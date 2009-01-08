@@ -18,6 +18,9 @@
 #include <QFileInfo>
 #include <QStringList>
 
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+
 #include <cstdlib>
 
 namespace Rosegarden
@@ -115,9 +118,13 @@ ResourceFinder::getResourcePath(QString resourceCat, QString fileName)
          i != prefixes.end(); ++i) {
         
         QString prefix = *i;
+
+        RG_DEBUG << "ResourceFinder::getResourcePath: Looking up file \"" << fileName << "\" for category \"" << resourceCat << "\" in prefix \"" << prefix << "\"" << endl;
+
         QString path =
             QString("%1%2/%3").arg(prefix).arg(resourceCat).arg(fileName);
         if (QFileInfo(path).exists() && QFileInfo(path).isReadable()) {
+            RG_DEBUG << "Found it!" << endl;
             return path;
         }
     }

@@ -89,10 +89,11 @@ protected:
     QWidget *m_actionOwner;
     bool m_inMenuBar;
     bool m_inText;
-    QString m_currentMenu;
+    QStringList m_currentMenus;
     QString m_currentToolbar;
     QString m_currentState;
     QString m_currentText;
+    QString m_currentFile;
 };
 
 }

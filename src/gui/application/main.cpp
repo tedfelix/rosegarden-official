@@ -479,11 +479,9 @@ int main(int argc, char *argv[])
     aboutData.setTranslator(ki18nc("NAME OF TRANSLATORS", "Your names"),
 			    ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
-/*&&&
     KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
+//&&&    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
     KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
-*/
 
     if (!RosegardenApplication::start())
         return 0;

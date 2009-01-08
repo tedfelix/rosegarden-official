@@ -63,6 +63,8 @@ ActionFileParser::load(QString actionRcFile)
         return false;
     }
 
+    m_currentFile = location;
+
     QFile f(location);
     QXmlInputSource is(&f);
     QXmlSimpleReader reader;
@@ -93,15 +95,20 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString menuName = atts.value("name");
         if (menuName == "") {
-            cerr << "WARNING: ActionFileParser::startElement: No menu name provided in menu element" << endl;
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No menu name provided in menu element" << endl;
         }
-        m_currentMenu = menuName;
+        
+        if (!m_currentMenus.empty()) {
+            addMenuToMenu(m_currentMenus.last(), menuName);
+        }
+
+        m_currentMenus.push_back(menuName);
 
     } else if (name == "toolbar") {
 
         QString toolbarName = atts.value("name");
         if (toolbarName == "") {
-            cerr << "WARNING: ActionFileParser::startElement: No toolbar name provided in toolbar element" << endl;
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << endl;
         }
         m_currentToolbar = toolbarName;
         
@@ -110,7 +117,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
         // used to provide label for menu or title for toolbar, but
         // text comes from characters()
 
-        if (m_currentMenu != "" || m_currentToolbar != "") {
+        if (!m_currentMenus.empty() || m_currentToolbar != "") {
             m_inText = true;
             m_currentText = "";
         }
@@ -119,11 +126,11 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString actionName = atts.value("name");
         if (actionName == "") {
-            cerr << "WARNING: ActionFileParser::startElement: No action name provided in action element" << endl;
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No action name provided in action element" << endl;
         }
 
-        if (m_currentMenu == "" && m_currentToolbar == "" && m_currentState == "") {
-            cerr << "WARNING: ActionFileParser::startElement: Action appears outside (valid) menu, toolbar or state element" << endl;
+        if (m_currentMenus.empty() && m_currentToolbar == "" && m_currentState == "") {
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state element" << endl;
         }
 
         QString text = atts.value("text");
@@ -142,7 +149,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
         
         //!!! can appear in menu, toolbar, state/enable, state/disable
 
-        if (m_currentMenu != "") addActionToMenu(m_currentMenu, actionName);
+        if (!m_currentMenus.empty()) addActionToMenu(m_currentMenus.last(), actionName);
         if (m_currentToolbar != "") addActionToToolbar(m_currentToolbar, actionName);
 
         if (m_currentState != "") {
@@ -151,14 +158,14 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
     } else if (name == "separator") {
 
-        if (m_currentMenu != "") addSeparatorToMenu(m_currentMenu);
+        if (!m_currentMenus.empty()) addSeparatorToMenu(m_currentMenus.last());
         if (m_currentToolbar != "") addSeparatorToToolbar(m_currentToolbar);
 
     } else if (name == "state") {
 
         QString stateName = atts.value("name");
         if (stateName == "") {
-            cerr << "WARNING: ActionFileParser::startElement: No state name provided in state element" << endl;
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No state name provided in state element" << endl;
         }
         m_currentState = stateName;
 
@@ -187,7 +194,7 @@ ActionFileParser::endElement(const QString& namespaceURI,
         
     } else if (name == "menu") {
 
-        m_currentMenu = "";
+        m_currentMenus.pop_back();
 
     } else if (name == "toolbar") {
 
@@ -196,8 +203,8 @@ ActionFileParser::endElement(const QString& namespaceURI,
     } else if (name == "text") {
 
         if (m_inText) {
-            if (m_currentMenu != "") {
-                setMenuText(m_currentMenu, m_currentText);
+            if (!m_currentMenus.empty()) {
+                setMenuText(m_currentMenus.last(), m_currentText);
             }
             if (m_currentToolbar != "") {
                 setToolbarText(m_currentToolbar, m_currentText);

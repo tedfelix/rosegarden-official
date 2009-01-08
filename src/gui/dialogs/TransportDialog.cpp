@@ -25,6 +25,7 @@
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
+#include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
@@ -357,18 +358,12 @@ TransportDialog::loadPixmaps()
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     for (int i = 0; i < 10; i++) {
-        fileName = QString("%1/transport/led-%2.xpm").arg(pixmapDir).arg(i);
-        if (!m_lcdList[i].load(fileName)) {
-            std::cerr << "TransportDialog - failed to load pixmap \""
-                      << fileName << "\"" << std::endl;
-        }
+        m_lcdList[i] = IconLoader().loadPixmap(QString("led-%1").arg(i));
     }
 
     // Load the "negative" sign pixmap
     //
-    fileName = QString("%1/transport/led--.xpm").arg(pixmapDir);
-    m_lcdNegative.load(fileName);
-
+    m_lcdNegative = IconLoader().loadPixmap("led--");
 }
 
 void

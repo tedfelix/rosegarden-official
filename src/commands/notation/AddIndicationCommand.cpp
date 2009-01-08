@@ -28,23 +28,28 @@
 #include "document/BasicCommand.h"
 #include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
+#include <vector>
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-static std::string standardIndications[] = {
-    Indication::Slur,
-    Indication::PhrasingSlur,
-    Indication::Glissando,
-    Indication::Crescendo,
-    Indication::Decrescendo,
-    Indication::QuindicesimaUp,
-    Indication::OttavaUp,
-    Indication::OttavaDown,
-    Indication::QuindicesimaDown
-};
+static std::vector<std::string> getStandardIndications()
+{
+    std::vector<std::string> v;
+    v.push_back(Indication::Slur);
+    v.push_back(Indication::PhrasingSlur);
+    v.push_back(Indication::Glissando);
+    v.push_back(Indication::Crescendo);
+    v.push_back(Indication::Decrescendo);
+    v.push_back(Indication::QuindicesimaUp);
+    v.push_back(Indication::OttavaUp);
+    v.push_back(Indication::OttavaDown);
+    v.push_back(Indication::QuindicesimaDown);
+    return v;
+}
+
 static const char *shortcuts[] = {
     ")",
     "Ctrl+)",
@@ -82,9 +87,9 @@ static const char *actionNames[] = {
 void
 AddIndicationCommand::registerCommand(CommandRegistry *r)
 {
-    for (int i = 0;
-         i < sizeof(standardIndications)/sizeof(standardIndications[0]);
-         ++i) {
+    std::vector<std::string> standardIndications = getStandardIndications();
+    
+    for (int i = 0; i < standardIndications.size(); ++i) {
         r->registerCommand
             (getGlobalName(standardIndications[i]), icons[i],
              shortcuts[i], actionNames[i],
@@ -95,9 +100,9 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
 std::string
 AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
-    for (int i = 0;
-         i < sizeof(standardIndications)/sizeof(standardIndications[0]);
-         ++i) {
+    std::vector<std::string> standardIndications = getStandardIndications();
+    
+    for (int i = 0; i < standardIndications.size(); ++i) {
         if (actionName == actionNames[i]) return standardIndications[i];
     }
     throw CommandCancelled();
