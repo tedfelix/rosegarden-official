@@ -1,9 +1,5 @@
 
-# These paths set up for Ubuntu 8.04 with kdelibs5-dev and qt4-dev.
-# For some mad reason, KDE4 headers are in /usr/lib/kde4/include on
-# this system.  Someone is really going to have to explain that to me.
-# More sensibly, Qt4 headers are in /usr/include/Qt4.  Note also
-# special names of moc and uic (to avoid messing with alternatives).
+# These paths set up for Ubuntu 8.10 with kdelibs5-dev and qt4-dev.
 
 KDEDIR		= /usr
 QTDIR		= /usr
