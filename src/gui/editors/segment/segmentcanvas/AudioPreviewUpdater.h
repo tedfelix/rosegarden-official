@@ -22,7 +22,7 @@
 #include <QObject>
 #include <QRect>
 #include <vector>
-
+#include <inttypes.h>
 
 class QEvent;
 

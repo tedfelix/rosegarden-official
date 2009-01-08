@@ -35,7 +35,7 @@ DirectoryCreationFailed::DirectoryCreationFailed(QString directory) throw() :
     m_directory(directory)
 {
     std::cerr << "ERROR: Directory creation failed for directory: "
-              << directory.toStdString() << std::endl;
+              << qstrtostr( directory ) << std::endl;
 }
 
 const char *

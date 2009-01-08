@@ -65,7 +65,8 @@ ENDIF(WANT_SOUND)
 # gui executable
 INCLUDE(GUIFileList.txt)
 
-KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
+# KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
+QT4_AUTOMOC(${ui_SRCS})
 QT4_AUTOMOC(${gui_SRCS})
 QT4_AUTOMOC(${segmentcanvas_SRCS})
 QT4_AUTOMOC(${commands_SRCS})
@@ -76,6 +77,19 @@ ADD_LIBRARY(RosegardenExtended STATIC
     ${document_SRCS}
     ${gui_SRCS}
 )
+
+#    gui/general/ResourceFinder
+#    gui/general/IconLoader
+
+ADD_LIBRARY(ResourceFinder STATIC
+    gui/general/ResourceFinder.h
+    gui/general/ResourceFinder.cpp
+)
+ADD_LIBRARY(IconLoader STATIC
+    gui/general/IconLoader.h
+    gui/general/IconLoader.cpp
+)
+
 
 ADD_LIBRARY(RosegardenSequencer STATIC
     ${snd_SRCS}
@@ -118,7 +132,12 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegarden
-    ${QT_AND_KDECORE_LIBS} 
+	#${QT_AND_KDECORE_LIBS} 
+	${KDECORE_LIBS}
+#    ${QT4_LIBS}
+    ${QT_LIBRARIES}
+	${QT_QT3SUPPORT_LIBRARY}
+    
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
     ${FFTW3F_LIBS}
@@ -129,12 +148,15 @@ TARGET_LINK_LIBRARIES(rosegarden
     ${FFTW3F_LIBS}
     kio
     kdeui
-    kdeprint
+#    kdeprint
     RosegardenExtended
     RosegardenSequencer
     RosegardenSegmentCanvas
     RosegardenCommands
     RosegardenCommon
+    
+    ResourceFinder
+    IconLoader
 )
 
 # Install targets

@@ -2,10 +2,15 @@
 # find commands/ document/ gui/ -iname '*.cpp' -or -iname '*.h' > list.txt
 
 SET(ui_SRCS 
-	gui/ui/RosegardenTransport.ui
+	data/ui/RosegardenTransport.ui
 )
 
 SET(commands_SRCS
+	document/Command.h
+	document/Command.cpp
+	document/CommandHistory.h
+	document/CommandHistory.cpp
+
 	commands/edit/AddDotCommand.cpp
 	commands/edit/AddDotCommand.h
 	commands/edit/AddMarkerCommand.cpp
@@ -670,7 +675,18 @@ SET(gui_SRCS
 	gui/editors/tempo/TempoListItem.h
 	gui/editors/tempo/TempoView.cpp
 	gui/editors/tempo/TempoView.h
-	gui/general/ActiveItem.cpp
+	
+	gui/general/ActionFileParser.cpp
+	gui/general/ActionFileParser.h
+	gui/general/ActionFileClient.cpp
+	gui/general/ActionFileClient.h
+	gui/general/AutoSaveFinder.cpp
+	gui/general/AutoSaveFinder.h
+	gui/general/DecoyAction.cpp
+	gui/general/DecoyAction.h
+
+
+	gui/general/ActiveItem.h
 	gui/general/ActiveItem.h
 	gui/general/BarLine.cpp
 	gui/general/BarLine.h
