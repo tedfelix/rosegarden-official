@@ -21,7 +21,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QSettings>
-#include <kglobal.h>
+#include "gui/general/IconLoader.h"
 #include <QFont>
 #include <QFrame>
 #include <QLayout>
@@ -59,9 +59,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
     font.setBold(true);
     m_toggleButton->setFont(font);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QPixmap pixmap(pixmapDir + "/misc/arrow-expanded.png");
-    m_toggleButton->setIcon(pixmap);
+    m_toggleButton->setIcon(IconLoader().load("arrow-expanded"));
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
@@ -121,13 +119,12 @@ CollapsingFrame::toggle()
 
     m_widget->setShown(!m_collapsed);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap pixmap;
 
     if (m_collapsed) {
-        pixmap = QPixmap(pixmapDir + "/misc/arrow-contracted.png");
+        pixmap = IconLoader().loadPixmap("arrow-contracted");
     } else {
-        pixmap = QPixmap(pixmapDir + "/misc/arrow-expanded.png");
+        pixmap = IconLoader().loadPixmap("arrow-expanded");
     }
 
     if (objectName().isEmpty()) {               // name(0)

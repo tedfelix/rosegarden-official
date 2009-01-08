@@ -312,7 +312,6 @@ private:
     QString m_errorString;
 
     bool checkFile(int size, std::string &src) const;
-    QString m_fontDirectory;
 
     bool m_ok;
 };

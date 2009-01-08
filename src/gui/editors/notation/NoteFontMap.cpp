@@ -24,7 +24,7 @@
 #include "misc/Strings.h"
 #include "base/Exception.h"
 #include "SystemFont.h"
-#include <kglobal.h>
+#include "gui/general/ResourceFinder.h"
 #include <QFile>
 #include <QFileInfo>
 #include <QPixmap>
@@ -45,23 +45,24 @@ NoteFontMap::NoteFontMap(std::string name) :
         m_errorString(i18n("unknown error")),
         m_ok(true)
 {
-    m_fontDirectory = KGlobal::dirs()->findResource("appdata", "fonts/");
-
     QString mapFileName;
 
-    QString mapFileMixedName = QString("%1/mappings/%2.xml")
-                               .arg(m_fontDirectory)
-                               .arg(strtoqstr(name));
+    ResourceFinder rf;
+    
+    QString mapFileMixedName =
+        rf.getResourcePath("fonts/mappings",
+                           QString("%1.xml").arg(strtoqstr(name)));
 
     QFileInfo mapFileMixedInfo(mapFileMixedName);
 
-    if (!mapFileMixedInfo.isReadable()) {
+    if (mapFileMixedName == "" || !mapFileMixedInfo.isReadable()) {
 
         QString lowerName = strtoqstr(name).toLower();
         lowerName.replace(QRegExp(" "), "_");
-        QString mapFileLowerName = QString("%1/mappings/%2.xml")
-                                   .arg(m_fontDirectory)
-                                   .arg(lowerName);
+
+        QString mapFileLowerName =
+            rf.getResourcePath("fonts/mappings",
+                               QString("%1.xml").arg(lowerName));
 
         QFileInfo mapFileLowerInfo(mapFileLowerName);
 
@@ -697,25 +698,29 @@ NoteFontMap::getCharNames() const
 bool
 NoteFontMap::checkFile(int size, std::string &src) const
 {
-    QString pixmapFileMixedName = QString("%1/%2/%3/%4.xpm")
-                                  .arg(m_fontDirectory)
-                                  .arg(strtoqstr(m_srcDirectory))
-                                  .arg(size)
-                                  .arg(strtoqstr(src));
+    ResourceFinder rf;
+
+    QString pixmapFileMixedName =
+        rf.getResourcePath(QString("fonts/%2/%3")
+                           .arg(strtoqstr(m_srcDirectory))
+                           .arg(size),
+                           QString("%1.xpm")
+                           .arg(strtoqstr(src)));
 
     QFileInfo pixmapFileMixedInfo(pixmapFileMixedName);
 
-    if (!pixmapFileMixedInfo.isReadable()) {
+    if (pixmapFileMixedName == "" || !pixmapFileMixedInfo.isReadable()) {
 
-        QString pixmapFileLowerName = QString("%1/%2/%3/%4.xpm")
-                                      .arg(m_fontDirectory)
-                                      .arg(strtoqstr(m_srcDirectory).toLower())
-                                      .arg(size)
-                                      .arg(strtoqstr(src));
+        QString pixmapFileLowerName =
+            rf.getResourcePath(QString("fonts/%2/%3")
+                               .arg(strtoqstr(m_srcDirectory).toLower())
+                               .arg(size),
+                               QString("%1.xpm")
+                               .arg(strtoqstr(src)));
 
         QFileInfo pixmapFileLowerInfo(pixmapFileLowerName);
 
-        if (!pixmapFileLowerInfo.isReadable()) {
+        if (pixmapFileMixedName == "" || !pixmapFileLowerInfo.isReadable()) {
             if (pixmapFileMixedName != pixmapFileLowerName) {
                 std::cerr << "Warning: Unable to open pixmap file "
                 << pixmapFileMixedName << " or " << pixmapFileLowerName

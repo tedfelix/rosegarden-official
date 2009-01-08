@@ -354,8 +354,6 @@ void
 TransportDialog::loadPixmaps()
 {
     m_lcdList.clear();
-    QString fileName;
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     for (int i = 0; i < 10; i++) {
         m_lcdList[i] = IconLoader().loadPixmap(QString("led-%1").arg(i));

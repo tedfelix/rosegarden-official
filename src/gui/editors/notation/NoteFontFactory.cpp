@@ -29,7 +29,7 @@
 #include "NoteFont.h"
 #include "NoteFontMap.h"
 #include <QSettings>
-#include <kglobal.h>
+#include "gui/general/ResourceFinder.h"
 #include <QMessageBox>
 #include <QDir>
 #include <QString>
@@ -63,36 +63,27 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
     QStringList names = QStringList::split(",", fontNameList);
 
+    ResourceFinder rf;
+
     if (names.empty()) {
 
         NOTATION_DEBUG << "NoteFontFactory::getFontNames: No names available, rescanning..." << endl;
 
-        QString mappingDir =
-            KGlobal::dirs()->findResource("appdata", "fonts/mappings/");
-        QDir dir(mappingDir);
-        if (!dir.exists()) {
-            std::cerr << "NoteFontFactory::getFontNames: mapping directory \""
-                      << mappingDir << "\" not found" << std::endl;
-            return m_fontNames;
-        }
+        QStringList files = rf.getResourceFiles("fonts/mappings", "xml");
 
-        dir.setFilter(QDir::Files | QDir::Readable);
-        QStringList files = dir.entryList();
         for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
 
-            if ((*i).length() > 4 && (*i).right(4).toLower() == ".xml") {
+            QString filepath = *i;
+            QString qname = QFileInfo(filepath).baseName();
+            std::string name = qstrtostr(qname);
 
-                std::string name(qstrtostr((*i).left((*i).length() - 4)));
-
-                try {
-                    NoteFontMap map(name);
-                    if (map.ok())
-                        names.append(strtoqstr(map.getName()));
-                } catch (Exception e) {
-                    KStartupLogo::hideIfStillThere();
-                    QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
-                    throw;
-                }
+            try {
+                NoteFontMap map(name);
+                if (map.ok()) names.append(strtoqstr(map.getName()));
+            } catch (Exception e) {
+                KStartupLogo::hideIfStillThere();
+                QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
+                throw;
             }
         }
     }
@@ -101,8 +92,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
 
     for (QStringList::Iterator i = names.begin(); i != names.end(); ++i) {
         m_fontNames.insert(qstrtostr(*i));
-        if (i != names.begin())
-            savedNames += ",";
+        if (i != names.begin()) savedNames += ",";
         savedNames += *i;
     }
 

@@ -68,7 +68,6 @@ private:
 
     // For use when reading the XML file:
     QString m_errorString;
-    QString m_presetDirectory;
 
     QString m_elCategoryName;
     QString m_elInstrumentName;

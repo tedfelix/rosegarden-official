@@ -32,7 +32,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "Rotary.h"
-#include <kglobal.h>
+#include "gui/general/IconLoader.h"
 #include <QFrame>
 #include <QLabel>
 #include <QObject>
@@ -122,9 +122,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     m_fader->setOutlineColour(GUIPalette::getColour(GUIPalette::PlaybackFaderOutline));
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    m_monoPixmap.load(QString("%1/misc/mono.xpm").arg(pixmapDir));
-    m_stereoPixmap.load(QString("%1/misc/stereo.xpm").arg(pixmapDir));
+    m_monoPixmap = IconLoader().loadPixmap("mono");
+    m_stereoPixmap = IconLoader().loadPixmap("stereo");
 
     m_pan = new Rotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22,
                        Rotary::NoTicks, false, true);

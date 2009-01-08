@@ -28,11 +28,12 @@
 #include "CategoryElement.h"
 #include <klocale.h>
 #include <QDir>
-#include <kglobal.h>
 #include <QFile>
 #include <QFileInfo>
 #include <QRegExp>
 #include <QString>
+#include <QLocale>
+#include "gui/general/ResourceFinder.h"
 
 
 namespace Rosegarden
@@ -58,35 +59,33 @@ PresetGroup::PresetGroup() :
         m_amateur(false),
         m_pro(false)
 {
-    m_presetDirectory = KGlobal::dirs()->findResource("appdata", "presets/");
+    QString language = QLocale::system().name();
 
-    QString language = KGlobal::locale()->language();
+    ResourceFinder rf;
+    QString presetFileName = rf.getResourcePath
+        ("presets", QString("presets-%2.xml").arg(language));
 
-    QString presetFileName = QString("%1/presets-%2.xml")
-                             .arg(m_presetDirectory).arg(language);
-
-    if (!QFileInfo(presetFileName).isReadable()) {
+    if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
         RG_DEBUG << "Failed to open " << presetFileName << endl;
 
         language.replace(QRegExp("_.*$"), "");
-        presetFileName = QString("%1/presets-%2.xml")
-                         .arg(m_presetDirectory).arg(language);
+        presetFileName = rf.getResourcePath
+            ("presets", QString("presets-%2.xml").arg(language));
 
-        if (!QFileInfo(presetFileName).isReadable()) {
+        if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
             RG_DEBUG << "Failed to open " << presetFileName << endl;
 
-            presetFileName = QString("%1/presets.xml")
-                             .arg(m_presetDirectory);
+            presetFileName = rf.getResourcePath
+                ("presets", QString("presets.xml"));
 
-            if (!QFileInfo(presetFileName).isReadable()) {
+            if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
                 RG_DEBUG << "Failed to open " << presetFileName << endl;
 
                 throw PresetFileReadFailed
-                (qstrtostr(i18n("Can't open preset file %1", 
-                           presetFileName)));
+                (qstrtostr(i18n("Can't open preset file %1", presetFileName)));
             }
         }
     }

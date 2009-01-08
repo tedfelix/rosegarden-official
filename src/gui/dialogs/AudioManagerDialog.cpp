@@ -122,9 +122,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     box->setLayout(boxLayout);
     m_wrongSampleRates->hide();
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIcon icon(QPixmap(pixmapDir + "/toolbar/transport-play.xpm"));
-
     createAction("add_audio", SLOT(slotAdd()));
     createAction("export_audio", SLOT(slotExportAudio()));
     createAction("remove_audio", SLOT(slotRemove()));

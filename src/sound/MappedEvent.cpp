@@ -218,9 +218,9 @@ protected:
 };
 
 DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
-        : m_fileName(KGlobal::dirs()->resourceDirs("tmp").first() + QString("/rosegarden_datablock_%1").arg(id)),
-        m_file(m_fileName),
-        m_cleared(false)
+    : m_fileName(QDir::tempPath() + QString("/rosegarden_datablock_%1").arg(id)),
+      m_file(m_fileName),
+      m_cleared(false)
 {
     //     std::cerr << "DataBlockFile " << m_fileName.toLatin1().data() << std::endl;
 }
@@ -392,7 +392,7 @@ void DataBlockRepository::clear()
 
     // Erase all 'datablock_*' files
     //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+    QString tmpPath = QDir::tempPath();
 
     QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
