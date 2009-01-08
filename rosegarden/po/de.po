@@ -3596,7 +3596,7 @@ msgstr "Export und Import von Rosegarden Projektdateien..."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4532
 msgid "The Rosegarden Project Packager helper script"
-msgstr "Das Rosegarden Projekt-Packer Hilfs-Script \n"
+msgstr "Das Rosegarden Projekt-Packer Hilfs-Script"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:4536
 msgid "%1 - for project file support"
