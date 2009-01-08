@@ -2609,10 +2609,10 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
         if ( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) ) {
 
             QString autoloadFile =
-                KGlobal::dirs()->findResource("appdata", "autoload.rg");
+                ResourceFinder().getResourcePath("", "autoload.rg");
 
             QFileInfo autoloadFileInfo(autoloadFile);
-            if (autoloadFileInfo.isReadable()) {
+            if (autoloadFile != "" && autoloadFileInfo.isReadable()) {
 
                 RG_DEBUG << "Importing default studio from " << autoloadFile << endl;
 

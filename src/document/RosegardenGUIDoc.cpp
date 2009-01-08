@@ -65,6 +65,7 @@
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/general/ResourceFinder.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioPluginManager.h"
@@ -550,26 +551,24 @@ void RosegardenGUIDoc::newDocument()
 void RosegardenGUIDoc::performAutoload()
 {
     QString autoloadFile =
-        KGlobal::dirs()->findResource("appdata", "autoload.rg");
+        ResourceFinder().getResourcePath("", "autoload.rg");
 
     QFileInfo autoloadFileInfo(autoloadFile);
 
-    if (!autoloadFileInfo.isReadable()) {
-        RG_DEBUG << "RosegardenGUIDoc::performAutoload - "
-        << "can't find autoload file - defaulting" << endl;
+    if (autoloadFile == "" || !autoloadFileInfo.isReadable()) {
+        std::cerr << "WARNING: RosegardenGUIDoc::performAutoload - "
+                  << "can't find autoload file - defaulting" << std::endl;
         return ;
     }
 
     openDocument(autoloadFile);
-
 }
 
 bool RosegardenGUIDoc::openDocument(const QString& filename,
                                     bool permanent,
                                     const char* /*format*/ /*=0*/)
 {
-    RG_DEBUG << "RosegardenGUIDoc::openDocument("
-    << filename << ")" << endl;
+    RG_DEBUG << "RosegardenGUIDoc::openDocument(" << filename << ")" << endl;
 
     if ( filename.isEmpty() )
         return false;
@@ -602,6 +601,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     QString fileContents;
     bool cancelled = false, okay = true;
 
+    //### Consider un-KDE-ifying this
     KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
     if (fileCompressedDevice == 0) {
 

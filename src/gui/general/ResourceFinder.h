@@ -83,6 +83,9 @@ public:
     QString getResourceSaveDir(QString resourceCat);
 
 protected:
+    QString getUserResourcePrefix();
+    QStringList getSystemResourcePrefixList();
+    QStringList getResourcePrefixList();
 };
 
 }

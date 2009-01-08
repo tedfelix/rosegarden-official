@@ -27,6 +27,7 @@
 #include <QMenuBar>
 
 #include "IconLoader.h"
+#include "ResourceFinder.h"
 #include "misc/Strings.h"
 
 #include "document/CommandHistory.h"
@@ -49,17 +50,7 @@ ActionFileParser::~ActionFileParser()
 QString
 ActionFileParser::findRcFile(QString name)
 {
-    if (QFileInfo(name).exists()) return name;
-
-    QString base = QFileInfo(name).fileName();
-
-    QString tester = QString(":/ui/%1").arg(base);
-    if (QFileInfo(tester).exists()) return tester;
-
-    tester = QString(":/%1").arg(base);
-    if (QFileInfo(tester).exists()) return tester;
-
-    return ""; // that's all we try for now
+    return ResourceFinder().getResourcePath("ui", name);
 }
 
 bool
