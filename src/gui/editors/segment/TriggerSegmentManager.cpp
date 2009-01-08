@@ -24,7 +24,7 @@
 // #include <kmainwindow.h>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 
 #include "TriggerSegmentManager.h"
 #include "TriggerManagerItem.h"

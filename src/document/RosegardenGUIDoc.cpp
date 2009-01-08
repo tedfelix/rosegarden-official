@@ -24,7 +24,7 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"

@@ -19,7 +19,7 @@
 #include "CollapsingFrame.h"
 #include "misc/Strings.h"
 #include <QApplication>
-#include <kstandarddirs.h>
+#include <QDir>
 #include <QSettings>
 #include <kglobal.h>
 #include <QFont>

@@ -19,7 +19,7 @@
 #include "ControlBlockMmapper.h"
 #include "misc/Debug.h"
 
-#include <kstandarddirs.h>
+#include <QDir>
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Exception.h"
@@ -90,7 +90,7 @@ ControlBlockMmapper::~ControlBlockMmapper()
 
 QString ControlBlockMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_control_block";
+    return QDir::tempPath() + "/rosegarden_control_block";
 }
 
 void ControlBlockMmapper::updateTrackData(Track *t)

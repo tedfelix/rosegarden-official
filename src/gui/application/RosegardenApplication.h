@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef _RG_ROSEGARDENAPPLICATION_H_
 #define _RG_ROSEGARDENAPPLICATION_H_
 
-#include <kuniqueapplication.h>
+#include <QApplication>
 #include <QByteArray>
 #include <QString>
 
@@ -39,18 +38,19 @@ namespace Rosegarden
  * Handles RosegardenGUIApps perceived uniqueness for us.
  *
  */
-class RosegardenApplication : public KUniqueApplication
+class RosegardenApplication : public QApplication
 {
     Q_OBJECT
 public:
-    RosegardenApplication(): KUniqueApplication(), m_noSequencerMode(false) {}
+    RosegardenApplication(int argc, char **argv) :
+        QApplication(argc, argv), m_noSequencerMode(false) {}
 
     /**
      * Handle the attempt at creation of a new instance - 
      * only accept new file names which we attempt to load
      * into the existing instance (if it exists)
      */
-    virtual int newInstance();
+//&&&    virtual int newInstance();
 
     void refreshGUI(int maxTime);
 

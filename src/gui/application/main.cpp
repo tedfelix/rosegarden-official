@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <QSettings>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <QDir>
 #include <ktip.h>
 #include <QProcess>
 #include <kglobalsettings.h>
@@ -479,14 +479,18 @@ int main(int argc, char *argv[])
     aboutData.setTranslator(ki18nc("NAME OF TRANSLATORS", "Your names"),
 			    ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
-    KCmdLineArgs::init( argc, argv, &aboutData );
+//&&&    KCmdLineArgs::init( argc, argv, &aboutData );
 //&&&    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
-    KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
+//&&&    KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
 
-    if (!RosegardenApplication::start())
-        return 0;
+//&&&    if (!RosegardenApplication::start())
+//&&&        return 0;
 
-    RosegardenApplication app;
+    RosegardenApplication app(argc, argv);
+
+    QApplication::setOrganizationName("rosegardenmusic");
+    QApplication::setOrganizationDomain("rosegardenmusic.org");
+    QApplication::setApplicationName(i18n("Rosegarden"));
 
     // Ensure quit on last window close
     //
@@ -530,10 +534,10 @@ int main(int argc, char *argv[])
 
     int windowWidth = 0, windowHeight = 0;
 
-    QDesktopWidget *desktop = KApplication::desktop();
+    QDesktopWidget *desktop = QApplication::desktop();
     if (desktop) {
 	QRect totalRect(desktop->screenGeometry());
-	QRect desktopRect = KGlobalSettings::desktopGeometry(QPoint(0, 0));
+	QRect desktopRect = desktop->availableGeometry();
 	QSize startupSize;
 	if (desktopRect.height() <= 800) {
 	    startupSize = QSize((desktopRect.width() * 6) / 7,

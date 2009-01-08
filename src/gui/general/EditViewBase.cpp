@@ -61,7 +61,7 @@
 #include <klocale.h>
 //#include <kxmlguiclient.h>
 //#include <kkeydialog.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 //#include <kedittoolbar.h>
 //#include <kglobal.h>
 //#include <kstandardshortcut.h>

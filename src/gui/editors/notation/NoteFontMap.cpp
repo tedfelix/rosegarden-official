@@ -20,7 +20,7 @@
 #include "misc/Debug.h"
 
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include "misc/Strings.h"
 #include "base/Exception.h"
 #include "SystemFont.h"

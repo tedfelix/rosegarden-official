@@ -19,7 +19,7 @@
 #include <Q3PointArray>
 
 #include <klocale.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 //#include <kglobal.h>
 
 #include <cmath>

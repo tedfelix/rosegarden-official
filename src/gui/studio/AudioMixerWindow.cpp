@@ -19,7 +19,7 @@
 #include "AudioMixerWindow.h"
 
 #include <klocale.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 // #include <kglobal.h>
 // #include <kmainwindow.h>
 // #include <kstandardaction.h>

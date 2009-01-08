@@ -27,7 +27,7 @@
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>
 #include <klocale.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 // #include <kstandardshortcut.h>
 
 #include "misc/Debug.h"

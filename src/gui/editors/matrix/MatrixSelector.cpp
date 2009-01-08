@@ -25,7 +25,7 @@
 #include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"

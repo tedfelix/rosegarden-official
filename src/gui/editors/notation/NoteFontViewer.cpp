@@ -23,7 +23,7 @@
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <ktoolbar.h>
+#include <QToolBar>
 #include <QLabel>
 #include <QString>
 #include <QStringList>
@@ -88,7 +88,7 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     QVBoxLayout *boxLayout = new QVBoxLayout;
     metagrid->addWidget(box, 0, 0);
 
-    KToolBar *controls = new KToolBar( box );
+    QToolBar *controls = new QToolBar( box );
     boxLayout->addWidget(controls);
 // 	controls->setMargin(3);
 	controls->setContentsMargins(3,3,3,3);

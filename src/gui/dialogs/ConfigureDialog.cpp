@@ -34,7 +34,7 @@
 #include <QTabWidget>
 
 //#include <kdialogbase.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include <klocale.h>
 
 

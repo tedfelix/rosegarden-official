@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include "sound/Midi.h"
-#include <kstandarddirs.h>
+#include <QDir>
 #include "document/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
@@ -150,7 +150,7 @@ InstrumentId MetronomeMmapper::getMetronomeInstrument()
 
 QString MetronomeMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_metronome";
+    return QDir::tempPath() + "/rosegarden_metronome";
 }
 
 void MetronomeMmapper::dump()

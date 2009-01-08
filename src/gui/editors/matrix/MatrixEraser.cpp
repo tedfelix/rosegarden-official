@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixEraseCommand.h"
 #include "gui/general/EditTool.h"

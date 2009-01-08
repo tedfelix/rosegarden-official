@@ -85,7 +85,7 @@
 #include <klocale.h>
 #include <kxmlguiclient.h>
 //#include <kstatusbar.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 //#include <kglobal.h>
 //#include <klineeditdlg.h>
 

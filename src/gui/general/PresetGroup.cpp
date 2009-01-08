@@ -27,7 +27,7 @@
 #include "base/Exception.h"
 #include "CategoryElement.h"
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include <kglobal.h>
 #include <QFile>
 #include <QFileInfo>

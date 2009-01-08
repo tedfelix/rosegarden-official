@@ -20,7 +20,7 @@
 #include <QLayout>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
+#include <QDir>
 #include "misc/Debug.h"
 #include "AudioRouteMenu.h"
 #include "AudioVUMeter.h"

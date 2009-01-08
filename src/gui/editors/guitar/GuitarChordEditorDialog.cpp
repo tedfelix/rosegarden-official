@@ -25,7 +25,7 @@
 #include <QSpinBox>
 #include <klocale.h>
 #include <QMessageBox>
-#include <kstandarddirs.h>
+#include <QDir>
 #include <QLayout>
 #include <QLabel>
 #include <QDialogButtonBox>

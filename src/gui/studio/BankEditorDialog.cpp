@@ -65,7 +65,7 @@
 #include <QShortcut>
 
 #include <klocale.h>  // i18n()
-// #include <kstandarddirs.h>
+// #include <QDir>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>
 // #include <kxmlguiclient.h>

@@ -22,7 +22,7 @@
 
 //#include <kglobal.h>
 //#include <kiconloader.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 //#include <kxmlguiclient.h>
 #include <klocale.h>
 

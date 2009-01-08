@@ -23,7 +23,7 @@
 //#include <kstandardaction.h>
 //#include <ktoolbar.h>
 //#include <kglobal.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>

@@ -235,7 +235,7 @@
 //#include <kurl.h>
 //#include <kstandardshortcut.h>
 //#include <kstandardaction.h>
-//#include <kstandarddirs.h>
+//#include <QDir>
 
 // remaining kde headers:
 #include <kxmlguiclient.h>

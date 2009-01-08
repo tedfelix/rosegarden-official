@@ -20,7 +20,7 @@
 
 #include <klocale.h>
 #include <kled.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 // #include <kglobal.h>
 
 #include "misc/Debug.h"

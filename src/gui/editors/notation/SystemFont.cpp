@@ -16,7 +16,7 @@
 */
 
 
-//#include <kstandarddirs.h>
+//#include <QDir>
 
 //include  this first:
 #include <QTextStream>

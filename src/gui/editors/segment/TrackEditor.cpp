@@ -19,7 +19,7 @@
 #include "TrackEditor.h"
 
 #include <klocale.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 // #include <kglobal.h>
 
 #include "misc/Strings.h"

@@ -32,6 +32,7 @@
 #include <QBuffer>
 #include <QVector>
 #include <QMutex>
+#include <QDir>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -77,13 +78,14 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
-    m_segmentFilesPath(KGlobal::dirs()->resourceDirs("tmp").last()),
     m_metaIterator(0),
     m_controlBlockMmapper(0),
     m_transportToken(1),
     m_isEndOfCompReached(false),
     m_mutex(true) // recursive
 {
+    m_segmentFilesPath = QDir::tempPath();
+
     // Initialise the MappedStudio
     //
     initialiseStudio();
@@ -222,7 +224,7 @@ RosegardenSequencer::play(const RealTime &time,
         mmapSegment(m_segmentFilesPath + "/" + segmentsDir[i]);
     }
 
-    QString tmpDir = KGlobal::dirs()->resourceDirs("tmp").last();
+    QString tmpDir = QDir::tempPath();
 
     // Map metronome
     //
@@ -1468,7 +1470,7 @@ RosegardenSequencer::processAsynchronousEvents()
         lastCheckedAt = tv;
 
         try {
-            m_controlBlockMmapper = new MmappedControlBlock(KGlobal::dirs()->resourceDirs("tmp").last()
+            m_controlBlockMmapper = new MmappedControlBlock(QDir::tempPath()
                                     + "/rosegarden_control_block");
         } catch (Exception e) {
             // Assume that the control block simply hasn't been

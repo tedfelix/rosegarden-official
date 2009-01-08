@@ -18,7 +18,7 @@
 
 #include "NoteStyleFactory.h"
 
-#include <kstandarddirs.h>
+#include <QDir>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Exception.h"

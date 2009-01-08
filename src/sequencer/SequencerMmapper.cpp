@@ -23,9 +23,8 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include <kstandarddirs.h>
-
 #include <QFile>
+#include <QDir>
 
 #include "SequencerMmapper.h"
 #include "misc/Debug.h"
@@ -132,8 +131,7 @@ SequencerMmapper::setFileSize(size_t size)
 QString
 SequencerMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() +
-           "/rosegarden_sequencer_timing_block";
+    return QDir::tempPath() + "/rosegarden_sequencer_timing_block";
 }
 
 }

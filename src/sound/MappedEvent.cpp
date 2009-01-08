@@ -16,7 +16,7 @@
 #include <QFile>
 #include <QFileInfo>
 
-#include <kstandarddirs.h>
+#include <QDir>
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"

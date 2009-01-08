@@ -18,7 +18,7 @@
 
 #include "SpecialSegmentMmapper.h"
 
-#include <kstandarddirs.h>
+#include <QDir>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
@@ -38,7 +38,7 @@ SpecialSegmentMmapper::SpecialSegmentMmapper(RosegardenGUIDoc* doc,
 
 QString SpecialSegmentMmapper::createFileName(QString baseFileName)
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() + "/" + baseFileName;
+    return QDir::tempPath() + "/" + baseFileName;
 }
 
 unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()

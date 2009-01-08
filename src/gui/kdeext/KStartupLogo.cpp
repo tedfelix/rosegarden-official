@@ -18,7 +18,7 @@
 
 
 // #include <ktip.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 
 #include <unistd.h>
 #include "KStartupLogo.h"

@@ -17,7 +17,7 @@
 
 
 #include <klocale.h>
-// #include <kstandarddirs.h>
+// #include <QDir>
 
 #include "SequenceManager.h"
 
@@ -237,7 +237,7 @@ SequenceManager::mapSequencer()
 
     try {
         m_sequencerMapper = new SequencerMapper(
-                                KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_sequencer_timing_block");
+                                QDir::tempPath() + "/rosegarden_sequencer_timing_block");
     } catch (Exception) {
         m_sequencerMapper = 0;
     }

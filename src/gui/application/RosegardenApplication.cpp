@@ -23,23 +23,24 @@
 #include "document/RosegardenGUIDoc.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
-#include <kcmdlineargs.h>
+//#include <kcmdlineargs.h>
 #include <klocale.h>
-#include <kmainwindow.h>
+#include <QMainWindow>
+#include <QStatusBar>
 #include <QMessageBox>
 #include <QProcess>
-#include <kuniqueapplication.h>
+//#include <kuniqueapplication.h>
 #include <QByteArray>
 #include <QEventLoop>
 #include <QSessionManager>
 #include <QString>
 #include <QSettings>
-#include <kstatusbar.h>
+//#include <kstatusbar.h>
 
 
 namespace Rosegarden
 {
-
+/*&&&
 int RosegardenApplication::newInstance()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
@@ -55,7 +56,7 @@ int RosegardenApplication::newInstance()
 
     return KUniqueApplication::newInstance();
 }
-
+*/
 void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
 	if (proc->exitStatus() != QProcess::NormalExit ) {
@@ -74,11 +75,12 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
 
 void RosegardenApplication::slotSetStatusMessage(QString msg)
 {
-    KMainWindow* mainWindow = dynamic_cast<KMainWindow*>(mainWidget());
+    QMainWindow* mainWindow = dynamic_cast<QMainWindow*>(mainWidget());
     if (mainWindow) {
         if (msg.isEmpty())
             msg = KTmpStatusMsg::getDefaultMsg();
-        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), KTmpStatusMsg::getDefaultId());
+//@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), KTmpStatusMsg::getDefaultId());
+        mainWindow->statusBar()->showMessage(QString("  %1").arg(msg));
     }
 
 }
@@ -94,12 +96,13 @@ RosegardenApplication::refreshGUI(int maxTime)
 void RosegardenApplication::saveState(QSessionManager& sm)
 {
     emit aboutToSaveState();
-    KUniqueApplication::saveState(sm);
+//&&&    KUniqueApplication::saveState(sm);
 }
 
 RosegardenApplication* RosegardenApplication::rgApp()
 {
-    return dynamic_cast<RosegardenApplication*>(kApplication());
+//&&&    return dynamic_cast<RosegardenApplication*>(kApplication());
+    return dynamic_cast<RosegardenApplication*>(qApp);
 }
 
 QByteArray RosegardenApplication::Empty;

@@ -19,7 +19,7 @@
 #include "CompositionMmapper.h"
 #include "misc/Debug.h"
 
-#include <kstandarddirs.h>
+#include <QDir>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "document/RosegardenGUIDoc.h"
@@ -80,7 +80,7 @@ void CompositionMmapper::cleanup()
 
     // Erase all 'segment_*' files
     //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").last();
+    QString tmpPath = QDir::tempPath();
 
     QDir segmentsDir(tmpPath, "segment_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {

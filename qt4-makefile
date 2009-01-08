@@ -73,7 +73,6 @@ rosegarden:	$(OBJECTS)
 	$(MOC) $< -o $@
 
 %.cpp: %.qrc
-#	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
 	$(RCC) $< -o $@
 
 %.o: %.cpp
