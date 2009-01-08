@@ -150,6 +150,15 @@ ResourceFinder::getResourceDir(QString resourceCat)
 }
 
 QString
+ResourceFinder::getResourceSavePath(QString resourceCat, QString fileName)
+{
+    QString dir = getResourceSaveDir(resourceCat);
+    if (dir == "") return "";
+
+    return dir + "/" + fileName;
+}
+
+QString
 ResourceFinder::getResourceSaveDir(QString resourceCat)
 {
     // Returns the "user" location

@@ -551,7 +551,7 @@ void RosegardenGUIDoc::newDocument()
 void RosegardenGUIDoc::performAutoload()
 {
     QString autoloadFile =
-        ResourceFinder().getResourcePath("", "autoload.rg");
+        ResourceFinder().getResourcePath("autoload", "autoload.rg");
 
     QFileInfo autoloadFileInfo(autoloadFile);
 

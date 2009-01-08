@@ -77,6 +77,12 @@ public:
     QString getResourceDir(QString resourceCat);
 
     /**
+     * Return the true file path for the location in which the named
+     * resource file in the given resource category should be saved.
+     */
+    QString getResourceSavePath(QString resourceCat, QString fileName);
+
+    /**
      * Return the true file path for the location in which resource
      * files in the given resource category should be saved.
      */

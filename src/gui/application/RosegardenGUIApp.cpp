@@ -135,6 +135,8 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/FileSource.h"
+#include "gui/general/ResourceFinder.h"
+#include "gui/general/AutoSaveFinder.h"
 #include "gui/kdeext/KStartupLogo.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
@@ -2609,7 +2611,7 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
         if ( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) ) {
 
             QString autoloadFile =
-                ResourceFinder().getResourcePath("", "autoload.rg");
+                ResourceFinder().getResourcePath("autoload", "autoload.rg");
 
             QFileInfo autoloadFileInfo(autoloadFile);
             if (autoloadFile != "" && autoloadFileInfo.isReadable()) {
@@ -2710,17 +2712,18 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
     QString effectiveFilePath = filePath;
     bool canRecover = false;
 
-    //### implement this! (but not in rgTempQtIV) -- was in KApplication
-    QString autoSaveFileName = rgTempQtIV->checkRecoverFile(filePath, canRecover);
+    QString autoSaveFileName = AutoSaveFinder().checkAutoSaveFile(filePath);
+    bool recovering = (autoSaveFileName != "");
 
-    if (canRecover) {
+    if (recovering) {
+
         // First check if the auto-save file is more recent than the doc
         QFileInfo docFileInfo(filePath), autoSaveFileInfo(autoSaveFileName);
 
         if (docFileInfo.lastModified() < autoSaveFileInfo.lastModified()) {
 
             RG_DEBUG << "RosegardenGUIApp::openFile : "
-            << "found a more recent autosave file\n";
+                     << "found a more recent autosave file\n";
 
             // At this point the splash screen may still be there, hide it if
             // it's the case
@@ -2728,7 +2731,7 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
 
             // It is, so ask the user if he wants to use the autosave file
             int reply = QMessageBox::question(this, "",
-											  i18n("An auto-save file for this document has been found\nDo you want to open it instead ?"), QMessageBox::Yes | QMessageBox::No );
+                                              i18n("An auto-save file for this document has been found\nDo you want to open it instead ?"), QMessageBox::Yes | QMessageBox::No );
 
             if (reply == QMessageBox::Yes)
                 // open the autosave file instead
@@ -2736,13 +2739,12 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
             else {
                 // user doesn't want the autosave, so delete it
                 // so it won't bother us again if we reload
-                canRecover = false;
-                QFile::remove
-                    (autoSaveFileName);
+                QFile::remove(autoSaveFileName);
+                recovering = false;
             }
-
-        } else
-            canRecover = false;
+        } else {
+            recovering = false;
+        }
     }
 
     // Create a new blank document
@@ -2753,7 +2755,7 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
     // ignore return thingy
     //
     if (newDoc->openDocument(effectiveFilePath)) {
-        if (canRecover) {
+        if (recovering) {
             // Mark the document as modified,
             // set the "regular" filepath and name (not those of
             // the autosaved doc)
@@ -2938,15 +2940,16 @@ void RosegardenGUIApp::saveGlobalProperties()
         settings.setValue("filename", filename);
         settings.setValue("modified", m_doc->isModified());
 
-        //### implement (was in KApplication?)
-        QString tempname = rgTempQtIV->tempSaveName(filename);
-        QString errMsg;
-        bool res = m_doc->saveDocument(tempname, errMsg);
-        if (!res) {
-            if ( !errMsg.isEmpty() )
-                QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg))) );
-            else
-                QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1").arg(tempname)))  );
+        QString tempname = AutoSaveFinder().getAutoSavePath(filename);
+        if (tempname != "") {
+            QString errMsg;
+            bool res = m_doc->saveDocument(tempname, errMsg);
+            if (!res) {
+                if ( !errMsg.isEmpty() )
+                    QMessageBox::critical(this, "", i18n(qStrToCharPtrUtf8( QString("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg))) );
+                else
+                    QMessageBox::critical(this, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1").arg(tempname)))  );
+            }
         }
     }
 }
@@ -2961,10 +2964,10 @@ void RosegardenGUIApp::readGlobalProperties()
 
     if (modified) {
         bool canRecover;
-        //### implement (was in KApplication)
-        QString tempname = rgTempQtIV->checkRecoverFile(filename, canRecover);
 
-        if (canRecover) {
+        QString tempname = AutoSaveFinder().checkAutoSaveFile(filename);
+
+        if (tempname != "") {
             slotEnableTransport(false);
             m_doc->openDocument(tempname);
             slotEnableTransport(true);
@@ -8726,11 +8729,11 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 
     KTmpStatusMsg msg(i18n("Saving current document as default studio..."), this);
 
-//    QString autoloadFile = locateLocal("appdata", "autoload.rg"); //@@@ FIX //&&&
-	QString autoloadFile ("");
+    QString autoloadFile =
+        ResourceFinder().getResourceSavePath("autoload", "autoload.rg");
 	
     RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio : saving studio in "
-    << autoloadFile << endl;
+             << autoloadFile << endl;
 
     SetWaitCursor waitCursor;
     QString errMsg;
@@ -8756,7 +8759,7 @@ RosegardenGUIApp::slotImportDefaultStudio()
         return ;
 
     QString autoloadFile =
-        KGlobal::dirs()->findResource("appdata", "autoload.rg");
+        ResourceFinder().getResourcePath("autoload", "autoload.rg");
 
     QFileInfo autoloadFileInfo(autoloadFile);
 

@@ -35,6 +35,30 @@
 namespace Rosegarden
 {
 
+// This dialog used to use QTextCodec::codecForContent() to guess an
+// appropriate codec for the string, and then call
+// QTextCodec::heuristicContentMatch() to test each listed codec to
+// determine whether to include it in the dialog (if it has a non-zero
+// probability).
+
+// Unfortunately, both of those functions have been removed from Qt4.
+// Not that either was all that effective in the first place.
+
+// QTextCodec::canEncode is not a replacement; it tests whether a
+// given QString can be encoded using a certain codec, and our problem
+// is that we haven't got a QString to start with.
+
+// Let's try this:
+
+static bool
+codecPreserves(QTextCodec &codec, std::string encoded)
+{
+    QString u = codec.toUnicode(encoded.c_str(), encoded.length());
+    QByteArray d = codec.fromUnicode(u);
+    if (encoded == d.data()) return true;
+    else return false; // not at all authoritative
+}
+
 IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         std::string text) :
         QDialog(parent),
@@ -55,10 +79,8 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     vboxLayout->addWidget(codecs);
 
     std::string defaultCodec;
-    QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
+    QTextCodec *cc = 0;
     QTextCodec *codec = 0;
-
-    std::cerr << "cc is " << (cc ? cc->name().data() : "null") << std::endl;
 
     std::map<std::string, QString> codecDescriptions;
     codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
@@ -88,31 +110,37 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     int current = -1;
 
     int selectedProbability = 0;
-    if (cc) {
-//        selectedProbability = cc->heuristicContentMatch
-//            (m_text.c_str(), m_text.length());
-		selectedProbability = codec->canEncode( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> canEncode ????? FIX
-	}
 
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
-//		int probability = codec->heuristicContentMatch
-//				(m_text.c_str(), m_text.length());
-		int probability = codec->canEncode( m_text.c_str() );	//@@@ codec->heuristicContentMatch ==> canEncode ????? FIX
+        if (!codec) {
+            ++i;
+            continue;
+        }
+
+        bool preserves = codecPreserves(*codec, m_text);
+
+        if (preserves && !cc) {
+            // prefer the first codec that seems OK with what we've got
+            cc = codec;
+        }
+
+/*
+  we're no longer confident enough to actually eliminate codecs on the
+  basis of our crappy test, though
 
         if (probability <= 0) {
             ++i;
             continue;
         }
+*/
 
-		std::string name = qstrtostr(codec->name().data()); //codec->objectName();
+        std::string name = qstrtostr(codec->name().data());
 
-        std::cerr << "codec " << name << " probability " << probability << std::endl;
+        std::cerr << "codec " << name << " preserves " << preserves << std::endl;
 
-        if (name == "UTF-8" && 
-			(!cc || (qstrtostr(cc->name().data()) != name)) &&
-            probability > selectedProbability/2) {
-            std::cerr << "UTF-8 has a decent probability, selecting it instead to promote global harmony" << std::endl;
+        if (name == "UTF-8" && cc && preserves) {
+            std::cerr << "UTF-8 is a possibility, selecting it instead of our first choice to promote global harmony" << std::endl;
             cc = codec;
         }
 
@@ -134,7 +162,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         m_codecs.push_front(name);
         if (current >= 0) ++current;
 
-		if (cc && (name == qstrtostr(cc->name().data())) ) {
+        if (cc && (name == qstrtostr(cc->name().data())) ) {
             current = 0;
         }
 
@@ -152,7 +180,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
     m_example->setPaletteForegroundColor(QColor(Qt::blue));
-    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
+//    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
     if (current < 0) current = 0;
     codecs->setCurrentIndex(current);
     slotCodecSelected(current);
@@ -175,7 +203,7 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
     QTextCodec *codec = QTextCodec::codecForName( qStrToCharPtrUtf8(strtoqstr(name)) );
     if (!codec) return;
     m_codec = qstrtostr( codec->name() );
-    std::cerr << "Applying codec " << m_codec << std::endl;
+//    std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
     if (outText.length() > 80) outText = outText.left(80);
     m_example->setText("\"" + outText + "\"");
