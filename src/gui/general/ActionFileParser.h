@@ -30,8 +30,6 @@ namespace Rosegarden
 	
 class ActionFileParser : public QXmlDefaultHandler
 {
-    Q_OBJECT
-    
 public:
     ActionFileParser(QWidget *actionOwner);
     virtual ~ActionFileParser();

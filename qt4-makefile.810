@@ -41,8 +41,8 @@ LDLIBS		= \
 		-L$(CCDIR)/lib \
 		-L$(KDELIB) \
 		-L$(QTLIB) \
-		-lkdeprint -lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
-		-ljack -lasound -llo -llrdf -lraptor -llirc_client
+		-lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -51,8 +51,7 @@ SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.c
 QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
-UI		= $(wildcard src/gui/ui/*.ui)
-RC		= $(wildcard src/gui/ui/*.rc)
+UI		= $(wildcard src/*/*/*.ui)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden

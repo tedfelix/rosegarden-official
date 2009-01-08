@@ -30,7 +30,7 @@ class DirectoryCreationFailed : virtual public std::exception
 {
 public:
     DirectoryCreationFailed(QString directory) throw();
-    virtual ~DirectoryCreationFailed() throw() { }
+    virtual ~DirectoryCreationFailed() throw();
     virtual const char *what() const throw();
     
 protected:

@@ -810,3 +810,5 @@ FileSource::createCacheFile()
 
 }
 
+#include "FileSource.moc"
+

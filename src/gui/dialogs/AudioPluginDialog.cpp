@@ -558,12 +558,18 @@ AudioPluginDialog::slotPluginSelected(int i)
         AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 
+        int row = 2;
+        int col = 0;
+        int width = 8;
+
         for (; it != plugin->end(); ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input)) {
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
                                       m_gridLayout,
+                                      row,
+                                      col,
                                       PluginControl::Rotary,
                                       *it,
                                       m_pluginManager,
@@ -571,6 +577,11 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       inst->getPort(count)->value,
                                       showBounds,
                                       portCount > tooManyPorts);
+
+                if (col + 4 >= width) {
+                    col = 0;
+                    row++;
+                }
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));

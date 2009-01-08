@@ -547,3 +547,5 @@ CommandHistory::updateActions()
 
 }
 
+#include "CommandHistory.moc"
+

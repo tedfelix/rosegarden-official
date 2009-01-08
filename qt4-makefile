@@ -45,7 +45,7 @@ LDLIBS		= \
 		-L$(CCDIR)/lib \
 		-L$(KDELIB) \
 		-L$(QTLIB) \
-		-lkdeprint -lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -llirc_client
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)

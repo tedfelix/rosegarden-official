@@ -31,6 +31,22 @@
 namespace Rosegarden
 {
 
+DirectoryCreationFailed::DirectoryCreationFailed(QString directory) throw() :
+    m_directory(directory)
+{
+    std::cerr << "ERROR: Directory creation failed for directory: "
+              << directory.toStdString() << std::endl;
+}
+
+const char *
+DirectoryCreationFailed::what() const throw()
+{
+    return QString("Directory creation failed for \"%1\"")
+        .arg(m_directory).toLocal8Bit().data();
+}
+
+DirectoryCreationFailed::~DirectoryCreationFailed() throw() { }
+
 TempDirectory *
 TempDirectory::m_instance = new TempDirectory;
 
@@ -262,4 +278,4 @@ TempDirectory::cleanupAbandonedDirectories(QString rgDir)
 }
 
 
-        
+       

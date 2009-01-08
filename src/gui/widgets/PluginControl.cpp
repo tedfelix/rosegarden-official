@@ -37,6 +37,8 @@ namespace Rosegarden
 
 PluginControl::PluginControl(QWidget *parent,
                              QGridLayout *layout,
+                             int row,
+                             int col,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
@@ -46,6 +48,8 @@ PluginControl::PluginControl(QWidget *parent,
                              bool hidden):
         QObject(parent),
         m_layout(layout),
+        m_row(row),
+        m_col(col),
         m_type(type),
         m_port(port),
         m_pluginManager(aPM),
@@ -152,50 +156,31 @@ PluginControl::PluginControl(QWidget *parent,
         }
         upp->setFont(plainFont);
 
-// 		QWidgetItem *item;
-		QWidgetItem *item;
-
         if (!hidden) {
             controlTitle->show();
- 			item = new QWidgetItem(controlTitle);
-// 			item = new QWidget(controlTitle);
-			item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-//             m_layout->addItem(item);
-			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
+            m_layout->addWidget(controlTitle, m_row, m_col, Qt::AlignRight | Qt::AlignBottom);
         } else {
             controlTitle->hide();
         }
 
         if (showBounds && !hidden) {
             low->show();
-			item = new QWidgetItem(low);
-// 			item = new QWidget(low);
-			item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-//             m_layout->addItem(item);
-			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
-		} else {
+            m_layout->addWidget(low, m_row, m_col+1, Qt::AlignRight | Qt::AlignBottom);
+        } else {
             low->hide();
         }
 
         if (!hidden) {
             m_dial->show();
-			item = new QWidgetItem(m_dial);
-// 			item = new QWidget(m_dial);
-			item->setAlignment(Qt::AlignCenter);
-//             m_layout->addItem(item);
-			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
-		} else {
+            m_layout->addWidget(m_dial, m_row, m_col+2, Qt::AlignCenter);
+        } else {
             m_dial->hide();
         }
 
         if (showBounds && !hidden) {
             upp->show();
-			item = new QWidgetItem(upp);
-// 			item = new QWidget(upp);
-			item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-//             m_layout->addItem(item);
-			m_layout->addItem( dynamic_cast<QLayoutItem*>(item) );
-		} else {
+            m_layout->addWidget(upp, m_row, m_col+3, Qt::AlignLeft | Qt::AlignBottom);
+        } else {
             upp->hide();
         }
     }

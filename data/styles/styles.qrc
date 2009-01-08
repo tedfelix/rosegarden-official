@@ -1,9 +1,0 @@
-<!DOCTYPE RCC>
-<RCC version="1.0">
-<qresource>
-<file>Classical.xml</file>
-<file>Cross.xml</file>
-<file>Mensural.xml</file>
-<file>Triangle.xml</file>
-</qresource>
-</RCC>

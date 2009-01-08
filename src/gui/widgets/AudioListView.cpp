@@ -23,7 +23,7 @@
 
 #include <Q3DragObject>
 #include <Q3UriDrag>
-#include <QTextDrag>
+#include <Q3TextDrag>
 
 // #include <QMimeData>	// qt4: replaces Q3DragObject and Q3UriDrag
 
@@ -36,12 +36,13 @@ AudioListView::AudioListView(QWidget *parent, const char *name)
 	setObjectName( name );
     setDragEnabled(true);
     setAcceptDrops(true);
-    setDropVisualizer(false);
+//&&&    setDropVisualizer(false);
 }
 
 bool AudioListView::acceptDrag(QDropEvent* e) const
 {
-    return Q3UriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);
+    return false;
+//&&&    return Q3UriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);
 }
 
 Q3DragObject* AudioListView::dragObject()
@@ -61,7 +62,7 @@ Q3DragObject* AudioListView::dragObject()
              << "file id = " << item->getId()
              << ", start time = " << item->getStartTime() << endl;
     
-    return new QTextDrag(audioData, this);
+    return new Q3TextDrag(audioData, this);
 }
 
 }

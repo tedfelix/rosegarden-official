@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -46,8 +45,12 @@ public:
         NumericSlider
     } ControlType;
 
+	//### This is just garbage
+
     PluginControl(QWidget *parent,
                   QGridLayout *layout,
+		  int row,
+		  int col,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
@@ -75,6 +78,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     QGridLayout         *m_layout;
+
+	int m_row;
+	int m_col;
 
     ControlType          m_type;
     PluginPort          *m_port;
