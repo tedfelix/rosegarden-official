@@ -308,8 +308,10 @@ The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
 */
 
-static const char *description =
-    I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
+static KLocalizedString description =
+       ki18n("Rosegarden - A sequencer and musical notation editor");
+
+/*&&& removed options -- we'll want a different set anyway 
 
 static KCmdLineOptions options[] =
     {
@@ -320,7 +322,7 @@ static KCmdLineOptions options[] =
         { "+[File]", I18N_NOOP("file to open"), 0 },
         { 0, 0, 0 }
     };
-
+*/
 
 // -----------------------------------------------------------------
 
@@ -335,8 +337,8 @@ static int _x_errhandler( Display *dpy, XErrorEvent *err )
     char errstr[256];
     XGetErrorText( dpy, err->error_code, errstr, 256 );
     if ( err->error_code != BadWindow )
-        kdWarning() << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
-        << "\n  Major opcode:  " << err->request_code << endl;
+	std::cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
+		  << "\n  Major opcode:  " << err->request_code << std::endl;
     return 0;
 }
 #endif
@@ -345,10 +347,11 @@ static int _x_errhandler( Display *dpy, XErrorEvent *err )
 // std::cerr << kdBacktrace() << std::endl
 // (see kdebug.h)
 
+//###!!! This should no longer be necessary... should it?
+
+/*&&&
 void testInstalledVersion()
 {
-    //###!!! This should no longer be necessary... should it?
-
     QString versionLocation =
 	ResourceFinder().getResourcePath("appdata", "version.txt");
     QString installedVersion;
@@ -413,7 +416,7 @@ void testInstalledVersion()
 
     exit(1);
 }
-
+*/
 
 int main(int argc, char *argv[])
 {
@@ -421,10 +424,10 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
-    KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
+    KAboutData aboutData( "rosegarden", "", ki18n("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
-                          0,
+                          ki18n("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          KLocalizedString(),
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
 
@@ -476,9 +479,11 @@ int main(int argc, char *argv[])
     aboutData.setTranslator(ki18nc("NAME OF TRANSLATORS", "Your names"),
 			    ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
 
+/*&&&
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
     KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
+*/
 
     if (!RosegardenApplication::start())
         return 0;
@@ -491,6 +496,7 @@ int main(int argc, char *argv[])
 
     // Parse cmd line args
     //
+/*&&&
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
     if (!args->isSet("ignoreversion")) {
@@ -499,7 +505,7 @@ int main(int argc, char *argv[])
         //
         testInstalledVersion();
     }
-
+*/
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
@@ -562,8 +568,10 @@ int main(int argc, char *argv[])
 
     // See if the settings wants us to control JACK
     //
-    if ( qStrToBool( settings.value("Logo", "true" ) )  && (!qApp->isSessionRestored() && args->isSet("splash")) ) {
-        RG_DEBUG << k_funcinfo << "Showing startup logo\n";
+    if ( qStrToBool( settings.value("Logo", "true" ) ) 
+//&&&	 && (!qApp->isSessionRestored() && args->isSet("splash"))
+	)
+    {
         startLogo = KStartupLogo::getInstance();
 	startLogo->setShowTip(!newVersion);
         startLogo->show();
@@ -577,6 +585,7 @@ int main(int argc, char *argv[])
     //
     RosegardenGUIApp *rosegardengui = 0;
 
+/*&&& worry about this later
     if (app.isSessionRestored()) {
         RG_DEBUG << "Restoring from session\n";
 
@@ -590,14 +599,15 @@ int main(int argc, char *argv[])
         }
 
     } else {
-
+*/
+/*&&& 
 #ifndef NO_SOUND
         app.setNoSequencerMode(!args->isSet("sequencer"));
 #else
 
         app.setNoSequencerMode(true);
 #endif // NO_SOUND
-
+*/
         rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(), startLogo);
 
 	rosegardengui->setIsFirstRun(newVersion);
@@ -618,6 +628,7 @@ int main(int argc, char *argv[])
             QApplication::flushX();
         }
 
+/*&&&
         if (args->count()) {
             rosegardengui->openFile(QFile::decodeName(args->arg(0)), RosegardenGUIApp::ImportCheckType);
         } else {
@@ -625,9 +636,8 @@ int main(int argc, char *argv[])
         }
 
         args->clear();
-
     }
-
+*/
     QObject::connect(&app, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 
