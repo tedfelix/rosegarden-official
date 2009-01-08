@@ -263,9 +263,17 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
 		
 	    bars=$(($bars + 5))
 	    count=$(($bars * 7 / 3))
-	
-	    indev=/dev/pts/0
-	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
+
+// old:	
+//	    indev=/dev/pts/0
+//	    if [ ! -c "$indev" ]; then indev=/dev/ptya0; fi
+            
+            indev=/dev/pts/0
+            if ([ ! -c "$indev" ] || [ ! -w "$indev" ]); then indev=/dev/pts/1; fi
+            if ([ ! -c "$indev" ] || [ ! -w "$indev" ]); then indev=/dev/ptya0; fi
+            // note: -c becomes True if file is a Character special device.
+            // -w : is writeable
+            
 
 	    PROGRESS=`$prog_temp_file`
 
