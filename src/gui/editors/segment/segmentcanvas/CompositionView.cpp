@@ -54,7 +54,6 @@
 #include <QPoint>
 #include <QRect>
 #include <QScrollBar>
-#include <QScrollArea>
 #include <QSize>
 #include <QString>
 #include <QWidget>
@@ -85,13 +84,9 @@ protected:
 
 CompositionView::CompositionView(RosegardenGUIDoc* doc,
                                  CompositionModel* model,
-								QWidget * parent, const char * name)	//, WFlags f)
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,2,0)
-        : RosegardenScrollView(parent, name, f | WNoAutoErase | WStaticContents),
-#else
-        :
-        RosegardenScrollView(parent, name, f | WRepaintNoErase | WResizeNoErase | WStaticContents),
-#endif
+                                 QWidget * parent, const char * name) :
+    RosegardenScrollView(parent, name),
+//### These are usually unnecessary for Qt4 -- let's see how it goes... | WRepaintNoErase | WResizeNoErase | WStaticContents),
         m_model(model),
         m_currentIndex(0),
         m_tool(0),
@@ -134,8 +129,10 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
     }
     
     setDragAutoScroll(true);
-    setBackgroundMode(NoBackground);
-    viewport()->setBackgroundMode(NoBackground);
+
+//@@@ Not sure what becomes of these    setBackgroundMode(NoBackground);
+//@@@    viewport()->setBackgroundMode(NoBackground);
+
     viewport()->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
     slotUpdateSize();
@@ -191,8 +188,8 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         doc->getAudioPreviewThread().setEmptyQueueListener(this);
     }
     
-    m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
-    m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
+//@@@ no longer necessary?    m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
+//@@@ no longer necessary?     m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
 
     viewport()->setMouseTracking(true);
 }
@@ -403,7 +400,6 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
                 i != items.end(); ++i) {
             CompositionItem ic = *i;
             if (ic->z() > maxZ) {
-                RG_DEBUG << k_funcinfo << "found new topmost at z=" << ic->z() << endl;
                 res = ic;
                 maxZ = ic->z();
                 maxZItemPos = i;
@@ -417,8 +413,6 @@ CompositionItem CompositionView::getFirstItemAt(QPoint pos)
             delete *i;
 
         return res;
-    } else {
-        RG_DEBUG << k_funcinfo << "no item under cursor\n";
     }
 
 
@@ -482,7 +476,7 @@ void CompositionView::slotStoppedRecording()
 
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
-    QScrollArea::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
     slotUpdateSize();
 
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
@@ -657,7 +651,11 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
     //      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
     //  	     << rect << endl;
 
-    QPainter p(&m_segmentsDrawBuffer, viewport());
+//### This constructor used to mean "start painting on the draw buffer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
+//@@@    QPainter p(&m_segmentsDrawBuffer, viewport());
+// Let's see how we get on with:
+    QPainter p(&m_segmentsDrawBuffer);
+
     p.translate( -contentsX(), -contentsY());
 
     if (!m_backgroundPixmap.isNull()) {
@@ -683,7 +681,10 @@ void CompositionView::refreshArtifactsDrawBuffer(const QRect& rect)
     //               << rect << endl;
 
     QPainter p;
-    p.begin(&m_artifactsDrawBuffer, viewport());
+
+//@@@ see comment in refreshSegmentsDrawBuffer    p.begin(&m_artifactsDrawBuffer, viewport());
+    p.begin(&m_artifactsDrawBuffer);
+
     p.translate( -contentsX(), -contentsY());
     //     QRect r(contentsX(), contentsY(), m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
     drawAreaArtifacts(&p, rect);
@@ -944,10 +945,10 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
     // no need to check for clipping, these guides are meant to follow the mouse cursor
     QPoint guideOrig(m_topGuidePos, m_foreGuidePos);
 	
-// 	int contentsHeight = contentsHeight();
-// 	int contentsWidth = contentsWidth();
-	int contentsHeight = this->widget()->height();	//@@@
-	int contentsWidth = this->widget()->width();
+    int contentsHeight = this->contentsHeight();
+    int contentsWidth = this->contentsWidth();
+//	int contentsHeight = this->widget()->height();	//@@@
+//	int contentsWidth = this->widget()->width();
 	
     p->save();
     p->setPen(m_guideColor);

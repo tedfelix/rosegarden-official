@@ -46,7 +46,7 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 					const char* name) //, WFlags f)
-			: QScrollArea(parent), // name), //, f),
+    : Q3ScrollView(parent, name), //, f),
 		
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
@@ -76,6 +76,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 // <QScrollArea*>this->horizontalScrollBar().value()
 //                  + <QScrollArea*>this->width()
 //
+/*###
 int RosegardenScrollView::contentsX()	//### todo: when GUI is ready: check the following code
 {
 	return this->horizontalScrollBar()->value();
@@ -98,7 +99,7 @@ int RosegardenScrollView::visibleHeight()
 {
 	return this->verticalScrollBar()->value() + this->height();
 }
-
+*/
 
 
 void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
@@ -395,7 +396,7 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
-    QScrollArea::resizeEvent(e);
+    Q3ScrollView::resizeEvent(e);
     if (!horizontalScrollBar()->isVisible())
         updateBottomWidgetGeometry();
 
@@ -403,8 +404,8 @@ void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
 {
-//     QScrollArea::setHBarGeometry(hbar, x, y, w, h);
-	hbar.setGeometry( x,y, w,h );
+     Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
+//	hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
 
@@ -447,7 +448,7 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
             emit zoomOut();
         return ;
     }
-    QScrollArea::wheelEvent(e);
+    Q3ScrollView::wheelEvent(e);
 }
 
 }

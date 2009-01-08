@@ -20,7 +20,7 @@
 #define _RG_ROSEGARDENSCROLLVIEW_H_
 
 #include <QPoint>
-#include <QScrollArea>
+#include <Q3ScrollView>
 #include <QDateTime>
 #include <QTimer>
 
@@ -41,7 +41,7 @@ namespace Rosegarden
  * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
  * just above the bottom scrollbar.
  */
-class RosegardenScrollView : public QScrollArea // was:QScrollView
+class RosegardenScrollView : public Q3ScrollView
 {
     Q_OBJECT
 public:
@@ -83,22 +83,6 @@ public:
     int getDeltaScroll() { return m_minDeltaScroll; }
 
     virtual void wheelEvent(QWheelEvent *);
-
-	
-	
-	// convenience methods, added for qt4 support
-	// they will either use (I'm not shure yet):
-	// QRegion QWidget::visibleRegion () 
-	// or 
-	// <QScrollArea*>this->horizontalScrollBar().value()
-	//                  + <QScrollArea*>this->width()
-	//
-	int contentsX();
-	int contentsY();
-        void setContentsPos(int posX, int posY); //### JAS todo: check for errors later
-	int visibleWidth();
-	int visibleHeight();
-	
 
 public slots:
     /**
