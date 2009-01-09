@@ -539,8 +539,8 @@ AudioPluginDialog::slotPluginSelected(int i)
             m_programCombo->setMaxVisibleItems(20);
             m_programCombo->addItem(i18n("<none selected>"));
             m_gridLayout->addWidget(m_programLabel,
-                                             0, 0, 0-
-                                             0+1, 0- 1, Qt::AlignRight);
+                                    0, 0, 0-
+                                    0+1, 0- 0+1, Qt::AlignRight);
             m_gridLayout->addWidget(m_programCombo, 0, 1, 1, -1, Qt::AlignLeft);
             connect(m_programCombo, SIGNAL(activated(const QString &)),
                     this, SLOT(slotPluginProgramChanged(const QString &)));
@@ -736,7 +736,7 @@ AudioPluginDialog::updatePluginProgramList()
             m_programCombo->addItem(i18n("<none selected>"));
             m_gridLayout->addWidget(m_programLabel,
                                              0, 0, 0-
-                                             0+1, 0- 1, Qt::AlignRight);
+                                             0+1, 0-0+ 1, Qt::AlignRight);
             m_gridLayout->addWidget(m_programCombo, 0, 1, 1, -1, Qt::AlignLeft);
 
             m_programCombo->clear();

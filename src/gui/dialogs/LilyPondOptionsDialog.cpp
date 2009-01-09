@@ -206,7 +206,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportStaffMerge = new QCheckBox(
                                  i18n("Merge tracks that have the same name"), frameStaff);
     m_lilyExportStaffMerge->setChecked( qStrToBool( settings.value("lilyexportstaffmerge", "false" ) ) );
-    layoutStaff->addWidget(m_lilyExportStaffMerge, 1, 0, 0+1, 1- 1);
+    layoutStaff->addWidget(m_lilyExportStaffMerge, 1, 0, 0+1, 1- 0+1);
+
 
     frameStaff->setLayout(layoutStaff);
 
@@ -242,19 +243,19 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     // fixed, no "- - -" lyrics are generated for an empty lyrics
     // default again into lyrics - HJJ
     m_lilyExportLyrics->setChecked( qStrToBool( settings.value("lilyexportlyrics", "true" ) ) );
-    layoutNotation->addWidget(m_lilyExportLyrics, 1, 0, 0+1, 1- 1);
+    layoutNotation->addWidget(m_lilyExportLyrics, 1, 0, 0+1, 1- 0+1);
 
     m_lilyExportBeams = new QCheckBox(
                             i18n("Export beamings"), frameNotation);
     m_lilyExportBeams->setChecked( qStrToBool( settings.value("lilyexportbeamings", "false" ) ) );
-    layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 0+1, 1- 1);
+    layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 0+1, 1- 0+1);
 
     // recycle this for a new option to ignore the track brackets (so it is less
     // obnoxious to print single parts where brackets are in place)
     m_lilyExportStaffGroup = new QCheckBox(
                                  i18n("Export track staff brackets"), frameNotation);
     m_lilyExportStaffGroup->setChecked( qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) );
-    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 1); 
+    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1); 
 
     frameNotation->setLayout(layoutNotation);
 
@@ -287,12 +288,13 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyRaggedBottom = new QCheckBox(
                            i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
     m_lilyRaggedBottom->setChecked( qStrToBool( settings.value("lilyraggedbottom", "false" ) ) );
-    layoutAdvancedLayout->addWidget(m_lilyRaggedBottom, 1, 0, 0+1, 1- 1);
+    layoutAdvancedLayout->addWidget(m_lilyRaggedBottom, 1, 0, 0+1, 1- 0+1);
+
 
     m_lilyChordNamesMode = new QCheckBox(
                            i18n("Interpret chord texts as lead sheet chord names"), frameAdvancedLayout);
     m_lilyChordNamesMode->setChecked( qStrToBool( settings.value("lilychordnamesmode", "false" ) ) );
-    layoutAdvancedLayout->addWidget(m_lilyChordNamesMode, 2, 0, 0+1, 1- 1);
+    layoutAdvancedLayout->addWidget(m_lilyChordNamesMode, 2, 0, 0+1, 1- 0+1);
 
     frameAdvancedLayout->setLayout(layoutAdvancedLayout);
 
@@ -309,12 +311,12 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportPointAndClick = new QCheckBox(
                                     i18n("Enable \"point and click\" debugging"), frameMisc);
     m_lilyExportPointAndClick->setChecked( qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) );
-    layoutMisc->addWidget(m_lilyExportPointAndClick, 0, 0, 0- 0+1, 1- 1);
+    layoutMisc->addWidget(m_lilyExportPointAndClick, 0, 0, 0- 0+1, 1- 0+1);
 
     m_lilyExportMidi = new QCheckBox(
                            i18n("Export \\midi block"), frameMisc);
     m_lilyExportMidi->setChecked( qStrToBool( settings.value("lilyexportmidi", "false" ) ) );
-    layoutMisc->addWidget(m_lilyExportMidi, 1, 0, 0+1, 1- 1);
+    layoutMisc->addWidget(m_lilyExportMidi, 1, 0, 0+1, 1- 0+1);
 
     m_lilyMarkerMode = new QComboBox(frameMisc);
     m_lilyMarkerMode->addItem(i18n("No markers"));

@@ -119,14 +119,14 @@ PresetHandlerDialog::initDialog()
     }
     scopeBox->setLayout(scopeBoxLayout);
 
-    layout->addWidget(title, 0, 0, 0- 0+1, 1- 1, Qt::AlignLeft);
+    layout->addWidget(title, 0, 0, 0- 0+1, 1-0+ 1, Qt::AlignLeft);
     layout->addWidget(catlabel, 1, 0, Qt::AlignRight);
     layout->addWidget(m_categoryCombo, 1, 1);
     layout->addWidget(inslabel, 2, 0, Qt::AlignRight);
     layout->addWidget(m_instrumentCombo, 2, 1);
     layout->addWidget(plylabel, 3, 0, Qt::AlignRight);
     layout->addWidget(m_playerCombo, 3, 1);
-    layout->addWidget(scopeBox, 4, 0, 0+1, 1- 1, Qt::AlignLeft);
+    layout->addWidget(scopeBox, 4, 0, 0+1, 1-0+ 1, Qt::AlignLeft);
 
     populateCategoryCombo();
     // try to set to same category used previously

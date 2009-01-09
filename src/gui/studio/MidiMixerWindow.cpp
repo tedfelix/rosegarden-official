@@ -142,7 +142,7 @@ MidiMixerWindow::setupTabs()
             //.arg(i18n("MIDI Mixer")), m_tabFrame);
 
             QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 1, Qt::AlignCenter);
+            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 0+1, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i) {

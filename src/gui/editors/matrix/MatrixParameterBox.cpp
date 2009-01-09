@@ -68,7 +68,7 @@ MatrixParameterBox::initBox()
     gridLayout->setSpacing(1);
 
     m_instrumentParameterBox = new InstrumentParameterBox(m_doc, this);
-    gridLayout->addWidget(m_instrumentParameterBox, 0, 0, 7- 0+1, 2- 1);
+    gridLayout->addWidget(m_instrumentParameterBox, 0, 0, 7- 0+1, 2- 0+1);
 
     setLayout(gridLayout);
 }

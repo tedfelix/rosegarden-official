@@ -276,15 +276,15 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-	gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 3, Qt::AlignRight);
-    gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 5);
+	gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
+    gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
     gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
 
 	gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
-    gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 5);
+    gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
     gridLayout->addWidget(colourLabel, row, 0); //, AlignRight);
@@ -293,7 +293,7 @@ SegmentParameterBox::initBox()
 
 //    gridLayout->addWidget(m_rangeLabel, row, 0); //, AlignRight);
 //    gridLayout->addWidget(m_lowButton, row, 1, row- row+1, 2);
-//    gridLayout->addWidget(m_highButton, row, 3, row- row+1, 4- 4);
+//    gridLayout->addWidget(m_highButton, row, 3, row- row+1, 4- 3+1);
 //    ++row;
 
 //    m_autoFadeLabel->hide();

@@ -52,7 +52,7 @@ PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString 
     layout->setSpacing(5);
 
     m_pitch = new PitchChooser(text, frame, initialPitch);
-    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2- 1, Qt::AlignHCenter);
+    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

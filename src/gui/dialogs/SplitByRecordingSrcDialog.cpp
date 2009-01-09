@@ -72,7 +72,7 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
 
     layout->addWidget(new QLabel( i18n("Device:"), groupBox ), 1, 0);
     m_device = new QComboBox( groupBox );
-    layout->addWidget( m_device, 1, 1, 1, 2 - 2);
+    layout->addWidget( m_device, 1, 1, 0+1, 2 - 1+1);
 
     m_deviceIds.clear();
     m_deviceIds.push_back( -1);

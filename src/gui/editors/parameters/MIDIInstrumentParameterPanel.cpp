@@ -117,6 +117,32 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->setColumnStretch(2, 1);
 
+    m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 3- 0+1, Qt::AlignCenter);
+    m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 3- 0+1, Qt::AlignCenter)
+;
+
+    m_mainGrid->addWidget(channelLabel, 2, 0, 0+1, 1- 0+1, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_channelValue, 2, 3, Qt::AlignRight);
+
+    m_mainGrid->addWidget(percussionLabel, 3, 0, 0+1, 1- 0+1, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignRight);
+
+    m_mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
+    m_mainGrid->addWidget(m_bankValue, 4, 2, 0+1, 3- 2+1, Qt::AlignRight);
+
+    m_mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
+    m_mainGrid->addWidget(m_programValue, 5, 2, 0+1, 3- 2+1, Qt::AlignRight);
+
+    m_mainGrid->addWidget(m_variationLabel, 6, 0);
+    m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
+    m_mainGrid->addWidget(m_variationValue, 6, 2, 0+1, 3- 2+1, Qt::AlignRight);
+      
+    m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, 0+1, 2- 0+1, Qt::AlignLeft);
+    m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, Qt::AlignRight);	
+    
+    /*@@@
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, Qt::AlignCenter);
     m_mainGrid->addWidget(m_connectionLabel, 1, 0, 0+1, 2- 1, Qt::AlignCenter);
 
@@ -140,7 +166,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
       
 	m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, Qt::AlignLeft);
 	m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 2, Qt::AlignRight);	
-    
+    */
     
     // Populate channel lists
     //
@@ -318,7 +344,8 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
-        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 1, Qt::AlignHCenter);
+        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 0+1, Qt::AlignHCenter);
+//@@@  m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 1, Qt::AlignHCenter);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);

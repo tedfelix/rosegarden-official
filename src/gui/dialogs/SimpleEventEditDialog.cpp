@@ -204,7 +204,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     vbox->setLayout(vboxLayout);
 
     m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), m_notationGroupBox);
-    layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2- 1);
+    layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
     m_lockNotationValues->setChecked(true);
 
     connect(m_lockNotationValues, SIGNAL(released()),

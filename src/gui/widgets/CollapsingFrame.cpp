@@ -63,7 +63,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
-    m_layout->addWidget(m_toggleButton, 0, 0, 0- 0+1, 2- 1);
+    m_layout->addWidget(m_toggleButton, 0, 0, 0- 0+1, 2-0+ 1);
 }
 
 CollapsingFrame::~CollapsingFrame()
@@ -93,7 +93,7 @@ CollapsingFrame::setWidget(QWidget *widget)
     assert(!m_widget);
     m_widget = widget;
     if (m_fill) {
-        m_layout->addWidget(widget, 1, 0, 0+1, 2- 1);
+        m_layout->addWidget(widget, 1, 0, 0+1, 2- 0+1);
     } else {
         m_layout->addWidget(widget, 1, 1);
     }

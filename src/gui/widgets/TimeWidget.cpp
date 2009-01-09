@@ -127,7 +127,7 @@ TimeWidget::init(bool editable)
             }
             connect(m_note, SIGNAL(activated(int)),
                     this, SLOT(slotNoteChanged(int)));
-            layout->addWidget(m_note, 0, 1, 0- 1, 3);
+            layout->addWidget(m_note, 0, 1, 0-0+ 1, 3);
 
         } else {
 
@@ -139,7 +139,7 @@ TimeWidget::init(bool editable)
                 label = i18n("<inexact>");
             QLineEdit *le = new QLineEdit(label);
             le->setReadOnly(true);
-            layout->addWidget(le, 0, 1, 0- 1, 3);
+            layout->addWidget(le, 0, 1, 0- 0+1, 3);
         }
 
         label = new QLabel(i18n("Units:"));

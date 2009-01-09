@@ -166,7 +166,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     QGridLayout *grid = new QGridLayout(this);
     grid->setSpacing(4);
 
-    grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2- 1);
+    grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2-0+ 1);
 
     if (haveInOut) {
         m_inputLabel = new QLabel(i18n("In:"), this);
@@ -176,9 +176,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         grid->addWidget(m_outputLabel, 0, 3, Qt::AlignRight);
         grid->addWidget(m_audioOutput->getWidget(), 0, 4, 1, 2);
     }
-
-    grid->addWidget(pluginVbox, 2, 0, 0+1, 2- 1);
-    grid->addWidget(faderHbox, 1, 3, 2, 5- 4);
+    grid->addWidget(pluginVbox, 2, 0, 0+1, 2- 0+1);
+    grid->addWidget(faderHbox, 1, 3, 1+1, 5- 3+1);
 
     grid->addWidget(m_synthGUIButton, 1, 0);
     grid->addWidget(m_pan, 1, 2);

@@ -282,15 +282,15 @@ $code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b7- 7\b/${1}0/gs;
 $code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b8- 8\b/${1}0/gs;
 $code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b9- 9\b/${1}0/gs;
 
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b0\+1\b/${1}1/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b1\+1\b/${1}2/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b2\+1\b/${1}3/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b3\+1\b/${1}4/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b4\+1\b/${1}5/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b5\+1\b/${1}6/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b6\+1\b/${1}7/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b7\+1\b/${1}8/gs;
-$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b8\+1\b/${1}9/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b0\+1\b/${1}1/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b1\+1\b/${1}2/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b2\+1\b/${1}3/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b3\+1\b/${1}4/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b4\+1\b/${1}5/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b5\+1\b/${1}6/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b6\+1\b/${1}7/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b7\+1\b/${1}8/gs;
+#$code =~ s/(PLOB_addWidget\s*\([^;\)]*)\b8\+1\b/${1}9/gs;
 
 # Then convert back the distinctive name
 

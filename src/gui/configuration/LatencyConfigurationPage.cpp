@@ -71,7 +71,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
     m_jackPlayback = new QSlider(Horizontal, frame);
     m_jackPlayback->setTickPosition(QSlider::TicksBelow);
-    layout->addWidget(m_jackPlayback, 3, 2, 1, 3- 3);
+    layout->addWidget(m_jackPlayback, 3, 2, 1, 3- 2+1);
 
     QLabel *jackPlaybackLabel = new QLabel(QString("%1").arg(jackPlaybackValue),
                                            frame);
@@ -94,7 +94,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
 
     m_jackRecord = new QSlider(Horizontal, frame);
     m_jackRecord->setTickPosition(QSlider::TicksBelow);
-    layout->addWidget(m_jackRecord, 5, 2, 1, 3- 3);
+    layout->addWidget(m_jackRecord, 5, 2, 1, 3- 2+1);
 
     QLabel *jackRecordLabel = new QLabel(QString("%1").arg(jackRecordValue),
                                          frame);

@@ -62,7 +62,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     m_colourtable = new ColourTable(frame, m_map, m_listmap);
     m_colourtable->setFixedHeight(280);
 
-    layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 1);
+    layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 0+1);
 
     QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
                                    frame);

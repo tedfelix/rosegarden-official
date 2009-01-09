@@ -159,7 +159,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     //
     row++;
     QLabel *insLabel = new QLabel(i18n("Instrument"), m_playbackGroup);
-    groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 1);
+    groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
     m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
@@ -276,7 +276,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
 
     m_presetButton = new QPushButton(i18n("Load"), m_defaultsGroup);
-    groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5- 5);
+    groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5-4+1);
 
     // default clef
     //
@@ -309,7 +309,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default transpose
     //
     m_transpLbl = new QLabel(i18n("Transpose"), m_defaultsGroup);
-	groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 4, Qt::AlignRight);
+	groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
 
     connect(m_defTranspose, SIGNAL(activated(int)),
@@ -340,7 +340,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     m_highButton = new QPushButton(i18n("---"), m_defaultsGroup);
     m_highButton->setToolTip(i18n("Choose the highest suggested playable note, using a staff"));
-    groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 5);
+    groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 4+1);
 
     updateHighLow();
 

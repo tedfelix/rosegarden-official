@@ -91,7 +91,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page);
-    topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 1);
+    topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 0+1);
     
     connect(m_rootNotesList, SIGNAL(highlighted(int)),
             this, SLOT(slotRootHighlighted(int)));

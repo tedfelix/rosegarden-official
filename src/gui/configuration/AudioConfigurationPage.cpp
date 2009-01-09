@@ -191,7 +191,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
     label->setWordWrap(true);
 
-    layout->addWidget(label, row, 0, row- row+1, 3- 1);
+    layout->addWidget(label, row, 0, row- row+1, 3- 0+1);
     ++row;
 
     settings.beginGroup( SequencerOptionsConfigGroup );

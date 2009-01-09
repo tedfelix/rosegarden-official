@@ -58,7 +58,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     layout->setSpacing(5);
 
     m_pitch = new PitchChooser(i18n("Starting split pitch"), frame, 60);
-    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2- 1, Qt::AlignHCenter);
+    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
 
     m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);
     layout->addWidget(m_range,
@@ -67,7 +67,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
                               );
 
     m_duplicate = new QCheckBox(i18n("Duplicate non-note events"), frame);
-    layout->addWidget(m_duplicate, 2, 0, 0+1, 2- 1);
+    layout->addWidget(m_duplicate, 2, 0, 0+1, 2- 0+1);
 
     layout->addWidget(new QLabel(i18n("Clef handling:"), frame), 3, 0);
 

@@ -64,7 +64,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     QGroupBox *groupBox = new QGroupBox(i18n("Librarian"), m_mainFrame);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
 
-    m_mainLayout->addWidget(groupBox, 0, 3, 2- 1, 5- 4);
+    m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
 
     groupBoxLayout->addWidget(new QLabel(i18n("Name")));
     m_librarian = new QLabel(groupBox);

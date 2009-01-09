@@ -68,7 +68,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     if (p) {
         QLabel *label = new QLabel(preamble, this);
         label->setWordWrap(true);
-        m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1- 1);
+        m_mainLayout->addWidget(label, 0, 0, 0- 0+1, 1-0+ 1);
         zero = 1;
     }
 
@@ -89,7 +89,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_notationTarget = new QCheckBox
                        (i18n("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
-    layout->addWidget(m_notationTarget, 1, 0, 0+1, 1- 1);
+    layout->addWidget(m_notationTarget, 1, 0, 0+1, 1-0+ 1);
     if (!showNotationOption)
         m_notationTarget->hide();
     quantizerBox->setLayout(layout);
@@ -137,7 +137,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     layout->addWidget(m_maxTuplet, 2, 1);
 
     m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), m_notationBox);
-    layout->addWidget(m_counterpoint, 3, 0, 0+1, 1- 1);
+    layout->addWidget(m_counterpoint, 3, 0, 0+1, 1-0+ 1);
 
     m_notationBox->setLayout(layout);
 
@@ -163,7 +163,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     m_durationCheckBox = new QCheckBox
                          (i18n("Quantize durations as well as start times"), m_gridBox);
-    layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1- 1);
+    layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1-0+ 1);
 
     m_gridBox->setLayout(layout);
     parameterBox->setLayout(parameterBoxLayout);
@@ -179,7 +179,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
                                          zero,
                                          1, zero + 1-
                                          zero+1, 1-
-                                         2);
+                                         1+1);
     } else {
         m_mainLayout->addWidget(m_postProcessingBox, zero + 3, 0);
     }

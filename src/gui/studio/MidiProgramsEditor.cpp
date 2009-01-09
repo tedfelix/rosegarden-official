@@ -71,7 +71,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 1);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2-0+ 1);
     }
 }
 

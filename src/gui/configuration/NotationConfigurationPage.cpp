@@ -502,7 +502,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
                                row,
                                0, row-
                                row+1, 3-
-                               1);
+                      0+1);
     ++row;
 
     layout->addWidget

@@ -348,13 +348,13 @@ AudioMixerWindow::populate()
         idLabel->setFont(boldFont);
 
         if (rec.m_input) {
-            mainLayout->addMultiCellWidget(rec.m_input->getWidget(), 1, 1, col, col + 1);
+            mainLayout->addWidget(rec.m_input->getWidget(), 1, col, 1, 2);
         }
-        mainLayout->addMultiCellWidget(rec.m_output->getWidget(), 2, 2, col, col + 1);
+        mainLayout->addWidget(rec.m_output->getWidget(), 2, col, 1, 2);
         //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
         //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
+        mainLayout->addWidget(idLabel, 0, col, 0- 0+1, col + 1- col+1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);

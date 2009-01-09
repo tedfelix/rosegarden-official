@@ -92,7 +92,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_midiPitchOctave->setMaximum(10);
     m_midiPitchOctave->setMinimum( -10);
     m_midiPitchOctave->setValue( settings.value("midipitchoctave", -2).toInt() );
-    layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 3);
+    layout->addWidget(m_midiPitchOctave, row, 2, row- row+1, 3- 2+1);
     ++row;
 
     layout->setRowMinimumHeight(row, 20);
@@ -115,7 +115,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     QString controllerTip = i18n("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     label->setToolTip(controllerTip);
-    layout->addWidget(label, row, 0, row- row+1, 1- 1);
+    layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
     bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
@@ -129,10 +129,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     //### settings.beginGroup( SequencerOptionsConfigGroup );
     label = new QLabel(i18n("Sequencer timing source"), frame);
-    layout->addWidget(label, row, 0, row- row+1, 1- 1);
+    layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_timer = new QComboBox(frame);
-    layout->addWidget(m_timer, row, 2, row- row+1, 3- 3);
+    layout->addWidget(m_timer, row, 2, row- row+1, 3-2+1);
 
     QStringList timers = m_doc->getTimers();
     m_origTimer = m_doc->getCurrentTimer();
@@ -156,7 +156,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QLabel* lbl = new QLabel(i18n("Load SoundFont to SoundBlaster card at startup"), frame);
     QString tooltip = i18n("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
     lbl->setToolTip(tooltip);
-    layout->addWidget(lbl, row, 0, row- row+1, 1- 1);
+    layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
 
     m_sfxLoadEnabled = new QCheckBox(frame);
     layout->addWidget(m_sfxLoadEnabled, row, 2);
@@ -272,7 +272,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QWidget *hbox = new QWidget(frame);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(5);
-    layout->addWidget(hbox, row, 0, row- row+1, 1- 1);
+    layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
 
     label = new QLabel(i18n("Automatically connect sync output to all devices in use"), hbox );
     hboxLayout->addWidget(label);

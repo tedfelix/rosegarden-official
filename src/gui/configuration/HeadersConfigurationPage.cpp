@@ -157,7 +157,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     }
     QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
-    layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 2);
+    layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
 
     frameHeaders->setLayout(layoutHeaders);
 
@@ -233,7 +233,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         shown.insert(names[i]);
     }
 
-    layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1- 1);
+    layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1-0+ 1);
 
     QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
                                  frameOtherHeaders);
