@@ -87,7 +87,6 @@
 #include "sound/SoundDriver.h"
 #include "document/Command.h"
 #include <QSettings>
-#include <kfilterdev.h>
 #include <kglobal.h>
 #include <QMessageBox>
 #include <QProcess>
@@ -107,7 +106,7 @@
 #include <QWidget>
 #include "gui/widgets/ProgressBar.h"
 #include <QSettings>
-
+#include "GzipFile.h"
 
 namespace Rosegarden
 {
@@ -599,46 +598,13 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     QString errMsg;
     QString fileContents;
-    bool cancelled = false, okay = true;
+    bool cancelled = false;
 
-    //### Consider un-KDE-ifying this
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
-    if (fileCompressedDevice == 0) {
-
-        errMsg = i18n("Could not open Rosegarden file");
-
-    } else {
-        fileCompressedDevice->open(QIODevice::ReadOnly);
-
-        unsigned int elementCount = fileInfo.size() / 4; // approx. guess
-        //         RG_DEBUG << "RosegardenGUIDoc::xmlParse() : elementCount = " << elementCount
-        //                  << " - file size : " << file->size()
-        //                  << endl;
-
-
-        // Fugly work-around in case of broken rg files
-        //
-        int c = 0;
-        std::vector<char> baseBuffer;
-
-        while (c != -1) {
-            c = fileCompressedDevice->getch();
-            if (c != -1)
-                baseBuffer.push_back(c);
-        }
-
-        fileCompressedDevice->close();
-
-        QString fileContents = QString::fromUtf8(&baseBuffer[0],
-                               baseBuffer.size());
-
-        // parse xml file
-        okay = xmlParse(fileContents, errMsg, &progressDlg,
-                        elementCount, permanent, cancelled);
-        // 	okay = xmlParse(fileCompressedDevice, errMsg, &progressDlg,
-        //                         elementCount, permanent, cancelled);
-        delete fileCompressedDevice;
-
+    bool okay = GzipFile::readFromFile(filename, fileContents);
+    if (!okay) errMsg = i18n("Could not open Rosegarden file");
+    else {
+	okay = xmlParse(fileContents, errMsg, &progressDlg,
+			permanent, cancelled);
     }
 
     if (!okay) {
@@ -1238,19 +1204,8 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     Profiler profiler("RosegardenGUIDoc::saveDocumentActual");
     RG_DEBUG << "RosegardenGUIDoc::saveDocumentActual(" << filename << ")\n";
 
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
-    fileCompressedDevice->setOrigFileName("audio/x-rosegarden");
-    bool rc = fileCompressedDevice->open(QIODevice::WriteOnly);
-
-    if (!rc) {
-        // do some error report
-		errMsg = i18n( qStrToCharPtrUtf8( QString("Could not open file '%1' for writing").arg(filename) ));
-        delete fileCompressedDevice;
-        return false; // couldn't open file
-    }
-
-
-    QTextStream outStream(fileCompressedDevice);
+    QString outText;
+    QTextStream outStream(&outText, QIODevice::WriteOnly);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
 
     // output XML header
@@ -1360,17 +1315,11 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     //
     outStream << "</rosegarden-data>\n";
 
-    // check that all went ok
-    //
-    if (fileCompressedDevice->status() != IO_Ok) {
-		errMsg = i18n( qStrToCharPtrUtf8( QString("Error while writing on '%1'").arg(filename)) );
-        delete fileCompressedDevice;
+    bool okay = GzipFile::writeToFile(filename, outText);
+    if (!okay) {
+        errMsg = i18n(QString("Error while writing on '%1'").arg(filename));
         return false;
     }
-
-    fileCompressedDevice->close();
-
-    delete fileCompressedDevice; // DO NOT USE outStream AFTER THIS POINT
 
     RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
 
@@ -1395,17 +1344,15 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     RG_DEBUG << "RosegardenGUIDoc::exportStudio("
     << filename << ")\n";
 
-    KFilterDev* fileCompressedDevice = static_cast<KFilterDev*>(KFilterDev::deviceForFile(filename, "application/x-gzip"));
-    fileCompressedDevice->setOrigFileName("audio/x-rosegarden-device");
-    fileCompressedDevice->open(QIODevice::WriteOnly);
-    QTextStream outStream(fileCompressedDevice);
+    QString outText;
+    QTextStream outStream(&outText, QIODevice::WriteOnly);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
 
     // output XML header
     //
     outStream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-    << "<!DOCTYPE rosegarden-data>\n"
-    << "<rosegarden-data version=\"" << VERSION << "\">\n";
+              << "<!DOCTYPE rosegarden-data>\n"
+              << "<rosegarden-data version=\"" << VERSION << "\">\n";
 
     // Send out the studio - a self contained command
     //
@@ -1415,7 +1362,10 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
     //
     outStream << "</rosegarden-data>\n";
 
-    delete fileCompressedDevice;
+    bool okay = GzipFile::writeToFile(filename, outText);
+    if (!okay) {
+        return false;
+    }
 
     RG_DEBUG << endl << "RosegardenGUIDoc::exportStudio() finished\n";
     return true;
@@ -1616,11 +1566,17 @@ bool RosegardenGUIDoc::isSequencerRunning()
 bool
 RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                            ProgressDialog *progress,
-                           unsigned int elementCount,
                            bool permanent,
                            bool &cancelled)
 {
     cancelled = false;
+
+    unsigned int elementCount = 0;
+    for (int i = 0; i < fileContents.length() - 1; ++i) {
+	if (fileContents[i] == '<' && fileContents[i+1] != '/') {
+	    ++elementCount;
+	}
+    }
 
     RoseXmlHandler handler(this, elementCount, permanent);
 

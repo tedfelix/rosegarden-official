@@ -517,7 +517,6 @@ protected:
      */
     bool xmlParse(QString fileContents, QString &errMsg,
                   ProgressDialog *progress,
-                  unsigned int elementCount,
                   bool permanent,
                   bool &cancelled);
 
