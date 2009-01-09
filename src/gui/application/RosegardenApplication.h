@@ -42,7 +42,7 @@ class RosegardenApplication : public QApplication
 {
     Q_OBJECT
 public:
-    RosegardenApplication(int argc, char **argv) :
+    RosegardenApplication(int &argc, char **argv) :
         QApplication(argc, argv), m_noSequencerMode(false) {}
 
     /**
