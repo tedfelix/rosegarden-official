@@ -1,8 +1,8 @@
 #!/bin/bash
 #
 # Helper program used by Rosegarden to preview and print Lilypond output.
-# Copyright 2004-2008 Chris Cannam and Fervent Software Ltd.
-# Copyright 2006-2008 Heikki Junes.
+# Copyright 2004-2009 Chris Cannam and Fervent Software Ltd.
+# Copyright 2006-2009 Heikki Junes.
 # Distributed under the GNU General Public License.
 
 tmpdir=/tmp/$$_lilypondview

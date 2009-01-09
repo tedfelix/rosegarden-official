@@ -23,7 +23,7 @@ exec perl -x "$0" "$@"
 # -*- cperl-indent-level: 4 -*-
 #
 # Rosegarden Project file packager
-# Copyright 2005-2008 Chris Cannam and Fervent Software Ltd.
+# Copyright 2005-2008 Chris Cannam and Fervent Software Ltd
 # Distributed under the GNU General Public License.
 #
 # This program converts between Rosegarden (.rg) files and Rosegarden
@@ -62,7 +62,7 @@ use File::Copy;
 use File::Basename;
 use Getopt::Long;
 
-print STDERR "Rosegarden Project Packager v0.25 (c) Fervent Software Ltd 2005-2008\n";
+print STDERR "Rosegarden Project Packager v0.25 (c) Fervent Software Ltd 2005-2009\n";
 print STDERR "This program is Free Software under the GNU General Public License.\n";
 
 my $dcop = undef;

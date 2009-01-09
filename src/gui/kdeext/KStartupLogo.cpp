@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2009 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This file contains code borrowed from KDevelop 2.0
@@ -76,7 +76,7 @@ void KStartupLogo::paintEvent(QPaintEvent*)
 
     // grep me: splash color
     //    QColor bg(49, 94, 19); // color for 2006 splash
-    QColor bg(19, 19, 19);  // color for the 2008 splash
+    QColor bg(19, 19, 19);  // color for the 2009 splash
     paint.setPen(bg);
     paint.setBrush(bg);
     paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,

@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2009 the Rosegarden development team.
 
-    This file Coypright 2008 D. Michael McIntyre
+    This file Coypright 2009 D. Michael McIntyre
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
