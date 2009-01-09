@@ -3,7 +3,7 @@
 /*
   Rosegarden
   A sequencer and musical notation editor.
-  Copyright 2000-2008 the Rosegarden development team.
+  Copyright 2000-2009 the Rosegarden development team.
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     KAboutData aboutData( "rosegardensequencer",
                           I18N_NOOP("RosegardenSequencer"),
                           VERSION, description, KAboutData::License_GPL,
-                          "(c) 2000-2008, Guillaume Laurent, Chris Cannam, Richard Bown");
+                          "(c) 2000-2009, Guillaume Laurent, Chris Cannam, Richard Bown");
     aboutData.addAuthor("Guillaume Laurent, Chris Cannam, Richard Bown", 0, "glaurent@telegraph-road.org, cannam@all-day-breakfast.com, bownie@bownie.com");
     KCmdLineArgs::init( argc, argv, &aboutData );
     KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.

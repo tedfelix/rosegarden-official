@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2009 the Rosegarden development team.
 
     Parts of the configuration classes are taken from KMail.
     Copyright (C) 2000 The KMail Development Team.
