@@ -82,6 +82,7 @@ ResourceFinder::getUserResourcePrefix()
     if (home) {
         return QString("%1/%2/%3").arg(home).arg(homepath).arg(appname);
     } else {
+        std::cerr << "ResourceFinder::getUserResourcePrefix: ERROR: No home directory available?" << std::endl;
         return "";
     }
 }    
@@ -176,12 +177,22 @@ ResourceFinder::getResourceSaveDir(QString resourceCat)
     if (resourceCat != "") resourceCat = "/" + resourceCat;
 
     QDir userDir(user);
-    if (!userDir.exists()) userDir.mkpath(user);
+    if (!userDir.exists()) {
+        if (!userDir.mkpath(user)) {
+            std::cerr << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << user << "\"" << std::endl;
+            return "";
+        }
+    }
 
     if (resourceCat != "") {
-        QString save = QString("%1/%2").arg(user).arg(resourceCat);
+        QString save = QString("%1%2").arg(user).arg(resourceCat);
         QDir saveDir(save);
-        if (!saveDir.exists()) userDir.mkpath(resourceCat);
+        if (!saveDir.exists()) {
+            if (!userDir.mkpath(save)) {
+                std::cerr << "ResourceFinder::getResourceSaveDir: ERROR: Failed to create user resource path \"" << save << "\"" << std::endl;
+                return "";
+            }
+        }
         return save;
     } else {
         return user;
@@ -223,6 +234,32 @@ ResourceFinder::getResourceFiles(QString resourceCat, QString fileExt)
     }
 
     return results;
+}
+
+QString
+ResourceFinder::getAutoloadPath()
+{
+    QString path = getResourcePath("autoload", "autoload.rg");
+    
+    if (path.startsWith(':')) {
+        // This is the lowest-priority alternative path for this
+        // resource, so we know that there must be no installed copy.
+        // Install one to the user location.
+        RG_DEBUG << "ResourceFinder::getAutoloadPath: Autoload file is bundled, un-bundling it" << endl;
+        QString target = getAutoloadSavePath();
+        QFile file(path);
+        if (!file.copy(target)) {
+            std::cerr << "ResourceFinder::getAutoloadPath: ERROR: Failed to un-bundle autoload resource file to user location \"" << target << "\"" << std::endl;
+        }
+    }
+
+    return getResourcePath("autoload", "autoload.rg");
+}
+
+QString
+ResourceFinder::getAutoloadSavePath()
+{
+    return getResourceSavePath("autoload", "autoload.rg");
 }
 
 }

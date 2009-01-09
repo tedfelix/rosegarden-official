@@ -20,7 +20,7 @@
 
 #include "base/Instrument.h"
 #include "document/RosegardenGUIDoc.h"
-#include <ksqueezedtextlabel.h>
+#include "gui/kdeext/SqueezedLabel.h"
 #include <QFontMetrics>
 #include <QFrame>
 #include <QLabel>
@@ -33,7 +33,7 @@ namespace Rosegarden
 InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc,
         QWidget* parent)
         : QFrame(parent),
-        m_instrumentLabel(new KSqueezedTextLabel(this)),
+        m_instrumentLabel(new SqueezedLabel(this)),
         m_selectedInstrument(0),
         m_doc(doc)
 {

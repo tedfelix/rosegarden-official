@@ -83,3 +83,6 @@ clean:
 
 test:
 	echo $(QSOURCES)
+
+include dependencies
+

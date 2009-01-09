@@ -28,13 +28,6 @@ class QString;
 /*****************************************************************/
 
 
-class SqueezedLabel: public QLabel
-{
-	public:
-	SqueezedLabel( QString label="", QWidget* parent=0 );
-};
-
-
 /*!!!
 class RgTempQtIV
 {

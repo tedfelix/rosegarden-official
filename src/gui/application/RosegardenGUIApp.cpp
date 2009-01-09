@@ -2610,8 +2610,7 @@ RosegardenGUIApp::openFile(QString filePath, ImportType type)
 
         if ( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) ) {
 
-            QString autoloadFile =
-                ResourceFinder().getResourcePath("autoload", "autoload.rg");
+            QString autoloadFile = ResourceFinder().getAutoloadPath();
 
             QFileInfo autoloadFileInfo(autoloadFile);
             if (autoloadFile != "" && autoloadFileInfo.isReadable()) {
@@ -8729,8 +8728,7 @@ RosegardenGUIApp::slotSaveDefaultStudio()
 
     KTmpStatusMsg msg(i18n("Saving current document as default studio..."), this);
 
-    QString autoloadFile =
-        ResourceFinder().getResourceSavePath("autoload", "autoload.rg");
+    QString autoloadFile = ResourceFinder().getAutoloadSavePath();
 	
     RG_DEBUG << "RosegardenGUIApp::slotSaveDefaultStudio : saving studio in "
              << autoloadFile << endl;
@@ -8758,8 +8756,7 @@ RosegardenGUIApp::slotImportDefaultStudio()
     if (reply != QMessageBox::Yes)
         return ;
 
-    QString autoloadFile =
-        ResourceFinder().getResourcePath("autoload", "autoload.rg");
+    QString autoloadFile = ResourceFinder().getAutoloadPath();
 
     QFileInfo autoloadFileInfo(autoloadFile);
 

@@ -79,30 +79,6 @@ RgTempQtIV* rgTempQtIV = &__mm;
 
 
 
-/** ksqueezedtextlabel.h replacement: */
-SqueezedLabel::SqueezedLabel
-	( 
-	QString label, QWidget* parent
-	)
-	: QLabel(label, parent)
-{
-	//### maybe fix: not really the same as KSqueezedTextLabel,
-	//    but should work for now.
-
-    //!!! no, this does something totally different -- implement it,
-    //!!! borrowing SV code for this?
-
-	this->setScaledContents( true );
-}
-//SqueezedLabel::~SqueezedLabel(){
-	//
-//}
-
-
-/**********************************************************************/
-/**********************************************************************/
-
-
 KTmpStatusMsg::KTmpStatusMsg(const QString& msg, QMainWindow* window, int id)
         : m_mainWindow(window),
         m_id(id)

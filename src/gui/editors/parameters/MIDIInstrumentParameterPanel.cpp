@@ -19,7 +19,7 @@
 #include "MIDIInstrumentParameterPanel.h"
 
 #include <klocale.h>
-#include <ksqueezedtextlabel.h>
+#include "gui/kdeext/SqueezedLabel.h"
 
 #include "sound/Midi.h"
 #include "misc/Debug.h"
@@ -65,7 +65,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_mainGrid = new QGridLayout(this);
     m_mainGrid->setSpacing(1);
 
-    m_connectionLabel = new KSqueezedTextLabel(this);
+    m_connectionLabel = new SqueezedLabel(this);
     m_bankValue = new QComboBox(this);
     m_channelValue = new QComboBox(this);
     m_programValue = new QComboBox(this);
@@ -421,7 +421,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Add a label
-            QLabel *label = new KSqueezedTextLabel(strtoqstr(it->getName()), hbox);
+            QLabel *label = new SqueezedLabel(strtoqstr(it->getName()), hbox);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;
 

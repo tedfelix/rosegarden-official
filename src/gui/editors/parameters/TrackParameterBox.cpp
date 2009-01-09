@@ -23,7 +23,7 @@
 #include "TrackParameterBox.h"
 
 #include <klocale.h>
-//#include <ksqueezedtextlabel.h>
+#include "gui/kdeext/SqueezedLabel.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"

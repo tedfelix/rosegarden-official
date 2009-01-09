@@ -5,9 +5,6 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
 
-    This file originally from Sonic Visualiser, copyright 2007 Queen
-    Mary, University of London.
-
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -87,6 +84,23 @@ public:
      * files in the given resource category should be saved.
      */
     QString getResourceSaveDir(QString resourceCat);
+
+    /**
+     * Return the path of the autoload document.  This is a true file
+     * path -- if the only autoload discovered is a bundled resource,
+     * it will be unpacked into the user location so that it can be
+     * read using non-Qt code (i.e. zlib).  However, this path is not
+     * guaranteed to be the user's own (it may be a system path) so it
+     * should not be used for writing.  Call getAutoloadSavePath for
+     * that.
+     */
+    QString getAutoloadPath();
+
+    /**
+     * Return the path (including filename) to which to save autoload
+     * documents.
+     */
+    QString getAutoloadSavePath();
 
 protected:
     QString getUserResourcePrefix();

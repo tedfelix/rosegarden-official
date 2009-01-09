@@ -549,8 +549,7 @@ void RosegardenGUIDoc::newDocument()
 
 void RosegardenGUIDoc::performAutoload()
 {
-    QString autoloadFile =
-        ResourceFinder().getResourcePath("autoload", "autoload.rg");
+    QString autoloadFile = ResourceFinder().getAutoloadPath();
 
     QFileInfo autoloadFileInfo(autoloadFile);
 
@@ -686,6 +685,8 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         //
         initialiseControllers();
     }
+
+    std::cerr << "RosegardenGUIDoc::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
 
     return true;
 }
