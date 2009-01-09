@@ -177,8 +177,10 @@ TransportDialog::TransportDialog(QWidget *parent,
 
     connect(m_transport->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
 
-    m_panelOpen = *m_transport->PanelOpenButton->pixmap();
-    m_panelClosed = *m_transport->PanelCloseButton->pixmap();
+    const QPixmap *p = m_transport->PanelOpenButton->pixmap();
+    if (p) m_panelOpen = *p;
+    p = m_transport->PanelCloseButton->pixmap();
+    if (p) m_panelClosed = *p;
 
 
     connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
