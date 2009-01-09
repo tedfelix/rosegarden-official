@@ -1318,7 +1318,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
     bool okay = GzipFile::writeToFile(filename, outText);
     if (!okay) {
-        errMsg = i18n(QString("Error while writing on '%1'").arg(filename));
+        errMsg = i18n("Error while writing on '%1'", filename);
         return false;
     }
 
