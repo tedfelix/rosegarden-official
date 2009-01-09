@@ -78,17 +78,15 @@ ADD_LIBRARY(RosegardenExtended STATIC
     ${gui_SRCS}
 )
 
-#    gui/general/ResourceFinder
-#    gui/general/IconLoader
 
-ADD_LIBRARY(ResourceFinder STATIC
-    gui/general/ResourceFinder.h
-    gui/general/ResourceFinder.cpp
-)
-ADD_LIBRARY(IconLoader STATIC
-    gui/general/IconLoader.h
-    gui/general/IconLoader.cpp
-)
+#ADD_LIBRARY(ResourceFinder STATIC
+#    gui/general/ResourceFinder.h
+#    gui/general/ResourceFinder.cpp
+#)
+#ADD_LIBRARY(IconLoader STATIC
+#    gui/general/IconLoader.h
+#    gui/general/IconLoader.cpp
+#)
 
 
 ADD_LIBRARY(RosegardenSequencer STATIC
@@ -154,9 +152,9 @@ TARGET_LINK_LIBRARIES(rosegarden
     RosegardenSegmentCanvas
     RosegardenCommands
     RosegardenCommon
-    
-    ResourceFinder
-    IconLoader
+	
+#    ResourceFinder
+#    IconLoader
 )
 
 # Install targets

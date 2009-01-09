@@ -308,6 +308,9 @@ SET(commands_SRCS
 )
 
 SET(document_SRCS
+	document/GzipFile.h
+	document/GzipFile.cpp
+	
 	document/BasicCommand.cpp
 	document/BasicCommand.h
 	document/BasicSelectionCommand.cpp
@@ -684,7 +687,8 @@ SET(gui_SRCS
 	gui/general/AutoSaveFinder.h
 	gui/general/DecoyAction.cpp
 	gui/general/DecoyAction.h
-
+    gui/general/ResourceFinder.h
+    gui/general/ResourceFinder.cpp
 
 	gui/general/ActiveItem.h
 	gui/general/ActiveItem.h
@@ -755,6 +759,10 @@ SET(gui_SRCS
 	gui/kdeext/KStartupLogo.h
 	gui/kdeext/KTmpStatusMsg.cpp
 	gui/kdeext/KTmpStatusMsg.h
+	
+	gui/kdeext/SqueezedLabel.cpp
+	gui/kdeext/SqueezedLabel.h
+
 	gui/kdeext/QCanvasGroupableItem.cpp
 	gui/kdeext/QCanvasGroupableItem.h
 	gui/kdeext/QCanvasSimpleSprite.cpp
