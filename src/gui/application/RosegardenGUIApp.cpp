@@ -2245,7 +2245,13 @@ void RosegardenGUIApp::initView()
         comp.setEndMarker(endMarker);
     }
 
+    /* 
+    //&&& Painter not active on create??? ... this seems to be really weird,
+    //&&& since the value of m_viewTrackLabels should just have been set.
+    //&&& Should later fix the fetching of the visibility from saved settings.
     m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(),
+    */
+    m_swapView = new RosegardenGUIView(false,
                                        m_segmentParameterBox,
                                        m_instrumentParameterBox,
                                        m_trackParameterBox, this);

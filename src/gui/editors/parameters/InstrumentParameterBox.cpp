@@ -76,9 +76,12 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
+    /*
+    //### Painter not active on create?? ... come me back to resizing these widgets.
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
     m_noInstrumentParameters->adjustSize();
+    */
 
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));

@@ -90,9 +90,12 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // Append the parameter box to the list to be displayed.
 
     m_parameterBoxes.push_back(b);
-
+ 
+    /*
+    //### Painter not active on create?? ... come me back to setting minimum width.
     m_scrollView->setMinimumWidth(std::max(m_scrollView->minimumWidth(),
                                            b->sizeHint().width()) + 8);
+    */
 
     // Create a titled group box for the parameter box, parented by the
     // classic layout widget, so that it can be used to provide a title
