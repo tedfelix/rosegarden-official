@@ -265,6 +265,9 @@ SET( QT_DEFINITIONS "")
 
 SET(QT4_INSTALLED_VERSION_TOO_OLD FALSE)
 
+SET(QT_QMAKE_EXECUTABLE qmake-qt4)
+#SET(QT_HEADERS_DIR /usr/include/qt4)
+
 #  macro for asking qmake to process pro files
 MACRO(QT_QUERY_QMAKE outvar invar)
   FILE(WRITE ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/CMakeTmpQmake/tmp.pro
@@ -410,6 +413,7 @@ IF (QT4_QMAKE_FOUND)
         OUTPUT_VARIABLE qt_headers ) 
       # make sure we have / and not \ as qmake gives on windows
       FILE(TO_CMAKE_PATH "${qt_headers}" qt_headers)
+	MESSAGE( ":::: QT_HEADERS_DIR ::::: ${qt_headers} ")
       SET(QT_HEADERS_DIR ${qt_headers} CACHE INTERNAL "")
   ENDIF(QT_LIBRARY_DIR AND NOT QT_HEADERS_DIR)
 
