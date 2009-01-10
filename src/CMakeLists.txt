@@ -79,6 +79,23 @@ ADD_LIBRARY(RosegardenExtended STATIC
 )
 
 
+MACRO(RG_GEN_DATA_RC) #
+  #  SET(_customName "${ARGV1}")
+ #   GET_FILENAME_COMPONENT(_in_file ${_header} ABSOLUTE)
+#    GET_FILENAME_COMPONENT(_basename ${_header} NAME_WE)
+    
+    SET(_rcc_out "./_rcc_out.txt")
+    ADD_CUSTOM_COMMAND(OUTPUT ${_rcc_out}
+        COMMAND "rcc ../data/data.qrc > ../data/data.cpp" > ${_rcc_out}
+        #DEPENDS ${_in_file}
+    )
+ENDMACRO(RG_GEN_DATA_RC)
+
+RG_GEN_DATA_RC()
+
+ADD_LIBRARY(Rosegarden_rc_data STATIC
+    ../data/data.cpp
+)
 #ADD_LIBRARY(ResourceFinder STATIC
 #    gui/general/ResourceFinder.h
 #    gui/general/ResourceFinder.cpp
@@ -152,7 +169,8 @@ TARGET_LINK_LIBRARIES(rosegarden
     RosegardenSegmentCanvas
     RosegardenCommands
     RosegardenCommon
-	
+    
+	Rosegarden_rc_data
 #    ResourceFinder
 #    IconLoader
 )
