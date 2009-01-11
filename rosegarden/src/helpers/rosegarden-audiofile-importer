@@ -55,11 +55,11 @@ conftest() {
 	return 0
     fi
     if [ -x "`which sox`" ]; then
-	if sox -h 2>&1 | egrep -q '(polyphase|rabbit)'; then
+	if sox -h 2>&1 | egrep -q '(rate|polyphase|rabbit)'; then
 	    return 0
 	fi
     fi
-    echo "Required: sox with polyphase or rabbit resampler OR sndfile-resample"
+    echo "Required: sox with rate, polyphase or rabbit resampler OR sndfile-resample"
     echo "rosegarden-audiofile-importer: ERROR: No resampler available, failing configuration test" 1>&2
     return 1
 }
@@ -205,7 +205,9 @@ resample() {
 	    sndfile-resample -to "$rate" -c 0 "$_source" "$_target" || return 4
 	else
 	    echo "Resampling using sox..." 1>&2
-	    if sox -h | grep -q rabbit ; then
+	    if sox -h | grep -q rate ; then
+	        sox "$_source" -r "$rate" "$_target" rate || return 4
+	    elif sox -h | grep -q rabbit ; then
 	        sox "$_source" -r "$rate" "$_target" rabbit || return 4
 	    else
 		sox "$_source" -r "$rate" "$_target" polyphase || return 4
