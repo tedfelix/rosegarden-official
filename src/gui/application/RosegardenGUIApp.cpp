@@ -238,7 +238,6 @@
 //#include <QDir>
 
 // remaining kde headers:
-#include <kxmlguiclient.h>
 #include <klocale.h>
 
 
@@ -609,29 +608,6 @@ RosegardenGUIApp::~RosegardenGUIApp()
         delete m_sequencerThread;
     }
 
-    delete m_jumpToQuickMarkerAction;
-    delete m_setQuickMarkerAction;
-	
-	// delete QMenus
-	delete m_menuFile;
-	delete m_menuEdit;
-	delete m_menuComposition;
-	delete m_menuStudio;
-	delete m_menuSettings;
-	
-	// delete QMenuBar
-	delete m_menuBarMain;
-	
-	// delete QAction pointers
-	delete m_playTransport;	//@@@ emru: should these be free'd, if GUIApp quits? Assumed so!
-	delete m_stopTransport;
-	delete m_rewindTransport;
-	delete m_ffwdTransport; 
-	delete m_recordTransport;
-	delete m_rewindEndTransport;
-	delete m_ffwdEndTransport;
-	delete m_panic;
-	
     delete m_transport;
 
     delete m_seqManager;
@@ -717,8 +693,6 @@ void RosegardenGUIApp::setupActions()
 //    m_fileRecent = KStandardAction::openRecent(this,
 //                                          SLOT(slotFileOpenRecent(const KURL&)),
 //                                          actionCollection());
-    m_menuRecent = 0;
-    
     createAction("file_import_project", SLOT(slotImportProject()));
     createAction("file_import_midi", SLOT(slotImportMIDI()));
     createAction("file_import_rg21", SLOT(slotImportRG21()));
@@ -825,6 +799,8 @@ void RosegardenGUIApp::setupActions()
     createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
     createAction("load_studio", SLOT(slotImportStudio()));
     createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
+
+    //### todo: test quick-marker actions (they aren't obvious in gui)
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
 
@@ -2087,16 +2063,17 @@ void RosegardenGUIApp::setupActions()
 void
 RosegardenGUIApp::setupRecentFilesMenu()
 {
-    if (!m_menuRecent) {
+    QMenu *menu = findMenu("file_open_recent");
+    if (!menu) {
         std::cerr << "ERROR: RosegardenGUIApp::setupRecentFilesMenu: No recent files menu!" << std::endl;
         return;
     }
-    m_menuRecent->clear();
+    menu->clear();
     std::vector<QString> files = m_recentFiles.getRecent();
     for (size_t i = 0; i < files.size(); ++i) {
 	QAction *action = new QAction(files[i], this);
 	connect(action, SIGNAL(triggered()), this, SLOT(slotFileOpenRecent()));
-	m_menuRecent->addAction(action);
+	menu->addAction(action);
     }
 }
 
@@ -2104,7 +2081,7 @@ RosegardenGUIApp::setupRecentFilesMenu()
 void RosegardenGUIApp::setRewFFwdToAutoRepeat()
 {
 	//QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
-	QWidget* transportToolbar = this->toolBar("Transport Toolbar");
+    QWidget* transportToolbar = this->findToolbar("Transport Toolbar");
 
     if (transportToolbar) {
 		//QList<QPushButton *> allPButtons = parentWidget.findChildren<QPushButton *>();
@@ -2213,17 +2190,7 @@ void RosegardenGUIApp::initStatusBar()
 	/* init toolbar */
 	/****************/
 	
-	m_toolBarMain = new QToolBar( "Main Toolbar", this );
-	this->addToolBar( Qt::TopToolBarArea, m_toolBarMain );
-}
-
-
-QToolBar* RosegardenGUIApp::toolBar( const char* name ){
-	/* convenience method qt3 -> qt4 */
-        if( QString(name) == "" ){
-		return m_toolBarMain;
-	}
-	return this->findChild<QToolBar*>( name );
+    addToolBar( Qt::TopToolBarArea, new QToolBar("Main Toolbar") );
 }
 
 void RosegardenGUIApp::initView()
@@ -2245,13 +2212,7 @@ void RosegardenGUIApp::initView()
         comp.setEndMarker(endMarker);
     }
 
-    /* 
-    //&&& Painter not active on create??? ... this seems to be really weird,
-    //&&& since the value of m_viewTrackLabels should just have been set.
-    //&&& Should later fix the fetching of the visibility from saved settings.
-    m_swapView = new RosegardenGUIView(m_viewTrackLabels->isChecked(),
-    */
-    m_swapView = new RosegardenGUIView(false,
+    m_swapView = new RosegardenGUIView(findAction("show_tracklabels")->isChecked(),
                                        m_segmentParameterBox,
                                        m_instrumentParameterBox,
                                        m_trackParameterBox, this);
@@ -2389,8 +2350,7 @@ void RosegardenGUIApp::initView()
     /* was toggle */ 
 	// old. QAction *trackingAction = dynamic_cast<QAction*>
 	//                                (actionCollection()->action("toggle_tracking"));
-    QAction *trackingAction = findAction( QString("toggle_tracking") );
-	
+    QAction *trackingAction = findAction("toggle_tracking");
     if (trackingAction && !trackingAction->isChecked()) {
         m_view->getTrackEditor()->slotToggleTracking();
     }
@@ -2439,7 +2399,7 @@ void RosegardenGUIApp::initView()
 
     ProgressDialog::processEvents();
 
-    if (m_viewChordNameRuler->isChecked()) {
+    if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
         m_view->initChordNameRuler();
     } else {
@@ -2787,22 +2747,22 @@ void RosegardenGUIApp::slotSaveOptions()
 #ifdef SETTING_LOG_DEBUG
 
     _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(getTransport()->isExpanded()));
-    _settingLog(QString("SETTING 2 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
+    _settingLog(QString("SETTING 2 : show track labels = %1").arg(findAction("show_tracklabels")->isChecked()));
 #endif
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    settings.setValue("Show Transport", m_viewTransport->isChecked());
+    settings.setValue("Show Transport", findAction("show_transport")->isChecked());
     settings.setValue("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
-    settings.setValue("Show Track labels", m_viewTrackLabels->isChecked());
-    settings.setValue("Show Rulers", m_viewRulers->isChecked());
-    settings.setValue("Show Tempo Ruler", m_viewTempoRuler->isChecked());
-    settings.setValue("Show Chord Name Ruler", m_viewChordNameRuler->isChecked());
-    settings.setValue("Show Previews", m_viewPreviews->isChecked());
-    settings.setValue("Show Segment Labels", m_viewSegmentLabels->isChecked());
+    settings.setValue("Show Track labels", findAction("show_tracklabels")->isChecked());
+    settings.setValue("Show Rulers", findAction("show_rulers")->isChecked());
+    settings.setValue("Show Tempo Ruler", findAction("show_tempo_ruler")->isChecked());
+    settings.setValue("Show Chord Name Ruler", findAction("show_chord_name_ruler")->isChecked());
+    settings.setValue("Show Previews", findAction("show_previews")->isChecked());
+    settings.setValue("Show Segment Labels", findAction("show_segment_labels")->isChecked());
     settings.setValue("Show Parameters", m_dockVisible);
-    settings.setValue("MIDI Thru Routing", m_enableMIDIrouting->isChecked());
+    settings.setValue("MIDI Thru Routing", findAction("enable_midi_routing")->isChecked());
 
 #ifdef SETTING_LOG_DEBUG
 
@@ -2834,7 +2794,7 @@ void RosegardenGUIApp::setupFileDialogSpeedbar()
         settings.setValue(QString("IconGroup_%1").arg(n), 4);
         settings.setValue(QString("Icon_%1").arg(n), "folder");
         settings.setValue(QString("URL_%1").arg(n),
-                           KGlobal::dirs()->findResource("appdata", "examples/"));
+                          ResourceFinder().getResourceDir("examples"));
 
         RG_DEBUG << "wrote url " << settings.value(QString("URL_%1").arg(n)).toString() << endl;
 
@@ -2855,20 +2815,20 @@ void RosegardenGUIApp::readOptions()
 
     // Statusbar and toolbars toggling action status
     //
-    m_viewStatusBar ->setChecked(!statusBar() ->isHidden());
-    m_viewToolBar ->setChecked(!toolBar() ->isHidden());
-    m_viewToolsToolBar ->setChecked(!toolBar("Tools Toolbar") ->isHidden());
-    m_viewTracksToolBar ->setChecked(!toolBar("Tracks Toolbar") ->isHidden());
-    m_viewEditorsToolBar ->setChecked(!toolBar("Editors Toolbar") ->isHidden());
-    m_viewTransportToolBar->setChecked(!toolBar("Transport Toolbar")->isHidden());
-    m_viewZoomToolBar ->setChecked(!toolBar("Zoom Toolbar") ->isHidden());
+    findAction("show_status_bar")->setChecked(!statusBar() ->isHidden());
+    findAction("show_stock_toolbar")->setChecked(!findToolbar("Main Toolbar") ->isHidden());
+    findAction("show_tools_toolbar")->setChecked(!findToolbar("Tools Toolbar") ->isHidden());
+    findAction("show_tracks_toolbar")->setChecked(!findToolbar("Tracks Toolbar") ->isHidden());
+    findAction("show_editors_toolbar")->setChecked(!findToolbar("Editors Toolbar") ->isHidden());
+    findAction("show_transport_toolbar")->setChecked(!findToolbar("Transport Toolbar")->isHidden());
+    findAction("show_zoom_toolbar")->setChecked(!findToolbar("Zoom Toolbar") ->isHidden());
 
     bool opt;
 
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     opt = qStrToBool( settings.value("Show Transport", "true" ) ) ;
-    m_viewTransport->setChecked(opt);
+    findAction("show_transport")->setChecked(opt);
     slotToggleTransport();
 
     opt = qStrToBool( settings.value("Expanded Transport", "true" ) ) ;
@@ -2890,27 +2850,27 @@ void RosegardenGUIApp::readOptions()
     _settingLog(QString("SETTING 3 : show track labels = %1").arg(opt));
 #endif
 
-    m_viewTrackLabels->setChecked(opt);
+    findAction("show_tracklabels")->setChecked(opt);
     slotToggleTrackLabels();
 
     opt = qStrToBool( settings.value("Show Rulers", "true" ) ) ;
-    m_viewRulers->setChecked(opt);
+    findAction("show_rulers")->setChecked(opt);
     slotToggleRulers();
 
     opt = qStrToBool( settings.value("Show Tempo Ruler", "true" ) ) ;
-    m_viewTempoRuler->setChecked(opt);
+    findAction("show_tempo_ruler")->setChecked(opt);
     slotToggleTempoRuler();
 
     opt = qStrToBool( settings.value("Show Chord Name Ruler", "false" ) ) ;
-    m_viewChordNameRuler->setChecked(opt);
+    findAction("show_chord_name_ruler")->setChecked(opt);
     slotToggleChordNameRuler();
 
     opt = qStrToBool( settings.value("Show Previews", "true" ) ) ;
-    m_viewPreviews->setChecked(opt);
+    findAction("show_previews")->setChecked(opt);
     slotTogglePreviews();
 
     opt = qStrToBool( settings.value("Show Segment Labels", "true" ) ) ;
-    m_viewSegmentLabels->setChecked(opt);
+    findAction("show_segment_labels")->setChecked(opt);
     slotToggleSegmentLabels();
 
     opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;
@@ -2925,7 +2885,7 @@ void RosegardenGUIApp::readOptions()
 
     // MIDI Thru routing
     opt = qStrToBool( settings.value("MIDI Thru Routing", "true" ) ) ;
-    m_enableMIDIrouting->setChecked(opt);
+    findAction("enable_midi_routing")->setChecked(opt);
     slotEnableMIDIThruRouting();
 
     settings.endGroup();
@@ -3010,7 +2970,7 @@ bool RosegardenGUIApp::queryClose()
 #ifdef SETTING_LOG_DEBUG
 
     _settingLog(QString("SETTING 1 : transport flap extended = %1").arg(getTransport()->isExpanded()));
-    _settingLog(QString("SETTING 1 : show track labels = %1").arg(m_viewTrackLabels->isChecked()));
+    _settingLog(QString("SETTING 1 : show track labels = %1").arg(findAction("show_tracklabels")->isChecked()));
 #endif
 
     QString errMsg;
@@ -4258,67 +4218,67 @@ void RosegardenGUIApp::slotToggleToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the toolbar..."), this);
 
-    if (m_viewToolBar->isChecked())
-        toolBar("mainToolBar")->show();
+    if (findAction("show_stock_toolbar")->isChecked())
+        findToolbar("Main Toolbar")->show();
     else
-        toolBar("mainToolBar")->hide();
+        findToolbar("Main Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleToolsToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the tools toolbar..."), this);
 
-    if (m_viewToolsToolBar->isChecked())
-        toolBar("Tools Toolbar")->show();
+    if (findAction("show_tools_toolbar")->isChecked())
+        findToolbar("Tools Toolbar")->show();
     else
-        toolBar("Tools Toolbar")->hide();
+        findToolbar("Tools Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTracksToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the tracks toolbar..."), this);
 
-    if (m_viewTracksToolBar->isChecked())
-        toolBar("Tracks Toolbar")->show();
+    if (findAction("show_tracks_toolbar")->isChecked())
+        findToolbar("Tracks Toolbar")->show();
     else
-        toolBar("Tracks Toolbar")->hide();
+        findToolbar("Tracks Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the editor toolbar..."), this);
 
-    if (m_viewEditorsToolBar->isChecked())
-        toolBar("Editors Toolbar")->show();
+    if (findAction("show_editors_toolbar")->isChecked())
+        findToolbar("Editors Toolbar")->show();
     else
-        toolBar("Editors Toolbar")->hide();
+        findToolbar("Editors Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransportToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the transport toolbar..."), this);
 
-    if (m_viewTransportToolBar->isChecked())
-        toolBar("Transport Toolbar")->show();
+    if (findAction("show_transport_toolbar")->isChecked())
+        findToolbar("Transport Toolbar")->show();
     else
-        toolBar("Transport Toolbar")->hide();
+        findToolbar("Transport Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleZoomToolBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the zoom toolbar..."), this);
 
-    if (m_viewZoomToolBar->isChecked())
-        toolBar("Zoom Toolbar")->show();
+    if (findAction("show_zoom_toolbar")->isChecked())
+        findToolbar("Zoom Toolbar")->show();
     else
-        toolBar("Zoom Toolbar")->hide();
+        findToolbar("Zoom Toolbar")->hide();
 }
 
 void RosegardenGUIApp::slotToggleTransport()
 {
     KTmpStatusMsg msg(i18n("Toggle the Transport"), this);
 
-    if (m_viewTransport->isChecked()) {
+    if (findAction("show_transport")->isChecked()) {
         getTransport()->show();
         getTransport()->raise();
         getTransport()->blockSignals(false);
@@ -4330,10 +4290,11 @@ void RosegardenGUIApp::slotToggleTransport()
 
 void RosegardenGUIApp::slotHideTransport()
 {
-    if (m_viewTransport->isChecked()) {
-        m_viewTransport->blockSignals(true);
-        m_viewTransport->setChecked(false);
-        m_viewTransport->blockSignals(false);
+    QAction *a = findAction("show_transport");
+    if (a && a->isChecked()) {
+        a->blockSignals(true);
+        a->setChecked(false);
+        a->blockSignals(false);
     }
     getTransport()->hide();
     getTransport()->blockSignals(true);
@@ -4341,7 +4302,7 @@ void RosegardenGUIApp::slotHideTransport()
 
 void RosegardenGUIApp::slotToggleTrackLabels()
 {
-    if (m_viewTrackLabels->isChecked()) {
+    if (findAction("show_tracklabels")->isChecked()) {
 #ifdef SETTING_LOG_DEBUG
         _settingLog("toggle track labels on");
 #endif
@@ -4360,22 +4321,22 @@ void RosegardenGUIApp::slotToggleTrackLabels()
 
 void RosegardenGUIApp::slotToggleRulers()
 {
-    m_view->slotShowRulers(m_viewRulers->isChecked());
+    m_view->slotShowRulers(findAction("show_rulers")->isChecked());
 }
 
 void RosegardenGUIApp::slotToggleTempoRuler()
 {
-    m_view->slotShowTempoRuler(m_viewTempoRuler->isChecked());
+    m_view->slotShowTempoRuler(findAction("show_tempo_ruler")->isChecked());
 }
 
 void RosegardenGUIApp::slotToggleChordNameRuler()
 {
-    m_view->slotShowChordNameRuler(m_viewChordNameRuler->isChecked());
+    m_view->slotShowChordNameRuler(findAction("show_chord_name_ruler")->isChecked());
 }
 
 void RosegardenGUIApp::slotTogglePreviews()
 {
-    m_view->slotShowPreviews(m_viewPreviews->isChecked());
+    m_view->slotShowPreviews(findAction("show_previews")->isChecked());
 }
 
 void RosegardenGUIApp::slotDockParametersBack()
@@ -4403,7 +4364,7 @@ void RosegardenGUIApp::slotToggleStatusBar()
 {
     KTmpStatusMsg msg(i18n("Toggle the statusbar..."), this);
 
-    if (!m_viewStatusBar->isChecked())
+    if (!findAction("show_status_bar")->isChecked())
         statusBar()->hide();
     else
         statusBar()->show();
@@ -6152,7 +6113,7 @@ void RosegardenGUIApp::exportMusicXmlFile(QString file)
 void
 RosegardenGUIApp::slotCloseTransport()
 {
-    m_viewTransport->setChecked(false);
+    findAction("show_transport")->setChecked(false);
     slotToggleTransport(); // hides the transport
 }
 
@@ -6686,7 +6647,7 @@ void RosegardenGUIApp::slotEditToolbars()
 void RosegardenGUIApp::slotUpdateToolbars()
 {
     createGUI("rosegardenui.rc");
-    m_viewToolBar->setChecked(!toolBar()->isHidden());
+    findAction("show_stock_toolbar")->setChecked(!(findToolbar("Main Toolbar")->isHidden()));
 }
 
 void RosegardenGUIApp::slotEditTempo()
@@ -8982,7 +8943,7 @@ void RosegardenGUIApp::slotShowToolHelp(const QString &s)
 void
 RosegardenGUIApp::slotEnableMIDIThruRouting()
 {
-    m_seqManager->enableMIDIThruRouting(m_enableMIDIrouting->isChecked());
+    m_seqManager->enableMIDIThruRouting(findAction("enable_midi_routing")->isChecked());
 }
 
 TransportDialog* RosegardenGUIApp::getTransport() 
@@ -9005,35 +8966,21 @@ RosegardenGUIApp::awaitDialogClearance()
 
     std::cerr << "RosegardenGUIApp::awaitDialogClearance: entering" << std::endl;
     
-	QDialog* c;
-	QList<QDialog*> cl;
-	int i;
+    QDialog* c;
+    QList<QDialog*> cl;
+    int i;
+
     while (haveDialog) {
-		//&&& TODO: check reimplemented code here:
-		cl = this->findChildren<QDialog*>();
-		for( i=0; i < cl.size(); i++ ){
-			c = cl.at(i);
-			if( c->isVisible() ){
-				haveDialog = true;
-				break;	
-			}
-			
-		}
-		/*
-        const QObjectList *c = children();
-        if (!c) return;
+
+        cl = this->findChildren<QDialog*>();
         haveDialog = false;
-        for (QObjectList::const_iterator i = c->begin(); i != c->end(); ++i) {
-            QDialog *dialog = dynamic_cast<QDialog *>(*i);
-            if (dialog && dialog->isVisible()) {
+        for( i=0; i < cl.size(); i++ ){
+            c = cl.at(i);
+            if( c->isVisible() ){
                 haveDialog = true;
-                break;
+                break;	
             }
         }
-		*/
-
-//        std::cerr << "RosegardenGUIApp::awaitDialogClearance: have dialog = "
-//                  << haveDialog << std::endl;
     
         if (haveDialog) qApp->processEvents();
     }

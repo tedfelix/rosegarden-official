@@ -23,6 +23,8 @@
 
 #include <QObject>
 #include <QAction>
+#include <QMenu>
+#include <QToolBar>
 
 namespace Rosegarden 
 {
@@ -65,7 +67,7 @@ ActionFileClient::findAction(QString actionName)
     QAction *a = obj->findChild<QAction *>(actionName);
     if (!a) {
         std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                  << "\"::findAction: No such action as \"" << actionName << "\"" << std::endl;
+                  << "\")::findAction: No such action as \"" << actionName << "\"" << std::endl;
         return DecoyAction::getInstance();
     }
     return a;
@@ -85,6 +87,42 @@ ActionFileClient::leaveActionState(QString stateName)
     //&&& implement
 #pragma warning("Implement leaveActionState");
     std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
+}
+
+QMenu *
+ActionFileClient::findMenu(QString menuName)
+{
+    QObject *obj = dynamic_cast<QObject *>(this);
+    if (!obj) {
+        std::cerr << "ERROR: ActionFileClient::findMenu: ActionFileClient subclass is not a QObject" << std::endl;
+        return 0;
+    }
+    QMenu *m = obj->findChild<QMenu *>(menuName);
+    if (!m) {
+        std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
+                  << "\")::findMenu: No such menu as \"" << menuName << "\"" << std::endl;
+        return 0;
+    }
+    return m;
+}
+
+QToolBar *
+ActionFileClient::findToolbar(QString toolbarName)
+{
+    QWidget *w = dynamic_cast<QWidget *>(this);
+    if (!w) {
+        std::cerr << "ERROR: ActionFileClient::findToolbar: ActionFileClient subclass is not a QWidget" << std::endl;
+        return 0;
+    }
+    QToolBar *t = w->findChild<QToolBar *>(toolbarName);
+    if (!t) {
+        std::cerr << "WARNING: ActionFileClient(\"" << w->objectName()
+                  << "\")::findToolbar: No such toolbar as \"" << toolbarName << "\", creating one" << std::endl;
+        t = new QToolBar(toolbarName, w);
+        t->setObjectName(toolbarName);
+        return t;
+    }
+    return t;
 }
 
 bool

@@ -228,6 +228,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       canvasHeight,
                                       m_trackButtonScroll->viewport());
 // 	m_trackButtonScroll->addChild(m_trackButtons);
+    
+    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
+
 	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
 	
 // 		m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);

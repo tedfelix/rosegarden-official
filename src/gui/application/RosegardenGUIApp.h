@@ -1559,52 +1559,8 @@ private:
     /**
      *	Menus
      */
-    QMenuBar* m_menuBarMain;
-	
-    QToolBar* m_toolBarMain;
-	
-    QMenu* m_menuFile;
-
-    QMenu *m_menuRecent;
     RecentFiles m_recentFiles;
-
-    QMenu* m_menuEdit;
-    QMenu* m_menuComposition;
-    QMenu* m_menuStudio;
-    QMenu* m_menuSettings;
     
-    /**
-     * QAction pointers to enable/disable actions
-     */
-	//KRecentFilesAction* m_fileOpenRecent;
-	QAction* m_fileOpenRecent;
-
-    /* was toggle */ QAction* m_viewToolBar;
-    /* was toggle */ QAction* m_viewToolsToolBar;
-    /* was toggle */ QAction* m_viewTracksToolBar;
-    /* was toggle */ QAction* m_viewEditorsToolBar;
-    /* was toggle */ QAction* m_viewZoomToolBar;
-    /* was toggle */ QAction* m_viewStatusBar;
-    /* was toggle */ QAction* m_viewTransport;
-    /* was toggle */ QAction* m_viewTransportToolBar;
-    /* was toggle */ QAction* m_viewTrackLabels;
-    /* was toggle */ QAction* m_viewRulers;
-    /* was toggle */ QAction* m_viewTempoRuler;
-    /* was toggle */ QAction* m_viewChordNameRuler;
-    /* was toggle */ QAction* m_viewPreviews;
-    /* was toggle */ QAction* m_viewSegmentLabels;
-    /* was toggle */ QAction* m_enableMIDIrouting;
-
-	// QAction pointers, dealloc. in: RosegardenGUIApp::~RosegardenGUIApp()
-    QAction *m_playTransport;
-    QAction *m_stopTransport;
-    QAction *m_rewindTransport;
-    QAction *m_ffwdTransport; 
-    QAction *m_recordTransport;
-    QAction *m_rewindEndTransport;
-    QAction *m_ffwdEndTransport;
-    QAction *m_panic; 
-	
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
 
@@ -1683,9 +1639,6 @@ private:
     bool m_haveAudioImporter;
 
     RosegardenParameterArea *m_parameterArea;
-
-    QAction *m_setQuickMarkerAction;
-    QAction *m_jumpToQuickMarkerAction;
     
 #ifdef HAVE_LIRC        
     LircClient *m_lircClient;
