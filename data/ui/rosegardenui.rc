@@ -216,7 +216,7 @@
       <!-- JAS "show_stock_toolbar" is "options_show_toolbar" in matrix.rc and notation .rc -->
       <Action name="show_stock_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
       <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tracks_toolbar" text="Show trac&amp;ks Toolbar" checked="true" append="show_merge" />
+      <Action name="show_tracks_toolbar" text="Show Trac&amp;ks Toolbar" checked="true" append="show_merge" />
       <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />

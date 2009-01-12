@@ -112,6 +112,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
         if (toolbarName == "") {
             cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << endl;
         }
+        (void)findToolbar(toolbarName); // creates it if necessary
         m_currentToolbar = toolbarName;
         
     } else if (name == "text") {
@@ -304,12 +305,13 @@ ActionFileParser::findToolbar(QString toolbarName)
 {
     QToolBar *toolbar = m_actionOwner->findChild<QToolBar *>(toolbarName);
     if (!toolbar) {
-        toolbar = new QToolBar(toolbarName, m_actionOwner);
-        toolbar->setObjectName(toolbarName);
         QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
         if (mw) {
-            mw->addToolBar(toolbar);
+            toolbar = mw->addToolBar(toolbarName);
+        } else {
+            toolbar = new QToolBar(toolbarName, m_actionOwner);
         }
+        toolbar->setObjectName(toolbarName);
     }
     return toolbar;
 }

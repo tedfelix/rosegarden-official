@@ -3106,8 +3106,8 @@ void RosegardenGUIApp::slotFileOpen()
 
         // We haven't opened any files with this version of the
         // program before.  Default to the examples directory.
-
-        QString examplesDir = KGlobal::dirs()->findResource("appdata", "examples/");
+                          
+        QString examplesDir = ResourceFinder().getResourceDir("examples");
         settings.beginGroup( "Recent Dirs" );
 
         QString recentString = settings.value("ROSEGARDEN", "").toString() ;
@@ -7085,7 +7085,7 @@ void
 RosegardenGUIApp::setCursor(const QCursor& cursor)
 {
 	//KDockMainWindow::setCursor(cursor);
-	this->setCursor(cursor);	// note. this (qmainwindow) now contains main dock
+//	this->setCursor(cursor);	// note. this (qmainwindow) now contains main dock
 
     // play it safe, so we can use this class at anytime even very early in the app init
     if ((getView() &&
