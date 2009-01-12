@@ -27,7 +27,6 @@
 #include "base/Track.h"
 #include "document/RosegardenGUIDoc.h"
 #include "sound/ControlBlock.h"
-#include <kglobal.h>
 #include <QFile>
 #include <QString>
 #include <sys/types.h>

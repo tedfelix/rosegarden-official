@@ -87,7 +87,6 @@
 #include "sound/SoundDriver.h"
 #include "document/Command.h"
 #include <QSettings>
-#include <kglobal.h>
 #include <QMessageBox>
 #include <QProcess>
 #include <QProgressBar>

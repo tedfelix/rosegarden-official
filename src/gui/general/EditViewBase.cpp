@@ -59,13 +59,6 @@
 #include <Q3Canvas>
 
 #include <klocale.h>
-//#include <kxmlguiclient.h>
-//#include <kkeydialog.h>
-//#include <QDir>
-//#include <kedittoolbar.h>
-//#include <kglobal.h>
-//#include <kstandardshortcut.h>
-//#include <kstandardaction.h>
 
 
 

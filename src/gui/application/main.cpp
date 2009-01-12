@@ -20,15 +20,17 @@
 #include <sys/time.h>
 #include "base/RealTime.h"
 
+//@@@ required ? :
 #include <kcmdlineargs.h>
 #include <kaboutdata.h>
 #include <klocale.h>
+//#include <ktip.h>
+//#include <kglobalsettings.h>
+
 #include <QSettings>
 #include <QMessageBox>
 #include <QDir>
-#include <ktip.h>
 #include <QProcess>
-#include <kglobalsettings.h>
 
 #include <QStringList>
 #include <QRegExp>
@@ -732,7 +734,7 @@ int main(int argc, char *argv[])
 	    RosegardenGUIApp::self()->awaitDialogClearance();
 	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
 	    if (tipResource != "") {
-		KTipDialog::showTip(tipResource);
+// 			KTipDialog::showTip(tipResource);	//&&&
 	    }
 	}
     }

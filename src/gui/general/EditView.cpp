@@ -20,10 +20,6 @@
 #include <Q3CanvasItem>
 #include <Q3CanvasPixmap>
 
-//#include <kglobal.h>
-//#include <kiconloader.h>
-//#include <QDir>
-//#include <kxmlguiclient.h>
 #include <klocale.h>
 
 #include "EditView.h"

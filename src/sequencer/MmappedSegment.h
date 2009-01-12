@@ -29,7 +29,6 @@
 #include <iostream>
 
 #include <klocale.h>
-#include <kstandarddirs.h>
 
 #include <QDateTime>
 #include <QString>

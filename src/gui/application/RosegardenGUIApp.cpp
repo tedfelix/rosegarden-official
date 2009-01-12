@@ -3123,7 +3123,11 @@ void RosegardenGUIApp::slotFileOpen()
 	// getOpenFileName ( QWidget * parent = 0, const QString & caption = QString(), const QString & dir = QString(), const QString & filter = QString(), QString * selectedFilter = 0, Options options = 0 )
 		
 		//@@@ check disabled and following code:
-		QString fname = QFileDialog::getOpenFileName( this, i18n("Open File"), QDir::currentPath(), "*", 0, 0 ); 
+		QString fname;
+		//QFileDialog *fdlg = new QFileDialog(this, Qt::Dialog);
+		fname = QFileDialog::getOpenFileName( this, "Open File", ".", "All Files (*);;Rosegarden Projects (*.rg)", 0, 0 );
+		//QString fname = QFileDialog::getOpenFileName( this, i18n("Open File"), QDir::currentPath(), "*", 0, 0 );
+	
 		// last params: QString filter="*", QString* selectedFilter = 0, Options options = 0 )
 		// options info: http://doc.trolltech.com/4.3/qfiledialog.html#Option-enum
 	

@@ -35,7 +35,6 @@
 #include "MatrixTool.h"
 #include "MatrixView.h"
 #include <QAction>
-#include <kglobal.h>
 #include <QIcon>
 #include <QPoint>
 #include <QString>

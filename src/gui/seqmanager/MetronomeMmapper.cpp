@@ -34,7 +34,6 @@
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
 #include <QSettings>
-#include <kglobal.h>
 #include <QString>
 #include <algorithm>
 

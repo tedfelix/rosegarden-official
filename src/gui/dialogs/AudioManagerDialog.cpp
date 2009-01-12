@@ -444,7 +444,9 @@ AudioManagerDialog::getCurrentSelection()
     // try and get the selected item
 	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
 	if (til.isEmpty()){
-		//@@@ print some error here
+		QMessageBox::warning
+				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+		return 0;
 	}
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
     if (item == 0)
@@ -472,7 +474,9 @@ AudioManagerDialog::slotExportAudio()
 
 	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
 	if (til.isEmpty()){
-		//@@@ print some error here
+		QMessageBox::warning
+				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+		return;
 	}
 	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
@@ -534,7 +538,9 @@ AudioManagerDialog::slotRemove()
     AudioFile *audioFile = getCurrentSelection();
 	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
 	if (til.isEmpty() ){
-		//@@@ ouput error here
+		QMessageBox::warning
+				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+		return;
 	}
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
@@ -639,7 +645,9 @@ AudioManagerDialog::slotPlayPreview()
 	
 	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
 	if (til.isEmpty() ){
-		//@@@ ouput error here
+		QMessageBox::warning
+				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+		return;
 	}
 	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
@@ -1082,11 +1090,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     AudioFileManager &aFM = m_doc->getAudioFileManager();
 
     if (! QFile::exists(kurl.toLocalFile()) ) {
-	if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return false;
+		
+		if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return false;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
         if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return false;
     }
-
+	
     ProgressDialog progressDlg(i18n("Adding audio file..."),
                                100,
                                this);
@@ -1199,7 +1208,9 @@ AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 bool
 AudioManagerDialog::addAudioFile(const QString &filePath)
 {
-    return addFile(QFileInfo(filePath).absFilePath());
+	QString fp = QFileInfo(filePath).absFilePath();
+	RG_DEBUG << "\\_AudioFilePath : " << fp << endl;
+	return addFile( fp );
 }
 
 bool

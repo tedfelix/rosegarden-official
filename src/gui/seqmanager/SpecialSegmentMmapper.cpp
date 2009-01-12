@@ -24,7 +24,6 @@
 #include "base/TriggerSegment.h"
 #include "document/RosegardenGUIDoc.h"
 #include "SegmentMmapper.h"
-#include <kglobal.h>
 #include <QString>
 
 
