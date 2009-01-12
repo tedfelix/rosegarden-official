@@ -26,7 +26,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
-#include <kglobal.h>
 #include <QDir>
 #include <QFile>
 #include <QString>
@@ -135,11 +134,11 @@ void CompositionMmapper::mmapSegment(Segment* segment)
 
 QString CompositionMmapper::makeFileName(Segment* segment)
 {
-    QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+    QString tmp = QDir::tempPath();
 
     return QString("%1/segment_%2")
-           .arg(tmpDirs.last())
-           .arg((uintptr_t)segment, 0, 16);
+        .arg(tmp)
+        .arg((uintptr_t)segment, 0, 16);
 }
 
 QString CompositionMmapper::getSegmentFileName(Segment* s)

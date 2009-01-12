@@ -640,6 +640,13 @@ int main(int argc, char *argv[])
         args->clear();
     }
 */
+
+	//@@@ temporarily
+	if (argc > 1) {
+	    rosegardengui->openFile(QString::fromLocal8Bit(argv[1]));
+	}
+
+
     QObject::connect(&app, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 

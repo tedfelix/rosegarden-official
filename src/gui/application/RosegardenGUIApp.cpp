@@ -8741,15 +8741,9 @@ RosegardenGUIApp::slotImportStudio()
 {
     RG_DEBUG << "RosegardenGUIApp::slotImportStudio()\n";
 
-    QString studioDir = KGlobal::dirs()->findResource("appdata", "library/");
-    QDir dir(studioDir);
-    if (!dir.exists()) {
-        studioDir = ":ROSEGARDENDEVICE";
-    } else {
-        studioDir = "file://" + studioDir;
-    }
+    QString studioDir = ResourceFinder().getResourceDir("library");
 
-    QUrl url = QFileDialog::getOpenFileName( this, i18n("Import Studio from File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, i18n("Import Studio from File"), studioDir, "*", 0, 0 );
 
     if (url.isEmpty())
         return ;

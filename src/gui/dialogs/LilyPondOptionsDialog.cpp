@@ -23,7 +23,6 @@
 #include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
 
-#include <kglobal.h>
 #include <klineedit.h>
 #include <klocale.h>
 
@@ -43,6 +42,7 @@
 #include <QToolTip>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QLocale>
 
 #include <iostream>
 
@@ -150,8 +150,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->addItem(i18n("Tabloid"));
     m_lilyPaperSize->addItem(i18n("do not specify"));
     int defaultPaperSize = 1; // A4
-    if (KGlobal::locale()->country() == "us" || 
-        KGlobal::locale()->country() == "US") defaultPaperSize = 5; // Letter
+    if (QLocale::system().country() == QLocale::UnitedStates) {
+        defaultPaperSize = 5; // Letter
+    }
     m_lilyPaperSize->setCurrentIndex(settings.value("lilypapersize",
             defaultPaperSize).toUInt());
 

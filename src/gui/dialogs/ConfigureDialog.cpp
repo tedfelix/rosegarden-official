@@ -41,23 +41,6 @@
 namespace Rosegarden
 {
 
-/*
-// this should not be required anymore, since we have gui/general/IconLoader.h now
-static QPixmap loadIcon(const char *name)
-{
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QString fileBase = pixmapDir + "/misc/";
-    fileBase += name;
-    if (QFile(fileBase + ".png").exists()) {
-        return QPixmap(fileBase + ".png");
-    } else if (QFile(fileBase + ".xpm").exists()) {
-        return QPixmap(fileBase + ".xpm");
-    }
-    QPixmap pmap = KGlobal::instance()->iconLoader()
-        ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
-    return pmap;
-}
-*/
 
 
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
