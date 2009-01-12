@@ -132,8 +132,9 @@ ActionFileParser::startElement(const QString& namespaceURI,
             cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No action name provided in action element" << endl;
         }
 
-        if (m_currentMenus.empty() && m_currentToolbar == "" && m_currentState == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state element" << endl;
+        if (m_currentMenus.empty() && m_currentToolbar == "" &&
+            (m_currentState == "" || (!m_inEnable && !m_inDisable))) {
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state enable/disable element" << endl;
         }
 
         QString text = atts.value("text");
@@ -150,14 +151,12 @@ ActionFileParser::startElement(const QString& namespaceURI,
         if (checked != "") setActionChecked(actionName,
                                             checked.toLower() == "true");
         
-        //!!! can appear in menu, toolbar, state/enable, state/disable
+        // this can appear in menu, toolbar, state/enable, state/disable
 
+        if (m_inEnable) enableActionInState(m_currentState, actionName);
+        if (m_inDisable) disableActionInState(m_currentState, actionName);
         if (!m_currentMenus.empty()) addActionToMenu(m_currentMenus.last(), actionName);
         if (m_currentToolbar != "") addActionToToolbar(m_currentToolbar, actionName);
-
-        if (m_currentState != "") {
-            //!!!
-        }
 
     } else if (name == "separator") {
 
@@ -174,11 +173,19 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
     } else if (name == "enable") {
 
-        //!!! in state
+        if (m_currentState == "") {
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Enable element appears outside state element" << endl;
+        } else {
+            m_inEnable = true;
+        }
 
     } else if (name == "disable") {
 
-        //!!! in state
+        if (m_currentState == "") {
+            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Disable element appears outside state element" << endl;
+        } else {
+            m_inDisable = true;
+        }
     }
 
     return true;
@@ -218,6 +225,14 @@ ActionFileParser::endElement(const QString& namespaceURI,
     } else if (name == "state") {
         
         m_currentState = "";
+
+    } else if (name == "enable") {
+        
+        m_inEnable = false;
+
+    } else if (name == "disable") {
+        
+        m_inDisable = false;
     }
         
     return true;
@@ -468,20 +483,13 @@ ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 }
 
 bool
-ActionFileParser::addState(QString name)
-{
-    if (name == "") return false;
-    //!!! implement
-    return true;
-}
-
-bool
 ActionFileParser::enableActionInState(QString stateName, QString actionName)
 {
     if (stateName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) return false;
-    //!!! implement
+    m_stateEnableMap[stateName].push_back(action);
+    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
     return true;
 }
 
@@ -491,9 +499,45 @@ ActionFileParser::disableActionInState(QString stateName, QString actionName)
     if (stateName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) return false;
-    //!!! implement
+    m_stateDisableMap[stateName].push_back(action);
+    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
     return true;
 }
 
+void
+ActionFileParser::enterActionState(QString stateName)
+{
+    for (QList<QAction *>::iterator i = m_stateDisableMap[stateName].begin();
+         i != m_stateDisableMap[stateName].end(); ++i) {
+        (*i)->setEnabled(false);
+    }
+    for (QList<QAction *>::iterator i = m_stateEnableMap[stateName].begin();
+         i != m_stateEnableMap[stateName].end(); ++i) {
+        (*i)->setEnabled(true);
+    }
 }
+
+void
+ActionFileParser::leaveActionState(QString stateName)
+{
+    for (QList<QAction *>::iterator i = m_stateEnableMap[stateName].begin();
+         i != m_stateEnableMap[stateName].end(); ++i) {
+        (*i)->setEnabled(false);
+    }
+    for (QList<QAction *>::iterator i = m_stateDisableMap[stateName].begin();
+         i != m_stateDisableMap[stateName].end(); ++i) {
+        (*i)->setEnabled(true);
+    }
+}
+
+void
+ActionFileParser::slotObjectDestroyed(QObject *o)
+{
+    std::cerr << "WARNING: ActionFileParser::slotObjectDestroyed called, but not yet implemented" << std::endl;
+//!!! remove action from all maps
+}
+
+}
+
+#include "ActionFileParser.moc"
 

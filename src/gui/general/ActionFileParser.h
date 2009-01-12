@@ -19,6 +19,8 @@
 #define _RG_ACTIONFILEPARSER_H_
 
 #include <QXmlDefaultHandler>
+#include <QMap>
+#include <QObject>
 
 class QAction;
 class QActionGroup;
@@ -28,8 +30,10 @@ class QToolBar;
 namespace Rosegarden
 {
 	
-class ActionFileParser : public QXmlDefaultHandler
+class ActionFileParser : public QObject, public QXmlDefaultHandler
 {
+    Q_OBJECT
+
 public:
     ActionFileParser(QWidget *actionOwner);
     virtual ~ActionFileParser();
@@ -55,6 +59,12 @@ public:
 
     bool error(const QXmlParseException &exception);
     bool fatalError(const QXmlParseException &exception);
+    
+    void enterActionState(QString stateName);
+    void leaveActionState(QString stateName);
+
+protected slots:
+    void slotObjectDestroyed(QObject *);
 
 protected:
     bool setActionText(QString actionName, QString text);
@@ -73,7 +83,6 @@ protected:
     bool addActionToToolbar(QString toolbarName, QString actionName);
     bool addSeparatorToToolbar(QString toolbarName);
 
-    bool addState(QString name);
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
 
@@ -87,9 +96,15 @@ protected:
     QMenu *findMenu(QString name);
     QToolBar *findToolbar(QString name);
 
+    typedef QMap<QString, QList<QAction *> > StateMap;
+    StateMap m_stateEnableMap;
+    StateMap m_stateDisableMap;
+
     QWidget *m_actionOwner;
     bool m_inMenuBar;
     bool m_inText;
+    bool m_inEnable;
+    bool m_inDisable;
     QStringList m_currentMenus;
     QString m_currentToolbar;
     QString m_currentState;

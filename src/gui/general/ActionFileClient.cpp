@@ -76,17 +76,21 @@ ActionFileClient::findAction(QString actionName)
 void
 ActionFileClient::enterActionState(QString stateName)
 {
-    //&&& implement
-#pragma warning("Implement enterActionState");
-    std::cerr << "ERROR: enterActionState not implemented" << std::endl;
+    // inelegant, parser should just be a parser... we can't easily
+    // put implementations of these in here because this object cannot
+    // be a QObject and so cannot receive destroyed() signal from
+    // objects... proper structure needed
+    if (m_actionFileParser) m_actionFileParser->enterActionState(stateName);
 }
 
 void
 ActionFileClient::leaveActionState(QString stateName)
 {
-    //&&& implement
-#pragma warning("Implement leaveActionState");
-    std::cerr << "ERROR: leaveActionState not implemented" << std::endl;
+    // inelegant, parser should just be a parser... we can't easily
+    // put implementations of these in here because this object cannot
+    // be a QObject and so cannot receive destroyed() signal from
+    // objects... proper structure needed
+    if (m_actionFileParser) m_actionFileParser->leaveActionState(stateName);
 }
 
 QMenu *
