@@ -2127,7 +2127,10 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
 
 void RosegardenGUIApp::initZoomToolbar()
 {
-    QToolBar *zoomToolbar = this->addToolBar("Zoom Toolbar");
+    //### Zoom toolbar has already been created. Find it instead.
+    // QToolBar *zoomToolbar = this->addToolBar("Zoom Toolbar");
+    //
+    QToolBar *zoomToolbar = findToolbar("Zoom Toolbar");
     if (!zoomToolbar) {
         RG_DEBUG << "RosegardenGUIApp::initZoomToolbar() : "
         << "zoom toolbar not found" << endl;
