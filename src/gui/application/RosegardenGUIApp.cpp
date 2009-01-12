@@ -2190,7 +2190,8 @@ void RosegardenGUIApp::initStatusBar()
 	/* init toolbar */
 	/****************/
 	
-    addToolBar( Qt::TopToolBarArea, new QToolBar("Main Toolbar") );
+    //### Main toolbar seems to appear twice. Commenting out the empty one.
+    // addToolBar( Qt::TopToolBarArea, new QToolBar("Main Toolbar") );
 }
 
 void RosegardenGUIApp::initView()
