@@ -476,7 +476,7 @@ void CompositionView::slotStoppedRecording()
 
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
-    Q3ScrollView::resizeEvent(e);
+//&&&!!    Q3ScrollView::resizeEvent(e);
     slotUpdateSize();
 
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
