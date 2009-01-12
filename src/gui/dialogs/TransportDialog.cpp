@@ -53,12 +53,8 @@
 namespace Rosegarden
 {
 
-TransportDialog::TransportDialog(QWidget *parent,
-                                 const char *name,
-                                 Qt::WindowFlags flags):
-    QDialog( 
-			parent, flags //!!! WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose 
-		   ),
+TransportDialog::TransportDialog(QWidget *parent):
+    QDialog(parent, Qt::Tool),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
@@ -195,7 +191,7 @@ TransportDialog::TransportDialog(QWidget *parent,
     //
     int rfh = m_transport->RecordingFrame->height();
     m_transport->RecordingFrame->hide();
-    setFixedSize(width(), height() - rfh);
+//    setFixedSize(width(), height() - rfh);
     m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default

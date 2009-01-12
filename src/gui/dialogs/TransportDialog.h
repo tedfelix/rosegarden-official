@@ -47,14 +47,7 @@ class TransportDialog : public QDialog
 {
     Q_OBJECT
 public:
-    TransportDialog( QWidget *parent = 0,
-                     const char *name = 0,
-                     //!!! perhaps not any of this:
-                     Qt::WindowFlags flags = Qt::Dialog 
-                     | Qt::WindowStaysOnTopHint
-                     | Qt::WStyle_NormalBorder
-//!!!???						| Qt::WA_DeleteOnClose
-        );
+    TransportDialog(QWidget *parent = 0);
     ~TransportDialog();
 
     enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };

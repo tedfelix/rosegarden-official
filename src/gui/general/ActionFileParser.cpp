@@ -100,6 +100,8 @@ ActionFileParser::startElement(const QString& namespaceURI,
         
         if (!m_currentMenus.empty()) {
             addMenuToMenu(m_currentMenus.last(), menuName);
+        } else {
+            addMenuToMenubar(menuName);
         }
 
         m_currentMenus.push_back(menuName);
@@ -293,10 +295,6 @@ ActionFileParser::findMenu(QString menuName)
     if (!menu) {
         menu = new QMenu(m_actionOwner);
         menu->setObjectName(menuName);
-        QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
-        if (mw) {
-            mw->menuBar()->addMenu(menu);
-        }
     }
     return menu;
 }
@@ -308,6 +306,10 @@ ActionFileParser::findToolbar(QString toolbarName)
     if (!toolbar) {
         toolbar = new QToolBar(toolbarName, m_actionOwner);
         toolbar->setObjectName(toolbarName);
+        QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+        if (mw) {
+            mw->addToolBar(toolbar);
+        }
     }
     return toolbar;
 }
@@ -390,6 +392,20 @@ ActionFileParser::addMenuToMenu(QString parent, QString child)
     QMenu *childMenu = findMenu(child);
     if (!parentMenu || !childMenu) return false;
     parentMenu->addMenu(childMenu);
+    QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+    if (!mw) return false;
+    return true;
+}
+
+bool
+ActionFileParser::addMenuToMenubar(QString menuName)
+{
+    if (menuName == "") return false;
+    QMenu *menu = findMenu(menuName);
+    if (!menu) return false;
+    QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+    if (!mw) return false;
+    mw->menuBar()->addMenu(menu);
     return true;
 }
 

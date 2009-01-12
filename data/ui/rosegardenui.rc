@@ -189,7 +189,7 @@
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
     <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
-    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <Action name="erase" text="&amp;Eraser" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
     <Action name="resize" text="&amp;Resize" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
     <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" />
@@ -269,6 +269,21 @@
   </Menu>
 
 </MenuBar>
+
+<ToolBar name="Main Toolbar">
+  <text>Main Toolbar</text>
+  <Action name="file_new"/>
+  <Action name="file_open"/>
+  <Action name="file_save"/>
+  <Action name="file_print"/>
+  <Action name="file_print_preview"/>
+  <Separator/>
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+  <Action name="edit_cut"/>
+  <Action name="edit_copy"/>
+  <Action name="edit_paste"/>
+</ToolBar>
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>

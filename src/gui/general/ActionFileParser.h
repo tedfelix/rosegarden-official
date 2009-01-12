@@ -65,6 +65,7 @@ protected:
 
     bool setMenuText(QString name, QString text);
     bool addMenuToMenu(QString parent, QString child);
+    bool addMenuToMenubar(QString menuName);
     bool addActionToMenu(QString menuName, QString actionName);
     bool addSeparatorToMenu(QString menuName);
     

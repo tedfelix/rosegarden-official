@@ -476,7 +476,13 @@ void CompositionView::slotStoppedRecording()
 
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
-//&&&!!    Q3ScrollView::resizeEvent(e);
+    static bool inResize = false; //&&&!!! ew gross
+
+    if (inResize) return;
+    
+    inResize = true;
+
+    Q3ScrollView::resizeEvent(e);
     slotUpdateSize();
 
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());
@@ -486,6 +492,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     m_artifactsDrawBuffer.resize(w, h);
     slotAllDrawBuffersNeedRefresh();
     //     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsDrawBuffer.size() << endl;
+
+    inResize = false;
 }
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
