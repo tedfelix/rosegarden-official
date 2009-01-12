@@ -1273,11 +1273,33 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     }
 
 #ifdef HAVE_LIBJACK
+
+/*
+ * KMessageBox::information:
+ *
+ * static void   information (QWidget *parent, const QString &text, const
+ * QString &caption=QString(), const QString &dontShowAgainName=QString(),
+ * Options options=Notify)
+ *
+ * QMessageBox:
+ *
+ * QMessageBox ( Icon icon, const QString & title, const QString & text,
+ * StandardButtons buttons = NoButton, QWidget * parent = 0, Qt::WindowFlags f =
+ * Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint )
+ */
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenGUIApp::self()->awaitDialogClearance();
-        QMessageBox::information(RosegardenGUIApp::self(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
+        QMessageBox::information(0,
                                  i18n("Failed to connect to JACK"),
-                                 "startup-jack-failed");
+                                 i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
+
+                                 //&&& ,"startup-jack-failed");
+                                 //
+                                 // We will need to write our own "don't show
+                                 // this again" functionality.  Temporarily
+                                 // removed from the dialog above.  It used to
+                                 // use the "startup-jack-failed" key for this
+                                 // purpose.
     }
 #endif
     CurrentProgressDialog::thaw();
