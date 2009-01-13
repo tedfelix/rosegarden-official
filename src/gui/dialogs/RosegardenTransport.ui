@@ -5,7 +5,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
+    <width>416</width>
     <height>134</height>
    </rect>
   </property>
@@ -6234,7 +6234,8 @@
     <property name="icon" >
      <iconset resource="../../../data/data.qrc" >
       <normaloff>:/pixmaps/transport/button-flip-closed.png</normaloff>
-      <normalon>:/pixmaps/transport/button-flip-open.png</normalon>:/pixmaps/transport/button-flip-closed.png</iconset>
+      <normalon>:/pixmaps/transport/button-flip-open.png</normalon>
+     </iconset>
     </property>
     <property name="checkable" >
      <bool>true</bool>

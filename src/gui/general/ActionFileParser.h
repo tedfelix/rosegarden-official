@@ -64,7 +64,7 @@ public:
     void leaveActionState(QString stateName);
 
 protected slots:
-    void slotObjectDestroyed(QObject *);
+    void slotObjectDestroyed();
 
 protected:
     bool setActionText(QString actionName, QString text);

@@ -531,8 +531,9 @@ ActionFileParser::leaveActionState(QString stateName)
 }
 
 void
-ActionFileParser::slotObjectDestroyed(QObject *o)
+ActionFileParser::slotObjectDestroyed()
 {
+    QObject *o = sender();
     std::cerr << "WARNING: ActionFileParser::slotObjectDestroyed called, but not yet implemented" << std::endl;
 //!!! remove action from all maps
 }

@@ -28,7 +28,7 @@
 #include <QCursor>
 #include <QPoint>
 #include <QRect>
-#include <QScrollArea>
+#include <Q3ScrollView>
 #include <QScrollBar>
 #include <QSize>
 #include <QSizePolicy>
@@ -404,15 +404,19 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget && m_leftWidget->isVisible()) {
-        QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
+        Q3ScrollView * qsv = dynamic_cast<Q3ScrollView *>(m_leftWidget);
+        
+        if (!qsv) {
+            std::cerr << "RosegardenCanvasView::updateBottomWidgetGeometry: Left widget is not a Q3ScrollView" << std::endl;
+        } else {
+//            qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
+//		int contWidth = qsv->widget()->width();
 		
-		//qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
-		int contWidth = qsv->widget()->width();
+            leftWidgetWidth = qsv->contentsWidth()+2;
+//		leftWidgetWidth = contWidth + 2;
 		
-//         leftWidgetWidth = qsv->contentsWidth()+2;
-		leftWidgetWidth = contWidth + 2;
-		
-        qsv->setFixedWidth(leftWidgetWidth);
+            qsv->setFixedWidth(leftWidgetWidth);
+        }
     }
 
     setMargins(leftWidgetWidth, 0, 0, bottomWidgetHeight);
@@ -467,14 +471,22 @@ void RosegardenCanvasView::updateLeftWidgetGeometry()
         return ;
 
     int leftWidgetWidth = 0;
-    if (m_leftWidget->isVisible()) {
-        QScrollArea * qsv = dynamic_cast<QScrollArea *>(m_leftWidget);
+    if (m_leftWidget && m_leftWidget->isVisible()) {
+
+        Q3ScrollView * qsv = dynamic_cast<Q3ScrollView *>(m_leftWidget);
+        
+        if (!qsv) {
+            std::cerr << "RosegardenCanvasView::updateBottomWidgetGeometry: Left widget is not a Q3ScrollView" << std::endl;
+        } else {
+//            qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
+//		int contWidth = qsv->widget()->width();
 		
-		int contWidth = qsv->widget()->width();
-// 		leftWidgetWidth = qsv->contentsWidth() + 2;
-		leftWidgetWidth = contWidth + 2;
-	}
-    m_leftWidget->setFixedWidth(leftWidgetWidth);
+            leftWidgetWidth = qsv->contentsWidth()+2;
+//		leftWidgetWidth = contWidth + 2;
+		
+            qsv->setFixedWidth(leftWidgetWidth);
+        }
+    }
 
     int bottomWidgetHeight = m_bottomWidget ? 
                                 m_bottomWidget->sizeHint().height() : 0;

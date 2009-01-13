@@ -85,6 +85,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     QVBoxLayout *vboxLay = new QVBoxLayout();
     setLayout( vboxLay );
+    vboxLay->setMargin(0);
 
     QFrame *frame = new QFrame;
     vboxLay->addWidget(frame);
@@ -1066,11 +1067,11 @@ TransportDialog::slotPanelOpenButtonClicked()
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
-        setFixedSize(width(), height() - rfh);
+//        setFixedSize(width(), height() - rfh);
         m_transport->PanelOpenButton->setPixmap(m_panelClosed);
         m_isExpanded = false;
     } else {
-        setFixedSize(width(), height() + rfh);
+//        setFixedSize(width(), height() + rfh);
         m_transport->RecordingFrame->show();
         m_transport->PanelOpenButton->setPixmap(m_panelOpen);
         m_isExpanded = true;
@@ -1084,7 +1085,7 @@ TransportDialog::slotPanelCloseButtonClicked()
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
-        setFixedSize(width(), height() - rfh);
+//        setFixedSize(width(), height() - rfh);
         m_transport->PanelOpenButton->setPixmap(m_panelClosed);
         m_isExpanded = false;
     }
