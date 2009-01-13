@@ -345,7 +345,7 @@ VUMeter::paintEvent(QPaintEvent *e)
             meterStop();
             drawFrame(&paint);
 //             drawContents(&paint); //### old QT3 method with no apparent equivalent; study required
-			repaint();	// use this ???
+//			repaint();	// use this ??? -- no, it would lead to a recursive repaint
 			
         }
     } else {
@@ -359,7 +359,7 @@ VUMeter::paintEvent(QPaintEvent *e)
             drawFrame(&paint);
 			
 //             drawContents(&paint);	//###
-			repaint();	// use this ???
+//			repaint();	// use this ???
 		}
     }
 }

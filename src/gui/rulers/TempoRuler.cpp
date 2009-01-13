@@ -110,7 +110,10 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_textFloat = new TextFloat(this);
     m_textFloat->hide();
 
-    //    setBackgroundColor(GUIPalette::getColour(GUIPalette::TextRulerBackground));
+    QPalette p(palette());
+    p.setColor(QPalette::Background,
+               GUIPalette::getColour(GUIPalette::TextRulerBackground));
+    setPalette(p);
     setBackgroundMode(Qt::NoBackground);
 
     QObject::connect

@@ -55,6 +55,8 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
       m_doc(doc),
       m_lastShowAdditionalControlsArg(false)
 {
+    setObjectName("Instrument Parameter Box");
+
     m_widgetStack->setFont(m_font);
     m_noInstrumentParameters->setFont(m_font);
     m_midiInstrumentParameters->setFont(m_font);

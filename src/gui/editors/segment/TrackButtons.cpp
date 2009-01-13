@@ -86,6 +86,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
         m_popupItem(0),
         m_lastSelected( -1)
 {
+    m_layout->setMargin(0);
     setFrameStyle(Plain);
 
     // when we create the widget, what are we looking at?

@@ -94,6 +94,8 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
         m_lowestPlayable(0),
         m_selectedTrackId( -1)
 {
+    setObjectName("Track Parameter Box");
+
     QFont font(m_font);
     QFont title_font(m_font);
     QFontMetrics metrics(font);

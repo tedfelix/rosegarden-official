@@ -36,6 +36,8 @@
 #include <QStackedWidget>
 #include <QGroupBox>
 
+#include "misc/Debug.h"
+
 namespace Rosegarden
 {
 
@@ -69,21 +71,23 @@ RosegardenParameterArea::RosegardenParameterArea(
     m_scrollView->addChild(m_classic);
     m_scrollView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
     m_scrollView->setVScrollBarMode(Q3ScrollView::Auto);
-    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
+//    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
 
 	
 	// add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
+//	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
-	addWidget(m_tabBox); //, TAB_BOX_STYLE);
+//	addWidget(m_tabBox); //, TAB_BOX_STYLE);
 
 }
 
 void RosegardenParameterArea::addRosegardenParameterBox(
     RosegardenParameterBox *b)
 {
+    RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox" << endl;
+
     // Check that the box hasn't been added before.
 
     for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
@@ -135,6 +139,8 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
 void RosegardenParameterArea::setArrangement(Arrangement style)
 {
+    RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ")" << endl;
+
     // Lookup the container of the specified style.
 
     QWidget *container;
@@ -219,6 +225,8 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
         QWidget *new_container,
         RosegardenParameterBox *box)
 {
+    RG_DEBUG << "RosegardenParameterArea::moveWidget" << endl;
+
     // Remove any state that is associated with the parameter boxes,
     // from the active container.
 

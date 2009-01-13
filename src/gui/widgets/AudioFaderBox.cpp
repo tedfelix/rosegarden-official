@@ -164,6 +164,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     setContentsMargins(4, 4, 4, 4);
     QGridLayout *grid = new QGridLayout(this);
+    setLayout(grid);
     grid->setSpacing(4);
 
     grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2-0+ 1);

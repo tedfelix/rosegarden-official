@@ -664,6 +664,8 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 // Let's see how we get on with:
     QPainter p(&m_segmentsDrawBuffer);
 
+    p.setRenderHint(QPainter::Antialiasing, false);
+
     p.translate( -contentsX(), -contentsY());
 
     if (!m_backgroundPixmap.isNull()) {
@@ -706,7 +708,6 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
     //     Profiler profiler("CompositionView::drawArea", true);
 
     //     RG_DEBUG << "CompositionView::drawArea() clipRect = " << clipRect << endl;
-
     //
     // Fetch track dividing lines
     //

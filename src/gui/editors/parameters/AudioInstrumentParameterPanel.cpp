@@ -237,9 +237,12 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* d
         : InstrumentParameterPanel(doc, parent),
         m_audioFader(new AudioFaderBox(this))
 {
+    setObjectName("Audio Instrument Parameter Panel");
+
     setContentsMargins(5, 5, 5, 5);
     QGridLayout *gridLayout = new QGridLayout(this);
     gridLayout->setSpacing(5);
+    setLayout(gridLayout);
     // Instrument label : first row, all cols
     gridLayout->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 1-0+ 1, Qt::AlignCenter);
 

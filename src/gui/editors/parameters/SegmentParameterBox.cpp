@@ -92,6 +92,8 @@ SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
         m_doc(doc),
         m_transposeRange(48)
 {
+    setObjectName("Segment Parameter Box");
+
     initBox();
 
     m_doc->getComposition().addObserver(this);

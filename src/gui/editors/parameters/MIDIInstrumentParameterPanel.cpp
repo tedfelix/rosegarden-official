@@ -61,9 +61,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
         m_rotaryFrame(0),
         m_rotaryMapper(new QSignalMapper(this))
 {
+    setObjectName("MIDI Instrument Parameter Panel");
+
     setContentsMargins(2, 2, 2, 2);
     m_mainGrid = new QGridLayout(this);
     m_mainGrid->setSpacing(1);
+    setLayout(m_mainGrid);
 
     m_connectionLabel = new SqueezedLabel(this);
     m_bankValue = new QComboBox(this);

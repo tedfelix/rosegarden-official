@@ -358,54 +358,13 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	
 	
 	// start of docking code 
-/*&&& cc removing all fancy options in docking code to see if it works then!
 	this->setDockOptions( // QMainWindow::AllowNestedDocks // not required with ::ForceTabbedDocks
 							QMainWindow::AnimatedDocks
 							|QMainWindow::ForceTabbedDocks
 							//|QMainWindow::VerticalTabs
 						);
 	
-*/	
 
-	/*
-	//&&& m_mainDockWidget may not be required: QMainWindow serves the mainDock
-	// 
-	// 
-	// create mainDockWidget
-	// old: m_mainDockWidget = createDockWidget("Rosegarden MainDockWidget", dummyPixmap, 0L, "main_dock_widget");
-	// 
-	m_mainDockWidget = new QDockWidget("Rosegarden MainDockWidget", dynamic_cast<QWidget*>(this), Qt::Tool );
-	//### FIX: deallocate m_mainDockWidget !
-	m_mainDockWidget->setMinimumSize( 60, 60 );	//### fix arbitrary value for min-size
-	
-	// allow others to dock to the left and right sides only
-    // old: m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
-	m_mainDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-	
-    // forbit docking abilities of m_mainDockWidget itself
-    // old: m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);  //&&& setEnableDocking() not required ?
-	
-	m_mainDockWidget->setFeatures( QDockWidget::DockWidgetMovable
-			| QDockWidget::DockWidgetMovable
-			| QDockWidget::DockWidgetFloatable
-			| QDockWidget::DockWidgetVerticalTitleBar
-			//| QDockWidget::DockWidgetClosable
-			);
-	
-	//setView(m_mainDockWidget); // central widget in a KDE mainwindow
-    //setMainDockWidget(m_mainDockWidget); // master dockwidget
-	
-	// add to QMainWindow, left side
-	this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
-	
-	// end disabled m_mainDockWidget
-	*/
-	
-	
-	//old: m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
-	//							  i18n("Special Parameters"));
-	m_dockLeft = new QDockWidget(i18n("Special Parameters"), this);
-	m_dockLeft->setMinimumSize( 180, 200 );	//### fix arbitrary value for min-size
 
 /*&&& cc removing all fancy options in docking code to see if it works then!
 	m_dockLeft->setFeatures( QDockWidget::DockWidgetMovable
@@ -415,25 +374,15 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 			//| QDockWidget::DockWidgetClosable
                         );
 */
-	// add dockLeft to mainDockWidget, left side 
-	//old: m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-	 //                     QDockWidget::DockLeft,  // dock site
-	   //                  20);                   // relation target/this (in percent)
-	//m_mainDockWidget->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
-
-//&&& Qt docs say this is unnecessary        addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
-	
-	// add to m_mainDockWidget, left side
-	//this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
 	
 	
 	
-	
-	
+/*
     connect(m_dockLeft, SIGNAL(iMBeingClosed()),
             this, SLOT(slotParametersClosed()));
     connect(m_dockLeft, SIGNAL(hasUndocked()),
             this, SLOT(slotParametersClosed()));
+*/
 	
     // Apparently, hasUndocked() is emitted when the dock widget's
     // 'close' button on the dock handle is clicked.
@@ -446,13 +395,36 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
+/*&&&
+    m_dockLeft = new QDockWidget(i18n("Special Parameters"), this);
+    m_dockLeft->setMinimumSize( 180, 200 );	//### fix arbitrary value for min-size
+    addDockWidget(Qt::LeftDockWidgetArea, m_dockLeft);
 
-    m_parameterArea = new RosegardenParameterArea(m_dockLeft);
+    m_parameterArea = new RosegardenParameterArea(m_dockLeft, "Rosegarden Parameter Area");
     m_dockLeft->setWidget(m_parameterArea);
-    m_parameterArea->show();
-
+*/
     // Populate the parameter-box area with the respective
     // parameter box widgets.
+
+    QDockWidget *dw = new QDockWidget(i18n("Segment Parameters"), this);
+    m_segmentParameterBox = new SegmentParameterBox(doc, dw);
+    dw->setWidget(m_segmentParameterBox);
+    addDockWidget(Qt::LeftDockWidgetArea, dw);
+
+    dw = new QDockWidget(i18n("Track Parameters"), this);
+    m_trackParameterBox = new TrackParameterBox(doc, dw);
+    dw->setWidget(m_trackParameterBox);
+    addDockWidget(Qt::LeftDockWidgetArea, dw);
+
+/*@@@
+
+    dw = new QDockWidget(i18n("Instrument Parameters"), this);
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, dw);
+    dw->setWidget(m_instrumentParameterBox);
+    addDockWidget(Qt::LeftDockWidgetArea, dw);
+
+
+  note: m_dockLeft and m_parameterArea are not currently used at all
 
     m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
@@ -460,6 +432,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
+*/
+    m_instrumentParameterBox = new InstrumentParameterBox(doc, 0);
+//    m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
 
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
@@ -467,11 +442,11 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-                                    settings.value("sidebarstyle",
-                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
+//    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
+//                                    settings.value("sidebarstyle",
+//                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
 
-    m_dockLeft->update();
+//    m_dockLeft->update();
 
     connect(m_instrumentParameterBox,
             SIGNAL(selectPlugin(QWidget *, InstrumentId, int)),
@@ -2883,7 +2858,7 @@ void RosegardenGUIApp::readOptions()
     opt = qStrToBool( settings.value("Show Segment Labels", "true" ) ) ;
     findAction("show_segment_labels")->setChecked(opt);
     slotToggleSegmentLabels();
-
+/*&&&
     opt = qStrToBool( settings.value("Show Parameters", "true" ) ) ;
     if (!opt) {
         //m_dockLeft->undock();
@@ -2893,7 +2868,7 @@ void RosegardenGUIApp::readOptions()
     enterActionState("parametersbox_closed"); //@@@ JAS KXMLGUIClient::StateNoReverse);
     m_dockVisible = false;
     }
-
+*/
     // MIDI Thru routing
     opt = qStrToBool( settings.value("MIDI Thru Routing", "true" ) ) ;
     findAction("enable_midi_routing")->setChecked(opt);
@@ -4357,8 +4332,10 @@ void RosegardenGUIApp::slotTogglePreviews()
 void RosegardenGUIApp::slotDockParametersBack()
 {
 //    m_dockLeft->dockBack();
+/*&&&
 	m_dockLeft->setFloating(false);
 	m_dockLeft->setVisible(true);
+*/
 }
 
 void RosegardenGUIApp::slotParametersClosed()
@@ -7127,7 +7104,7 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
     }
 	*/
 
-    m_dockLeft->setCursor(cursor);
+    if (m_dockLeft) m_dockLeft->setCursor(cursor);
 }
 
 QVector<QString>
@@ -8932,7 +8909,7 @@ RosegardenGUIApp::slotUpdateSidebarStyle(unsigned int style)
 {
     RG_DEBUG << "RosegardenGUIApp::slotUpdateSidebarStyle - "
     << "changed style to " << style << endl;
-    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement) style);
+    if (m_parameterArea) m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement) style);
 }
 
 void

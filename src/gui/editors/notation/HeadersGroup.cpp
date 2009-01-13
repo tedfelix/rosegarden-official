@@ -51,6 +51,7 @@ HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
         m_lastWidth(-1),
         m_layout( new QVBoxLayout(this) )
 {
+    setLayout(m_layout);
 }
 
 void
@@ -91,7 +92,7 @@ HeadersGroup::completeToHeight(int height)
         }
         m_filler->setFixedHeight(height - m_usedHeight);
     }
-    setLayout(m_layout);  // May it harm to call setLayout more than once ?
+//    setLayout(m_layout);  // May it harm to call setLayout more than once ?
 }
 
 void
