@@ -697,11 +697,13 @@ void RosegardenGUIApp::setupActions()
 //    new KToolBarPopupAction(i18n("Und&o"), "undo", KStdAccel::shortcut(KStdAccel::Undo), actionCollection(), KStdAction::stdName(KStdAction::Undo));
 //    new KToolBarPopupAction(i18n("Re&do"), "redo", KStdAccel::shortcut(KStdAccel::Redo), actionCollection(), KStdAction::stdName(KStdAction::Redo));
 
+    createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_tracks_toolbar", SLOT(slotToggleTracksToolBar()));
     createAction("show_editors_toolbar", SLOT(slotToggleEditorsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_zoom_toolbar", SLOT(slotToggleZoomToolBar()));
+    createAction("show_status_bar", SLOT(slotToggleStatusBar()));
     createAction("show_transport", SLOT(slotToggleTransport()));
     createAction("show_tracklabels", SLOT(slotToggleTrackLabels()));
     createAction("show_rulers", SLOT(slotToggleRulers()));
@@ -1044,7 +1046,7 @@ void RosegardenGUIApp::setupActions()
     //  old: m_viewToolBar = KStandardAction::showToolbar (this, SLOT(slotToggleToolBar()), actionCollection(),
    //                 "show_stock_toolbar");
 
-	QAction* qa_showToolbar = new QAction(i18n("Show &Toolbar"), this );
+	QAction* qa_showToolbar = new QAction(i18n("Show Main &Toolbar"), this );
 	connect( qa_showToolbar, SIGNAL(toggled()), this, SLOT(slotToggleToolBar()) ); ;
 	qa_quit->setCheckable( true );	//
 	qa_showToolbar->setAutoRepeat( false );	//
