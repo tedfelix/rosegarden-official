@@ -355,6 +355,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         m_rotaryGrid->setSpacing(1);
         m_rotaryGrid->setMargin(0);
         m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
+        m_rotaryFrame->setLayout(m_rotaryGrid);
     }
 
     // To cut down on flicker, we avoid destroying and recreating
@@ -446,8 +447,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             else if (it->getMax() - it->getMin() < 20)
                 bigStep = 2.0;
 
-            rotary = new Rotary( hbox ,
-                      it->getDefault() == 64);
+//@@@ Rotary takes a lot more args than this!           rotary = new Rotary( hbox ,
+//                      it->getDefault() == 64);
+            rotary = new Rotary(hbox);
             hboxLayout->addWidget(rotary);
             hbox->setLayout(hboxLayout); //!!! hacky
 
@@ -495,7 +497,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                      (m_rotaries.begin(), rmi);
     }
 
-    m_rotaryFrame->show();
+//    m_rotaryFrame->show();
 }
 
 void

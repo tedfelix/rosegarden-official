@@ -58,8 +58,10 @@ QColor GUIPalette::getColour(const char* const colourName)
     // is for!
 //    QColor res = getInstance()->m_defaultsMap[colourName];
 //    config.readColorEntry(colourName, &res);
-    
-    QColor color = config.value(colourName).value<QColor>();
+
+    // cc -- try half of the old and half of the new:
+    QColor res = getInstance()->m_defaultsMap[colourName];
+    QColor color = config.value(colourName, res).value<QColor>();
     config.endGroup();
 
     return color;

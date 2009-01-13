@@ -96,28 +96,34 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     QHBoxLayout *faderHboxLayout = new QHBoxLayout;
     faderHboxLayout->setMargin(0);
 
+    //@@@ Testing m_vuMeter->height() doesn't work until the meter has
+    //actually been shown, in Qt4 -- hardcode this for now
+    int vuHeight = 140;
+
+/*@@@
     m_vuMeter = new AudioVUMeter( faderHbox, VUMeter::AudioPeakHoldShort,
             true, true);
 
     faderHboxLayout->addWidget(m_vuMeter);
-
+*/
     m_recordFader = new Fader(AudioLevel::ShortFader, 20,
-            m_vuMeter->height(), faderHbox);
+                              vuHeight, faderHbox);
 
     faderHboxLayout->addWidget(m_recordFader);
 
     m_recordFader->setOutlineColour(GUIPalette::getColour(GUIPalette::RecordFaderOutline));
-
+/*@@@
     delete m_vuMeter; // only used the first one to establish height,
     // actually want it after the record fader in
     // hbox
+    */
     m_vuMeter = new AudioVUMeter(faderHbox, VUMeter::AudioPeakHoldShort,
             true, true);
 
     faderHboxLayout->addWidget(m_vuMeter);
 
     m_fader = new Fader(AudioLevel::ShortFader, 20,
-            m_vuMeter->height(), faderHbox);
+                        vuHeight, faderHbox);
 
     faderHboxLayout->addWidget(m_fader);
     faderHbox->setLayout(faderHboxLayout);
