@@ -1,18 +1,14 @@
 
 # These paths set up for Ubuntu 8.04 with kdelibs5-dev and qt4-dev.
-# For some mad reason, KDE4 headers are in /usr/lib/kde4/include on
-# this system.  Someone is really going to have to explain that to me.
-# More sensibly, Qt4 headers are in /usr/include/Qt4.  Note also
-# special names of moc and uic (to avoid messing with alternatives).
 
-KDEDIR		= /usr
+KDEDIR		= /usr/lib/kde4
 QTDIR		= /usr
 
-KDEINC          = $(KDEDIR)/lib/kde4/include
-KDELIB          = $(KDEDIR)/lib/kde4/lib
+KDEINC		= $(KDEDIR)/include
+KDELIB		= $(KDEDIR)/lib
 
-QTINC           = $(QTDIR)/include/qt4
-QTLIB           = $(QTDIR)/lib
+QTINC		= $(QTDIR)/include/qt4
+QTLIB		= $(QTDIR)/lib
 
 CCDIR		= /usr
 
@@ -24,7 +20,8 @@ MOC		= $(QTDIR)/bin/moc-qt4
 UIC		= $(QTDIR)/bin/uic-qt4
 RCC		= $(QTDIR)/bin/rcc
 
-CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DNDEBUG -D'VERSION="2.0-yeah-whatever-innit"'
+CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -D'VERSION="2.0-yeah-whatever-innit"'
+CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
 LDFLAGS		= 
 
 INCLUDES	= \
@@ -42,8 +39,8 @@ INCLUDES	= \
 		-Isrc
 
 LDLIBS		= \
-		-L$(CCDIR)/lib \
 		-L$(KDELIB) \
+		-L$(CCDIR)/lib \
 		-L$(QTLIB) \
 		-lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
@@ -74,6 +71,7 @@ rosegarden:	$(OBJECTS)
 
 %.cpp: %.qrc
 	$(RCC) $< -o $@
+#	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
