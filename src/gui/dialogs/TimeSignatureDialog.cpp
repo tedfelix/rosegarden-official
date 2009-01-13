@@ -81,7 +81,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
     QGroupBox *groupBox = new QGroupBox(i18n("Time signature"));
-    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
 
     QWidget *numBox = new QWidget;
@@ -144,7 +144,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_timeEditor = 0;
 
         groupBox = new QGroupBox(i18n("Scope"));
-        groupBoxLayout = new QHBoxLayout;
+        groupBoxLayout = new QVBoxLayout;
         vboxLayout->addWidget(groupBox);
 
         int barNo = composition->getBarNumber(m_time);
@@ -191,7 +191,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     groupBox->setLayout(groupBoxLayout);
 
     groupBox = new QGroupBox(i18n("Options"));
-    groupBoxLayout = new QHBoxLayout;
+    groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
