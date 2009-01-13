@@ -207,7 +207,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     ( qStrToBool( settings.value("timesigdialogmakehiddenbars", "false" ) ) );
 
     m_commonTimeButton = new QCheckBox(i18n("Show as common time"));
-    groupBoxLayout->addWidget(m_hideBarsButton);
+    groupBoxLayout->addWidget(m_commonTimeButton);
     m_commonTimeButton->setChecked
     ( qStrToBool( settings.value("timesigdialogshowcommon", "true" ) ) );
 
