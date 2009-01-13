@@ -823,6 +823,7 @@ void RosegardenGUIApp::setupActions()
 
     createGUI("rosegardenui.rc");
 
+    setupRecentFilesMenu();
     createAndSetupTransport();
 
     // transport toolbar is hidden by default - TODO : this should be in options
@@ -2210,8 +2211,7 @@ void RosegardenGUIApp::initView()
     // Ensure that the start and end markers for the piece are set
     // to something reasonable
     //
-    if (comp.getStartMarker() == 0 &&
-            comp.getEndMarker() == 0) {
+    if (comp.getStartMarker() == 0 && comp.getEndMarker() == 0) {
         int endMarker = comp.getBarRange(100 + comp.getNbBars()).second;
         comp.setEndMarker(endMarker);
     }
@@ -2219,7 +2219,8 @@ void RosegardenGUIApp::initView()
     m_swapView = new RosegardenGUIView(findAction("show_tracklabels")->isChecked(),
                                        m_segmentParameterBox,
                                        m_instrumentParameterBox,
-                                       m_trackParameterBox, this);
+                                       m_trackParameterBox,
+                                       this);
 
     // Connect up this signal so that we can force tool mode
     // changes from the view
@@ -2239,8 +2240,10 @@ void RosegardenGUIApp::initView()
     m_doc->attachView(m_swapView);
 	
     // m_mainDockWidget->setWidget(m_swapView);	//&&& later: check dockWidget code
-	
-    //     setCentralWidget(m_swapView);
+
+    //@@@ This was commented out... why?
+    setCentralWidget(m_swapView);
+
     setCaption(m_doc->getTitle());
 
 
@@ -8964,17 +8967,18 @@ RosegardenGUIDoc *RosegardenGUIApp::getDocument() const
 void
 RosegardenGUIApp::awaitDialogClearance()
 {
-    bool haveDialog = true;
-
     std::cerr << "RosegardenGUIApp::awaitDialogClearance: entering" << std::endl;
     
-    QDialog* c;
+    bool haveDialog = true;
+
+    QDialog *c;
     QList<QDialog*> cl;
     int i;
 
     while (haveDialog) {
 
-        cl = this->findChildren<QDialog*>();
+        cl = findChildren<QDialog*>();
+
         haveDialog = false;
         for( i=0; i < cl.size(); i++ ){
             c = cl.at(i);

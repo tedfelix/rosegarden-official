@@ -18,6 +18,8 @@
 
 //#include "Preferences.h"
 
+#include "misc/Debug.h"
+
 #include <QFileInfo>
 #include <QSettings>
 #include <QRegExp>
@@ -58,6 +60,8 @@ RecentFiles::read()
 void
 RecentFiles::write()
 {
+    RG_DEBUG << "RecentFiles::write" << endl;
+
     QSettings settings;
     settings.beginGroup(m_settingsGroup);
 
@@ -122,6 +126,8 @@ RecentFiles::add(QString name)
 void
 RecentFiles::addFile(QString name)
 {
+    RG_DEBUG << "RecentFiles::addFile(" << name << ")" << endl;
+
     static QRegExp schemeRE("^[a-zA-Z]{2,5}://");
     static QRegExp tempRE("[\\/][Tt]e?mp[\\/]");
     if (schemeRE.indexIn(name) == 0) {

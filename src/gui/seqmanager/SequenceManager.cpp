@@ -1116,13 +1116,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
                         QMessageBox::critical(
-                            dynamic_cast<QWidget*>(m_doc->parent()), "",
+                            RosegardenGUIApp::self(), "",
                             i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
                         QMessageBox::critical(
-                            dynamic_cast<QWidget*>(m_doc->parent()), "",
+                            RosegardenGUIApp::self(), "",
                             i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
@@ -1136,7 +1136,8 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
                         QMessageBox::information(
-                          dynamic_cast<QWidget*>(m_doc->parent()),
+                            
+                          RosegardenGUIApp::self(),
                           "", /* no title  */
                           i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 
                           QMessageBox::Ok,
@@ -1155,7 +1156,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         RosegardenGUIApp::self()->awaitDialogClearance();
 
                         QMessageBox::information(
-                          dynamic_cast<QWidget*>(m_doc->parent()),
+                          RosegardenGUIApp::self(),
                           "", /* no title */
                           i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"),
                           QMessageBox::Ok,
@@ -1289,7 +1290,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
  */
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenGUIApp::self()->awaitDialogClearance();
-        QMessageBox::information(0,
+        QMessageBox::information(RosegardenGUIApp::self(),
                                  i18n("Failed to connect to JACK"),
                                  i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
 

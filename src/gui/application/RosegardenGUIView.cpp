@@ -135,6 +135,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     //
     m_trackEditor = new TrackEditor(doc, this,
                                     m_rulerScale, showTrackLabels, unitsPerPixel, this /*hbox*/);
+
     layout->addWidget(m_trackEditor);
     setLayout(layout);
 
