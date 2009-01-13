@@ -1069,8 +1069,6 @@ protected:
 	HeadersGroup * m_headersGroup;
     QFrame * m_headersTopFrame;
 
-    QAction * m_showHeadersMenuEntry;
-
 };
 
 

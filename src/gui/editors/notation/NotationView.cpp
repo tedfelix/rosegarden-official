@@ -362,8 +362,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_showHeadersGroup(0),
         m_headersGroupView(0),
         m_headersGroup(0),
-        m_headersTopFrame(0),
-        m_showHeadersMenuEntry(0)
+        m_headersTopFrame(0)
 {
     initActionDataMaps(); // does something only the 1st time it's called
 
@@ -472,7 +471,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_headersGroupView = new QDeferScrollView(getCentralWidget());
     QWidget * vport = m_headersGroupView->viewport();
     m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
-	
+
      m_headersGroupView->setVScrollBarMode(Q3ScrollView::AlwaysOff);
      m_headersGroupView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
 //	m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -822,8 +821,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
         m_showHeadersGroup(0),
         m_headersGroupView(0),
         m_headersGroup(0),
-        m_headersTopFrame(0),
-        m_showHeadersMenuEntry(0)
+        m_headersTopFrame(0)
 {
     assert(segments.size() > 0);
     NOTATION_DEBUG << "NotationView print ctor" << endl;
@@ -1267,7 +1265,7 @@ void NotationView::positionStaffs()
     }
 
 
-    if (!m_printMode) {
+    if (!m_printMode && m_headersGroupView) {
         // Destroy then recreate all track headers
         hideHeadersGroup();
         m_headersGroup->removeAllHeaders();
@@ -1284,8 +1282,8 @@ void NotationView::positionStaffs()
 
             m_headersGroup->completeToHeight(canvas()->height());
 
-// 			m_headersGroupView->addChild(m_headersGroup);
-			m_headersGroupView->layout()->addWidget(m_headersGroup);
+ 			m_headersGroupView->addChild(m_headersGroup);
+//			m_headersGroupView->layout()->addWidget(m_headersGroup);
 
             getCanvasView()->updateLeftWidgetGeometry();
 
@@ -1297,14 +1295,14 @@ void NotationView::positionStaffs()
                 showHeadersGroup();
 
                 // Disable menu entry when headers are shown
-                m_showHeadersMenuEntry->setEnabled(false);
+                findAction("show_track_headers")->setEnabled(false);
             } else {
                 // Enable menu entry when headers are hidden
-                m_showHeadersMenuEntry->setEnabled(true);
+                findAction("show_track_headers")->setEnabled(true);
             }
         } else {
             // Disable menu entry when not in linear mode
-            m_showHeadersMenuEntry->setEnabled(false);
+            findAction("show_track_headers")->setEnabled(false);
         }
     }
 }
@@ -6295,7 +6293,7 @@ NotationView::slotShowHeadersGroup()
     showHeadersGroup();
 
     // Disable menu entry when headers are shown
-    m_showHeadersMenuEntry->setEnabled(false);
+    findAction("show_track_headers")->setEnabled(false);
 }
 
 void
@@ -6305,7 +6303,7 @@ NotationView::slotHideHeadersGroup()
     hideHeadersGroup();
 
     // Enable menu entry when headers are hidden
-    m_showHeadersMenuEntry->setEnabled(true);
+    findAction("show_track_headers")->setEnabled(true);
 }
 
 void

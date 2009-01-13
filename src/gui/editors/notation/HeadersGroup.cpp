@@ -57,8 +57,6 @@ HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
 void
 HeadersGroup::removeAllHeaders()
 {
-    delete m_layout;
-
     TrackHeaderVector::iterator i;
     for (i=m_headers.begin(); i!=m_headers.end(); i++) {
         delete *i;

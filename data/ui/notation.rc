@@ -8,7 +8,7 @@
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
   <Separator/>
     <Action name="file_print" text="&amp;Print..." icon="fileprint" />
-    <Action name= "file_print_preview" text="P&amp;rint preview..." icon="filequickprint" />
+    <Action name="file_print_preview" text="P&amp;rint preview..." icon="filequickprint" />
     <Action name="file_print_lilypond" text="Print &amp;with LilyPond..." append="print_merge" />
     <Action name="file_preview_lilypond" text="Preview with Lil&amp;yPond..." append="print_merge" />
   <Separator/>
@@ -177,7 +177,7 @@
       <Action name="add_fingering_4" text="Add Fingering &amp;4" shortcut="Alt+4" />
       <Action name="add_fingering_5" text="Add Fingering &amp;5" shortcut="Alt+5" />
       <Action name="add_fingering_plus" text="&amp;Add Fingering +" shortcut="Alt+9" />
-      <Action name="add_fingering_mark" text="Add Other &Fingering..." />
+      <Action name="add_fingering_mark" text="Add Other &amp;Fingering..." />
     </Menu>
     <Menu name="Slashes">
       <text>S&amp;lashes</text>
@@ -195,6 +195,7 @@
       <!-- JAS See src/commands/notation/ChangeStyleCommand.cpp -->
       <!-- JAS action name="style_" + NoteStyleName -->
   <Separator/>
+    </Menu>
     <Menu name="Respell">
       <text>&amp;Accidentals</text>
       <Action name="respell_restore" text="&amp;Restore Accidentals" />
@@ -253,8 +254,8 @@
       <Action name="ties_below" text="Tie &amp;Below" />
     </Menu>
   <Separator/>
-    <Action name="crescendo" text="Add &amp;Crescendo" icon="group-crescendo" shortcut="<" />
-    <Action name="decrescendo" text="Add &amp;Decescendo" icon="group-decrescendo" shortcut=">" />
+    <Action name="crescendo" text="Add &amp;Crescendo" icon="group-crescendo" shortcut="&lt;" />
+    <Action name="decrescendo" text="Add &amp;Decescendo" icon="group-decrescendo" shortcut="&gt;" />
   <Separator/>
     <Menu name="octaves">
       <text>&amp;Octaves</text>
