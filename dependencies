@@ -234,8 +234,8 @@ src/gui/kdeext/KTmpStatusMsg.o: src/gui/kdeext/KTmpStatusMsg.h
 src/gui/kdeext/KTmpStatusMsg.o: src/gui/application/RosegardenApplication.h
 src/gui/kdeext/SqueezedLabel.o: src/gui/kdeext/SqueezedLabel.h
 src/gui/kdeext/SqueezedLabel.o: src/gui/kdeext/SqueezedLabel.moc
-src/gui/kdeext/KLedButton.o: src/gui/kdeext/KLedButton.h
-src/gui/kdeext/KLedButton.o: src/gui/kdeext/KLedButton.moc
+src/gui/widgets/LedButton.o: src/gui/widgets/LedButton.h
+src/gui/widgets/LedButton.o: src/gui/widgets/LedButton.moc
 src/gui/kdeext/QCanvasSimpleSprite.o: src/misc/Debug.h
 src/gui/kdeext/QCanvasSimpleSprite.o: src/gui/kdeext/QCanvasSimpleSprite.h
 src/gui/kdeext/QCanvasSimpleSprite.o: src/gui/editors/notation/NotePixmapFactory.h
@@ -6901,7 +6901,7 @@ src/gui/editors/segment/TrackButtons.o: src/gui/general/ActionFileClient.h
 src/gui/editors/segment/TrackButtons.o: src/gui/general/GUIPalette.h
 src/gui/editors/segment/TrackButtons.o: src/base/Colour.h
 src/gui/editors/segment/TrackButtons.o: src/gui/general/IconLoader.h
-src/gui/editors/segment/TrackButtons.o: src/gui/kdeext/KLedButton.h
+src/gui/editors/segment/TrackButtons.o: src/gui/widgets/LedButton.h
 src/gui/editors/segment/TrackButtons.o: src/sound/PluginIdentifier.h
 src/gui/editors/segment/TrackButtons.o: src/gui/editors/segment/TrackLabel.h
 src/gui/editors/segment/TrackButtons.o: src/gui/editors/segment/TrackVUMeter.h

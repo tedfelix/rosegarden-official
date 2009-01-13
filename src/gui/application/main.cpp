@@ -420,6 +420,8 @@ void testInstalledVersion()
 }
 */
 
+extern const unsigned char qt_resource_data[];
+
 int main(int argc, char *argv[])
 {
     setsid(); // acquire shiny new process group

@@ -40,7 +40,7 @@ namespace Rosegarden
 
 class TrackVUMeter;
 class RosegardenGUIDoc;
-class KLedButton;
+class LedButton;
 class Instrument;
 
 
@@ -186,8 +186,8 @@ protected:
 
     QVBoxLayout                      *m_layout;
 
-    std::vector<KLedButton *>         m_muteLeds;
-    std::vector<KLedButton *>         m_recordLeds;
+    std::vector<LedButton *>          m_muteLeds;
+    std::vector<LedButton *>          m_recordLeds;
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
     std::vector<QFrame *>             m_trackHBoxes;

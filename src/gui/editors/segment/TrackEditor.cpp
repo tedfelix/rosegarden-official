@@ -233,10 +233,10 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
 	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
 	
-// 		m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
-//     m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
-	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+ 		m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+     m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+//	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	
 //     m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
 	QSizePolicy poli;

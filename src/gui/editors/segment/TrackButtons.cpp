@@ -19,7 +19,6 @@
 #include "TrackButtons.h"
 
 #include <klocale.h>
-#include <kled.h>
 // #include <QDir>
 // #include <kglobal.h>
 
@@ -38,7 +37,7 @@
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
-#include "gui/kdeext/KLedButton.h"
+#include "gui/widgets/LedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
 #include "TrackLabel.h"
@@ -217,7 +216,7 @@ TrackButtons::mutedTracks()
     std::vector<int> mutedTracks;
 
     for (TrackId i = 0; i < m_tracks; i++) {
-        if (m_muteLeds[i]->state() == KLed::Off)
+        if (m_muteLeds[i]->state() == Led::Off)
             mutedTracks.push_back(i);
     }
 
@@ -258,7 +257,7 @@ TrackButtons::removeButtons(unsigned int position)
     vit += position;
     m_trackMeters.erase(vit);
 
-    std::vector<KLedButton*>::iterator mit = m_muteLeds.begin();
+    std::vector<LedButton*>::iterator mit = m_muteLeds.begin();
     mit += position;
     m_muteLeds.erase(mit);
 
@@ -499,9 +498,9 @@ TrackButtons::setRecordButton(int position, bool state)
     if (position < 0 || position >= (int)m_tracks)
         return ;
 
-    KLedButton* led = m_recordLeds[position];
+    LedButton* led = m_recordLeds[position];
 
-    led->setState(state ? KLed::On : KLed::Off);
+    led->setState(state ? Led::On : Led::Off);
 }
 
 void
@@ -983,7 +982,7 @@ TrackButtons::setMuteButton(TrackId track, bool value)
     RG_DEBUG << "TrackButtons::setMuteButton() trackId = "
     << track << ", pos = " << pos << endl;
 
-    m_muteLeds[pos]->setState(value ? KLed::Off : KLed::On);
+    m_muteLeds[pos]->setState(value ? Led::Off : Led::On);
 }
 
 void
@@ -1005,8 +1004,8 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     QFrame *trackHBox = 0;
 
-    KLedButton *mute = 0;
-    KLedButton *record = 0;
+    LedButton *mute = 0;
+    LedButton *record = 0;
 
     TrackVUMeter *vuMeter = 0;
     TrackLabel *trackLabel = 0;
@@ -1060,18 +1059,16 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     // 'mute' and 'record' leds
     //
 
-    mute = new KLedButton(Rosegarden::GUIPalette::getColour
+    mute = new LedButton(Rosegarden::GUIPalette::getColour
               (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
     mute->setToolTip(i18n("Mute track"));
     hblayout->addWidget(mute);
 
-    record = new KLedButton(Rosegarden::GUIPalette::getColour
+    record = new LedButton(Rosegarden::GUIPalette::getColour
                 (Rosegarden::GUIPalette::RecordMIDITrackLED), trackHBox);
     record->setToolTip(i18n("Record on this track"));
     hblayout->addWidget(record);
 
-    record->setLook(KLed::Sunken);
-    mute->setLook(KLed::Sunken);
     record->off();
 
     // Connect them to their sigmappers
@@ -1082,7 +1079,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     m_recordSigMapper->setMapping(record, track->getPosition());
     m_muteSigMapper->setMapping(mute, track->getPosition());
 
-    // Store the KLedButton
+    // Store the LedButton
     //
     m_muteLeds.push_back(mute);
     m_recordLeds.push_back(record);

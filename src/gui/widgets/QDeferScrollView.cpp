@@ -18,7 +18,7 @@
 
 #include "QDeferScrollView.h"
 
-#include <QScrollArea>
+//#include <QScrollArea>
 #include <QWidget>
 
 
@@ -26,7 +26,7 @@ namespace Rosegarden
 {
 
 QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name) //, WFlags f)
-        : QScrollArea(parent) //, f)
+        : Q3ScrollView(parent) //, f)
 {
 	setObjectName( name );
     setFocusPolicy(Qt::WheelFocus);

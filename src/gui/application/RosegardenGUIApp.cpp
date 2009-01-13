@@ -358,13 +358,15 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	
 	
 	// start of docking code 
+/*&&& cc removing all fancy options in docking code to see if it works then!
 	this->setDockOptions( // QMainWindow::AllowNestedDocks // not required with ::ForceTabbedDocks
 							QMainWindow::AnimatedDocks
 							|QMainWindow::ForceTabbedDocks
 							//|QMainWindow::VerticalTabs
 						);
 	
-	
+*/	
+
 	/*
 	//&&& m_mainDockWidget may not be required: QMainWindow serves the mainDock
 	// 
@@ -402,23 +404,24 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	
 	//old: m_dockLeft = createDockWidget("params dock", dummyPixmap, 0L,
 	//							  i18n("Special Parameters"));
-	m_dockLeft = new QDockWidget(i18n("Special Parameters"),  dynamic_cast<QWidget*>(this), Qt::Tool );
+	m_dockLeft = new QDockWidget(i18n("Special Parameters"), this);
 	m_dockLeft->setMinimumSize( 180, 200 );	//### fix arbitrary value for min-size
-	//### FIX: deallocate m_DockLeft !
-	
+
+/*&&& cc removing all fancy options in docking code to see if it works then!
 	m_dockLeft->setFeatures( QDockWidget::DockWidgetMovable
 			| QDockWidget::DockWidgetMovable
 			| QDockWidget::DockWidgetFloatable
 			| QDockWidget::DockWidgetVerticalTitleBar
 			//| QDockWidget::DockWidgetClosable
-								 );
-	
+                        );
+*/
 	// add dockLeft to mainDockWidget, left side 
 	//old: m_dockLeft->manualDock(m_mainDockWidget,             // dock target
 	 //                     QDockWidget::DockLeft,  // dock site
 	   //                  20);                   // relation target/this (in percent)
 	//m_mainDockWidget->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
-	this->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
+
+//&&& Qt docs say this is unnecessary        addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft );
 	
 	// add to m_mainDockWidget, left side
 	//this->addDockWidget(Qt::LeftDockWidgetArea, m_mainDockWidget);
@@ -446,6 +449,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     m_parameterArea = new RosegardenParameterArea(m_dockLeft);
     m_dockLeft->setWidget(m_parameterArea);
+    m_parameterArea->show();
 
     // Populate the parameter-box area with the respective
     // parameter box widgets.
@@ -8982,7 +8986,7 @@ RosegardenGUIApp::awaitDialogClearance()
         haveDialog = false;
         for( i=0; i < cl.size(); i++ ){
             c = cl.at(i);
-            if( c->isVisible() ){
+            if( c->isVisible() && c->objectName() != "Rosegarden Transport" ){
                 haveDialog = true;
                 break;	
             }

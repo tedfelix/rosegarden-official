@@ -79,6 +79,10 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_isBackgroundSet(false),
     m_sampleRate(0)
 {
+    // So we can identify it in RosegardenGUIApp::awaitDialogClearance().
+    // Do not change this string:
+    setObjectName("Rosegarden Transport");
+
     QVBoxLayout *vboxLay = new QVBoxLayout();
     setLayout( vboxLay );
 

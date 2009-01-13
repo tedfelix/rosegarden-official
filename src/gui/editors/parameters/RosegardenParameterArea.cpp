@@ -28,14 +28,13 @@
 #include <QFont>
 #include <QFrame>
 #include <QPoint>
-#include <QScrollArea>
+#include <Q3ScrollView>
 #include <QString>
 #include <QLayout>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QGroupBox>
-
 
 namespace Rosegarden
 {
@@ -46,15 +45,15 @@ RosegardenParameterArea::RosegardenParameterArea(
 	)	//, WFlags f)
 	: QStackedWidget(parent),//, name),//, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
-        m_scrollView(new QScrollArea(this)), //, 0, Qt::WStaticContents)),
+        m_scrollView(new Q3ScrollView(this, 0, Qt::WStaticContents)),
         m_classic(new QWidget(m_scrollView->viewport())),
         m_classicLayout(new QVBoxLayout),
         m_tabBox(new QTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
-	this->setObjectName( name );
-	
+	setObjectName( name );
+	/*!!!
     m_classic->setLayout(m_classicLayout);
 	m_scrollView->setWidget(m_classic);
 	
@@ -66,14 +65,19 @@ RosegardenParameterArea::RosegardenParameterArea(
 	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );		//@@@ was AutoOneFit
 	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
 	m_scrollView->setSizePolicy( poli );
-	
+	*/
+    m_scrollView->addChild(m_classic);
+    m_scrollView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    m_scrollView->setVScrollBarMode(Q3ScrollView::Auto);
+    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
+
 	
 	// add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-	this->addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
+	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
-	this->addWidget(m_tabBox); //, TAB_BOX_STYLE);
+	addWidget(m_tabBox); //, TAB_BOX_STYLE);
 
 }
 
@@ -194,7 +198,14 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
         // Switch the widget stack to displaying the new container.
 
-		setCurrentWidget( dynamic_cast<QWidget*>(container) );	//@@@ verify if gui works
+        switch (style) {
+        case CLASSIC_STYLE:
+            setCurrentWidget(m_scrollView);
+            break;
+        case TAB_BOX_STYLE:
+            setCurrentWidget(m_tabBox);
+            break;
+        }
     }
 
     // Record the identity of the active container, and the associated

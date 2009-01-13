@@ -473,13 +473,13 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     QWidget * vport = m_headersGroupView->viewport();
     m_headersGroup = new HeadersGroup(vport, this, &doc->getComposition());
 	
-//     m_headersGroupView->setVScrollBarMode(QScrollView::AlwaysOff);
-//     m_headersGroupView->setHScrollBarMode(QScrollView::AlwaysOff);
-	m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	m_headersGroupView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+     m_headersGroupView->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+     m_headersGroupView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+//	m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//	m_headersGroupView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	
-// 	m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
-	m_headersGroupView->setFixedWidth( m_headersGroupView->widget()->width() );
+ 	m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
+//	m_headersGroupView->setFixedWidth( m_headersGroupView->widget()->width() );
 	m_canvasView->setLeftFixedWidget(m_headersGroupView);
 
     // Add a close button just above the track headers.
