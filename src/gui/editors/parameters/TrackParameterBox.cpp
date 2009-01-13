@@ -123,6 +123,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     setContentsMargins(2, 2, 2, 2);
     QGridLayout *mainLayout = new QGridLayout(this);
+    mainLayout->setMargin(0);
     mainLayout->setSpacing(1);
 
     int row = 0;
@@ -142,6 +143,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     cframe->setWidget(m_playbackGroup);
     m_playbackGroup->setContentsMargins(3, 3, 3, 3);
     QGridLayout *groupLayout = new QGridLayout(m_playbackGroup);
+    groupLayout->setMargin(0);
     groupLayout->setSpacing(2);
 
     // playback group title

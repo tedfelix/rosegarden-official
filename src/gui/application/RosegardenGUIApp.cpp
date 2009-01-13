@@ -416,13 +416,13 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     dw->setWidget(m_trackParameterBox);
     addDockWidget(Qt::LeftDockWidgetArea, dw);
 
+
 /*@@@
 
     dw = new QDockWidget(i18n("Instrument Parameters"), this);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, dw);
     dw->setWidget(m_instrumentParameterBox);
     addDockWidget(Qt::LeftDockWidgetArea, dw);
-
 
   note: m_dockLeft and m_parameterArea are not currently used at all
 

@@ -122,6 +122,7 @@ SegmentParameterBox::initBox()
     //    QFrame *frame = new QFrame(this);
     setContentsMargins(4, 4, 4, 4);
     QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setMargin(0);
     gridLayout->setSpacing(2);
 
     QLabel *label	= new QLabel(i18n("Label"), this);

@@ -70,6 +70,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     pluginVbox = new QWidget(this);
     QVBoxLayout *pluginVboxLayout = new QVBoxLayout;
     pluginVboxLayout->setSpacing(2);
+    pluginVboxLayout->setMargin(0);
 
     for (int i = 0; i < 5; i++) {
         plugin = new QPushButton(pluginVbox);
@@ -93,6 +94,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     //
     QWidget *faderHbox = new QWidget(this);
     QHBoxLayout *faderHboxLayout = new QHBoxLayout;
+    faderHboxLayout->setMargin(0);
 
     m_vuMeter = new AudioVUMeter( faderHbox, VUMeter::AudioPeakHoldShort,
             true, true);
@@ -165,6 +167,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     setContentsMargins(4, 4, 4, 4);
     QGridLayout *grid = new QGridLayout(this);
     setLayout(grid);
+    grid->setMargin(0);
     grid->setSpacing(4);
 
     grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2-0+ 1);
@@ -183,13 +186,13 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     grid->addWidget(m_synthGUIButton, 1, 0);
     grid->addWidget(m_pan, 1, 2);
     grid->addWidget(m_stereoButton, 1, 1);
-
+/*&&&
     for (int i = 0; i < 5; ++i) {
         // Force width
-        m_plugins[i]->setFixedWidth(m_plugins[i]->width());
+        m_plugins[i]->setFixedWidth(m_plugins[i]->sizeHint().width());
     }
-    m_synthButton->setFixedWidth(m_plugins[0]->width());
-
+    m_synthButton->setFixedWidth(m_plugins[0]->sizeHint().width());
+*/
     m_synthButton->hide();
     m_synthGUIButton->hide();
 }

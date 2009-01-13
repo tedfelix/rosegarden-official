@@ -53,6 +53,53 @@
 namespace Rosegarden
 {
 
+AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
+        : InstrumentParameterPanel(doc, parent),
+        m_audioFader(new AudioFaderBox(this))
+{
+    setObjectName("Audio Instrument Parameter Panel");
+
+    setContentsMargins(5, 5, 5, 5);
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(5);
+    gridLayout->setMargin(0);
+    setLayout(gridLayout);
+    // Instrument label : first row, all cols
+    gridLayout->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 1-0+ 1, Qt::AlignCenter);
+
+    // fader and connect it
+    gridLayout->addWidget(m_audioFader, 1, 0, 0+1, 1-0+ 1);
+
+    gridLayout->setRowStretch(2, 1);
+
+    connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
+            this, SLOT(slotAudioChannels(int)));
+
+    connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
+            this, SLOT(slotSelectPlugin(int)));
+
+    connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
+            this, SLOT(slotSelectAudioLevel(float)));
+
+    connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
+            this, SLOT(slotSelectAudioRecordLevel(float)));
+
+    connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
+            this, SLOT(slotSetPan(float)));
+
+    connect(m_audioFader->m_audioOutput, SIGNAL(changed()),
+            this, SLOT(slotAudioRoutingChanged()));
+
+    connect(m_audioFader->m_audioInput, SIGNAL(changed()),
+            this, SLOT(slotAudioRoutingChanged()));
+
+    connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
+            this, SLOT(slotSynthButtonClicked()));
+
+    connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
+            this, SLOT(slotSynthGUIButtonClicked()));
+}
+
 void
 AudioInstrumentParameterPanel::slotSelectAudioLevel(float dB)
 {
@@ -231,52 +278,6 @@ AudioInstrumentParameterPanel::setButtonColour(
         button->
         setPaletteBackgroundColor(colour);
     }
-}
-
-AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
-        : InstrumentParameterPanel(doc, parent),
-        m_audioFader(new AudioFaderBox(this))
-{
-    setObjectName("Audio Instrument Parameter Panel");
-
-    setContentsMargins(5, 5, 5, 5);
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setSpacing(5);
-    setLayout(gridLayout);
-    // Instrument label : first row, all cols
-    gridLayout->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 1-0+ 1, Qt::AlignCenter);
-
-    // fader and connect it
-    gridLayout->addWidget(m_audioFader, 1, 0, 0+1, 1-0+ 1);
-
-    gridLayout->setRowStretch(2, 1);
-
-    connect(m_audioFader, SIGNAL(audioChannelsChanged(int)),
-            this, SLOT(slotAudioChannels(int)));
-
-    connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotSelectPlugin(int)));
-
-    connect(m_audioFader->m_fader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioLevel(float)));
-
-    connect(m_audioFader->m_recordFader, SIGNAL(faderChanged(float)),
-            this, SLOT(slotSelectAudioRecordLevel(float)));
-
-    connect(m_audioFader->m_pan, SIGNAL(valueChanged(float)),
-            this, SLOT(slotSetPan(float)));
-
-    connect(m_audioFader->m_audioOutput, SIGNAL(changed()),
-            this, SLOT(slotAudioRoutingChanged()));
-
-    connect(m_audioFader->m_audioInput, SIGNAL(changed()),
-            this, SLOT(slotAudioRoutingChanged()));
-
-    connect(m_audioFader->m_synthButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthButtonClicked()));
-
-    connect(m_audioFader->m_synthGUIButton, SIGNAL(clicked()),
-            this, SLOT(slotSynthGUIButtonClicked()));
 }
 
 void

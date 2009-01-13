@@ -65,6 +65,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     setContentsMargins(2, 2, 2, 2);
     m_mainGrid = new QGridLayout(this);
+    m_mainGrid->setMargin(0);
     m_mainGrid->setSpacing(1);
     setLayout(m_mainGrid);
 
@@ -352,6 +353,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);
+        m_rotaryGrid->setMargin(0);
         m_rotaryGrid->addItem(new QSpacerItem(10, 4), 0, 1);
     }
 
@@ -434,6 +436,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             QWidget *hbox = new QWidget(m_rotaryFrame);
             QHBoxLayout *hboxLayout = new QHBoxLayout;
             hboxLayout->setSpacing(8);
+            hboxLayout->setMargin(0);
 
             float smallStep = 1.0;
 
@@ -452,6 +455,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
             QLabel *label = new SqueezedLabel(strtoqstr(it->getName()), hbox);
+            hboxLayout->addWidget(label);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;
 

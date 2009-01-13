@@ -45,6 +45,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
 
     setContentsMargins(0, 0, 0, 0);
     m_layout = new QGridLayout(this);
+    m_layout->setMargin(0);
     m_layout->setSpacing(0);
 
     m_toggleButton = new QToolButton(this);
