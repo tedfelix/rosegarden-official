@@ -1029,7 +1029,9 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     trackHBox = new QFrame(this);
     QHBoxLayout *hblayout = new QHBoxLayout(trackHBox);
-        
+    trackHBox->setLayout(hblayout);
+    hblayout->setMargin(0);
+
     trackHBox->setMinimumSize(labelWidth, m_cellSize * multiple - m_borderGap);
     trackHBox->setFixedHeight(m_cellSize * multiple - m_borderGap);
 
