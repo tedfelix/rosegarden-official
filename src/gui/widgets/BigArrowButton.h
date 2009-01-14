@@ -18,42 +18,56 @@
 #ifndef _RG_BIGARROWBUTTON_H_
 #define _RG_BIGARROWBUTTON_H_
 
-#include <karrowbutton.h>
+#include <QWidget>
+#include <QPushButton>
 
 namespace Rosegarden {
-        
 
-class BigArrowButton : public QPushButton	//&&& use a button now, re-implemented BigArrow, FIX: use QPixmap/QIcon
+
+class BigArrowButton : public QPushButton
 {
 public:
-	BigArrowButton( QWidget *parent = 0, Qt::ArrowType arrow = Qt::UpArrow, const char* name=0 ) : QPushButton( "", parent )
-	{ 
-		if( arrow == Qt::UpArrow ){
-			this->setText( "UP" );
-			//this->setIcon();
-		}
-		if( arrow == Qt::DownArrow ){
-			this->setText( "DOWN" );
-			//this->setIcon();
-		}
-	
-	}
-};
-	
-/*		
-class BigArrowButton : public KArrowButton
-{
-public:
-    BigArrowButton(QWidget *parent = 0, Qt::ArrowType arrow = Qt::UpArrow,
-                   const char *name = 0) :
-        KArrowButton(parent, arrow, name) { }
+    BigArrowButton( QWidget *parent = 0,
+                    Qt::ArrowType arrow = Qt::RightArrow,
+                    const char* name=0 ) :
+                        QPushButton( "", parent )
+    { 
+        QIcon icon;
+        const char *fileName;
+
+        switch(arrow) {
+            case Qt::RightArrow :
+                fileName = ":/pixmaps/misc/arrow-right.png";
+                break;
+            case Qt::LeftArrow :
+                fileName = ":/pixmaps/misc/arrow-left.png";
+                break;
+            case Qt::UpArrow :
+                fileName = ":/pixmaps/misc/arrow-up.png";
+                break;
+            case Qt::DownArrow :
+                fileName = ":/pixmaps/misc/arrow-down.png";
+                break;
+            default :
+                fileName = 0;
+        }
+
+        if(fileName){
+            icon.addPixmap(QPixmap(QString::fromUtf8(fileName)),
+                                          QIcon::Normal, QIcon::Off);
+            setIcon(icon);
+        } else {
+            setText("???");
+        }
+    }
+
     virtual ~BigArrowButton() { } 
 
     virtual QSize sizeHint() const {
         return QSize(20, 20);
     }
 };
-*/
+
 	
 }
 

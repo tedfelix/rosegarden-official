@@ -143,6 +143,10 @@
 <file>pixmaps/misc/bg-paper-grey.xpm</file>
 <file>pixmaps/misc/bg-paper-white.xpm</file>
 <file>pixmaps/misc/bg-segmentcanvas.xpm</file>
+<file>pixmaps/misc/arrow-down.png</file>
+<file>pixmaps/misc/arrow-left.png</file>
+<file>pixmaps/misc/arrow-right.png</file>
+<file>pixmaps/misc/arrow-up.png</file>
 <file>pixmaps/misc/close.xpm</file>
 <file>pixmaps/misc/connected-selected.xpm</file>
 <file>pixmaps/misc/connected-used.xpm</file>
