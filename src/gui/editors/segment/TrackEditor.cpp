@@ -128,6 +128,8 @@ void
 TrackEditor::init(QWidget* rosegardenguiview)
 {
     QGridLayout *grid = new QGridLayout(this);
+    grid->setMargin(0);
+    grid->setSpacing(0);
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
@@ -417,8 +419,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         m_trackButtons->slotUpdateTracks();
         m_segmentCanvas->clearSegmentRectsCache(true);
 		
-//         m_segmentCanvas->updateContents();
-		m_segmentCanvas->update();
+         m_segmentCanvas->updateContents();
+//		m_segmentCanvas->update();
 
         Composition &composition = m_doc->getComposition();
 

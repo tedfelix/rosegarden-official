@@ -432,8 +432,8 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 {
     //     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
     slotAllDrawBuffersNeedRefresh();
-// 	updateContents();
-	update();
+ 	updateContents();
+//	update();
 }
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
@@ -444,11 +444,11 @@ void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
     slotAllDrawBuffersNeedRefresh(rect);
 
     if (rect.isValid()) {
-// 		updateContents(rect);
-		update(rect);
+ 		updateContents(rect);
+//		update(rect);
 	} else {
-// 		updateContents();
-		update();
+ 		updateContents();
+//		update();
 	}
 }
 

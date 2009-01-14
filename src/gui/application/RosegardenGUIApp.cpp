@@ -7705,7 +7705,9 @@ RosegardenGUIApp::awaitDialogClearance()
             }
         }
     
-        if (haveDialog) qApp->processEvents();
+        if (haveDialog) {
+            qApp->processEvents(QEventLoop::AllEvents, 300);
+        }
     }
 
     std::cerr << "RosegardenGUIApp::awaitDialogClearance: exiting" << std::endl;

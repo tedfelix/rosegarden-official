@@ -61,6 +61,7 @@ TrackLabel::TrackLabel(TrackId id,
     m_trackLabel->setFont(font);
 	
 	this->setLayout( new QHBoxLayout() );
+        layout()->setMargin(0);
 	
 	m_instrumentLabel->setObjectName( "InstrumentLabel" );
 	m_trackLabel->setObjectName( "TrackLabel" );

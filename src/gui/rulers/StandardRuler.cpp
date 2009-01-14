@@ -56,7 +56,8 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_hButtonBar(0)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
-	layout->setSpacing(0);
+    layout->setMargin(0);
+    layout->setSpacing(0);
 	setLayout(layout);
 	
     if (!m_invert) {

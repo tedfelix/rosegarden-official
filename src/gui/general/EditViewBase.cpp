@@ -447,10 +447,7 @@ void EditViewBase::paintEvent(QPaintEvent* e)
         refreshSegment(singleSegment, updateStart, updateEnd);
     }
 
-    if (e){
-// 		KMainWindow::paintEvent(e);
-		update();	//@@@
-	}
+    if (e) QMainWindow::paintEvent(e);
 
     // moved this to the end of the method so that things called
     // from this method can still test whether the composition had
