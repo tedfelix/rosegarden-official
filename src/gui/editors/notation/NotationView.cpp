@@ -1786,7 +1786,7 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
             sizeAction = createAction
                 (actionName, SLOT(slotChangeFontSizeFromStringValue()));
 // 			sizeAction->setText(i18n("1 pixel", "%n pixels", sizes[i]));
-			sizeAction->setText( i18np("1 pixel", "%n pixels", sizes[i]) );
+			sizeAction->setText( QObject::tr("%n pixel(s)", "", sizes[i]) );
 			sizeAction->setCheckable(true);
         }
 
@@ -2475,8 +2475,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     if (s) {
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-        (i18np("  1 event selected ",
-              "  %1 events selected ", eventsSelected));
+        (QObject::tr("  %s event(s) selected ", "", eventsSelected));
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
     }

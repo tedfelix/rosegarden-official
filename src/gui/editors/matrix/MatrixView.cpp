@@ -1103,8 +1103,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-        (i18np("  1 event selected ",
-              "  %1 events selected ", eventsSelected));
+        (QObject::tr("  %1 event(s) selected ", "", eventsSelected));
 
     } else {
         m_selectionCounter->setText(i18n("  No selection "));

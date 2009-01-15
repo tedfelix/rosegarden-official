@@ -307,9 +307,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 		           "up %1 octaves and %2",
 			   octaves, textInterval);
 		} else {
-		    return i18np("up 1 octave",
-		           "up %1 octaves",
-			   octaves);
+		    return QObject::tr("up %1 octave(s)", "", octaves);
 		}
 	    } else {
 		return i18n("up %1", textInterval);
@@ -323,9 +321,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 		           "down %1 octaves and %2",
 			   octaves, textInterval);
 		} else {
-		    return i18np("down 1 octave",
-		           "down %1 octaves",
-			   octaves);
+		    return QObject::tr("down %1 octave(s)", "", octaves);
 		}
 	    } else {
 		return i18n("down %1", textInterval);

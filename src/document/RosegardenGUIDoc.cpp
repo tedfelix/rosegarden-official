@@ -480,7 +480,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         int reply = QMessageBox::warning
             (0, "Warning",
-             i18np("Delete the 1 audio file recorded during the unsaved session?", "Delete the %1 audio files recorded during the unsaved session?", recordedOrphans.size()),
+             QObject::tr("Delete the %1 audio file(s) recorded during the unsaved session?", "", recordedOrphans.size()),
              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
              QMessageBox::Cancel);
 
@@ -518,7 +518,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         return true;
 
     QString question =
-        i18np("<qt>About to delete 1 audio file permanently from the hard disk.<br>There will be no way to recover this file.<br>Are you sure?</qt>\n", "<qt>About to delete %1 audio files permanently from the hard disk.<br>There will be no way to recover these files.<br>Are you sure?</qt>", recordedOrphans.size());
+        QObject::tr("<qt>About to delete %1 audio file(s) permanently from the hard disk.<br>There will be no way to recover the file(s).<br>Are you sure?</qt>", "", recordedOrphans.size());
 
     int reply = QMessageBox::warning(0, "Warning", question, QMessageBox::Ok | QMessageBox::Cancel);
 
