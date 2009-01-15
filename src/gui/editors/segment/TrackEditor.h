@@ -74,7 +74,7 @@ public:
 
     ~TrackEditor();
 
-    CompositionView* getSegmentCanvas()       { return m_segmentCanvas; }
+    CompositionView* getCompositionView()       { return m_compositionView; }
     TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
     StandardRuler*    getTopStandardRuler()       { return m_topStandardRuler; }
@@ -162,10 +162,10 @@ protected slots:
 
 signals:
     /**
-     * Emitted when the represented data changed and the SegmentCanvas
+     * Emitted when the represented data changed and the CompositionView
      * needs to update itself
      *
-     * @see SegmentCanvas::update()
+     * @see CompositionView::update()
      */
     void needUpdate();
 
@@ -217,7 +217,7 @@ protected:
     StandardRuler              *m_topStandardRuler;
     StandardRuler              *m_bottomStandardRuler;
     TrackButtons            *m_trackButtons;
-    CompositionView         *m_segmentCanvas;
+    CompositionView         *m_compositionView;
     CompositionModel        *m_compositionModel;
     QDeferScrollView        *m_trackButtonScroll;
 

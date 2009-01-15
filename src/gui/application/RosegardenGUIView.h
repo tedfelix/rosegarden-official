@@ -108,7 +108,7 @@ public:
     // RosegardenGUIApp
 
     /**
-     * Select a tool at the SegmentCanvas
+     * Select a tool at the CompositionView
      */
     void selectTool(QString toolName);
 

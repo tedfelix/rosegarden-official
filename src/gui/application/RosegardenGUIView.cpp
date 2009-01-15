@@ -57,8 +57,8 @@
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
-#include "gui/editors/segment/segmentcanvas/CompositionView.h"
-#include "gui/editors/segment/segmentcanvas/SegmentSelector.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
+#include "gui/editors/segment/compositionview/SegmentSelector.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/seqmanager/SequencerMapper.h"
@@ -139,35 +139,35 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
     layout->addWidget(m_trackEditor);
     setLayout(layout);
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegment(Segment*)),
             SLOT(slotEditSegment(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentNotation(Segment*)),
             SLOT(slotEditSegmentNotation(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentMatrix(Segment*)),
             SLOT(slotEditSegmentMatrix(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentAudio(Segment*)),
             SLOT(slotEditSegmentAudio(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(audioSegmentAutoSplit(Segment*)),
             SLOT(slotSegmentAutoSplit(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editSegmentEventList(Segment*)),
             SLOT(slotEditSegmentEventList(Segment*)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(editRepeat(Segment*, timeT)),
             SLOT(slotEditRepeat(Segment*, timeT)));
 
-    connect(m_trackEditor->getSegmentCanvas(),
+    connect(m_trackEditor->getCompositionView(),
             SIGNAL(setPointerPosition(timeT)),
             doc, SLOT(slotSetPointerPosition(timeT)));
 
@@ -224,7 +224,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
 
         QObject::connect
         (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         m_trackEditor->getSegmentCanvas(), SLOT(slotUpdateSegmentsDrawBuffer()));
+         m_trackEditor->getCompositionView(), SLOT(slotUpdateSegmentsDrawBuffer()));
     }
 }
 
@@ -275,24 +275,24 @@ void RosegardenGUIView::print(Composition* p, bool previewOnly)
 
 void RosegardenGUIView::selectTool(const QString toolName)
 {
-    m_trackEditor->getSegmentCanvas()->slotSetTool(toolName);
+    m_trackEditor->getCompositionView()->slotSetTool(toolName);
 }
 
 bool
 RosegardenGUIView::haveSelection()
 {
-    return m_trackEditor->getSegmentCanvas()->haveSelection();
+    return m_trackEditor->getCompositionView()->haveSelection();
 }
 
 SegmentSelection
 RosegardenGUIView::getSelection()
 {
-    return m_trackEditor->getSegmentCanvas()->getSelectedSegments();
+    return m_trackEditor->getCompositionView()->getSelectedSegments();
 }
 
 void RosegardenGUIView::updateSelectionContents()
 {
-    m_trackEditor->getSegmentCanvas()->updateSelectionContents();
+    m_trackEditor->getCompositionView()->updateSelectionContents();
 }
 
 /* hjj: WHAT DO DO WITH THIS ?
@@ -532,10 +532,10 @@ RosegardenGUIView::createNotationView(std::vector<Segment *> segmentsToEdit)
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view
-    if (m_trackEditor->getSegmentCanvas()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+    if (m_trackEditor->getCompositionView()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
         // first find the time at the center of the visible segment canvas
-        int centerX = (int)(m_trackEditor->getSegmentCanvas()->contentsX() +
-                            m_trackEditor->getSegmentCanvas()->visibleWidth() / 2);
+        int centerX = (int)(m_trackEditor->getCompositionView()->contentsX() +
+                            m_trackEditor->getCompositionView()->visibleWidth() / 2);
         timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
         // then scroll the notation view to that time, "localized" for the current segment
         notationView->scrollToTime(centerSegmentView);
@@ -731,11 +731,11 @@ RosegardenGUIView::createMatrixView(std::vector<Segment *> segmentsToEdit, bool 
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view
-    if (m_trackEditor->getSegmentCanvas()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
+    if (m_trackEditor->getCompositionView()->horizontalScrollBar()->value() > 1) { // don't scroll unless we need to
         // first find the time at the center of the visible segment canvas
-        int centerX = (int)(m_trackEditor->getSegmentCanvas()->contentsX());
+        int centerX = (int)(m_trackEditor->getCompositionView()->contentsX());
         // Seems to work better for matrix view to scroll to left side
-        // + m_trackEditor->getSegmentCanvas()->visibleWidth() / 2);
+        // + m_trackEditor->getCompositionView()->visibleWidth() / 2);
         timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
         // then scroll the notation view to that time, "localized" for the current segment
         matrixView->scrollToTime(centerSegmentView);
@@ -904,9 +904,9 @@ void RosegardenGUIView::setZoomSize(double size)
     m_trackEditor->slotSetPointerPosition
     (getDocument()->getComposition().getPosition());
 
-    m_trackEditor->getSegmentCanvas()->clearSegmentRectsCache(true);
-    m_trackEditor->getSegmentCanvas()->slotUpdateSize();
-    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
+    m_trackEditor->getCompositionView()->clearSegmentRectsCache(true);
+    m_trackEditor->getCompositionView()->slotUpdateSize();
+    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
 
     if (m_trackEditor->getTempoRuler()) {
         m_trackEditor->getTempoRuler()->repaint();
@@ -978,7 +978,7 @@ void RosegardenGUIView::slotPropagateSegmentSelection(const SegmentSelection &se
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    m_trackEditor->getSegmentCanvas()->slotSelectSegments(segments);
+    m_trackEditor->getCompositionView()->slotSelectSegments(segments);
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
@@ -1031,7 +1031,7 @@ void RosegardenGUIView::slotSelectAllSegments()
     // Send the segment list even if it's empty as we
     // use that to clear any current selection
     //
-    m_trackEditor->getSegmentCanvas()->slotSelectSegments(segments);
+    m_trackEditor->getCompositionView()->slotSelectSegments(segments);
 
     // update the segment parameter box
     m_segmentParameterBox->useSegments(segments);
@@ -1337,14 +1337,14 @@ void RosegardenGUIView::slotShowChordNameRuler(bool v)
 
 void RosegardenGUIView::slotShowPreviews(bool v)
 {
-    m_trackEditor->getSegmentCanvas()->setShowPreviews(v);
-    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
+    m_trackEditor->getCompositionView()->setShowPreviews(v);
+    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
 }
 
 void RosegardenGUIView::slotShowSegmentLabels(bool v)
 {
-    m_trackEditor->getSegmentCanvas()->setShowSegmentLabels(v);
-    m_trackEditor->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
+    m_trackEditor->getCompositionView()->setShowSegmentLabels(v);
+    m_trackEditor->getCompositionView()->slotUpdateSegmentsDrawBuffer();
 }
 
 void RosegardenGUIView::slotAddTracks(unsigned int nbTracks,

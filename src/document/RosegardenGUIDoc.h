@@ -25,7 +25,7 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
-#include "gui/editors/segment/segmentcanvas/AudioPreviewThread.h"
+#include "gui/editors/segment/compositionview/AudioPreviewThread.h"
 #include <map>
 #include "sound/AudioFileManager.h"
 #include <QObject>

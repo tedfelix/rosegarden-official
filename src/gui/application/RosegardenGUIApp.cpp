@@ -116,19 +116,19 @@
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/editors/parameters/SegmentParameterBox.h"
 #include "gui/editors/parameters/TrackParameterBox.h"
-#include "gui/editors/segment/segmentcanvas/CompositionView.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
 #include "gui/editors/segment/ControlEditorDialog.h"
 #include "gui/editors/segment/MarkerEditor.h"
 #include "gui/editors/segment/PlayListDialog.h"
 #include "gui/editors/segment/PlayList.h"
-#include "gui/editors/segment/segmentcanvas/SegmentEraser.h"
-#include "gui/editors/segment/segmentcanvas/SegmentJoiner.h"
-#include "gui/editors/segment/segmentcanvas/SegmentMover.h"
-#include "gui/editors/segment/segmentcanvas/SegmentPencil.h"
-#include "gui/editors/segment/segmentcanvas/SegmentResizer.h"
-#include "gui/editors/segment/segmentcanvas/SegmentSelector.h"
-#include "gui/editors/segment/segmentcanvas/SegmentSplitter.h"
-#include "gui/editors/segment/segmentcanvas/SegmentToolBox.h"
+#include "gui/editors/segment/compositionview/SegmentEraser.h"
+#include "gui/editors/segment/compositionview/SegmentJoiner.h"
+#include "gui/editors/segment/compositionview/SegmentMover.h"
+#include "gui/editors/segment/compositionview/SegmentPencil.h"
+#include "gui/editors/segment/compositionview/SegmentResizer.h"
+#include "gui/editors/segment/compositionview/SegmentSelector.h"
+#include "gui/editors/segment/compositionview/SegmentSplitter.h"
+#include "gui/editors/segment/compositionview/SegmentToolBox.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
 #include "gui/editors/tempo/TempoView.h"
@@ -573,8 +573,8 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
     if (getView() &&
             getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getSegmentCanvas()) {
-        getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
+            getView()->getTrackEditor()->getCompositionView()) {
+        getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
 #ifdef HAVE_LIBLO
@@ -801,10 +801,10 @@ void RosegardenGUIApp::setRewFFwdToAutoRepeat()
 
     if (transportToolbar) {
 		//QList<QPushButton *> allPButtons = parentWidget.findChildren<QPushButton *>();
-		QPushButton* rew = transportToolbar->findChild<QPushButton*>( "rewind" );
-		QPushButton* ffw = transportToolbar->findChild<QPushButton*>( "fast_forward" );
-		//rew->setAutoRepeat(true);
-		//ffw->setAutoRepeat(true);
+		QToolButton *rew = transportToolbar->findChild<QToolButton*>( "rewind" );
+		QToolButton *ffw = transportToolbar->findChild<QToolButton*>( "fast_forward" );
+		if (rew) rew->setAutoRepeat(true);
+		if (ffw) ffw->setAutoRepeat(true);
 		
 		/*
 		//&&& //### reimplement all this:
@@ -1079,7 +1079,7 @@ void RosegardenGUIApp::initView()
 
     m_view->show();
 
-    connect(m_view->getTrackEditor()->getSegmentCanvas(),
+    connect(m_view->getTrackEditor()->getCompositionView(),
             SIGNAL(showContextHelp(const QString &)),
             this,
             SLOT(slotShowToolHelp(const QString &)));
@@ -1088,7 +1088,7 @@ void RosegardenGUIApp::initView()
     // actually has any effect. Activating the same radio action
     // doesn't work the 2nd time (like pressing down the same radio
     // button twice - it doesn't have any effect), so if you load two
-    // files in a row, on the 2nd file a new SegmentCanvas will be
+    // files in a row, on the 2nd file a new CompositionView will be
     // created but its tool won't be set, even though it will appear
     // to be selected.
     //
@@ -1183,8 +1183,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     if (getView() &&
         getView()->getTrackEditor() &&
-        getView()->getTrackEditor()->getSegmentCanvas()) {
-        getView()->getTrackEditor()->getSegmentCanvas()->endAudioPreviewGeneration();
+        getView()->getTrackEditor()->getCompositionView()) {
+        getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
     // this will delete all edit views
@@ -1257,7 +1257,7 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
     Composition &comp = m_doc->getComposition();
 
     // Set any loaded loop at the Composition and
-    // on the marker on SegmentCanvas and clients
+    // on the marker on CompositionView and clients
     //
     if (m_seqManager)
         m_doc->setLoop(comp.getLoopStart(), comp.getLoopEnd());
@@ -5790,10 +5790,10 @@ RosegardenGUIApp::setCursor(const QCursor& cursor)
     // play it safe, so we can use this class at anytime even very early in the app init
     if ((getView() &&
             getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getSegmentCanvas() &&
-            getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
+            getView()->getTrackEditor()->getCompositionView() &&
+            getView()->getTrackEditor()->getCompositionView()->viewport())) {
 
-        getView()->getTrackEditor()->getSegmentCanvas()->viewport()->setCursor(cursor);
+        getView()->getTrackEditor()->getCompositionView()->viewport()->setCursor(cursor);
     }
 
     // view, main window...
@@ -6107,7 +6107,7 @@ RosegardenGUIApp::slotRelabelSegments()
     if (ok) {
         CommandHistory::getInstance()->addCommand
         (new SegmentLabelCommand(selection, newLabel));
-        m_view->getTrackEditor()->getSegmentCanvas()->slotUpdateSegmentsDrawBuffer();
+        m_view->getTrackEditor()->getCompositionView()->slotUpdateSegmentsDrawBuffer();
     }
 }
 
@@ -6141,7 +6141,7 @@ RosegardenGUIApp::slotChangeCompositionLength()
               dialog.getStartMarker(),
               dialog.getEndMarker());
 
-        m_view->getTrackEditor()->getSegmentCanvas()->clearSegmentRectsCache(true);
+        m_view->getTrackEditor()->getCompositionView()->clearSegmentRectsCache(true);
         CommandHistory::getInstance()->addCommand(command);
     }
 }

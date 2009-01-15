@@ -42,7 +42,7 @@ public:
 protected:
     RosegardenGUIApp* m_guiApp;
     QCursor m_saveCursor;
-    QCursor m_saveSegmentCanvasCursor;
+    QCursor m_saveCompositionViewCursor;
 };
  
 

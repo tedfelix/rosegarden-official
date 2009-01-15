@@ -755,8 +755,6 @@ SET(gui_SRCS
 	gui/general/TempDirectory.h
 	gui/kdeext/KLedButton.cpp
 	gui/kdeext/KLedButton.h
-	gui/kdeext/KStartupLogo.cpp
-	gui/kdeext/KStartupLogo.h
 	gui/kdeext/KTmpStatusMsg.cpp
 	gui/kdeext/KTmpStatusMsg.h
 	
@@ -912,6 +910,8 @@ SET(gui_SRCS
 	gui/widgets/DiatonicPitchChooser.h
 	gui/widgets/Fader.cpp
 	gui/widgets/Fader.h
+	gui/widgets/StartupLogo.cpp
+	gui/widgets/StartupLogo.h
 	gui/widgets/Label.cpp
 	gui/widgets/Label.h
 	gui/widgets/MidiFaderWidget.cpp
@@ -953,51 +953,51 @@ SET(gui_SRCS
 	gui/widgets/ZoomSlider.h
 )
 
-SET(segmentcanvas_SRCS
-	gui/editors/segment/segmentcanvas/AudioPreviewPainter.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewPainter.h
-	gui/editors/segment/segmentcanvas/AudioPreviewThread.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewThread.h
-	gui/editors/segment/segmentcanvas/AudioPreviewUpdater.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewUpdater.h
-	gui/editors/segment/segmentcanvas/CompositionColourCache.cpp
-	gui/editors/segment/segmentcanvas/CompositionColourCache.h
-	gui/editors/segment/segmentcanvas/CompositionItem.cpp
-	gui/editors/segment/segmentcanvas/CompositionItem.h
-	gui/editors/segment/segmentcanvas/CompositionItemHelper.cpp
-	gui/editors/segment/segmentcanvas/CompositionItemHelper.h
-	gui/editors/segment/segmentcanvas/CompositionItemImpl.cpp
-	gui/editors/segment/segmentcanvas/CompositionItemImpl.h
-	gui/editors/segment/segmentcanvas/CompositionModel.cpp
-	gui/editors/segment/segmentcanvas/CompositionModel.h
-	gui/editors/segment/segmentcanvas/CompositionModelImpl.cpp
-	gui/editors/segment/segmentcanvas/CompositionModelImpl.h
-	gui/editors/segment/segmentcanvas/CompositionRect.cpp
-	gui/editors/segment/segmentcanvas/CompositionRect.h
-	gui/editors/segment/segmentcanvas/CompositionView.cpp
-	gui/editors/segment/segmentcanvas/CompositionView.h
-	gui/editors/segment/segmentcanvas/PreviewRect.cpp
-	gui/editors/segment/segmentcanvas/PreviewRect.h
-	gui/editors/segment/segmentcanvas/SegmentEraser.cpp
-	gui/editors/segment/segmentcanvas/SegmentEraser.h
-	gui/editors/segment/segmentcanvas/SegmentItemPreview.cpp
-	gui/editors/segment/segmentcanvas/SegmentItemPreview.h
-	gui/editors/segment/segmentcanvas/SegmentJoiner.cpp
-	gui/editors/segment/segmentcanvas/SegmentJoiner.h
-	gui/editors/segment/segmentcanvas/SegmentMover.cpp
-	gui/editors/segment/segmentcanvas/SegmentMover.h
-	gui/editors/segment/segmentcanvas/SegmentOrderer.cpp
-	gui/editors/segment/segmentcanvas/SegmentOrderer.h
-	gui/editors/segment/segmentcanvas/SegmentPencil.cpp
-	gui/editors/segment/segmentcanvas/SegmentPencil.h
-	gui/editors/segment/segmentcanvas/SegmentResizer.cpp
-	gui/editors/segment/segmentcanvas/SegmentResizer.h
-	gui/editors/segment/segmentcanvas/SegmentSelector.cpp
-	gui/editors/segment/segmentcanvas/SegmentSelector.h
-	gui/editors/segment/segmentcanvas/SegmentSplitter.cpp
-	gui/editors/segment/segmentcanvas/SegmentSplitter.h
-	gui/editors/segment/segmentcanvas/SegmentToolBox.cpp
-	gui/editors/segment/segmentcanvas/SegmentToolBox.h
-	gui/editors/segment/segmentcanvas/SegmentTool.cpp
-	gui/editors/segment/segmentcanvas/SegmentTool.h
+SET(compositionview_SRCS
+	gui/editors/segment/compositionview/AudioPreviewPainter.cpp
+	gui/editors/segment/compositionview/AudioPreviewPainter.h
+	gui/editors/segment/compositionview/AudioPreviewThread.cpp
+	gui/editors/segment/compositionview/AudioPreviewThread.h
+	gui/editors/segment/compositionview/AudioPreviewUpdater.cpp
+	gui/editors/segment/compositionview/AudioPreviewUpdater.h
+	gui/editors/segment/compositionview/CompositionColourCache.cpp
+	gui/editors/segment/compositionview/CompositionColourCache.h
+	gui/editors/segment/compositionview/CompositionItem.cpp
+	gui/editors/segment/compositionview/CompositionItem.h
+	gui/editors/segment/compositionview/CompositionItemHelper.cpp
+	gui/editors/segment/compositionview/CompositionItemHelper.h
+	gui/editors/segment/compositionview/CompositionItemImpl.cpp
+	gui/editors/segment/compositionview/CompositionItemImpl.h
+	gui/editors/segment/compositionview/CompositionModel.cpp
+	gui/editors/segment/compositionview/CompositionModel.h
+	gui/editors/segment/compositionview/CompositionModelImpl.cpp
+	gui/editors/segment/compositionview/CompositionModelImpl.h
+	gui/editors/segment/compositionview/CompositionRect.cpp
+	gui/editors/segment/compositionview/CompositionRect.h
+	gui/editors/segment/compositionview/CompositionView.cpp
+	gui/editors/segment/compositionview/CompositionView.h
+	gui/editors/segment/compositionview/PreviewRect.cpp
+	gui/editors/segment/compositionview/PreviewRect.h
+	gui/editors/segment/compositionview/SegmentEraser.cpp
+	gui/editors/segment/compositionview/SegmentEraser.h
+	gui/editors/segment/compositionview/SegmentItemPreview.cpp
+	gui/editors/segment/compositionview/SegmentItemPreview.h
+	gui/editors/segment/compositionview/SegmentJoiner.cpp
+	gui/editors/segment/compositionview/SegmentJoiner.h
+	gui/editors/segment/compositionview/SegmentMover.cpp
+	gui/editors/segment/compositionview/SegmentMover.h
+	gui/editors/segment/compositionview/SegmentOrderer.cpp
+	gui/editors/segment/compositionview/SegmentOrderer.h
+	gui/editors/segment/compositionview/SegmentPencil.cpp
+	gui/editors/segment/compositionview/SegmentPencil.h
+	gui/editors/segment/compositionview/SegmentResizer.cpp
+	gui/editors/segment/compositionview/SegmentResizer.h
+	gui/editors/segment/compositionview/SegmentSelector.cpp
+	gui/editors/segment/compositionview/SegmentSelector.h
+	gui/editors/segment/compositionview/SegmentSplitter.cpp
+	gui/editors/segment/compositionview/SegmentSplitter.h
+	gui/editors/segment/compositionview/SegmentToolBox.cpp
+	gui/editors/segment/compositionview/SegmentToolBox.h
+	gui/editors/segment/compositionview/SegmentTool.cpp
+	gui/editors/segment/compositionview/SegmentTool.h
 )

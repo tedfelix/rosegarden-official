@@ -990,7 +990,7 @@ AudioManagerDialog::setSelected(AudioFileId id,
                     if (aItem->getId() == id && aItem->getSegment() == segment) {
                         selectFileListItemNoSignal(chIt);
 
-                        // Only propagate to segmentcanvas if asked to
+                        // Only propagate to compositionview if asked to
                         if (propagate) {
                             SegmentSelection selection;
                             selection.insert(aItem->getSegment());

@@ -19,7 +19,7 @@
 #include "SetWaitCursor.h"
 
 #include "gui/editors/segment/TrackEditor.h"
-#include "gui/editors/segment/segmentcanvas/CompositionView.h"
+#include "gui/editors/segment/compositionview/CompositionView.h"
 #include "misc/Debug.h"
 #include "RosegardenGUIApp.h"
 #include "RosegardenGUIView.h"
@@ -38,10 +38,10 @@ SetWaitCursor::SetWaitCursor()
         // play it safe, so we can use this class at anytime even very early in the app init
         if ((m_guiApp->getView() &&
                 m_guiApp->getView()->getTrackEditor() &&
-                m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
-                m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
+                m_guiApp->getView()->getTrackEditor()->getCompositionView() &&
+                m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport())) {
 
-            m_saveSegmentCanvasCursor = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport()->cursor();
+            m_saveCompositionViewCursor = m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport()->cursor();
 
         }
 
@@ -58,23 +58,23 @@ SetWaitCursor::~SetWaitCursor()
 
         RG_DEBUG << "SetWaitCursor::SetWaitCursor() : restoring normal cursor\n";
         QWidget* viewport = 0;
-        QCursor currentSegmentCanvasCursor;
+        QCursor currentCompositionViewCursor;
 
         if ((m_guiApp->getView() &&
                 m_guiApp->getView()->getTrackEditor() &&
-                m_guiApp->getView()->getTrackEditor()->getSegmentCanvas() &&
-                m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport())) {
-            viewport = m_guiApp->getView()->getTrackEditor()->getSegmentCanvas()->viewport();
-            currentSegmentCanvasCursor = viewport->cursor();
+                m_guiApp->getView()->getTrackEditor()->getCompositionView() &&
+                m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport())) {
+            viewport = m_guiApp->getView()->getTrackEditor()->getCompositionView()->viewport();
+            currentCompositionViewCursor = viewport->cursor();
         }
 
         m_guiApp->setCursor(m_saveCursor);
 
         if (viewport) {
-            if (currentSegmentCanvasCursor.shape() == Qt::WaitCursor) {
-                viewport->setCursor(m_saveSegmentCanvasCursor);
+            if (currentCompositionViewCursor.shape() == Qt::WaitCursor) {
+                viewport->setCursor(m_saveCompositionViewCursor);
             } else {
-                viewport->setCursor(currentSegmentCanvasCursor); // because m_guiApp->setCursor() has replaced it
+                viewport->setCursor(currentCompositionViewCursor); // because m_guiApp->setCursor() has replaced it
             }
         }
 
