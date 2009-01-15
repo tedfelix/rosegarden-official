@@ -24,7 +24,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 class Modify;
@@ -45,7 +45,7 @@ public:
                                DeviceId fromDevice,
                                DeviceId toDevice);
 
-    static QString getGlobalName() { return i18n("Modify &Device Mapping"); }
+    static QString getGlobalName() { return QObject::tr("Modify &Device Mapping"); }
 
     virtual void execute();
     virtual void unexecute();

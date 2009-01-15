@@ -29,7 +29,7 @@ namespace Rosegarden
 SegmentColourCommand::SegmentColourCommand(
     SegmentSelection &segments,
     const unsigned int index):
-        NamedCommand(i18n("Change Segment Color")),
+        NamedCommand(QObject::tr("Change Segment Color")),
         m_newColourIndex(index)
 {
     for (SegmentSelection::iterator i = segments.begin(); i != segments.end(); ++i)

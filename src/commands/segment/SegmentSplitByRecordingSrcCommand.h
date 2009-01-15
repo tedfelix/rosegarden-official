@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 namespace Rosegarden
@@ -39,7 +39,7 @@ public:
     virtual ~SegmentSplitByRecordingSrcCommand();
     
     static QString getGlobalName()
-        { return i18n("Split by &Recording Source..."); }
+        { return QObject::tr("Split by &Recording Source..."); }
 
     virtual void execute();
     virtual void unexecute();

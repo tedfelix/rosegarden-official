@@ -20,7 +20,7 @@
 
 #include "document/Command.h"
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 #include "SegmentJoinCommand.h"
 
@@ -49,7 +49,7 @@ public:
         // method.
 
         RejoinCommand() :
-            NamedCommand(i18n("Rejoin Command"))
+            NamedCommand(QObject::tr("Rejoin Command"))
             { }
 
         virtual ~RejoinCommand();

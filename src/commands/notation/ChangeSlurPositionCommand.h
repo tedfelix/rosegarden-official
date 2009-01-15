@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Slur;
@@ -42,7 +42,7 @@ public:
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? i18n("Slur &Above") : i18n("Slur &TicksBelow");
+        return above ? QObject::tr("Slur &Above") : QObject::tr("Slur &TicksBelow");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

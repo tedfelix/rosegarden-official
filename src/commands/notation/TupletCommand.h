@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -43,8 +43,8 @@ public:
                            bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-        if (simple) return i18n("&Triplet");
-        else return i18n("Tu&plet...");
+        if (simple) return QObject::tr("&Triplet");
+        else return QObject::tr("Tu&plet...");
     }
 
 protected:

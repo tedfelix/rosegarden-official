@@ -23,7 +23,7 @@
 #include "base/Device.h"
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -50,7 +50,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return i18n("&Remove Control Parameter"); }
+    static QString getGlobalName() { return QObject::tr("&Remove Control Parameter"); }
 
 protected:
     Studio              *m_studio;

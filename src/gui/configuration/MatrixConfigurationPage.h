@@ -21,7 +21,7 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -44,8 +44,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Matrix"); }
-    static QString title()     { return i18n("Matrix"); }
+    static QString iconLabel() { return QObject::tr("Matrix"); }
+    static QString title()     { return QObject::tr("Matrix"); }
 
 protected slots:
 

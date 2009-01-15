@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -42,7 +42,7 @@ public:
                             timeT endTime) :
         BasicCommand(getGlobalName(), segment, startTime, endTime) { }
 
-    static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return QObject::tr("Tie Notes at &Barlines"); }
 
 protected:
     virtual void modifySegment();

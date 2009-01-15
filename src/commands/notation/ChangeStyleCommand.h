@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Change;
@@ -44,7 +44,7 @@ public:
         m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-        return i18n("Change &Note Style");
+        return QObject::tr("Change &Note Style");
     }
 
     static QString getGlobalName(NoteStyleName style);

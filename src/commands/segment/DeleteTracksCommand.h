@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 #include "base/Track.h"
 
 
@@ -41,7 +41,7 @@ public:
                         std::vector<TrackId> tracks);
     virtual ~DeleteTracksCommand();
 
-    static QString getGlobalName() { return i18n("Delete Tracks..."); }
+    static QString getGlobalName() { return QObject::tr("Delete Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

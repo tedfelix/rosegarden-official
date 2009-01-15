@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,7 +45,7 @@ public:
 
     CollapseRestsCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return i18n("&Collapse Rests"); }
+    static QString getGlobalName() { return QObject::tr("&Collapse Rests"); }
 
     static void registerCommand(CommandRegistry *r);
 

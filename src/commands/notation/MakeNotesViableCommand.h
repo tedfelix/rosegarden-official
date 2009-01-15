@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -46,7 +46,7 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return QObject::tr("Tie Notes at &Barlines"); }
 
     static void registerCommand(CommandRegistry *r);
 

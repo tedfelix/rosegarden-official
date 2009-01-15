@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -40,7 +40,7 @@ public:
                    timeT newDuration,
                    bool closeGap);
 
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
     
 protected:
     virtual void modifySegment();

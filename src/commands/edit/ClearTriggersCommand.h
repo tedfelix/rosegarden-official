@@ -20,7 +20,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("&Clear Triggers");
+        return QObject::tr("&Clear Triggers");
     }
 
 protected:

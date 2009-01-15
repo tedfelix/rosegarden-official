@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,7 +45,7 @@ public:
     // return pointer to new copy
     Segment* getCopy() { return m_segment; }
 
-    static QString getGlobalName() { return i18n("Quick-Copy Segment"); }
+    static QString getGlobalName() { return QObject::tr("Quick-Copy Segment"); }
 
 private:
     Composition *m_composition;

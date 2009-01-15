@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
         m_selection(&selection),
         m_visible(visible) { }
 
-    static QString getGlobalName() { return i18n("Set Visibility"); }
+    static QString getGlobalName() { return QObject::tr("Set Visibility"); }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);

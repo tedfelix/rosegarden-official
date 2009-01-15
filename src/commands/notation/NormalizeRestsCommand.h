@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -44,7 +44,7 @@ public:
 
     NormalizeRestsCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return i18n("&Normalize Rests"); }
+    static QString getGlobalName() { return QObject::tr("&Normalize Rests"); }
 
 protected:
     virtual void modifySegment();

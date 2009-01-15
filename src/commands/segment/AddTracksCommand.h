@@ -25,7 +25,7 @@
 #include <QString>
 #include <vector>
 #include <map>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,7 +45,7 @@ public:
                      int position); // -1 -> at end
     virtual ~AddTracksCommand();
 
-    static QString getGlobalName() { return i18n("Add Tracks..."); }
+    static QString getGlobalName() { return QObject::tr("Add Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

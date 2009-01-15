@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -56,7 +56,7 @@ public:
     virtual ~AudioSegmentDistributeCommand();
 
     static QString getGlobalName() 
-        { return i18n("Distribute Audio Segments over MIDI"); }
+        { return QObject::tr("Distribute Audio Segments over MIDI"); }
 
 
     virtual void execute();

@@ -23,7 +23,7 @@
 #include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -48,7 +48,7 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-    static QString getGlobalName() { return i18n("Add Te&mpo Change..."); }
+    static QString getGlobalName() { return QObject::tr("Add Te&mpo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

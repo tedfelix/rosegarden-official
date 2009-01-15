@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -48,7 +48,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
 
 private:
     Segment *m_segment;

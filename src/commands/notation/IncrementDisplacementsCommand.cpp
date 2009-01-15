@@ -34,16 +34,16 @@ void
 IncrementDisplacementsCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (i18n("Push &Left"), "", "", "fine_position_left",
+        (QObject::tr("Push &Left"), "", "", "fine_position_left",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (i18n("Push &Right"), "", "", "fine_position_right",
+        (QObject::tr("Push &Right"), "", "", "fine_position_right",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (i18n("Push &Up"), "", "", "fine_position_up",
+        (QObject::tr("Push &Up"), "", "", "fine_position_up",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (i18n("Push &Down"), "", "", "fine_position_down",
+        (QObject::tr("Push &Down"), "", "", "fine_position_down",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
 }
 

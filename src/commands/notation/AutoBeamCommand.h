@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -43,7 +43,7 @@ public:
     AutoBeamCommand(Segment &segment) :
         BasicSelectionCommand(getGlobalName(), segment) { }
 
-    static QString getGlobalName() { return i18n("&Auto-Beam"); }
+    static QString getGlobalName() { return QObject::tr("&Auto-Beam"); }
 
     static void registerCommand(CommandRegistry *r);
 

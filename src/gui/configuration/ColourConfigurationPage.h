@@ -23,7 +23,7 @@
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -50,8 +50,8 @@ public:
 
     void populate_table();
 
-    static QString iconLabel() { return i18n("Color"); }
-    static QString title()     { return i18n("Color Settings"); }
+    static QString iconLabel() { return QObject::tr("Color"); }
+    static QString title()     { return QObject::tr("Color Settings"); }
     static QString iconName()  { return "colorize"; }
 
 signals:

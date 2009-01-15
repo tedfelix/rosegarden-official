@@ -20,7 +20,7 @@
 #define _RG_CUTCOMMAND_H_
 
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 #include "document/Command.h"
 
 
@@ -45,7 +45,7 @@ public:
     CutCommand(SegmentSelection &selection,
                Clipboard *clipboard);
 
-    static QString getGlobalName() { return i18n("Cu&t"); }
+    static QString getGlobalName() { return QObject::tr("Cu&t"); }
 };
 
 

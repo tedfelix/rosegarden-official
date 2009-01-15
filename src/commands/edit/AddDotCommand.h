@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -42,7 +42,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("&Add Dot");
+        return QObject::tr("&Add Dot");
     }
 
 protected:

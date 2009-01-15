@@ -27,7 +27,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 
-#include <klocale.h>
+#include <QObject>
 #include <kiconloader.h>
 
 class QWidget;
@@ -67,8 +67,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("General"); }
-    static QString title()     { return i18n("General Configuration"); }
+    static QString iconLabel() { return QObject::tr("General"); }
+    static QString title()     { return QObject::tr("General Configuration"); }
     static QString iconName()  { return "configure-general"; }
 
 signals:

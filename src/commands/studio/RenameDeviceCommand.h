@@ -23,7 +23,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,7 +45,7 @@ public:
         m_deviceId(deviceId),
         m_name(name) { }
 
-    static QString getGlobalName() { return i18n("Rename Device"); }
+    static QString getGlobalName() { return QObject::tr("Rename Device"); }
 
     virtual void execute();
     virtual void unexecute();

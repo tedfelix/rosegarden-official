@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -57,7 +57,7 @@ public:
 
     virtual ~CopyCommand();
 
-    static QString getGlobalName() { return i18n("&Copy"); }
+    static QString getGlobalName() { return QObject::tr("&Copy"); }
 
     virtual void execute();
     virtual void unexecute();

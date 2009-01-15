@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <string>
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -53,7 +53,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("Tri&gger Segment");
+        return QObject::tr("Tri&gger Segment");
     }
 
 protected:

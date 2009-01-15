@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 class Make;
@@ -40,7 +40,7 @@ class GraceCommand : public BasicCommand
 public:
     GraceCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return i18n("Make &Grace Notes"); }
+    static QString getGlobalName() { return QObject::tr("Make &Grace Notes"); }
 
     static void registerCommand(CommandRegistry *r);
 

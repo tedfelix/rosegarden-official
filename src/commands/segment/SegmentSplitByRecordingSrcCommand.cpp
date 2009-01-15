@@ -33,7 +33,7 @@ namespace Rosegarden
 
 SegmentSplitByRecordingSrcCommand::SegmentSplitByRecordingSrcCommand (
     Segment *segment, int channel, int device ) :
-        NamedCommand(i18n("Split by Recording Source")),
+        NamedCommand(QObject::tr("Split by Recording Source")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(0),
@@ -111,8 +111,8 @@ SegmentSplitByRecordingSrcCommand::execute()
                                       m_segment->getEndMarkerTime());
 
         std::string label = m_segment->getLabel();
-        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
-        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(QObject::tr("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(QObject::tr("(split)"))));
         m_newSegmentA->setColourIndex(m_segment->getColourIndex());
         m_newSegmentB->setColourIndex(m_segment->getColourIndex());
     }

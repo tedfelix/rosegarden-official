@@ -24,7 +24,7 @@
 #include <map>
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -80,7 +80,7 @@ public:
 
     EventSelection getPastedEvents();
 
-    static QString getGlobalName() { return i18n("&Paste"); }
+    static QString getGlobalName() { return QObject::tr("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();

@@ -24,7 +24,7 @@
 #include <QLineEdit>
 #include <QCheckBox>
 
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -52,8 +52,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("MIDI"); }
-    static QString title()     { return i18n("MIDI Settings"); }
+    static QString iconLabel() { return QObject::tr("MIDI"); }
+    static QString title()     { return QObject::tr("MIDI Settings"); }
     static QString iconName()  { return "configure-midi"; }
 
 protected slots:

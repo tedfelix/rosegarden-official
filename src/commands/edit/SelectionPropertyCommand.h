@@ -22,7 +22,7 @@
 #include "base/PropertyName.h"
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Set;
@@ -56,7 +56,7 @@ public:
                              int value1,
                              int value2);
 
-    static QString getGlobalName() { return i18n("Set &Property"); }
+    static QString getGlobalName() { return QObject::tr("Set &Property"); }
 
     virtual void modifySegment();
 

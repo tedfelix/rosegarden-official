@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 namespace Rosegarden
 {
@@ -36,7 +36,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("Make &Chord"); }
+    static QString getGlobalName() { return QObject::tr("Make &Chord"); }
 
     static void registerCommand(CommandRegistry *r);
 

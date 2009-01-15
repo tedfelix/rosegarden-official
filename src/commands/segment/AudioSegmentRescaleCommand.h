@@ -21,7 +21,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 namespace Rosegarden
 {
@@ -52,7 +52,7 @@ public:
     void connectProgressDialog(ProgressDialog *dlg);
     void disconnectProgressDialog(ProgressDialog *dlg);
     
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
 
 private:
     AudioFileManager *m_afm;

@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 class Pedal;
@@ -46,9 +46,9 @@ public:
 
     static QString getGlobalName(bool down) {
         if (down) {
-            return i18n("Add Pedal &Press");
+            return QObject::tr("Add Pedal &Press");
         } else {
-            return i18n("Add Pedal &Release");
+            return QObject::tr("Add Pedal &Release");
         }
     }
 

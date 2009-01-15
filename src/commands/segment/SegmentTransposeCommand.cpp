@@ -26,13 +26,13 @@
 namespace Rosegarden
 {
 SegmentTransposeCommand::SegmentTransposeCommand(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        MacroCommand(i18n("Change segment transposition"))
+        MacroCommand(QObject::tr("Change segment transposition"))
 {
     processSegment(segment, changeKey, steps, semitones, transposeSegmentBack);
 }
 
 SegmentTransposeCommand::SegmentTransposeCommand(SegmentSelection selection, bool changeKey, int steps, int semitones, bool transposeSegmentBack) :
-        MacroCommand(i18n("Change segment transposition"))
+        MacroCommand(QObject::tr("Change segment transposition"))
 {
     //SegmentSelection selection(m_view->getSelection());
     for (SegmentSelection::iterator i = selection.begin();

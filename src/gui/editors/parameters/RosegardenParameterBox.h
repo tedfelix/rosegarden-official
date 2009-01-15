@@ -23,7 +23,7 @@
 #include <QFrame>
 #include <QString>
 
-#include <klocale.h> // i18n()
+#include <QObject> // QObject::tr()
 
 
 class QWidget;
@@ -45,8 +45,8 @@ class RosegardenParameterBox : public QFrame
 {
     Q_OBJECT
 public:
-    RosegardenParameterBox(const QString &shortLabel, // e.g. i18n("Track")
-                           const QString &longLabel,  // e.g. i18n("Track Parameters")
+    RosegardenParameterBox(const QString &shortLabel, // e.g. QObject::tr("Track")
+                           const QString &longLabel,  // e.g. QObject::tr("Track Parameters")
                            QWidget *parent = 0,
                            const char *name = 0);
 

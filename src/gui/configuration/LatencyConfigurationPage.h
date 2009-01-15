@@ -23,7 +23,7 @@
 #include <QString>
 #include <QSlider>
 
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -51,8 +51,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Latency"); }
-    static QString title()     { return i18n("Sequencer Latency"); }
+    static QString iconLabel() { return QObject::tr("Latency"); }
+    static QString title()     { return QObject::tr("Sequencer Latency"); }
 
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }

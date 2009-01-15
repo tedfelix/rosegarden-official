@@ -24,7 +24,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -58,7 +58,7 @@ public:
                                 DeviceId deviceId);
     
     static QString getGlobalName(bool deletion) {
-        return (deletion ? i18n("Delete Device") : i18n("Create Device")); 
+        return (deletion ? QObject::tr("Delete Device") : QObject::tr("Create Device")); 
     }
     
     virtual void execute();

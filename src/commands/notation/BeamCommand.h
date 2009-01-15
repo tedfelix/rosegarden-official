@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Beam Group"); }
+    static QString getGlobalName() { return QObject::tr("&Beam Group"); }
 
     static void registerCommand(CommandRegistry *r);
     

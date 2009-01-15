@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
-        default:  return i18n("Re&trograde Invert");
+        default:  return QObject::tr("Re&trograde Invert");
         }
     }
 

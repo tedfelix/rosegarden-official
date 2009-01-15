@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 #include "document/CommandHistory.h"
-#include <klocale.h>
+#include <QObject>
 
 namespace Rosegarden
 {
@@ -44,7 +44,7 @@ public:
 
     static QString getGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval...");
+        default:  return QObject::tr("Transpose by &Interval...");
         }
     }
 

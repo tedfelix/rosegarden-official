@@ -24,7 +24,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Modify;
@@ -58,7 +58,7 @@ public:
     /// supersedes setBankList() and setProgramList()
     void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
 
-    static QString getGlobalName() { return i18n("Modify &MIDI Bank"); }
+    static QString getGlobalName() { return QObject::tr("Modify &MIDI Bank"); }
 
     virtual void execute();
     virtual void unexecute();

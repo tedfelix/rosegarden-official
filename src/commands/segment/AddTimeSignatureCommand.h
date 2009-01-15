@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -42,7 +42,7 @@ public:
                             TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-    static QString getGlobalName() { return i18n("Add Time Si&gnature Change..."); }
+    static QString getGlobalName() { return QObject::tr("Add Time Si&gnature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

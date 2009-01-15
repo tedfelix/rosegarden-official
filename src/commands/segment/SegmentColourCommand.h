@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -42,7 +42,7 @@ public:
     virtual ~SegmentColourCommand();
 
     static QString getGlobalName()
-        { return i18n("Change Segment Color..."); }
+        { return QObject::tr("Change Segment Color..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Overlapping;
@@ -46,7 +46,7 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return i18n("Split-and-Tie Overlapping &Chords"); }
+    static QString getGlobalName() { return QObject::tr("Split-and-Tie Overlapping &Chords"); }
 
     static void registerCommand(CommandRegistry *r);
 

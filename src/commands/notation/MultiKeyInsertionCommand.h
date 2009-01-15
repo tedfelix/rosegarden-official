@@ -22,7 +22,7 @@
 #include "base/NotationTypes.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 #include "misc/Strings.h"
 #include "document/Command.h"
 #include "document/RosegardenGUIDoc.h"
@@ -53,9 +53,9 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return i18n("Change all to &Key %1...", strtoqstr(key->getName()));
+            return QObject::tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
-            return i18n("Add &Key Change...");
+            return QObject::tr("Add &Key Change...");
         }
     }
 };

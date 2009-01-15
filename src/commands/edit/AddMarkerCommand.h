@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -44,7 +44,7 @@ public:
                      const std::string &description);
     ~AddMarkerCommand();
 
-    static QString getGlobalName() { return i18n("&Add Marker"); }
+    static QString getGlobalName() { return QObject::tr("&Add Marker"); }
 
     virtual void execute();
     virtual void unexecute();

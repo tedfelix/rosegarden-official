@@ -94,7 +94,7 @@ SegmentRescaleCommand::execute()
         m_newSegment->setTrack(m_segment->getTrack());
         std::string label = m_segment->getLabel();
         m_newSegment->setLabel(appendLabel(
-                label, qstrtostr(i18n("(rescaled)"))));
+                label, qstrtostr(QObject::tr("(rescaled)"))));
         m_newSegment->setColourIndex(m_segment->getColourIndex());
 
         for (Segment::iterator i = m_segment->begin();

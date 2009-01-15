@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -43,7 +43,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return i18n("&Join"); }
+    static QString getGlobalName() { return QObject::tr("&Join"); }
     
 private:
     std::vector<Segment *> m_oldSegments;

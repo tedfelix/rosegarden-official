@@ -23,7 +23,7 @@
 #include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
-#include <klocale.h>
+#include <QObject>
 
 
 class Remove;
@@ -48,7 +48,7 @@ public:
 
     virtual ~RemoveTempoChangeCommand() {}
 
-    static QString getGlobalName() { return i18n("Remove &Tempo Change..."); }
+    static QString getGlobalName() { return QObject::tr("Remove &Tempo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 #include <QPoint>
 
 
@@ -49,7 +49,7 @@ public:
         m_dx(dx),
         m_dy(dy) { }
 
-    static QString getGlobalName() { return i18n("Fine Reposition"); }
+    static QString getGlobalName() { return QObject::tr("Fine Reposition"); }
 
     static void registerCommand(CommandRegistry *r);
     static QPoint getArgument(QString actionName, CommandArgumentQuerier &);

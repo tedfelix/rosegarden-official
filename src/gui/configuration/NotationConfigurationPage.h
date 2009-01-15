@@ -23,7 +23,7 @@
 #include "TabbedConfigurationPage.h"
 #include <QString>
 #include <QStringList>
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -52,8 +52,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Notation"); }
-    static QString title()     { return i18n("Notation"); }
+    static QString iconLabel() { return QObject::tr("Notation"); }
+    static QString title()     { return QObject::tr("Notation"); }
     static QString iconName()  { return "configure-notation"; }
 
 protected slots:

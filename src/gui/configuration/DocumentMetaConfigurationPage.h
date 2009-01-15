@@ -21,7 +21,7 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class QWidget;
@@ -47,8 +47,8 @@ public:
                                   QWidget *parent = 0, const char *name = 0);
     virtual void apply();
 
-    static QString iconLabel() { return i18n("About"); }
-    static QString title() { return i18n("About"); }
+    static QString iconLabel() { return QObject::tr("About"); }
+    static QString title() { return QObject::tr("About"); }
     static QString iconName()  { return "contents"; }
 
 /* hjj: WHAT TO DO WITH THIS ?

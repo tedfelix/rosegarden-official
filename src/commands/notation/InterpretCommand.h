@@ -24,7 +24,7 @@
 #include <string>
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -60,7 +60,7 @@ public:
 
     virtual ~InterpretCommand();
 
-    static QString getGlobalName() { return i18n("&Interpret..."); }
+    static QString getGlobalName() { return QObject::tr("&Interpret..."); }
     
 protected:
     virtual void modifySegment();

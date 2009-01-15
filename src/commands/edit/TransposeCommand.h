@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,17 +45,17 @@ public:
 
     static QString getDiatonicGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval...");
+        default:  return QObject::tr("Transpose by &Interval...");
         }
     }
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
-        case   1: return i18n("&Up a Semitone");
-        case  -1: return i18n("&Down a Semitone");
-        case  12: return i18n("Up an &Octave");
-        case -12: return i18n("Down an Octa&ve");
-        default:  return i18n("&Transpose by Semitones...");
+        case   1: return QObject::tr("&Up a Semitone");
+        case  -1: return QObject::tr("&Down a Semitone");
+        case  12: return QObject::tr("Up an &Octave");
+        case -12: return QObject::tr("Down an Octa&ve");
+        default:  return QObject::tr("&Transpose by Semitones...");
         }
     }
 

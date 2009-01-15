@@ -22,7 +22,7 @@
 #include "base/Segment.h"
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 #include "gui/general/ClefIndex.h"
 
 
@@ -51,7 +51,7 @@ public:
     virtual ~SegmentSplitByPitchCommand();
 
     static QString getGlobalName()
-        { return i18n("Split by &Pitch..."); }
+        { return QObject::tr("Split by &Pitch..."); }
 
     virtual void execute();
     virtual void unexecute();

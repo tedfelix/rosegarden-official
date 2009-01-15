@@ -24,7 +24,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 class Modify;
@@ -45,7 +45,7 @@ public:
                                    InstrumentId fromInstrument,
                                    InstrumentId toInstrument);
 
-    static QString getGlobalName() { return i18n("Modify &Instrument Mapping"); }
+    static QString getGlobalName() { return QObject::tr("Modify &Instrument Mapping"); }
 
     virtual void execute();
     virtual void unexecute();

@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -42,7 +42,7 @@ public:
     virtual ~SegmentLabelCommand();
 
     static QString getGlobalName()
-        { return i18n("Re&label..."); }
+        { return QObject::tr("Re&label..."); }
 
     virtual void execute();
     virtual void unexecute();

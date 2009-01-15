@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -38,7 +38,7 @@ public:
     UnGraceCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection) { }
 
-    static QString getGlobalName() { return i18n("Ung&race"); }
+    static QString getGlobalName() { return QObject::tr("Ung&race"); }
 
 protected:
     virtual void modifySegment();

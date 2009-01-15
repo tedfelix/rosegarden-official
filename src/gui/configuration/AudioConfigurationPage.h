@@ -23,7 +23,7 @@
 #include <QSettings>
 #include <QLineEdit>
 
-#include <klocale.h>
+#include <QObject>
 
 class QWidget;
 class QSpinBox;
@@ -51,8 +51,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Audio"); }
-    static QString title()     { return i18n("Audio Settings"); }
+    static QString iconLabel() { return QObject::tr("Audio"); }
+    static QString title()     { return QObject::tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
 #ifdef HAVE_LIBJACK

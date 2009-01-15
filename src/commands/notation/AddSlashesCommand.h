@@ -20,7 +20,7 @@
 #define _RG_ADDSLASHESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <klocale.h>
+#include <QObject>
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ class AddSlashesCommand : public BasicSelectionCommand
 {
 public:
     AddSlashesCommand(int number, EventSelection &selection) :
-        BasicSelectionCommand(i18n("Slashes"), selection, true),
+        BasicSelectionCommand(QObject::tr("Slashes"), selection, true),
         m_selection(&selection), m_number(number) { }
 
     static int getArgument(QString actionName, CommandArgumentQuerier &);

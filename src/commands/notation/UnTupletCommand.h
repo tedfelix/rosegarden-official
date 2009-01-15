@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
         m_selection(&selection) { }
 
     static QString getGlobalName() {
-        return i18n("&Untuplet");
+        return QObject::tr("&Untuplet");
     }
 
     static void registerCommand(CommandRegistry *r);

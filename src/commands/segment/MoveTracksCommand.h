@@ -22,7 +22,7 @@
 #include "base/Track.h"
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
                       TrackId destTrack);
     virtual ~MoveTracksCommand();
 
-    static QString getGlobalName() { return i18n("Move Tracks..."); }
+    static QString getGlobalName() { return QObject::tr("Move Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

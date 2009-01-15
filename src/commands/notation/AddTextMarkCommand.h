@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <string>
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -41,7 +41,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection), m_text(text) { }
 
-    static QString getGlobalName() { return i18n("Add Te&xt Mark..."); }
+    static QString getGlobalName() { return QObject::tr("Add Te&xt Mark..."); }
 
     static std::string getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);

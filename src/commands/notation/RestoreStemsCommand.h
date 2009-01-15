@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -40,7 +40,7 @@ public:
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Restore Stems"); }
+    static QString getGlobalName() { return QObject::tr("&Restore Stems"); }
 
     static void registerCommand(CommandRegistry *);
 

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -43,8 +43,8 @@ public:
         m_selection(&selection), m_delta(delta) { }
 
     static QString getGlobalName(int delta = 0) {
-        if (delta > 0) return i18n("&Increase Velocity");
-        else return i18n("&Reduce Velocity");
+        if (delta > 0) return QObject::tr("&Increase Velocity");
+        else return QObject::tr("&Reduce Velocity");
     }
 
 protected:

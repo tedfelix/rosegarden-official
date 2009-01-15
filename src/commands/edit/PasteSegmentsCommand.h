@@ -22,9 +22,9 @@
 #include "base/Track.h"
 #include "document/Command.h"
 #include <QString>
+#include <QObject>
 #include <vector>
 #include "base/Event.h"
-#include <klocale.h>
 
 
 
@@ -50,7 +50,7 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
-    static QString getGlobalName() { return i18n("&Paste"); }
+    static QString getGlobalName() { return QObject::tr("&Paste"); }
 
     virtual void execute();
     virtual void unexecute();

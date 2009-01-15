@@ -44,7 +44,7 @@ ChangeStyleCommand::registerCommand(CommandRegistry *r)
         r->registerCommand(styleQName, 0, "", "style_" + styleQName,
                            new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>(),
 
-                           i18n("Note &Style"), "note_style_actionmenu");
+                           QObject::tr("Note &Style"), "note_style_actionmenu");
     }
 }
 

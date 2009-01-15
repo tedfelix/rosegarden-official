@@ -19,7 +19,7 @@
 #define _RG_CHANGERECORDDEVICECOMMAND_H_
 
 #include "base/Studio.h"
-#include <klocale.h>
+#include <QObject>
 #include "document/Command.h"
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ class ChangeRecordDeviceCommand : public NamedCommand
 {
 public:
     ChangeRecordDeviceCommand(Rosegarden::DeviceId deviceId, bool action) :
-        NamedCommand(i18n("Change Record Device")),
+        NamedCommand(QObject::tr("Change Record Device")),
         m_deviceId(deviceId), m_action(action) { }
     
     virtual void execute() { swap(); }

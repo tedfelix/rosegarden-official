@@ -22,7 +22,7 @@
 #include "base/Event.h"
 #include "document/BasicCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -45,7 +45,7 @@ public:
                      Event *eventToModify,
                      const Event &newEvent);
 
-    static QString getGlobalName() { return i18n("Edit E&vent"); }
+    static QString getGlobalName() { return QObject::tr("Edit E&vent"); }
 
 protected:
     virtual void modifySegment();

@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 #include "base/Composition.h" // for tempoT
 
 
@@ -41,7 +41,7 @@ public:
 
     virtual ~ModifyDefaultTempoCommand() {}
 
-    static QString getGlobalName() { return i18n("Modify &Default Tempo..."); }
+    static QString getGlobalName() { return QObject::tr("Modify &Default Tempo..."); }
 
     virtual void execute();
     virtual void unexecute();

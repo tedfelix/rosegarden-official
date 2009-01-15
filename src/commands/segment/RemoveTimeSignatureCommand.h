@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 class Remove;
@@ -48,7 +48,7 @@ public:
 
     virtual ~RemoveTimeSignatureCommand() {}
 
-    static QString getGlobalName() { return i18n("Remove &Time Signature Change..."); }
+    static QString getGlobalName() { return QObject::tr("Remove &Time Signature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

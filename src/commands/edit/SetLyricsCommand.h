@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -40,7 +40,7 @@ public:
     SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
     ~SetLyricsCommand();
     
-    static QString getGlobalName() { return i18n("Edit L&yrics"); }
+    static QString getGlobalName() { return QObject::tr("Edit L&yrics"); }
 
     virtual void execute();
     virtual void unexecute();

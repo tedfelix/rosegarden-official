@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -43,7 +43,7 @@ public:
     CutAndCloseCommand(EventSelection &selection,
                        Clipboard *clipboard);
 
-    static QString getGlobalName() { return i18n("C&ut and Close"); }
+    static QString getGlobalName() { return QObject::tr("C&ut and Close"); }
 
 protected:
     class CloseCommand : public NamedCommand

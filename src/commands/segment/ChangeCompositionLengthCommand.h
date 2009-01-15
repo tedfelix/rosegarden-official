@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QObject>
 
 
 class Change;
@@ -43,7 +43,7 @@ public:
     virtual ~ChangeCompositionLengthCommand();
 
     static QString getGlobalName()
-        { return i18n("Change &Composition Start and End..."); }
+        { return QObject::tr("Change &Composition Start and End..."); }
 
     virtual void execute();
     virtual void unexecute();

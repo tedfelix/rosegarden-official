@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 class Stems;
@@ -42,7 +42,7 @@ public:
         m_selection(&selection), m_up(up) { }
 
     static QString getGlobalName(bool up) {
-        return up ? i18n("Stems &Up") : i18n("Stems &Down");
+        return up ? QObject::tr("Stems &Up") : QObject::tr("Stems &Down");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

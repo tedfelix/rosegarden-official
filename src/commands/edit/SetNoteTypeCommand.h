@@ -22,7 +22,7 @@
 #include "base/NotationTypes.h"
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <klocale.h>
+#include <QObject>
 
 
 
@@ -46,7 +46,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("&Set Note Type");
+        return QObject::tr("&Set Note Type");
     }
 
 protected:

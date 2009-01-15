@@ -43,7 +43,7 @@ std::string
 AddTextMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &querier)
 {
     bool ok = false;
-    QString str = querier.getText(i18n("Text:"), &ok);
+    QString str = querier.getText(QObject::tr("Text:"), &ok);
     if (ok) return qstrtostr(str);
     else throw CommandCancelled();
 }
