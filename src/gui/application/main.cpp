@@ -23,7 +23,6 @@
 //@@@ required ? :
 //#include <kcmdlineargs.h>
 //#include <kaboutdata.h>
-#include <klocale.h>
 //#include <ktip.h>
 //#include <kglobalsettings.h>
 
@@ -314,8 +313,8 @@ The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
 */
 
-static KLocalizedString description =
-       ki18n("Rosegarden - A sequencer and musical notation editor");
+static QString description =
+       QObject::tr("Rosegarden - A sequencer and musical notation editor");
 
 /*&&& removed options -- we'll want a different set anyway 
 
@@ -369,67 +368,67 @@ int main(int argc, char *argv[])
       the About box.  To be honest I think a single big bit of HTML in a
       suitable window should be fine, but let's see
 
-    KAboutData aboutData( "rosegarden", "", ki18n("Rosegarden"),
+    KAboutData aboutData( "rosegarden", "", QObject::tr("Rosegarden"),
                           VERSION, description, KAboutData::License_GPL,
-                          ki18n("Copyright 2000 - 2009 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
-                          KLocalizedString(),
+                          QObject::tr("Copyright 2000 - 2009 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
+                          QString(),
                           "http://www.rosegardenmusic.com/",
                           "rosegarden-devel@lists.sourceforge.net");
 
-    aboutData.addAuthor(ki18n("Guillaume Laurent (lead)"), KLocalizedString(), "glaurent@telegraph-road.org", "http://telegraph-road.org");
-    aboutData.addAuthor(ki18n("Chris Cannam (lead)"), KLocalizedString(), "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor(ki18n("Richard Bown (lead)"), KLocalizedString(), "richard.bown@ferventsoftware.com");
-    aboutData.addAuthor(ki18n("D. Michael McIntyre"), KLocalizedString(), "dmmcintyr@users.sourceforge.net");
-    aboutData.addAuthor(ki18n("Pedro Lopez-Cabanillas"), KLocalizedString(), "plcl@users.sourceforge.net");
-    aboutData.addAuthor(ki18n("Heikki Johannes Junes"), KLocalizedString(), "hjunes@users.sourceforge.net");
+    aboutData.addAuthor(QObject::tr("Guillaume Laurent (lead)"), QString(), "glaurent@telegraph-road.org", "http://telegraph-road.org");
+    aboutData.addAuthor(QObject::tr("Chris Cannam (lead)"), QString(), "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
+    aboutData.addAuthor(QObject::tr("Richard Bown (lead)"), QString(), "richard.bown@ferventsoftware.com");
+    aboutData.addAuthor(QObject::tr("D. Michael McIntyre"), QString(), "dmmcintyr@users.sourceforge.net");
+    aboutData.addAuthor(QObject::tr("Pedro Lopez-Cabanillas"), QString(), "plcl@users.sourceforge.net");
+    aboutData.addAuthor(QObject::tr("Heikki Johannes Junes"), QString(), "hjunes@users.sourceforge.net");
 
-    aboutData.addCredit(ki18n("Randall Farmer"), ki18n("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit(ki18n("Hans  Kieserman"), ki18n("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit(ki18n("Levi Burton"), ki18n("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
-    aboutData.addCredit(ki18n("Mark Hymers"), ki18n("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
-    aboutData.addCredit(ki18n("Alexandre Prokoudine"), ki18n("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit(ki18n("Jörg Schumann"), ki18n("German translation"), "jrschumann@gmx.de");
-    aboutData.addCredit(ki18n("Eckhard Jokisch"), ki18n("German translation"), "e.jokisch@u-code.de");
-    aboutData.addCredit(ki18n("Kevin Donnelly"), ki18n("Welsh translation"));
-    aboutData.addCredit(ki18n("Didier Burli"), ki18n("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit(ki18n("Yves Guillemot"), ki18n("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
-    aboutData.addCredit(ki18n("Daniele Medri"), ki18n("Italian translation"), "madrid@linuxmeeting.net");
-    aboutData.addCredit(ki18n("Alessandro Musesti"), ki18n("Italian translation"), "a.musesti@dmf.unicatt.it");
-    aboutData.addCredit(ki18n("Stefan Asserhäll"), ki18n("Swedish translation"), "stefan.asserhall@comhem.se");
-    aboutData.addCredit(ki18n("Erik Magnus Johansson"), ki18n("Swedish translation"), "erik.magnus.johansson@telia.com");
-    aboutData.addCredit(ki18n("Hasso Tepper"), ki18n("Estonian translation"), "hasso@estpak.ee");
-    aboutData.addCredit(ki18n("Jelmer Vernooij"), ki18n("Dutch translation"), "jelmer@samba.org");
-    aboutData.addCredit(ki18n("Jasper Stein"), ki18n("Dutch translation"), "jasper.stein@12move.nl");
-    aboutData.addCredit(ki18n("Arnout Engelen"), ki18n("Transposition by interval"));
-    aboutData.addCredit(ki18n("Thorsten Wilms"), ki18n("Original designs for rotary controllers"), "t_w_@freenet.de");
-    aboutData.addCredit(ki18n("Oota Toshiya"), ki18n("Japanese translation"), "ribbon@users.sourceforge.net");
-    aboutData.addCredit(ki18n("William"), ki18n("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
-    aboutData.addCredit(ki18n("Liu Songhe"), ki18n("Simplified Chinese translation"), "jackliu9999@msn.com");
-    aboutData.addCredit(ki18n("Toni Arnold"), ki18n("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
-    aboutData.addCredit(ki18n("Vince Negri"), ki18n("MTC slave timing implementation"), "vince.negri@gmail.com");
-    aboutData.addCredit(ki18n("Jan Bína"), ki18n("Czech translation"), "jbina@sky.cz");
-    aboutData.addCredit(ki18n("Thomas Nagy"), ki18n("SCons/bksys building system"), "tnagy256@yahoo.fr");
-    aboutData.addCredit(ki18n("Vladimir Savic"), ki18n("icons, icons, icons"), "vladimir@vladimirsavic.net");
-    aboutData.addCredit(ki18n("Marcos Germán Guglielmetti"), ki18n("Spanish translation"), "marcospcmusica@yahoo.com.ar");
-    aboutData.addCredit(ki18n("Lisandro Damián Nicanor Pérez Meyer"), ki18n("Spanish translation"), "perezmeyer@infovia.com.ar");
-    aboutData.addCredit(ki18n("Javier Castrillo"), ki18n("Spanish translation"), "riverplatense@gmail.com");
-    aboutData.addCredit(ki18n("Lucas Godoy"), ki18n("Spanish translation"), "godoy.lucas@gmail.com");
-    aboutData.addCredit(ki18n("Feliu Ferrer"), ki18n("Catalan translation"), "mverge2@pie.xtec.es");
-    aboutData.addCredit(ki18n("Quim Perez i Noguer"), ki18n("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit(ki18n("Carolyn McIntyre"), ki18n("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
-    aboutData.addCredit(ki18n("Stephen Torri"), ki18n("Initial guitar chord editing code"), "storri@torri.org");
-    aboutData.addCredit(ki18n("Piotr Sawicki"), ki18n("Polish translation"), "pelle@plusnet.pl");
-    aboutData.addCredit(ki18n("David García-Abad"), ki18n("Basque translation"), "davidgarciabad@telefonica.net");
+    aboutData.addCredit(QObject::tr("Randall Farmer"), QObject::tr("Chord labelling code"), " rfarme@simons-rock.edu");
+    aboutData.addCredit(QObject::tr("Hans  Kieserman"), QObject::tr("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
+    aboutData.addCredit(QObject::tr("Levi Burton"), QObject::tr("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
+    aboutData.addCredit(QObject::tr("Mark Hymers"), QObject::tr("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
+    aboutData.addCredit(QObject::tr("Alexandre Prokoudine"), QObject::tr("Russian translation\ni18n-ization"), "avp@altlinux.ru");
+    aboutData.addCredit(QObject::tr("Jörg Schumann"), QObject::tr("German translation"), "jrschumann@gmx.de");
+    aboutData.addCredit(QObject::tr("Eckhard Jokisch"), QObject::tr("German translation"), "e.jokisch@u-code.de");
+    aboutData.addCredit(QObject::tr("Kevin Donnelly"), QObject::tr("Welsh translation"));
+    aboutData.addCredit(QObject::tr("Didier Burli"), QObject::tr("French translation"), "didierburli@bluewin.ch");
+    aboutData.addCredit(QObject::tr("Yves Guillemot"), QObject::tr("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
+    aboutData.addCredit(QObject::tr("Daniele Medri"), QObject::tr("Italian translation"), "madrid@linuxmeeting.net");
+    aboutData.addCredit(QObject::tr("Alessandro Musesti"), QObject::tr("Italian translation"), "a.musesti@dmf.unicatt.it");
+    aboutData.addCredit(QObject::tr("Stefan Asserhäll"), QObject::tr("Swedish translation"), "stefan.asserhall@comhem.se");
+    aboutData.addCredit(QObject::tr("Erik Magnus Johansson"), QObject::tr("Swedish translation"), "erik.magnus.johansson@telia.com");
+    aboutData.addCredit(QObject::tr("Hasso Tepper"), QObject::tr("Estonian translation"), "hasso@estpak.ee");
+    aboutData.addCredit(QObject::tr("Jelmer Vernooij"), QObject::tr("Dutch translation"), "jelmer@samba.org");
+    aboutData.addCredit(QObject::tr("Jasper Stein"), QObject::tr("Dutch translation"), "jasper.stein@12move.nl");
+    aboutData.addCredit(QObject::tr("Arnout Engelen"), QObject::tr("Transposition by interval"));
+    aboutData.addCredit(QObject::tr("Thorsten Wilms"), QObject::tr("Original designs for rotary controllers"), "t_w_@freenet.de");
+    aboutData.addCredit(QObject::tr("Oota Toshiya"), QObject::tr("Japanese translation"), "ribbon@users.sourceforge.net");
+    aboutData.addCredit(QObject::tr("William"), QObject::tr("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
+    aboutData.addCredit(QObject::tr("Liu Songhe"), QObject::tr("Simplified Chinese translation"), "jackliu9999@msn.com");
+    aboutData.addCredit(QObject::tr("Toni Arnold"), QObject::tr("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
+    aboutData.addCredit(QObject::tr("Vince Negri"), QObject::tr("MTC slave timing implementation"), "vince.negri@gmail.com");
+    aboutData.addCredit(QObject::tr("Jan Bína"), QObject::tr("Czech translation"), "jbina@sky.cz");
+    aboutData.addCredit(QObject::tr("Thomas Nagy"), QObject::tr("SCons/bksys building system"), "tnagy256@yahoo.fr");
+    aboutData.addCredit(QObject::tr("Vladimir Savic"), QObject::tr("icons, icons, icons"), "vladimir@vladimirsavic.net");
+    aboutData.addCredit(QObject::tr("Marcos Germán Guglielmetti"), QObject::tr("Spanish translation"), "marcospcmusica@yahoo.com.ar");
+    aboutData.addCredit(QObject::tr("Lisandro Damián Nicanor Pérez Meyer"), QObject::tr("Spanish translation"), "perezmeyer@infovia.com.ar");
+    aboutData.addCredit(QObject::tr("Javier Castrillo"), QObject::tr("Spanish translation"), "riverplatense@gmail.com");
+    aboutData.addCredit(QObject::tr("Lucas Godoy"), QObject::tr("Spanish translation"), "godoy.lucas@gmail.com");
+    aboutData.addCredit(QObject::tr("Feliu Ferrer"), QObject::tr("Catalan translation"), "mverge2@pie.xtec.es");
+    aboutData.addCredit(QObject::tr("Quim Perez i Noguer"), QObject::tr("Catalan translation"), "noguer@osona.com");
+    aboutData.addCredit(QObject::tr("Carolyn McIntyre"), QObject::tr("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
+    aboutData.addCredit(QObject::tr("Stephen Torri"), QObject::tr("Initial guitar chord editing code"), "storri@torri.org");
+    aboutData.addCredit(QObject::tr("Piotr Sawicki"), QObject::tr("Polish translation"), "pelle@plusnet.pl");
+    aboutData.addCredit(QObject::tr("David García-Abad"), QObject::tr("Basque translation"), "davidgarciabad@telefonica.net");
 
-    aboutData.setTranslator(ki18nc("NAME OF TRANSLATORS", "Your names"),
-			    ki18nc("EMAIL OF TRANSLATORS", "Your emails"));
+    aboutData.setTranslator(QObject::tr("NAME OF TRANSLATORS", "Your names"),
+			    QObject::tr("EMAIL OF TRANSLATORS", "Your emails"));
 */
 
     RosegardenApplication app(argc, argv);
 
     app.setOrganizationName("rosegardenmusic");
     app.setOrganizationDomain("rosegardenmusic.org");
-    app.setApplicationName(i18n("Rosegarden"));
+    app.setApplicationName(QObject::tr("Rosegarden"));
 
     QStringList args = app.arguments();
 
@@ -689,7 +688,7 @@ int main(int argc, char *argv[])
 
         QDialog *dialog = new QDialog;
         dialog->setModal(true);
-        dialog->setWindowTitle(i18n("Welcome!"));
+        dialog->setWindowTitle(QObject::tr("Welcome!"));
         QGridLayout *metagrid = new QGridLayout;
         dialog->setLayout(metagrid);
 
@@ -705,7 +704,7 @@ int main(int argc, char *argv[])
 
         QLabel *label = new QLabel;
         hbLayout->addWidget(label);
-        label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
+        label->setText(QObject::tr("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
         label->setWordWrap(true);
 
         hb->setLayout(hbLayout);
