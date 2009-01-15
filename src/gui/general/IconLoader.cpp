@@ -70,16 +70,14 @@ IconLoader::load(QString name)
 QPixmap
 IconLoader::loadPixmap(QString name)
 {
+    if (m_cache.find(name) != m_cache.end()) return m_cache[name];
     QPixmap pixmap = loadPixmap(":pixmaps/toolbar", name);
-    if (!pixmap.isNull()) return pixmap;
-    pixmap = loadPixmap(":pixmaps/transport", name);
-    if (!pixmap.isNull()) return pixmap;
-    pixmap = loadPixmap(":pixmaps/misc", name);
-    if (!pixmap.isNull()) return pixmap;
-    pixmap = loadPixmap(":pixmaps/stock", name);
-    if (!pixmap.isNull()) return pixmap;
-    pixmap = loadPixmap(":pixmaps", name);
-    if (!pixmap.isNull()) return pixmap;
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/transport", name);
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/misc", name);
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/stock", name);
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/icons", name);
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps", name);
+    m_cache[name] = pixmap;
     return pixmap;
 }
 

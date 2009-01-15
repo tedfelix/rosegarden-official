@@ -22,6 +22,8 @@
 #include <QPixmap>
 #include <QString>
 
+#include <map>
+
 namespace Rosegarden {
 
 class IconLoader
@@ -35,6 +37,7 @@ public:
 
 protected:
     QPixmap loadPixmap(QString dir, QString name);
+    std::map<QString, QPixmap> m_cache;
 };
 
 }
