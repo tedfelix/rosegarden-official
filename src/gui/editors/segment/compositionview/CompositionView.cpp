@@ -191,7 +191,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
 //@@@ no longer necessary?    m_segmentsDrawBuffer.setOptimization(QPixmap::BestOptim);
 //@@@ no longer necessary?     m_artifactsDrawBuffer.setOptimization(QPixmap::BestOptim);
 
-    viewport()->setMouseTracking(true);
+//    viewport()->setMouseTracking(true);
 }
 
 void CompositionView::endAudioPreviewGeneration()
@@ -225,8 +225,14 @@ void CompositionView::slotUpdateSize()
     int computedWidth = int(nearbyint(ruler->getTotalWidth()));
 
     int width = std::max(computedWidth, minWidth);
+    
+    if (contentsWidth() != width || contentsHeight() != height) {
+        RG_DEBUG << "CompositionView::slotUpdateSize: Resizing contents from "
+                 << contentsWidth() << "x" << contentsHeight() << " to "
+                 << width << "x" << height << endl;
 
-    resizeContents(width, height);
+        resizeContents(width, height);
+    }
 }
 
 void CompositionView::scrollRight()
@@ -476,11 +482,9 @@ void CompositionView::slotStoppedRecording()
 
 void CompositionView::resizeEvent(QResizeEvent* e)
 {
-    static bool inResize = false; //&&&!!! ew gross
+    if (e->size() == e->oldSize()) return;
 
-    if (inResize) return;
-    
-    inResize = true;
+    RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
 
     Q3ScrollView::resizeEvent(e);
     slotUpdateSize();
@@ -491,9 +495,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
     m_segmentsDrawBuffer.resize(w, h);
     m_artifactsDrawBuffer.resize(w, h);
     slotAllDrawBuffersNeedRefresh();
-    //     RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsDrawBuffer.size() << endl;
 
-    inResize = false;
+    RG_DEBUG << "CompositionView::resizeEvent() : drawBuffer size = " << m_segmentsDrawBuffer.size() << endl;
 }
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
@@ -1389,7 +1392,7 @@ void CompositionView::contentsMousePressEvent(QMouseEvent* e)
     slotSetSelectCopy((bs & Qt::ControlModifier) != 0);
     slotSetSelectAdd((bs & Qt::ShiftModifier) != 0);
     slotSetFineGrain((bs & Qt::ShiftModifier) != 0);
-    slotSetPencilOverExisting((bs & Qt::AltModifier + Qt::ControlModifier) != 0);
+    slotSetPencilOverExisting((bs & (Qt::AltModifier + Qt::ControlModifier)) != 0);
 
     switch (e->button()) {
     case Qt::LeftButton:

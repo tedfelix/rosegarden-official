@@ -93,7 +93,7 @@ public:
     (const QString& namespaceURI, const QString& localName,
      const QString& qName, const QXmlAttributes& atts);
 
-    virtual bool characters(QString &);
+    virtual bool characters(const QString &);
 
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);

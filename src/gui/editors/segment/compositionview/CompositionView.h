@@ -282,15 +282,15 @@ protected slots:
     void slotArtifactsDrawBufferNeedsRefresh() {
         m_artifactsDrawBufferRefresh = 
             QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight());
-        update();	// was: updateContents()
+	updateContents();
     }
 
     void slotArtifactsDrawBufferNeedsRefresh(QRect r) {
         m_artifactsDrawBufferRefresh |=
             (QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight())
              & r);
-		update();	// was: updateContents()
-	}
+	updateContents();
+    }
 
     void slotAllDrawBuffersNeedRefresh() {
         slotSegmentsDrawBufferNeedsRefresh();

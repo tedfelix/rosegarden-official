@@ -67,7 +67,7 @@ public:
     virtual EventSelection *getSubsequentSelection(Command *) { return 0; }
 };
 
-template <typename Command>
+template <typename CommandType>
 class SelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
@@ -75,17 +75,17 @@ public:
     virtual Command *build(QString /* actionName */,
                             EventSelection &s,
                             CommandArgumentQuerier &querier) {
-        return new Command(s);
+        return new CommandType(s);
     }
 
     virtual EventSelection *getSubsequentSelection(Command *c) {
-        Command *command = dynamic_cast<Command *>(c);
+        CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;
     }
 };
 
-template <typename Command>
+template <typename CommandType>
 class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 {
 public:
@@ -93,11 +93,11 @@ public:
     virtual Command *build(QString actionName,
                             EventSelection &s,
                             CommandArgumentQuerier &querier) {
-        return new Command(Command::getArgument(actionName, querier), s);
+        return new CommandType(CommandType::getArgument(actionName, querier), s);
     }
 
     virtual EventSelection *getSubsequentSelection(Command *c) {
-        Command *command = dynamic_cast<Command *>(c);
+        CommandType *command = dynamic_cast<CommandType *>(c);
         if (command) return command->getSubsequentSelection();
         return 0;
     }

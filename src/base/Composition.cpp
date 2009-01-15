@@ -104,7 +104,7 @@ Composition::ReferenceSegment::find(Event *e)
 }
 
 Composition::ReferenceSegment::iterator
-Composition::ReferenceSegment::insert(Event *e)
+Composition::ReferenceSegment::insertEvent(Event *e)
 {
     if (!e->isa(m_eventType)) {
 	throw Event::BadType(std::string("event in ReferenceSegment"),
@@ -126,7 +126,7 @@ Composition::ReferenceSegment::insert(Event *e)
 }
 
 void
-Composition::ReferenceSegment::erase(Event *e)
+Composition::ReferenceSegment::eraseEvent(Event *e)
 {
     iterator i = find(e);
     if (i != end()) Impl::erase(i);
@@ -763,7 +763,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
 #endif
 
     ReferenceSegment::iterator i =
-	m_timeSigSegment.insert(timeSig.getAsEvent(t));
+	m_timeSigSegment.insertEvent(timeSig.getAsEvent(t));
     m_barPositionsNeedCalculating = true;
 
     updateRefreshStatuses();
@@ -855,7 +855,7 @@ Composition::getTimeSignatureChange(int n) const
 void
 Composition::removeTimeSignature(int n)
 {
-    m_timeSigSegment.erase(m_timeSigSegment[n]);
+    m_timeSigSegment.eraseEvent(m_timeSigSegment[n]);
     m_barPositionsNeedCalculating = true;
     updateRefreshStatuses();
     notifyTimeSignatureChanged();
@@ -957,7 +957,7 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 	tempoEvent->set<Int>(TargetTempoProperty, targetTempo);
     }
 
-    ReferenceSegment::iterator i = m_tempoSegment.insert(tempoEvent);
+    ReferenceSegment::iterator i = m_tempoSegment.insertEvent(tempoEvent);
 
     if (fullTempoUpdate) {
 	
@@ -1036,7 +1036,7 @@ Composition::removeTempoChange(int n)
 	oldTarget = m_tempoSegment[n]->get<Int>(TargetTempoProperty);
     }
 
-    m_tempoSegment.erase(m_tempoSegment[n]);
+    m_tempoSegment.eraseEvent(m_tempoSegment[n]);
     m_tempoTimestampsNeedCalculating = true;
 
     if (oldTempo == m_minTempo ||

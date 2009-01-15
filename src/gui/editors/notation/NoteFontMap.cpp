@@ -106,7 +106,7 @@ NoteFontMap::~NoteFontMap()
 }
 
 bool
-NoteFontMap::characters(QString &chars)
+NoteFontMap::characters(const QString &chars)
 {
     if (!m_characterDestination)
         return true;
