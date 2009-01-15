@@ -25,12 +25,12 @@
 namespace Rosegarden
 {
 
-class KStartupLogo : public QWidget
+class StartupLogo : public QWidget
 {
     Q_OBJECT
 
 public:
-    static KStartupLogo* getInstance();
+    static StartupLogo* getInstance();
 
     static void hideIfStillThere();
     
@@ -43,8 +43,8 @@ public slots:
 
 protected:
 
-    KStartupLogo(QWidget *parent=0, const char *name=0);
-    ~KStartupLogo();
+    StartupLogo(QWidget *parent=0, const char *name=0);
+    ~StartupLogo();
     
     virtual void paintEvent(QPaintEvent*);
     virtual void mousePressEvent( QMouseEvent*);
@@ -54,7 +54,7 @@ protected:
 
     QPixmap m_pixmap;
 
-    static KStartupLogo* m_instance;
+    static StartupLogo* m_instance;
     static bool m_wasClosed;
     QString m_statusMessage;
 };

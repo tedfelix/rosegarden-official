@@ -183,7 +183,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     p = m_transport->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
 
-
     connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
     connect(m_transport->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
 
@@ -1069,11 +1068,13 @@ TransportDialog::slotPanelOpenButtonClicked()
         m_transport->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
         m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        setFixedSize(sizeHint());
         m_isExpanded = false;
     } else {
 //        setFixedSize(width(), height() + rfh);
         m_transport->RecordingFrame->show();
         m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+        setFixedSize(sizeHint());
         m_isExpanded = true;
     }
 }
@@ -1087,6 +1088,7 @@ TransportDialog::slotPanelCloseButtonClicked()
         m_transport->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
         m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        setFixedSize(sizeHint());
         m_isExpanded = false;
     }
 }

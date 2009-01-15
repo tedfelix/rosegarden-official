@@ -21,7 +21,7 @@
 // #include <QDir>
 
 #include <unistd.h>
-#include "KStartupLogo.h"
+#include "StartupLogo.h"
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
@@ -39,7 +39,7 @@ namespace Rosegarden
 
 // NOTE: use QSplashScreen instead ??
 
-KStartupLogo::KStartupLogo(QWidget * parent, const char *name) :
+StartupLogo::StartupLogo(QWidget * parent, const char *name) :
     QWidget(parent, name, Qt::SplashScreen),
     m_readyToHide(false),
     m_showTip(true)
@@ -52,13 +52,13 @@ KStartupLogo::KStartupLogo(QWidget * parent, const char *name) :
                 m_pixmap.width(), m_pixmap.height());
 }
 
-KStartupLogo::~KStartupLogo()
+StartupLogo::~StartupLogo()
 {
     m_wasClosed = true;
     m_instance = 0;
 }
 
-void KStartupLogo::paintEvent(QPaintEvent*)
+void StartupLogo::paintEvent(QPaintEvent*)
 {
     // Print version number
     QPainter paint(this);
@@ -100,22 +100,22 @@ void KStartupLogo::paintEvent(QPaintEvent*)
     paint.drawText(m_pixmap.width() - (width + 10), y, m_statusMessage);
 }
 
-void KStartupLogo::slotShowStatusMessage(QString message)
+void StartupLogo::slotShowStatusMessage(QString message)
 {
     m_statusMessage = message;
     paintEvent(0);
     QApplication::flushX();
 }
 
-void KStartupLogo::close()
+void StartupLogo::close()
 {
     if (!m_wasClosed && isVisible()) {
 
 	if (m_showTip) {
 	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
 	    if (tipResource != "") {
-		RG_DEBUG << "KStartupLogo::close: Showing Tips\n";
-		KTipDialog::showTip(tipResource);
+		RG_DEBUG << "StartupLogo::close: Showing Tips\n";
+//&&&		KTipDialog::showTip(tipResource);
 	    }
 	}
     }
@@ -124,25 +124,25 @@ void KStartupLogo::close()
 }
 
 
-void KStartupLogo::mousePressEvent(QMouseEvent*)
+void StartupLogo::mousePressEvent(QMouseEvent*)
 {
     // for the haters of raising startlogos
     if (m_readyToHide)
         hide(); // don't close, main() sets up a QTimer for that
 }
 
-KStartupLogo* KStartupLogo::getInstance()
+StartupLogo* StartupLogo::getInstance()
 {
     if (m_wasClosed)
         return 0;
 
     if (!m_instance)
-        m_instance = new KStartupLogo;
+        m_instance = new StartupLogo;
 
     return m_instance;
 }
 
-void KStartupLogo::hideIfStillThere()
+void StartupLogo::hideIfStillThere()
 {
     if (m_instance)
         m_instance->hide();
@@ -150,10 +150,10 @@ void KStartupLogo::hideIfStillThere()
 }
 
 
-KStartupLogo* KStartupLogo::m_instance = 0;
-bool KStartupLogo::m_wasClosed = false;
+StartupLogo* StartupLogo::m_instance = 0;
+bool StartupLogo::m_wasClosed = false;
 
-#include "KStartupLogo.moc"
+#include "StartupLogo.moc"
 
 }
 

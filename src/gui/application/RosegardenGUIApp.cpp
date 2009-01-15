@@ -137,7 +137,7 @@
 #include "gui/general/FileSource.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/AutoSaveFinder.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -325,7 +325,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
             // If no connection to JACK
             // try to launch JACK - if the configuration wants us to.
             if (!launchJack()) {
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 QMessageBox::critical( dynamic_cast<QWidget*>(this), "", i18n("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
             }
         } else {
@@ -1029,7 +1029,7 @@ void RosegardenGUIApp::initView()
                 m_seqManager->setLoop(0, 0);
 		leaveActionState("have_range"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         } catch (QString s) {
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
 			QMessageBox::critical( dynamic_cast<QWidget*>(this), "", s, QMessageBox::Ok, QMessageBox::Ok);
             CurrentProgressDialog::thaw();
@@ -1325,13 +1325,13 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
 
     if (!info.exists()) {
         // can happen with command-line arg, so...
-//        KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
+//        StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" does not exist", QMessageBox::Ok, QMessageBox::Ok ));
         return 0;
     }
 	
     if (info.isDir()) {
-//		KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
+//		StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
 		QMessageBox::warning(dynamic_cast<QWidget*>(this), filePath, i18n("File \"%1\" is actually a directory"), QMessageBox::Ok, QMessageBox::Ok );
 		return 0;
     }
@@ -1339,7 +1339,7 @@ RosegardenGUIApp::createDocument(QString filePath, ImportType importType)
     QFile file(filePath);
 
     if (!file.open(QIODevice::ReadOnly)) {
-//		KStartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
+//		StartupLogo::hideIfStillThere();  //&&& TODO: use QSplashScreen instead
         QString errStr =
             i18n("You do not have read permission for \"%1\"", filePath);
 
@@ -1414,7 +1414,7 @@ RosegardenGUIApp::createDocumentFromRGFile(QString filePath)
 
             // At this point the splash screen may still be there, hide it if
             // it's the case
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
 
             // It is, so ask the user if he wants to use the autosave file
             int reply = QMessageBox::question(this, "",
@@ -2122,34 +2122,7 @@ void RosegardenGUIApp::slotQuit()
 
     Profiles::getInstance()->dump();
 
-    // close the first window, the list makes the next one the first again.
-    // This ensures that queryClose() is called on each window to ask for closing
-	QMainWindow* w;
-	QList<QMainWindow*> wl = this->findChildren<QMainWindow*>();
-	for (int i=0; i < wl.size(); ++i) {
-            // only close the window if the closeEvent is accepted. If
-            // the user presses Cancel on the saveIfModified() dialog,
-            // the window and the application stay open.
-		w = wl.at(i);
-		if ( ! w->close() )
-			break;
-	}
-	//this->close();  //@@@ call this close() here too? 
-	
-	/*
-	// old:
-    QMainWindow* w;
-    if (memberList) {
-
-        for (w = memberList->first(); w != 0; w = memberList->next()) {
-            // only close the window if the closeEvent is accepted. If
-            // the user presses Cancel on the saveIfModified() dialog,
-            // the window and the application stay open.
-            if (!w->close())
-                break;
-        }
-    }
-	*/
+    if (queryClose()) close();
 }
 
 void RosegardenGUIApp::slotEditCut()
@@ -2550,8 +2523,7 @@ void RosegardenGUIApp::createAndSetupTransport()
     //
     m_transport = new TransportDialog(this);
 	
-//
-//    plugShortcuts(m_transport, m_transport->getShortcuts());
+    plugShortcuts(m_transport, m_transport->getShortcuts());
 /*
     m_transport->getShortcuts()->connectItem
         (m_transport->getShortcuts()->addItem(Qt::Key_T),
@@ -3433,7 +3405,7 @@ void RosegardenGUIApp::importProject(QString filePath)
     procArgs << "--unpack";
     procArgs << filePath;
 
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     proc->execute("rosegarden-project-package", procArgs);
 
     if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
@@ -3510,7 +3482,7 @@ RosegardenGUIApp::guessTextCodec(std::string text)
         if (text[c] & 0x80) {
 
             CurrentProgressDialog::freeze();
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
 
             IdentifyTextCodecDialog dialog(0, text);
             dialog.exec();
@@ -3598,7 +3570,7 @@ RosegardenGUIApp::createDocumentFromMIDIFile(QString file)
     MidiFile midiFile(fname,
                       &newDoc->getStudio());
 
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(i18n("Importing MIDI file..."),
                                200,
                                this);
@@ -3770,7 +3742,7 @@ void RosegardenGUIApp::slotMergeRG21()
 RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromRG21File(QString file)
 {
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(
         i18n("Importing Rosegarden 2.1 file..."), 100, this);
 
@@ -3871,7 +3843,7 @@ void RosegardenGUIApp::slotMergeHydrogen()
 RosegardenGUIDoc*
 RosegardenGUIApp::createDocumentFromHydrogenFile(QString file)
 {
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(
         i18n("Importing Hydrogen file..."), 100, this);
 
@@ -4523,7 +4495,7 @@ void RosegardenGUIApp::slotSequencerExited(QProcess*)
 {
     RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
 
     if (m_sequencerCheckedIn) {
 
@@ -5908,7 +5880,7 @@ RosegardenGUIApp::getArmedInstruments()
 void
 RosegardenGUIApp::showError(QString error)
 {
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
     // This is principally used for return values from DSSI plugin
@@ -7717,7 +7689,7 @@ void
 RosegardenGUIApp::slotNewerVersionAvailable(QString v)
 {
     if (m_firstRun) return;
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
     awaitDialogClearance();
     QMessageBox::information

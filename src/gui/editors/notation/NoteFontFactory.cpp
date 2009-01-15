@@ -25,7 +25,7 @@
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "NoteFont.h"
 #include "NoteFontMap.h"
 #include <QSettings>
@@ -81,7 +81,7 @@ NoteFontFactory::getFontNames(bool forceRescan)
                 NoteFontMap map(name);
                 if (map.ok()) names.append(strtoqstr(map.getName()));
             } catch (Exception e) {
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
                 throw;
             }
@@ -153,7 +153,7 @@ NoteFontFactory::getFont(std::string fontName, int size)
             m_fonts[std::pair<std::string, int>(fontName, size)] = font;
             return font;
         } catch (Exception e) {
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
             QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
             throw;
         }
@@ -184,7 +184,7 @@ NoteFontFactory::getDefaultFontName()
             defaultFont = *fontNames.begin();
         else {
             QString message = i18n("Can't obtain a default font -- no fonts found");
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
             QMessageBox::critical(0, "", message);
             throw NoFontsAvailable(qstrtostr(message));
         }

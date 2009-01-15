@@ -46,7 +46,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
 #include "gui/general/ProgressReporter.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/widgets/CurrentProgressDialog.h"
@@ -441,7 +441,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     minor > RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR) {
 
                 CurrentProgressDialog::freeze();
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
 
                 QMessageBox::information(0, "", i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
 
@@ -1031,7 +1031,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
 
                 // Hide splash screen if present on startup
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
 
                 // Create a locate file dialog - give it the file name
                 // and the AudioFileManager path that we've already

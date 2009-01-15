@@ -364,9 +364,9 @@ DeviceManagerDialog::populate()
         QString connectionName = strtoqstr((*it)->getConnection());
 
 // 		m_playTable->setText(deviceCount, PLAY_NAME_COL, strtoqstr((*it)->getName()));
-		m_playTable->item(deviceCount, PLAY_NAME_COL)->setText( strtoqstr((*it)->getName()) );
+//		m_playTable->item(deviceCount, PLAY_NAME_COL)->setText( strtoqstr((*it)->getName()) );
 		// or:
-		//m_playTable->setItem(deviceCount, PLAY_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
+        m_playTable->setItem(deviceCount, PLAY_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
 		
         int currentConnectionIndex = m_playConnections.size() - 1;
         for (unsigned int i = 0; i < m_playConnections.size(); ++i) {
@@ -408,9 +408,9 @@ DeviceManagerDialog::populate()
         QString connectionName = strtoqstr((*it)->getConnection());
 
 //         m_recordTable->setText(deviceCount, RECORD_NAME_COL, strtoqstr((*it)->getName()));
-		m_recordTable->item(deviceCount, RECORD_NAME_COL)->setText( strtoqstr((*it)->getName()) );
+//		m_recordTable->item(deviceCount, RECORD_NAME_COL)->setText( strtoqstr((*it)->getName()) );
 		// or:
-		//m_recordTable->setItem(deviceCount, RECORD_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
+	m_recordTable->setItem(deviceCount, RECORD_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
 		
 
         int currentConnectionIndex = m_recordConnections.size() - 1;

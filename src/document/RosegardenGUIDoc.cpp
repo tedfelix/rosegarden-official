@@ -66,7 +66,7 @@
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ResourceFinder.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
@@ -577,7 +577,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
-        KStartupLogo::hideIfStillThere();
+        StartupLogo::hideIfStillThere();
         QString msg(i18n("Can't open file '%1'", filename));
         /* was sorry */ QMessageBox::warning(0, "", msg);
         return false;
@@ -606,7 +606,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     }
 
     if (!okay) {
-        KStartupLogo::hideIfStillThere();
+        StartupLogo::hideIfStillThere();
         QString msg(i18n("Error when parsing file '%1': \"%2\"",
                      filename,
                      errMsg));
@@ -668,7 +668,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         // generate any audio previews after loading the files
         m_audioFileManager.generatePreviews();
     } catch (Exception e) {
-        KStartupLogo::hideIfStillThere();
+        StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
         QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();
@@ -1035,7 +1035,7 @@ void RosegardenGUIDoc::initialiseStudio()
                      config);
 
                 if (error != "") {
-                    KStartupLogo::hideIfStillThere();
+                    StartupLogo::hideIfStillThere();
                     CurrentProgressDialog::freeze();
                     QMessageBox::warning(0, "", error);
                     CurrentProgressDialog::thaw();
@@ -1607,7 +1607,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
         if (handler.isCancelled()) {
             RG_DEBUG << "File load cancelled\n";
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
             QMessageBox::information(0, "", i18n("File load cancelled"));
             cancelled = true;
             return true;
@@ -1620,7 +1620,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
         if (getSequenceManager() &&
             !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
 
-            KStartupLogo::hideIfStillThere();
+            StartupLogo::hideIfStillThere();
             CurrentProgressDialog::freeze();
 
             if (handler.hasActiveAudio() ||
@@ -1665,7 +1665,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
                 if (er == 0) er = *rates.begin();
 
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
 
                 QMessageBox::information(0, "", i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>", er, sr, er));
@@ -1675,7 +1675,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
  
             } else if (sr != 0 && mixed) {
                     
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 
                 QMessageBox::information(0, "", i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
@@ -1705,7 +1705,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 }
                 msg += "</ul>";
                 
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 QMessageBox::information(0, "", msg);
                 CurrentProgressDialog::thaw();
@@ -1718,7 +1718,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
                 slotDocumentModified(); // so file can be re-saved immediately
                 
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 QMessageBox::information(0, "", msg);
                 CurrentProgressDialog::thaw();
@@ -2748,7 +2748,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
         //!!! mtr just for now?: or better to do this once after the fact?
         //!!!	m_audioFileManager.generatePreviews();
     } catch (Exception e) {
-        KStartupLogo::hideIfStillThere();
+        StartupLogo::hideIfStillThere();
         CurrentProgressDialog::freeze();
         QMessageBox::critical(0, "", strtoqstr(e.getMessage()));
         CurrentProgressDialog::thaw();

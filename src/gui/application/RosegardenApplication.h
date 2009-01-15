@@ -63,6 +63,9 @@ public:
 
     virtual void saveState(QSessionManager&);
     
+    //!!!
+    //@@@ Need session manager commitData() call
+
 signals:
     // connect this to RosegardenGUIApp
     void aboutToSaveState();

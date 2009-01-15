@@ -44,7 +44,7 @@
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/TransportDialog.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -1109,7 +1109,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     }
                 }
             } else {
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
 
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
@@ -1130,7 +1130,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
-                        KStartupLogo::hideIfStillThere();
+                        StartupLogo::hideIfStillThere();
                         CurrentProgressDialog::freeze();
 
                         RosegardenGUIApp::self()->awaitDialogClearance();
@@ -1150,7 +1150,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
-                        KStartupLogo::hideIfStillThere();
+                        StartupLogo::hideIfStillThere();
                         CurrentProgressDialog::freeze();
 
                         RosegardenGUIApp::self()->awaitDialogClearance();
@@ -1252,7 +1252,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         (MIDI_OK | VERSION_OK)) return;
 #endif
 
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
     QString text = "";

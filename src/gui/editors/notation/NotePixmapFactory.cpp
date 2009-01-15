@@ -39,7 +39,7 @@
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"
 #include "gui/general/ResourceFinder.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "NotationStrings.h"
 #include "NotationView.h"
 #include "NoteCharacter.h"
@@ -191,7 +191,7 @@ NotePixmapFactory::init(std::string fontName, int size)
     try {
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
-        KStartupLogo::hideIfStillThere();
+        StartupLogo::hideIfStillThere();
         QMessageBox::critical(0, "", i18n( u.getMessage().c_str() )  );
         throw;
     }
