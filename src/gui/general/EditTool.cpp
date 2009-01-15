@@ -132,10 +132,11 @@ void EditTool::createMenu()
 
     if (!createGUI(m_rcFileName)) {
         std::cerr << "EditTool::createMenu(" << m_rcFileName << "): menu creation failed" << std::endl;
+        m_menu = 0;
         return;
     }
 
-    QMenu *menu = findChild<QMenu *>(m_menuName);
+    QMenu *menu = findMenu(m_menuName);
     if (!menu) {
         std::cerr << "EditTool::createMenu(" << m_rcFileName
                   << "): menu name "

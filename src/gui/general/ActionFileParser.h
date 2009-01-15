@@ -29,13 +29,14 @@ class QToolBar;
 
 namespace Rosegarden
 {
-	
+
 class ActionFileParser : public QObject, public QXmlDefaultHandler
 {
     Q_OBJECT
 
 public:
-    ActionFileParser(QWidget *actionOwner);
+    ActionFileParser(QObject *actionOwner);
+    ActionFileParser(QObject *actionOwner, QWidget *menuOwner);
     virtual ~ActionFileParser();
     
     bool load(QString actionRcFile);
@@ -100,7 +101,8 @@ protected:
     StateMap m_stateEnableMap;
     StateMap m_stateDisableMap;
 
-    QWidget *m_actionOwner;
+    QObject *m_actionOwner;
+    QWidget *m_menuOwner;
     bool m_inMenuBar;
     bool m_inText;
     bool m_inEnable;
@@ -110,6 +112,26 @@ protected:
     QString m_currentState;
     QString m_currentText;
     QString m_currentFile;
+};
+
+// A QMenu needs a QWidget as its parent, but the action file client
+// will not necessarily be a QWidget -- for example, it might be a
+// tool object.  In this case, we need to make a menu that has no
+// parent, but we need to wrap it in something that is parented by the
+// action file client so that we can find it later and it shares the
+// scope of the client.  This is that wrapper.
+class ActionFileMenuWrapper : public QObject
+{
+    Q_OBJECT
+
+public:
+    ActionFileMenuWrapper(QMenu *menu, QObject *parent);
+    virtual ~ActionFileMenuWrapper();
+
+    QMenu *getMenu();
+
+private:
+    QMenu *m_menu;
 };
 
 }

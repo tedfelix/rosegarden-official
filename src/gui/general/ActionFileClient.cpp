@@ -101,12 +101,22 @@ ActionFileClient::findMenu(QString menuName)
         std::cerr << "ERROR: ActionFileClient::findMenu: ActionFileClient subclass is not a QObject" << std::endl;
         return 0;
     }
-    QMenu *m = obj->findChild<QMenu *>(menuName);
-    if (!m) {
-        std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
-                  << "\")::findMenu: No such menu as \"" << menuName << "\"" << std::endl;
-        return 0;
-    }
+    QWidget *widget = dynamic_cast<QWidget *>(this);
+    QMenu *m = 0;
+    if (widget) {
+        m = obj->findChild<QMenu *>(menuName);
+        if (!m) {
+            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findMenu: No such menu as \"" << menuName << "\"" << std::endl;
+        }
+    } else {
+        ActionFileMenuWrapper *w = obj->findChild<ActionFileMenuWrapper *>(menuName);
+        if (w) m = w->getMenu();
+        else {
+            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findMenu: No such menu (wrapper) as \"" << menuName << "\"" << std::endl;
+        }
+    }            
     return m;
 }
 
@@ -132,12 +142,12 @@ ActionFileClient::findToolbar(QString toolbarName)
 bool
 ActionFileClient::createGUI(QString rcFileName)
 {
-    QWidget *widg = dynamic_cast<QWidget *>(this);
-    if (!widg) {
-        std::cerr << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QWidget" << std::endl;
+    QObject *obj = dynamic_cast<QObject *>(this);
+    if (!obj) {
+        std::cerr << "ERROR: ActionFileClient::createGUI: ActionFileClient subclass is not a QObject" << std::endl;
         return 0;
     }
-    if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(widg);
+    if (!m_actionFileParser) m_actionFileParser = new ActionFileParser(obj);
     if (!m_actionFileParser->load(rcFileName)) {
         std::cerr << "ActionFileClient::createGUI: ERROR: Failed to load action file" << std::endl;
         return false;

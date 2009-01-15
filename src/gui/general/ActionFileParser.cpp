@@ -38,7 +38,7 @@ using std::endl;
 namespace Rosegarden
 {
    
-ActionFileParser::ActionFileParser(QWidget *actionOwner) :
+ActionFileParser::ActionFileParser(QObject *actionOwner) :
     m_actionOwner(actionOwner)
 {
 }
@@ -307,10 +307,24 @@ ActionFileParser::findGroup(QString groupName)
 QMenu *
 ActionFileParser::findMenu(QString menuName)
 {
-    QMenu *menu = m_actionOwner->findChild<QMenu *>(menuName);
-    if (!menu) {
-        menu = new QMenu(m_actionOwner);
-        menu->setObjectName(menuName);
+    QMenu *menu = 0;
+    QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
+    if (widget) {
+        menu = widget->findChild<QMenu *>(menuName);
+        if (!menu) {
+            menu = new QMenu(widget);
+            menu->setObjectName(menuName);
+        }
+    } else {
+        ActionFileMenuWrapper *ref =
+            m_actionOwner->findChild<ActionFileMenuWrapper *>(menuName);
+        if (ref) {
+            menu = ref->getMenu();
+        } else {
+            menu = new QMenu(0);
+            menu->setObjectName(menuName);
+            new ActionFileMenuWrapper(menu, m_actionOwner);
+        }
     }
     return menu;
 }
@@ -318,13 +332,18 @@ ActionFileParser::findMenu(QString menuName)
 QToolBar *
 ActionFileParser::findToolbar(QString toolbarName)
 {
-    QToolBar *toolbar = m_actionOwner->findChild<QToolBar *>(toolbarName);
+    QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
+    if (!widget) {
+        std::cerr << "ActionFileParser::findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars" << endl;
+        return 0;
+    }
+    QToolBar *toolbar = widget->findChild<QToolBar *>(toolbarName);
     if (!toolbar) {
-        QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+        QMainWindow *mw = dynamic_cast<QMainWindow *>(widget);
         if (mw) {
             toolbar = mw->addToolBar(toolbarName);
         } else {
-            toolbar = new QToolBar(toolbarName, m_actionOwner);
+            toolbar = new QToolBar(toolbarName, widget);
         }
         toolbar->setObjectName(toolbarName);
     }
@@ -536,6 +555,24 @@ ActionFileParser::slotObjectDestroyed()
     QObject *o = sender();
     std::cerr << "WARNING: ActionFileParser::slotObjectDestroyed called, but not yet implemented" << std::endl;
 //!!! remove action from all maps
+}
+
+ActionFileMenuWrapper::ActionFileMenuWrapper(QMenu *menu, QObject *parent) :
+    QObject(parent),
+    m_menu(menu) 
+{
+    setObjectName(menu->objectName());
+}
+
+ActionFileMenuWrapper::~ActionFileMenuWrapper()
+{
+    delete m_menu;
+}
+
+QMenu *
+ActionFileMenuWrapper::getMenu()
+{
+    return m_menu;
 }
 
 }

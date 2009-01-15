@@ -717,11 +717,15 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     slotTestClipboard();
 	
     if (getSegmentsOnlyRestsAndClefs()) {
-        m_selectDefaultNote->setChecked(true);
+        if (!m_selectDefaultNote) {
+            std::cerr << "ERROR: No default note action available" << std::endl;
+        } else {
+            m_selectDefaultNote->trigger();
+        }
         enterActionState("note_insert_tool_current");
     } else {
         QAction *tac = findAction("select");
-        tac->setChecked(true);
+        tac->trigger();
         leaveActionState("note_insert_tool_current");
     }
 
