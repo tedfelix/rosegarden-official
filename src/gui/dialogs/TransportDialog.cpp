@@ -49,6 +49,9 @@
 
 #include <klocale.h>
 
+using std::cerr;
+using std::endl;
+
 
 namespace Rosegarden
 {
@@ -177,12 +180,12 @@ TransportDialog::TransportDialog(QWidget *parent):
             SLOT(slotPanelCloseButtonClicked()));
 
     connect(m_transport->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
-
+/*
     const QPixmap *p = m_transport->PanelOpenButton->pixmap();
     if (p) m_panelOpen = *p;
     p = m_transport->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
-
+*/
     connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
     connect(m_transport->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
 
@@ -193,10 +196,10 @@ TransportDialog::TransportDialog(QWidget *parent):
 
     // and by default we close the lower panel
     //
-    int rfh = m_transport->RecordingFrame->height();
+//    int rfh = m_transport->RecordingFrame->height();
     m_transport->RecordingFrame->hide();
 //    setFixedSize(width(), height() - rfh);
-    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default
     // we hide the small colon pixmaps
@@ -1067,14 +1070,22 @@ TransportDialog::slotPanelOpenButtonClicked()
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
-        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
-        setFixedSize(sizeHint());
+//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        adjustSize();
+        setFixedSize(416, 87);
+        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = false;
     } else {
 //        setFixedSize(width(), height() + rfh);
+        setFixedSize(416, 132);
         m_transport->RecordingFrame->show();
-        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
-        setFixedSize(sizeHint());
+//        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+//        adjustSize();
+        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = true;
     }
 }
@@ -1087,8 +1098,12 @@ TransportDialog::slotPanelCloseButtonClicked()
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
 //        setFixedSize(width(), height() - rfh);
-        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
-        setFixedSize(sizeHint());
+//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        setFixedSize(416, 87);
+//        adjustSize();
+        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = false;
     }
 }

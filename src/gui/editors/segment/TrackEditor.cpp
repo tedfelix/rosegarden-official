@@ -141,6 +141,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                           this);
     grid->addWidget(m_chordNameRuler, 0, 1);
 
+//    m_chordNameRuler->hide();
+
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
                                   RosegardenGUIApp::self(),
@@ -152,6 +154,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_tempoRuler, 1, 1);
 
     m_tempoRuler->connectSignals();
+
+//    m_tempoRuler->hide();
 
     //
     // Top Bar Buttons
@@ -165,6 +169,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
 
     grid->addWidget(m_topStandardRuler, 2, 1);
+
+//    m_topStandardRuler->hide();
 
     //
     // Segment Canvas
@@ -206,9 +212,14 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         m_compositionView, "bottombarbuttons");
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
 
+
+//    m_bottomStandardRuler->hide();
+
     m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
     grid->addWidget(m_compositionView, 3, 1);
+
+//    m_compositionView->hide();
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
@@ -220,6 +231,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_trackButtonScroll = new QDeferScrollView(this);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
+//    m_trackButtonScroll->hide();
+
     int canvasHeight = getTrackCellHeight() *
                        std::max(40u, m_doc->getComposition().getNbTracks());
 
@@ -229,23 +242,24 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       m_showTrackLabels,
                                       canvasHeight,
                                       m_trackButtonScroll->viewport());
-// 	m_trackButtonScroll->addChild(m_trackButtons);
-    
-    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
+//    m_trackButtons->hide();
+    m_trackButtonScroll->addChild(m_trackButtons);
 
-    m_trackButtonScroll->layout()->setMargin(0);
-	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
+//    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
+
+//    m_trackButtonScroll->layout()->setMargin(0);
+//	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
 	
  		m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
      m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
 //	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 //	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	
-//     m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
-	QSizePolicy poli;
-	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
-	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
-	m_trackButtonScroll->setSizePolicy( poli );
+     m_trackButtonScroll->setResizePolicy(Q3ScrollView::AutoOneFit);
+//	QSizePolicy poli;
+//	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
+//	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
+//	m_trackButtonScroll->setSizePolicy( poli );
 	
     m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
                                          m_compositionView->horizontalScrollBar()->height());
@@ -283,7 +297,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
-    connect( dynamic_cast<QObject*>( m_compositionView->verticalScrollBar()), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
@@ -692,10 +706,10 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-//     m_trackButtonScroll->setContentsPos(0, y);
+     m_trackButtonScroll->setContentsPos(0, y);
 	
 // 	ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
-	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
+//	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)

@@ -45,7 +45,7 @@ namespace Rosegarden
  * received it itself.
  *
  * @see TrackEditor
- * @see SegmentCanvas
+ * @see CompositionView
  * @see TrackEditor::m_trackButtonScroll
  */
 class QDeferScrollView : public Q3ScrollView

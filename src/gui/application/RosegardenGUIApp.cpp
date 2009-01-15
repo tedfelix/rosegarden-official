@@ -7666,6 +7666,8 @@ RosegardenGUIApp::awaitDialogClearance()
 
     while (haveDialog) {
 
+        std::cerr << "RosegardenGUIApp::awaitDialogClearance: looping" << std::endl;
+    
         cl = findChildren<QDialog*>();
 
         haveDialog = false;

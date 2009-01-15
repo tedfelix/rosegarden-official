@@ -27,6 +27,7 @@
 #include <QObject>
 #include <QThread>
 
+#define DEBUG_AUDIO_PREVIEW_THREAD 1
 
 namespace Rosegarden
 {
@@ -202,10 +203,6 @@ AudioPreviewThread::requestPreview(const Request &request)
     //     if (!running()) start();
 
 #ifdef DEBUG_AUDIO_PREVIEW_THREAD
-
-    std::cerr << "AudioPreviewThread::requestPreview : thread running : " << running()
-    << " - thread finished : " << finished() << std::endl;
-
     std::cerr << "AudioPreviewThread::requestPreview - token = " << token << std::endl;
 #endif
 

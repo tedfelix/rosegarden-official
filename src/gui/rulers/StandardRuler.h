@@ -77,10 +77,10 @@ signals:
     /// reflected from the loop ruler
     void dragLoopToPosition(timeT);
 
-
+/*
 protected:
     virtual void paintEvent(QPaintEvent *);
-
+*/
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;
@@ -90,7 +90,7 @@ private:
     RosegardenGUIDoc       *m_doc;
     RulerScale *m_rulerScale;
 
-    MarkerRuler *m_hButtonBar;
+    MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
 };
 

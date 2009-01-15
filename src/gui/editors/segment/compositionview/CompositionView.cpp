@@ -298,8 +298,8 @@ void CompositionView::updateSelectionContents()
 
 
     QRect selectionRect = getModel()->getSelectionContentsRect();
-// 	updateContents(selectionRect);
-	update(selectionRect);
+ 	updateContents(selectionRect);
+//	update(selectionRect);
 }
 
 void CompositionView::slotContentsMoving(int x, int y)
