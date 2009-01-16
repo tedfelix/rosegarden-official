@@ -269,9 +269,8 @@ TriggerSegmentManager::slotUpdate()
         if (label == "")
             label = i18n("<no label>");
 
-        QString used = i18np("%2 on 1 track",
-                            "%2 on %1 tracks",
-                            tracks.size(), uses);
+        QString used = QObject::tr("%1 on %n track(s)", "",
+                            tracks.size()).arg(uses);
 
         QString pitch = QString("%1 (%2)")
                         .arg(MidiPitchLabel((*it)->getBasePitch()).getQString())

@@ -2656,7 +2656,7 @@ RosegardenGUIApp::slotSplitSelectionAtTime()
 
     timeT now = m_doc->getComposition().getPosition();
 
-    QString title = QObject::tr("Split %1 Segment(s) at Time", "",
+    QString title = QObject::tr("Split %n Segment(s) at Time", "",
                          selection.size());
 
     TimeDialog dialog(m_view, title,

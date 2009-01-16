@@ -1103,7 +1103,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
 
         int eventsSelected = s->getSegmentEvents().size();
         m_selectionCounter->setText
-        (QObject::tr("  %1 event(s) selected ", "", eventsSelected));
+        (QObject::tr("  %n event(s) selected ", "", eventsSelected));
 
     } else {
         m_selectionCounter->setText(i18n("  No selection "));
@@ -2623,11 +2623,10 @@ MatrixView::updateViewCaption()
 
     } else {
 
-        setCaption(i18np("%2 - 1 Segment - %3",
-                        "%2 - %1 Segments - %3",
-                        m_segments.size(),
-                    getDocument()->getTitle(),
-                    view));
+        setCaption(QObject::tr("%1 - %n Segment(s) - %2", "",
+                        m_segments.size())
+                    .arg(getDocument()->getTitle())
+                    .arg(view));
     }
 }
 

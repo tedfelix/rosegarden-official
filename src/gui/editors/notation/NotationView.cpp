@@ -3440,8 +3440,8 @@ void NotationView::updateViewCaption()
 
     } else {
 
-        setWindowTitle(i18np("%2 - Segment - Notation", "%2 - %1 Segments - Notation", m_segments.size(),
-                    getDocument()->getTitle()));
+        setWindowTitle(QObject::tr("%1 - %n Segment(s) - Notation", "", m_segments.size())
+                    .arg(getDocument()->getTitle()));
 
     }
 }
