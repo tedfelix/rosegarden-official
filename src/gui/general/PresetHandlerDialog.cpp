@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
 
-    This file is Copyright 2006
+    This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
  
     Other copyrights also apply to some parts of this work.  Please
@@ -20,15 +20,13 @@
 
 
 #include "PresetHandlerDialog.h"
-#include <QLayout>
-#include <QApplication>
-
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "CategoryElement.h"
 #include "PresetElement.h"
 #include "PresetGroup.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QDialog>
@@ -39,6 +37,8 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLayout>
+#include <QApplication>
 
 
 namespace Rosegarden
@@ -130,7 +130,7 @@ PresetHandlerDialog::initDialog()
     populateCategoryCombo();
     // try to set to same category used previously
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup( PresetDialogConfigGroup );
 
     m_categoryCombo->setCurrentIndex( settings.value("category_combo_index", 0).toInt() );
 
@@ -139,7 +139,7 @@ PresetHandlerDialog::initDialog()
 
     // try to set to same instrument used previously
 
-    //###settings.beginGroup( GeneralOptionsConfigGroup );
+    //###settings.beginGroup( PresetDialogConfigGroup );
     m_instrumentCombo->setCurrentIndex( settings.value("instrument_combo_index", 0).toInt() );
 
     // set to same player used previously (this one can't fail, unlike the
@@ -278,7 +278,7 @@ void
 PresetHandlerDialog::slotOk()
 {
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup( PresetDialogConfigGroup );
 
     settings.setValue("category_combo_index", m_categoryCombo->currentIndex());
     settings.setValue("instrument_combo_index", m_instrumentCombo->currentIndex());
@@ -290,10 +290,10 @@ PresetHandlerDialog::slotOk()
     else {
         settings.setValue("convert_segments", m_convertSegments->isChecked());
     }
-    
-    QDialog::accept();
 
     settings.endGroup();
+    
+    QDialog::accept();
 }
 
 }

@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
  
-    This file is Copyright 2006
+    This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
@@ -20,8 +20,8 @@
 
 
 #include "PresetElement.h"
-
 #include "misc/Debug.h"
+
 #include <QString>
 
 
