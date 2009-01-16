@@ -17,8 +17,6 @@
 
 
 #include "UseOrnamentDialog.h"
-#include <QLayout>
-#include <QApplication>
 
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
@@ -27,6 +25,7 @@
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QDialog>
@@ -39,6 +38,8 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLayout>
+#include <QApplication>
 
 
 namespace Rosegarden
@@ -261,7 +262,7 @@ UseOrnamentDialog::slotMarkChanged(int i)
 }
 
 void
-UseOrnamentDialog::slotOk()
+UseOrnamentDialog::accept()
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -271,9 +272,9 @@ UseOrnamentDialog::slotOk()
     settings.setValue("useornamentretune", m_retune->isChecked());
     settings.setValue("useornamentlastornament", m_ornament->currentIndex());
 
-    accept();
-
     settings.endGroup();
+
+    QDialog::accept();
 }
 
 }

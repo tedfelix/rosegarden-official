@@ -31,6 +31,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "document/ConfigGroups.h"
+
 #include <QApplication>
 #include <QSettings>
 #include <QDialog>
@@ -111,6 +112,7 @@ EventFilterDialog::initDialog()
     m_notePitchIncludeComboBox->setEditable(false);
     m_notePitchIncludeComboBox->addItem(tr("include"));
     m_notePitchIncludeComboBox->addItem(tr("exclude"));
+
     QSettings settings;
     settings.beginGroup( EventFilterDialogConfigGroup );
 
@@ -122,7 +124,6 @@ EventFilterDialog::initDialog()
     m_noteVelocityIncludeComboBox->addItem(tr("include"));
     m_noteVelocityIncludeComboBox->addItem(tr("exclude"));
 
-    //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_noteVelocityIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("velocityinclude", "0" ) ) );
     noteFrameLayout->addWidget(m_noteVelocityIncludeComboBox, 2, 0);
 
@@ -131,7 +132,6 @@ EventFilterDialog::initDialog()
     m_noteDurationIncludeComboBox->addItem(tr("include"));
     m_noteDurationIncludeComboBox->addItem(tr("exclude"));
 
-    //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_noteDurationIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("durationinclude", "0" ) ) );
     noteFrameLayout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
 
@@ -139,7 +139,6 @@ EventFilterDialog::initDialog()
     m_pitchFromSpinBox = new QSpinBox(noteFrame);
     m_pitchFromSpinBox->setMaximum(127);
 
-    //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_pitchFromSpinBox->setValue( settings.value("pitchfrom", 0).toUInt() );
     noteFrameLayout->addWidget(m_pitchFromSpinBox, 1, 2);
     connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
@@ -158,8 +157,6 @@ EventFilterDialog::initDialog()
     m_pitchToSpinBox = new QSpinBox(noteFrame);
     m_pitchToSpinBox->setMaximum(127);
 
-    //### settings.beginGroup( EventFilterDialogConfigGroup );
-
     m_pitchToSpinBox->setValue( settings.value("pitchto", 127).toUInt() );
     noteFrameLayout->addWidget(m_pitchToSpinBox, 1, 4);
     connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
@@ -175,7 +172,6 @@ EventFilterDialog::initDialog()
     m_velocityFromSpinBox = new QSpinBox(noteFrame);
     m_velocityFromSpinBox->setMaximum(127);
 
-    //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_velocityFromSpinBox->setValue( settings.value("velocityfrom", 0).toUInt() );
     noteFrameLayout->addWidget(m_velocityFromSpinBox, 2, 2);
     connect(m_velocityFromSpinBox, SIGNAL(valueChanged(int)),
@@ -184,7 +180,6 @@ EventFilterDialog::initDialog()
     m_velocityToSpinBox = new QSpinBox(noteFrame);
     m_velocityToSpinBox->setMaximum(127);
 
-    //###settings.beginGroup( EventFilterDialogConfigGroup );
     m_velocityToSpinBox->setValue( settings.value("velocityto", 127).toUInt() );
     noteFrameLayout->addWidget( m_velocityToSpinBox, 2, 4 );
     connect(m_velocityToSpinBox, SIGNAL(valueChanged(int)),
@@ -295,7 +290,7 @@ EventFilterDialog::slotToggleNone()
 }
 
 void
-EventFilterDialog::slotOk()
+EventFilterDialog::accept()
 {
     QSettings settings;
     settings.beginGroup( EventFilterDialogConfigGroup );
@@ -312,9 +307,9 @@ EventFilterDialog::slotOk()
     settings.setValue("durationfrom", m_noteDurationFromComboBox->currentIndex());
     settings.setValue("durationto", m_noteDurationToComboBox->currentIndex());
 
-    accept();
-
     settings.endGroup();
+
+    QDialog::accept();
 }
 
 void

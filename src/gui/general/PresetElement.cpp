@@ -24,6 +24,7 @@
 
 #include <QString>
 
+//#define DEBUG_CATEGORIES
 
 namespace Rosegarden
 {
@@ -43,6 +44,7 @@ PresetElement::PresetElement(QString name,
         m_highPro (highPro),
         m_lowPro (lowPro)
 {
+#ifdef DEBUG_CATEGORIES
     RG_DEBUG << "PresetElement::PresetElement(" << endl
     << "    name = " << name << endl
     << "    clef = " << clef << endl
@@ -51,6 +53,7 @@ PresetElement::PresetElement(QString name,
     << "    lowA = " << lowAm << endl
     << "    higP = " << highPro << endl
     << "    lowP = " << lowPro << ")" << endl;
+#endif
 }
 
 PresetElement::~PresetElement()

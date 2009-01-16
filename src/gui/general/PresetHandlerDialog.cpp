@@ -40,7 +40,7 @@
 #include <QLayout>
 #include <QApplication>
 
-// #define DEBUG_XML
+// #define DEBUG_CATEGORIES
 
 namespace Rosegarden
 {
@@ -249,7 +249,7 @@ PresetHandlerDialog::populateCategoryCombo()
     for (CategoriesContainer::iterator i = m_categories.begin();
             i != m_categories.end(); ++i) {
 
-#ifdef DEBUG_XML
+#ifdef DEBUG_CATEGORIES
         RG_DEBUG << "    adding category: " << (*i).getName() << endl;
 #endif
 
@@ -270,7 +270,7 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
     for (ElementContainer::iterator i = c.begin();
             i != c.end(); ++i) {
 
-#ifdef DEBUG_XML
+#ifdef DEBUG_CATEGORIES
         RG_DEBUG << "    adding instrument: " << (*i).getName() << endl;
 #endif
 
@@ -280,8 +280,10 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
 }
 
 void
-PresetHandlerDialog::slotOk()
+PresetHandlerDialog::accept()
 {
+    RG_DEBUG << "PresetHandlerDialog::accept()" << endl;
+
     QSettings settings;
     settings.beginGroup( PresetDialogConfigGroup );
 

@@ -35,6 +35,7 @@
 #include <QString>
 #include <QLocale>
 
+//#define DEBUG_CATEGORIES
 
 namespace Rosegarden
 {
@@ -131,8 +132,10 @@ PresetGroup::startElement(const QString &, const QString &,
             m_lastInstrument = -1;
             m_currentInstrument = -1;
 
+#ifdef DEBUG_CATEGORIES
             RG_DEBUG << "PresetGroup::startElement: adding category " << m_elCategoryName << " last: "
             << m_lastCategory << " curr: " << m_currentCategory << endl;
+#endif
 
             // add new CategoryElement to m_categories, in order to contain
             // subsequent PresetElements

@@ -52,7 +52,7 @@ public:
     std::string getTimeAdjust() const;
 
 public slots:
-    void slotOk();
+    void accept();
     void slotMarkChanged(int);
 
 protected:

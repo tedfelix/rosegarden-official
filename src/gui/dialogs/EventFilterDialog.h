@@ -111,8 +111,8 @@ protected slots:
     // set widget values to include nothing
     void slotToggleNone();
 
-    // write out settings to kconfig data for next time and call accept()
-    virtual void slotOk();
+    // write out settings to QSettings data for next time
+    virtual void accept();
 
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);
