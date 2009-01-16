@@ -102,11 +102,14 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 	this->setAttribute( Qt::WA_DeleteOnClose );
 
     QWidget *box = new QWidget(this);
-    QVBoxLayout *boxLayout = new QVBoxLayout;
+    QVBoxLayout *boxLayout = new QVBoxLayout(this);
+	box->setLayout(boxLayout);
+	//setLayout( boxLayout );
+	
     setCentralWidget(box);
     boxLayout->setMargin(10);
     boxLayout->setSpacing(5);
-
+	
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     m_fileList = new AudioListView( box );
@@ -118,7 +121,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     m_wrongSampleRates = new QLabel( "...or adjusting the sample rate of the JACK server.", box );	//### FIX: text was cut
     boxLayout->addWidget(m_wrongSampleRates);
-    box->setLayout(boxLayout);
     m_wrongSampleRates->hide();
 
     createAction("add_audio", SLOT(slotAdd()));
@@ -152,6 +154,9 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 	m_fileList->setColumnCount(7);
 	m_fileList->setHeaderItem( new QTreeWidgetItem( sl ) );
 	
+	//m_fileList->sortByColumn ( int column=1, Qt::AscendingOrder );
+	m_fileList->setSortingEnabled( true );
+	
 	/*
 	//&&& table widget - column alignment
     m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
@@ -173,24 +178,38 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // show tooltips when columns are partially hidden
 //    m_fileList->setShowToolTips(true);
 
-    // connect selection mechanism
-    connect(m_fileList, SIGNAL(selectionChanged(QTreeWidgetItem*)),
-            SLOT(slotSelectionChanged(QTreeWidgetItem*)));
-
+	
+	
+// 	old: 
+//    connect(m_fileList, SIGNAL(selectionChanged(QTreeWidgetItem*)),
+//             SLOT(slotSelectionChanged(QTreeWidgetItem*)));
+	//
+	// connect selection mechanism
+	connect( m_fileList, SIGNAL(itemSelectionChanged()),
+			this, SLOT(slotSelectionChanged()) );
+	
+	
+	// not really used:
+	//connect( m_fileList, SIGNAL(currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)), this, SLOT(slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)) );
+	
+	
+// // 	connect( m_fileList, SIGNAL(itemActivated ( QTreeWidgetItem * item, int column )), this, SLOT(slotFileItemActivated()) );
+	
+	
+	//### TODO: Fix drag n drop
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
-    // setup local shortcuts
-    //
-	m_shortcuts = new QShortcut( QKeySequence(Qt::Key_Delete), dynamic_cast<QWidget*>(this));
+	//
+	// setup local shortcuts
+	 //
 
     // delete
     //
-//    m_shortcuts->connectItem(m_shortcuts->addItem( Qt::Key_Delete ),
- //                               this,
-   //                             SLOT(slotRemove()));
+	m_shortcuts = new QShortcut( QKeySequence(Qt::Key_Delete), this );
 	connect( m_shortcuts, SIGNAL(activated()), this, SLOT(slotRemove()) );
-
+	
+	
     slotPopulateFileList();
 
     // Connect command history for updates
@@ -213,6 +232,14 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     updateActionState(false);
 }
+
+
+
+void slotFileItemActivated(){
+	
+	return;
+}
+
 
 AudioManagerDialog::~AudioManagerDialog()
 {
@@ -443,8 +470,9 @@ AudioManagerDialog::getCurrentSelection()
     // try and get the selected item
 	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
 	if (til.isEmpty()){
-		QMessageBox::warning
-				(this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+		//QMessageBox::warning
+		//		(this, "Error: Selection is empty!", 
+		//		tr("Please select an audio item in the list!"), QMessageBox::Yes );
 		return 0;
 	}
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -939,15 +967,38 @@ AudioManagerDialog::slotRename()
     slotPopulateFileList();
 }
 
-void
-AudioManagerDialog::slotSelectionChanged(QTreeWidgetItem *item)
-{
-    AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
+/*
+void AudioManagerDialog::slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
+{
+	//std::cerr << "Warning: AudioManagerDialog::slotItemChanged not implemented" << std::endl;
+	return;
+}
+*/
+
+//void AudioManagerDialog::slotSelectionChanged(QTreeWidgetItem *item)
+void AudioManagerDialog::slotSelectionChanged()
+{
+	AudioListItem *aItem = 0;
+    //AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+	
+	QList<QTreeWidgetItem *> itemsx = m_fileList->selectedItems();
+	if( itemsx.count() > 0 ){
+		aItem = dynamic_cast<AudioListItem*>( itemsx.at(0) );
+	}
+	
+	// en/disable Actions
+	//QAction *ea = findAction("export_audio");
+	//if( ea ) ea->setEnabled("false");
+	
     // If we're on a segment then send a "select" signal
     // and enable appropriate buttons.
     //
     if (aItem && aItem->getSegment()) {
+		
+		//### required to enable it? 
+		//if( ea ) ea->setEnabled("true");
+		
         SegmentSelection selection;
         selection.insert(aItem->getSegment());
         emit segmentsSelected(selection);

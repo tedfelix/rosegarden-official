@@ -101,9 +101,12 @@ public slots:
     void slotRemoveAllUnused();
     void slotDeleteUnused();
     void slotExportAudio();
-
+	
+	//void slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+	
     // get selection
-    void slotSelectionChanged(QTreeWidgetItem *);
+	void slotSelectionChanged();
+//	void slotSelectionChanged(QTreeWidgetItem *);
 
     // Repopulate
     //

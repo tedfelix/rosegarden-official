@@ -1,11 +1,11 @@
 
 # These paths set up for Ubuntu 8.04 with kdelibs5-dev and qt4-dev.
 
-KDEDIR		= /usr
+#KDEDIR		= /usr
 QTDIR		= /usr
 
-KDEINC		= $(KDEDIR)/lib/kde4/include
-KDELIB		= $(KDEDIR)/lib/kde4/lib
+#KDEINC		= $(KDEDIR)/lib/kde4/include
+#KDELIB		= $(KDEDIR)/lib/kde4/lib
 
 QTINC		= $(QTDIR)/include/qt4
 QTLIB		= $(QTDIR)/lib
@@ -31,19 +31,22 @@ INCLUDES	= \
 		-I$(QTINC)/QtXml \
 		-I$(QTINC)/QtNetwork \
 		-I$(QTINC) \
-		-I$(KDEINC) \
 		-I$(CCDIR)/include \
 		-I/usr/local/include \
 		-I/usr/include/freetype2 \
                 -Isrc/base \
 		-Isrc
+#		-I$(KDEINC)
+
 
 LDLIBS		= \
-		-L$(KDELIB) \
 		-L$(CCDIR)/lib \
 		-L$(QTLIB) \
-		-lkdeui -lkdecore -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
 		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
+#		-L$(KDELIB) \
+#		-lkdeui -lkdecore \
+
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
