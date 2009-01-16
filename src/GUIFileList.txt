@@ -910,6 +910,8 @@ SET(gui_SRCS
 	gui/widgets/DiatonicPitchChooser.h
 	gui/widgets/Fader.cpp
 	gui/widgets/Fader.h
+	gui/widgets/FontRequester.cpp
+	gui/widgets/FontRequester.h
 	gui/widgets/StartupLogo.cpp
 	gui/widgets/StartupLogo.h
 	gui/widgets/Label.cpp

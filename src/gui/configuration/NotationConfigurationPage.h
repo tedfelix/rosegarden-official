@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -31,13 +30,13 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QCheckBox;
-class KFontRequester;
 
 
 namespace Rosegarden
 {
 
 class QuantizeParameters;
+class FontRequester;
 
 
 /**
@@ -69,9 +68,9 @@ protected:
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
-    KFontRequester* m_textFont;
-    KFontRequester* m_sansFont;
-    KFontRequester* m_timeSigFont;
+    FontRequester* m_textFont;
+    FontRequester* m_sansFont;
+    FontRequester* m_timeSigFont;
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;

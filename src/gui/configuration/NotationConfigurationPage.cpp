@@ -35,10 +35,10 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "gui/widgets/QuantizeParameters.h"
+#include "gui/widgets/FontRequester.h"
 #include "TabbedConfigurationPage.h"
 #include <QComboBox>
 #include <QSettings>
-#include <kfontrequester.h>
 #include <QMessageBox>
 #include <QCheckBox>
 #include <QComboBox>
@@ -540,7 +540,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
 
     layout->addWidget
         (new QLabel(QObject::tr("Text font"), frame), row, 0);
-    m_textFont = new KFontRequester(frame);
+    m_textFont = new FontRequester(frame);
     QFont textFont = defaultTextFont;
     QVariant fv = settings.value("textfont", textFont);
     if (fv.canConvert(QVariant::Font)) textFont = fv.value<QFont>();
@@ -550,7 +550,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
 
     layout->addWidget
         (new QLabel(QObject::tr("Sans-serif font"), frame), row, 0);
-    m_sansFont = new KFontRequester(frame);
+    m_sansFont = new FontRequester(frame);
     QFont sansFont = defaultTextFont;
     fv = settings.value("sansfont", sansFont);
     if (fv.canConvert(QVariant::Font)) sansFont = fv.value<QFont>();
@@ -564,7 +564,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
 
     layout->addWidget
         (new QLabel(QObject::tr("Time Signature font"), frame), row, 0);
-    m_timeSigFont = new KFontRequester(frame);
+    m_timeSigFont = new FontRequester(frame);
     QFont timeSigFont = settings->readFontEntry("timesigfont", &defaultTimeSigFont);
     m_timeSigFont->setFont(timeSigFont);
     layout->addWidget(m_timeSigFont, row, 1, row- row+1, 3);

@@ -359,21 +359,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 	// start of docking code 
 	this->setDockOptions( // QMainWindow::AllowNestedDocks // not required with ::ForceTabbedDocks
 							QMainWindow::AnimatedDocks
-							|QMainWindow::ForceTabbedDocks
+//							|QMainWindow::ForceTabbedDocks
 							//|QMainWindow::VerticalTabs
 						);
 	
 
 
-/*&&& cc removing all fancy options in docking code to see if it works then!
-	m_dockLeft->setFeatures( QDockWidget::DockWidgetMovable
-			| QDockWidget::DockWidgetMovable
-			| QDockWidget::DockWidgetFloatable
-			| QDockWidget::DockWidgetVerticalTitleBar
-			//| QDockWidget::DockWidgetClosable
-                        );
-*/
-	
 	
 	
 /*
@@ -394,17 +385,24 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse
 
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
-/*&&&
+
     m_dockLeft = new QDockWidget(QObject::tr("Special Parameters"), this);
     m_dockLeft->setMinimumSize( 180, 200 );	//### fix arbitrary value for min-size
     addDockWidget(Qt::LeftDockWidgetArea, m_dockLeft);
 
+	m_dockLeft->setFeatures( QDockWidget::DockWidgetMovable
+			| QDockWidget::DockWidgetFloatable
+//			| QDockWidget::DockWidgetVerticalTitleBar
+			| QDockWidget::DockWidgetClosable
+                        );
+	
+
     m_parameterArea = new RosegardenParameterArea(m_dockLeft, "Rosegarden Parameter Area");
     m_dockLeft->setWidget(m_parameterArea);
-*/
+
     // Populate the parameter-box area with the respective
     // parameter box widgets.
-
+/*@@@
     QDockWidget *dw = new QDockWidget(QObject::tr("Segment Parameters"), this);
     m_segmentParameterBox = new SegmentParameterBox(doc, dw);
     dw->setWidget(m_segmentParameterBox);
@@ -420,10 +418,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_instrumentParameterBox = new InstrumentParameterBox(doc, dw);
     dw->setWidget(m_instrumentParameterBox);
     addDockWidget(Qt::LeftDockWidgetArea, dw);
-
-/*@@@
-
-  note: m_dockLeft and m_parameterArea are not currently used at all
+*/
 
     m_segmentParameterBox = new SegmentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_segmentParameterBox);
@@ -431,8 +426,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
-*/
-    m_instrumentParameterBox = new InstrumentParameterBox(doc, 0);
+
+//    m_instrumentParameterBox = new InstrumentParameterBox(doc, 0);
 //    m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
 
     // Lookup the configuration parameter that specifies the default

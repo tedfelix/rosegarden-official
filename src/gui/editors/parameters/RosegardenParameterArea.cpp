@@ -55,8 +55,8 @@ RosegardenParameterArea::RosegardenParameterArea(
         m_spacing(0)
 {
 	setObjectName( name );
-	/*!!!
     m_classic->setLayout(m_classicLayout);
+	/*!!!
 	m_scrollView->setWidget(m_classic);
 	
 	m_scrollView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -71,15 +71,15 @@ RosegardenParameterArea::RosegardenParameterArea(
     m_scrollView->addChild(m_classic);
     m_scrollView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
     m_scrollView->setVScrollBarMode(Q3ScrollView::Auto);
-//    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
+    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
 
 	
 	// add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-//	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
+	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
-//	addWidget(m_tabBox); //, TAB_BOX_STYLE);
+	addWidget(m_tabBox); //, TAB_BOX_STYLE);
 
 }
 
@@ -120,6 +120,8 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     box->setFont( f );
     m_groupBoxes.push_back(box);
 
+    box->layout()->addWidget(b);
+
     if (m_spacing)
         delete m_spacing;
     m_spacing = new QFrame(m_classic);
@@ -129,12 +131,12 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // Add the parameter box to the current container of the displayed
     // widgets, unless the current container has been set up yet.
 
-    if (m_active)
-        moveWidget(0, m_active, b);
+//    if (m_active)
+//        moveWidget(0, m_active, b);
 
     // Queue a redisplay of the parameter area, to incorporate the new box.
 
-    update();
+//    update();
 }
 
 void RosegardenParameterArea::setArrangement(Arrangement style)

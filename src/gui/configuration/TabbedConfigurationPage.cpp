@@ -48,7 +48,8 @@ TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent,
 
 void TabbedConfigurationPage::init()
 {
-    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+//@@@    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+    QVBoxLayout *vlay = new QVBoxLayout(this);
     m_tabWidget = new QTabWidget(this);
     vlay->addWidget(m_tabWidget);
 }
