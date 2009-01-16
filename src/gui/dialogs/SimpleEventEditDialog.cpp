@@ -63,7 +63,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(i18n(inserting ? "Insert Event" : "Edit Event"));
+    setWindowTitle(QObject::tr(inserting ? "Insert Event" : "Edit Event"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -72,13 +72,13 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *frame = new QGroupBox( i18n("Event Properties"), vbox );
+    QGroupBox *frame = new QGroupBox( QObject::tr("Event Properties"), vbox );
     frame->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
     vboxLayout->addWidget(frame);
 
-    layout->addWidget(new QLabel(i18n("Event type:"), frame), 0, 0);
+    layout->addWidget(new QLabel(QObject::tr("Event type:"), frame), 0, 0);
 
     if (inserting) {
 
@@ -114,7 +114,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
         layout->addWidget(m_typeLabel, 0, 1);
     }
 
-    m_timeLabel = new QLabel(i18n("Absolute time:"), frame);
+    m_timeLabel = new QLabel(QObject::tr("Absolute time:"), frame);
     layout->addWidget(m_timeLabel, 1, 0);
     m_timeSpinBox = new QSpinBox(frame);
     m_timeSpinBox->setMinimum(INT_MIN);
@@ -129,7 +129,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_timeEditButton, SIGNAL(released()),
             SLOT(slotEditAbsoluteTime()));
 
-    m_durationLabel = new QLabel(i18n("Duration:"), frame);
+    m_durationLabel = new QLabel(QObject::tr("Duration:"), frame);
     layout->addWidget(m_durationLabel, 2, 0);
     m_durationSpinBox = new QSpinBox(frame);
     m_durationSpinBox->setMinimum(0);
@@ -144,7 +144,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_durationEditButton, SIGNAL(released()),
             SLOT(slotEditDuration()));
 
-    m_pitchLabel = new QLabel(i18n("Pitch:"), frame);
+    m_pitchLabel = new QLabel(QObject::tr("Pitch:"), frame);
     layout->addWidget(m_pitchLabel, 3, 0);
     m_pitchSpinBox = new QSpinBox(frame);
     m_pitchEditButton = new QPushButton("edit", frame);
@@ -159,14 +159,14 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
 
-    m_controllerLabel = new QLabel(i18n("Controller name:"), frame);
-    m_controllerLabelValue = new QLabel(i18n("<none>"), frame);
+    m_controllerLabel = new QLabel(QObject::tr("Controller name:"), frame);
+    m_controllerLabelValue = new QLabel(QObject::tr("<none>"), frame);
     m_controllerLabelValue->setAlignment( Qt::AlignRight );
 
     layout->addWidget(m_controllerLabel, 4, 0);
     layout->addWidget(m_controllerLabelValue, 4, 1);
 
-    m_velocityLabel = new QLabel(i18n("Velocity:"), frame);
+    m_velocityLabel = new QLabel(QObject::tr("Velocity:"), frame);
     layout->addWidget(m_velocityLabel, 5, 0);
     m_velocitySpinBox = new QSpinBox(frame);
     layout->addWidget(m_velocitySpinBox, 5, 1);
@@ -177,14 +177,14 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     m_velocitySpinBox->setMinimum(MidiMinValue);
     m_velocitySpinBox->setMaximum(MidiMaxValue);
 
-    m_metaLabel = new QLabel(i18n("Meta string:"), frame);
+    m_metaLabel = new QLabel(QObject::tr("Meta string:"), frame);
     layout->addWidget(m_metaLabel, 6, 0);
     m_metaEdit = new QLineEdit(frame);
     layout->addWidget(m_metaEdit, 6, 1);
 
-    m_sysexLoadButton = new QPushButton(i18n("Load data"), frame);
+    m_sysexLoadButton = new QPushButton(QObject::tr("Load data"), frame);
     layout->addWidget(m_sysexLoadButton, 6, 2);
-    m_sysexSaveButton = new QPushButton(i18n("Save data"), frame);
+    m_sysexSaveButton = new QPushButton(QObject::tr("Save data"), frame);
     layout->addWidget(m_sysexSaveButton, 4, 2);
 
     frame->setLayout(layout);
@@ -196,21 +196,21 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_sysexSaveButton, SIGNAL(released()),
             SLOT(slotSysexSave()));
 
-    m_notationGroupBox = new QGroupBox( i18n("Notation Properties"), vbox );
+    m_notationGroupBox = new QGroupBox( QObject::tr("Notation Properties"), vbox );
     m_notationGroupBox->setContentsMargins(5, 5, 5, 5);
     layout = new QGridLayout(m_notationGroupBox);
     layout->setSpacing(5);
     vboxLayout->addWidget(m_notationGroupBox);
     vbox->setLayout(vboxLayout);
 
-    m_lockNotationValues = new QCheckBox(i18n("Lock to changes in performed values"), m_notationGroupBox);
+    m_lockNotationValues = new QCheckBox(QObject::tr("Lock to changes in performed values"), m_notationGroupBox);
     layout->addWidget(m_lockNotationValues, 0, 0, 0- 0+1, 2-0+ 1);
     m_lockNotationValues->setChecked(true);
 
     connect(m_lockNotationValues, SIGNAL(released()),
             SLOT(slotLockNotationChanged()));
 
-    m_notationTimeLabel = new QLabel(i18n("Notation time:"), m_notationGroupBox);
+    m_notationTimeLabel = new QLabel(QObject::tr("Notation time:"), m_notationGroupBox);
     layout->addWidget(m_notationTimeLabel, 1, 0);
     m_notationTimeSpinBox = new QSpinBox(m_notationGroupBox);
     m_notationTimeSpinBox->setMinimum(INT_MIN);
@@ -225,7 +225,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
     connect(m_notationTimeEditButton, SIGNAL(released()),
             SLOT(slotEditNotationAbsoluteTime()));
 
-    m_notationDurationLabel = new QLabel(i18n("Notation duration:"), m_notationGroupBox);
+    m_notationDurationLabel = new QLabel(QObject::tr("Notation duration:"), m_notationGroupBox);
     layout->addWidget(m_notationDurationLabel, 2, 0);
     m_notationDurationSpinBox = new QSpinBox(m_notationGroupBox);
     m_notationDurationSpinBox->setMinimum(0);
@@ -272,13 +272,13 @@ SimpleEventEditDialog::setupForEvent()
 
     // Some common settings
     //
-    m_durationLabel->setText(i18n("Absolute time:"));
+    m_durationLabel->setText(QObject::tr("Absolute time:"));
     m_timeLabel->show();
     m_timeSpinBox->show();
     m_timeEditButton->show();
     m_timeSpinBox->setValue(m_event.getAbsoluteTime());
 
-    m_durationLabel->setText(i18n("Duration:"));
+    m_durationLabel->setText(QObject::tr("Duration:"));
     m_durationLabel->show();
     m_durationSpinBox->show();
     m_durationEditButton->show();
@@ -304,7 +304,7 @@ SimpleEventEditDialog::setupForEvent()
         m_notationDurationSpinBox->setValue(m_notationDuration);
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Note pitch:"));
+        m_pitchLabel->setText(QObject::tr("Note pitch:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->show();
 
@@ -312,7 +312,7 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabelValue->hide();
 
         m_velocityLabel->show();
-        m_velocityLabel->setText(i18n("Note velocity:"));
+        m_velocityLabel->setText(QObject::tr("Note velocity:"));
         m_velocitySpinBox->show();
 
         m_metaLabel->hide();
@@ -340,16 +340,16 @@ SimpleEventEditDialog::setupForEvent()
         m_durationEditButton->hide();
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Controller number:"));
+        m_pitchLabel->setText(QObject::tr("Controller number:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->hide();
 
         m_controllerLabel->show();
         m_controllerLabelValue->show();
-        m_controllerLabel->setText(i18n("Controller name:"));
+        m_controllerLabel->setText(QObject::tr("Controller name:"));
 
         m_velocityLabel->show();
-        m_velocityLabel->setText(i18n("Controller value:"));
+        m_velocityLabel->setText(QObject::tr("Controller value:"));
         m_velocitySpinBox->show();
 
         m_metaLabel->hide();
@@ -379,7 +379,7 @@ SimpleEventEditDialog::setupForEvent()
         m_durationEditButton->hide();
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Key pitch:"));
+        m_pitchLabel->setText(QObject::tr("Key pitch:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->show();
 
@@ -387,7 +387,7 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabelValue->hide();
 
         m_velocityLabel->show();
-        m_velocityLabel->setText(i18n("Key pressure:"));
+        m_velocityLabel->setText(QObject::tr("Key pressure:"));
         m_velocitySpinBox->show();
 
         m_metaLabel->hide();
@@ -417,7 +417,7 @@ SimpleEventEditDialog::setupForEvent()
         m_durationEditButton->hide();
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Channel pressure:"));
+        m_pitchLabel->setText(QObject::tr("Channel pressure:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->hide();
 
@@ -450,7 +450,7 @@ SimpleEventEditDialog::setupForEvent()
         m_pitchSpinBox->setMaximum(MidiMaxValue + 1);
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Program change:"));
+        m_pitchLabel->setText(QObject::tr("Program change:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->hide();
 
@@ -495,8 +495,8 @@ SimpleEventEditDialog::setupForEvent()
         m_sysexLoadButton->show();
         m_sysexSaveButton->show();
 
-        m_controllerLabel->setText(i18n("Data length:"));
-        m_metaLabel->setText(i18n("Data:"));
+        m_controllerLabel->setText(QObject::tr("Data length:"));
+        m_metaLabel->setText(QObject::tr("Data:"));
         try {
             SystemExclusive sysEx(m_event);
             m_controllerLabelValue->setText(QString("%1").
@@ -516,7 +516,7 @@ SimpleEventEditDialog::setupForEvent()
         m_durationEditButton->hide();
 
         m_pitchLabel->show();
-        m_pitchLabel->setText(i18n("Pitchbend MSB:"));
+        m_pitchLabel->setText(QObject::tr("Pitchbend MSB:"));
         m_pitchSpinBox->show();
         m_pitchEditButton->hide();
 
@@ -524,7 +524,7 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabelValue->hide();
 
         m_velocityLabel->show();
-        m_velocityLabel->setText(i18n("Pitchbend LSB:"));
+        m_velocityLabel->setText(QObject::tr("Pitchbend LSB:"));
         m_velocitySpinBox->show();
 
         m_metaLabel->hide();
@@ -561,14 +561,14 @@ SimpleEventEditDialog::setupForEvent()
 
         m_metaLabel->show();
         m_metaEdit->show();
-        m_metaLabel->setText(i18n("Indication:"));
+        m_metaLabel->setText(QObject::tr("Indication:"));
 
         try {
             Indication ind(m_event);
             m_metaEdit->setText(strtoqstr(ind.getIndicationType()));
             m_durationSpinBox->setValue(ind.getIndicationDuration());
         } catch (...) {
-            m_metaEdit->setText(i18n("<none>"));
+            m_metaEdit->setText(QObject::tr("<none>"));
         }
 
         if (m_typeCombo)
@@ -593,8 +593,8 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->show();
         m_metaEdit->show();
 
-        m_controllerLabel->setText(i18n("Text type:"));
-        m_metaLabel->setText(i18n("Text:"));
+        m_controllerLabel->setText(QObject::tr("Text type:"));
+        m_metaLabel->setText(QObject::tr("Text:"));
 
         // get the text event
         try {
@@ -602,8 +602,8 @@ SimpleEventEditDialog::setupForEvent()
             m_controllerLabelValue->setText(strtoqstr(text.getTextType()));
             m_metaEdit->setText(strtoqstr(text.getText()));
         } catch (...) {
-            m_controllerLabelValue->setText(i18n("<none>"));
-            m_metaEdit->setText(i18n("<none>"));
+            m_controllerLabelValue->setText(QObject::tr("<none>"));
+            m_metaEdit->setText(QObject::tr("<none>"));
         }
 
         if (m_typeCombo)
@@ -640,13 +640,13 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabel->show();
         m_controllerLabelValue->show();
 
-        m_controllerLabel->setText(i18n("Clef type:"));
+        m_controllerLabel->setText(QObject::tr("Clef type:"));
 
         try {
             Clef clef(m_event);
             m_controllerLabelValue->setText(strtoqstr(clef.getClefType()));
         } catch (...) {
-            m_controllerLabelValue->setText(i18n("<none>"));
+            m_controllerLabelValue->setText(QObject::tr("<none>"));
         }
 
         m_velocityLabel->hide();
@@ -671,13 +671,13 @@ SimpleEventEditDialog::setupForEvent()
         m_controllerLabel->show();
         m_controllerLabelValue->show();
 
-        m_controllerLabel->setText(i18n("Key name:"));
+        m_controllerLabel->setText(QObject::tr("Key name:"));
 
         try {
             ::Rosegarden::Key key(m_event);
             m_controllerLabelValue->setText(strtoqstr(key.getName()));
         } catch (...) {
-            m_controllerLabelValue->setText(i18n("<none>"));
+            m_controllerLabelValue->setText(QObject::tr("<none>"));
         }
 
         m_velocityLabel->hide();
@@ -708,15 +708,15 @@ SimpleEventEditDialog::setupForEvent()
         m_metaLabel->hide();
         m_metaEdit->hide();
 
-        // m_controllerLabel->setText(i18n("Text type:"));
-        // m_metaLabel->setText(i18n("Chord:"));
+        // m_controllerLabel->setText(QObject::tr("Text type:"));
+        // m_metaLabel->setText(QObject::tr("Chord:"));
 
         // get the fingering event
         try {
             Guitar::Chord chord( m_event );
         } catch (...) {
-            // m_controllerLabelValue->setText(i18n("<none>"));
-            // m_metaEdit->setText(i18n("<none>"));
+            // m_controllerLabelValue->setText(QObject::tr("<none>"));
+            // m_metaEdit->setText(QObject::tr("<none>"));
         }
 
         if (m_typeCombo)
@@ -724,7 +724,7 @@ SimpleEventEditDialog::setupForEvent()
 
     } else {
 
-        m_durationLabel->setText(i18n("Unsupported event type:"));
+        m_durationLabel->setText(QObject::tr("Unsupported event type:"));
         m_durationLabel->show();
         m_durationSpinBox->hide();
         m_durationEditButton->hide();
@@ -981,7 +981,7 @@ SimpleEventEditDialog::slotLockNotationChanged()
 void
 SimpleEventEditDialog::slotEditAbsoluteTime()
 {
-    TimeDialog dialog(this, i18n("Edit Event Time"),
+    TimeDialog dialog(this, QObject::tr("Edit Event Time"),
                       &m_doc->getComposition(),
                       m_timeSpinBox->value(),
                       true);
@@ -993,7 +993,7 @@ SimpleEventEditDialog::slotEditAbsoluteTime()
 void
 SimpleEventEditDialog::slotEditNotationAbsoluteTime()
 {
-    TimeDialog dialog(this, i18n("Edit Event Notation Time"),
+    TimeDialog dialog(this, QObject::tr("Edit Event Notation Time"),
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
                       true);
@@ -1005,7 +1005,7 @@ SimpleEventEditDialog::slotEditNotationAbsoluteTime()
 void
 SimpleEventEditDialog::slotEditDuration()
 {
-    TimeDialog dialog(this, i18n("Edit Duration"),
+    TimeDialog dialog(this, QObject::tr("Edit Duration"),
                       &m_doc->getComposition(),
                       m_timeSpinBox->value(),
                       m_durationSpinBox->value(),
@@ -1018,7 +1018,7 @@ SimpleEventEditDialog::slotEditDuration()
 void
 SimpleEventEditDialog::slotEditNotationDuration()
 {
-    TimeDialog dialog(this, i18n("Edit Notation Duration"),
+    TimeDialog dialog(this, QObject::tr("Edit Notation Duration"),
                       &m_doc->getComposition(),
                       m_notationTimeSpinBox->value(),
                       m_notationDurationSpinBox->value(),
@@ -1031,7 +1031,7 @@ SimpleEventEditDialog::slotEditNotationDuration()
 void
 SimpleEventEditDialog::slotEditPitch()
 {
-    PitchDialog dialog(this, i18n("Edit Pitch"), m_pitchSpinBox->value());
+    PitchDialog dialog(this, QObject::tr("Edit Pitch"), m_pitchSpinBox->value());
     if (dialog.exec() == QDialog::Accepted) {
         m_pitchSpinBox->setValue(dialog.getPitch());
     }
@@ -1041,8 +1041,8 @@ void
 SimpleEventEditDialog::slotSysexLoad()
 {
     QString path = QFileDialog::getOpenFileName( this,//":SYSTEMEXCLUSIVE",
-			i18n("Load System Exclusive data in File"),
-			i18n("*.syx|System exclusive files (*.syx)")
+			QObject::tr("Load System Exclusive data in File"),
+			QObject::tr("*.syx|System exclusive files (*.syx)")
 			);
     if (path.isNull())
         return ;
@@ -1070,8 +1070,8 @@ void
 SimpleEventEditDialog::slotSysexSave()
 {
     QString path = QFileDialog::getSaveFileName( this, //":SYSTEMEXCLUSIVE",
-			i18n("Save System Exclusive data to..."),
-					i18n("*.syx|System exclusive files (*.syx)")
+			QObject::tr("Save System Exclusive data to..."),
+					QObject::tr("*.syx|System exclusive files (*.syx)")
 					);
     if (path.isNull())
         return ;

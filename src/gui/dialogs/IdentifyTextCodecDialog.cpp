@@ -65,7 +65,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         m_text(text)
 {
     setModal(true);
-    setWindowTitle(i18n("Choose Text Encoding"));
+    setWindowTitle(QObject::tr("Choose Text Encoding"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -73,7 +73,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    new QLabel(i18n("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
+    new QLabel(QObject::tr("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
 
     QComboBox *codecs = new QComboBox( vbox );
     vboxLayout->addWidget(codecs);
@@ -83,28 +83,28 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     QTextCodec *codec = 0;
 
     std::map<std::string, QString> codecDescriptions;
-    codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
-    codecDescriptions["UTF-8"] = i18n("Unicode variable-width");
-    codecDescriptions["ISO 8859-1"] = i18n("Western Europe");
-    codecDescriptions["ISO 8859-15"] = i18n("Western Europe + Euro");
-    codecDescriptions["ISO 8859-2"] = i18n("Eastern Europe");
-    codecDescriptions["ISO 8859-3"] = i18n("Southern Europe");
-    codecDescriptions["ISO 8859-4"] = i18n("Northern Europe");
-    codecDescriptions["ISO 8859-5"] = i18n("Cyrillic");
-    codecDescriptions["ISO 8859-6"] = i18n("Arabic");
-    codecDescriptions["ISO 8859-7"] = i18n("Greek");
-    codecDescriptions["ISO 8859-8"] = i18n("Hebrew");
-    codecDescriptions["ISO 8859-9"] = i18n("Turkish");
-    codecDescriptions["ISO 8859-10"] = i18n("Nordic");
-    codecDescriptions["ISO 8859-11"] = i18n("Thai");
-    codecDescriptions["ISO 8859-13"] = i18n("Baltic");
-    codecDescriptions["ISO 8859-14"] = i18n("Celtic");
-    codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
-    codecDescriptions["Big5"] = i18n("Traditional Chinese");
-    codecDescriptions["GB18030"] = i18n("Simplified Chinese");
-    codecDescriptions["KOI8-R"] = i18n("Russian");
-    codecDescriptions["KOI8-U"] = i18n("Ukrainian");
-    codecDescriptions["TSCII"] = i18n("Tamil");
+    codecDescriptions["SJIS"] = QObject::tr("Japanese Shift-JIS");
+    codecDescriptions["UTF-8"] = QObject::tr("Unicode variable-width");
+    codecDescriptions["ISO 8859-1"] = QObject::tr("Western Europe");
+    codecDescriptions["ISO 8859-15"] = QObject::tr("Western Europe + Euro");
+    codecDescriptions["ISO 8859-2"] = QObject::tr("Eastern Europe");
+    codecDescriptions["ISO 8859-3"] = QObject::tr("Southern Europe");
+    codecDescriptions["ISO 8859-4"] = QObject::tr("Northern Europe");
+    codecDescriptions["ISO 8859-5"] = QObject::tr("Cyrillic");
+    codecDescriptions["ISO 8859-6"] = QObject::tr("Arabic");
+    codecDescriptions["ISO 8859-7"] = QObject::tr("Greek");
+    codecDescriptions["ISO 8859-8"] = QObject::tr("Hebrew");
+    codecDescriptions["ISO 8859-9"] = QObject::tr("Turkish");
+    codecDescriptions["ISO 8859-10"] = QObject::tr("Nordic");
+    codecDescriptions["ISO 8859-11"] = QObject::tr("Thai");
+    codecDescriptions["ISO 8859-13"] = QObject::tr("Baltic");
+    codecDescriptions["ISO 8859-14"] = QObject::tr("Celtic");
+    codecDescriptions["SJIS"] = QObject::tr("Japanese Shift-JIS");
+    codecDescriptions["Big5"] = QObject::tr("Traditional Chinese");
+    codecDescriptions["GB18030"] = QObject::tr("Simplified Chinese");
+    codecDescriptions["KOI8-R"] = QObject::tr("Russian");
+    codecDescriptions["KOI8-U"] = QObject::tr("Ukrainian");
+    codecDescriptions["TSCII"] = QObject::tr("Tamil");
 
     int i = 0;
     int current = -1;
@@ -147,13 +147,13 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         QString description = codecDescriptions[name];
         if (description == "") {
             if (strtoqstr(name).left(3) == "CP ") {
-                description = i18n("Microsoft Code Page %1", 
-                              strtoqstr(name).right(name.length() - 3));
+                description = QObject::tr("Microsoft Code Page %1")
+                              .arg(strtoqstr(name).right(name.length() - 3));
             }
         }
 
         if (description != "") {
-            description = i18n("%1 (%2)", strtoqstr(name), description);
+            description = QObject::tr("%1 (%2)").arg(strtoqstr(name)).arg(description);
         } else {
             description = strtoqstr(name);
         }
@@ -172,7 +172,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     connect(codecs, SIGNAL(activated(int)),
             this, SLOT(slotCodecSelected(int)));
 
-    new QLabel(i18n("\nExample text from file:"), vbox);
+    new QLabel(QObject::tr("\nExample text from file:"), vbox);
     m_example = new QLabel("", vbox );
     vboxLayout->addWidget(m_example);
     vbox->setLayout(vboxLayout);

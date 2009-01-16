@@ -44,7 +44,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Select Unused Audio Files"));
+    setWindowTitle(QObject::tr("Select Unused Audio Files"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -60,19 +60,19 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
 	
 	m_listView->setColumnCount( 3 );
 	QStringList sl;
-	sl << i18n("File name") << i18n("File size") << i18n("Last modified date");
+	sl << QObject::tr("File name") << QObject::tr("File size") << QObject::tr("Last modified date");
 	m_listView->setHorizontalHeaderLabels( sl );
 	
-//     m_listView->addColumn(i18n("File name"));
-//     m_listView->addColumn(i18n("File size"));
-//     m_listView->addColumn(i18n("Last modified date"));
+//     m_listView->addColumn(QObject::tr("File name"));
+//     m_listView->addColumn(QObject::tr("File size"));
+//     m_listView->addColumn(QObject::tr("Last modified date"));
 	QTableWidgetItem *item = 0;
 	unsigned int i;
 	unsigned int rc;
 	for (i=0; i < fileNames.size(); ++i ) {
         QString fileName = fileNames[i];
         QFileInfo info(fileName);
-        QString fileSize = i18n(" (not found) ");
+        QString fileSize = QObject::tr(" (not found) ");
         QString fileDate;
         if (info.exists()) {
             fileSize = QString(" %1 ").arg(info.size());

@@ -45,7 +45,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Specify Interval"));
+    setWindowTitle(QObject::tr("Specify Interval"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -58,20 +58,20 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     vBoxLayout->addWidget(hBox);
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
 
-    m_referencenote = new DiatonicPitchChooser(i18n("Reference note:"), hBox );
+    m_referencenote = new DiatonicPitchChooser(QObject::tr("Reference note:"), hBox );
     hBoxLayout->addWidget(m_referencenote);
-    m_targetnote = new DiatonicPitchChooser(i18n("Target note:"), hBox );
+    m_targetnote = new DiatonicPitchChooser(QObject::tr("Target note:"), hBox );
     hBoxLayout->addWidget(m_targetnote);
     hBox->setLayout(hBoxLayout);
 
     intervalChromatic = 0;
     intervalDiatonic = 0;
 
-    //m_intervalPitchLabel = new QLabel( i18n("Pitch: %1").arg(intervalChromatic), hBox);
-    //m_intervalOctavesLabel = new QLabel( i18n("Octaves: %1").arg(intervalDiatonic / 7), hBox);
-    //m_intervalStepsLabel = new QLabel( i18n("Steps: %1").arg(intervalDiatonic % 7), hBox);
+    //m_intervalPitchLabel = new QLabel( QObject::tr("Pitch: %1").arg(intervalChromatic), hBox);
+    //m_intervalOctavesLabel = new QLabel( QObject::tr("Octaves: %1").arg(intervalDiatonic / 7), hBox);
+    //m_intervalStepsLabel = new QLabel( QObject::tr("Steps: %1").arg(intervalDiatonic % 7), hBox);
 
-    m_intervalLabel = new QLabel(i18n("a perfect unison"), vBox );
+    m_intervalLabel = new QLabel(QObject::tr("a perfect unison"), vBox );
     vBoxLayout->addWidget(m_intervalLabel);
     m_intervalLabel->setAlignment(Qt::AlignCenter);
     QFont font(m_intervalLabel->font());
@@ -80,13 +80,13 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
 
     if (askChangeKey)
     {
-        QGroupBox *affectKeyGroup = new QGroupBox( i18n("Effect on Key"), vBox );
+        QGroupBox *affectKeyGroup = new QGroupBox( QObject::tr("Effect on Key"), vBox );
         QVBoxLayout *affectKeyGroupLayout = new QVBoxLayout;
         vBoxLayout->addWidget(affectKeyGroup);
-        m_transposeWithinKey = new QRadioButton(i18n("Transpose within key"));
+        m_transposeWithinKey = new QRadioButton(QObject::tr("Transpose within key"));
         affectKeyGroupLayout->addWidget(m_transposeWithinKey);
         m_transposeWithinKey->setChecked(true);
-        m_transposeChangingKey = new QRadioButton(i18n("Change key for selection"));
+        m_transposeChangingKey = new QRadioButton(QObject::tr("Change key for selection"));
         affectKeyGroupLayout->addWidget(m_transposeChangingKey);
         affectKeyGroup->setLayout(affectKeyGroupLayout);
     }
@@ -98,7 +98,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
     
     if (askTransposeSegmentBack)
     {
-        m_transposeSegmentBack = new QCheckBox(i18n("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
+        m_transposeSegmentBack = new QCheckBox(QObject::tr("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
         vBoxLayout->addWidget(m_transposeSegmentBack);
         m_transposeSegmentBack->setTristate(false);
         m_transposeSegmentBack->setChecked(false);
@@ -207,25 +207,25 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 3: // fourth
         case 4: // fifth
            if (deviation == -1)
-               textIntervalDeviated += i18n("a diminished");
+               textIntervalDeviated += QObject::tr("a diminished");
            else if (deviation == 1)
-               textIntervalDeviated += i18n("an augmented");
+               textIntervalDeviated += QObject::tr("an augmented");
            else if (deviation == -2)
-               textIntervalDeviated += i18n("a doubly diminished");
+               textIntervalDeviated += QObject::tr("a doubly diminished");
            else if (deviation == 2)
-               textIntervalDeviated += i18n("a doubly augmented");
+               textIntervalDeviated += QObject::tr("a doubly augmented");
            else if (deviation == -3)
-               textIntervalDeviated += i18n("a triply diminished");
+               textIntervalDeviated += QObject::tr("a triply diminished");
            else if (deviation == 3)
-               textIntervalDeviated += i18n("a triply augmented");
+               textIntervalDeviated += QObject::tr("a triply augmented");
            else if (deviation == -4)
-               textIntervalDeviated += i18n("a quadruply diminished");
+               textIntervalDeviated += QObject::tr("a quadruply diminished");
            else if (deviation == 4)
-               textIntervalDeviated += i18n("a quadruply augmented");
+               textIntervalDeviated += QObject::tr("a quadruply augmented");
            else if (deviation == 0)
-               textIntervalDeviated += i18n("a perfect");
+               textIntervalDeviated += QObject::tr("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown, %1)", deviation);
+               textIntervalDeviated += QObject::tr("an (unknown, %1)").arg(deviation);
            break;
         // Then the major/minor:
         case 1: // second
@@ -233,30 +233,30 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         case 5: // sixth
         case 6: // seventh
            if (deviation == -1)
-               textIntervalDeviated += i18n("a minor");
+               textIntervalDeviated += QObject::tr("a minor");
            else if (deviation == 0)
-               textIntervalDeviated += i18n("a major");
+               textIntervalDeviated += QObject::tr("a major");
            else if (deviation == -2)
-               textIntervalDeviated += i18n("a diminished");
+               textIntervalDeviated += QObject::tr("a diminished");
            else if (deviation == 1)
-               textIntervalDeviated += i18n("an augmented");
+               textIntervalDeviated += QObject::tr("an augmented");
            else if (deviation == -3)
-               textIntervalDeviated += i18n("a doubly diminished");
+               textIntervalDeviated += QObject::tr("a doubly diminished");
            else if (deviation == 2)
-               textIntervalDeviated += i18n("a doubly augmented");
+               textIntervalDeviated += QObject::tr("a doubly augmented");
            else if (deviation == -4)
-               textIntervalDeviated += i18n("a triply diminished");
+               textIntervalDeviated += QObject::tr("a triply diminished");
            else if (deviation == 3)
-               textIntervalDeviated += i18n("a triply augmented");
+               textIntervalDeviated += QObject::tr("a triply augmented");
            else if (deviation == 4)
-               textIntervalDeviated += i18n("a quadruply augmented");
+               textIntervalDeviated += QObject::tr("a quadruply augmented");
            else if (deviation == 0)
-               textIntervalDeviated += i18n("a perfect");
+               textIntervalDeviated += QObject::tr("a perfect");
            else
-               textIntervalDeviated += i18n("an (unknown, %1)", deviation);
+               textIntervalDeviated += QObject::tr("an (unknown, %1)").arg(deviation);
            break;
         default:
-           textIntervalDeviated += i18n("an (unknown)");
+           textIntervalDeviated += QObject::tr("an (unknown)");
         }
         switch (displayIntervalDiatonic % 7)
 	{
@@ -265,35 +265,35 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 	    // "1 octave and a diminished octave" is better than
 	    // "2 octaves and a diminished unison"
 	    if (octaves > 0) {
-	      textInterval += i18n("%1 octave", textIntervalDeviated);
+	      textInterval += QObject::tr("%1 octave").arg(textIntervalDeviated);
 	      octaves--;
 	    } else if (octaves < 0) {
-	      textInterval += i18n("%1 octave", textIntervalDeviated);
+	      textInterval += QObject::tr("%1 octave").arg(textIntervalDeviated);
 	      octaves++;
 	    } else {
-	      textInterval += i18n("%1 unison", textIntervalDeviated);
+	      textInterval += QObject::tr("%1 unison").arg(textIntervalDeviated);
 	    }
 	    break;
 	case 1:
-	    textInterval += i18n("%1 second", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 second").arg(textIntervalDeviated);
 	    break;
 	case 2:
-	    textInterval += i18n("%1 third", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 third").arg(textIntervalDeviated);
 	    break;
 	case 3:
-	    textInterval += i18n("%1 fourth", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 fourth").arg(textIntervalDeviated);
 	    break;
 	case 4:
-	    textInterval += i18n("%1 fifth", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 fifth").arg(textIntervalDeviated);
 	    break;
 	case 5:
-	    textInterval += i18n("%1 sixth", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 sixth").arg(textIntervalDeviated);
 	    break;
 	case 6:
-	    textInterval += i18n("%1 seventh", textIntervalDeviated);
+	    textInterval += QObject::tr("%1 seventh").arg(textIntervalDeviated);
 	    break;
         default:
-	    textInterval += i18n("%1", textIntervalDeviated);
+	    textInterval += QObject::tr("%1").arg(textIntervalDeviated);
         }
     }
     
@@ -309,7 +309,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 		    return QObject::tr("up %n octave(s)", "", octaves);
 		}
 	    } else {
-		return i18n("up %1", textInterval);
+		return QObject::tr("up %1").arg(textInterval);
 	    }
         }
         else
@@ -322,11 +322,11 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 		    return QObject::tr("down %n octave(s)", "", octaves);
 		}
 	    } else {
-		return i18n("down %1", textInterval);
+		return QObject::tr("down %1").arg(textInterval);
 	    }
         }
     } else {
-	return i18n("a perfect unison");
+	return QObject::tr("a perfect unison");
     }
 }
 

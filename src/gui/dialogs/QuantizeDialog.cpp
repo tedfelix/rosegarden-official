@@ -36,7 +36,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
     //setHelp("quantization");
 
     setModal(true);
-    setWindowTitle(i18n("Quantize"));
+    setWindowTitle(QObject::tr("Quantize"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -61,7 +61,7 @@ QuantizeDialog::QuantizeDialog(QWidget *parent, bool inNotation) :
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 
-    QPushButton *details = buttonBox->addButton(i18n("Advanced"), QDialogButtonBox::ActionRole);
+    QPushButton *details = buttonBox->addButton(QObject::tr("Advanced"), QDialogButtonBox::ActionRole);
 	details->setObjectName( "detailsButton" );
 	connect(details, SIGNAL(clicked()), this, SLOT(slotShowDetails(bool)));
 	buttonBox->addButton(QDialogButtonBox::Help);

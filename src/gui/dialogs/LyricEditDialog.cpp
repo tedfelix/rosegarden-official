@@ -53,7 +53,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     //setHelp("nv-text-lyrics");
 
     setModal(true);
-    setWindowTitle(i18n("Edit Lyrics"));
+    setWindowTitle(QObject::tr("Edit Lyrics"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -62,7 +62,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *groupBox = new QGroupBox( i18n("Lyrics for this segment"), vbox );
+    QGroupBox *groupBox = new QGroupBox( QObject::tr("Lyrics for this segment"), vbox );
     QVBoxLayout *groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
     vbox->setLayout(vboxLayout);
@@ -71,15 +71,15 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     groupBoxLayout->addWidget(hbox);
     hboxLayout->setSpacing(5);
-//    new QLabel(i18n("Verse:"), hbox);
+//    new QLabel(QObject::tr("Verse:"), hbox);
     m_verseNumber = new QComboBox( hbox );
     hboxLayout->addWidget(m_verseNumber);
     m_verseNumber->setEditable(false);
     connect(m_verseNumber, SIGNAL(activated(int)), this, SLOT(slotVerseNumberChanged(int)));
-    m_verseAddButton = new QPushButton(i18n("Add Verse"), hbox );
+    m_verseAddButton = new QPushButton(QObject::tr("Add Verse"), hbox );
     hboxLayout->addWidget(m_verseAddButton);
     connect(m_verseAddButton, SIGNAL(clicked()), this, SLOT(slotAddVerse()));
-    m_verseRemoveButton = new QPushButton(i18n("Remove Verse"), hbox );
+    m_verseRemoveButton = new QPushButton(QObject::tr("Remove Verse"), hbox );
     hboxLayout->addWidget(m_verseRemoveButton);
     connect(m_verseRemoveButton, SIGNAL(clicked()), this, SLOT(slotRemoveVerse()));
     QFrame *f = new QFrame( hbox );
@@ -312,7 +312,7 @@ LyricEditDialog::verseDialogRepopulate()
     m_verseNumber->clear();
 
     for (int i = 0; i < m_verseCount; ++i) {
-        m_verseNumber->addItem(i18n("Verse %1", i + 1));
+        m_verseNumber->addItem(QObject::tr("Verse %1").arg(i + 1));
     }
 
     if (m_verseCount == 12)

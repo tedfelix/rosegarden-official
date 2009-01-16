@@ -68,7 +68,7 @@ bool
 ImportDeviceDialog::doImport()
 {
     setModal(true);
-    setWindowTitle(i18n("Import from Device..."));
+    setWindowTitle(QObject::tr("Import from Device..."));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *mainFrame = new QWidget(this);
@@ -86,7 +86,7 @@ ImportDeviceDialog::doImport()
         QMessageBox::critical(
           dynamic_cast<QWidget*>(this),
           "", /* no title */
-          i18n("Cannot download file %1", m_url.toString()),
+          QObject::tr("Cannot download file %1").arg(m_url.toString()),
           QMessageBox::Ok,
           QMessageBox::Ok);
         return false;
@@ -106,7 +106,7 @@ ImportDeviceDialog::doImport()
         QMessageBox::critical(
           dynamic_cast<QWidget*>(this),
           "", /* no title */
-          i18n("Cannot open file %1", m_url.toString()),
+          QObject::tr("Cannot open file %1").arg(m_url.toString()),
           QMessageBox::Ok,
           QMessageBox::Ok);
         reject();
@@ -117,7 +117,7 @@ ImportDeviceDialog::doImport()
         QMessageBox::warning(
           dynamic_cast<QWidget*>(this),
           "", /* no title */
-          i18n("No devices found in file %1", m_url.toString()),
+          QObject::tr("No devices found in file %1").arg(m_url.toString()),
           QMessageBox::Ok,
           QMessageBox::Ok);
         reject();
@@ -125,7 +125,7 @@ ImportDeviceDialog::doImport()
         return false;
     }
 
-    QGroupBox *groupBox = new QGroupBox(i18n("Source device"));
+    QGroupBox *groupBox = new QGroupBox(QObject::tr("Source device"));
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     mainFrameLayout->addWidget(groupBox);
 
@@ -133,7 +133,7 @@ ImportDeviceDialog::doImport()
     QHBoxLayout *deviceBoxLayout = new QHBoxLayout( deviceBox );
     groupBoxLayout->addWidget(deviceBox);
 
-    deviceBoxLayout->addWidget(new QLabel(i18n("Import from: "), deviceBox));
+    deviceBoxLayout->addWidget(new QLabel(QObject::tr("Import from: "), deviceBox));
 
     bool showRenameOption = false;
 
@@ -155,7 +155,7 @@ ImportDeviceDialog::doImport()
         if ((*i)->getName() != "") {
             showRenameOption = true;
         } else {
-            (*i)->setName(qstrtostr(i18n("Device %1", count)));
+            (*i)->setName(qstrtostr(QObject::tr("Device %1").arg(count)));
         }
         if (m_devices.size() > 1) {
             m_deviceCombo->addItem(strtoqstr((*i)->getName()));
@@ -169,34 +169,34 @@ ImportDeviceDialog::doImport()
     QHBoxLayout *optionsBoxLayout = new QHBoxLayout;
     mainFrameLayout->addWidget(optionsBox);
 
-    QGroupBox *gb = new QGroupBox(i18n("Options"));
+    QGroupBox *gb = new QGroupBox(QObject::tr("Options"));
     QHBoxLayout *gbLayout = new QHBoxLayout;
     optionsBoxLayout->addWidget(gb);
 
-    m_importBanks = new QCheckBox(i18n("Import banks"), gb);
+    m_importBanks = new QCheckBox(QObject::tr("Import banks"), gb);
     gbLayout->addWidget(m_importBanks);
-    m_importKeyMappings = new QCheckBox(i18n("Import key mappings"), gb);
+    m_importKeyMappings = new QCheckBox(QObject::tr("Import key mappings"), gb);
     gbLayout->addWidget(m_importKeyMappings);
-    m_importControllers = new QCheckBox(i18n("Import controllers"), gb);
+    m_importControllers = new QCheckBox(QObject::tr("Import controllers"), gb);
     gbLayout->addWidget(m_importControllers);
 
     if (showRenameOption) {
-        m_rename = new QCheckBox(i18n("Import device name"), gb);
+        m_rename = new QCheckBox(QObject::tr("Import device name"), gb);
         gbLayout->addWidget(m_rename);
     } else {
         m_rename = 0;
     }
 
-    QGroupBox *buttonGroupBox = new QGroupBox(i18n("Bank import behavior"));
+    QGroupBox *buttonGroupBox = new QGroupBox(QObject::tr("Bank import behavior"));
     QHBoxLayout *buttonGroupBoxLayout = new QHBoxLayout;
     optionsBoxLayout->addWidget(buttonGroupBox);
     m_buttonGroup = new QButtonGroup(buttonGroupBox);
 
-    m_mergeBanks = new QRadioButton(i18n("Merge banks"));
+    m_mergeBanks = new QRadioButton(QObject::tr("Merge banks"));
     buttonGroupBoxLayout->addWidget(m_mergeBanks);
     m_buttonGroup->addButton(m_mergeBanks, 0);
 
-    m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"));
+    m_overwriteBanks = new QRadioButton(QObject::tr("Overwrite banks"));
     buttonGroupBoxLayout->addWidget(m_overwriteBanks);
     m_buttonGroup->addButton(m_overwriteBanks, 1);
 
@@ -415,7 +415,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
 
         MidiBank bank
         (msb == 1, msb, lsb,
-         qstrtostr(i18n("Bank %1:%2", msb, lsb)));
+         qstrtostr(QObject::tr("Bank %1:%2").arg(msb).arg(lsb)));
 
         banks.push_back(bank);
 

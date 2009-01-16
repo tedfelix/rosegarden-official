@@ -46,7 +46,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     QBoxLayout *layout = new QBoxLayout(QBoxLayout::TopToBottom, this);
     layout->setSpacing(14);
 
-    setWindowTitle(i18n("Recording..."));
+    setWindowTitle(QObject::tr("Recording..."));
 
     QWidget *hBox = new QWidget(this);
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
@@ -58,7 +58,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
 
     layout->addWidget(hBox, 0, Qt::AlignCenter);
 
-    m_label->setText(i18n("Recording time remaining:  "));
+    m_label->setText(QObject::tr("Recording time remaining:  "));
     m_progressBar =
         new CountdownBar(this, m_progressBarWidth, m_progressBarHeight);
 
@@ -66,7 +66,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
 
     // Simply re-emit from Stop button
     //
-    m_stopButton = new QPushButton(i18n("Stop"), this);
+    m_stopButton = new QPushButton(QObject::tr("Stop"), this);
     m_stopButton->setFixedWidth(60);
 
     layout->addWidget(m_progressBar, 0, Qt::AlignCenter);
@@ -119,7 +119,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     {
         m_time->setText(QString("%1:%2:%3").arg(h).arg(m).arg(s));
     } else {
-        m_time->setText(i18n("Just how big is your hard disk?"));
+        m_time->setText(QObject::tr("Just how big is your hard disk?"));
     }
 
     // Draw the progress bar
@@ -153,7 +153,7 @@ CountdownDialog::setPastEndMode()
         return ;
 
     m_pastEndMode = true;
-    m_label->setText(i18n("Recording beyond end of composition:  "));
+    m_label->setText(QObject::tr("Recording beyond end of composition:  "));
 
 }
 

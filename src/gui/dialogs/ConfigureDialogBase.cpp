@@ -39,7 +39,7 @@ namespace Rosegarden
 ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
         QString label,
         const char *name):
-        KDialogBase(IconList, !label.isEmpty() ? label : i18n("Configure"), Help | Apply | Ok | Cancel,
+        KDialogBase(IconList, !label.isEmpty() ? label : QObject::tr("Configure"), Help | Apply | Ok | Cancel,
                     Ok, parent, name, true) // modal
 */
 ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const char *name  ):QDialog(parent)
@@ -48,7 +48,7 @@ ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const 
 //    setWFlags(WDestructiveClose);
 	this->setAttribute( Qt::WA_DeleteOnClose );
 	
-	this->setWindowTitle( i18n("Configure Rosegarden") );
+	this->setWindowTitle( QObject::tr("Configure Rosegarden") );
 	this->setObjectName( (name) );
 	
 	QVBoxLayout *dlgLay = new QVBoxLayout( this );

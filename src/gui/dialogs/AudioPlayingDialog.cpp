@@ -35,7 +35,7 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Playing audio file"));
+    setWindowTitle(QObject::tr("Playing audio file"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -43,7 +43,7 @@ AudioPlayingDialog::AudioPlayingDialog(QWidget *parent,
     QHBoxLayout *wLayout = new QHBoxLayout;
     metagrid->addWidget(w, 0, 0);
 
-    QLabel *label = new QLabel(i18n("Playing audio file \"%1\"", name), w );
+    QLabel *label = new QLabel(QObject::tr("Playing audio file \"%1\"").arg(name), w );
     wLayout->addWidget(label);
     w->setLayout(wLayout);
 

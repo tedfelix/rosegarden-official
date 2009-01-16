@@ -41,7 +41,7 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     //setHelp("nv-paste-types");
 
     setModal(true);
-    setWindowTitle(i18n("Paste"));
+    setWindowTitle(QObject::tr("Paste"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -50,7 +50,7 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *pasteTypeGroup = new QGroupBox( i18n("Paste type"), vbox );
+    QGroupBox *pasteTypeGroup = new QGroupBox( QObject::tr("Paste type"), vbox );
     QVBoxLayout *pasteTypeGroupLayout = new QVBoxLayout;
     vboxLayout->addWidget(pasteTypeGroup);
 
@@ -71,13 +71,13 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent,
     pasteTypeGroup->setLayout(pasteTypeGroupLayout);
 
 
-    QGroupBox *setAsDefaultGroup = new QGroupBox( i18n("Options"), vbox );
+    QGroupBox *setAsDefaultGroup = new QGroupBox( QObject::tr("Options"), vbox );
     QVBoxLayout *setAsDefaultGroupLayout = new QVBoxLayout;
     vboxLayout->addWidget(setAsDefaultGroup);
     vbox->setLayout(vboxLayout);
 
     m_setAsDefaultButton = new QCheckBox
-                           (i18n("Make this the default paste type"), setAsDefaultGroup);
+                           (QObject::tr("Make this the default paste type"), setAsDefaultGroup);
     setAsDefaultGroupLayout->addWidget(m_setAsDefaultButton);
     m_setAsDefaultButton->setChecked(true);
     setAsDefaultGroup->setLayout(setAsDefaultGroupLayout);

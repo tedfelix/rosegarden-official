@@ -65,7 +65,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_timeEditor(0)
 {
     setModal(true);
-    setWindowTitle(i18n("Time Signature"));
+    setWindowTitle(QObject::tr("Time Signature"));
 
     static QFont *timeSigFont = 0;
 
@@ -80,7 +80,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    QGroupBox *groupBox = new QGroupBox(i18n("Time signature"));
+    QGroupBox *groupBox = new QGroupBox(QObject::tr("Time signature"));
     QVBoxLayout *groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
 
@@ -130,7 +130,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     if (timeEditable) {
 
         m_timeEditor = new TimeWidget
-                       (i18n("Time where signature takes effect"),
+                       (QObject::tr("Time where signature takes effect"),
                         vbox,
                         composition,
                         m_time,
@@ -143,7 +143,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
         m_timeEditor = 0;
 
-        groupBox = new QGroupBox(i18n("Scope"));
+        groupBox = new QGroupBox(QObject::tr("Scope"));
         groupBoxLayout = new QVBoxLayout;
         vboxLayout->addWidget(groupBox);
 
@@ -157,26 +157,26 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
             if (barNo != 0 || !atStartOfBar) {
                 if (atStartOfBar) {
                     scopeText = QString
-                                (i18n("Insertion point is at start of measure %1."))
+                                (QObject::tr("Insertion point is at start of measure %1."))
                                 .arg(barNo + 1);
                 } else {
                     scopeText = QString
-                                (i18n("Insertion point is in the middle of measure %1."))
+                                (QObject::tr("Insertion point is in the middle of measure %1."))
                                 .arg(barNo + 1);
                 }
             } else {
                 scopeText = QString
-                            (i18n("Insertion point is at start of composition."));
+                            (QObject::tr("Insertion point is at start of composition."));
             }
 
             groupBoxLayout->addWidget(new QLabel(scopeText));
             m_asGivenButton = new QRadioButton
-                              (i18n("Start measure %1 here", barNo + 2), groupBox);
+                              (QObject::tr("Start measure %1 here").arg(barNo + 2), groupBox);
             groupBoxLayout->addWidget(m_asGivenButton);
             if (!atStartOfBar) {
                 m_startOfBarButton = new QRadioButton
-                                     (i18n("Change time from start of measure %1",
-                                       barNo + 1), groupBox);
+                                     (QObject::tr("Change time from start of measure %1")
+                                       .arg(barNo + 1), groupBox);
                 groupBoxLayout->addWidget(m_startOfBarButton);
                 m_startOfBarButton->setChecked(true);
             } else {
@@ -184,35 +184,35 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
             }
         } else {
             groupBoxLayout->addWidget(
-                new QLabel(i18n("Time change will take effect at the start of"
-                                " measure %1.", barNo + 1)));
+                new QLabel(QObject::tr("Time change will take effect at the start of"
+                                " measure %1.").arg(barNo + 1)));
         }
     }
     groupBox->setLayout(groupBoxLayout);
 
-    groupBox = new QGroupBox(i18n("Options"));
+    groupBox = new QGroupBox(QObject::tr("Options"));
     groupBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(groupBox);
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_hideSignatureButton = new QCheckBox(i18n("Hide the time signature"));
+    m_hideSignatureButton = new QCheckBox(QObject::tr("Hide the time signature"));
     groupBoxLayout->addWidget(m_hideSignatureButton);
     m_hideSignatureButton->setChecked
     ( qStrToBool( settings.value("timesigdialogmakehidden", "false" ) ) );
 
-    m_hideBarsButton = new QCheckBox(i18n("Hide the affected bar lines"));
+    m_hideBarsButton = new QCheckBox(QObject::tr("Hide the affected bar lines"));
     groupBoxLayout->addWidget(m_hideBarsButton);
     m_hideBarsButton->setChecked
     ( qStrToBool( settings.value("timesigdialogmakehiddenbars", "false" ) ) );
 
-    m_commonTimeButton = new QCheckBox(i18n("Show as common time"));
+    m_commonTimeButton = new QCheckBox(QObject::tr("Show as common time"));
     groupBoxLayout->addWidget(m_commonTimeButton);
     m_commonTimeButton->setChecked
     ( qStrToBool( settings.value("timesigdialogshowcommon", "true" ) ) );
 
     m_normalizeRestsButton = new QCheckBox
-                             (i18n("Correct the durations of following measures"));
+                             (QObject::tr("Correct the durations of following measures"));
     groupBoxLayout->addWidget(m_normalizeRestsButton);
     m_normalizeRestsButton->setChecked
     ( qStrToBool( settings.value("timesigdialognormalize", "true" ) ) );
@@ -320,11 +320,11 @@ TimeSignatureDialog::slotUpdateCommonTimeButton()
     if (!m_hideSignatureButton || !m_hideSignatureButton->isChecked()) {
         if (m_timeSignature.getDenominator() == m_timeSignature.getNumerator()) {
             if (m_timeSignature.getNumerator() == 4) {
-                m_commonTimeButton->setText(i18n("Display as common time"));
+                m_commonTimeButton->setText(QObject::tr("Display as common time"));
                 m_commonTimeButton->setEnabled(true);
                 return ;
             } else if (m_timeSignature.getNumerator() == 2) {
-                m_commonTimeButton->setText(i18n("Display as cut common time"));
+                m_commonTimeButton->setText(QObject::tr("Display as cut common time"));
                 m_commonTimeButton->setEnabled(true);
                 return ;
             }
