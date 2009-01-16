@@ -98,7 +98,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         m_playTimer(new QTimer(this)),
         m_audiblePreview(true)
 {
-    setCaption(i18n("Audio File Manager"));
+    setCaption(QObject::tr("Audio File Manager"));
 //    setWFlags(WDestructiveClose);	
 	this->setAttribute( Qt::WA_DeleteOnClose );
 
@@ -139,16 +139,16 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     //
 	//
 	
-	//m_fileList->setHorizontalHeaderItem( 0, new QTreeWidgetItem( i18n("File")));           // 6	
+	//m_fileList->setHorizontalHeaderItem( 0, new QTreeWidgetItem( QObject::tr("File")));           // 6	
 	QStringList sl;
 	
-	sl << i18n("Name");           // 0
-	sl << i18n("Duration");       // 1	
-	sl << i18n("Envelope");       // 2
-	sl << i18n("Sample rate");    // 3
-	sl << i18n("Channels");       // 4
-	sl << i18n("Resolution");     // 5
-	sl << i18n("File");           // 6	
+	sl << QObject::tr("Name");           // 0
+	sl << QObject::tr("Duration");       // 1	
+	sl << QObject::tr("Envelope");       // 2
+	sl << QObject::tr("Sample rate");    // 3
+	sl << QObject::tr("Channels");       // 4
+	sl << QObject::tr("Resolution");     // 5
+	sl << QObject::tr("File");           // 6	
 	
 	m_fileList->setColumnCount(7);
 	m_fileList->setHeaderItem( new QTreeWidgetItem( sl ) );
@@ -257,8 +257,8 @@ AudioManagerDialog::slotPopulateFileList()
             m_doc->getAudioFileManager().end()) {
         // Turn off selection and report empty list
         //
-		//new AudioListItem(m_fileList, i18n("<no audio files>"), 0);
-		auItem = new AudioListItem( m_fileList, QStringList( i18n("<no audio files>")) );
+		//new AudioListItem(m_fileList, QObject::tr("<no audio files>"), 0);
+		auItem = new AudioListItem( m_fileList, QStringList( QObject::tr("<no audio files>")) );
 		
 		m_fileList->setSelectionMode( QAbstractItemView::NoSelection );
 //        m_fileList->setRootIsDecorated(false);
@@ -445,7 +445,7 @@ AudioManagerDialog::getCurrentSelection()
 	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
 	if (til.isEmpty()){
 		QMessageBox::warning
-				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+				(this, "Error: Selection is empty!", QObject::tr("Please select an audio item in the list!"), QMessageBox::Yes );
 		return 0;
 	}
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -475,7 +475,7 @@ AudioManagerDialog::slotExportAudio()
 	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
 	if (til.isEmpty()){
 		QMessageBox::warning
-				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+				(this, "Error: Selection is empty!", QObject::tr("Please select an audio item in the list!"), QMessageBox::Yes );
 		return;
 	}
 	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -483,7 +483,7 @@ AudioManagerDialog::slotExportAudio()
     Segment *segment = item->getSegment();
 
     QString saveFile =
-			QFileDialog::getSaveFileName( this, i18n("Choose a name to save this file as ").arg(":WAVS"), QDir::currentPath(), i18n("*.wav|WAV files (*.wav)" ) );
+			QFileDialog::getSaveFileName( this, QObject::tr("Choose a name to save this file as ").arg(":WAVS"), QDir::currentPath(), QObject::tr("*.wav|WAV files (*.wav)" ) );
 
     if (sourceFile == 0 || item == 0 || saveFile.isEmpty())
         return ;
@@ -493,7 +493,7 @@ AudioManagerDialog::slotExportAudio()
     if (saveFile.contains(".") == 0)
         saveFile += ".wav";
 
-    ProgressDialog progressDlg(i18n("Exporting audio file..."),
+    ProgressDialog progressDlg(QObject::tr("Exporting audio file..."),
                                100,
                                this);
 
@@ -539,7 +539,7 @@ AudioManagerDialog::slotRemove()
 	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
 	if (til.isEmpty() ){
 		QMessageBox::warning
-				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+				(this, "Error: Selection is empty!", QObject::tr("Please select an audio item in the list!"), QMessageBox::Yes );
 		return;
 	}
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -610,7 +610,7 @@ AudioManagerDialog::slotRemove()
 
     if (haveSegments) {
 
-        QString question = i18n("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
+        QString question = QObject::tr("This will unload audio file \"%1\" and remove all associated segments.  Are you sure?")
                            .arg(QString(audioFile->getFilename().c_str()));
 
         // Ask the question
@@ -646,7 +646,7 @@ AudioManagerDialog::slotPlayPreview()
 	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
 	if (til.isEmpty() ){
 		QMessageBox::warning
-				(this, "Error: Selection is empty!", i18n("Please select an audio item in the list!"), QMessageBox::Yes );
+				(this, "Error: Selection is empty!", QObject::tr("Please select an audio item in the list!"), QMessageBox::Yes );
 		return;
 	}
 	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -699,17 +699,17 @@ AudioManagerDialog::slotCancelPlayingAudio()
 void
 AudioManagerDialog::slotAdd()
 {
-    QString extensionList = i18n("*.wav|WAV files (*.wav)\n*.*|All files");
+    QString extensionList = QObject::tr("*.wav|WAV files (*.wav)\n*.*|All files");
     
     if (RosegardenGUIApp::self()->haveAudioImporter()) {
 	//!!! This list really needs to come from the importer helper program
 	// (which has an option to supply it -- we just haven't recorded it)
-        extensionList = i18n("*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)\n*.wav|WAV files (*.wav)\n*.flac|FLAC files (*.flac)\n*.ogg|Ogg files (*.ogg)\n*.mp3|MP3 files (*.mp3)\n*.*|All files");
+        extensionList = QObject::tr("*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)\n*.wav|WAV files (*.wav)\n*.flac|FLAC files (*.flac)\n*.ogg|Ogg files (*.ogg)\n*.mp3|MP3 files (*.mp3)\n*.*|All files");
     }
 
 	QStringList kurlList;
-	kurlList = QFileDialog::getOpenFileNames( this, i18n("Select one or more audio files").arg(":WAVS"), QDir::currentPath(), extensionList );
-                                 //  i18n("*.wav|WAV files (*.wav)\n*.mp3|MP3 files (*.mp3)"),);
+	kurlList = QFileDialog::getOpenFileNames( this, QObject::tr("Select one or more audio files").arg(":WAVS"), QDir::currentPath(), extensionList );
+                                 //  QObject::tr("*.wav|WAV files (*.wav)\n*.mp3|MP3 files (*.mp3)"),);
 
 	//KURL::List::iterator it;
 
@@ -770,7 +770,7 @@ void
 AudioManagerDialog::slotRemoveAll()
 {
     QString question =
-        i18n("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
+        QObject::tr("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
 	int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
@@ -807,7 +807,7 @@ void
 AudioManagerDialog::slotRemoveAllUnused()
 {
     QString question =
-        i18n("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
+        QObject::tr("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
 	int reply = QMessageBox::warning(this, "", question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
 
@@ -872,7 +872,7 @@ AudioManagerDialog::slotDeleteUnused()
 
     UnusedAudioSelectionDialog *dialog = new UnusedAudioSelectionDialog
                                          (this,
-                                          i18n("The following audio files are not used in the current composition.\n\nPlease select the ones you wish to delete permanently from the hard disk.\n"),
+                                          QObject::tr("The following audio files are not used in the current composition.\n\nPlease select the ones you wish to delete permanently from the hard disk.\n"),
                                           toDelete);
 
     if (dialog->exec() == QDialog::Accepted) {
@@ -895,7 +895,7 @@ AudioManagerDialog::slotDeleteUnused()
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {
-                    QMessageBox::critical(this, "", i18n("File %1 could not be deleted.", names[i]));
+                    QMessageBox::critical(this, "", QObject::tr("File %1 could not be deleted.").arg(names[i]));
                 } else {
                     if (nameMap.find(names[i]) != nameMap.end()) {
                         m_doc->getAudioFileManager().removeFile(nameMap[names[i]]);
@@ -928,8 +928,8 @@ AudioManagerDialog::slotRename()
     bool ok = false;
 
     QString newText = QInputDialog::getText( this, 
-                          i18n("Change Audio File label"),
-							   i18n("Enter new label"), 
+                          QObject::tr("Change Audio File label"),
+							   QObject::tr("Enter new label"), 
 							QLineEdit::Normal, 
                           QString(audioFile->getName().c_str()),
                           &ok );
@@ -1091,12 +1091,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     if (! QFile::exists(kurl.toLocalFile()) ) {
 		
-		if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing a remote audio file"))) return false;
+		if (!RosegardenGUIApp::self()->testAudioPath(QObject::tr("importing a remote audio file"))) return false;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
-        if (!RosegardenGUIApp::self()->testAudioPath(i18n("importing an audio file that needs to be converted or resampled"))) return false;
+        if (!RosegardenGUIApp::self()->testAudioPath(QObject::tr("importing an audio file that needs to be converted or resampled"))) return false;
     }
 	
-    ProgressDialog progressDlg(i18n("Adding audio file..."),
+    ProgressDialog progressDlg(QObject::tr("Adding audio file..."),
                                100,
                                this);
 
@@ -1117,12 +1117,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         id = aFM.importURL(kurl, m_sampleRate);
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
-        QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
+        QString errorString = QObject::tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         /* was sorry */ QMessageBox::warning(this, "", errorString);
         return false;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
-        QString errorString = i18n("Failed to add audio file. ") + strtoqstr(e.getMessage());
+        QString errorString = QObject::tr("Failed to add audio file. ") + strtoqstr(e.getMessage());
         /* was sorry */ QMessageBox::warning(this, "", errorString);
         return false;
     }
@@ -1132,7 +1132,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     connect(&progressDlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
     progressDlg.progressBar()->show();
-    progressDlg.slotSetOperationName(i18n("Generating audio preview..."));
+    progressDlg.slotSetOperationName(QObject::tr("Generating audio preview..."));
 
     try {
         aFM.generatePreview(id);
@@ -1140,7 +1140,7 @@ AudioManagerDialog::addFile(const QUrl& kurl)
         CurrentProgressDialog::freeze();
 
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
-                          i18n("Try copying this file to a directory where you have write permission and re-add it");
+                          QObject::tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, "", message);
     }
 

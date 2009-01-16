@@ -58,8 +58,8 @@ EventParameterDialog::EventParameterDialog(
 
     QLabel *explainLabel = new QLabel( topBox );
     topBoxLayout->addWidget(explainLabel);
-    QString text = i18n("Set the %1 property of the event selection:", 
-                   strtoqstr(property));
+    QString text = QObject::tr("Set the %1 property of the event selection:")
+                   .arg(strtoqstr(property));
     explainLabel->setText(text);
 
 	
@@ -68,30 +68,30 @@ EventParameterDialog::EventParameterDialog(
 	QVBoxLayout *patternBoxLayout = new QVBoxLayout;
 	patternBox->setLayout(topBoxLayout);
 	
-	QLabel *child_10 = new QLabel(i18n("Pattern"), patternBox );
+	QLabel *child_10 = new QLabel(QObject::tr("Pattern"), patternBox );
     patternBoxLayout->addWidget(child_10);
     m_patternCombo = new QComboBox( patternBox );
     patternBoxLayout->addWidget(m_patternCombo);
 
     // create options
     // 0 flat
-    text = i18n("Flat - set %1 to value", strtoqstr(property));
+    text = QObject::tr("Flat - set %1 to value").arg(strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 1 alternating
-    text = i18n("Alternating - set %1 to max and min on alternate events", strtoqstr(property));
+    text = QObject::tr("Alternating - set %1 to max and min on alternate events").arg(strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 2 crescendo
-    text = i18n("Crescendo - set %1 rising from min to max", strtoqstr(property));
+    text = QObject::tr("Crescendo - set %1 rising from min to max").arg(strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 3 diminuendo
-    text = i18n("Diminuendo - set %1 falling from max to min", strtoqstr(property));
+    text = QObject::tr("Diminuendo - set %1 falling from max to min").arg(strtoqstr(property));
     m_patternCombo->addItem(text);
 
     // 4 ringing
-    text = i18n("Ringing - set %1 alternating from max to min with both dying to zero", strtoqstr(property));
+    text = QObject::tr("Ringing - set %1 alternating from max to min with both dying to zero").arg(strtoqstr(property));
     m_patternCombo->addItem(text);
 
     connect(m_patternCombo, SIGNAL(activated(int)),
@@ -101,13 +101,13 @@ EventParameterDialog::EventParameterDialog(
 	topBoxLayout->addWidget(value1Box);
 //    topBox->setLayout(topBoxLayout);
     QHBoxLayout *value1BoxLayout = new QHBoxLayout;
-    m_value1Label = new QLabel(i18n("Value"), value1Box );
+    m_value1Label = new QLabel(QObject::tr("Value"), value1Box );
     value1BoxLayout->addWidget(m_value1Label);
     m_value1Combo = new QComboBox( value1Box );
     value1BoxLayout->addWidget(m_value1Combo);
     value1Box->setLayout(value1BoxLayout);
 
-	m_value2Label = new QLabel(i18n("Value"), topBox );
+	m_value2Label = new QLabel(QObject::tr("Value"), topBox );
 	topBoxLayout->addWidget(m_value2Label);
 	m_value2Combo = new QComboBox( topBox );
 	topBoxLayout->addWidget(m_value2Combo);
@@ -137,7 +137,7 @@ EventParameterDialog::slotPatternSelected(int value)
 {
     switch (value) {
     case 0:  // flat
-        m_value1Label->setText(i18n("Value"));
+        m_value1Label->setText(QObject::tr("Value"));
         m_value1Label->show();
         m_value1Combo->show();
         m_value2Label->hide();
@@ -145,8 +145,8 @@ EventParameterDialog::slotPatternSelected(int value)
         break;
 
     case 1:  // alternating
-        m_value1Label->setText(i18n("First Value"));
-        m_value2Label->setText(i18n("Second Value"));
+        m_value1Label->setText(QObject::tr("First Value"));
+        m_value2Label->setText(QObject::tr("Second Value"));
         m_value1Label->show();
         m_value1Combo->show();
         m_value2Label->show();
@@ -154,8 +154,8 @@ EventParameterDialog::slotPatternSelected(int value)
         break;
 
     case 2:  // crescendo
-        m_value1Label->setText(i18n("Low Value"));
-        m_value2Label->setText(i18n("High Value"));
+        m_value1Label->setText(QObject::tr("Low Value"));
+        m_value2Label->setText(QObject::tr("High Value"));
         m_value1Label->show();
         m_value1Combo->show();
         m_value2Label->show();
@@ -163,8 +163,8 @@ EventParameterDialog::slotPatternSelected(int value)
         break;
 
     case 3:  // decrescendo
-        m_value1Label->setText(i18n("High Value"));
-        m_value2Label->setText(i18n("Low Value"));
+        m_value1Label->setText(QObject::tr("High Value"));
+        m_value2Label->setText(QObject::tr("Low Value"));
         m_value1Label->show();
         m_value1Combo->show();
         m_value2Label->show();
@@ -172,8 +172,8 @@ EventParameterDialog::slotPatternSelected(int value)
         break;
 
     case 4:  // ringing
-        m_value1Label->setText(i18n("First Value"));
-        m_value2Label->setText(i18n("Second Value"));
+        m_value1Label->setText(QObject::tr("First Value"));
+        m_value2Label->setText(QObject::tr("Second Value"));
         m_value1Label->show();
         m_value1Combo->show();
         m_value2Label->show();

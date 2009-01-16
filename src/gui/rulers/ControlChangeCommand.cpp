@@ -26,7 +26,7 @@ namespace Rosegarden {
 ControlChangeCommand::ControlChangeCommand(Q3CanvasItemList selectedItems,
                                            Segment &segment,
                                            Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(i18n("Control Change"), segment, start, end, true),
+    : BasicCommand(QObject::tr("Control Change"), segment, start, end, true),
       m_selectedItems(selectedItems)
 {
     RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end << endl;

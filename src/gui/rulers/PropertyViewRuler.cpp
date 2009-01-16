@@ -63,7 +63,7 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
 
     setBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
-    QString tip = i18n("%1 controller", strtoqstr(property));
+    QString tip = QObject::tr("%1 controller").arg(strtoqstr(property));
     this->setToolTip(tip);
 }
 

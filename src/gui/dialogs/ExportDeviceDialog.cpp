@@ -36,17 +36,17 @@ ExportDeviceDialog::ExportDeviceDialog(QWidget *parent, QString deviceName) :
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Export Devices..."));
+    setWindowTitle(QObject::tr("Export Devices..."));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 
     QGroupBox *bg = new QGroupBox("Export devices");
     QVBoxLayout *bgLayout = new QVBoxLayout;
-    m_exportAll = new QRadioButton(i18n("Export all devices"));
+    m_exportAll = new QRadioButton(QObject::tr("Export all devices"));
     bgLayout->addWidget(m_exportAll);
-    m_exportOne = new QRadioButton(i18n("Export selected device only"));
+    m_exportOne = new QRadioButton(QObject::tr("Export selected device only"));
     bgLayout->addWidget(m_exportOne);
-    bgLayout->addWidget(new QLabel(i18n("         (\"%1\")", deviceName)));
+    bgLayout->addWidget(new QLabel(QObject::tr("         (\"%1\")").arg(deviceName)));
     bg->setLayout(bgLayout);
 
     m_exportOne->setChecked(true);

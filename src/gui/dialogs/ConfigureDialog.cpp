@@ -46,12 +46,12 @@ namespace Rosegarden
 ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                                  QWidget *parent,
 								 const char *name)
-			//: QDialog(parent) //, i18n("Configure Rosegarden"), name)
-	: ConfigureDialogBase(parent, i18n("Configure Rosegarden"), name )
+			//: QDialog(parent) //, QObject::tr("Configure Rosegarden"), name)
+	: ConfigureDialogBase(parent, QObject::tr("Configure Rosegarden"), name )
 {
 	
 //  set in parent constr.
-//	this->setWindowTitle( i18n("Configure Rosegarden") );
+//	this->setWindowTitle( QObject::tr("Configure Rosegarden") );
 //	this->setObjectName( objName );
 	
 	QWidget *pageWidget = 0;

@@ -28,7 +28,7 @@ namespace Rosegarden
 ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
                                                          Segment &segment,
                                                          Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(i18n("Erase Controller Event(s)"),
+    : BasicCommand(QObject::tr("Erase Controller Event(s)"),
                    segment,
                    start,
                    (start == end) ? start + 10 : end, 

@@ -73,7 +73,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(i18n(editable ? "Advanced Event Edit" : "Advanced Event Viewer"));
+    setWindowTitle(QObject::tr(editable ? "Advanced Event Edit" : "Advanced Event Viewer"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -82,13 +82,13 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *intrinsicGrid = new QGroupBox(i18n("Intrinsics"), vbox);
+    QGroupBox *intrinsicGrid = new QGroupBox(QObject::tr("Intrinsics"), vbox);
     QGridLayout *intrinsicGridLay = new QGridLayout(intrinsicGrid);
     vboxLayout->addWidget(intrinsicGrid);
 
     int row = 0;
 
-    intrinsicGridLay->addWidget(new QLabel(i18n("Event type: ")), row, 0);
+    intrinsicGridLay->addWidget(new QLabel(QObject::tr("Event type: ")), row, 0);
     intrinsicGridLay->addWidget(new QLabel("", intrinsicGrid), row, 1);
     intrinsicGridLay->addWidget(new QLabel("", intrinsicGrid), row, 2);
     QLineEdit *lineEdit = new QLineEdit(intrinsicGrid);
@@ -96,7 +96,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     intrinsicGridLay->addWidget(lineEdit, row, 3);
     row++;
 
-    intrinsicGridLay->addWidget(new QLabel(i18n("Absolute time: ")), row, 0);
+    intrinsicGridLay->addWidget(new QLabel(QObject::tr("Absolute time: ")), row, 0);
     intrinsicGridLay->addWidget(new QLabel(""), row, 1);
     intrinsicGridLay->addWidget(new QLabel(""), row, 2);
     QSpinBox *absoluteTime = new QSpinBox;
@@ -110,7 +110,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
                      this, SLOT(slotAbsoluteTimeChanged(int)));
     slotAbsoluteTimeChanged(event.getAbsoluteTime());
 
-    intrinsicGridLay->addWidget(new QLabel(i18n("Duration: ")), row, 0);
+    intrinsicGridLay->addWidget(new QLabel(QObject::tr("Duration: ")), row, 0);
     m_durationDisplay = new QLabel("(note)");
     m_durationDisplay->setMinimumWidth(20);
     intrinsicGridLay->addWidget(m_durationDisplay, row, 1);
@@ -128,7 +128,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
                      this, SLOT(slotDurationChanged(int)));
     slotDurationChanged(event.getDuration());
 
-    intrinsicGridLay->addWidget(new QLabel(i18n("Sub-ordering: ")), row, 0);
+    intrinsicGridLay->addWidget(new QLabel(QObject::tr("Sub-ordering: ")), row, 0);
     intrinsicGridLay->addWidget(new QLabel(""), row, 1);
     intrinsicGridLay->addWidget(new QLabel(""), row, 2);
     QSpinBox *subOrdering = new QSpinBox;
@@ -143,23 +143,23 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
     intrinsicGrid->setLayout(intrinsicGridLay);
 
-    m_persistentGrid = new QGroupBox( i18n("Persistent properties"), vbox );
+    m_persistentGrid = new QGroupBox( QObject::tr("Persistent properties"), vbox );
     m_persistentGridLay = new QGridLayout(m_persistentGrid);
     vboxLayout->addWidget(m_persistentGrid);
 
     m_persistentGridRow = 0;
 
-    QLabel *label = new QLabel(i18n("Name"), m_persistentGrid);
+    QLabel *label = new QLabel(QObject::tr("Name"), m_persistentGrid);
     QFont font(label->font());
     font.setItalic(true);
     label->setFont(font);
     m_persistentGridLay->addWidget(label, m_persistentGridRow, 0);
 
-    label = new QLabel(i18n("Type"), m_persistentGrid);
+    label = new QLabel(QObject::tr("Type"), m_persistentGrid);
     label->setFont(font);
     m_persistentGridLay->addWidget(label, m_persistentGridRow, 1);
 
-    label = new QLabel(i18n("Value"), m_persistentGrid);
+    label = new QLabel(QObject::tr("Value"), m_persistentGrid);
     label->setFont(font);
     m_persistentGridLay->addWidget(label, m_persistentGridRow, 2);
 
@@ -187,12 +187,12 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
         // create bottom area container (group-box) for non-persistent-events view
         QGroupBox *nonPersistentBox = 
-            new QGroupBox( i18n("Non-persistent properties"));
+            new QGroupBox( QObject::tr("Non-persistent properties"));
         QVBoxLayout *nonPersistentBoxLayout = new QVBoxLayout;
         vboxLayout->addWidget(nonPersistentBox);
 
         // insert label
-        nonPersistentBoxLayout->addWidget(new QLabel(i18n(
+        nonPersistentBoxLayout->addWidget(new QLabel(QObject::tr(
                 "These are cached values, lost if the event is modified.")));
 
 
@@ -203,15 +203,15 @@ EventEditDialog::EventEditDialog(QWidget *parent,
 
         int nonPersistentGridRow = 0;
 
-        label = new QLabel(i18n("Name       "));
+        label = new QLabel(QObject::tr("Name       "));
         label->setFont(font);
         nonPersistentGridLay->addWidget(label, nonPersistentGridRow, 0);
 
-        label = new QLabel(i18n("Type       "));
+        label = new QLabel(QObject::tr("Type       "));
         label->setFont(font);
         nonPersistentGridLay->addWidget(label, nonPersistentGridRow, 1);
 
-        label = new QLabel(i18n("Value      "));
+        label = new QLabel(QObject::tr("Value      "));
         label->setFont(font);
         nonPersistentGridLay->addWidget(label, nonPersistentGridRow, 2);
 
@@ -240,7 +240,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
             button->setObjectName(strtoqstr(*i));
             button->setFixedSize(QSize(24, 24));
             nonPersistentGridLay->addWidget(label, nonPersistentGridRow, 3);
-            button->setToolTip(i18n("Make persistent"));
+            button->setToolTip(QObject::tr("Make persistent"));
             QObject::connect(button, SIGNAL(clicked()),
                                 this, SLOT(slotPropertyMadePersistent()));
 
@@ -337,7 +337,7 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
             spinBox->setRange(INT_MIN, INT_MAX);
             spinBox->setSingleStep(1);
             spinBox->setObjectName(strtoqstr(name));
-            spinBox->setSuffix(i18n("sec"));
+            spinBox->setSuffix(QObject::tr("sec"));
             spinBox->setValue(realTime.sec);
             hboxLayout->addWidget(spinBox);
 
@@ -351,7 +351,7 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
             spinBox->setRange(INT_MIN, INT_MAX);
             spinBox->setSingleStep( 1 );
             spinBox->setObjectName(strtoqstr(name));
-            spinBox->setSuffix(i18n("nsec"));
+            spinBox->setSuffix(QObject::tr("nsec"));
             spinBox->setValue(realTime.nsec);
             hboxLayout->addWidget(spinBox);
 
@@ -391,7 +391,7 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
     QPushButton *button = new QPushButton("X");
     button->setObjectName(strtoqstr(name));
     button->setFixedSize(QSize(24, 24));
-    button->setToolTip(i18n("Delete this property"));
+    button->setToolTip(QObject::tr("Delete this property"));
     m_persistentGridLay->addWidget(button, m_persistentGridRow, 3);
     QObject::connect(button, SIGNAL(clicked()),
                      this, SLOT(slotPropertyDeleted()));
@@ -534,12 +534,12 @@ EventEditDialog::slotPropertyDeleted()
     QString propertyName = pushButton->objectName();
 
 
-    QMessageBox msgBox(QMessageBox::Warning, i18n("Edit Event"),
-             i18n("Are you sure you want to delete the \"%1\" property?\n\n"
-                  "Removing necessary properties may cause unexpected behavior.",
-                  propertyName),
+    QMessageBox msgBox(QMessageBox::Warning, QObject::tr("Edit Event"),
+             QObject::tr("Are you sure you want to delete the \"%1\" property?\n\n"
+                  "Removing necessary properties may cause unexpected behavior.")
+                  .arg(propertyName),
              QMessageBox::Cancel, this);
-    QPushButton *ok = msgBox.addButton(i18n("&Delete"),
+    QPushButton *ok = msgBox.addButton(QObject::tr("&Delete"),
                                        QMessageBox::AcceptRole);
     msgBox.exec();
     if (msgBox.clickedButton() != ok)
@@ -567,12 +567,12 @@ EventEditDialog::slotPropertyMadePersistent()
 
     QString propertyName = pushButton->objectName();
 
-    QMessageBox msgBox(QMessageBox::Warning, i18n("Edit Event"),
-             i18n("Are you sure you want to make the \"%1\" property persistent?"
+    QMessageBox msgBox(QMessageBox::Warning, QObject::tr("Edit Event"),
+             QObject::tr("Are you sure you want to make the \"%1\" property persistent?"
                   "\n\nThis could cause problems if it overrides a different "
-                  "computed value later on.", propertyName),
+                  "computed value later on.").arg(propertyName),
              QMessageBox::Cancel, this);
-    QPushButton *ok = msgBox.addButton(i18n("Make &Persistent"),
+    QPushButton *ok = msgBox.addButton(QObject::tr("Make &Persistent"),
                                        QMessageBox::AcceptRole);
     msgBox.exec();
     if (msgBox.clickedButton() != ok)

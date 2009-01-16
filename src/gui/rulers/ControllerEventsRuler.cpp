@@ -182,7 +182,7 @@ ControllerEventsRuler::~ControllerEventsRuler()
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
-        QString name = i18n("Unsupported Event Type");
+        QString name = QObject::tr("Unsupported Event Type");
 
         if (m_controller->getType() == Controller::EventType) {
             QString hexValue;
@@ -192,12 +192,12 @@ QString ControllerEventsRuler::getName()
                    .arg(int(m_controller->getControllerValue()))
                    .arg(hexValue);
         } else if (m_controller->getType() == PitchBend::EventType) {
-            name = i18n("Pitch Bend");
+            name = QObject::tr("Pitch Bend");
         }
 
         return name;
     } else
-        return i18n("Controller Events");
+        return QObject::tr("Controller Events");
 }
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
@@ -272,9 +272,9 @@ void ControllerEventsRuler::insertControllerEvent()
     } else {
         bool ok = false;
         QIntValidator intValidator(0, 128, this);
-//         QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0",
+//         QString res = KLineEditDlg::getText(QObject::tr("Controller Event Number"), "0",
 //                                             &ok, this, &intValidator);
-		QString res = QInputDialog::getText( this, "", i18n("Controller Event Number"),
+		QString res = QInputDialog::getText( this, "", QObject::tr("Controller Event Number"),
 											 QLineEdit::Normal, "0", &ok );
 		
         if (ok)
@@ -468,7 +468,7 @@ ControllerEventsRuler::drawControlLine(timeT startTime,
     timeT time = startTime, newTime = 0;
     double step = double(endValue - startValue) / double(endTime - startTime);
 
-    MacroCommand *macro = new MacroCommand(i18n("Add line of controllers"));
+    MacroCommand *macro = new MacroCommand(QObject::tr("Add line of controllers"));
 
     while (time < endTime) {
         int value = startValue + int(step * double(time - startTime));

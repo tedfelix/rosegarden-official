@@ -70,20 +70,20 @@ MarkerModifyDialog::initialise(Composition *composition,
     m_originalTime = time;
 
     setModal(true);
-    setWindowTitle(i18n("Edit Marker"));
+    setWindowTitle(QObject::tr("Edit Marker"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    m_timeEdit = new TimeWidget(i18n("Marker Time"), vbox, composition,
+    m_timeEdit = new TimeWidget(QObject::tr("Marker Time"), vbox, composition,
                                 time);
     vboxLayout->addWidget(m_timeEdit);
 
     /*!!!
      
-        layout->addWidget(new QLabel(i18n("Absolute Time:"), frame), 0, 0);
+        layout->addWidget(new QLabel(QObject::tr("Absolute Time:"), frame), 0, 0);
         m_timeEdit = new QSpinBox(frame);
         layout->addWidget(m_timeEdit, 0, 1);
      
@@ -94,7 +94,7 @@ MarkerModifyDialog::initialise(Composition *composition,
         m_timeEdit->setValue(time);
     */
 
-    QGroupBox *groupBox = new QGroupBox(i18n("Marker Properties"));
+    QGroupBox *groupBox = new QGroupBox(QObject::tr("Marker Properties"));
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     vboxLayout->addWidget(groupBox);
 
@@ -104,11 +104,11 @@ MarkerModifyDialog::initialise(Composition *composition,
     layout->setSpacing(5);
     groupBoxLayout->addWidget(frame);
 
-    layout->addWidget(new QLabel(i18n("Text:"), frame), 0, 0);
+    layout->addWidget(new QLabel(QObject::tr("Text:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(name, frame);
     layout->addWidget(m_nameEdit, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Description:"), frame), 1, 0);
+    layout->addWidget(new QLabel(QObject::tr("Description:"), frame), 1, 0);
     m_desEdit = new QLineEdit(des, frame);
     layout->addWidget(m_desEdit, 1, 1);
 

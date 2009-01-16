@@ -65,7 +65,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
         reject();
 
     setModal(true);
-    setWindowTitle(i18n("Autosplit Audio Segment"));
+    setWindowTitle(QObject::tr("Autosplit Audio Segment"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -74,7 +74,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     metagrid->addWidget(w, 0, 0);
 
 
-    new QLabel(i18n("AutoSplit Segment \"") +
+    new QLabel(QObject::tr("AutoSplit Segment \"") +
                strtoqstr(m_segment->getLabel()) + QString("\""), w);
 
     m_canvas = new Q3Canvas( w );
@@ -95,7 +95,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     wLayout->addWidget(hbox);
     w->setLayout(wLayout);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QLabel *child_3 = new QLabel(i18n("Threshold"), hbox );
+    QLabel *child_3 = new QLabel(QObject::tr("Threshold"), hbox );
     hboxLayout->addWidget(child_3);
     m_thresholdSpin = new QSpinBox( hbox );
     hboxLayout->addWidget(m_thresholdSpin);
@@ -161,7 +161,7 @@ AudioSplitDialog::drawPreview()
         Q3CanvasText *text = new Q3CanvasText(m_canvas);
         text->setColor(qApp->palette().
                        color(QPalette::Active, QColorGroup::Shadow));
-        text->setText(i18n("<no preview generated for this audio file>"));
+        text->setText(QObject::tr("<no preview generated for this audio file>"));
         text->setX(30);
         text->setY(30);
         text->setZ(4);

@@ -46,17 +46,17 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     QSettings settings;
     settings.beginGroup( LatencyOptionsConfigGroup );
 
-    frame = new QFrame(m_tabWidget, i18n("JACK latency"));
+    frame = new QFrame(m_tabWidget, QObject::tr("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
 
-    layout->addMultiCellWidget(new QLabel(i18n("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
+    layout->addMultiCellWidget(new QLabel(QObject::tr("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
                                0, 0,
                                0, 3);
 
-    layout->addWidget(new QLabel(i18n("JACK playback latency (in ms)"), frame), 1, 0);
-    layout->addWidget(new QLabel(i18n("JACK record latency (in ms)"), frame), 3, 0);
+    layout->addWidget(new QLabel(QObject::tr("JACK playback latency (in ms)"), frame), 1, 0);
+    layout->addWidget(new QLabel(QObject::tr("JACK record latency (in ms)"), frame), 3, 0);
 
-    m_fetchLatencyValues = new QPushButton(i18n("Fetch JACK latencies"),
+    m_fetchLatencyValues = new QPushButton(QObject::tr("Fetch JACK latencies"),
                                            frame);
 
     layout->addWidget(m_fetchLatencyValues, 1, 3);
@@ -109,7 +109,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     m_jackRecord->setValue(jackRecordValue);
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
-    addTab(frame, i18n("JACK Latency"));
+    addTab(frame, QObject::tr("JACK Latency"));
 
     settings.endGroup();
 #endif  // HAVE_LIBJACK

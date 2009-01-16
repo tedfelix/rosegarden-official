@@ -83,11 +83,11 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_programValue->setMaxVisibleItems(20);
     m_variationValue->setMaxVisibleItems(20);
     
-    m_bankLabel = new QLabel(i18n("Bank"), this);
-    m_variationLabel = new QLabel(i18n("Variation"), this);
-    m_programLabel = new QLabel(i18n("Program"), this);
-    QLabel *channelLabel = new QLabel(i18n("Channel out"), this);
-    QLabel *percussionLabel = new QLabel(i18n("Percussion"), this);
+    m_bankLabel = new QLabel(QObject::tr("Bank"), this);
+    m_variationLabel = new QLabel(QObject::tr("Variation"), this);
+    m_programLabel = new QLabel(QObject::tr("Program"), this);
+    QLabel *channelLabel = new QLabel(QObject::tr("Channel out"), this);
+    QLabel *percussionLabel = new QLabel(QObject::tr("Percussion"), this);
     
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
@@ -103,9 +103,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_connectionLabel->setAlignment(Qt::AlignCenter);
     
     
-    QString programTip = i18n("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
+    QString programTip = QObject::tr("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
-    m_evalMidiPrgChgLabel = new QLabel(i18n("Receive external"), this);
+    m_evalMidiPrgChgLabel = new QLabel(QObject::tr("Receive external"), this);
     m_evalMidiPrgChgLabel->setToolTip(programTip);
     
     m_evalMidiPrgChgCheckBox->setDisabled(false);
@@ -267,13 +267,13 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     //
     QString connection(strtoqstr(md->getConnection()));
     if (connection == "") {
-        m_connectionLabel->setText(i18n("[ %1 ]", i18n("No connection")));
+        m_connectionLabel->setText(QObject::tr("[ %1 ]").arg(QObject::tr("No connection")));
     } else {
 
         // remove trailing "(duplex)", "(read only)", "(write only)" etc
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
 
-        QString text = i18n("[ %1 ]", connection);
+        QString text = QObject::tr("[ %1 ]").arg(connection);
         /*QString origText(text);
 
         QFontMetrics metrics(m_connectionLabel->fontMetrics());
@@ -820,7 +820,7 @@ MIDIInstrumentParameterPanel::populateVariationList()
         if (programName != "") { // yes, that is how you know whether it exists
             /*
             	    m_variationValue->addItem(programName == defaultProgramName ?
-            					 i18n("(default)") :
+            					 QObject::tr("(default)") :
             					 strtoqstr(programName));
             */
             m_variationValue->addItem(QString("%1. %2")

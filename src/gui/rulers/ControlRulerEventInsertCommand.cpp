@@ -26,7 +26,7 @@ ControlRulerEventInsertCommand::ControlRulerEventInsertCommand(const std::string
                                                                timeT insertTime,
                                                                long number, long initialValue,
                                                                Segment &segment)
-    : BasicCommand(i18n("Insert Controller Event"),
+    : BasicCommand(QObject::tr("Insert Controller Event"),
                    segment,
                    insertTime, 
                    (insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work
