@@ -316,7 +316,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
         {
 	    if (octaves != 0) {
 		if (showStep) {
-		    return QObject::tr("down %n octave(s) and %2", "", octaves)
+		    return QObject::tr("down %n octave(s) and %1", "", octaves)
 			   .arg(textInterval);
 		} else {
 		    return QObject::tr("down %n octave(s)", "", octaves);
