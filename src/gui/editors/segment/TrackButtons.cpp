@@ -202,7 +202,7 @@ TrackButtons::populateButtons()
             }
 
         } else {
-            m_trackLabels[i]->getInstrumentLabel()->setText(QObject::tr("<no instrument>"));
+            m_trackLabels[i]->getInstrumentLabel()->setText(tr("<no instrument>"));
         }
 
         m_trackLabels[i]->update();
@@ -345,9 +345,9 @@ TrackButtons::slotUpdateTracks()
                 Instrument *ins =
                     m_doc->getStudio().getInstrumentById(track->getInstrument());
                 if (ins && ins->getType() == Instrument::Audio) {
-                    trackLabel->setText(QObject::tr("<untitled audio>"));
+                    trackLabel->setText(tr("<untitled audio>"));
                 } else {
-                    trackLabel->setText(QObject::tr("<untitled>"));
+                    trackLabel->setText(tr("<untitled>"));
                 }
             } else {
                 trackLabel->setText(strtoqstr(track->getLabel()));
@@ -410,9 +410,9 @@ TrackButtons::slotToggleRecordTrack(int position)
         } catch (AudioFileManager::BadAudioPathException e) {
             if (QMessageBox::warning( //ContinueCancel
                     this,
-					QObject::tr("Warning"),
-					//QObject::tr("Set audio file path")) 
-					QObject::tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+					tr("Warning"),
+					//tr("Set audio file path")) 
+					tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
 					QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
 					)
 				== QMessageBox::Yes
@@ -582,7 +582,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
 
     int position = comp.getTrackById(trackId)->getPosition();
 
-    QString instrumentName = QObject::tr("<no instrument>");
+    QString instrumentName = tr("<no instrument>");
     Track *track = comp.getTrackByPosition(position);
 
     Instrument *instrument = 0;
@@ -938,7 +938,7 @@ TrackButtons::slotSynchroniseWithComposition()
             Instrument *ins = studio.
                               getInstrumentById(track->getInstrument());
 
-            QString instrumentName(QObject::tr("<no instrument>"));
+            QString instrumentName(tr("<no instrument>"));
             if (ins)
                 instrumentName = strtoqstr(ins->getPresentationName());
 
@@ -1063,12 +1063,12 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     mute = new LedButton(Rosegarden::GUIPalette::getColour
               (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
-    mute->setToolTip(QObject::tr("Mute track"));
+    mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
 
     record = new LedButton(Rosegarden::GUIPalette::getColour
                 (Rosegarden::GUIPalette::RecordMIDITrackLED), trackHBox);
-    record->setToolTip(QObject::tr("Record on this track"));
+    record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
 
     record->off();
@@ -1097,9 +1097,9 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
     if (ins && ins->getType() == Rosegarden::Instrument::Audio) {
-        trackLabel->getTrackLabel()->setText(QObject::tr("<untitled audio>"));
+        trackLabel->getTrackLabel()->setText(tr("<untitled audio>"));
     } else {
-        trackLabel->getTrackLabel()->setText(QObject::tr("<untitled>"));
+        trackLabel->getTrackLabel()->setText(tr("<untitled>"));
     }
     }
     else
@@ -1130,7 +1130,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     Rosegarden::Instrument *ins =
         m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-    QString instrumentName(QObject::tr("<no instrument>"));
+    QString instrumentName(tr("<no instrument>"));
     if (ins) instrumentName = strtoqstr(ins->getPresentationName());
 
     // Set label to program change if it's being sent

@@ -51,10 +51,10 @@ ColourTable::ColourTable
 	setSelectionBehavior( QAbstractItemView::SelectRows );
 	
 	/*
-    horizontalHeader()->setLabel(0, QObject::tr("Name"));
-    horizontalHeader()->setLabel(1, QObject::tr("Color"));
+    horizontalHeader()->setLabel(0, tr("Name"));
+    horizontalHeader()->setLabel(1, tr("Color"));
 	*/
-	setHorizontalHeaderLabels( QStringList() << QObject::tr("Name") << QObject::tr("Color") );
+	setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
 	
     populate_table(input, list);
     connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
@@ -73,7 +73,7 @@ ColourTable::slotEditEntry(int row, int col)
             bool ok = false;
             //@@@ QInputDialog replaces KLineEditDlg.  This is not a clean swap,
             // and this is untested
-            QString newName = QInputDialog::getText(QObject::tr("Modify Color Name"), QObject::tr("Enter new name"),
+            QString newName = QInputDialog::getText(tr("Modify Color Name"), tr("Enter new name"),
                                                     QLineEdit::Normal, item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty())) {
@@ -119,7 +119,7 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
 
     for (RCMap::const_iterator it = input.begin(); it != input.end(); ++it) {
         if (it->second.second == std::string(""))
-            name = QObject::tr("Default Color");
+            name = tr("Default Color");
         else
             name = strtoqstr(it->second.second);
 

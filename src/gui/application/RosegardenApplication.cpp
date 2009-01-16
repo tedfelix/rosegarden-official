@@ -66,7 +66,7 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
             settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
 
             QMessageBox::critical( mainWidget(), "",  
-                    QObject::tr("Failed to load soundfont %1").arg(soundFontPath ));
+                    tr("Failed to load soundfont %1").arg(soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }

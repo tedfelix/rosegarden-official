@@ -56,36 +56,36 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
     m_step = new QComboBox( hbox );
     hboxLayout->addWidget(m_step);
     m_step->setMaxVisibleItems( 7 );
-    m_step->addItem(QObject::tr("C"));
-    m_step->addItem(QObject::tr("D"));
-    m_step->addItem(QObject::tr("E"));
-    m_step->addItem(QObject::tr("F"));
-    m_step->addItem(QObject::tr("G"));
-    m_step->addItem(QObject::tr("A"));
-    m_step->addItem(QObject::tr("B"));
+    m_step->addItem(tr("C"));
+    m_step->addItem(tr("D"));
+    m_step->addItem(tr("E"));
+    m_step->addItem(tr("F"));
+    m_step->addItem(tr("G"));
+    m_step->addItem(tr("A"));
+    m_step->addItem(tr("B"));
     m_step->setCurrentIndex(defaultNote);
 
     m_octave = new QComboBox( hbox );
     hboxLayout->addWidget(m_octave);
-    m_octave->addItem(QObject::tr("-2"));
-    m_octave->addItem(QObject::tr("-1"));
-    m_octave->addItem(QObject::tr("0"));
-    m_octave->addItem(QObject::tr("1"));
-    m_octave->addItem(QObject::tr("2"));
-    m_octave->addItem(QObject::tr("3"));
-    m_octave->addItem(QObject::tr("4"));
-    m_octave->addItem(QObject::tr("5"));
-    m_octave->addItem(QObject::tr("6"));
-    m_octave->addItem(QObject::tr("7"));
+    m_octave->addItem(tr("-2"));
+    m_octave->addItem(tr("-1"));
+    m_octave->addItem(tr("0"));
+    m_octave->addItem(tr("1"));
+    m_octave->addItem(tr("2"));
+    m_octave->addItem(tr("3"));
+    m_octave->addItem(tr("4"));
+    m_octave->addItem(tr("5"));
+    m_octave->addItem(tr("6"));
+    m_octave->addItem(tr("7"));
     m_octave->setCurrentIndex(defaultOctave);
 
     m_accidental = new QComboBox( hbox );
     hboxLayout->addWidget(m_accidental);
-    m_accidental->addItem(QObject::tr("double flat"));
-    m_accidental->addItem(QObject::tr("flat"));
-    m_accidental->addItem(QObject::tr("natural"));
-    m_accidental->addItem(QObject::tr("sharp"));
-    m_accidental->addItem(QObject::tr("double sharp"));
+    m_accidental->addItem(tr("double flat"));
+    m_accidental->addItem(tr("flat"));
+    m_accidental->addItem(tr("natural"));
+    m_accidental->addItem(tr("sharp"));
+    m_accidental->addItem(tr("double sharp"));
     m_accidental->setCurrentIndex(2); // default: natural
 
     m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox );

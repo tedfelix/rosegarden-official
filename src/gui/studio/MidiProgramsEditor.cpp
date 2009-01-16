@@ -61,8 +61,8 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                        QWidget* parent,
                                        const char* name)
         : NameSetEditor(bankEditor,
-                        QObject::tr("Bank and Program details"),
-                        parent, name, QObject::tr("Programs"), true),
+                        tr("Bank and Program details"),
+                        parent, name, tr("Programs"), true),
         m_device(0),
         m_bankList(bankEditor->getBankList()),
         m_programList(bankEditor->getProgramList()),
@@ -86,26 +86,26 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     frame->setContentsMargins(2, 2, 2, 2);
     QGridLayout *gridLayout = new QGridLayout(frame); // margin
 
-    gridLayout->addWidget(new QLabel(QObject::tr("Percussion"), frame),
+    gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
                           0, 0, Qt::AlignLeft);
     gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
             this, SLOT(slotNewPercussion()));
 
-    gridLayout->addWidget(new QLabel(QObject::tr("MSB Value"), frame),
+    gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
                           1, 0, Qt::AlignLeft);
     m_msb->setMinimum(0);
     m_msb->setMaximum(127);
     gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
 
-    m_msb->setToolTip(QObject::tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
 
-    m_lsb->setToolTip(QObject::tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
 
     connect(m_msb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewMSB(int)));
 
-    gridLayout->addWidget(new QLabel(QObject::tr("LSB Value"), frame),
+    gridLayout->addWidget(new QLabel(tr("LSB Value"), frame),
                           2, 0, Qt::AlignLeft);
     m_lsb->setMinimum(0);
     m_lsb->setMaximum(127);
@@ -158,7 +158,7 @@ MidiProgramsEditor::clearAll()
     for (unsigned int i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
-    setTitle(QObject::tr("Bank and Program details"));
+    setTitle(tr("Bank and Program details"));
 
     m_percussion->setChecked(false);
     m_msb->setValue(0);
@@ -241,7 +241,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
                 if (m_device->getKeyMappingForProgram(*it)) {
                     getEntryButton(i)->setIcon(QIcon(keyPixmap));
                     getEntryButton(i)->setToolTip
-                        (QObject::tr("Key Mapping: %1") 
+                        (tr("Key Mapping: %1") 
                               .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
@@ -464,7 +464,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
 
     int currentEntry = 0;
 
-    QAction *a = menu->addAction(QObject::tr("<no key mapping>"));
+    QAction *a = menu->addAction(tr("<no key mapping>"));
     a->setObjectName("0");
 
     for (int i = 0; i < kml.size(); ++i) {
@@ -536,7 +536,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
         if( ! icon.isNull() ){
             btn->setIcon( icon );
         }
-        btn->setToolTip(QObject::tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
+        btn->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
     btn->setEnabled(haveKeyMappings);
 }

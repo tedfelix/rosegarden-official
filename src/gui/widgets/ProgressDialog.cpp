@@ -39,9 +39,9 @@ ProgressDialog::ProgressDialog(QWidget *creator,
                                bool modal
 		):
 // 		QProgressDialog(creator, name,
-// 						QObject::tr("Processing..."), QString::null, modal),
+// 						tr("Processing..."), QString::null, modal),
 		
-// 		QProgressDialog( QObject::tr("Processing..."), QString("Cancel"), creator ),	//modal),
+// 		QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),	//modal),
 		QProgressDialog( creator, Qt::Dialog ),		// creator = parent ??
         m_wasVisible(false),
         m_frozen(false),
@@ -56,12 +56,12 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 // 	setMinimum();
 // 	setMaximum();
 // 	setValue();
-// 	setLabelText( QObject::tr("Processing...") );
-	setWindowTitle( QObject::tr("Processing...") );
+// 	setLabelText( tr("Processing...") );
+	setWindowTitle( tr("Processing...") );
 	setCancelButtonText( QString("Cancel") );
 	
 	
-    setCaption(QObject::tr("Processing..."));
+    setCaption(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
 
@@ -92,11 +92,11 @@ ProgressDialog::ProgressDialog(
     bool modal) :
 //         QProgressDialog(creator,
 //                         name,
-//                         QObject::tr("Processing..."),
+//                         tr("Processing..."),
 //                         labelText,
 //                         modal),
 		
-// 		QProgressDialog( QObject::tr("Processing..."), QString("Cancel"), creator ),	//modal),
+// 		QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),	//modal),
 		QProgressDialog( creator, Qt::Dialog ),	//modal),
 		
 		m_wasVisible(false),
@@ -113,8 +113,8 @@ ProgressDialog::ProgressDialog(
 // 	setMinimum();
 // 	setMaximum();
 // 	setValue();
-// 	setLabelText( QObject::tr("Processing...") );
-	setWindowTitle( QObject::tr("Processing...") );
+// 	setLabelText( tr("Processing...") );
+	setWindowTitle( tr("Processing...") );
 	setCancelButtonText( QString("Cancel") );
 	
 	

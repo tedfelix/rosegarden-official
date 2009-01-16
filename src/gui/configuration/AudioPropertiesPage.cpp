@@ -63,22 +63,22 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
     frame->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
-    layout->addWidget(new QLabel(QObject::tr("Audio file path:"), frame), 0, 0);
+    layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
     m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
     layout->addWidget(m_path, 0, 1);
 
     m_changePathButton =
-        new QPushButton(QObject::tr("Choose..."), frame);
+        new QPushButton(tr("Choose..."), frame);
 
     layout->addWidget(m_changePathButton, 0, 2);
 
     m_diskSpace = new QLabel(frame);
-    layout->addWidget(new QLabel(QObject::tr("Disk space remaining:"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("Disk space remaining:"), frame), 1, 0);
     layout->addWidget(m_diskSpace, 1, 1);
 
     m_minutesAtStereo = new QLabel(frame);
     layout->addWidget(
-        new QLabel(QObject::tr("Equivalent minutes of 16-bit stereo:"),
+        new QLabel(tr("Equivalent minutes of 16-bit stereo:"),
                    frame), 2, 0);
 
     layout->addWidget(m_minutesAtStereo, 2, 1, Qt::AlignCenter);
@@ -91,7 +91,7 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
     connect(m_changePathButton, SIGNAL(released()),
             SLOT(slotFileDialog()));
 
-    addTab(frame, QObject::tr("Modify audio path"));
+    addTab(frame, tr("Modify audio path"));
 }
 
 void
@@ -133,7 +133,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
         unsigned long /*kBUsed*/,
         unsigned long kBAvail )
 {
-    m_diskSpace->setText(QObject::tr("%1 kB out of %2 kB (%3% kB used)")
+    m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% kB used)")
                           //KIO::convertSizeFromKB
 			  .arg(kBAvail)
                           //KIO::convertSizeFromKB
@@ -156,7 +156,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 
     m_minutesAtStereo->
     setText(QString("%1 %2 %3Hz").arg(minsStr)
-            .arg(QObject::tr("minutes at"))
+            .arg(tr("minutes at"))
             .arg(sampleRate));
 }
 

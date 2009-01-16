@@ -80,12 +80,12 @@ PlayList::PlayList
     m_barLayout->addStretch();
 
 
-    m_openButton ->setText(QObject::tr("Add..."));
-    m_playButton ->setText(QObject::tr("Play"));
-    m_moveUpButton ->setText(QObject::tr("Move Up"));
-    m_moveDownButton->setText(QObject::tr("Move Down"));
-    m_deleteButton ->setText(QObject::tr("Delete"));
-    m_clearButton ->setText(QObject::tr("Clear"));
+    m_openButton ->setText(tr("Add..."));
+    m_playButton ->setText(tr("Play"));
+    m_moveUpButton ->setText(tr("Move Up"));
+    m_moveDownButton->setText(tr("Move Down"));
+    m_deleteButton ->setText(tr("Delete"));
+    m_clearButton ->setText(tr("Clear"));
 
     connect(m_openButton, SIGNAL(clicked()),
             SLOT(slotOpenFiles()));
@@ -129,12 +129,12 @@ void PlayList::slotOpenFiles()
         KFileDialog::getOpenURLs(":ROSEGARDEN",
                                  "audio/x-rosegarden audio/x-midi audio/x-rosegarden21",
                                  this,
-                                 QObject::tr("Select one or more Rosegarden files"));
+                                 tr("Select one or more Rosegarden files"));
 
     QUrl::List::iterator it;
 	*/
 	
-	QStringList files = QFileDialog::getOpenFileNames( this, QObject::tr("Select one or more Rosegarden files"), QDir::currentPath(), 0, 0);
+	QStringList files = QFileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(), 0, 0);
 	
 	QString fname;
 	

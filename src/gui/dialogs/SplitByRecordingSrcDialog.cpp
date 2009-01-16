@@ -41,7 +41,7 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Split by Recording Source"));
+    setWindowTitle(tr("Split by Recording Source"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -50,32 +50,32 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
     metagrid->addWidget(vBox, 0, 0);
 
 
-    QGroupBox *groupBox = new QGroupBox( QObject::tr("Recording Source"), vBox );
+    QGroupBox *groupBox = new QGroupBox( tr("Recording Source"), vBox );
     groupBox->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layout = new QGridLayout(groupBox);
     layout->setSpacing(5);
     vBoxLayout->addWidget(groupBox);
     vBox->setLayout(vBoxLayout);
 
-    layout->addWidget(new QLabel( QObject::tr("Channel:"), groupBox ), 0, 0);
+    layout->addWidget(new QLabel( tr("Channel:"), groupBox ), 0, 0);
     m_channel = new QComboBox( groupBox );
     m_channel->setMaxVisibleItems( 17 );
     layout->addWidget(m_channel, 0, 1);
     QSpacerItem *spacer = new QSpacerItem( 1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum );
     layout->addItem( spacer, 0, 2 );
 
-    m_channel->addItem(QObject::tr("any"));
+    m_channel->addItem(tr("any"));
     for (int i = 1; i < 17; ++i) {
         m_channel->addItem(QString::number(i));
     }
 
-    layout->addWidget(new QLabel( QObject::tr("Device:"), groupBox ), 1, 0);
+    layout->addWidget(new QLabel( tr("Device:"), groupBox ), 1, 0);
     m_device = new QComboBox( groupBox );
     layout->addWidget( m_device, 1, 1, 0+1, 2 - 1+1);
 
     m_deviceIds.clear();
     m_deviceIds.push_back( -1);
-    m_device->addItem(QObject::tr("any"));
+    m_device->addItem(tr("any"));
 
     DeviceList *devices = doc->getStudio().getDevices();
     DeviceListConstIterator it;
@@ -89,7 +89,7 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
             QString connection = strtoqstr(dev->getConnection());
             label += " - ";
             if (connection == "")
-                label += QObject::tr("No connection");
+                label += tr("No connection");
             else
                 label += connection;
             m_device->addItem(label);

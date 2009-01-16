@@ -116,7 +116,7 @@ int MatrixResizer::handleMouseMove(timeT newTime,
         return RosegardenCanvasView::NoFollow;
 
     if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
+        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
@@ -193,10 +193,10 @@ void MatrixResizer::handleMouseRelease(timeT newTime,
     if (selection->getAddedEvents() == 0)
         return ;
     else {
-        QString commandLabel = QObject::tr("Resize Event");
+        QString commandLabel = tr("Resize Event");
 
         if (selection->getAddedEvents() > 1)
-            commandLabel = QObject::tr("Resize Events");
+            commandLabel = tr("Resize Events");
 
         MacroCommand *macro = new MacroCommand(commandLabel);
 
@@ -299,9 +299,9 @@ void MatrixResizer::setBasicContextHelp()
 {
     EventSelection *selection = m_mParentView->getCurrentSelection();
     if (selection && selection->getAddedEvents() > 1) {
-        setContextHelp(QObject::tr("Click and drag to resize selected notes"));
+        setContextHelp(tr("Click and drag to resize selected notes"));
     } else {
-        setContextHelp(QObject::tr("Click and drag to resize a note"));
+        setContextHelp(tr("Click and drag to resize a note"));
     }
 }
 

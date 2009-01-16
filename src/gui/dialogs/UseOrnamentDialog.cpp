@@ -50,7 +50,7 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
         m_composition(composition)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Use Ornament"));
+    setWindowTitle(tr("Use Ornament"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
@@ -60,14 +60,14 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
 
     QLabel *label;
 
-    QGroupBox *notationBox = new QGroupBox(QObject::tr("Notation"));
+    QGroupBox *notationBox = new QGroupBox(tr("Notation"));
     vboxLayout->addWidget(notationBox);
 
     notationBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
 
-    label = new QLabel(QObject::tr("Display as:  "));
+    label = new QLabel(tr("Display as:  "));
     layout->addWidget(label, 0, 0);
 
     m_mark = new QComboBox;
@@ -83,9 +83,9 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     m_marks.push_back(Marks::MordentLongInverted);
 
     const QString markLabels[] = {
-                                     QObject::tr("Trill"), QObject::tr("Trill with line"), QObject::tr("Trill line only"),
-                                     QObject::tr("Turn"), QObject::tr("Mordent"), QObject::tr("Inverted mordent"),
-                                     QObject::tr("Long mordent"), QObject::tr("Long inverted mordent"),
+                                     tr("Trill"), tr("Trill with line"), tr("Trill line only"),
+                                     tr("Turn"), tr("Mordent"), tr("Inverted mordent"),
+                                     tr("Long mordent"), tr("Long inverted mordent"),
                                  };
 
     for (size_t i = 0; i < m_marks.size(); ++i) {
@@ -93,18 +93,18 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
                            (NotePixmapFactory::makeMarkMenuPixmap(m_marks[i])),
                            markLabels[i]);
     }
-    m_mark->addItem(QObject::tr("Text mark"));
+    m_mark->addItem(tr("Text mark"));
 
     connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
 
-    m_textLabel = new QLabel(QObject::tr("   Text:  "));
+    m_textLabel = new QLabel(tr("   Text:  "));
     layout->addWidget(m_textLabel, 0, 2);
 
     m_text = new QLineEdit;
     layout->addWidget(m_text, 0, 3);
     notationBox->setLayout(layout);
 
-    QGroupBox *performBox = new QGroupBox(QObject::tr("Performance"));
+    QGroupBox *performBox = new QGroupBox(tr("Performance"));
     vboxLayout->addWidget(performBox);
     vbox->setLayout(vboxLayout);
 
@@ -112,7 +112,7 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     layout = new QGridLayout;
     layout->setSpacing(5);
 
-    label = new QLabel(QObject::tr("Perform using triggered segment: "));
+    label = new QLabel(tr("Perform using triggered segment: "));
     layout->addWidget(label, 0, 0);
 
     m_ornament = new QComboBox;
@@ -126,18 +126,18 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(QObject::tr("Perform with timing: "));
+    label = new QLabel(tr("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
     m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->addItem(QObject::tr("As stored"));
-    m_adjustTime->addItem(QObject::tr("Truncate if longer than note"));
-    m_adjustTime->addItem(QObject::tr("End at same time as note"));
-    m_adjustTime->addItem(QObject::tr("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(tr("As stored"));
+    m_adjustTime->addItem(tr("Truncate if longer than note"));
+    m_adjustTime->addItem(tr("End at same time as note"));
+    m_adjustTime->addItem(tr("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(QObject::tr("Adjust pitch to note"));
+    m_retune = new QCheckBox(tr("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);

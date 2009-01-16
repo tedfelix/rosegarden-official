@@ -39,7 +39,7 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     m_currentTrack(currentTrack)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Add Tracks"));
+    setWindowTitle(tr("Add Tracks"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -52,7 +52,7 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
 //    countBoxLayout->setSpacing(4);
 	vBox->setLayout( countBoxLayout );
 	
-    QLabel *child_8 = new QLabel(QObject::tr("How many tracks do you want to add?") );
+    QLabel *child_8 = new QLabel(tr("How many tracks do you want to add?") );
     countBoxLayout->addWidget(child_8);
 	
     m_count = new QSpinBox();
@@ -67,15 +67,15 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     vBox->setLayout(vBoxLayout);
     QHBoxLayout *posBoxLayout = new QHBoxLayout;
     posBoxLayout->setSpacing(4);
-    QLabel *child_4 = new QLabel(QObject::tr("Add tracks"), posBox );
+    QLabel *child_4 = new QLabel(tr("Add tracks"), posBox );
     posBoxLayout->addWidget(child_4);
     m_position = new QComboBox( posBox );
     posBoxLayout->addWidget(m_position);
     posBox->setLayout(posBoxLayout);
-    m_position->addItem(QObject::tr("At the top"));
-    m_position->addItem(QObject::tr("Above the current selected track"));
-    m_position->addItem(QObject::tr("TicksBelow the current selected track"));
-    m_position->addItem(QObject::tr("At the bottom"));
+    m_position->addItem(tr("At the top"));
+    m_position->addItem(tr("Above the current selected track"));
+    m_position->addItem(tr("TicksBelow the current selected track"));
+    m_position->addItem(tr("At the bottom"));
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );

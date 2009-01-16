@@ -532,7 +532,7 @@ LilyPondExporter::write()
 		int reply = QMessageBox::question(
                         dynamic_cast<QWidget*>(qApp),
 						baseName, 
-						QObject::tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
+						tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
                                 "Would you like to use\n\n %1\n\n instead?"),
 								QMessageBox::Yes |QMessageBox::Cancel,
 								QMessageBox::Cancel);
@@ -2316,13 +2316,13 @@ LilyPondExporter::writeBar(Segment *s,
     if (overlong) {
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1").
-                  arg(QObject::tr("warning: overlong bar truncated here")));
+                  arg(tr("warning: overlong bar truncated here")));
     }
 
     if (fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
-                arg(QObject::tr("warning: bar too short, padding with rests")));
+                arg(tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1/%2 < %3/%4").
                   arg(durationRatioSum.first).

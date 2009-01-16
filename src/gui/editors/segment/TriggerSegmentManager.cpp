@@ -85,31 +85,31 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(QObject::tr("Manage Triggered Segments"));
+    setCaption(tr("Manage Triggered Segments"));
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
 	
 	QStringList sl;
 	sl 		<< "Index"
-			<< QObject::tr("ID")
-			<< QObject::tr("Label")
-			<< QObject::tr("Duration")
-			<< QObject::tr("Base pitch")
-			<< QObject::tr("Base velocity")
-			<< QObject::tr("Triggers");
+			<< tr("ID")
+			<< tr("Label")
+			<< tr("Duration")
+			<< tr("Base pitch")
+			<< tr("Base velocity")
+			<< tr("Triggers");
 	
 	m_listView->setColumnCount( 7 );
 	m_listView->setHeaderLabels( sl );
 	
 	/*
 	m_listView->addColumn("Index");
-    m_listView->addColumn(QObject::tr("ID"));
-    m_listView->addColumn(QObject::tr("Label"));
-    m_listView->addColumn(QObject::tr("Duration"));
-    m_listView->addColumn(QObject::tr("Base pitch"));
-    m_listView->addColumn(QObject::tr("Base velocity"));
-    m_listView->addColumn(QObject::tr("Triggers"));
+    m_listView->addColumn(tr("ID"));
+    m_listView->addColumn(tr("Label"));
+    m_listView->addColumn(tr("Duration"));
+    m_listView->addColumn(tr("Base pitch"));
+    m_listView->addColumn(tr("Base velocity"));
+    m_listView->addColumn(tr("Triggers"));
 	*/
 	
     // Align centrally
@@ -129,19 +129,19 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
-    m_addButton = new QPushButton(QObject::tr("Add"), btnBox);
-    m_deleteButton = new QPushButton(QObject::tr("Delete"), btnBox);
-    m_deleteAllButton = new QPushButton(QObject::tr("Delete All"), btnBox);
+    m_addButton = new QPushButton(tr("Add"), btnBox);
+    m_deleteButton = new QPushButton(tr("Delete"), btnBox);
+    m_deleteAllButton = new QPushButton(tr("Delete All"), btnBox);
 
-    m_closeButton = new QPushButton(QObject::tr("Close"), btnBox);
+    m_closeButton = new QPushButton(tr("Close"), btnBox);
 
-    m_addButton->setToolTip(QObject::tr("Add a Triggered Segment"));
+    m_addButton->setToolTip(tr("Add a Triggered Segment"));
 
-    m_deleteButton->setToolTip(QObject::tr("Delete a Triggered Segment"));
+    m_deleteButton->setToolTip(tr("Delete a Triggered Segment"));
 
-    m_deleteAllButton->setToolTip(QObject::tr("Delete All Triggered Segments"));
+    m_deleteAllButton->setToolTip(tr("Delete All Triggered Segments"));
 
-    m_closeButton->setToolTip(QObject::tr("Close the Triggered Segment Manager"));
+    m_closeButton->setToolTip(tr("Close the Triggered Segment Manager"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
@@ -266,9 +266,9 @@ TriggerSegmentManager::slotUpdate()
 
         QString label = strtoqstr((*it)->getSegment()->getLabel());
         if (label == "")
-            label = QObject::tr("<no label>");
+            label = tr("<no label>");
 
-        QString used = QObject::tr("%1 on %n track(s)", "",
+        QString used = tr("%1 on %n track(s)", "",
                             tracks.size()).arg(uses);
 
         QString pitch = QString("%1 (%2)")
@@ -295,7 +295,7 @@ TriggerSegmentManager::slotUpdate()
 
     if (m_listView->topLevelItemCount() == 0) {
         QTreeWidgetItem *item =
-            new TriggerManagerItem(m_listView, QStringList() << QObject::tr("<none>") );
+            new TriggerManagerItem(m_listView, QStringList() << tr("<none>") );
         m_listView->addTopLevelItem(item);
 
 //         m_listView->setSelectionMode(QTreeWidget::NoSelection);
@@ -312,11 +312,11 @@ TriggerSegmentManager::slotUpdate()
 void
 TriggerSegmentManager::slotDeleteAll()
 {
-	if (QMessageBox::warning(this, "", QObject::tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
+	if (QMessageBox::warning(this, "", tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
-    MacroCommand *command = new MacroCommand(QObject::tr("Remove all triggered segments"));
+    MacroCommand *command = new MacroCommand(tr("Remove all triggered segments"));
 
 // 	QTreeWidgetItem *it = m_listView->firstChild();
 	QTreeWidgetItem *it = m_listView->topLevelItem(0);
@@ -342,7 +342,7 @@ TriggerSegmentManager::slotDeleteAll()
 void
 TriggerSegmentManager::slotAdd()
 {
-    TimeDialog dialog(this, QObject::tr("Trigger Segment Duration"),
+    TimeDialog dialog(this, tr("Trigger Segment Duration"),
                       &m_doc->getComposition(),
                       0, 3840, false);
 
@@ -364,7 +364,7 @@ TriggerSegmentManager::slotDelete()
         return ;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warning(this, "", QObject::tr("This triggered segment is used %1 time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
+        if (QMessageBox::warning(this, "", tr("This triggered segment is used %1 time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
 										QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
 		   					) != QMessageBox::Yes )
             return ;
@@ -382,7 +382,7 @@ TriggerSegmentManager::slotPasteAsNew()
     Clipboard *clipboard = m_doc->getClipboard();
 
     if (clipboard->isEmpty()) {
-        QMessageBox::information(this, "", QObject::tr("Clipboard is empty"));
+        QMessageBox::information(this, "", tr("Clipboard is empty"));
         return ;
     }
 
@@ -413,7 +413,7 @@ TriggerSegmentManager::setupActions()
 //                                        actionCollection());
     createAction( "file_close", SLOT(slotClose()) );
 
-    //!!! will not work right -- need to do this after createGUI call or just use hardcoded QObject::tr("Close")
+    //!!! will not work right -- need to do this after createGUI call or just use hardcoded tr("Close")
     m_closeButton->setText( findAction("file_close")->text() );
 
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));

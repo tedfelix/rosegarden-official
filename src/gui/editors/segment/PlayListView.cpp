@@ -31,10 +31,10 @@ PlayListView::PlayListView(QWidget *parent, const char *name)
 {
 	this->setObjectName( name );
 	
-//     addColumn(QObject::tr("Title"));
-//     addColumn(QObject::tr("File name"));
+//     addColumn(tr("Title"));
+//     addColumn(tr("File name"));
 	setColumnCount( 2 );
-	setHeaderLabels( QStringList() << QObject::tr("Title") << QObject::tr("File name") );
+	setHeaderLabels( QStringList() << tr("Title") << tr("File name") );
 	
     setDragEnabled(true);
     setAcceptDrops(true);

@@ -45,7 +45,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Rescale"));
+    setWindowTitle(tr("Rescale"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -54,17 +54,17 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    m_newDuration = new TimeWidget(QObject::tr("Duration of selection"), vbox,
+    m_newDuration = new TimeWidget(tr("Duration of selection"), vbox,
                      composition, startTime, originalDuration, true,
                      constrainToCompositionDuration);
     vboxLayout->addWidget(m_newDuration);
 
     if (showCloseGapOption) {
-        QGroupBox *optionBox = new QGroupBox( QObject::tr("Options"), vbox );
+        QGroupBox *optionBox = new QGroupBox( tr("Options"), vbox );
         QVBoxLayout *optionBoxLayout = new QVBoxLayout;
         vboxLayout->addWidget(optionBox);
         vbox->setLayout(vboxLayout);
-        m_closeGap = new QCheckBox(QObject::tr("Adjust times of following events accordingly"),
+        m_closeGap = new QCheckBox(tr("Adjust times of following events accordingly"),
                                    optionBox);
         optionBoxLayout->addWidget(m_closeGap);
         optionBox->setLayout(optionBoxLayout);

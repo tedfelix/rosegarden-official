@@ -216,7 +216,7 @@ int SegmentPencil::handleMouseMove(QMouseEvent *e)
     }
 
     if (!m_canvas->isFineGrain()) {
-        setContextHelp(QObject::tr("Hold Shift to avoid snapping to bar lines"));
+        setContextHelp(tr("Hold Shift to avoid snapping to bar lines"));
     } else {
         clearContextHelp();
     }
@@ -274,13 +274,13 @@ void SegmentPencil::setContextHelpFor(QPoint p)
         if (t) {
             InstrumentId id = t->getInstrument();
             if (id >= AudioInstrumentBase && id < MidiInstrumentBase) {
-                setContextHelp(QObject::tr("Record or drop audio here"));
+                setContextHelp(tr("Record or drop audio here"));
                 return;
             }
         }
     }
 
-    setContextHelp(QObject::tr("Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode."));
+    setContextHelp(tr("Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode."));
 }
 
 const QString SegmentPencil::ToolName   = "segmentpencil";

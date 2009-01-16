@@ -41,7 +41,7 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
         m_file(file)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Locate audio file"));
+    setWindowTitle(tr("Locate audio file"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *w = new QWidget(this);
@@ -49,7 +49,7 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
     metagrid->addWidget(w, 0, 0);
 
     QString label =
-        QObject::tr("Can't find file \"%1\".\n"
+        tr("Can't find file \"%1\".\n"
              "Would you like to try and locate this file or skip it?")
              .arg(m_file);
 
@@ -61,15 +61,15 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox;
 
-    QPushButton *user1 = new QPushButton(QObject::tr("&Skip"));
+    QPushButton *user1 = new QPushButton(tr("&Skip"));
     buttonBox->addButton(user1, QDialogButtonBox::ActionRole);
     connect(user1, SIGNAL(clicked(bool)), this, SLOT(slotUser1()));
 
-    QPushButton *user2 = new QPushButton(QObject::tr("Skip &All"));
+    QPushButton *user2 = new QPushButton(tr("Skip &All"));
     buttonBox->addButton(user2, QDialogButtonBox::ActionRole);
     connect(user2, SIGNAL(clicked(bool)), this, SLOT(slotUser2()));
 
-    QPushButton *user3 = new QPushButton(QObject::tr("&Locate"));
+    QPushButton *user3 = new QPushButton(tr("&Locate"));
     buttonBox->addButton(user3, QDialogButtonBox::ActionRole);
     connect(user3, SIGNAL(clicked(bool)), this, SLOT(slotUser3()));
 
@@ -83,14 +83,14 @@ void
 FileLocateDialog::slotUser3()
 {
     if (!m_file.isEmpty()) {
-		m_file = QFileDialog::getOpenFileName( this, QObject::tr("Select an Audio File"), QDir::currentPath(), QObject::tr("%1|Requested file (%2)\n*.wav|WAV files (*.wav)").arg(QFileInfo(m_file).fileName()).arg(QFileInfo(m_file).fileName()) );
+		m_file = QFileDialog::getOpenFileName( this, tr("Select an Audio File"), QDir::currentPath(), tr("%1|Requested file (%2)\n*.wav|WAV files (*.wav)").arg(QFileInfo(m_file).fileName()).arg(QFileInfo(m_file).fileName()) );
 				
 				/*
 				(":WAVS",
-                  QObject::tr("%1|Requested file (%2)\n*.wav|WAV files (*.wav)")
+                  tr("%1|Requested file (%2)\n*.wav|WAV files (*.wav)")
                    .arg(QFileInfo(m_file).fileName())
                    .arg(QFileInfo(m_file).fileName()),
-                  this, QObject::tr("Select an Audio File"));
+                  this, tr("Select an Audio File"));
 				*/
 
         RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;

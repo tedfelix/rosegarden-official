@@ -85,8 +85,8 @@ namespace Rosegarden
 
 TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
                                       QWidget *parent)
-        : RosegardenParameterBox(QObject::tr("Track"),
-                                 QObject::tr("Track Parameters"),
+        : RosegardenParameterBox(tr("Track"),
+                                 tr("Track Parameters"),
                                  parent),
         m_doc(doc),
         m_highestPlayable(127),
@@ -129,14 +129,14 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // track label
     //
-    m_trackLabel = new SqueezedLabel (QObject::tr("<untitled>"), this );
+    m_trackLabel = new SqueezedLabel (tr("<untitled>"), this );
     m_trackLabel->setAlignment(Qt::AlignCenter);
     //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 
     // playback group
     //
-    CollapsingFrame *cframe = new CollapsingFrame(QObject::tr("Playback parameters"),
+    CollapsingFrame *cframe = new CollapsingFrame(tr("Playback parameters"),
                               this, "trackparametersplayback");
     m_playbackGroup = new QFrame(cframe);
     cframe->setWidget(m_playbackGroup);
@@ -152,7 +152,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // playback device
     //
     //    row++;
-    QLabel *devLabel = new QLabel(QObject::tr("Device"), m_playbackGroup);
+    QLabel *devLabel = new QLabel(tr("Device"), m_playbackGroup);
     groupLayout->addWidget(devLabel, row, 0);
     m_playDevice = new QComboBox(m_playbackGroup);
     m_playDevice->setMinimumWidth(width25);
@@ -161,7 +161,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // playback instrument
     //
     row++;
-    QLabel *insLabel = new QLabel(QObject::tr("Instrument"), m_playbackGroup);
+    QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
     groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
     m_instrument->setMaxVisibleItems( 16 );
@@ -174,7 +174,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // record group
     //
-    cframe = new CollapsingFrame(QObject::tr("Recording filters"), this,
+    cframe = new CollapsingFrame(tr("Recording filters"), this,
                                  "trackparametersrecord");
     m_recordGroup = new QFrame(cframe);
     cframe->setWidget(m_recordGroup);
@@ -187,7 +187,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     row = 0;
 
     // recording device
-    groupLayout->addWidget(new QLabel(QObject::tr("Device"), m_recordGroup), row, 0);
+    groupLayout->addWidget(new QLabel(tr("Device"), m_recordGroup), row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
@@ -195,7 +195,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // recording channel
     //
     row++;
-    groupLayout->addWidget(new QLabel(QObject::tr("Channel"), m_recordGroup), row, 0, 1, 2);
+    groupLayout->addWidget(new QLabel(tr("Channel"), m_recordGroup), row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
@@ -207,7 +207,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // staff group
     //
-    cframe = new CollapsingFrame(QObject::tr("Staff export options"), this,
+    cframe = new CollapsingFrame(tr("Staff export options"), this,
                                  "staffoptions");
     m_staffGroup = new QFrame(cframe);
     cframe->setWidget(m_staffGroup);
@@ -225,31 +225,31 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // per-staff (rather than per-score) basis is something the author of the
     // LilyPond documentation has no idea how to do, so we settle for this,
     // which is not as nice, but actually a lot easier to implement.
-    m_staffGrpLbl = new QLabel(QObject::tr("Notation size:"), m_staffGroup);
+    m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
     m_staffSizeCombo->setMinimumWidth(width11);
-    m_staffSizeCombo->addItem(QObject::tr("Normal"), StaffTypes::Normal);
-    m_staffSizeCombo->addItem(QObject::tr("Small"), StaffTypes::Small);
-    m_staffSizeCombo->addItem(QObject::tr("Tiny"), StaffTypes::Tiny);
+    m_staffSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
+    m_staffSizeCombo->addItem(tr("Small"), StaffTypes::Small);
+    m_staffSizeCombo->addItem(tr("Tiny"), StaffTypes::Tiny);
 
     groupLayout->addWidget(m_staffSizeCombo, row, 1, row- row+1, 2);
 
     // Staff bracketing (export only at the moment, but using this for GUI
     // rendering would be nice in the future!) //!!! 
     row++;
-    m_grandStaffLbl = new QLabel(QObject::tr("Bracket type:"), m_staffGroup);
+    m_grandStaffLbl = new QLabel(tr("Bracket type:"), m_staffGroup);
     groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
     m_staffBracketCombo->setMinimumWidth(width11);
-    m_staffBracketCombo->addItem(QObject::tr("-----"), Brackets::None);
-    m_staffBracketCombo->addItem(QObject::tr("[----"), Brackets::SquareOn);
-    m_staffBracketCombo->addItem(QObject::tr("----]"), Brackets::SquareOff);
-    m_staffBracketCombo->addItem(QObject::tr("[---]"), Brackets::SquareOnOff);
-    m_staffBracketCombo->addItem(QObject::tr("{----"), Brackets::CurlyOn);
-    m_staffBracketCombo->addItem(QObject::tr("----}"), Brackets::CurlyOff);
-    m_staffBracketCombo->addItem(QObject::tr("{[---"), Brackets::CurlySquareOn);
-    m_staffBracketCombo->addItem(QObject::tr("---]}"), Brackets::CurlySquareOff);
+    m_staffBracketCombo->addItem(tr("-----"), Brackets::None);
+    m_staffBracketCombo->addItem(tr("[----"), Brackets::SquareOn);
+    m_staffBracketCombo->addItem(tr("----]"), Brackets::SquareOff);
+    m_staffBracketCombo->addItem(tr("[---]"), Brackets::SquareOnOff);
+    m_staffBracketCombo->addItem(tr("{----"), Brackets::CurlyOn);
+    m_staffBracketCombo->addItem(tr("----}"), Brackets::CurlyOff);
+    m_staffBracketCombo->addItem(tr("{[---"), Brackets::CurlySquareOn);
+    m_staffBracketCombo->addItem(tr("---]}"), Brackets::CurlySquareOff);
 
     groupLayout->addWidget(m_staffBracketCombo, row, 1, row- row+1, 2);
 
@@ -258,7 +258,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
 
     // default segment group
     //
-    cframe = new CollapsingFrame(QObject::tr("Create segments with"), this,
+    cframe = new CollapsingFrame(tr("Create segments with"), this,
                                  "trackparametersdefaults");
     m_defaultsGroup = new QFrame(cframe);
     cframe->setWidget(m_defaultsGroup);
@@ -270,48 +270,48 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     row = 0;
 
     // preset picker
-    m_psetLbl = new QLabel(QObject::tr("Preset"), m_defaultsGroup);
+    m_psetLbl = new QLabel(tr("Preset"), m_defaultsGroup);
     groupLayout->addWidget(m_psetLbl, row, 0, Qt::AlignLeft);
 
-    m_presetLbl = new QLabel(QObject::tr("<none>"), m_defaultsGroup);
+    m_presetLbl = new QLabel(tr("<none>"), m_defaultsGroup);
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_presetLbl->setFixedWidth(width20);
     groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
 
-    m_presetButton = new QPushButton(QObject::tr("Load"), m_defaultsGroup);
+    m_presetButton = new QPushButton(tr("Load"), m_defaultsGroup);
     groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5-4+1);
 
     // default clef
     //
     row++;
-    m_clefLbl = new QLabel(QObject::tr("Clef"), m_defaultsGroup);
+    m_clefLbl = new QLabel(tr("Clef"), m_defaultsGroup);
     groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
     m_defClef = new QComboBox(m_defaultsGroup);
     m_defClef->setMinimumWidth(width11);
-    m_defClef->addItem(QObject::tr("treble"), TrebleClef);
-    m_defClef->addItem(QObject::tr("bass"), BassClef);
-    m_defClef->addItem(QObject::tr("crotales"), CrotalesClef);
-    m_defClef->addItem(QObject::tr("xylophone"), XylophoneClef);
-    m_defClef->addItem(QObject::tr("guitar"), GuitarClef);
-    m_defClef->addItem(QObject::tr("contrabass"), ContrabassClef);
-    m_defClef->addItem(QObject::tr("celesta"), CelestaClef);
-    m_defClef->addItem(QObject::tr("old celesta"), OldCelestaClef);
-    m_defClef->addItem(QObject::tr("french"), FrenchClef);
-    m_defClef->addItem(QObject::tr("soprano"), SopranoClef);
-    m_defClef->addItem(QObject::tr("mezzosoprano"), MezzosopranoClef);
-    m_defClef->addItem(QObject::tr("alto"), AltoClef);
-    m_defClef->addItem(QObject::tr("tenor"), TenorClef);
-    m_defClef->addItem(QObject::tr("baritone"), BaritoneClef);
-    m_defClef->addItem(QObject::tr("varbaritone"), VarbaritoneClef);
-    m_defClef->addItem(QObject::tr("subbass"), SubbassClef);
+    m_defClef->addItem(tr("treble"), TrebleClef);
+    m_defClef->addItem(tr("bass"), BassClef);
+    m_defClef->addItem(tr("crotales"), CrotalesClef);
+    m_defClef->addItem(tr("xylophone"), XylophoneClef);
+    m_defClef->addItem(tr("guitar"), GuitarClef);
+    m_defClef->addItem(tr("contrabass"), ContrabassClef);
+    m_defClef->addItem(tr("celesta"), CelestaClef);
+    m_defClef->addItem(tr("old celesta"), OldCelestaClef);
+    m_defClef->addItem(tr("french"), FrenchClef);
+    m_defClef->addItem(tr("soprano"), SopranoClef);
+    m_defClef->addItem(tr("mezzosoprano"), MezzosopranoClef);
+    m_defClef->addItem(tr("alto"), AltoClef);
+    m_defClef->addItem(tr("tenor"), TenorClef);
+    m_defClef->addItem(tr("baritone"), BaritoneClef);
+    m_defClef->addItem(tr("varbaritone"), VarbaritoneClef);
+    m_defClef->addItem(tr("subbass"), SubbassClef);
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
-        m_defClef->addItem(QObject::tr("two bar"), TwoBarClef); */
+        m_defClef->addItem(tr("two bar"), TwoBarClef); */
     groupLayout->addWidget(m_defClef, row, 1, row- row+1, 2);
 
     // default transpose
     //
-    m_transpLbl = new QLabel(QObject::tr("Transpose"), m_defaultsGroup);
+    m_transpLbl = new QLabel(tr("Transpose"), m_defaultsGroup);
 	groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
 
@@ -330,19 +330,19 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // highest/lowest playable note
     //
     row++;
-    m_rangeLbl = new QLabel(QObject::tr("Pitch"), m_defaultsGroup);
+    m_rangeLbl = new QLabel(tr("Pitch"), m_defaultsGroup);
     groupLayout->addWidget(m_rangeLbl, row, 0, row- row+1, 0- 1);
 
-    groupLayout->addWidget(new QLabel(QObject::tr("Lowest"), m_defaultsGroup), row, 1, Qt::AlignRight);
+    groupLayout->addWidget(new QLabel(tr("Lowest"), m_defaultsGroup), row, 1, Qt::AlignRight);
 
-    m_lowButton = new QPushButton(QObject::tr("---"), m_defaultsGroup);
-    m_lowButton->setToolTip(QObject::tr("Choose the lowest suggested playable note, using a staff"));
+    m_lowButton = new QPushButton(tr("---"), m_defaultsGroup);
+    m_lowButton->setToolTip(tr("Choose the lowest suggested playable note, using a staff"));
     groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 
-    groupLayout->addWidget(new QLabel(QObject::tr("Highest"), m_defaultsGroup), row, 3, Qt::AlignRight);
+    groupLayout->addWidget(new QLabel(tr("Highest"), m_defaultsGroup), row, 3, Qt::AlignRight);
 
-    m_highButton = new QPushButton(QObject::tr("---"), m_defaultsGroup);
-    m_highButton->setToolTip(QObject::tr("Choose the highest suggested playable note, using a staff"));
+    m_highButton = new QPushButton(tr("---"), m_defaultsGroup);
+    m_highButton->setToolTip(tr("Choose the highest suggested playable note, using a staff"));
     groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 4+1);
 
     updateHighLow();
@@ -350,7 +350,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default color
     //
     row++;
-    m_colorLbl = new QLabel(QObject::tr("Color"), m_defaultsGroup);
+    m_colorLbl = new QLabel(tr("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
     m_defColor = new QComboBox(m_defaultsGroup);
     m_defColor->setEditable(false);
@@ -528,8 +528,8 @@ TrackParameterBox::populateRecordingDeviceList()
         if (inst->getInstrumentType() == Instrument::Audio) {
 
             m_recDeviceIds.push_back(Device::NO_DEVICE);
-            m_recDevice->addItem(QObject::tr("Audio"));
-            m_recChannel->addItem(QObject::tr("Audio"));
+            m_recDevice->addItem(tr("Audio"));
+            m_recChannel->addItem(tr("Audio"));
 
             m_recDevice->setEnabled(false);
             m_recChannel->setEnabled(false);
@@ -543,7 +543,7 @@ TrackParameterBox::populateRecordingDeviceList()
             m_defaultsGroup->parentWidget()->setShown(true);
 
             m_recDeviceIds.push_back(Device::ALL_DEVICES);
-            m_recDevice->addItem(QObject::tr("All"));
+            m_recDevice->addItem(tr("All"));
 
             DeviceList *devices = m_doc->getStudio().getDevices();
             DeviceListConstIterator it;
@@ -562,7 +562,7 @@ TrackParameterBox::populateRecordingDeviceList()
                 }
             }
 
-            m_recChannel->addItem(QObject::tr("All"));
+            m_recChannel->addItem(tr("All"));
             for (int i = 1; i < 17; ++i) {
                 m_recChannel->addItem(QString::number(i));
             }
@@ -612,8 +612,8 @@ TrackParameterBox::updateHighLow()
     bool useSharps = true;
     bool includeOctave = true;
 
-//    m_highButton->setText(QObject::tr("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
-//    m_lowButton->setText(QObject::tr("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+//    m_highButton->setText(tr("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
+//    m_lowButton->setText(tr("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
     m_highButton->setText(strtoqstr(highest.getAsString(useSharps, includeOctave, base)));
     m_lowButton->setText(strtoqstr(lowest.getAsString(useSharps, includeOctave, base)));
 
@@ -671,11 +671,11 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     Track *trk = comp.getTrackById(m_selectedTrackId);
     QString m_trackName = strtoqstr(trk->getLabel());
     if (m_trackName.isEmpty())
-        m_trackName = QObject::tr("<untitled>");
+        m_trackName = tr("<untitled>");
     else
         m_trackName.truncate(20);
     int trackNum = trk->getPosition() + 1;
-    m_trackLabel->setText(QObject::tr("[ Track %1 - %2 ]").arg(trackNum).arg(m_trackName));
+    m_trackLabel->setText(tr("[ Track %1 - %2 ]").arg(trackNum).arg(m_trackName));
 }
 
 void
@@ -859,7 +859,7 @@ TrackParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_defColor->addItem(colour, QObject::tr("Default"), i);
+            m_defColor->addItem(colour, tr("Default"), i);
         } else {
             // truncate name to 15 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide
@@ -872,7 +872,7 @@ TrackParameterBox::slotDocColoursChanged()
     }
 
     m_addColourPos = i;
-    m_defColor->addItem(QObject::tr("Add New Color"), m_addColourPos);
+    m_defColor->addItem(tr("Add New Color"), m_addColourPos);
 
     m_defColor->setCurrentIndex(0);
 }
@@ -892,8 +892,8 @@ TrackParameterBox::slotColorChanged(int index)
         QColor newColour;
         bool ok = false;
         
-		QString newName = QInputDialog::getText(0, QObject::tr("New Color Name"), QObject::tr("Enter new name"),
-				QLineEdit::Normal, QObject::tr("New"), &ok );
+		QString newName = QInputDialog::getText(0, tr("New Color Name"), tr("Enter new name"),
+				QLineEdit::Normal, tr("New"), &ok );
 		
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
@@ -923,7 +923,7 @@ TrackParameterBox::slotHighestPressed()
     if (!trk)
         return ;
 
-    PitchPickerDialog dialog(0, m_highestPlayable, QObject::tr("Highest playable note"));
+    PitchPickerDialog dialog(0, m_highestPlayable, tr("Highest playable note"));
 
     if (dialog.exec() == QDialog::Accepted) {
         m_highestPlayable = dialog.getPitch();
@@ -943,7 +943,7 @@ TrackParameterBox::slotLowestPressed()
     if (!trk)
         return ;
 
-    PitchPickerDialog dialog(0, m_lowestPlayable, QObject::tr("Lowest playable note"));
+    PitchPickerDialog dialog(0, m_lowestPlayable, tr("Lowest playable note"));
 
     if (dialog.exec() == QDialog::Accepted) {
         m_lowestPlayable = dialog.getPitch();
@@ -1000,7 +1000,7 @@ TrackParameterBox::slotPresetPressed()
         // row/column of the corruption, but I can't be bothered to work
         // that out just at the moment.  Hopefully this code will never
         // execute anyway.
-        /* was sorry */ QMessageBox::warning(0, "", QObject::tr("The instrument preset database is corrupt.  Check your installation."));
+        /* was sorry */ QMessageBox::warning(0, "", tr("The instrument preset database is corrupt.  Check your installation."));
     }
 
 }
@@ -1030,7 +1030,7 @@ QString
 TrackParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
 {
     if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
-        return QObject::tr("Segment");
+        return tr("Segment");
     } else {
         return "";
     }

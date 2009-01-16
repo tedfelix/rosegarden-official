@@ -89,7 +89,7 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     createAction("delete_marker", SLOT(slotDeleteMarker()));
     createAction("edit_marker", SLOT(slotEditMarker()));
 
-    this->setToolTip(QObject::tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
+    this->setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
 MarkerRuler::~MarkerRuler()

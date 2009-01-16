@@ -82,8 +82,8 @@ namespace Rosegarden
 
 SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
         QWidget *parent)
-        : RosegardenParameterBox(QObject::tr("Segment"),
-                                 QObject::tr("Segment Parameters"),
+        : RosegardenParameterBox(tr("Segment"),
+                                 tr("Segment Parameters"),
                                  parent),
         m_highestPlayable(127),
         m_lowestPlayable(0),
@@ -124,16 +124,16 @@ SegmentParameterBox::initBox()
     gridLayout->setMargin(0);
     gridLayout->setSpacing(2);
 
-    QLabel *label	= new QLabel(QObject::tr("Label"), this);
-    QLabel *repeatLabel = new QLabel(QObject::tr("Repeat"), this);
-    QLabel *quantizeLabel = new QLabel(QObject::tr("Quantize"), this);
-    QLabel *transposeLabel = new QLabel(QObject::tr("Transpose"), this);
-    QLabel *delayLabel = new QLabel(QObject::tr("Delay"), this);
-    QLabel *colourLabel = new QLabel(QObject::tr("Color"), this);
-//    m_autoFadeLabel = new QLabel(QObject::tr("Audio auto-fade"), this);
-//    m_fadeInLabel = new QLabel(QObject::tr("Fade in"), this);
-//    m_fadeOutLabel = new QLabel(QObject::tr("Fade out"), this);
-//    m_rangeLabel = new QLabel(QObject::tr("Range"), this);
+    QLabel *label	= new QLabel(tr("Label"), this);
+    QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
+    QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
+    QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
+    QLabel *delayLabel = new QLabel(tr("Delay"), this);
+    QLabel *colourLabel = new QLabel(tr("Color"), this);
+//    m_autoFadeLabel = new QLabel(tr("Audio auto-fade"), this);
+//    m_fadeInLabel = new QLabel(tr("Fade in"), this);
+//    m_fadeOutLabel = new QLabel(tr("Fade out"), this);
+//    m_rangeLabel = new QLabel(tr("Range"), this);
 
     // Label ..
     m_label = new QLabel(this);
@@ -143,7 +143,7 @@ SegmentParameterBox::initBox()
     m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
-    m_labelButton = new QPushButton(QObject::tr("Edit"), this);
+    m_labelButton = new QPushButton(tr("Edit"), this);
     m_labelButton->setFont(font);
     //    m_labelButton->setFixedWidth(50);
 
@@ -209,13 +209,13 @@ SegmentParameterBox::initBox()
             SLOT(slotColourSelected(int)));
 
     // pre-set width of buttons so they don't grow later
-//    width = fontMetrics.width(QObject::tr("used internally for spacing", "High: ----"));
+//    width = fontMetrics.width(tr("used internally for spacing", "High: ----"));
 
     // highest playable note
     //
-//    m_highButton = new QPushButton(QObject::tr("High: ---"), this);
+//    m_highButton = new QPushButton(tr("High: ---"), this);
 //    QToolTip::add
-//        (m_highButton, QObject::tr("Choose the highest suggested playable note, using a staff"));
+//        (m_highButton, tr("Choose the highest suggested playable note, using a staff"));
 //    m_highButton->setFont(font);
 //    m_highButton->setMinimumWidth(width);
 
@@ -224,9 +224,9 @@ SegmentParameterBox::initBox()
 
     // lowest playable note
     //
-//    m_lowButton = new QPushButton(QObject::tr("Low: ----"), this);
+//    m_lowButton = new QPushButton(tr("Low: ----"), this);
 //    QToolTip::add
-//        (m_lowButton, QObject::tr("Choose the lowest suggested playable note, using a staff"));
+//        (m_lowButton, tr("Choose the lowest suggested playable note, using a staff"));
 //    m_lowButton->setFont(font);
 //    m_lowButton->setMinimumWidth(width);
 
@@ -244,14 +244,14 @@ SegmentParameterBox::initBox()
 //    m_fadeInSpin = new QSpinBox(this);
 //    m_fadeInSpin->setMinimum(0);
 //    m_fadeInSpin->setMaximum(5000);
-//    m_fadeInSpin->setSuffix(QObject::tr(" ms"));
+//    m_fadeInSpin->setSuffix(tr(" ms"));
 //    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
 //            this, SLOT(slotFadeInChanged(int)));
 
 //    m_fadeOutSpin = new QSpinBox(this);
 //    m_fadeOutSpin->setMinimum(0);
 //    m_fadeOutSpin->setMaximum(5000);
-//    m_fadeOutSpin->setSuffix(QObject::tr(" ms"));
+//    m_fadeOutSpin->setSuffix(tr(" ms"));
 //    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
 //            this, SLOT(slotFadeOutChanged(int)));
 
@@ -328,7 +328,7 @@ SegmentParameterBox::initBox()
         QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
         m_quantizeValue->addItem(error ? noMap : pmap, label);
     }
-    m_quantizeValue->addItem(noMap, QObject::tr("Off"));
+    m_quantizeValue->addItem(noMap, tr("Off"));
 
     // default to last item
     m_quantizeValue->setCurrentIndex(m_quantizeValue->count() - 1);
@@ -366,7 +366,7 @@ SegmentParameterBox::initBox()
     for (int i = 0; i < 10; i++) {
         int rtd = (i < 5 ? ((i + 1) * 10) : ((i - 3) * 50));
         m_realTimeDelays.push_back(rtd);
-        m_delayValue->addItem(QObject::tr("%1 ms").arg(rtd));
+        m_delayValue->addItem(tr("%1 ms").arg(rtd));
     }
 
     // set delay blank initially
@@ -435,7 +435,7 @@ SegmentParameterBox::slotDocColoursChanged()
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
-            m_colourValue->addItem(colour, QObject::tr("Default"), i);
+            m_colourValue->addItem(colour, tr("Default"), i);
         } else {
             // truncate name to 15 characters to avoid the combo forcing the
             // whole kit and kaboodle too wide
@@ -448,7 +448,7 @@ SegmentParameterBox::slotDocColoursChanged()
     }
 
     m_addColourPos = i;
-    m_colourValue->addItem(QObject::tr("Add New Color"), m_addColourPos);
+    m_colourValue->addItem(tr("Add New Color"), m_addColourPos);
 
     m_colourValue->setCurrentIndex(0);
 }
@@ -701,8 +701,8 @@ SegmentParameterBox::populateBoxFromSegments()
 
         } else if (delayLevel < 0) {
 
-// 			m_delayValue->setCurrentIndex(QObject::tr("%1 ms").arg(-delayLevel),true);
-			m_delayValue->setCurrentText( QObject::tr("%1 ms").arg(-delayLevel) );
+// 			m_delayValue->setCurrentIndex(tr("%1 ms").arg(-delayLevel),true);
+			m_delayValue->setCurrentText( tr("%1 ms").arg(-delayLevel) );
 		}
 
         break;
@@ -751,8 +751,8 @@ SegmentParameterBox::populateBoxFromSegments()
     case Some:
     case None:
     default:
-        m_highButton->setText(QObject::tr("High: ---"));
-        m_lowButton->setText(QObject::tr("Low: ----"));
+        m_highButton->setText(tr("High: ---"));
+        m_lowButton->setText(tr("Low: ----"));
         highlow = NotApplicable;
         break;
     }
@@ -988,9 +988,9 @@ SegmentParameterBox::slotColourSelected(int value)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = QInputDialog::getText(this, QObject::tr("New Color Name"), QObject::tr("Enter new name"),
+        QString newName = QInputDialog::getText(this, tr("New Color Name"), tr("Enter new name"),
 									QLineEdit::Normal,
-									QObject::tr("New"), &ok);
+									tr("New"), &ok);
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 			
@@ -1042,7 +1042,7 @@ SegmentParameterBox::slotHighestPressed()
 {
     RG_DEBUG << "SegmentParameterBox::slotHighestPressed()" << endl;
 
-    PitchPickerDialog dialog(0, m_highestPlayable, QObject::tr("Highest playable note"));
+    PitchPickerDialog dialog(0, m_highestPlayable, tr("Highest playable note"));
     std::vector<Segment*>::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -1062,7 +1062,7 @@ SegmentParameterBox::slotLowestPressed()
 {
     RG_DEBUG << "SegmentParameterBox::slotLowestPressed()" << endl;
 
-    PitchPickerDialog dialog(0, m_lowestPlayable, QObject::tr("Lowest playable note"));
+    PitchPickerDialog dialog(0, m_lowestPlayable, tr("Lowest playable note"));
     std::vector<Segment*>::iterator it;
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -1091,9 +1091,9 @@ SegmentParameterBox::slotEditSegmentLabel()
     if (m_segments.size() == 0)
         return ;
     else if (m_segments.size() == 1)
-        editLabel = QObject::tr("Modify Segment label");
+        editLabel = tr("Modify Segment label");
     else
-        editLabel = QObject::tr("Modify Segments label");
+        editLabel = tr("Modify Segments label");
 
     bool ok = false;
 
@@ -1104,7 +1104,7 @@ SegmentParameterBox::slotEditSegmentLabel()
         label = "";
 
     QString newLabel = QInputDialog::getText( this, 
-											  QObject::tr("Enter new label"), editLabel, QLineEdit::Normal,
+											  tr("Enter new label"), editLabel, QLineEdit::Normal,
                        m_label->text(),
                        &ok );
 
@@ -1213,7 +1213,7 @@ SegmentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrange
     if (arrangement == RosegardenParameterArea::CLASSIC_STYLE) {
         return "";
     } else {
-        return QObject::tr("Instrument");
+        return tr("Instrument");
     }
 }
 

@@ -96,7 +96,7 @@ Rotary::Rotary(QWidget *parent,
             SLOT(slotFloatTimeout()));
     _float->hide();
 
-    this->setToolTip(QObject::tr("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
+    this->setToolTip(tr("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
@@ -422,8 +422,8 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
     }
 
     FloatEdit dialog(this,
-                     QObject::tr("Select a new value"),
-                     QObject::tr("Enter a new value"),
+                     tr("Select a new value"),
+                     tr("Enter a new value"),
                      minv,
                      maxv,
                      val,

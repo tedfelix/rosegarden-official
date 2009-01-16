@@ -161,9 +161,9 @@ void
 SegmentSplitter::setBasicContextHelp()
 {
     if (!m_canvas->isFineGrain()) {
-        setContextHelp(QObject::tr("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
+        setContextHelp(tr("Click on a segment to split it in two; hold Shift to avoid snapping to beat grid"));
     } else {
-        setContextHelp(QObject::tr("Click on a segment to split it in two"));
+        setContextHelp(tr("Click on a segment to split it in two"));
     }
 }
 

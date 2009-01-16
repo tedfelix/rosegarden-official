@@ -439,7 +439,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     settings.endGroup();
 
     Pitch p(getHeightAtCanvasCoords(x, y), clef, key);
-    //!!! QObject::tr() how?
+    //!!! tr() how?
     return p.getAsString(key.isSharp(), true, baseOctave);
 }
 
@@ -450,7 +450,7 @@ NotationStaff::renderElements(NotationElementList::iterator from,
     //    NOTATION_DEBUG << "NotationStaff " << this << "::renderElements()" << endl;
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(QObject::tr("Rendering staff %1...").arg(getId() + 1));
+    emit setOperationName(tr("Rendering staff %1...").arg(getId() + 1));
     emit setValue(0);
 
     throwIfCancelled();
@@ -513,7 +513,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 
     Profiler profiler("NotationStaff::renderElements");
 
-    emit setOperationName(QObject::tr("Rendering notes on staff %1...").arg(getId() + 1));
+    emit setOperationName(tr("Rendering notes on staff %1...").arg(getId() + 1));
     emit setValue(0);
 
     throwIfCancelled();
@@ -581,7 +581,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     if (to < startTime) to = startTime;
     if (to == from) return;
 
-    emit setOperationName(QObject::tr("Positioning staff %1...").arg(getId() + 1));
+    emit setOperationName(tr("Positioning staff %1...").arg(getId() + 1));
     emit setValue(0);
     throwIfCancelled();
 
@@ -939,7 +939,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         static bool warned = false;
         if (!warned) {
-            QMessageBox::critical(0, "", QObject::tr( u.getMessage().c_str() ));
+            QMessageBox::critical(0, "", tr( u.getMessage().c_str() ));
             warned = true;
         }
     }
@@ -1250,7 +1250,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                             if (i->getType() == Controller::EventType &&
                                     i->getControllerValue() == controlNumber) {
                                 if (i->getName() == "Sustain" ||
-                                        strtoqstr(i->getName()) == QObject::tr("Sustain")) {
+                                        strtoqstr(i->getName()) == tr("Sustain")) {
                                     isSustain = true;
                                 }
                                 break;

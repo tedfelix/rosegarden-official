@@ -47,8 +47,8 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
         QWidget* parent,
         const char* name)
         : NameSetEditor(bankEditor,
-                        QObject::tr("Key Mapping details"),
-                        parent, name, QObject::tr("Pitches"), false),
+                        tr("Key Mapping details"),
+                        parent, name, tr("Pitches"), false),
         m_device(0)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
@@ -71,7 +71,7 @@ MidiKeyMappingEditor::clearAll()
     for (unsigned int i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
-    setTitle(QObject::tr("Key Mapping details"));
+    setTitle(tr("Key Mapping details"));
 
     setEnabled(false);
 

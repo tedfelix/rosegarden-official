@@ -126,21 +126,21 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup = new QGroupBox( QObject::tr("Event filters"), getCentralWidget() );
+    m_filterGroup = new QGroupBox( tr("Event filters"), getCentralWidget() );
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
 	m_filterGroup->setAlignment( Qt::AlignHorizontal_Mask );
 
-    m_noteCheckBox = new QCheckBox(QObject::tr("Note"), m_filterGroup);
-    m_programCheckBox = new QCheckBox(QObject::tr("Program Change"), m_filterGroup);
-    m_controllerCheckBox = new QCheckBox(QObject::tr("Controller"), m_filterGroup);
-    m_pitchBendCheckBox = new QCheckBox(QObject::tr("Pitch Bend"), m_filterGroup);
-    m_sysExCheckBox = new QCheckBox(QObject::tr("System Exclusive"), m_filterGroup);
-    m_keyPressureCheckBox = new QCheckBox(QObject::tr("Key Pressure"), m_filterGroup);
-    m_channelPressureCheckBox = new QCheckBox(QObject::tr("Channel Pressure"), m_filterGroup);
-    m_restCheckBox = new QCheckBox(QObject::tr("Rest"), m_filterGroup);
-    m_indicationCheckBox = new QCheckBox(QObject::tr("Indication"), m_filterGroup);
-    m_textCheckBox = new QCheckBox(QObject::tr("Text"), m_filterGroup);
-    m_otherCheckBox = new QCheckBox(QObject::tr("Other"), m_filterGroup);
+    m_noteCheckBox = new QCheckBox(tr("Note"), m_filterGroup);
+    m_programCheckBox = new QCheckBox(tr("Program Change"), m_filterGroup);
+    m_controllerCheckBox = new QCheckBox(tr("Controller"), m_filterGroup);
+    m_pitchBendCheckBox = new QCheckBox(tr("Pitch Bend"), m_filterGroup);
+    m_sysExCheckBox = new QCheckBox(tr("System Exclusive"), m_filterGroup);
+    m_keyPressureCheckBox = new QCheckBox(tr("Key Pressure"), m_filterGroup);
+    m_channelPressureCheckBox = new QCheckBox(tr("Channel Pressure"), m_filterGroup);
+    m_restCheckBox = new QCheckBox(tr("Rest"), m_filterGroup);
+    m_indicationCheckBox = new QCheckBox(tr("Indication"), m_filterGroup);
+    m_textCheckBox = new QCheckBox(tr("Text"), m_filterGroup);
+    m_otherCheckBox = new QCheckBox(tr("Other"), m_filterGroup);
 
     filterGroupLayout->addWidget(m_noteCheckBox);
     filterGroupLayout->addWidget(m_programCheckBox);
@@ -175,33 +175,33 @@ EventView::EventView(RosegardenGUIDoc *doc,
         TriggerSegmentRec *rec =
             segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-        QGroupBox *frame = new QGroupBox( QObject::tr("Triggered Segment Properties"), getCentralWidget() );
+        QGroupBox *frame = new QGroupBox( tr("Triggered Segment Properties"), getCentralWidget() );
 		frame->setAlignment( Qt::AlignHorizontal_Mask );
         frame->setContentsMargins(5, 5, 5, 5);
         QGridLayout *layout = new QGridLayout(frame);
         layout->setSpacing(5);
 
-        layout->addWidget(new QLabel(QObject::tr("Label:  "), frame), 0, 0);
+        layout->addWidget(new QLabel(tr("Label:  "), frame), 0, 0);
         QString label = strtoqstr(segments[0]->getLabel());
         if (label == "")
-            label = QObject::tr("<no label>");
+            label = tr("<no label>");
         m_triggerName = new QLabel(label, frame);
         layout->addWidget(m_triggerName, 0, 1);
-        QPushButton *editButton = new QPushButton(QObject::tr("edit"), frame);
+        QPushButton *editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 0, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerName()));
 
-        layout->addWidget(new QLabel(QObject::tr("Base pitch:  "), frame), 1, 0);
+        layout->addWidget(new QLabel(tr("Base pitch:  "), frame), 1, 0);
         m_triggerPitch = new QLabel(QString("%1").arg(rec->getBasePitch()), frame);
         layout->addWidget(m_triggerPitch, 1, 1);
-        editButton = new QPushButton(QObject::tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 1, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerPitch()));
 
-        layout->addWidget(new QLabel(QObject::tr("Base velocity:  "), frame), 2, 0);
+        layout->addWidget(new QLabel(tr("Base velocity:  "), frame), 2, 0);
         m_triggerVelocity = new QLabel(QString("%1").arg(rec->getBaseVelocity()), frame);
         layout->addWidget(m_triggerVelocity, 2, 1);
-        editButton = new QPushButton(QObject::tr("edit"), frame);
+        editButton = new QPushButton(tr("edit"), frame);
         layout->addWidget(editButton, 2, 2);
         connect(editButton, SIGNAL(clicked()), this, SLOT(slotEditTriggerVelocity()));
 
@@ -209,14 +209,14 @@ EventView::EventView(RosegardenGUIDoc *doc,
           anywhere else -- intended for use with library ornaments, not
           yet implemented
 
-        layout->addWidget(new QLabel(QObject::tr("Default timing:  "), frame), 3, 0);
+        layout->addWidget(new QLabel(tr("Default timing:  "), frame), 3, 0);
 
         QComboBox *adjust = new QComboBox(frame);
         layout->addWidget(adjust, 3, 1, 1, 2);
-        adjust->addItem(QObject::tr("As stored"));
-        adjust->addItem(QObject::tr("Truncate if longer than note"));
-        adjust->addItem(QObject::tr("End at same time as note")); 
-        adjust->addItem(QObject::tr("Stretch or squash segment to note duration"));
+        adjust->addItem(tr("As stored"));
+        adjust->addItem(tr("Truncate if longer than note"));
+        adjust->addItem(tr("End at same time as note")); 
+        adjust->addItem(tr("Stretch or squash segment to note duration"));
 
         std::string timing = rec->getDefaultTimeAdjust();
         if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
@@ -231,7 +231,7 @@ EventView::EventView(RosegardenGUIDoc *doc,
 
         connect(adjust, SIGNAL(activated(int)), this, SLOT(slotTriggerTimeAdjustChanged(int)));
             
-        QCheckBox *retune = new QCheckBox(QObject::tr("Adjust pitch to trigger note by default"), frame);
+        QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), frame);
         retune->setChecked(rec->getDefaultRetune());
         connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
         layout->addWidget(retune, 4, 1, 1, 2);
@@ -262,23 +262,23 @@ EventView::EventView(RosegardenGUIDoc *doc,
 	m_eventList->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
 	/*
-    m_eventList->addColumn(QObject::tr("Time  "));
-    m_eventList->addColumn(QObject::tr("Duration  "));
-    m_eventList->addColumn(QObject::tr("Event Type  "));
-    m_eventList->addColumn(QObject::tr("Pitch  "));
-    m_eventList->addColumn(QObject::tr("Velocity  "));
-    m_eventList->addColumn(QObject::tr("Type (Data1)  "));
-    m_eventList->addColumn(QObject::tr("Value (Data2)  "));
+    m_eventList->addColumn(tr("Time  "));
+    m_eventList->addColumn(tr("Duration  "));
+    m_eventList->addColumn(tr("Event Type  "));
+    m_eventList->addColumn(tr("Pitch  "));
+    m_eventList->addColumn(tr("Velocity  "));
+    m_eventList->addColumn(tr("Type (Data1)  "));
+    m_eventList->addColumn(tr("Value (Data2)  "));
 	*/
 	QStringList sl;
-	sl << QObject::tr("Time  ");
-	sl << QObject::tr("Duration  ");
-	sl << QObject::tr("Event Type  ");
-	sl << QObject::tr("Pitch  ");
-	sl << QObject::tr("Velocity  ");
-	sl << QObject::tr("Type (Data1)  ");
-	sl << QObject::tr("Type (Data1)  ");
-	sl << QObject::tr("Value (Data2)  ");
+	sl << tr("Time  ");
+	sl << tr("Duration  ");
+	sl << tr("Event Type  ");
+	sl << tr("Pitch  ");
+	sl << tr("Velocity  ");
+	sl << tr("Type (Data1)  ");
+	sl << tr("Type (Data1)  ");
+	sl << tr("Value (Data2)  ");
 	
 	m_eventList->setHeaderLabels ( sl );
 	
@@ -516,7 +516,7 @@ EventView::applyLayout(int /*staffNo*/)
                            arg((*it)->get
                                <Int>(PitchBend::LSB));
             } else if ((*it)->has(BaseProperties::BEAMED_GROUP_ID)) {
-                data2Str = QObject::tr("(group %1)  ")
+                data2Str = tr("(group %1)  ")
                            .arg((*it)->get
                                <Int>(BaseProperties::BEAMED_GROUP_ID));
             }
@@ -578,9 +578,9 @@ EventView::applyLayout(int /*staffNo*/)
     if ( m_eventList->topLevelItemCount() == 0 ) {
         if (m_segments.size())
             new QTreeWidgetItem(m_eventList,
-                                QStringList( QObject::tr("<no events at this filter level>")) );
+                                QStringList( tr("<no events at this filter level>")) );
         else
-            new QTreeWidgetItem(m_eventList, QStringList( QObject::tr("<no events>")) );
+            new QTreeWidgetItem(m_eventList, QStringList( tr("<no events>")) );
 
         m_eventList->setSelectionMode(QTreeWidget::NoSelection);
         leaveActionState("have_selection");
@@ -762,8 +762,8 @@ EventView::slotEditTriggerName()
 {
     bool ok = false;
     QString newLabel = QInputDialog::getText(this, 
-						QObject::tr("Segment label"),
-						QObject::tr("Label:"),
+						tr("Segment label"),
+						tr("Label:"),
 						QLineEdit::Normal,
 						strtoqstr(m_segments[0]->getLabel()),
 						&ok
@@ -786,7 +786,7 @@ EventView::slotEditTriggerPitch()
     TriggerSegmentRec *rec =
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
-    PitchDialog *dlg = new PitchDialog(this, QObject::tr("Base pitch"), rec->getBasePitch());
+    PitchDialog *dlg = new PitchDialog(this, tr("Base pitch"), rec->getBasePitch());
 
     if (dlg->exec() == QDialog::Accepted) {
         addCommandToHistory(new SetTriggerSegmentBasePitchCommand
@@ -804,7 +804,7 @@ EventView::slotEditTriggerVelocity()
         m_segments[0]->getComposition()->getTriggerSegmentRec(id);
 
     TrivialVelocityDialog *dlg = new TrivialVelocityDialog
-                                 (this, QObject::tr("Base velocity"), rec->getBaseVelocity());
+                                 (this, tr("Base velocity"), rec->getBaseVelocity());
 
     if (dlg->exec() == QDialog::Accepted) {
         addCommandToHistory(new SetTriggerSegmentBaseVelocityCommand
@@ -957,11 +957,11 @@ void
 EventView::slotEditPaste()
 {
     if (getDocument()->getClipboard()->isEmpty()) {
-        slotStatusHelpMsg(QObject::tr("Clipboard is empty"));
+        slotStatusHelpMsg(tr("Clipboard is empty"));
         return ;
     }
 
-    KTmpStatusMsg msg(QObject::tr("Inserting clipboard contents..."), this);
+    KTmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
     timeT insertionTime = 0;
 
@@ -995,7 +995,7 @@ EventView::slotEditPaste()
                                    insertionTime, PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
-        slotStatusHelpMsg(QObject::tr("Couldn't paste at this point"));
+        slotStatusHelpMsg(tr("Couldn't paste at this point"));
     } else
         addCommandToHistory(command);
 
@@ -1286,7 +1286,7 @@ EventView::setupActions()
 			qa_filter_selection->setIconText("filter"); 
 			connect( qa_filter_selection, SIGNAL(triggered()), this, SLOT(slotFilterSelection())  );
 
-    QAction* qa_select_all = new QAction(  QObject::tr("Select &All"), dynamic_cast<QObject*>(this) );
+    QAction* qa_select_all = new QAction(  tr("Select &All"), dynamic_cast<QObject*>(this) );
 			connect( qa_select_all, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAll()) );
 			qa_select_all->setObjectName( "select_all" );		//
 			//qa_select_all->setCheckable( true );		//
@@ -1296,7 +1296,7 @@ EventView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_clear_selection = new QAction(  QObject::tr("Clear Selection"), dynamic_cast<QObject*>(this) );
+    QAction* qa_clear_selection = new QAction(  tr("Clear Selection"), dynamic_cast<QObject*>(this) );
 			connect( qa_clear_selection, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearSelection()) );
 			qa_clear_selection->setObjectName( "clear_selection" );		//
 			//qa_clear_selection->setCheckable( true );		//
@@ -1326,7 +1326,7 @@ EventView::setupActions()
 	QActionGroup *qag_timeMode = new QActionGroup(qa_parent);
 	
     //action = 
-	QAction* qa_time_musical = new QAction( icon, QObject::tr("&Musical Times"), qa_parent );
+	QAction* qa_time_musical = new QAction( icon, tr("&Musical Times"), qa_parent );
 			connect( qa_time_musical, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotMusicalTime()) );
 			qa_time_musical->setObjectName( "time_musical" );
 			qa_time_musical->setCheckable( true );		//
@@ -1343,7 +1343,7 @@ EventView::setupActions()
 	icon = il.load("time-real");
 
 //     action = 
-	QAction* qa_time_real = new QAction( icon, QObject::tr("&Real Times"), qa_parent );
+	QAction* qa_time_real = new QAction( icon, tr("&Real Times"), qa_parent );
 			connect( qa_time_real, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRealTime()) );
 			qa_time_real->setObjectName( "time_real" );
 			qa_time_real->setCheckable( true );		//
@@ -1360,7 +1360,7 @@ EventView::setupActions()
 	icon = il.load("time-raw");
 
 //     action = 
-	QAction* qa_time_raw = new QAction( icon, QObject::tr("Ra&w Times"), qa_parent );
+	QAction* qa_time_raw = new QAction( icon, tr("Ra&w Times"), qa_parent );
 			connect( qa_time_raw, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRawTime()) );
 			qa_time_raw->setObjectName( "time_raw" );
 			qa_time_raw->setCheckable( true );		//
@@ -1729,8 +1729,8 @@ EventView::createMenu()
 {
 	//m_menu = new QPopupMenu(this);
 	m_menu = new QMenu(this);
-	m_menu->addAction( QObject::tr("Open in Event Editor") );
-    m_menu->addAction( QObject::tr("Open in Expert Event Editor") );
+	m_menu->addAction( tr("Open in Event Editor") );
+    m_menu->addAction( tr("Open in Expert Event Editor") );
 
     connect(m_menu, SIGNAL(activated(int)),
             SLOT(slotMenuActivated(int)));
@@ -1786,7 +1786,7 @@ EventView::updateViewCaption()
 {
     if (m_isTriggerSegment) {
 
-        setWindowTitle(QObject::tr("%1 - Triggered Segment: %2")
+        setWindowTitle(tr("%1 - Triggered Segment: %2")
                        .arg(getDocument()->getTitle())
                        .arg(strtoqstr(m_segments[0]->getLabel())));
 
@@ -1801,13 +1801,13 @@ EventView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setWindowTitle(QObject::tr("%1 - Segment Track #%2 - Event List")
+        setWindowTitle(tr("%1 - Segment Track #%2 - Event List")
                        .arg(getDocument()->getTitle())
                        .arg(trackPosition + 1));
 
     } else {
 
-        setWindowTitle(QObject::tr("%1 - %2 Segments - Event List")
+        setWindowTitle(tr("%1 - %2 Segments - Event List")
                        .arg(getDocument()->getTitle())
                        .arg(m_segments.size()));
     }

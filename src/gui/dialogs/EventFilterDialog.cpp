@@ -74,7 +74,7 @@ void
 EventFilterDialog::initDialog()
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Event Filter"));
+    setWindowTitle(tr("Event Filter"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *mainWidget = new QWidget(this);
@@ -84,33 +84,33 @@ EventFilterDialog::initDialog()
     //----------[ Note Filter Widgets ]-------------------------
 
     // Frame
-    QGroupBox* noteFrame = new QGroupBox(QObject::tr("Note Events"));
+    QGroupBox* noteFrame = new QGroupBox(tr("Note Events"));
     noteFrame->setContentsMargins(20, 20, 20, 20);
     QGridLayout* noteFrameLayout = new QGridLayout;
     noteFrameLayout->setSpacing(6);
     mainWidgetLayout->addWidget(noteFrame);
 
     // Labels
-    QLabel* pitchFromLabel = new QLabel(QObject::tr("lowest:"), noteFrame);
+    QLabel* pitchFromLabel = new QLabel(tr("lowest:"), noteFrame);
     noteFrameLayout->addWidget(pitchFromLabel, 0, 2);
 
-    QLabel* pitchToLabel = new QLabel(QObject::tr("highest:"), noteFrame);
+    QLabel* pitchToLabel = new QLabel(tr("highest:"), noteFrame);
     noteFrameLayout->addWidget(pitchToLabel, 0, 4);
 
-    QLabel* pitchLabel = new QLabel(QObject::tr("Pitch:"), noteFrame);
+    QLabel* pitchLabel = new QLabel(tr("Pitch:"), noteFrame);
     noteFrameLayout->addWidget(pitchLabel, 1, 1);
 
-    QLabel* velocityLabel = new QLabel(QObject::tr("Velocity:"), noteFrame);
+    QLabel* velocityLabel = new QLabel(tr("Velocity:"), noteFrame);
     noteFrameLayout->addWidget(velocityLabel, 2, 1);
 
-    QLabel* durationLabel = new QLabel(QObject::tr("Duration:"), noteFrame);
+    QLabel* durationLabel = new QLabel(tr("Duration:"), noteFrame);
     noteFrameLayout->addWidget(durationLabel, 3, 1);
 
     // Include Boxes
     m_notePitchIncludeComboBox = new QComboBox(noteFrame);
     m_notePitchIncludeComboBox->setEditable(false);
-    m_notePitchIncludeComboBox->addItem(QObject::tr("include"));
-    m_notePitchIncludeComboBox->addItem(QObject::tr("exclude"));
+    m_notePitchIncludeComboBox->addItem(tr("include"));
+    m_notePitchIncludeComboBox->addItem(tr("exclude"));
     QSettings settings;
     settings.beginGroup( EventFilterDialogConfigGroup );
 
@@ -119,8 +119,8 @@ EventFilterDialog::initDialog()
 
     m_noteVelocityIncludeComboBox = new QComboBox(noteFrame);
     m_noteVelocityIncludeComboBox->setEditable(false);
-    m_noteVelocityIncludeComboBox->addItem(QObject::tr("include"));
-    m_noteVelocityIncludeComboBox->addItem(QObject::tr("exclude"));
+    m_noteVelocityIncludeComboBox->addItem(tr("include"));
+    m_noteVelocityIncludeComboBox->addItem(tr("exclude"));
 
     //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_noteVelocityIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("velocityinclude", "0" ) ) );
@@ -128,8 +128,8 @@ EventFilterDialog::initDialog()
 
     m_noteDurationIncludeComboBox = new QComboBox(noteFrame);
     m_noteDurationIncludeComboBox->setEditable(false);
-    m_noteDurationIncludeComboBox->addItem(QObject::tr("include"));
-    m_noteDurationIncludeComboBox->addItem(QObject::tr("exclude"));
+    m_noteDurationIncludeComboBox->addItem(tr("include"));
+    m_noteDurationIncludeComboBox->addItem(tr("exclude"));
 
     //### settings.beginGroup( EventFilterDialogConfigGroup );
     m_noteDurationIncludeComboBox->setCurrentIndex( qStrToBool( settings.value("durationinclude", "0" ) ) );
@@ -145,11 +145,11 @@ EventFilterDialog::initDialog()
     connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchFromChanged(int)));
 
-    m_pitchFromChooserButton = new QPushButton(QObject::tr("edit"), noteFrame);
+    m_pitchFromChooserButton = new QPushButton(tr("edit"), noteFrame);
     m_pitchFromChooserButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,
                                                         QSizePolicy::Fixed,
                                                         QSizePolicy::PushButton));
-    m_pitchFromChooserButton->setToolTip(QObject::tr("choose a pitch using a staff"));
+    m_pitchFromChooserButton->setToolTip(tr("choose a pitch using a staff"));
     noteFrameLayout->addWidget(m_pitchFromChooserButton, 1, 3);
     connect(m_pitchFromChooserButton, SIGNAL(clicked()),
             SLOT(slotPitchFromChooser()));
@@ -165,8 +165,8 @@ EventFilterDialog::initDialog()
     connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
             SLOT(slotPitchToChanged(int)));
 
-    m_pitchToChooserButton = new QPushButton(QObject::tr("edit"), noteFrame);
-    m_pitchToChooserButton->setToolTip(QObject::tr("choose a pitch using a staff"));
+    m_pitchToChooserButton = new QPushButton(tr("edit"), noteFrame);
+    m_pitchToChooserButton->setToolTip(tr("choose a pitch using a staff"));
     noteFrameLayout->addWidget(m_pitchToChooserButton, 1, 5);
     connect(m_pitchToChooserButton, SIGNAL(clicked()),
             SLOT(slotPitchToChooser()));
@@ -194,14 +194,14 @@ EventFilterDialog::initDialog()
     // Duration From/To
     m_noteDurationFromComboBox = new QComboBox(noteFrame);
     m_noteDurationFromComboBox->setEditable(false);
-    m_noteDurationFromComboBox->addItem(QObject::tr("longest"));
+    m_noteDurationFromComboBox->addItem(tr("longest"));
     noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
     connect(m_noteDurationFromComboBox, SIGNAL(activated(int)),
             SLOT(slotDurationFromChanged(int)));
 
     m_noteDurationToComboBox = new QComboBox(noteFrame);
     m_noteDurationToComboBox->setEditable(false);
-    m_noteDurationToComboBox->addItem(QObject::tr("longest"));
+    m_noteDurationToComboBox->addItem(tr("longest"));
     noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
     connect(m_noteDurationToComboBox, SIGNAL(activated(int)),
             SLOT(slotDurationToChanged(int)));
@@ -216,14 +216,14 @@ EventFilterDialog::initDialog()
     buttonLayout->setSpacing(6);
     mainWidgetLayout->addWidget(privateLayoutWidget);
 
-    m_buttonAll = new QPushButton(QObject::tr("Include all"), privateLayoutWidget);
+    m_buttonAll = new QPushButton(tr("Include all"), privateLayoutWidget);
     m_buttonAll->setAutoDefault(true);
-    m_buttonAll->setToolTip(QObject::tr("Include entire range of values"));
+    m_buttonAll->setToolTip(tr("Include entire range of values"));
     buttonLayout->addWidget( m_buttonAll, 0, 0 );
 
-    m_buttonNone = new QPushButton(QObject::tr("Exclude all"), privateLayoutWidget);
+    m_buttonNone = new QPushButton(tr("Exclude all"), privateLayoutWidget);
     m_buttonNone->setAutoDefault(true);
-    m_buttonNone->setToolTip(QObject::tr("Exclude entire range of values"));
+    m_buttonNone->setToolTip(tr("Exclude entire range of values"));
     buttonLayout->addWidget( m_buttonNone, 0, 1 );
 
     connect(m_buttonAll, SIGNAL(clicked()), this, SLOT(slotToggleAll()));
@@ -258,8 +258,8 @@ EventFilterDialog::populateDurationCombos()
         m_noteDurationFromComboBox->addItem(error ? noMap : pmap, label);
         m_noteDurationToComboBox ->addItem(error ? noMap : pmap, label);
     }
-    m_noteDurationFromComboBox->addItem(noMap, QObject::tr("shortest"));
-    m_noteDurationToComboBox->addItem(noMap, QObject::tr("shortest"));
+    m_noteDurationFromComboBox->addItem(noMap, tr("shortest"));
+    m_noteDurationToComboBox->addItem(noMap, tr("shortest"));
 
     QSettings settings;
     settings.beginGroup( EventFilterDialogConfigGroup );
@@ -363,7 +363,7 @@ EventFilterDialog::slotDurationToChanged(int index)
 void
 EventFilterDialog::slotPitchFromChooser()
 {
-    PitchPickerDialog dialog(this, m_pitchFromSpinBox->value(), QObject::tr("Lowest pitch"));
+    PitchPickerDialog dialog(this, m_pitchFromSpinBox->value(), tr("Lowest pitch"));
 
     if (dialog.exec() == QDialog::Accepted) {
         m_pitchFromSpinBox->setValue(dialog.getPitch());
@@ -373,7 +373,7 @@ EventFilterDialog::slotPitchFromChooser()
 void
 EventFilterDialog::slotPitchToChooser()
 {
-    PitchPickerDialog dialog(this, m_pitchToSpinBox->value(), QObject::tr("Highest pitch"));
+    PitchPickerDialog dialog(this, m_pitchToSpinBox->value(), tr("Highest pitch"));
 
     if (dialog.exec() == QDialog::Accepted) {
         m_pitchToSpinBox->setValue(dialog.getPitch());

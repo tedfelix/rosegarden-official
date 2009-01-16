@@ -63,7 +63,7 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
         m_modified(false)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Manage MIDI Devices"));
+    setWindowTitle(tr("Manage MIDI Devices"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *mainBox = new QWidget(this);
@@ -85,14 +85,14 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 	
 	/*
 	QStringList sl;
-	sl << QObject::tr("Device") << QObject::tr("Name") << QObject::tr("Type") << QObject::tr("Connection");
+	sl << tr("Device") << tr("Name") << tr("Type") << tr("Connection");
 	m_table->setHeaderLabels( sl );
 	*/
 	
-	m_table->setHorizontalHeaderItem( 0, new QTableWidgetItem( QObject::tr("Device")));
-	m_table->setHorizontalHeaderItem( 1, new QTableWidgetItem( QObject::tr("Name")));
-	m_table->setHorizontalHeaderItem( 2, new QTableWidgetItem( QObject::tr("Type")));
-	m_table->setHorizontalHeaderItem( 3, new QTableWidgetItem( QObject::tr("Connection")));
+	m_table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Device")));
+	m_table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Name")));
+	m_table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Type")));
+	m_table->setHorizontalHeaderItem( 3, new QTableWidgetItem( tr("Connection")));
 	
 	
     m_table->horizontalHeader()->show();
@@ -117,11 +117,11 @@ DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
 
     QWidget *hbox = new QWidget(mainBox);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QPushButton *addButton = new QPushButton(QObject::tr("Add Play Device"), hbox );
+    QPushButton *addButton = new QPushButton(tr("Add Play Device"), hbox );
     hboxLayout->addWidget(addButton);
-    QPushButton *addRButton = new QPushButton(QObject::tr("Add Record Device"), hbox );
+    QPushButton *addRButton = new QPushButton(tr("Add Record Device"), hbox );
     hboxLayout->addWidget(addRButton);
-    QPushButton *deleteButton = new QPushButton(QObject::tr("Delete Device"), hbox );
+    QPushButton *deleteButton = new QPushButton(tr("Delete Device"), hbox );
     hboxLayout->addWidget(deleteButton);
     hbox->setLayout(hboxLayout);
 	
@@ -193,7 +193,7 @@ DeviceEditorDialog::populate()
         MidiDevice *md = static_cast<MidiDevice *>(*it);
 
         // if you change this string ("Device %1"), change test in slotApply
-        QString deviceName = QObject::tr("Device %1").arg(md->getId() + 1);
+        QString deviceName = tr("Device %1").arg(md->getId() + 1);
         QString deviceLabel = strtoqstr(md->getName());
         QString connectionName = strtoqstr(md->getConnection());
 	
@@ -203,13 +203,13 @@ DeviceEditorDialog::populate()
         m_table->setText(deviceCount, LABEL_COL, deviceLabel);
         m_table->setText(deviceCount, DIRECTION_COL,
                          (md->getDirection() == MidiDevice::Play ?
-                          QObject::tr("Play") : QObject::tr("Record")));
+                          tr("Play") : tr("Record")));
 		*/
 		m_table->setItem(deviceCount, NAME_COL, new QTableWidgetItem(deviceName));
 		m_table->setItem(deviceCount, LABEL_COL, new QTableWidgetItem(deviceLabel));
 		m_table->setItem(deviceCount, DIRECTION_COL, new QTableWidgetItem(
 						 (md->getDirection() == MidiDevice::Play ?
-								 QObject::tr("Play") : QObject::tr("Record")) ));
+								 tr("Play") : tr("Record")) ));
 		
 
         QStringList &list(md->getDirection() == MidiDevice::Play ?
@@ -261,7 +261,7 @@ DeviceEditorDialog::makeConnectionList(MidiDevice::DeviceDirection direction,
                     getConnection(Device::Midi, direction, i));
     }
 
-    list.append(QObject::tr("No connection"));
+    list.append(tr("No connection"));
 }
 
 void
@@ -292,7 +292,7 @@ DeviceEditorDialog::slotClose()
         int reply = QMessageBox::question(
                       dynamic_cast<QWidget*>(this),
                       "", /* no title */
-                      QObject::tr("Apply pending changes?"),
+                      tr("Apply pending changes?"),
                       QMessageBox::Yes | QMessageBox::No,
                       QMessageBox::No);
 
@@ -399,9 +399,9 @@ DeviceEditorDialog::slotAddPlayDevice()
 // 	m_table->insertRows(n, 1);
 	m_table->insertRow( n );
 	
-    m_table->setItem(n, 0, new QTableWidgetItem( QObject::tr("<new device>")));
-	m_table->setItem(n, 1, new QTableWidgetItem( QObject::tr("New Device")));
-	m_table->setItem(n, 2, new QTableWidgetItem( QObject::tr("Play")));
+    m_table->setItem(n, 0, new QTableWidgetItem( tr("<new device>")));
+	m_table->setItem(n, 1, new QTableWidgetItem( tr("New Device")));
+	m_table->setItem(n, 2, new QTableWidgetItem( tr("Play")));
 
 	/*
     QComboTableItem *item =
@@ -426,9 +426,9 @@ DeviceEditorDialog::slotAddRecordDevice()
 // 	m_table->insertRows(n, 1);
 	m_table->insertRow( n );
 	
-	m_table->setItem(n, 0, new QTableWidgetItem( QObject::tr("<new device>")));
-	m_table->setItem(n, 1, new QTableWidgetItem( QObject::tr("New Device")));
-	m_table->setItem(n, 2, new QTableWidgetItem( QObject::tr("Record")));
+	m_table->setItem(n, 0, new QTableWidgetItem( tr("<new device>")));
+	m_table->setItem(n, 1, new QTableWidgetItem( tr("New Device")));
+	m_table->setItem(n, 2, new QTableWidgetItem( tr("Record")));
 
 	/*
     QComboTableItem *item =

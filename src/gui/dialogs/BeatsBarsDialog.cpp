@@ -37,11 +37,11 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Audio Segment Duration"));
+    setWindowTitle(tr("Audio Segment Duration"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 
-    QGroupBox *gbox = new QGroupBox(QObject::tr("The selected audio segment contains:"));
+    QGroupBox *gbox = new QGroupBox(tr("The selected audio segment contains:"));
     gbox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
@@ -56,8 +56,8 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
 
     m_comboBox = new QComboBox;
     m_comboBox->setEditable(false);
-    m_comboBox->addItem(QObject::tr("beat(s)"));
-    m_comboBox->addItem(QObject::tr("bar(s)"));
+    m_comboBox->addItem(tr("beat(s)"));
+    m_comboBox->addItem(tr("bar(s)"));
     m_comboBox->setCurrentIndex(0);
     layout->addWidget(m_comboBox, 0, 1);
 

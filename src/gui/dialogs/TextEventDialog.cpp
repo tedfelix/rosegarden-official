@@ -56,7 +56,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 {
     //setHelp("nv-text");
     setModal(true);
-    setWindowTitle(QObject::tr("Text"));
+    setWindowTitle(tr("Text"));
 
 //    QGridLayout *metagrid = new QGridLayout;
 //    setLayout(metagrid);
@@ -67,14 +67,14 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 	QWidget *vbox = dynamic_cast<QWidget*>( this );
 	vbox->setLayout( vboxLayout );
 
-    QGroupBox *entryBox = new QGroupBox( QObject::tr("Specification"), vbox );
+    QGroupBox *entryBox = new QGroupBox( tr("Specification"), vbox );
     vboxLayout->addWidget(entryBox);
-    QGroupBox *exampleBox = new QGroupBox( QObject::tr("Preview"), vbox );
+    QGroupBox *exampleBox = new QGroupBox( tr("Preview"), vbox );
     QVBoxLayout *exampleVBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(exampleBox);
 
     QGridLayout *entryGridLay = new QGridLayout;
-    entryGridLay->addWidget(new QLabel(QObject::tr("Text:  ")), 0, 0);
+    entryGridLay->addWidget(new QLabel(tr("Text:  ")), 0, 0);
     m_text = new QLineEdit;
     m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0)
@@ -82,7 +82,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     entryGridLay->addWidget(m_text, 0, 1);
 
     // style combo
-    entryGridLay->addWidget(new QLabel(QObject::tr("Style:  ")), 1, 0);
+    entryGridLay->addWidget(new QLabel(tr("Style:  ")), 1, 0);
     m_typeCombo = new QComboBox;
     entryGridLay->addWidget(m_typeCombo, 1, 1);
 
@@ -104,37 +104,37 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
         std::string style = m_styles[i];
 
-        // if the style is in this list, we can QObject::tr it (kludgy):
+        // if the style is in this list, we can tr it (kludgy):
 
         if (style == Text::Dynamic) {                           // index //
-            m_typeCombo->addItem(QObject::tr("Dynamic"));           // 0
+            m_typeCombo->addItem(tr("Dynamic"));           // 0
 
         } else if (style == Text::Direction) {
-            m_typeCombo->addItem(QObject::tr("Direction"));         // 1
+            m_typeCombo->addItem(tr("Direction"));         // 1
 
         } else if (style == Text::LocalDirection) {
-            m_typeCombo->addItem(QObject::tr("Local Direction"));   // 2
+            m_typeCombo->addItem(tr("Local Direction"));   // 2
 
         } else if (style == Text::Tempo) {
-            m_typeCombo->addItem(QObject::tr("Tempo"));             // 3
+            m_typeCombo->addItem(tr("Tempo"));             // 3
 
         } else if (style == Text::LocalTempo) {
-            m_typeCombo->addItem(QObject::tr("Local Tempo"));       // 4
+            m_typeCombo->addItem(tr("Local Tempo"));       // 4
 
         } else if (style == Text::Lyric) {
-            m_typeCombo->addItem(QObject::tr("Lyric"));             // 5
+            m_typeCombo->addItem(tr("Lyric"));             // 5
 
         } else if (style == Text::Chord) {
-            m_typeCombo->addItem(QObject::tr("Chord"));             // 6
+            m_typeCombo->addItem(tr("Chord"));             // 6
 
         } else if (style == Text::Annotation) {
-            m_typeCombo->addItem(QObject::tr("Annotation"));        // 7
+            m_typeCombo->addItem(tr("Annotation"));        // 7
 
         } else if (style == Text::LilyPondDirective) {
-            m_typeCombo->addItem(QObject::tr("LilyPond Directive")); // 8
+            m_typeCombo->addItem(tr("LilyPond Directive")); // 8
 
         } else {
-            // not QObject::tr()-able
+            // not tr()-able
 
             std::string styleName;
             styleName += (char)toupper(style[0]);
@@ -155,7 +155,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
         }
     }
 
-    m_verseLabel = new QLabel(QObject::tr("Verse:  "));
+    m_verseLabel = new QLabel(tr("Verse:  "));
     m_optionLabel->addWidget(m_verseLabel);
     m_verseSpin = new QSpinBox;
     m_optionWidget->addWidget(m_verseSpin);
@@ -165,24 +165,24 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_verseSpin->setValue(defaultText.getVerse() + 1);
 
     // dynamic shortcuts combo
-    m_dynamicShortcutLabel = new QLabel(QObject::tr("Dynamic:  "));
+    m_dynamicShortcutLabel = new QLabel(tr("Dynamic:  "));
     m_optionLabel->addWidget(m_dynamicShortcutLabel);
 
     m_dynamicShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_dynamicShortcutCombo);
-    m_dynamicShortcutCombo->addItem(QObject::tr("ppp"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("pp"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("p"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("mp"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("mf"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("f"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("ff"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("fff"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("rfz"));
-    m_dynamicShortcutCombo->addItem(QObject::tr("sf"));
+    m_dynamicShortcutCombo->addItem(tr("ppp"));
+    m_dynamicShortcutCombo->addItem(tr("pp"));
+    m_dynamicShortcutCombo->addItem(tr("p"));
+    m_dynamicShortcutCombo->addItem(tr("mp"));
+    m_dynamicShortcutCombo->addItem(tr("mf"));
+    m_dynamicShortcutCombo->addItem(tr("f"));
+    m_dynamicShortcutCombo->addItem(tr("ff"));
+    m_dynamicShortcutCombo->addItem(tr("fff"));
+    m_dynamicShortcutCombo->addItem(tr("rfz"));
+    m_dynamicShortcutCombo->addItem(tr("sf"));
 
     // direction shortcuts combo
-    m_directionShortcutLabel = new QLabel(QObject::tr("Direction:  "));
+    m_directionShortcutLabel = new QLabel(tr("Direction:  "));
     m_optionLabel->addWidget(m_directionShortcutLabel);
 
     m_directionShortcutCombo = new QComboBox;
@@ -192,93 +192,93 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // where it's supposed to go, without the need to micro-diddle each and
     // every bliffin' one.  (Micro-diddling is not exportable to LilyPond
     // either, is it?  I rather doubt it.)
-    m_directionShortcutCombo->addItem(QObject::tr("  ,"));
-    m_directionShortcutCombo->addItem(QObject::tr("D.C. al Fine"));
-    m_directionShortcutCombo->addItem(QObject::tr("D.S. al Fine"));
-    m_directionShortcutCombo->addItem(QObject::tr("Fine"));
-    m_directionShortcutCombo->addItem(QObject::tr("D.S. al Coda"));
-    m_directionShortcutCombo->addItem(QObject::tr("to Coda"));
-    m_directionShortcutCombo->addItem(QObject::tr("Coda"));
+    m_directionShortcutCombo->addItem(tr("  ,"));
+    m_directionShortcutCombo->addItem(tr("D.C. al Fine"));
+    m_directionShortcutCombo->addItem(tr("D.S. al Fine"));
+    m_directionShortcutCombo->addItem(tr("Fine"));
+    m_directionShortcutCombo->addItem(tr("D.S. al Coda"));
+    m_directionShortcutCombo->addItem(tr("to Coda"));
+    m_directionShortcutCombo->addItem(tr("Coda"));
 
     // local direction shortcuts combo
-    m_localDirectionShortcutLabel = new QLabel(QObject::tr("Local Direction:  "));
+    m_localDirectionShortcutLabel = new QLabel(tr("Local Direction:  "));
     m_optionLabel->addWidget(m_localDirectionShortcutLabel);
 
     m_localDirectionShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_localDirectionShortcutCombo);
-    m_localDirectionShortcutCombo->addItem(QObject::tr("shortcut."));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("ritard."));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("ralletando"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("a tempo"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("legato"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("simile"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("pizz."));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("arco"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("non vib."));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("sul pont."));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("sul tasto"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("con legno"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("sul tasto"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("sul G"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("ordinario"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("Muta in "));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("volti subito "));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("soli"));
-    m_localDirectionShortcutCombo->addItem(QObject::tr("div."));
+    m_localDirectionShortcutCombo->addItem(tr("shortcut."));
+    m_localDirectionShortcutCombo->addItem(tr("ritard."));
+    m_localDirectionShortcutCombo->addItem(tr("ralletando"));
+    m_localDirectionShortcutCombo->addItem(tr("a tempo"));
+    m_localDirectionShortcutCombo->addItem(tr("legato"));
+    m_localDirectionShortcutCombo->addItem(tr("simile"));
+    m_localDirectionShortcutCombo->addItem(tr("pizz."));
+    m_localDirectionShortcutCombo->addItem(tr("arco"));
+    m_localDirectionShortcutCombo->addItem(tr("non vib."));
+    m_localDirectionShortcutCombo->addItem(tr("sul pont."));
+    m_localDirectionShortcutCombo->addItem(tr("sul tasto"));
+    m_localDirectionShortcutCombo->addItem(tr("con legno"));
+    m_localDirectionShortcutCombo->addItem(tr("sul tasto"));
+    m_localDirectionShortcutCombo->addItem(tr("sul G"));
+    m_localDirectionShortcutCombo->addItem(tr("ordinario"));
+    m_localDirectionShortcutCombo->addItem(tr("Muta in "));
+    m_localDirectionShortcutCombo->addItem(tr("volti subito "));
+    m_localDirectionShortcutCombo->addItem(tr("soli"));
+    m_localDirectionShortcutCombo->addItem(tr("div."));
 
     // tempo shortcuts combo
-    m_tempoShortcutLabel = new QLabel(QObject::tr("Tempo:  "));
+    m_tempoShortcutLabel = new QLabel(tr("Tempo:  "));
     m_optionLabel->addWidget(m_tempoShortcutLabel);
 
     m_tempoShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_tempoShortcutCombo);
-    m_tempoShortcutCombo->addItem(QObject::tr("Grave"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Adagio"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Largo"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Lento"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Andante"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Moderato"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Allegretto"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Allegro"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Vivace"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Presto"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Prestissimo"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Maestoso"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Sostenuto"));
-    m_tempoShortcutCombo->addItem(QObject::tr("Tempo Primo"));
+    m_tempoShortcutCombo->addItem(tr("Grave"));
+    m_tempoShortcutCombo->addItem(tr("Adagio"));
+    m_tempoShortcutCombo->addItem(tr("Largo"));
+    m_tempoShortcutCombo->addItem(tr("Lento"));
+    m_tempoShortcutCombo->addItem(tr("Andante"));
+    m_tempoShortcutCombo->addItem(tr("Moderato"));
+    m_tempoShortcutCombo->addItem(tr("Allegretto"));
+    m_tempoShortcutCombo->addItem(tr("Allegro"));
+    m_tempoShortcutCombo->addItem(tr("Vivace"));
+    m_tempoShortcutCombo->addItem(tr("Presto"));
+    m_tempoShortcutCombo->addItem(tr("Prestissimo"));
+    m_tempoShortcutCombo->addItem(tr("Maestoso"));
+    m_tempoShortcutCombo->addItem(tr("Sostenuto"));
+    m_tempoShortcutCombo->addItem(tr("Tempo Primo"));
 
     // local tempo shortcuts combo (duplicates the non-local version, because
     // nobody is actually sure what is supposed to distinguish Tempo from
     // Local Tempo, or what this text style is supposed to be good for in the
     // way of standard notation)
-    m_localTempoShortcutLabel = new QLabel(QObject::tr("Local Tempo:  "));
+    m_localTempoShortcutLabel = new QLabel(tr("Local Tempo:  "));
     m_optionLabel->addWidget(m_localTempoShortcutLabel);
 
     m_localTempoShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_localTempoShortcutCombo);
-    m_localTempoShortcutCombo->addItem(QObject::tr("Grave"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Adagio"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Largo"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Lento"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Andante"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Moderato"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Allegretto"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Allegro"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Vivace"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Presto"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Prestissimo"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Maestoso"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Sostenuto"));
-    m_localTempoShortcutCombo->addItem(QObject::tr("Tempo Primo"));
+    m_localTempoShortcutCombo->addItem(tr("Grave"));
+    m_localTempoShortcutCombo->addItem(tr("Adagio"));
+    m_localTempoShortcutCombo->addItem(tr("Largo"));
+    m_localTempoShortcutCombo->addItem(tr("Lento"));
+    m_localTempoShortcutCombo->addItem(tr("Andante"));
+    m_localTempoShortcutCombo->addItem(tr("Moderato"));
+    m_localTempoShortcutCombo->addItem(tr("Allegretto"));
+    m_localTempoShortcutCombo->addItem(tr("Allegro"));
+    m_localTempoShortcutCombo->addItem(tr("Vivace"));
+    m_localTempoShortcutCombo->addItem(tr("Presto"));
+    m_localTempoShortcutCombo->addItem(tr("Prestissimo"));
+    m_localTempoShortcutCombo->addItem(tr("Maestoso"));
+    m_localTempoShortcutCombo->addItem(tr("Sostenuto"));
+    m_localTempoShortcutCombo->addItem(tr("Tempo Primo"));
 
     // LilyPond directive combo
-    m_directiveLabel = new QLabel(QObject::tr("Directive:  "));
+    m_directiveLabel = new QLabel(tr("Directive:  "));
     m_optionLabel->addWidget(m_directiveLabel);
 
     m_lilyPondDirectiveCombo = new QComboBox;
     m_optionWidget->addWidget(m_lilyPondDirectiveCombo);
 
-    // not QObject::tr()able, because the directive exporter currently depends on the
+    // not tr()able, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
@@ -330,7 +330,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     exampleVBoxLayout->addWidget(m_staffAboveLabel);
     m_staffAboveLabel->setPixmap(map);
 
-    m_textExampleLabel = new QLabel(QObject::tr("Example"), exampleBox );
+    m_textExampleLabel = new QLabel(tr("Example"), exampleBox );
     exampleVBoxLayout->addWidget(m_textExampleLabel);
 
     m_staffBelowLabel = new QLabel("staff", exampleBox );

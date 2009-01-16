@@ -91,14 +91,14 @@ TimeWidget::init(bool editable)
 
     if (m_isDuration) {
 
-        label = new QLabel(QObject::tr("Note:"));
+        label = new QLabel(tr("Note:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
         if (editable) {
             m_note = new QComboBox;
             m_noteDurations.push_back(0);
-            m_note->addItem(QObject::tr("<inexact>"));
+            m_note->addItem(tr("<inexact>"));
             for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
 
                 timeT duration =
@@ -135,13 +135,13 @@ TimeWidget::init(bool editable)
             QString label = NotationStrings::makeNoteMenuLabel
                             (m_time, false, error);
             if (error != 0)
-                label = QObject::tr("<inexact>");
+                label = tr("<inexact>");
             QLineEdit *le = new QLineEdit(label);
             le->setReadOnly(true);
             layout->addWidget(le, 0, 1, 0- 0+1, 3);
         }
 
-        label = new QLabel(QObject::tr("Units:"));
+        label = new QLabel(tr("Units:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 4);
 
@@ -163,7 +163,7 @@ TimeWidget::init(bool editable)
 
         m_note = 0;
 
-        label = new QLabel(QObject::tr("Time:"));
+        label = new QLabel(tr("Time:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
@@ -174,7 +174,7 @@ TimeWidget::init(bool editable)
             connect(m_timeT, SIGNAL(valueChanged(int)),
                     this, SLOT(slotTimeTChanged(int)));
             layout->addWidget(m_timeT, 0, 1);
-            layout->addWidget(new QLabel(QObject::tr("units")), 0, 2);
+            layout->addWidget(new QLabel(tr("units")), 0, 2);
         } else {
             m_timeT = 0;
             QLineEdit *le = new QLineEdit(QString("%1").arg(m_time));
@@ -183,7 +183,7 @@ TimeWidget::init(bool editable)
         }
     }
 
-    label = new QLabel(m_isDuration ? QObject::tr("Measures:") : QObject::tr("Measure:"));
+    label = new QLabel(m_isDuration ? tr("Measures:") : tr("Measure:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 
@@ -202,7 +202,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_barLabel, 1, 1);
     }
 
-    label = new QLabel(m_isDuration ? QObject::tr("beats:") : QObject::tr("beat:"));
+    label = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 2);
 
@@ -220,7 +220,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_beatLabel, 1, 3);
     }
 
-    label = new QLabel(QObject::tr("%1:").arg(NotationStrings::getShortNoteName
+    label = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName
                                             (Note(Note::Shortest), true)));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 4);
@@ -242,7 +242,7 @@ TimeWidget::init(bool editable)
     m_timeSig = new QLabel;
     layout->addWidget(m_timeSig, 1, 6);
 
-    label = new QLabel(QObject::tr("Seconds:"));
+    label = new QLabel(tr("Seconds:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 0);
 
@@ -261,7 +261,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_secLabel, 2, 1);
     }
 
-    label = new QLabel(QObject::tr("msec:"));
+    label = new QLabel(tr("msec:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 2);
 
@@ -397,7 +397,7 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(QObject::tr("(%1/%2 time)")
+        m_timeSig->setText(tr("(%1/%2 time)")
 			   .arg(timeSig.getNumerator())
                            .arg(timeSig.getDenominator()));
 
@@ -443,25 +443,25 @@ TimeWidget::populate()
         }
         if (change) {
             if (bpmc != qpmc) {
-                m_tempo->setText(QObject::tr("(starting %1.%2 qpm, %3.%4 bpm)")
+                m_tempo->setText(tr("(starting %1.%2 qpm, %3.%4 bpm)")
                                  .arg(qpmc / 100)
                                  .arg(qpmc % 100)
                                  .arg(bpmc / 100)
                                  .arg(bpmc % 100));
             } else {
-                m_tempo->setText(QObject::tr("(starting %1.%2 bpm)") 
+                m_tempo->setText(tr("(starting %1.%2 bpm)") 
                                  .arg(bpmc / 100)
                                  .arg(bpmc % 100));
             }
         } else {
             if (bpmc != qpmc) {
-                m_tempo->setText(QObject::tr("(%1.%2 qpm, %3.%4 bpm)")
+                m_tempo->setText(tr("(%1.%2 qpm, %3.%4 bpm)")
                                  .arg(qpmc / 100)
                                  .arg(qpmc % 100)
                                  .arg(bpmc / 100)
                                  .arg(bpmc % 100));
             } else {
-                m_tempo->setText(QObject::tr("(%1.%2 bpm)")
+                m_tempo->setText(tr("(%1.%2 bpm)")
                                  .arg(bpmc / 100)
                                  .arg(bpmc % 100));
             }
@@ -522,7 +522,7 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(QObject::tr("(%1/%2 time)")
+        m_timeSig->setText(tr("(%1/%2 time)")
 	                   .arg(timeSig.getNumerator())
                            .arg(timeSig.getDenominator()));
 

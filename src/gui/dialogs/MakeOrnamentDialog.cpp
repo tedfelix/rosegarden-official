@@ -39,7 +39,7 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Make Ornament"));
+    setWindowTitle(tr("Make Ornament"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 
@@ -47,12 +47,12 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    QGroupBox *nameBox = new QGroupBox(QObject::tr("Name"));
+    QGroupBox *nameBox = new QGroupBox(tr("Name"));
     QVBoxLayout *nameBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(nameBox);
 
     nameBoxLayout->addWidget(
-        new QLabel(QObject::tr("The name is used to identify both the ornament\n"
+        new QLabel(tr("The name is used to identify both the ornament\n"
                         "and the triggered segment that stores\n"
                         "the ornament's notes."), nameBox));
 
@@ -61,14 +61,14 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
     nameBoxLayout->addWidget(hbox);
     nameBox->setLayout(nameBoxLayout);
 
-    QLabel *child_3 = new QLabel(QObject::tr("Name:  "));
+    QLabel *child_3 = new QLabel(tr("Name:  "));
     hboxLayout->addWidget(child_3);
 
     m_name = new QLineEdit(defaultName);
     hboxLayout->addWidget(m_name);
     hbox->setLayout(hboxLayout);
 
-    m_pitch = new PitchChooser(QObject::tr("Base pitch"), vbox, defaultBasePitch);
+    m_pitch = new PitchChooser(tr("Base pitch"), vbox, defaultBasePitch);
     vboxLayout->addWidget(m_pitch);
     vbox->setLayout(vboxLayout);
 

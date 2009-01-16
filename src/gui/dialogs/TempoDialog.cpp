@@ -53,7 +53,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     //setHelp("tempo");
 
     setModal(true);
-    setWindowTitle(QObject::tr("Insert Tempo Change"));
+    setWindowTitle(tr("Insert Tempo Change"));
 
 	QWidget* vbox = dynamic_cast<QWidget*>( this );
 	QVBoxLayout *vboxLayout = new QVBoxLayout;
@@ -61,14 +61,14 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     //metagrid->addWidget(vbox, 0, 0);
 
     // group box for tempo
-    QGroupBox *frame = new QGroupBox( QObject::tr("Tempo"), vbox );
+    QGroupBox *frame = new QGroupBox( tr("Tempo"), vbox );
     frame->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout;
     layout->setSpacing(5);
     vboxLayout->addWidget(frame);
 
     // Set tempo
-    layout->addWidget(new QLabel(QObject::tr("New tempo:"), frame), 0, 1);
+    layout->addWidget(new QLabel(tr("New tempo:"), frame), 0, 1);
     m_tempoValueSpinBox = new QDoubleSpinBox(frame);
     m_tempoValueSpinBox->setDecimals(3);
     m_tempoValueSpinBox->setMaximum(1000);
@@ -80,16 +80,16 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
             SLOT(slotTempoChanged(double)));
 
-    m_tempoTap= new QPushButton(QObject::tr("Tap"), frame);
+    m_tempoTap= new QPushButton(tr("Tap"), frame);
     layout->addWidget(m_tempoTap, 0, 3);
     connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
 
 
-    m_tempoConstant = new QRadioButton(QObject::tr("Tempo is fixed until the following tempo change"), frame);
-    m_tempoRampToNext = new QRadioButton(QObject::tr("Tempo ramps to the following tempo"), frame);
-    m_tempoRampToTarget = new QRadioButton(QObject::tr("Tempo ramps to:"), frame);
+    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), frame);
+    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), frame);
+    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), frame);
 
-    //    m_tempoTargetCheckBox = new QCheckBox(QObject::tr("Ramping to:"), frame);
+    //    m_tempoTargetCheckBox = new QCheckBox(tr("Ramping to:"), frame);
     m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
     m_tempoValueSpinBox->setDecimals(3);
     m_tempoValueSpinBox->setMaximum(1000);
@@ -139,7 +139,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 		bool editable = true,
 		bool constrainToCompositionDuration = true );
 		*/
-        m_timeEditor = new TimeWidget(QObject::tr("Time of tempo change"), vbox, 0, true);	//@@@ FIX !!! 3. param, 
+        m_timeEditor = new TimeWidget(tr("Time of tempo change"), vbox, 0, true);	//@@@ FIX !!! 3. param, 
         vboxLayout->addWidget(m_timeEditor);
         populateTempo();
         return ;
@@ -148,7 +148,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 	
 	
 	// group box for scope (area)
-	QGroupBox *scopeGroup = new QGroupBox( QObject::tr("Scope"), vbox );
+	QGroupBox *scopeGroup = new QGroupBox( tr("Scope"), vbox );
 	vboxLayout->addWidget(scopeGroup);
     //vbox->setLayout(vboxLayout);	// already done
 
@@ -163,7 +163,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 	QVBoxLayout * currentBoxLayout = scopeBoxLayout;
 	QWidget * currentBox = scopeGroup;
 	
-    QLabel *child_15 = new QLabel(QObject::tr("The pointer is currently at "), currentBox );
+    QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox );
     currentBoxLayout->addWidget(child_15);
     m_tempoTimeLabel = new QLabel( currentBox );
     currentBoxLayout->addWidget(m_tempoTimeLabel);
@@ -192,19 +192,19 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     changeWhereBox->setLayout(changeWhereBoxLayout);
     changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
 
-    m_tempoChangeHere = new QRadioButton(QObject::tr("Apply this tempo from here onwards"), changeWhereVBox );
+    m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox );
     changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
 
-    m_tempoChangeBefore = new QRadioButton(QObject::tr("Replace the last tempo change"), changeWhereVBox );
+    m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox );
     changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
     m_tempoChangeBeforeAt = new QLabel( changeWhereVBox );
     changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
     m_tempoChangeBeforeAt->hide();
 
-    m_tempoChangeStartOfBar = new QRadioButton(QObject::tr("Apply this tempo from the start of this bar"), changeWhereVBox );
+    m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox );
     changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
 
-    m_tempoChangeGlobal = new QRadioButton(QObject::tr("Apply this tempo to the whole composition"), changeWhereVBox );
+    m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox );
     changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
 
     QWidget *optionHBox = new QWidget( changeWhereVBox );
@@ -213,7 +213,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
     QLabel *child_6 = new QLabel("         ", optionHBox );
     optionHBoxLayout->addWidget(child_6);
-    m_defaultBox = new QCheckBox(QObject::tr("Also make this the default tempo"), optionHBox );
+    m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox );
     optionHBoxLayout->addWidget(m_defaultBox);
     spare = new QLabel( optionHBox );
     optionHBoxLayout->addWidget(spare);
@@ -307,17 +307,17 @@ TempoDialog::populateTempo()
     RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03d", tempoTime.msec());
-    m_tempoTimeLabel->setText(QObject::tr("%1.%2 s,").arg(tempoTime.sec)
+    m_tempoTimeLabel->setText(tr("%1.%2 s,").arg(tempoTime.sec)
                                .arg(milliSeconds));
 
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
         m_tempoBarLabel->setText
-        (QObject::tr("at the start of measure %1.").arg(barNo + 1));
+        (tr("at the start of measure %1.").arg(barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(false);
     } else {
         m_tempoBarLabel->setText(
-            QObject::tr("in the middle of measure %1.").arg(barNo + 1));
+            tr("in the middle of measure %1.").arg(barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(true);
     }
 
@@ -336,7 +336,7 @@ TempoDialog::populateTempo()
             lastms.sprintf("%03d", lastRT.msec());
             int lastBar = comp.getBarNumber(lastTempoTime);
             m_tempoChangeBeforeAt->setText
-            (QObject::tr("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
+            (tr("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
               .arg(lastms).arg(lastBar + 1));
             m_tempoChangeBeforeAt->show();
 
@@ -353,7 +353,7 @@ TempoDialog::populateTempo()
             m_tempoStatusLabel->hide();
         } else {
             m_tempoStatusLabel->setText
-            (QObject::tr("There are no preceding tempo changes."));
+            (tr("There are no preceding tempo changes."));
         }
 
         m_tempoChangeGlobal->setEnabled(true);
@@ -361,7 +361,7 @@ TempoDialog::populateTempo()
     } else {
 
         m_tempoStatusLabel->setText
-        (QObject::tr("There are no other tempo changes."));
+        (tr("There are no other tempo changes."));
 
         m_tempoChangeGlobal->setEnabled(false);
     }
@@ -379,7 +379,7 @@ TempoDialog::updateBeatLabels(double qpm)
 
     timeT beat = comp.getTimeSignatureAt(m_tempoTime).getBeatDuration();
     if (beat == Note(Note::Crotchet).getDuration()) {
-        m_tempoBeatLabel->setText(QObject::tr(" bpm"));
+        m_tempoBeatLabel->setText(tr(" bpm"));
         m_tempoBeatLabel->show();
         m_tempoBeat->hide();
         m_tempoBeatsPerMinute->hide();

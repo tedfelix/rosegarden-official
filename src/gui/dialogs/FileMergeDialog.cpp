@@ -48,7 +48,7 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     ////setHelp("file-merge");
 
     setModal(true);
-    setWindowTitle(QObject::tr("Merge File"));
+    setWindowTitle(tr("Merge File"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -60,19 +60,19 @@ FileMergeDialog::FileMergeDialog(QWidget *parent,
     QWidget *hbox = new QWidget( vbox );
     vboxLayout->addWidget(hbox);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
-    QLabel *child_3 = new QLabel(QObject::tr("Merge new file  "), hbox );
+    QLabel *child_3 = new QLabel(tr("Merge new file  "), hbox );
     hboxLayout->addWidget(child_3);
 
     m_choice = new QComboBox( hbox );
     hboxLayout->addWidget(m_choice);
     hbox->setLayout(hboxLayout);
-    m_choice->addItem(QObject::tr("At start of existing composition"));
-    m_choice->addItem(QObject::tr("From end of existing composition"));
+    m_choice->addItem(tr("At start of existing composition"));
+    m_choice->addItem(tr("From end of existing composition"));
     m_useTimings = 0;
 
     if (timingsDiffer) {
-        new QLabel(QObject::tr("The file has different time signatures or tempos."), vbox);
-        m_useTimings = new QCheckBox(QObject::tr("Import these as well"), vbox );
+        new QLabel(tr("The file has different time signatures or tempos."), vbox);
+        m_useTimings = new QCheckBox(tr("Import these as well"), vbox );
         vboxLayout->addWidget(m_useTimings);
         vbox->setLayout(vboxLayout);
         m_useTimings->setChecked(false);

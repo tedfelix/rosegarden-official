@@ -86,7 +86,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
     QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
                      this, SLOT(update()));
 
-    this->setToolTip(QObject::tr("Chord name ruler.\nTurn it on and off from the Settings->Rulers menu."));
+    this->setToolTip(tr("Chord name ruler.\nTurn it on and off from the Settings->Rulers menu."));
 
 }
 

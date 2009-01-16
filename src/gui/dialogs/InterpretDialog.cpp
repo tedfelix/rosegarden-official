@@ -40,28 +40,28 @@ InterpretDialog::InterpretDialog(QWidget *parent) :
     //setHelp("nv-interpret");
 
     setModal(true);
-    setWindowTitle(QObject::tr("Interpret"));
+    setWindowTitle(tr("Interpret"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
-    QGroupBox *vbox = new QGroupBox(QObject::tr("Interpretations to apply"), this);
+    QGroupBox *vbox = new QGroupBox(tr("Interpretations to apply"), this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
     m_applyTextDynamics = new QCheckBox
-                          (QObject::tr("Apply text dynamics (p, mf, ff etc)"));
+                          (tr("Apply text dynamics (p, mf, ff etc)"));
     vboxLayout->addWidget(m_applyTextDynamics);
     m_applyHairpins = new QCheckBox
-                      (QObject::tr("Apply hairpin dynamics"));
+                      (tr("Apply hairpin dynamics"));
     vboxLayout->addWidget(m_applyHairpins);
     m_stressBeats = new QCheckBox
-                    (QObject::tr("Stress beats"));
+                    (tr("Stress beats"));
     vboxLayout->addWidget(m_stressBeats);
     m_articulate = new QCheckBox
-                   (QObject::tr("Articulate slurs, staccato, tenuto etc"));
+                   (tr("Articulate slurs, staccato, tenuto etc"));
     vboxLayout->addWidget(m_articulate);
     m_allInterpretations = new QCheckBox
-                           (QObject::tr("All available interpretations"));
+                           (tr("All available interpretations"));
     vboxLayout->addWidget(m_allInterpretations);
 
     vbox->setLayout(vboxLayout);

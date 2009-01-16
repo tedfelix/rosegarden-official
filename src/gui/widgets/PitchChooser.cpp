@@ -48,7 +48,7 @@ PitchChooser::PitchChooser(QString title,
     hboxLayout->setSpacing(6);
     layout->addWidget(hbox);
 
-    QLabel *child_4 = new QLabel(QObject::tr("Pitch:"), hbox );
+    QLabel *child_4 = new QLabel(tr("Pitch:"), hbox );
     hboxLayout->addWidget(child_4);
 
     m_pitch = new QSpinBox( hbox );

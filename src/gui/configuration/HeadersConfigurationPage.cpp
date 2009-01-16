@@ -57,7 +57,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     // LilyPond export: Printable headers
     //
 
-    QGroupBox *headersBox = new QGroupBox( QObject::tr("Printable headers"), this );
+    QGroupBox *headersBox = new QGroupBox( tr("Printable headers"), this );
     QHBoxLayout *headersBoxLayout = new QHBoxLayout;
     layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
@@ -91,55 +91,55 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 	if (key == headerDedication) {  
 	    m_editDedication = editHeader;
 	    row = 0; col = 2; width = 2;
-	    trName = QObject::tr("Dedication");
+	    trName = tr("Dedication");
 	} else if (key == headerTitle) {       
 	    m_editTitle = editHeader;	
 	    row = 1; col = 1; width = 4;
-	    trName = QObject::tr("Title");
+	    trName = tr("Title");
 	} else if (key == headerSubtitle) {
 	    m_editSubtitle = editHeader;
 	    row = 2; col = 1; width = 4;
-	    trName = QObject::tr("Subtitle");
+	    trName = tr("Subtitle");
 	} else if (key == headerSubsubtitle) { 
 	    m_editSubsubtitle = editHeader;
 	    row = 3; col = 2; width = 2;
-	    trName = QObject::tr("Subsubtitle");
+	    trName = tr("Subsubtitle");
 	} else if (key == headerPoet) {        
 	    m_editPoet = editHeader;
 	    row = 4; col = 0; width = 2;
-	    trName = QObject::tr("Poet");
+	    trName = tr("Poet");
 	} else if (key == headerInstrument) {  
 	    m_editInstrument = editHeader;
 	    row = 4; col = 2; width = 2;
-	    trName = QObject::tr("Instrument");
+	    trName = tr("Instrument");
 	} else if (key == headerComposer) {    
 	    m_editComposer = editHeader;
 	    row = 4; col = 4; width = 2; 
-	    trName = QObject::tr("Composer");
+	    trName = tr("Composer");
 	} else if (key == headerMeter) {       
 	    m_editMeter = editHeader;
 	    row = 5; col = 0; width = 3; 
-	    trName = QObject::tr("Meter");
+	    trName = tr("Meter");
 	} else if (key == headerArranger) {    
 	    m_editArranger = editHeader;
 	    row = 5; col = 3; width = 3; 
-	    trName = QObject::tr("Arranger");
+	    trName = tr("Arranger");
 	} else if (key == headerPiece) {       
 	    m_editPiece = editHeader;
 	    row = 6; col = 0; width = 3; 
-	    trName = QObject::tr("Piece");
+	    trName = tr("Piece");
 	} else if (key == headerOpus) {        
 	    m_editOpus = editHeader;
 	    row = 6; col = 3; width = 3; 
-	    trName = QObject::tr("Opus");
+	    trName = tr("Opus");
 	} else if (key == headerCopyright) {   
 	    m_editCopyright = editHeader;
 	    row = 8; col = 1; width = 4; 
-	    trName = QObject::tr("Copyright");
+	    trName = tr("Copyright");
 	} else if (key == headerTagline) {     
 	    m_editTagline = editHeader;
 	    row = 9; col = 1; width = 4; 
-	    trName = QObject::tr("Tagline");
+	    trName = tr("Tagline");
 	}
 
 	// editHeader->setReadOnly( true );
@@ -154,7 +154,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
 	shown.insert(key);
     }
-    QLabel *separator = new QLabel(QObject::tr("The composition comes here."), frameHeaders);
+    QLabel *separator = new QLabel(tr("The composition comes here."), frameHeaders);
     separator->setAlignment( Qt::AlignCenter );
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
 
@@ -178,7 +178,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     settings.endGroup();
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
-        (QObject::tr("Non-printable headers"), this, "nonprintableheaders");
+        (tr("Non-printable headers"), this, "nonprintableheaders");
         
     layout->addWidget(otherHeadersBox);
     setLayout(layout);        
@@ -196,8 +196,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
 	m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
 	
-	m_metadata->setItem( 0, 0, new QTableWidgetItem(QObject::tr("Name"))  ); // row, column, item
-	m_metadata->setItem( 0, 2, new QTableWidgetItem(QObject::tr("Value"))  ); // row, column, item
+	m_metadata->setItem( 0, 0, new QTableWidgetItem(tr("Name"))  ); // row, column, item
+	m_metadata->setItem( 0, 2, new QTableWidgetItem(tr("Value"))  ); // row, column, item
 //    m_metadata->setFullWidth(true);
 	m_metadata->setMinimumSize( 40, 40 ); // width, height
 //    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor ( QTableWidgetItem * item )
@@ -234,11 +234,11 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1-0+ 1);
 
-    QPushButton* addPropButton = new QPushButton(QObject::tr("Add New Property"),
+    QPushButton* addPropButton = new QPushButton(tr("Add New Property"),
                                  frameOtherHeaders);
     layoutOtherHeaders->addWidget(addPropButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deletePropButton = new QPushButton(QObject::tr("Delete Property"),
+    QPushButton* deletePropButton = new QPushButton(tr("Delete Property"),
                                     frameOtherHeaders);
     layoutOtherHeaders->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
 
@@ -260,7 +260,7 @@ HeadersConfigurationPage::slotAddNewProperty()
 	QList<QTableWidgetItem*> foundItems;
     while (1) {
         propertyName =
-            (i > 0 ? QObject::tr("{new property %1}").arg(i) : QObject::tr("{new property}"));
+            (i > 0 ? tr("{new property %1}").arg(i) : tr("{new property}"));
 		//<QTableWidgetItem*>
 		foundItems = m_metadata->findItems( propertyName, Qt::MatchContains | Qt::MatchCaseSensitive );
 	
@@ -271,7 +271,7 @@ HeadersConfigurationPage::slotAddNewProperty()
         ++i;
     }
 
-	//new QTableWidgetItem(m_metadata, propertyName, QObject::tr("{undefined}"));
+	//new QTableWidgetItem(m_metadata, propertyName, tr("{undefined}"));
 	int rc = m_metadata->rowCount();
 	int col = 0;
 	m_metadata->setRowCount( rc + 1 );

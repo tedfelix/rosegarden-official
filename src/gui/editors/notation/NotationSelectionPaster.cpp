@@ -71,10 +71,10 @@ void NotationSelectionPaster::handleLeftButtonPress(timeT,
                                    PasteEventsCommand::Restricted);
 
     if (!command->isPossible()) {
-        m_parentView->slotStatusHelpMsg(QObject::tr("Couldn't paste at this point"));
+        m_parentView->slotStatusHelpMsg(tr("Couldn't paste at this point"));
     } else {
         m_parentView->addCommandToHistory(command);
-        m_parentView->slotStatusHelpMsg(QObject::tr("Ready."));
+        m_parentView->slotStatusHelpMsg(tr("Ready."));
     }
 }
 

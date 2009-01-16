@@ -432,7 +432,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int minor = sminor.toInt();
 
             if (major > RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR) {
-                m_errorString = QObject::tr("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.").arg(version);
+                m_errorString = tr("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.").arg(version);
                 return false;
             }
 
@@ -442,7 +442,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
                 StartupLogo::hideIfStillThere();
 
-                QMessageBox::information(0, "", QObject::tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
+                QMessageBox::information(0, "", tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
 
                 CurrentProgressDialog::thaw();
             }
@@ -1011,7 +1011,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString thing;
 			//KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
 			//KURL url = QFileDialog.directory()
-			QString url = QFileDialog::getExistingDirectory(0, QObject::tr("Open Directory"),
+			QString url = QFileDialog::getExistingDirectory(0, tr("Open Directory"),
 										"/home", QFileDialog::ShowDirsOnly
 												| QFileDialog::DontResolveSymlinks);			
 			
@@ -1685,7 +1685,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 //            std::cerr << "Have container" << std::endl;
 
-            emit setOperationName(QObject::tr("Loading plugins..."));
+            emit setOperationName(tr("Loading plugins..."));
             ProgressDialog::processEvents();
 
             // Get the details

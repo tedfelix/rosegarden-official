@@ -39,7 +39,7 @@ namespace Rosegarden
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         QWidget *parent,
         const char *name)
-	: ConfigureDialogBase(parent, QObject::tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
+	: ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
     QWidget *pageWidget = 0;
     QVBoxLayout *vlay = 0;

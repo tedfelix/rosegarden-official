@@ -48,7 +48,7 @@ PitchDialog::PitchDialog(QWidget *parent, QString title, int defaultPitch) :
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     QPushButton *user1
-        = buttonBox->addButton(QObject::tr("Reset"), QDialogButtonBox::ActionRole);
+        = buttonBox->addButton(tr("Reset"), QDialogButtonBox::ActionRole);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(user1, SIGNAL(clicked(bool)),

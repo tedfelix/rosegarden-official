@@ -142,7 +142,7 @@ int MatrixPainter::handleMouseMove(timeT time,
         return RosegardenCanvasView::NoFollow;
 
     if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
+        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
@@ -334,9 +334,9 @@ void MatrixPainter::slotMatrixScrolled(int newX, int newY)
 void MatrixPainter::setBasicContextHelp()
 {
     if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(QObject::tr("Click and drag to draw a note; Shift to avoid snapping to grid"));
+        setContextHelp(tr("Click and drag to draw a note; Shift to avoid snapping to grid"));
     } else {
-        setContextHelp(QObject::tr("Click and drag to draw a note"));
+        setContextHelp(tr("Click and drag to draw a note"));
     }        
 }
 

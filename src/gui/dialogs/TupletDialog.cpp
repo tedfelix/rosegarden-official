@@ -46,7 +46,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 {
     //setHelp("nv-tuplets");
     setModal(true);
-    setWindowTitle(QObject::tr("Tuplet"));
+    setWindowTitle(tr("Tuplet"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -55,7 +55,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *timingBox = new QGroupBox( QObject::tr("New timing for tuplet group"), vbox );
+    QGroupBox *timingBox = new QGroupBox( tr("New timing for tuplet group"), vbox );
     timingBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *timingLayout = new QGridLayout(timingBox);
     timingLayout->setSpacing(5);
@@ -74,7 +74,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
             defaultUnitType = maxUnitType;
     }
 
-    timingLayout->addWidget(new QLabel(QObject::tr("Play "), timingBox), 0, 0);
+    timingLayout->addWidget(new QLabel(tr("Play "), timingBox), 0, 0);
 
     m_untupledCombo = new QComboBox(timingBox);
     timingLayout->addWidget(m_untupledCombo, 0, 1);
@@ -96,13 +96,13 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         }
     }
 
-    timingLayout->addWidget(new QLabel(QObject::tr("in the time of  "), timingBox), 1, 0);
+    timingLayout->addWidget(new QLabel(tr("in the time of  "), timingBox), 1, 0);
 
     m_tupledCombo = new QComboBox(timingBox);
     timingLayout->addWidget(m_tupledCombo, 1, 1);
 
     m_hasTimingAlready = new QCheckBox
-                         (QObject::tr("Timing is already correct: update display only"), timingBox);
+                         (tr("Timing is already correct: update display only"), timingBox);
     m_hasTimingAlready->setChecked(false);
     timingLayout->addWidget(m_hasTimingAlready, 2, 0, 0+1, 2- 1);
 
@@ -113,7 +113,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     updateUntupledCombo();
     updateTupledCombo();
 
-    m_timingDisplayGrid = new QGroupBox( QObject::tr("Timing calculations"), vbox );
+    m_timingDisplayGrid = new QGroupBox( tr("Timing calculations"), vbox );
     QGridLayout *m_timingDisplayLayout = new QGridLayout(m_timingDisplayGrid);
     vboxLayout->addWidget(m_timingDisplayGrid);
 
@@ -121,7 +121,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     if (maxDuration > 0) {
 
-        m_timingDisplayLayout->addWidget(new QLabel(QObject::tr("Selected region:")),
+        m_timingDisplayLayout->addWidget(new QLabel(tr("Selected region:")),
                                          row, 0);
         m_timingDisplayLayout->addWidget(new QLabel(""), row, 1);
         m_selectionDurationDisplay = new QLabel("x");
@@ -133,7 +133,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
         m_selectionDurationDisplay = 0;
     }
 
-    m_timingDisplayLayout->addWidget(new QLabel(QObject::tr("Group with current timing:")),
+    m_timingDisplayLayout->addWidget(new QLabel(tr("Group with current timing:")),
                                      row, 0);
     m_untupledDurationCalculationDisplay = new QLabel("x");
     m_timingDisplayLayout->addWidget(m_untupledDurationCalculationDisplay,
@@ -144,7 +144,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     m_timingDisplayLayout->addWidget(m_untupledDurationDisplay, row, 2);
     row++;
 
-    m_timingDisplayLayout->addWidget(new QLabel(QObject::tr("Group with new timing:")),
+    m_timingDisplayLayout->addWidget(new QLabel(tr("Group with new timing:")),
                                      row, 0);
     m_tupledDurationCalculationDisplay = new QLabel("x");
     m_timingDisplayLayout->addWidget(m_tupledDurationCalculationDisplay,
@@ -155,7 +155,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
     m_timingDisplayLayout->addWidget(m_tupledDurationDisplay, row, 2);
     row++;
 
-    m_timingDisplayLayout->addWidget(new QLabel(QObject::tr("Gap created by timing change:")),
+    m_timingDisplayLayout->addWidget(new QLabel(tr("Gap created by timing change:")),
                                      row, 0);
     m_newGapDurationCalculationDisplay = new QLabel("x");
     m_timingDisplayLayout->addWidget(m_newGapDurationCalculationDisplay,
@@ -168,7 +168,7 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     if (maxDuration > 0) {
 
-        m_timingDisplayLayout->addWidget(new QLabel(QObject::tr("Unchanged at end of selection:")),
+        m_timingDisplayLayout->addWidget(new QLabel(tr("Unchanged at end of selection:")),
                                          row, 0);
         m_unchangedDurationCalculationDisplay = new QLabel("x");
         m_timingDisplayLayout->addWidget(m_unchangedDurationCalculationDisplay,

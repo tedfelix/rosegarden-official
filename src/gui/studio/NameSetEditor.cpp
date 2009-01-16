@@ -60,21 +60,21 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
     // Librarian
     //
-    QGroupBox *groupBox = new QGroupBox(QObject::tr("Librarian"), m_mainFrame);
+    QGroupBox *groupBox = new QGroupBox(tr("Librarian"), m_mainFrame);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
 
     m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
 
-    groupBoxLayout->addWidget(new QLabel(QObject::tr("Name")));
+    groupBoxLayout->addWidget(new QLabel(tr("Name")));
     m_librarian = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarian);
 
-    groupBoxLayout->addWidget(new QLabel(QObject::tr("Email")));
+    groupBoxLayout->addWidget(new QLabel(tr("Email")));
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail);
 
     groupBox->setLayout(groupBoxLayout);
-    groupBox->setToolTip(QObject::tr("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
+    groupBox->setToolTip(tr("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
     QTabWidget* tabw = new QTabWidget(this);
     layout->addWidget(tabw);

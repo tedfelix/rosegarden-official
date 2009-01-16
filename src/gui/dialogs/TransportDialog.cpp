@@ -94,7 +94,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_transport = new Ui_RosegardenTransport();
     m_transport->setupUi(frame);
 	
-    setCaption(QObject::tr("Rosegarden Transport"));
+    setCaption(tr("Rosegarden Transport"));
 
     resetFonts();
 
@@ -919,24 +919,24 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->InDisplay->setText(QObject::tr("PITCH WHEEL"));
+        m_transport->InDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->InDisplay->setText(QObject::tr("CONTROLLER"));
+        m_transport->InDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->InDisplay->setText(QObject::tr("PROG CHNGE"));
+        m_transport->InDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->InDisplay->setText(QObject::tr("PRESSURE"));
+        m_transport->InDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->InDisplay->setText(QObject::tr("SYS MESSAGE"));
+        m_transport->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
     default:   // do nothing
@@ -956,7 +956,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiInLabel()
 {
-    m_transport->InDisplay->setText( qStrToCharPtrUtf8( QObject::tr("NO EVENTS"))  );
+    m_transport->InDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS"))  );
 
     // also, just to be sure:
     slotResetBackground();
@@ -979,24 +979,24 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->OutDisplay->setText(QObject::tr("PITCH WHEEL"));
+        m_transport->OutDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->OutDisplay->setText(QObject::tr("CONTROLLER"));
+        m_transport->OutDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->OutDisplay->setText(QObject::tr("PROG CHNGE"));
+        m_transport->OutDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->OutDisplay->setText(QObject::tr("PRESSURE"));
+        m_transport->OutDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->OutDisplay->setText(QObject::tr("SYS MESSAGE"));
+        m_transport->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
     default:   // do nothing
@@ -1016,7 +1016,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiOutLabel()
 {
-	m_transport->OutDisplay->setText( qStrToCharPtrUtf8( QObject::tr("NO EVENTS")) ); 
+	m_transport->OutDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS")) ); 
 }
 
 void

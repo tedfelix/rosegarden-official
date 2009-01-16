@@ -84,15 +84,15 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // define some note filtering buttons in a group
     //
-// 	m_filterGroup = new QGroupBox(1, Qt::Horizontal, QObject::tr("Filter"), getCentralWidget());
-	m_filterGroup = new QGroupBox( QObject::tr("Filter"), getCentralWidget() );
+// 	m_filterGroup = new QGroupBox(1, Qt::Horizontal, tr("Filter"), getCentralWidget());
+	m_filterGroup = new QGroupBox( tr("Filter"), getCentralWidget() );
 	QHBoxLayout *filterGroupLayout = new QHBoxLayout;
 	m_filterGroup->setLayout( filterGroupLayout );
 
-    m_tempoCheckBox = new QCheckBox(QObject::tr("Tempo"), m_filterGroup);
+    m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
     filterGroupLayout->addWidget(m_tempoCheckBox);
 
-    m_timeSigCheckBox = new QCheckBox(QObject::tr("Time Signature"), m_filterGroup);
+    m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
     filterGroupLayout->addWidget(m_timeSigCheckBox);
 
     m_filterGroup->setLayout(filterGroupLayout);
@@ -124,18 +124,18 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 // 	m_list->setSelectionBehavior( QAbstractItemView::SelectRows );
 	
 	/*
-    m_list->addColumn(QObject::tr("Time  "));
-    m_list->addColumn(QObject::tr("Type  "));
-    m_list->addColumn(QObject::tr("Value  "));
-    m_list->addColumn(QObject::tr("Properties  "));
+    m_list->addColumn(tr("Time  "));
+    m_list->addColumn(tr("Type  "));
+    m_list->addColumn(tr("Value  "));
+    m_list->addColumn(tr("Properties  "));
 	*/
 	
 	
 	QStringList sl;
-	sl 		<< QObject::tr("Time  ")
-			<< QObject::tr("Type  ")
-			<< QObject::tr("Value  ")
-			<< QObject::tr("Properties  ")
+	sl 		<< tr("Time  ")
+			<< tr("Type  ")
+			<< tr("Value  ")
+			<< tr("Properties  ")
 			;
 	
 	m_list->setColumnCount( 4 );
@@ -244,12 +244,12 @@ TempoView::applyLayout(int /*staffNo*/)
             QString properties;
             if (sig.second.isHidden()) {
                 if (sig.second.isCommon())
-                    properties = QObject::tr("Common, hidden");
+                    properties = tr("Common, hidden");
                 else
-                    properties = QObject::tr("Hidden");
+                    properties = tr("Hidden");
             } else {
                 if (sig.second.isCommon())
-                    properties = QObject::tr("Common");
+                    properties = tr("Common");
             }
 
             QString timeString = makeTimeString(sig.first, timeMode);
@@ -258,7 +258,7 @@ TempoView::applyLayout(int /*staffNo*/)
                               sig.first, i, m_list, 
 							QStringList()
 							<< timeString
-                              << QObject::tr("Time Signature   ")
+                              << tr("Time Signature   ")
                               << QString("%1/%2   ").arg(sig.second.getNumerator()).
                               				arg(sig.second.getDenominator())
                               << properties );
@@ -283,7 +283,7 @@ TempoView::applyLayout(int /*staffNo*/)
             Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
             if (sig.getBeatDuration() ==
                     Note(Note::Crotchet).getDuration()) {
-                desc = QObject::tr("%1.%2%3")
+                desc = tr("%1.%2%3")
                        .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
             } else {
                 float bpm = (qpm *
@@ -293,7 +293,7 @@ TempoView::applyLayout(int /*staffNo*/)
                 int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
                 int bpmHundredths = int((bpm - bpmUnits - bpmTenths / 10.0) * 100 + 0.001);
 
-                desc = QObject::tr("%1.%2%3 qpm (%4.%5%6 bpm)   ")
+                desc = tr("%1.%2%3 qpm (%4.%5%6 bpm)   ")
                        .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths)
                        .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
@@ -302,13 +302,13 @@ TempoView::applyLayout(int /*staffNo*/)
 
             new TempoListItem(comp, TempoListItem::Tempo,
                               tempo.first, i, m_list, QStringList() << timeString
-                              << QObject::tr("Tempo   ")
+                              << tr("Tempo   ")
                               << desc );
         }
     }
 
     if (m_list->topLevelItemCount() == 0) {
-        new QTreeWidgetItem( m_list, QStringList() << QObject::tr("<nothing at this filter level>") );
+        new QTreeWidgetItem( m_list, QStringList() << tr("<nothing at this filter level>") );
         m_list->setSelectionMode(QTreeWidget::NoSelection);
 		leaveActionState("have_selection");
     } else {
@@ -515,7 +515,7 @@ TempoView::slotEditDelete()
 	
     if (haveSomething) {
         MacroCommand *command = new MacroCommand
-                                 (QObject::tr("Delete Tempo or Time Signature"));
+                                 (tr("Delete Tempo or Time Signature"));
         for (std::vector<Command *>::iterator i = commands.end();
                 i != commands.begin();) {
             command->addCommand(*--i);
@@ -863,7 +863,7 @@ TempoView::slotPopupEditor(QTreeWidgetItem *qitem)
 void
 TempoView::updateViewCaption()
 {
-    setWindowTitle(QObject::tr("%1 - Tempo and Time Signature Editor")
+    setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
                 .arg(getDocument()->getTitle()));
 }
 

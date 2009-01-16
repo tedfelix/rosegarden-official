@@ -79,7 +79,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                               QSizePolicy::Fixed));
 
     setModal(false);
-    setWindowTitle(QObject::tr("Audio Plugin"));
+    setWindowTitle(tr("Audio Plugin"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -88,7 +88,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *pluginSelectionBox = new QGroupBox( QObject::tr("Plugin"), vbox );
+    QGroupBox *pluginSelectionBox = new QGroupBox( tr("Plugin"), vbox );
     vboxLayout->addWidget(pluginSelectionBox);
     vbox->setLayout(vboxLayout);
 
@@ -97,7 +97,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     m_pluginCategoryBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout;
-    pluginCategoryBoxLayout->addWidget(new QLabel(QObject::tr("Category:"),
+    pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"),
                                                   m_pluginCategoryBox));
 
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
@@ -108,35 +108,35 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QWidget *hbox = new QWidget(pluginSelectionBox);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
 
-    m_pluginLabel = new QLabel(QObject::tr("Plugin:"), hbox );
+    m_pluginLabel = new QLabel(tr("Plugin:"), hbox );
     hboxLayout->addWidget(m_pluginLabel);
     m_pluginList = new QComboBox( hbox );
     hboxLayout->addWidget(m_pluginList);
     hbox->setLayout(hboxLayout);
     m_pluginList->setMaxVisibleItems(20);
-    m_pluginList->setToolTip(QObject::tr("Select a plugin from this list."));
+    m_pluginList->setToolTip(tr("Select a plugin from this list."));
 
     QWidget *h = new QWidget(pluginSelectionBox);
     QHBoxLayout *hLayout = new QHBoxLayout;
 
 // top line
-    m_bypass = new QCheckBox(QObject::tr("Bypass"), h );
+    m_bypass = new QCheckBox(tr("Bypass"), h );
     hLayout->addWidget(m_bypass);
-    m_bypass->setToolTip(QObject::tr("Bypass this plugin."));
+    m_bypass->setToolTip(tr("Bypass this plugin."));
 
     connect(m_bypass, SIGNAL(toggled(bool)),
             this, SLOT(slotBypassChanged(bool)));
 
 
-    m_insOuts = new QLabel(QObject::tr("<ports>"), h );
+    m_insOuts = new QLabel(tr("<ports>"), h );
 	hLayout->addWidget(m_insOuts, Qt::AlignRight );
 //    m_insOuts->setAlignment(AlignRight);
-    m_insOuts->setToolTip(QObject::tr("Input and output port counts."));
+    m_insOuts->setToolTip(tr("Input and output port counts."));
 
-    m_pluginId = new QLabel(QObject::tr("<id>"), h );
+    m_pluginId = new QLabel(tr("<id>"), h );
 	hLayout->addWidget(m_pluginId, Qt::AlignRight );
 //    m_pluginId->setAlignment(AlignRight);
-    m_pluginId->setToolTip(QObject::tr("Unique ID of plugin."));
+    m_pluginId->setToolTip(tr("Unique ID of plugin."));
 
     connect(m_pluginList, SIGNAL(activated(int)),
             this, SLOT(slotPluginSelected(int)));
@@ -149,24 +149,24 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     h = new QWidget(pluginSelectionBox);
     hLayout = new QHBoxLayout;
 
-    m_copyButton = new QPushButton(QObject::tr("Copy"), h );
+    m_copyButton = new QPushButton(tr("Copy"), h );
     hLayout->addWidget(m_copyButton);
     connect(m_copyButton, SIGNAL(clicked()),
             this, SLOT(slotCopy()));
-    m_copyButton->setToolTip(QObject::tr("Copy plugin parameters"));
+    m_copyButton->setToolTip(tr("Copy plugin parameters"));
 
-    m_pasteButton = new QPushButton(QObject::tr("Paste"), h );
+    m_pasteButton = new QPushButton(tr("Paste"), h );
     hLayout->addWidget(m_pasteButton);
     connect(m_pasteButton, SIGNAL(clicked()),
             this, SLOT(slotPaste()));
-    m_pasteButton->setToolTip(QObject::tr("Paste plugin parameters"));
+    m_pasteButton->setToolTip(tr("Paste plugin parameters"));
 
-    m_defaultButton = new QPushButton(QObject::tr("Default"), h );
+    m_defaultButton = new QPushButton(tr("Default"), h );
     hLayout->addWidget(m_defaultButton);
     h->setLayout(hLayout);
     connect(m_defaultButton, SIGNAL(clicked()),
             this, SLOT(slotDefault()));
-    m_defaultButton->setToolTip(QObject::tr("Set to defaults"));
+    m_defaultButton->setToolTip(tr("Set to defaults"));
 
     populatePluginCategoryList();
     populatePluginList();
@@ -178,7 +178,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 #ifdef HAVE_LIBLO
-    QPushButton *detailsButton = new QPushButton(QObject::tr("Editor"));
+    QPushButton *detailsButton = new QPushButton(tr("Editor"));
     buttonBox->addButton(detailsButton, QDialogButtonBox::ActionRole);
     connect(detailsButton, SIGNAL(clicked(bool)), this, SLOT(slotDetails()));
 #endif
@@ -241,8 +241,8 @@ AudioPluginDialog::populatePluginCategoryList()
     }
 
     m_pluginCategoryList->clear();
-    m_pluginCategoryList->addItem(QObject::tr("(any)"));
-    m_pluginCategoryList->addItem(QObject::tr("(unclassified)"));
+    m_pluginCategoryList->addItem(tr("(any)"));
+    m_pluginCategoryList->addItem(tr("(unclassified)"));
     m_pluginCategoryList->setCurrentIndex(0);
 
     for (std::set
@@ -263,7 +263,7 @@ AudioPluginDialog::populatePluginList()
     m_pluginList->clear();
     m_pluginsInList.clear();
 
-    m_pluginList->addItem(QObject::tr("(none)"));
+    m_pluginList->addItem(tr("(none)"));
     m_pluginsInList.push_back(0);
 
     QString category;
@@ -403,14 +403,14 @@ AudioPluginDialog::slotPluginSelected(int i)
         QString(" [ %1 ] - ").arg(m_index + 1);
 
     if (number == 0) {
-        setWindowTitle(caption + QObject::tr("<no plugin>"));
-        m_insOuts->setText(QObject::tr("<ports>"));
-        m_pluginId->setText(QObject::tr("<id>"));
+        setWindowTitle(caption + tr("<no plugin>"));
+        m_insOuts->setText(tr("<ports>"));
+        m_pluginId->setText(tr("<id>"));
 
 //        QToolTip::hideText(false);
 //        QToolTip::remove(m_pluginList);
-//        QToolTip::add(m_pluginList, QObject::tr("Select a plugin from this list."));
-	      m_pluginList->setToolTip( QObject::tr("Select a plugin from this list.") );
+//        QToolTip::add(m_pluginList, tr("Select a plugin from this list."));
+	      m_pluginList->setToolTip( tr("Select a plugin from this list.") );
 	}
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
@@ -442,7 +442,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     if (portCount > tooManyPorts) {
 
         m_gridLayout->addWidget(
-            new QLabel(QObject::tr("This plugin has too many controls to edit here."),
+            new QLabel(tr("This plugin has too many controls to edit here."),
                             m_pluginParamsBox),
                        1, 0, 1, -1, Qt::AlignCenter);
     }
@@ -453,7 +453,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     if (plugin) {
         setWindowTitle(caption + plugin->getName());
-        m_pluginId->setText(QObject::tr("Id: %1").arg(plugin->getUniqueId()));
+        m_pluginId->setText(tr("Id: %1").arg(plugin->getUniqueId()));
 
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
             plugin->getCopyright();
@@ -504,11 +504,11 @@ AudioPluginDialog::slotPluginSelected(int i)
         }
 
         if (ins == 1 && outs == 1)
-            m_insOuts->setText(QObject::tr("mono"));
+            m_insOuts->setText(tr("mono"));
         else if (ins == 2 && outs == 2)
-            m_insOuts->setText(QObject::tr("stereo"));
+            m_insOuts->setText(tr("stereo"));
         else
-            m_insOuts->setText(QObject::tr("%1 in, %2 out").arg(ins).arg(outs));
+            m_insOuts->setText(tr("%1 in, %2 out").arg(ins).arg(outs));
 
         QString shortName(plugin->getName());
         int parenIdx = shortName.find(" (");
@@ -532,11 +532,11 @@ AudioPluginDialog::slotPluginSelected(int i)
 
         if (programs.count() > 0) {
 
-            m_programLabel = new QLabel(QObject::tr("Program:  "), m_pluginParamsBox);
+            m_programLabel = new QLabel(tr("Program:  "), m_pluginParamsBox);
 
             m_programCombo = new QComboBox(m_pluginParamsBox);
             m_programCombo->setMaxVisibleItems(20);
-            m_programCombo->addItem(QObject::tr("<none selected>"));
+            m_programCombo->addItem(tr("<none selected>"));
             m_gridLayout->addWidget(m_programLabel,
                                     0, 0, 0-
                                     0+1, 0- 0+1, Qt::AlignRight);
@@ -545,7 +545,7 @@ AudioPluginDialog::slotPluginSelected(int i)
                     this, SLOT(slotPluginProgramChanged(const QString &)));
 
             m_programCombo->clear();
-            m_programCombo->addItem(QObject::tr("<none selected>"));
+            m_programCombo->addItem(tr("<none selected>"));
             m_programCombo->addItems(programs);
             m_programCombo->setCurrentIndex(current + 1);
             m_programCombo->adjustSize();
@@ -728,18 +728,18 @@ AudioPluginDialog::updatePluginProgramList()
 
         if (programs.count() > 0) {
 
-            m_programLabel = new QLabel(QObject::tr("Program:  "), m_pluginParamsBox);
+            m_programLabel = new QLabel(tr("Program:  "), m_pluginParamsBox);
 
             m_programCombo = new QComboBox(m_pluginParamsBox);
             m_programCombo->setMaxVisibleItems(20);
-            m_programCombo->addItem(QObject::tr("<none selected>"));
+            m_programCombo->addItem(tr("<none selected>"));
             m_gridLayout->addWidget(m_programLabel,
                                              0, 0, 0-
                                              0+1, 0-0+ 1, Qt::AlignRight);
             m_gridLayout->addWidget(m_programCombo, 0, 1, 1, -1, Qt::AlignLeft);
 
             m_programCombo->clear();
-            m_programCombo->addItem(QObject::tr("<none selected>"));
+            m_programCombo->addItem(tr("<none selected>"));
             m_programCombo->addItems(programs);
             m_programCombo->setCurrentIndex(current + 1);
             m_programCombo->adjustSize();
@@ -768,7 +768,7 @@ AudioPluginDialog::updatePluginProgramList()
         m_programCombo->show();
         m_programLabel->show();
         m_programCombo->clear();
-        m_programCombo->addItem(QObject::tr("<none selected>"));
+        m_programCombo->addItem(tr("<none selected>"));
         m_programCombo->addItems(programs);
         m_programCombo->setCurrentIndex(current + 1);
     } else {

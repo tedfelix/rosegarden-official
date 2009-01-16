@@ -970,13 +970,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
-                            QObject::tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+                            tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
                         QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
-                            QObject::tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
+                            tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
 
@@ -987,7 +987,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         QMessageBox::critical(
                             dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
-                            QObject::tr("Run out of processor power for real-time audio processing.  Cannot continue."));
+                            tr("Run out of processor power for real-time audio processing.  Cannot continue."));
 
 #endif
 
@@ -1013,7 +1013,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         if (tv.tv_sec - warningShownAt >= 5 &&
                                 !boolShowingALSAWarning) {
 
-                            QString message = QObject::tr("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
+                            QString message = tr("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
                             boolShowingALSAWarning = true;
 
                             QMessageBox::information(
@@ -1039,7 +1039,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         if (tv.tv_sec - warningShownAt >= 5 &&
                                 !boolShowingWarning) {
 
-                            QString message = QObject::tr("JACK Audio subsystem is losing sample frames.");
+                            QString message = tr("JACK Audio subsystem is losing sample frames.");
                             boolShowingWarning = true;
 
                             QMessageBox::information(0, message);
@@ -1057,23 +1057,23 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         switch ((*i)->getData1()) {
 
                         case MappedEvent::FailureDiscUnderrun:
-                            message = QObject::tr("Failed to read audio data from disc in time to service the audio subsystem.");
+                            message = tr("Failed to read audio data from disc in time to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureDiscOverrun:
-                            message = QObject::tr("Failed to write audio data to disc fast enough to service the audio subsystem.");
+                            message = tr("Failed to write audio data to disc fast enough to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureBussMixUnderrun:
-                            message = QObject::tr("The audio mixing subsystem is failing to keep up.");
+                            message = tr("The audio mixing subsystem is failing to keep up.");
                             break;
 
                         case MappedEvent::FailureMixUnderrun:
-                            message = QObject::tr("The audio subsystem is failing to keep up.");
+                            message = tr("The audio subsystem is failing to keep up.");
                             break;
 
                         default:
-                            message = QObject::tr("Unknown sequencer failure mode!");
+                            message = tr("Unknown sequencer failure mode!");
                             break;
                         }
 
@@ -1116,13 +1116,13 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         QMessageBox::critical(
                             RosegardenGUIApp::self(), "",
-                            QObject::tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+                            tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
                         QMessageBox::critical(
                             RosegardenGUIApp::self(), "",
-                            QObject::tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
+                            tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
                                shouldWarnForImpreciseTimer()) {
@@ -1138,7 +1138,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             
                           RosegardenGUIApp::self(),
                           "", /* no title  */
-                          QObject::tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 
+                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 
                           QMessageBox::Ok,
                           QMessageBox::Ok);
                         
@@ -1157,7 +1157,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         QMessageBox::information(
                           RosegardenGUIApp::self(),
                           "", /* no title */
-                          QObject::tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"),
+                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"),
                           QMessageBox::Ok,
                           QMessageBox::Ok);
                         
@@ -1257,17 +1257,17 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     QString text = "";
 
     if (m_soundDriverStatus == NO_DRIVER) {
-        text = QObject::tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        text = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
     } else if (!(m_soundDriverStatus & MIDI_OK)) {
-        text = QObject::tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        text = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
     } else if (!(m_soundDriverStatus & VERSION_OK)) {
-        text = QObject::tr("<p>The Rosegarden sequencer module version does not match the GUI module version.</p><p>You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.</p>");
+        text = tr("<p>The Rosegarden sequencer module version does not match the GUI module version.</p><p>You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.</p>");
     }
 
     if (text != "") {
         RosegardenGUIApp::self()->awaitDialogClearance();
         QMessageBox::critical(RosegardenGUIApp::self(), "",
-                           QObject::tr("<h3>Sequencer startup failed</h3>%1").arg(text));
+                           tr("<h3>Sequencer startup failed</h3>%1").arg(text));
         CurrentProgressDialog::thaw();
         return;
     }
@@ -1290,8 +1290,8 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenGUIApp::self()->awaitDialogClearance();
         QMessageBox::information(RosegardenGUIApp::self(),
-                                 QObject::tr("Failed to connect to JACK"),
-                                 QObject::tr("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
+                                 tr("Failed to connect to JACK"),
+                                 tr("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
 
                                  //&&& ,"startup-jack-failed");
                                  //

@@ -37,7 +37,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Sequencer status"));
+    setWindowTitle(tr("Sequencer status"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -46,7 +46,7 @@ ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
     metagrid->addWidget(vbox, 0, 0);
 
 
-    new QLabel(QObject::tr("Sequencer status:"), vbox);
+    new QLabel(tr("Sequencer status:"), vbox);
 
     QString status = RosegardenSequencer::getInstance()->getStatusLog();
 

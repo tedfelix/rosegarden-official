@@ -72,7 +72,7 @@ int SegmentEraser::handleMouseMove(QMouseEvent*)
 
 void SegmentEraser::setBasicContextHelp()
 {
-    setContextHelp(QObject::tr("Click on a segment to delete it"));
+    setContextHelp(tr("Click on a segment to delete it"));
 }    
 
 const QString SegmentEraser::ToolName   = "segmenteraser";

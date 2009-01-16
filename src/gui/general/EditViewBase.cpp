@@ -190,13 +190,13 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 /*&&&
   Connect up CommandHistory appropriately
 
-    new KToolBarPopupAction(QObject::tr("Und&o"),
+    new KToolBarPopupAction(tr("Und&o"),
                             "undo",
                             KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Undo));
 
-    new KToolBarPopupAction(QObject::tr("Re&do"),
+    new KToolBarPopupAction(tr("Re&do"),
                             "redo",
                             KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
@@ -239,7 +239,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 			qa_open_in_event_list->setIcon(icon); 
 			connect( qa_open_in_event_list, SIGNAL(triggered()), this, SLOT(slotOpenInEventList())  );
 
-    QAction* qa_set_segment_start = new QAction(  QObject::tr("Set Segment Start Time..."), dynamic_cast<QObject*>(this) );
+    QAction* qa_set_segment_start = new QAction(  tr("Set Segment Start Time..."), dynamic_cast<QObject*>(this) );
 			connect( qa_set_segment_start, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentStartTime()) );
 			qa_set_segment_start->setObjectName( "set_segment_start" );		//
 			//qa_set_segment_start->setCheckable( true );		//
@@ -249,7 +249,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_set_segment_duration = new QAction(  QObject::tr("Set Segment Duration..."), dynamic_cast<QObject*>(this) );
+    QAction* qa_set_segment_duration = new QAction(  tr("Set Segment Duration..."), dynamic_cast<QObject*>(this) );
 			connect( qa_set_segment_duration, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSetSegmentDuration()) );
 			qa_set_segment_duration->setObjectName( "set_segment_duration" );		//
 			//qa_set_segment_duration->setCheckable( true );		//
@@ -503,7 +503,7 @@ void EditViewBase::slotCloseWindow()
 
 void EditViewBase::slotToggleToolBar()
 {
-    KTmpStatusMsg msg(QObject::tr("Toggle the toolbar..."), this);
+    KTmpStatusMsg msg(tr("Toggle the toolbar..."), this);
 
     if (m_toolBar->isVisible())
 		m_toolBar->hide();
@@ -513,7 +513,7 @@ void EditViewBase::slotToggleToolBar()
 
 void EditViewBase::slotToggleStatusBar()
 {
-    KTmpStatusMsg msg(QObject::tr("Toggle the statusbar..."), this);
+    KTmpStatusMsg msg(tr("Toggle the statusbar..."), this);
 
     if (statusBar()->isVisible())
         statusBar()->hide();
@@ -645,14 +645,14 @@ EditViewBase::slotSetSegmentStartTime()
     if (!s)
         return ;
 
-    TimeDialog dialog(this, QObject::tr("Segment Start Time"),
+    TimeDialog dialog(this, tr("Segment Start Time"),
                       &getDocument()->getComposition(),
                       s->getStartTime(), false);
 
     if (dialog.exec() == QDialog::Accepted) {
 
         SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(QObject::tr("Set Segment Start Time"));
+            new SegmentReconfigureCommand(tr("Set Segment Start Time"));
 
         command->addSegment
         (s, dialog.getTime(),
@@ -670,7 +670,7 @@ EditViewBase::slotSetSegmentDuration()
     if (!s)
         return ;
 
-    TimeDialog dialog(this, QObject::tr("Segment Duration"),
+    TimeDialog dialog(this, tr("Segment Duration"),
                       &getDocument()->getComposition(),
                       s->getStartTime(),
                       s->getEndMarkerTime() - s->getStartTime(), false);
@@ -678,7 +678,7 @@ EditViewBase::slotSetSegmentDuration()
     if (dialog.exec() == QDialog::Accepted) {
 
         SegmentReconfigureCommand *command =
-            new SegmentReconfigureCommand(QObject::tr("Set Segment Duration"));
+            new SegmentReconfigureCommand(tr("Set Segment Duration"));
 
         command->addSegment
         (s, s->getStartTime(),

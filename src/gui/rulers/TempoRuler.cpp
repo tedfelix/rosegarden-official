@@ -561,7 +561,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
             int b0 = int(bpm * 10 + 0.0001) % 10;
             int b00 = int(bpm * 100 + 0.0001) % 10;
 
-            tempoText = QObject::tr("%1.%2%3 (%4.%5%6 bpm)")
+            tempoText = tr("%1.%2%3 (%4.%5%6 bpm)")
                          .arg(qi).arg(q0).arg(q00)
                          .arg(bi).arg(b0).arg(b00);
             haveSet = true;
@@ -569,7 +569,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     }
 
     if (!haveSet) {
-        tempoText = QObject::tr("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
+        tempoText = tr("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
     }
 
     if (target > 0 && target != tempo) {
@@ -577,7 +577,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
         int tqi = int(tq + 0.0001);
         int tq0 = int(tq * 10 + 0.0001) % 10;
         int tq00 = int(tq * 100 + 0.0001) % 10;
-        tempoText = QObject::tr("%1 - %2.%3%4")
+        tempoText = tr("%1 - %2.%3%4")
                      .arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
     }
 

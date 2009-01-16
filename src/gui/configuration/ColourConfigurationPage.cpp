@@ -64,11 +64,11 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 0+1);
 
-    QPushButton* addColourButton = new QPushButton(QObject::tr("Add New Color"),
+    QPushButton* addColourButton = new QPushButton(tr("Add New Color"),
                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deleteColourButton = new QPushButton(QObject::tr("Delete Color"),
+    QPushButton* deleteColourButton = new QPushButton(tr("Delete Color"),
                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
 
@@ -87,7 +87,7 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
             this, SLOT(slotColourChanged(unsigned int, QColor)));
 
-    addTab(frame, QObject::tr("Color Map"));
+    addTab(frame, tr("Color Map"));
 
 }
 
@@ -122,9 +122,9 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = QInputDialog::getText(this, QObject::tr("New Color Name"),
-											QObject::tr("Enter new name"), QLineEdit::Normal,
-                                            QObject::tr("New"),
+    QString newName = QInputDialog::getText(this, tr("New Color Name"),
+											tr("Enter new name"), QLineEdit::Normal,
+                                            tr("New"),
                                             &ok, 0);
 	
 	bool c_ok;

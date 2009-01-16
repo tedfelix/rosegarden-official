@@ -39,7 +39,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Split by Pitch"));
+    setWindowTitle(tr("Split by Pitch"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -56,24 +56,24 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    m_pitch = new PitchChooser(QObject::tr("Starting split pitch"), frame, 60);
+    m_pitch = new PitchChooser(tr("Starting split pitch"), frame, 60);
     layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
 
-    m_range = new QCheckBox(QObject::tr("Range up and down to follow music"), frame);
+    m_range = new QCheckBox(tr("Range up and down to follow music"), frame);
     layout->addWidget(m_range,
                                1, 0,  // fromRow, fromCol
                                1, 3   // rowSpan, colSpan
                               );
 
-    m_duplicate = new QCheckBox(QObject::tr("Duplicate non-note events"), frame);
+    m_duplicate = new QCheckBox(tr("Duplicate non-note events"), frame);
     layout->addWidget(m_duplicate, 2, 0, 0+1, 2- 0+1);
 
-    layout->addWidget(new QLabel(QObject::tr("Clef handling:"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("Clef handling:"), frame), 3, 0);
 
     m_clefs = new QComboBox(frame);
-    m_clefs->addItem(QObject::tr("Leave clefs alone"));
-    m_clefs->addItem(QObject::tr("Guess new clefs"));
-    m_clefs->addItem(QObject::tr("Use treble and bass clefs"));
+    m_clefs->addItem(tr("Leave clefs alone"));
+    m_clefs->addItem(tr("Guess new clefs"));
+    m_clefs->addItem(tr("Use treble and bass clefs"));
     layout->addWidget(m_clefs, 3, 1, 1, 2);
 
     m_range->setChecked(true);

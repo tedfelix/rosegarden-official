@@ -252,7 +252,7 @@ void RosegardenGUIView::print(Composition* p, bool previewOnly)
     }
 
     if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No non-audio segments in composition"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments in composition"));
         return ;
     }
 
@@ -328,7 +328,7 @@ void RosegardenGUIView::slotEditSegment(Segment* segment)
                 Segment::SegmentType myType = (*i)->getType();
                 if (haveType) {
                     if (myType != type) {
-                        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("Selection must contain only audio or non-audio segments"));
+                        /* was sorry */ QMessageBox::warning(this, "", tr("Selection must contain only audio or non-audio segments"));
                         return ;
                     }
                 } else {
@@ -428,7 +428,7 @@ void RosegardenGUIView::slotEditSegmentNotation(Segment* p)
     }
 
     if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No non-audio segments selected"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
     }
 
@@ -573,7 +573,7 @@ void RosegardenGUIView::slotEditSegmentMatrix(Segment* p)
     }
 
     if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No non-audio segments selected"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
     }
 
@@ -609,7 +609,7 @@ void RosegardenGUIView::slotEditSegmentPercussionMatrix(Segment* p)
     }
 
     if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No non-audio segments selected"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
     }
 
@@ -773,7 +773,7 @@ void RosegardenGUIView::slotEditSegmentEventList(Segment *p)
     }
 
     if (segmentsToEdit.empty()) {
-        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No non-audio segments selected"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
     }
 
@@ -849,7 +849,7 @@ void RosegardenGUIView::slotEditSegmentAudio(Segment *segment)
         << "\" not found" << std::endl;
 
         /* was sorry */ QMessageBox::warning(this, "", 
-                           QObject::tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> Audio."));
+                           tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Settings -> Configure Rosegarden -> Audio."));
 
         return ;
     }
@@ -1530,12 +1530,12 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
 
     QUrl kurl(url);
     if (! QFile::exists(kurl.toLocalFile()) ) {
-        if (!RosegardenGUIApp::self()->testAudioPath(QObject::tr("importing a remote audio file"))) return;
+        if (!RosegardenGUIApp::self()->testAudioPath(tr("importing a remote audio file"))) return;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), sampleRate)) {
-	if (!RosegardenGUIApp::self()->testAudioPath(QObject::tr("importing an audio file that needs to be converted or resampled"))) return;
+	if (!RosegardenGUIApp::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return;
     }
 
-    ProgressDialog progressDlg(QObject::tr("Adding audio file..."),
+    ProgressDialog progressDlg(tr("Adding audio file..."),
                                100,
                                this);
 
@@ -1556,12 +1556,12 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
         audioFileId = aFM.importURL(kurl, sampleRate);
     } catch (AudioFileManager::BadAudioPathException e) {
         CurrentProgressDialog::freeze();
-        QString errorString = QObject::tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
+        QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         /* was sorry */ QMessageBox::warning(this, "", errorString);
         return ;
     } catch (SoundFile::BadSoundFileException e) {
         CurrentProgressDialog::freeze();
-        QString errorString = QObject::tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
+        QString errorString = tr("Can't add dropped file. ") + strtoqstr(e.getMessage());
         /* was sorry */ QMessageBox::warning(this, "", errorString);
         return ;
     }
@@ -1571,14 +1571,14 @@ RosegardenGUIView::slotDroppedNewAudio(QString audioDesc)
     connect(&progressDlg, SIGNAL(cancelClicked()),
             &aFM, SLOT(slotStopPreview()));
     progressDlg.progressBar()->show();
-    progressDlg.slotSetOperationName(QObject::tr("Generating audio preview..."));
+    progressDlg.slotSetOperationName(tr("Generating audio preview..."));
 
     try {
         aFM.generatePreview(audioFileId);
     } catch (Exception e) {
         CurrentProgressDialog::freeze();
         QString message = strtoqstr(e.getMessage()) + "\n\n" +
-                          QObject::tr("Try copying this file to a directory where you have write permission and re-add it");
+                          tr("Try copying this file to a directory where you have write permission and re-add it");
         QMessageBox::information(this, "", message);
         //return false;
     }

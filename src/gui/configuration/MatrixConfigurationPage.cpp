@@ -46,7 +46,7 @@ MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent,
 
     layout->addWidget(new QLabel("Nothing here yet", frame), 0, 0);
 
-    addTab(frame, QObject::tr("General"));
+    addTab(frame, tr("General"));
 }
 
 void MatrixConfigurationPage::apply()

@@ -33,7 +33,7 @@ PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString 
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Pitch Selector"));
+    setWindowTitle(tr("Pitch Selector"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);

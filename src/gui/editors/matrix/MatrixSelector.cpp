@@ -432,7 +432,7 @@ void MatrixSelector::ready()
     connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
 
-    setContextHelp(QObject::tr("Click and drag to select; middle-click and drag to draw new note"));
+    setContextHelp(tr("Click and drag to select; middle-click and drag to draw new note"));
 }
 
 void MatrixSelector::stow()
@@ -571,7 +571,7 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     }
 
     if (!mel) {
-        setContextHelp(QObject::tr("Click and drag to select; middle-click and drag to draw new note"));
+        setContextHelp(tr("Click and drag to select; middle-click and drag to draw new note"));
 
     } else {
         
@@ -589,22 +589,22 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 
         if (p.x() > resizeStart) {
             if (s && s->getAddedEvents() > 1) {
-                setContextHelp(QObject::tr("Click and drag to resize selected notes"));
+                setContextHelp(tr("Click and drag to resize selected notes"));
             } else {
-                setContextHelp(QObject::tr("Click and drag to resize note"));
+                setContextHelp(tr("Click and drag to resize note"));
             }
         } else {
             if (s && s->getAddedEvents() > 1) {
                 if (!ctrlPressed) {
-                    setContextHelp(QObject::tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
+                    setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
                 } else {
-                    setContextHelp(QObject::tr("Click and drag to copy selected notes"));
+                    setContextHelp(tr("Click and drag to copy selected notes"));
                 }
             } else {
                 if (!ctrlPressed) {
-                    setContextHelp(QObject::tr("Click and drag to move note; hold Ctrl as well to copy"));
+                    setContextHelp(tr("Click and drag to move note; hold Ctrl as well to copy"));
                 } else {
-                    setContextHelp(QObject::tr("Click and drag to copy note"));
+                    setContextHelp(tr("Click and drag to copy note"));
                 }
             }                
         }

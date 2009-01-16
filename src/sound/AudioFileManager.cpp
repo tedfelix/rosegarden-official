@@ -657,7 +657,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 {
     FileSource source(url);
     if (!source.isAvailable()) {
-	QMessageBox::critical(0, "", QObject::tr("Cannot download file %1").arg(url.toString()));
+	QMessageBox::critical(0, "", tr("Cannot download file %1").arg(url.toString()));
 	throw SoundFile::BadSoundFileException(qstrtostr(url.toString()));
     }
 
@@ -723,13 +723,13 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     }
 
     if (ec == 2) {
-	emit setOperationName(QObject::tr("Converting audio file..."));
+	emit setOperationName(tr("Converting audio file..."));
     } else if (ec == 3) {
-	emit setOperationName(QObject::tr("Resampling audio file..."));
+	emit setOperationName(tr("Resampling audio file..."));
     } else if (ec == 4) {
-	emit setOperationName(QObject::tr("Converting and resampling audio file..."));
+	emit setOperationName(tr("Converting and resampling audio file..."));
     } else {
-	emit setOperationName(QObject::tr("Importing audio file..."));
+	emit setOperationName(tr("Importing audio file..."));
     }
 
     AudioFileId newId = getFirstUnusedID();
@@ -789,7 +789,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, qstrtostr( QObject::tr("Failed to convert or resample audio file on import")) );
+	throw SoundFile::BadSoundFileException(fileName, qstrtostr( tr("Failed to convert or resample audio file on import")) );
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }

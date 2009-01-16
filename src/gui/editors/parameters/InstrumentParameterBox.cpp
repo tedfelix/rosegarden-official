@@ -43,8 +43,8 @@ namespace Rosegarden
 
 InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
                                                QWidget *parent)
-    : RosegardenParameterBox(QObject::tr("Instrument"),
-                             QObject::tr("Instrument Parameters"),
+    : RosegardenParameterBox(tr("Instrument"),
+                             tr("Instrument Parameters"),
                              parent),
       m_widgetStack(new QStackedWidget(this)),
       m_noInstrumentParameters(new QFrame(this)),
@@ -160,7 +160,7 @@ InstrumentParameterBox::getSelectedInstrument()
 QString
 InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
 {
-    return QObject::tr("Track");
+    return tr("Track");
 }
 
 void

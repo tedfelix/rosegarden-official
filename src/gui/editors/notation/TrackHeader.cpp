@@ -102,25 +102,25 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(QObject::tr("Track %1 : \"%2\"")
+    QString toolTipText = QString(tr("Track %1 : \"%2\"")
                              .arg(trackPos + 1)
                              .arg(strtoqstr(track->getLabel())));
 
     QString preset = strtoqstr(track->getPresetLabel());
     if (preset != QString(""))
-        toolTipText += QString(QObject::tr("\nNotate for: %1").arg(preset));
+        toolTipText += QString(tr("\nNotate for: %1").arg(preset));
 
-    QString notationSize = QObject::tr("normal");
+    QString notationSize = tr("normal");
     switch (track->getStaffSize()) {
         case StaffTypes::Small:
-            notationSize = QObject::tr("small");
+            notationSize = tr("small");
             break;
         case StaffTypes::Tiny:
-            notationSize = QObject::tr("tiny");
+            notationSize = tr("tiny");
             break;
     }
 
-    QString bracketText = QObject::tr("--");
+    QString bracketText = tr("--");
     switch (track->getStaffBracket()) {
         case Brackets::SquareOn:
             bracketText = "[-";
@@ -145,7 +145,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
             break;
     }
 
-    toolTipText += QString(QObject::tr("\nSize: %1,  Bracket: %2 "))
+    toolTipText += QString(tr("\nSize: %1,  Bracket: %2 "))
                             .arg(notationSize)
                             .arg(bracketText);
 
@@ -172,14 +172,14 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         if (transpose) {
             QString transposeName;
             transposeValueToName(transpose, transposeName);
-            toolTipText += QString(QObject::tr("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
+            toolTipText += QString(tr("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transposeName)
                                     .arg(transpose)
                                     .arg(strtoqstr((*i)->getLabel()));
         } else {
-            toolTipText += QString(QObject::tr("\nbars [%1-%2] (tr=%3) : \"%4\""))
+            toolTipText += QString(tr("\nbars [%1-%2] (tr=%3) : \"%4\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transpose)
@@ -228,18 +228,18 @@ TrackHeader::transposeValueToName(int transpose, QString &transposeName)
     if (noteIndex < 0) noteIndex += 12;
 
     switch(noteIndex) {
-        case  0 : transposeName = QObject::tr("C");  break;
-        case  1 : transposeName = QObject::tr("C#"); break;
-        case  2 : transposeName = QObject::tr("D");  break;
-        case  3 : transposeName = QObject::tr("Eb"); break;
-        case  4 : transposeName = QObject::tr("E");  break;
-        case  5 : transposeName = QObject::tr("F");  break;
-        case  6 : transposeName = QObject::tr("F#"); break;
-        case  7 : transposeName = QObject::tr("G");  break;
-        case  8 : transposeName = QObject::tr("G#"); break;
-        case  9 : transposeName = QObject::tr("A");  break;
-        case 10 : transposeName = QObject::tr("Bb"); break;
-        case 11 : transposeName = QObject::tr("B");  break;
+        case  0 : transposeName = tr("C");  break;
+        case  1 : transposeName = tr("C#"); break;
+        case  2 : transposeName = tr("D");  break;
+        case  3 : transposeName = tr("Eb"); break;
+        case  4 : transposeName = tr("E");  break;
+        case  5 : transposeName = tr("F");  break;
+        case  6 : transposeName = tr("F#"); break;
+        case  7 : transposeName = tr("G");  break;
+        case  8 : transposeName = tr("G#"); break;
+        case  9 : transposeName = tr("A");  break;
+        case 10 : transposeName = tr("Bb"); break;
+        case 11 : transposeName = tr("B");  break;
     }
 }
 
@@ -341,10 +341,10 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     QString noteName;
     transposeValueToName(m_transpose, noteName);
 
-    m_upperText = QString(QObject::tr("%1: %2")
+    m_upperText = QString(tr("%1: %2")
                                  .arg(trackPos + 1)
                                  .arg(strtoqstr(track->getLabel())));
-    if (m_transpose) m_transposeText = QObject::tr(" in %1").arg(noteName);
+    if (m_transpose) m_transposeText = tr(" in %1").arg(noteName);
     else             m_transposeText = QString("");
 
     NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();

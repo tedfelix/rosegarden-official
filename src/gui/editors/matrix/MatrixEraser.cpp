@@ -78,7 +78,7 @@ void MatrixEraser::ready()
 
 void MatrixEraser::setBasicContextHelp()
 {
-    setContextHelp(QObject::tr("Click on a note to delete it"));
+    setContextHelp(tr("Click on a note to delete it"));
 }
 
 const QString MatrixEraser::ToolName    = "eraser";

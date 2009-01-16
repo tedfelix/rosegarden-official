@@ -46,7 +46,7 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
         m_composition(composition)
 {
     setModal(true);
-    setWindowTitle(QObject::tr("Trigger Segment"));
+    setWindowTitle(tr("Trigger Segment"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 
@@ -58,7 +58,7 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
     layout->setSpacing(5);
 
 
-    QLabel *label = new QLabel(QObject::tr("Trigger segment: "));
+    QLabel *label = new QLabel(tr("Trigger segment: "));
     layout->addWidget(label, 0, 0);
 
     m_segment = new QComboBox(frame);
@@ -72,18 +72,18 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(QObject::tr("Perform with timing: "));
+    label = new QLabel(tr("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
     m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->addItem(QObject::tr("As stored"));
-    m_adjustTime->addItem(QObject::tr("Truncate if longer than note"));
-    m_adjustTime->addItem(QObject::tr("End at same time as note"));
-    m_adjustTime->addItem(QObject::tr("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(tr("As stored"));
+    m_adjustTime->addItem(tr("Truncate if longer than note"));
+    m_adjustTime->addItem(tr("End at same time as note"));
+    m_adjustTime->addItem(tr("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(QObject::tr("Adjust pitch to note"));
+    m_retune = new QCheckBox(tr("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);

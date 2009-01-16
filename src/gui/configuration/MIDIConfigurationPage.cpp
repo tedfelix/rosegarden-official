@@ -85,7 +85,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->addWidget(new QLabel(QObject::tr("Base octave number for MIDI pitch display"),
+    layout->addWidget(new QLabel(tr("Base octave number for MIDI pitch display"),
                                  frame), row, 0, 1, 2);
     
     m_midiPitchOctave = new QSpinBox(frame);
@@ -99,7 +99,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     //### settings.beginGroup( GeneralOptionsConfigGroup );
-    layout->addWidget(new QLabel(QObject::tr("Always use default studio when loading files"),
+    layout->addWidget(new QLabel(tr("Always use default studio when loading files"),
                                       frame), row, 0, 1, 2);
 
     m_studio = new QCheckBox(frame);
@@ -111,9 +111,9 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     // Send Controllers
     //
     settings.beginGroup( SequencerOptionsConfigGroup );
-    label = new QLabel(QObject::tr("Send all MIDI Controllers at start of each playback"), frame);
+    label = new QLabel(tr("Send all MIDI Controllers at start of each playback"), frame);
 
-    QString controllerTip = QObject::tr("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
+    QString controllerTip = tr("Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every\ntime you hit play if you so wish.  Please note that this option will usually incur a\ndelay at the start of playback due to the amount of data being transmitted.");
     label->setToolTip(controllerTip);
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
@@ -128,7 +128,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     //
 
     //### settings.beginGroup( SequencerOptionsConfigGroup );
-    label = new QLabel(QObject::tr("Sequencer timing source"), frame);
+    label = new QLabel(tr("Sequencer timing source"), frame);
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_timer = new QComboBox(frame);
@@ -153,8 +153,8 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // SoundFont loading
     //
-    QLabel* lbl = new QLabel(QObject::tr("Load SoundFont to SoundBlaster card at startup"), frame);
-    QString tooltip = QObject::tr("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
+    QLabel* lbl = new QLabel(tr("Load SoundFont to SoundBlaster card at startup"), frame);
+    QString tooltip = tr("Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched");
     lbl->setToolTip(tooltip);
     layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
 
@@ -163,14 +163,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     m_sfxLoadEnabled->setToolTip(tooltip);
     ++row;
 
-    layout->addWidget(new QLabel(QObject::tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
     m_sfxLoadPath = new QLineEdit(settings.value("sfxloadpath", "/bin/sfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
-    layout->addWidget(new QLabel(QObject::tr("SoundFont"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("SoundFont"), frame), row, 0);
 	m_soundFontPath = new QLineEdit(settings.value("soundfontpath", "").toString() , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
@@ -197,7 +197,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, QObject::tr("General"));
+    addTab(frame, tr("General"));
 
     //### settings.beginGroup( SequencerOptionsConfigGroup );
 
@@ -215,14 +215,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // MIDI Clock and System Realtime Messages
     //
-    label = new QLabel(QObject::tr("MIDI Clock and System messages"), frame);
+    label = new QLabel(tr("MIDI Clock and System messages"), frame);
     layout->addWidget(label, row, 0);
     m_midiSync = new QComboBox(frame);
     layout->addWidget(m_midiSync, row, 1);
 
-    m_midiSync->addItem(QObject::tr("Off"));
-    m_midiSync->addItem(QObject::tr("Send MIDI Clock, Start and Stop"));
-    m_midiSync->addItem(QObject::tr("Accept Start, Stop and Continue"));
+    m_midiSync->addItem(tr("Off"));
+    m_midiSync->addItem(tr("Send MIDI Clock, Start and Stop"));
+    m_midiSync->addItem(tr("Accept Start, Stop and Continue"));
 
     int midiClock = settings.value("midiclock", 0).toInt() ;
     if (midiClock < 0 || midiClock > 2)
@@ -233,15 +233,15 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // MMC Transport
     //
-    label = new QLabel(QObject::tr("MIDI Machine Control mode"), frame);
+    label = new QLabel(tr("MIDI Machine Control mode"), frame);
     layout->addWidget(label, row, 0);
 
     m_mmcTransport = new QComboBox(frame);
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
-    m_mmcTransport->addItem(QObject::tr("Off"));
-    m_mmcTransport->addItem(QObject::tr("MMC Master"));
-    m_mmcTransport->addItem(QObject::tr("MMC Slave"));
+    m_mmcTransport->addItem(tr("Off"));
+    m_mmcTransport->addItem(tr("MMC Master"));
+    m_mmcTransport->addItem(tr("MMC Slave"));
 
     int mmcMode = settings.value("mmcmode", 0).toInt() ;
     if (mmcMode < 0 || mmcMode > 2)
@@ -252,15 +252,15 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     // MTC transport
     //
-    label = new QLabel(QObject::tr("MIDI Time Code mode"), frame);
+    label = new QLabel(tr("MIDI Time Code mode"), frame);
     layout->addWidget(label, row, 0);
 
     m_mtcTransport = new QComboBox(frame);
     layout->addWidget(m_mtcTransport, row, 1);
 
-    m_mtcTransport->addItem(QObject::tr("Off"));
-    m_mtcTransport->addItem(QObject::tr("MTC Master"));
-    m_mtcTransport->addItem(QObject::tr("MTC Slave"));
+    m_mtcTransport->addItem(tr("Off"));
+    m_mtcTransport->addItem(tr("MTC Master"));
+    m_mtcTransport->addItem(tr("MTC Slave"));
 
     int mtcMode = settings.value("mtcmode", 0).toInt() ;
     if (mtcMode < 0 || mtcMode > 2)
@@ -274,7 +274,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     hboxLayout->setSpacing(5);
     layout->addWidget(hbox, row, 0, row- row+1, 1- 0+1);
 
-    label = new QLabel(QObject::tr("Automatically connect sync output to all devices in use"), hbox );
+    label = new QLabel(tr("Automatically connect sync output to all devices in use"), hbox );
     hboxLayout->addWidget(label);
 //    layout->addWidget(label, row, 0);
     m_midiSyncAuto = new QCheckBox( hbox );
@@ -288,7 +288,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, QObject::tr("MIDI Sync"));
+    addTab(frame, tr("MIDI Sync"));
 
     settings.endGroup();
 }
@@ -306,14 +306,14 @@ MIDIConfigurationPage::slotSoundFontToggled(bool isChecked)
 void
 MIDIConfigurationPage::slotSfxLoadPathChoose()
 {
-	QString path = QFileDialog::getOpenFileName(this, QObject::tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
+	QString path = QFileDialog::getOpenFileName(this, tr("sfxload path"), QDir::currentPath() ); //":SFXLOAD"
     m_sfxLoadPath->setText(path);
 }
 
 void
 MIDIConfigurationPage::slotSoundFontChoose()
 {
-	QString path = QFileDialog::getOpenFileName(this, QObject::tr("Soundfont path"), QDir::currentPath(), "*.sb *.sf2 *.SF2 *.SB" ); // ":SOUNDFONTS"
+	QString path = QFileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(), "*.sb *.sf2 *.SF2 *.SB" ); // ":SOUNDFONTS"
     m_soundFontPath->setText(path);
 }
 

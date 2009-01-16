@@ -800,7 +800,7 @@ EditView::setupActions()
     //
     // Transforms
     //
-    QAction* qa_halve_durations = new QAction(  QObject::tr("&Halve Durations"), dynamic_cast<QObject*>(this) );
+    QAction* qa_halve_durations = new QAction(  tr("&Halve Durations"), dynamic_cast<QObject*>(this) );
 			connect( qa_halve_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotHalveDurations()) );
 			qa_halve_durations->setObjectName( "halve_durations" );		//
 			//qa_halve_durations->setCheckable( true );		//
@@ -810,7 +810,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_double_durations = new QAction(  QObject::tr("&Double Durations"), dynamic_cast<QObject*>(this) );
+    QAction* qa_double_durations = new QAction(  tr("&Double Durations"), dynamic_cast<QObject*>(this) );
 			connect( qa_double_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDoubleDurations()) );
 			qa_double_durations->setObjectName( "double_durations" );		//
 			//qa_double_durations->setCheckable( true );		//
@@ -920,7 +920,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_jog_left = new QAction(  QObject::tr("Jog &Left"), dynamic_cast<QObject*>(this) );
+    QAction* qa_jog_left = new QAction(  tr("Jog &Left"), dynamic_cast<QObject*>(this) );
 			connect( qa_jog_left, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogLeft()) );
 			qa_jog_left->setObjectName( "jog_left" );		//
 			//qa_jog_left->setCheckable( true );		//
@@ -930,7 +930,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_jog_right = new QAction(  QObject::tr("Jog &Right"), dynamic_cast<QObject*>(this) );
+    QAction* qa_jog_right = new QAction(  tr("Jog &Right"), dynamic_cast<QObject*>(this) );
 			connect( qa_jog_right, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogRight()) );
 			qa_jog_right->setObjectName( "jog_right" );		//
 			//qa_jog_right->setCheckable( true );		//
@@ -942,7 +942,7 @@ EditView::setupActions()
 
     // Control rulers
     //
-    QAction* qa_show_velocity_control_ruler = new QAction(  QObject::tr("Show Velocity Property Ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_show_velocity_control_ruler = new QAction(  tr("Show Velocity Property Ruler"), dynamic_cast<QObject*>(this) );
 			connect( qa_show_velocity_control_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowVelocityControlRuler()) );
 			qa_show_velocity_control_ruler->setObjectName( "show_velocity_control_ruler" );		//
 			//qa_show_velocity_control_ruler->setCheckable( true );		//
@@ -955,7 +955,7 @@ EditView::setupActions()
     //
     // Control Ruler context menu
     //
-    QAction* qa_insert_control_ruler_item = new QAction(  QObject::tr("Insert item"), dynamic_cast<QObject*>(this) );
+    QAction* qa_insert_control_ruler_item = new QAction(  tr("Insert item"), dynamic_cast<QObject*>(this) );
 			connect( qa_insert_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertControlRulerItem()) );
 			qa_insert_control_ruler_item->setObjectName( "insert_control_ruler_item" );		//
 			//qa_insert_control_ruler_item->setCheckable( true );		//
@@ -967,7 +967,7 @@ EditView::setupActions()
 
     // This was on Qt::Key_Delete, but that conflicts with existing Delete commands
     // on individual edit views
-    QAction* qa_erase_control_ruler_item = new QAction(  QObject::tr("Erase selected items"), dynamic_cast<QObject*>(this) );
+    QAction* qa_erase_control_ruler_item = new QAction(  tr("Erase selected items"), dynamic_cast<QObject*>(this) );
 			connect( qa_erase_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEraseControlRulerItem()) );
 			qa_erase_control_ruler_item->setObjectName( "erase_control_ruler_item" );		//
 			//qa_erase_control_ruler_item->setCheckable( true );		//
@@ -977,7 +977,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_clear_control_ruler_item = new QAction(  QObject::tr("Clear ruler"), dynamic_cast<QObject*>(this) );
+    QAction* qa_clear_control_ruler_item = new QAction(  tr("Clear ruler"), dynamic_cast<QObject*>(this) );
 			connect( qa_clear_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearControlRulerItem()) );
 			qa_clear_control_ruler_item->setObjectName( "clear_control_ruler_item" );		//
 			//qa_clear_control_ruler_item->setCheckable( true );		//
@@ -987,7 +987,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_start_control_line_item = new QAction(  QObject::tr("Insert line of controllers"), dynamic_cast<QObject*>(this) );
+    QAction* qa_start_control_line_item = new QAction(  tr("Insert line of controllers"), dynamic_cast<QObject*>(this) );
 			connect( qa_start_control_line_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotStartControlLineItem()) );
 			qa_start_control_line_item->setObjectName( "start_control_line_item" );		//
 			//qa_start_control_line_item->setCheckable( true );		//
@@ -997,7 +997,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_flip_control_events_forward = new QAction(  QObject::tr("Flip forward"), dynamic_cast<QObject*>(this) );
+    QAction* qa_flip_control_events_forward = new QAction(  tr("Flip forward"), dynamic_cast<QObject*>(this) );
 			connect( qa_flip_control_events_forward, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipForwards()) );
 			qa_flip_control_events_forward->setObjectName( "flip_control_events_forward" );		//
 			//qa_flip_control_events_forward->setCheckable( true );		//
@@ -1007,7 +1007,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_flip_control_events_back = new QAction(  QObject::tr("Flip backwards"), dynamic_cast<QObject*>(this) );
+    QAction* qa_flip_control_events_back = new QAction(  tr("Flip backwards"), dynamic_cast<QObject*>(this) );
 			connect( qa_flip_control_events_back, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipBackwards()) );
 			qa_flip_control_events_back->setObjectName( "flip_control_events_back" );		//
 			//qa_flip_control_events_back->setCheckable( true );		//
@@ -1017,7 +1017,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_draw_property_line = new QAction(  QObject::tr("Draw property line"), dynamic_cast<QObject*>(this) );
+    QAction* qa_draw_property_line = new QAction(  tr("Draw property line"), dynamic_cast<QObject*>(this) );
 			connect( qa_draw_property_line, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDrawPropertyLine()) );
 			qa_draw_property_line->setObjectName( "draw_property_line" );		//
 			//qa_draw_property_line->setCheckable( true );		//
@@ -1027,7 +1027,7 @@ EditView::setupActions()
 			//### FIX: deallocate QAction ptr
 			
 
-    QAction* qa_select_all_properties = new QAction(  QObject::tr("Select all property values"), dynamic_cast<QObject*>(this) );
+    QAction* qa_select_all_properties = new QAction(  tr("Select all property values"), dynamic_cast<QObject*>(this) );
 			connect( qa_select_all_properties, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAllProperties()) );
 			qa_select_all_properties->setObjectName( "select_all_properties" );		//
 			//qa_select_all_properties->setCheckable( true );		//
@@ -1071,15 +1071,15 @@ EditView::setupAddControlRulerMenu()
                 QString hexValue;
                 hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-                itemStr = QObject::tr("%1 Controller %2 %3")
+                itemStr = tr("%1 Controller %2 %3")
 				.arg(strtoqstr(it->getName()))
                           	.arg(it->getControllerValue())
                           	.arg(hexValue);
 
             } else if (it->getType() == PitchBend::EventType)
-                itemStr = QObject::tr("Pitch Bend");
+                itemStr = tr("Pitch Bend");
             else
-                itemStr = QObject::tr("Unsupported Event Type");
+                itemStr = tr("Unsupported Event Type");
 
 // 			addControlRulerMenu->addItem(itemStr, i++);
 			addControlRulerMenu->addAction(itemStr); i++;	//@@@
@@ -1245,11 +1245,11 @@ void
 EditView::createInsertPitchActionMenu()
 {
     QString notePitchNames[] = {
-        QObject::tr("I"), QObject::tr("II"), QObject::tr("III"), QObject::tr("IV"),
-        QObject::tr("V"), QObject::tr("VI"), QObject::tr("VII"), QObject::tr("VIII")
+        tr("I"), tr("II"), tr("III"), tr("IV"),
+        tr("V"), tr("VI"), tr("VII"), tr("VIII")
     };
-    QString flat = QObject::tr("%1 flat");
-    QString sharp = QObject::tr("%1 sharp");
+    QString flat = tr("%1 flat");
+    QString sharp = tr("%1 sharp");
 
     const Qt::Key notePitchKeys[3][7] = {
         {
@@ -1263,19 +1263,19 @@ EditView::createInsertPitchActionMenu()
         },
     };
 
-    QMenu *insertPitchActionMenu = new QMenu(QObject::tr("&Insert Note"), this);
+    QMenu *insertPitchActionMenu = new QMenu(tr("&Insert Note"), this);
     insertPitchActionMenu->setObjectName("insert_note_actionmenu");
 
     for (int octave = 0; octave <= 2; ++octave) {
 
         QMenu *menu = insertPitchActionMenu;
         if (octave == 1) {
-            menu = new QMenu(QObject::tr("&Upper Octave"), this);
+            menu = new QMenu(tr("&Upper Octave"), this);
             menu->setObjectName("insert_note_actionmenu_upper_octave");
             insertPitchActionMenu->addSeparator();
             insertPitchActionMenu->addMenu(menu);
         } else if (octave == 2) {
-            menu = new QMenu(QObject::tr("&Lower Octave"), this);
+            menu = new QMenu(tr("&Lower Octave"), this);
             menu->setObjectName("insert_note_actionmenu_lower_octave");
             insertPitchActionMenu->addMenu(menu);
         }
@@ -1451,7 +1451,7 @@ void EditView::slotAddTimeSignature()
 
         dialog = new TimeSignatureDialog
                  (this, composition, insertionTime, timeSig, false,
-                  QObject::tr("Estimated time signature shown"));
+                  tr("Estimated time signature shown"));
     }
 
     if (dialog->exec() == QDialog::Accepted) {
@@ -1533,7 +1533,7 @@ void EditView::slotShowControllerEventsRuler()
 void EditView::slotShowPropertyControlRuler()
 {
     /*
-        KDialogBase propChooserDialog(this, "propertychooserdialog", true, QObject::tr("Select event property"),
+        KDialogBase propChooserDialog(this, "propertychooserdialog", true, tr("Select event property"),
                                       KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
         
         KListBox* propList = new KListBox(propChooserDialog.makeVBoxMainWidget());
@@ -1614,7 +1614,7 @@ EditView::slotHalveDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(QObject::tr("Halving durations..."), this);
+    KTmpStatusMsg msg(tr("Halving durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1628,7 +1628,7 @@ EditView::slotDoubleDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(QObject::tr("Doubling durations..."), this);
+    KTmpStatusMsg msg(tr("Doubling durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1652,7 +1652,7 @@ EditView::slotRescale()
      true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(QObject::tr("Rescaling..."), this);
+        KTmpStatusMsg msg(tr("Rescaling..."), this);
         addCommandToHistory(new RescaleCommand
                             (*m_currentEventSelection,
                              dialog.getNewDuration(),
@@ -1672,8 +1672,8 @@ void EditView::slotTranspose()
 
     bool ok = false;
     int semitones = QInputDialog::getInteger
-                    (QObject::tr("Transpose"),
-                     QObject::tr("By number of semitones: "),
+                    (tr("Transpose"),
+                     tr("By number of semitones: "),
                      dialogDefault, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
@@ -1681,7 +1681,7 @@ void EditView::slotTranspose()
 
     settings.setValue("lasttransposition", semitones);
 
-    KTmpStatusMsg msg(QObject::tr("Transposing..."), this);
+    KTmpStatusMsg msg(tr("Transposing..."), this);
     addCommandToHistory(new TransposeCommand
                         (semitones, *m_currentEventSelection));
 
@@ -1705,7 +1705,7 @@ void EditView::slotDiatonicTranspose()
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
-    KTmpStatusMsg msg(QObject::tr("Transposing..."), this);
+    KTmpStatusMsg msg(tr("Transposing..."), this);
     if (intervalDialog.getChangeKey())
     {
 		std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
@@ -1723,7 +1723,7 @@ void EditView::slotTransposeUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Transposing up one semitone..."), this);
+    KTmpStatusMsg msg(tr("Transposing up one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
 }
@@ -1732,7 +1732,7 @@ void EditView::slotTransposeUpOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Transposing up one octave..."), this);
+    KTmpStatusMsg msg(tr("Transposing up one octave..."), this);
 
     addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
 }
@@ -1741,7 +1741,7 @@ void EditView::slotTransposeDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Transposing down one semitone..."), this);
+    KTmpStatusMsg msg(tr("Transposing down one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand( -1, *m_currentEventSelection));
 }
@@ -1750,7 +1750,7 @@ void EditView::slotTransposeDownOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Transposing down one octave..."), this);
+    KTmpStatusMsg msg(tr("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransposeCommand( -12, *m_currentEventSelection));
 }
@@ -1762,7 +1762,7 @@ void EditView::slotInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(QObject::tr("Inverting..."), this);
+    KTmpStatusMsg msg(tr("Inverting..."), this);
     addCommandToHistory(new InvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1774,7 +1774,7 @@ void EditView::slotRetrograde()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(QObject::tr("Retrograding..."), this);
+    KTmpStatusMsg msg(tr("Retrograding..."), this);
     addCommandToHistory(new RetrogradeCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1786,7 +1786,7 @@ void EditView::slotRetrogradeInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(QObject::tr("Retrograde inverting..."), this);
+    KTmpStatusMsg msg(tr("Retrograde inverting..."), this);
     addCommandToHistory(new RetrogradeInvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1795,7 +1795,7 @@ void EditView::slotJogLeft()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Jogging left..."), this);
+    KTmpStatusMsg msg(tr("Jogging left..."), this);
 
     RG_DEBUG << "EditView::slotJogLeft" << endl;
 
@@ -1810,7 +1810,7 @@ void EditView::slotJogRight()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(QObject::tr("Jogging right..."), this);
+    KTmpStatusMsg msg(tr("Jogging right..."), this);
 
     RG_DEBUG << "EditView::slotJogRight" << endl;
 
