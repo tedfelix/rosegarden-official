@@ -27,6 +27,7 @@ class QWidget;
 class QSpinBox;
 class QCheckBox;
 class QComboBox;
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
@@ -63,18 +64,19 @@ protected:
 
     RosegardenGUIDoc       *m_doc;
 
+    QDialogButtonBox       *m_buttonBox;
     QComboBox              *m_metronomeDevice;
     QComboBox              *m_metronomeInstrument;
     QComboBox              *m_metronomeResolution;
     QComboBox              *m_metronomePitchSelector;
-    PitchChooser *m_metronomePitch;
+    PitchChooser           *m_metronomePitch;
     QSpinBox               *m_metronomeBarVely;
     QSpinBox               *m_metronomeBeatVely;
     QSpinBox               *m_metronomeSubBeatVely;
     InstrumentParameterBox *m_instrumentParameterBox;
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
-        
+
     bool                   m_modified;
     MidiByte   m_barPitch;
     MidiByte   m_beatPitch;

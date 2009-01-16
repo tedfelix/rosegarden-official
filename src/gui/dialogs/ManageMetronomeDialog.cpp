@@ -58,7 +58,8 @@ namespace Rosegarden
 ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         RosegardenGUIDoc *doc) :
         QDialog(parent),
-        m_doc(doc)
+        m_doc(doc),
+        m_buttonBox(0)
 {
     //setHelp("studio-metronome");
 
@@ -201,13 +202,16 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     connect(m_metronomeDevice, SIGNAL(activated(int)),
             this, SLOT(slotSetModified()));
 
-    setModified(false);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Close | QDialogButtonBox::Help);
-	buttonBox->setObjectName( "buttonBox1" );
-    metagrid->addWidget(buttonBox, 1, 0);
+    QDialogButtonBox *m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | 
+                                                         QDialogButtonBox::Apply |
+                                                         QDialogButtonBox::Close |
+                                                         QDialogButtonBox::Help);
+    metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    setModified(false);
 }
 
 void
@@ -394,16 +398,16 @@ ManageMetronomeDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-	
-	QDialogButtonBox *bbox = this->findChild<QDialogButtonBox*>( "buttonBox1" );
-	QPushButton *butt = bbox->button( QDialogButtonBox::Apply );
+
+    // Fix crash when some slot calls setModified before m_buttonBox is created
+    if (!m_buttonBox) return;
+
+    QPushButton *butt = m_buttonBox->button( QDialogButtonBox::Apply );
     if (value) {
-//		enableButtonApply(true);
-		butt->setEnabled(true);
-	} else {
-//         enableButtonApply(false);
-		butt->setEnabled(false);
-	}
+        butt->setEnabled(true);
+    } else {
+        butt->setEnabled(false);
+    }
 
     m_modified = value;
 }
