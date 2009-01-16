@@ -19,7 +19,6 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#include <klocale.h>
 
 #include <QDateTime>
 

@@ -47,7 +47,6 @@
 #include <QHBoxLayout>
 #include <QGridLayout>
 
-#include <klocale.h>
 
 
 namespace Rosegarden

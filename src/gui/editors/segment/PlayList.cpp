@@ -16,7 +16,6 @@
 */
 
 
-#include <klocale.h>
 // #include <kglobal.h>
 // #include <kurl.h>
 

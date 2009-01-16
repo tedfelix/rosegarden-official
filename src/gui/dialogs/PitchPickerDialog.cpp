@@ -17,7 +17,6 @@
 
 
 #include "PitchPickerDialog.h"
-#include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLayout>

@@ -64,7 +64,6 @@
 #include <QHBoxLayout>
 #include <QShortcut>
 
-#include <klocale.h>  // i18n()
 // #include <QDir>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>

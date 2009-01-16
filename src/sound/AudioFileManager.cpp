@@ -34,7 +34,6 @@
 #endif
 
 #include <QApplication>
-#include <klocale.h>
 #include <QMessageBox>
 
 #include <QProcess>

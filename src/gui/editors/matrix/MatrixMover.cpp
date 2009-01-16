@@ -20,7 +20,6 @@
 #include "MatrixMover.h"
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include <QDir>
 #include "base/Event.h"
 #include "base/Segment.h"

@@ -42,7 +42,6 @@
 #include <utility>
 
 #include <QApplication>
-#include <klocale.h>
 #include <QSize>
 #include <QWidget>
 #include <QVBoxLayout>

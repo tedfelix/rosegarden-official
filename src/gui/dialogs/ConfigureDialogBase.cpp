@@ -18,7 +18,6 @@
 
 #include "ConfigureDialogBase.h"
 
-#include <klocale.h>
 #include "gui/configuration/ConfigurationPage.h"
 #include "misc/Debug.h"
 

@@ -18,7 +18,6 @@
 
 #include "EventInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"

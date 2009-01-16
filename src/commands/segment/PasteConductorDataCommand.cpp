@@ -18,11 +18,11 @@
 
 #include "PasteConductorDataCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
+#include <QObject>
 
 
 namespace Rosegarden

@@ -18,7 +18,6 @@
 
 #include "UnusedAudioSelectionDialog.h"
 
-#include <klocale.h>
 
 #include <QDialog>
 #include <QDialogButtonBox>

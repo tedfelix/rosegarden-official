@@ -23,7 +23,6 @@
 #include "sound/Midi.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
-#include <klocale.h>
 #include <QDir>
 #include "misc/AppendLabel.h"
 #include "misc/Debug.h"
@@ -354,9 +353,9 @@ bool RosegardenGUIDoc::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-					QMessageBox::critical( 0, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg)) )  );
+					QMessageBox::critical( 0, "", QObject::tr( qStrToCharPtrUtf8( QString("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg)) )  );
                 } else {
-					QMessageBox::critical( 0, "", i18n( qStrToCharPtrUtf8( QString("Could not save document at %1").arg( getAbsFilePath() )) )  );
+					QMessageBox::critical( 0, "", QObject::tr( qStrToCharPtrUtf8( QString("Could not save document at %1").arg( getAbsFilePath() )) )  );
                 }
             }
         }
@@ -526,8 +525,8 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         for (size_t i = 0; i < recordedOrphans.size(); ++i) {
             QFile file(recordedOrphans[i]);
             if (!file.remove()) {
-                QMessageBox::critical(0, "", i18n("File %1 could not be deleted.",
-                                    recordedOrphans[i]));
+                QMessageBox::critical(0, "", QObject::tr("File %1 could not be deleted.")
+                                    .arg(recordedOrphans[i]));
             }
 
             QFile peakFile(QString("%1.pk").arg(recordedOrphans[i]));
@@ -578,7 +577,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     // Check if file readable with fileInfo ?
     if (!fileInfo.isReadable() || fileInfo.isDir()) {
         StartupLogo::hideIfStillThere();
-        QString msg(i18n("Can't open file '%1'", filename));
+        QString msg(QObject::tr("Can't open file '%1'").arg(filename));
         /* was sorry */ QMessageBox::warning(0, "", msg);
         return false;
     }
@@ -607,9 +606,9 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     if (!okay) {
         StartupLogo::hideIfStillThere();
-        QString msg(i18n("Error when parsing file '%1': \"%2\"",
-                     filename,
-                     errMsg));
+        QString msg(QObject::tr("Error when parsing file '%1': \"%2\"")
+                     .arg(filename)
+                     .arg(errMsg));
 
         CurrentProgressDialog::freeze();
         /* was sorry */ QMessageBox::warning(0, "", msg);
@@ -1162,7 +1161,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     temp.open(); // This creates the file and opens it atomically
 
     if ( temp.error() ) {
-		errMsg = i18n( qStrToCharPtrUtf8( QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString()) )  );		//### removed .arg(strerror(status))
+		errMsg = QObject::tr( qStrToCharPtrUtf8( QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString()) )  );		//### removed .arg(strerror(status))
         return false;
     }
 
@@ -1175,7 +1174,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     if( temp.error() ){
         //status = temp.status();
-        errMsg = i18n( qStrToCharPtrUtf8( QString("Failure in temporary file handling for file '%1': %2")
+        errMsg = QObject::tr( qStrToCharPtrUtf8( QString("Failure in temporary file handling for file '%1': %2")
 				.arg(tempFileName).arg(temp.errorString() )) ); // .arg(strerror(status))
         return false;
     }
@@ -1189,7 +1188,7 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 
     QDir dir(QFileInfo(tempFileName).dir());
     if (!dir.rename(tempFileName, filename)) {
-		errMsg = i18n( qStrToCharPtrUtf8( QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename) )  );
+		errMsg = QObject::tr( qStrToCharPtrUtf8( QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename) )  );
         return false;
     }
 
@@ -1317,7 +1316,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
     bool okay = GzipFile::writeToFile(filename, outText);
     if (!okay) {
-        errMsg = i18n("Error while writing on '%1'", filename);
+        errMsg = QObject::tr("Error while writing on '%1'").arg(filename);
         return false;
     }
 
@@ -1668,7 +1667,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
 
-                QMessageBox::information(0, "", i18n("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>", er, sr, er));
+                QMessageBox::information(0, "", QObject::tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
 
                 CurrentProgressDialog::thaw();
                 shownWarning = true;
@@ -1678,7 +1677,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 StartupLogo::hideIfStillThere();
                 CurrentProgressDialog::freeze();
                 
-                QMessageBox::information(0, "", i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
+                QMessageBox::information(0, "", QObject::tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
                                          QObject::tr("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
@@ -1701,7 +1700,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                     QString type, soName, label;
                     PluginIdentifier::parseIdentifier(ident, type, soName, label);
                     QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += i18n("<li>%1 (from %2)</li>", label, pluginFileName);
+                    msg += QObject::tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
                 }
                 msg += "</ul>";
                 

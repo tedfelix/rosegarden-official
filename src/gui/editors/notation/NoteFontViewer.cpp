@@ -18,7 +18,6 @@
 
 #include "NoteFontViewer.h"
 
-#include <klocale.h>
 #include "FontViewFrame.h"
 #include <QComboBox>
 #include <QDialog>

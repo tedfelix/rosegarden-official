@@ -18,9 +18,9 @@
 
 #include "EraseSegmentsStartingInRangeCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
+#include <QObject>
 
 
 namespace Rosegarden

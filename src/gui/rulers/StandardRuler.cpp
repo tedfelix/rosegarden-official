@@ -18,7 +18,6 @@
 
 #include "StandardRuler.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "MarkerRuler.h"
 #include "base/RulerScale.h"

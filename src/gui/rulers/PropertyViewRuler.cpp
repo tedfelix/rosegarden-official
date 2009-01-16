@@ -20,7 +20,6 @@
 #include "PropertyViewRuler.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/PropertyName.h"
 #include "base/RulerScale.h"

@@ -33,7 +33,6 @@
 #include <QMessageBox>
 #include <QDialogButtonBox>
 
-#include <klocale.h>
 //#include <QDir>
 
 namespace Rosegarden

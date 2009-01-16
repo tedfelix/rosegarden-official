@@ -19,7 +19,6 @@
 #include <Q3Canvas>
 #include <Q3CanvasPixmap>
 
-#include <klocale.h>
 // #include <kglobal.h>
 // #include <kmainwindow.h>
 // #include <kstandardshortcut.h>

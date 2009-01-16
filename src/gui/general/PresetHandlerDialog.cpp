@@ -23,7 +23,6 @@
 #include <QLayout>
 #include <QApplication>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"

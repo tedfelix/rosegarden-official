@@ -19,7 +19,6 @@
 #include "BeatsBarsDialog.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "base/Segment.h"
 #include <QComboBox>
 #include <QDialog>

@@ -18,7 +18,6 @@
 
 #include "AddTracksDialog.h"
 
-#include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>

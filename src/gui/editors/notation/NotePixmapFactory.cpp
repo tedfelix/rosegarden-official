@@ -18,7 +18,6 @@
 #include <Q3CanvasPixmap>
 #include <Q3PointArray>
 
-#include <klocale.h>
 //#include <QDir>
 //#include <kglobal.h>
 

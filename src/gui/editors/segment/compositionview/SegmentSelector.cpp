@@ -19,7 +19,6 @@
 #include "SegmentSelector.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"

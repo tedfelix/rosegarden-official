@@ -24,7 +24,6 @@
 #include "misc/Debug.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"

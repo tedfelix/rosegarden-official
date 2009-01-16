@@ -19,7 +19,6 @@
 #include "ControlChangeCommand.h"
 #include "ControlItem.h"
 #include "misc/Debug.h"
-#include <klocale.h>
 
 namespace Rosegarden {
 

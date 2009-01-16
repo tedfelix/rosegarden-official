@@ -20,7 +20,6 @@
 #include "ControlItem.h"
 #include "ElementAdapter.h"
 #include "misc/Debug.h"
-#include <klocale.h>
 
 namespace Rosegarden
 {

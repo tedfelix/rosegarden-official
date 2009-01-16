@@ -18,7 +18,6 @@
 
 #include "KeySignatureDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"

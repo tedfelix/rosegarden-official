@@ -26,7 +26,6 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
 #include <QComboBox>
-#include <klocale.h>
 #include <QCursor>
 #include <QObject>
 #include <QPoint>

@@ -37,7 +37,6 @@
 #include <QToolTip>
 #include <QWidget>
 
-#include <klocale.h> // i18n()
 
 namespace Rosegarden
 {

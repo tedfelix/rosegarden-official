@@ -18,7 +18,6 @@
 
 #include "LyricEditDialog.h"
 
-#include <klocale.h> // i18n
 
 #include "base/Event.h"
 #include "base/BaseProperties.h"

@@ -18,7 +18,6 @@
 
 #include "MakeAccidentalsCautionaryCommand.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"

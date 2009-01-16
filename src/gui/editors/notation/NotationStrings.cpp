@@ -19,7 +19,6 @@
 #include "NotationStrings.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Exception.h"

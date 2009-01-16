@@ -18,7 +18,6 @@
 
 #include "DeleteTriggerSegmentCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"

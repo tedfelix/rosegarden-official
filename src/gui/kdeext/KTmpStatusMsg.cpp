@@ -21,7 +21,6 @@
 #include <QString>
 #include <QLabel>
 
-#include <klocale.h>
 
 #include "KTmpStatusMsg.h"
 #include "gui/application/RosegardenApplication.h"

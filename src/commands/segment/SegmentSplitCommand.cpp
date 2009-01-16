@@ -18,7 +18,6 @@
 
 #include "SegmentSplitCommand.h"
 
-#include <klocale.h>
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"

@@ -30,7 +30,6 @@
 
 #include "LilyPondExporter.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
@@ -533,10 +532,10 @@ LilyPondExporter::write()
 		int reply = QMessageBox::question(
                         dynamic_cast<QWidget*>(qApp),
 						baseName, 
-						i18n("LilyPond does not allow spaces or backslashes in filenames.\n\n"
-                                "Would you like to use\n\n %1\n\n instead?",
+						QObject::tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
+                                "Would you like to use\n\n %1\n\n instead?"),
 								QMessageBox::Yes |QMessageBox::Cancel,
-								QMessageBox::Cancel));
+								QMessageBox::Cancel);
         if (reply != QMessageBox::Yes)
             return false;
     }

@@ -18,9 +18,9 @@
 
 #include "SetTriggerSegmentDefaultTimeAdjustCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
+#include <QObject>
 
 
 namespace Rosegarden

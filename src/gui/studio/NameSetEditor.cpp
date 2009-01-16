@@ -19,7 +19,6 @@
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
 
-#include <klocale.h>
 
 #include <QFrame>
 #include <QGroupBox>

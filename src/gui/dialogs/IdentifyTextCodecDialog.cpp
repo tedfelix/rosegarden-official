@@ -18,7 +18,6 @@
 
 #include "IdentifyTextCodecDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include <QComboBox>

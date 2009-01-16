@@ -19,7 +19,6 @@
 #include "SegmentResizer.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

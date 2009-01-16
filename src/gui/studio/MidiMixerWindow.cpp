@@ -20,7 +20,6 @@
 
 // #include <kmainwindow.h>
 // #include <kstandardaction.h>
-#include <klocale.h>
 
 #include "sound/Midi.h"
 #include "misc/Debug.h"

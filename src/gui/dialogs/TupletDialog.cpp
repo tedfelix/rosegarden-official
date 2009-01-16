@@ -19,7 +19,6 @@
 #include "TupletDialog.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"

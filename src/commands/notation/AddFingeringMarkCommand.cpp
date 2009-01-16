@@ -18,7 +18,6 @@
 
 #include "AddFingeringMarkCommand.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
 #include "base/Segment.h"

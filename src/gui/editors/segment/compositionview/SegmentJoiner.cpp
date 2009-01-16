@@ -27,7 +27,6 @@
 #include "document/Command.h"
 #include <QPoint>
 #include <QString>
-#include <klocale.h>
 #include <QMouseEvent>
 
 

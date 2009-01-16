@@ -42,7 +42,6 @@
 #include <QVBoxLayout>
 #include <QFont>
 
-#include <klocale.h>
 
 namespace Rosegarden
 {

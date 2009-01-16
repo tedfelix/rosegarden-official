@@ -18,7 +18,6 @@
 
 #include "PitchChooser.h"
 
-#include <klocale.h>
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
 #include <QGroupBox>

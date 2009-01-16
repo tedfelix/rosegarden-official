@@ -20,7 +20,6 @@
 #include "ChordNameRuler.h"
 #include "misc/Debug.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"

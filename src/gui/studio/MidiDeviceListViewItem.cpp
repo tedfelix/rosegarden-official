@@ -18,7 +18,6 @@
 
 #include "MidiDeviceListViewItem.h"
 
-#include <klocale.h>
 #include "base/Device.h"
 #include <QTreeWidget>
 #include <QTreeWidgetItem>

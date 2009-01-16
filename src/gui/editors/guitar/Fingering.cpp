@@ -22,7 +22,6 @@
 #include <QStringList>
 #include <sstream>
 #include <algorithm>
-#include <klocale.h>
 
 namespace Rosegarden
 {

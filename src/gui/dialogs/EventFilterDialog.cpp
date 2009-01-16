@@ -35,7 +35,6 @@
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <klocale.h>
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFrame>

@@ -32,7 +32,6 @@
 #include "document/Command.h"
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <klocale.h>
 #include <QGroupBox>
 #include <QLabel>
 #include <QRadioButton>

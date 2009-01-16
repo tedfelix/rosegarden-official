@@ -30,7 +30,6 @@
 #include <QWidget>
 
 //#include <kdialogbase.h>
-#include <klocale.h>
 //#include <QDir>
 
 

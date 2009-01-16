@@ -19,7 +19,6 @@
 #include "TimeSignatureDialog.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

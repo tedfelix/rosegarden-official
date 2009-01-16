@@ -18,7 +18,6 @@
 
 #include "CompositionLengthDialog.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include <QDialog>
 #include <QDialogButtonBox>

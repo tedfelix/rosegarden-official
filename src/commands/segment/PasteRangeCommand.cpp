@@ -18,7 +18,6 @@
 
 #include "PasteRangeCommand.h"
 
-#include <klocale.h>
 #include "AudioSegmentSplitCommand.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"

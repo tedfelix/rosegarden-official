@@ -18,7 +18,6 @@
 
 #include "SegmentInsertCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Studio.h"

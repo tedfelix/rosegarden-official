@@ -19,7 +19,6 @@
 #include "MatrixModifyCommand.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"

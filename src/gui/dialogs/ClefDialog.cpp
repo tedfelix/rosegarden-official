@@ -21,7 +21,6 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
-#include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>

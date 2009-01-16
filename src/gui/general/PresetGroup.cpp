@@ -26,7 +26,6 @@
 #include "gui/general/ClefIndex.h"
 #include "base/Exception.h"
 #include "CategoryElement.h"
-#include <klocale.h>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>

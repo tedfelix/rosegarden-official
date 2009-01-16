@@ -18,7 +18,6 @@
 
 #include "ColourTable.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/ColourMap.h"
 #include "ColourTableItem.h"

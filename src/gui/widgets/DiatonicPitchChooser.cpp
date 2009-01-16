@@ -19,7 +19,6 @@
 #include "DiatonicPitchChooser.h"
 
 #include <iostream>
-#include <klocale.h>
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/general/MidiPitchLabel.h"

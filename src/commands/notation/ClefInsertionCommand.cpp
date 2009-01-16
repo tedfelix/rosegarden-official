@@ -18,7 +18,6 @@
 
 #include "ClefInsertionCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"

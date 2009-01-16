@@ -18,7 +18,6 @@
 
 #include "EventUnquantizeCommand.h"
 
-#include <klocale.h>
 #include "base/Quantizer.h"
 #include "base/Segment.h"
 #include "base/Selection.h"

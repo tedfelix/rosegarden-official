@@ -20,7 +20,6 @@
 #include <QLayout>
 #include <QApplication>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "base/Quantizer.h"

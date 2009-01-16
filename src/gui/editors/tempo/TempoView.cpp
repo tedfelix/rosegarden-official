@@ -20,7 +20,6 @@
 #include <Q3CanvasPixmap>
 #include "TempoView.h"
 
-#include <klocale.h>
 // #include <QDir>
 // #include <kglobal.h>
 // #include <kxmlguiclient.h>

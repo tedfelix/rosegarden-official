@@ -18,10 +18,10 @@
 
 #include "AudioSegmentResizeFromStartCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
+#include <QObject>
 
 
 namespace Rosegarden

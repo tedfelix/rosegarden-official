@@ -18,7 +18,6 @@
 
 #include "SplitByPitchDialog.h"
 
-#include <klocale.h>
 #include "commands/segment/SegmentSplitByPitchCommand.h"
 #include "gui/general/ClefIndex.h"
 #include "gui/widgets/PitchChooser.h"

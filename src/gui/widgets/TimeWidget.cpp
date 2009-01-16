@@ -19,7 +19,6 @@
 #include "TimeWidget.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

@@ -127,7 +127,6 @@
 #include <QShortcut>
 #include <QKeySequence>
 
-#include <klocale.h>
 
 
 namespace Rosegarden

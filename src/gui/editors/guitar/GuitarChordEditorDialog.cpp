@@ -23,7 +23,6 @@
 #include <klineedit.h>
 #include <QComboBox>
 #include <QSpinBox>
-#include <klocale.h>
 #include <QMessageBox>
 #include <QDir>
 #include <QLayout>

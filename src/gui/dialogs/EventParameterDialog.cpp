@@ -18,7 +18,6 @@
 
 #include "EventParameterDialog.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/PropertyName.h"

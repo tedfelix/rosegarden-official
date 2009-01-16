@@ -18,7 +18,6 @@
 
 #include "TextChangeCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"

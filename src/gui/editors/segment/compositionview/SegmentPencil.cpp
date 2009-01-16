@@ -34,7 +34,6 @@
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
 #include "document/Command.h"
-#include <klocale.h>
 #include <QCursor>
 #include <QEvent>
 #include <QPoint>

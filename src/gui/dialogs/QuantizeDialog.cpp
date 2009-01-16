@@ -18,7 +18,6 @@
 
 #include "QuantizeDialog.h"
 
-#include <klocale.h>
 #include "base/Quantizer.h"
 #include "gui/widgets/QuantizeParameters.h"
 #include <QDialog>

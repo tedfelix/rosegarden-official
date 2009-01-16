@@ -18,7 +18,6 @@
 
 #include "ControlEditorDialog.h"
 
-#include <klocale.h>
 // #include <kmainwindow.h>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>

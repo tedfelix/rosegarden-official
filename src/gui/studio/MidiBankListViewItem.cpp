@@ -18,7 +18,6 @@
 
 #include "MidiBankListViewItem.h"
 
-#include <klocale.h>
 #include "base/Device.h"
 #include "MidiDeviceListViewItem.h"
 #include "MidiKeyMapListViewItem.h"

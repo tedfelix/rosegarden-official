@@ -18,7 +18,6 @@
 
 #include "NotationSelectionPaster.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Selection.h"
 #include "base/ViewElement.h"

@@ -18,13 +18,13 @@
 
 #include "InsertRangeCommand.h"
 
-#include <klocale.h>
 #include "AudioSegmentSplitCommand.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "OpenOrCloseRangeCommand.h"
 #include "SegmentSplitCommand.h"
+#include <QObject>
 
 
 namespace Rosegarden

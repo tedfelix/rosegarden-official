@@ -20,7 +20,6 @@
 #include <QLayout>
 
 #include <iostream>
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
 #include "base/NotationRules.h"

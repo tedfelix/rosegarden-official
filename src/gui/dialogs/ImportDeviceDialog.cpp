@@ -43,7 +43,6 @@
 #include <QHBoxLayout>
 #include <QButtonGroup>
 
-#include <klocale.h> // i18n()
 
 namespace Rosegarden
 {

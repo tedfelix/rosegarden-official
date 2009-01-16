@@ -18,7 +18,6 @@
 
 #include "RestInserter.h"
 
-#include <klocale.h>
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"

@@ -28,7 +28,6 @@
 
 #include <iostream>
 
-#include <klocale.h>
 
 #include <QDateTime>
 #include <QString>

@@ -18,7 +18,6 @@
 
 #include "AudioSegmentInsertCommand.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"

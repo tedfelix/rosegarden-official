@@ -18,7 +18,6 @@
 
 #include "AddMarkCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"

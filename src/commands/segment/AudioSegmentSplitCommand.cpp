@@ -18,7 +18,6 @@
 
 #include "AudioSegmentSplitCommand.h"
 
-#include <klocale.h>
 #include "misc/AppendLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"

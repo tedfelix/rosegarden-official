@@ -18,7 +18,6 @@
 
 #include "AudioPlayingDialog.h"
 
-#include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>

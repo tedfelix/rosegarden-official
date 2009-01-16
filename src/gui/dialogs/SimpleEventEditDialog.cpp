@@ -44,7 +44,6 @@
 #include <QVBoxLayout>
 #include <QLayout>
 
-#include <klocale.h>
 
 
 namespace Rosegarden

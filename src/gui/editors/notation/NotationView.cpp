@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <klocale.h>
 #include <kxmlguiclient.h>
 //#include <kprinter.h>
 

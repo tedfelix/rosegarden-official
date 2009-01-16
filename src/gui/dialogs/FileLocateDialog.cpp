@@ -18,7 +18,6 @@
 
 #include "FileLocateDialog.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include <QDialog>
 #include <QDialogButtonBox>

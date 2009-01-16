@@ -82,7 +82,6 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <klocale.h>
 #include <kxmlguiclient.h>
 //#include <kstatusbar.h>
 //#include <QDir>

@@ -18,7 +18,6 @@
 
 #include "FileMergeDialog.h"
 
-#include <klocale.h>
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>

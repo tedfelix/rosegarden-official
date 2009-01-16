@@ -27,7 +27,6 @@
 #include "SegmentSplitCommand.h"
 #include "DeleteRangeCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"

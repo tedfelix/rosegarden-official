@@ -16,7 +16,6 @@
 */
 
 
-#include <klocale.h>
 
 #include "MidiProgramsEditor.h"
 #include "MidiBankListViewItem.h"

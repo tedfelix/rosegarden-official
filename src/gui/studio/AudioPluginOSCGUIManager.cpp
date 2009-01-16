@@ -22,7 +22,6 @@
 #include "AudioPluginOSCGUIManager.h"
 
 #include "sound/Midi.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "AudioPluginOSCGUI.h"

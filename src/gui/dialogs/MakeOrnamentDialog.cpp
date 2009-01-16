@@ -18,7 +18,6 @@
 
 #include "MakeOrnamentDialog.h"
 
-#include <klocale.h>
 #include "gui/widgets/PitchChooser.h"
 #include <QDialog>
 #include <QDialogButtonBox>

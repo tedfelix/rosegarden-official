@@ -27,7 +27,6 @@
 #include <QFileInfo>
 #include <QDir>
 
-#include <klocale.h>
 
 
 namespace Rosegarden {

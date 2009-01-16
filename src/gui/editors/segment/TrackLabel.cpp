@@ -18,7 +18,6 @@
 
 #include "TrackLabel.h"
 
-#include <klocale.h>
 #include "base/Track.h"
 
 #include <QInputDialog>

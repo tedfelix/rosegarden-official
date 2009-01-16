@@ -18,7 +18,6 @@
 
 #include "ShowSequencerStatusDialog.h"
 
-#include <klocale.h>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QByteArray>

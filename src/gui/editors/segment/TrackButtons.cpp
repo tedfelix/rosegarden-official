@@ -18,7 +18,6 @@
 
 #include "TrackButtons.h"
 
-#include <klocale.h>
 // #include <QDir>
 // #include <kglobal.h>
 

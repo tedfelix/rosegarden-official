@@ -24,7 +24,6 @@
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
 //#include <kcmdlineargs.h>
-#include <klocale.h>
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QMessageBox>
@@ -67,7 +66,7 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
             settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
 
             QMessageBox::critical( mainWidget(), "",  
-                    i18n("Failed to load soundfont %1", soundFontPath ));
+                    QObject::tr("Failed to load soundfont %1").arg(soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }

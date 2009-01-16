@@ -18,7 +18,6 @@
 
 #include "MatrixPercussionInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"

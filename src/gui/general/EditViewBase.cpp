@@ -58,7 +58,6 @@
 #include <Q3CanvasPixmap>
 #include <Q3Canvas>
 
-#include <klocale.h>
 
 
 

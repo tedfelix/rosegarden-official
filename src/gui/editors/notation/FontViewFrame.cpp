@@ -19,7 +19,6 @@
 #include "FontViewFrame.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include <QMessageBox>
 #include <QFontMetrics>
 #include <QFrame>

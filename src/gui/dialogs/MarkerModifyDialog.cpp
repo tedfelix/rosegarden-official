@@ -19,7 +19,6 @@
 #include "MarkerModifyDialog.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/widgets/TimeWidget.h"

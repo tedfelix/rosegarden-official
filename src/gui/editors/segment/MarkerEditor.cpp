@@ -26,7 +26,6 @@
 // #include <kmainwindow.h>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>
-#include <klocale.h>
 // #include <QDir>
 // #include <kstandardshortcut.h>
 

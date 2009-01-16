@@ -19,7 +19,6 @@
 #include "AudioFaderBox.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include <QDir>
 #include "misc/Debug.h"
 #include "AudioRouteMenu.h"

@@ -19,7 +19,6 @@
 #include "NoteFontMap.h"
 #include "misc/Debug.h"
 
-#include <klocale.h>
 #include <QDir>
 #include "misc/Strings.h"
 #include "base/Exception.h"

@@ -20,7 +20,6 @@
 
 #include "base/Event.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"

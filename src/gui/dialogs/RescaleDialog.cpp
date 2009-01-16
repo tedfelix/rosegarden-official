@@ -18,7 +18,6 @@
 
 #include "RescaleDialog.h"
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"

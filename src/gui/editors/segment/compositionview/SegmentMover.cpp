@@ -19,7 +19,6 @@
 #include "SegmentMover.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
@@ -41,7 +40,6 @@
 #include <QPoint>
 #include <QRect>
 #include <QString>
-#include <klocale.h>
 #include <QMouseEvent>
 
 

@@ -18,7 +18,6 @@
 
 #include "MoveAcrossSegmentsCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Segment.h"
 #include "base/Selection.h"

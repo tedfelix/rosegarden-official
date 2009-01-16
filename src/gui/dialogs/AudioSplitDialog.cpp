@@ -25,7 +25,6 @@
 #include "AudioSplitDialog.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Exception.h"

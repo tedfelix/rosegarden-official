@@ -24,7 +24,6 @@
 
 #include "EditViewCommandRegistry.h"
 
-#include <klocale.h>
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QFile>

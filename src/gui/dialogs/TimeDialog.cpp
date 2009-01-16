@@ -18,7 +18,6 @@
 
 #include "TimeDialog.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
 #include <QDialog>

@@ -20,7 +20,6 @@
 #include <QApplication>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"

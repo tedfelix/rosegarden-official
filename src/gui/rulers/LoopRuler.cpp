@@ -16,7 +16,6 @@
 */
 
 #include <Q3PointArray>
-#include <klocale.h>
 
 #include "LoopRuler.h"
 

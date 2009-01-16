@@ -20,7 +20,6 @@
 #include "CurrentProgressDialog.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenApplication.h"
-#include <klocale.h>
 #include <QCursor>
 #include <QProgressDialog>
 #include <QProgressBar>

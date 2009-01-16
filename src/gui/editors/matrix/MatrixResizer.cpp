@@ -19,7 +19,6 @@
 #include <Q3CanvasPixmap>
 #include "MatrixResizer.h"
 
-#include <klocale.h>
 #include <QDir>
 #include "base/Event.h"
 #include "base/Segment.h"

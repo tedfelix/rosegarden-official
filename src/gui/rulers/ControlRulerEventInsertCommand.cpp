@@ -17,7 +17,6 @@
 
 #include "ControlRulerEventInsertCommand.h"
 #include "base/MidiTypes.h"
-#include <klocale.h>
 
 namespace Rosegarden
 {

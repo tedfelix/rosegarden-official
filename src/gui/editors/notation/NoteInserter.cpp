@@ -19,7 +19,6 @@
 #include "NoteInserter.h"
 #include "misc/Debug.h"
 
-#include <klocale.h>
 
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"

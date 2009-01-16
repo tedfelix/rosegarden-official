@@ -177,7 +177,6 @@
 #include <klineeditdlg.h>
 #include <klineedit.h>
 #include <QListWidget>
-#include <klocale.h>
 #include <kmainwindow.h>
 #include <QMessageBox>
 #include <kmimetype.h>

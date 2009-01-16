@@ -47,7 +47,6 @@
 #include <QHBoxLayout>
 #include <QDesktopWidget>
 
-#include <klocale.h>
 
 using std::cerr;
 using std::endl;

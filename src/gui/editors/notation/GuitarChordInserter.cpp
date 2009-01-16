@@ -18,7 +18,6 @@
 
 #include "GuitarChordInserter.h"
 
-#include <klocale.h>
 
 #include "base/Event.h"
 #include "base/Exception.h"

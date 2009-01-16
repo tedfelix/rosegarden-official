@@ -23,7 +23,6 @@
 #include <QSettings>
 #include <QString>
 
-#include <klocale.h>
 
 namespace Rosegarden
 {

@@ -18,10 +18,10 @@
 
 #include "SegmentCommandRepeat.h"
 
-#include <klocale.h>
 #include "base/Segment.h"
 #include "SegmentCommand.h"
 #include <QString>
+#include <QObject>
 
 
 namespace Rosegarden

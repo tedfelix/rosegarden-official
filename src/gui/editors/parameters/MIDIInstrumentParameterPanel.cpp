@@ -18,7 +18,6 @@
 
 #include "MIDIInstrumentParameterPanel.h"
 
-#include <klocale.h>
 #include "gui/kdeext/SqueezedLabel.h"
 
 #include "sound/Midi.h"

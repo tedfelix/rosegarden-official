@@ -35,7 +35,6 @@
 
 //#include <kdialogbase.h>
 #include <QDir>
-#include <klocale.h>
 
 
 namespace Rosegarden

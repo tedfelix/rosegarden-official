@@ -41,7 +41,6 @@
 #include <QSpinBox>
 #include <QApplication>
 
-#include <klocale.h>
 
 namespace Rosegarden
 {
@@ -105,7 +104,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
         std::string style = m_styles[i];
 
-        // if the style is in this list, we can i18n it (kludgy):
+        // if the style is in this list, we can QObject::tr it (kludgy):
 
         if (style == Text::Dynamic) {                           // index //
             m_typeCombo->addItem(QObject::tr("Dynamic"));           // 0
@@ -135,7 +134,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
             m_typeCombo->addItem(QObject::tr("LilyPond Directive")); // 8
 
         } else {
-            // not i18n()-able
+            // not QObject::tr()-able
 
             std::string styleName;
             styleName += (char)toupper(style[0]);
@@ -279,7 +278,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_lilyPondDirectiveCombo = new QComboBox;
     m_optionWidget->addWidget(m_lilyPondDirectiveCombo);
 
-    // not i18nable, because the directive exporter currently depends on the
+    // not QObject::tr()able, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));

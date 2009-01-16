@@ -17,7 +17,6 @@
 
 #include "PlayListView.h"
 
-#include <klocale.h>
 
 //#include <qdragobject.h>
 #include <QMimeData>	// replaces Q3DragObject and Q3UriDrag

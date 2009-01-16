@@ -19,7 +19,6 @@
 #include "CountdownDialog.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "CountdownBar.h"
 #include <qshortcut.h>
 #include <QDialog>

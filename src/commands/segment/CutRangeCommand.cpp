@@ -18,7 +18,6 @@
 
 #include "CutRangeCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "commands/edit/CopyCommand.h"

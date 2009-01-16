@@ -50,7 +50,6 @@
 #include <QLayout>
 #include <QPushButton>
 
-#include <klocale.h>
 
 
 namespace Rosegarden

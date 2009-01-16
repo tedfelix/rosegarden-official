@@ -67,7 +67,6 @@
 #include <QCheckBox>
 #include <QShortcut>
 
-#include <klocale.h>
 // #include <kglobal.h>
 // #include <kstandardshortcut.h>
 // #include <kstandardaction.h>

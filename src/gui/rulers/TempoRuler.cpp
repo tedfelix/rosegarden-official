@@ -55,7 +55,6 @@
 
 
 
-#include <klocale.h>
 
 
 namespace Rosegarden

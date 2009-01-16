@@ -18,7 +18,6 @@
 
 #include "SynthPluginManagerDialog.h"
 
-#include <klocale.h>
 
 #include "misc/Debug.h"
 #include "AudioPlugin.h"

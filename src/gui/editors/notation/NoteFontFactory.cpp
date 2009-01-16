@@ -20,7 +20,6 @@
 #include "misc/Debug.h"
 #include <QApplication>
 
-#include <klocale.h>
 #include <QDir>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"

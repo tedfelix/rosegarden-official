@@ -21,7 +21,6 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include <klocale.h>
 
 
 namespace Rosegarden

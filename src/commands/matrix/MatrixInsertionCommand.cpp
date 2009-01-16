@@ -18,7 +18,6 @@
 
 #include "MatrixInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/SegmentMatrixHelper.h"

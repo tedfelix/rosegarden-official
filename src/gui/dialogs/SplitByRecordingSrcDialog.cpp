@@ -19,7 +19,6 @@
 #include "SplitByRecordingSrcDialog.h"
 #include <QLayout>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
 #include "document/RosegardenGUIDoc.h"

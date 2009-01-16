@@ -23,7 +23,6 @@
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
 #include <QApplication>
-#include <klocale.h>
 #include <QBrush>
 #include <QColor>
 #include <QDialog>

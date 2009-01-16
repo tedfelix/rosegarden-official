@@ -18,7 +18,6 @@
 
 #include "EventQuantizeCommand.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/Quantizer.h"

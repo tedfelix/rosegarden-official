@@ -18,7 +18,6 @@
 
 #include "PasteNotationDialog.h"
 
-#include <klocale.h>
 #include "commands/edit/PasteEventsCommand.h"
 #include <QDialog>
 #include <QDialogButtonBox>

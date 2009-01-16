@@ -20,7 +20,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/LayoutEngine.h"

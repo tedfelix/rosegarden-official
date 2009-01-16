@@ -18,7 +18,6 @@
 
 #include "MidiFilterDialog.h"
 
-#include <klocale.h>
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
 #include "document/RosegardenGUIDoc.h"

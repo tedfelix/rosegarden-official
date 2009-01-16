@@ -19,7 +19,6 @@
 #include "PasteToTriggerSegmentCommand.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"

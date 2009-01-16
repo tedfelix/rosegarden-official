@@ -24,7 +24,6 @@
 #include "misc/Strings.h"
 
 #include <klineedit.h>
-#include <klocale.h>
 
 #include <QApplication>
 #include <QCheckBox>
