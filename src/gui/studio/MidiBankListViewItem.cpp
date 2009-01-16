@@ -41,7 +41,7 @@ MidiBankListViewItem::MidiBankListViewItem(DeviceId deviceId,
 void MidiBankListViewItem::setPercussion(bool percussion)
 {
     m_percussion = percussion;
-    setText(1, QString(percussion ? i18n("Percussion Bank") : i18n("Bank")));
+    setText(1, QString(percussion ? QObject::tr("Percussion Bank") : QObject::tr("Bank")));
 }
 
 void MidiBankListViewItem::setMSB(int msb)

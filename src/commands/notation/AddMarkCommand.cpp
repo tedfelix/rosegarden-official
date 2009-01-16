@@ -39,41 +39,41 @@ AddMarkCommand::getGlobalName(Mark markType)
 
     // Gosh, lots of collisions
     if (markType == Marks::Sforzando)
-        m = i18n("S&forzando");
+        m = QObject::tr("S&forzando");
     else if (markType == Marks::Staccato)
-        m = i18n("Sta&ccato");
+        m = QObject::tr("Sta&ccato");
     else if (markType == Marks::Rinforzando)
-        m = i18n("R&inforzando");
+        m = QObject::tr("R&inforzando");
     else if (markType == Marks::Tenuto)
-        m = i18n("T&enuto");
+        m = QObject::tr("T&enuto");
     else if (markType == Marks::Trill)
-        m = i18n("Tri&ll");
+        m = QObject::tr("Tri&ll");
     else if (markType == Marks::LongTrill)
-        m = i18n("Trill &with Line");
+        m = QObject::tr("Trill &with Line");
     else if (markType == Marks::TrillLine)
-        m = i18n("Trill Line");
+        m = QObject::tr("Trill Line");
     else if (markType == Marks::Turn)
-        m = i18n("&Turn");
+        m = QObject::tr("&Turn");
     else if (markType == Marks::Accent)
-        m = i18n("&Accent");
+        m = QObject::tr("&Accent");
     else if (markType == Marks::Staccatissimo)
-        m = i18n("&Staccatissimo");
+        m = QObject::tr("&Staccatissimo");
     else if (markType == Marks::Marcato)
-        m = i18n("&Marcato");
+        m = QObject::tr("&Marcato");
     else if (markType == Marks::Pause)
-        m = i18n("&Pause");
+        m = QObject::tr("&Pause");
     else if (markType == Marks::UpBow)
-        m = i18n("&Up-Bow");
+        m = QObject::tr("&Up-Bow");
     else if (markType == Marks::DownBow)
-        m = i18n("&Down-Bow");
+        m = QObject::tr("&Down-Bow");
     else if (markType == Marks::Mordent)
-        m = i18n("Mo&rdent");
+        m = QObject::tr("Mo&rdent");
     else if (markType == Marks::MordentInverted)
-        m = i18n("Inverted Mordent");
+        m = QObject::tr("Inverted Mordent");
     else if (markType == Marks::MordentLong)
-        m = i18n("Long Mordent");
+        m = QObject::tr("Long Mordent");
     else if (markType == Marks::MordentLongInverted)
-        m = i18n("Lon&g Inverted Mordent");
+        m = QObject::tr("Lon&g Inverted Mordent");
     else
         m = i18n("&%1%2", m[0].toUpper(), m.right(m.length() - 1));
     // FIXME: That last i18n has very little chance of working, unless

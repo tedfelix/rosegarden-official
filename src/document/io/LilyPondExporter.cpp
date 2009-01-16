@@ -2317,13 +2317,13 @@ LilyPondExporter::writeBar(Segment *s,
     if (overlong) {
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1").
-                  arg(i18n("warning: overlong bar truncated here")));
+                  arg(QObject::tr("warning: overlong bar truncated here")));
     }
 
     if (fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
-                arg(i18n("warning: bar too short, padding with rests")));
+                arg(QObject::tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1/%2 < %3/%4").
                   arg(durationRatioSum.first).

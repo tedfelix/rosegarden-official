@@ -42,7 +42,7 @@ namespace Rosegarden
 SegmentSplitTwiceCommand::SegmentSplitTwiceCommand(Segment *segment,
             timeT splitTime1, timeT splitTime2,
             DeleteRangeCommand::RejoinCommand *rejoins) :
-        NamedCommand(i18n("Split Twice Segment")),
+        NamedCommand(QObject::tr("Split Twice Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),

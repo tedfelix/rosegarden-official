@@ -32,7 +32,7 @@ namespace Rosegarden
 
 TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
         Text text) :
-        BasicCommand(i18n("Insert Text"), segment, time, time + 1),
+        BasicCommand(QObject::tr("Insert Text"), segment, time, time + 1),
         m_text(text),
         m_lastInsertedEvent(0)
 {

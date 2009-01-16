@@ -32,7 +32,7 @@ AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
         timeT duration,
         int basePitch,
         int baseVelocity) :
-        NamedCommand(i18n("Add Triggered Segment")),
+        NamedCommand(QObject::tr("Add Triggered Segment")),
         m_composition(&doc->getComposition()),
         m_duration(duration),
         m_basePitch(basePitch),

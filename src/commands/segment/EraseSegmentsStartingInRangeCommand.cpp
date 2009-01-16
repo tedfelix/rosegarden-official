@@ -29,7 +29,7 @@ namespace Rosegarden
 EraseSegmentsStartingInRangeCommand::EraseSegmentsStartingInRangeCommand(
     Composition *composition,
     timeT t0, timeT t1) :
-        NamedCommand(i18n("Delete Range")),
+        NamedCommand(QObject::tr("Delete Range")),
         m_composition(composition),
         m_beginTime(t0),
         m_endTime(t1),

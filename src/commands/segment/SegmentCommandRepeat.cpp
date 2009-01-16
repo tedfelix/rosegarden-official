@@ -29,7 +29,7 @@ namespace Rosegarden
 
 SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Segment*>& segments,
         bool repeat)
-        : SegmentCommand(i18n("Repeat Segments"), segments),
+        : SegmentCommand(QObject::tr("Repeat Segments"), segments),
         m_repeatState(repeat)
 {}
 

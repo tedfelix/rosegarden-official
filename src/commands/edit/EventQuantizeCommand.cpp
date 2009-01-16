@@ -105,13 +105,13 @@ EventQuantizeCommand::getGlobalName(Quantizer *quantizer)
 {
     if (quantizer) {
         if (dynamic_cast<NotationQuantizer *>(quantizer)) {
-            return i18n("Heuristic Notation &Quantize");
+            return QObject::tr("Heuristic Notation &Quantize");
         } else {
-            return i18n("Grid &Quantize");
+            return QObject::tr("Grid &Quantize");
         }
     }
 
-    return i18n("&Quantize...");
+    return QObject::tr("&Quantize...");
 }
 
 void

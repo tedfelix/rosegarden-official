@@ -1012,7 +1012,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString thing;
 			//KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
 			//KURL url = QFileDialog.directory()
-			QString url = QFileDialog::getExistingDirectory(0, i18n("Open Directory"),
+			QString url = QFileDialog::getExistingDirectory(0, QObject::tr("Open Directory"),
 										"/home", QFileDialog::ShowDirsOnly
 												| QFileDialog::DontResolveSymlinks);			
 			
@@ -1686,7 +1686,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
 //            std::cerr << "Have container" << std::endl;
 
-            emit setOperationName(i18n("Loading plugins..."));
+            emit setOperationName(QObject::tr("Loading plugins..."));
             ProgressDialog::processEvents();
 
             // Get the details

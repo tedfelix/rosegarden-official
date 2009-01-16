@@ -36,7 +36,7 @@ MatrixInsertionCommand::MatrixInsertionCommand(Segment &segment,
         timeT time,
         timeT endTime,
         Event *event) :
-        BasicCommand(i18n("Insert Note"), segment, time, endTime),
+        BasicCommand(QObject::tr("Insert Note"), segment, time, endTime),
         m_event(new Event(*event,
                           std::min(time, endTime),
                           (time < endTime) ? endTime - time : time - endTime))

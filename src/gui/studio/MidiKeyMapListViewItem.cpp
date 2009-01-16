@@ -39,7 +39,7 @@ MidiKeyMapListViewItem::MidiKeyMapListViewItem(DeviceId deviceId,
         : MidiDeviceListViewItem(deviceId, parent, name),
         m_name(name)
 {
-    setText( 0, i18n("Key Mapping") );		// which column ? assumed 0
+    setText( 0, QObject::tr("Key Mapping") );		// which column ? assumed 0
 }
 
 int MidiKeyMapListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const

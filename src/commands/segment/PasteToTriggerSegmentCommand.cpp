@@ -37,7 +37,7 @@ PasteToTriggerSegmentCommand::PasteToTriggerSegmentCommand(Composition *composit
         QString label,
         int basePitch,
         int baseVelocity) :
-        NamedCommand(i18n("Paste as New Triggered Segment")),
+        NamedCommand(QObject::tr("Paste as New Triggered Segment")),
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_label(label),

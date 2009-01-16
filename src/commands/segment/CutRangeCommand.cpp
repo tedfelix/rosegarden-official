@@ -31,7 +31,7 @@ namespace Rosegarden
 CutRangeCommand::CutRangeCommand(Composition *composition,
                                  timeT t0, timeT t1,
                                  Clipboard *clipboard) :
-        MacroCommand(i18n("Cut Range"))
+        MacroCommand(QObject::tr("Cut Range"))
 {
     addCommand(new CopyCommand(composition, t0, t1, clipboard));
     addCommand(new DeleteRangeCommand(composition, t0, t1));

@@ -267,7 +267,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             m_segment->setEndMarkerTime(m_composition->getBarEnd(m_currentBar));
             QString label = QString("%1 - %2 %3 %4").arg(strtoqstr(m_patternName))
                             .arg(strtoqstr(m_sequenceName))
-                            .arg(i18n(" imported from Hydrogen ")).arg(strtoqstr(m_version));
+                            .arg(QObject::tr(" imported from Hydrogen ")).arg(strtoqstr(m_version));
             m_segment->setLabel(qstrtostr(label));
 
             m_composition->addTrack(track);

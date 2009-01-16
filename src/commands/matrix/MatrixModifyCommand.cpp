@@ -33,7 +33,7 @@ MatrixModifyCommand::MatrixModifyCommand(Segment &segment,
         Event *newEvent,
         bool isMove,
         bool normalize):
-        BasicCommand((isMove ? i18n("Move Note") : i18n("Modify Note")),
+        BasicCommand((isMove ? QObject::tr("Move Note") : QObject::tr("Modify Note")),
                      segment,
                      std::min(newEvent->getAbsoluteTime(),
                               oldEvent->getAbsoluteTime()),

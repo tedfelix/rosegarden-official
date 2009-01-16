@@ -92,7 +92,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     setCentralWidget(mainFrame);
 	mainFrame->setLayout( new QVBoxLayout(this) );
 
-    setCaption(i18n("Manage MIDI Banks and Programs"));
+    setCaption(QObject::tr("Manage MIDI Banks and Programs"));
 
     QSplitter *splitter = new QSplitter( mainFrame );
     mainFrame->layout()->addWidget(splitter);
@@ -107,8 +107,8 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     layout->setSpacing(10);
 
     m_closeButton = new QPushButton(btnBox);
-    m_applyButton = new QPushButton(i18n("Apply"), btnBox);
-    m_resetButton = new QPushButton(i18n("Reset"), btnBox);
+    m_applyButton = new QPushButton(QObject::tr("Apply"), btnBox);
+    m_resetButton = new QPushButton(QObject::tr("Reset"), btnBox);
 
     layout->addStretch(10);
     layout->addWidget(m_applyButton);
@@ -135,16 +135,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 	
 	m_listView->setColumnCount( 4 );
 	QStringList sl;
-	sl		<< i18n("MIDI Device")
-			<< i18n("Type")
-			<< i18n("MSB")
-			<< i18n("LSB");
+	sl		<< QObject::tr("MIDI Device")
+			<< QObject::tr("Type")
+			<< QObject::tr("MSB")
+			<< QObject::tr("LSB");
 	m_listView->setHeaderLabels( sl );
 	/*
-	m_listView->addColumn(i18n("MIDI Device"));
-    m_listView->addColumn(i18n("Type"));
-    m_listView->addColumn(i18n("MSB"));
-    m_listView->addColumn(i18n("LSB"));
+	m_listView->addColumn(QObject::tr("MIDI Device"));
+    m_listView->addColumn(QObject::tr("Type"));
+    m_listView->addColumn(QObject::tr("MSB"));
+    m_listView->addColumn(QObject::tr("LSB"));
 	*/
 	
     m_listView->setRootIsDecorated(true);
@@ -162,10 +162,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QGridLayout *gridLayout = new QGridLayout(bankBox);
     gridLayout->setSpacing(6);
 
-    m_addBank = new QPushButton(i18n("Add Bank"), bankBox);
-    m_addKeyMapping = new QPushButton(i18n("Add Key Mapping"), bankBox);
-    m_delete = new QPushButton(i18n("Delete"), bankBox);
-    m_deleteAll = new QPushButton(i18n("Delete All"), bankBox);
+    m_addBank = new QPushButton(QObject::tr("Add Bank"), bankBox);
+    m_addKeyMapping = new QPushButton(QObject::tr("Add Key Mapping"), bankBox);
+    m_delete = new QPushButton(QObject::tr("Delete"), bankBox);
+    m_deleteAll = new QPushButton(QObject::tr("Delete All"), bankBox);
     gridLayout->addWidget(m_addBank, 0, 0);
     gridLayout->addWidget(m_addKeyMapping, 0, 1);
     gridLayout->addWidget(m_delete, 1, 0);
@@ -173,26 +173,26 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    m_addBank->setToolTip(i18n("Add a Bank to the current device"));
+    m_addBank->setToolTip(QObject::tr("Add a Bank to the current device"));
 
-    m_addKeyMapping->setToolTip(i18n("Add a Percussion Key Mapping to the current device"));
+    m_addKeyMapping->setToolTip(QObject::tr("Add a Percussion Key Mapping to the current device"));
 
-    m_delete->setToolTip(i18n("Delete the current Bank or Key Mapping"));
+    m_delete->setToolTip(QObject::tr("Delete the current Bank or Key Mapping"));
 
-    m_deleteAll->setToolTip(i18n("Delete all Banks and Key Mappings from the current Device"));
+    m_deleteAll->setToolTip(QObject::tr("Delete all Banks and Key Mappings from the current Device"));
 
-    m_importBanks = new QPushButton(i18n("Import..."), bankBox);
-    m_exportBanks = new QPushButton(i18n("Export..."), bankBox);
+    m_importBanks = new QPushButton(QObject::tr("Import..."), bankBox);
+    m_exportBanks = new QPushButton(QObject::tr("Export..."), bankBox);
     gridLayout->addWidget(m_importBanks, 2, 0);
     gridLayout->addWidget(m_exportBanks, 2, 1);
 
     // Tips
     //
-    m_importBanks->setToolTip(i18n("Import Bank and Program data from a Rosegarden file to the current Device"));
-    m_exportBanks->setToolTip(i18n("Export all Device and Bank information to a Rosegarden format  interchange file"));
+    m_importBanks->setToolTip(QObject::tr("Import Bank and Program data from a Rosegarden file to the current Device"));
+    m_exportBanks->setToolTip(QObject::tr("Export all Device and Bank information to a Rosegarden format  interchange file"));
 
-    m_copyPrograms = new QPushButton(i18n("Copy"), bankBox);
-    m_pastePrograms = new QPushButton(i18n("Paste"), bankBox);
+    m_copyPrograms = new QPushButton(QObject::tr("Copy"), bankBox);
+    m_pastePrograms = new QPushButton(QObject::tr("Paste"), bankBox);
     gridLayout->addWidget(m_copyPrograms, 3, 0);
     gridLayout->addWidget(m_pastePrograms, 3, 1);
 
@@ -200,9 +200,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     // Tips
     //
-    m_copyPrograms->setToolTip(i18n("Copy all Program names from current Bank to clipboard"));
+    m_copyPrograms->setToolTip(QObject::tr("Copy all Program names from current Bank to clipboard"));
 
-    m_pastePrograms->setToolTip(i18n("Paste Program names from clipboard to current Bank"));
+    m_pastePrograms->setToolTip(QObject::tr("Paste Program names from clipboard to current Bank"));
 
     connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
             this, SLOT(slotPopulateDevice(QTreeWidgetItem*)));
@@ -222,7 +222,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_programEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
     m_keyMappingEditor->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred));
 
-    m_optionBox = new QGroupBox(i18n("Options"), vbox);
+    m_optionBox = new QGroupBox(QObject::tr("Options"), vbox);
     QVBoxLayout *optionBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(m_optionBox);
 
@@ -232,13 +232,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
     optionBoxLayout->addWidget(variationBox);
 
-    m_variationToggle = new QCheckBox(i18n("Show Variation list based on "), variationBox );
+    m_variationToggle = new QCheckBox(QObject::tr("Show Variation list based on "), variationBox );
     variationBoxLayout->addWidget(m_variationToggle);
     m_variationCombo = new QComboBox( variationBox );
     variationBoxLayout->addWidget(m_variationCombo);
     variationBox->setLayout(variationBoxLayout);
-    m_variationCombo->addItem(i18n("LSB"));
-    m_variationCombo->addItem(i18n("MSB"));
+    m_variationCombo->addItem(QObject::tr("LSB"));
+    m_variationCombo->addItem(QObject::tr("MSB"));
 
     m_optionBox->setLayout(optionBoxLayout);
 
@@ -344,13 +344,13 @@ BankEditorDialog::setupActions()
     // some adjustments
 
 /*
-    new KToolBarPopupAction(i18n("Und&o"),
+    new KToolBarPopupAction(QObject::tr("Und&o"),
                             "undo",
                             KStandardShortcut::key(KStandardShortcut::Undo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Undo));
 
-    new KToolBarPopupAction(i18n("Re&do"),
+    new KToolBarPopupAction(QObject::tr("Re&do"),
                             "redo",
                             KStandardShortcut::key(KStandardShortcut::Redo),
                             actionCollection(),
@@ -1060,7 +1060,7 @@ BankEditorDialog::slotAddBank()
 
         MidiBank newBank(false,
                          bank.first, bank.second,
-                         qstrtostr(i18n("<new bank>")));
+                         qstrtostr(QObject::tr("<new bank>")));
         m_bankList.push_back(newBank);
 
         QTreeWidgetItem* newBankItem =
@@ -1096,7 +1096,7 @@ BankEditorDialog::slotAddKeyMapping()
         while (name == "" || device->getKeyMappingByName(qstrtostr(name)) != 0) {
             ++n;
             if (n == 1)
-                name = i18n("<new mapping>");
+                name = QObject::tr("<new mapping>");
             else
                 name = i18n("<new mapping %1>", n);
         }
@@ -1142,7 +1142,7 @@ BankEditorDialog::slotDelete()
             QMessageBox::warning(
               dynamic_cast<QWidget*>(this),
               "", /* no title */
-              i18n("Really delete this bank?"),
+              QObject::tr("Really delete this bank?"),
               QMessageBox::Yes | QMessageBox::No,
               QMessageBox::No);
 
@@ -1195,7 +1195,7 @@ BankEditorDialog::slotDelete()
             QMessageBox::warning(
               dynamic_cast<QWidget*>(this),
               "", /* no title */
-              i18n("Really delete this key mapping?"),
+              QObject::tr("Really delete this key mapping?"),
               QMessageBox::Yes | QMessageBox::No,
               QMessageBox::No);
 
@@ -1247,7 +1247,7 @@ BankEditorDialog::slotDeleteAll()
     MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(deviceItem);
 
-    QString question = i18n("Really delete all banks for ") +
+    QString question = QObject::tr("Really delete all banks for ") +
                        strtoqstr(device->getName()) + QString(" ?");
 
     int reply = QMessageBox::warning(
@@ -1577,11 +1577,11 @@ BankEditorDialog::slotImport()
     QUrl url = QFileDialog::getOpenURL
                (deviceDir,
                 "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
-                this, i18n("Import Banks from Device in File"));
+                this, QObject::tr("Import Banks from Device in File"));
 	*/
 	
 	//### use simple file dialog for now:
-	QString url_str = QFileDialog::getOpenFileName( this, i18n("Import Banks from Device in File"), deviceDir );
+	QString url_str = QFileDialog::getOpenFileName( this, QObject::tr("Import Banks from Device in File"), deviceDir );
 	QUrl url( url_str );
 	
     if (url.isEmpty())
@@ -1598,7 +1598,7 @@ BankEditorDialog::slotImport()
             QMessageBox::critical(
               dynamic_cast<QWidget*>(this),
               "", /* no title */
-              i18n("Some internal error: cannot locate selected device"),
+              QObject::tr("Some internal error: cannot locate selected device"),
               QMessageBox::Ok,
               QMessageBox::Ok);
             return ;
@@ -1750,7 +1750,7 @@ BankEditorDialog::slotExport()
 
     QString name =
         QFileDialog::getSaveFileName(this,
-                                     i18n("Export Device as..."),
+                                     QObject::tr("Export Device as..."),
                                      dir,
                                      (extension.isEmpty() ? QString("*") : ("*." + extension)));
 
@@ -1772,7 +1772,7 @@ BankEditorDialog::slotExport()
         QMessageBox::warning(
           dynamic_cast<QWidget*>(this),
           "", /* no title */
-          i18n("You have specified a directory"),
+          QObject::tr("You have specified a directory"),
           QMessageBox::Ok,
           QMessageBox::Ok);
         return ;
@@ -1782,7 +1782,7 @@ BankEditorDialog::slotExport()
         int overwrite = QMessageBox::question(
                           dynamic_cast<QWidget*>(this),
                           "", /* no title */
-                          i18n("The specified file exists.  Overwrite?"),
+                          QObject::tr("The specified file exists.  Overwrite?"),
                           QMessageBox::Yes | QMessageBox::No,
                           QMessageBox::No);
  
@@ -1832,8 +1832,8 @@ BankEditorDialog::closeEvent(QCloseEvent *e)
     if (m_modified) {
         int res = QMessageBox::warning(
                     dynamic_cast<QWidget*>(this),
-                    i18n("Unsaved Changes"),
-                    i18n("There are unsaved changes.\n"
+                    QObject::tr("Unsaved Changes"),
+                    QObject::tr("There are unsaved changes.\n"
                          "Do you want to apply the changes before exiting "
                          "the Bank Editor?"),
                     QMessageBox::Yes | QMessageBox::No,

@@ -52,7 +52,7 @@ PresetHandlerDialog::PresetHandlerDialog(QWidget *parent,
 {
     m_presets = new PresetGroup();
     m_categories = m_presets->getCategories();
-    if (m_fromNotation) setWindowTitle(i18n("Convert notation for..."));
+    if (m_fromNotation) setWindowTitle(QObject::tr("Convert notation for..."));
 
     initDialog();
 }
@@ -71,7 +71,7 @@ PresetHandlerDialog::initDialog()
     RG_DEBUG << "PresetHandlerDialog::initDialog()" << endl;
 
     setModal(true);
-    setWindowTitle(i18n("Load track parameters preset"));
+    setWindowTitle(QObject::tr("Load track parameters preset"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 
@@ -83,37 +83,37 @@ PresetHandlerDialog::initDialog()
 
     metagrid->addWidget(frame, 0, 0);
 
-    QLabel *title = new QLabel(i18n("Select preset track parameters for:"), frame);
-    if (m_fromNotation) title->setText(i18n("Create appropriate notation for:"));
+    QLabel *title = new QLabel(QObject::tr("Select preset track parameters for:"), frame);
+    if (m_fromNotation) title->setText(QObject::tr("Create appropriate notation for:"));
 
-    QLabel *catlabel = new QLabel(i18n("Category"), frame);
+    QLabel *catlabel = new QLabel(QObject::tr("Category"), frame);
     m_categoryCombo = new QComboBox(frame);
 
-    QLabel *inslabel = new QLabel(i18n("Instrument"), frame);
+    QLabel *inslabel = new QLabel(QObject::tr("Instrument"), frame);
     m_instrumentCombo = new QComboBox(frame);
 
-    QLabel *plylabel = new QLabel(i18n("Player Ability"), frame);
+    QLabel *plylabel = new QLabel(QObject::tr("Player Ability"), frame);
     m_playerCombo = new QComboBox(frame);
-    m_playerCombo->addItem(i18n("Amateur"));
-    m_playerCombo->addItem(i18n("Professional"));
+    m_playerCombo->addItem(QObject::tr("Amateur"));
+    m_playerCombo->addItem(QObject::tr("Professional"));
 
-    QGroupBox *scopeBox = new QGroupBox(i18n("Scope"));
+    QGroupBox *scopeBox = new QGroupBox(QObject::tr("Scope"));
     QVBoxLayout *scopeBoxLayout = new QVBoxLayout;
     if (m_fromNotation) {
         QRadioButton *onlySelectedSegments = new
-            QRadioButton(i18n("Only selected segments"));
+            QRadioButton(QObject::tr("Only selected segments"));
         scopeBoxLayout->addWidget(onlySelectedSegments);
         m_convertAllSegments = new 
-            QRadioButton(i18n("All segments in this track"));
+            QRadioButton(QObject::tr("All segments in this track"));
         scopeBoxLayout->addWidget(m_convertAllSegments);
         onlySelectedSegments->setChecked(true);
     }
     else {
         QRadioButton *onlyNewSegments = new 
-            QRadioButton(i18n("Only for new segments"));
+            QRadioButton(QObject::tr("Only for new segments"));
         scopeBoxLayout->addWidget(onlyNewSegments);
         m_convertSegments = new 
-            QRadioButton(i18n("Convert existing segments"));
+            QRadioButton(QObject::tr("Convert existing segments"));
         scopeBoxLayout->addWidget(m_convertSegments);
         onlyNewSegments->setChecked(true);
     }

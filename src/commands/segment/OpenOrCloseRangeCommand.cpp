@@ -33,7 +33,7 @@ OpenOrCloseRangeCommand::OpenOrCloseRangeCommand(Composition *composition,
         timeT rangeBegin,
         timeT rangeEnd,
         bool open) :
-        NamedCommand(i18n("Open or Close Range")),
+        NamedCommand(QObject::tr("Open or Close Range")),
         m_composition(composition),
         m_beginTime(rangeBegin),
         m_endTime(rangeEnd),

@@ -724,13 +724,13 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     }
 
     if (ec == 2) {
-	emit setOperationName(i18n("Converting audio file..."));
+	emit setOperationName(QObject::tr("Converting audio file..."));
     } else if (ec == 3) {
-	emit setOperationName(i18n("Resampling audio file..."));
+	emit setOperationName(QObject::tr("Resampling audio file..."));
     } else if (ec == 4) {
-	emit setOperationName(i18n("Converting and resampling audio file..."));
+	emit setOperationName(QObject::tr("Converting and resampling audio file..."));
     } else {
-	emit setOperationName(i18n("Importing audio file..."));
+	emit setOperationName(QObject::tr("Importing audio file..."));
     }
 
     AudioFileId newId = getFirstUnusedID();
@@ -790,7 +790,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, qstrtostr( i18n("Failed to convert or resample audio file on import")) );
+	throw SoundFile::BadSoundFileException(fileName, qstrtostr( QObject::tr("Failed to convert or resample audio file on import")) );
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }

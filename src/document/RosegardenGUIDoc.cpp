@@ -333,7 +333,7 @@ bool RosegardenGUIDoc::saveIfModified()
 
     RosegardenGUIApp *win = (RosegardenGUIApp *)parent();
 
-    int wantSave = QMessageBox::warning( dynamic_cast<QWidget*>(win), i18n("Warning"), i18n("The current file has been modified.\n"                          "Do you want to save it?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
+    int wantSave = QMessageBox::warning( dynamic_cast<QWidget*>(win), QObject::tr("Warning"), QObject::tr("The current file has been modified.\n"                          "Do you want to save it?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
 
     RG_DEBUG << "wantSave = " << wantSave << endl;
 
@@ -502,7 +502,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         UnusedAudioSelectionDialog *dialog =
             new UnusedAudioSelectionDialog
             (0,
-             i18n("The following audio files were recorded during this session but have been unloaded\nfrom the audio file manager, and so are no longer in use in the document you are saving.\n\nYou may want to clean up these files to save disk space.\n\nPlease select any you wish to delete permanently from the hard disk.\n"),
+             QObject::tr("The following audio files were recorded during this session but have been unloaded\nfrom the audio file manager, and so are no longer in use in the document you are saving.\n\nYou may want to clean up these files to save disk space.\n\nPlease select any you wish to delete permanently from the hard disk.\n"),
              recordedOrphans);
 
         if (dialog->exec() != QDialog::Accepted) {
@@ -542,7 +542,7 @@ void RosegardenGUIDoc::newDocument()
 {
     setModified(false);
     setAbsFilePath(QString::null);
-    setTitle(i18n("Untitled"));
+    setTitle(QObject::tr("Untitled"));
     CommandHistory::getInstance()->clear();
 }
 
@@ -583,7 +583,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Reading file..."),
+    ProgressDialog progressDlg(QObject::tr("Reading file..."),
                                100,
                                (QWidget*)parent());
 
@@ -599,7 +599,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
     bool cancelled = false;
 
     bool okay = GzipFile::readFromFile(filename, fileContents);
-    if (!okay) errMsg = i18n("Could not open Rosegarden file");
+    if (!okay) errMsg = QObject::tr("Could not open Rosegarden file");
     else {
 	okay = xmlParse(fileContents, errMsg, &progressDlg,
 			permanent, cancelled);
@@ -655,7 +655,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
 
     // We might need a progress dialog when we generate previews,
     // reuse the previous one
-    progressDlg.setLabelText(i18n("Generating audio previews..."));
+    progressDlg.setLabelText(QObject::tr("Generating audio previews..."));
 
 	// old qt3:
 	//connect(&m_audioFileManager, SIGNAL(setValue(int)),
@@ -694,7 +694,7 @@ void
 RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
                                 int options)
 {
-    MacroCommand *command = new MacroCommand(i18n("Merge"));
+    MacroCommand *command = new MacroCommand(QObject::tr("Merge"));
 
     timeT time0 = 0;
     if (options & MERGE_AT_END) {
@@ -1223,7 +1223,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 	
     if (!autosave) {
 
-        progressDlg = new ProgressDialog(i18n("Saving file..."),
+        progressDlg = new ProgressDialog(QObject::tr("Saving file..."),
                                          100,
                                          (QWidget*)parent());
 		//progress = progressDlg->progressBar();
@@ -1608,7 +1608,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
         if (handler.isCancelled()) {
             RG_DEBUG << "File load cancelled\n";
             StartupLogo::hideIfStillThere();
-            QMessageBox::information(0, "", i18n("File load cancelled"));
+            QMessageBox::information(0, "", QObject::tr("File load cancelled"));
             cancelled = true;
             return true;
         } else {
@@ -1628,10 +1628,10 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
 #ifdef HAVE_LIBJACK
                 QMessageBox::information
-                    (0, "", i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
+                    (0, "", QObject::tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
 #else
                 QMessageBox::information
-                    (0, "", i18n("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
+                    (0, "", QObject::tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
 #endif
             }
             CurrentProgressDialog::thaw();
@@ -1679,7 +1679,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 CurrentProgressDialog::freeze();
                 
                 QMessageBox::information(0, "", i18n("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>", sr),
-                                         i18n("Inconsistent sample rates"),
+                                         QObject::tr("Inconsistent sample rates"),
                                          "file-load-inconsistent-samplerates");
                     
                 CurrentProgressDialog::thaw();
@@ -1693,7 +1693,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
                 // another file (which is the normal case in which we
                 // have no plugin manager).
 
-                QString msg(i18n("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
+                QString msg(QObject::tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
 
                 for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
                      i != handler.pluginsNotFound().end(); ++i) {
@@ -1715,7 +1715,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
             if (handler.isDeprecated() && !shownWarning) {
                 
-                QString msg(i18n("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
+                QString msg(QObject::tr("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
                 slotDocumentModified(); // so file can be re-saved immediately
                 
                 StartupLogo::hideIfStillThere();
@@ -2217,7 +2217,7 @@ RosegardenGUIDoc::stopRecordingMidi()
         }
 
         // Quantize for notation only -- doesn't affect performance timings.
-        MacroCommand *command = new MacroCommand(i18n("Insert Recorded MIDI"));
+        MacroCommand *command = new MacroCommand(QObject::tr("Insert Recorded MIDI"));
 
         command->addCommand(new EventQuantizeCommand
                             (*s,
@@ -2499,7 +2499,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     }
 
     recordMIDISegment->setLabel(appendLabel(label,
-            qstrtostr(i18n("(recorded)"))));
+            qstrtostr(QObject::tr("(recorded)"))));
 
     Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
@@ -2583,7 +2583,7 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
         }
     }
 
-    recordSegment->setLabel(appendLabel(label, qstrtostr(i18n("(recorded)"))));
+    recordSegment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(recorded)"))));
     recordSegment->setAudioFileId(auid);
 
     // set color for audio segment to distinguish it from a MIDI segment on an
@@ -2731,7 +2731,7 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
     // Create a progress dialog
     //
     ProgressDialog *progressDlg = new ProgressDialog
-                                  (i18n("Generating audio preview..."), 100, (QWidget*)parent());
+                                  (QObject::tr("Generating audio preview..."), 100, (QWidget*)parent());
     progressDlg->setAutoClose(false);
     progressDlg->setAutoReset(false);
     progressDlg->show();

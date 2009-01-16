@@ -49,7 +49,7 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
         m_doc(doc)
 {
     setModal(true);
-    setWindowTitle(i18n("Remap Instrument assigments..."));
+    setWindowTitle(QObject::tr("Remap Instrument assigments..."));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -58,15 +58,15 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
     metagrid->addWidget(vBox, 0, 0);
 
 
-    QGroupBox *buttonGroup = new QGroupBox(i18n("Device or Instrument"));
+    QGroupBox *buttonGroup = new QGroupBox(QObject::tr("Device or Instrument"));
     QVBoxLayout *buttonGroupLayout = new QVBoxLayout;
     vBoxLayout->addWidget(buttonGroup);
 
-    buttonGroupLayout->addWidget(new QLabel(i18n("Remap Tracks by all "
+    buttonGroupLayout->addWidget(new QLabel(QObject::tr("Remap Tracks by all "
                             "Instruments on a Device or by single Instrument")));
-    m_deviceButton = new QRadioButton(i18n("Device"));
+    m_deviceButton = new QRadioButton(QObject::tr("Device"));
     buttonGroupLayout->addWidget(m_deviceButton);
-    m_instrumentButton = new QRadioButton(i18n("Instrument"));
+    m_instrumentButton = new QRadioButton(QObject::tr("Instrument"));
     buttonGroupLayout->addWidget(m_instrumentButton);
     buttonGroup->setLayout(buttonGroupLayout);
 
@@ -75,12 +75,12 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
     connect(m_instrumentButton, SIGNAL(released()),
             this, SLOT(slotRemapReleased()));
 
-    QGroupBox *groupBox = new QGroupBox(i18n("Choose Source and Destination"));
+    QGroupBox *groupBox = new QGroupBox(QObject::tr("Choose Source and Destination"));
     QGridLayout *groupBoxLayout = new QGridLayout;
     vBoxLayout->addWidget(groupBox);
 
-    groupBoxLayout->addWidget(new QLabel(i18n("From")), 0, 0);
-    groupBoxLayout->addWidget(new QLabel(i18n("To")), 0, 1);
+    groupBoxLayout->addWidget(new QLabel(QObject::tr("From")), 0, 0);
+    groupBoxLayout->addWidget(new QLabel(QObject::tr("To")), 0, 1);
     m_fromCombo = new QComboBox(groupBox);
     groupBoxLayout->addWidget(m_fromCombo, 1, 0);
     m_toCombo = new QComboBox(groupBox);
@@ -135,8 +135,8 @@ RemapInstrumentDialog::populateCombo()
         }
 
         if (m_devices.size() == 0) {
-            m_fromCombo->addItem(i18n("<no devices>"));
-            m_toCombo->addItem(i18n("<no devices>"));
+            m_fromCombo->addItem(QObject::tr("<no devices>"));
+            m_toCombo->addItem(QObject::tr("<no devices>"));
         }
     } else {
         m_instruments = studio->getPresentationInstruments();

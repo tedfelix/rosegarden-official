@@ -47,7 +47,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     //setHelp("studio-midi-filters");
 
     setModal(true);
-    setWindowTitle(i18n("Modify MIDI filters..."));
+    setWindowTitle(QObject::tr("Modify MIDI filters..."));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -57,17 +57,17 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
 
 
     m_thruBox = new QGroupBox( 
-                         i18n("THRU events to ignore"), hBox );
+                         QObject::tr("THRU events to ignore"), hBox );
     QVBoxLayout *thruBoxLayout = new QVBoxLayout;
     hBoxLayout->addWidget(m_thruBox);
 
-    QCheckBox *noteThru = new QCheckBox(i18n("Note"), m_thruBox);
-    QCheckBox *progThru = new QCheckBox(i18n("Program Change"), m_thruBox);
-    QCheckBox *keyThru = new QCheckBox(i18n("Key Pressure"), m_thruBox);
-    QCheckBox *chanThru = new QCheckBox(i18n("Channel Pressure"), m_thruBox);
-    QCheckBox *pitchThru = new QCheckBox(i18n("Pitch Bend"), m_thruBox);
-    QCheckBox *contThru = new QCheckBox(i18n("Controller"), m_thruBox);
-    QCheckBox *sysThru = new QCheckBox(i18n("System Exclusive"), m_thruBox);
+    QCheckBox *noteThru = new QCheckBox(QObject::tr("Note"), m_thruBox);
+    QCheckBox *progThru = new QCheckBox(QObject::tr("Program Change"), m_thruBox);
+    QCheckBox *keyThru = new QCheckBox(QObject::tr("Key Pressure"), m_thruBox);
+    QCheckBox *chanThru = new QCheckBox(QObject::tr("Channel Pressure"), m_thruBox);
+    QCheckBox *pitchThru = new QCheckBox(QObject::tr("Pitch Bend"), m_thruBox);
+    QCheckBox *contThru = new QCheckBox(QObject::tr("Controller"), m_thruBox);
+    QCheckBox *sysThru = new QCheckBox(QObject::tr("System Exclusive"), m_thruBox);
 
     thruBoxLayout->addWidget(noteThru);
     thruBoxLayout->addWidget(progThru);
@@ -102,17 +102,17 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
         sysThru->setChecked(true);
 
     m_recordBox = new QGroupBox(
-                         i18n("RECORD events to ignore"), hBox );
+                         QObject::tr("RECORD events to ignore"), hBox );
     QVBoxLayout *recordBoxLayout = new QVBoxLayout;
     hBoxLayout->addWidget(m_recordBox);
 
-    QCheckBox *noteRecord = new QCheckBox(i18n("Note"), m_recordBox);
-    QCheckBox *progRecord = new QCheckBox(i18n("Program Change"), m_recordBox);
-    QCheckBox *keyRecord = new QCheckBox(i18n("Key Pressure"), m_recordBox);
-    QCheckBox *chanRecord = new QCheckBox(i18n("Channel Pressure"), m_recordBox);
-    QCheckBox *pitchRecord = new QCheckBox(i18n("Pitch Bend"), m_recordBox);
-    QCheckBox *contRecord = new QCheckBox(i18n("Controller"), m_recordBox);
-    QCheckBox *sysRecord = new QCheckBox(i18n("System Exclusive"), m_recordBox);
+    QCheckBox *noteRecord = new QCheckBox(QObject::tr("Note"), m_recordBox);
+    QCheckBox *progRecord = new QCheckBox(QObject::tr("Program Change"), m_recordBox);
+    QCheckBox *keyRecord = new QCheckBox(QObject::tr("Key Pressure"), m_recordBox);
+    QCheckBox *chanRecord = new QCheckBox(QObject::tr("Channel Pressure"), m_recordBox);
+    QCheckBox *pitchRecord = new QCheckBox(QObject::tr("Pitch Bend"), m_recordBox);
+    QCheckBox *contRecord = new QCheckBox(QObject::tr("Controller"), m_recordBox);
+    QCheckBox *sysRecord = new QCheckBox(QObject::tr("System Exclusive"), m_recordBox);
 
     recordBoxLayout->addWidget(noteRecord);
     recordBoxLayout->addWidget(progRecord);

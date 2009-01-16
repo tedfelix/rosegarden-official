@@ -29,7 +29,7 @@ namespace Rosegarden
 
 EventInsertionCommand::EventInsertionCommand(Segment &segment,
         Event *event) :
-        BasicCommand(i18n("Insert Event"), segment, event->getAbsoluteTime(),
+        BasicCommand(QObject::tr("Insert Event"), segment, event->getAbsoluteTime(),
                      event->getAbsoluteTime() + event->getDuration()),
         m_event(new Event(*event))
 {

@@ -41,32 +41,32 @@ RespellCommand::getGlobalName(RespellType type)
             QString s(i18n("Respell with %1"));
             //!!! should be in notationstrings:
             if (type.accidental == DoubleSharp) {
-                s = s.arg(i18n("Do&uble Sharp"));
+                s = s.arg(QObject::tr("Do&uble Sharp"));
             } else if (type.accidental == Sharp) {
-                s = s.arg(i18n("&Sharp"));
+                s = s.arg(QObject::tr("&Sharp"));
             } else if (type.accidental == Flat) {
-                s = s.arg(i18n("&Flat"));
+                s = s.arg(QObject::tr("&Flat"));
             } else if (type.accidental == DoubleFlat) {
-                s = s.arg(i18n("Dou&ble Flat"));
+                s = s.arg(QObject::tr("Dou&ble Flat"));
             } else if (type.accidental == Natural) {
-                s = s.arg(i18n("&Natural"));
+                s = s.arg(QObject::tr("&Natural"));
             } else {
-                s = s.arg(i18n("N&one"));
+                s = s.arg(QObject::tr("N&one"));
             }
             return s;
         }
 
     case RespellType::Up:
-        return i18n("Respell Accidentals &Upward");
+        return QObject::tr("Respell Accidentals &Upward");
 
     case RespellType::Down:
-        return i18n("Respell Accidentals &Downward");
+        return QObject::tr("Respell Accidentals &Downward");
 
     case RespellType::Restore:
-        return i18n("&Restore Accidentals");
+        return QObject::tr("&Restore Accidentals");
     }
 
-    return i18n("Respell Accidentals");
+    return QObject::tr("Respell Accidentals");
 }
 
 RespellCommand::RespellType

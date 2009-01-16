@@ -110,7 +110,7 @@ public:
     EditViewCommandArgumentQuerier(EditView *view) : m_view(view) { }
     QString getText(QString message, bool *ok) {
         return QInputDialog::getText(m_view,
-                                     i18n("Rosegarden - Query"),
+                                     QObject::tr("Rosegarden - Query"),
                                      message, QLineEdit::Normal, "", ok);
     }
 
@@ -147,7 +147,7 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
     } catch (CommandFailed f) {
 
         QMessageBox::warning(m_view,
-                             i18n("Rosegarden - Warning"),
+                             QObject::tr("Rosegarden - Warning"),
                              strtoqstr(f.getMessage()),
                              QMessageBox::Ok);
     }

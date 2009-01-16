@@ -35,7 +35,7 @@ namespace Rosegarden
 PasteRangeCommand::PasteRangeCommand(Composition *composition,
                                      Clipboard *clipboard,
                                      timeT t0) :
-        MacroCommand(i18n("Paste Range"))
+        MacroCommand(QObject::tr("Paste Range"))
 {
     timeT clipBeginTime = clipboard->getBaseTime();
 

@@ -95,9 +95,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
     mainLayout->setSpacing(10);
 
-    setWindowTitle(i18n("Manage MIDI Devices"));
+    setWindowTitle(QObject::tr("Manage MIDI Devices"));
 
-    QGroupBox *groupBox = new QGroupBox(i18n("Play devices"), mainBox);
+    QGroupBox *groupBox = new QGroupBox(QObject::tr("Play devices"), mainBox);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
 
@@ -110,8 +110,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	*/
 	m_playTable->setShowGrid(false);
 	
-	m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, new QTableWidgetItem( i18n("Device")));
-	m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, new QTableWidgetItem( i18n("Connection")));
+	m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, new QTableWidgetItem( QObject::tr("Device")));
+	m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, new QTableWidgetItem( QObject::tr("Connection")));
 	
     m_playTable->horizontalHeader()->show();
     m_playTable->verticalHeader()->hide();
@@ -127,12 +127,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     QGridLayout *vlayout = new QGridLayout(frame);
     groupBoxLayout->addWidget(frame);
 
-    QPushButton *addButton = new QPushButton(i18n("New"));
-    m_deletePlayButton = new QPushButton(i18n("Delete"));
-    m_importButton = new QPushButton(i18n("Import..."));
-    m_exportButton = new QPushButton(i18n("Export..."));
-    m_banksButton = new QPushButton(i18n("Banks..."));
-    m_controllersButton = new QPushButton(i18n("Control Events..."));
+    QPushButton *addButton = new QPushButton(QObject::tr("New"));
+    m_deletePlayButton = new QPushButton(QObject::tr("Delete"));
+    m_importButton = new QPushButton(QObject::tr("Import..."));
+    m_exportButton = new QPushButton(QObject::tr("Export..."));
+    m_banksButton = new QPushButton(QObject::tr("Banks..."));
+    m_controllersButton = new QPushButton(QObject::tr("Control Events..."));
 
     vlayout->addWidget(addButton, 0, 0);
     vlayout->addWidget(m_deletePlayButton, 0, 1);
@@ -146,12 +146,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     frame->setLayout(vlayout);
     groupBox->setLayout(groupBoxLayout);
 
-    addButton->setToolTip(i18n("Create a new Play device"));
-    m_deletePlayButton->setToolTip(i18n("Delete the selected device"));
-    m_importButton->setToolTip(i18n("Import Bank, Program and Controller data from a Rosegarden file to the selected device"));
-    m_exportButton->setToolTip(i18n("Export Bank and Controller data to a Rosegarden interchange file"));
-    m_banksButton->setToolTip(i18n("View and edit Banks and Programs for the selected device"));
-    m_controllersButton->setToolTip(i18n("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
+    addButton->setToolTip(QObject::tr("Create a new Play device"));
+    m_deletePlayButton->setToolTip(QObject::tr("Delete the selected device"));
+    m_importButton->setToolTip(QObject::tr("Import Bank, Program and Controller data from a Rosegarden file to the selected device"));
+    m_exportButton->setToolTip(QObject::tr("Export Bank and Controller data to a Rosegarden interchange file"));
+    m_banksButton->setToolTip(QObject::tr("View and edit Banks and Programs for the selected device"));
+    m_controllersButton->setToolTip(QObject::tr("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(m_deletePlayButton, SIGNAL(clicked()), this, SLOT(slotDeletePlayDevice()));
@@ -165,7 +165,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     connect(m_playTable, SIGNAL(currentChanged(int, int)),
             this, SLOT(slotPlayDeviceSelected (int, int)));
 
-    groupBox = new QGroupBox(i18n("Record devices"), mainBox);
+    groupBox = new QGroupBox(QObject::tr("Record devices"), mainBox);
     groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
 
@@ -178,9 +178,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_recordTable->setColumnMovingEnabled(false);
 	*/
 	
-    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, new QTableWidgetItem( i18n("Device")));
-	m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, new QTableWidgetItem( i18n("Current")));
-	m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, new QTableWidgetItem( i18n("Connection")));
+    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, new QTableWidgetItem( QObject::tr("Device")));
+	m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, new QTableWidgetItem( QObject::tr("Current")));
+	m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, new QTableWidgetItem( QObject::tr("Connection")));
 	
     m_recordTable->horizontalHeader()->show();
     m_recordTable->verticalHeader()->hide();
@@ -198,8 +198,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     vlayout = new QGridLayout(frame);
     groupBoxLayout->addWidget(frame);
 
-    addButton = new QPushButton(i18n("New"), frame);
-    m_deleteRecordButton = new QPushButton(i18n("Delete"), frame);
+    addButton = new QPushButton(QObject::tr("New"), frame);
+    m_deleteRecordButton = new QPushButton(QObject::tr("Delete"), frame);
 
     vlayout->addWidget(addButton, 0, 0);
     vlayout->addWidget(m_deleteRecordButton, 0, 1);
@@ -209,8 +209,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     frame->setLayout(vlayout);
     groupBox->setLayout(groupBoxLayout);
 
-    addButton->setToolTip(i18n("Create a new Record device"));
-    m_deleteRecordButton->setToolTip(i18n("Delete the selected device"));
+    addButton->setToolTip(QObject::tr("Create a new Record device"));
+    m_deleteRecordButton->setToolTip(QObject::tr("Delete the selected device"));
 
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(m_deleteRecordButton, SIGNAL(clicked()), this, SLOT(slotDeleteRecordDevice()));
@@ -222,7 +222,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     connect(document, SIGNAL(devicesResyncd()), this, SLOT(slotDevicesResyncd()));
 
-    m_noConnectionString = i18n("No connection");
+    m_noConnectionString = QObject::tr("No connection");
 
     slotDevicesResyncd();
 
@@ -238,7 +238,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-    QPushButton *closeButton = new QPushButton(i18n("Close"), btnBox);
+    QPushButton *closeButton = new QPushButton(QObject::tr("Close"), btnBox);
 
     layout->addStretch(10);
     layout->addWidget(closeButton);
@@ -258,13 +258,13 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     // some adjustments
 	/*
-    new KToolBarPopupAction(i18n("Und&o"),
+    new KToolBarPopupAction(QObject::tr("Und&o"),
                             "undo",
                             KStandardShortcut::shortcut(KStandardShortcut::Undo),
                             actionCollection(),
                             KStandardAction::stdName(KStandardAction::Undo));
 
-    new KToolBarPopupAction(i18n("Re&do"),
+    new KToolBarPopupAction(QObject::tr("Re&do"),
                             "redo",
                             KStandardShortcut::shortcut(KStandardShortcut::Redo),
                             actionCollection(),
@@ -434,15 +434,15 @@ DeviceManagerDialog::populate()
         Q3CheckTableItem *check = new Q3CheckTableItem(m_recordTable, QString());
         //check->setChecked((*it)->getId() == recordDevice);
         //check->setText(((*it)->getId() == recordDevice) ?
-        //	       i18n("Yes") : i18n("No"));
+        //	       QObject::tr("Yes") : QObject::tr("No"));
         check->setChecked((*it)->isRecording());
-        check->setText((*it)->isRecording() ? i18n("Yes") : i18n("No"));
+        check->setText((*it)->isRecording() ? QObject::tr("Yes") : QObject::tr("No"));
         m_recordTable->setItem(deviceCount, RECORD_CURRENT_COL, check);
 		*/
 
 		QCheckBox *check = new QCheckBox( m_recordTable );
 		check->setChecked( (*it)->isRecording() );
-		check->setText( (*it)->isRecording() ? i18n("Yes") : i18n("No") );
+		check->setText( (*it)->isRecording() ? QObject::tr("Yes") : QObject::tr("No") );
 		m_recordTable->setCellWidget( deviceCount, RECORD_CURRENT_COL, check );		
 
 //         m_recordTable->adjustRow(deviceCount);	//&&&
@@ -476,7 +476,7 @@ DeviceManagerDialog::makeConnectionList(MidiDevice::DeviceDirection direction,
                     getConnection(Device::Midi, direction, i));
     }
 
-    list.append(i18n("No connection"));
+    list.append(QObject::tr("No connection"));
 }
 
 void
@@ -510,7 +510,7 @@ DeviceManagerDialog::slotAddPlayDevice()
         connection = m_playConnections[m_playConnections.size() - 1];
     CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
         (m_studio,
-         qstrtostr(i18n("New Device")),
+         qstrtostr(QObject::tr("New Device")),
          Device::Midi,
          MidiDevice::Play,
          qstrtostr(connection));
@@ -525,7 +525,7 @@ DeviceManagerDialog::slotAddRecordDevice()
         connection = m_recordConnections[m_recordConnections.size() - 1];
     CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
         (m_studio,
-         qstrtostr(i18n("New Device")),
+         qstrtostr(QObject::tr("New Device")),
          Device::Midi,
          MidiDevice::Record,
          qstrtostr(connection));
@@ -660,7 +660,7 @@ DeviceManagerDialog::slotRecordValueChanged(int row, int col)
         // The following lines are not strictly needed, but give the checkboxes
         // a smoother behavior while waiting a confirmation from the sequencer.
         //
-        check->setText(actionConnect ? i18n("Yes") : i18n("No"));
+        check->setText(actionConnect ? QObject::tr("Yes") : QObject::tr("No"));
         MidiDevice *device =
             dynamic_cast<MidiDevice*>(m_studio->getDevice(id));
         device->setRecording(actionConnect);
@@ -721,10 +721,10 @@ DeviceManagerDialog::slotImport()
     KURL url = KFileDialog::getOpenURL
         (deviceDir,
          "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
-         this, i18n("Import from Device in File"));
+         this, QObject::tr("Import from Device in File"));
 	*/
 	//### use simple file dialog for now:
-	QString url_str = QFileDialog::getOpenFileName( this, i18n("Import from Device in File"), deviceDir );
+	QString url_str = QFileDialog::getOpenFileName( this, QObject::tr("Import from Device in File"), deviceDir );
 
 	QUrl url( url_str );
 	
@@ -790,13 +790,13 @@ DeviceManagerDialog::slotExport()
 {
     QString extension = "rgd";
 
-	QString name = QFileDialog::getSaveFileName( this, i18n("Export Device as..."), QDir::currentPath(), 
+	QString name = QFileDialog::getSaveFileName( this, QObject::tr("Export Device as..."), QDir::currentPath(), 
 			(extension.isEmpty() ? QString("*") : ("*." + extension)) );
 			/*
         KFileDialog::getSaveFileName(":ROSEGARDEN",
                                      (extension.isEmpty() ? QString("*") : ("*." + extension)),
                                      this,
-                                     i18n("Export Device as..."));
+                                     QObject::tr("Export Device as..."));
 */
     // Check for the existence of the name
     if (name.isEmpty())
@@ -816,7 +816,7 @@ DeviceManagerDialog::slotExport()
         QMessageBox::warning
             (dynamic_cast<QWidget*>(this),
             "", /* stupid extra parameter because pure Qt sucks */
-            i18n("You have specified a directory"),
+            QObject::tr("You have specified a directory"),
             QMessageBox::Ok,
             QMessageBox::Ok);
         return ;
@@ -826,7 +826,7 @@ DeviceManagerDialog::slotExport()
         int overwrite = QMessageBox::question
             (dynamic_cast<QWidget*>(this),
             "", /* stupid extra parameter because pure Qt sucks */
-            i18n("The specified file exists.  Overwrite?"),
+            QObject::tr("The specified file exists.  Overwrite?"),
             QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
         if (overwrite != QMessageBox::Yes)

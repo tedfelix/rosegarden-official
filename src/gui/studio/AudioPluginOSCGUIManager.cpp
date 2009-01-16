@@ -434,7 +434,7 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
 {
     PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container)
-        return i18n("Rosegarden Plugin");
+        return QObject::tr("Rosegarden Plugin");
     else {
         if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
             return i18n("Rosegarden: %1", strtoqstr(container->getPresentationName()));

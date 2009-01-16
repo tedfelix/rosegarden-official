@@ -66,7 +66,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             , m_guiManager(guiManager)
 #endif
     {
-        setWindowTitle(i18n("Manage Synth Plugins"));
+        setWindowTitle(QObject::tr("Manage Synth Plugins"));
 
         QFrame *mainBox = new QFrame(this);
         setCentralWidget(mainBox);
@@ -75,7 +75,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
         QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
         mainLayout->setSpacing(10);
 
-        QGroupBox *pluginFrame = new QGroupBox(i18n("Synth plugins"), mainBox);
+        QGroupBox *pluginFrame = new QGroupBox(QObject::tr("Synth plugins"), mainBox);
         pluginFrame->setContentsMargins(3, 3, 3, 3);
         QGridLayout *pluginLayout = new QGridLayout(pluginFrame);
         pluginLayout->setSpacing(3);
@@ -120,7 +120,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             int currentIndex = 0;
 
             QComboBox *pluginCombo = new QComboBox(pluginFrame);
-            pluginCombo->addItem(i18n("<none>"));
+            pluginCombo->addItem(QObject::tr("<none>"));
 
             for (size_t j = 0; j < m_synthPlugins.size(); ++j) {
 
@@ -144,14 +144,14 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
             m_synthCombos.push_back(pluginCombo);
 
-            QPushButton *controlsButton = new QPushButton(i18n("Controls"), pluginFrame);
+            QPushButton *controlsButton = new QPushButton(QObject::tr("Controls"), pluginFrame);
             pluginLayout->addWidget(controlsButton, i, 2);
             connect(controlsButton, SIGNAL(clicked()), this, SLOT(slotControlsButtonClicked()));
             m_controlsButtons.push_back(controlsButton);
 
 #ifdef HAVE_LIBLO
 
-            QPushButton *guiButton = new QPushButton(i18n("Editor >>"), pluginFrame);
+            QPushButton *guiButton = new QPushButton(QObject::tr("Editor >>"), pluginFrame);
             pluginLayout->addWidget(guiButton, i, 3);
             guiButton->setEnabled(m_guiManager->hasGUI
                                   (id, Instrument::SYNTH_PLUGIN_POSITION));
@@ -168,7 +168,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
         btnBox->setSizePolicy(
             QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-        QPushButton *closeButton = new QPushButton(i18n("Close"), btnBox);
+        QPushButton *closeButton = new QPushButton(QObject::tr("Close"), btnBox);
 
         btnBox->setContentsMargins(0,0,0,0);
         QHBoxLayout* layout = new QHBoxLayout(btnBox);

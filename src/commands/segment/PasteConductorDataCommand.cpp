@@ -31,7 +31,7 @@ namespace Rosegarden
 PasteConductorDataCommand::PasteConductorDataCommand(Composition *composition,
         Clipboard *clipboard,
         timeT t) :
-        NamedCommand(i18n("Paste Tempos and Time Signatures")),
+        NamedCommand(QObject::tr("Paste Tempos and Time Signatures")),
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_t0(t)

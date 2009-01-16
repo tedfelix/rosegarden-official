@@ -110,7 +110,7 @@ MidiMixerWindow::setupTabs()
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
-    setWindowTitle(i18n("MIDI Mixer"));
+    setWindowTitle(QObject::tr("MIDI Mixer"));
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
         dev = dynamic_cast<MidiDevice*>(*it);
@@ -139,7 +139,7 @@ MidiMixerWindow::setupTabs()
             //
             //QLabel *label = new QLabel(QString("%1 %2").
             //arg(strtoqstr(dev->getName()))
-            //.arg(i18n("MIDI Mixer")), m_tabFrame);
+            //.arg(QObject::tr("MIDI Mixer")), m_tabFrame);
 
             QLabel *label = new QLabel("", m_tabFrame);
             mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 0+1, Qt::AlignCenter);
@@ -152,17 +152,17 @@ MidiMixerWindow::setupTabs()
 
             // meter label
             //
-            //label = new QLabel(i18n("Meter"), m_tabFrame);
+            //label = new QLabel(QObject::tr("Meter"), m_tabFrame);
             //mainLayout->addWidget(label,
             //controls.size() + 1, 0, Qt::AlignCenter);
 
             // volume label
-            label = new QLabel(i18n("Volume"), m_tabFrame);
+            label = new QLabel(QObject::tr("Volume"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 2, 0,
                                   Qt::AlignCenter);
 
             // instrument label
-            label = new QLabel(i18n("Instrument"), m_tabFrame);
+            label = new QLabel(QObject::tr("Instrument"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 3, 0,
                                   Qt::AlignCenter);
 

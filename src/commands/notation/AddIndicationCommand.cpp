@@ -121,7 +121,7 @@ AddIndicationCommand::AddIndicationCommand(std::string indicationType,
     if (!canExecute()) {
         throw CommandFailed
             //!!! need to use text from trunk/src/gui/editors/notation/NotationView.cpp (but this requires an informal human-readable version of the indication name)
-            (qstrtostr(i18n("Can't add identical overlapping indications")));
+            (qstrtostr(QObject::tr("Can't add identical overlapping indications")));
     }
 }
 
@@ -222,26 +222,26 @@ QString
 AddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Indication::Slur) {
-        return i18n("Add S&lur");
+        return QObject::tr("Add S&lur");
     } else if (indicationType == Indication::PhrasingSlur) {
-        return i18n("Add &Phrasing Slur");
+        return QObject::tr("Add &Phrasing Slur");
     } else if (indicationType == Indication::QuindicesimaUp) {
-        return i18n("Add Double-Octave Up");
+        return QObject::tr("Add Double-Octave Up");
     } else if (indicationType == Indication::OttavaUp) {
-        return i18n("Add Octave &Up");
+        return QObject::tr("Add Octave &Up");
     } else if (indicationType == Indication::OttavaDown) {
-        return i18n("Add Octave &Down");
+        return QObject::tr("Add Octave &Down");
     } else if (indicationType == Indication::QuindicesimaDown) {
-        return i18n("Add Double Octave Down");
+        return QObject::tr("Add Double Octave Down");
 
         // We used to generate these ones from the internal names plus
         // caps, but that makes them untranslateable:
     } else if (indicationType == Indication::Crescendo) {
-        return i18n("Add &Crescendo");
+        return QObject::tr("Add &Crescendo");
     } else if (indicationType == Indication::Decrescendo) {
-        return i18n("Add &Decrescendo");
+        return QObject::tr("Add &Decrescendo");
     } else if (indicationType == Indication::Glissando) {
-        return i18n("Add &Glissando");
+        return QObject::tr("Add &Glissando");
     }
 
     QString n = i18n("Add &%1%2", (char)toupper(indicationType[0]), strtoqstr(indicationType.substr(1)));

@@ -45,7 +45,7 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         bool retune,
         std::string timeAdjust,
         Mark mark) :
-        BasicCommand(i18n("Insert Trigger Note"), segment,
+        BasicCommand(QObject::tr("Insert Trigger Note"), segment,
                      time, time + note.getDuration()),
         m_time(time),
         m_note(note),

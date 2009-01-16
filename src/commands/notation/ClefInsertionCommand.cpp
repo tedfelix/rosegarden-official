@@ -73,7 +73,7 @@ ClefInsertionCommand::getGlobalName(Clef *)
     	return i18n("Change to %1 Cle&f...").arg(name);
         } else {
     */ 
-    return i18n("Add Cle&f Change...");
+    return QObject::tr("Add Cle&f Change...");
     /*
         }
     */

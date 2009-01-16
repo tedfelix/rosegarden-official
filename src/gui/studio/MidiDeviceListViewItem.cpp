@@ -43,7 +43,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
         : QTreeWidgetItem(parent, //name,
 							new QTreeWidgetItem( 
 							QStringList()
-                        	<< QString(percussion ? i18n("Percussion Bank") : i18n("Bank"))
+                        	<< QString(percussion ? QObject::tr("Percussion Bank") : QObject::tr("Bank"))
                         	<< QString().setNum(msb)
 							<< QString().setNum(lsb)
 							)
@@ -56,7 +56,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
 MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
         QTreeWidgetItem* parent, QString name)
 	: QTreeWidgetItem(parent, //name, 
-						new QTreeWidgetItem( QStringList() << i18n("Key Mapping") << "" << "")    
+						new QTreeWidgetItem( QStringList() << QObject::tr("Key Mapping") << "" << "")    
 					 ),
 m_deviceId(deviceId)
 {

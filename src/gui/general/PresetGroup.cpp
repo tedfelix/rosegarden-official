@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 PresetGroup::PresetGroup() :
-        m_errorString(i18n("unknown error")),
+        m_errorString(QObject::tr("unknown error")),
         m_elCategoryName(""),
         m_elInstrumentName(""),
         m_elClef(0),
