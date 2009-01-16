@@ -7244,7 +7244,7 @@ invokeBrowser(QString url)
 void
 RosegardenGUIApp::slotTutorial()
 {
-    QString tutorialURL = i18n("http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html");
+    QString tutorialURL = i18n("http://www.rosegardenmusic.com/tutorials/en/chapter-0.html");
     invokeBrowser(tutorialURL);
 }
 
