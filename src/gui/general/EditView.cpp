@@ -175,7 +175,9 @@ EditView::~EditView()
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
 
-    delete m_commandRegistry;
+	
+	//&&&!!! removed: created SeqFault when closing MatrixView
+//     delete m_commandRegistry;
 }
 
 void EditView::updateBottomWidgetGeometry()
