@@ -40,9 +40,9 @@ ProgressDialog::ProgressDialog(QWidget *creator,
                                bool modal
 		):
 // 		QProgressDialog(creator, name,
-// 						i18n("Processing..."), QString::null, modal),
+// 						QObject::tr("Processing..."), QString::null, modal),
 		
-// 		QProgressDialog( i18n("Processing..."), QString("Cancel"), creator ),	//modal),
+// 		QProgressDialog( QObject::tr("Processing..."), QString("Cancel"), creator ),	//modal),
 		QProgressDialog( creator, Qt::Dialog ),		// creator = parent ??
         m_wasVisible(false),
         m_frozen(false),
@@ -57,12 +57,12 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 // 	setMinimum();
 // 	setMaximum();
 // 	setValue();
-// 	setLabelText( i18n("Processing...") );
-	setWindowTitle( i18n("Processing...") );
+// 	setLabelText( QObject::tr("Processing...") );
+	setWindowTitle( QObject::tr("Processing...") );
 	setCancelButtonText( QString("Cancel") );
 	
 	
-    setCaption(i18n("Processing..."));
+    setCaption(QObject::tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
 
@@ -93,11 +93,11 @@ ProgressDialog::ProgressDialog(
     bool modal) :
 //         QProgressDialog(creator,
 //                         name,
-//                         i18n("Processing..."),
+//                         QObject::tr("Processing..."),
 //                         labelText,
 //                         modal),
 		
-// 		QProgressDialog( i18n("Processing..."), QString("Cancel"), creator ),	//modal),
+// 		QProgressDialog( QObject::tr("Processing..."), QString("Cancel"), creator ),	//modal),
 		QProgressDialog( creator, Qt::Dialog ),	//modal),
 		
 		m_wasVisible(false),
@@ -114,8 +114,8 @@ ProgressDialog::ProgressDialog(
 // 	setMinimum();
 // 	setMaximum();
 // 	setValue();
-// 	setLabelText( i18n("Processing...") );
-	setWindowTitle( i18n("Processing...") );
+// 	setLabelText( QObject::tr("Processing...") );
+	setWindowTitle( QObject::tr("Processing...") );
 	setCancelButtonText( QString("Cancel") );
 	
 	

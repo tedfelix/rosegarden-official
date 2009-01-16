@@ -433,7 +433,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int minor = sminor.toInt();
 
             if (major > RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR) {
-                m_errorString = i18n("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.", version);
+                m_errorString = QObject::tr("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.").arg(version);
                 return false;
             }
 
@@ -443,7 +443,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 CurrentProgressDialog::freeze();
                 StartupLogo::hideIfStillThere();
 
-                QMessageBox::information(0, "", i18n("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.", version));
+                QMessageBox::information(0, "", QObject::tr("This file was written by Rosegarden %1, which is more recent than this version.\nThere may be some incompatibilities with the file format.").arg(version));
 
                 CurrentProgressDialog::thaw();
             }

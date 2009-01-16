@@ -38,7 +38,7 @@ RespellCommand::getGlobalName(RespellType type)
     switch (type.type) {
 
     case RespellType::Set: {
-            QString s(i18n("Respell with %1"));
+            QString s(QObject::tr("Respell with %1"));
             //!!! should be in notationstrings:
             if (type.accidental == DoubleSharp) {
                 s = s.arg(QObject::tr("Do&uble Sharp"));

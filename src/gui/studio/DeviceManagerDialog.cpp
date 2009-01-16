@@ -360,7 +360,7 @@ DeviceManagerDialog::populate()
 // 		 m_playTable->insertRows(deviceCount, 1);
 		 m_playTable->insertRow(deviceCount);
 		
-        QString deviceName = i18n("%1", deviceCount + 1);
+        QString deviceName = QObject::tr("%1").arg(deviceCount + 1);
         QString connectionName = strtoqstr((*it)->getConnection());
 
 // 		m_playTable->setText(deviceCount, PLAY_NAME_COL, strtoqstr((*it)->getName()));
@@ -404,7 +404,7 @@ DeviceManagerDialog::populate()
 // 		 m_recordTable->insertRows(deviceCount, 1);
 		 m_recordTable->insertRow(deviceCount);
 
-        QString deviceName = i18n("%1", deviceCount + 1);
+        QString deviceName = QObject::tr("%1").arg(deviceCount + 1);
         QString connectionName = strtoqstr((*it)->getConnection());
 
 //         m_recordTable->setText(deviceCount, RECORD_NAME_COL, strtoqstr((*it)->getName()));

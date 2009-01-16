@@ -242,8 +242,8 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
                 if (m_device->getKeyMappingForProgram(*it)) {
                     getEntryButton(i)->setIcon(QIcon(keyPixmap));
                     getEntryButton(i)->setToolTip
-                        (i18n("Key Mapping: %1", 
-                              strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
+                        (QObject::tr("Key Mapping: %1") 
+                              .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
                 break;
@@ -537,7 +537,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
         if( ! icon.isNull() ){
             btn->setIcon( icon );
         }
-        btn->setToolTip(i18n("Key Mapping: %1", strtoqstr(newMapping)));
+        btn->setToolTip(QObject::tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
     btn->setEnabled(haveKeyMappings);
 }

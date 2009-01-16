@@ -1072,9 +1072,10 @@ EditView::setupAddControlRulerMenu()
                 QString hexValue;
                 hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-                itemStr = i18n("%1 Controller %2 %3", strtoqstr(it->getName()),
-                           it->getControllerValue(),
-                           hexValue);
+                itemStr = QObject::tr("%1 Controller %2 %3")
+				.arg(strtoqstr(it->getName()))
+                          	.arg(it->getControllerValue())
+                          	.arg(hexValue);
 
             } else if (it->getType() == PitchBend::EventType)
                 itemStr = QObject::tr("Pitch Bend");
@@ -1248,8 +1249,8 @@ EditView::createInsertPitchActionMenu()
         QObject::tr("I"), QObject::tr("II"), QObject::tr("III"), QObject::tr("IV"),
         QObject::tr("V"), QObject::tr("VI"), QObject::tr("VII"), QObject::tr("VIII")
     };
-    QString flat = i18n("%1 flat");
-    QString sharp = i18n("%1 sharp");
+    QString flat = QObject::tr("%1 flat");
+    QString sharp = QObject::tr("%1 sharp");
 
     const Qt::Key notePitchKeys[3][7] = {
         {

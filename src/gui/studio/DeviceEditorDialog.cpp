@@ -194,7 +194,7 @@ DeviceEditorDialog::populate()
         MidiDevice *md = static_cast<MidiDevice *>(*it);
 
         // if you change this string ("Device %1"), change test in slotApply
-        QString deviceName = i18n("Device %1", md->getId() + 1);
+        QString deviceName = QObject::tr("Device %1").arg(md->getId() + 1);
         QString deviceLabel = strtoqstr(md->getName());
         QString connectionName = strtoqstr(md->getConnection());
 	

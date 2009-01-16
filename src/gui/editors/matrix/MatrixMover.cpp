@@ -192,7 +192,7 @@ int MatrixMover::handleMouseMove(timeT newTime,
         return RosegardenCanvasView::NoFollow;
 
     if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
@@ -303,15 +303,15 @@ void MatrixMover::handleMouseRelease(timeT newTime,
     QString commandLabel;
     if (m_quickCopy) {
         if (selection->getAddedEvents() < 2) {
-            commandLabel = i18n("Copy and Move Event");
+            commandLabel = QObject::tr("Copy and Move Event");
         } else {
-            commandLabel = i18n("Copy and Move Events");
+            commandLabel = QObject::tr("Copy and Move Events");
         }
     } else {
         if (selection->getAddedEvents() < 2) {
-            commandLabel = i18n("Move Event");
+            commandLabel = QObject::tr("Move Event");
         } else {
-            commandLabel = i18n("Move Events");
+            commandLabel = QObject::tr("Move Events");
         }
     }
 
@@ -440,15 +440,15 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
     EventSelection *selection = m_mParentView->getCurrentSelection();
     if (!selection || selection->getAddedEvents() < 2) {
         if (!ctrlPressed) {
-            setContextHelp(i18n("Click and drag to move a note; hold Ctrl as well to copy it"));
+            setContextHelp(QObject::tr("Click and drag to move a note; hold Ctrl as well to copy it"));
         } else {
-            setContextHelp(i18n("Click and drag to copy a note"));
+            setContextHelp(QObject::tr("Click and drag to copy a note"));
         }
     } else {
         if (!ctrlPressed) {
-            setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy"));
+            setContextHelp(QObject::tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
         } else {
-            setContextHelp(i18n("Click and drag to copy selected notes"));
+            setContextHelp(QObject::tr("Click and drag to copy selected notes"));
         }
     }
 }

@@ -226,24 +226,24 @@ AudioRouteMenu::getEntryText(int entry)
 
             if (stereo) {
                 if (entry < recordIns) {
-                    return i18n("In %1", entry + 1);
+                    return QObject::tr("In %1").arg(entry + 1);
                 } else if (entry == recordIns) {
-                    return i18n("Master");
+                    return QObject::tr("Master");
                 } else {
-                    return i18n("Sub %1", entry - recordIns);
+                    return QObject::tr("Sub %1").arg(entry - recordIns);
                 }
             } else {
                 int channel = entry % 2;
                 entry /= 2;
                 if (entry < recordIns) {
-                    return (channel ? i18n("In %1 R") :
-                            i18n("In %1 L")).arg(entry + 1);
+                    return (channel ? QObject::tr("In %1 R") :
+                            QObject::tr("In %1 L")).arg(entry + 1);
                 } else if (entry == recordIns) {
-                    return (channel ? i18n("Master R") :
-                            i18n("Master L"));
+                    return (channel ? QObject::tr("Master R") :
+                            QObject::tr("Master L"));
                 } else {
-                    return (channel ? i18n("Sub %1 R") :
-                            i18n("Sub %1 L")).arg(entry - recordIns);
+                    return (channel ? QObject::tr("Sub %1 R") :
+                            QObject::tr("Sub %1 L")).arg(entry - recordIns);
                 }
             }
             break;
@@ -251,9 +251,9 @@ AudioRouteMenu::getEntryText(int entry)
 
     case Out:
         if (entry == 0)
-            return i18n("Master");
+            return QObject::tr("Master");
         else
-            return i18n("Sub %1", entry);
+            return QObject::tr("Sub %1").arg(entry);
     }
 
     return QString();

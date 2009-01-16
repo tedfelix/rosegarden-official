@@ -337,11 +337,11 @@ AudioMixerWindow::populate()
         QLabel *idLabel;
         QString idString;
         if ((*i)->getType() == Instrument::Audio) {
-            idString = i18n("Audio %1", (*i)->getId() -
+            idString = QObject::tr("Audio %1").arg((*i)->getId() -
                                             AudioInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "audioIdLabel");
         } else {
-            idString = i18n("Synth %1", (*i)->getId() -
+            idString = QObject::tr("Synth %1").arg((*i)->getId() -
                                             SoftSynthInstrumentBase + 1);
             idLabel = new QLabel(idString, m_mainBox, "synthIdLabel");
         }
@@ -464,7 +464,7 @@ AudioMixerWindow::populate()
 
         rec.m_pluginBox->setLayout(pluginBoxLayout);
 
-        QLabel *idLabel = new QLabel(i18n("Sub %1", count), m_mainBox, "subMaster");
+        QLabel *idLabel = new QLabel(QObject::tr("Sub %1").arg(count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
 
         //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);

@@ -29,9 +29,9 @@ namespace Rosegarden
 {
 
 static QString notes[] = {
-    i18n("C%1"),  i18n("C#%1"), i18n("D%1"),  i18n("D#%1"),
-    i18n("E%1"),  i18n("F%1"),  i18n("F#%1"), i18n("G%1"),
-    i18n("G#%1"), i18n("A%1"),  i18n("A#%1"), i18n("B%1")
+    QObject::tr("C%1"),  QObject::tr("C#%1"), QObject::tr("D%1"),  QObject::tr("D#%1"),
+    QObject::tr("E%1"),  QObject::tr("F%1"),  QObject::tr("F#%1"), QObject::tr("G%1"),
+    QObject::tr("G#%1"), QObject::tr("A%1"),  QObject::tr("A#%1"), QObject::tr("B%1")
 };
 
 

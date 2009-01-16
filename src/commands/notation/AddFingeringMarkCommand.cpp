@@ -57,7 +57,7 @@ AddFingeringMarkCommand::getGlobalName(std::string fingering)
     } else if (fingering == "0") {
         return QObject::tr("Add Fingering &0 (Thumb)");
     } else {
-        return i18n("Add Fingering &%1", strtoqstr(fingering));
+        return QObject::tr("Add Fingering &%1").arg(strtoqstr(fingering));
     }
 }
 

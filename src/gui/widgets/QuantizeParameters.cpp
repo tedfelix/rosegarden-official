@@ -73,21 +73,21 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     }
 
     QGroupBox *quantizerBox = new QGroupBox
-                              (i18n("Quantizer"), this);
+                              (QObject::tr("Quantizer"), this);
     quantizerBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *layout = new QGridLayout(quantizerBox);
     layout->setSpacing(3);
     m_mainLayout->addWidget(quantizerBox, zero, 0);
 
-    layout->addWidget(new QLabel(i18n("Quantizer type:"), quantizerBox), 0, 0);
+    layout->addWidget(new QLabel(QObject::tr("Quantizer type:"), quantizerBox), 0, 0);
     m_typeCombo = new QComboBox(quantizerBox);
-    m_typeCombo->addItem(i18n("Grid quantizer"));
-    m_typeCombo->addItem(i18n("Legato quantizer"));
-    m_typeCombo->addItem(i18n("Heuristic notation quantizer"));
+    m_typeCombo->addItem(QObject::tr("Grid quantizer"));
+    m_typeCombo->addItem(QObject::tr("Legato quantizer"));
+    m_typeCombo->addItem(QObject::tr("Heuristic notation quantizer"));
     layout->addWidget(m_typeCombo, 0, 1);
 
     m_notationTarget = new QCheckBox
-                       (i18n("Quantize for notation only (leave performance unchanged)"),
+                       (QObject::tr("Quantize for notation only (leave performance unchanged)"),
                         quantizerBox);
     layout->addWidget(m_notationTarget, 1, 0, 0+1, 1-0+ 1);
     if (!showNotationOption)
@@ -98,78 +98,78 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     QHBoxLayout *parameterBoxLayout = new QHBoxLayout;
     m_mainLayout->addWidget(parameterBox, zero + 1, 0);
 
-    m_notationBox = new QGroupBox( i18n("Notation parameters"), parameterBox );
+    m_notationBox = new QGroupBox( QObject::tr("Notation parameters"), parameterBox );
     m_notationBox->setContentsMargins(5, 5, 5, 5);
     layout = new QGridLayout(m_notationBox);
     layout->setSpacing(3);
     parameterBoxLayout->addWidget(m_notationBox);
 
-    layout->addWidget(new QLabel(i18n("Base grid unit:"), m_notationBox),
+    layout->addWidget(new QLabel(QObject::tr("Base grid unit:"), m_notationBox),
                       1, 0);
     m_notationUnitCombo = new QComboBox(m_notationBox);
     layout->addWidget(m_notationUnitCombo, 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Complexity:"),
+    layout->addWidget(new QLabel(QObject::tr("Complexity:"),
                                  m_notationBox), 0, 0);
 
     m_simplicityCombo = new QComboBox(m_notationBox);
-    m_simplicityCombo->addItem(i18n("Very high"));
-    m_simplicityCombo->addItem(i18n("High"));
-    m_simplicityCombo->addItem(i18n("Normal"));
-    m_simplicityCombo->addItem(i18n("Low"));
-    m_simplicityCombo->addItem(i18n("Very low"));
+    m_simplicityCombo->addItem(QObject::tr("Very high"));
+    m_simplicityCombo->addItem(QObject::tr("High"));
+    m_simplicityCombo->addItem(QObject::tr("Normal"));
+    m_simplicityCombo->addItem(QObject::tr("Low"));
+    m_simplicityCombo->addItem(QObject::tr("Very low"));
     layout->addWidget(m_simplicityCombo, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Tuplet level:"),
+    layout->addWidget(new QLabel(QObject::tr("Tuplet level:"),
                                  m_notationBox), 2, 0);
     m_maxTuplet = new QComboBox(m_notationBox);
-    m_maxTuplet->addItem(i18n("None"));
-    m_maxTuplet->addItem(i18n("2-in-the-time-of-3"));
-    m_maxTuplet->addItem(i18n("Triplet"));
+    m_maxTuplet->addItem(QObject::tr("None"));
+    m_maxTuplet->addItem(QObject::tr("2-in-the-time-of-3"));
+    m_maxTuplet->addItem(QObject::tr("Triplet"));
     /*
-        m_maxTuplet->addItem(i18n("4-Tuplet"));
-        m_maxTuplet->addItem(i18n("5-Tuplet"));
-        m_maxTuplet->addItem(i18n("6-Tuplet"));
-        m_maxTuplet->addItem(i18n("7-Tuplet"));
-        m_maxTuplet->addItem(i18n("8-Tuplet"));
+        m_maxTuplet->addItem(QObject::tr("4-Tuplet"));
+        m_maxTuplet->addItem(QObject::tr("5-Tuplet"));
+        m_maxTuplet->addItem(QObject::tr("6-Tuplet"));
+        m_maxTuplet->addItem(QObject::tr("7-Tuplet"));
+        m_maxTuplet->addItem(QObject::tr("8-Tuplet"));
     */
-    m_maxTuplet->addItem(i18n("Any"));
+    m_maxTuplet->addItem(QObject::tr("Any"));
     layout->addWidget(m_maxTuplet, 2, 1);
 
-    m_counterpoint = new QCheckBox(i18n("Permit counterpoint"), m_notationBox);
+    m_counterpoint = new QCheckBox(QObject::tr("Permit counterpoint"), m_notationBox);
     layout->addWidget(m_counterpoint, 3, 0, 0+1, 1-0+ 1);
 
     m_notationBox->setLayout(layout);
 
-    m_gridBox = new QGroupBox( i18n("Grid parameters"), parameterBox );
+    m_gridBox = new QGroupBox( QObject::tr("Grid parameters"), parameterBox );
     m_gridBox->setContentsMargins(5, 5, 5, 5);
     layout = new QGridLayout(m_gridBox);
     layout->setSpacing(3);
     parameterBoxLayout->addWidget(m_gridBox);
 
-    layout->addWidget(new QLabel(i18n("Base grid unit:"), m_gridBox), 0, 0);
+    layout->addWidget(new QLabel(QObject::tr("Base grid unit:"), m_gridBox), 0, 0);
     m_gridUnitCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_gridUnitCombo, 0, 1);
 
-    m_swingLabel = new QLabel(i18n("Swing:"), m_gridBox);
+    m_swingLabel = new QLabel(QObject::tr("Swing:"), m_gridBox);
     layout->addWidget(m_swingLabel, 1, 0);
     m_swingCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_swingCombo, 1, 1);
 
-    m_iterativeLabel = new QLabel(i18n("Iterative amount:"), m_gridBox);
+    m_iterativeLabel = new QLabel(QObject::tr("Iterative amount:"), m_gridBox);
     layout->addWidget(m_iterativeLabel, 2, 0);
     m_iterativeCombo = new QComboBox(m_gridBox);
     layout->addWidget(m_iterativeCombo, 2, 1);
 
     m_durationCheckBox = new QCheckBox
-                         (i18n("Quantize durations as well as start times"), m_gridBox);
+                         (QObject::tr("Quantize durations as well as start times"), m_gridBox);
     layout->addWidget(m_durationCheckBox, 3, 0, 0+1, 1-0+ 1);
 
     m_gridBox->setLayout(layout);
     parameterBox->setLayout(parameterBoxLayout);
 
     m_postProcessingBox = new QGroupBox
-                          (i18n("After quantization"), this);
+                          (QObject::tr("After quantization"), this);
     m_postProcessingBox->setContentsMargins(5, 5, 5, 5);
     layout = new QGridLayout(m_postProcessingBox);
     layout->setSpacing(3);
@@ -188,17 +188,17 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     m_advancedButton = 0;
     if (showAdvancedButton) {
         m_advancedButton =
-            new QPushButton(i18n("Show advanced options"), this);
+            new QPushButton(QObject::tr("Show advanced options"), this);
         m_mainLayout->addWidget(m_advancedButton, zero + 2, 0, Qt::AlignLeft);
         QObject::connect(m_advancedButton, SIGNAL(clicked()),
                          this, SLOT(slotAdvancedChanged()));
     }
 
-    m_rebeam = new QCheckBox(i18n("Re-beam"), m_postProcessingBox);
+    m_rebeam = new QCheckBox(QObject::tr("Re-beam"), m_postProcessingBox);
     m_articulate = new QCheckBox
-                   (i18n("Add articulations (staccato, tenuto, slurs)"), m_postProcessingBox);
-    m_makeViable = new QCheckBox(i18n("Tie notes at barlines etc"), m_postProcessingBox);
-    m_deCounterpoint = new QCheckBox(i18n("Split-and-tie overlapping chords"), m_postProcessingBox);
+                   (QObject::tr("Add articulations (staccato, tenuto, slurs)"), m_postProcessingBox);
+    m_makeViable = new QCheckBox(QObject::tr("Tie notes at barlines etc"), m_postProcessingBox);
+    m_deCounterpoint = new QCheckBox(QObject::tr("Split-and-tie overlapping chords"), m_postProcessingBox);
 
     layout->addWidget(m_rebeam, 0, 0);
     layout->addWidget(m_articulate, 1, 0);
@@ -303,13 +303,13 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
     }
 
     for (int i = -100; i <= 200; i += 10) {
-        m_swingCombo->addItem(i == 0 ? i18n("None") : QString("%1%").arg(i));
+        m_swingCombo->addItem(i == 0 ? QObject::tr("None") : QString("%1%").arg(i));
         if (i == defaultSwing)
             m_swingCombo->setCurrentIndex(m_swingCombo->count() - 1);
     }
 
     for (int i = 10; i <= 100; i += 10) {
-        m_iterativeCombo->addItem(i == 100 ? i18n("Full quantize") :
+        m_iterativeCombo->addItem(i == 100 ? QObject::tr("Full quantize") :
                                      QString("%1%").arg(i));
         if (i == defaultIterate)
             m_iterativeCombo->setCurrentIndex(m_iterativeCombo->count() - 1);
@@ -455,11 +455,11 @@ QuantizeParameters::slotAdvancedChanged()
 {
     if (m_postProcessingBox->isVisible()) {
         if (m_advancedButton)
-            m_advancedButton->setText(i18n("Show Advanced Options"));
+            m_advancedButton->setText(QObject::tr("Show Advanced Options"));
         m_postProcessingBox->hide();
     } else {
         if (m_advancedButton)
-            m_advancedButton->setText(i18n("Hide Advanced Options"));
+            m_advancedButton->setText(QObject::tr("Hide Advanced Options"));
         m_postProcessingBox->show();
     }
     adjustSize();

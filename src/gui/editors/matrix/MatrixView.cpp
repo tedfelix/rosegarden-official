@@ -180,14 +180,14 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	
 	/*
     m_dockLeft = createDockWidget("params dock", matrixPixmap, 0L,
-                                  i18n("Instrument Parameters"));
+                                  QObject::tr("Instrument Parameters"));
 	
     m_dockLeft->manualDock(m_mainDockWidget,             // dock target
                            QDockWidget::DockLeft,  // dock site
                            20);                   // relation target/this (in percent)
 	*/
 	
-	m_dockLeft = new QDockWidget( i18n("Instrument Parameters"),  this );
+	m_dockLeft = new QDockWidget( QObject::tr("Instrument Parameters"),  this );
 	m_dockLeft->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	m_dockLeft->setFeatures( QDockWidget::AllDockWidgetFeatures );
 	this->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft ); // optional 3. param: Qt::Horizontal
@@ -484,7 +484,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, "", i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, "", QObject::tr("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
@@ -1106,7 +1106,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
         (QObject::tr("  %n event(s) selected ", "", eventsSelected));
 
     } else {
-        m_selectionCounter->setText(i18n("  No selection "));
+        m_selectionCounter->setText(QObject::tr("  No selection "));
     }
 
     m_selectionCounter->update();
@@ -1211,7 +1211,7 @@ void MatrixView::slotTransformsQuantize()
     QuantizeDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Quantizing..."), this);
+        KTmpStatusMsg msg(QObject::tr("Quantizing..."), this);
         addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
                              dialog.getQuantizer()));
@@ -1223,7 +1223,7 @@ void MatrixView::slotTransformsRepeatQuantize()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Quantizing..."), this);
+    KTmpStatusMsg msg(QObject::tr("Quantizing..."), this);
     addCommandToHistory(new EventQuantizeCommand
                         (*m_currentEventSelection,
                          "Quantize Dialog Grid", false)); // no i18n (config group name)
@@ -1233,7 +1233,7 @@ void MatrixView::slotTransformsCollapseNotes()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
+    KTmpStatusMsg msg(QObject::tr("Collapsing notes..."), this);
 
     addCommandToHistory(new CollapseNotesCommand
                         (*m_currentEventSelection));
@@ -1244,7 +1244,7 @@ void MatrixView::slotTransformsLegato()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Making legato..."), this);
+    KTmpStatusMsg msg(QObject::tr("Making legato..."), this);
     addCommandToHistory(new EventQuantizeCommand
                         (*m_currentEventSelection,
                          new LegatoQuantizer(0))); // no quantization
@@ -1339,23 +1339,23 @@ MatrixView::slotHoveredOverNoteChanged(int evPitch,
             getDocument()->getComposition().getElapsedRealTime(evTime);
         long ms = rt.msec();
 
-        QString msg = i18n("Note: %1 (%2.%3s)",
-                   QString("%1-%2-%3-%4")
+        QString msg = QObject::tr("Note: %1 (%2.%3s)")
+                   .arg(QString("%1-%2-%3-%4")
                        .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
                        .arg(QString("%1").arg(beat).rightJustify(2, '0'))
                        .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-                       .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
-                   rt.sec,
-                   QString("%1").arg(ms).rightJustify(3, '0'));
+                       .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+                   .arg(rt.sec)
+                   .arg(QString("%1").arg(ms).rightJustify(3, '0'));
 
         m_hoveredOverAbsoluteTime->setText(msg);
     }
 
     m_haveHoveredOverNote = false;
 
-    m_hoveredOverNoteName->setText(i18n("%1 (%2)",
-                                    label.getQString(),
-                                    evPitch));
+    m_hoveredOverNoteName->setText(QObject::tr("%1 (%2)")
+                                    .arg(label.getQString())
+                                    .arg(evPitch));
 
     m_pitchRuler->drawHoverNote(evPitch);
 }
@@ -1394,14 +1394,14 @@ MatrixView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
     // we replaced this    QString format("%ld (%ld.%03lds)");
     // to support Unicode
 
-    QString message = i18n("Time: %1 (%2.%3s)",
-                       QString("%1-%2-%3-%4")
+    QString message = QObject::tr("Time: %1 (%2.%3s)")
+                       .arg(QString("%1-%2-%3-%4")
                            .arg(QString("%1").arg(bar + 1).rightJustify(3, '0'))
                            .arg(QString("%1").arg(beat).rightJustify(2, '0'))
                            .arg(QString("%1").arg(fraction).rightJustify(2, '0'))
-                           .arg(QString("%1").arg(remainder).rightJustify(2, '0')),
-                       rt.sec,
-                       QString("%1").arg(ms).rightJustify(3, '0'));
+                           .arg(QString("%1").arg(remainder).rightJustify(2, '0')))
+                       .arg(rt.sec)
+                       .arg(QString("%1").arg(ms).rightJustify(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
@@ -1472,7 +1472,7 @@ void MatrixView::slotEditCut()
 
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
+    KTmpStatusMsg msg(QObject::tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
                                        getDocument()->getClipboard()));
@@ -1482,7 +1482,7 @@ void MatrixView::slotEditCopy()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
+    KTmpStatusMsg msg(QObject::tr("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
                                         getDocument()->getClipboard()));
@@ -1493,18 +1493,18 @@ void MatrixView::slotEditCopy()
 void MatrixView::slotEditPaste()
 {
     if (getDocument()->getClipboard()->isEmpty()) {
-        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        slotStatusHelpMsg(QObject::tr("Clipboard is empty"));
         return ;
     }
 
-    KTmpStatusMsg msg(i18n("Inserting clipboard contents..."), this);
+    KTmpStatusMsg msg(QObject::tr("Inserting clipboard contents..."), this);
 
     PasteEventsCommand *command = new PasteEventsCommand
                                   (m_staffs[0]->getSegment(), getDocument()->getClipboard(),
                                    getInsertionTime(), PasteEventsCommand::MatrixOverlay);
 
     if (!command->isPossible()) {
-        slotStatusHelpMsg(i18n("Couldn't paste at this point"));
+        slotStatusHelpMsg(QObject::tr("Couldn't paste at this point"));
     } else {
         addCommandToHistory(command);
         setCurrentSelection(new EventSelection(command->getPastedEvents()));
@@ -1515,7 +1515,7 @@ void MatrixView::slotEditDelete()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Deleting selection..."), this);
+    KTmpStatusMsg msg(QObject::tr("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 
@@ -1707,11 +1707,11 @@ void MatrixView::slotInsertNoteFromAction()
     } catch (...) {
 
         /* was sorry */ QMessageBox::warning
-        (this, "", i18n("Unknown note insert action %1", name) );
+        (this, "", QObject::tr("Unknown note insert action %1").arg(name) );
         return ;
     }
 
-    KTmpStatusMsg msg(i18n("Inserting note"), this);
+    KTmpStatusMsg msg(QObject::tr("Inserting note"), this);
 
     MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
 
@@ -1959,7 +1959,7 @@ MatrixView::slotQuantizeSelection(int q)
          Note(Note::Shortest).getDuration(), false);
 
     if (unit) {
-        KTmpStatusMsg msg(i18n("Quantizing..."), this);
+        KTmpStatusMsg msg(QObject::tr("Quantizing..."), this);
         if (m_currentEventSelection &&
                 m_currentEventSelection->getAddedEvents()) {
             addCommandToHistory(new EventQuantizeCommand
@@ -1971,7 +1971,7 @@ MatrixView::slotQuantizeSelection(int q)
                                  quant));
         }
     } else {
-        KTmpStatusMsg msg(i18n("Unquantizing..."), this);
+        KTmpStatusMsg msg(QObject::tr("Unquantizing..."), this);
         if (m_currentEventSelection &&
                 m_currentEventSelection->getAddedEvents()) {
             addCommandToHistory(new EventUnquantizeCommand
@@ -2001,7 +2001,7 @@ MatrixView::initActionsToolbar()
 
     // The SnapGrid combo and Snap To... menu items
     //
-    QLabel *sLabel = new QLabel(i18n(" Grid: "), actionsToolbar, "kde toolbar widget");
+    QLabel *sLabel = new QLabel(QObject::tr(" Grid: "), actionsToolbar, "kde toolbar widget");
     sLabel->setIndent(10);
 
     QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
@@ -2013,13 +2013,13 @@ MatrixView::initActionsToolbar()
         timeT d = m_snapValues[i];
 
         if (d == SnapGrid::NoSnap) {
-            m_snapGridCombo->addItem(i18n("None"));
+            m_snapGridCombo->addItem(QObject::tr("None"));
         } else if (d == SnapGrid::SnapToUnit) {
-            m_snapGridCombo->addItem(i18n("Unit"));
+            m_snapGridCombo->addItem(QObject::tr("Unit"));
         } else if (d == SnapGrid::SnapToBeat) {
-            m_snapGridCombo->addItem(i18n("Beat"));
+            m_snapGridCombo->addItem(QObject::tr("Beat"));
         } else if (d == SnapGrid::SnapToBar) {
-            m_snapGridCombo->addItem(i18n("Bar"));
+            m_snapGridCombo->addItem(QObject::tr("Bar"));
         } else {
             timeT err = 0;
             QString label = NotationStrings::makeNoteMenuLabel(d, true, err);
@@ -2040,7 +2040,7 @@ MatrixView::initActionsToolbar()
     // slow to use unless we make it typeable into, and then it takes
     // focus away from our more important widgets
 
-    QLabel *vlabel = new QLabel(i18n(" Velocity: "), actionsToolbar, "kde toolbar widget");
+    QLabel *vlabel = new QLabel(QObject::tr(" Velocity: "), actionsToolbar, "kde toolbar widget");
     vlabel->setIndent(10);
     
     m_velocityCombo = new QComboBox(actionsToolbar);
@@ -2051,7 +2051,7 @@ MatrixView::initActionsToolbar()
 
     // Quantize combo
     //
-    QLabel *qLabel = new QLabel(i18n(" Quantize: "), actionsToolbar, "kde toolbar widget");
+    QLabel *qLabel = new QLabel(QObject::tr(" Quantize: "), actionsToolbar, "kde toolbar widget");
     qLabel->setIndent(10);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
@@ -2065,7 +2065,7 @@ MatrixView::initActionsToolbar()
         m_quantizeCombo->addItem(error ? noMap : pmap, label);
     }
 
-    m_quantizeCombo->addItem(noMap, i18n("Off"));
+    m_quantizeCombo->addItem(noMap, QObject::tr("Off"));
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
@@ -2123,8 +2123,8 @@ MatrixView::slotChangeHorizontalZoom(int)
 {
     double zoomValue = m_hZoomSlider->getCurrentSize();
 
-    //     m_zoomLabel->setText(i18n("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
-    m_zoomLabel->setText(i18n("%1%", zoomValue*100.0));
+    //     m_zoomLabel->setText(QObject::tr("%1%").arg(zoomValue*100.0 * 2)); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595
+    m_zoomLabel->setText(QObject::tr("%1%").arg(zoomValue*100.0));
 
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
     << zoomValue << endl;
@@ -2471,7 +2471,7 @@ void MatrixView::slotVelocityUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Raising velocities..."), this);
+    KTmpStatusMsg msg(QObject::tr("Raising velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand(10, *m_currentEventSelection));
@@ -2483,7 +2483,7 @@ void MatrixView::slotVelocityDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Lowering velocities..."), this);
+    KTmpStatusMsg msg(QObject::tr("Lowering velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand( -10, *m_currentEventSelection));
@@ -2498,12 +2498,12 @@ MatrixView::slotSetVelocities()
         return ;
 
     EventParameterDialog dialog(this,
-                                i18n("Set Event Velocities"),
+                                QObject::tr("Set Event Velocities"),
                                 BaseProperties::VELOCITY,
                                 getCurrentVelocity());
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
+        KTmpStatusMsg msg(QObject::tr("Setting Velocities..."), this);
         addCommandToHistory(new SelectionPropertyCommand
                             (m_currentEventSelection,
                              BaseProperties::VELOCITY,
@@ -2542,7 +2542,7 @@ MatrixView::slotTriggerSegment()
                         dialog.getRetune(),
                         dialog.getTimeAdjust(),
                         Marks::NoMark,
-                        i18n("Trigger Segment")));
+                        QObject::tr("Trigger Segment")));
 }
 
 void
@@ -2552,7 +2552,7 @@ MatrixView::slotRemoveTriggers()
         return ;
 
     addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
-                        i18n("Remove Triggers")));
+                        QObject::tr("Remove Triggers")));
 }
 
 void
@@ -2596,9 +2596,9 @@ MatrixView::updateViewCaption()
 {
     // Set client label
     //
-    QString view = i18n("Matrix");
+    QString view = QObject::tr("Matrix");
     if (isDrumMode())
-        view = i18n("Percussion");
+        view = QObject::tr("Percussion");
 
     if (m_segments.size() == 1) {
 
@@ -2610,16 +2610,16 @@ MatrixView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setCaption(i18n("%1 - Segment Track #%2 - %3",
-                    getDocument()->getTitle(),
-                    trackPosition + 1,
-                    view));
+        setCaption(QObject::tr("%1 - Segment Track #%2 - %3")
+                    .arg(getDocument()->getTitle())
+                    .arg(trackPosition + 1)
+                    .arg(view));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(i18n("%1 - All Segments - %2",
-                    getDocument()->getTitle(),
-                    view));
+        setCaption(QObject::tr("%1 - All Segments - %2")
+                    .arg(getDocument()->getTitle())
+                    .arg(view));
 
     } else {
 
@@ -2743,7 +2743,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     pitch -= segment.getTranspose();
 
-    KTmpStatusMsg msg(i18n("Inserting note"), this);
+    KTmpStatusMsg msg(QObject::tr("Inserting note"), this);
 
     MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
 
@@ -2771,7 +2771,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, "", i18n("Can't insert note: No grid duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("Can't insert note: No grid duration selected"));
         showingError = false;
         return ;
     }
@@ -2821,7 +2821,7 @@ MatrixView::slotUpdateInsertModeStatus()
 {
     QString message;
     if (isInChordMode()) {
-        message = i18n(" Chord ");
+        message = QObject::tr(" Chord ");
     } else {
         message = "";
     }
@@ -2940,7 +2940,7 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
     readjustCanvasSize();
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
-        /* was sorry */ QMessageBox::warning(0, "", i18n("Couldn't apply piano roll layout"));
+        /* was sorry */ QMessageBox::warning(0, "", QObject::tr("Couldn't apply piano roll layout"));
     else {
         MATRIX_DEBUG << "MatrixView : rendering elements\n";
         m_staffs[0]->positionAllElements();

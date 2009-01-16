@@ -43,29 +43,29 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     : QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Guitar Chord Selector"));
+    setWindowTitle(QObject::tr("Guitar Chord Selector"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *page = new QWidget(this);
     QGridLayout *topLayout = new QGridLayout(page);
     metagrid->addWidget(page, 0, 0);
     
-    topLayout->addWidget(new QLabel(i18n("Root"), page), 0, 0);
+    topLayout->addWidget(new QLabel(QObject::tr("Root"), page), 0, 0);
     m_rootNotesList = new QListWidget(page);
     topLayout->addWidget(m_rootNotesList, 1, 0);
     
-    topLayout->addWidget(new QLabel(i18n("Extension"), page), 0, 1);
+    topLayout->addWidget(new QLabel(QObject::tr("Extension"), page), 0, 1);
     m_chordExtList = new QListWidget(page);
     topLayout->addWidget(m_chordExtList, 1, 1);
     
-    m_newFingeringButton = new QPushButton(i18n("New"), page);
-    m_deleteFingeringButton = new QPushButton(i18n("Delete"), page);
-    m_editFingeringButton = new QPushButton(i18n("Edit"), page);
+    m_newFingeringButton = new QPushButton(QObject::tr("New"), page);
+    m_deleteFingeringButton = new QPushButton(QObject::tr("Delete"), page);
+    m_editFingeringButton = new QPushButton(QObject::tr("Edit"), page);
     
     m_chordComplexityCombo = new QComboBox(page);
-    m_chordComplexityCombo->addItem(i18n("beginner"));
-    m_chordComplexityCombo->addItem(i18n("common"));
-    m_chordComplexityCombo->addItem(i18n("all"));
+    m_chordComplexityCombo->addItem(QObject::tr("beginner"));
+    m_chordComplexityCombo->addItem(QObject::tr("common"));
+    m_chordComplexityCombo->addItem(QObject::tr("all"));
     
     connect(m_chordComplexityCombo, SIGNAL(activated(int)),
             this, SLOT(slotComplexityChanged(int)));
@@ -86,7 +86,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     connect(m_editFingeringButton, SIGNAL(clicked()),
             this, SLOT(slotEditFingering()));
     
-    topLayout->addWidget(new QLabel(i18n("Fingerings"), page), 0, 3);
+    topLayout->addWidget(new QLabel(QObject::tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
@@ -445,7 +445,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     QFile chordFile(chordFileName);
     bool ok = chordFile.open(QIODevice::ReadOnly);    
     if (!ok)
-        QMessageBox::critical(0, "", i18n("couldn't open file '%1'", handler.errorString()));
+        QMessageBox::critical(0, "", QObject::tr("couldn't open file '%1'").arg(handler.errorString()));
 
     QXmlInputSource source(chordFile);
     QXmlSimpleReader reader;
@@ -454,7 +454,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     NOTATION_DEBUG << "GuitarChordSelectorDialog::parseChordFile() parsing " << chordFileName << endl;
     reader.parse(source);
     if (!ok)
-        QMessageBox::critical(0, "", i18n("couldn't parse chord dictionary : %1", handler.errorString()));
+        QMessageBox::critical(0, "", QObject::tr("couldn't parse chord dictionary : %1").arg(handler.errorString()));
     
 }
 

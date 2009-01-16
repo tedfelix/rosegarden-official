@@ -39,14 +39,14 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
       m_chordMap(chordMap)
 {
     setModal(true);
-    setWindowTitle(i18n("Guitar Chord Editor"));
+    setWindowTitle(QObject::tr("Guitar Chord Editor"));
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QWidget *page = new QWidget(this);
     QGridLayout *topLayout = new QGridLayout(page);
     metagrid->addWidget(page, 0, 0);
 
-    topLayout->addWidget(new QLabel(i18n("Start fret"), page), 0, 1);
+    topLayout->addWidget(new QLabel(QObject::tr("Start fret"), page), 0, 1);
     m_startFret = new QSpinBox(page);
     m_startFret->setRange(1, 24);
     m_startFret->setSingleStep(1);
@@ -55,11 +55,11 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     connect(m_startFret, SIGNAL(valueChanged(int)),
             this, SLOT(slotStartFretChanged(int)));
     
-    topLayout->addWidget(new QLabel(i18n("Root"), page), 2, 1);
+    topLayout->addWidget(new QLabel(QObject::tr("Root"), page), 2, 1);
     m_rootNotesList = new QComboBox(page);
     topLayout->addWidget(m_rootNotesList, 3, 1);
     
-    topLayout->addWidget(new QLabel(i18n("Extension"), page), 4, 1);
+    topLayout->addWidget(new QLabel(QObject::tr("Extension"), page), 4, 1);
     m_ext = new QComboBox(page);
     m_ext->setEditable(true);
     topLayout->addWidget(m_ext, 5, 1);

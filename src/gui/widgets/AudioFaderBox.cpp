@@ -75,9 +75,9 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     for (int i = 0; i < 5; i++) {
         plugin = new QPushButton(pluginVbox);
         pluginVboxLayout->addWidget(plugin);
-        plugin->setText(i18n("<no plugin>"));
+        plugin->setText(QObject::tr("<no plugin>"));
 
-        plugin->setToolTip(i18n("Audio plugin button"));
+        plugin->setToolTip(QObject::tr("Audio plugin button"));
 
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
@@ -87,8 +87,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     pluginVbox->setLayout(pluginVboxLayout);
 
     m_synthButton = new QPushButton(this);
-    m_synthButton->setText(i18n("<no synth>"));
-    m_synthButton->setToolTip(i18n("Synth plugin button"));
+    m_synthButton->setText(QObject::tr("<no synth>"));
+    m_synthButton->setToolTip(QObject::tr("Synth plugin button"));
 
     // VU meter and fader
     //
@@ -147,7 +147,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
             this, SLOT(slotChannelStateChanged()));
 
     m_synthGUIButton = new QPushButton(this);
-    m_synthGUIButton->setText(i18n("Editor"));
+    m_synthGUIButton->setText(QObject::tr("Editor"));
 
     if (haveInOut) {
         m_audioInput = new AudioRouteMenu(this,
@@ -163,12 +163,12 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         m_audioOutput = 0;
     }
 
-    m_pan->setToolTip(i18n("Set the audio pan position in the stereo field"));
-    m_synthGUIButton->setToolTip(i18n("Open synth plugin's native editor"));
-    m_stereoButton->setToolTip(i18n("Mono or Stereo Instrument"));
-    m_recordFader->setToolTip(i18n("Record level"));
-    m_fader->setToolTip(i18n("Playback level"));
-    m_vuMeter->setToolTip(i18n("Audio level"));
+    m_pan->setToolTip(QObject::tr("Set the audio pan position in the stereo field"));
+    m_synthGUIButton->setToolTip(QObject::tr("Open synth plugin's native editor"));
+    m_stereoButton->setToolTip(QObject::tr("Mono or Stereo Instrument"));
+    m_recordFader->setToolTip(QObject::tr("Record level"));
+    m_fader->setToolTip(QObject::tr("Playback level"));
+    m_vuMeter->setToolTip(QObject::tr("Audio level"));
 
     setContentsMargins(4, 4, 4, 4);
     QGridLayout *grid = new QGridLayout(this);
@@ -179,10 +179,10 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2-0+ 1);
 
     if (haveInOut) {
-        m_inputLabel = new QLabel(i18n("In:"), this);
+        m_inputLabel = new QLabel(QObject::tr("In:"), this);
         grid->addWidget(m_inputLabel, 0, 0, Qt::AlignRight);
         grid->addWidget(m_audioInput->getWidget(), 0, 1, 1, 2);
-        m_outputLabel = new QLabel(i18n("Out:"), this);
+        m_outputLabel = new QLabel(QObject::tr("Out:"), this);
         grid->addWidget(m_outputLabel, 0, 3, Qt::AlignRight);
         grid->addWidget(m_audioOutput->getWidget(), 0, 4, 1, 2);
     }
