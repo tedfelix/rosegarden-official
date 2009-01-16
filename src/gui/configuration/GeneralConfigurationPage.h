@@ -28,7 +28,6 @@
 #include <QLineEdit>
 
 #include <QObject>
-#include <kiconloader.h>
 
 class QWidget;
 

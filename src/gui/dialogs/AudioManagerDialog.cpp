@@ -78,7 +78,6 @@
 #include <Q3DragObject>
 #include <Q3UriDrag>
 
-#include <kurl.h>
 
 
 namespace Rosegarden
