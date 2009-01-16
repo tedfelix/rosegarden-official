@@ -23,7 +23,7 @@
 #include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
 
-#include <klineedit.h>
+//#include <klineedit.h>
 
 #include <QApplication>
 #include <QCheckBox>

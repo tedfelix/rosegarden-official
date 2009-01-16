@@ -55,8 +55,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
-#include <algorithm>
-
 #include <Q3Canvas>
 #include <Q3CanvasPixmap>
 #include <QAction>
@@ -82,11 +80,7 @@
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <kxmlguiclient.h>
-//#include <kstatusbar.h>
-//#include <QDir>
-//#include <kglobal.h>
-//#include <klineeditdlg.h>
+#include <algorithm>
 
 
 namespace Rosegarden

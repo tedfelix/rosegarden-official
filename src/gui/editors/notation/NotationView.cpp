@@ -15,14 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include <kxmlguiclient.h>
-//#include <kprinter.h>
-
-//#include <kstatusbar.h>
-//#include <kstandardaction.h>
-//#include <ktoolbar.h>
-//#include <kglobal.h>
-//#include <QDir>
+#include "NotationView.h"
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>
@@ -31,9 +24,7 @@
 #include <Q3CanvasText>
 #include <Q3PaintDeviceMetrics>
 
-#include "NotationView.h"
 
-#include <list>
 #include "misc/Debug.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
@@ -159,9 +150,7 @@
 #include "TextInserter.h"
 #include "NotationCommandRegistry.h"
 #include "HeadersGroup.h"
-#include <algorithm>
 
-//#include <qpaintdevicemetrics.h>
 #include <QApplication>
 #include <QAction>
 #include <QComboBox>
@@ -203,6 +192,8 @@
 #include <QPrinter>
 #include <QPrintDialog>
 
+#include <list>
+#include <algorithm>
 
 namespace Rosegarden
 {

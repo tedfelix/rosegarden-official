@@ -20,7 +20,6 @@
 #include "Chord.h"
 #include "ChordMap.h"
 
-#include <klineedit.h>
 #include <QComboBox>
 #include <QSpinBox>
 #include <QMessageBox>

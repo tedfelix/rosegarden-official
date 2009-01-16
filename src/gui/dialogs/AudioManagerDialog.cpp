@@ -79,7 +79,6 @@
 #include <Q3UriDrag>
 
 
-
 namespace Rosegarden
 {
 
