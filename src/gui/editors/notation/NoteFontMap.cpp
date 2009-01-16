@@ -42,7 +42,7 @@ NoteFontMap::NoteFontMap(std::string name) :
         m_srcDirectory(name),
         m_characterDestination(0),
         m_hotspotCharName(""),
-        m_errorString(i18n("unknown error")),
+        m_errorString(QObject::tr("unknown error")),
         m_ok(true)
 {
     QString mapFileName;
@@ -69,12 +69,12 @@ NoteFontMap::NoteFontMap(std::string name) :
         if (!mapFileLowerInfo.isReadable()) {
             if (mapFileLowerName != mapFileMixedName) {
                 throw MappingFileReadFailed
-                (qstrtostr(i18n("Can't open font mapping file %1 or %2", 
-                           mapFileMixedName, mapFileLowerName)));
+                (qstrtostr(QObject::tr("Can't open font mapping file %1 or %2") 
+                           .arg(mapFileMixedName).arg(mapFileLowerName)));
             } else {
                 throw MappingFileReadFailed
-                (qstrtostr(i18n("Can't open font mapping file %1", 
-                           mapFileMixedName)));
+                (qstrtostr(QObject::tr("Can't open font mapping file %1")
+                           .arg(mapFileMixedName)));
             }
         } else {
             mapFileName = mapFileLowerName;

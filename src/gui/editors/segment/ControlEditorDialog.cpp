@@ -68,7 +68,7 @@
 namespace Rosegarden
 {
 
-const QString notShowing(i18n("<not showing>"));
+const QString notShowing(QObject::tr("<not showing>"));
 
 ControlEditorDialog::ControlEditorDialog
 		(
@@ -88,9 +88,9 @@ ControlEditorDialog::ControlEditorDialog
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(i18n("Manage Control Events"));
+    setCaption(QObject::tr("Manage Control Events"));
 
-    QString deviceName(i18n("<no device>"));
+    QString deviceName(QObject::tr("<no device>"));
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
     if (md)
@@ -98,33 +98,34 @@ ControlEditorDialog::ControlEditorDialog
 
     // spacing hack!
     new QLabel("", mainFrame);
-    new QLabel(i18n("  Control Events for %1 (device %2)", deviceName, 
-               device), mainFrame);
+    new QLabel(QObject::tr("  Control Events for %1 (device %2)")
+	       .arg(deviceName)
+               .arg(device), mainFrame);
     new QLabel("", mainFrame);
 
 	
 	/*
-    m_listView->addColumn(i18n("Control Event name  "));
-    m_listView->addColumn(i18n("Control Event type  "));
-    m_listView->addColumn(i18n("Control Event value  "));
-    m_listView->addColumn(i18n("Description  "));
-    m_listView->addColumn(i18n("Min  "));
-    m_listView->addColumn(i18n("Max  "));
-    m_listView->addColumn(i18n("Default  "));
-    m_listView->addColumn(i18n("Color  "));
-    m_listView->addColumn(i18n("Position on instrument panel"));
+    m_listView->addColumn(QObject::tr("Control Event name  "));
+    m_listView->addColumn(QObject::tr("Control Event type  "));
+    m_listView->addColumn(QObject::tr("Control Event value  "));
+    m_listView->addColumn(QObject::tr("Description  "));
+    m_listView->addColumn(QObject::tr("Min  "));
+    m_listView->addColumn(QObject::tr("Max  "));
+    m_listView->addColumn(QObject::tr("Default  "));
+    m_listView->addColumn(QObject::tr("Color  "));
+    m_listView->addColumn(QObject::tr("Position on instrument panel"));
 	*/
 	
 	QStringList sl;
-	sl	<< i18n("Control Event name  ")
-		<< i18n("Control Event type  ")
-		<< i18n("Control Event value  ")
-		<< i18n("Description  ")
-		<< i18n("Min  ")
-		<< i18n("Max  ")
-		<< i18n("Default  ")
-		<< i18n("Color  ")
-		<< i18n("Position on instrument panel");
+	sl	<< QObject::tr("Control Event name  ")
+		<< QObject::tr("Control Event type  ")
+		<< QObject::tr("Control Event value  ")
+		<< QObject::tr("Description  ")
+		<< QObject::tr("Min  ")
+		<< QObject::tr("Max  ")
+		<< QObject::tr("Default  ")
+		<< QObject::tr("Color  ")
+		<< QObject::tr("Position on instrument panel");
 	
 	m_listView = new QTreeWidget( mainFrame );
 	m_listView->setHeaderLabels( sl );
@@ -151,16 +152,16 @@ ControlEditorDialog::ControlEditorDialog
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
-    m_addButton = new QPushButton(i18n("Add"), btnBox);
-    m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
+    m_addButton = new QPushButton(QObject::tr("Add"), btnBox);
+    m_deleteButton = new QPushButton(QObject::tr("Delete"), btnBox);
 
-    m_closeButton = new QPushButton(i18n("Close"), btnBox);
+    m_closeButton = new QPushButton(QObject::tr("Close"), btnBox);
 
-    m_addButton->setToolTip(i18n("Add a Control Parameter to the Studio"));
+    m_addButton->setToolTip(QObject::tr("Add a Control Parameter to the Studio"));
 
-    m_deleteButton->setToolTip(i18n("Delete a Control Parameter from the Studio"));
+    m_deleteButton->setToolTip(QObject::tr("Delete a Control Parameter from the Studio"));
 
-    m_closeButton->setToolTip(i18n("Close the Control Parameter editor"));
+    m_closeButton->setToolTip(QObject::tr("Close the Control Parameter editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
@@ -236,7 +237,7 @@ ControlEditorDialog::slotUpdate()
             strtoqstr(comp.getGeneralColourMap().getNameByIndex(it->getColourIndex()));
 
         if (colour == "")
-            colour = i18n("<default>");
+            colour = QObject::tr("<default>");
 
         QString position = QString("%1").arg(it->getIPBPosition());
         if (position.toInt() == -1)
@@ -292,7 +293,7 @@ ControlEditorDialog::slotUpdate()
     }
 
     if( m_listView->topLevelItemCount() == 0 ) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(m_listView, QStringList( i18n("<none>")) );
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_listView, QStringList( QObject::tr("<none>")) );
 		m_listView->addTopLevelItem(item);
 
 		m_listView->setSelectionMode( QAbstractItemView::NoSelection );
@@ -363,7 +364,7 @@ void
 ControlEditorDialog::setupActions()
 {
     createAction("file_close", SLOT(slotClose()));
-    m_closeButton->setText(i18n("Close"));
+    m_closeButton->setText(QObject::tr("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
     createGUI("controleditor.rc");

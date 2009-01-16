@@ -146,8 +146,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     try {
                         m_doc->getAudioFileManager().testAudioPath();
                     } catch (AudioFileManager::BadAudioPathException) {
-						if (QMessageBox::warning( dynamic_cast<QWidget*>(this), i18n("Warning"), //i18n("Set audio file path"), 
-                            	 i18n("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
+						if (QMessageBox::warning( dynamic_cast<QWidget*>(this), QObject::tr("Warning"), //QObject::tr("Set audio file path"), 
+                            	 QObject::tr("The audio file path does not exist or is not writable.\nYou must set the audio file path to a valid directory in Document Properties before rescaling an audio file.\nWould you like to set it now?"),
 								QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
 								) 
 								== QMessageBox::Yes ) {
@@ -163,7 +163,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                                                        newStartTime, newEndTime);
 
                     ProgressDialog progressDlg
-                        (i18n("Rescaling audio file..."), 100, 0);
+                        (QObject::tr("Rescaling audio file..."), 100, 0);
                     progressDlg.setAutoClose(false);
                     progressDlg.setAutoReset(false);
                     progressDlg.show();
@@ -171,8 +171,8 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
                     
                     addCommandToHistory(command);
 
-// 					progressDlg.setLabel( new QLabel(i18n("Generating audio preview..."), this, Qt::Tool) );
-					progressDlg.setLabelText( i18n("Generating audio preview...") );
+// 					progressDlg.setLabel( new QLabel(QObject::tr("Generating audio preview..."), this, Qt::Tool) );
+					progressDlg.setLabelText( QObject::tr("Generating audio preview...") );
 					
 					command->disconnectProgressDialog(&progressDlg);
                     connect(&m_doc->getAudioFileManager(), SIGNAL(setValue(int)),
@@ -250,13 +250,13 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
 
     if (rescale) {
         if (!m_canvas->isFineGrain()) {
-            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+            setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
         } else {
             clearContextHelp();
         }
     } else {
         if (!m_canvas->isFineGrain()) {
-            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
+            setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents"));
         } else {
             setContextHelp("Hold Ctrl to rescale contents");
         }
@@ -271,7 +271,7 @@ int SegmentResizer::handleMouseMove(QMouseEvent *e)
         {
             m_currentIndex = CompositionItem();
             QMessageBox::information(m_canvas,
-                    i18n("You can't yet resize an audio segment!"));
+                    QObject::tr("You can't yet resize an audio segment!"));
             return RosegardenCanvasView::NoFollow;
         }
     */
@@ -379,9 +379,9 @@ bool SegmentResizer::cursorIsCloseEnoughToEdge(const CompositionItem& p, const Q
 void SegmentResizer::setBasicContextHelp(bool ctrlPressed)
 {
     if (ctrlPressed) {
-        setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+        setContextHelp(QObject::tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
     } else {
-        setContextHelp(i18n("Click and drag to rescale segment"));
+        setContextHelp(QObject::tr("Click and drag to rescale segment"));
     }        
 }    
 

@@ -80,7 +80,7 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(i18n("Note Font Viewer: %1", noteFontName));
+    setWindowTitle(QObject::tr("Note Font Viewer: %1").arg(noteFontName));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -93,7 +93,7 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
 // 	controls->setMargin(3);
 	controls->setContentsMargins(3,3,3,3);
 
-    (void) new QLabel(i18n("  Component: "), controls);
+    (void) new QLabel(QObject::tr("  Component: "), controls);
     m_font = new QComboBox(controls);
 
     for (QStringList::iterator i = fontNames.begin(); i != fontNames.end();
@@ -101,13 +101,13 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
         m_font->addItem(*i);
     }
 
-    (void) new QLabel(i18n("  View: "), controls);
+    (void) new QLabel(QObject::tr("  View: "), controls);
     m_view = new QComboBox(controls);
 
-    m_view->addItem(i18n("Glyphs"));
-    m_view->addItem(i18n("Codes"));
+    m_view->addItem(QObject::tr("Glyphs"));
+    m_view->addItem(QObject::tr("Codes"));
 
-    (void) new QLabel(i18n("  Page: "), controls);
+    (void) new QLabel(QObject::tr("  Page: "), controls);
     m_rows = new QComboBox(controls);
 
     m_frame = new FontViewFrame(pixelSize, box );

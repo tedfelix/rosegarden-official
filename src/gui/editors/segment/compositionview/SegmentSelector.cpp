@@ -73,7 +73,7 @@ void SegmentSelector::ready()
     m_canvas->viewport()->setCursor(Qt::arrowCursor);
     connect(m_canvas, SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
-    setContextHelp(i18n("Click and drag to select segments"));
+    setContextHelp(QObject::tr("Click and drag to select segments"));
 }
 
 void SegmentSelector::stow()
@@ -240,8 +240,8 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (m_selectedItems.size() == 1 ? i18n("Move Segment") :
-                 i18n("Move Segments"));
+                (m_selectedItems.size() == 1 ? QObject::tr("Move Segment") :
+                 QObject::tr("Move Segments"));
 
             for (it = changingItems.begin();
                     it != changingItems.end();
@@ -383,7 +383,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
     if (m_canvas->getModel()->isSelected(m_currentIndex)) {
 
         if (!m_canvas->isFineGrain()) {
-            setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+            setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
         } else {
             clearContextHelp();
         }
@@ -491,7 +491,7 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
     CompositionItem item = m_canvas->getFirstItemAt(p);
 
     if (!item) {
-        setContextHelp(i18n("Click and drag to select segments; middle-click and drag to draw an empty segment"));
+        setContextHelp(QObject::tr("Click and drag to select segments; middle-click and drag to draw an empty segment"));
 
     } else {
 
@@ -508,22 +508,22 @@ void SegmentSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
             SegmentResizer::cursorIsCloseEnoughToEdge(item, p,
                                                       threshold, start)) {
             if (!ctrlPressed) {
-                setContextHelp(i18n("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
+                setContextHelp(QObject::tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
             } else {
-                setContextHelp(i18n("Click and drag to rescale segment"));
+                setContextHelp(QObject::tr("Click and drag to rescale segment"));
             }
         } else {
             if (m_canvas->getModel()->haveMultipleSelection()) {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move segments; hold Ctrl as well to copy them"));
+                    setContextHelp(QObject::tr("Click and drag to move segments; hold Ctrl as well to copy them"));
                 } else {
-                    setContextHelp(i18n("Click and drag to copy segments"));
+                    setContextHelp(QObject::tr("Click and drag to copy segments"));
                 }
             } else {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit"));
+                    setContextHelp(QObject::tr("Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit"));
                 } else {
-                    setContextHelp(i18n("Click and drag to copy segment"));
+                    setContextHelp(QObject::tr("Click and drag to copy segment"));
                 }
             }
         }

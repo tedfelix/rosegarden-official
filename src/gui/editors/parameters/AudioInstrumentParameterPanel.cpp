@@ -166,10 +166,10 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
 
     if (index == (int)Instrument::SYNTH_PLUGIN_POSITION) {
         button = m_audioFader->m_synthButton;
-        noneText = i18n("<no synth>");
+        noneText = QObject::tr("<no synth>");
     } else {
         button = m_audioFader->m_plugins[index];
-        noneText = i18n("<no plugin>");
+        noneText = QObject::tr("<no plugin>");
     }
 
     if (!button)
@@ -350,11 +350,11 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
         if (i == -1) {
             index = Instrument::SYNTH_PLUGIN_POSITION;
             button = m_audioFader->m_synthButton;
-            noneText = i18n("<no synth>");
+            noneText = QObject::tr("<no synth>");
         } else {
             index = i;
             button = m_audioFader->m_plugins[i];
-            noneText = i18n("<no plugin>");
+            noneText = QObject::tr("<no plugin>");
         }
 
         button->show();

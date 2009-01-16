@@ -485,7 +485,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
 				QMessageBox::warning
 					( dynamic_cast<QWidget *>(parent()), 
 					"", 
-	 				i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)", (*scooter)->getViewAbsoluteTime())
+	 				QObject::tr("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())
 					);
                 event->dump(std::cerr);
             }

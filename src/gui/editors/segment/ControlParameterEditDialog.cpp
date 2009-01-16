@@ -46,7 +46,7 @@
 namespace Rosegarden
 {
 
-const QString notShowing(i18n("<not showing>"));
+const QString notShowing(QObject::tr("<not showing>"));
 
 ControlParameterEditDialog::ControlParameterEditDialog(
     QWidget *parent,
@@ -59,7 +59,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_dialogControl = *control; // copy in the ControlParameter
 
     setModal(true);
-    setWindowTitle(i18n("Edit Control Parameter"));
+    setWindowTitle(QObject::tr("Edit Control Parameter"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -68,22 +68,22 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *frame = new QGroupBox( i18n("Control Event Properties"), vbox );
+    QGroupBox *frame = new QGroupBox( QObject::tr("Control Event Properties"), vbox );
     vboxLayout->addWidget(frame);
     vbox->setLayout(vboxLayout);
     frame->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    layout->addWidget(new QLabel(i18n("Name:"), frame), 0, 0);
+    layout->addWidget(new QLabel(QObject::tr("Name:"), frame), 0, 0);
     m_nameEdit = new QLineEdit(frame);
     layout->addWidget(m_nameEdit, 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Type:"), frame), 1, 0);
+    layout->addWidget(new QLabel(QObject::tr("Type:"), frame), 1, 0);
     m_typeCombo = new QComboBox(frame);
     layout->addWidget(m_typeCombo, 1, 1, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Description:"), frame), 2, 0);
+    layout->addWidget(new QLabel(QObject::tr("Description:"), frame), 2, 0);
     m_description = new QLineEdit(frame);
     layout->addWidget(m_description, 2, 1, 1, 2);
 
@@ -91,27 +91,27 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_hexValue = new QLabel(frame);
     layout->addWidget(m_hexValue, 3, 1);
 
-    layout->addWidget(new QLabel(i18n("Control Event value:"), frame), 3, 0);
+    layout->addWidget(new QLabel(QObject::tr("Control Event value:"), frame), 3, 0);
     m_controllerBox = new QSpinBox(frame);
     layout->addWidget(m_controllerBox, 3, 2);
 
-    layout->addWidget(new QLabel(i18n("Minimum value:"), frame), 4, 0);
+    layout->addWidget(new QLabel(QObject::tr("Minimum value:"), frame), 4, 0);
     m_minBox = new QSpinBox(frame);
     layout->addWidget(m_minBox, 4, 1, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Maximum value:"), frame), 5, 0);
+    layout->addWidget(new QLabel(QObject::tr("Maximum value:"), frame), 5, 0);
     m_maxBox = new QSpinBox(frame);
     layout->addWidget(m_maxBox, 5, 1, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Default value:"), frame), 6, 0);
+    layout->addWidget(new QLabel(QObject::tr("Default value:"), frame), 6, 0);
     m_defaultBox = new QSpinBox(frame);
     layout->addWidget(m_defaultBox, 6, 1, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Color:"), frame), 7, 0);
+    layout->addWidget(new QLabel(QObject::tr("Color:"), frame), 7, 0);
     m_colourCombo = new QComboBox(frame);
     layout->addWidget(m_colourCombo, 7, 1, 1, 2);
 
-    layout->addWidget(new QLabel(i18n("Instrument Parameter Box position:"), frame), 8, 0);
+    layout->addWidget(new QLabel(QObject::tr("Instrument Parameter Box position:"), frame), 8, 0);
     m_ipbPosition = new QComboBox(frame);
     layout->addWidget(m_ipbPosition, 8, 1, 1, 2);
 

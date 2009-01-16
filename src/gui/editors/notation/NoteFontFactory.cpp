@@ -183,7 +183,7 @@ NoteFontFactory::getDefaultFontName()
         else if (fontNames.size() > 0)
             defaultFont = *fontNames.begin();
         else {
-            QString message = i18n("Can't obtain a default font -- no fonts found");
+            QString message = QObject::tr("Can't obtain a default font -- no fonts found");
             StartupLogo::hideIfStillThere();
             QMessageBox::critical(0, "", message);
             throw NoFontsAvailable(qstrtostr(message));

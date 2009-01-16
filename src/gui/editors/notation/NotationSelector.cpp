@@ -89,7 +89,7 @@ NotationSelector::NotationSelector(NotationView* view)
     // (this crashed, and it might be superfluous with ^N anyway, so I'm
     // commenting it out, but leaving it here in case I change my mind about
     // fooling with it.)  (DMM)
-    //    new KAction(i18n("Normalize Rests"), 0, 0, this,
+    //    new KAction(QObject::tr("Normalize Rests"), 0, 0, this,
     //                SLOT(slotCollapseRests()), actionCollection(),
     //                "collapse_rests");
 

@@ -192,7 +192,7 @@ NotePixmapFactory::init(std::string fontName, int size)
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
     } catch (NoteStyleFactory::StyleUnavailable u) {
         StartupLogo::hideIfStillThere();
-        QMessageBox::critical(0, "", i18n( u.getMessage().c_str() )  );
+        QMessageBox::critical(0, "", QObject::tr( u.getMessage().c_str() )  );
         throw;
     }
 
@@ -2308,7 +2308,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
             if (!text.isEmpty()) {
                 // String too long : cut it and replace last character by dots
                 int len = textLine.length();
-                if (len > 1) textLine.replace(len - 1, 1, i18n("..."));
+                if (len > 1) textLine.replace(len - 1, 1, QObject::tr("..."));
             }
         } else {
             textLine = getOneLine(text, width - charWidth / 2);
@@ -2352,7 +2352,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(
         if ((l == numberOfTextLines)  && !text.isEmpty()) {
                 // String too long : cut it and replace last character by dots
                 int len = textLine.length();
-                if (len > 1) textLine.replace(len - 1, 1, i18n("..."));
+                if (len > 1) textLine.replace(len - 1, 1, QObject::tr("..."));
         }
 
         m_p->drawText(charWidth / 4, lowerTextY, textLine);

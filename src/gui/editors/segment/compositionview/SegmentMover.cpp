@@ -154,7 +154,7 @@ void SegmentMover::handleMouseButtonRelease(QMouseEvent *e)
 
             SegmentReconfigureCommand *command =
                 new SegmentReconfigureCommand
-                (changingItems.size() == 1 ? i18n("Move Segment") : i18n("Move Segments"));
+                (changingItems.size() == 1 ? QObject::tr("Move Segment") : QObject::tr("Move Segments"));
 
 
             CompositionModel::itemcontainer::iterator it;
@@ -223,7 +223,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
     }
 
     if (!m_canvas->isFineGrain()) {
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+        setContextHelp(QObject::tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
@@ -337,7 +337,7 @@ int SegmentMover::handleMouseMove(QMouseEvent *e)
 
 void SegmentMover::setBasicContextHelp()
 {
-    setContextHelp(i18n("Click and drag to move a segment"));
+    setContextHelp(QObject::tr("Click and drag to move a segment"));
 }
 
 const QString SegmentMover::ToolName    = "segmentmover";

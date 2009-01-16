@@ -496,7 +496,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
                                         Qt::AlignRight | Qt::AlignBottom);
     hideHeadersButton->setIcon(IconLoader().load("close"));
     hideHeadersButton->setFlat(true);
-    hideHeadersButton->setToolTip(i18n("Close track headers"));
+    hideHeadersButton->setToolTip(QObject::tr("Close track headers"));
     headersTopGrid->setMargin(4);
     setTopStandardRuler(new StandardRuler(getDocument(),
                                     m_hlayout, m_leftGutter, 25,
@@ -532,7 +532,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
-        progressDlg = new ProgressDialog(i18n("Starting..."),
+        progressDlg = new ProgressDialog(QObject::tr("Starting..."),
                                          100, this);
         progressDlg->setAutoClose(false);
         progressDlg->setAutoReset(true);
@@ -898,7 +898,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
         NOTATION_DEBUG << "NotationView : setting up progress dialog" << endl;
 
-        progressDlg = new ProgressDialog(i18n("Preparing to print..."),
+        progressDlg = new ProgressDialog(QObject::tr("Preparing to print..."),
                                          100, parent);
         progressDlg->setAutoClose(false);
         progressDlg->setAutoReset(true);
@@ -1611,7 +1611,7 @@ void NotationView::setupActions()
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
-    QMenu *fontActionMenu = new QMenu(i18n("Note &Font"), this); 
+    QMenu *fontActionMenu = new QMenu(QObject::tr("Note &Font"), this); 
     fontActionMenu->setObjectName("note_font_actionmenu");
 
     QActionGroup *ag = new QActionGroup(this);
@@ -1634,7 +1634,7 @@ void NotationView::setupActions()
 
     //&&& add fontActionMenu to the appropriate super-menu
 
-    m_fontSizeActionMenu = new QMenu(i18n("Si&ze"), this);
+    m_fontSizeActionMenu = new QMenu(QObject::tr("Si&ze"), this);
     m_fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
 
     setupFontSizeMenu();
@@ -1642,7 +1642,7 @@ void NotationView::setupActions()
     //&&& add m_fontSizeActionMenu to the appropriate super-menu
 
 
-    QMenu *spacingActionMenu = new QMenu(i18n("S&pacing"), this);
+    QMenu *spacingActionMenu = new QMenu(QObject::tr("S&pacing"), this);
     spacingActionMenu->setObjectName("stretch_actionmenu");
 
     int defaultSpacing = m_hlayout->getSpacing();
@@ -1667,7 +1667,7 @@ void NotationView::setupActions()
     //&&& add spacingActionMenu to the appropriate super-menu
 
 
-    QMenu *proportionActionMenu = new QMenu(i18n("Du&ration Factor"), this);
+    QMenu *proportionActionMenu = new QMenu(QObject::tr("Du&ration Factor"), this);
     proportionActionMenu->setObjectName("proportion_actionmenu");
 
     int defaultProportion = m_hlayout->getProportion();
@@ -1679,7 +1679,7 @@ void NotationView::setupActions()
          i != proportions.end(); ++i) {
 
         QString name = QString("%1%").arg(*i);
-        if (*i == 0) name = i18n("None");
+        if (*i == 0) name = QObject::tr("None");
 
         QAction *a = createAction(QString("proportion_%1").arg(*i),
                                   SLOT(slotChangeSpacingFromAction()));
@@ -1698,7 +1698,7 @@ void NotationView::setupActions()
 //!!!
 // I believe this one was never actually used:
 //    KActionMenu *ornamentActionMenu =
-//        new KActionMenu(i18n("Use Ornament"), this, "ornament_actionmenu");
+//        new KActionMenu(QObject::tr("Use Ornament"), this, "ornament_actionmenu");
 
 
     ag = new QActionGroup(this);
@@ -1785,7 +1785,7 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
         if (!sizeAction) {
             sizeAction = createAction
                 (actionName, SLOT(slotChangeFontSizeFromStringValue()));
-// 			sizeAction->setText(i18n("1 pixel", "%n pixels", sizes[i]));
+// 			sizeAction->setText( QObject::tr("%n pixel(s)", "", sizes[i]));
 			sizeAction->setText( QObject::tr("%n pixel(s)", "", sizes[i]) );
 			sizeAction->setCheckable(true);
         }
@@ -1834,7 +1834,7 @@ void NotationView::initLayoutToolbar()
         return ;
     }
 
-    new QLabel(i18n("  Font:  "), layoutToolbar);
+    new QLabel(QObject::tr("  Font:  "), layoutToolbar);
 
     //
     // font combo
@@ -1862,15 +1862,15 @@ void NotationView::initLayoutToolbar()
 
     if (!foundFont) {
         /* was sorry */ QMessageBox::warning
-        (this, "", i18n("Unknown font \"%1\", using default", 
-         strtoqstr(m_fontName)) );
+        (this, "", QObject::tr("Unknown font \"%1\", using default")
+         .arg(strtoqstr(m_fontName)) );
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this, SLOT(slotChangeFont(const QString &)));
 
-    new QLabel(i18n("  Size:  "), layoutToolbar);
+    new QLabel(QObject::tr("  Size:  "), layoutToolbar);
 
     QString value;
 
@@ -1894,7 +1894,7 @@ void NotationView::initLayoutToolbar()
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
 
-    new QLabel(i18n("  Spacing:  "), layoutToolbar);
+    new QLabel(QObject::tr("  Spacing:  "), layoutToolbar);
 
     //
     // spacing combo
@@ -2222,12 +2222,12 @@ NotationView::paintEvent(QPaintEvent *e)
         }
     }
 
-    slotSetOperationNameAndStatus(i18n("  Ready."));
+    slotSetOperationNameAndStatus(QObject::tr("  Ready."));
 }
 
 bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
 {
-    slotSetOperationNameAndStatus(i18n("Laying out score..."));
+    slotSetOperationNameAndStatus(QObject::tr("Laying out score..."));
     ProgressDialog::processEvents();
 
     m_hlayout->setStaffCount(m_staffs.size());
@@ -2240,7 +2240,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         if (staffNo >= 0 && (int)i != staffNo)
             continue;
 
-        slotSetOperationNameAndStatus(i18n("Laying out staff %1...", i + 1));
+        slotSetOperationNameAndStatus(QObject::tr("Laying out staff %1...").arg(i + 1));
         ProgressDialog::processEvents();
 
         m_hlayout->resetStaff(*m_staffs[i], startTime, endTime);
@@ -2249,7 +2249,7 @@ bool NotationView::applyLayout(int staffNo, timeT startTime, timeT endTime)
         m_vlayout->scanStaff(*m_staffs[i], startTime, endTime);
     }
 
-    slotSetOperationNameAndStatus(i18n("Reconciling staffs..."));
+    slotSetOperationNameAndStatus(QObject::tr("Reconciling staffs..."));
     ProgressDialog::processEvents();
 
     m_hlayout->finishLayout(startTime, endTime);
@@ -2477,7 +2477,7 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
         m_selectionCounter->setText
         (QObject::tr("  %s event(s) selected ", "", eventsSelected));
     } else {
-        m_selectionCounter->setText(i18n("  No selection "));
+        m_selectionCounter->setText(QObject::tr("  No selection "));
     }
     m_selectionCounter->update();
 
@@ -2746,7 +2746,7 @@ void NotationView::updateView()
 void NotationView::print(bool previewOnly)
 {
     if (m_staffs.size() == 0) {
-        QMessageBox::critical(0, "", i18n("Nothing to print"));
+        QMessageBox::critical(0, "", QObject::tr("Nothing to print"));
         return ;
     }
 
@@ -3065,7 +3065,7 @@ void NotationView::refreshSegment(Segment *segment,
     }
 
     setMenuStates();
-    slotSetOperationNameAndStatus(i18n("  Ready."));
+    slotSetOperationNameAndStatus(QObject::tr("  Ready."));
     NOTATION_DEBUG << "*** " << endl;
 }
 
@@ -3128,7 +3128,7 @@ void NotationView::readjustCanvasSize()
     double maxWidth = 0.0;
     int maxHeight = 0;
 
-    slotSetOperationNameAndStatus(i18n("Sizing and allocating canvas..."));
+    slotSetOperationNameAndStatus(QObject::tr("Sizing and allocating canvas..."));
     ProgressDialog::processEvents();
 
     int progressTotal = m_staffs.size() + 2;
@@ -3282,7 +3282,7 @@ void NotationView::initActionDataMaps()
                             titleName.right(titleName.length() - 1);
 
                 if (rest) {
-                    titleName.replace(QRegExp(i18n("note")), i18n("rest"));
+                    titleName.replace(QRegExp(QObject::tr("note")), QObject::tr("rest"));
                 }
 
                 int keycode = keys[type - Note::Shortest];
@@ -3429,14 +3429,14 @@ void NotationView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
         //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
-        setWindowTitle(i18n("%1 - Segment Track #%2 - Notation",
-                    getDocument()->getTitle(),
-                    trackPosition + 1));
+        setWindowTitle(QObject::tr("%1 - Segment Track #%2 - Notation")
+                    .arg(getDocument()->getTitle())
+                    .arg(trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setWindowTitle(i18n("%1 - All Segments - Notation",
-                    getDocument()->getTitle()));
+        setWindowTitle(QObject::tr("%1 - All Segments - Notation")
+                    .arg(getDocument()->getTitle()));
 
     } else {
 
@@ -3457,21 +3457,21 @@ NotationView::NoteActionDataMap* NotationView::m_noteActionDataMap = 0;
 void
 NotationView::slotUpdateInsertModeStatus()
 {
-    QString tripletMessage = i18n("Triplet");
-    QString chordMessage = i18n("Chord");
-    QString graceMessage = i18n("Grace");
+    QString tripletMessage = QObject::tr("Triplet");
+    QString chordMessage = QObject::tr("Chord");
+    QString graceMessage = QObject::tr("Grace");
     QString message;
 
     if (isInTripletMode()) {
-        message = i18n("%1 %2", message, tripletMessage);
+        message = QObject::tr("%1 %2").arg(message).arg(tripletMessage);
     }
 
     if (isInChordMode()) {
-        message = i18n("%1 %2", message, chordMessage);
+        message = QObject::tr("%1 %2").arg(message).arg(chordMessage);
     }
 
     if (isInGraceMode()) {
-        message = i18n("%1 %2", message, graceMessage);
+        message = QObject::tr("%1 %2").arg(message).arg(graceMessage);
     }
 
     m_insertModeLabel->setText(message);
@@ -3487,7 +3487,7 @@ NotationView::slotUpdateAnnotationsStatus()
                 if ((*j)->isa(Text::EventType) &&
                         ((*j)->get<String>(Text::TextTypePropertyName)
                          == Text::Annotation)) {
-                    m_annotationsLabel->setText(i18n("Hidden annotations"));
+                    m_annotationsLabel->setText(QObject::tr("Hidden annotations"));
                     return ;
                 }
             }
@@ -3509,7 +3509,7 @@ NotationView::slotUpdateLilyPondDirectivesStatus()
                          <String>
                          (Text::TextTypePropertyName)
                          == Text::LilyPondDirective)) {
-                    m_lilyPondDirectivesLabel->setText(i18n("Hidden LilyPond directives"));
+                    m_lilyPondDirectivesLabel->setText(QObject::tr("Hidden LilyPond directives"));
                     return ;
                 }
             }
@@ -3542,7 +3542,7 @@ NotationView::slotChangeSpacingFromAction()
 
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, "", i18n("Unknown spacing action %1", name));
+        (this, "", QObject::tr("Unknown spacing action %1").arg(name));
     }
 }
 
@@ -3603,7 +3603,7 @@ NotationView::slotChangeProportionFromAction()
 
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, "",  i18n("Unknown proportion action %1", name));
+        (this, "",  QObject::tr("Unknown proportion action %1").arg(name));
     }
 }
 
@@ -3653,7 +3653,7 @@ NotationView::slotChangeFontFromAction()
         slotChangeFont(name);
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, "", i18n("Unknown font action %1", name));
+        (this, "", QObject::tr("Unknown font action %1").arg(name));
     }
 }
 
@@ -3671,11 +3671,11 @@ NotationView::slotChangeFontSizeFromAction()
             slotChangeFont(m_fontName, size);
         else {
             /* was sorry */ QMessageBox::warning
-            (this, "", i18n("Unknown font size %1", name));
+            (this, "", QObject::tr("Unknown font size %1").arg(name));
         }
     } else {
         /* was sorry */ QMessageBox::warning
-        (this, "", i18n("Unknown font size action %1", name));
+        (this, "", QObject::tr("Unknown font size action %1").arg(name));
     }
 }
 
@@ -3849,7 +3849,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 void
 NotationView::slotFilePrint()
 {
-    KTmpStatusMsg msg(i18n("Printing..."), this);
+    KTmpStatusMsg msg(QObject::tr("Printing..."), this);
 
     SetWaitCursor waitCursor;
     NotationView printingView(getDocument(), m_segments,
@@ -3866,7 +3866,7 @@ NotationView::slotFilePrint()
 void
 NotationView::slotFilePrintPreview()
 {
-    KTmpStatusMsg msg(i18n("Previewing..."), this);
+    KTmpStatusMsg msg(QObject::tr("Previewing..."), this);
 
     SetWaitCursor waitCursor;
     NotationView printingView(getDocument(), m_segments,
@@ -3884,13 +3884,13 @@ std::map<QProcess *, QTemporaryFile *> NotationView::m_lilyTempFileMap;
 
 void NotationView::slotPrintLilyPond()
 {
-    KTmpStatusMsg msg(i18n("Printing LilyPond file..."), this);
+    KTmpStatusMsg msg(QObject::tr("Printing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
 	
     if (!file->open()) {
 //         CurrentProgressDialog::freeze();		//&&& which progressDlg ?
-		QMessageBox::warning(this, "", i18n("Failed to open a temporary file for LilyPond export."));
+		QMessageBox::warning(this, "", QObject::tr("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     QString filename = file->fileName();
@@ -3914,14 +3914,14 @@ void NotationView::slotPrintLilyPond()
 
 void NotationView::slotPreviewLilyPond()
 {
-    KTmpStatusMsg msg(i18n("Previewing LilyPond file..."), this);
+    KTmpStatusMsg msg(QObject::tr("Previewing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
 	
     if (!file->open()) {
 //         CurrentProgressDialog::freeze();	//&&& what's the current progress dialog?
         /* was sorry */ 
-		QMessageBox::warning(this, "", i18n("Failed to open a temporary file for LilyPond export."));
+		QMessageBox::warning(this, "", QObject::tr("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
 	
@@ -3953,8 +3953,8 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
 {
     QString caption = "", heading = "";
     if (forPreview) {
-        caption = i18n("LilyPond Preview Options");
-        heading = i18n("LilyPond preview options");
+        caption = QObject::tr("LilyPond Preview Options");
+        heading = QObject::tr("LilyPond preview options");
     }
 
     LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
@@ -3962,7 +3962,7 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    ProgressDialog progressDlg(i18n("Exporting LilyPond file..."),
+    ProgressDialog progressDlg(QObject::tr("Exporting LilyPond file..."),
                                100,
                                this);
 
@@ -3977,7 +3977,7 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
     if (!e.write()) {
         // CurrentProgressDialog::freeze();
         /* was sorry */ 
-		QMessageBox::warning(this, "", i18n("Export failed.  The file could not be opened for writing."));
+		QMessageBox::warning(this, "", QObject::tr("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -3988,7 +3988,7 @@ void NotationView::slotEditCut()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
+    KTmpStatusMsg msg(QObject::tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
                                        getDocument()->getClipboard()));
@@ -3998,7 +3998,7 @@ void NotationView::slotEditDelete()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Deleting selection..."), this);
+    KTmpStatusMsg msg(QObject::tr("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 }
@@ -4007,7 +4007,7 @@ void NotationView::slotEditCopy()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Copying selection to clipboard..."), this);
+    KTmpStatusMsg msg(QObject::tr("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
                                         getDocument()->getClipboard()));
@@ -4017,13 +4017,13 @@ void NotationView::slotEditCutAndClose()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Cutting selection to clipboard..."), this);
+    KTmpStatusMsg msg(QObject::tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
                         getDocument()->getClipboard()));
 }
 
-static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = i18n(
+static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = QObject::tr(
                       "The Restricted paste type requires enough empty " \
                       "space (containing only rests) at the paste position " \
                       "to hold all of the events to be pasted.\n" \
@@ -4040,15 +4040,15 @@ void NotationView::slotEditPaste()
     Clipboard * clipboard = getDocument()->getClipboard();
 
     if (clipboard->isEmpty()) {
-        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        slotStatusHelpMsg(QObject::tr("Clipboard is empty"));
         return ;
     }
     if (!clipboard->isSingleSegment()) {
-        slotStatusHelpMsg(i18n("Can't paste multiple Segments into one"));
+        slotStatusHelpMsg(QObject::tr("Can't paste multiple Segments into one"));
         return ;
     }
 
-    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+    slotStatusHelpMsg(QObject::tr("Inserting clipboard contents..."));
 
     LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
@@ -4073,7 +4073,7 @@ void NotationView::slotEditPaste()
     if (!command->isPossible()) {
         QMessageBox::warning	//detailedError
 				(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
-             i18n("Couldn't paste at this point.") );
+             QObject::tr("Couldn't paste at this point.") );
     } else {
         addCommandToHistory(command);
         setCurrentSelection(new EventSelection(command->getPastedEvents()));
@@ -4088,11 +4088,11 @@ void NotationView::slotEditGeneralPaste()
     Clipboard *clipboard = getDocument()->getClipboard();
 
     if (clipboard->isEmpty()) {
-        slotStatusHelpMsg(i18n("Clipboard is empty"));
+        slotStatusHelpMsg(QObject::tr("Clipboard is empty"));
         return ;
     }
 
-    slotStatusHelpMsg(i18n("Inserting clipboard contents..."));
+    slotStatusHelpMsg(QObject::tr("Inserting clipboard contents..."));
 
     LinedStaff *staff = getCurrentLinedStaff();
     Segment &segment = staff->getSegment();
@@ -4124,7 +4124,7 @@ void NotationView::slotEditGeneralPaste()
         if (!command->isPossible()) {
             QMessageBox::warning	//detailedError
 					(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
-                 i18n("Couldn't paste at this point.") );
+                 QObject::tr("Couldn't paste at this point.") );
         } else {
             addCommandToHistory(command);
             setCurrentSelection(new EventSelection
@@ -4144,7 +4144,7 @@ NotationView::slotMoveEventsUpStaff()
     if (!m_currentEventSelection) return;
     Segment &targetSegment = targetStaff->getSegment();
     
-    MacroCommand *command = new MacroCommand(i18n("Move Events to Staff Above"));
+    MacroCommand *command = new MacroCommand(QObject::tr("Move Events to Staff Above"));
 
     timeT insertionTime = m_currentEventSelection->getStartTime();
 
@@ -4172,7 +4172,7 @@ NotationView::slotMoveEventsDownStaff()
     if (!m_currentEventSelection) return;
     Segment &targetSegment = targetStaff->getSegment();
     
-    MacroCommand *command = new MacroCommand(i18n("Move Events to Staff TicksBelow"));
+    MacroCommand *command = new MacroCommand(QObject::tr("Move Events to Staff TicksBelow"));
 
     timeT insertionTime = m_currentEventSelection->getStartTime();
 
@@ -4284,7 +4284,7 @@ void NotationView::slotVelocityUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Raising velocities..."), this);
+    KTmpStatusMsg msg(QObject::tr("Raising velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand(10, *m_currentEventSelection));
@@ -4294,7 +4294,7 @@ void NotationView::slotVelocityDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Lowering velocities..."), this);
+    KTmpStatusMsg msg(QObject::tr("Lowering velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand( -10, *m_currentEventSelection));
@@ -4329,12 +4329,12 @@ void NotationView::slotSetVelocities()
         return ;
 
     EventParameterDialog dialog(this,
-                                i18n("Set Event Velocities"),
+                                QObject::tr("Set Event Velocities"),
                                 BaseProperties::VELOCITY,
                                 getVelocityFromSelection());
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Setting Velocities..."), this);
+        KTmpStatusMsg msg(QObject::tr("Setting Velocities..."), this);
         addCommandToHistory(new SelectionPropertyCommand
                             (m_currentEventSelection,
                              BaseProperties::VELOCITY,
@@ -4505,7 +4505,7 @@ void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Normalizing rests..."), this);
+    KTmpStatusMsg msg(QObject::tr("Normalizing rests..."), this);
 
     addCommandToHistory(new NormalizeRestsCommand
                         (*m_currentEventSelection));
@@ -4515,7 +4515,7 @@ void NotationView::slotTransformsCollapseNotes()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Collapsing notes..."), this);
+    KTmpStatusMsg msg(QObject::tr("Collapsing notes..."), this);
 
     addCommandToHistory(new CollapseNotesCommand
                         (*m_currentEventSelection));
@@ -4530,7 +4530,7 @@ void NotationView::slotInsertNoteFromAction()
 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No note duration selected"));
         return ;
     }
 
@@ -4549,11 +4549,11 @@ void NotationView::slotInsertNoteFromAction()
     } catch (...) {
 
         /* was sorry */ QMessageBox::warning
-            (this,"",  i18n("Unknown note insert action %1", name));
+            (this,"",  QObject::tr("Unknown note insert action %1").arg(name));
         return ;
     }
 
-    KTmpStatusMsg msg(i18n("Inserting note"), this);
+    KTmpStatusMsg msg(QObject::tr("Inserting note"), this);
 
     NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
 
@@ -4571,7 +4571,7 @@ void NotationView::slotInsertRest()
 
         NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
         if (!noteInserter) {
-            /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
+            /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No note duration selected"));
             return ;
         }
 
@@ -4592,7 +4592,7 @@ void NotationView::slotSwitchFromRestToNote()
 {
     RestInserter *restInserter = dynamic_cast<RestInserter *>(m_tool);
     if (!restInserter) {
-        /* was sorry */ QMessageBox::warning(this, "", i18n("No rest duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No rest duration selected"));
         return ;
     }
 
@@ -4628,7 +4628,7 @@ void NotationView::slotSwitchFromNoteToRest()
 {
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>(m_tool);
     if (!noteInserter) {
-        /* was sorry */ QMessageBox::warning(this, "", i18n("No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No note duration selected"));
         return ;
     }
 
@@ -4681,7 +4681,7 @@ void NotationView::slotToggleDot()
             noteInserter->slotSetDots(note.getDots() ? 0 : 1);
             setTool(noteInserter);
         } else {
-            /* was sorry */ QMessageBox::warning(this, "", i18n("No note or rest duration selected"));
+            /* was sorry */ QMessageBox::warning(this, "", QObject::tr("No note or rest duration selected"));
         }
     }
 
@@ -4696,7 +4696,7 @@ void NotationView::slotTransformsQuantize()
     QuantizeDialog dialog(this, true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Quantizing..."), this);
+        KTmpStatusMsg msg(QObject::tr("Quantizing..."), this);
         addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
                              dialog.getQuantizer()));
@@ -4711,7 +4711,7 @@ void NotationView::slotTransformsInterpret()
     InterpretDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Interpreting selection..."), this);
+        KTmpStatusMsg msg(QObject::tr("Interpreting selection..."), this);
         addCommandToHistory(new InterpretCommand
                             (*m_currentEventSelection,
                              getDocument()->getComposition().getNotationQuantizer(),
@@ -4724,7 +4724,7 @@ void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Setting note durations..."), this);
+    KTmpStatusMsg msg(QObject::tr("Setting note durations..."), this);
     addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
 }
 */
@@ -4733,7 +4733,7 @@ void NotationView::slotAddDot()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    KTmpStatusMsg msg(QObject::tr("Adding dot..."), this);
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, false));
 }
 
@@ -4741,7 +4741,7 @@ void NotationView::slotAddDotNotationOnly()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Adding dot..."), this);
+    KTmpStatusMsg msg(QObject::tr("Adding dot..."), this);
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
 }
 
@@ -4785,9 +4785,9 @@ NotationView::slotMakeOrnament()
     QString name;
     int barNo = segment.getComposition()->getBarNumber(absTime);
     if (track) {
-        name = QString(i18n("Ornament track %1 bar %2", track->getPosition() + 1, barNo + 1));
+        name = QString(QObject::tr("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
     } else {
-        name = QString(i18n("Ornament bar %1", barNo + 1));
+        name = QString(QObject::tr("Ornament bar %1").arg(barNo + 1));
     }
 
     MakeOrnamentDialog dialog(this, name, basePitch);
@@ -4797,7 +4797,7 @@ NotationView::slotMakeOrnament()
     name = dialog.getName();
     basePitch = dialog.getBasePitch();
 
-    MacroCommand *command = new MacroCommand(i18n("Make Ornament"));
+    MacroCommand *command = new MacroCommand(QObject::tr("Make Ornament"));
 
     command->addCommand(new CutCommand
                         (*m_currentEventSelection,
@@ -4837,7 +4837,7 @@ NotationView::slotUseOrnament()
                                               dialog.getRetune(),
                                               dialog.getTimeAdjust(),
                                               dialog.getMark(),
-                                              i18n("Use Ornament")));
+                                              QObject::tr("Use Ornament")));
 }
 
 void
@@ -4847,7 +4847,7 @@ NotationView::slotRemoveOrnament()
         return ;
 
     addCommandToHistory(new ClearTriggersCommand(*m_currentEventSelection,
-                                                 i18n("Remove Ornaments")));
+                                                 QObject::tr("Remove Ornaments")));
 }
 
 void NotationView::slotEditAddClef()
@@ -4894,7 +4894,7 @@ void NotationView::slotEditAddKeySignature()
 
     KeySignatureDialog dialog
         (this, m_notePixmapFactory, clef, key, true, true,
-         i18n("Estimated key signature shown"));
+         QObject::tr("Estimated key signature shown"));
 
     if (dialog.exec() == QDialog::Accepted &&
         dialog.isValid()) {
@@ -4951,7 +4951,7 @@ void NotationView::slotEditAddSustain(bool down)
 
                     if (i->getType() == Controller::EventType &&
                         (i->getName() == "Sustain" ||
-                         strtoqstr(i->getName()) == i18n("Sustain"))) {
+                         strtoqstr(i->getName()) == QObject::tr("Sustain"))) {
 
                         addCommandToHistory
                             (new SustainInsertionCommand(segment, insertionTime, down,
@@ -4967,7 +4967,7 @@ void NotationView::slotEditAddSustain(bool down)
         }
     }
 
-    /* was sorry */ QMessageBox::warning(this, "", i18n("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+    /* was sorry */ QMessageBox::warning(this, "", QObject::tr("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
 }
 
 void NotationView::slotEditAddSustainDown()
@@ -6005,17 +6005,17 @@ NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 
     //    QString message;
     //    QString format("%ld (%ld.%03lds)");
-    //    format = i18n("Time: %1").arg(format);
+    //    format = QObject::tr("Time: %1").arg(format);
     //    message.sprintf(format, t, rt.sec, ms);
 
-    QString message = i18n("Time: %1 (%2.%3s)",
-         QString("%1-%2-%3-%4")
+    QString message = QObject::tr("Time: %1 (%2.%3s)")
+         .arg(QString("%1-%2-%3-%4")
              .arg(QString("%1").arg(bar + 1).rightJustified(3, '0'))
              .arg(QString("%1").arg(beat).rightJustified(2, '0'))
              .arg(QString("%1").arg(fraction).rightJustified(2, '0'))
-             .arg(QString("%1").arg(remainder).rightJustified(2, '0')),
-         rt.sec,
-         QString("%1").arg(ms).rightJustified(3, '0'));
+             .arg(QString("%1").arg(remainder).rightJustified(2, '0')))
+         .arg(rt.sec)
+         .arg(QString("%1").arg(ms).rightJustified(3, '0'));
 
     m_hoveredOverAbsoluteTime->setText(message);
 }
@@ -6054,7 +6054,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
         if (showingError)
             return ;
         showingError = true;
-        /* was sorry */ QMessageBox::warning(this, "", i18n("Can't insert note: No note duration selected"));
+        /* was sorry */ QMessageBox::warning(this, "", QObject::tr("Can't insert note: No note duration selected"));
         showingError = false;
         return ;
     }
@@ -6077,7 +6077,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 
     pitch -= segment.getTranspose();
 
-    //    KTmpStatusMsg msg(i18n("Inserting note"), this);
+    //    KTmpStatusMsg msg(QObject::tr("Inserting note"), this);
 
     // We need to ensure that multiple notes hit at once come out as
     // chords, without imposing the interpretation that overlapping

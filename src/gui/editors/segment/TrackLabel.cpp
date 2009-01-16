@@ -80,7 +80,7 @@ TrackLabel::TrackLabel(TrackId id,
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
 
-    this->setToolTip(i18n("Click and hold with left mouse button to assign this Track to an Instrument."));
+    this->setToolTip(QObject::tr("Click and hold with left mouse button to assign this Track to an Instrument."));
 
 }
 
@@ -203,8 +203,8 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
 
     QString newText = QInputDialog::getText(this,
-										   i18n("Change track name"),
-                                            i18n("Enter new track name"),
+										   QObject::tr("Change track name"),
+                                            QObject::tr("Enter new track name"),
 													QLineEdit::Normal,
                                             m_trackLabel->text(),
                                             &ok

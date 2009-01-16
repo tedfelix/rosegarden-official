@@ -688,9 +688,9 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     QString text;
 
     if (segments.size() == 1)
-        text = i18n("Turn Repeating Segment into Real Copies");
+        text = QObject::tr("Turn Repeating Segment into Real Copies");
     else
-        text = i18n("Turn Repeating Segments into Real Copies");
+        text = QObject::tr("Turn Repeating Segments into Real Copies");
 
     MacroCommand *macro = new MacroCommand(text);
 
@@ -892,7 +892,7 @@ void TrackEditor::dropEvent(QDropEvent* e)
 
             } else {
 
-                /* was sorry */ QMessageBox::warning(this, "", i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+                /* was sorry */ QMessageBox::warning(this, "", QObject::tr("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
 
             }
 

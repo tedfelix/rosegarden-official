@@ -87,21 +87,21 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(i18n("Manage Markers"));
+    setCaption(QObject::tr("Manage Markers"));
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
 	
 	QStringList sl;
-	sl	<< i18n("Marker time  ")
-		<< i18n("Marker text  ")
-		<< i18n("Marker description ");
+	sl	<< QObject::tr("Marker time  ")
+		<< QObject::tr("Marker text  ")
+		<< QObject::tr("Marker description ");
 	
 	m_listView->setHeaderLabels( sl );
 	/*
-    m_listView->addColumn(i18n("Marker time  "));
-    m_listView->addColumn(i18n("Marker text  "));
-    m_listView->addColumn(i18n("Marker description "));
+    m_listView->addColumn(QObject::tr("Marker time  "));
+    m_listView->addColumn(QObject::tr("Marker text  "));
+    m_listView->addColumn(QObject::tr("Marker description "));
 	*/
     
 	// Align centrally
@@ -109,20 +109,20 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 //         m_listView->setColumnAlignment(i, Qt::AlignHCenter);	//&&& align items now
 	
 	
-    QGroupBox *posGroup = new QGroupBox(i18n("Pointer position"), mainFrame);
+    QGroupBox *posGroup = new QGroupBox(QObject::tr("Pointer position"), mainFrame);
     mainFrameLayout->addWidget(posGroup);
 
     QGridLayout *posGroupLayout = new QGridLayout;
 
-    posGroupLayout->addWidget(new QLabel(i18n("Absolute time:")), 0, 0);
+    posGroupLayout->addWidget(new QLabel(QObject::tr("Absolute time:")), 0, 0);
     m_absoluteTime = new QLabel;
     posGroupLayout->addWidget(m_absoluteTime, 0, 1);
 
-    posGroupLayout->addWidget(new QLabel(i18n("Real time:")), 1, 0);
+    posGroupLayout->addWidget(new QLabel(QObject::tr("Real time:")), 1, 0);
     m_realTime = new QLabel;
     posGroupLayout->addWidget(m_realTime, 1, 1);
 
-    posGroupLayout->addWidget(new QLabel(i18n("In measure:")), 2, 0);
+    posGroupLayout->addWidget(new QLabel(QObject::tr("In measure:")), 2, 0);
     m_barTime = new QLabel;
     posGroupLayout->addWidget(m_barTime, 2, 1);
 
@@ -139,19 +139,19 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     QHBoxLayout* layout = new QHBoxLayout(btnBox);
     layout->setSpacing(10);
 
-    m_addButton = new QPushButton(i18n("Add"), btnBox);
-    m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
-    m_deleteAllButton = new QPushButton(i18n("Delete All"), btnBox);
+    m_addButton = new QPushButton(QObject::tr("Add"), btnBox);
+    m_deleteButton = new QPushButton(QObject::tr("Delete"), btnBox);
+    m_deleteAllButton = new QPushButton(QObject::tr("Delete All"), btnBox);
 
-    m_closeButton = new QPushButton(i18n("Close"), btnBox);
+    m_closeButton = new QPushButton(QObject::tr("Close"), btnBox);
 
-    m_addButton->setToolTip(i18n("Add a Marker"));
+    m_addButton->setToolTip(QObject::tr("Add a Marker"));
 
-    m_deleteButton->setToolTip(i18n("Delete a Marker"));
+    m_deleteButton->setToolTip(QObject::tr("Delete a Marker"));
 
-    m_deleteAllButton->setToolTip(i18n("Delete All Markers"));
+    m_deleteAllButton->setToolTip(QObject::tr("Delete All Markers"));
 
-    m_closeButton->setToolTip(i18n("Close the Marker Editor"));
+    m_closeButton->setToolTip(QObject::tr("Close the Marker Editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
@@ -310,7 +310,7 @@ MarkerEditor::slotUpdate()
     }
 
     if (m_listView->topLevelItemCount() == 0) {
-        QTreeWidgetItem *item = new MarkerEditorViewItem(m_listView, 0, QStringList(i18n("<none>")) );
+        QTreeWidgetItem *item = new MarkerEditorViewItem(m_listView, 0, QStringList(QObject::tr("<none>")) );
 		
 		((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->addTopLevelItem(item);
@@ -329,7 +329,7 @@ void
 MarkerEditor::slotDeleteAll()
 {
     RG_DEBUG << "MarkerEditor::slotDeleteAll" << endl;
-    MacroCommand *command = new MacroCommand(i18n("Remove all markers"));
+    MacroCommand *command = new MacroCommand(QObject::tr("Remove all markers"));
 
 // 	QTreeWidgetItem *item = m_listView->firstChild();
 	QTreeWidgetItem *item;
@@ -411,7 +411,7 @@ MarkerEditor::setupActions()
 {
     createAction("file_close", SLOT(slotClose())); //!!! uh-oh, file_close_discard in rc file
 	
-    m_closeButton->setText(i18n("Close"));
+    m_closeButton->setText(QObject::tr("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
     QSettings settings;

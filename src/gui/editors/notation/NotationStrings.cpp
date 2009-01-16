@@ -42,14 +42,14 @@ NotationStrings::addDots(QString s, int dots,
     if (internationalize) {
         if (dots > 1) {
             if (hyphenate)
-                return i18n("%1-dotted-%2", dots, s);
+                return QObject::tr("%1-dotted-%2").arg(dots).arg(s);
             else
-                return i18n("%1-dotted %2", dots, s);
+                return QObject::tr("%1-dotted %2").arg(dots).arg(s);
         } else {
             if (hyphenate)
-                return i18n("dotted-%1", s);
+                return QObject::tr("dotted-%1").arg(s);
             else
-                return i18n("dotted %1", s);
+                return QObject::tr("dotted %1").arg(s);
         }
     } else {
         if (dots > 1) {
@@ -73,24 +73,24 @@ NotationStrings::getNoteName(Note note, bool plural, bool triplet)
     int dots = note.getDots();
 
     static const QString names[] = {
-                                       i18n("sixty-fourth note"), i18n("thirty-second note"),
-                                       i18n("sixteenth note"), i18n("eighth note"),
-                                       i18n("quarter note"), i18n("half note"),
-                                       i18n("whole note"), i18n("double whole note")
+                                       QObject::tr("sixty-fourth note"), QObject::tr("thirty-second note"),
+                                       QObject::tr("sixteenth note"), QObject::tr("eighth note"),
+                                       QObject::tr("quarter note"), QObject::tr("half note"),
+                                       QObject::tr("whole note"), QObject::tr("double whole note")
                                    };
     static const QString pluralnames[] = {
-                                             i18n("sixty-fourth notes"), i18n("thirty-second notes"),
-                                             i18n("sixteenth notes"), i18n("eighth notes"),
-                                             i18n("quarter notes"), i18n("half notes"),
-                                             i18n("whole notes"), i18n("double whole notes")
+                                             QObject::tr("sixty-fourth notes"), QObject::tr("thirty-second notes"),
+                                             QObject::tr("sixteenth notes"), QObject::tr("eighth notes"),
+                                             QObject::tr("quarter notes"), QObject::tr("half notes"),
+                                             QObject::tr("whole notes"), QObject::tr("double whole notes")
                                          };
 
     if (plural && triplet) {
-        return addDots(i18n("%1 triplets", names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
+        return addDots(QObject::tr("%1 triplets", names[type]), dots, false, true); // TODO PLURAL - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
-        return addDots(i18n("%1 triplet", names[type]), dots, false, true);
+        return addDots(QObject::tr("%1 triplet").arg(names[type]), dots, false, true);
     } else {
         return addDots(names[type], dots, false, true);
     }
@@ -133,22 +133,22 @@ NotationStrings::getShortNoteName(Note note, bool plural, bool triplet)
     int dots = note.getDots();
 
     static const QString names[] = {
-                                       i18n("64th"), i18n("32nd"), i18n("16th"), i18n("8th"),
-                                       i18n("quarter"), i18n("half"), i18n("whole"),
-                                       i18n("double whole")
+                                       QObject::tr("64th"), QObject::tr("32nd"), QObject::tr("16th"), QObject::tr("8th"),
+                                       QObject::tr("quarter"), QObject::tr("half"), QObject::tr("whole"),
+                                       QObject::tr("double whole")
                                    };
     static const QString pluralnames[] = {
-                                             i18n("64ths"), i18n("32nds"), i18n("16ths"), i18n("8ths"),
-                                             i18n("quarters"), i18n("halves"), i18n("wholes"),
-                                             i18n("double wholes")
+                                             QObject::tr("64ths"), QObject::tr("32nds"), QObject::tr("16ths"), QObject::tr("8ths"),
+                                             QObject::tr("quarters"), QObject::tr("halves"), QObject::tr("wholes"),
+                                             QObject::tr("double wholes")
                                          };
 
     if (plural && triplet) {
-        return addDots(i18n("%1 triplets", names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
+        return addDots(QObject::tr("%1 triplets").arg(names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
     } else if (plural) {
         return addDots(pluralnames[type], dots, false, true);
     } else if (triplet) {
-        return addDots(i18n("%1 triplet", names[type]), dots, false, true);
+        return addDots(QObject::tr("%1 triplet").arg(names[type]), dots, false, true);
     } else {
         return addDots(names[type], dots, false, true);
     }
@@ -272,7 +272,7 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         } else if ((wholeNote /(duration*2/3)) * (duration*2/3) == wholeNote) {
             return QString("3/%1").arg(wholeNote / (duration*1/3));
         } else {
-            return i18n("%1 ticks", duration);
+            return QObject::tr("%1 ticks").arg(duration);
             plural = false;
         }
 
