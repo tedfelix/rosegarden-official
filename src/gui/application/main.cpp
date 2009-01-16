@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
     RosegardenApplication app(argc, argv);
 
     app.setOrganizationName("rosegardenmusic");
-    app.setOrganizationDomain("rosegardenmusic.org");
+    app.setOrganizationDomain("rosegardenmusic.com");
     app.setApplicationName(QObject::tr("Rosegarden"));
 
     QStringList args = app.arguments();

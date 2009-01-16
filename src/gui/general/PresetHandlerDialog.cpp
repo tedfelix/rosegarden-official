@@ -40,6 +40,7 @@
 #include <QLayout>
 #include <QApplication>
 
+// #define DEBUG_XML
 
 namespace Rosegarden
 {
@@ -128,29 +129,29 @@ PresetHandlerDialog::initDialog()
     layout->addWidget(scopeBox, 4, 0, 0+1, 1-0+ 1, Qt::AlignLeft);
 
     populateCategoryCombo();
+
     // try to set to same category used previously
     QSettings settings;
-    settings.beginGroup( PresetDialogConfigGroup );
+    settings.beginGroup(PresetDialogConfigGroup);
 
-    m_categoryCombo->setCurrentIndex( settings.value("category_combo_index", 0).toInt() );
+    m_categoryCombo->setCurrentIndex(settings.value("category_combo_index", 0).toInt());
 
     // populate the instrument combo
     slotCategoryIndexChanged(m_categoryCombo->currentIndex());
 
     // try to set to same instrument used previously
 
-    //###settings.beginGroup( PresetDialogConfigGroup );
-    m_instrumentCombo->setCurrentIndex( settings.value("instrument_combo_index", 0).toInt() );
+    m_instrumentCombo->setCurrentIndex(settings.value("instrument_combo_index", 0).toInt());
 
     // set to same player used previously (this one can't fail, unlike the
     // others, because the contents of this combo are static)
-    m_playerCombo->setCurrentIndex( settings.value("player_combo_index", 0).toInt() );
+    m_playerCombo->setCurrentIndex(settings.value("player_combo_index", 0).toInt());
 
     if (m_fromNotation){
-        m_convertAllSegments->setChecked( qStrToBool( settings.value("convert_all_segments", "0" ) ) );
+        m_convertAllSegments->setChecked(qStrToBool(settings.value("convert_all_segments", "0")));
     }
     else {
-    	m_convertSegments->setChecked( qStrToBool( settings.value("convert_segments", "0" ) ) );
+    	m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
     }
     
     connect(m_categoryCombo, SIGNAL(activated(int)),
@@ -248,7 +249,9 @@ PresetHandlerDialog::populateCategoryCombo()
     for (CategoriesContainer::iterator i = m_categories.begin();
             i != m_categories.end(); ++i) {
 
+#ifdef DEBUG_XML
         RG_DEBUG << "    adding category: " << (*i).getName() << endl;
+#endif
 
         m_categoryCombo->addItem((*i).getName());
     }
@@ -267,7 +270,9 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
     for (ElementContainer::iterator i = c.begin();
             i != c.end(); ++i) {
 
+#ifdef DEBUG_XML
         RG_DEBUG << "    adding instrument: " << (*i).getName() << endl;
+#endif
 
         m_instrumentCombo->addItem((*i).getName());
     }
