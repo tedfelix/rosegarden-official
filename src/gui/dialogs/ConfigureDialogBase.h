@@ -27,6 +27,7 @@
 
 class QWidget;
 class QTabWidget;
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
@@ -54,7 +55,9 @@ public:
 	QTabWidget* m_tabWidget;
 	
 protected slots:
-    virtual void slotOk();
+	
+	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
+	virtual void slotOk();
     virtual void slotApply();
     virtual void slotCancelOrClose();
 
@@ -63,6 +66,8 @@ protected slots:
 protected:
 
     configurationpages m_configurationPages;
+	
+	QDialogButtonBox *m_dialogButtonBox;
 	
 };
 

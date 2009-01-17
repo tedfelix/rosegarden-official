@@ -23,6 +23,7 @@
 #include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -328,6 +329,11 @@ void HeadersConfigurationPage::apply()
 			
 		tabItem = m_metadata->item( r, c );
 		tabItem2 = m_metadata->item( r, c+1 );
+		
+		if( (!tabItem) || (!tabItem2) ){
+			RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
+			continue;
+		}
 			
 		metadata.set<String>( qstrtostr(tabItem->text().toLower()),
 							  qstrtostr(tabItem2->text()) );

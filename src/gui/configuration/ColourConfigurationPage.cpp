@@ -42,6 +42,7 @@
 #include <QTableWidgetItem>
 #include <QWidget>
 #include <QLayout>
+#include <QMessageBox>
 
 
 namespace Rosegarden
@@ -151,10 +152,16 @@ void
 ColourConfigurationPage::slotDelete()
 {
     //old: QTableWidgetSelection temp = m_colourtable->selection(0);
-	QList<QTableWidgetItem *> temp =  m_colourtable->selectedItems();
+	QList<QTableWidgetItem *> temp = m_colourtable->selectedItems();
 	
 //    if ((!temp.isActive()) || (temp.topRow() == 0))	//&&& check re-implementation
 //        return ;
+	
+	if( temp.isEmpty() ){
+		QMessageBox::warning
+			(this, "Error: Selection is empty!", tr("Please select an item in the list!"), QMessageBox::Yes );
+		return;
+	}
 
     unsigned int toDel = (*temp[0]).row();
 
