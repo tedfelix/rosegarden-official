@@ -171,24 +171,35 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	IconLoader il;
 	QPixmap matrixPixmap = il.loadPixmap( "matrix" );
 	
-	m_actionsToolBar = new QToolBar( "Action Tools", this );
-	m_zoomToolBar = new QToolBar( "Zoom Tool", this );
+	
+	
+	// note: toobars added by parseAction script (?)
+	//
+	m_actionsToolBar = new QToolBar( "Actions Toolbar", this );
+	m_actionsToolBar->setToolTip( "Actions Toolbar" );
+	m_actionsToolBar->setObjectName( "Actions Toolbar" );
+	
+	m_zoomToolBar = new QToolBar( "Zoom Toolbar", this );
+	m_zoomToolBar->setToolTip( "Zoom Toolbar" );
+	m_zoomToolBar->setObjectName( "Zoom Toolbar" );
 // 	m_zoomToolBar = new QSlider( Qt::Horizontal, this );
+	
 	addToolBar( m_actionsToolBar );
 	addToolBar( m_zoomToolBar );
 	
-	/*
-    m_dockLeft = createDockWidget("params dock", matrixPixmap, 0L,
-                                  tr("Instrument Parameters"));
+	m_actionsToolBar->setMinimumHeight( 32 );
+	m_actionsToolBar->setMinimumWidth( 80 );
 	
-    m_dockLeft->manualDock(m_mainDockWidget,             // dock target
-                           QDockWidget::DockLeft,  // dock site
-                           20);                   // relation target/this (in percent)
-	*/
+	m_zoomToolBar->setMinimumHeight( 32 );
+	m_zoomToolBar->setMinimumWidth( 80 );
+	
 	
 	m_dockLeft = new QDockWidget( tr("Instrument Parameters"),  this );
 	m_dockLeft->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	m_dockLeft->setFeatures( QDockWidget::AllDockWidgetFeatures );
+	// set min/max size for InstrumentPanelWidget instead
+// 	m_dockLeft->setMaximumSize( 300, 460 );
+// 	m_dockLeft->setMinimumSize( 140, 200 );
 	this->addDockWidget( Qt::LeftDockWidgetArea, m_dockLeft ); // optional 3. param: Qt::Horizontal
 	
 	/*
@@ -219,8 +230,10 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	
     Composition &comp = doc->getComposition();
 
+	// note:  BaseToolBox : maintains a single instance of each registered tool
     m_toolBox = new MatrixToolBox(this);
-
+	
+	
     initStatusBar();
 
     connect(m_toolBox, SIGNAL(showContextHelp(const QString &)),
@@ -299,10 +312,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_pitchRuler = new PianoKeyboard(vport);
     }
 
-	// old:
-//     m_pianoView->setVScrollBarMode(QScrollView::AlwaysOff);
-//     m_pianoView->setHScrollBarMode(QScrollView::AlwaysOff);
-	
 	// new:
 // 	m_pianoView->verticalScrollBar()->setEnabled( false );
 // 	m_pianoView->horizontalScrollBar()->setEnabled( false );
@@ -316,6 +325,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	// widget to scroll
 	m_pianoView->setWidget(scrollMainWidget);
 	
+	
+// 	m_pitchRuler->setWidth( 45 );
+	m_pitchRuler->setMinimumWidth( 45 );
+	m_pitchRuler->setMaximumWidth( 45 );
+	
 	scrollMainWidget->layout()->addWidget( m_pitchRuler );
 // 	m_pianoView->setFixedWidth( m_pianoView->contentsWidth() );
 // 	m_pianoView->setFixedWidth( m_pianoView->maximumViewportSize().width() );
@@ -324,6 +338,9 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
     m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
+	m_parameterBox->setMaximumSize( 300, 460 );
+	m_parameterBox->setMinimumSize( 140, 200 );
+	
     m_dockLeft->setWidget(m_parameterBox);
 
     RosegardenGUIApp *app = RosegardenGUIApp::self();
@@ -503,6 +520,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     StandardRuler *bottomStandardRuler = new StandardRuler(getDocument(),
                                    &m_hlayout, 0, 25,
                                    true, getBottomWidget());
+	
     getBottomWidget()->layout()->addWidget(bottomStandardRuler);
     bottomStandardRuler->setSnapGrid(m_snapGrid);
     setBottomStandardRuler(bottomStandardRuler);
@@ -1158,6 +1176,9 @@ void MatrixView::updateQuantizeCombo()
         }
     }
 
+	if( ! m_quantizeCombo ){
+		MATRIX_DEBUG << "ERROR: m_quantizeCombo is NULL in MatrixView::updateQuantizeCombo() \n";
+	}
     m_quantizeCombo->setCurrentIndex(m_quantizeCombo->count() - 1); // "Off"
 }
 
@@ -1992,6 +2013,9 @@ MatrixView::initActionsToolbar()
 // 	QToolBar *actionsToolbar = toolBar("Actions Toolbar");
 	QToolBar *actionsToolbar = m_actionsToolBar;
 
+	
+	//actionsToolbar->setLayout( new QHBoxLayout(actionsToolbar) );
+	
     if (!actionsToolbar) {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
         << "tool bar not found" << endl;
@@ -2002,10 +2026,12 @@ MatrixView::initActionsToolbar()
     //
     QLabel *sLabel = new QLabel(tr(" Grid: "), actionsToolbar, "kde toolbar widget");
     sLabel->setIndent(10);
+	actionsToolbar->addWidget( sLabel );
 
     QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
 
     m_snapGridCombo = new QComboBox(actionsToolbar);
+	actionsToolbar->addWidget( m_snapGridCombo );
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++) {
 
@@ -2041,9 +2067,12 @@ MatrixView::initActionsToolbar()
 
     QLabel *vlabel = new QLabel(tr(" Velocity: "), actionsToolbar, "kde toolbar widget");
     vlabel->setIndent(10);
+	actionsToolbar->addWidget( vlabel );
     
     m_velocityCombo = new QComboBox(actionsToolbar);
-    for (int i = 0; i <= 127; ++i) {
+	actionsToolbar->addWidget( m_velocityCombo );
+	
+	for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
     m_velocityCombo->setCurrentIndex(100); //!!! associate with segment
@@ -2052,8 +2081,10 @@ MatrixView::initActionsToolbar()
     //
     QLabel *qLabel = new QLabel(tr(" Quantize: "), actionsToolbar, "kde toolbar widget");
     qLabel->setIndent(10);
+	actionsToolbar->addWidget( qLabel );
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
+	actionsToolbar->addWidget( m_quantizeCombo );
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 
@@ -2069,6 +2100,7 @@ MatrixView::initActionsToolbar()
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
 }
+
 
 void
 MatrixView::initZoomToolbar()

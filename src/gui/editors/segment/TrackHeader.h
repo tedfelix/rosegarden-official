@@ -41,7 +41,8 @@ public:
                           QWidget *parent=0,
                           const char *name=0
 			   ):
-				Q3Header(number, parent, name) {;}
+//		QHeaderView(Qt::Horizontal, parent) {;}
+		Q3Header(number, parent, name) {;}
 	
 	/*
 	QHeader(Qt::Horizontal, parent) 

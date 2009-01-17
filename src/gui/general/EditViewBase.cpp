@@ -95,34 +95,43 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
     m_timeSigNotifier(new EditViewTimeSigNotifier(doc))
 {
     QPixmap dummyPixmap; // any icon will do
-    
-// 	m_mainDockWidget = createDockWidget("Rosegarden EditView DockWidget", dummyPixmap,
-//                                         0L, "editview_dock_widget");
 	
-    // allow others to dock to the left and right sides only
-//     m_mainDockWidget->setDockSite(QDockWidget::DockLeft | QDockWidget::DockRight);
 	
-    // forbit docking abilities of m_mainDockWidget itself
-//     m_mainDockWidget->setEnableDocking(QDockWidget::DockNone);
-	
+	/*
 	m_mainDockWidget = new QDockWidget( "Rosegarden EditView DockWidget", this );
 	m_mainDockWidget->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	m_mainDockWidget->setFeatures( QDockWidget::AllDockWidgetFeatures );
 	
 	addDockWidget( Qt::LeftDockWidgetArea, m_mainDockWidget, Qt::Horizontal );
+	*/
+	m_mainDockWidget = 0;
 	
-	
-//     setView(m_mainDockWidget); // central widget in a KDE mainwindow
-//     setMainDockWidget(m_mainDockWidget); // master dockwidget
+	setStatusBar( new QStatusBar(this) );
 	
 	m_toolBar = new QToolBar( "Tool Bar", this );
 	addToolBar( Qt::TopToolBarArea, m_toolBar );
+	m_toolBar->setMinimumHeight( 16 );
+	m_toolBar->setMinimumWidth( 40 );
 	
-    m_centralFrame = new QFrame(m_mainDockWidget);
+    m_centralFrame = new QFrame(this);		//m_mainDockWidget);
     m_centralFrame->setObjectName("centralframe");
-    m_grid = new QGridLayout(m_centralFrame);
-
-    m_mainDockWidget->setWidget(m_centralFrame);
+	m_centralFrame->setMinimumSize( 500, 300 );
+	m_centralFrame->setMaximumSize( 2200, 1400 );
+	
+	// 
+	m_grid = new QGridLayout(m_centralFrame);
+	m_centralFrame->setLayout( m_grid );
+	
+	// Note: We add Widget bottom-right, so the grid gets the propper col,row count
+	// NbLayoutRows, cols
+	//m_grid->addWidget( new QWidget(this), NbLayoutRows, cols);
+	
+	
+	//this->setLayout( new QVBoxLayout(this) );
+	//this->layout()->addWidget( m_centralFrame );
+	setCentralWidget( m_centralFrame );
+	
+//    m_mainDockWidget->setWidget(m_centralFrame);
 
     initSegmentRefreshStatusIds();
 

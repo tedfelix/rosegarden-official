@@ -152,23 +152,31 @@ EditView::EditView(RosegardenGUIDoc *doc,
     // m_rulerBoxFiller is a white label used to keep m_rulerBox exactly
     // above the scrolling part of the view (and never above the
     // RosegardenCanvasView::m_leftWidget).
-    QGridLayout * gl = new QGridLayout; 
+	
+    QGridLayout * gl = new QGridLayout(); 
     gl->setColumnStretch(0, 0);
     gl->setColumnStretch(1, 1);
     gl->addLayout(m_rulerBox, 0, 1);
+	// note: getCentralWidget() returns m_centralFrame
     m_rulerBoxFiller = new QLabel(getCentralWidget());
     gl->addWidget(m_rulerBoxFiller, 0, 0);
     m_rulerBoxFiller->hide();
-
+	
+	// note: this is adds a gridLayout to one cell in the gridLayout m_grid
     m_grid->addLayout(gl, RULERS_ROW, m_mainCol);
-
+	
+	// note: m_controlBox is QVBoxLayout*
     m_grid->addLayout(m_controlBox, CONTROLS_ROW, 0, 1, 2);
     m_controlBox->setAlignment(Qt::AlignRight);
-    //     m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
-
+	
+	
+	// m_controlRulers is QTabWidget*
+	//m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
+	
     m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }
+
 
 EditView::~EditView()
 {

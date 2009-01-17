@@ -35,6 +35,7 @@
 #include <QHBoxLayout>
 // #include <QEvent>
 #include <QMouseEvent>
+#include <QHeaderView>
 
 namespace Rosegarden
 {
