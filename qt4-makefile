@@ -65,7 +65,6 @@ rosegarden:	$(OBJECTS)
 
 %.cpp: %.qrc
 	$(RCC) $< -o $@
-#	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
