@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Pedal;
@@ -37,6 +37,8 @@ class Event;
 
 class SustainInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SustainInsertionCommand)
+
 public:
     SustainInsertionCommand(Segment &segment,
                             timeT time,
@@ -46,9 +48,9 @@ public:
 
     static QString getGlobalName(bool down) {
         if (down) {
-            return QObject::tr("Add Pedal &Press");
+            return tr("Add Pedal &Press");
         } else {
-            return QObject::tr("Add Pedal &Release");
+            return tr("Add Pedal &Release");
         }
     }
 

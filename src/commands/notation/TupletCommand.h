@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class Segment;
 
 class TupletCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TupletCommand)
+
 public:
     TupletCommand(Segment &segment,
                            timeT startTime,
@@ -43,8 +45,8 @@ public:
                            bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-        if (simple) return QObject::tr("&Triplet");
-        else return QObject::tr("Tu&plet...");
+        if (simple) return tr("&Triplet");
+        else return tr("Tu&plet...");
     }
 
 protected:

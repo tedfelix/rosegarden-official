@@ -23,8 +23,6 @@
 #include <QString>
 #include <QSlider>
 
-#include <QObject>
-
 
 class QWidget;
 class QPushButton;
@@ -51,8 +49,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return QObject::tr("Latency"); }
-    static QString title()     { return QObject::tr("Sequencer Latency"); }
+    static QString iconLabel() { return tr("Latency"); }
+    static QString title()     { return tr("Sequencer Latency"); }
 
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }

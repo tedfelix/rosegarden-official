@@ -23,7 +23,7 @@
 #include "base/Device.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Studio;
 
 class RemoveControlParameterCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveControlParameterCommand)
+
 public:
     RemoveControlParameterCommand(Studio *studio,
                                   DeviceId device,
@@ -50,7 +52,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return QObject::tr("&Remove Control Parameter"); }
+    static QString getGlobalName() { return tr("&Remove Control Parameter"); }
 
 protected:
     Studio              *m_studio;

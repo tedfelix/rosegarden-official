@@ -23,7 +23,7 @@
 #include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Remove;
@@ -37,6 +37,8 @@ class Composition;
 
 class RemoveTempoChangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveTempoChangeCommand)
+
 public:
     RemoveTempoChangeCommand(Composition *composition,
                              int index):
@@ -48,7 +50,7 @@ public:
 
     virtual ~RemoveTempoChangeCommand() {}
 
-    static QString getGlobalName() { return QObject::tr("Remove &Tempo Change..."); }
+    static QString getGlobalName() { return tr("Remove &Tempo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

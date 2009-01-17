@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,14 +37,16 @@ class EventSelection;
     creative. */
 class ChangeVelocityCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeVelocityCommand)
+
 public:
     ChangeVelocityCommand(int delta, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(delta), selection, true),
         m_selection(&selection), m_delta(delta) { }
 
     static QString getGlobalName(int delta = 0) {
-        if (delta > 0) return QObject::tr("&Increase Velocity");
-        else return QObject::tr("&Reduce Velocity");
+        if (delta > 0) return tr("&Increase Velocity");
+        else return tr("&Reduce Velocity");
     }
 
 protected:

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,12 +32,14 @@ class CommandRegistry;
 
 class BeamCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(BeamCommand)
+
 public:
     BeamCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Beam Group"); }
+    static QString getGlobalName() { return tr("&Beam Group"); }
 
     static void registerCommand(CommandRegistry *r);
     

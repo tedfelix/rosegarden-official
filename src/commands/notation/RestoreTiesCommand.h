@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RestoreTiesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RestoreTiesCommand)
+
 public:
     RestoreTiesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Restore Tie Positions"); }
+    static QString getGlobalName() { return tr("&Restore Tie Positions"); }
 
     static void registerCommand(CommandRegistry *r);
 

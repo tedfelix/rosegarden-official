@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -40,6 +40,8 @@ class Clipboard;
 
 class CopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CopyCommand)
+
 public:
     /// Make a CopyCommand that copies events from within a Segment
     CopyCommand(EventSelection &selection,
@@ -57,7 +59,7 @@ public:
 
     virtual ~CopyCommand();
 
-    static QString getGlobalName() { return QObject::tr("&Copy"); }
+    static QString getGlobalName() { return tr("&Copy"); }
 
     virtual void execute();
     virtual void unexecute();

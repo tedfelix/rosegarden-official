@@ -23,7 +23,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 #include "misc/Strings.h"
 
 
@@ -48,6 +48,8 @@ class Event;
 
 class KeyInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(KeyInsertionCommand)
+
 public:
     KeyInsertionCommand(Segment &segment,
                         timeT time,
@@ -60,9 +62,9 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return QObject::tr("Change to &Key %1...").arg(strtoqstr(key->getName()));
+            return tr("Change to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
-            return QObject::tr("Add &Key Change...");
+            return tr("Add &Key Change...");
         }
     }
 

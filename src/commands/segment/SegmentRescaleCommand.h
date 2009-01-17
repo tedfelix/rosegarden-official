@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class Segment;
 
 class SegmentRescaleCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRescaleCommand)
+
 public:
     SegmentRescaleCommand(Segment *segment,
                           int multiplier,
@@ -48,7 +50,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
     Segment *m_segment;

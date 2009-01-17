@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,13 +35,15 @@ class CommandRegistry;
 
 class UnTupletCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(UnTupletCommand)
+
 public:
     UnTupletCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
     static QString getGlobalName() {
-        return QObject::tr("&Untuplet");
+        return tr("&Untuplet");
     }
 
     static void registerCommand(CommandRegistry *r);

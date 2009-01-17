@@ -23,7 +23,7 @@
 #include "base/Device.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Studio;
 
 class AddControlParameterCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddControlParameterCommand)
+
 public:
     AddControlParameterCommand(Studio *studio,
                                DeviceId device,
@@ -51,7 +53,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return QObject::tr("&Add Control Parameter"); }
+    static QString getGlobalName() { return tr("&Add Control Parameter"); }
 
 protected:
     Studio              *m_studio;

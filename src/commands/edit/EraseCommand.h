@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,10 +37,12 @@ class EventSelection;
 
 class EraseCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EraseCommand)
+
 public:
     EraseCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return QObject::tr("&Erase"); }
+    static QString getGlobalName() { return tr("&Erase"); }
 
     virtual timeT getRelayoutEndTime();
 

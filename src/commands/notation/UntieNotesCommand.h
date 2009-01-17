@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class UntieNotesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(UntieNotesCommand)
+
 public:
     UntieNotesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Untie"); }
+    static QString getGlobalName() { return tr("&Untie"); }
 
     static void registerCommand(CommandRegistry *r);
 

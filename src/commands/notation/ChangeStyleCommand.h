@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Change;
@@ -37,6 +37,8 @@ class CommandRegistry;
 
 class ChangeStyleCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeStyleCommand)
+
 public:
     ChangeStyleCommand(NoteStyleName style,
                        EventSelection &selection) :
@@ -44,7 +46,7 @@ public:
         m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-        return QObject::tr("Change &Note Style");
+        return tr("Change &Note Style");
     }
 
     static QString getGlobalName(NoteStyleName style);

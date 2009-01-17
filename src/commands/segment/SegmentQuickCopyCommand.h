@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class Composition;
 
 class SegmentQuickCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentQuickCopyCommand)
+
 public:
     SegmentQuickCopyCommand(Segment *segment);
     virtual ~SegmentQuickCopyCommand();
@@ -45,7 +47,7 @@ public:
     // return pointer to new copy
     Segment* getCopy() { return m_segment; }
 
-    static QString getGlobalName() { return QObject::tr("Quick-Copy Segment"); }
+    static QString getGlobalName() { return tr("Quick-Copy Segment"); }
 
 private:
     Composition *m_composition;

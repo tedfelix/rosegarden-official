@@ -24,7 +24,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Modify;
@@ -40,12 +40,14 @@ class Composition;
 
 class ModifyInstrumentMappingCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyInstrumentMappingCommand)
+
 public:
     ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,
                                    InstrumentId fromInstrument,
                                    InstrumentId toInstrument);
 
-    static QString getGlobalName() { return QObject::tr("Modify &Instrument Mapping"); }
+    static QString getGlobalName() { return tr("Modify &Instrument Mapping"); }
 
     virtual void execute();
     virtual void unexecute();

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RemoveFingeringMarksCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveFingeringMarksCommand)
+
 public:
     RemoveFingeringMarksCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Remove Fingerings"); }
+    static QString getGlobalName() { return tr("&Remove Fingerings"); }
 
     static void registerCommand(CommandRegistry *r);
 

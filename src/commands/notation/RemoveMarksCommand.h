@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RemoveMarksCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveMarksCommand)
+
 public:
     RemoveMarksCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Remove All Marks"); }
+    static QString getGlobalName() { return tr("&Remove All Marks"); }
 
     static void registerCommand(CommandRegistry *r);
 

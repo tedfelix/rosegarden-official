@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -31,12 +31,14 @@ class CommandRegistry;
 
 class MakeChordCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeChordCommand)
+
 public:
     MakeChordCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("Make &Chord"); }
+    static QString getGlobalName() { return tr("Make &Chord"); }
 
     static void registerCommand(CommandRegistry *r);
 

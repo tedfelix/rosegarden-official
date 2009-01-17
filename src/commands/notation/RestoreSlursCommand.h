@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RestoreSlursCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RestoreSlursCommand)
+
 public:
     RestoreSlursCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Restore Slur Positions"); }
+    static QString getGlobalName() { return tr("&Restore Slur Positions"); }
 
     static void registerCommand(CommandRegistry *r);
 

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class TieNotesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TieNotesCommand)
+
 public:
     TieNotesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Tie"); }
+    static QString getGlobalName() { return tr("&Tie"); }
 
     static void registerCommand(CommandRegistry *r);
 

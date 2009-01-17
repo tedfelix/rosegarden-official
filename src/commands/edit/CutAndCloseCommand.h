@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -39,11 +39,13 @@ class Clipboard;
 
 class CutAndCloseCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CutAndCloseCommand)
+
 public:
     CutAndCloseCommand(EventSelection &selection,
                        Clipboard *clipboard);
 
-    static QString getGlobalName() { return QObject::tr("C&ut and Close"); }
+    static QString getGlobalName() { return tr("C&ut and Close"); }
 
 protected:
     class CloseCommand : public NamedCommand

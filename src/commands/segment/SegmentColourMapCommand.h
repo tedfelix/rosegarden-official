@@ -23,7 +23,7 @@
 #include "base/Segment.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class RosegardenGUIDoc;
 
 class SegmentColourMapCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentColourMapCommand)
+
 public:
     SegmentColourMapCommand(      RosegardenGUIDoc*      doc,
                             const ColourMap& map);
     virtual ~SegmentColourMapCommand();
 
     static QString getGlobalName()
-        { return QObject::tr("Change Segment Color Map..."); }
+        { return tr("Change Segment Color Map..."); }
 
     virtual void execute();
     virtual void unexecute();

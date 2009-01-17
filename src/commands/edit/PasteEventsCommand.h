@@ -24,7 +24,7 @@
 #include <map>
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -40,6 +40,8 @@ class Clipboard;
 
 class PasteEventsCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteEventsCommand)
+
 public:
     enum PasteType {
         Restricted,             // paste into existing gap
@@ -80,7 +82,7 @@ public:
 
     EventSelection getPastedEvents();
 
-    static QString getGlobalName() { return QObject::tr("&Paste"); }
+    static QString getGlobalName() { return tr("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();

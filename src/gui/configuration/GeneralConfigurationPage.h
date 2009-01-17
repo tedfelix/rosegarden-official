@@ -27,7 +27,6 @@
 #include <QComboBox>
 #include <QLineEdit>
 
-#include <QObject>
 
 class QWidget;
 
@@ -66,8 +65,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return QObject::tr("General"); }
-    static QString title()     { return QObject::tr("General Configuration"); }
+    static QString iconLabel() { return tr("General"); }
+    static QString title()     { return tr("General Configuration"); }
     static QString iconName()  { return "configure-general"; }
 
 signals:

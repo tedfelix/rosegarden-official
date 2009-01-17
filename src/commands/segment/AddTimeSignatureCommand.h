@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class Composition;
 
 class AddTimeSignatureCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTimeSignatureCommand)
+
 public:
     AddTimeSignatureCommand(Composition *composition,
                             timeT time,
                             TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-    static QString getGlobalName() { return QObject::tr("Add Time Si&gnature Change..."); }
+    static QString getGlobalName() { return tr("Add Time Si&gnature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

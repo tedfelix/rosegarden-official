@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class EventSelection;
 
 class NormalizeRestsCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(NormalizeRestsCommand)
+
 public:
     NormalizeRestsCommand(Segment &s,
                                         timeT startTime,
@@ -44,7 +46,7 @@ public:
 
     NormalizeRestsCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return QObject::tr("&Normalize Rests"); }
+    static QString getGlobalName() { return tr("&Normalize Rests"); }
 
 protected:
     virtual void modifySegment();

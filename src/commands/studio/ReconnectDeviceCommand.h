@@ -23,7 +23,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Studio;
 
 class ReconnectDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ReconnectDeviceCommand)
+
 public:
     ReconnectDeviceCommand(Studio *studio,
                            DeviceId deviceId,
@@ -45,7 +47,7 @@ public:
         m_deviceId(deviceId),
         m_newConnection(newConnection) { }
 
-    static QString getGlobalName() { return QObject::tr("Reconnect Device"); }
+    static QString getGlobalName() { return tr("Reconnect Device"); }
 
     virtual void execute();
     virtual void unexecute();

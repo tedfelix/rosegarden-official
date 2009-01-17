@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Remove;
@@ -37,6 +37,8 @@ class Composition;
 
 class RemoveTimeSignatureCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveTimeSignatureCommand)
+
 public:
     RemoveTimeSignatureCommand(Composition *composition,
                                int index):
@@ -48,7 +50,7 @@ public:
 
     virtual ~RemoveTimeSignatureCommand() {}
 
-    static QString getGlobalName() { return QObject::tr("Remove &Time Signature Change..."); }
+    static QString getGlobalName() { return tr("Remove &Time Signature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

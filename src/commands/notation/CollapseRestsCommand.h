@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,6 +37,8 @@ class CommandRegistry;
 
 class CollapseRestsCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CollapseRestsCommand)
+
 public:
     CollapseRestsCommand(Segment &s,
                          timeT startTime,
@@ -45,7 +47,7 @@ public:
 
     CollapseRestsCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return QObject::tr("&Collapse Rests"); }
+    static QString getGlobalName() { return tr("&Collapse Rests"); }
 
     static void registerCommand(CommandRegistry *r);
 

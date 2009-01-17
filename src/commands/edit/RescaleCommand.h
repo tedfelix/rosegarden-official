@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class EventSelection;
 
 class RescaleCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RescaleCommand)
+
 public:
     RescaleCommand(EventSelection &selection,
                    timeT newDuration,
                    bool closeGap);
 
-    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
     
 protected:
     virtual void modifySegment();

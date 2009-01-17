@@ -24,7 +24,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Modify;
@@ -40,12 +40,14 @@ class Composition;
 
 class ModifyDeviceMappingCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyDeviceMappingCommand)
+
 public:
     ModifyDeviceMappingCommand(RosegardenGUIDoc *doc,
                                DeviceId fromDevice,
                                DeviceId toDevice);
 
-    static QString getGlobalName() { return QObject::tr("Modify &Device Mapping"); }
+    static QString getGlobalName() { return tr("Modify &Device Mapping"); }
 
     virtual void execute();
     virtual void unexecute();

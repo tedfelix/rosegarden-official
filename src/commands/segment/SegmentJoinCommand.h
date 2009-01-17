@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Segment;
 
 class SegmentJoinCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentJoinCommand)
+
 public:
     SegmentJoinCommand(SegmentSelection &segments);
     virtual ~SegmentJoinCommand();
@@ -43,7 +45,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return QObject::tr("&Join"); }
+    static QString getGlobalName() { return tr("&Join"); }
     
 private:
     std::vector<Segment *> m_oldSegments;

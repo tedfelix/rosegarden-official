@@ -23,7 +23,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class Composition;
 
 class RenameTrackCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RenameTrackCommand)
+
 public:
     RenameTrackCommand(Composition *composition,
                        TrackId track, 
                        std::string name);
     virtual ~RenameTrackCommand();
 
-    static QString getGlobalName() { return QObject::tr("Rename Track"); }
+    static QString getGlobalName() { return tr("Rename Track"); }
 
     virtual void execute();
     virtual void unexecute();

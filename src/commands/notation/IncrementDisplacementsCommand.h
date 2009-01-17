@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 #include <QPoint>
 
 
@@ -34,6 +34,8 @@ class CommandRegistry;
 
 class IncrementDisplacementsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(IncrementDisplacementsCommand)
+
 public:
     IncrementDisplacementsCommand(QPoint relative,
                                   EventSelection &selection) :
@@ -49,7 +51,7 @@ public:
         m_dx(dx),
         m_dy(dy) { }
 
-    static QString getGlobalName() { return QObject::tr("Fine Reposition"); }
+    static QString getGlobalName() { return tr("Fine Reposition"); }
 
     static void registerCommand(CommandRegistry *r);
     static QPoint getArgument(QString actionName, CommandArgumentQuerier &);

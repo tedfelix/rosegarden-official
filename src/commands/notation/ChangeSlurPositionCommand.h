@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Slur;
@@ -36,13 +36,15 @@ class CommandRegistry;
 
 class ChangeSlurPositionCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeSlurPositionCommand)
+
 public:
     ChangeSlurPositionCommand(bool above, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(above), selection, true),
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? QObject::tr("Slur &Above") : QObject::tr("Slur &TicksBelow");
+        return above ? tr("Slur &Above") : tr("Slur &TicksBelow");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RestoreStemsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RestoreStemsCommand)
+
 public:
     RestoreStemsCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Restore Stems"); }
+    static QString getGlobalName() { return tr("&Restore Stems"); }
 
     static void registerCommand(CommandRegistry *);
 

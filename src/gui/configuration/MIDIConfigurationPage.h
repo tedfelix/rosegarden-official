@@ -24,8 +24,6 @@
 #include <QLineEdit>
 #include <QCheckBox>
 
-#include <QObject>
-
 
 class QWidget;
 class QSpinBox;
@@ -52,8 +50,8 @@ public:
 
     virtual void apply();
 
-    static QString iconLabel() { return QObject::tr("MIDI"); }
-    static QString title()     { return QObject::tr("MIDI Settings"); }
+    static QString iconLabel() { return tr("MIDI"); }
+    static QString title()     { return tr("MIDI Settings"); }
     static QString iconName()  { return "configure-midi"; }
 
 protected slots:

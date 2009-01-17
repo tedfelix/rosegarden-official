@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Collapse;
@@ -35,12 +35,14 @@ class EventSelection;
 
 class CollapseNotesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CollapseNotesCommand)
+
 public:
     CollapseNotesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("Collapse &Equal-Pitch Notes"); }
+    static QString getGlobalName() { return tr("Collapse &Equal-Pitch Notes"); }
 
 protected:
     virtual void modifySegment();

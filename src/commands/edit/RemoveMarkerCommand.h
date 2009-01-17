@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,6 +37,8 @@ class Composition;
 
 class RemoveMarkerCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveMarkerCommand)
+
 public:
     RemoveMarkerCommand(Composition *comp,
                         int id,
@@ -45,7 +47,7 @@ public:
                         const std::string &description);
     ~RemoveMarkerCommand();
 
-    static QString getGlobalName() { return QObject::tr("&Remove Marker"); }
+    static QString getGlobalName() { return tr("&Remove Marker"); }
 
     virtual void execute();
     virtual void unexecute();

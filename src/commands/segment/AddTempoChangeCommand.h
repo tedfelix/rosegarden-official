@@ -23,7 +23,7 @@
 #include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -33,6 +33,8 @@ namespace Rosegarden
 
 class AddTempoChangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTempoChangeCommand)
+
 public:
     AddTempoChangeCommand(Composition *composition,
                           timeT time,
@@ -48,7 +50,7 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-    static QString getGlobalName() { return QObject::tr("Add Te&mpo Change..."); }
+    static QString getGlobalName() { return tr("Add Te&mpo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

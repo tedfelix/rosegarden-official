@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Make;
@@ -37,10 +37,12 @@ class CommandRegistry;
 /*!!!
 class GraceCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(GraceCommand)
+
 public:
     GraceCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return QObject::tr("Make &Grace Notes"); }
+    static QString getGlobalName() { return tr("Make &Grace Notes"); }
 
     static void registerCommand(CommandRegistry *r);
 

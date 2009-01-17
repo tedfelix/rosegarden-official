@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 #include "base/Composition.h" // for tempoT
 
 
@@ -32,6 +32,8 @@ namespace Rosegarden
 
 class ModifyDefaultTempoCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyDefaultTempoCommand)
+
 public:
     ModifyDefaultTempoCommand(Composition *composition,
                               tempoT tempo):
@@ -41,7 +43,7 @@ public:
 
     virtual ~ModifyDefaultTempoCommand() {}
 
-    static QString getGlobalName() { return QObject::tr("Modify &Default Tempo..."); }
+    static QString getGlobalName() { return tr("Modify &Default Tempo..."); }
 
     virtual void execute();
     virtual void unexecute();

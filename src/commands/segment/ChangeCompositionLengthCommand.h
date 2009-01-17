@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Change;
@@ -36,6 +36,8 @@ class Composition;
 
 class ChangeCompositionLengthCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeCompositionLengthCommand)
+
 public:
     ChangeCompositionLengthCommand(Composition *composition,
                                    timeT startTime,
@@ -43,7 +45,7 @@ public:
     virtual ~ChangeCompositionLengthCommand();
 
     static QString getGlobalName()
-        { return QObject::tr("Change &Composition Start and End..."); }
+        { return tr("Change &Composition Start and End..."); }
 
     virtual void execute();
     virtual void unexecute();

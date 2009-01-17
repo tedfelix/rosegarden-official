@@ -22,7 +22,7 @@
 #include "base/Event.h"
 #include "document/BasicCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -40,12 +40,14 @@ class Segment;
 
 class EventEditCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EventEditCommand)
+
 public:
     EventEditCommand(Segment &segment,
                      Event *eventToModify,
                      const Event &newEvent);
 
-    static QString getGlobalName() { return QObject::tr("Edit E&vent"); }
+    static QString getGlobalName() { return tr("Edit E&vent"); }
 
 protected:
     virtual void modifySegment();

@@ -20,7 +20,7 @@
 #define _RG_CUTCOMMAND_H_
 
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 #include "document/Command.h"
 
 
@@ -36,6 +36,8 @@ class Clipboard;
 
 class CutCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CutCommand)
+
 public:
     /// Make a CutCommand that cuts events from within a Segment
     CutCommand(EventSelection &selection,
@@ -45,7 +47,7 @@ public:
     CutCommand(SegmentSelection &selection,
                Clipboard *clipboard);
 
-    static QString getGlobalName() { return QObject::tr("Cu&t"); }
+    static QString getGlobalName() { return tr("Cu&t"); }
 };
 
 

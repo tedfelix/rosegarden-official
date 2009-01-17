@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -34,6 +34,8 @@ class EventSelection;
 
 class AddDotCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddDotCommand)
+
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -42,7 +44,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return QObject::tr("&Add Dot");
+        return tr("&Add Dot");
     }
 
 protected:

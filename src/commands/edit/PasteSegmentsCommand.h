@@ -22,7 +22,7 @@
 #include "base/Track.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 #include <vector>
 #include "base/Event.h"
 
@@ -41,6 +41,8 @@ class Clipboard;
 
 class PasteSegmentsCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteSegmentsCommand)
+
 public:
     PasteSegmentsCommand(Composition *composition,
                          Clipboard *clipboard,
@@ -50,7 +52,7 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
-    static QString getGlobalName() { return QObject::tr("&Paste"); }
+    static QString getGlobalName() { return tr("&Paste"); }
 
     virtual void execute();
     virtual void unexecute();

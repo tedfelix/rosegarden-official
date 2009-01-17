@@ -20,7 +20,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -33,6 +33,8 @@ class EventSelection;
 
 class ClearTriggersCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ClearTriggersCommand)
+
 public:
     ClearTriggersCommand(EventSelection &selection,
                          QString name = 0) :
@@ -41,7 +43,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return QObject::tr("&Clear Triggers");
+        return tr("&Clear Triggers");
     }
 
 protected:

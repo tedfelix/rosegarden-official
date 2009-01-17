@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 #include "base/Track.h"
 
 
@@ -36,12 +36,14 @@ class Composition;
 
 class DeleteTracksCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeleteTracksCommand)
+
 public:
     DeleteTracksCommand(Composition *composition,
                         std::vector<TrackId> tracks);
     virtual ~DeleteTracksCommand();
 
-    static QString getGlobalName() { return QObject::tr("Delete Tracks..."); }
+    static QString getGlobalName() { return tr("Delete Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

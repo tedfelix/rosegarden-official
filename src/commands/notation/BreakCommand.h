@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class BreakCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(BreakCommand)
+
 public:
     BreakCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Unbeam"); }
+    static QString getGlobalName() { return tr("&Unbeam"); }
 
     static void registerCommand(CommandRegistry *r);
 

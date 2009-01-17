@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -34,6 +34,8 @@ class EventSelection;
 
 class RetrogradeInvertCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RetrogradeInvertCommand)
+
 public:
     RetrogradeInvertCommand(int semitones, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(semitones), selection, true),
@@ -41,7 +43,7 @@ public:
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
-        default:  return QObject::tr("Re&trograde Invert");
+        default:  return tr("Re&trograde Invert");
         }
     }
 

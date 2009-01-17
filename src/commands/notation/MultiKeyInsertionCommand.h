@@ -22,7 +22,7 @@
 #include "base/NotationTypes.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 #include "misc/Strings.h"
 #include "document/Command.h"
 #include "document/RosegardenGUIDoc.h"
@@ -40,6 +40,8 @@ class RosegardenGUIDoc;
 
 class MultiKeyInsertionCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MultiKeyInsertionCommand)
+
 public:
     
     MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
@@ -53,9 +55,9 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return QObject::tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
+            return tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
-            return QObject::tr("Add &Key Change...");
+            return tr("Add &Key Change...");
         }
     }
 };

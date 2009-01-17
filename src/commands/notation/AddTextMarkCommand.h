@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <string>
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,13 +35,15 @@ class CommandRegistry;
 
 class AddTextMarkCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTextMarkCommand)
+
 public:
     AddTextMarkCommand(std::string text,
                        EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection), m_text(text) { }
 
-    static QString getGlobalName() { return QObject::tr("Add Te&xt Mark..."); }
+    static QString getGlobalName() { return tr("Add Te&xt Mark..."); }
 
     static std::string getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);

@@ -25,7 +25,7 @@
 #include <QString>
 #include <vector>
 #include <map>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -38,6 +38,8 @@ class Composition;
 
 class AddTracksCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTracksCommand)
+
 public:
     AddTracksCommand(Composition *composition,
                      unsigned int nbTracks,
@@ -45,7 +47,7 @@ public:
                      int position); // -1 -> at end
     virtual ~AddTracksCommand();
 
-    static QString getGlobalName() { return QObject::tr("Add Tracks..."); }
+    static QString getGlobalName() { return tr("Add Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

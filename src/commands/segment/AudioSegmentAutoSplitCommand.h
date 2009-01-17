@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -38,6 +38,8 @@ class AudioFileManager;
 
 class AudioSegmentAutoSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentAutoSplitCommand)
+
 public:
     AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,
                                  Segment *segment,
@@ -47,7 +49,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return QObject::tr("&Split on Silence"); }
+    static QString getGlobalName() { return tr("&Split on Silence"); }
 
 private:
     Segment                *m_segment;

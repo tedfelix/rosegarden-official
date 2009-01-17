@@ -23,7 +23,6 @@
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <QObject>
 
 
 class QWidget;
@@ -43,6 +42,7 @@ class RosegardenGUIDoc;
 class ColourConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
+
 public:
     ColourConfigurationPage(RosegardenGUIDoc *doc,
                             QWidget *parent=0, const char *name=0);
@@ -50,8 +50,8 @@ public:
 
     void populate_table();
 
-    static QString iconLabel() { return QObject::tr("Color"); }
-    static QString title()     { return QObject::tr("Color Settings"); }
+    static QString iconLabel() { return tr("Color"); }
+    static QString title()     { return tr("Color Settings"); }
     static QString iconName()  { return "colorize"; }
 
 signals:

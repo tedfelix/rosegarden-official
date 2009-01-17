@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Stems;
@@ -36,13 +36,15 @@ class CommandRegistry;
 
 class ChangeStemsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeStemsCommand)
+
 public:
     ChangeStemsCommand(bool up, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(up), selection, true),
         m_selection(&selection), m_up(up) { }
 
     static QString getGlobalName(bool up) {
-        return up ? QObject::tr("Stems &Up") : QObject::tr("Stems &Down");
+        return up ? tr("Stems &Up") : tr("Stems &Down");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

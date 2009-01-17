@@ -22,7 +22,7 @@
 #include "base/PropertyName.h"
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Set;
@@ -48,6 +48,8 @@ typedef enum
 
 class SelectionPropertyCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SelectionPropertyCommand)
+
 public:
 
     SelectionPropertyCommand(EventSelection *selection,
@@ -56,7 +58,7 @@ public:
                              int value1,
                              int value2);
 
-    static QString getGlobalName() { return QObject::tr("Set &Property"); }
+    static QString getGlobalName() { return tr("Set &Property"); }
 
     virtual void modifySegment();
 

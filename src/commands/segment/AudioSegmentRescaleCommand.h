@@ -21,7 +21,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -34,6 +34,8 @@ class ProgressDialog;
 
 class AudioSegmentRescaleCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentRescaleCommand)
+
 public:
     AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
                                Segment *segment, float ratio);
@@ -52,7 +54,7 @@ public:
     void connectProgressDialog(ProgressDialog *dlg);
     void disconnectProgressDialog(ProgressDialog *dlg);
     
-    static QString getGlobalName() { return QObject::tr("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
     AudioFileManager *m_afm;

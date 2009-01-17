@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class Segment;
 /// MakeRegionViable works on part of a segment
 class MakeRegionViableCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeRegionViableCommand)
+
 public:
     MakeRegionViableCommand(Segment &segment,
                             timeT startTime,
                             timeT endTime) :
         BasicCommand(getGlobalName(), segment, startTime, endTime) { }
 
-    static QString getGlobalName() { return QObject::tr("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
 
 protected:
     virtual void modifySegment();

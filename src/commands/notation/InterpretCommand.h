@@ -24,7 +24,7 @@
 #include <string>
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -40,6 +40,8 @@ class Event;
 
 class InterpretCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(InterpretCommand)
+
 public:
     // bit masks: pass an OR of these to the constructor
     static const int NoInterpretation;
@@ -60,7 +62,7 @@ public:
 
     virtual ~InterpretCommand();
 
-    static QString getGlobalName() { return QObject::tr("&Interpret..."); }
+    static QString getGlobalName() { return tr("&Interpret..."); }
     
 protected:
     virtual void modifySegment();

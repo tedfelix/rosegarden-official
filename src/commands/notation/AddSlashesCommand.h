@@ -20,7 +20,7 @@
 #define _RG_ADDSLASHESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -31,9 +31,11 @@ class CommandRegistry;
 
 class AddSlashesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddSlashesCommand)
+
 public:
     AddSlashesCommand(int number, EventSelection &selection) :
-        BasicSelectionCommand(QObject::tr("Slashes"), selection, true),
+        BasicSelectionCommand(tr("Slashes"), selection, true),
         m_selection(&selection), m_number(number) { }
 
     static int getArgument(QString actionName, CommandArgumentQuerier &);

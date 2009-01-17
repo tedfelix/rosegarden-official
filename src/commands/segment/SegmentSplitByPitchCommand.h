@@ -22,7 +22,7 @@
 #include "base/Segment.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 #include "gui/general/ClefIndex.h"
 
 
@@ -36,6 +36,8 @@ class Composition;
 
 class SegmentSplitByPitchCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitByPitchCommand)
+
 public:
     enum ClefHandling {
         LeaveClefs,
@@ -51,7 +53,7 @@ public:
     virtual ~SegmentSplitByPitchCommand();
 
     static QString getGlobalName()
-        { return QObject::tr("Split by &Pitch..."); }
+        { return tr("Split by &Pitch..."); }
 
     virtual void execute();
     virtual void unexecute();

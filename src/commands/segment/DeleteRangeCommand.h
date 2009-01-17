@@ -20,7 +20,7 @@
 
 #include "document/Command.h"
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 #include "SegmentJoinCommand.h"
 
@@ -34,6 +34,8 @@ class Composition;
 
 class DeleteRangeCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeleteRangeCommand)
+
 public:
     DeleteRangeCommand(Composition *composition,
                        timeT begin,
@@ -49,7 +51,7 @@ public:
         // method.
 
         RejoinCommand() :
-            NamedCommand(QObject::tr("Rejoin Command"))
+            NamedCommand(tr("Rejoin Command"))
             { }
 
         virtual ~RejoinCommand();

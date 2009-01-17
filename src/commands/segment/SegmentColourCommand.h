@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class SegmentSelection;
 
 class SegmentColourCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentColourCommand)
+
 public:
     SegmentColourCommand(SegmentSelection &segments,
                          const unsigned int index);
     virtual ~SegmentColourCommand();
 
     static QString getGlobalName()
-        { return QObject::tr("Change Segment Color..."); }
+        { return tr("Change Segment Color..."); }
 
     virtual void execute();
     virtual void unexecute();

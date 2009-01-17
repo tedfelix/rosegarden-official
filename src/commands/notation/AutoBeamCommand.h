@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class CommandRegistry;
 
 class AutoBeamCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AutoBeamCommand)
+
 public:
     AutoBeamCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection) { }
@@ -43,7 +45,7 @@ public:
     AutoBeamCommand(Segment &segment) :
         BasicSelectionCommand(getGlobalName(), segment) { }
 
-    static QString getGlobalName() { return QObject::tr("&Auto-Beam"); }
+    static QString getGlobalName() { return tr("&Auto-Beam"); }
 
     static void registerCommand(CommandRegistry *r);
 

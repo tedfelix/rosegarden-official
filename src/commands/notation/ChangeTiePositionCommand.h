@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,13 +33,15 @@ class CommandRegistry;
 
 class ChangeTiePositionCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeTiePositionCommand)
+
 public:
     ChangeTiePositionCommand(bool above, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(above), selection, true),
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? QObject::tr("Tie &Above") : QObject::tr("Tie &TicksBelow");
+        return above ? tr("Tie &Above") : tr("Tie &TicksBelow");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);

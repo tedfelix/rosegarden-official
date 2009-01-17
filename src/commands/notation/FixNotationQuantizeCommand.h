@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class FixNotationQuantizeCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(FixNotationQuantizeCommand)
+
 public:
     FixNotationQuantizeCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
     
-    static QString getGlobalName() { return QObject::tr("Fi&x Notation Quantization"); }
+    static QString getGlobalName() { return tr("Fi&x Notation Quantization"); }
     
     static void registerCommand(CommandRegistry *r);
 

@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Composition;
 
 class SegmentAutoSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentAutoSplitCommand)
+
 public:
     SegmentAutoSplitCommand(Segment *segment);
     virtual ~SegmentAutoSplitCommand();
@@ -43,7 +45,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return QObject::tr("&Split on Silence"); }
+    static QString getGlobalName() { return tr("&Split on Silence"); }
 
 private:
     Segment *m_segment;

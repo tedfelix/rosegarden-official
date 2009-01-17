@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,13 +35,15 @@ class CommandRegistry;
 
 class SetVisibilityCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetVisibilityCommand)
+
 public:
     SetVisibilityCommand(bool visible, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection),
         m_visible(visible) { }
 
-    static QString getGlobalName() { return QObject::tr("Set Visibility"); }
+    static QString getGlobalName() { return tr("Set Visibility"); }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);

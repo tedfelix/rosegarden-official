@@ -23,7 +23,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +36,8 @@ class Studio;
 
 class RenameDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RenameDeviceCommand)
+
 public:
     RenameDeviceCommand(Studio *studio,
                         DeviceId deviceId,
@@ -45,7 +47,7 @@ public:
         m_deviceId(deviceId),
         m_name(name) { }
 
-    static QString getGlobalName() { return QObject::tr("Rename Device"); }
+    static QString getGlobalName() { return tr("Rename Device"); }
 
     virtual void execute();
     virtual void unexecute();

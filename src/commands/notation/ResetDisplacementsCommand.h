@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class ResetDisplacementsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ResetDisplacementsCommand)
+
 public:
     ResetDisplacementsCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return QObject::tr("&Restore Positions"); }
+    static QString getGlobalName() { return tr("&Restore Positions"); }
 
     static void registerCommand(CommandRegistry *r);
 

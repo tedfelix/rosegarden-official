@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -34,11 +34,13 @@ class EventSelection;
 
 class UnGraceCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(UnGraceCommand)
+
 public:
     UnGraceCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection) { }
 
-    static QString getGlobalName() { return QObject::tr("Ung&race"); }
+    static QString getGlobalName() { return tr("Ung&race"); }
 
 protected:
     virtual void modifySegment();

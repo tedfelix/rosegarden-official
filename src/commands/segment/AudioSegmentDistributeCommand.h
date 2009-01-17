@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -44,6 +44,8 @@ class AudioFile;
  */
 class AudioSegmentDistributeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentDistributeCommand)
+
 public:
     AudioSegmentDistributeCommand(Composition *comp,
                                   SegmentSelection &inputSelection,
@@ -56,7 +58,7 @@ public:
     virtual ~AudioSegmentDistributeCommand();
 
     static QString getGlobalName() 
-        { return QObject::tr("Distribute Audio Segments over MIDI"); }
+        { return tr("Distribute Audio Segments over MIDI"); }
 
 
     virtual void execute();

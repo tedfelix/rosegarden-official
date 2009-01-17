@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 #include "base/Event.h"
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,6 +37,8 @@ class Composition;
 
 class AddMarkerCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddMarkerCommand)
+
 public:
     AddMarkerCommand(Composition *comp,
                      timeT time,
@@ -44,7 +46,7 @@ public:
                      const std::string &description);
     ~AddMarkerCommand();
 
-    static QString getGlobalName() { return QObject::tr("&Add Marker"); }
+    static QString getGlobalName() { return tr("&Add Marker"); }
 
     virtual void execute();
     virtual void unexecute();

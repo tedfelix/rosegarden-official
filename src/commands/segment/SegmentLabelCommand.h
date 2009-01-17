@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class Segment;
 
 class SegmentLabelCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentLabelCommand)
+
 public:
     SegmentLabelCommand(SegmentSelection &segments,
                         const QString &label);
     virtual ~SegmentLabelCommand();
 
     static QString getGlobalName()
-        { return QObject::tr("Re&label..."); }
+        { return tr("Re&label..."); }
 
     virtual void execute();
     virtual void unexecute();

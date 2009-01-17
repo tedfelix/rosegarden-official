@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <string>
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class EventSelection;
 
 class SetTriggerCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerCommand)
+
 public:
     SetTriggerCommand(EventSelection &selection,
                       TriggerSegmentId triggerSegmentId,
@@ -53,7 +55,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return QObject::tr("Tri&gger Segment");
+        return tr("Tri&gger Segment");
     }
 
 protected:

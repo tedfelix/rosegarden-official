@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Overlapping;
@@ -37,6 +37,8 @@ class CommandRegistry;
 
 class DeCounterpointCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeCounterpointCommand)
+
 public:
     DeCounterpointCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -46,7 +48,7 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return QObject::tr("Split-and-Tie Overlapping &Chords"); }
+    static QString getGlobalName() { return tr("Split-and-Tie Overlapping &Chords"); }
 
     static void registerCommand(CommandRegistry *r);
 

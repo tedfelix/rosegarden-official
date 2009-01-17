@@ -24,7 +24,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 class Modify;
@@ -38,6 +38,8 @@ class Studio;
 
 class ModifyDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyDeviceCommand)
+
 public:
     // Any of the arguments passed by pointer may be null (except for
     // the Studio) -- in which case they will not be changed in the device.
@@ -58,7 +60,7 @@ public:
     /// supersedes setBankList() and setProgramList()
     void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
 
-    static QString getGlobalName() { return QObject::tr("Modify &MIDI Bank"); }
+    static QString getGlobalName() { return tr("Modify &MIDI Bank"); }
 
     virtual void execute();
     virtual void unexecute();

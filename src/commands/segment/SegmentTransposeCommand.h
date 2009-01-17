@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 #include "document/CommandHistory.h"
-#include <QObject>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -33,6 +33,8 @@ class SegmentSelection;
 
 class SegmentTransposeCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentTransposeCommand)
+
 public:
     SegmentTransposeCommand(Segment &segment,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
@@ -44,7 +46,7 @@ public:
 
     static QString getGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return QObject::tr("Transpose by &Interval...");
+        default:  return tr("Transpose by &Interval...");
         }
     }
 

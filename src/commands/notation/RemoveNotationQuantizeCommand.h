@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class CommandRegistry;
 
 class RemoveNotationQuantizeCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveNotationQuantizeCommand)
+
 public:
     RemoveNotationQuantizeCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
     
-    static QString getGlobalName() { return QObject::tr("Remo&ve Notation Quantization"); }
+    static QString getGlobalName() { return tr("Remo&ve Notation Quantization"); }
     
     static void registerCommand(CommandRegistry *r);
 

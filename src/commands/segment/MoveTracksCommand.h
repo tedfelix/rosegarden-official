@@ -22,7 +22,7 @@
 #include "base/Track.h"
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -35,13 +35,15 @@ class Composition;
 
 class MoveTracksCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MoveTracksCommand)
+
 public:
     MoveTracksCommand(Composition *composition,
                       TrackId srcTrack,
                       TrackId destTrack);
     virtual ~MoveTracksCommand();
 
-    static QString getGlobalName() { return QObject::tr("Move Tracks..."); }
+    static QString getGlobalName() { return tr("Move Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

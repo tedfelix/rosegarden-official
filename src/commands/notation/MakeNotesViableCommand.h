@@ -21,7 +21,7 @@
 
 #include "document/BasicSelectionCommand.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,6 +37,8 @@ class CommandRegistry;
 /// MakeNotesViable works on a selection or entire segment
 class MakeNotesViableCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeNotesViableCommand)
+
 public:
     MakeNotesViableCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -46,7 +48,7 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return QObject::tr("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
 
     static void registerCommand(CommandRegistry *r);
 

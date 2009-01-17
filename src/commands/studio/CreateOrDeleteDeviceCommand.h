@@ -24,7 +24,7 @@
 #include <string>
 #include "document/Command.h"
 #include <QString>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -37,6 +37,8 @@ class Studio;
 
 class CreateOrDeleteDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CreateOrDeleteDeviceCommand)
+
 public:
     // Creation constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
@@ -58,7 +60,7 @@ public:
                                 DeviceId deviceId);
     
     static QString getGlobalName(bool deletion) {
-        return (deletion ? QObject::tr("Delete Device") : QObject::tr("Create Device")); 
+        return (deletion ? tr("Delete Device") : tr("Create Device")); 
     }
     
     virtual void execute();

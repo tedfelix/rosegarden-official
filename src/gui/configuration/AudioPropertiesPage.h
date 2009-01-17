@@ -21,7 +21,6 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
-#include <QObject>
 
 
 class QWidget;
@@ -48,8 +47,8 @@ public:
                            QWidget *parent=0, const char *name=0);
     virtual void apply();
 
-    static QString iconLabel() { return QObject::tr("Audio"); }
-    static QString title()     { return QObject::tr("Audio Settings"); }
+    static QString iconLabel() { return tr("Audio"); }
+    static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
 protected slots:

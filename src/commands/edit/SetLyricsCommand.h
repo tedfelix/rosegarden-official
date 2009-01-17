@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <QString>
 #include <vector>
-#include <QObject>
+#include <QCoreApplication>
 
 
 
@@ -36,11 +36,13 @@ class Event;
 
 class SetLyricsCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetLyricsCommand)
+
 public:
     SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
     ~SetLyricsCommand();
     
-    static QString getGlobalName() { return QObject::tr("Edit L&yrics"); }
+    static QString getGlobalName() { return tr("Edit L&yrics"); }
 
     virtual void execute();
     virtual void unexecute();
