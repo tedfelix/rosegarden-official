@@ -1391,7 +1391,7 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 
 /*
 
-  Auto-beaming code derived from Rosegarden 2.1's ItemListAutoBeam
+  Auto-beaming code derived from X11 Rosegarden's ItemListAutoBeam
   and ItemListAutoBeamSub in editor/src/ItemList.c.
   
 */
@@ -1470,7 +1470,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
 /*
 
-  Derived from (and no less mystifying than) Rosegarden 2.1's
+  Derived from (and no less mystifying than) X11 Rosegarden's
   ItemListAutoBeamSub in editor/src/ItemList.c.
 
   "Today I want to celebrate "Montreal" by Autechre, because of
@@ -1649,7 +1649,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 }
 
 
-// based on Rosegarden 2.1's GuessItemListClef in editor/src/MidiIn.c
+// based on X11 Rosegarden's GuessItemListClef in editor/src/MidiIn.c
 
 Clef
 SegmentNotationHelper::guessClef(iterator from, iterator to)

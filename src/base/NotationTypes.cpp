@@ -1393,7 +1393,7 @@ Pitch::getAsNoteEvent(timeT absoluteTime, timeT duration) const
  * decision just where to put it on the staff, and what accidental it should
  * display for (or against) the key.
  *
- * This function originally written by Chris Cannam for Rosegarden 2.1
+ * This function originally written by Chris Cannam for X11 Rosegarden
  * Entirely rewritten by Chris Cannam for Rosegarden 4
  * Entirely rewritten by Hans Kieserman
  * Entirely rewritten by Michael McIntyre
@@ -1766,7 +1766,7 @@ Pitch::getPerformancePitchFromRG21Pitch(int heightOnStaff,
 					const Clef &clef,
 					const Key &)
 {
-    // Rosegarden 2.1 pitches are a bit weird; see
+    // X11 Rosegarden pitches are a bit weird; see
     // docs/data_struct/units.txt
 
     // We pass the accidental and clef, a faked key of C major, and a

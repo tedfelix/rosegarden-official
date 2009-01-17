@@ -52,6 +52,9 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "RosegardenGUIDoc.h"
 #include "sound/AudioFileManager.h"
+#include "XmlStorableEvent.h"
+#include "XmlSubHandler.h"
+
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QByteArray>
@@ -60,8 +63,6 @@
 #include <QFileInfo>
 #include <QString>
 #include <QStringList>
-#include "XmlStorableEvent.h"
-#include "XmlSubHandler.h"
 
 namespace Rosegarden
 {

@@ -3664,7 +3664,7 @@ void RosegardenGUIApp::slotImportRG21()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Rosegarden 2.1 File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(), "*", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }
@@ -3687,7 +3687,7 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::slotMergeRG21()
 {
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Rosegarden 2.1 File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(), "*", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }
@@ -3713,7 +3713,7 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
 {
     StartupLogo::hideIfStillThere();
     ProgressDialog progressDlg(
-        tr("Importing Rosegarden 2.1 file..."), 100, this);
+        tr("Importing X11 Rosegarden file..."), 100, this);
 
     CurrentProgressDialog::set
         (&progressDlg);
@@ -3741,7 +3741,7 @@ RosegardenGUIApp::createDocumentFromRG21File(QString file)
     if (!rg21Loader.load(file, newDoc->getComposition())) {
         CurrentProgressDialog::freeze();
         QMessageBox::critical(this, "", 
-                           tr("Can't load Rosegarden 2.1 file.  It appears to be corrupted."));
+                           tr("Can't load X11 Rosegarden file.  It appears to be corrupted."));
         delete newDoc;
         return 0;
     }
