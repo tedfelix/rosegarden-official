@@ -2609,20 +2609,20 @@ MatrixView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setCaption(tr("%1 - Segment Track #%2 - %3")
+        setWindowTitle(tr("%1 - Segment Track #%2 - %3")
                     .arg(getDocument()->getTitle())
                     .arg(trackPosition + 1)
                     .arg(view));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setCaption(tr("%1 - All Segments - %2")
+        setWindowTitle(tr("%1 - All Segments - %2")
                     .arg(getDocument()->getTitle())
                     .arg(view));
 
     } else {
 
-        setCaption(tr("%1 - %n Segment(s) - %2", "",
+        setWindowTitle(tr("%1 - %n Segment(s) - %2", "",
                         m_segments.size())
                     .arg(getDocument()->getTitle())
                     .arg(view));

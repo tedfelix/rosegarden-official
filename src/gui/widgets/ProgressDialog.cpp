@@ -61,7 +61,7 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 	setCancelButtonText( QString("Cancel") );
 	
 	
-    setCaption(tr("Processing..."));
+    setWindowTitle(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
     << labelText() << " - modal : " << modal << endl;
 

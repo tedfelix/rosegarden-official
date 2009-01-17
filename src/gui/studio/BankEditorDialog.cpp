@@ -91,7 +91,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     setCentralWidget(mainFrame);
 	mainFrame->setLayout( new QVBoxLayout(this) );
 
-    setCaption(tr("Manage MIDI Banks and Programs"));
+    setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
     QSplitter *splitter = new QSplitter( mainFrame );
     mainFrame->layout()->addWidget(splitter);

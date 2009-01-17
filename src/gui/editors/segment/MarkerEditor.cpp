@@ -86,7 +86,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(tr("Manage Markers"));
+    setWindowTitle(tr("Manage Markers"));
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);

@@ -74,7 +74,6 @@
 #include <QUrl>
 #include <QShortcut>
 #include <QKeySequence>
-
 #include <Q3DragObject>
 #include <Q3UriDrag>
 
@@ -95,14 +94,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         m_playTimer(new QTimer(this)),
         m_audiblePreview(true)
 {
-    setCaption(tr("Audio File Manager"));
-//    setWFlags(WDestructiveClose);	
+    setWindowTitle(tr("Audio File Manager"));
 	this->setAttribute( Qt::WA_DeleteOnClose );
 
     QWidget *box = new QWidget(this);
     QVBoxLayout *boxLayout = new QVBoxLayout(this);
 	box->setLayout(boxLayout);
-	//setLayout( boxLayout );
 	
     setCentralWidget(box);
     boxLayout->setMargin(10);

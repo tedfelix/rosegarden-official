@@ -16,9 +16,7 @@
 */
 
 
-#include <QShortcut>
 #include "RosegardenGUIApp.h"
-#include <QApplication>
 
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
@@ -171,10 +169,12 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
+#include <gui/kdeext/KTmpStatusMsg.h>
 
 #include <Q3Canvas>
-
+#include <QApplication>
 #include <QSettings>
+#include <QShortcut>
 #include <QDockWidget>
 #include <QMessageBox>
 #include <QProcess>
@@ -212,7 +212,6 @@
 #include <QStatusBar>
 #include <QAction>
 #include <QUrl>
-
 #include <QDialog>
 #include <QFileDialog>
 #include <QInputDialog>
@@ -220,25 +219,6 @@
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QPageSetupDialog>
-
-#include <gui/kdeext/KTmpStatusMsg.h>
-
-//#include <kmimetype.h>
-//#include <kedittoolbar.h> //
-//#include <QFileDialog>
-//#include <kglobal.h>
-//#include <kinputdialog.h>
-//#include <kkeydialog.h>	//&&& disabled kkaydialog.h
-//#include <kmainwindow.h>
-//#include <ktip.h>
-//#include <ktoolbar.h>
-//#include <kurl.h>
-//#include <kstandardshortcut.h>
-//#include <kstandardaction.h>
-//#include <QDir>
-
-// remaining kde headers:
-
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -953,7 +933,7 @@ void RosegardenGUIApp::initView()
     //@@@ This was commented out... why?
     setCentralWidget(m_swapView);
 
-    setCaption(m_doc->getTitle());
+    setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
 
 
     // Transport setup
@@ -1135,11 +1115,8 @@ void RosegardenGUIApp::setDocument(RosegardenGUIDoc* newDocument)
 
     // Caption
     //
-    //QString caption = qApp->caption();
-	//QString caption = qApp->windowTitle();
-	QString caption = qApp->applicationName();
-	
-    setCaption(caption + ": " + newDocument->getTitle());
+    QString caption = qApp->applicationName();
+    setWindowTitle(tr("%1 - %2").arg(newDocument->getTitle()).arg(caption));
 	
 
     //     // reset AudioManagerDialog
@@ -1665,9 +1642,8 @@ void RosegardenGUIApp::readGlobalProperties()
         }
     }
 
-	//QString caption = qApp->caption();
-	QString caption = qApp->organizationName();
-	setCaption(caption + ": " + m_doc->getTitle());
+	QString caption = qApp->applicationName();
+        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
 }
 
 void RosegardenGUIApp::showEvent(QShowEvent* e)
@@ -1805,7 +1781,7 @@ void RosegardenGUIApp::openURL(const QUrl& url)
     source.waitForData();
     openFile(target);
 
-    setCaption(caption);
+    setWindowTitle(caption);
 }
 
 void RosegardenGUIApp::slotFileOpen()
@@ -2061,7 +2037,7 @@ bool RosegardenGUIApp::slotFileSaveAs()
         m_recentFiles.add(newName);
 
         QString caption = qApp->applicationName();
-        setCaption(caption + ": " + m_doc->getTitle());
+        setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(caption));
         // update the edit view's captions too
         emit compositionStateUpdate();
     }

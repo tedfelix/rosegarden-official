@@ -87,7 +87,7 @@ ControlEditorDialog::ControlEditorDialog
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(QObject::tr("Manage Control Events"));
+    setWindowTitle(QObject::tr("Manage Control Events"));
 
     QString deviceName(QObject::tr("<no device>"));
     MidiDevice *md =

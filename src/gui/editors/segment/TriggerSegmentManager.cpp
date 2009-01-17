@@ -85,7 +85,7 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(tr("Manage Triggered Segments"));
+    setWindowTitle(tr("Manage Triggered Segments"));
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);

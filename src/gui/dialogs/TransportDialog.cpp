@@ -94,7 +94,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_transport = new Ui_RosegardenTransport();
     m_transport->setupUi(frame);
 	
-    setCaption(tr("Rosegarden Transport"));
+    setWindowTitle(tr("Rosegarden Transport"));
 
     resetFonts();
 

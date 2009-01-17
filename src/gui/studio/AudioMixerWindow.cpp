@@ -221,7 +221,7 @@ AudioMixerWindow::populate()
     QGridLayout *mainLayout = new QGridLayout
                               (m_mainBox, (instruments.size() + busses.size()) * 3, 7);
 
-    setCaption(tr("Audio Mixer"));
+    setWindowTitle(tr("Audio Mixer"));
 
     int count = 1;
     int col = 0;
