@@ -20,7 +20,6 @@
 #include "ScrollBoxDialog.h"
 
 #include "ScrollBox.h"
-#include <kdialog.h>
 #include <QFrame>
 #include <QPainter>
 #include <QPixmap>

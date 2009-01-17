@@ -33,7 +33,6 @@
 #include "lrdf.h"
 #endif // HAVE_LIBLRDF
 
-#include <kdebug.h>
 
 namespace Rosegarden
 {

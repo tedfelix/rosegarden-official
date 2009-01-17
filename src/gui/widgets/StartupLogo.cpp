@@ -26,7 +26,6 @@
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
 
-#include <ktip.h>
 
 #include <QApplication>
 #include <QDesktopWidget>
