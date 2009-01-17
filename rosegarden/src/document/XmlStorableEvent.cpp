@@ -148,34 +148,36 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
     }
 
     for (int i = 0; i < attributes.length(); ++i) {
-        QString attrName(attributes.qName(i)),
-        attrVal(attributes.value(i));
+        QString attrName(attributes.qName(i));
+        QString attrLcName(attrName.lower());
+        QString attrVal(attributes.value(i));
 
-        if (attrName == "name") {
+        if (attrLcName == "name") {
             continue;
         } else if (have) {
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
             continue;
-        } else if (attrName == "bool") {
+        } else if (attrLcName == "bool") {
             set
                 <Bool>(qstrtostr(name), attrVal.lower() == "true",
                        persistent);
             have = true;
-        } else if (attrName == "int") {
+        } else if (attrLcName == "int") {
             set
                 <Int>(qstrtostr(name), attrVal.toInt(), persistent);
             have = true;
-        } else if (attrName == "string") {
+        } else if (attrLcName == "string") {
             set
                 <String>(qstrtostr(name), qstrtostr(attrVal), persistent);
             have = true;
         } else {
-            RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
+            std::cerr << "XmlStorableEvent::setProperty: unknown attribute type \"" << attrName << "\" (lc name \"" << attrLcName << "\"), ignoring" << std::endl;
         }
     }
 
-    if (!have)
-        RG_DEBUG << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << endl;
+    if (!have) {
+        std::cerr << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << std::endl;
+    }
 }
 
 }
