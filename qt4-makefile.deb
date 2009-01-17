@@ -47,7 +47,7 @@ LDLIBS		= \
 #		-L$(KDELIB) \
 #		-lkdeui -lkdecore \
 
-
+#
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
 HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
@@ -74,7 +74,7 @@ rosegarden:	$(OBJECTS)
 
 %.cpp: %.qrc
 	$(RCC) $< -o $@
-	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
+#	$(RCC) $< -root /$(firstword $(subst ., ,$(lastword $(subst /, ,$<)))) -o $@
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
