@@ -306,24 +306,6 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
             spinBox->show();
             break;
         }
-    case UInt: {
-            int min = 0;
-            int max = UINT_MAX;
-            if (m_originalEvent.isa(ProgramChange::EventType)) {
-                    min = 0;
-                    max = 65535;
-                }
-            QSpinBox *spinBox = new QSpinBox;
-            spinBox->setRange(min, max);
-            spinBox->setSingleStep(1);
-            spinBox->setObjectName(strtoqstr(name));
-            spinBox->setValue(m_originalEvent.get<UInt>(name));
-            m_persistentGridLay->addWidget(spinBox, m_persistentGridRow, 2);
-            QObject::connect(spinBox, SIGNAL(valueChanged(int)),
-                              this, SLOT(slotIntPropertyChanged(int)));
-            spinBox->show();
-            break;
-        }
     case RealTimeT: {
             RealTime realTime = m_originalEvent.get<RealTimeT>(name);
 
@@ -596,13 +578,6 @@ EventEditDialog::slotPropertyMadePersistent()
         m_event.set<Int>
         (qstrtostr(propertyName),
          m_originalEvent.get<Int>
-         (qstrtostr(propertyName)));
-        break;
-
-    case UInt:
-        m_event.set<UInt>
-        (qstrtostr(propertyName),
-         m_originalEvent.get<UInt>
          (qstrtostr(propertyName)));
         break;
 

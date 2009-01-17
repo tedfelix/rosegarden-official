@@ -157,17 +157,13 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
             continue;
         } else if (attrName == "bool") {
-            set
-                <Bool>(qstrtostr(name), attrVal.toLower() == "true",
-                       persistent);
+            set<Bool>(qstrtostr(name), attrVal.toLower() == "true", persistent);
             have = true;
         } else if (attrName == "int") {
-            set
-                <Int>(qstrtostr(name), attrVal.toInt(), persistent);
+            set<Int>(qstrtostr(name), attrVal.toInt(), persistent);
             have = true;
         } else if (attrName == "string") {
-            set
-                <String>(qstrtostr(name), qstrtostr(attrVal), persistent);
+            set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
             have = true;
         } else {
             RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
