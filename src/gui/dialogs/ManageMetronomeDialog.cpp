@@ -59,7 +59,10 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
         RosegardenGUIDoc *doc) :
         QDialog(parent),
         m_doc(doc),
-        m_buttonBox(0)
+        m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | 
+                                         QDialogButtonBox::Apply |
+                                         QDialogButtonBox::Close |
+                                         QDialogButtonBox::Help))
 {
     //setHelp("studio-metronome");
 
@@ -202,10 +205,6 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     connect(m_metronomeDevice, SIGNAL(activated(int)),
             this, SLOT(slotSetModified()));
 
-    QDialogButtonBox *m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | 
-                                                         QDialogButtonBox::Apply |
-                                                         QDialogButtonBox::Close |
-                                                         QDialogButtonBox::Help);
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -398,9 +397,6 @@ ManageMetronomeDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-
-    // Fix crash when some slot calls setModified before m_buttonBox is created
-    if (!m_buttonBox) return;
 
     QPushButton *butt = m_buttonBox->button( QDialogButtonBox::Apply );
     if (value) {
