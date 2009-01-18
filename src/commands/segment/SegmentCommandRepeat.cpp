@@ -21,7 +21,6 @@
 #include "base/Segment.h"
 #include "SegmentCommand.h"
 #include <QString>
-#include <QObject>
 
 
 namespace Rosegarden
@@ -29,7 +28,7 @@ namespace Rosegarden
 
 SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Segment*>& segments,
         bool repeat)
-        : SegmentCommand(QObject::tr("Repeat Segments"), segments),
+        : SegmentCommand(tr("Repeat Segments"), segments),
         m_repeatState(repeat)
 {}
 

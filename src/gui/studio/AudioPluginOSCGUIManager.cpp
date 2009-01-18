@@ -433,13 +433,13 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
 {
     PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container)
-        return QObject::tr("Rosegarden Plugin");
+        return tr("Rosegarden Plugin");
     else {
         if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-            return QObject::tr("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
+            return tr("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
         } else {
-            return QObject::tr("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
-                    .arg(QObject::tr("Plugin slot %1").arg(position));
+            return tr("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
+                    .arg(tr("Plugin slot %1").arg(position));
         }
     }
 }

@@ -26,7 +26,7 @@
 #include <string>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -37,6 +37,8 @@ class Segment;
 
 class InsertTriggerNoteCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(InsertTriggerNoteCommand)
+
 public:
     InsertTriggerNoteCommand(Segment &,
                              timeT time,

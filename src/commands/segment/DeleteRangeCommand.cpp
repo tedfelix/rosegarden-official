@@ -34,7 +34,7 @@ namespace Rosegarden
 
 DeleteRangeCommand::DeleteRangeCommand(Composition *composition,
                                        timeT t0, timeT t1) :
-        MacroCommand(QObject::tr("Delete Range"))
+        MacroCommand(tr("Delete Range"))
 {
     // First add commands to split the segments up.  Make a note of
     // segments that will need rejoining with their neighbours

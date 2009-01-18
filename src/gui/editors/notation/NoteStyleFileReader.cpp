@@ -52,7 +52,7 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
 
     if (styleFileName == "" || !fileInfo.isReadable()) {
         throw StyleFileReadFailed
-	    (qstrtostr(QObject::tr("Can't open style file %1").arg(styleFileName)));
+	    (qstrtostr(tr("Can't open style file %1").arg(styleFileName)));
     }
 
     QFile styleFile(styleFileName);
@@ -87,7 +87,7 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 	
 	QString s = attributes.value("type");
 	if (s.isEmpty() ) {
-	    m_errorString = QObject::tr("type is a required attribute of note");
+	    m_errorString = tr("type is a required attribute of note");
 	    return false;
 	}
 	
@@ -96,14 +96,14 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 	    if (!setFromAttributes(type, attributes)) return false;
 
 	} catch (NotationStrings::MalformedNoteName n) {
-	    m_errorString = QObject::tr("Unrecognised note name %1").arg(s);
+	    m_errorString = tr("Unrecognised note name %1").arg(s);
 	    return false;
 	}
 
     } else if (lcName == "global") {
 
 	if (m_haveNote) {
-	    m_errorString = QObject::tr("global element must precede note elements");
+	    m_errorString = tr("global element must precede note elements");
 	    return false;
 	}
 	    
@@ -132,7 +132,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     s = attributes.value("charname");
 	if (!s.isEmpty() ) {
 	if (haveShape) {
-	    m_errorString = QObject::tr("global and note elements may have shape "
+	    m_errorString = tr("global and note elements may have shape "
 				 "or charname attribute, but not both");
 	    return false;
 	}

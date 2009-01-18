@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Composition;
 
 class SegmentSingleRepeatToCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSingleRepeatToCopyCommand)
+
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,
                                      timeT time);

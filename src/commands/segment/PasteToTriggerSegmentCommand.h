@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,8 @@ class Clipboard;
 
 class PasteToTriggerSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteToTriggerSegmentCommand)
+
 public:
     /// If basePitch is -1, the first pitch in the selection will be used
     PasteToTriggerSegmentCommand(Composition *composition,

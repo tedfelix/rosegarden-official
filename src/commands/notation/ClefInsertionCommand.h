@@ -24,6 +24,8 @@
 #include <QString>
 #include "base/Event.h"
 
+#include <QCoreApplication>
+
 
 namespace Rosegarden
 {
@@ -33,6 +35,8 @@ class Event;
 
 class ClefInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ClefInsertionCommand)
+
 public:
     ClefInsertionCommand(Segment &segment,
                          timeT time,

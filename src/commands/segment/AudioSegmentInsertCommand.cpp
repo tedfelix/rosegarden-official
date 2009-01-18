@@ -41,7 +41,7 @@ AudioSegmentInsertCommand::AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
                                                      AudioFileId audioFileId,
                                                      const RealTime &audioStartTime,
                                                      const RealTime &audioEndTime):
-    NamedCommand(QObject::tr("Create Segment")),
+    NamedCommand(tr("Create Segment")),
     m_composition(&(doc->getComposition())),
     m_audioFileManager(&(doc->getAudioFileManager())),
     m_segment(0),
@@ -103,9 +103,9 @@ AudioSegmentInsertCommand::execute()
 
         if (aF) {
             std::string label = aF->getName();
-            m_segment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(inserted)"))));
+            m_segment->setLabel(appendLabel(label, qstrtostr(tr("(inserted)"))));
         } else {
-            m_segment->setLabel(qstrtostr( QObject::tr("unknown audio file")) );
+            m_segment->setLabel(qstrtostr( tr("unknown audio file")) );
         }
         m_composition->addSegment(m_segment);
     } else {

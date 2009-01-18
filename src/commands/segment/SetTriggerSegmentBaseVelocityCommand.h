@@ -22,7 +22,7 @@
 #include "base/TriggerSegment.h"
 #include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,6 +33,8 @@ class Composition;
 
 class SetTriggerSegmentBaseVelocityCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentBaseVelocityCommand)
+
 public:
     SetTriggerSegmentBaseVelocityCommand(Composition *composition,
                                       TriggerSegmentId id,

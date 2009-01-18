@@ -38,7 +38,7 @@ CopyCommand::CopyCommand(EventSelection &selection,
     m_savedClipboard = 0;
     std::string label = selection.getSegment().getLabel();
     m_sourceClipboard->newSegment(&selection)->setLabel(
-            appendLabel(label, qstrtostr(QObject::tr("(excerpt)"))));
+            appendLabel(label, qstrtostr(tr("(excerpt)"))));
 }
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
@@ -53,7 +53,7 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
             i != selection.end(); ++i) {
         std::string label = (*i)->getLabel();
         m_sourceClipboard->newSegment(*i)->setLabel(
-                appendLabel(label, qstrtostr(QObject::tr("(copied)"))));
+                appendLabel(label, qstrtostr(tr("(copied)"))));
     }
 }
 
@@ -61,7 +61,7 @@ CopyCommand::CopyCommand(Composition *composition,
                          timeT beginTime,
                          timeT endTime,
                          Clipboard *clipboard) :
-        NamedCommand(QObject::tr("Copy Range")),
+        NamedCommand(tr("Copy Range")),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;

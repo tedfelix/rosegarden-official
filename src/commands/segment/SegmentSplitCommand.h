@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Segment;
 
 class SegmentSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitCommand)
+
 public:
 
     // If keepLabel is true, "(split)" is not append to the new segments label

@@ -29,7 +29,7 @@ namespace Rosegarden
 {
 
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
-        NamedCommand(QObject::tr("Erase Segment")),
+        NamedCommand(tr("Erase Segment")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_mgr(0),
@@ -41,7 +41,7 @@ SegmentEraseCommand::SegmentEraseCommand(Segment *segment) :
 
 SegmentEraseCommand::SegmentEraseCommand(Segment *segment,
         AudioFileManager *mgr) :
-        NamedCommand(QObject::tr("Erase Segment")),
+        NamedCommand(tr("Erase Segment")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_mgr(mgr),

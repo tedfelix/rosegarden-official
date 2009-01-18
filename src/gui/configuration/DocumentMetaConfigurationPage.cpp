@@ -52,18 +52,6 @@
 namespace Rosegarden
 {
 
-static QString durationToString(Rosegarden::Composition &comp,
-				Rosegarden::timeT absTime,
-				Rosegarden::timeT duration,
-				Rosegarden::RealTime rt)
-{
-    return QObject::tr("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
-	 .arg(rt.sec / 60).arg(rt.sec % 60)
-	 .arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
-	 .arg(duration).arg(comp.getBarNumber(absTime + duration) -
-			   comp.getBarNumber(absTime));
-}
-
 class SegmentDataItem : public QTableWidgetItem
 {
 public:
@@ -102,7 +90,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         TabbedConfigurationPage(doc, parent, name)
 {
     m_headersPage = new HeadersConfigurationPage(this, doc);
-    addTab(m_headersPage, QObject::tr("Headers"));
+    addTab(m_headersPage, tr("Headers"));
 
     Composition &comp = doc->getComposition();
     std::set
@@ -123,27 +111,27 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     QGridLayout *layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-    layout->addWidget(new QLabel(QObject::tr("Filename:"), frame), 0, 0);
+    layout->addWidget(new QLabel(tr("Filename:"), frame), 0, 0);
     layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
 
-    layout->addWidget(new QLabel(QObject::tr("Formal duration (to end marker):"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("Formal duration (to end marker):"), frame), 1, 0);
     timeT d = comp.getEndMarker();
     RealTime rtd = comp.getElapsedRealTime(d);
     layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 1, 1);
 
-    layout->addWidget(new QLabel(QObject::tr("Playing duration:"), frame), 2, 0);
+    layout->addWidget(new QLabel(tr("Playing duration:"), frame), 2, 0);
     d = comp.getDuration();
     rtd = comp.getElapsedRealTime(d);
     layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 2, 1);
 
-    layout->addWidget(new QLabel(QObject::tr("Tracks:"), frame), 3, 0);
-    layout->addWidget(new QLabel(QObject::tr("%1 used, %2 total")
+    layout->addWidget(new QLabel(tr("Tracks:"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("%1 used, %2 total")
                                   .arg(usedTracks.size())
                                   .arg(comp.getNbTracks()),
                                  frame), 3, 1);
 
-    layout->addWidget(new QLabel(QObject::tr("Segments:"), frame), 4, 0);
-    layout->addWidget(new QLabel(QObject::tr("%1 MIDI, %2 audio, %3 total")
+    layout->addWidget(new QLabel(tr("Segments:"), frame), 4, 0);
+    layout->addWidget(new QLabel(tr("%1 MIDI, %2 audio, %3 total")
                                   .arg(internalSegments)
                                   .arg(audioSegments)
                                   .arg(internalSegments + audioSegments),
@@ -151,7 +139,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
     layout->setRowStretch(5, 2);
 
-    addTab(frame, QObject::tr("Statistics"));
+    addTab(frame, tr("Statistics"));
 
     frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
@@ -164,17 +152,17 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 	table->setSelectionMode( QAbstractItemView::SingleSelection );
 	table->setSortingEnabled(true);
 	
-	table->setHorizontalHeaderItem( 0, new QTableWidgetItem( QObject::tr("Type")));	// p1=column
-	table->setHorizontalHeaderItem( 1, new QTableWidgetItem( QObject::tr("Track")));
-	table->setHorizontalHeaderItem( 2, new QTableWidgetItem( QObject::tr("Label")));
-	table->setHorizontalHeaderItem( 3, new QTableWidgetItem( QObject::tr("Time")));
-	table->setHorizontalHeaderItem( 4, new QTableWidgetItem( QObject::tr("Duration")));
-	table->setHorizontalHeaderItem( 5, new QTableWidgetItem( QObject::tr("Events")));
-	table->setHorizontalHeaderItem( 6, new QTableWidgetItem( QObject::tr("Polyphony")));
-	table->setHorizontalHeaderItem( 7, new QTableWidgetItem( QObject::tr("Repeat")));
-	table->setHorizontalHeaderItem( 8, new QTableWidgetItem( QObject::tr("Quantize")));
-	table->setHorizontalHeaderItem( 9, new QTableWidgetItem( QObject::tr("Transpose")));
-	table->setHorizontalHeaderItem( 10, new QTableWidgetItem( QObject::tr("Delay")));
+	table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));	// p1=column
+	table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
+	table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Label")));
+	table->setHorizontalHeaderItem( 3, new QTableWidgetItem( tr("Time")));
+	table->setHorizontalHeaderItem( 4, new QTableWidgetItem( tr("Duration")));
+	table->setHorizontalHeaderItem( 5, new QTableWidgetItem( tr("Events")));
+	table->setHorizontalHeaderItem( 6, new QTableWidgetItem( tr("Polyphony")));
+	table->setHorizontalHeaderItem( 7, new QTableWidgetItem( tr("Repeat")));
+	table->setHorizontalHeaderItem( 8, new QTableWidgetItem( tr("Quantize")));
+	table->setHorizontalHeaderItem( 9, new QTableWidgetItem( tr("Transpose")));
+	table->setHorizontalHeaderItem( 10, new QTableWidgetItem( tr("Delay")));
 	
 	//table->setNumRows(audioSegments + internalSegments);
 	table->setRowCount(audioSegments + internalSegments);
@@ -201,7 +189,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         table->setItem(i, 0, new SegmentDataItem
                        (table,
                         s->getType() == Segment::Audio ?
-                        QObject::tr("Audio") : QObject::tr("MIDI")));
+                        tr("Audio") : tr("MIDI")));
 
         table->setItem(i, 1, new SegmentDataItem
                        (table,
@@ -263,7 +251,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
         table->setItem(i, 7, new SegmentDataItem
                        (table,
-                        s->isRepeating() ? QObject::tr("Yes") : QObject::tr("No")));
+                        s->isRepeating() ? tr("Yes") : tr("No")));
 
         timeT discard;
 
@@ -276,7 +264,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         } else {
             table->setItem(i, 8, new SegmentDataItem
                            (table,
-                            QObject::tr("Off")));
+                            tr("Off")));
         }
 
         table->setItem(i, 9, new SegmentDataItem
@@ -307,7 +295,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         } else {
             table->setItem(i, 10, new SegmentDataItem
                            (table,
-                            QObject::tr("None")));
+                            tr("None")));
         }
 
         ++i;
@@ -315,7 +303,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
     layout->addWidget(table, 0, 0);
 
-    addTab(frame, QObject::tr("Segment Summary"));
+    addTab(frame, tr("Segment Summary"));
 
 }
 

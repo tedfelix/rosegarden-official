@@ -20,7 +20,6 @@
 
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
-#include <QObject>
 
 
 namespace Rosegarden
@@ -29,7 +28,7 @@ namespace Rosegarden
 SetTriggerSegmentBaseVelocityCommand::SetTriggerSegmentBaseVelocityCommand(Composition *composition,
         TriggerSegmentId id,
         int newVelocity) :
-        NamedCommand(QObject::tr("Set Base Velocity")),
+        NamedCommand(tr("Set Base Velocity")),
         m_composition(composition),
         m_id(id),
         m_newVelocity(newVelocity),

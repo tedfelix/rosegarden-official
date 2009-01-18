@@ -24,7 +24,7 @@
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -38,6 +38,8 @@ namespace Rosegarden
 
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CreateTempoMapFromSegmentCommand)
+
 public:
     CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     virtual ~CreateTempoMapFromSegmentCommand();

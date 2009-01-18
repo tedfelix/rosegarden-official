@@ -32,7 +32,7 @@ namespace Rosegarden
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
         timeT splitTime, bool keepLabel) :
-        NamedCommand(QObject::tr("Split Segment")),
+        NamedCommand(tr("Split Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),
@@ -126,8 +126,8 @@ SegmentSplitCommand::execute()
     m_newSegmentA->setLabel(label);
     m_newSegmentB->setLabel(label);
     if (!m_keepLabel) {
-        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(QObject::tr("(split)"))));
-        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(QObject::tr("(split)"))));
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
     }
 
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());

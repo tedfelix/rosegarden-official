@@ -29,7 +29,7 @@ namespace Rosegarden
 {
 
 CreateTempoMapFromSegmentCommand::CreateTempoMapFromSegmentCommand(Segment *groove) :
-        NamedCommand(QObject::tr("Set Tempos from Beat Segment")),
+        NamedCommand(tr("Set Tempos from Beat Segment")),
         m_composition(groove->getComposition())
 {
     initialise(groove);

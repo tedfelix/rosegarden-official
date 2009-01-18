@@ -22,10 +22,14 @@
 
 #include "NoteStyle.h"
 
+#include <QCoreApplication>
+
 namespace Rosegarden {
 
 class NoteStyleFileReader : public QXmlDefaultHandler
 {
+    Q_DECLARE_TR_FUNCTIONS(NoteStyleFileReader)
+
 public:
     NoteStyleFileReader(NoteStyleName name);
 

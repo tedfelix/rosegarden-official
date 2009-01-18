@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class CommandRegistry;
 
 class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeAccidentalsCautionaryCommand)
+
 public:
     MakeAccidentalsCautionaryCommand(bool cautionary,
                                      EventSelection &selection) :

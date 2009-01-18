@@ -29,7 +29,7 @@ namespace Rosegarden
 GuitarChordInsertionCommand::GuitarChordInsertionCommand(Segment &segment,
         timeT time,
         const Guitar::Chord& chord) :
-        BasicCommand(QObject::tr("Insert Guitar Chord"), segment, time, time + 1, true),
+        BasicCommand(tr("Insert Guitar Chord"), segment, time, time + 1, true),
         m_chord(chord)
 {
     // nothing

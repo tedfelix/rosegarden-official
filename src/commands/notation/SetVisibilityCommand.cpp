@@ -35,10 +35,10 @@ void
 SetVisibilityCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (QObject::tr("Make &Visible"), "", "", "make_visible",
+        (tr("Make &Visible"), "", "", "make_visible",
          new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
     r->registerCommand
-        (QObject::tr("Make &Invisible"), "", "", "make_invisible",
+        (tr("Make &Invisible"), "", "", "make_invisible",
          new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
 }
 

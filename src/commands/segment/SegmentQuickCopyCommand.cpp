@@ -49,7 +49,7 @@ SegmentQuickCopyCommand::execute()
     if (!m_segment) {
         m_segment = new Segment(*m_segmentToCopy);
         std::string label = m_segment->getLabel();
-        m_segment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(copied)"))));
+        m_segment->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
     }
     m_composition->addSegment(m_segment);
     m_detached = false;

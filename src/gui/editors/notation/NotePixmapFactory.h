@@ -33,6 +33,7 @@
 #include <QPixmap>
 #include <QPoint>
 
+#include <QCoreApplication>
 
 class QPainter;
 class Q3CanvasPixmap;
@@ -60,6 +61,8 @@ class TrackHeader;
 
 class NotePixmapFactory 
 {
+    Q_DECLARE_TR_FUNCTIONS(NotePixmapFactory)
+
 public:
     NotePixmapFactory(std::string fontName = "", int size = -1);
     NotePixmapFactory(const NotePixmapFactory &);

@@ -22,7 +22,7 @@
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Event;
 
 class TextChangeCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TextChangeCommand)
+
 public:
     TextChangeCommand(Segment &segment,
                       Event *event,

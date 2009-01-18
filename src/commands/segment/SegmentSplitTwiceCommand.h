@@ -31,7 +31,7 @@
 
 #include "DeleteRangeCommand.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -46,6 +46,8 @@ class Composition;
 
 class SegmentSplitTwiceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitTwiceCommand)
+
 public:
     SegmentSplitTwiceCommand(Segment *segment,
                         timeT splitTime1, timeT splitTime2,

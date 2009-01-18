@@ -52,11 +52,11 @@ QString
 AddFingeringMarkCommand::getGlobalName(std::string fingering)
 {
     if (fingering == "") {
-        return QObject::tr("Add Other &Fingering...");
+        return tr("Add Other &Fingering...");
     } else if (fingering == "0") {
-        return QObject::tr("Add Fingering &0 (Thumb)");
+        return tr("Add Fingering &0 (Thumb)");
     } else {
-        return QObject::tr("Add Fingering &%1").arg(strtoqstr(fingering));
+        return tr("Add Fingering &%1").arg(strtoqstr(fingering));
     }
 }
 
@@ -97,7 +97,7 @@ AddFingeringMarkCommand::getArgument(QString actionName,
         QString remainder = actionName.right(actionName.length() - pfx.length());
         if (remainder == "mark") {
             bool ok = false;
-            QString txt = querier.getText(QObject::tr("Fingering: "), &ok);
+            QString txt = querier.getText(tr("Fingering: "), &ok);
             if (!ok) throw CommandCancelled();
             else return qstrtostr(txt);
         } else if (remainder == "plus") {

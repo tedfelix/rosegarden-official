@@ -24,7 +24,7 @@
 #include <QString>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -37,6 +37,8 @@ class CommandRegistry;
 
 class AddIndicationCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddIndicationCommand)
+
 public:
     AddIndicationCommand(std::string indicationType,
                          EventSelection &selection);

@@ -29,7 +29,7 @@ namespace Rosegarden
 
 AudioSegmentResizeFromStartCommand::AudioSegmentResizeFromStartCommand(Segment *segment,
         timeT newStartTime) :
-        NamedCommand(QObject::tr("Resize Segment")),
+        NamedCommand(tr("Resize Segment")),
         m_segment(segment),
         m_newSegment(0),
         m_detached(false),

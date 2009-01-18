@@ -69,10 +69,10 @@ ClefInsertionCommand::getGlobalName(Clef *)
         if (clef) {
     	QString name(strtoqstr(clef->getClefType()));
     	name = name.left(1).toUpper() + name.right(name.length()-1);
-    	return QObject::tr("Change to %1 Cle&f...").arg(name);
+    	return tr("Change to %1 Cle&f...").arg(name);
         } else {
     */ 
-    return QObject::tr("Add Cle&f Change...");
+    return tr("Add Cle&f Change...");
     /*
         }
     */

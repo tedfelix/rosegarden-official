@@ -30,7 +30,7 @@ namespace Rosegarden
 SegmentColourMapCommand::SegmentColourMapCommand(
     RosegardenGUIDoc *doc,
     const ColourMap &map):
-        NamedCommand(QObject::tr("Change Segment Color Map")),
+        NamedCommand(tr("Change Segment Color Map")),
         m_doc(doc),
         m_oldMap(m_doc->getComposition().getSegmentColourMap()),
         m_newMap(map)

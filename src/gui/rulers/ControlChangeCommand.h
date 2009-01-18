@@ -22,6 +22,8 @@
 #include "document/BasicCommand.h"
 #include <Q3Canvas>
 
+#include <QCoreApplication>
+
 namespace Rosegarden {
 
 /**
@@ -29,6 +31,8 @@ namespace Rosegarden {
  */
 class ControlChangeCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ControlChangeCommand)
+
 public:
 
     ControlChangeCommand(Q3CanvasItemList selectedItems,

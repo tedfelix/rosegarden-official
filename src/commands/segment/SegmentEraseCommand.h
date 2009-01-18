@@ -22,7 +22,7 @@
 #include <string>
 #include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -37,6 +37,8 @@ class AudioFileManager;
 
 class SegmentEraseCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentEraseCommand)
+
 public:
     /// for removing segment normally
     SegmentEraseCommand(Segment *segment);

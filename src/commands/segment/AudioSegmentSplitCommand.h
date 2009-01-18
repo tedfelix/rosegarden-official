@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Segment;
 
 class AudioSegmentSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentSplitCommand)
+
 public:
     AudioSegmentSplitCommand(Segment *segment,
                              timeT splitTime);

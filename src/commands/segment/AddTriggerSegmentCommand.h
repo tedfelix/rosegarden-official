@@ -23,7 +23,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,8 @@ class Composition;
 
 class AddTriggerSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTriggerSegmentCommand)
+
 public:
     AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
                              timeT duration, // start time always 0

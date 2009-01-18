@@ -51,9 +51,9 @@ QString
 MakeAccidentalsCautionaryCommand::getGlobalName(bool cautionary)
 {
     if (cautionary)
-        return QObject::tr("Use &Cautionary Accidentals");
+        return tr("Use &Cautionary Accidentals");
     else
-        return QObject::tr("Cancel C&autionary Accidentals");
+        return tr("Cancel C&autionary Accidentals");
 }
 
 void

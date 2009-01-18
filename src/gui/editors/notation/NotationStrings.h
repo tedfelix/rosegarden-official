@@ -24,7 +24,7 @@
 #include <QString>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -39,6 +39,8 @@ namespace Rosegarden
  */
 class NotationStrings
 {
+    Q_DECLARE_TR_FUNCTIONS(NotationStrings)
+
 public:
     NotationStrings();
     ~NotationStrings();

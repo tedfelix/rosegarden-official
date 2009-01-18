@@ -23,6 +23,7 @@
 #include "MidiDeviceListViewItem.h"
 #include <QString>
 
+#include <QCoreApplication>
 
 //class QListWidgetItem;
 class QTreeWidgetItem;
@@ -34,6 +35,8 @@ namespace Rosegarden
 
 class MidiBankListViewItem : public MidiDeviceListViewItem
 {
+    Q_DECLARE_TR_FUNCTIONS(MidiBankListViewItem)
+
 public:
     MidiBankListViewItem(DeviceId deviceId,
                          int bankNb,

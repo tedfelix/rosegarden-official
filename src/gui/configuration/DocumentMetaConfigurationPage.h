@@ -21,6 +21,7 @@
 
 #include "TabbedConfigurationPage.h"
 #include <QString>
+#include "base/Composition.h"
 
 
 class QWidget;
@@ -55,6 +56,16 @@ public:
 */
 
 protected:
+    static QString durationToString(Composition &comp,
+                                    timeT absTime,
+                                    timeT duration,
+                                    RealTime rt) {
+        return tr("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
+	 .arg(rt.sec / 60).arg(rt.sec % 60)
+	 .arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
+	 .arg(duration).arg(comp.getBarNumber(absTime + duration) -
+			   comp.getBarNumber(absTime));
+    }
 
     //--------------- Data members ---------------------------------
 

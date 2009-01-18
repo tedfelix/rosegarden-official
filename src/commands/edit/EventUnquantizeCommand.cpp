@@ -32,7 +32,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
         Quantizer *quantizer) :
-        BasicCommand(QObject::tr("Unquantize Events"), segment, startTime, endTime,
+        BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_quantizer(quantizer),
         m_selection(0)
@@ -43,7 +43,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
 EventUnquantizeCommand::EventUnquantizeCommand(
     EventSelection &selection,
     Quantizer *quantizer) :
-        BasicCommand(QObject::tr("Unquantize Events"),
+        BasicCommand(tr("Unquantize Events"),
                      selection.getSegment(),
                      selection.getStartTime(),
                      selection.getEndTime(),
@@ -66,17 +66,17 @@ EventUnquantizeCommand::getGlobalName(Quantizer *)
         if (quantizer) {
     	switch (quantizer->getType()) {
     	case Quantizer::PositionQuantize:
-    	    return QObject::tr("Position &Quantize");
+    	    return tr("Position &Quantize");
     	case Quantizer::UnitQuantize:
-    	    return QObject::tr("Unit &Quantize");
+    	    return tr("Unit &Quantize");
     	case Quantizer::NoteQuantize:
-    	    return QObject::tr("Note &Quantize");
+    	    return tr("Note &Quantize");
     	case Quantizer::LegatoQuantize:
-    	    return QObject::tr("Smoothing &Quantize");
+    	    return tr("Smoothing &Quantize");
     	}
         }
     */ 
-    return QObject::tr("&Quantize...");
+    return tr("&Quantize...");
 }
 
 void

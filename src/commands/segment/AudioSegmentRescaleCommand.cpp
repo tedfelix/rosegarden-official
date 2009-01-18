@@ -119,7 +119,7 @@ AudioSegmentRescaleCommand::execute()
         m_newSegment = new Segment(*m_segment);
 
         std::string label = m_newSegment->getLabel();
-        m_newSegment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(rescaled)"))));
+        m_newSegment->setLabel(appendLabel(label, qstrtostr(tr("(rescaled)"))));
 
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;

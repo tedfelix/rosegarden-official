@@ -30,7 +30,7 @@ namespace Rosegarden
 
 MatrixEraseCommand::MatrixEraseCommand(Segment &segment,
                                        Event *event) :
-        BasicCommand(QObject::tr("Erase Note"),
+        BasicCommand(tr("Erase Note"),
                      segment,
                      event->getAbsoluteTime(),
                      event->getAbsoluteTime() + event->getDuration(),

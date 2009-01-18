@@ -30,7 +30,7 @@ namespace Rosegarden
 TextChangeCommand::TextChangeCommand(Segment &segment,
                                      Event *event,
                                      Text text) :
-        BasicCommand(QObject::tr("Edit Text"), segment,
+        BasicCommand(tr("Edit Text"), segment,
                      event->getAbsoluteTime(), event->getAbsoluteTime() + 1,
                      true),  // bruteForceRedo
         m_event(event),

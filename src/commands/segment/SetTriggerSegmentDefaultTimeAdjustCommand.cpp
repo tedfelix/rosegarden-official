@@ -29,7 +29,7 @@ namespace Rosegarden
 SetTriggerSegmentDefaultTimeAdjustCommand::SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,
         TriggerSegmentId id,
         std::string newDefaultTimeAdjust) :
-        NamedCommand(QObject::tr("Set Default Time Adjust")),
+        NamedCommand(tr("Set Default Time Adjust")),
         m_composition(composition),
         m_id(id),
         m_newDefaultTimeAdjust(newDefaultTimeAdjust),

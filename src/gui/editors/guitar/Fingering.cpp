@@ -107,7 +107,7 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
 //            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";  
             fingering[idx] = MUTED;
         } else {
-            errorString = QObject::tr("couldn't parse fingering '%1' in '%2'").arg(t).arg(ch);            
+            errorString = tr("couldn't parse fingering '%1' in '%2'").arg(t).arg(ch);            
         }
     }
 

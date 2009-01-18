@@ -41,7 +41,7 @@ namespace Rosegarden
 {
 
 PresetGroup::PresetGroup() :
-        m_errorString(QObject::tr("unknown error")),
+        m_errorString(tr("unknown error")),
         m_elCategoryName(""),
         m_elInstrumentName(""),
         m_elClef(0),
@@ -86,7 +86,7 @@ PresetGroup::PresetGroup() :
                 RG_DEBUG << "Failed to open " << presetFileName << endl;
 
                 throw PresetFileReadFailed
-                (qstrtostr(QObject::tr("Can't open preset file %1").arg(presetFileName)));
+                (qstrtostr(tr("Can't open preset file %1").arg(presetFileName)));
             }
         }
     }

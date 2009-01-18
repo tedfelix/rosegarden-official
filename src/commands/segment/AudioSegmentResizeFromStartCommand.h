@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,8 @@ class Segment;
  */
 class AudioSegmentResizeFromStartCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentResizeFromStartCommand)
+
 public:
     AudioSegmentResizeFromStartCommand(Segment *segment,
                                        timeT newStartTime);

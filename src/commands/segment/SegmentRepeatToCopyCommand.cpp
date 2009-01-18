@@ -29,7 +29,7 @@ namespace Rosegarden
 
 SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
     Segment *segment):
-        NamedCommand(QObject::tr("Turn Repeats into Copies")),
+        NamedCommand(tr("Turn Repeats into Copies")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_detached(false)

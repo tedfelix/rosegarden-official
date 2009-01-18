@@ -88,15 +88,15 @@ PasteEventsCommand::getPasteTypes()
     static bool haveTypes = false;
     if (!haveTypes) {
         types[Restricted] =
-            QObject::tr("Paste into an existing gap [\"restricted\"]");
+            tr("Paste into an existing gap [\"restricted\"]");
         types[Simple] =
-            QObject::tr("Erase existing events to make room [\"simple\"]");
+            tr("Erase existing events to make room [\"simple\"]");
         types[OpenAndPaste] =
-            QObject::tr("Move existing events out of the way [\"open-n-paste\"]");
+            tr("Move existing events out of the way [\"open-n-paste\"]");
         types[NoteOverlay] =
-            QObject::tr("Overlay notes, tying against present notes [\"note-overlay\"]");
+            tr("Overlay notes, tying against present notes [\"note-overlay\"]");
         types[MatrixOverlay] =
-            QObject::tr("Overlay notes, ignoring present notes [\"matrix-overlay\"]");
+            tr("Overlay notes, ignoring present notes [\"matrix-overlay\"]");
     }
     return types;
 }

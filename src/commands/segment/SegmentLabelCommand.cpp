@@ -30,7 +30,7 @@ namespace Rosegarden
 SegmentLabelCommand::SegmentLabelCommand(
     SegmentSelection &segments,
     const QString &label):
-        NamedCommand(QObject::tr("Label Segments")),
+        NamedCommand(tr("Label Segments")),
         m_newLabel(label)
 {
     for (SegmentSelection::iterator i = segments.begin();

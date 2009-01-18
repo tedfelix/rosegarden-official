@@ -28,6 +28,8 @@
 #include "document/CommandRegistry.h"
 #include <QShortcut>
 
+#include <QCoreApplication>
+
 class QIcon;
 
 namespace Rosegarden {
@@ -36,6 +38,8 @@ class EditView;
 
 class EditViewCommandRegistry : public CommandRegistry
 {
+    Q_DECLARE_TR_FUNCTIONS(EditViewCommandRegistry)
+
 public:
     EditViewCommandRegistry(EditView *v);
     virtual ~EditViewCommandRegistry();

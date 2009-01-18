@@ -27,7 +27,7 @@ namespace Rosegarden
 {
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-        NamedCommand(QObject::tr("Record")),
+        NamedCommand(tr("Record")),
         m_composition(s->getComposition()),
         m_segment(s),
         m_detached(false)

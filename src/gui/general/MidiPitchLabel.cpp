@@ -27,15 +27,14 @@
 namespace Rosegarden
 {
 
-static QString notes[] = {
-    QObject::tr("C%1"),  QObject::tr("C#%1"), QObject::tr("D%1"),  QObject::tr("D#%1"),
-    QObject::tr("E%1"),  QObject::tr("F%1"),  QObject::tr("F#%1"), QObject::tr("G%1"),
-    QObject::tr("G#%1"), QObject::tr("A%1"),  QObject::tr("A#%1"), QObject::tr("B%1")
-};
-
-
 MidiPitchLabel::MidiPitchLabel(int pitch)
 {
+    static QString notes[] = {
+        tr("C%1"),  tr("C#%1"), tr("D%1"),  tr("D#%1"),
+        tr("E%1"),  tr("F%1"),  tr("F#%1"), tr("G%1"),
+        tr("G#%1"), tr("A%1"),  tr("A#%1"), tr("B%1")
+    };
+
     if (pitch < 0 || pitch > 127) {
 
         m_midiNote = "";

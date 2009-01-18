@@ -27,6 +27,7 @@
 #include "sound/RingBuffer.h"
 #include <QString>
 
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -41,6 +42,8 @@ class AudioPluginOSCGUI;
 
 class AudioPluginOSCGUIManager
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioPluginOSCGUIManager)
+
 public:
     AudioPluginOSCGUIManager(RosegardenGUIApp *app);
     virtual ~AudioPluginOSCGUIManager();

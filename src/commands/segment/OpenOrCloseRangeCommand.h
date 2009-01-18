@@ -24,7 +24,7 @@
 #include <vector>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -43,6 +43,8 @@ class Composition;
  */
 class OpenOrCloseRangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(OpenOrCloseRangeCommand)
+
 public:
     OpenOrCloseRangeCommand(Composition *composition,
                             timeT rangeBegin,

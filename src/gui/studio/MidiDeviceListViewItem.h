@@ -23,6 +23,7 @@
 #include <QTreeWidget>
 #include <QString>
 
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -31,6 +32,8 @@ namespace Rosegarden
 
 class MidiDeviceListViewItem : public QTreeWidgetItem
 {
+    Q_DECLARE_TR_FUNCTIONS(MidiDeviceListViewItem)
+
 public:
     // Device
     MidiDeviceListViewItem(DeviceId id,

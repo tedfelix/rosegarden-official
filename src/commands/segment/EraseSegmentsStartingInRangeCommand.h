@@ -22,6 +22,7 @@
 #include "document/Command.h"
 #include <vector>
 #include "base/Event.h"
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -32,6 +33,8 @@ class Composition;
 
 class EraseSegmentsStartingInRangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EraseSegmentsStartingInRangeCommand)
+
 public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,
                                         timeT begin,

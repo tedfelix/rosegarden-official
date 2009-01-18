@@ -24,6 +24,9 @@
 #include "base/NotationTypes.h"
 #include "document/CommandHistory.h"
 
+#include <QCoreApplication>
+
+
 namespace Rosegarden
 {
 
@@ -33,6 +36,8 @@ class SegmentSelection;
 
 class SegmentSyncClefCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSyncClefCommand)
+
 public:
     SegmentSyncClefCommand(Segment &segment, const Clef& clef);
 

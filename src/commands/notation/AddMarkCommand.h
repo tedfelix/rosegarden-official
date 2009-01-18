@@ -22,7 +22,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,6 +33,8 @@ class CommandRegistry;
 
 class AddMarkCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddMarkCommand)
+
 public:
     AddMarkCommand(Mark mark,
                    EventSelection &selection) :

@@ -22,6 +22,8 @@
 #include "base/Event.h"
 #include "document/Command.h"
 
+#include <QCoreApplication>
+
 
 namespace Rosegarden
 {
@@ -32,6 +34,8 @@ class Clipboard;
 
 class PasteRangeCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteRangeCommand)
+
 public:
     PasteRangeCommand(Composition *composition,
                       Clipboard *clipboard,

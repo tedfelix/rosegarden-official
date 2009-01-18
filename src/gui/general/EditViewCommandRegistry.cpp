@@ -33,6 +33,8 @@
 #include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
 
+#include <QCoreApplication>
+
 namespace Rosegarden
 {
 
@@ -105,11 +107,13 @@ EditViewCommandRegistry::addAction(QString title,
 
 class EditViewCommandArgumentQuerier : public CommandArgumentQuerier
 {
+    Q_DECLARE_TR_FUNCTIONS(EditViewCommandArgumentQuerier)
+
 public:
     EditViewCommandArgumentQuerier(EditView *view) : m_view(view) { }
     QString getText(QString message, bool *ok) {
         return QInputDialog::getText(m_view,
-                                     QObject::tr("Rosegarden - Query"),
+                                     tr("Rosegarden - Query"),
                                      message, QLineEdit::Normal, "", ok);
     }
 
@@ -146,7 +150,7 @@ EditViewCommandRegistry::invokeCommand(QString actionName)
     } catch (CommandFailed f) {
 
         QMessageBox::warning(m_view,
-                             QObject::tr("Rosegarden - Warning"),
+                             tr("Rosegarden - Warning"),
                              strtoqstr(f.getMessage()),
                              QMessageBox::Ok);
     }

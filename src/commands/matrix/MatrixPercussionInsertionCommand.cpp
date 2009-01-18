@@ -36,7 +36,7 @@ using namespace BaseProperties;
 MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Segment &segment,
         timeT time,
         Event *event) :
-        BasicCommand(QObject::tr("Insert Percussion Note"), segment,
+        BasicCommand(tr("Insert Percussion Note"), segment,
                      getEffectiveStartTime(segment, time, *event),
                      getEndTime(segment, time, *event)),
         m_event(0),

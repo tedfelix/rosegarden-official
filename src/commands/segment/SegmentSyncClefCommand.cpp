@@ -24,7 +24,7 @@
 namespace Rosegarden
 {
 SegmentSyncClefCommand::SegmentSyncClefCommand(Segment &segment, const Clef& clef) :
-        MacroCommand(QObject::tr("Sync segment clef"))
+        MacroCommand(tr("Sync segment clef"))
 {
     processSegment(segment, clef);
 }

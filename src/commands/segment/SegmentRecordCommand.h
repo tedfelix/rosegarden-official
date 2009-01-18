@@ -21,7 +21,7 @@
 
 #include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -40,6 +40,8 @@ class Composition;
  */
 class SegmentRecordCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRecordCommand)
+
 public:
     SegmentRecordCommand(Segment *segment);
     virtual ~SegmentRecordCommand();

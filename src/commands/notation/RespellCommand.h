@@ -21,7 +21,7 @@
 #include "document/BasicSelectionCommand.h"
 #include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,6 +33,8 @@ class CommandRegistry;
 
 class RespellCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RespellCommand)
+
 public:
     struct RespellType
     {

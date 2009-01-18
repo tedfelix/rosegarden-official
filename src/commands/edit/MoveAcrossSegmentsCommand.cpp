@@ -62,7 +62,7 @@ MoveAcrossSegmentsCommand::~MoveAcrossSegmentsCommand()
 QString
 MoveAcrossSegmentsCommand::getGlobalName()
 {
-    return QObject::tr("&Move Events to Other Segment");
+    return tr("&Move Events to Other Segment");
 }
 
 }

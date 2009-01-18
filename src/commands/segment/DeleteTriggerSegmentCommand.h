@@ -22,7 +22,7 @@
 #include "base/TriggerSegment.h"
 #include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -35,6 +35,8 @@ class Composition;
 
 class DeleteTriggerSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeleteTriggerSegmentCommand)
+
 public:
     DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
                                 TriggerSegmentId);

@@ -32,7 +32,7 @@ namespace Rosegarden
 
 AudioSegmentSplitCommand::AudioSegmentSplitCommand(Segment *segment,
         timeT splitTime) :
-        NamedCommand(QObject::tr("Split Audio Segment")),
+        NamedCommand(tr("Split Audio Segment")),
         m_segment(segment),
         m_newSegment(0),
         m_splitTime(splitTime),
@@ -92,7 +92,7 @@ AudioSegmentSplitCommand::execute()
         // Set labels
         //
         std::string label = m_segment->getLabel();
-        m_segment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(split)"))));
+        m_segment->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
         m_newSegment->setLabel(m_segment->getLabel());
 
         // Set color

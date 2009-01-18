@@ -23,11 +23,15 @@
 #include "document/BasicCommand.h"
 #include <Q3Canvas>
 
+#include <QCoreApplication>
+
 namespace Rosegarden
 {
 
 class ControlRulerEventEraseCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventEraseCommand)
+
 public:
 
     ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,

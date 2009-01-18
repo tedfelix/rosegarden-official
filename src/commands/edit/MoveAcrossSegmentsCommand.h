@@ -23,6 +23,7 @@
 #include "base/Event.h"
 #include "document/Command.h"
 
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -35,6 +36,8 @@ class Clipboard;
 
 class MoveAcrossSegmentsCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MoveAcrossSegmentsCommand)
+
 public:
     MoveAcrossSegmentsCommand(Segment &firstSegment,
                               Segment &secondSegment,

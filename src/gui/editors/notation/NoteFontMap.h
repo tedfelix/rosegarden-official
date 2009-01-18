@@ -30,7 +30,6 @@
 #include <qxml.h>
 #include "gui/editors/notation/NoteCharacterNames.h"
 
-
 class QXmlParseException;
 class QXmlAttributes;
 

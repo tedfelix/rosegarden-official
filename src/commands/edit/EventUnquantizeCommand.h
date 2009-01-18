@@ -23,7 +23,7 @@
 #include <QString>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,7 @@ class EventSelection;
 
 class EventUnquantizeCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EventUnquantizeCommand)
 public:
     /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Segment &segment,

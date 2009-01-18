@@ -27,6 +27,8 @@
 #include <QString>
 #include <qxml.h>
 
+#include <QCoreApplication>
+
 
 class QXmlParseException;
 class QXmlAttributes;
@@ -41,6 +43,8 @@ namespace Rosegarden
  */
 class PresetGroup : public QXmlDefaultHandler
 {
+    Q_DECLARE_TR_FUNCTIONS(PresetGroup)
+
 public:
     typedef Exception PresetFileReadFailed;
 

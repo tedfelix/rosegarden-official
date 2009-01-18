@@ -32,7 +32,7 @@ namespace Rosegarden
 
 InsertRangeCommand::InsertRangeCommand(Composition *composition,
 				       timeT t0, timeT duration) :
-    MacroCommand(QObject::tr("Insert Range"))
+    MacroCommand(tr("Insert Range"))
 {
     // Need to split segments before opening, at t0
 

@@ -38,48 +38,48 @@ AddMarkCommand::getGlobalName(Mark markType)
 
     // Gosh, lots of collisions
     if (markType == Marks::Sforzando)
-        m = QObject::tr("S&forzando");
+        m = tr("S&forzando");
     else if (markType == Marks::Staccato)
-        m = QObject::tr("Sta&ccato");
+        m = tr("Sta&ccato");
     else if (markType == Marks::Rinforzando)
-        m = QObject::tr("R&inforzando");
+        m = tr("R&inforzando");
     else if (markType == Marks::Tenuto)
-        m = QObject::tr("T&enuto");
+        m = tr("T&enuto");
     else if (markType == Marks::Trill)
-        m = QObject::tr("Tri&ll");
+        m = tr("Tri&ll");
     else if (markType == Marks::LongTrill)
-        m = QObject::tr("Trill &with Line");
+        m = tr("Trill &with Line");
     else if (markType == Marks::TrillLine)
-        m = QObject::tr("Trill Line");
+        m = tr("Trill Line");
     else if (markType == Marks::Turn)
-        m = QObject::tr("&Turn");
+        m = tr("&Turn");
     else if (markType == Marks::Accent)
-        m = QObject::tr("&Accent");
+        m = tr("&Accent");
     else if (markType == Marks::Staccatissimo)
-        m = QObject::tr("&Staccatissimo");
+        m = tr("&Staccatissimo");
     else if (markType == Marks::Marcato)
-        m = QObject::tr("&Marcato");
+        m = tr("&Marcato");
     else if (markType == Marks::Pause)
-        m = QObject::tr("&Pause");
+        m = tr("&Pause");
     else if (markType == Marks::UpBow)
-        m = QObject::tr("&Up-Bow");
+        m = tr("&Up-Bow");
     else if (markType == Marks::DownBow)
-        m = QObject::tr("&Down-Bow");
+        m = tr("&Down-Bow");
     else if (markType == Marks::Mordent)
-        m = QObject::tr("Mo&rdent");
+        m = tr("Mo&rdent");
     else if (markType == Marks::MordentInverted)
-        m = QObject::tr("Inverted Mordent");
+        m = tr("Inverted Mordent");
     else if (markType == Marks::MordentLong)
-        m = QObject::tr("Long Mordent");
+        m = tr("Long Mordent");
     else if (markType == Marks::MordentLongInverted)
-        m = QObject::tr("Lon&g Inverted Mordent");
+        m = tr("Lon&g Inverted Mordent");
     else
-        m = QObject::tr("&%1%2").arg(m[0].toUpper()).arg(m.right(m.length() - 1));
+        m = tr("&%1%2").arg(m[0].toUpper()).arg(m.right(m.length() - 1));
     // FIXME: That last i18n has very little chance of working, unless
     // by some miracle the exact same string was translated elsewhere already
     // but we'll leave it as a warning
 
-    m = QObject::tr("Add %1").arg(m);
+    m = tr("Add %1").arg(m);
     return m;
 }
 

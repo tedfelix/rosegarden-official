@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -38,6 +38,8 @@ class Clipboard;
  */
 class PasteConductorDataCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteConductorDataCommand)
+
 public:
     PasteConductorDataCommand(Composition *composition,
                               Clipboard *clipboard,

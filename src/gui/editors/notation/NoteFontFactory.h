@@ -25,7 +25,7 @@
 #include <string>
 #include <vector>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,8 @@ class NoteFont;
 
 class NoteFontFactory
 {
+    Q_DECLARE_TR_FUNCTIONS(NoteFontFactory)
+
 public:
     typedef Exception NoFontsAvailable;
 

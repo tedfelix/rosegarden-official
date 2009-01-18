@@ -24,7 +24,7 @@
 #include "base/Event.h"
 #include "gui/editors/notation/NoteStyle.h"
 
-
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -35,6 +35,8 @@ class Event;
 
 class NoteInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(NoteInsertionCommand)
+
 public:
     enum AutoBeamMode {
         AutoBeamOff,

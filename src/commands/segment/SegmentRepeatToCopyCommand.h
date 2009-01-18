@@ -22,7 +22,7 @@
 #include "document/Command.h"
 #include <vector>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Composition;
 
 class SegmentRepeatToCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRepeatToCopyCommand)
+
 public:
     SegmentRepeatToCopyCommand(Segment *segment);
     virtual ~SegmentRepeatToCopyCommand();

@@ -44,7 +44,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            GraceMode grace,
                                            float targetSubordering,
                                            NoteStyleName noteStyle) :
-        BasicCommand(QObject::tr("Insert Note"), segment,
+        BasicCommand(tr("Insert Note"), segment,
                      getModificationStartTime(segment, time),
                      (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
         m_insertionTime(time),
