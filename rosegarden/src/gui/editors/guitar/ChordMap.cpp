@@ -17,6 +17,7 @@
 
 #include "misc/Debug.h"
 #include "ChordMap.h"
+#include "misc/Strings.h"
 
 #include <qfile.h>
 #include <qtextstream.h>
@@ -185,7 +186,7 @@ bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QStrin
             outStream << ">\n";
         }
         
-        outStream << "<fingering>" << chord.getFingering().toString() << "</fingering>\n";
+        outStream << "<fingering>" << strtoqstr(chord.getFingering().toString()) << "</fingering>\n";
     }
 
     if (!m_map.empty())

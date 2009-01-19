@@ -6368,7 +6368,7 @@ void NotationView::slotEditSwitchPreset()
 	// wrong, or just mildly wrong, but I'm betting somebody will tell me
 	// about it if this was inappropriate
 	Track *track = comp.getTrackById(selectedTrack);
-	track->setPresetLabel(dialog.getName());
+	track->setPresetLabel(qstrtostr(dialog.getName()));
 	track->setClef(dialog.getClef());
 	track->setTranspose(dialog.getTranspose());
 	track->setLowestPlayable(dialog.getLowRange());

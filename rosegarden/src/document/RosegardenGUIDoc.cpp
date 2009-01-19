@@ -3151,13 +3151,13 @@ RosegardenGUIDoc::notifyAudioFileRemoval(AudioFileId id)
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedRecordedAudioFile(file->getFilename());
+        if (file) addOrphanedRecordedAudioFile(strtoqstr(file->getFilename()));
         return;
     }
 
     if (m_audioFileManager.wasAudioFileRecentlyDerived(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedDerivedAudioFile(file->getFilename());
+        if (file) addOrphanedDerivedAudioFile(strtoqstr(file->getFilename()));
         return;
     }
 }

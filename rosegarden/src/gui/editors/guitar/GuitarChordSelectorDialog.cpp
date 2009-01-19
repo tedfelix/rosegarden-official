@@ -22,6 +22,7 @@
 #include "FingeringListBoxItem.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include <qlistbox.h>
 #include <qlayout.h>
 #include <qcombobox.h>
@@ -314,7 +315,7 @@ GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray
     
     for(Guitar::ChordMap::chordarray::const_iterator i = chords.begin(); i != chords.end(); ++i) {
         const Guitar::Chord& chord = *i; 
-        QString fingeringString = chord.getFingering().toString();
+        QString fingeringString = strtoqstr(chord.getFingering().toString());
         NOTATION_DEBUG << "GuitarChordSelectorDialog::populateFingerings " << chord << endl;
         QPixmap fingeringPixmap = getFingeringPixmap(chord.getFingering());            
         FingeringListBoxItem *item = new FingeringListBoxItem(chord, m_fingeringsList, fingeringPixmap, fingeringString);

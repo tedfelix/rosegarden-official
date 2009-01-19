@@ -195,8 +195,8 @@ MarkerRuler::slotDeleteMarker()
     if (marker)
         emit deleteMarker(marker->getID(),
                           marker->getTime(),
-                          marker->getName(),
-                          marker->getDescription());                          
+                          strtoqstr(marker->getName()),
+                          strtoqstr(marker->getDescription()));                          
 }
 
 void

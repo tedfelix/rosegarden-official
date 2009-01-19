@@ -616,7 +616,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
         fileName = QString("%1-%2-%3-%4.wav")
 	    .arg(prefix)
-	    .arg(sourceBase)
+	    .arg(strtoqstr(sourceBase))
 	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
 	    .arg(newId + 1);
 
@@ -646,7 +646,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 AudioFileId
 AudioFileManager::importURL(const KURL &url, int sampleRate)
 {
-    if (url.isLocalFile()) return importFile(url.path(), sampleRate);
+    if (url.isLocalFile()) return importFile(qstrtostr(url.path()), sampleRate);
 
     std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
 
@@ -655,7 +655,7 @@ AudioFileManager::importURL(const KURL &url, int sampleRate)
     QString localPath = "";
     if (!KIO::NetAccess::download(url, localPath)) {
 	KMessageBox::error(0, i18n("Cannot download file %1").arg(url.prettyURL()));
-	throw SoundFile::BadSoundFileException(url.prettyURL());
+	throw SoundFile::BadSoundFileException(qstrtostr(url.prettyURL()));
     }
     
     AudioFileId id = 0;
@@ -784,7 +784,7 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     if (es) {
 	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, i18n("Failed to convert or resample audio file on import"));
+	throw SoundFile::BadSoundFileException(fileName, qstrtostr(i18n("Failed to convert or resample audio file on import")));
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }
