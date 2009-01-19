@@ -17,9 +17,7 @@
 
 
 #include "AudioFaderBox.h"
-#include <QLayout>
 
-#include <QDir>
 #include "misc/Debug.h"
 #include "AudioRouteMenu.h"
 #include "AudioVUMeter.h"
@@ -32,6 +30,8 @@
 #include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "Rotary.h"
 #include "gui/general/IconLoader.h"
+#include "VUMeter.h"
+
 #include <QFrame>
 #include <QLabel>
 #include <QObject>
@@ -44,7 +44,8 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "VUMeter.h"
+#include <QLayout>
+#include <QDir>
 
 
 namespace Rosegarden

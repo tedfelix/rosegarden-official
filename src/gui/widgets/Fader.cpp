@@ -16,13 +16,12 @@
 */
 
 
-#include <QWheelEvent>
-#include <QMouseEvent>
 #include "Fader.h"
-#include "TextFloat.h"
 
+#include "TextFloat.h"
 #include "misc/Debug.h"
 #include "base/AudioLevel.h"
+
 #include <QColor>
 #include <QEvent>
 #include <QPainter>
@@ -31,6 +30,9 @@
 #include <QString>
 #include <QTimer>
 #include <QWidget>
+#include <QWheelEvent>
+#include <QMouseEvent>
+
 #include <cmath>
 
 namespace Rosegarden
