@@ -361,9 +361,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 //    connect(m_mainDockWidget, SIGNAL(docking(QDockWidget*, QDockWidget::DockPosition)),
 //            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 	
-	
-    leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse
 
+
+    leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse	
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
@@ -5659,24 +5659,24 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 	
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotPlay()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
 	// alternative Shortcut for Play command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotPlay()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotStop()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotFastforward()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotRewind()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(slotToggleRecord()), this, SLOT(slotHideTransport()) );
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
 
 
@@ -5688,11 +5688,11 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 		//### check shortcuts:
 		sc_tmp = new QShortcut( QKeySequence(Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
 		//sc_tmp = m_jumpToQuickMarkerAction->shortcut();
-		connect( sc_tmp, SIGNAL(slotJumpToQuickMarker()), this, SLOT(slotHideTransport()) );
+		connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()) );
 		
 		sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
 		//sc_tmp = m_setQuickMarkerAction->shortcut();
-		connect( sc_tmp, SIGNAL(slotSetQuickMarker()), this, SLOT(slotHideTransport()) );
+		connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()) );
 		
 
         connect(transport->PlayButton(),
