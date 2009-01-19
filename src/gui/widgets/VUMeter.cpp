@@ -329,7 +329,7 @@ VUMeter::paintEvent(QPaintEvent *e)
 
         drawMeterLevel(&paint);
 
-        paint.setPen(colorGroup().background());
+        paint.setPen(palette().background());
         paint.drawPoint(0, 0);
         paint.drawPoint(width() - 1, 0);
         paint.drawPoint(0, height() - 1);

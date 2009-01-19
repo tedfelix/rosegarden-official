@@ -68,7 +68,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(0.0);
@@ -105,7 +105,7 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(deflt);
@@ -136,7 +136,7 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(deflt);
@@ -442,9 +442,9 @@ Fader::calculateGroovePixmap()
 
     delete map;
     map = new QPixmap(width(), height());
-    map->fill(colorGroup().background());
+    map->fill(palette().background());
     QPainter paint(map);
-    paint.setBrush(colorGroup().background());
+    paint.setBrush(palette().background());
 
     if (m_vertical) {
 
@@ -459,9 +459,9 @@ Fader::calculateGroovePixmap()
                 if (position >= 0 &&
                         position < m_sliderMax - m_sliderMin) {
                     if (dB == 0)
-                        paint.setPen(colorGroup().dark());
+                        paint.setPen(palette().dark());
                     else
-                        paint.setPen(colorGroup().midlight());
+                        paint.setPen(palette().midlight());
                     paint.drawLine(1, (m_sliderMax - position),
                                    width() - 2, (m_sliderMax - position));
                 }
@@ -472,8 +472,8 @@ Fader::calculateGroovePixmap()
             }
         }
 
-        paint.setPen(colorGroup().dark());
-        paint.setBrush(colorGroup().mid());
+        paint.setPen(palette().dark());
+        paint.setBrush(palette().mid());
         paint.drawRect(width() / 2 - 3, height() - m_sliderMax,
                        6, m_sliderMax - m_sliderMin);
         paint.end();
@@ -506,48 +506,48 @@ Fader::calculateButtonPixmap()
             buttonWidth = width() - 2;
 
         map = new QPixmap(buttonWidth, buttonHeight);
-        map->fill(colorGroup().background());
+        map->fill(palette().background());
 
         int x = 0;
         int y = 0;
 
         QPainter paint(map);
 
-        paint.setPen(colorGroup().light());
+        paint.setPen(palette().light());
         paint.drawLine(x + 1, y, x + buttonWidth - 2, y);
         paint.drawLine(x, y + 1, x, y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().midlight());
+        paint.setPen(palette().midlight());
         paint.drawLine(x + 1, y + 1, x + buttonWidth - 2, y + 1);
         paint.drawLine(x + 1, y + 1, x + 1, y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().mid());
+        paint.setPen(palette().mid());
         paint.drawLine(x + 2, y + buttonHeight - 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
         paint.drawLine(x + buttonWidth - 2, y + 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().dark());
+        paint.setPen(palette().dark());
         paint.drawLine(x + 1, y + buttonHeight - 1, x + buttonWidth - 2,
                        y + buttonHeight - 1);
         paint.drawLine(x + buttonWidth - 1, y + 1, x + buttonWidth - 1,
                        y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().shadow());
+        paint.setPen(palette().shadow());
         paint.drawLine(x + 1, y + buttonHeight / 2, x + buttonWidth - 2,
                        y + buttonHeight / 2);
 
-        paint.setPen(colorGroup().mid());
+        paint.setPen(palette().mid());
         paint.drawLine(x + 1, y + buttonHeight / 2 - 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 - 1);
         paint.drawPoint(x, y + buttonHeight / 2);
 
-        paint.setPen(colorGroup().light());
+        paint.setPen(palette().light());
         paint.drawLine(x + 1, y + buttonHeight / 2 + 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 + 1);
 
-        paint.setPen(colorGroup().button());
-        paint.setBrush(colorGroup().button());
+        paint.setPen(palette().button());
+        paint.setBrush(palette().button());
         paint.drawRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4);
         paint.drawRect(x + 2, y + buttonHeight / 2 + 2,
                        buttonWidth - 4, buttonHeight / 2 - 4);

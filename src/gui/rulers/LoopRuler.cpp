@@ -150,7 +150,7 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 
-    paint.setBrush(colorGroup().foreground());
+    paint.setBrush(palette().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
     
@@ -346,7 +346,7 @@ void LoopRuler::slotSetLoopMarker(timeT startLoop,
     m_endLoop = endLoop;
 
     QPainter paint(this);
-    paint.setBrush(colorGroup().foreground());
+    paint.setBrush(palette().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
 

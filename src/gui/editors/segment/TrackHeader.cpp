@@ -35,7 +35,7 @@ void
 TrackHeader::paintEvent(QPaintEvent *e)
 {
     QPainter p( this );
-    p.setPen( colorGroup().buttonText() );
+    p.setPen( palette().buttonText() );
     int pos = (orientation() == Qt::Horizontal)
               ? e->rect().left()
               : e->rect().top();

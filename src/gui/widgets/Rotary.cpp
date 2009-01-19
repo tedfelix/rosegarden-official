@@ -215,7 +215,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.setBrush(Qt::NoBrush);
 
-    pen.setColor(colorGroup().dark());
+    pen.setColor(palette().dark());
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -245,7 +245,7 @@ Rotary::paintEvent(QPaintEvent *)
     paint.setPen(pen);
 
     int shadowAngle = -720;
-    c = colorGroup().dark();
+    c = palette().dark();
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -255,7 +255,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     shadowAngle = 2160;
-    c = colorGroup().dark();
+    c = palette().dark();
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -281,7 +281,7 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-    pen.setColor(colorGroup().dark());
+    pen.setColor(palette().dark());
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));

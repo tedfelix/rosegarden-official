@@ -69,11 +69,11 @@ void
 AudioVUMeter::paintEvent(QPaintEvent *e)
 {
     QPainter paint(this);
-    paint.setPen(colorGroup().mid());
+    paint.setPen(palette().mid());
     paint.drawRect(0, 0, width(), height());
 
-    paint.setPen(colorGroup().background());
-    paint.setBrush(colorGroup().background());
+    paint.setPen(palette().background());
+    paint.setBrush(palette().background());
     paint.drawRect(1, 1, width() - 2, m_yoff / 2 - 1);
     paint.drawRect(1, 1, m_xoff / 2 - 1, height() - 2);
     paint.drawRect(width() - m_xoff / 2 - 1, 1, m_xoff / 2, height() - 2);

@@ -137,18 +137,18 @@ TrackLabel::setSelected(bool on)
     if (on) {
         m_selected = true;
 
-        m_instrumentLabel->setPaletteBackgroundColor(colorGroup().highlight());
-        m_instrumentLabel->setPaletteForegroundColor(colorGroup().highlightedText());
-        m_trackLabel->setPaletteBackgroundColor(colorGroup().highlight());
-        m_trackLabel->setPaletteForegroundColor(colorGroup().highlightedText());
+        m_instrumentLabel->setPaletteBackgroundColor(palette().highlight());
+        m_instrumentLabel->setPaletteForegroundColor(palette().highlightedText());
+        m_trackLabel->setPaletteBackgroundColor(palette().highlight());
+        m_trackLabel->setPaletteForegroundColor(palette().highlightedText());
 
     } else {
         m_selected = false;
 
-        m_instrumentLabel->setPaletteBackgroundColor(colorGroup().background());
-        m_trackLabel->setPaletteBackgroundColor(colorGroup().background());
-        m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
-        m_trackLabel->setPaletteForegroundColor(colorGroup().text());
+        m_instrumentLabel->setPaletteBackgroundColor(palette().background());
+        m_trackLabel->setPaletteBackgroundColor(palette().background());
+        m_instrumentLabel->setPaletteForegroundColor(palette().text());
+        m_trackLabel->setPaletteForegroundColor(palette().text());
     }
     if( currentWidget() ){
         currentWidget()->update();

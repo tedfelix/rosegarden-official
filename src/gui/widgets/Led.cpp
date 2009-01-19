@@ -172,11 +172,11 @@ Led::paintEvent(QPaintEvent *)
     brush.setStyle( Qt::NoBrush );              // Switch off the brush
     paint.setBrush( brush );                        // This avoids filling of the ellipse
 
-    // Set the initial color value to colorGroup().light() (bright) and start
+    // Set the initial color value to palette().light() (bright) and start
     // drawing the shadow border at 45° (45*16 = 720).
 
     int angle = -720;
-    color = colorGroup().light();
+    color = palette().light();
 
     for ( int arc = 120; arc < 2880; arc += 240 )
     {

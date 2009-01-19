@@ -149,7 +149,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        label.getQString());
     }
 
-    paint.setBrush(colorGroup().foreground());
+    paint.setBrush(palette().foreground());
 
     for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
         paint.drawRect(0, m_blackKeyPos[i],
