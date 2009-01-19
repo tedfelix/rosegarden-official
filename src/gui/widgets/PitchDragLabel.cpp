@@ -16,15 +16,16 @@
 */
 
 
-#include <QWheelEvent>
-#include <QMouseEvent>
-#include <Q3CanvasPixmap>
 #include "PitchDragLabel.h"
 
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
 #include <Q3Canvas>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <Q3CanvasPixmap>
 #include <QPainter>
 #include <QPixmap>
 #include <QSize>
