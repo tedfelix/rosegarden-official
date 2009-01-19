@@ -314,6 +314,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif // OFFER_JACK_START_OPTION
 #endif // HAVE_LIBJACK
 
+		// This causes the QPainter::begin debug message
         emit startupStatusMessage(tr("Starting sequencer..."));
         launchSequencer();
 
@@ -327,7 +328,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 
     // call inits to invoke all other construction parts
     //
-    emit startupStatusMessage(tr("Initializing view..."));
+    emit startupStatusMessage(tr("Initializing view...")); 
     initStatusBar();
     setupActions();
     initZoomToolbar();
@@ -362,8 +363,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 //            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 	
 
-
     leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse	
+
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
@@ -4460,7 +4461,7 @@ void RosegardenGUIApp::slotDocumentDevicesResyncd()
     m_trackParameterBox->populateDeviceLists();
 }
 
-void RosegardenGUIApp::slotSequencerExited(QProcess*)
+void RosegardenGUIApp::slotSequencerExited()
 {
     RG_DEBUG << "RosegardenGUIApp::slotSequencerExited Sequencer exited\n";
 

@@ -1114,7 +1114,9 @@ public slots:
     /**
      * Called when the sequencer auxiliary process exits
      */
-    void slotSequencerExited(QProcess*);
+    //void slotSequencerExited(QProcess*); QThread::finished has no QProcess param
+    //  current slotSequenceExited implementation doesn't use (or name!) this param
+    void slotSequencerExited();
 
     /// When the transport closes 
     void slotCloseTransport();

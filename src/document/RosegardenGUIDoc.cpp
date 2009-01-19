@@ -125,22 +125,26 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_quickMarkerTime(-1),
         m_beingDestroyed(false)
 {
+	RG_DEBUG << "RosegardenGUIDoc::RosegardenGUIDoc Sync Devices" << endl;
     syncDevices();
 
 //### FIX-qt4-removed: 
 //    m_viewList.setAutoDelete(false);
 //    m_editViewList.setAutoDelete(false);
 
+	RG_DEBUG << "RosegardenGUIDoc::RosegardenGUIDoc Connect CommandHistory" << endl;
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotDocumentModified()));
 
     connect(CommandHistory::getInstance(), SIGNAL(documentRestored()),
             this, SLOT(slotDocumentRestored()));
 
+	RG_DEBUG << "RosegardenGUIDoc::RosegardenGUIDoc Autoload" << endl;
     // autoload a new document
     if (!skipAutoload)
         performAutoload();
 
+	RG_DEBUG << "RosegardenGUIDoc::RosegardenGUIDoc newDocument" << endl;
     // now set it up as a "new document"
     newDocument();
 }
