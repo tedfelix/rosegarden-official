@@ -189,9 +189,9 @@ void SegmentPencil::handleMouseButtonRelease(QMouseEvent* e)
         segment->setLowestPlayable(track->getLowestPlayable());
         segment->setHighestPlayable(track->getHighestPlayable());
 
-        std::string label = qstrtostr(track->getPresetLabel());
+        std::string label = qstrtostr(strtoqstr(track->getPresetLabel()));
         if (label != "") {
-            segment->setLabel(qstrtostr(track->getPresetLabel()));
+            segment->setLabel(qstrtostr(strtoqstr(track->getPresetLabel())));
         }
 
         CompositionItem item = CompositionItemHelper::makeCompositionItem(segment);

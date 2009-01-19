@@ -749,7 +749,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         
 	QString presetLabelStr = atts.value("defaultLabel");
 	if (labelStr) {
-	    track->setPresetLabel(presetLabelStr);
+	    track->setPresetLabel(qstrtostr(presetLabelStr));
 	}	
 	
         QString clefStr = atts.value("defaultClef");

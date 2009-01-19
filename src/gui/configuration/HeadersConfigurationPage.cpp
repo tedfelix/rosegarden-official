@@ -228,7 +228,7 @@ HeadersConfigurationPage::slotAddNewProperty()
         propertyName =
             (i > 0 ? i18n("{new property %1}").arg(i) : i18n("{new property}"));
         if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
-	    m_metadata->findItem(qstrtostr(propertyName),0) == 0)
+	    m_metadata->findItem(strtoqstr(qstrtostr(propertyName)),0) == 0)
             break;
         ++i;
     }

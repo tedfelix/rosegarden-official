@@ -254,20 +254,20 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // not i18nable, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
-    m_lilyPondDirectiveCombo->insertItem(Text::Segno);
-    m_lilyPondDirectiveCombo->insertItem(Text::Coda);
-    m_lilyPondDirectiveCombo->insertItem(Text::Alternate1);
-    m_lilyPondDirectiveCombo->insertItem(Text::Alternate2);
-    m_lilyPondDirectiveCombo->insertItem(Text::BarDouble);
-    m_lilyPondDirectiveCombo->insertItem(Text::BarEnd);
-    m_lilyPondDirectiveCombo->insertItem(Text::BarDot);
-    m_lilyPondDirectiveCombo->insertItem(Text::Gliss);
-    m_lilyPondDirectiveCombo->insertItem(Text::Arpeggio);
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Segno));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Coda));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Alternate1));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Alternate2));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::BarDouble));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::BarEnd));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::BarDot));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Gliss));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Arpeggio));
     //    m_lilyPondDirectiveCombo->insertItem(Text::ArpeggioUp);
     //    m_lilyPondDirectiveCombo->insertItem(Text::ArpeggioDn);
-    m_lilyPondDirectiveCombo->insertItem(Text::Tiny);
-    m_lilyPondDirectiveCombo->insertItem(Text::Small);
-    m_lilyPondDirectiveCombo->insertItem(Text::NormalSize);
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Tiny));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::Small));
+    m_lilyPondDirectiveCombo->insertItem(strtoqstr(Text::NormalSize));
 
     QVBox *exampleVBox = new QVBox(exampleBox);
 
@@ -410,7 +410,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Dynamic) {
         m_dynamicShortcutLabel->show();
         m_dynamicShortcutCombo->show();
-        slotDynamicShortcutChanged(text);
+        slotDynamicShortcutChanged(strtoqstr(text));
     } else {
         m_dynamicShortcutLabel->hide();
         m_dynamicShortcutCombo->hide();
@@ -419,7 +419,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Direction) {
         m_directionShortcutLabel->show();
         m_directionShortcutCombo->show();
-        slotDirectionShortcutChanged(text);
+        slotDirectionShortcutChanged(strtoqstr(text));
     } else {
         m_directionShortcutLabel->hide();
         m_directionShortcutCombo->hide();
@@ -428,7 +428,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::LocalDirection) {
         m_localDirectionShortcutLabel->show();
         m_localDirectionShortcutCombo->show();
-        slotLocalDirectionShortcutChanged(text);
+        slotLocalDirectionShortcutChanged(strtoqstr(text));
     } else {
         m_localDirectionShortcutLabel->hide();
         m_localDirectionShortcutCombo->hide();
@@ -437,7 +437,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::Tempo) {
         m_tempoShortcutLabel->show();
         m_tempoShortcutCombo->show();
-        slotTempoShortcutChanged(text);
+        slotTempoShortcutChanged(strtoqstr(text));
     } else {
         m_tempoShortcutLabel->hide();
         m_tempoShortcutCombo->hide();
@@ -446,7 +446,7 @@ TextEventDialog::slotTypeChanged(const QString &)
     if (type == Text::LocalTempo) {
         m_localTempoShortcutLabel->show();
         m_localTempoShortcutCombo->show();
-        slotLocalTempoShortcutChanged(text);
+        slotLocalTempoShortcutChanged(strtoqstr(text));
     } else {
         m_localTempoShortcutLabel->hide();
         m_localTempoShortcutCombo->hide();
@@ -479,7 +479,7 @@ TextEventDialog::slotTypeChanged(const QString &)
         m_staffBelowLabel->show();
         m_text->setReadOnly(true);
         m_text->setEnabled(false);
-        slotLilyPondDirectiveChanged(text);
+        slotLilyPondDirectiveChanged(strtoqstr(text));
     } else {
         m_lilyPondDirectiveCombo->hide();
         m_directiveLabel->hide();
@@ -533,7 +533,7 @@ void
 TextEventDialog::slotDynamicShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_dynamicShortcutCombo->currentText()));
+        m_text->setText(m_dynamicShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -543,7 +543,7 @@ void
 TextEventDialog::slotDirectionShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_directionShortcutCombo->currentText()));
+        m_text->setText(m_directionShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -553,7 +553,7 @@ void
 TextEventDialog::slotLocalDirectionShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_localDirectionShortcutCombo->currentText()));
+        m_text->setText(m_localDirectionShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -563,7 +563,7 @@ void
 TextEventDialog::slotTempoShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_tempoShortcutCombo->currentText()));
+        m_text->setText(m_tempoShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -573,7 +573,7 @@ void
 TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 {
     if (text == "" || text == "Sample") {
-        m_text->setText(strtoqstr(m_localTempoShortcutCombo->currentText()));
+        m_text->setText(m_localTempoShortcutCombo->currentText());
     } else {
         m_text->setText(text);
     }
@@ -582,7 +582,7 @@ TextEventDialog::slotLocalTempoShortcutChanged(const QString &text)
 void
 TextEventDialog::slotLilyPondDirectiveChanged(const QString &)
 {
-    m_text->setText(strtoqstr(m_lilyPondDirectiveCombo->currentText()));
+    m_text->setText(m_lilyPondDirectiveCombo->currentText());
 }
 
 }

@@ -19,6 +19,7 @@
 #include "RawNoteRuler.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -445,7 +446,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
 	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)")
 		           .arg(trackPosition + 1)
-		           .arg(m_segment->getLabel())
+		           .arg(strtoqstr(m_segment->getLabel()))
 		           .arg(m_segment->getRuntimeId()));
     }
 

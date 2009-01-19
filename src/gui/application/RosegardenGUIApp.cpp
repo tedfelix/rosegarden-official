@@ -5437,7 +5437,7 @@ void RosegardenGUIApp::slotPlay()
         m_playTimer->stop();
         m_stopTimer->start(100);
     } catch (Exception e) {
-        KMessageBox::error(this, e.getMessage());
+        KMessageBox::error(this, strtoqstr(e.getMessage()));
         m_playTimer->stop();
         m_stopTimer->start(100);
     }
@@ -5949,8 +5949,8 @@ RosegardenGUIApp::slotAddMarker(timeT time)
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
                              time,
-                             i18n("new marker"),
-                             i18n("no description"));
+                             qstrtostr(i18n("new marker")),
+                             qstrtostr(i18n("no description")));
 
     m_doc->getCommandHistory()->addCommand(command);    
 }

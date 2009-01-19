@@ -600,8 +600,8 @@ TrackParameterBox::updateHighLow()
 
 //    m_highButton->setText(i18n("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
 //    m_lowButton->setText(i18n("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
-    m_highButton->setText(QString("%1").arg(highest.getAsString(useSharps, includeOctave, base)));
-    m_lowButton->setText(QString("%1").arg(lowest.getAsString(useSharps, includeOctave, base)));
+    m_highButton->setText(QString("%1").arg(strtoqstr(highest.getAsString(useSharps, includeOctave, base))));
+    m_lowButton->setText(QString("%1").arg(strtoqstr(lowest.getAsString(useSharps, includeOctave, base))));
 
     m_presetLbl->setEnabled(false);
 }
@@ -629,7 +629,7 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
     // set this down here because updateHighLow just disabled the label
-    m_presetLbl->setText(trk->getPresetLabel());
+    m_presetLbl->setText(strtoqstr(trk->getPresetLabel()));
     m_presetLbl->setEnabled(true);
 
     m_staffSizeCombo->setCurrentItem(trk->getStaffSize());
@@ -669,7 +669,7 @@ TrackParameterBox::slotSelectedTrackNameChanged()
     }
 
     Track *trk = comp.getTrackById(m_selectedTrackId);
-    QString m_trackName = trk->getLabel();
+    QString m_trackName = strtoqstr(trk->getLabel());
     if (m_trackName.isEmpty())
         m_trackName = i18n("<untitled>");
     else
@@ -999,7 +999,7 @@ TrackParameterBox::slotPresetPressed()
     try {
         if (dialog.exec() == QDialog::Accepted) {
             m_presetLbl->setText(dialog.getName());
-            trk->setPresetLabel(dialog.getName());
+            trk->setPresetLabel(qstrtostr(dialog.getName()));
             if (dialog.getConvertAllSegments()) {
             	SegmentSyncCommand* command = new SegmentSyncCommand(
             			comp.getSegments(), m_selectedTrackId,
