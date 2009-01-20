@@ -46,7 +46,7 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
     }
 
     QBitmap m;
-    m.convertFromImage(im);
+    m.fromImage(im);
     return m;
 }
 
@@ -76,7 +76,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
     }
 
     QBitmap m;
-    m.convertFromImage(im);
+    m.fromImage(im);
     return m;
 }
 
@@ -119,7 +119,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
     }
 
     QPixmap rmap;
-    rmap.convertFromImage(image);
+    rmap.fromImage(image);
     if (!map.mask().isNull())
         rmap.setMask(map.mask());
     return rmap;
@@ -148,7 +148,7 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
     }
 
     QPixmap rmap;
-    rmap.convertFromImage(image);
+    rmap.fromImage(image);
     if (!map.mask().isNull())
         rmap.setMask(map.mask());
     return rmap;
@@ -159,12 +159,12 @@ PixmapFunctions::flipVertical(const QPixmap &map)
 {
     QPixmap rmap;
     QImage i(map.convertToImage());
-    rmap.convertFromImage(i.mirror(false, true));
+    rmap.fromImage(i.mirror(false, true));
 
     if (!map.mask().isNull()) {
         QImage im(map.mask().convertToImage());
         QBitmap newMask;
-        newMask.convertFromImage(im.mirror(false, true));
+        newMask.fromImage(im.mirror(false, true));
         rmap.setMask(newMask);
     }
 
@@ -176,12 +176,12 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
 {
     QPixmap rmap;
     QImage i(map.convertToImage());
-    rmap.convertFromImage(i.mirror(true, false));
+    rmap.fromImage(i.mirror(true, false));
 
     if (!map.mask().isNull()) {
         QImage im(map.mask().convertToImage());
         QBitmap newMask;
-        newMask.convertFromImage(im.mirror(true, false));
+        newMask.fromImage(im.mirror(true, false));
         rmap.setMask(newMask);
     }
 
@@ -258,8 +258,8 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
         }
     }
 
-    dest.convertFromImage(idp);
-    destMask.convertFromImage(idm);
+    dest.fromImage(idp);
+    destMask.fromImage(idm);
 }
 
 }

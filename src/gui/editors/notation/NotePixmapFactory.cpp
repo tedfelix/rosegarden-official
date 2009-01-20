@@ -2477,7 +2477,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     delete clefPixmap;
     delete notePixmap;
 
-    return makeCanvasPixmap(m_pointZero);
+    //### Force the mask generation (following arg. true) to have
+    //### a staff and a clef displayed in the pitch chooser widget
+    return makeCanvasPixmap(m_pointZero, true);
 }
 
 Q3CanvasPixmap*
@@ -2544,7 +2546,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     delete clefPixmap;
     delete notePixmap;
 
-    return makeCanvasPixmap(m_pointZero);
+    //### Force the mask generation (following arg. true) to have
+    //### a staff and a clef displayed in the pitch chooser widget
+    return makeCanvasPixmap(m_pointZero, true);
 }
 
 Q3CanvasPixmap*
