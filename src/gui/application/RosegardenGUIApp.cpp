@@ -828,7 +828,8 @@ void RosegardenGUIApp::initZoomToolbar()
         return ;
     }
 
-    new QLabel(tr("  Zoom:  "), zoomToolbar, "kde toolbar widget");
+    QLabel *label = new QLabel(tr("  Zoom:  "));
+    zoomToolbar->addWidget(label);
 
     std::vector<double> zoomSizes; // in units-per-pixel
     double defaultBarWidth44 = 100.0;
@@ -853,6 +854,9 @@ void RosegardenGUIApp::initZoomToolbar()
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeZoom(int)));
+
+    zoomToolbar->addWidget(m_zoomSlider);
+    zoomToolbar->addWidget(m_zoomLabel);
 
     // set initial zoom - we might want to make this a settings option
     //    m_zoomSlider->setToDefault();

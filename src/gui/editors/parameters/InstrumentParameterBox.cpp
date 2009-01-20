@@ -121,6 +121,7 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     // Layout the groups left to right.
 
     QBoxLayout* layout = new QVBoxLayout(this);
+    setLayout(layout);
     layout->setMargin(0);
     layout->addWidget(m_widgetStack);
 

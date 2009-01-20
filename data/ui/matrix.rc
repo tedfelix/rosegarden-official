@@ -344,7 +344,7 @@
   <Action name="panic" />
 </ToolBar>
 
-<ToolBar name="Actions Toolbar">
+<ToolBar name="Actions Toolbar" newline="true">
   <text>Actions Toolbar</text>
   <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
 </ToolBar>

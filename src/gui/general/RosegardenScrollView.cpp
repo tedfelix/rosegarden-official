@@ -62,7 +62,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         m_autoScrolling(false)
 {
 
-//     setDragAutoScroll(true);		//&&& could not find replacement
+     setDragAutoScroll(true);		//&&& could not find replacement
 	
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
@@ -108,8 +108,8 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     if (m_bottomWidget) {
         m_bottomWidget->reparent(this, 0, QPoint(0, 0));
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-// 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
-		setContentsMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+ 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+//		setContentsMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
 	}
 }
 
@@ -257,7 +257,7 @@ void RosegardenScrollView::slotScrollHoriz(int hpos)
     int currentContentYPos = contentsY();
 
     /* Lots of performance hitting debug
-    RG_DEBUG << "RosegardenCanvasView::slotScrollHoriz: hpos is " << hpos
+    RG_DEBUG << "RosegardenScrollView::slotScrollHoriz: hpos is " << hpos
       << ", contentsX is " << contentsX() << ", visibleWidth is "
       << visibleWidth() << endl;
              */

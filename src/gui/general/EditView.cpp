@@ -94,6 +94,7 @@
 #include <QString>
 #include <QTabWidget>
 #include <QWidget>
+#include <QToolBar>
 #include <QVBoxLayout>
 #include <QMatrix>
 
@@ -130,7 +131,9 @@ EditView::EditView(RosegardenGUIDoc *doc,
 {
 //!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
     m_bottomBox->setObjectName("bottomframe");
-    m_bottomBox->setLayout(new QVBoxLayout);
+    QVBoxLayout *bblayout = new QVBoxLayout;
+    bblayout->setMargin(0);
+    m_bottomBox->setLayout(bblayout);
     //@@@ Widget should be had to m_bottomBox using something as
     //@@@         getBottomWidget()->layout()->addWidget(widgetPtr);
     //@@@ All widgets added or some of them forgotten ?
@@ -228,6 +231,7 @@ void EditView::paintEvent(QPaintEvent* e)
 
 void EditView::updateControlRulers(bool updateHPos)
 {
+    RG_DEBUG << "EditView::updateControlRulers" << endl;
     for (int i = 0; i < m_controlRulers->count(); ++i) {
         ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
         if (ruler) {
@@ -293,6 +297,7 @@ void EditView::setTopStandardRuler(StandardRuler* w, QWidget *leftBox)
     m_topStandardRuler = w;
 
     QGridLayout * gl = new QGridLayout;
+    gl->setMargin(0);
     gl->setColumnStretch(0, 0);
     gl->setColumnStretch(1, 1);
 
@@ -328,7 +333,7 @@ void EditView::setBottomStandardRuler(StandardRuler* w)
 
 void EditView::setRewFFwdToAutoRepeat()
 {
-    QWidget* transportToolbar = findChild<QWidget *>("Transport Toolbar");
+    QWidget* transportToolbar = findToolbar("Transport Toolbar");
 	
     if (transportToolbar) {
         QObjectList obl = transportToolbar->queryList();

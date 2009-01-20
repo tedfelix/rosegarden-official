@@ -444,7 +444,7 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
 void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
 {
-    if (e->state() & Qt::CTRL ){ //@@@	//	was: ControlButton) {
+    if (e->modifiers() & Qt::CTRL ){ //@@@	//	was: ControlButton) {
         if (e->delta() > 0)
             emit zoomIn();
         else if (e->delta() < 0)

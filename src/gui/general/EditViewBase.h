@@ -186,7 +186,7 @@ public slots:
     /**
      * toggles the main toolbar
      */
-    virtual void slotToggleToolBar();
+//    virtual void slotToggleToolBar();
 
     /**
      * toggles the statusbar
@@ -355,7 +355,7 @@ protected:
     EditTool*    m_tool;
     EditToolBox* m_toolBox;
 	
-	QToolBar 	*m_toolBar;
+//	QToolBar 	*m_toolBar;
 
     QDockWidget *m_mainDockWidget;
     QFrame      *m_centralFrame;

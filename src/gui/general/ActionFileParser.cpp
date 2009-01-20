@@ -39,7 +39,8 @@ namespace Rosegarden
 {
    
 ActionFileParser::ActionFileParser(QObject *actionOwner) :
-    m_actionOwner(actionOwner)
+    m_actionOwner(actionOwner),
+    m_lastToolbarPosition(Top)
 {
 }
 
@@ -108,13 +109,24 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
     } else if (name == "toolbar") {
 
+        QString newline = atts.value("newline");
+        if (newline == "true") addToolbarBreak(m_lastToolbarPosition);
+
+        Position position = Default;
+        QString posstr = atts.value("position");
+        if (posstr == "top") position = Top;
+        if (posstr == "bottom") position = Bottom;
+        if (posstr == "left") position = Left;
+        if (posstr == "right") position = Right;
+
         QString toolbarName = atts.value("name");
         if (toolbarName == "") {
             cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << endl;
         }
-        (void)findToolbar(toolbarName); // creates it if necessary
+        (void)findToolbar(toolbarName, position); // creates it if necessary
         m_currentToolbar = toolbarName;
-        
+        m_lastToolbarPosition = position;
+
     } else if (name == "text") {
 
         // used to provide label for menu or title for toolbar, but
@@ -330,7 +342,7 @@ ActionFileParser::findMenu(QString menuName)
 }
 
 QToolBar *
-ActionFileParser::findToolbar(QString toolbarName)
+ActionFileParser::findToolbar(QString toolbarName, Position position)
 {
     QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
     if (!widget) {
@@ -341,7 +353,15 @@ ActionFileParser::findToolbar(QString toolbarName)
     if (!toolbar) {
         QMainWindow *mw = dynamic_cast<QMainWindow *>(widget);
         if (mw) {
-            toolbar = mw->addToolBar(toolbarName);
+            Qt::ToolBarArea area = Qt::TopToolBarArea;
+            switch (position) {
+            case Top: case Default: break;
+            case Left: area = Qt::LeftToolBarArea; break;
+            case Right: area = Qt::RightToolBarArea; break;
+            case Bottom: area = Qt::BottomToolBarArea; break;
+            }
+            toolbar = new QToolBar(toolbarName, mw);
+            mw->addToolBar(area, toolbar);
         } else {
             toolbar = new QToolBar(toolbarName, widget);
         }
@@ -485,7 +505,7 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    QToolBar *toolbar = findToolbar(toolbarName);
+    QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;
     toolbar->addAction(action);
     return true;
@@ -495,10 +515,25 @@ bool
 ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 {
     if (toolbarName == "") return false;
-    QToolBar *toolbar = findToolbar(toolbarName);
+    QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;
     toolbar->addSeparator();
     return true;
+}
+
+void
+ActionFileParser::addToolbarBreak(Position position)
+{
+    QMainWindow *mw = dynamic_cast<QMainWindow *>(m_actionOwner);
+    if (!mw) return;
+    Qt::ToolBarArea area = Qt::TopToolBarArea;
+    switch (position) {
+    case Top: case Default: break;
+    case Left: area = Qt::LeftToolBarArea; break;
+    case Right: area = Qt::RightToolBarArea; break;
+    case Bottom: area = Qt::BottomToolBarArea; break;
+    }
+    mw->addToolBarBreak(area);
 }
 
 bool

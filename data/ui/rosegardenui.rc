@@ -312,7 +312,7 @@
   <Action name="show_tracklabels"/>  -->
 </ToolBar>
 
-<ToolBar name="Editors Toolbar">
+<ToolBar name="Editors Toolbar" newline="true">
   <text>Editors Toolbar</text>
   <Action name="edit_matrix" />
   <Action name="edit_percussion_matrix" />

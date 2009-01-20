@@ -46,7 +46,7 @@ class QMouseEvent;
 class QLabel;
 class QCursor;
 class QComboBox;
-class QScrollArea;
+//class QScrollArea;
 
 namespace Rosegarden
 {
@@ -588,8 +588,8 @@ protected:
     //--------------- Data members ---------------------------------
 	
 // 	QSlider*	m_zoomToolBar;
-	QToolBar*	m_zoomToolBar;
-	QToolBar*	m_actionsToolBar;
+//	QToolBar*	m_zoomToolBar;
+//	QToolBar*	m_actionsToolBar;
 	
     std::vector<MatrixStaff*> m_staffs;
 
@@ -614,8 +614,8 @@ protected:
 
     QDockWidget         *m_dockLeft;
     MatrixCanvasView    *m_canvasView;
-// 	QDeferScrollView    *m_pianoView;
-	QScrollArea   		*m_pianoView;
+ 	QDeferScrollView    *m_pianoView;
+//	QScrollArea   		*m_pianoView;
 	PitchRuler          *m_pitchRuler;
 
     MidiKeyMapping *m_localMapping;

@@ -112,11 +112,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_evalMidiPrgChgCheckBox->setToolTip(programTip);
     m_evalMidiPrgChgCheckBox->setShortcut((QKeySequence)"Shift+P");
     
-    
-    // Configure the empty final row to accomodate any extra vertical space.
-    
-    m_mainGrid->setRowStretch(m_mainGrid->rowCount() - 1, 1);
-
 
     m_mainGrid->setColumnStretch(2, 1);
 
@@ -144,6 +139,8 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
       
     m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, 0+1, 2- 0+1, Qt::AlignLeft);
     m_mainGrid->addWidget(m_evalMidiPrgChgCheckBox, 7, 3, Qt::AlignRight);	
+    
+    // Configure the empty final row to accomodate any extra vertical space.
     
     /*@@@
     m_mainGrid->addWidget(m_instrumentLabel, 0, 0, 0- 0+1, 2- 1, Qt::AlignCenter);
@@ -316,6 +313,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
     // Setup the ControlParameters
     //
     setupControllers(md);
+
+    m_mainGrid->setRowStretch(9, 20);
 
     // Set all the positions by controller number
     //

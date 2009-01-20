@@ -1815,7 +1815,7 @@ bool NotationView::isCurrentStaff(int i)
 void NotationView::initLayoutToolbar()
 {
 // 	KToolBar *layoutToolbar = toolBar("Layout Toolbar");
-	QToolBar *layoutToolbar = findChild<QToolBar*>("Layout Toolbar");
+    QToolBar *layoutToolbar = findToolbar("Layout Toolbar");
 
     if (!layoutToolbar) {
         std::cerr
@@ -1824,16 +1824,17 @@ void NotationView::initLayoutToolbar()
         return ;
     }
 
-    new QLabel(tr("  Font:  "), layoutToolbar);
+    QLabel *label = new QLabel(tr("  Font:  "), layoutToolbar);
+    layoutToolbar->addWidget(label);
 
     //
     // font combo
     //
     m_fontCombo = new QComboBox(layoutToolbar);
     m_fontCombo->setEditable(false);
+    layoutToolbar->addWidget(m_fontCombo);
 
-    std::set
-        <std::string> fs(NoteFontFactory::getFontNames());
+    std::set<std::string> fs(NoteFontFactory::getFontNames());
     std::vector<std::string> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
@@ -1860,7 +1861,8 @@ void NotationView::initLayoutToolbar()
     connect(m_fontCombo, SIGNAL(activated(const QString &)),
             this, SLOT(slotChangeFont(const QString &)));
 
-    new QLabel(tr("  Size:  "), layoutToolbar);
+    label = new QLabel(tr("  Size:  "), layoutToolbar);
+    layoutToolbar->addWidget(label);
 
     QString value;
 
@@ -1869,6 +1871,7 @@ void NotationView::initLayoutToolbar()
     //
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(m_fontName);
     m_fontSizeCombo = new QComboBox(layoutToolbar);
+    layoutToolbar->addWidget(m_fontSizeCombo);
 
     for (std::vector<int>::iterator i = sizes.begin(); i != sizes.end(); ++i) {
 
@@ -1884,7 +1887,9 @@ void NotationView::initLayoutToolbar()
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
 
-    new QLabel(tr("  Spacing:  "), layoutToolbar);
+    label = new QLabel(tr("  Spacing:  "), layoutToolbar);
+    layoutToolbar->addWidget(label);
+    
 
     //
     // spacing combo
@@ -1908,6 +1913,8 @@ void NotationView::initLayoutToolbar()
 
     connect(m_spacingCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
+
+    layoutToolbar->addWidget(m_spacingCombo);
 }
 
 void NotationView::initStatusBar()
@@ -3115,6 +3122,8 @@ void NotationView::readjustCanvasSize()
 {
     Profiler profiler("NotationView::readjustCanvasSize");
 
+    NOTATION_DEBUG << "NotationView::readjustCanvasSize" << endl;
+
     double maxWidth = 0.0;
     int maxHeight = 0;
 
@@ -3188,7 +3197,7 @@ void NotationView::readjustCanvasSize()
 
     // Give a correct vertical alignment to track headers
     if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
-// 		m_headersGroupView->setContentsPos( 0, getCanvasView()->contentsY() );	//&&& FIX alignment
+        m_headersGroupView->setContentsPos( 0, getCanvasView()->contentsY() );
 	}
 }
 
@@ -6264,8 +6273,8 @@ NotationView::slotRenderSomething()
     // (better late than never)
     m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
 	
-//     m_headersGroupView->setContentsPos(	//&&& FIX contentsPos
-// 					getCanvasView()->contentsX(),getCanvasView()->contentsY()); 
+     m_headersGroupView->setContentsPos(	//&&& FIX contentsPos
+ 					getCanvasView()->contentsX(),getCanvasView()->contentsY()); 
 }
 
 NotationCanvasView* NotationView::getCanvasView()
@@ -6276,7 +6285,7 @@ NotationCanvasView* NotationView::getCanvasView()
 void
 NotationView::slotVerticalScrollHeadersGroup(int y)
 {
-// 	m_headersGroupView->setContentsPos(0, y);	//&&& FIX contentsPos
+    m_headersGroupView->setContentsPos(0, y);	//&&& FIX contentsPos
 }
 
 void
@@ -6323,7 +6332,7 @@ void
 NotationView::slotUpdateHeaders(int x, int y)
 {
     m_headersGroup->slotUpdateAllHeaders(x, y);
-// 	m_headersGroupView->setContentsPos(x, y);	//&&& FIX contentsPos
+ 	m_headersGroupView->setContentsPos(x, y);	//&&& FIX contentsPos
 }
 
 void

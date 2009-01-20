@@ -68,6 +68,8 @@ protected slots:
     void slotObjectDestroyed();
 
 protected:
+    enum Position { Top, Bottom, Left, Right, Default };
+
     bool setActionText(QString actionName, QString text);
     bool setActionIcon(QString actionName, QString icon);
     bool setActionShortcut(QString actionName, QString shortcut);
@@ -83,6 +85,7 @@ protected:
     bool setToolbarText(QString name, QString text);
     bool addActionToToolbar(QString toolbarName, QString actionName);
     bool addSeparatorToToolbar(QString toolbarName);
+    void addToolbarBreak(Position);
 
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
@@ -95,7 +98,7 @@ protected:
     QAction *findStandardAction(QString name);
     QActionGroup *findGroup(QString name);
     QMenu *findMenu(QString name);
-    QToolBar *findToolbar(QString name);
+    QToolBar *findToolbar(QString name, Position position);
 
     typedef QMap<QString, QList<QAction *> > StateMap;
     StateMap m_stateEnableMap;
@@ -112,6 +115,7 @@ protected:
     QString m_currentState;
     QString m_currentText;
     QString m_currentFile;
+    Position m_lastToolbarPosition;
 };
 
 // A QMenu needs a QWidget as its parent, but the action file client

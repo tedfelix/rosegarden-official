@@ -44,14 +44,13 @@ TextFloat::TextFloat(QWidget *parent):
 void
 TextFloat::reparent(QWidget *newParent)
 {
-    QPoint position = newParent->pos();
+    QPoint position(0, 0);//newParent->pos();
 
     // Get position and reparent to either top level or dialog
     //
-    while (newParent->parentWidget() && !newParent->isTopLevel()
-            && !newParent->isDialog()) {
-        newParent = newParent->parentWidget();
+    while (newParent->parentWidget() && !newParent->isWindow()) {
         position += newParent->pos();
+        newParent = newParent->parentWidget();
     }
 
     // Position this widget to the right of the parent

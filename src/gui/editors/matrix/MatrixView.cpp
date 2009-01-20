@@ -175,6 +175,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	
 	// note: toobars added by parseAction script (?)
 	//
+/*
 	m_actionsToolBar = new QToolBar( "Actions Toolbar", this );
 	m_actionsToolBar->setToolTip( "Actions Toolbar" );
 	m_actionsToolBar->setObjectName( "Actions Toolbar" );
@@ -192,7 +193,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	
 	m_zoomToolBar->setMinimumHeight( 32 );
 	m_zoomToolBar->setMinimumWidth( 80 );
-	
+*/	
 	
 	m_dockLeft = new QDockWidget( tr("Instrument Parameters"),  this );
 	m_dockLeft->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
@@ -298,8 +299,8 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         }
     }
 
-//	m_pianoView = new QDeferScrollView(getCentralWidget());
-	m_pianoView = new QScrollArea(getCentralWidget());
+	m_pianoView = new QDeferScrollView(getCentralWidget());
+//	m_pianoView = new QScrollArea(getCentralWidget());
 
     QWidget* vport = m_pianoView->viewport();
 
@@ -312,6 +313,11 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
         m_pitchRuler = new PianoKeyboard(vport);
     }
 
+    m_pianoView->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+    m_pianoView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+    m_pianoView->addChild(m_pitchRuler);
+    m_pianoView->setFixedWidth(m_pianoView->contentsWidth());
+/*
 	// new:
 // 	m_pianoView->verticalScrollBar()->setEnabled( false );
 // 	m_pianoView->horizontalScrollBar()->setEnabled( false );
@@ -319,11 +325,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	m_pianoView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	
 // 	m_pianoView->addChild(m_pitchRuler);
+
 	QWidget *scrollMainWidget = new QWidget();
 	scrollMainWidget->setLayout( new QHBoxLayout() );
-	
+
 	// widget to scroll
 	m_pianoView->setWidget(scrollMainWidget);
+
 	
 	
 // 	m_pitchRuler->setWidth( 45 );
@@ -333,13 +341,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	scrollMainWidget->layout()->addWidget( m_pitchRuler );
 // 	m_pianoView->setFixedWidth( m_pianoView->contentsWidth() );
 // 	m_pianoView->setFixedWidth( m_pianoView->maximumViewportSize().width() );
-	
+*/		
 	
     m_grid->addWidget(m_pianoView, CANVASVIEW_ROW, 1);
 
     m_parameterBox = new InstrumentParameterBox(getDocument(), m_dockLeft);
-	m_parameterBox->setMaximumSize( 300, 460 );
-	m_parameterBox->setMinimumSize( 140, 200 );
+//	m_parameterBox->setMaximumSize( 300, 460 );
+//	m_parameterBox->setMinimumSize( 140, 200 );
 	
     m_dockLeft->setWidget(m_parameterBox);
 
@@ -598,10 +606,12 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     // default zoom
     //###settings.beginGroup( MatrixViewConfigGroup );
 
-    double zoom = settings.value("Zoom Level",
-            m_hZoomSlider->getCurrentSize()).toDouble();
-    m_hZoomSlider->setSize(zoom);
-    m_referenceRuler->setHScaleFactor(zoom);
+    if (m_hZoomSlider) {
+        double zoom = settings.value("Zoom Level",
+                                     m_hZoomSlider->getCurrentSize()).toDouble();
+        m_hZoomSlider->setSize(zoom);
+        m_referenceRuler->setHScaleFactor(zoom);
+    }
     
     // Scroll view to centre middle-C and warp to pointer position
     //
@@ -1696,9 +1706,8 @@ void MatrixView::slotKeyReleased(unsigned int y, bool repeating)
 void MatrixView::slotVerticalScrollPianoKeyboard(int y)
 {
     if (m_pianoView){ // check that the piano view still exists (see dtor)
-//         m_pianoView->setContentsPos(0, y);
-		m_pianoView->ensureVisible( 0, y );
-	}
+         m_pianoView->setContentsPos(0, y);
+    }
 }
 
 void MatrixView::slotInsertNoteFromAction()
@@ -2010,10 +2019,8 @@ MatrixView::initActionsToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
-// 	QToolBar *actionsToolbar = toolBar("Actions Toolbar");
-	QToolBar *actionsToolbar = m_actionsToolBar;
-
-	
+    QToolBar *actionsToolbar = findToolbar("Actions Toolbar");
+//	QToolBar *actionsToolbar = m_actionsToolBar;
 	//actionsToolbar->setLayout( new QHBoxLayout(actionsToolbar) );
 	
     if (!actionsToolbar) {
@@ -2107,9 +2114,9 @@ MatrixView::initZoomToolbar()
 {
     MATRIX_DEBUG << "MatrixView::initZoomToolbar" << endl;
 
-//     QToolBar *zoomToolbar = toolBar("Zoom Toolbar");
+     QToolBar *zoomToolbar = findToolbar("Zoom Toolbar");
 // 	QSlider *zoomToolbar = m_zoomToolBar;
-	QToolBar *zoomToolbar = m_zoomToolBar;
+//	QToolBar *zoomToolbar = m_zoomToolBar;
 
     if (!zoomToolbar) {
         MATRIX_DEBUG << "MatrixView::initZoomToolbar - "
@@ -2139,14 +2146,20 @@ MatrixView::initZoomToolbar()
     m_hZoomSlider->setTracking(true);
     m_hZoomSlider->setFocusPolicy(Qt::NoFocus);
 
-    m_zoomLabel = new QLabel(zoomToolbar, "kde toolbar widget");
+    QLabel *label = new QLabel(tr("  Zoom:  "));
+    zoomToolbar->addWidget(label);
+
+    m_zoomLabel = new QLabel();
     m_zoomLabel->setIndent(10);
     m_zoomLabel->setFixedWidth(80);
+    m_zoomLabel->setText(tr("%1%").arg(m_hZoomSlider->getCurrentSize()*100.0));
 
     connect(m_hZoomSlider,
             SIGNAL(valueChanged(int)),
             SLOT(slotChangeHorizontalZoom(int)));
 
+    zoomToolbar->addWidget(m_hZoomSlider);
+    zoomToolbar->addWidget(m_zoomLabel);
 }
 
 void
@@ -2962,8 +2975,8 @@ MatrixView::slotPercussionSetChanged(Instrument * newInstr)
 
     // Replace the old pitchruler widget
     m_pitchRuler = pitchRuler;
-// 	m_pianoView->addChild(m_pitchRuler);
-	m_pianoView->layout()->addWidget(m_pitchRuler);
+ 	m_pianoView->addChild(m_pitchRuler);
+//	m_pianoView->layout()->addWidget(m_pitchRuler);
 	m_pitchRuler->show();
     m_pianoView->setFixedWidth(pitchRuler->sizeHint().width());
 
@@ -2986,8 +2999,8 @@ MatrixView::slotCanvasBottomWidgetHeightChanged(int newHeight)
 {
 	int newH;
 	newH = newHeight + m_canvasView->horizontalScrollBar()->height();
-//     m_pianoView->setBottomMargin( newH );
-	m_pianoView->setContentsMargins ( 0, 0, 0, newH );
+     m_pianoView->setBottomMargin( newH );
+//	m_pianoView->setContentsMargins ( 0, 0, 0, newH );
 }
 
 MatrixCanvasView* MatrixView::getCanvasView()

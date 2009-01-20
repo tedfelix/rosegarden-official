@@ -543,6 +543,7 @@
         <Action name="insert_6_flat_low" text="VII flat" shortcut="Ctrl+Shift+M" />
         <Action name="insert_6_low" text="VII" shortcut="M" />
       </Menu>
+    </Menu>
     <Action name="insert_rest" text="Insert rest" shortcut="P" />
 
   <!--
@@ -565,11 +566,11 @@
       <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
       <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
       <Action name="show_notes_toolbar" text="Show &amp;Notes Toolbar" icon="palette-notes" checked="true" append="show_merge" />
-      <Action name="show_rests_toolbar" text="Show &amp;Rest Toolbar" icon="palette-rests" checked=true" append="show_merge" />
+      <Action name="show_rests_toolbar" text="Show &amp;Rest Toolbar" icon="palette-rests" checked="true" append="show_merge" />
       <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" append="show_merge" />
       <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" append="show_merge" />
       <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" append="show_merge" />
-      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked=true" append="show_merge" />
+      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked="true" append="show_merge" />
       <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
       <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="false" append="show_merge" />
       <Action name="show_meta_toolbar" text="Show M&amp;eta Toolbar" checked="false" append="show_merge" />
@@ -642,7 +643,6 @@
 
 <ToolBar name="Notes Toolbar" newline="true" hidden="false" position="left">
   <text>Notes Toolbar</text>
-
   <!-- Reference names, but with _ instead of - -->
   <Action name="breve" />
   <Action name="semibreve" />

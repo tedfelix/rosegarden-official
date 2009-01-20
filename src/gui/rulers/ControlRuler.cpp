@@ -115,11 +115,14 @@ void ControlRuler::slotUpdate()
     canvas()->setAllChanged(); // TODO: be a bit more subtle, call setChanged(<time area>)
 
     canvas()->update();
-    repaint();
+//    repaint();
+//   update();
 }
 
 void ControlRuler::slotUpdateElementsHPos()
 {
+    RG_DEBUG << "ControlRuler::slotUpdateElementsHPos()\n";
+
     computeStaffOffset();
 
     Q3CanvasItemList list = canvas()->allItems();

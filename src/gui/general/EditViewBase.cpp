@@ -107,12 +107,12 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 	m_mainDockWidget = 0;
 	
 	setStatusBar( new QStatusBar(this) );
-	
+/*	
 	m_toolBar = new QToolBar( "Tool Bar", this );
 	addToolBar( Qt::TopToolBarArea, m_toolBar );
 	m_toolBar->setMinimumHeight( 16 );
 	m_toolBar->setMinimumWidth( 40 );
-	
+*/	
     m_centralFrame = new QFrame(this);		//m_mainDockWidget);
     m_centralFrame->setObjectName("centralframe");
 	m_centralFrame->setMinimumSize( 500, 300 );
@@ -170,8 +170,8 @@ void EditViewBase::readOptions()
     QAction *a = findAction("options_show_statusbar");
     if (a) a->setChecked( ! statusBar()->isHidden() );
 
-    a = findAction("options_show_toolbar");
-    if (a) a->setChecked( ! m_toolBar->isHidden());
+//    a = findAction("options_show_toolbar");
+//    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
 
 void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
@@ -180,7 +180,7 @@ void EditViewBase::setupActions(QString rcFileName, bool haveClipboard)
 
     // Actions all edit views will have
 
-    createAction("options_show_toolbar", SLOT(slotToggleToolBar()));
+//    createAction("options_show_toolbar", SLOT(slotToggleToolBar()));
     createAction("options_show_statusbar", SLOT(slotToggleStatusBar()));
     createAction("options_configure", SLOT(slotConfigure()));
 //    createAction("options_configure_keybindings", SLOT(slotEditKeys()));
@@ -509,7 +509,7 @@ void EditViewBase::slotCloseWindow()
 {
     close();
 }
-
+/*
 void EditViewBase::slotToggleToolBar()
 {
     KTmpStatusMsg msg(tr("Toggle the toolbar..."), this);
@@ -519,7 +519,7 @@ void EditViewBase::slotToggleToolBar()
     else
 		m_toolBar->show();
 }
-
+*/
 void EditViewBase::slotToggleStatusBar()
 {
     KTmpStatusMsg msg(tr("Toggle the statusbar..."), this);
