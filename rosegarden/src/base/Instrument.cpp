@@ -23,6 +23,7 @@
 #define stringstream strstream
 #else
 #include <sstream>
+#include <cstdio>
 #endif
 
 

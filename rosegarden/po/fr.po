@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-27 19:18-0500\n"
+"POT-Creation-Date: 2009-01-15 21:21-0500\n"
 "PO-Revision-Date: 2008-09-03 21:04-0400\n"
 "Last-Translator: D. Michael McIntyre <michael.mcintyre@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -7045,8 +7045,8 @@ msgstr "Canal de sortie"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
 msgid ""
-"<qt>use program changes from an external source to manipulate these controls "
-"(only valid for the currently-active track)</qt>"
+"<qt>Use program changes from an external source to manipulate these controls "
+"(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
