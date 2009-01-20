@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-27 19:18-0500\n"
+"POT-Creation-Date: 2009-01-15 21:21-0500\n"
 "PO-Revision-Date: 2008-10-15 00:21+0300\n"
 "Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
@@ -6983,9 +6983,10 @@ msgid "Channel out"
 msgstr "Kanava ulos"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
+#, fuzzy
 msgid ""
-"<qt>use program changes from an external source to manipulate these controls "
-"(only valid for the currently-active track)</qt>"
+"<qt>Use program changes from an external source to manipulate these controls "
+"(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
 "<qt>käytä ohjelmamuutoksia ulkosesta lähteestä muuttaaksesi näitä valintoja "
 "(pätee vain nyt aktiivisena olevalle raidalle)</qt>"
@@ -7456,6 +7457,7 @@ msgid "Click on a note to delete it"
 msgstr "Klikkaa nuotin päällä poistaaksesi sen"
 
 #: ../src/gui/editors/matrix/MatrixVelocity.cpp:174
+#, c-format
 msgid "Velocity change: %1"
 msgstr "Nopeuden muutos: %1"
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: id\n"
-"POT-Creation-Date: 2008-12-27 19:18-0500\n"
+"POT-Creation-Date: 2009-01-15 21:21-0500\n"
 "PO-Revision-Date: 2008-07-04 20:53+0700\n"
 "Last-Translator: Citra Paska <dirgitadevina@yahoo.co.id>\n"
 "Language-Team: Bahasa Indonesia <proyek-ooo@yahoogroups.com>\n"
@@ -6807,8 +6807,8 @@ msgstr "Kanal keluaran"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
 msgid ""
-"<qt>use program changes from an external source to manipulate these controls "
-"(only valid for the currently-active track)</qt>"
+"<qt>Use program changes from an external source to manipulate these controls "
+"(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: rosegarden4 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-27 19:18-0500\n"
+"POT-Creation-Date: 2009-01-15 21:21-0500\n"
 "PO-Revision-Date: 2005-02-01 19:15+0800\n"
 "Last-Translator: Liu Songhe <jack@linux.net.cn>\n"
 "Language-Team: Simplified Chinese <i18n-translation@lists.linux.net.cn>\n"
@@ -7061,8 +7061,8 @@ msgstr "通道"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
 msgid ""
-"<qt>use program changes from an external source to manipulate these controls "
-"(only valid for the currently-active track)</qt>"
+"<qt>Use program changes from an external source to manipulate these controls "
+"(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101

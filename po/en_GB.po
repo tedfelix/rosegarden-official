@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: en_GB\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-27 19:18-0500\n"
+"POT-Creation-Date: 2009-01-15 21:21-0500\n"
 "PO-Revision-Date: 2006-01-13 20:22+0000\n"
 "Last-Translator: Chris Cannam <cannam@all-day-breakfast.com>\n"
 "Language-Team:  <en@li.org>\n"
@@ -6659,8 +6659,8 @@ msgstr ""
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
 msgid ""
-"<qt>use program changes from an external source to manipulate these controls "
-"(only valid for the currently-active track)</qt>"
+"<qt>Use program changes from an external source to manipulate these controls "
+"(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
