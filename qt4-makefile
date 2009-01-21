@@ -14,6 +14,7 @@ LD		= $(CXX)
 MOC		= $(QTDIR)/bin/moc-qt4
 UIC		= $(QTDIR)/bin/uic-qt4
 RCC		= $(QTDIR)/bin/rcc
+LUPDATE		= $(QTDIR)/bin/lupdate
 
 CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -D'VERSION="THE FUTURE IS SOON"'
 CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
@@ -67,6 +68,9 @@ rosegarden:	$(OBJECTS)
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+ts:	$(HEADERS) $(SOURCES)
+	mkdir -p ts && $(LUPDATE) $(HEADERS) $(SOURCES) -ts ts/rosegarden.ts
 
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
