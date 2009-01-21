@@ -32,6 +32,10 @@
 #include <QFile>
 #include <QProcess>
 
+#include <QTranslator>
+#include <QLocale>
+#include <QLibraryInfo>
+
 #include <QStringList>
 #include <QRegExp>
 #include <QWidget>
@@ -425,6 +429,33 @@ int main(int argc, char *argv[])
 */
 
     RosegardenApplication app(argc, argv);
+
+    RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
+    RG_DEBUG << "QT translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
+
+    QTranslator qtTranslator;
+    bool qtTranslationsLoaded = 
+      qtTranslator.load("qt_" + QLocale::system().name(),
+            QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    if ( qtTranslationsLoaded ) {
+        app.installTranslator(&qtTranslator);
+        RG_DEBUG << "QT translations loaded successfully." << endl;
+    } else {
+        RG_DEBUG << "QT translations not loaded." << endl;
+    }
+
+    QTranslator rgTranslator;
+    //
+    // FIXME: The RG translation is loaded from current directory.
+    //
+    bool rgTranslationsLoaded = 
+      rgTranslator.load("rg_" + QLocale::system().name());
+    if ( rgTranslationsLoaded ) {
+        RG_DEBUG << "RG translations loaded successfully." << endl;
+        app.installTranslator(&rgTranslator);
+    } else {
+        RG_DEBUG << "RG translations not loaded." << endl;
+    }
 
     app.setOrganizationName("rosegardenmusic");
     app.setOrganizationDomain("rosegardenmusic.com");
