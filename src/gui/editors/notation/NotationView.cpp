@@ -4022,7 +4022,7 @@ void NotationView::slotEditCutAndClose()
                         getDocument()->getClipboard()));
 }
 
-static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = QObject::tr(
+static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = NotationView::tr(
                       "The Restricted paste type requires enough empty " \
                       "space (containing only rests) at the paste position " \
                       "to hold all of the events to be pasted.\n" \

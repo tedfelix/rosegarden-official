@@ -2586,7 +2586,7 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
         }
     }
 
-    recordSegment->setLabel(appendLabel(label, qstrtostr(QObject::tr("(recorded)"))));
+    recordSegment->setLabel(appendLabel(label, qstrtostr(RosegardenGUIDoc::tr("(recorded)"))));
     recordSegment->setAudioFileId(auid);
 
     // set color for audio segment to distinguish it from a MIDI segment on an
