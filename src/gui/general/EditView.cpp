@@ -221,8 +221,8 @@ void EditView::paintEvent(QPaintEvent* e)
 
     } else {
 
-        getCanvasView()->slotUpdate();
-        updateControlRulers();
+//        getCanvasView()->slotUpdate();
+//        updateControlRulers();
 
     }
 
@@ -413,12 +413,11 @@ void EditView::addControlRuler(ControlRuler* ruler)
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
     Profiler profiler("EditView::readjustViewSize", true);
+    RG_DEBUG << "EditView::readjustViewSize: "
+                 << requestedSize.width() << ", " << requestedSize.height()
+             << ", exact = " << (exact?"true":"false") << endl;
 
     if (exact) {
-        RG_DEBUG << "EditView::readjustViewSize: exact size requested ("
-        << requestedSize.width() << ", " << requestedSize.height()
-        << ")\n";
-
         setViewSize(requestedSize);
         getCanvasView()->slotUpdate();
         return ;

@@ -94,6 +94,7 @@ void RosegardenCanvasView::setBottomFixedWidget(QWidget* w)
 
 void RosegardenCanvasView::slotUpdate()
 {
+    RG_DEBUG << "RosegardenCanvasView::slotUpdate" << endl;
     CanvasItemGC::gc();
     canvas()->update();
 }

@@ -85,33 +85,36 @@ NoteFontViewer::NoteFontViewer(QWidget *parent, QString noteFontName,
     setLayout(metagrid);
     QWidget *box = new QWidget(this);
     QVBoxLayout *boxLayout = new QVBoxLayout;
+    box->setLayout(boxLayout);
     metagrid->addWidget(box, 0, 0);
 
     QToolBar *controls = new QToolBar( box );
     boxLayout->addWidget(controls);
 // 	controls->setMargin(3);
-	controls->setContentsMargins(3,3,3,3);
+    controls->setContentsMargins(3,3,3,3);
 
-    (void) new QLabel(tr("  Component: "), controls);
+    controls->addWidget(new QLabel(tr("  Component: "), controls));
     m_font = new QComboBox(controls);
+    controls->addWidget(m_font);
 
     for (QStringList::iterator i = fontNames.begin(); i != fontNames.end();
             ++i) {
         m_font->addItem(*i);
     }
 
-    (void) new QLabel(tr("  View: "), controls);
+    controls->addWidget(new QLabel(tr("  View: "), controls));
     m_view = new QComboBox(controls);
+    controls->addWidget(m_view);
 
     m_view->addItem(tr("Glyphs"));
     m_view->addItem(tr("Codes"));
 
-    (void) new QLabel(tr("  Page: "), controls);
+    controls->addWidget(new QLabel(tr("  Page: "), controls));
     m_rows = new QComboBox(controls);
+    controls->addWidget(m_rows);
 
     m_frame = new FontViewFrame(pixelSize, box );
     boxLayout->addWidget(m_frame);
-    box->setLayout(boxLayout);
 
     connect(m_font, SIGNAL(activated(const QString &)),
             this, SLOT(slotFontChanged(const QString &)));

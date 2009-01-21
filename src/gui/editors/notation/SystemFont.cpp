@@ -76,6 +76,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
             NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
         }
         haveFcDirectory = true;
+        NOTATION_DEBUG << "Added font dir \"" << fontDir << "\" to font config path" << endl;
     }
 
     pattern = FcPatternCreate();
@@ -115,7 +116,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: successfully loaded font "
-    << name << " through Xft" << endl;
+                   << name << " through Xft" << endl;
 
     return new SystemFontXft(dpy, xfont);
 

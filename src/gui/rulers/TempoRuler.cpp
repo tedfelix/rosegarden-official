@@ -592,9 +592,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     QPoint mp = cp + pos();
 
     QWidget *parent = parentWidget();
-    while (parent->parentWidget() &&
-            !parent->isTopLevel() &&
-            !parent->isDialog()) {
+    while (parent->parentWidget() && !parent->isWindow()) {
         mp += parent->pos();
         parent = parent->parentWidget();
     }

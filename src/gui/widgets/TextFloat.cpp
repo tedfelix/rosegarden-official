@@ -99,7 +99,7 @@ void
 TextFloat::setText(const QString &text)
 {
     m_text = text;
-    repaint();
+    update();
 }
 
 }

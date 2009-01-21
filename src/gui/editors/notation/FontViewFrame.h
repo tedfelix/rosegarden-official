@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -58,11 +57,10 @@ private:
     QString m_fontName;
     int m_fontSize;
     void *m_tableFont;
+    int m_ascent;
     int m_row;
     bool m_glyphs;
 };
-
-
 
 
 }

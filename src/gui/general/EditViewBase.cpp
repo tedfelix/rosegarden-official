@@ -375,6 +375,8 @@ void EditViewBase::paintEvent(QPaintEvent* e)
     */ 
     //!!!    m_inPaintEvent = true;
 
+    RG_DEBUG << "EditViewBase::paintEvent" << endl;
+
     if (isCompositionModified()) {
 
         // Check if one of the segments we display has been removed

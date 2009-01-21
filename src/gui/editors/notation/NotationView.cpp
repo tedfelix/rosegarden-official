@@ -6199,7 +6199,7 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 void
 NotationView::slotCheckRendered(double cx0, double cx1)
 {
-    //    NOTATION_DEBUG << "slotCheckRendered(" << cx0 << "," << cx1 << ")" << endl;
+    NOTATION_DEBUG << "slotCheckRendered(" << cx0 << "," << cx1 << ")" << endl;
 
     bool something = false;
 
@@ -6238,6 +6238,8 @@ NotationView::slotCheckRendered(double cx0, double cx1)
 void
 NotationView::slotRenderSomething()
 {
+    NOTATION_DEBUG << "NotationView::slotRenderSomething" << endl;
+
     delete m_renderTimer;
     m_renderTimer = 0;
     static clock_t lastWork = 0;
