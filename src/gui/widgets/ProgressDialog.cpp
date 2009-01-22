@@ -60,12 +60,22 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 	setWindowTitle( tr("Processing...") );
 	setCancelButtonText( QString("Cancel") );
 	
+	// qt4 note: progressBar() doesn't exist anymore. 
+	// one can call setBar(QProgressBar*) but not retrieve it 
+	m_progressBar = new QProgressBar();
+	setBar( m_progressBar );
+	
+// 	progressBar()->setTotalSteps(totalSteps);
+//	progressBar()->setMaximum(totalSteps);
+	
 	
     setWindowTitle(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
-    << labelText() << " - modal : " << modal << endl;
+//    << labelText() << " - modal : " << modal << endl;
+    << name << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+//    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(valueChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -130,7 +140,8 @@ ProgressDialog::ProgressDialog(
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+//    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(valueChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
