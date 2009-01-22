@@ -1292,7 +1292,12 @@ void MatrixView::slotMousePressed(timeT time, int pitch,
     if (curSegmentStartTime > time)
         time = curSegmentStartTime;
 
-    m_tool->handleMousePress(time, pitch, 0, e, el);
+	if( !m_tool ){
+			// note: test was inserted, because the following line caused a SeqFault
+		MATRIX_DEBUG << "ERROR: m_tool is NULL in MatrixView::slotMousePressed " << endl;
+		return;
+	}
+	m_tool->handleMousePress(time, pitch, 0, e, el);
 
     if (e->button() != Qt::RightButton) {
         getCanvasView()->startAutoScroll();
@@ -1314,6 +1319,11 @@ void MatrixView::slotMouseMoved(timeT time, int pitch, QMouseEvent* e)
         activeItem()->handleMouseMove(e);
         updateView();
     } else {
+		if( !m_tool ){
+			// note: test was inserted, because the following line caused a SeqFault
+			MATRIX_DEBUG << "ERROR: m_tool is NULL in MatrixView::slotMouseMoved " << endl;
+			return;
+		}
         int follow = m_tool->handleMouseMove(time, pitch, e);
         getCanvasView()->setScrollDirectionConstraint(follow);
 
@@ -1344,6 +1354,11 @@ void MatrixView::slotMouseReleased(timeT time, int pitch, QMouseEvent* e)
         updateView();
     }
 
+	if( !m_tool ){
+			// note: test was inserted, because the following line caused a SeqFault
+		MATRIX_DEBUG << "ERROR: m_tool is NULL in MatrixView::slotMouseReleased " << endl;
+		return;
+	}
     // send the real event time now (not adjusted for beginning of bar)
     m_tool->handleMouseRelease(time, pitch, e);
     m_previousEvPitch = 0;

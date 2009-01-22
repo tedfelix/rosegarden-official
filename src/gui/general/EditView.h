@@ -200,7 +200,8 @@ public slots:
 
     // add control ruler
     void slotAddControlRuler(int);
-    void slotRemoveControlRuler(QWidget*);
+// 	void slotRemoveControlRuler(QWidget*);
+	void slotRemoveControlRuler(int index);
 
 protected:
     virtual RulerScale* getHLayout() = 0;

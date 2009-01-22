@@ -122,10 +122,6 @@ EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
 	m_grid = new QGridLayout(m_centralFrame);
 	m_centralFrame->setLayout( m_grid );
 	
-	// Note: We add Widget bottom-right, so the grid gets the propper col,row count
-	// NbLayoutRows, cols
-	//m_grid->addWidget( new QWidget(this), NbLayoutRows, cols);
-	
 	
 	//this->setLayout( new QVBoxLayout(this) );
 	//this->layout()->addWidget( m_centralFrame );

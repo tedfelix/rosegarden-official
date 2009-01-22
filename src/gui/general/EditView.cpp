@@ -147,8 +147,15 @@ EditView::EditView(RosegardenGUIDoc *doc,
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);
 */
-    connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
-            this, SLOT(slotRemoveControlRuler(QWidget*)));
+	
+	//old qt3:
+//     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
+//             this, SLOT(slotRemoveControlRuler(QWidget*)));
+	
+	
+	connect(m_controlRulers, SIGNAL(tabCloseRequested( int index )),
+			this, SLOT(slotRemoveControlRuler( int index )));		// since Qt 4.5 only !
+	
 
     (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
@@ -174,9 +181,10 @@ EditView::EditView(RosegardenGUIDoc *doc,
 	
 	
 	// m_controlRulers is QTabWidget*
-	//m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
+	m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
 	
-    m_controlRulers->hide();
+// 	m_controlRulers->setTabsClosable( true );	// requires Qt 4.5
+	m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }
 
@@ -1211,9 +1219,12 @@ EditView::slotAddControlRuler(int controller)
     getDocument()->slotDocumentModified();
 }
 
-void EditView::slotRemoveControlRuler(QWidget* w)
+// void EditView::slotRemoveControlRuler(QWidget* w)
+void EditView::slotRemoveControlRuler( int index )
 {
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
+// 	ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
+	
+	ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>( m_controlRulers->widget( index ));
 
     if (ruler) {
         ControlParameter *controller = ruler->getControlParameter();
@@ -1233,19 +1244,24 @@ void EditView::slotRemoveControlRuler(QWidget* w)
                 << endl;
 
         }
+		delete ruler;
+		
     } else { // else it's probably a velocity ruler
-        PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>(w);
-
+		
+//         PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>(w);
+		PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>( m_controlRulers->widget( index ));
+		
         if (propertyRuler) {
             Segment &seg = getCurrentStaff()->getSegment();
             seg.setViewFeatures(0); // for the moment we only have one view feature so
             // we can just blank it out
-
+			
+			delete propertyRuler;
             RG_DEBUG << "slotRemoveControlRuler : removed velocity ruler" << endl;
         }
     }
 
-    delete w;
+//     delete w;	// 
 
     if (m_controlRulers->count() == 0) {
         m_controlRulers->hide();
