@@ -26,6 +26,7 @@ class QString;
 class QWidget;
 class QSpinBox;
 class QLabel;
+class QVBoxLayout;
 
 
 namespace Rosegarden
@@ -51,12 +52,14 @@ signals:
 public slots:
     void slotSetPitch(int);
     void slotResetToDefault();
+    void addWidgetToLayout(QWidget *widget);
 
 protected:
     int m_defaultPitch;
     PitchDragLabel *m_pitchDragLabel;
     QSpinBox *m_pitch;
     QLabel *m_pitchLabel;
+    QVBoxLayout *m_layout;
 };
 
     

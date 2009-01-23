@@ -176,10 +176,11 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));
 
-    m_metronomePitchSelector = new QComboBox(m_metronomePitch);
+    m_metronomePitchSelector = new QComboBox();
     m_metronomePitchSelector->addItem(tr("for Bar"));
     m_metronomePitchSelector->addItem(tr("for Beat"));
     m_metronomePitchSelector->addItem(tr("for Sub-beat"));
+    m_metronomePitch->addWidgetToLayout(m_metronomePitchSelector);
     connect(m_metronomePitchSelector, SIGNAL(activated(int)), this, SLOT(slotPitchSelectorChanged(int)));
 
     QGroupBox *enableBox = new QGroupBox( tr("Metronome Activated"), vbox );

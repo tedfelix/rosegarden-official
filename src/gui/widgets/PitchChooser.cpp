@@ -38,15 +38,15 @@ PitchChooser::PitchChooser(QString title,
         QGroupBox(title, parent),
         m_defaultPitch(defaultPitch)
 {
-    QVBoxLayout *layout = new QVBoxLayout;
+    m_layout = new QVBoxLayout;
 
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
-    layout->addWidget(m_pitchDragLabel);
+    m_layout->addWidget(m_pitchDragLabel);
 
     QWidget *hbox = new QWidget(this);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     hboxLayout->setSpacing(6);
-    layout->addWidget(hbox);
+    m_layout->addWidget(hbox);
 
     QLabel *child_4 = new QLabel(tr("Pitch:"), hbox );
     hboxLayout->addWidget(child_4);
@@ -63,7 +63,7 @@ PitchChooser::PitchChooser(QString title,
     hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
 
-    setLayout(layout);
+    setLayout(m_layout);
 
     connect(m_pitch, SIGNAL(valueChanged(int)),
             this, SLOT(slotSetPitch(int)));
@@ -86,6 +86,12 @@ PitchChooser::PitchChooser(QString title,
     connect(m_pitchDragLabel, SIGNAL(preview(int)),
             this, SIGNAL(preview(int)));
 
+}
+
+void
+PitchChooser::addWidgetToLayout(QWidget *widget)
+{
+    m_layout->addWidget(widget);
 }
 
 int
