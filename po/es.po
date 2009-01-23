@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 21:21-0500\n"
-"PO-Revision-Date: 2008-10-14 09:58-0400\n"
+"POT-Creation-Date: 2009-01-23 12:49-0500\n"
+"PO-Revision-Date: 2008-11-04 21:52-0500\n"
 "Last-Translator: D. Michael McIntyre <michael.mcintyre@gmail.com>\n"
 "Language-Team:  <en@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -10108,7 +10108,7 @@ msgstr "aviso: compás demasiado largo truncado aquí"
 
 #: ../src/document/io/LilyPondExporter.cpp:2383
 msgid "warning: bar too short, padding with rests"
-msgstr ""
+msgstr "aviso: compás demasiado corto; rellenando con silencios "
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
