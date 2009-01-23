@@ -11,10 +11,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-15 21:21-0500\n"
-"PO-Revision-Date: 2008-09-03 21:04-0400\n"
-"Last-Translator: D. Michael McIntyre <michael.mcintyre@gmail.com>\n"
-"Language-Team:  <en@li.org>\n"
+"POT-Creation-Date: 2009-01-23 12:49-0500\n"
+"PO-Revision-Date: 2008-11-06 21:55+0100\n"
+"Last-Translator: Yves Guillemot <yc.guillemot@wanadoo.fr>\n"
+"Language-Team:  <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -7044,14 +7044,18 @@ msgid "Channel out"
 msgstr "Canal de sortie"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
+#, fuzzy
 msgid ""
 "<qt>Use program changes from an external source to manipulate these controls "
 "(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
+"<qt>Accepter la modification de ces choix par des commandes de changement de "
+"programme venant d'une source externe(valide pour la piste courante "
+"seulement)</qt>"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
 msgid "Receive external program changes"
-msgstr ""
+msgstr "Recevoir des changements de programme externes"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:237
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:243
@@ -7651,7 +7655,7 @@ msgid "couldn't open file '%1'"
 msgstr "Impossible d'ouvrir le fichier '%1'"
 
 #: ../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp:421
-#, fuzzy, c-format
+#, c-format
 msgid "couldn't parse chord dictionary : %1"
 msgstr "Échec de l'analyse du dictionnaire d'accords : %1"
 
@@ -11539,6 +11543,12 @@ msgid ""
 "your shortcuts.<br>They will show up in the menus just as if they were "
 "native Rosegarden shortcuts.</p>\n"
 msgstr ""
+" \t \n"
+"<p>... que vous pouvez définir vos propres raccourcis clavier pour vos "
+"actions favorites.<br><br>Il suffit d'appeler le menu <b>Configuration -> "
+"Configurer les raccourcis clavier</b> puis de définir ces raccourcis.<br>Ils "
+"seront ensuite affichés dans les menus comme les raccourcis originaux de "
+"Rosegarden.</p>\n"
 
 #: ../data/fonts/mappings/fonts.cpp:1
 msgid "Feta Pixmaps"
