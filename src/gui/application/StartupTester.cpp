@@ -54,21 +54,36 @@ StartupTester::~StartupTester()
 void
 StartupTester::run()
 {
+///CJ - Can't see the need for Mutex here
+///CJ - Appears to be used as a completed flag in isReady()
     m_projectPackagerMutex.lock();
     m_lilyPondViewMutex.lock();
     m_audioFileImporterMutex.lock();
     m_ready = true;
 
     //setup "rosegarden-audiofile-importer" process
-    QProcess *proc = new QProcess();
+    m_proc = new QProcess();
     QStringList procArgs;
 
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
+///CJ - Don't think this connection process is necessary or useful
+///CJ - Simpler to wait for the process to finish and check the stdout and stderr streams
+//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+//                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
+    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
+                     this, SLOT(stdoutReceived()));
+                     
     procArgs << "--conftest";
-    proc->execute("rosegarden-audiofile-importer", procArgs);
-    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
+//    m_proc->execute("rosegarden-audiofile-importer", procArgs);
+    m_proc->start("rosegarden-audiofile-importer", procArgs);
+	m_proc->waitForFinished();
+
+	// Wait for stdout to be processed by stdoutReceived
+	// Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
+	while(m_proc->bytesAvailable() > 0)
+		usleep(10000);
+
+    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
         RG_DEBUG << "StartupTester - No audio file importer available" << endl;
         m_haveAudioFileImporter = false;
         parseStdoutBuffer(m_audioFileImporterMissing);
@@ -76,18 +91,26 @@ StartupTester::run()
         RG_DEBUG << "StartupTester - Audio file importer OK" << endl;
         m_haveAudioFileImporter = true;
     }
-    delete proc;
+    delete m_proc;
     procArgs = QStringList();
     m_audioFileImporterMutex.unlock();
 
     //setup "rosegarden-project-package" process
-    proc = new QProcess;
+    m_proc = new QProcess;
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
+//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
+                     this, SLOT(stdoutReceived()));
     procArgs << "--conftest";
-    proc->execute("rosegarden-project-package", procArgs);
-    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
+//    m_proc->execute("rosegarden-project-package", procArgs);
+    m_proc->start("rosegarden-project-package", procArgs);
+	m_proc->waitForFinished();
+
+	// Wait for stdout to be processed by stdoutReceived
+	while(m_proc->bytesAvailable() > 0)
+		usleep(10000);
+
+    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
         m_haveProjectPackager = false;
         // rosegarden-project-package ran but exited with an error code
         RG_DEBUG << "StartupTester - No project packager available" << endl;
@@ -97,18 +120,26 @@ StartupTester::run()
         RG_DEBUG << "StartupTester - Project packager OK" << endl;
         m_haveProjectPackager = true;
     }
-    delete proc;
+    delete m_proc;
     procArgs = QStringList();
     m_projectPackagerMutex.unlock();
 
     //setup "rosegarden-lilypondview" process
-    proc = new QProcess();
+    m_proc = new QProcess();
     m_stdoutBuffer = "";
-    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
-                     this, SLOT(stdoutReceived(QProcess *, char *, int)));
+//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
+    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
+                     this, SLOT(stdoutReceived()));
     procArgs << "--conftest";
-    proc->execute("rosegarden-lilypondview", procArgs);
-    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
+//    m_proc->execute("rosegarden-lilypondview", procArgs);
+    m_proc->start("rosegarden-lilypondview", procArgs);
+	m_proc->waitForFinished();
+
+	// Wait for stdout to be processed by stdoutReceived
+	while(m_proc->bytesAvailable() > 0)
+		usleep(10000);
+
+    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
         RG_DEBUG << "StartupTester - No lilypondview available" << endl;
         m_haveLilyPondView = false;
         parseStdoutBuffer(m_lilyPondViewMissing);
@@ -120,7 +151,8 @@ StartupTester::run()
             LilyPondOptionsDialog::setDefaultLilyPondVersion(re.cap(1));
         }
     }
-    delete proc;
+    delete m_proc;
+    	
     m_lilyPondViewMutex.unlock();
 }
 
@@ -143,9 +175,11 @@ StartupTester::isReady()
 }
 
 void
-StartupTester::stdoutReceived(QProcess *, char *buffer, int len)
+//StartupTester::stdoutReceived(QProcess *, char *buffer, int len)
+StartupTester::stdoutReceived()
 {
-    m_stdoutBuffer += QString::fromLatin1(buffer, len);
+//    m_stdoutBuffer += QString::fromLatin1(buffer, len);
+	m_stdoutBuffer.append(m_proc->readAllStandardOutput());
 }
 
 void

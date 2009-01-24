@@ -53,12 +53,14 @@ signals:
     void newerVersionAvailable(QString);
 
 protected slots:
-    void stdoutReceived(QProcess *, char *, int);
+//    void stdoutReceived(QProcess *, char *, int);
+    void stdoutReceived();
 
     void slotHttpResponseHeaderReceived(const QHttpResponseHeader &);
     void slotHttpDone(bool);
 
 protected:
+	QProcess* m_proc;
     bool m_ready;
     QMutex m_projectPackagerMutex;
     QMutex m_lilyPondViewMutex;
@@ -69,7 +71,8 @@ protected:
     QStringList m_lilyPondViewMissing;
     bool m_haveAudioFileImporter;
     QStringList m_audioFileImporterMissing;
-    QString m_stdoutBuffer;
+//    QString m_stdoutBuffer;
+    QByteArray m_stdoutBuffer;
     bool m_versionHttpFailed;
     void parseStdoutBuffer(QStringList &target);
     bool isVersionNewerThan(QString, QString);
