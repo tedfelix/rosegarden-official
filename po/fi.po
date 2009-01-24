@@ -5,19 +5,19 @@
 #
 # Heikki Johannes Junes <hjunes@cc.hut.fi>, 2006.
 # Asmo Koskinen <asmo.koskinen@arkki.info>, 2006.
-# Heikki Junes <hjunes@ltl.tkk.fi>, 2007.
+# Heikki Junes <hjunes@ltl.tkk.fi>, 2007, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: fi\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-01-23 12:49-0500\n"
-"PO-Revision-Date: 2008-10-15 00:21+0300\n"
+"PO-Revision-Date: 2009-01-24 23:59+0200\n"
 "Last-Translator: Heikki Junes\n"
 "Language-Team:  <fi@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: Lokalize 0.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../src/commands/segment/SegmentSplitByPitchCommand.cpp:40
@@ -1271,7 +1271,7 @@ msgid ""
 "%1|Requested file (%2)\n"
 "*.wav|WAV files (*.wav)"
 msgstr ""
-"%1|Vaaditut tiedostot (%2)\n"
+"%1|Vaadittu tiedosto (%2)\n"
 "*.wav|WAV-tiedostot (*.wav)"
 
 #: ../src/gui/dialogs/FileLocateDialog.cpp:67
@@ -2316,7 +2316,7 @@ msgstr "Kynnys"
 
 #: ../src/gui/dialogs/AudioSplitDialog.cpp:135
 msgid "<no preview generated for this audio file>"
-msgstr "<esikatselua ei tehty tälle äänitiedostolle>"
+msgstr "<esikatselua ei luotu tälle äänitiedostolle>"
 
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:63
 msgid "Audio Plugin"
@@ -2359,7 +2359,7 @@ msgstr "<portit>"
 
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:123
 msgid "Input and output port counts."
-msgstr "Sisään- ja ulostuloporttien määrä."
+msgstr "Sisään- ja ulostuloporttien määrät."
 
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:125
 #: ../src/gui/dialogs/AudioPluginDialog.cpp:384
@@ -3220,7 +3220,7 @@ msgstr "  Suurennos:  "
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1722
 msgid "File \"%1\" does not exist"
-msgstr "Tiedosta \"%1\" ei ole olemassa"
+msgstr "Tiedostoa \"%1\" ei ole olemassa"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:1728
 msgid "File \"%1\" is actually a directory"
@@ -3367,7 +3367,7 @@ msgstr "Syötettävän tyhjän alueen kesto"
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2634
 msgid "This function needs no more than one segment to be selected."
-msgstr "Tämä toiminto ei tarvitse kuin yhden valitun osan."
+msgstr "Tämä toiminto tarvitsee vain yhden valitun osan."
 
 #: ../src/gui/application/RosegardenGUIApp.cpp:2657
 msgid "Can't join Audio segments"
@@ -6357,7 +6357,7 @@ msgstr "Siirrä osia"
 #: ../src/gui/editors/segment/segmentcanvas/SegmentResizer.cpp:248
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:382
 msgid "Hold Shift to avoid snapping to beat grid"
-msgstr "Klikkaa Shift välttääksesi iskuruudukkoon lukkiutumisen"
+msgstr "Pidä Shift pohjassa välttääksesi iskuruudukkoon lukkiutumisen"
 
 #: ../src/gui/editors/segment/segmentcanvas/SegmentSelector.cpp:483
 msgid ""
@@ -6462,7 +6462,7 @@ msgstr "Muuta kertautuva osa todellisiksi kopioiksi"
 
 #: ../src/gui/editors/segment/TrackEditor.cpp:643
 msgid "Turn Repeating Segments into Real Copies"
-msgstr "Muuta kertautuvat osat todellisiksi kopioiksi"
+msgstr "Muuta kerrattavat osat aidoiksi kopioiksi"
 
 #: ../src/gui/editors/segment/TrackEditor.cpp:807
 msgid ""
@@ -6470,11 +6470,11 @@ msgid ""
 "instead."
 msgstr ""
 "Et voi pudottaa tiedostoja Rosegardenille tältä asiakasohjelmalta.  Yritä "
-"Konqueror:in käyttöä sen sijaan."
+"käyttää Konqueror:ia sen sijaan."
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:78
 msgid "Manage Triggered Segments"
-msgstr "Hallitse sysäistäviä osia"
+msgstr "Hallitse sysättäviä osia"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:82
 msgid "ID"
@@ -6491,19 +6491,19 @@ msgstr "Sysääjät"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:108
 msgid "Add a Triggered Segment"
-msgstr "Lisää sysäistävä osa"
+msgstr "Lisää sysättävä osa"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:112
 msgid "Delete a Triggered Segment"
-msgstr "Poista sysäistävä osa"
+msgstr "Poista sysättävä osa"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:116
 msgid "Delete All Triggered Segments"
-msgstr "Poista kaikki sysäistävät osat"
+msgstr "Poista kaikki sysättävät osat"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:120
 msgid "Close the Triggered Segment Manager"
-msgstr "Sulje sysäistävien osien hallitsin"
+msgstr "Sulje sysättävien osien hallitsin"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:162
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:238
@@ -6522,12 +6522,11 @@ msgstr ""
 msgid ""
 "This will remove all triggered segments from the whole composition.  Are you "
 "sure?"
-msgstr ""
-"Tämä poistaa kaikki sysäistävät osat koko sävellyksestä.  Oletko varma?"
+msgstr "Tämä poistaa kaikki sysättävät osat koko sävellyksestä.  Oletko varma?"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:281
 msgid "Remove all triggered segments"
-msgstr "Poista kaikki sysäistävät osat"
+msgstr "Poista kaikki sysättävät osat"
 
 #: ../src/gui/editors/segment/TriggerSegmentManager.cpp:306
 msgid "Trigger Segment Duration"
@@ -6983,13 +6982,12 @@ msgid "Channel out"
 msgstr "Kanava ulos"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:99
-#, fuzzy
 msgid ""
 "<qt>Use program changes from an external source to manipulate these controls "
 "(only valid for the currently-active track) [Shift+P]</qt>"
 msgstr ""
-"<qt>käytä ohjelmamuutoksia ulkosesta lähteestä muuttaaksesi näitä valintoja "
-"(pätee vain nyt aktiivisena olevalle raidalle)</qt>"
+"<qt>Käytä ulkoisen lähteen ohjelman muutoksia muuttaaksesi näitä valintoja "
+"(pätee vain nyt aktiivisena olevalle raidalle) [Shift+P]</qt>"
 
 #: ../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp:101
 msgid "Receive external program changes"
@@ -8705,7 +8703,7 @@ msgstr "Muu"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:154
 msgid "Triggered Segment Properties"
-msgstr "Sysäistävän osan ominaisuudet"
+msgstr "Sysättävän osan ominaisuudet"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:159
 msgid "Label:  "
@@ -8789,7 +8787,7 @@ msgstr "Avaa Asiantuntijan tapahtumamuokkaimessa"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1570
 msgid "%1 - Triggered Segment: %2"
-msgstr "%1 - sysäistävä osa: %2"
+msgstr "%1 - sysättävä osa: %2"
 
 #: ../src/gui/editors/eventlist/EventView.cpp:1585
 msgid "%1 - Segment Track #%2 - Event List"
@@ -10062,7 +10060,7 @@ msgstr "varoitus: ylipitkä tahti katkaistiin tässä"
 
 #: ../src/document/io/LilyPondExporter.cpp:2383
 msgid "warning: bar too short, padding with rests"
-msgstr ""
+msgstr "varoitus: liian lyhyt tahti, täytetään tauoilla"
 
 #: ../src/document/MultiViewCommandHistory.cpp:311
 msgid "Nothing to undo"
@@ -11588,3 +11586,4 @@ msgstr "Mensuraali"
 #: ../data/styles/styles.cpp:4
 msgid "Triangle"
 msgstr "Kolmio"
+
