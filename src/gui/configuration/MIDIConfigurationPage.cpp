@@ -32,6 +32,8 @@
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
+#include "misc/Debug.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QFileDialog>
@@ -65,6 +67,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
         TabbedConfigurationPage(parent, name),
         m_midiPitchOctave(0)
 {
+//    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR" << endl;
     // set the document in the super class
     m_doc = doc;
 
@@ -320,6 +323,7 @@ MIDIConfigurationPage::slotSoundFontChoose()
 void
 MIDIConfigurationPage::apply()
 {
+    RG_DEBUG << "MIDI CONFIGURATION PAGE SETTINGS APPLIED" << endl;
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 

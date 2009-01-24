@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,6 +20,7 @@
 
 #include "TabbedConfigurationPage.h"
 #include "gui/editors/eventlist/EventView.h"
+
 #include <QString>
 #include <QCheckBox>
 #include <QSpinBox>
@@ -99,9 +99,6 @@ protected:
     QCheckBox *m_jackTransport;
 
 };
-
-
-
 
 }
 
