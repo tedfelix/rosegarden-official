@@ -49,7 +49,7 @@ QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
 UI		= $(wildcard src/*/*/*.ui)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 RCS		= $(wildcard data/ui/*.rc)
-TRANSLATIONS	= $(wildcard ts/*.ts)
+TRANSLATIONS	= $(filter-out ts/rosegarden.ts, $(wildcard ts/*.ts))
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
 
@@ -75,7 +75,7 @@ ts:
 	echo "Updating translations..."
 	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
 	mkdir -p ts
-	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts $(TRANSLATIONS)
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts ts/rosegarden.ts $(TRANSLATIONS)
 
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
