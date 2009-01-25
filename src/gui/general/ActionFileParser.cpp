@@ -377,7 +377,7 @@ ActionFileParser::translate(QString actionName,
 {
     // These translations are extracted from data/ui/*.rc files.
     // The translations appear in Rosegarden::ActionFileParser context.
-    return tr(text);
+    return QObject::tr(text);
 }                                       
 
 bool
