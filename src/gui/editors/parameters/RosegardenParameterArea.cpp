@@ -69,7 +69,7 @@ RosegardenParameterArea::RosegardenParameterArea(
 	m_classic->setMinimumSize( 400,800 );
 	//m_classic->setMaximumSize( 400,400 );
 	
-	m_scrollView->setWidget(m_classic);
+//	m_scrollView->setWidget(m_classic);
 	m_scrollView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	m_scrollView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 //	m_scrollView->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
@@ -173,84 +173,88 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 {
     RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ")" << endl;
 
+	///CJNFTEMP
+	m_scrollView->setWidget(m_classic);
+	
     // Lookup the container of the specified style.
 
-    QWidget *container;
-    switch (style) {
-    case CLASSIC_STYLE:
-        container = m_classic;
-        break;
-    case TAB_BOX_STYLE:
-        container = m_tabBox;
-        break;
-    default:
-        std::cerr << "setArrangement() was passed an unknown arrangement style."
-        << std::endl;
-        return ;
-    }
+    //QWidget *container;
+    //switch (style) {
+    //case CLASSIC_STYLE:
+        //container = m_classic;
+        //break;
+    //case TAB_BOX_STYLE:
+        //container = m_tabBox;
+        //break;
+    //default:
+        //std::cerr << "setArrangement() was passed an unknown arrangement style."
+        //<< std::endl;
+        //return ;
+    //}
 
-    // Does the current container of the parameter-box widgets differ
-    // from the one that is associated with the currently configured
-    // style?
+    //// Does the current container of the parameter-box widgets differ
+    //// from the one that is associated with the currently configured
+    //// style?
 
-    if (container != m_active) {
+    //if (container != m_active) {
 
-        // Move the parameter boxes from the old container to the new one.
+        //// Move the parameter boxes from the old container to the new one.
 
-        std::vector<RosegardenParameterBox *> sorted;
-        std::set<RosegardenParameterBox *> unsorted;
+        //std::vector<RosegardenParameterBox *> sorted;
+        //std::set<RosegardenParameterBox *> unsorted;
 
-        for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
-            unsorted.insert(m_parameterBoxes[i]);
-        }
+        //for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
+            //unsorted.insert(m_parameterBoxes[i]);
+        //}
 
-        QString previous = "";
+        //QString previous = "";
 
-        while (!unsorted.empty()) {
-            std::set<RosegardenParameterBox *>::iterator i = unsorted.begin();
-            bool have = false;
-            while (i != unsorted.end()) {
-                if ((*i)->getPreviousBox(style) == previous) {
-                    sorted.push_back(*i);
-                    previous = (*i)->getShortLabel();
-                    unsorted.erase(i);
-                    have = true;
-                    break;
-                }
-                ++i;
-            }
-            if (!have) {
-                while (!unsorted.empty()) {
-                    sorted.push_back(*unsorted.begin());
-                    unsorted.erase(unsorted.begin());
-                }
-                break;
-            }
-        }
+        //while (!unsorted.empty()) {
+            //std::set<RosegardenParameterBox *>::iterator i = unsorted.begin();
+            //bool have = false;
+            //while (i != unsorted.end()) {
+                //if ((*i)->getPreviousBox(style) == previous) {
+                    //sorted.push_back(*i);
+                    //previous = (*i)->getShortLabel();
+                    //unsorted.erase(i);
+                    //have = true;
+                    //break;
+                //}
+                //++i;
+            //}
+            //if (!have) {
+                //while (!unsorted.empty()) {
+                    //sorted.push_back(*unsorted.begin());
+                    //unsorted.erase(unsorted.begin());
+                //}
+                //break;
+            //}
+        //}
 
-        for (std::vector<RosegardenParameterBox *>::iterator i = sorted.begin();
-                i != sorted.end(); ++i) {
-            moveWidget(m_active, container, *i);
-            (*i)->showAdditionalControls(style == TAB_BOX_STYLE);
-        }
+        //for (std::vector<RosegardenParameterBox *>::iterator i = sorted.begin();
+                //i != sorted.end(); ++i) {
+            //moveWidget(m_active, container, *i);
+            //(*i)->showAdditionalControls(style == TAB_BOX_STYLE);
+        //}
 
-        // Switch the widget stack to displaying the new container.
+        //// Switch the widget stack to displaying the new container.
 
-        switch (style) {
-        case CLASSIC_STYLE:
-            setCurrentWidget(m_scrollView);
-            break;
-        case TAB_BOX_STYLE:
-            setCurrentWidget(m_tabBox);
-            break;
-        }
-    }
+        //switch (style) {
+        //case CLASSIC_STYLE:
+            //setCurrentWidget(m_scrollView);
+            //break;
+        //case TAB_BOX_STYLE:
+            //setCurrentWidget(m_tabBox);
+            //break;
+        //}
+    //}
 
-    // Record the identity of the active container, and the associated
-    // arrangement style.
+    //// Record the identity of the active container, and the associated
+    //// arrangement style.
 
-    m_active = container;
-    m_style = style;
+    //m_active = container;
+    //m_style = style;
+
 }
 
 void RosegardenParameterArea::moveWidget(QWidget *old_container,

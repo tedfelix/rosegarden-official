@@ -417,9 +417,9 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-//    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
-//                                    settings.value("sidebarstyle",
-//                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
+    m_parameterArea->setArrangement((RosegardenParameterArea::Arrangement)
+                                    settings.value("sidebarstyle",
+                                    RosegardenParameterArea::CLASSIC_STYLE).toUInt());
 
 //    m_dockLeft->update();
 
