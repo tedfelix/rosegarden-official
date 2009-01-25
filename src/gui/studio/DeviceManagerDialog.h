@@ -34,7 +34,7 @@ class QTableWidget;
 class QTableWidgetItem;
 class QPushButton;
 class QCloseEvent;
-
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
@@ -87,6 +87,8 @@ protected:
 private:
     RosegardenGUIDoc *m_document;
     Studio *m_studio;
+	
+	QDialogButtonBox * m_dialogButtonBox;
 
     QPushButton *m_deletePlayButton;
     QPushButton *m_deleteRecordButton;

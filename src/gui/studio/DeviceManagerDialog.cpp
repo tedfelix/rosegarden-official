@@ -66,6 +66,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QShortcut>
+#include <QDialogButtonBox>
 
 // #include <kglobal.h>
 // #include <kstandardshortcut.h>
@@ -93,7 +94,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     mainBox->setContentsMargins(10, 10, 10, 10);
     QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
     mainLayout->setSpacing(10);
-
+	
+	resize( 780, 500 );
+	
     setWindowTitle(tr("Manage MIDI Devices"));
 
     QGroupBox *groupBox = new QGroupBox(tr("Play devices"), mainBox);
@@ -159,11 +162,19 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     connect(m_banksButton, SIGNAL(clicked()), this, SLOT(slotSetBanks()));
     connect(m_controllersButton, SIGNAL(clicked()), this, SLOT(slotSetControllers()));
 
-    connect(m_playTable, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotPlayValueChanged (int, int)));
-    connect(m_playTable, SIGNAL(currentChanged(int, int)),
-            this, SLOT(slotPlayDeviceSelected (int, int)));
-
+	
+	/* // old:
+	connect(m_playTable, SIGNAL(valueChanged(int, int)),
+			this, SLOT(slotPlayValueChanged (int, int)));
+	connect(m_playTable, SIGNAL(currentChanged(int, int)),
+			this, SLOT(slotPlayDeviceSelected (int, int)));
+	*/
+// 	connect(m_playTable, SIGNAL(cellChanged(int, int)),
+// 			this, SLOT(slotPlayValueChanged (int, int)));
+	connect(m_playTable, SIGNAL(cellChanged(int, int)),
+			this, SLOT(slotPlayDeviceSelected (int, int)));
+	
+	
     groupBox = new QGroupBox(tr("Record devices"), mainBox);
     groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
@@ -192,6 +203,9 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 // 	m_recordTable->setSelectionMode( QAbstractItemView::ExtendedSelection );
 	
     groupBoxLayout->addWidget(m_recordTable);
+	
+	
+	
 
     frame = new QFrame(groupBox);
     vlayout = new QGridLayout(frame);
@@ -228,7 +242,11 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     setMinimumHeight(400);
     setMinimumWidth(600);
 
-    QFrame* btnBox = new QFrame(mainBox);
+    
+	/*
+	// replaced by QDialogButtonBox 
+	//
+	QFrame* btnBox = new QFrame(mainBox);
     btnBox->setContentsMargins(0, 0, 0, 0);
     QHBoxLayout* layout = new QHBoxLayout(btnBox);
     layout->setSpacing(10);
@@ -242,6 +260,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     layout->addStretch(10);
     layout->addWidget(closeButton);
     layout->addSpacing(5);
+	*/
 
 	/*
     KAction* close = KStandardAction::close(this,
@@ -250,8 +269,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	*/
     QAction *close = createAction("file_close", SLOT(slotClose()) );
 
-    closeButton->setText(close->text());
-    connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
+//     closeButton->setText(close->text());
+//     connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
 
     mainBox->setLayout(mainLayout);
 
@@ -283,7 +302,38 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 
     //    enableButtonOK(false);
     //    enableButtonApply(false);
-
+	
+	
+	    // setup dialog buttons
+	//
+	QDialogButtonBox::StandardButtons sbuttons = \
+//			QDialogButtonBox::Ok |
+			QDialogButtonBox::Close | 
+//			QDialogButtonBox::Apply |
+//			QDialogButtonBox::RestoreDefaults |
+			QDialogButtonBox::Help;
+    //QDialogButtonBox *
+	m_dialogButtonBox = new QDialogButtonBox( sbuttons, Qt::Horizontal, this );
+	m_dialogButtonBox->setObjectName( "dialog_base_button_box" );
+	mainLayout->addWidget( m_dialogButtonBox );
+    
+    // fist disable the Apply button
+	QPushButton * btApply;
+	btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
+	if( btApply )
+		btApply->setEnabled( false );
+	
+    // setup connctions for the Buttons of QDialogButtonBox:
+	//
+    //@@@### this connection doesn't work: - but why ???
+//     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), \
+//             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton * button)) );
+//	connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+	connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotClose()));
+	//
+	
+	//
+	
 }
 
 DeviceManagerDialog::~DeviceManagerDialog()
@@ -427,7 +477,7 @@ DeviceManagerDialog::populate()
 		QComboBox *	combo = new QComboBox( m_recordTable );
 		combo->addItems( m_recordConnections );
 		combo->setCurrentIndex( currentConnectionIndex );
-		m_playTable->setCellWidget( deviceCount, RECORD_CONNECTION_COL, combo );
+		m_recordTable->setCellWidget( deviceCount, RECORD_CONNECTION_COL, combo );
 		
 		/*
         Q3CheckTableItem *check = new Q3CheckTableItem(m_recordTable, QString());

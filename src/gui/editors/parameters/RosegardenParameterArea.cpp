@@ -66,7 +66,7 @@ RosegardenParameterArea::RosegardenParameterArea(
 	
 	//### how to make this self-adjusting (to the size of child widgets)??
 	// without this, the size tends to become 0
-	m_classic->setMinimumSize( 400,800 );
+//	m_classic->setMinimumSize( 400,800 );
 	//m_classic->setMaximumSize( 400,400 );
 	
 //	m_scrollView->setWidget(m_classic);
