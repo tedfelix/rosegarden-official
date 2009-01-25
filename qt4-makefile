@@ -48,6 +48,8 @@ OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
 UI		= $(wildcard src/*/*/*.ui)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
+RCS		= $(wildcard data/ui/*.rc)
+TRANSLATIONS	= $(wildcard ts/rosegarden_*.ts)
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
 
@@ -69,14 +71,18 @@ rosegarden:	$(OBJECTS)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
-ts:	$(HEADERS) $(SOURCES)
-	mkdir -p ts && $(LUPDATE) $(HEADERS) $(SOURCES) -ts ts/rosegarden.ts
+ts:
+	echo "Updating translations..."
+	mkdir -p ts
+	$(LUPDATE) $(HEADERS) $(SOURCES) $(RCS) -ts ts/rosegarden.ts $(TRANSLATIONS)
 
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
 
 test:
 	echo $(QSOURCES)
+
+.PHONY: ts
 
 include dependencies
 
