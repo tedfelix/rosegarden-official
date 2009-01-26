@@ -57,7 +57,7 @@ public:
     // Add a rosegarden parameter box to the list that are to be displayed.
 
     void addRosegardenParameterBox(RosegardenParameterBox *b);
-
+	void setScrollAreaWidget();
 
     // List the supported methods of arranging the various parameter-box
     // widgets within the parameter area.
@@ -91,8 +91,8 @@ private:
     void moveWidget(QWidget *old_container, QWidget *new_container,
                     RosegardenParameterBox *box);
 
-//     Q3ScrollView *m_scrollView; // Holds the m_classic container
-	QScrollArea *m_scrollView;	
+//     Q3ScrollView *m_scrollArea; // Holds the m_classic container
+	QScrollArea *m_scrollArea;	
 	
 	QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
 	QVBoxLayout *m_classicLayout;

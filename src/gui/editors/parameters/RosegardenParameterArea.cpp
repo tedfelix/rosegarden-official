@@ -49,68 +49,37 @@ RosegardenParameterArea::RosegardenParameterArea(
 	)	//, WFlags f)
 	: QStackedWidget(parent),//, name),//, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
-//         m_scrollView(new Q3ScrollView(this, 0, Qt::WStaticContents)),
-		m_scrollView( new QScrollArea(this) ),
-// 		m_classic(new QWidget(m_scrollView->viewport())),
-		m_classic(0),
+		m_scrollArea( new QScrollArea(this) ),
+ 		m_classic(new QWidget()),
 		m_classicLayout( new QVBoxLayout(m_classic) ),
         m_tabBox(new QTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
 	setObjectName( name );
-	
-	
-	m_classic = new QWidget( m_scrollView );
+		
 	m_classic->setLayout(m_classicLayout);
 	
-	//### how to make this self-adjusting (to the size of child widgets)??
-	// without this, the size tends to become 0
-//	m_classic->setMinimumSize( 400,800 );
-	//m_classic->setMaximumSize( 400,400 );
-	
-//	m_scrollView->setWidget(m_classic);
-	m_scrollView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	m_scrollView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-//	m_scrollView->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
-	
-	// set a dark background
-// 	m_scrollView->setBackgroundRole(QPalette::Dark);
-	
-	//
-	QSizePolicy poli;
-// 	m_scrollView->setResizePolicy(QScrollArea::AutoOneFit);
-	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );		//@@@ was AutoOneFit
-	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
-	m_scrollView->setSizePolicy( poli );
-	// */
-	
-	/*
-    m_scrollView->addChild(m_classic);
-	m_scrollView->setLayout( m_classicLayout );
-    m_scrollView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-	m_scrollView->setVScrollBarMode(Q3ScrollView::AlwaysOn);
-    m_scrollView->setResizePolicy(Q3ScrollView::AutoOneFit);
-	*/
+	//m_scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+	// Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
+	m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 	
 	// add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-	addWidget(m_scrollView);//, CLASSIC_STYLE);	//&&& 
+	addWidget(m_scrollArea);//, CLASSIC_STYLE);	//&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
 	addWidget(m_tabBox); //, TAB_BOX_STYLE);
 	
-	setCurrentWidget( m_scrollView );
+	setCurrentWidget( m_scrollArea );
 	
-	//m_scrollView->setVisible( true );
-
+	//m_scrollArea->setVisible( true );
 }
 
 void RosegardenParameterArea::addRosegardenParameterBox(
     RosegardenParameterBox *b)
 {
     RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox" << endl;
-
 	
     // Check that the box hasn't been added before.
 
@@ -122,12 +91,6 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // Append the parameter box to the list to be displayed.
      m_parameterBoxes.push_back(b);
  
-    /*
-    //### Painter not active on create?? ... come me back to setting minimum width.
-    m_scrollView->setMinimumWidth(std::max(m_scrollView->minimumWidth(),
-                                           b->sizeHint().width()) + 8);
-    */
-
     // Create a titled group box for the parameter box, parented by the
     // classic layout widget, so that it can be used to provide a title
     // and outline, in classic mode. Add this container to an array that
@@ -148,15 +111,11 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 	// add the ParameterBox to the Layout
     box->layout()->addWidget(b);
 	
-	
-	
     if (m_spacing)
         delete m_spacing;
     m_spacing = new QFrame(m_classic);
     m_classicLayout->addWidget(m_spacing);
     m_classicLayout->setStretchFactor(m_spacing, 100);
-	
-	
 
     // Add the parameter box to the current container of the displayed
     // widgets, unless the current container has been set up yet.
@@ -169,13 +128,15 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 // 	update();
 }
 
+void RosegardenParameterArea::setScrollAreaWidget()
+{
+	m_scrollArea->setWidget(m_classic);
+}
+	
 void RosegardenParameterArea::setArrangement(Arrangement style)
 {
     RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ")" << endl;
-
-	///CJNFTEMP
-	m_scrollView->setWidget(m_classic);
-	
+	//CJ-TODO Kill this fcn or implement Tab Style
     // Lookup the container of the specified style.
 
     //QWidget *container;
@@ -241,7 +202,7 @@ void RosegardenParameterArea::setArrangement(Arrangement style)
 
         //switch (style) {
         //case CLASSIC_STYLE:
-            //setCurrentWidget(m_scrollView);
+            //setCurrentWidget(m_scrollArea);
             //break;
         //case TAB_BOX_STYLE:
             //setCurrentWidget(m_tabBox);

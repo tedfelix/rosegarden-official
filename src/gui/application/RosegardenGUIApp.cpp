@@ -407,9 +407,12 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_parameterArea->addRosegardenParameterBox(m_trackParameterBox);
     m_instrumentParameterBox = new InstrumentParameterBox(doc, m_parameterArea);
     m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
-
 //    m_instrumentParameterBox = new InstrumentParameterBox(doc, 0);
 //    m_parameterArea->addRosegardenParameterBox(m_instrumentParameterBox);
+
+	// Now that we've added the parameter boxes, we set this as the QScrollArea's widget
+	m_parameterArea->setScrollAreaWidget();
+	m_dockLeft->setMaximumWidth(m_dockLeft->sizeHint().width());
 
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.

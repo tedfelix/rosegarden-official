@@ -211,7 +211,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         m_compositionView, "bottombarbuttons");
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
 
-
 //    m_bottomStandardRuler->hide();
 
     m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
@@ -229,6 +228,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     m_trackButtonScroll = new QDeferScrollView(this);
     grid->addWidget(m_trackButtonScroll, 3, 0);
+
 
 //    m_trackButtonScroll->hide();
 
