@@ -99,6 +99,10 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	
     setWindowTitle(tr("Manage MIDI Devices"));
 
+	
+	// setup playback devices
+	// **************************************************************************
+	//
     QGroupBox *groupBox = new QGroupBox(tr("Play devices"), mainBox);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
@@ -125,6 +129,10 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	m_playTable->setSelectionBehavior( QAbstractItemView::SelectRows );
     groupBoxLayout->addWidget(m_playTable);
 
+	
+	// setup action buttons for playback devices
+	// **************************************************************************
+	//
     QFrame *frame = new QFrame(groupBox);
     QGridLayout *vlayout = new QGridLayout(frame);
     groupBoxLayout->addWidget(frame);
@@ -155,6 +163,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     m_banksButton->setToolTip(tr("View and edit Banks and Programs for the selected device"));
     m_controllersButton->setToolTip(tr("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
 
+	// connect action buttons - for playback devices
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
     connect(m_deletePlayButton, SIGNAL(clicked()), this, SLOT(slotDeletePlayDevice()));
     connect(m_importButton, SIGNAL(clicked()), this, SLOT(slotImport()));
@@ -175,7 +184,10 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 			this, SLOT(slotPlayDeviceSelected (int, int)));
 	
 	
-    groupBox = new QGroupBox(tr("Record devices"), mainBox);
+	// setup record devices
+	// **************************************************************************
+	//
+	groupBox = new QGroupBox(tr("Record devices"), mainBox);
     groupBoxLayout = new QHBoxLayout;
     mainLayout->addWidget(groupBox);
 
@@ -206,8 +218,10 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	
 	
 	
-
-    frame = new QFrame(groupBox);
+	// setup action buttons - for record devices
+	// **************************************************************************
+	//
+	frame = new QFrame(groupBox);
     vlayout = new QGridLayout(frame);
     groupBoxLayout->addWidget(frame);
 
@@ -225,9 +239,12 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     addButton->setToolTip(tr("Create a new Record device"));
     m_deleteRecordButton->setToolTip(tr("Delete the selected device"));
 
+	// connect action buttons - for record devices
     connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
     connect(m_deleteRecordButton, SIGNAL(clicked()), this, SLOT(slotDeleteRecordDevice()));
 
+	
+	// 
     connect(m_recordTable, SIGNAL(currentChanged(int, int)),
             this, SLOT(slotRecordDeviceSelected (int, int)));
     connect(m_recordTable, SIGNAL(valueChanged(int, int)),
@@ -304,7 +321,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
     //    enableButtonApply(false);
 	
 	
-	    // setup dialog buttons
+	// setup dialog buttons
+	// **************************************************************************
 	//
 	QDialogButtonBox::StandardButtons sbuttons = \
 //			QDialogButtonBox::Ok |
@@ -324,6 +342,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 		btApply->setEnabled( false );
 	
     // setup connctions for the Buttons of QDialogButtonBox:
+	// **************************************************************************
 	//
     //@@@### this connection doesn't work: - but why ???
 //     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), \
@@ -334,7 +353,8 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	
 	//
 	
-}
+}// end of constructor
+
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
