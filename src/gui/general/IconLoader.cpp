@@ -84,8 +84,11 @@ IconLoader::loadPixmap(QString name)
 QPixmap
 IconLoader::loadPixmap(QString dir, QString name)
 {
+    bool light = false;
     QColor bg = QApplication::palette().window().color();
-    if (bg.red() + bg.green() + bg.blue() > 384) { // light background
+    if (bg.red() + bg.green() + bg.blue() > 384) light = true;
+    
+    if (light) {
         QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
         if (pmap.isNull()) {
             pmap = QPixmap(QString("%1/%2.png").arg(dir).arg(name));
