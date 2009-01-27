@@ -108,6 +108,7 @@
     <!-- JAS corrected typo old text="midi Mi&amp;ixer" -->
     <Action name="midi_mixer" text="MIDI Mi&amp;ixer" icon="midimixer" />
   <Separator/>
+  <Action name="open_devices_manager_new" text="Open the new Midi Devices &amp;Manager" icon="manage-midi-devices" />
     <Action name="manage_devices" text="Manage MIDI &amp;Devices" icon="manage-midi-devices" />
     <Action name="manage_synths" text="Manage S&amp;ynth Plugins" icon="manage-synth-plugins" />
     <Action name="manage_metronome" text="Manage &amp;Metronome" />
@@ -322,6 +323,7 @@
 <Separator/>
   <Action name="quantize_selection" />
 <Separator/>
+  <Action name="open_devices_manager_new" />
   <Action name="manage_devices" />
   <Action name="manage_synths" />
   <Action name="midi_mixer" />

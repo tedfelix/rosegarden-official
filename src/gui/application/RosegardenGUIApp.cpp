@@ -170,6 +170,7 @@
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
 #include <gui/kdeext/KTmpStatusMsg.h>
+#include "gui/ui/DevicesManagerNew.h"
 
 #include <Q3Canvas>
 #include <QApplication>
@@ -274,7 +275,8 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 #endif
     m_firstRun(false),
     m_haveAudioImporter(false),
-    m_parameterArea(0)
+    m_parameterArea(0),
+	m_devicesManagerNew(0)
 {
     m_myself = this;
 
@@ -713,6 +715,8 @@ void RosegardenGUIApp::setupActions()
     createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
+	
+	createAction("open_devices_manager_new", SLOT(slotOpenDeviceManagerNew()));
 
 // These were commented out in the old KDE3 code as well
 //    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
@@ -7695,6 +7699,36 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 
     m_doc->jumpToQuickMarker();
 }
+
+
+
+
+
+void RosegardenGUIApp::slotOpenDeviceManagerNew()
+{
+	
+	if( ! m_devicesManagerNew ){
+		m_devicesManagerNew = new DevicesManagerNew( this );
+		//m_devicesManagerNew->setupUi( dynamic_cast<QDialog*>(m_devicesManagerNew) );
+		
+		//devMan->setAttribute(Qt::WA_DeleteOnClose );	// destroys dialog, if close event was accepted
+		
+		// adjust some column widths for better visibility
+		m_devicesManagerNew->m_treeWidget_playbackDevices->setColumnWidth( 0, 200 );	// column, width
+		m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth( 0, 200 );	// column, width
+		m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth( 1, 60 );	// column, width
+		
+		m_devicesManagerNew->move( 60, 40 );
+		
+	}
+	
+	m_devicesManagerNew->show();
+// 	m_devicesManagerNew->raise();
+// 	m_devicesManagerNew->activateWindow();
+	
+}
+
+
 
 RosegardenGUIApp *RosegardenGUIApp::m_myself = 0;
 

@@ -1,14 +1,21 @@
 <ui version="4.0" >
  <author>Emanuel Rumpf</author>
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog" >
+ <class>DevicesManagerNewUi</class>
+ <widget class="QDialog" name="DevicesManagerNewUi" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
     <width>760</width>
-    <height>576</height>
+    <height>584</height>
    </rect>
+  </property>
+  <property name="font" >
+   <font>
+    <family>Sans Serif</family>
+    <pointsize>10</pointsize>
+    <italic>false</italic>
+   </font>
   </property>
   <property name="windowTitle" >
    <string>Midi Devices Manager</string>
@@ -32,7 +39,7 @@
         <item row="0" column="0" colspan="2" >
          <widget class="QTreeWidget" name="m_treeWidget_playbackDevices" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -42,6 +49,15 @@
             <width>340</width>
             <height>140</height>
            </size>
+          </property>
+          <property name="font" >
+           <font>
+            <family>Sans Serif</family>
+            <pointsize>10</pointsize>
+            <weight>50</weight>
+            <bold>false</bold>
+            <kerning>true</kerning>
+           </font>
           </property>
           <property name="autoFillBackground" >
            <bool>false</bool>
@@ -74,6 +90,12 @@
         </item>
         <item row="1" column="1" >
          <widget class="QFrame" name="frame_2" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -84,6 +106,12 @@
         </item>
         <item row="1" column="0" >
          <widget class="QFrame" name="frame" >
+          <property name="sizePolicy" >
+           <sizepolicy vsizetype="Minimum" hsizetype="Preferred" >
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -201,6 +229,12 @@
             <height>100</height>
            </size>
           </property>
+          <property name="font" >
+           <font>
+            <family>Sans Serif</family>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
           <property name="autoFillBackground" >
            <bool>false</bool>
           </property>
@@ -260,6 +294,12 @@
             <width>260</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="font" >
+           <font>
+            <family>Sans Serif</family>
+            <pointsize>10</pointsize>
+           </font>
           </property>
           <column>
            <property name="text" >
@@ -339,7 +379,7 @@
         <item row="0" column="0" colspan="2" >
          <widget class="QTreeWidget" name="m_treeWidget_outputPorts" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+           <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -349,6 +389,12 @@
             <width>320</width>
             <height>0</height>
            </size>
+          </property>
+          <property name="font" >
+           <font>
+            <family>Sans Serif</family>
+            <pointsize>10</pointsize>
+           </font>
           </property>
           <column>
            <property name="text" >
@@ -379,7 +425,13 @@
            <property name="spacing" >
             <number>2</number>
            </property>
-           <property name="margin" >
+           <property name="leftMargin" >
+            <number>0</number>
+           </property>
+           <property name="topMargin" >
+            <number>0</number>
+           </property>
+           <property name="bottomMargin" >
             <number>0</number>
            </property>
            <item>
@@ -503,7 +555,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>DevicesManagerNewUi</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -519,7 +571,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Dialog</receiver>
+   <receiver>DevicesManagerNewUi</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

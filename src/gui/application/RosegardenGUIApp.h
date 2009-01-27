@@ -28,6 +28,7 @@
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
+#include "gui/ui/DevicesManagerNew.h"
 
 #include <QDockWidget>
 #include <QString>
@@ -1530,6 +1531,8 @@ public slots:
     
     void slotJumpToQuickMarker();    
 
+	
+	void slotOpenDeviceManagerNew();
 private:
 
 
@@ -1549,6 +1552,7 @@ private:
     //QDockWidget* m_mainDockWidget;
 	QDockWidget *m_mainDockWidget;
     QDockWidget* m_dockLeft;
+	
 
     /**
      * doc represents your actual document and is created only
@@ -1603,7 +1607,9 @@ private:
 
     AudioPluginManager *m_pluginManager;
 
-    QTimer* m_autoSaveTimer;
+	DevicesManagerNew * m_devicesManagerNew;
+	
+	QTimer* m_autoSaveTimer;
 
     Clipboard *m_clipboard;
 
