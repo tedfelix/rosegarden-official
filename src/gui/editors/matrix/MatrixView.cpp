@@ -919,7 +919,7 @@ void MatrixView::slotMouseLeftCanvasView()
 {
     m_mouseInCanvasView = false;
 //     statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(), 1);
-	statusBar()->showMessage( "default message" );	//### fix default message
+	statusBar()->showMessage( tr("default message") );	//### fix default message
 }
 
 bool MatrixView::applyLayout(int staffNo,

@@ -874,7 +874,7 @@ void RosegardenGUIApp::initStatusBar()
 //			  KTmpStatusMsg::getDefaultId(), 1);
 //	statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
 //			  AlignLeft | AlignVCenter);
-	m_statusBarLabel1 = new QLabel( "status", this );
+	m_statusBarLabel1 = new QLabel( tr("status"), this );
 	
 	statusBar()->addPermanentWidget( m_statusBarLabel1 );
 //	statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
