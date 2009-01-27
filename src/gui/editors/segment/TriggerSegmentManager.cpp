@@ -364,7 +364,7 @@ TriggerSegmentManager::slotDelete()
         return ;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warning(this, "", tr("This triggered segment is used %1 time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
+        if (QMessageBox::warning(this, "", tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
 										QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
 		   					) != QMessageBox::Yes )
             return ;

@@ -14525,7 +14525,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     </message>
     <message numerus="yes">
         <location filename="../src/gui/editors/segment/TriggerSegmentManager.cpp" line="367"/>
-        <source>This triggered segment is used %1 time(s) in the current composition.  Are you sure you want to remove it?</source>
+        <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
