@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="en_US">
 <context>
     <name>Dialog</name>
     <message>
@@ -3562,8 +3562,9 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location filename="../src/gui/dialogs/AudioManagerDialog.cpp" line="907"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;About to delete %n audio file permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;About to delete %n audio files permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -7414,15 +7415,17 @@ Example text from file:</source>
     <message numerus="yes">
         <location filename="../src/gui/dialogs/IntervalDialog.cpp" line="305"/>
         <source>up %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>up %n octave and %1</numerusform>
+            <numerusform>up %n octaves and %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/gui/dialogs/IntervalDialog.cpp" line="308"/>
         <source>up %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>up %n octave</numerusform>
+            <numerusform>up %n octaves</numerusform>
         </translation>
     </message>
     <message>
@@ -7433,15 +7436,17 @@ Example text from file:</source>
     <message numerus="yes">
         <location filename="../src/gui/dialogs/IntervalDialog.cpp" line="318"/>
         <source>down %n octave(s) and %1</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>down %n octave and %1</numerusform>
+            <numerusform>down %n octaves and %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/gui/dialogs/IntervalDialog.cpp" line="321"/>
         <source>down %n octave(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>down %n octave</numerusform>
+            <numerusform>down %n octaves</numerusform>
         </translation>
     </message>
     <message>
@@ -8656,8 +8661,9 @@ Double-click to open the marker editor.</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/matrix/MatrixView.cpp" line="1133"/>
         <source>  %n event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>  %n event selected </numerusform>
+            <numerusform>  %n events selected </numerusform>
         </translation>
     </message>
     <message>
@@ -8843,8 +8849,9 @@ Double-click to open the marker editor.</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/matrix/MatrixView.cpp" line="2686"/>
         <source>%1 - %n Segment(s) - %2</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 - %n Segment - %2</numerusform>
+            <numerusform>%1 - %n Segments - %2</numerusform>
         </translation>
     </message>
     <message>
@@ -9780,8 +9787,9 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/notation/NotationView.cpp" line="1779"/>
         <source>%n pixel(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n pixel</numerusform>
+            <numerusform>%n pixels</numerusform>
         </translation>
     </message>
     <message>
@@ -9827,8 +9835,9 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/notation/NotationView.cpp" line="2475"/>
         <source>  %s event(s) selected </source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>  %s event selected </numerusform>
+            <numerusform>  %s events selected </numerusform>
         </translation>
     </message>
     <message>
@@ -9869,8 +9878,9 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/notation/NotationView.cpp" line="3442"/>
         <source>%1 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 - %n Segment - Notation</numerusform>
+            <numerusform>%1 - %n Segments - Notation</numerusform>
         </translation>
     </message>
     <message>
@@ -11248,8 +11258,9 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location filename="../src/gui/application/RosegardenGUIApp.cpp" line="2638"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Split %n Segment at Time</numerusform>
+            <numerusform>Split %n Segments at Time</numerusform>
         </translation>
     </message>
     <message>
@@ -11766,8 +11777,9 @@ Do you want to save it?</source>
     <message numerus="yes">
         <location filename="../src/document/RosegardenGUIDoc.cpp" line="482"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Delete the audio file recorded during the unsaved session?</numerusform>
+            <numerusform>Delete the %n audio files recorded during the unsaved session?</numerusform>
         </translation>
     </message>
     <message>
@@ -11784,8 +11796,9 @@ Please select any you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location filename="../src/document/RosegardenGUIDoc.cpp" line="520"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>&lt;qt&gt;About to delete %n audio file permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;About to delete %n audio files permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -14499,8 +14512,9 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/segment/TriggerSegmentManager.cpp" line="272"/>
         <source>%1 on %n track(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 on %n track</numerusform>
+            <numerusform>%1 on %n tracks</numerusform>
         </translation>
     </message>
     <message>
@@ -14526,8 +14540,9 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/segment/TriggerSegmentManager.cpp" line="367"/>
         <source>This triggered segment is used %1 time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>This triggered segment is used %1 time in the current composition.  Are you sure you want to remove it?</numerusform>
+            <numerusform>This triggered segment is used %1 times in the current composition.  Are you sure you want to remove it?</numerusform>
         </translation>
     </message>
     <message>
