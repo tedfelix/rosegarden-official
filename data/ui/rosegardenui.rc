@@ -34,7 +34,7 @@
       <Action name="file_export_midi" text="Export &amp;MIDI file..." />
       <Separator/>
       <Action name="file_export_csound" text="Export &amp;Csound score file..." />
-      <Action name="file_export_mup" text="Export M&apm;up file..." />
+      <Action name="file_export_mup" text="Export M&amp;up file..." />
       <Action name="file_export_musicxml" text="Export Music&amp;XML file..." />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
@@ -89,7 +89,7 @@
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
     <Action name="edit_tempos" text="&amp;Open Tempo and Time Signature Editor" />
   <Separator/>
-    <Action name="set_tempo_to_segment_length" text="Set &apm;Tempo to Audio Segment Duration" />
+    <Action name="set_tempo_to_segment_length" text="Set &amp;Tempo to Audio Segment Duration" />
     <Action name="groove_quantize" text="Set Tempos from &amp;Beat Segment" />
   <Separator/>
     <Action name="change_composition_length" text="Change &amp;Composition Start and End..." />
