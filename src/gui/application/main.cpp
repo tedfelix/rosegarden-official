@@ -446,10 +446,14 @@ int main(int argc, char *argv[])
 
     QTranslator rgTranslator;
     //
-    // FIXME: The RG translation is loaded from current directory.
+    //@@@ RG is now run from the build directory. Translations are at locale/.
+    //@@@ When "make install" works, relative directory locale/ should be
+    //@@@ replaced with the install directory, which is(?) one of the following:
+    //@@@   /usr/share/rosegarden/locale or 
+    //@@@   /usr/local/share/rosegarden/locale
     //
     bool rgTranslationsLoaded = 
-      rgTranslator.load("rg_" + QLocale::system().name());
+      rgTranslator.load(QLocale::system().name(), "locale/");
     if ( rgTranslationsLoaded ) {
         RG_DEBUG << "RG translations loaded successfully." << endl;
         app.installTranslator(&rgTranslator);

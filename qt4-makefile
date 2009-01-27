@@ -15,6 +15,7 @@ MOC		= $(QTDIR)/bin/moc-qt4
 UIC		= $(QTDIR)/bin/uic-qt4
 RCC		= $(QTDIR)/bin/rcc
 LUPDATE		= $(QTDIR)/bin/lupdate
+LRELEASE	= $(QTDIR)/bin/lrelease
 
 CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -D'VERSION="THE FUTURE IS SOON"'
 CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
@@ -49,7 +50,7 @@ QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
 UI		= $(wildcard src/*/*/*.ui)
 UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
 RCS		= $(wildcard data/ui/*.rc)
-TRANSLATIONS	= $(filter-out ts/rosegarden.ts, $(wildcard ts/*.ts))
+TRANSLATIONS	= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
 
@@ -75,7 +76,10 @@ ts:
 	echo "Updating translations..."
 	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
 	mkdir -p ts
-	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts ts/rosegarden.ts $(TRANSLATIONS)
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
+locale:
+	$(LRELEASE) $(TRANSLATIONS)
 
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
@@ -83,7 +87,7 @@ clean:
 test:
 	echo $(QSOURCES)
 
-.PHONY: ts
+.PHONY: ts locale
 
 include dependencies
 
