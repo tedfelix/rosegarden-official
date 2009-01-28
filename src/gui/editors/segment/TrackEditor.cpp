@@ -132,7 +132,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
-
+	
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
                                           m_doc,
                                           0.0,
@@ -213,10 +213,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
 //    m_bottomStandardRuler->hide();
 
-    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
+//    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
     grid->addWidget(m_compositionView, 3, 1);
 
+	grid->addWidget(m_bottomStandardRuler, 4, 1);
 //    m_compositionView->hide();
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
@@ -226,7 +227,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     // (must be put in a QScrollView)
     //
-    m_trackButtonScroll = new QDeferScrollView(this);
+//    m_trackButtonScroll = new QDeferScrollView(this);
+	m_trackButtonScroll = new QScrollArea(this);
+	// Vertical scroll bar always off
+	m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+	// Horizontal scroll bar always on hidden gives good spacing with CompositionView widget
+	m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+	m_trackButtonScroll->horizontalScrollBar()->setVisible(false);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
 
@@ -242,26 +249,27 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       canvasHeight,
                                       m_trackButtonScroll->viewport());
 //    m_trackButtons->hide();
-    m_trackButtonScroll->addChild(m_trackButtons);
+//    m_trackButtonScroll->addChild(m_trackButtons);
+	m_trackButtonScroll->setWidget(m_trackButtons);
 
 //    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
 
 //    m_trackButtonScroll->layout()->setMargin(0);
 //	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
 	
- 		m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-     m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+// 		m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+//    m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
 //	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 //	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 	
-     m_trackButtonScroll->setResizePolicy(Q3ScrollView::AutoOneFit);
+//     m_trackButtonScroll->setResizePolicy(Q3ScrollView::AutoOneFit);
 //	QSizePolicy poli;
 //	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
 //	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
 //	m_trackButtonScroll->setSizePolicy( poli );
 	
-    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
-                                         m_compositionView->horizontalScrollBar()->height());
+//    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
+//                                        m_compositionView->horizontalScrollBar()->height());
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));
@@ -282,6 +290,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview, SLOT(slotSetMuteButton(TrackId, bool)));
 
     // connect loop rulers' follow-scroll signals
+    // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
             m_compositionView, SLOT(startAutoScroll(int)));
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
@@ -298,13 +307,16 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
+//	connect(m_vertScrollBar, SIGNAL(valueChanged(int)),
+//		this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     // scrolling with mouse wheel
-    connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
-            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
+///@TODO gotWheelEvent not implemented for QScrollArea
+//    connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
+//            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
     // Connect horizontal scrollbar
     //
@@ -707,7 +719,8 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-     m_trackButtonScroll->setContentsPos(0, y);
+//     m_trackButtonScroll->setContentsPos(0, y);
+m_trackButtonScroll->verticalScrollBar()->setValue(y);
 	
 // 	ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
 //	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );

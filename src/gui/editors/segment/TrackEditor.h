@@ -30,7 +30,8 @@
 class QPaintEvent;
 class QDropEvent;
 class QDragEnterEvent;
-
+class QScrollBar;
+class QScrollArea;
 
 namespace Rosegarden
 {
@@ -46,7 +47,6 @@ class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
 class StandardRuler;
-
 
 /**
  * Global widget for segment edition.
@@ -211,15 +211,17 @@ protected:
     //--------------- Data members ---------------------------------
 
     RosegardenGUIDoc        *m_doc;
-    RulerScale  *m_rulerScale;
+    
+    RulerScale  			*m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
-    StandardRuler              *m_topStandardRuler;
-    StandardRuler              *m_bottomStandardRuler;
+    StandardRuler           *m_topStandardRuler;
+    StandardRuler           *m_bottomStandardRuler;
     TrackButtons            *m_trackButtons;
     CompositionView         *m_compositionView;
     CompositionModel        *m_compositionModel;
-    QDeferScrollView        *m_trackButtonScroll;
+//    QDeferScrollView        *m_trackButtonScroll;
+    QScrollArea		        *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;
@@ -231,6 +233,8 @@ protected:
     SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
 
     double                   m_initialUnitsPerPixel;
+
+private:
 };
 
 
