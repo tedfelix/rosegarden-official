@@ -194,7 +194,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="40"/>
-        <source>Insert Into Slelected Audio track</source>
+        <source>Insert Into Selected Audio track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -14790,17 +14790,17 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/application/main.cpp" line="462"/>
+        <location filename="../src/gui/application/main.cpp" line="466"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/application/main.cpp" line="722"/>
+        <location filename="../src/gui/application/main.cpp" line="726"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/gui/application/main.cpp" line="738"/>
+        <location filename="../src/gui/application/main.cpp" line="742"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to &lt;a href=&quot;http://www.rosegardenmusic.com/&quot;&gt;http://www.rosegardenmusic.com/&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>

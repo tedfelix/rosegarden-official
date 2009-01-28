@@ -75,7 +75,7 @@ rosegarden:	$(OBJECTS)
 ts:
 	echo "Updating translations..."
 	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
-	mkdir -p ts
+	mkdir -p locale
 	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
 
 locale:

@@ -23,7 +23,7 @@
   <Menu name="action">
     <Text>&amp;Action</Text>
     <Action name="preview_audio" text="Play Preview" icon="transport-play" />
-    <Action name="insert_audio" text="Insert Into Slelected Audio track" icon="insert_audio_into_track" />
+    <Action name="insert_audio" text="Insert Into Selected Audio track" icon="insert_audio_into_track" />
     <!-- JAS No text in menus for 'distribute_audio' action name. -->
     <Action name="distribute_audio" text=""/>
   </Menu>
