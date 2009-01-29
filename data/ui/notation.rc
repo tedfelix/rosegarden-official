@@ -94,7 +94,7 @@
     </Menu>
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
-    <Action name="show_track_headers" text="Show &amp;track Headers" />
+    <Action name="show_track_headers" text="Show &amp;Track Headers" />
   </Menu>
 
   <Menu name="document">
@@ -123,7 +123,7 @@
     <Action name="set_segment_duration" text="Set Segment &amp;Duration..." />
   <Separator/>
     <Action name="transpose_segment" text="Transpose by &amp;Inverval..." />
-    <Action name="switch_preset" text="&amp;convert Notation For..." />
+    <Action name="switch_preset" text="&amp;Convert Notation For..." />
   </Menu>
 
   <Menu name="Notes">
@@ -227,7 +227,7 @@
     <Action name="remove_indications" />
   <Separator/>
     <Action name="tuplet" text="Tupl&amp;et..." icon="group-tuplet" shortcut="Ctrl+T" />
-    <Action name="simple_tuplet" text="&amp;triplet" icon="group-simple-tuplet" shortcut="Ctrl+R" />
+    <Action name="simple_tuplet" text="&amp;Triplet" icon="group-simple-tuplet" shortcut="Ctrl+R" />
     <Action name="break_tuplets" text="U&amp;ntuplet" />
   <Separator/>
     <!-- JAS No text in menus for 'grace' action name. -->
@@ -238,7 +238,7 @@
 	  <!--  <Action name="glissando"/> -->
     <Menu name="Slurs">
       <text>Slur &amp;Position</text>
-      <Action name="restore_slurs" text="&amp;restore Slur Positions" />
+      <Action name="restore_slurs" text="&amp;Restore Slur Positions" />
     <Separator/>
       <Action name="slurs_above" text="Slur &amp;Above" />
       <Action name="slurs_below" text="Slur &amp;Below" />
@@ -366,7 +366,7 @@
       <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="menu-dotted-semiquaver" />
       <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="menu-dotted-demisemi" />
     <Separator/>
-      <Action name="toggle_dot" text="to&amp;ggle Dot" />
+      <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />
     </Menu>
     <Menu noMerge="1" name="Rests">
@@ -388,7 +388,7 @@
       <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" />
       <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" />
     <Separator/>
-      <Action name="toggle_dot" text="to&amp;ggle Dot" />
+      <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_note_to_rest" text="Switch from &amp;Note to Rest" shortcut="T" />
     </Menu>
     <Menu noMerge="1" name="Accidentals">
@@ -403,7 +403,7 @@
     </Menu>
     <Menu noMerge="1" name="Clefs">
       <text>&amp;Clefs</text>
-      <Action name="treble_clef" text="&amp;treble Clef" icon="clef-treble" />
+      <Action name="treble_clef" text="&amp;Treble Clef" icon="clef-treble" />
       <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" />
       <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" />
       <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" />
@@ -580,7 +580,7 @@
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
       <Action name="show_chords_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
-      <Action name="show_raw_note_ruler" text="ShowRa&amp;w Note Ruler" checked="false" append="show_merge" />
+      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="false" append="show_merge" />
       <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
     </Menu>
   <Separator append="show_merge" />
