@@ -84,7 +84,7 @@
   <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Poperty Ruler" />
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" />
     <!-- JAS No text in menus for 'show_controller_event_ruler' action name. -->
     <Action name="show_controller_events_ruler" />
 <!--    <Action name="add_control_ruler"/> -->
@@ -303,7 +303,7 @@
       <Action name="transpose_up_octave" text="Up an &amp;Octave" shortcut="Ctrl+Up" />
       <Action name="transpose_down_octave" text="Down an Octa&amp;ve" shortcut="Ctrl+Down" />
     <Separator/>
-      <Action name="general_transpose" text="&amp;transpose by Semitones..." />
+      <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
       <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
       <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
     </Menu>
@@ -346,7 +346,7 @@
     <!-- JAS for 'select' and 'erase' actions, do they belong to same group as matrix.rc and rosegardenui.rc. -->
     <!-- JAS Other tools in group are not selectable from menu -->
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
-    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
+    <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <Menu noMerge="1" name="Notes">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->

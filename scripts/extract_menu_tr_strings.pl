@@ -33,7 +33,17 @@ print qq{
 
 };
 
+my $file = $ARGV[0];
+my $nextfile = $ARGV[1];
 while (<>) {
+    if ($ARGV[0]) {
+        if ($nextfile ne $ARGV[0]) {
+            $file = $nextfile;
+            $nextfile = $ARGV[0];
+        }
+    } else {
+        $file = $nextfile;
+    }
     my $line = $_;
 
     my $name = "";
@@ -53,8 +63,9 @@ while (<>) {
 
     if ($text) {
         print 'QObject::tr("' . $text . '");';
-        if ($name) { print ' // ' . $name; }
-        print '
+        print ' /* ' . $file;
+        if ($name) { print ' : ' . $name; }
+        print ' */
 ';
     }
 

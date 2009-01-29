@@ -52,7 +52,7 @@
       <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
     </Menu>
   <Separator/>
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Poperty Ruler" />
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" />
     <!-- JAS don't see any text associated with "show_controller_evnents_ruler" action -->
     <Action name="show_controller_events_ruler" />
 <!--    <Action name="add_control_ruler"/> -->
@@ -118,7 +118,7 @@
       <Action name="transpose_up_octave" text="Up an &amp;Octave" shortcut="Ctrl+Up" />
       <Action name="transpose_down_octave" text="Down an Octa&amp;ve" shortcut="Ctrl+Down" />
     <Separator/>
-      <Action name="general_transpose" text="&amp;transpose by Semitones..." />
+      <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
       <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
       <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
     </Menu>
@@ -136,7 +136,7 @@
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
     <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
-    <Action name="erase" text="&amp;Easer" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
     <!-- JAS '&amp;' before the 'R' in rosegardenui.rc -->
     <Action name="resize" text="Resi&amp;ze" icon="resize" shortcut="F6" group="tools_segment" checked="false" />

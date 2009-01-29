@@ -72,9 +72,10 @@ rosegarden:	$(OBJECTS)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
-ts:
-	echo "Updating translations..."
+menu-ts:
 	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
+
+ts:	menu-ts
 	mkdir -p locale
 	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
 
@@ -87,7 +88,7 @@ clean:
 test:
 	echo $(QSOURCES)
 
-.PHONY: ts locale
+.PHONY: ts locale menu-ts
 
 include dependencies
 
