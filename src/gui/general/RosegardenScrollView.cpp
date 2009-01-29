@@ -108,7 +108,7 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     if (m_bottomWidget) {
         m_bottomWidget->reparent(this, 0, QPoint(0, 0));
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
-// 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+ 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
 //		setContentsMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
 	}
 }
@@ -427,7 +427,10 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
         vScrollBarWidth = verticalScrollBar()->width();
 
     m_bottomWidget->setGeometry(r.x(),
-                                r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
+//                                r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
+//CJ r.height is the height of the area having had the margin removed
+//CJ there is, therefore, no need to remove it again here
+                                r.y() + r.height() - hScrollBarHeight,
                                 r.width() - vScrollBarWidth,
                                 bottomWidgetHeight);
 
