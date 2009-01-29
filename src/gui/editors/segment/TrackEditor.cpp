@@ -213,11 +213,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
 //    m_bottomStandardRuler->hide();
 
-//    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
+    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
     grid->addWidget(m_compositionView, 3, 1);
 
-	grid->addWidget(m_bottomStandardRuler, 4, 1);
+//	grid->addWidget(m_bottomStandardRuler, 4, 1);
 //    m_compositionView->hide();
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
