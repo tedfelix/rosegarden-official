@@ -14,7 +14,7 @@
       <Separator/>
       <Action name="file_import_midi" text="Import &amp;MIDI file..." />
       <Action name="file_import_rg21" text="Import &amp;Rosegarden 2.1 file..." />
-      <Action name="file_import_hydrogen" text="Import &amp;Hydogen file..." />
+      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." />
     </Menu>
     <Menu name="merge" append="new_merge">
       <text>&amp;Merge</text>

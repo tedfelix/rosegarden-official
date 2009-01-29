@@ -9,7 +9,7 @@
 <!--  <Action name="collapse_rests" /> -->
   <Action name="collapse_rests_aggressively" text="Collapse Rests" />
 <Separator />
-  <Action name="respell_flat" text="respell as Flat" />
+  <Action name="respell_flat" text="Respell as Flat" />
   <Action name="respell_sharp" text="Respell as Sharp" />
   <Action name="respell_natural" text="Respell as Natural" />
 <Separator />
