@@ -39,6 +39,9 @@ MixerWindow::MixerWindow(QWidget *parent,
         m_currentId(0)
 {
     m_shortcuts = new QShortcut(this);
+
+    // enable styling; internal string, no tr()
+    setObjectName("MIXER_WINDOW");
 }
 
 void

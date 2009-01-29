@@ -82,6 +82,9 @@ Rotary::Rotary(QWidget *parent,
         m_lastX(0),
         m_knobColour(0, 0, 0)
 {
+    // permit styling; internal string, no tr()
+    setObjectName("ROTARY");
+
     setBackgroundMode(Qt::NoBackground);
 
     if (!_float)

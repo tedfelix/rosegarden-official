@@ -7671,6 +7671,12 @@ RosegardenGUIApp::awaitDialogClearance()
 void
 RosegardenGUIApp::slotNewerVersionAvailable(QString v)
 {
+    //### DISABLE THIS FOR NOW, BECAUSE IT IS IRRITATING THE PISS OUT OF ME
+    //HAVING TO CLICK ON THIS USELESS DIALOG EVERY TIME I RUN THIS THING!
+    //
+    return;
+    //
+    
     if (m_firstRun) return;
     StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();

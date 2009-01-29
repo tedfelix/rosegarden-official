@@ -32,7 +32,10 @@ namespace Rosegarden
 
 LedButton::LedButton(const QColor &col, QWidget *parent) :
     Led( col, parent )
-{}
+{
+    // enable styling; internal string, no tr()
+    setObjectName("LED");
+}
 
 LedButton::~LedButton()
 {}

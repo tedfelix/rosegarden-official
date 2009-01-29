@@ -247,7 +247,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       trackLabelWidth,
                                       m_showTrackLabels,
                                       canvasHeight,
-                                      m_trackButtonScroll->viewport());
+                                      m_trackButtonScroll->viewport(),
+                                      "TRACK_BUTTONS"); // permit styling; internal string; no tr()
 //    m_trackButtons->hide();
 //    m_trackButtonScroll->addChild(m_trackButtons);
 	m_trackButtonScroll->setWidget(m_trackButtons);

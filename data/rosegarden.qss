@@ -28,6 +28,11 @@ Setting the background-attachment to scroll, scrolls the background-image when
 the scroll bars move.  See Customizing QAbstractScrollArea for an example. */
 
 QAbstractScrollArea {
+/* May have to use some caution here, à la QWidget, because setting this
+ * background currently overrides the white background in the notation editor in
+ * the qt4-graphicsview branch, making the notation editor quite unusable. */
+/*    background-color: #000000; 
+    color: #FFFFFF; */
 }
 
 
@@ -60,7 +65,63 @@ the widget. The arrow mark inside the drop-down button can be styled using the
 ::down-arrow subcontrol. By default, the arrow is placed in the center of the
 contents rectangle of the drop-down subcontrol. */
 
+/* pasted example code again */
 QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+QComboBox:editable {
+    background: white;
+}
+
+QComboBox:!editable, QComboBox::drop-down:editable {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+}
+
+/* QComboBox gets the "on" state when the popup is open */
+QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
+                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+}
+
+QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);
+}
+
+QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}
+
+/* The pop-up of the QComboBox is a QAbstractItemView and is styled using the
+descendant selector: */
+
+QComboBox QAbstractItemView {
+    border: 2px solid darkgray;
+    selection-background-color: lightgray;
 }
 
 
@@ -85,6 +146,7 @@ The above code is a no-operation if there is no stylesheet set.
 Warning: Make sure you define the Q_OBJECT macro for your custom widget. */
 
 QDialog {
+    background: #101010;
 }
 
 
@@ -93,6 +155,7 @@ QDialog {
   The layout of buttons can be altered using the button-layout property. */
 
 QDialogButtonBox {
+/*    background: #949494; */
 }
 
 
@@ -105,6 +168,9 @@ Supports the box model.  Since 4.3, setting a stylesheet on a QLabel
 automatically sets the QFrame::frameStyle property to QFrame::StyledPanel. */
 
 QFrame {
+    /* We probably want these to remain invisible, and not style them.  If there
+     * are exceptions, they'll have to be addressed on a case by case basis,
+     * because styling QFrame in general is definitely a BAD idea */
 }
 
 
@@ -117,6 +183,11 @@ indicator is styled using the the ::indicator subcontrol. The spacing property
 can be used to control the spacing between the text and indicator. */
 
 QGroupBox {
+   background-color: #808080;
+   color: white;
+   border: 2px solid #2CD0FC;
+   border-radius: 4px;
+   padding: 2px;
 }
 
 
@@ -139,6 +210,12 @@ setting a stylesheet on a QLabel automatically sets the QFrame::frameStyle
 property to QFrame::StyledPanel. */
 
 QLabel {
+    /* we don't want to specify a background color for QLabel, because we use
+     * them in many different places that should have different backgrounds, but
+     * putting a background in for now makes it easier to see all the places
+     * that are affected by this change. */
+    background-color: blue;
+    color: #FFFFFF;
 }
 
 
@@ -177,7 +254,21 @@ left-arrow.  The scroller is styled using the ::scroller.  The tear-off is
 styled using the ::tear-off. */
 
 QMenu {
+    background-color: #000000;
 }
+
+QMenu::item {
+    /* sets background of menu item. set this to something non-transparent
+       if you want menu color and menu item color to be different */
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background-color: #2CD0FC;
+}
+
+
 
 
 /*  QMenuBar
@@ -186,6 +277,24 @@ Supports the box model. The spacing property specifies the spacing between menu
 items. Individual items are styled using the ::item subcontrol. */
 
 QMenuBar {
+    background-color: #454545;
+}
+
+QMenuBar::item {
+    spacing: 3px; /* spacing between menu bar items */
+    padding: 1px 4px;
+    background: transparent;
+    border-radius: 4px;
+    font: bold;
+    color: white;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #0088E8;
+}
+
+QMenuBar::item:pressed {
+    background: #2CD0FC;
 }
 
 
@@ -195,6 +304,7 @@ The messagebox-text-interaction-flags property can be used to alter the
 interaction with text in the message box. */
 
 QMessageBox {
+    background: #949494;
 }
 
 
@@ -217,7 +327,14 @@ Supports the box model. Supports the :default, :flat, :checked pseudo states.
 For QPushButton with a menu, the menu indicator is styled using the ::menu-indicator subcontrol. Appearance of checkable push buttons can be customized using the :open and :closed pseudo-states. */
 
 QPushButton {
+    border: 1px solid #AAAAAA;
+    border-radius: 6px;
+    background-color: #808080;
+/*    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                       stop: 0 #f6f7fa, stop: 1 #dadbde); 
+    min-width: 80px; */
 }
+
 
 
 
@@ -257,6 +374,74 @@ can be used to style the region of the slider that adds a page. */
 QScrollBar {
 }
 
+/* horizontal scrollbars */
+QScrollBar:horizontal {
+    border: 2px solid grey;
+    background: #32CC99;
+    height: 15px;
+    margin: 0px 20px 0 20px;
+}
+
+QScrollBar::handle:horizontal {
+    background: white;
+    min-width: 20px;
+}
+
+QScrollBar::add-line:horizontal {
+    border: 2px solid grey;
+    background: #32CC99;
+    width: 20px;
+    subcontrol-position: right;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:horizontal {
+    border: 2px solid grey;
+    background: #32CC99;
+    width: 20px;
+    subcontrol-position: left;
+    subcontrol-origin: margin;
+}
+
+/* vertical scrollbars */
+QScrollBar:vertical {
+    border: 2px solid grey;
+    background: #32CC99;
+    width: 15px;
+    margin: 22px 0 22px 0;
+}
+
+QScrollBar::handle:vertical {
+    background: white;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical {
+    border: 2px solid grey;
+    background: #32CC99;
+    height: 20px;
+    subcontrol-position: bottom;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::sub-line:vertical {
+    border: 2px solid grey;
+    background: #32CC99;
+    height: 20px;
+    subcontrol-position: top;
+    subcontrol-origin: margin;
+}
+
+QScrollBar::up-arrow:vertical, QScrollBar::down-arrow:vertical {
+    border: 2px solid grey;
+    width: 3px;
+    height: 3px;
+    background: white;
+}
+
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
 
 
 /*  QSizeGrip
@@ -276,7 +461,46 @@ properties must be provided.  The groove of the slider is styled using the
 widget. The thumb of the slider is styled using ::handle subcontrol. The
 subcontrol moves in the Contents rectangle of the groove subcontrol. */
 
-QSlider {
+/* boilerplate code pasted from styling example
+ *
+ * this actually looks a lot better than the stock default, though this is by no
+ * means a suggestion for what it should ultimately look like */
+
+QSlider::groove:horizontal {
+    border: 1px solid #999999;
+    height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
+    margin: 2px 0;
+}
+
+QSlider::handle:horizontal {
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
+    border: 1px solid #5c5c5c;
+    width: 18px;
+    margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+    border-radius: 3px;
+}
+
+/* what is this green white pink stuff?  doesn't seem to be visible.  anyway,
+ * this is just boilerplate code pasted from an example */
+QSlider::groove:vertical {
+    background: red;
+    position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */
+    left: 4px; right: 4px;
+}
+
+QSlider::handle:vertical {
+    height: 10px;
+    background: green;
+    margin: 0 -4px; /* expand outside the groove */
+}
+
+QSlider::add-page:vertical {
+    background: white;
+}
+
+QSlider::sub-page:vertical {
+    background: pink;
 }
 
 
@@ -333,7 +557,50 @@ QTabBar is styled using the alignment property.  Warning: To change the position
 of the QTabBar within a QTabWidget, use the tab-bar subcontrol (and set
 subcontrol-position). */
 
-QTabBar {
+/*QTabBar {
+    background-color: green;
+    color: yellow;
+    font: bold;
+}*/
+
+/* pasted demo code -- QTabBar and QTabWidget are somewhat complicated to
+style, rather like menus */
+
+QTabWidget::pane { /* The tab widget frame */
+    border-top: 2px solid #C2C7CB;
+}
+
+QTabWidget::tab-bar {
+    left: 5px; /* move to the right by 5px */
+}
+
+/* Style the tab using the tab sub-control. Note that
+    it reads QTabBar _not_ QTabWidget */
+QTabBar::tab {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+    border: 2px solid #C4C4C3;
+    border-bottom-color: #C2C7CB; /* same as the pane color */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 8ex;
+    padding: 2px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #fafafa, stop: 0.4 #f4f4f4,
+                                stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
+}
+
+QTabBar::tab:selected {
+    border-color: #9B9B9B;
+    border-bottom-color: #C2C7CB; /* same as pane color */
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px; /* make non-selected tabs look smaller */
 }
 
 
@@ -347,8 +614,10 @@ QWindowsStyle. To place the QTabBar in the center, set the subcontrol-position
 of the tab-bar subcontrol.  The :top, :left, :right, :bottom pseudo states
 depending on the orientation of the tabs. */
 
-QTabWidget {
-}
+/*QTabWidget {
+    background-color: #000000;
+    color: #FFFFFF;
+}*/
 
 
 
@@ -371,15 +640,27 @@ QTableView {
 
 Supports the box model.  The color and background of selected text is styled
 using selection-color and selection-background-color respectively.  See
-QAbsractScrollArea to style scrollable backgrounds.  QTimeEdit   See QSpinBox.
-QToolBar   Supports the box model.  The :top, :left, :right, :bottom pseudo
-states depending on the area in which the tool bar is grouped.  The :first,
-:last, :middle, :only-one pseudo states indicator the position of the tool bar
-within a line group (See QStyleOptionToolBar::positionWithinLine).  The
-separator of a QToolBar is styled using the ::separator subcontrol.  The handle
-(to move the toolbar) is styled using the ::handle subcontrol. */
+QAbsractScrollArea to style scrollable backgrounds.  QTimeEdit   See QSpinBox. */
 
 QTextEdit {
+}
+
+
+/* QToolBar
+
+Supports the box model.  The :top, :left, :right, :bottom pseudo states
+depending on the area in which the tool bar is grouped.  The :first, :last,
+:middle, :only-one pseudo states indicator the position of the tool bar within a
+line group (See QStyleOptionToolBar::positionWithinLine).  The separator of a
+QToolBar is styled using the ::separator subcontrol.  The handle (to move the
+toolbar) is styled using the ::handle subcontrol. */
+
+QToolBar {
+    background-color: #808080;
+}
+
+QToolBar::handle {
+    image: url(toolbar-separator.png);
 }
 
 
@@ -420,6 +701,8 @@ QToolBox {
 Supports the box model. The opacity property controls the opacity of the tooltip. */
 
 QToolTip {
+    background-color: red;
+    color: yellow;
 }
 
 
@@ -454,4 +737,43 @@ The above code is a no-operation if there is no stylesheet set.
 Warning: Make sure you define the Q_OBJECT macro for your custom widget. */
 
 QWidget {
+    /* We can't style QWidget without changing EVERYTHING, so we have to address
+     * all our QWidget-derived widgets by name instead.  The Qt name property
+     * turns out to be good for something after all, apparently. */
+}
+
+QWidget#TRACK_BUTTONS {
+    background-color: #000000;
+    color: #FFFFFF;
+}
+
+QWidget#ROTARY {
+    background-color: transparent;
+}
+
+QWidget#LED {
+    background-color: transparent;
+}
+
+QWidget#MATRIX {
+    background-color: #000000;
+}
+
+/* the parameter area in the matrix views, I think */
+QWidget#DOCK {
+    background-color: #000000; 
+}
+
+/* the audio and MIDI mixer windows */
+/* (actually only affects audio, because the MIDI mixer window is more
+ * complicated) */
+QWidget#MIXER_WINDOW {
+    background-color: #000000; 
+}
+
+/* internal fader widgets need a style-set transparent background at a minimum */
+QWidget#FADER {
+    /* or maybe not...  this is actually too simplistic to work, and needs
+     * further investigation */
+    background-color: transparent;
 }
