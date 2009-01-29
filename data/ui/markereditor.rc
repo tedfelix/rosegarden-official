@@ -19,7 +19,7 @@
   <Menu name="view">
     <text>&amp;View</text>
     <Action name="time_musical" text="&amp;Musical Times" icon="time-musical"  />
-    <Action name="time_real" text="&amp;real Times" icon="time-real" />
+    <Action name="time_real" text="&amp;Real Times" icon="time-real" />
     <Action name="time_raw" text="Ra&amp;w Times" icon="time-raw" />
   </Menu>
 
