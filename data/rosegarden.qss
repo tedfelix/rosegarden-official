@@ -214,8 +214,8 @@ QLabel {
      * them in many different places that should have different backgrounds, but
      * putting a background in for now makes it easier to see all the places
      * that are affected by this change. */
-    background-color: blue;
-    color: #FFFFFF;
+    /* background-color: blue; */
+    color: #ABCDEF;
 }
 
 
@@ -743,8 +743,17 @@ QWidget {
 }
 
 QWidget#TRACK_BUTTONS {
-    background-color: #000000;
-    color: #FFFFFF;
+    background-color: yellow;
+    color: white;
+    selection-background-color: blue;
+    selection-color: yellow;
+}
+
+QWidget#TRACK_LABEL {
+    background-color: yellow;
+    color: white;
+    selection-background-color: blue;
+    selection-color: yellow;
 }
 
 QWidget#ROTARY {

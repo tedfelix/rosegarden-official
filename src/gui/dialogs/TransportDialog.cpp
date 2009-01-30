@@ -56,7 +56,7 @@ namespace Rosegarden
 {
 
 TransportDialog::TransportDialog(QWidget *parent):
-    QDialog(parent, Qt::Tool),
+    QDialog(parent, 0),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),

@@ -59,6 +59,13 @@ TrackLabel::TrackLabel(TrackId id,
     font.setBold(false);
     m_instrumentLabel->setFont(font);
     m_trackLabel->setFont(font);
+
+    // style
+    m_instrumentLabel->setObjectName("TRACK_LABEL");
+    m_trackLabel->setObjectName("TRACK_LABEL");
+
+    m_instrumentLabel->setAutoFillBackground(true);
+    m_trackLabel->setAutoFillBackground(true);
 	
 	this->setLayout( new QHBoxLayout() );
         layout()->setMargin(0);
@@ -134,22 +141,28 @@ void TrackLabel::showLabel(InstrumentTrackLabels l)
 void
 TrackLabel::setSelected(bool on)
 {
+    QPalette pal;
+
     if (on) {
         m_selected = true;
 
-        m_instrumentLabel->setPaletteBackgroundColor(palette().highlight());
-        m_instrumentLabel->setPaletteForegroundColor(palette().highlightedText());
-        m_trackLabel->setPaletteBackgroundColor(palette().highlight());
-        m_trackLabel->setPaletteForegroundColor(palette().highlightedText());
+        pal.setColor(m_instrumentLabel->backgroundRole(), palette().highlight());
+        pal.setColor(m_instrumentLabel->foregroundRole(), palette().highlightedText());
+        pal.setColor(m_trackLabel->backgroundRole(), palette().highlight());
+        pal.setColor(m_trackLabel->foregroundRole(), palette().highlightedText());
 
     } else {
         m_selected = false;
 
-        m_instrumentLabel->setPaletteBackgroundColor(palette().background());
-        m_trackLabel->setPaletteBackgroundColor(palette().background());
-        m_instrumentLabel->setPaletteForegroundColor(palette().text());
-        m_trackLabel->setPaletteForegroundColor(palette().text());
+        pal.setColor(m_instrumentLabel->backgroundRole(), palette().background());
+        pal.setColor(m_instrumentLabel->foregroundRole(), palette().text());
+        pal.setColor(m_trackLabel->backgroundRole(), palette().background());
+        pal.setColor(m_trackLabel->foregroundRole(), palette().text());
     }
+
+    m_instrumentLabel->setPalette(pal);
+    m_trackLabel->setPalette(pal);
+
     if( currentWidget() ){
         currentWidget()->update();
 	}
