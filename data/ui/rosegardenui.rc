@@ -94,7 +94,7 @@
   <Separator/>
     <Action name="change_composition_length" text="Change &amp;Composition Start and End..." />
   <Separator/>
-    <Action name="edit_markers" text="Edit mar&amp;kers..." shortcut="Ctrl+K" />
+    <Action name="edit_markers" text="Edit Mar&amp;kers..." shortcut="Ctrl+K" />
     <Action name="edit_doc_properties" text="Edit Document P&amp;roperties..." />
   <Separator/>
     <!-- JAS No text in menus for 'quick-mark' action names. -->
@@ -105,10 +105,9 @@
   <Menu name="Studio">
     <text>&amp;Studio</text>
     <Action name="audio_mixer" text="&amp;Audio Mixer" icon="mixer" />
-    <!-- JAS corrected typo old text="midi Mi&amp;ixer" -->
     <Action name="midi_mixer" text="MIDI Mi&amp;ixer" icon="midimixer" />
   <Separator/>
-  <Action name="open_devices_manager_new" text="Open the new Midi Devices &amp;Manager" icon="manage-midi-devices" />
+  <Action name="open_devices_manager_new" text="Open the New MIDI Devices &amp;Manager" icon="manage-midi-devices" />
     <Action name="manage_devices" text="Manage MIDI &amp;Devices" icon="manage-midi-devices" />
     <Action name="manage_synths" text="Manage S&amp;ynth Plugins" icon="manage-synth-plugins" />
     <Action name="manage_metronome" text="Manage &amp;Metronome" />
@@ -118,7 +117,7 @@
   <Separator/>
     <Action name="reset_midi_network" text="&amp;Reset MIDI Network" />
   <Separator/>
-    <Action name="load_studio" text="im&amp;port Studio from File..." />
+    <Action name="load_studio" text="Im&amp;port Studio from File..." />
     <Action name="load_default_studio" text="&amp;Import Default Studio" />
     <Action name="save_default_studio" text="&amp;Save Current Document as Default Studio" />
   </Menu>
@@ -171,7 +170,7 @@
     <Action name="move_track_down" text="Move Track &amp;Down" icon="move_track_down" shortcut="Shift+Down" />
     <Action name="move_track_up" text="Mo&amp;ve Track Up" icon="move_track_up" shortcut="Shift+Up" />
   <Separator/>
-    <Action name="select_next_track" text="Select &amp;Next track" shortcut="Down" />
+    <Action name="select_next_track" text="Select &amp;Next Track" shortcut="Down" />
     <Action name="select_previous_track" text="Select &amp;Previous Track" shortcut="Up" />
   <Separator/>
     <Action name="toggle_mute_track" text="Mute or Unmute Tra&amp;ck" shortcut="U" />
@@ -190,7 +189,7 @@
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
     <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
-    <Action name="erase" text="&amp;Eraser" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
     <Action name="resize" text="&amp;Resize" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
     <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" />
@@ -239,7 +238,7 @@
   <Separator append="show_merge" />
     <Action name="show_previews" text="Show Segment Pre&amp;views" checked="true" append="show_merge" />
     <Action name="show_segment_labels" text="Sh&amp;ow Segment Labels" checked="true" append="show_merge" />
-    <Action name="show_tracklabels" text="Show track &amp;Labels" checked="true" append="show_merge" />
+    <Action name="show_tracklabels" text="Show Track &amp;Labels" checked="true" append="show_merge" />
     <!-- Action name="toggle_all" append="show_merge" /> -->
   <Separator/>
     <Action name="options_save_options" text="&amp;Save Settings" />
