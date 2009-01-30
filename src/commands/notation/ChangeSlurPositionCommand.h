@@ -44,7 +44,7 @@ public:
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? tr("Slur &Above") : tr("Slur &TicksBelow");
+        return above ? tr("Slur &Above") : tr("Slur &Below");
     }
 
     static bool getArgument(QString actionName, CommandArgumentQuerier &);
