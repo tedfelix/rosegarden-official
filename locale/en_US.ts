@@ -9932,14 +9932,6 @@ This is a bug (the program would previously have crashed by now)</source>
         <source>Reconciling staffs...</source>
         <translation type="unfinished"></translation>
     </message>
-    <message numerus="yes">
-        <location filename="../src/gui/editors/notation/NotationView.cpp" line="2475"/>
-        <source>  %s event(s) selected </source>
-        <translation type="obsolete">
-            <numerusform>  %s event selected </numerusform>
-            <numerusform>  %s events selected </numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../src/gui/editors/notation/NotationView.cpp" line="2477"/>
         <source>  No selection </source>

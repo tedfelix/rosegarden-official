@@ -79,6 +79,10 @@ ts:	menu-ts
 	mkdir -p locale
 	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
 
+ts-noobsolete:	menu-ts
+	mkdir -p locale
+	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
 locale:
 	$(LRELEASE) $(TRANSLATIONS)
 
