@@ -251,9 +251,11 @@ ResourceFinder::getAutoloadPath()
         if (!file.copy(target)) {
             std::cerr << "ResourceFinder::getAutoloadPath: ERROR: Failed to un-bundle autoload resource file to user location \"" << target << "\"" << std::endl;
         }
+	// Try to reload from user location
+	path = getResourcePath("autoload", "autoload.rg");
     }
 
-    return getResourcePath("autoload", "autoload.rg");
+    return path;
 }
 
 QString
