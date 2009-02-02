@@ -194,7 +194,7 @@ Fader::setFader(float value)
 {
     m_value = value;
     emit faderChanged(value);
-    repaint();
+    update();
 }
 
 float

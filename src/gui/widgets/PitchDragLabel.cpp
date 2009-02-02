@@ -63,7 +63,7 @@ PitchDragLabel::slotSetPitch(int p)
     m_pitch = p;
     calculatePixmap();
     emitPitchChange();
-    repaint();
+    update();
 }
 
 void
@@ -75,7 +75,7 @@ PitchDragLabel::slotSetPitch(int pitch, int octave, int step)
     calculatePixmap(pitch, octave, step);
     emit pitchChanged(pitch);
     emit pitchChanged(pitch, octave, step);
-    repaint();
+    update();
 }
 
 void
@@ -123,7 +123,7 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
                                   steps_Cmajor_with_flats[m_pitch % 12]);
 	    }
             emit preview(m_pitch);
-            repaint();
+            update();
         }
     }
 }
@@ -165,7 +165,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             calculatePixmap();
 			emitPitchChange();
             emit preview(m_pitch);
-            repaint();
+            update();
         }
     } else {
         if (m_pitch > 0) {
@@ -174,7 +174,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             calculatePixmap();
             emitPitchChange();
             emit preview(m_pitch);
-            repaint();
+            update();
         }
     }
 }
