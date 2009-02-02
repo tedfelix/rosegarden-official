@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS><TS version="1.1" language="fi_FI">
+<defaultcodec></defaultcodec>
 <context>
     <name>DevicesManagerNewUi</name>
     <message>
@@ -3018,12 +3019,12 @@ Jos haluat litt채채 t채st채 huolimatta, harkitse toisen liit채nt채tyypin k채ytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="885"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Aseta pikakirjanmerkki toisto-osoittimen kohdalle</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="886"/>
         <source>&amp;Jump to Quick Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hypp채채 pikakirjanmerkin kohdalle</translation>
     </message>
 </context>
 <context>
