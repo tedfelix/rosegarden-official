@@ -1,4 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+Content-Type: text/html; charset=UTF-8>
 <html>
   <!--#include virtual="/head.html" -->
   <body>
@@ -10,64 +11,103 @@
 
     <div id="main">
 
-    <h2>Authors</h2> <p>Rosegarden has had three core developers who
-    between them are to blame for most of the application as you find
-    it now, plus a crack team of distinguished, long-term contributors who
-    have been doing assorted jobs around here for years.
-    </p>
-    <p>There have been a handful of interviews with Rosegarden developers published over the years:
-    <ul>
-    <li><a href="http://community.linux.com/article.pl?sid=07/01/23/1935248">Interview with D. Michael McIntyre</a> by Joe Barr, January 2007</li>
-    <li><a href="http://www.mstation.org/rosegarden_chris_cannam.php">Interview with Chris Cannam on mstation.org</a> by John Littler, December 2006</li>
-    <li><a href="http://sourceforge.net/potm/potm-2006-12.php">Interview for SourceForge.net Project of the Month</a>, December 2006</li>
-    <li><a href="http://www.linuxdevcenter.com/pub/a/linux/2004/12/16/rosegarden.html">Interview in LinuxDevCenter</a> by Howard Wen, December 2004</li>
-    <li><a href="http://mstation.org/rosegarden_bown.php">Interview with Richard Bown on mstation.org</a> by John Littler, 2003</li>
-    </ul>
+    <h2>Origin of a Legend</h2> <p>Chris Cannam and Andy Green began Rosegarden in 1993
+    while working together at the University of Bath under the tutelage of <a
+    href="http://en.wikipedia.org/wiki/John_Fitch_(computer_scientist)">John
+    ffitch</a>, of <a href="http://en.wikipedia.org/wiki/Csound">Csound</a>
+    fame. Andy was responsible for the MIDI sequencer, and Chris the notation
+    editor.</p>
+
+    <p>Rosegarden was originally written for the SGI&reg; IRIX&reg; platform.
+    Richard Bown got involved in late 1995, and began work on a port to Linux.
+    Richard took over responsibility for working on the Linux sequencer
+    engine, which was written using the OSS/Voxware drivers.  Not long after,
+    Guillaume Laurent showed up with a big patch of code and a lot of
+    enthusiasm.  Rosegarden (the version now known as &quot;X11 Rosegarden&quot;
+    began moving along quite quickly from there.</p>
+
+    <p>After a few years, the project started to show its age.  Its dated user
+    interface and a lack of internal organization meant that a rewrite was
+    inevitable at some point.  After a few false starts, Guillaume got the project restarted,
+    and designed most of the GUI using KDE and Qt.  Guillaume kept the project
+    spurred on with his admonition on June 2001 that &quot;If we lose focus again,
+    [Rosegarden] is dead.  It has already been brought back from limbo a couple
+    of times, there won't be a next one.&quot;</p>
+    
+    <p>Thus encouraged, the current incarnation of Rosegarden clawed its way out
+    of limbo.  Chris worked on notation again, and Richard continued working on the
+    sequencer, eventually adding support for audio playback through <a
+    href="http://jackaudio.org">JACK</a>.  The first public alpha release was in
+    October of 2001.  Ron Kuris, the first outside contributor, came in with
+    some cleanups that nobody can quite remember, and Randall Farmer provided
+    some chord labelling code. Then Hans Kieserman stepped in with the idea of
+    writing an engine to export Rosegarden's internal music notation to <a
+    href="http://lilypong.org">LilyPond</a>, and he began work on
+    internationalization.</p>
+
+    <p>In 2002, D. Michael McIntyre became a member of the project when Chris
+    addressed his complaints about MIDI applications on the Linux Audio Users
+    list, suggesting that most of Michael's problems were due to a lack of
+    documentation.  Chris <a
+    href="http://lalists.stanford.edu/lau/2002/12/0058.html">suggested</a>
+    &quot;What might be more handy would be a tutorial from someone other than
+    the developers....&quot;  Thus what eventually became <a
+    href="/tutorials/">Rosegarden Companion</a> was born with about 600 lines of
+    HTML and 36 images.  Michael had never written a tutorial before, and had no
+    idea what he was doing.  Some would argue that he still doesn't, but that
+    hasn't stopped him yet.</p>
+
+    <p>Guillaume added Michael as a developer so that he could continue to work
+    on his <a href="/tutorials/">tutorial</a>.  He began as a documentation
+    writer, and eventually outlasted everyone except Chris to become the
+    project's most outspoken and visible personality, and the longest running
+    contributor who didn't have some tie to the original X11 Rosegarden.  Pedro
+    Lopez-Cabanillas came along right after Michael, and and began to help and
+    contribute actively, bringing about countless improvements to MIDI handling,
+    in particular, though he has been involved in many different aspects of the
+    application, including putting together two build systems, help with the
+    translation framework, and pioneering the entire concept of track
+    parameters.</p>
+    
+    <p>Together these five, along with a long list of contributors,
+    carried Rosegarden through to a 1.0 release in 2005.</p>
+    
+    <p>Shortly thereafter, Heikki Junes showed up out of the clear blue sky, and
+    demanded developer access.  He went on to transform the LilyPond export code
+    from something useful but quirky to something that just works most of the
+    time, and he continued the trend of sorting out the final few details the
+    rest of us missed.  Finally, French translator Yves Guillemot revealed that
+    he had been hiding his programming skills all along, and began to embark on
+    increasingly ambitious projects, beginning with the notation editor track
+    headers feature, and continuing right along to be surprisingly and quietly
+    effective over the years.</p>
+
+    <p>Many people have come and gone in the years since the project's humble
+    beginnings, and together the Rosegarden development team have brought the
+    application from a fun bit of schoolwork all the way to the world-class
+    application before you today.</p>
+
+    <p>Rosegarden currently stands at version 1.7.3, with the new Qt4-based
+    Rosegarden &quot;Thorn&quot; slated for release at some point in 2009, if
+    possible.</p>
+
+
+    <h2>Current Project Managers</h2>
+    <p>Rosegarden is currently managed by Chris Cannam, D. Michael McIntyre,
+    and Heikki Junes.</p>
 
     <h4><a href="http://www.all-day-breakfast.com/cannam/">Chris
     Cannam</a></h4>
     <p><small>cannam <i>at</i> all-day-breakfast <i>dot</i> com</small></p>
 
     <p><img style="float:right; margin-top: 0px; margin-left: 12px; margin-right: 0px; margin-bottom: 8px;" src="pics/cannam.png" alt=" "/>Chris has been working on one incarnation or another of
-    Rosegarden since the end of 1993.  It was then a university
-    project for two students, devised by professor <a
-    href="http://www.bath.ac.uk/~masjpf/">John Fitch</a> at the
-    University of Bath, with Andy Green working on the MIDI sequencer
-    and Chris on the notation editor.  They were the sole developers
-    until late in 1995.</p>
+    Rosegarden since the end of 1993.</p>
 
     <p>Chris has worked on nearly every aspect of Rosegarden at some
     point, having been responsible for most of the notation rendering
     and editing, some of the file and data representation, and much of
     the audio and MIDI sequencing, recording, plugin, and MIDI studio
-    management subsystems.  He has mostly managed to avoid working on
-    the segment and matrix editors.  He lives in London.</p>
-
-    <h4>Richard Bown</h4> <p>Richard began
-    working on Rosegarden at the end of 1995, when he was drafted in
-    to take over the Unix sequencer.  He was responsible for the
-    Rosegarden MIDI, audio, sequencing and recording code, and
-    significant parts of the GUI.  He retired from the project after
-    seeing it through to the release of 1.0.</p>
-
-    <h4><a href="http://www.telegraph-road.org">Guillaume Laurent</a></h4>
-    <p><small>glaurent <i>at</i> telegraph-road <i>dot</i> org</small></p>
-
-    <p><img style="float:right; margin-top: 0px; margin-left: 12px;
-    margin-right:0px; margin-bottom:8px"
-    src="pics/glaurent.png"
-    alt=" "/>Guillaume lives in Cannes, in the South of France.
-    He's been using Linux since 1995, and first worked on
-    Rosegarden in the summer of 1996, when he supplied a few hundred
-    lines of new code in his first couple of emails.  Guillaume is
-    responsible for getting the Rosegarden project restarted, for
-    creating the basic design and writing much of the GUI code and
-    file and data framework, and for most of the project administration.
-
-    <p>He has also helped maintain <a href="http://gtkmm.sourceforge.net/">Gtk--</a> for a while, and was
-    involved in some parts of <a href="http://www.kde.org">KDE</a> here and there.  In his spare time,
-    he works as a software engineer.
-    </p>
+    management subsystems.  He lives in London.</p>
 
     <h4><a href="http://home.comcast.net/~documentarian">D. Michael McIntyre</a></h4>
     <p><small>dmmcintyr <i>at</i> users <i>dot</i> sourceforge <i>dot</i> net</small></p>
@@ -75,24 +115,19 @@
     margin-right:0px; margin-bottom:8px"
     src="pics/dmm.jpg" alt="
     "/>Michael lives in Christiansburg, Virginia, in the United States of
-    America.  He got his first taste of Linux toward the end of 2001.  He came
-    to work at Rosegarden in December 2002, after being shamed into doing
-    something more useful than complaining, as a consequence of his <a
-	href="http://lalists.stanford.edu/lau/2002/11/0317.html">infamous
-	posting</a> on the Linux Audio Users mailing list.  That discussion
-    lead him to begin writing a <a
-	href="http://rosegarden.sourceforge.net/tutorial/">tutorial</a> for
-    Rosegarden, which grew into a full-fledged book, and went on to be
-    pronounced a &quot;total financial disaster&quot; by the publisher.</p>
-    <p>In the years since the book, Michael has concentrated on user support,
-    administration, and working toward making Rosegarden a more and more serious
-    choice for music notation.  He enjoys <a
-    href="http://flickr.com/photos/arborvitian">photography</a>, <a
-    href="http://home.comcast.net/~documentarian">woodworking</a>, hiking in the
-    mountain country of the eastern US, gardening, cooking, and, of course
-    music.  He plays trumpet, alto/tenor horn, flute, recorder, guitar, and some
-    keyboard, harmonica, and drums. In his spare time, he drives an 18-wheeler
-    to earn the money he pours down all of these various black holes.</p>
+    America.  He has been doing computer music since the TRS-80 Color
+    Computer.  He currently handles most of the project's administrative tasks,
+    and a little bit of pretty well everything else, but the hardcore
+    programmings jobs he leaves to people who actually have a formal education
+    in software engineering, or at least the people who didn't flunk math class.</p>
+    <p>Michael has been through a string of layoffs recenty, and is currently
+    working as an &quot;Automotive Service Specialist&quot; for a major
+    international retailer.  Michael is <b>very</b> broke these days.</p>
+
+
+    <!--  I hate to pull Pedro's blurb, but maybe it's time.  He's been on
+    sabbatical forever, and I guess unless he contributes something to Thorn, we
+    probably need to leave him with all the other bygone figures of history.
 
     <h4>Pedro Lopez-Cabanillas</h4>
     <p><small>pedro <i>dot</i> lopez <i>dot</i> cabanillas <i>at</i> gmail <i>dot</i> com</small></p>
@@ -114,7 +149,7 @@
 	href="http://kmetronome.sourceforge.net">KMetronome</a> and <a
 	href="http://kmetronome.sourceforge.net/kmidimon/">KMidimon.</a>  He is
 	also an amateur musician, playing pop and classical music with flutes,
-	and some MIDI instruments.</p>
+	and some MIDI instruments.</p>  -->
 
     <h4><a href= "http://heikkijunes.blogspot.com">Heikki Junes</a></h4>
     <p><small>hjunes <i>at</i> gmail <i>dot</i> com</small></p>
@@ -135,13 +170,85 @@
     href="/wiki/">Rosegarden Wiki</a>, and has
     become quite the organizer.</p>
 
+    <h2>Interviews</h2>
+    <p>There have been a handful of interviews with Rosegarden developers published over the years:
+    <ul>
+    <li><a href="http://community.linux.com/article.pl?sid=07/01/23/1935248">Interview with D. Michael McIntyre</a> by Joe Barr, January 2007</li>
+    <li><a href="http://www.mstation.org/rosegarden_chris_cannam.php">Interview with Chris Cannam on mstation.org</a> by John Littler, December 2006</li>
+    <li><a href="http://sourceforge.net/potm/potm-2006-12.php">Interview for SourceForge.net Project of the Month</a>, December 2006</li>
+    <li><a href="http://www.linuxdevcenter.com/pub/a/linux/2004/12/16/rosegarden.html">Interview in LinuxDevCenter</a> by Howard Wen, December 2004</li>
+    <li><a href="http://mstation.org/rosegarden_bown.php">Interview with Richard Bown on mstation.org</a> by John Littler, 2003</li>
+    </ul>
 
-    <h3>Friends of Rosegarden</h3>
+
+    <h2>Friends of Rosegarden</h2>
     <p>An ever-growing list of people are helping and have helped
-    with coding, documenting, translating and testing Rosegarden. 
-    Take a look at the latest <a href="http://rosegarden.svn.sourceforge.net/viewvc/*checkout*/rosegarden/trunk/rosegarden/AUTHORS">AUTHORS</a> file to keep up to date on the contributors.
+    with coding, documenting, translating and testing Rosegarden.</p>
+    <p>
+    <li> Chris Cannam                       </li>
+    <li> Andy Green                         </li>
+    <li> Richard Bown                       </li>
+    <li> Guillaume Laurent                  </li>
+    <li> Ron Kuris                          </li>
+    <li> Randall Farmer                     </li>
+    <li> Hans Kieserman                     </li>
+    <li> D. Michael McIntyre                </li>
+    <li> Pedro Lopez-Cabanillas             </li>
+    <li> Levi Burton                        </li>
+    <li> Mark Hymers                        </li>
+    <li> Alexandre Prokoudine               </li>
+    <li> Jörg Schumann                      </li>
+    <li> Eckhard Jokisch                    </li>
+    <li> Kevin Donnelly                     </li>
+    <li> Didier Burli                       </li>
+    <li> Yves Guillemot                     </li>
+    <li> Heikki Johannes Junes              </li>
+    <li> Daniele Medri                      </li>
+    <li> Alessandro Musesti                 </li>
+    <li> Stefan Asserhäl                    </li>
+    <li> Erik Magnus Johansson              </li>
+    <li> Hasso Tepper                       </li>
+    <li> Jelmer Vernooij                    </li>
+    <li> Jasper Stein                       </li>
+    <li> Oota Toshiya                       </li>
+    <li> Kevin Liang                        </li>
+    <li> Arnout Engelen                     </li>
+    <li> Thorsten Wilms                     </li>
+    <li> &quot;William&quot;                </li>
+    <li> Liu Songhe                         </li>
+    <li> Thomas Nagy                        </li>
+    <li> Vince Negri                        </li>
+    <li> Toni Arnold                        </li>
+    <li> Stephen Torri                      </li>
+    <li> Jan Bína                           </li>
+    <li> Vladimir Savic                     </li>
+    <li> Lisandro Damián Nicanor Pérez Meyer</li>
+    <li> Javier Castrillo                   </li>
+    <li> Lucas Godoy                        </li>
+    <li> Marcos Guglielmetti                </li>
+    <li> Feliu Ferrer                       </li>
+    <li> Quim Perez i Noguer                </li>
+    <li> Carolyn McIntyre (deceased)        </li>
+    <li> Piotr Sawicki                      </li>
+    <li> David García-Abad                  </li>
+    <li> Mikhail Yakshin                    </li>
+    <li> Joerg C. Koenig                    </li>
+    <li> Philippe Macaire                   </li>
+    <li> Jaakko H. Kyro                     </li>
+    <li> Gunhild Andersen                   </li>
+    <li> Colin Fletcher                     </li>
+    <li> Alessandro Preziosi                </li>
+    <li> Stefan Asserhall                   </li>
+    <li> &quot;Flameeyes&quot; Pettenò      </li>
+    <li> Anders Dahnielson                  </li>
+    <li> Shelagh Manton                     </li>
+    <li> Julie Swango                       </li>
+    <li> Emanuel Rumpf                      </li>
+    <li> David Willis                       </li>
+    <li> Chris &quot;CJ&quot; Fryer         </li>
+    <li> Luis Garrido                       </li>
+    
     </p>
-
     </div>
 
   </body>

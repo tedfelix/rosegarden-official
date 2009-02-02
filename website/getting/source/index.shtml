@@ -26,10 +26,10 @@
     <ul><li><a href="http://sourceforge.net/"><img align="right"
 src="http://sourceforge.net/sflogo.php?group_id=4932&type=1"
 width="88" height="31" border="0" alt="SourceForge.net Logo"/></a><a
-href="http://sourceforge.net/project/showfiles.php?group_id=4932&package_id=4959&release_id=623980">Rosegarden
-release 1.7.2 source code</a>, 3rd September 2008, for download from the
+href="https://sourceforge.net/project/platformdownload.php?group_id=4932">Rosegarden
+release 1.7.3 source code</a>, 2nd February 2009, for download from the
 SourceForge page. <i>(<a
-href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=623980">release note</a>)</i></li></ul>
+href="/wiki/dev:1.7.3">release note</a>)</i></li></ul>
 
     <h3>Development code from Subversion</h3>
 
@@ -37,6 +37,11 @@ href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=623
     developers is always available using the Subversion (svn)
     source-code control system from SourceForge.  The main Subversion
     repository can be retrieved with:</p>
+
+    <p><i>PLEASE NOTE: all new work is taking place in the </i>qt4<i> branch at
+    the moment, so if you intend to begin some sort of development work, please
+    do not patch against </i>trunk/<i>, as the current trunk is about to be abandoned
+    and replaced with the </i>qt4<i> branch.</i></p>
 
     <blockquote><code>svn co https://rosegarden.svn.sourceforge.net/svnroot/rosegarden/trunk/rosegarden</code></blockquote>
     
@@ -70,20 +75,21 @@ href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=623
     <p>Currently active branches are:
 
     <ul> <li><b>qt4</b> - This is where a handful of brave souls are trying to
-    move a mountain.  It will eventually become Rosegarden 2.0.</li>
+    move a mountain.  It will eventually become Rosegarden 09.xx.</li>
 
     <li><b>musicxml</b> - This branch contains initial work on
     MusicXML import.</li>
 
-    <li><b>notation_updates</b> - This branch contains some
+<!--    <li><b>notation_updates</b> - This branch contains some
     experiments related to notation improvements.</li>
 
     <li><b>kiftsgate</b> - This branch contains initial work towards
-    modularising the Rosegarden notation framework somewhat.</li>
+    modularising the Rosegarden notation framework somewhat.</li> -->
 
     <li><b>glasgow_pitchtracker_update</b> - This contains extensive custom work to support the <a
     href="http://markov.music.gla.ac.uk/CMT/cmt.py/Projects/rgtracker.html">University
-    of Glasgow Pitch Tracker project</a>.</li>
+    of Glasgow Pitch Tracker project</a>. (Not at all current with mainline
+    Rosegarden.)</li>
     </ul>
     
 <br>

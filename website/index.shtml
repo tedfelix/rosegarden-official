@@ -51,16 +51,32 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
       <p align="center"><a href="images/snap-1.5-1.png"><img src="/images/snap-1.5-1-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 10px; margin-bottom: 10px; margin-left: 0px; margin-right: 10px" alt=""/></a><a href="images/snap-1.5-3.png"><img src="/images/snap-1.5-3-thumb.png" style="border-width: 2px; border-color: #000000; border-style: solid; margin-top: 0px; margin-left: 0px; margin-right: 0px; margin-bottom: 20px" alt=""/></a></p>
 
-        <p><b>Release 1.7.2 now available!</b> This is a maintenance release
-that follows close on the heels of 1.7.1. It includes some comparatively small
-but really interesting new features and usability improvements, which mostly
-concern lyrics, and a new lead sheet LilyPond export mode that lets you make
-lead sheets by using LilyPond format chord texts (eg. g:maj7) over top of your
-lead line.</p>
+        <p><b>Release 1.7.3 now available!</b> This is primarily a bug
+        fix/maintenance release. It addresses some critical track-related
+        crashes that have been affecting users over the last couple of releases,
+        and introduces assorted other minor fixes, such as improved multi-track
+        recording for transposing instruments. It also includes the incomplete
+        beginnings of several improvement projects that have all been postponed
+        for now while we focus all our attention on the port to Qt4.</p>
 
-<p>Heikki Junes deserves the lion's share of credit for this release. All the features and most of the bug fixes have his name written all over them. Thanks, Heikki!  Well done!</p>
-        
-        <p>Read the <a href="https://sourceforge.net/project/shownotes.php?group_id=4932&release_id=617314">release note</a>, and 
+        <p>We hope for this to be the final release of the KDE/Qt3-based
+        Rosegarden. All work on this line of code has been suspended, and all of
+        our effort is going into the new Qt4-based Rosegarden &quot;Thorn&quot; which we
+        hope to release at some point in 2009. Unless we discover some truly
+        critical problems with this release, any bugs and usability complaints
+        will be deferred until after Thorn has entered the beta testing phase,
+        and all new work will be done on the new code.</p>
+
+        <p>Interested contributors should submit any patches against Thorn, as
+        patches against 1.7.3 and earlier releases will no longer be accepted
+        unless there are extenuating circumstances. Please inquire on the
+        rosegarden-devel mailing list if you have any questions or concerns.</p>
+
+        <p>We thank you, the Rosegarden community, for your patience during the
+        long wait leading up to this current release, and for the even longer
+        wait for Thorn. </p>
+
+        <p>Read the <a href="/wiki/dev:1.7.3">release note</a>, and 
 	<a href="getting/">get the code here</a>!</p>
 
 	<p><b>Learn more</b> about Rosegarden:</p>
