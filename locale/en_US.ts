@@ -12488,7 +12488,7 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location filename="../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="242"/>
         <source>Move Segment(s)</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>Move Segment</numerusform>
             <numerusform>Move Segments</numerusform>
         </translation>
