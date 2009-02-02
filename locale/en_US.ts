@@ -258,7 +258,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1039"/>
+        <location filename="../data/QMenuStrings.cpp" line="1041"/>
         <source>&amp;File</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,12 +273,12 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1040"/>
+        <location filename="../data/QMenuStrings.cpp" line="1042"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1041"/>
+        <location filename="../data/QMenuStrings.cpp" line="1043"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -313,57 +313,57 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1049"/>
+        <location filename="../data/QMenuStrings.cpp" line="1051"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1050"/>
+        <location filename="../data/QMenuStrings.cpp" line="1052"/>
         <source>Rosegarden &amp;Handbook</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1051"/>
+        <location filename="../data/QMenuStrings.cpp" line="1053"/>
         <source>&amp;What&apos;s This?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="977"/>
+        <location filename="../data/QMenuStrings.cpp" line="979"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="978"/>
+        <location filename="../data/QMenuStrings.cpp" line="980"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="979"/>
+        <location filename="../data/QMenuStrings.cpp" line="981"/>
         <source>Tip of the &amp;Day</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1052"/>
+        <location filename="../data/QMenuStrings.cpp" line="1054"/>
         <source>Switch application &amp;language...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1053"/>
+        <location filename="../data/QMenuStrings.cpp" line="1055"/>
         <source>&amp;Get Help Online</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1054"/>
+        <location filename="../data/QMenuStrings.cpp" line="1056"/>
         <source>&amp;Translate This Application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1055"/>
+        <location filename="../data/QMenuStrings.cpp" line="1057"/>
         <source>&amp;About Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1056"/>
+        <location filename="../data/QMenuStrings.cpp" line="1058"/>
         <source>About &amp;KDE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -373,12 +373,12 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1042"/>
+        <location filename="../data/QMenuStrings.cpp" line="1044"/>
         <source>&amp;Nothing to undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1043"/>
+        <location filename="../data/QMenuStrings.cpp" line="1045"/>
         <source>N&amp;othing to redo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -393,22 +393,22 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1036"/>
+        <location filename="../data/QMenuStrings.cpp" line="1038"/>
         <source>Switch to Select Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1037"/>
+        <location filename="../data/QMenuStrings.cpp" line="1039"/>
         <source>Switch to Inserting Notes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1038"/>
+        <location filename="../data/QMenuStrings.cpp" line="1040"/>
         <source>Switch to Erase Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1002"/>
+        <location filename="../data/QMenuStrings.cpp" line="1004"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
@@ -463,22 +463,22 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1045"/>
+        <location filename="../data/QMenuStrings.cpp" line="1047"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1046"/>
+        <location filename="../data/QMenuStrings.cpp" line="1048"/>
         <source>&amp;Musical Times</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1047"/>
+        <location filename="../data/QMenuStrings.cpp" line="1049"/>
         <source>&amp;Real Times</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1048"/>
+        <location filename="../data/QMenuStrings.cpp" line="1050"/>
         <source>Ra&amp;w Times</source>
         <translation type="unfinished"></translation>
     </message>
@@ -488,67 +488,67 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="899"/>
+        <location filename="../data/QMenuStrings.cpp" line="901"/>
         <source>Edit &amp;With</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="901"/>
+        <location filename="../data/QMenuStrings.cpp" line="903"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="903"/>
+        <location filename="../data/QMenuStrings.cpp" line="905"/>
         <source>Open in &amp;Notation Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1017"/>
+        <location filename="../data/QMenuStrings.cpp" line="1019"/>
         <source>Sett&amp;ings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1018"/>
+        <location filename="../data/QMenuStrings.cpp" line="1020"/>
         <source>Show &amp;Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1019"/>
+        <location filename="../data/QMenuStrings.cpp" line="1021"/>
         <source>Hide St&amp;atusbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1020"/>
+        <location filename="../data/QMenuStrings.cpp" line="1022"/>
         <source>Configure S&amp;hortcuts...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1021"/>
+        <location filename="../data/QMenuStrings.cpp" line="1023"/>
         <source>Configure Tool&amp;bars...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1022"/>
+        <location filename="../data/QMenuStrings.cpp" line="1024"/>
         <source>&amp;Configure Rosegarden...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1034"/>
+        <location filename="../data/QMenuStrings.cpp" line="1036"/>
         <source>Actions Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1057"/>
+        <location filename="../data/QMenuStrings.cpp" line="1059"/>
         <source>Time Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1033"/>
+        <location filename="../data/QMenuStrings.cpp" line="1035"/>
         <source>Transport Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1035"/>
+        <location filename="../data/QMenuStrings.cpp" line="1037"/>
         <source>Zoom Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -583,7 +583,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1009"/>
+        <location filename="../data/QMenuStrings.cpp" line="1011"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
@@ -678,12 +678,12 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1007"/>
+        <location filename="../data/QMenuStrings.cpp" line="1009"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1008"/>
+        <location filename="../data/QMenuStrings.cpp" line="1010"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -693,7 +693,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="904"/>
+        <location filename="../data/QMenuStrings.cpp" line="906"/>
         <source>Open in &amp;Event List Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -718,7 +718,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="906"/>
+        <location filename="../data/QMenuStrings.cpp" line="908"/>
         <source>&amp;Quantize...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -738,7 +738,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="912"/>
+        <location filename="../data/QMenuStrings.cpp" line="914"/>
         <source>Jog &amp;Left</source>
         <translation type="unfinished"></translation>
     </message>
@@ -813,7 +813,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="908"/>
+        <location filename="../data/QMenuStrings.cpp" line="910"/>
         <source>Transpose by &amp;Interval...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -848,22 +848,22 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="936"/>
+        <location filename="../data/QMenuStrings.cpp" line="938"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="937"/>
+        <location filename="../data/QMenuStrings.cpp" line="939"/>
         <source>&amp;Select and Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="938"/>
+        <location filename="../data/QMenuStrings.cpp" line="940"/>
         <source>&amp;Draw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="940"/>
+        <location filename="../data/QMenuStrings.cpp" line="942"/>
         <source>&amp;Move</source>
         <translation type="unfinished"></translation>
     </message>
@@ -873,7 +873,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="942"/>
+        <location filename="../data/QMenuStrings.cpp" line="944"/>
         <source>S&amp;plit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -943,27 +943,27 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="943"/>
+        <location filename="../data/QMenuStrings.cpp" line="945"/>
         <source>T&amp;ransport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="944"/>
+        <location filename="../data/QMenuStrings.cpp" line="946"/>
         <source>&amp;Play</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="945"/>
+        <location filename="../data/QMenuStrings.cpp" line="947"/>
         <source>&amp;Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="946"/>
+        <location filename="../data/QMenuStrings.cpp" line="948"/>
         <source>Re&amp;wind</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="947"/>
+        <location filename="../data/QMenuStrings.cpp" line="949"/>
         <source>&amp;Fast Forward</source>
         <translation type="unfinished"></translation>
     </message>
@@ -983,12 +983,12 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="950"/>
+        <location filename="../data/QMenuStrings.cpp" line="952"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="951"/>
+        <location filename="../data/QMenuStrings.cpp" line="953"/>
         <source>P&amp;anic</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1098,12 +1098,12 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="953"/>
+        <location filename="../data/QMenuStrings.cpp" line="955"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="961"/>
+        <location filename="../data/QMenuStrings.cpp" line="963"/>
         <source>&amp;Rulers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1123,7 +1123,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="986"/>
+        <location filename="../data/QMenuStrings.cpp" line="988"/>
         <source>Tools Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1178,7 +1178,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="948"/>
+        <location filename="../data/QMenuStrings.cpp" line="950"/>
         <source>&amp;Record</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1358,7 +1358,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="902"/>
+        <location filename="../data/QMenuStrings.cpp" line="904"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1898,7 +1898,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="913"/>
+        <location filename="../data/QMenuStrings.cpp" line="915"/>
         <source>Jog &amp;Right</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2178,7 +2178,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="955"/>
+        <location filename="../data/QMenuStrings.cpp" line="957"/>
         <source>Show T&amp;ools Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2213,7 +2213,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="958"/>
+        <location filename="../data/QMenuStrings.cpp" line="960"/>
         <source>Show Trans&amp;port Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2228,7 +2228,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="963"/>
+        <location filename="../data/QMenuStrings.cpp" line="965"/>
         <source>Show Cho&amp;rd Name Ruler</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2573,352 +2573,352 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="885"/>
+        <location filename="../data/QMenuStrings.cpp" line="887"/>
         <source>&amp;Studio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="886"/>
+        <location filename="../data/QMenuStrings.cpp" line="888"/>
         <source>&amp;Audio Mixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="887"/>
+        <location filename="../data/QMenuStrings.cpp" line="889"/>
         <source>MIDI Mi&amp;ixer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="889"/>
+        <location filename="../data/QMenuStrings.cpp" line="891"/>
         <source>Manage MIDI &amp;Devices</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="890"/>
+        <location filename="../data/QMenuStrings.cpp" line="892"/>
         <source>Manage S&amp;ynth Plugins</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="891"/>
+        <location filename="../data/QMenuStrings.cpp" line="893"/>
         <source>Manage &amp;Metronome</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="892"/>
+        <location filename="../data/QMenuStrings.cpp" line="894"/>
         <source>Modify MIDI &amp;Filters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="893"/>
+        <location filename="../data/QMenuStrings.cpp" line="895"/>
         <source>MIDI &amp;Thru Routing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="894"/>
+        <location filename="../data/QMenuStrings.cpp" line="896"/>
         <source>&amp;Reset MIDI Network</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="896"/>
+        <location filename="../data/QMenuStrings.cpp" line="898"/>
         <source>&amp;Import Default Studio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="897"/>
+        <location filename="../data/QMenuStrings.cpp" line="899"/>
         <source>&amp;Save Current Document as Default Studio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="898"/>
+        <location filename="../data/QMenuStrings.cpp" line="900"/>
         <source>Se&amp;gments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="900"/>
+        <location filename="../data/QMenuStrings.cpp" line="902"/>
         <source>Open in &amp;Default editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="905"/>
+        <location filename="../data/QMenuStrings.cpp" line="907"/>
         <source>R&amp;elabel...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="907"/>
+        <location filename="../data/QMenuStrings.cpp" line="909"/>
         <source>Repe&amp;at Last Quantize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="909"/>
+        <location filename="../data/QMenuStrings.cpp" line="911"/>
         <source>Stretch &amp;or Squash...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="910"/>
+        <location filename="../data/QMenuStrings.cpp" line="912"/>
         <source>Set Start &amp;Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="911"/>
+        <location filename="../data/QMenuStrings.cpp" line="913"/>
         <source>Set &amp;Duration...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="914"/>
+        <location filename="../data/QMenuStrings.cpp" line="916"/>
         <source>Join</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="915"/>
+        <location filename="../data/QMenuStrings.cpp" line="917"/>
         <source>&amp;Split</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="916"/>
+        <location filename="../data/QMenuStrings.cpp" line="918"/>
         <source>&amp;Split on Silence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="917"/>
+        <location filename="../data/QMenuStrings.cpp" line="919"/>
         <source>Split by &amp;Pitch...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="918"/>
+        <location filename="../data/QMenuStrings.cpp" line="920"/>
         <source>Split by &amp;Recording Source...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="919"/>
+        <location filename="../data/QMenuStrings.cpp" line="921"/>
         <source> Split &amp;at Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="920"/>
+        <location filename="../data/QMenuStrings.cpp" line="922"/>
         <source>Turn Re&amp;peats into Copies</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="921"/>
+        <location filename="../data/QMenuStrings.cpp" line="923"/>
         <source>Manage Tri&amp;ggered Segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="922"/>
+        <location filename="../data/QMenuStrings.cpp" line="924"/>
         <source>Trac&amp;ks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="923"/>
+        <location filename="../data/QMenuStrings.cpp" line="925"/>
         <source>Add &amp;Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="924"/>
+        <location filename="../data/QMenuStrings.cpp" line="926"/>
         <source>&amp;Add Tracks...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="925"/>
+        <location filename="../data/QMenuStrings.cpp" line="927"/>
         <source>D&amp;elete Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="926"/>
+        <location filename="../data/QMenuStrings.cpp" line="928"/>
         <source>Move Track &amp;Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="927"/>
+        <location filename="../data/QMenuStrings.cpp" line="929"/>
         <source>Mo&amp;ve Track Up</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="929"/>
+        <location filename="../data/QMenuStrings.cpp" line="931"/>
         <source>Select &amp;Previous Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="930"/>
+        <location filename="../data/QMenuStrings.cpp" line="932"/>
         <source>Mute or Unmute Tra&amp;ck</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="931"/>
+        <location filename="../data/QMenuStrings.cpp" line="933"/>
         <source>Arm &amp;or Un-arm Track for Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="932"/>
+        <location filename="../data/QMenuStrings.cpp" line="934"/>
         <source>&amp;Unmute all Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="933"/>
+        <location filename="../data/QMenuStrings.cpp" line="935"/>
         <source>&amp;Mute all Tracks</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="934"/>
+        <location filename="../data/QMenuStrings.cpp" line="936"/>
         <source>Set &amp;Instrument</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="935"/>
+        <location filename="../data/QMenuStrings.cpp" line="937"/>
         <source>&amp;Remap Instruments...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="941"/>
+        <location filename="../data/QMenuStrings.cpp" line="943"/>
         <source>&amp;Resize</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="949"/>
+        <location filename="../data/QMenuStrings.cpp" line="951"/>
         <source>P&amp;unch in Record</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="954"/>
+        <location filename="../data/QMenuStrings.cpp" line="956"/>
         <source>Show Main &amp;Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="956"/>
+        <location filename="../data/QMenuStrings.cpp" line="958"/>
         <source>Show Trac&amp;ks Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="957"/>
+        <location filename="../data/QMenuStrings.cpp" line="959"/>
         <source>Show &amp;Editors Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="959"/>
+        <location filename="../data/QMenuStrings.cpp" line="961"/>
         <source>Show &amp;Zoom Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="960"/>
+        <location filename="../data/QMenuStrings.cpp" line="962"/>
         <source>Show St&amp;atusbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="962"/>
+        <location filename="../data/QMenuStrings.cpp" line="964"/>
         <source>Show Playback Position R&amp;uler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="964"/>
+        <location filename="../data/QMenuStrings.cpp" line="966"/>
         <source>Show Te&amp;mpo Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="965"/>
+        <location filename="../data/QMenuStrings.cpp" line="967"/>
         <source>Show Tra&amp;nsport</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="966"/>
+        <location filename="../data/QMenuStrings.cpp" line="968"/>
         <source>Show Special &amp;Parameters</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="967"/>
+        <location filename="../data/QMenuStrings.cpp" line="969"/>
         <source>Show Segment Pre&amp;views</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="968"/>
+        <location filename="../data/QMenuStrings.cpp" line="970"/>
         <source>Sh&amp;ow Segment Labels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="970"/>
+        <location filename="../data/QMenuStrings.cpp" line="972"/>
         <source>&amp;Save Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="985"/>
+        <location filename="../data/QMenuStrings.cpp" line="987"/>
         <source>Main Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="987"/>
+        <location filename="../data/QMenuStrings.cpp" line="989"/>
         <source>Tracks Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="988"/>
+        <location filename="../data/QMenuStrings.cpp" line="990"/>
         <source>Editors Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="990"/>
+        <location filename="../data/QMenuStrings.cpp" line="992"/>
         <source>Rewind to Beginning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="991"/>
+        <location filename="../data/QMenuStrings.cpp" line="993"/>
         <source>Fast Forward to End</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="993"/>
+        <location filename="../data/QMenuStrings.cpp" line="995"/>
         <source>Insert Tempo Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="994"/>
+        <location filename="../data/QMenuStrings.cpp" line="996"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="995"/>
+        <location filename="../data/QMenuStrings.cpp" line="997"/>
         <source>Delete Tempo Change</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="996"/>
+        <location filename="../data/QMenuStrings.cpp" line="998"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="997"/>
+        <location filename="../data/QMenuStrings.cpp" line="999"/>
         <source>Un-Ramp Tempo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="998"/>
+        <location filename="../data/QMenuStrings.cpp" line="1000"/>
         <source>Edit Tempo...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="999"/>
+        <location filename="../data/QMenuStrings.cpp" line="1001"/>
         <source>Edit Time Signature...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1000"/>
+        <location filename="../data/QMenuStrings.cpp" line="1002"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1010"/>
+        <location filename="../data/QMenuStrings.cpp" line="1012"/>
         <source>&amp;Edit Item</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1011"/>
+        <location filename="../data/QMenuStrings.cpp" line="1013"/>
         <source>Select &amp;All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1012"/>
+        <location filename="../data/QMenuStrings.cpp" line="1014"/>
         <source>&amp;Clear Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="1044"/>
+        <location filename="../data/QMenuStrings.cpp" line="1046"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2938,7 +2938,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="939"/>
+        <location filename="../data/QMenuStrings.cpp" line="941"/>
         <source>&amp;Erase</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2983,17 +2983,17 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="895"/>
+        <location filename="../data/QMenuStrings.cpp" line="897"/>
         <source>Im&amp;port Studio from File...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="928"/>
+        <location filename="../data/QMenuStrings.cpp" line="930"/>
         <source>Select &amp;Next Track</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="969"/>
+        <location filename="../data/QMenuStrings.cpp" line="971"/>
         <source>Show Track &amp;Labels</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3003,13 +3003,23 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../data/QMenuStrings.cpp" line="888"/>
+        <location filename="../data/QMenuStrings.cpp" line="890"/>
         <source>Open the New MIDI Devices &amp;Manager</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="484"/>
         <source>&amp;Convert Notation for...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../data/QMenuStrings.cpp" line="885"/>
+        <source>&amp;Set Quick Marker at Playback Position</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../data/QMenuStrings.cpp" line="886"/>
+        <source>&amp;Jump to Quick Marker</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
