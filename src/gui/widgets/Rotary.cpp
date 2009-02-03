@@ -386,7 +386,12 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     }
 
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+    while (par->parentWidget() && !par->isWindow()) {
+        par = par->parentWidget();
+        totalPos += par->pos();
+    }
 
     if (!_float)
         _float = new TextFloat(this);
@@ -530,8 +535,15 @@ Rotary::wheelEvent(QWheelEvent *e)
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move(). Move just top/right of the rotary
     //
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
     _float->reparent(this);
+
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+    while (par->parentWidget() && !par->isWindow()) {
+        par = par->parentWidget();
+        totalPos += par->pos();
+    }
+
     _float->move(totalPos + QPoint(width() + 2, -height() / 2));
     _float->show();
 

@@ -414,13 +414,14 @@ Fader::showFloatText()
 
     // Reposition - we need to sum the relative positions up to the
     // topLevel or dialog to please move().
+    // (TextFloat position origin is toplevel or dialog top left corner)
     //
     QWidget *par = parentWidget();
     QPoint totalPos = this->pos();
 
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog()) {
-        totalPos += par->pos();
+    while (par->parentWidget() && !par->isWindow()) {
         par = par->parentWidget();
+        totalPos += par->pos();
     }
 
     // Move just top/right
