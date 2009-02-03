@@ -23,7 +23,7 @@ exec perl -x "$0" "$@"
 # -*- cperl-indent-level: 4 -*-
 #
 # Rosegarden Project file packager
-# Copyright 2005-2008 Chris Cannam and Fervent Software Ltd
+# Copyright 2005-2009 Chris Cannam and Fervent Software Ltd.
 # Distributed under the GNU General Public License.
 #
 # This program converts between Rosegarden (.rg) files and Rosegarden
@@ -295,7 +295,7 @@ sub rgPack {
 
     my $twig = XML::Twig->new();
 
-    open INZIP, "-|", "gunzip -c $rgFile";
+    open INZIP, "-|", "gunzip -c \"$rgFile\"";
 
     eval {
 	$twig->parse(\*INZIP);
@@ -556,7 +556,7 @@ sub rgPack {
 
     print STDERR "out is $targetRgFile\n";
 
-    open OUT, "| gzip -c > $targetRgFile" or die "Failed to open $targetRgFile for writing via gzip";
+    open OUT, "| gzip -c > \"$targetRgFile\"" or die "Failed to open $targetRgFile for writing via gzip";
 
     $twig->print(\*OUT);
 
@@ -572,7 +572,7 @@ sub rgPack {
     my $baseProject = basename $projectFile;
     print STDERR "dir is $targetDir\nbaseTarget is $baseTarget\nbaseRg is $baseRg\nnewProjectDir is $newProjectDir\n";
     system qq{mkdir -p "$targetDir/$newProjectDir"};
-    system qq{cd "$targetDir"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "$baseProject" ; mv "$baseProject" ..} and die "Making tarball failed";
+    system qq{cd "$targetDir"; tar cf - "$baseRg" "$newProjectDir" | gzip --fast -c > "\"$baseProject\"" ; mv "\"$baseProject\"" ..} and die "Making tarball failed";
 
     `dcop "$dcop" setLabel "Done"`;
     `dcop "$dcop" setProgress 100`;
