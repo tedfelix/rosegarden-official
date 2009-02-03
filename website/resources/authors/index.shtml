@@ -23,8 +23,8 @@ Content-Type: text/html; charset=UTF-8>
     Richard took over responsibility for working on the Linux sequencer
     engine, which was written using the OSS/Voxware drivers.  Not long after,
     Guillaume Laurent showed up with a big patch of code and a lot of
-    enthusiasm.  Rosegarden (the version now known as &quot;X11 Rosegarden&quot;
-    began moving along quite quickly from there.</p>
+    enthusiasm.  Rosegarden (the version now known as &quot;X11
+    Rosegarden&quot;) began moving along quite quickly from there.</p>
 
     <p>After a few years, the project started to show its age.  Its dated user
     interface and a lack of internal organization meant that a rewrite was
