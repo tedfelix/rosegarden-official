@@ -237,7 +237,7 @@ Fader::value_to_position(float value)
     if (m_integral) {
         float sliderLength = float(m_sliderMax) - float(m_sliderMin);
         position =
-            int(sliderLength * (value - float(m_min)) / float(m_max - m_min) + 0.1);
+            int(nearbyintf(sliderLength * (value - float(m_min)) / float(m_max - m_min) + 0.1));
     } else {
         position =
             AudioLevel::dB_to_fader
