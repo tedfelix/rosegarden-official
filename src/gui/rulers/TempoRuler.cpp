@@ -589,18 +589,17 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
     //    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
-    QPoint mp = cp + pos();
 
     QWidget *parent = parentWidget();
+    QPoint mp = this->pos();
     while (parent->parentWidget() && !parent->isWindow()) {
-        mp += parent->pos();
         parent = parent->parentWidget();
+        mp += parent->pos();
     }
 
-    int yoff = cp.y() + m_textFloat->height() + 3;
-    mp = QPoint(mp.x() + 10, mp.y() > yoff ? mp.y() - yoff : 0);
+    QPoint offset = QPoint(10, 30 - cp.y() - m_textFloat->height());
 
-    m_textFloat->move(mp);
+    m_textFloat->move(mp + cp + offset);
     m_textFloat->show();
 }
 
