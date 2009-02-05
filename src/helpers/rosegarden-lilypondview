@@ -267,8 +267,8 @@ echo "LilyPond version is $lilypond_version, file version is $fileversion"
             indev=/dev/pts/0
             if ([ ! -c "$indev" ] || [ ! -w "$indev" ]); then indev=/dev/pts/1; fi
             if ([ ! -c "$indev" ] || [ ! -w "$indev" ]); then indev=/dev/ptya0; fi
-            // note: -c becomes True if file is a Character special device.
-            // -w : is writeable
+            # note: -c becomes True if file is a Character special device.
+            # -w : is writeable
             
 
 	    PROGRESS=`$prog_temp_file`
