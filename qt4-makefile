@@ -92,7 +92,7 @@ clean:
 test:
 	echo $(QSOURCES)
 
-.PHONY: ts locale menu-ts
+.PHONY: menu-ts ts ts-noobsolete locale
 
 include dependencies
 
