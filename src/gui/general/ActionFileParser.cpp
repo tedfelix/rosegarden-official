@@ -360,10 +360,10 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
             case Right: area = Qt::RightToolBarArea; break;
             case Bottom: area = Qt::BottomToolBarArea; break;
             }
-            toolbar = new QToolBar(toolbarName, mw);
+            toolbar = new QToolBar(QObject::tr(toolbarName), mw);
             mw->addToolBar(area, toolbar);
         } else {
-            toolbar = new QToolBar(toolbarName, widget);
+            toolbar = new QToolBar(QObject::tr(toolbarName), widget);
         }
         toolbar->setObjectName(toolbarName);
     }
