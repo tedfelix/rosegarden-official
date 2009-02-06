@@ -24,7 +24,28 @@ prog_kdialog=""
 prog_pdf_view=""
 prog_printer=""
 
-set eval -- `getopt -n$0 --longoptions="graphical,pdf,print,version,conftest" "gpPv" "$@"`
+usage() {
+cat 1>&2 <<End-of-Usage-message
+Process LilyPond files to PDF files and print/view them.
+
+Usage: rosegarden-lilypondview [OPTION] file.ly ...
+
+Options:
+  -g, --graphical : show Lilypond progress in a graphical dialog
+  -P, --pdf       : view created PDF files (DEFAULT)
+  -p, --print     : print created PDF files; together with '--pdf', viewing starts first
+  -v, --version   : print version of rosegarden-lilypondview
+      --conftest  : check that all dependencies are present
+
+example: rosegarden-lilypondview -g file.ly
+
+End-of-Usage-message
+exit 2
+}
+
+OPTOUT=`getopt -n$0 --longoptions="graphical,pdf,print,version,conftest" "gpPv" -- "$@"`
+[ $? != 0 ] && usage
+eval set -- "$OPTOUT"
 
 input_files=""
 pdf_view=""
@@ -34,29 +55,25 @@ while [ $# -gt 0 ]
 do
     # Parse options
     case "$1" in
+	--) ;;
         -g|--graphical) graphical=true ;;
         -p|--print) printing=true ;;
         -P|--pdf) pdf_view=true ;;
         -v|--version) print_version=true ;;
            --conftest) conftest=true ;;
+	*)
+	    if [ ! -f "$1" ]; then
+		echo "Error: Can't open \"$1\" for reading" 1>&2
+		exit 1
+	    fi
+	    input_files="$input_files
+$1"
+	    ;;
     esac
-
-    # Check and list the listed LilyPond input files
-    # getopt adds quotation marks ('): "'input.ly'"
-    if [ "`expr match $1 '.*.ly'`" == "`expr length $1 - 1`" -o \
-	 "`expr match $1 '.*.ly.gz'`" == "`expr length $1 - 1`" ]; then
-        input="${1:1:`expr length "$1" - 2`}"
-        if [ ! -f "$input" ]; then
-	    echo "Error: Can't open \"$input\" for reading" 1>&2
-	    exit 1
-        fi
-	input_files="$input_files
-$input"
-    fi
     shift
 done
 
-#echo "input files: $input_files"
+echo "input files: $input_files"
 
 if [ -n "$print_version" ]; then
     echo "rosegarden-lilypondview v1.6" 1>&2
@@ -141,26 +158,9 @@ if [ -z "$prog_kdialog" ]; then
     graphical=""
 fi
 
-if [ -z "$input" ]; then
-cat <<End-of-Usage-message
-Process LilyPond files to PDF files and print/view them.
+if [ -z "$input_files" ]; then usage; fi
 
-Usage: rosegarden-lilypondview [OPTION] file.ly ...
-
-Options:
-  -g, --graphical : show Lilypond progress in a graphical dialog
-  -P, --pdf       : view created PDF files (DEFAULT)
-  -p, --print     : print created PDF files; together with '--pdf', viewing starts first
-  -v, --version   : print version of rosegarden-lilypondview
-      --conftest  : check that all dependencies are present
-
-example: rosegarden-lilypondview -g file.ly
-
-End-of-Usage-message
-    exit 2
-fi
-
-for x in $input_files; do
+echo $input_files | while read x; do
     case "$x" in
 	*.ly|*.ly.gz)
         input="$x"
