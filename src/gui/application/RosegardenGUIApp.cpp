@@ -583,6 +583,7 @@ RosegardenGUIApp::~RosegardenGUIApp()
 
 void RosegardenGUIApp::setupActions()
 {
+    createAction("file_new", SLOT(slotFileNew()));
     createAction("file_open", SLOT(slotFileOpen()));
     createAction("file_save", SLOT(slotFileSave()));
     createAction("file_save_as", SLOT(slotFileSaveAs()));
