@@ -215,29 +215,24 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
-    grid->addWidget(m_compositionView, 3, 1);
+//    grid->addWidget(m_compositionView, 3, 1);
+    grid->addWidget(m_compositionView, 3, 1, 2, 1); // Multi-cell widget FromRow, FromCol, RowSpan, ColSpan
 
-//	grid->addWidget(m_bottomStandardRuler, 4, 1);
-//    m_compositionView->hide();
+	QSize hsbSize = m_compositionView->horizontalScrollBar()->sizeHint();
+	grid->setRowMinimumHeight(4,hsbSize.height() + m_bottomStandardRuler->height());
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
 
     // Track Buttons
     //
-    // (must be put in a QScrollView)
-    //
 //    m_trackButtonScroll = new QDeferScrollView(this);
 	m_trackButtonScroll = new QScrollArea(this);
-	// Vertical scroll bar always off
+	// Scroll bars always off
 	m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	// Horizontal scroll bar always on hidden gives good spacing with CompositionView widget
-	m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-	m_trackButtonScroll->horizontalScrollBar()->setVisible(false);
+	m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
-
-//    m_trackButtonScroll->hide();
 
     int canvasHeight = getTrackCellHeight() *
                        std::max(40u, m_doc->getComposition().getNbTracks());
@@ -271,6 +266,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 	
 //    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
 //                                        m_compositionView->horizontalScrollBar()->height());
+
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));

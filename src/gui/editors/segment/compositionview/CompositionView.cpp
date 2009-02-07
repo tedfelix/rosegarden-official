@@ -486,7 +486,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
     RG_DEBUG << "CompositionView::resizeEvent() : from " << e->oldSize() << " to " << e->size() << endl;
 
-    Q3ScrollView::resizeEvent(e);
+    //Q3ScrollView::resizeEvent(e);
+    RosegardenScrollView::resizeEvent(e);
     slotUpdateSize();
 
     int w = std::max(m_segmentsDrawBuffer.width(), visibleWidth());

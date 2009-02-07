@@ -20,7 +20,8 @@
 #define _RG_ROSEGARDENSCROLLVIEW_H_
 
 #include <QPoint>
-#include <Q3ScrollView>
+//#include <Q3ScrollView>
+#include <QAbstractScrollArea>
 #include <QDateTime>
 #include <QTimer>
 
@@ -41,7 +42,8 @@ namespace Rosegarden
  * and the ability to have a "fixed" (non-scrolling) widget at its bottom,
  * just above the bottom scrollbar.
  */
-class RosegardenScrollView : public Q3ScrollView
+//class RosegardenScrollView : public Q3ScrollView
+class RosegardenScrollView : public QAbstractScrollArea
 {
     Q_OBJECT
 public:
@@ -62,6 +64,31 @@ public:
      * all the items
      */
 //     void fitWidthToContents();
+
+	// Functions that were missing from QAbstractScrollArea
+	int contentsX();	//### todo: when GUI is ready: check the following code
+	int contentsY();
+	void setContentsPos(int, int ); //### JAS todo: when GUI is ready: check the following code
+	int visibleWidth();
+	int visibleHeight();
+	int contentsWidth();
+	int	contentsHeight();
+	
+	void resizeContents(int, int);	
+	void updateContents(int, int, int, int);
+	void updateContents(const QRect& r);
+	void updateContents();
+
+	void paintEvent( QPaintEvent* pe );
+	
+	void mousePressEvent( QMouseEvent* );
+	void mouseReleaseEvent( QMouseEvent* );
+	void mouseDoubleClickEvent( QMouseEvent* );
+	void mouseMoveEvent( QMouseEvent* );
+
+	QPoint viewportToContents( QPoint& );
+	
+	void setDragAutoScroll(bool);
 
     /**
      * Sets the widget which will be between the scrollable part of the view
@@ -124,6 +151,8 @@ public slots:
 
     bool isAutoScrolling() const { return m_autoScrolling; }
 
+    void updateScrollBars();
+
 signals:
     void bottomWidgetHeightChanged(int);
 
@@ -132,6 +161,13 @@ signals:
 
 protected:
     
+    virtual void viewportPaintEvent( QPaintEvent* );
+
+	virtual void contentsMousePressEvent( QMouseEvent* );
+	virtual void contentsMouseReleaseEvent( QMouseEvent* );
+	virtual void contentsMouseMoveEvent( QMouseEvent* );
+	virtual void contentsMouseDoubleClickEvent( QMouseEvent* );
+
     virtual void resizeEvent(QResizeEvent*);
     virtual void setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h);
     
@@ -168,6 +204,15 @@ protected:
     static const int MaxScrollDelta;
     static const double ScrollShortcutValue;
 
+	int m_vwidth;
+	int m_vheight;
+	
+private:
+	void viewportMousePressEvent( QMouseEvent* );
+	void viewportMouseReleaseEvent( QMouseEvent* );
+	void viewportMouseDoubleClickEvent( QMouseEvent* );
+	void viewportMouseMoveEvent( QMouseEvent* );
+	QPoint viewportToContents(const QPoint& vp);
 };
 
 

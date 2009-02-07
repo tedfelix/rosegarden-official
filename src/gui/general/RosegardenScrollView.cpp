@@ -26,7 +26,7 @@
 #include <QPoint>
 #include <QRect>
 #include <QScrollBar>
-#include <QScrollArea>
+#include <QAbstractScrollArea>
 #include <QSizePolicy>
 #include <QTimer>
 #include <QWidget>
@@ -46,7 +46,8 @@ const double RosegardenScrollView::ScrollShortcutValue = 1.04;// shortcuteration
 
 RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 					const char* name) //, WFlags f)
-    : Q3ScrollView(parent, name), //, f),
+//    : Q3ScrollView(parent, name), //, f),
+	: QAbstractScrollArea(parent),
 		
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
@@ -62,7 +63,7 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
         m_autoScrolling(false)
 {
 
-     setDragAutoScroll(true);		//&&& could not find replacement
+    setDragAutoScroll(true);		//&&& could not find replacement
 	
     connect( &m_autoScrollTimer, SIGNAL( timeout() ),
              this, SLOT( doAutoScroll() ) );
@@ -76,31 +77,243 @@ RosegardenScrollView::RosegardenScrollView(QWidget* parent,
 // <QScrollArea*>this->horizontalScrollBar().value()
 //                  + <QScrollArea*>this->width()
 //
-/*###
 int RosegardenScrollView::contentsX()	//### todo: when GUI is ready: check the following code
 {
 	return this->horizontalScrollBar()->value();
 }
+
 int RosegardenScrollView::contentsY()
 {
 	return this->verticalScrollBar()->value();
 }
+
 void RosegardenScrollView::setContentsPos(int posX, int posY) //### JAS todo: when GUI is ready: check the following code
 {
         this->horizontalScrollBar()->setValue(posX);
         this->verticalScrollBar()->setValue(posY);
 	return;
 }
+
 int RosegardenScrollView::visibleWidth()
 {
-	return this->horizontalScrollBar()->value() + this->width();
+	// These were converted by someone to contentsX + this->width() - didn't look right
+	return this->viewport()->width();
+//	return this->width();
 }
+
 int RosegardenScrollView::visibleHeight()
 {
-	return this->verticalScrollBar()->value() + this->height();
+	return this->viewport()->height();
+//	return this->height();
 }
-*/
 
+int RosegardenScrollView::contentsWidth()
+{
+	return m_vwidth;
+}
+
+int	RosegardenScrollView::contentsHeight()
+{
+	return m_vheight;
+}
+
+void RosegardenScrollView::resizeContents(int w, int h)	// Code lifted from Q3ScrollView
+{
+	int ow = m_vwidth;
+	int oh = m_vheight;
+	
+	m_vwidth = w;
+	m_vheight = h;
+
+//    d->scrollbar_timer.start(0, true); // This was necessary until I fixed the resizeEvent connection
+
+//### CJ - Don't think this is necessary - slightly confused as we're resizing the content, not the widget
+//    if (d->children.isEmpty() && d->policy == Default)
+//        setResizePolicy(Manual);
+
+    if (ow > w) {
+        // Swap
+        int t=w;
+        w=ow;
+        ow=t;
+    }
+    // Refresh area ow..w
+    if (ow < visibleWidth() && w >= 0) {
+        if (ow < 0)
+            ow = 0;
+        if (w > visibleWidth())
+            w = visibleWidth();
+        this->viewport()->update(contentsX()+ow, 0, w-ow, visibleHeight());
+    }
+
+    if (oh > h) {
+        // Swap
+        int t=h;
+        h=oh;
+        oh=t;
+    }
+
+    // Refresh area oh..h
+    if (oh < visibleHeight() && h >= 0) {
+        if (oh < 0)
+            oh = 0;
+        if (h > visibleHeight())
+            h = visibleHeight();
+        this->viewport()->update(0, contentsY()+oh, visibleWidth(), h-oh);
+    }
+}
+
+void RosegardenScrollView::updateContents(int x, int y, int w, int h) 	// Code lifted from Q3ScrollView
+{
+	if (!isVisible() || !updatesEnabled())
+		return;
+
+//	RG_DEBUG << "RosegardenScrollView::updateContents" << endl;
+    QWidget* vp = viewport();
+
+    // Translate
+    x -= contentsX();
+    y -= contentsY();
+
+    if (x < 0) {
+        w += x;
+        x = 0;
+    }
+    if (y < 0) {
+        h += y;
+        y = 0;
+    }
+
+    if (w < 0 || h < 0)
+        return;
+    if (x > visibleWidth() || y > visibleHeight())
+        return;
+
+    if (w > visibleWidth())
+        w = visibleWidth();
+    if (h > visibleHeight())
+        h = visibleHeight();
+
+	//### CJ - I don't think we used a clipped_viewport on Q3ScrollView
+    //if (d->clipped_viewport) {
+        //// Translate clipper() to viewport()
+        //x -= d->clipped_viewport->x();
+        //y -= d->clipped_viewport->y();
+    //}
+
+    vp->update(x, y, w, h);
+}
+
+void RosegardenScrollView::updateContents(const QRect& r)
+{
+    updateContents(r.x(), r.y(), r.width(), r.height());
+}
+
+void RosegardenScrollView::updateContents()
+{
+    updateContents(contentsX(), contentsY(), visibleWidth(), visibleHeight());
+}
+
+void RosegardenScrollView::updateScrollBars()
+{
+	this->horizontalScrollBar()->setPageStep(visibleWidth());
+	this->horizontalScrollBar()->setMaximum(contentsWidth()-visibleWidth());
+	this->verticalScrollBar()->setPageStep(visibleHeight());
+	this->verticalScrollBar()->setMaximum(contentsHeight()-visibleHeight());
+
+//	RG_DEBUG << "RosegardenScrollView::updateScrollBars :" << " pagewidth - " << visibleWidth() << " pageheight - " << visibleHeight() << endl;
+}
+
+void RosegardenScrollView::paintEvent( QPaintEvent* event )
+{
+	viewportPaintEvent( event );
+}
+
+QPoint RosegardenScrollView::viewportToContents(const QPoint& vp)
+{
+	return QPoint(vp.x() + contentsX(),
+				   vp.y() + contentsY());
+}
+
+void RosegardenScrollView::viewportPaintEvent( QPaintEvent* event )
+{
+}
+
+void RosegardenScrollView::mousePressEvent( QMouseEvent* event )
+{
+	viewportMousePressEvent( event );
+}
+
+void RosegardenScrollView::viewportMousePressEvent(QMouseEvent* e)
+{
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+        e->globalPos(), e->button(), e->state());
+    contentsMousePressEvent(&ce);
+    if (!ce.isAccepted())
+        e->ignore();
+}
+
+void RosegardenScrollView::contentsMousePressEvent( QMouseEvent* event )
+{
+}
+
+void RosegardenScrollView::mouseReleaseEvent( QMouseEvent* event )
+{
+	viewportMouseReleaseEvent( event );
+}
+
+void RosegardenScrollView::viewportMouseReleaseEvent(QMouseEvent* e)
+{
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+        e->globalPos(), e->button(), e->state());
+    contentsMouseReleaseEvent(&ce);
+    if (!ce.isAccepted())
+        e->ignore();
+}
+
+void RosegardenScrollView::contentsMouseReleaseEvent( QMouseEvent* event )
+{
+}
+
+void RosegardenScrollView::mouseMoveEvent( QMouseEvent* event )
+{
+	viewportMouseMoveEvent( event );
+}
+
+void RosegardenScrollView::viewportMouseMoveEvent(QMouseEvent* e)
+{
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+        e->globalPos(), e->button(), e->state());
+    contentsMouseMoveEvent(&ce);
+    if (!ce.isAccepted())
+        e->ignore();
+}
+
+void RosegardenScrollView::contentsMouseMoveEvent( QMouseEvent* event )
+{
+}
+
+void RosegardenScrollView::mouseDoubleClickEvent( QMouseEvent* event )
+{
+	viewportMouseDoubleClickEvent( event );
+}
+
+void RosegardenScrollView::viewportMouseDoubleClickEvent(QMouseEvent* e)
+{
+    QMouseEvent ce(e->type(), viewportToContents(e->pos()),
+        e->globalPos(), e->button(), e->state());
+    contentsMouseDoubleClickEvent(&ce);
+    if (!ce.isAccepted())
+        e->ignore();
+}
+
+void RosegardenScrollView::contentsMouseDoubleClickEvent( QMouseEvent* event )
+{
+}
+
+void RosegardenScrollView::setDragAutoScroll(bool state)
+{
+}
 
 void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
 {
@@ -108,8 +321,8 @@ void RosegardenScrollView::setBottomFixedWidget(QWidget* w)
     if (m_bottomWidget) {
         m_bottomWidget->reparent(this, 0, QPoint(0, 0));
         m_bottomWidget->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
- 		setMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
-//		setContentsMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+		setViewportMargins( 0, 0, 0, m_bottomWidget->sizeHint().height() );
+		RG_DEBUG << "RosegardenScrollView::setBottomFixedWidget" << endl;
 	}
 }
 
@@ -396,21 +609,26 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
-    Q3ScrollView::resizeEvent(e);
-    if (!horizontalScrollBar()->isVisible())
-        updateBottomWidgetGeometry();
+	RG_DEBUG << "RosegardenScrollView::resizeEvent" << endl;
+//    Q3ScrollView::resizeEvent(e);
+	QAbstractScrollArea::resizeEvent(e);
+	updateScrollBars();
+//### What was the purpose of this?
+//    if (!horizontalScrollBar()->isVisible())
+    updateBottomWidgetGeometry();
 
 }
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
 {
-     Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
+     ///@TODO Not available in QAbstractScrollArea - Q3ScrollView::setHBarGeometry(hbar, x, y, w, h);
 //	hbar.setGeometry( x,y, w,h );
     updateBottomWidgetGeometry();
 }
 
 void RosegardenScrollView::updateBottomWidgetGeometry()
 {
+	RG_DEBUG << "RosegardenScrollView::updateBottomWidgetGeometry" << endl;
     if (!m_bottomWidget)
         return ;
 
@@ -427,10 +645,7 @@ void RosegardenScrollView::updateBottomWidgetGeometry()
         vScrollBarWidth = verticalScrollBar()->width();
 
     m_bottomWidget->setGeometry(r.x(),
-//                                r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
-//CJ r.height is the height of the area having had the margin removed
-//CJ there is, therefore, no need to remove it again here
-                                r.y() + r.height() - hScrollBarHeight,
+                                r.y() + r.height() - bottomWidgetHeight - hScrollBarHeight,
                                 r.width() - vScrollBarWidth,
                                 bottomWidgetHeight);
 
@@ -451,7 +666,8 @@ void RosegardenScrollView::wheelEvent(QWheelEvent *e)
             emit zoomOut();
         return ;
     }
-    Q3ScrollView::wheelEvent(e);
+//    Q3ScrollView::wheelEvent(e);
+	QAbstractScrollArea::wheelEvent(e);
 }
 
 }
