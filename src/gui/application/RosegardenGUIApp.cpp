@@ -1987,20 +1987,32 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
     QUrl *u = new QUrl(name);
 
     if (!u->isValid()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("This is not a valid filename.\n"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
         return "";
     }
 
-    //if (!u->isLocalFile()) {
-	if ( ! QFile::exists( u->toLocalFile() )){
-        /* was sorry */ QMessageBox::warning(this, "",  tr("This is not a local file.\n"));
-        return "";
-    }
+//@@@
+//
+// KURL::isLocalFile() doesn't exist in Qt at all.  Somebody tried to cobble up
+// this equivalent, and it doesn't work, because it will fail unless the file
+// actually exists, which it doesn't yet, because it won't be created until
+// after this test passes, which it never will.
+//
+// After considerable resarch on this matter, I have decided to see what happens
+// if we just remove the code entirely.  If it isn't a local file, who really
+// cares anyway?  What matters is whether it is writeable or not, which should
+// be determined further down.
+//
+//    //if (!u->isLocalFile()) {
+//  if ( !QFile::exists(u->toLocalFile() )){
+//      /* was sorry */ QMessageBox::warning(this, "",  tr("<qt>Sorry.<br>\"%1\" is not a local file.</qt>").arg(name));
+//      return "";
+//  } 
 
     QFileInfo info(name);
 
     if (info.isDir()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("You have specified a directory"));
+        /* was sorry */ QMessageBox::warning(this, "", tr("You have specified a folder/directory."));
         return "";
     }
 

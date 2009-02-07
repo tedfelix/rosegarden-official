@@ -19,6 +19,7 @@
 #include "TrackVUMeter.h"
 
 #include "gui/widgets/VUMeter.h"
+
 #include <QFont>
 #include <QString>
 #include <QWidget>
