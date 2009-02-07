@@ -85,6 +85,21 @@
 
 namespace Rosegarden
 {
+/********TrackButtonScroll*********/
+TrackButtonScroll::TrackButtonScroll(QWidget* parent) : QScrollArea(parent)
+{
+}
+
+TrackButtonScroll::~TrackButtonScroll()
+{
+}
+
+void TrackButtonScroll::wheelEvent(QWheelEvent* e)
+{
+    emit gotWheelEvent(e);
+}
+/********TrackButtonScroll*********/
+
 
 TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          QWidget* rosegardenguiview,
@@ -227,7 +242,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     // Track Buttons
     //
 //    m_trackButtonScroll = new QDeferScrollView(this);
-	m_trackButtonScroll = new QScrollArea(this);
+//	m_trackButtonScroll = new QScrollArea(this);
+	m_trackButtonScroll = new TrackButtonScroll(this);
 	// Scroll bars always off
 	m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 	m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -311,9 +327,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     // scrolling with mouse wheel
-///@TODO gotWheelEvent not implemented for QScrollArea
-//    connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
-//            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
+    connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
+            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
     // Connect horizontal scrollbar
     //

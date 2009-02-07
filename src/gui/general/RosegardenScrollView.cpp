@@ -407,7 +407,11 @@ void RosegardenScrollView::doAutoScroll()
 
     if ( (dx || dy) &&
             ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
-        scroll(dx, dy);
+
+//        scroll(dx, dy);
+		this->horizontalScrollBar()->setValue( this->horizontalScrollBar()->value() + dx );
+		this->verticalScrollBar()->setValue( this->verticalScrollBar()->value() + dy );
+		
         if ( startDecelerating )
             m_minDeltaScroll /= ScrollShortcutValue;
         else

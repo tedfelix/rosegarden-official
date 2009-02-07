@@ -23,6 +23,7 @@
 #include <map>
 #include <QString>
 #include <QWidget>
+#include <QScrollArea>
 #include "base/Event.h"
 #include "gui/editors/segment/TrackButtons.h"
 
@@ -47,6 +48,24 @@ class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
 class StandardRuler;
+
+/**
+ * Temporary (?) home for tghis class
+ */
+class TrackButtonScroll : public QScrollArea
+{
+    Q_OBJECT
+public:
+    TrackButtonScroll(QWidget* parent=0);
+	~TrackButtonScroll();
+
+	void wheelEvent(QWheelEvent*);
+public slots:
+signals:
+	void gotWheelEvent(QWheelEvent*);
+
+protected:
+};
 
 /**
  * Global widget for segment edition.
