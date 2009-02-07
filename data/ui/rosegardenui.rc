@@ -221,8 +221,6 @@
       <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />
       <!-- JAS "show_status_bar" is "options_show_statusbar" in matrix.rc and notation.rc -->
       <!-- JAS 'options_show_statusbar' determined by state -->
-    <Separator/>
-      <Action name="show_status_bar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
     </Menu>
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
@@ -233,12 +231,13 @@
   <Separator append="show_merge" />
     <Action name="show_transport" text="Show Tra&amp;nsport" shortcut="T" checked="true" append="show_merge" />
     <!-- JAS "show_inst_segment_parameters" is state dependent but not checkable -->
-    <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" append="show_merge" />
+    <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" checked="true" append="show_merge" />
   <Separator append="show_merge" />
     <Action name="show_previews" text="Show Segment Pre&amp;views" checked="true" append="show_merge" />
     <Action name="show_segment_labels" text="Sh&amp;ow Segment Labels" checked="true" append="show_merge" />
     <Action name="show_tracklabels" text="Show Track &amp;Labels" checked="true" append="show_merge" />
     <!-- Action name="toggle_all" append="show_merge" /> -->
+    <Action name="show_status_bar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
   <Separator/>
     <Action name="options_save_options" text="&amp;Save Settings" />
   <Seperator/>
