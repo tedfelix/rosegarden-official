@@ -338,7 +338,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="980"/>
         <source>&amp;Bug Reporting Guidelines</source>
-        <translation>&amp;Bugien raportoimisohjeet</translation>
+        <translation>&amp;Ohjelmointivirheiden raportoimisohjeet</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="981"/>
@@ -968,7 +968,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="949"/>
         <source>&amp;Fast Forward</source>
-        <translation>Pikakelaa &amp;eteenpäin</translation>
+        <translation>Kelaa &amp;eteenpäin</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="684"/>
@@ -978,7 +978,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="685"/>
         <source>Fast Forward to &amp;End</source>
-        <translation>Pikakelaa &amp;loppuun</translation>
+        <translation>Kelaa &amp;loppuun</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="686"/>
@@ -1123,7 +1123,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="339"/>
         <source>Show &amp;Instrument Parameters</source>
-        <translation>Näytä &amp;Instrimenttien ominaisuudet</translation>
+        <translation>Näytä &amp;Instrumenttien ominaisuudet</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="988"/>
@@ -2484,7 +2484,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="852"/>
         <source>Open &amp;Recent</source>
-        <translation>Avaa &amp;viimeinen</translation>
+        <translation>Avaa &amp;edellinen</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="854"/>
@@ -2809,7 +2809,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="964"/>
         <source>Show Playback Position R&amp;uler</source>
-        <translation>Näytä toisto-osoittimen &amp;viivain</translation>
+        <translation>Näytä Toisto-osoittimen &amp;viivain</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="966"/>
@@ -2824,7 +2824,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="968"/>
         <source>Show Special &amp;Parameters</source>
-        <translation>Näytä Erikois&amp;ominaisuudet</translation>
+        <translation>Näytä Erityis&amp;ominaisuudet</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="969"/>
@@ -2864,7 +2864,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="993"/>
         <source>Fast Forward to End</source>
-        <translation>Pikakelaa loppuun</translation>
+        <translation>Kelaa loppuun</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="995"/>
@@ -3391,7 +3391,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../src/gui/configuration/AudioConfigurationPage.cpp" line="154"/>
         <source>for individual audio instruments</source>
-        <translation>ääni-instrumenteille</translation>
+        <translation>eri ääni-instrumenteille</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/AudioConfigurationPage.cpp" line="161"/>
@@ -5376,7 +5376,7 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
     <message>
         <location filename="../src/gui/studio/DeviceManagerDialog.cpp" line="164"/>
         <source>View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box </source>
-        <translation>Katso ja muokkaa valitun laitteen hallintatapahtumia - nämä ovat erikoistapahtumatyyppejä, jotka voit määrittää laitekohtaisesti ja joita voit hallita Hallinta-viivaimista tai Instrumenttimuuttujat-laatikosta</translation>
+        <translation>Katso ja muokkaa valitun laitteen hallintatapahtumia - nämä ovat erityistapahtumatyyppejä, jotka voit määrittää laitekohtaisesti ja joita voit hallita Hallinta-viivaimista tai Instrumenttimuuttujat-laatikosta</translation>
     </message>
     <message>
         <location filename="../src/gui/studio/DeviceManagerDialog.cpp" line="190"/>
@@ -9914,8 +9914,8 @@ hyödyttämään muitakin.</translation>
         <location filename="../src/gui/editors/notation/NotationVLayout.cpp" line="487"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
-        <translation>Venytetyllä nuotilla kohdassa %1 ei ole nuottikorkeutta (HEIGHT_ON_STAFF)!
-Tämä on virhe (aiemmin ohjelma kaatui tässä kohdassa)</translation>
+        <translation type="unfinished">Venytetyllä nuotilla kohdassa %1 ei ole nuottikorkeutta (HEIGHT_ON_STAFF)!
+Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translation>
     </message>
 </context>
 <context>
@@ -11203,7 +11203,7 @@ Tarkista asetukset (Asetukset -&gt; Aseta Rosegarden -&gt; Ääni -&gt; Aloitus)
     <message>
         <location filename="../src/gui/application/RosegardenGUIApp.cpp" line="372"/>
         <source>Special Parameters</source>
-        <translation>Erikoisominaisuudet</translation>
+        <translation>Erityisominaisuudet</translation>
     </message>
     <message>
         <location filename="../src/gui/application/RosegardenGUIApp.cpp" line="466"/>
@@ -12784,7 +12784,7 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
     <message>
         <location filename="../src/gui/seqmanager/SequenceManager.cpp" line="1160"/>
         <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Järjestelmän aikaerottelukyky on liian matala&lt;/h3&gt;&lt;p&gt;Rosegarden ei löytänyt korkeaerottelukykyistä aikalähdettä MIDI-esitystä varten.&lt;/p&gt;&lt;p&gt;Saatat voida ratkaista tämän ongelman lataamalla RTC-kernelimoduulin.  Tehdäksesi tämän, yritä ajaa &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; komentorivi-ikkunassa ja käynnistämällä Rosegarden uudelleen&lt;/p&gt;&lt;p&gt;Vaihtoehtoisesti, tarkista tarjoaako Linux-jakelijasi multimedialle optimoitua kerneliä.  Sivulle &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; on kerätty tietoja tästä.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Järjestelmän aikaerottelukyky on liian matala&lt;/h3&gt;&lt;p&gt;Rosegarden ei löytänyt korkeaerottelukykyistä aikalähdettä MIDI-esitystä varten.&lt;/p&gt;&lt;p&gt;Saatat voida ratkaista tämän ongelman lataamalla ytintä varten RTC-moduulin.  Tehdäksesi tämän, yritä ajaa &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; komentorivi-ikkunassa ja käynnistämällä Rosegarden uudelleen&lt;/p&gt;&lt;p&gt;Vaihtoehtoisesti, tarkista tarjoaako Linux-jakelijasi multimedialle optimoitua ydintä.  Sivulle &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; on kerätty tästä tietoja.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../src/gui/seqmanager/SequenceManager.cpp" line="1260"/>
@@ -15210,7 +15210,7 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     <message>
         <location filename="../src/gui/dialogs/RosegardenTransport.h" line="1193"/>
         <source>Fast forward</source>
-        <translation>Pikakelaa eteenpäin</translation>
+        <translation>Kelaa eteenpäin</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs/RosegardenTransport.h" line="1198"/>
@@ -15220,7 +15220,7 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     <message>
         <location filename="../src/gui/dialogs/RosegardenTransport.h" line="1204"/>
         <source>Fast forward to end</source>
-        <translation>Pikakelaa loppuun</translation>
+        <translation>Kelaa loppuun</translation>
     </message>
     <message>
         <location filename="../src/gui/dialogs/RosegardenTransport.h" line="1209"/>
