@@ -110,6 +110,8 @@ void LoopRuler::scrollHoriz(int x)
         return ;
     }
 
+/*### These bitBlts are not working
+	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?" << endl;
     if (dx > 0) { // moving right, so the existing stuff moves left
         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
         repaint(w - dx, 0, dx, h);
@@ -117,6 +119,9 @@ void LoopRuler::scrollHoriz(int x)
         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
         repaint(0, 0, -dx, h);
     }
+	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?" << endl;
+*/
+	update();
 }
 
 QSize LoopRuler::sizeHint() const
