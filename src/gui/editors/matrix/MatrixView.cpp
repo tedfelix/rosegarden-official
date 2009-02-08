@@ -1989,7 +1989,11 @@ MatrixView::slotSetSnap(timeT t)
     QSettings settings;
     settings.beginGroup( MatrixViewConfigGroup );
 
-    settings.setValue("Snap Grid Size", static_cast<unsigned long long>(t));
+    //@@@ the following was "unsigned long long" but timeT is a signed long;
+    // perhaps changing this to "long long" will fix the QSettings matrix snap
+    // grid size bug where it randomly winds up a 20-digit number and causes a
+    // crash, or perhaps not
+    settings.setValue("Snap Grid Size", static_cast<long long>(t));
     settings.endGroup();
 
     updateView();

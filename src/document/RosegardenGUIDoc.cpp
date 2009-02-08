@@ -17,18 +17,11 @@
 
 
 #include "RosegardenGUIDoc.h"
-#include <QApplication>
 
-#include <qxml.h>
-#include "sound/Midi.h"
-#include "gui/editors/segment/TrackEditor.h"
-#include "gui/editors/segment/TrackButtons.h"
-#include <QDir>
-#include "misc/AppendLabel.h"
-#include "misc/Debug.h"
-#include "misc/Strings.h"
-#include "gui/general/ClefIndex.h"
-#include "document/ConfigGroups.h"
+#include "CommandHistory.h"
+#include "RoseXmlHandler.h"
+#include "GzipFile.h"
+
 #include "base/AudioDevice.h"
 #include "base/AudioPluginInstance.h"
 #include "base/BaseProperties.h"
@@ -56,6 +49,9 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRecordCommand.h"
 #include "commands/segment/ChangeCompositionLengthCommand.h"
+#include "gui/editors/segment/TrackEditor.h"
+#include "gui/editors/segment/TrackButtons.h"
+#include "gui/general/ClefIndex.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenGUIApp.h"
 #include "gui/application/RosegardenGUIView.h"
@@ -71,8 +67,8 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "CommandHistory.h"
-#include "RoseXmlHandler.h"
+#include "gui/widgets/ProgressBar.h"
+#include "gui/general/AutoSaveFinder.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -84,7 +80,14 @@
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
+#include "sound/Midi.h"
+#include "misc/AppendLabel.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "document/Command.h"
+#include "document/ConfigGroups.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QMessageBox>
 #include <QProcess>
@@ -102,9 +105,7 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QWidget>
-#include "gui/widgets/ProgressBar.h"
-#include <QSettings>
-#include "GzipFile.h"
+
 
 namespace Rosegarden
 {
@@ -121,8 +122,8 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
         m_audioPreviewThread(&m_audioFileManager),
         m_pluginManager(pluginManager),
         m_audioRecordLatency(0, 0),
-        m_autoSavePeriod(0),
         m_quickMarkerTime(-1),
+        m_autoSavePeriod(0),
         m_beingDestroyed(false)
 {
     syncDevices();
@@ -291,8 +292,10 @@ QString RosegardenGUIDoc::getAutoSaveFileName()
     //!!! are cleaned up after a crash, the next time RG is started,
     //!!! so they aren't appropriate for recovery purposes.
 
-//    QString autoSaveFileName = qApp->tempSaveName(filename); //&&& tempSaveName does not exist yet
-	QString autoSaveFileName = "autoSaveFileNameTemp_";
+    QString autoSaveFileName = AutoSaveFinder().getAutoSavePath(filename);
+    RG_DEBUG << "RosegardenGUIDoc::getAutoSaveFilename(): returning "
+             << autoSaveFileName
+             << endl;
 
     return autoSaveFileName;
 }
