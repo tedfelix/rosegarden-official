@@ -1251,8 +1251,7 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     return m_res;
 }
 
-CompositionModel::heightlist
-CompositionModelImpl::getTrackDividersIn(const QRect& rect)
+CompositionModel::heightlist CompositionModelImpl::getTrackDividersIn(const QRect& rect)
 {
     int top = m_grid.getYBin(rect.y());
     int bottom = m_grid.getYBin(rect.y() + rect.height());
@@ -1261,6 +1260,8 @@ CompositionModelImpl::getTrackDividersIn(const QRect& rect)
 //              << rect.x() << ", " << rect.y() << ", "
 //              << rect.width() << "x" << rect.height() << ", top = " << top
 //              << ", bottom = " << bottom << std::endl;
+    
+    setTrackHeights();
     
     CompositionModel::heightlist list;
 

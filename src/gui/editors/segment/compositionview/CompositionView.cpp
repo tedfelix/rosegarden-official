@@ -722,7 +722,7 @@ void CompositionView::drawArea(QPainter *p, const QRect& clipRect)
         p->save();
         QColor light = m_trackDividerColor.light();
         p->setPen(light);
-
+        
         for (CompositionModel::heightlist::const_iterator hi = lineHeights.begin();
              hi != lineHeights.end(); ++hi) {
             int y = *hi;
