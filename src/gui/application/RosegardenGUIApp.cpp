@@ -6383,6 +6383,9 @@ RosegardenGUIApp::slotEditControlParameters(DeviceId device)
     connect(m_doc, SIGNAL(devicesResyncd()),
             controlEditor, SLOT(slotUpdate()));
 
+	
+	controlEditor->resize( 780, 360 );
+	controlEditor->move( 50, 80 );
     controlEditor->show();
 }
 
@@ -7726,8 +7729,12 @@ RosegardenGUIApp::slotJumpToQuickMarker()
 void RosegardenGUIApp::slotOpenDeviceManagerNew()
 {
 	
+	if( m_devicesManagerNew != 0){
+	    RG_DEBUG << "Warning: m_deviceManagerNew was NOT null, , in RosegardenGUIApp::slotOpenDeviceManagerNew() " << endl;
+		//delete m_devicesManagerNew;
+	}
 	if( ! m_devicesManagerNew ){
-		m_devicesManagerNew = new DevicesManagerNew( this );
+		m_devicesManagerNew = new DevicesManagerNew( this, getDocument() );
 		//m_devicesManagerNew->setupUi( dynamic_cast<QDialog*>(m_devicesManagerNew) );
 		
 		//devMan->setAttribute(Qt::WA_DeleteOnClose );	// destroys dialog, if close event was accepted
@@ -7739,11 +7746,47 @@ void RosegardenGUIApp::slotOpenDeviceManagerNew()
 		
 		m_devicesManagerNew->move( 60, 40 );
 		
+		
+// 		connect(m_devicesManagerNew, SIGNAL(closing()),
+// 			this, SLOT(slotDeviceManagerClosed()));
+		
+// 		connect(this, SIGNAL(documentAboutToChange()),
+// 			m_devicesManagerNew, SLOT(close()));
+		
+		// for updating the track/instrument list
+		//
+// 		connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
+// 			m_view, SLOT(slotSynchroniseWithComposition()));
+		
+		connect(m_devicesManagerNew, SIGNAL(editBanks(DeviceId)),
+			this, SLOT(slotEditBanks(DeviceId)));
+		
+		connect(m_devicesManagerNew, SIGNAL(editControllers(DeviceId)),
+			this, SLOT(slotEditControlParameters(DeviceId)));
+		
+		if (m_midiMixer) {
+// 			connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
+// 						m_midiMixer, SLOT(slotSynchronise()));
+		}
+	
+		
+		
+	}// end if
+	//
+	
+	
+// 	QAction *ac = findAction( "open_devices_manager_new" );
+	QToolButton *tb = findChild<QToolButton*>( "open_devices_manager_new" );
+	if( tb ){
+		tb->setDown( true );
 	}
 	
 	m_devicesManagerNew->show();
 // 	m_devicesManagerNew->raise();
 // 	m_devicesManagerNew->activateWindow();
+	
+	//m_devicesManagerNew->refillAllPortsLists();
+	
 	
 }
 

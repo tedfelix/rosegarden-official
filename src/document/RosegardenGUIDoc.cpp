@@ -2315,6 +2315,7 @@ RosegardenGUIDoc::syncDevices()
     RG_DEBUG << "RosegardenGUIDoc::syncDevices - devices = "
              << devices << endl;
 
+    
     for (unsigned int i = 0; i < devices; i++) {
 
         RG_DEBUG << "RosegardenGUIDoc::syncDevices - i = "
@@ -2322,7 +2323,8 @@ RosegardenGUIDoc::syncDevices()
 
         getMappedDevice(i);
     }
-
+	
+	
     RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
              << "Sequencer alive - Instruments synced" << endl;
 

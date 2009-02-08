@@ -229,6 +229,12 @@ ControlEditorDialog::slotUpdate()
 
     for (; it != md->endControllers(); ++it) {
         Composition &comp = m_doc->getComposition();
+		
+		// TODO: fix following segFault
+// 		if( ! it ){
+// 			continue;
+// 			RG_DEBUG << "WARNING: it is NULL in ControlEditorDialog::slotUpdate() ";
+// 		}
 
         QString colour =
             strtoqstr(comp.getGeneralColourMap().getNameByIndex(it->getColourIndex()));

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>760</width>
+    <width>866</width>
     <height>584</height>
    </rect>
   </property>
@@ -46,7 +46,7 @@
           </property>
           <property name="minimumSize" >
            <size>
-            <width>340</width>
+            <width>380</width>
             <height>140</height>
            </size>
           </property>
@@ -58,6 +58,13 @@
             <bold>false</bold>
             <kerning>true</kerning>
            </font>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Create your playback devices here. Connect them to outgoing ports at right.&lt;/p>&lt;/body>&lt;/html></string>
           </property>
           <property name="autoFillBackground" >
            <bool>false</bool>
@@ -102,6 +109,44 @@
           <property name="frameShadow" >
            <enum>QFrame::Raised</enum>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_5" >
+           <property name="spacing" >
+            <number>2</number>
+           </property>
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButton_editControllerDefinitions" >
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
+             <property name="text" >
+              <string>Edit controller definitions</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_manageBanksOfPlaybackDevice" >
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Bank definitions define, how the programs (sounds) of the the device are called, which settings to use for it, etc..&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
+             <property name="text" >
+              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Manage bank definitions...</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item row="1" column="0" >
@@ -139,13 +184,6 @@
             <widget class="QPushButton" name="pushButton_deletePlaybackDevice" >
              <property name="text" >
               <string>Delete</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_manageBanksOfPlaybackDevice" >
-             <property name="text" >
-              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Manage bank definitions...</string>
              </property>
             </widget>
            </item>
@@ -213,6 +251,34 @@
           <property name="frameShadow" >
            <enum>QFrame::Raised</enum>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_6" >
+           <property name="spacing" >
+            <number>2</number>
+           </property>
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButton_2" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="flat" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="flat" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item row="0" column="1" colspan="2" >
@@ -234,6 +300,13 @@
             <family>Sans Serif</family>
             <pointsize>10</pointsize>
            </font>
+          </property>
+          <property name="toolTip" >
+           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Create your record devices here. Connect them to incoming ports at right.&lt;/p>&lt;/body>&lt;/html></string>
           </property>
           <property name="autoFillBackground" >
            <bool>false</bool>
@@ -264,10 +337,10 @@
             <string>Default record device</string>
            </property>
            <property name="text" >
-            <string>NO</string>
+            <string>No</string>
            </property>
            <property name="text" >
-            <string>Null Port</string>
+            <string>No port</string>
            </property>
           </item>
          </widget>
@@ -277,6 +350,18 @@
      </item>
      <item row="1" column="2" >
       <widget class="QGroupBox" name="groupBox_4" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>340</width>
+         <height>16777215</height>
+        </size>
+       </property>
        <property name="title" >
         <string>Available incoming ports</string>
        </property>
@@ -291,8 +376,14 @@
           </property>
           <property name="minimumSize" >
            <size>
-            <width>260</width>
+            <width>320</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize" >
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="font" >
@@ -301,14 +392,23 @@
             <pointsize>10</pointsize>
            </font>
           </property>
+          <property name="toolTip" >
+           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select (or create) a record device (left). Then &lt;span style=" font-weight:600;">double-click&lt;/span> here &lt;span style=" font-weight:600;">to connect&lt;/span> it to an incoming alsa-&lt;span style=" font-weight:600;">midi port.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. software-synthesizers. &lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
           <column>
            <property name="text" >
-            <string>Found incoming ports - click to connect</string>
+            <string>Found incoming ports - double-click to connect</string>
            </property>
           </column>
           <item>
            <property name="text" >
-            <string>Null Port</string>
+            <string>No port</string>
            </property>
           </item>
          </widget>
@@ -335,6 +435,14 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
              </property>
              <property name="text" >
               <string>Refresh</string>
@@ -372,6 +480,12 @@
      </item>
      <item row="0" column="2" >
       <widget class="QGroupBox" name="groupBox_2" >
+       <property name="sizePolicy" >
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="title" >
         <string>Available outgoing ports</string>
        </property>
@@ -379,7 +493,7 @@
         <item row="0" column="0" colspan="2" >
          <widget class="QTreeWidget" name="m_treeWidget_outputPorts" >
           <property name="sizePolicy" >
-           <sizepolicy vsizetype="Expanding" hsizetype="Preferred" >
+           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -390,20 +504,35 @@
             <height>0</height>
            </size>
           </property>
+          <property name="maximumSize" >
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
           <property name="font" >
            <font>
             <family>Sans Serif</family>
             <pointsize>10</pointsize>
            </font>
           </property>
+          <property name="toolTip" >
+           <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select a playback device (left). Then &lt;span style=" font-weight:600;">double-click&lt;/span> here &lt;span style=" font-weight:600;">to connect&lt;/span> it to an alsa-&lt;span style=" font-weight:600;">midi port.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. software-synthesizers. &lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+          </property>
           <column>
            <property name="text" >
-            <string>Found outgoing ports - click to connect</string>
+            <string>Found outgoing ports - double-click to connect</string>
            </property>
           </column>
           <item>
            <property name="text" >
-            <string>Null Port</string>
+            <string>No port</string>
            </property>
           </item>
           <item>
@@ -442,6 +571,14 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
              <property name="text" >
               <string>Refresh</string>
              </property>
@@ -451,22 +588,21 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_6" >
+            <widget class="QPushButton" name="pushButton_addLV2Device" >
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">LV2 is the most recent plugin standard for linux audio and effect plugins.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">More information is available on the &lt;a href="http://lv2plug.in/">&lt;span style=" text-decoration: underline; color:#0057ae;">LV2 Plugin Website&lt;/span>&lt;/a> .&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
              <property name="text" >
-              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." />
+              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Add LV2 plugin device</string>
              </property>
              <property name="flat" >
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_4" >
-             <property name="text" >
-              <string/>
-             </property>
-             <property name="flat" >
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -481,6 +617,24 @@
           <property name="frameShadow" >
            <enum>QFrame::Raised</enum>
           </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7" >
+           <property name="spacing" >
+            <number>2</number>
+           </property>
+           <property name="margin" >
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="pushButton_4" >
+             <property name="text" >
+              <string/>
+             </property>
+             <property name="flat" >
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>

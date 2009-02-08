@@ -3,6 +3,12 @@
 
 SET(ui_SRCS 
 	data/ui/RosegardenTransport.ui
+	
+	data/ui/DevicesManagerNew.h
+	data/ui/DevicesManagerNew.cpp
+	
+	data/ui/DevicesManagerNewUi.h
+	data/ui/DevicesManagerNewUi.ui
 )
 
 SET(commands_SRCS
