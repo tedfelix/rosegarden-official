@@ -280,7 +280,7 @@ TrackButtons::slotUpdateTracks()
     unsigned int newNbTracks = comp.getNbTracks();
     Track *track = 0;
 
-    std::cerr << "TrackButtons::slotUpdateTracks" << std::endl;
+    RG_DEBUG << "TrackButtons::slotUpdateTracks > newNbTracks = " << newNbTracks << endl;
 
     if (newNbTracks < m_tracks) {
         for (unsigned int i = m_tracks; i > newNbTracks; --i)
@@ -388,6 +388,9 @@ TrackButtons::slotUpdateTracks()
 
     // repopulate the buttons
     populateButtons();
+    
+	// This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
+    adjustSize();
 }
 
 void

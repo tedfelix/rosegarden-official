@@ -258,7 +258,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       trackLabelWidth,
                                       m_showTrackLabels,
                                       canvasHeight,
-                                      m_trackButtonScroll->viewport(),
+//                                      m_trackButtonScroll->viewport(),
+                                      m_trackButtonScroll,
                                       "TRACK_BUTTONS"); // permit styling; internal string; no tr()
 //    m_trackButtons->hide();
 //    m_trackButtonScroll->addChild(m_trackButtons);
@@ -282,7 +283,6 @@ TrackEditor::init(QWidget* rosegardenguiview)
 	
 //    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
 //                                        m_compositionView->horizontalScrollBar()->height());
-
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));
@@ -456,8 +456,9 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         RG_DEBUG << "TrackEditor::paintEvent: Composition modified" << endl;
 
+		//!!! These calls from within a paintEvent look ugly
         slotReadjustCanvasSize();
-        m_trackButtons->slotUpdateTracks();
+        m_trackButtons->slotUpdateTracks(); 
         m_compositionView->clearSegmentRectsCache(true);
 		
          m_compositionView->updateContents();
