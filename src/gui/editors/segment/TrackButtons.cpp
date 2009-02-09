@@ -117,10 +117,6 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     connect(m_clickedSigMapper, SIGNAL(mapped(int)),
             this, SIGNAL(trackSelected(int)));
 
-    //     // Populate instrument popup menu just once at start-up
-    //     //
-    //     populateInstrumentPopup();
-
     // We have to force the height for the moment
     //
     setMinimumHeight(overallHeight);
@@ -177,10 +173,11 @@ TrackButtons::populateButtons()
 
             // Set mute button from track
             //
-            if (track->isMuted())
+            if (track->isMuted()) {
                 m_muteLeds[i]->off();
-            else
+            } else {
                 m_muteLeds[i]->on();
+            }
 
             // Set record button from track
             //
@@ -361,7 +358,7 @@ TrackButtons::slotUpdateTracks()
     m_tracks = newNbTracks;
 
     // Set record status and colour
-
+    // 
     for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
 
         track = comp.getTrackByPosition(i);
@@ -389,7 +386,7 @@ TrackButtons::slotUpdateTracks()
     // repopulate the buttons
     populateButtons();
     
-	// This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
+    // This is necessary to update the widgets's sizeHint to reflect any change in child widget sizes
     adjustSize();
 }
 
@@ -411,17 +408,13 @@ TrackButtons::slotToggleRecordTrack(int position)
         try {
             m_doc->getAudioFileManager().testAudioPath();
         } catch (AudioFileManager::BadAudioPathException e) {
-            if (QMessageBox::warning( //ContinueCancel
-                    this,
-					tr("Warning"),
-					//tr("Set audio file path")) 
-					tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
-					QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-					)
-				== QMessageBox::Yes
-				){
-                	RosegardenGUIApp::self()->slotOpenAudioPathSettings();
-            	}
+            if (QMessageBox::warning(this,
+                                     tr("Warning"),
+                                     tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
+                                     QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+               ) == QMessageBox::Yes) {
+                RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+            }
         }
     }
 
@@ -435,7 +428,7 @@ TrackButtons::slotToggleRecordTrack(int position)
         comp.getRecordTracks();
 
     for (Composition::recordtrackcontainer::const_iterator i =
-                oldRecordTracks.begin();
+            oldRecordTracks.begin();
             i != oldRecordTracks.end(); ++i) {
 
         if (!comp.isTrackRecording(*i)) {
@@ -447,27 +440,6 @@ TrackButtons::slotToggleRecordTrack(int position)
 
         if (otherTrack &&
                 otherTrack != track) {
-
-            /* Obsolete code: audio, MIDI and plugin tracks behave the same now.
-                      plcl, 06/2006 - Multitrack MIDI recording
-                      
-                   bool unselect;
-
-            if (audio) {
-            unselect = (otherTrack->getInstrument() == track->getInstrument());
-            } else {
-            // our track is not an audio track, check that the
-            // other isn't either
-            Instrument *otherInstrument =
-             m_doc->getStudio().getInstrumentById(otherTrack->getInstrument());
-            bool otherAudio = (otherInstrument &&
-              otherInstrument->getType() == 
-              Instrument::Audio);
-
-            unselect = !otherAudio;
-            }
-
-            if (unselect) { */
 
             if (otherTrack->getInstrument() == track->getInstrument()) {
                 // found another record track of the same type (and
@@ -605,6 +577,7 @@ TrackButtons::slotInstrumentSelection(int trackId)
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     //
+    //@@@ was QPopupMenu
     QMenu instrumentPopup(this);
 
     populateInstrumentPopup(instrument, &instrumentPopup);
@@ -642,11 +615,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     connectedUsedPixmap, unconnectedUsedPixmap,
     connectedSelectedPixmap, unconnectedSelectedPixmap;
     static bool havePixmaps = false;
-	
+        
     if (!havePixmaps) {
 
-	IconLoader il;
-	
+        IconLoader il;
+        
         connectedPixmap = il.loadPixmap("connected");
         connectedUsedPixmap = il.loadPixmap("connected-used");
         connectedSelectedPixmap = il.loadPixmap("connected-selected");
@@ -673,12 +646,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList::iterator it;
     int currentDevId = -1;
     bool deviceUsedByAnyone = false;
-	QMenu* tempMenu = 0;
+    QMenu* tempMenu = 0;
 
     for (it = list.begin(); it != list.end(); it++) {
 
-        if (! (*it))
-            continue; // sanity check
+        if (!(*it)) continue; // sanity check
 
         QString iname(strtoqstr((*it)->getPresentationName()));
         QString pname(strtoqstr((*it)->getProgramName()));
@@ -760,14 +732,14 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
-			
-//             instrumentPopup->addItem(iconSet, deviceName, subMenu);
-			subMenu->setObjectName( deviceName );
-			subMenu->setTitle( deviceName );
-			subMenu->setIcon( iconSet );
-			
-			instrumentPopup->addMenu( subMenu );
-			instrumentSubMenus.push_back(subMenu);
+                        
+//          instrumentPopup->addItem(iconSet, deviceName, subMenu);
+            subMenu->setObjectName(deviceName);
+            subMenu->setTitle(deviceName);
+            subMenu->setIcon(iconSet);
+                        
+            instrumentPopup->addMenu(subMenu);
+            instrumentSubMenus.push_back(subMenu);
 
             // Connect up the submenu
             //
@@ -800,15 +772,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
         if (pname != "")
             iname += " (" + pname + ")";
-		
-		
-		tempMenu = new QMenu(instrumentPopup);
-		tempMenu->setIcon( iconSet );
-		tempMenu->setTitle( iname );
-		tempMenu->setObjectName( iname + QString(i++) );
-		instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
-// 		instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
-	}
+                
+                
+                tempMenu = new QMenu(instrumentPopup);
+                tempMenu->setIcon( iconSet );
+                tempMenu->setTitle( iname );
+                tempMenu->setObjectName( iname + QString(i++) );
+                instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
+//              instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
+        }
 
 }
 
