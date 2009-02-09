@@ -42,6 +42,7 @@ ActionFileClient::~ActionFileClient()
 QAction *
 ActionFileClient::createAction(QString actionName, QString connection)
 {
+    //std::cerr << "ActionFileClient::createAction(" << actionName << ", " << connection << ")" << std::endl;
     QObject *obj = dynamic_cast<QObject *>(this);
     if (!obj) {
         std::cerr << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject" << std::endl;

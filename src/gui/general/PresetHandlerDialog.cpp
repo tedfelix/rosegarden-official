@@ -20,12 +20,14 @@
 
 
 #include "PresetHandlerDialog.h"
-#include "misc/Strings.h"
-#include "misc/Debug.h"
-#include "document/ConfigGroups.h"
+
 #include "CategoryElement.h"
 #include "PresetElement.h"
 #include "PresetGroup.h"
+
+#include "misc/Strings.h"
+#include "misc/Debug.h"
+#include "document/ConfigGroups.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -47,7 +49,7 @@ namespace Rosegarden
 
 PresetHandlerDialog::PresetHandlerDialog(QWidget *parent,
                                          bool fromNotation)
-        : QDialog(parent),
+        : QDialog(parent, 0),
         m_fromNotation(fromNotation)
 {
     m_presets = new PresetGroup();

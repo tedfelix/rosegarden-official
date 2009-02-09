@@ -231,7 +231,7 @@ namespace Rosegarden
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver) :
-    QMainWindow(0),
+    QMainWindow(0, Qt::WindowContextHelpButtonHint),
     m_actionsSetup(false),
     m_view(0),
     m_swapView(0),
@@ -705,6 +705,7 @@ void RosegardenGUIApp::setupActions()
     createAction("remap_instruments", SLOT(slotRemapInstruments()));
     createAction("audio_mixer", SLOT(slotOpenAudioMixer()));
     createAction("midi_mixer", SLOT(slotOpenMidiMixer()));
+    createAction("open_devices_manager_new", SLOT(slotOpenDeviceManagerNew()));
     createAction("manage_devices", SLOT(slotManageMIDIDevices()));
     createAction("manage_synths", SLOT(slotManageSynths()));
     createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
@@ -716,8 +717,6 @@ void RosegardenGUIApp::setupActions()
     createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
     createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
     createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
-	
-	createAction("open_devices_manager_new", SLOT(slotOpenDeviceManagerNew()));
 
 // These were commented out in the old KDE3 code as well
 //    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
