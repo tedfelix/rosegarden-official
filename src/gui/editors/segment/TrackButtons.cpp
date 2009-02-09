@@ -18,8 +18,8 @@
 
 #include "TrackButtons.h"
 
-// #include <QDir>
-// #include <kglobal.h>
+#include "TrackLabel.h"
+#include "TrackVUMeter.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -30,6 +30,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "document/CommandHistory.h"
@@ -39,8 +40,6 @@
 #include "gui/widgets/LedButton.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PluginIdentifier.h"
-#include "TrackLabel.h"
-#include "TrackVUMeter.h"
 
 #include <QLayout>
 #include <QMessageBox>
@@ -62,6 +61,7 @@
 namespace Rosegarden
 {
 
+
 TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
@@ -69,8 +69,7 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
                            int overallHeight,
                            QWidget* parent,
                            const char* name )
-//                            WFlags f)
-        : QFrame(parent, name), //, f),
+        : QFrame(parent, name), 
         m_doc(doc),
         m_layout(new QVBoxLayout(this)),
         m_recordSigMapper(new QSignalMapper(this)),
@@ -89,10 +88,11 @@ TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
     setFrameStyle(Plain);
 
     // when we create the widget, what are we looking at?
-    if (showTrackLabels)
+    if (showTrackLabels) {
         m_trackInstrumentLabels = TrackLabel::ShowTrack;
-    else
+    } else {
         m_trackInstrumentLabels = TrackLabel::ShowInstrument;
+    }
 
     // Set the spacing between vertical elements
     //
@@ -605,7 +605,6 @@ TrackButtons::slotInstrumentSelection(int trackId)
     // Yes, well as we might've changed the Device name in the
     // Device/Bank dialog then we reload the whole menu here.
     //
-
     QMenu instrumentPopup(this);
 
     populateInstrumentPopup(instrument, &instrumentPopup);
@@ -1063,7 +1062,6 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
     //
     // 'mute' and 'record' leds
     //
-
     mute = new LedButton(Rosegarden::GUIPalette::getColour
               (Rosegarden::GUIPalette::MuteTrackLED), trackHBox);
     mute->setToolTip(tr("Mute track"));
@@ -1153,6 +1151,7 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
 
     return trackHBox;
 }
+
 
 }
 #include "TrackButtons.moc"
