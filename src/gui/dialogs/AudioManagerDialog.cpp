@@ -730,8 +730,10 @@ AudioManagerDialog::slotAdd()
     }
 
 	QStringList kurlList;
-	kurlList = QFileDialog::getOpenFileNames( this, tr("Select one or more audio files").arg(":WAVS"), QDir::currentPath(), extensionList );
-                                 //  tr("*.wav|WAV files (*.wav)\n*.mp3|MP3 files (*.mp3)"),);
+	kurlList = QFileDialog::getOpenFileNames( this, tr("Select one or more audio files"), QDir::currentPath(),
+                   tr("WAV files") + " (*.wav)" + ";;" + 
+                   tr("MP3 files") + " (*.mp3)" + ";;" +
+                   tr("All files") + " (*)");
 
 	//KURL::List::iterator it;
 

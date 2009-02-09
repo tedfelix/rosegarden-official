@@ -1819,22 +1819,10 @@ void RosegardenGUIApp::slotFileOpen()
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
-// old:   QUrl url = QFileDialog::getOpenURL
-//                (":ROSEGARDEN",
-//                 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21", this,
-//                 tr("Open File"));
-	// getOpenFileName ( QWidget * parent = 0, const QString & caption = QString(), const QString & dir = QString(), const QString & filter = QString(), QString * selectedFilter = 0, Options options = 0 )
-		
-		//@@@ check disabled and following code:
-		QString fname;
-		//QFileDialog *fdlg = new QFileDialog(this, Qt::Dialog);
-		fname = QFileDialog::getOpenFileName( this, "Open File", ".", "*", 0, 0 );
-		//QString fname = QFileDialog::getOpenFileName( this, tr("Open File"), QDir::currentPath(), "*", 0, 0 );
+    QString fname = QFileDialog::getOpenFileName( this, "Open File", ".",
+                    tr("Rosegarden files") + " (*.rg)" + ";;" + tr("All files") + " (*)", 0, 0 );
 	
-		// last params: QString filter="*", QString* selectedFilter = 0, Options options = 0 )
-		// options info: http://doc.trolltech.com/4.3/qfiledialog.html#Option-enum
-	
-		QUrl url( fname );
+    QUrl url( fname );
 	
     if ( url.isEmpty() ) {
         return ;
@@ -1853,7 +1841,8 @@ void RosegardenGUIApp::slotFileOpen()
 
 void RosegardenGUIApp::slotMerge()
 {
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open File"), QDir::currentPath(),
+               tr("Rosegarden files") + " (*.rg)" + ";;" + tr("All files") + " (*)", 0, 0 );
     if ( url.isEmpty() ) {
         return ;
     }
@@ -3334,7 +3323,8 @@ void RosegardenGUIApp::slotImportProject()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Import Rosegarden Project File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Import Rosegarden Project File"), QDir::currentPath(),
+               tr("Rosegarden Project files") + " (*.rgp)" + ";;" + tr("All files") + " (*)", 0, 0 );
 
     if (url.isEmpty()) {
         return ;
@@ -3387,7 +3377,8 @@ void RosegardenGUIApp::slotImportMIDI()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open MIDI File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open MIDI File"), QDir::currentPath(),
+               tr("MIDI files") + " (*.mid *.midi)" + ";;" + tr("All files") + " (*)", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }
@@ -3410,7 +3401,8 @@ void RosegardenGUIApp::slotImportMIDI()
 
 void RosegardenGUIApp::slotMergeMIDI()
 {
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Merge MIDI File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Merge MIDI File"), QDir::currentPath(),
+               tr("MIDI files") + " (*.mid *.midi)" + ";;" + tr("All files") + " (*)", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }
@@ -3653,7 +3645,9 @@ void RosegardenGUIApp::slotImportRG21()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
+               tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }
@@ -3676,7 +3670,9 @@ void RosegardenGUIApp::slotImportRG21()
 
 void RosegardenGUIApp::slotMergeRG21()
 {
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
+               tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
     if (url.isEmpty()) {
         return ;
     }

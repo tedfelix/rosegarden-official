@@ -316,7 +316,9 @@ MIDIConfigurationPage::slotSfxLoadPathChoose()
 void
 MIDIConfigurationPage::slotSoundFontChoose()
 {
-	QString path = QFileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(), "*.sb *.sf2 *.SF2 *.SB" ); // ":SOUNDFONTS"
+	QString path = QFileDialog::getOpenFileName(this, tr("Soundfont path"), QDir::currentPath(),
+                       tr("Sound fonts") + " (*.sb *.sf2 *.SF2 *.SB)" + ";;" +
+                       tr("All files") + " (*)" ); // ":SOUNDFONTS"
     m_soundFontPath->setText(path);
 }
 
