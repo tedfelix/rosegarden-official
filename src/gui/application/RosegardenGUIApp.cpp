@@ -1828,7 +1828,7 @@ void RosegardenGUIApp::slotFileOpen()
 		//@@@ check disabled and following code:
 		QString fname;
 		//QFileDialog *fdlg = new QFileDialog(this, Qt::Dialog);
-		fname = QFileDialog::getOpenFileName( this, "Open File", ".", "All Files (*);;Rosegarden Projects (*.rg)", 0, 0 );
+		fname = QFileDialog::getOpenFileName( this, "Open File", ".", "*", 0, 0 );
 		//QString fname = QFileDialog::getOpenFileName( this, tr("Open File"), QDir::currentPath(), "*", 0, 0 );
 	
 		// last params: QString filter="*", QString* selectedFilter = 0, Options options = 0 )
@@ -1933,43 +1933,25 @@ void RosegardenGUIApp::slotFileSave()
 }
 
 QString
-RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
-                                    QString label)
+RosegardenGUIApp::getValidWriteFileName(QString descriptiveExtension,
+                                        QString label)
 {
     // extract first extension listed in descriptiveExtension, for instance,
-    // ".rg" from "*.rg|Rosegarden files", or ".mid" from "*.mid *.midi|MIDI Files"
+    // ".rg" from "Rosegarden files (*.rg)", or ".mid" from "MIDI Files (*.mid *.midi)"
     //
-    QString extension = descriptiveExtension.left(descriptiveExtension.find('|')).mid(1).section(' ', 0, 0);
+    int left = descriptiveExtension.indexOf("*.");
+    int right = descriptiveExtension.indexOf(QRegExp("[ )]"),left);
+    QString extension = descriptiveExtension.mid(left,right-left+1);
 
-    RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : extension = " << extension << endl;
+    RG_DEBUG << "RosegardenGUIApp::getValidWriteFileName() : extension = " << extension << endl;
 
-    // It's too bad there isn't this functionality within
-    // QFileDialog::getSaveFileName
+
+    // Confirm the overwrite of the file later.
+    //
+    QString name = QFileDialog::getSaveFileName( this, tr("Save File"), QDir::currentPath(), descriptiveExtension, 0, QFileDialog::DontConfirmOverwrite ); 
 	
-// old:
-	/*
-//    QFileDialog saveFileDialog(":ROSEGARDEN", descriptiveExtension, this, label, true);
-//    saveFileDialog.setOperationMode(QFileDialog::Saving);
-	
-	// old:
-    if (m_doc) {
-        QString saveFileName = m_doc->getAbsFilePath();
-        // Show filename without the old extension
-        int dotLoc = saveFileName.findRev('.');
-        if (dotLoc >= int(saveFileName.length() - 4)) {
-            saveFileName = saveFileName.left(dotLoc);
-        }
-        saveFileDialog.setSelection(saveFileName);
-    }
-    saveFileDialog.exec();
-    QString name = saveFileDialog.selectedFile();
-	*/
-	// qt4:
-	
-	QString name = QFileDialog::getSaveFileName( this, tr("Save File"), QDir::currentPath(), "*", 0, 0 ); 
-	
-    //     RG_DEBUG << "RosegardenGUIApp::getValidWriteFile() : QFileDialog::getSaveFileName returned "
-    //              << name << endl;
+    RG_DEBUG << "RosegardenGUIApp::getValidWriteFileName() : QFileDialog::getSaveFileName returned "
+             << name << endl;
 
 
     if (name.isEmpty())
@@ -1979,7 +1961,7 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
     //
     if (!extension.isEmpty()) {
         static QRegExp rgFile("\\..{1,4}$");
-		if (rgFile.indexIn(name) == -1) {
+        if (rgFile.indexIn(name) == -1) {
             name += extension;
         }
     }
@@ -1988,26 +1970,8 @@ RosegardenGUIApp::getValidWriteFile(QString descriptiveExtension,
 
     if (!u->isValid()) {
         /* was sorry */ QMessageBox::warning(this, "", tr("<qt>Sorry.<br>\"%1\" is not a valid filename.</qt>").arg(name));
-        return "";
+        return QString("");
     }
-
-//@@@
-//
-// KURL::isLocalFile() doesn't exist in Qt at all.  Somebody tried to cobble up
-// this equivalent, and it doesn't work, because it will fail unless the file
-// actually exists, which it doesn't yet, because it won't be created until
-// after this test passes, which it never will.
-//
-// After considerable resarch on this matter, I have decided to see what happens
-// if we just remove the code entirely.  If it isn't a local file, who really
-// cares anyway?  What matters is whether it is writeable or not, which should
-// be determined further down.
-//
-//    //if (!u->isLocalFile()) {
-//  if ( !QFile::exists(u->toLocalFile() )){
-//      /* was sorry */ QMessageBox::warning(this, "",  tr("<qt>Sorry.<br>\"%1\" is not a local file.</qt>").arg(name));
-//      return "";
-//  } 
 
     QFileInfo info(name);
 
@@ -2036,9 +2000,10 @@ bool RosegardenGUIApp::slotFileSaveAs()
 
     KTmpStatusMsg msg(tr("Saving file with a new filename..."), this);
 
-    QString newName = getValidWriteFile("*.rg|" + tr("Rosegarden files") +
-                                        "\n*|" + tr("All files"),
-                                        tr("Save as..."));
+    QString newName = getValidWriteFileName
+                      (tr("Rosegarden files") + " (*.rg)" + ";;" +
+                       tr("All files") + " (*)",
+                       tr("Save as..."));
     if (newName.isEmpty())
         return false;
 
@@ -4509,9 +4474,9 @@ void RosegardenGUIApp::slotExportProject()
 {
     KTmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
 
-    QString fileName = getValidWriteFile
-                       ("*.rgp|" + tr("Rosegarden Project files\n") +
-                        "\n*|" + tr("All files"),
+    QString fileName = getValidWriteFileName
+                       (tr("Rosegarden Project files\n") + " (*.rgp)" + ";;" +
+                        tr("All files") + " (*)",
                         tr("Export as..."));
 
     if (fileName.isEmpty())
@@ -4554,9 +4519,9 @@ void RosegardenGUIApp::slotExportMIDI()
 {
     KTmpStatusMsg msg(tr("Exporting MIDI file..."), this);
 
-    QString fileName = getValidWriteFile
-                       ("*.mid *.midi|" + tr("Standard MIDI files\n") +
-                        "\n*|" + tr("All files"),
+    QString fileName = getValidWriteFileName
+                       (tr("Standard MIDI files") + " (*.mid *.midi)" + ";;" +
+                        tr("All files") + " (*)",
                         tr("Export as..."));
 
     if (fileName.isEmpty())
@@ -4594,8 +4559,9 @@ void RosegardenGUIApp::slotExportCsound()
 {
     KTmpStatusMsg msg(tr("Exporting Csound score file..."), this);
 
-    QString fileName = getValidWriteFile(QString("*|") + tr("All files"),
-                                         tr("Export as..."));
+    QString fileName = getValidWriteFileName
+                       (tr("All files") + " (*)",
+                        tr("Export as..."));
     if (fileName.isEmpty())
         return ;
 
@@ -4626,8 +4592,9 @@ void RosegardenGUIApp::slotExportMup()
 {
     KTmpStatusMsg msg(tr("Exporting Mup file..."), this);
 
-    QString fileName = getValidWriteFile
-                       ("*.mup|" + tr("Mup files\n") + "\n*|" + tr("All files"),
+    QString fileName = getValidWriteFileName
+                       (tr("Mup files") + " (*.mup)" + ";;" +
+                        tr("All files") + " (*)",
                         tr("Export as..."));
     if (fileName.isEmpty())
         return ;
@@ -4659,9 +4626,9 @@ void RosegardenGUIApp::slotExportLilyPond()
 {
     KTmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
 
-    QString fileName = getValidWriteFile
-                       (QString("*.ly|") + tr("LilyPond files") +
-                        "\n*|" + tr("All files"),
+    QString fileName = getValidWriteFileName
+                       (tr("LilyPond files") + " (*.ly)" + ";;" +
+                        tr("All files") + " (*)",
                         tr("Export as..."));
 
     if (fileName.isEmpty())
@@ -4772,9 +4739,10 @@ void RosegardenGUIApp::slotExportMusicXml()
 {
     KTmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
 
-    QString fileName = getValidWriteFile
-                       (QString("*.xml|") + tr("XML files") +
-                        "\n*|" + tr("All files"), tr("Export as..."));
+    QString fileName = getValidWriteFileName
+                       (tr("XML files") + " (*.xml)" + ";;" +
+                        tr("All files") + " (*)",
+                        tr("Export as..."));
 
     if (fileName.isEmpty())
         return ;

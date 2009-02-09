@@ -467,7 +467,7 @@ protected:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString getValidWriteFile(QString extension, QString label);
+    QString getValidWriteFileName(QString extension, QString label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
