@@ -1819,8 +1819,9 @@ void RosegardenGUIApp::slotFileOpen()
         ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
-    QString fname = QFileDialog::getOpenFileName( this, "Open File", ".",
-                    tr("Rosegarden files") + " (*.rg)" + ";;" + tr("All files") + " (*)", 0, 0 );
+    QString fname = QFileDialog::getOpenFileName( this, "Open File", QDir::currentPath(),
+                    tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                    tr("All files") + " (*)", 0, 0 );
 	
     QUrl url( fname );
 	
@@ -1842,7 +1843,9 @@ void RosegardenGUIApp::slotFileOpen()
 void RosegardenGUIApp::slotMerge()
 {
     QUrl url = QFileDialog::getOpenFileName( this, tr("Open File"), QDir::currentPath(),
-               tr("Rosegarden files") + " (*.rg)" + ";;" + tr("All files") + " (*)", 0, 0 );
+               tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
+
     if ( url.isEmpty() ) {
         return ;
     }
@@ -1990,7 +1993,7 @@ bool RosegardenGUIApp::slotFileSaveAs()
     KTmpStatusMsg msg(tr("Saving file with a new filename..."), this);
 
     QString newName = getValidWriteFileName
-                      (tr("Rosegarden files") + " (*.rg)" + ";;" +
+                      (tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                        tr("All files") + " (*)",
                        tr("Save as..."));
     if (newName.isEmpty())
@@ -3324,7 +3327,8 @@ void RosegardenGUIApp::slotImportProject()
         return ;
 
     QUrl url = QFileDialog::getOpenFileName( this, tr("Import Rosegarden Project File"), QDir::currentPath(),
-               tr("Rosegarden Project files") + " (*.rgp)" + ";;" + tr("All files") + " (*)", 0, 0 );
+               tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
 
     if (url.isEmpty()) {
         return ;
@@ -3378,7 +3382,9 @@ void RosegardenGUIApp::slotImportMIDI()
         return ;
 
     QUrl url = QFileDialog::getOpenFileName( this, tr("Open MIDI File"), QDir::currentPath(),
-               tr("MIDI files") + " (*.mid *.midi)" + ";;" + tr("All files") + " (*)", 0, 0 );
+               tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -3402,7 +3408,9 @@ void RosegardenGUIApp::slotImportMIDI()
 void RosegardenGUIApp::slotMergeMIDI()
 {
     QUrl url = QFileDialog::getOpenFileName( this, tr("Merge MIDI File"), QDir::currentPath(),
-               tr("MIDI files") + " (*.mid *.midi)" + ";;" + tr("All files") + " (*)", 0, 0 );
+               tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
+               tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -3648,6 +3656,7 @@ void RosegardenGUIApp::slotImportRG21()
     QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -3673,6 +3682,7 @@ void RosegardenGUIApp::slotMergeRG21()
     QUrl url = QFileDialog::getOpenFileName( this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -3750,7 +3760,9 @@ RosegardenGUIApp::slotImportHydrogen()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Hydrogen File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Hydrogen File"), QDir::currentPath(),
+               tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -3773,7 +3785,9 @@ RosegardenGUIApp::slotImportHydrogen()
 
 void RosegardenGUIApp::slotMergeHydrogen()
 {
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Hydrogen File"), QDir::currentPath(), "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Open Hydrogen File"), QDir::currentPath(),
+               tr("All files") + " (*)", 0, 0 );
+
     if (url.isEmpty()) {
         return ;
     }
@@ -4471,7 +4485,7 @@ void RosegardenGUIApp::slotExportProject()
     KTmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("Rosegarden Project files\n") + " (*.rgp)" + ";;" +
+                       (tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
 
@@ -4516,7 +4530,7 @@ void RosegardenGUIApp::slotExportMIDI()
     KTmpStatusMsg msg(tr("Exporting MIDI file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("Standard MIDI files") + " (*.mid *.midi)" + ";;" +
+                       (tr("Standard MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
 
@@ -4556,8 +4570,10 @@ void RosegardenGUIApp::slotExportCsound()
     KTmpStatusMsg msg(tr("Exporting Csound score file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("All files") + " (*)",
+                       (tr("Csound files") + " (*.csd *.CSD)" + ";;" +
+                        tr("All files") + " (*)",
                         tr("Export as..."));
+
     if (fileName.isEmpty())
         return ;
 
@@ -4589,7 +4605,7 @@ void RosegardenGUIApp::slotExportMup()
     KTmpStatusMsg msg(tr("Exporting Mup file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("Mup files") + " (*.mup)" + ";;" +
+                       (tr("Mup files") + " (*.mup *.MUP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
     if (fileName.isEmpty())
@@ -4623,7 +4639,7 @@ void RosegardenGUIApp::slotExportLilyPond()
     KTmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("LilyPond files") + " (*.ly)" + ";;" +
+                       (tr("LilyPond files") + " (*.ly *.LY)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
 
@@ -4736,7 +4752,7 @@ void RosegardenGUIApp::slotExportMusicXml()
     KTmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
 
     QString fileName = getValidWriteFileName
-                       (tr("XML files") + " (*.xml)" + ";;" +
+                       (tr("XML files") + " (*.xml *.XML)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
 
@@ -7403,7 +7419,8 @@ RosegardenGUIApp::slotImportStudio()
 
     QString studioDir = ResourceFinder().getResourceDir("library");
 
-    QUrl url = QFileDialog::getOpenFileName( this, tr("Import Studio from File"), studioDir, "*", 0, 0 );
+    QUrl url = QFileDialog::getOpenFileName( this, tr("Import Studio from File"), studioDir,
+               tr("All files") + " (*)", 0, 0 );
 
     if (url.isEmpty())
         return ;

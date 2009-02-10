@@ -124,24 +124,17 @@ PlayList::~PlayList()
 
 void PlayList::slotOpenFiles()
 {
-	/*
-    QUrl::List kurlList =
-        KFileDialog::getOpenURLs(":ROSEGARDEN",
-                                 "audio/x-rosegarden audio/x-midi audio/x-rosegarden21",
-                                 this,
-                                 tr("Select one or more Rosegarden files"));
-
-    QUrl::List::iterator it;
-	*/
+    QStringList files = QFileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(),
+                        tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                        tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
+                        tr("X11 Rosegaden files") + " (*.rose)" + ";;" +
+                        tr("All files") + " (*)", 0, 0 );
 	
-	QStringList files = QFileDialog::getOpenFileNames( this, tr("Select one or more Rosegarden files"), QDir::currentPath(), 0, 0);
+    QString fname;
 	
-	QString fname;
-	
-//    for (it = kurlList.begin(); it != kurlList.end(); ++it) {
-	for( int i=0; i< files.size(); i++ ){
-		fname = files.at( i );
-		new PlayListViewItem(m_listView, QUrl(fname) );
+    for( int i=0; i < files.size(); i++ ){
+        fname = files.at( i );
+        new PlayListViewItem(m_listView, QUrl(fname) );
     }
 	
     enableButtons( m_listView->currentItem() );

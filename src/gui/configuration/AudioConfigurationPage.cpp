@@ -232,7 +232,8 @@ AudioConfigurationPage::AudioConfigurationPage(
 void
 AudioConfigurationPage::slotFileDialog()
 {
-	QString path = QFileDialog::getOpenFileName(this, tr("External audio editor path"), QDir::currentPath() );
+    QString path = QFileDialog::getOpenFileName(this, tr("External audio editor path"), QDir::currentPath() );
+
     m_externalAudioEditorPath->setText(path);
 }
 

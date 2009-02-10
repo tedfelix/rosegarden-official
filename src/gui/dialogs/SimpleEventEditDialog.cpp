@@ -1039,9 +1039,10 @@ SimpleEventEditDialog::slotEditPitch()
 void
 SimpleEventEditDialog::slotSysexLoad()
 {
-    QString path = QFileDialog::getOpenFileName( this,//":SYSTEMEXCLUSIVE",
-			tr("Load System Exclusive data in File"),
-			tr("System exclusive files") + " (*.syx)");
+    QString path = QFileDialog::getOpenFileName( this, tr("Load System Exclusive data in File"), QDir::currentPath(),
+                   tr("System exclusive files") + " (*.syx *.SYX)" + ";;" +
+                   tr("All files") + " (*)"); //":SYSTEMEXCLUSIVE",
+
     if (path.isNull())
         return ;
 

@@ -721,26 +721,25 @@ AudioManagerDialog::slotCancelPlayingAudio()
 void
 AudioManagerDialog::slotAdd()
 {
-    QString extensionList = tr("*.wav|WAV files (*.wav)\n*.*|All files");
+    QString extensionList = tr("WAV files") + " (*.wav *.WAV);;" +
+                            tr("All files") + " (*)";
     
     if (RosegardenGUIApp::self()->haveAudioImporter()) {
 	//!!! This list really needs to come from the importer helper program
 	// (which has an option to supply it -- we just haven't recorded it)
-        extensionList = tr("*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)\n*.wav|WAV files (*.wav)\n*.flac|FLAC files (*.flac)\n*.ogg|Ogg files (*.ogg)\n*.mp3|MP3 files (*.mp3)\n*.*|All files");
+	//
+        extensionList = tr("Audio files") + " (*.wav *.flac *.ogg *.mp3 *.WAV *.FLAC *.OGG *.MP3)" + ";;" +
+                        tr("WAV files") + " (*.wav *.WAV)" + ";;" + 
+                        tr("FLAC files") + " (*.flac *.FLAC)" + ";;" +
+                        tr("Ogg files") + " (*.ogg *.OGG)" + ";;" +
+                        tr("MP3 files") + " (*.mp3 *.MP3)" + ";;" +
+                        tr("All files") + " (*)";
     }
 
-	QStringList kurlList;
-	kurlList = QFileDialog::getOpenFileNames( this, tr("Select one or more audio files"), QDir::currentPath(),
-                   tr("WAV files") + " (*.wav)" + ";;" + 
-                   tr("MP3 files") + " (*.mp3)" + ";;" +
-                   tr("All files") + " (*)");
+    QStringList urlList;
+    urlList = QFileDialog::getOpenFileNames( this, tr("Select one or more audio files"), QDir::currentPath(), extensionList);
 
-	//KURL::List::iterator it;
-
-	//for (it = kurlList.begin(); it != kurlList.end(); ++it)
-	//	addFile(*it);
-	for( int i=0; i < kurlList.size(); i++ )
-		addFile( kurlList.at(i) );
+    for( int i=0; i < urlList.size(); i++ ) addFile( urlList.at(i) );
 }
 
 void

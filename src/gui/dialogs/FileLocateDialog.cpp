@@ -83,17 +83,10 @@ void
 FileLocateDialog::slotUser3()
 {
     if (!m_file.isEmpty()) {
-		m_file = QFileDialog::getOpenFileName( this, tr("Select an Audio File"), QDir::currentPath(),
-                         tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_file).fileName()) + ";;" +
-                         tr("WAV files") + " (*.wav)");
-				
-				/*
-				(":WAVS",
-                  tr("%1|Requested file (%2)\n*.wav|WAV files (*.wav)")
-                   .arg(QFileInfo(m_file).fileName())
-                   .arg(QFileInfo(m_file).fileName()),
-                  this, tr("Select an Audio File"));
-				*/
+        m_file = QFileDialog::getOpenFileName( this, tr("Select an Audio File"), QDir::currentPath(),
+                 tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_file).fileName()) + ";;" +
+                 tr("WAV files") + " (*.wav *.WAV)" + ";;" +
+                 tr("All files") + " (*)");
 
         RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file << endl;
 

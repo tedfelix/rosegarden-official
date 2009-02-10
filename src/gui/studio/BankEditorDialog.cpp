@@ -1538,10 +1538,9 @@ BankEditorDialog::addCommandToHistory(Command *command)
 void
 BankEditorDialog::slotImport()
 {
-//     QString deviceDir = KGlobal::dirs()->findResource("appdata", "library/");
     QString deviceDir = ResourceFinder().getResourceDir("library");
 
-/*### huh?	
+/*### what does this mean?
     QDir dir(deviceDir);
     if (!dir.exists()) {
         deviceDir = ":ROSEGARDENDEVICE";
@@ -1550,38 +1549,13 @@ BankEditorDialog::slotImport()
     }
 */
 
-/* //###
- * 
- * KDE3:
- * KURL KFileDialog::getOpenURL   (  const QString &   startDir = QString::null,
- *   const QString &   filter = QString::null,
- *     QWidget *   parent = 0,
- *       const QString &   caption = QString::null
- *         )   [static]
- *
- * KDE4:
- * KUrl KFileDialog::getOpenUrl   (  const KUrl &   startDir = KUrl(), 
- *   const QString &   filter = QString(), 
- *   QWidget *   parent = 0, 
- *   const QString &   caption = QString()   
- *    )   [static]
- *
- * Qt4:
- * no apparent analog to getOpenURL at all QFileDialog, but at least
- * QFileDialogs are incredibly crappy looking and disgustingly GNOMEish to make
- * up for the reduced functionality.  Oh, wait.
- */
-	
-	/*
-    QUrl url = QFileDialog::getOpenURL
-               (deviceDir,
-                "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
-                this, tr("Import Banks from Device in File"));
-	*/
-	
-	//### use simple file dialog for now:
-	QString url_str = QFileDialog::getOpenFileName( this, tr("Import Banks from Device in File"), deviceDir );
-	QUrl url( url_str );
+    QString url_str = QFileDialog::getOpenFileName( this, tr("Import Banks from Device in File"), deviceDir,
+                      tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
+                      tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                      tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
+                      tr("All files") + " (*)", 0, 0 );
+
+    QUrl url( url_str );
 	
     if (url.isEmpty())
         return ;

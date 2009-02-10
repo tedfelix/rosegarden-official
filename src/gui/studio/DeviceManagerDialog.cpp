@@ -786,16 +786,13 @@ DeviceManagerDialog::slotImport()
     }
 */
 
-	/*
-    KURL url = KFileDialog::getOpenURL
-        (deviceDir,
-         "audio/x-rosegarden-device audio/x-rosegarden audio/x-soundfont",
-         this, tr("Import from Device in File"));
-	*/
-	//### use simple file dialog for now:
-	QString url_str = QFileDialog::getOpenFileName( this, tr("Import from Device in File"), deviceDir );
+    QString url_str = QFileDialog::getOpenFileName( this, tr("Import from Device in File"), deviceDir,
+                      tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
+                      tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                      tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
+                      tr("All files") + " (*)", 0, 0 );
 
-	QUrl url( url_str );
+    QUrl url( url_str );
 	
     if (url.isEmpty())
         return ;
