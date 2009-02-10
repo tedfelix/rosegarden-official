@@ -72,14 +72,17 @@ rosegarden:	$(OBJECTS)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
 
+instrument-ts:
+	perl scripts/extract_instrument_tr_strings.pl `ls -1 data/presets/*.xml` > data/InsrumentStrings.cpp
+
 menu-ts:
 	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
 
-ts:	menu-ts
+ts:	menu-ts instrument-ts
 	mkdir -p locale
 	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
 
-ts-noobsolete:	menu-ts
+ts-noobsolete:	menu-ts instrument-ts
 	mkdir -p locale
 	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
 
@@ -92,7 +95,7 @@ clean:
 test:
 	echo $(QSOURCES)
 
-.PHONY: menu-ts ts ts-noobsolete locale
+.PHONY: instrument-ts menu-ts ts ts-noobsolete locale
 
 include dependencies
 
