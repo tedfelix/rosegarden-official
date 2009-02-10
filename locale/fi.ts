@@ -3356,7 +3356,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../src/gui/configuration/AudioConfigurationPage.cpp" line="95"/>
         <source>Meter scaling - easier to see quiet activity</source>
-        <translation>Metrijakoinen mitta - helpompi nähdä hiljaisuustoiminta</translation>
+        <translation>Iskujakoinen mitta - helpompi nähdä äänetön toiminta</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/AudioConfigurationPage.cpp" line="105"/>
@@ -9914,7 +9914,7 @@ hyödyttämään muitakin.</translation>
         <location filename="../src/gui/editors/notation/NotationVLayout.cpp" line="487"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
-        <translation type="unfinished">Venytetyllä nuotilla kohdassa %1 ei ole nuottikorkeutta (HEIGHT_ON_STAFF)!
+        <translation>Venytetyllä nuotilla kohdassa %1 ei ole nuottikorkeutta (HEIGHT_ON_STAFF)!
 Tämä on ohjelmointivirhe (aiemmin ohjelma kaatui tässä kohdassa)</translation>
     </message>
 </context>
