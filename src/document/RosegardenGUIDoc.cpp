@@ -1190,6 +1190,10 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
     }
 
     QDir dir(QFileInfo(tempFileName).dir());
+    // According to  http://doc.trolltech.com/4.4/qdir.html#rename
+    // some systems fail, if renaming over an existing file.
+    // Therefore, delete first the existing file.
+    if (dir.exists(filename)) dir.remove(filename);
     if (!dir.rename(tempFileName, filename)) {
 		errMsg = tr( qStrToCharPtrUtf8( QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename) )  );
         return false;
