@@ -616,6 +616,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     connectedSelectedPixmap, unconnectedSelectedPixmap;
     static bool havePixmaps = false;
         
+    // pixmaps to show connection states as variously colored boxes
     if (!havePixmaps) {
 
         IconLoader il;
@@ -737,6 +738,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
             subMenu->setIcon(iconSet);
+            // need to create some QAction for #1 through #16 and addAction them
+            // somehow or other I haven't quite worked out yet.  Up to now, we
+            // just add more top level to the bottom level, instead of actually
+            // making the bottom level do something.  Rewrite pending
+            subMenu->addAction("foo");
                         
             instrumentPopup->addMenu(subMenu);
             instrumentSubMenus.push_back(subMenu);

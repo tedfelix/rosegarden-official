@@ -1812,20 +1812,20 @@ void RosegardenGUIApp::slotFileOpen()
         // program before.  Default to the examples directory.
                           
         QString examplesDir = ResourceFinder().getResourceDir("examples");
-        settings.beginGroup( "Recent Dirs" );
+        settings.beginGroup("Recent Dirs");
 
         QString recentString = settings.value("ROSEGARDEN", "").toString() ;
         settings.setValue
-        ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
+            ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
     QString fname = QFileDialog::getOpenFileName( this, "Open File", QDir::currentPath(),
                     tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                     tr("All files") + " (*)", 0, 0 );
 	
-    QUrl url( fname );
+    QUrl url(fname);
 	
-    if ( url.isEmpty() ) {
+    if (url.isEmpty()) {
         return ;
     }
 
@@ -1933,7 +1933,7 @@ RosegardenGUIApp::getValidWriteFileName(QString descriptiveExtension,
     //
     int left = descriptiveExtension.indexOf("*.");
     int right = descriptiveExtension.indexOf(QRegExp("[ )]"),left);
-    QString extension = descriptiveExtension.mid(left,right-left+1);
+    QString extension = descriptiveExtension.mid(left+1,right-left-1);
 
     RG_DEBUG << "RosegardenGUIApp::getValidWriteFileName() : extension = " << extension << endl;
 
