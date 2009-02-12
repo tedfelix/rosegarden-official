@@ -733,7 +733,8 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
-                        
+
+//          instrumentPopup->addItem(iconSet, deviceName, subMenu);
             subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
             subMenu->setIcon(iconSet);
@@ -778,9 +779,8 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                 tempMenu->setIcon(iconSet);
                 tempMenu->setTitle(iname);
                 tempMenu->setObjectName(iname + QString(i++));
-                /*QAction *a = new QAction(this);
-                tempMenu->addAction(a);*/
                 instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
+//              instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
         }
 
 }
