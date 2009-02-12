@@ -734,15 +734,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             QMenu *subMenu = new QMenu(instrumentPopup);
             QString deviceName = strtoqstr(device->getName());
                         
-//          instrumentPopup->addItem(iconSet, deviceName, subMenu);
             subMenu->setObjectName(deviceName);
             subMenu->setTitle(deviceName);
             subMenu->setIcon(iconSet);
-            // need to create some QAction for #1 through #16 and addAction them
-            // somehow or other I haven't quite worked out yet.  Up to now, we
-            // just add more top level to the bottom level, instead of actually
-            // making the bottom level do something.  Rewrite pending
-            subMenu->addAction("foo");
                         
             instrumentPopup->addMenu(subMenu);
             instrumentSubMenus.push_back(subMenu);
@@ -781,11 +775,12 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                 
                 
                 tempMenu = new QMenu(instrumentPopup);
-                tempMenu->setIcon( iconSet );
-                tempMenu->setTitle( iname );
-                tempMenu->setObjectName( iname + QString(i++) );
+                tempMenu->setIcon(iconSet);
+                tempMenu->setTitle(iname);
+                tempMenu->setObjectName(iname + QString(i++));
+                /*QAction *a = new QAction(this);
+                tempMenu->addAction(a);*/
                 instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
-//              instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
         }
 
 }
