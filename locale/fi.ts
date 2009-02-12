@@ -2624,7 +2624,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../data/QMenuStrings.cpp" line="898"/>
         <source>&amp;Import Default Studio</source>
-        <translation>&amp;Tuo oletusstudio</translation>
+        <translation>Tuo &amp;oletusstudio</translation>
     </message>
     <message>
         <location filename="../data/QMenuStrings.cpp" line="899"/>
@@ -6696,7 +6696,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../src/gui/configuration/GeneralConfigurationPage.cpp" line="94"/>
         <source>Number of count-in measures when recording</source>
-        <translation>Laskennan lukumäärä tahteina nauhoitettaessa</translation>
+        <translation>Ennen nauhoitusta laskettavien tahtien määrä</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/GeneralConfigurationPage.cpp" line="104"/>
@@ -8132,7 +8132,7 @@ Tupla-klikkaa aloittaaksesi toiston.</translation>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="105"/>
         <source>Always use default studio when loading files</source>
-        <translation>Käytä aina oletusstudiota kun avataan tiedostoja</translation>
+        <translation>Käytä aina oletusstudiota tiedostoja avattaessa</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="117"/>
@@ -8206,12 +8206,12 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="246"/>
         <source>MMC Master</source>
-        <translation>MMC Keskus</translation>
+        <translation>MMC-palvelin</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="247"/>
         <source>MMC Slave</source>
-        <translation>MMC seurain</translation>
+        <translation>MMC-asiakas</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="258"/>
@@ -8221,12 +8221,12 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="265"/>
         <source>MTC Master</source>
-        <translation>MTC mestari</translation>
+        <translation>MTC-palvelin</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="266"/>
         <source>MTC Slave</source>
-        <translation>MTC seurain</translation>
+        <translation>MTC-asiakas</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/MIDIConfigurationPage.cpp" line="280"/>
@@ -9424,7 +9424,7 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="120"/>
         <source>Default duration factor</source>
-        <translation>Oletus kestokerroin</translation>
+        <translation>Oletuskestokerroin</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="134"/>
@@ -9466,12 +9466,12 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="173"/>
         <source>Show non-notation events as question marks</source>
-        <translation>Näytä ei-nuotitustapahtumat kysymysmerkein</translation>
+        <translation>Näytä muut kuin nuotinnustapahtumat kysymysmerkein</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="183"/>
         <source>Show notation-quantized notes in a different color</source>
-        <translation>Näytä nuotinnus-yksiköidyt nuotit eri värillä</translation>
+        <translation>Näytä nuotinnuksen mukaan yksiköidyt nuotit eri värillä</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="193"/>
@@ -9481,17 +9481,17 @@ hyödyttämään muitakin.</translation>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="203"/>
         <source>Show notes outside suggested playable range in red</source>
-        <translation>Näytä nuotit ehdotetun soittoalueen ulkopuolelta punaisina</translation>
+        <translation>Näytä nuotit ehdotetun soittoalueen ulkopuolella punaisina</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="213"/>
         <source>Highlight superimposed notes with a halo effect</source>
-        <translation>Väritä päällekkäiset nuotit halo-efektillä</translation>
+        <translation>Korosta päällekkäiset nuotit halo-efektillä</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="226"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
-        <translation>MIDI-nauhoituksessa jaa-ja-sido pitkät nuotit tahtiviivojen kohdalla</translation>
+        <translation>MIDI-nauhoituksessa tahtiviivan ylittävät nuotit jaetaan ja sidotaan</translation>
     </message>
     <message>
         <location filename="../src/gui/configuration/NotationConfigurationPage.cpp" line="237"/>
