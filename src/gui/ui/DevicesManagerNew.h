@@ -24,7 +24,7 @@ namespace Rosegarden
 	class RosegardenGUIDoc;
 	class Studio;
 	
-	class DevicesManagerNew : public QDialog, public Ui::DevicesManagerNewUi
+	class DevicesManagerNew : public QMainWindow, public Ui::DevicesManagerNewUi
 	{
 		Q_OBJECT
 		
@@ -47,7 +47,9 @@ namespace Rosegarden
 			MidiDevice* getDeviceByName( QString deviceName );
 			MidiDevice* getDeviceById( DeviceId devId );
 			
+			MidiDevice* getMidiDeviceOfItem( QTreeWidgetItem* twItem );
 			MidiDevice* getCurrentlySelectedDevice( QTreeWidget* treeWid );
+			
 			
 			void connectMidiDeviceToPort ( MidiDevice* mdev, QString portName );
 			
@@ -86,6 +88,8 @@ namespace Rosegarden
 			void editBanks ( DeviceId );
 			void editControllers ( DeviceId );
 			
+			void sigDeviceNameChanged( DeviceId );
+			
 			
 		// START SLOTS
 		// ---------------------------------------------------------
@@ -93,10 +97,15 @@ namespace Rosegarden
 			void slotOutputPortDoubleClicked( QTreeWidgetItem * item, int column );
 			void slotOutputPortClicked( QTreeWidgetItem * item, int column );
 			void slotPlaybackDeviceSelected();
+// 			void slotPlaybackDevicesListItemDoubleClicked( QTreeWidgetItem* item, int col);
 			
 			void slotInputPortDoubleClicked( QTreeWidgetItem * item, int column );
 			void slotInputPortClicked( QTreeWidgetItem * item, int column );
 			void slotRecordDeviceSelected();
+			void slotRecordDevicesListItemDoubleClicked( QTreeWidgetItem* item, int col);
+			
+			void slotDeviceItemChanged ( QTreeWidgetItem * item, int column );
+			
 			
 			void slotRefreshOutputPorts();
 			void slotRefreshInputPorts();
@@ -128,6 +137,8 @@ namespace Rosegarden
 			*	of the visible device list (QTreeWidget)
 			*/
 			int m_UserRole_DeviceId; // = Qt::UserRole + 1;
+			
+			QString m_noPortName;
 			
 // 			MidiDeviceList m_playDevices;
 // 			MidiDeviceList m_recordDevices;

@@ -7719,13 +7719,15 @@ void RosegardenGUIApp::slotOpenDeviceManagerNew()
 		
 		//devMan->setAttribute(Qt::WA_DeleteOnClose );	// destroys dialog, if close event was accepted
 		
+		/*
+		// moved to constructor
 		// adjust some column widths for better visibility
 		m_devicesManagerNew->m_treeWidget_playbackDevices->setColumnWidth( 0, 200 );	// column, width
 		m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth( 0, 200 );	// column, width
 		m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth( 1, 60 );	// column, width
 		
 		m_devicesManagerNew->move( 60, 40 );
-		
+		*/
 		
 // 		connect(m_devicesManagerNew, SIGNAL(closing()),
 // 			this, SLOT(slotDeviceManagerClosed()));

@@ -624,9 +624,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         connectedPixmap = il.loadPixmap("connected");
         connectedUsedPixmap = il.loadPixmap("connected-used");
         connectedSelectedPixmap = il.loadPixmap("connected-selected");
-        unconnectedPixmap = il.loadPixmap("connected");
-        unconnectedUsedPixmap = il.loadPixmap("connected-used");
-        unconnectedSelectedPixmap = il.loadPixmap("connected-selected");
+        unconnectedPixmap = il.loadPixmap("unconnected");
+        unconnectedUsedPixmap = il.loadPixmap("unconnected-used");
+        unconnectedSelectedPixmap = il.loadPixmap("unconnected-selected");
 
         havePixmaps = true;
     }
@@ -647,7 +647,8 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList::iterator it;
     int currentDevId = -1;
     bool deviceUsedByAnyone = false;
-    QMenu* tempMenu = 0;
+//     QMenu* tempMenu = 0;
+    QAction* tempMenu = 0;
 
     for (it = list.begin(); it != list.end(); it++) {
 
@@ -744,8 +745,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
             // Connect up the submenu
             //
-            connect(subMenu, SIGNAL(activated(int)),
-                    SLOT(slotInstrumentPopupActivated(int)));
+//             connect(subMenu, SIGNAL(activated(int)),
+//                     SLOT(slotInstrumentPopupActivated(int)));
+            connect( subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentPopupActionTriggered(QAction*)) );
 
         } else if (!instrUsedByMe) {
 
@@ -775,14 +777,28 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             iname += " (" + pname + ")";
                 
                 
-                tempMenu = new QMenu(instrumentPopup);
-                tempMenu->setIcon(iconSet);
-                tempMenu->setTitle(iname);
-                tempMenu->setObjectName(iname + QString(i++));
-                instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
-//              instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
+//                 tempMenu = new QMenu(instrumentPopup);
+                tempMenu = new QAction(instrumentPopup);
+                tempMenu->setIcon( iconSet );
+                tempMenu->setText( iname );	// for QAction
+//                 tempMenu->setTitle( iname );	// for QMenu
+                tempMenu->setObjectName( iname + QString(i++) );
+                
+                instrumentSubMenus[instrumentSubMenus.size() - 1]->addAction( tempMenu );
+//                instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
+// qt3-old:       instrumentSubMenus[instrumentSubMenus.size() - 1]->addItem(iconSet, iname, i++);
         }
 
+}
+
+
+void TrackButtons:: slotInstrumentPopupActionTriggered( QAction* act ){
+		QMessageBox:: information( 
+			this, (""), 
+			( QString("Thank you! \n You've clicked the instrument ") + QString( act->text() ) ),
+			QMessageBox::Ok,
+			QMessageBox::Ok
+			);
 }
 
 void

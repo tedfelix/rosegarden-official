@@ -2,6 +2,7 @@
 <RCC version="1.0">
 <qresource>
 <file>autoload/autoload.rg</file>
+<!-- file>ui/DevicesManagerNewRc.qrc</file -->
 <file>ui/audiomanager.rc</file>
 <file>ui/bankeditor.rc</file>
 <file>ui/clefinserter.rc</file>
@@ -1160,5 +1161,12 @@
 <file>pixmaps/stock/revert.png</file>
 <file>pixmaps/stock/translate.png</file>
 <file>pixmaps/stock/undo.png</file>
+
+<file>pixmaps/DevicesManagerNew/icon-plugged-in.png</file>
+<file>pixmaps/DevicesManagerNew/icon-plugged-out.png</file>
+<file>pixmaps/DevicesManagerNew/icon-midi-connect.png</file>
+<file>pixmaps/DevicesManagerNew/image-connect.png</file>
+
 </qresource>
 </RCC>
+

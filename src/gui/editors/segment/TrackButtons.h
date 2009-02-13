@@ -142,7 +142,9 @@ public slots:
     void slotSetMetersByInstrument(float value, InstrumentId id);
 
     void slotInstrumentSelection(int);
-    void slotInstrumentPopupActivated(int);
+    void slotInstrumentPopupActivated(int);		// old kde3
+    void slotInstrumentPopupActionTriggered( QAction* );	// new qt4
+    
     void slotTrackInstrumentSelection(TrackId, int);
     
     // ensure track buttons match the Composition

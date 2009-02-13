@@ -389,8 +389,15 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 
     RG_DEBUG << "MidiProgramsEditor::slotNameChanged("
     << programName << ") : id = " << id << endl;
-
-    MidiProgram *program = getProgram(*getCurrentBank(), id);
+    
+    MidiBank* currBank;
+    currBank = getCurrentBank();
+    if( ! currBank ){
+        RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        return;
+    }
+    MidiProgram *program = getProgram(*currBank, id);
+//     MidiProgram *program = getProgram(*currBank, id);
 
     if (program == 0) {
         // Do nothing if program name is empty

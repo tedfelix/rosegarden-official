@@ -42,12 +42,14 @@
 //#include "gui/dialogs/ExportDeviceDialog.h"
 //#include "gui/dialogs/ImportDeviceDialog.h"
 
+#include "gui/general/IconLoader.h"
 //#include "gui/general/ResourceFinder.h"
 //#include "gui/kdeext/KTmpStatusMsg.h"
 
 
 #include <QWidget>
-#include <QDialog>
+// #include <QDialog>
+#include <QMainWindow>
 #include <QObject>
 #include <QFont>
 #include <QMessageBox>
@@ -72,7 +74,7 @@ namespace Rosegarden
 	}
 	
 	DevicesManagerNew :: DevicesManagerNew( QWidget* parent, RosegardenGUIDoc *doc )
-			: QDialog( ), Ui::DevicesManagerNewUi()
+			: QMainWindow( parent ), Ui::DevicesManagerNewUi()
  			, m_doc( doc )
 	{
 		// start constructor
@@ -81,11 +83,23 @@ namespace Rosegarden
 		//setWindowFlags( Qt::Dialog );	//| Qt::WindowStaysOnTopHint );
 		
 		m_UserRole_DeviceId = Qt::UserRole + 1;
+		m_noPortName = tr("[ No port ]");	// do not translate ?
 		
 		//m_doc = 0;	// RG document
 		m_studio = &m_doc->getStudio();
 		
-		setupUi ( dynamic_cast<QDialog*> ( this ) );
+		//setupUi ( dynamic_cast<QMainWindow*> ( this ) );
+		setupUi ( this );
+		
+		// gui adjustments
+		//
+		// adjust some column widths for better visibility
+		m_treeWidget_playbackDevices->setColumnWidth( 0, 200 );	// column, width
+		m_treeWidget_recordDevices->setColumnWidth( 0, 200 );	// column, width
+		m_treeWidget_recordDevices->setColumnWidth( 1, 60 );	// column, width
+		move( 60, 40 );
+		resize( 780, 420 );
+		
 		
 		connectSignalsToSlots();
 		
@@ -101,7 +115,8 @@ namespace Rosegarden
 		slotRefreshOutputPorts( );
 		slotRefreshInputPorts( );
 		
-		QDialog:: show();
+// 		QDialog:: show();
+		QMainWindow:: show();
 	}
 	
 	
@@ -112,8 +127,8 @@ namespace Rosegarden
 			//CommandHistory::getInstance()->detachView(actionCollection());	//&&&
 			m_doc = 0;
 		}
-		close( 0 );
 		*/
+		close( 0 );
 	}
 
 
@@ -149,6 +164,9 @@ namespace Rosegarden
 		QTreeWidgetItem* twItemS;
 		MidiDevice* mdev;
 		mdev = getCurrentlySelectedDevice( m_treeWidget_playbackDevices );
+		if( ! mdev ){
+			return;
+		}
 		twItemS = searchItemWithPort( m_treeWidget_outputPorts, strtoqstr(mdev->getConnection()) );
 		if( twItemS ){
 			m_treeWidget_outputPorts->scrollToItem( twItemS, QAbstractItemView::PositionAtCenter );
@@ -164,6 +182,9 @@ namespace Rosegarden
 		QTreeWidgetItem* twItemS;
 		MidiDevice* mdev;
 		mdev = getCurrentlySelectedDevice( m_treeWidget_recordDevices );
+		if( ! mdev ){
+			return;
+		}
 		twItemS = searchItemWithPort( m_treeWidget_inputPorts,  strtoqstr(mdev->getConnection())  );
 		if( twItemS ){
 			m_treeWidget_inputPorts->scrollToItem( twItemS, QAbstractItemView::PositionAtCenter );
@@ -254,6 +275,10 @@ namespace Rosegarden
 		QTreeWidgetItem* twItem;
 		QString portNameX;
 		
+		if( portName == "" ){
+			portName = m_noPortName;
+		}
+		
 		cnt = treeWid->topLevelItemCount();
 		for( i=0; i < cnt; i++ ){
 			twItem = treeWid->topLevelItem( i );
@@ -311,6 +336,7 @@ namespace Rosegarden
 		MidiDevice* mdev;
 		QString outPort;
 		QList<MidiDevice*> midiDevices;
+		QString devName;
 		
 		//DeviceList *
 		devices = m_studio->getDevices();
@@ -382,12 +408,12 @@ namespace Rosegarden
 					// create new entry
 					twItem = new QTreeWidgetItem (
 					    treeWid, QStringList() << strtoqstr ( mdev->getName() ) );
-		
+					
 					// set port text
 					if ( mdev->getDirection() == MidiDevice::Record )
 					{
 						// set record en-/disabled
-						//twItem->setText( 1, enabled ? "Yes" : "No" );
+						twItem->setText ( 1, mdev->isRecording() ? tr("Yes") : tr("No") );
 						twItem->setText ( 2, outPort );
 					}
 					else
@@ -397,6 +423,8 @@ namespace Rosegarden
 					
 					// save deviceId in data field
 					twItem->setData ( 0, m_UserRole_DeviceId, QVariant ( ( int ) mdev->getId() ) );
+					twItem->setFlags( twItem->flags() | Qt::ItemIsEditable );
+					twItem->setSizeHint( 0, QSize(24,24) );
 					treeWid->addTopLevelItem ( twItem );
 				
 				}
@@ -406,11 +434,15 @@ namespace Rosegarden
 					twItem = searchItemWithDeviceId ( treeWid, devId );
 					if ( twItem )
 					{
+						devName = strtoqstr( mdev->getName() );
+						if( devName != twItem->text(0) ){
+							twItem->setText( 0, devName );
+						}
+						
 						// update connection-name (port)
 						if ( mdev->getDirection() == MidiDevice::Record )
 						{
-							// set record en-/disabled
-							//twItem->setText( 1, enabled ? "Yes" : "No" );
+							twItem->setText ( 1, mdev->isRecording() ? tr("Yes") : tr("No") );
 							twItem->setText ( 2, outPort );
 						}
 						else
@@ -497,6 +529,22 @@ namespace Rosegarden
 	}
 	
 	
+	MidiDevice* DevicesManagerNew:: getMidiDeviceOfItem( QTreeWidgetItem* twItem ){
+		// return the device represented by twItem
+		//
+		MidiDevice* mdev;
+		DeviceId devId;
+		
+		if( ! twItem ) return 0;
+		devId = twItem->data( 0, m_UserRole_DeviceId ).toInt();
+		mdev = getDeviceById( devId );
+//		mdev = getDeviceByName( twItem->text( 0 ) );	// item->text(column)
+		return mdev;
+	}
+	
+	
+	
+	
 	void DevicesManagerNew:: updateCheckStatesOfPortsList( QTreeWidget* treeWid_ports, QTreeWidget* treeWid_devices ){
 		int i,cnt;
 		QTreeWidgetItem* twItem;
@@ -508,12 +556,18 @@ namespace Rosegarden
 		mdev = getCurrentlySelectedDevice( treeWid_devices );
 		//if( !mdev ) return;
 		
+		IconLoader il;
+		//:/pixmaps/DevicesManagerNew/
+		
 		cnt = treeWid_ports->topLevelItemCount();		
 		//
 		for( i=0; i < cnt; i++ ){
 			twItem = treeWid_ports->topLevelItem( i );
 			
-			twItem->setCheckState( 0, Qt::Unchecked );
+			twItem->setIcon( 0, il.load("DevicesManagerNew/icon-plugged-out.png") );
+			twItem->setSizeHint( 0, QSize(24,24) );
+// 			twItem->setIconSize( 0, QSize(32,32) );
+			//twItem->setCheckState( 0, Qt::Unchecked );
 			font = twItem->font(0);
 			font.setWeight( QFont::Normal );
 			twItem->setFont( 0, font );	// 0=column
@@ -521,15 +575,24 @@ namespace Rosegarden
 			
 			// RG_DEBUG << mdev->getConnection() << " ==> " << qstrtostr(twItem->text(0)) << endl;
 			
-			if( mdev ){
+			outPort = "";
+ 			if( mdev ){
 				outPort = strtoqstr( mdev->getConnection() );
-				if( outPort == twItem->text(0) ){
-					font.setWeight( QFont::Bold );
-					twItem->setFont( 0, font );	// 0=column
-					twItem->setCheckState( 0, Qt::Checked );
-// 					twItemSelected = twItem;
-				}
+ 			}
+			
+			if( outPort.isEmpty() ){
+				outPort = m_noPortName;	// nullPort
 			}
+			
+			
+			if( outPort == twItem->text(0) ){
+				font.setWeight( QFont::Bold );
+				twItem->setFont( 0, font );	// 0=column
+				twItem->setIcon( 0, il.load("DevicesManagerNew/icon-plugged-in.png") );
+// 				twItem->setCheckState( 0, Qt::Checked );
+// 				twItemSelected = twItem;
+			}
+			
 			
 		}// end for i
 		
@@ -545,16 +608,24 @@ namespace Rosegarden
 			return;
 		}
  		if( mdev->getType() != Device::Midi ){	
-			RG_DEBUG << "Warning: Type of mdev is not Device::Midi " << endl;
+			RG_DEBUG << "Warning: Type of mdev is not Device::Midi in DevicesManagerNew::connectMidiDeviceToPort() " << endl;
 			//return;
  		}
 		QString outPort;
 		outPort = strtoqstr( mdev->getConnection() );
-
+		
+		DeviceId devId;
+		devId = mdev->getId();
+		
 		if ( outPort != portName )
 		{
-			CommandHistory::getInstance()
-				->addCommand( new ReconnectDeviceCommand ( m_studio, mdev->getId(), qstrtostr(portName) ) );
+			if( (portName == "") || (portName == m_noPortName) ){
+				CommandHistory::getInstance()
+						->addCommand( new ReconnectDeviceCommand ( m_studio, devId, "" ) );
+			}else{
+				CommandHistory::getInstance()
+						->addCommand( new ReconnectDeviceCommand ( m_studio, devId, qstrtostr(portName) ) );
+			}
 		}
 	}
 
@@ -614,6 +685,8 @@ namespace Rosegarden
 			i += 1;
 		}
 		
+		portNamesAvail << m_noPortName;		// add nullPort
+		portsCount += 1;					// inc count
 		
 		for( i=0; i < portsCount; ++i ){
 			
@@ -627,7 +700,7 @@ namespace Rosegarden
 								treeWid, QStringList() << portName
 							);
 				
-				twItem->setCheckState( 0, Qt::Unchecked );
+				//twItem->setCheckState( 0, Qt::Unchecked );
 				//itemx->setFlags( itemx->flags() &! Qt::ItemIsUserCheckable );
 				treeWid->addTopLevelItem( twItem );
 			}
@@ -720,43 +793,92 @@ namespace Rosegarden
 	{
 		MidiDevice* mdev;
 		mdev = getCurrentlySelectedDevice( m_treeWidget_playbackDevices );
-		if ( ! mdev )
-			return;
-		DeviceId id = mdev->getId();
+		if ( ! mdev ) return;
+		DeviceId devId = mdev->getId();
+		if ( devId == Device::NO_DEVICE ) return;
 		//
-		emit editBanks ( id );
+		emit editBanks ( devId );
 	}
 	void DevicesManagerNew:: slotEditControllerDefinitions()
 	{
 		MidiDevice* mdev;
 		mdev = getCurrentlySelectedDevice( m_treeWidget_playbackDevices );
-		if ( ! mdev )
-			return;
-		DeviceId id = mdev->getId();
+		if ( ! mdev ) return;
+		DeviceId devId = mdev->getId();
+		if ( devId == Device::NO_DEVICE ) return;
 		//
-		emit editControllers ( id );
+		emit editControllers ( devId );
 	}
 	
 	void DevicesManagerNew:: slotAddLV2Device(){
+		/*
 		QMessageBox:: information( 
 			this, "Add LV2 Plugin Device", 
 			"Just an idea at the moment. \nNot implemented. ",
 			QMessageBox::Ok,
 			QMessageBox::Ok
 			);
+		*/
 	}
 	
 	
 	void DevicesManagerNew:: slotHelpRequested()
 	{
 		QMessageBox:: information( 
-			this, "Help for the Midi Device-Manager Dialog", 
-			"This is Rosegardens central connection station. Create and connect your Midi Devices here! ",
+			this, tr("Help for the Midi Devices-Manager Dialog"), 
+			tr("This is Rosegardens central connection station. Create and connect your Midi Devices here! "),
 			QMessageBox::Ok,
 			QMessageBox::Ok
 			);
 	}
 	
+	
+	void DevicesManagerNew:: slotDeviceItemChanged ( QTreeWidgetItem * twItem, int column ){
+		/** called, if an item of the playback or record devices list (treeWidgetItem) changed
+			if the device-name column has been changed, the device will be renamed.
+		**/
+		MidiDevice *mdev;
+		QString devName;
+		
+		mdev = getMidiDeviceOfItem( twItem );
+		if( ! mdev ){
+			RG_DEBUG << "Warning: mdev is NULL in DevicesManagerNew::slotPlaybackDeviceItemChanged() " << endl;
+			return;
+		}
+		devName = twItem->text(0);
+		
+		if ( devName != strtoqstr(mdev->getName()) ) {
+			CommandHistory::getInstance()->
+					addCommand( new RenameDeviceCommand(m_studio, mdev->getId(), qstrtostr(devName)) );
+			emit sigDeviceNameChanged( mdev->getId() );
+		}
+		
+	}
+	
+	void DevicesManagerNew:: slotRecordDevicesListItemDoubleClicked( QTreeWidgetItem* twItem, int col){
+		
+		MidiDevice *mdev;
+		mdev = getMidiDeviceOfItem( twItem );
+		if( !mdev ) return;
+		
+		if( col == 1 ){		// column: enable recording
+			
+			if( mdev->isRecording() ){
+				
+				mdev->setRecording( false );
+// 				CommandHistory::getInstance()
+// 						->addCommand( new ChangeRecordDeviceCommand(mdev->getId(), false) );
+			}else{
+				mdev->setRecording( true );
+// 				CommandHistory::getInstance()
+// 						->addCommand( new ChangeRecordDeviceCommand(mdev->getId(), true) );
+			}
+			
+			
+			// update list entry
+			twItem->setText( 1, mdev->isRecording() ? tr("Yes") : tr("No") );
+		}
+	}
 	
 	
 	void DevicesManagerNew:: connectSignalsToSlots(){
@@ -770,13 +892,11 @@ namespace Rosegarden
 		connect( m_treeWidget_playbackDevices, SIGNAL(itemSelectionChanged()),
 				this, SLOT(slotPlaybackDeviceSelected()) );
 		
-		connect( pushButton_refreshOutputPorts, SIGNAL(clicked()),
-				this, SLOT(slotRefreshOutputPorts()) );
-		connect( pushButton_refreshInputPorts, SIGNAL(clicked()),
-				this, SLOT(slotRefreshInputPorts()) );
+// 		connect( m_treeWidget_playbackDevices, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+// 				this, SLOT(slotPlaybackDevicesListItemDoubleClicked( QTreeWidgetItem *, int )) );
+ 		connect( m_treeWidget_playbackDevices, SIGNAL(itemChanged ( QTreeWidgetItem*, int )),
+ 				this, SLOT(slotDeviceItemChanged( QTreeWidgetItem*, int )) );
 		
-		connect( pushButton_addLV2Device, SIGNAL(clicked()),
-				this, SLOT(slotAddLV2Device()) );
 		
 		// record devices
 		connect( m_treeWidget_inputPorts, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
@@ -786,10 +906,30 @@ namespace Rosegarden
 		connect( m_treeWidget_recordDevices, SIGNAL(itemSelectionChanged()),
 				this, SLOT(slotRecordDeviceSelected()) );
 		
+ 		connect( m_treeWidget_recordDevices, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
+ 				this, SLOT(slotRecordDevicesListItemDoubleClicked( QTreeWidgetItem *, int )) );
+ 		connect( m_treeWidget_recordDevices, SIGNAL(itemChanged( QTreeWidgetItem*, int )),
+ 				this, SLOT(slotDeviceItemChanged( QTreeWidgetItem*, int )) );
 		
+		
+		// refresh buttons
+		connect( pushButton_refreshOutputPorts, SIGNAL(clicked()),
+				this, SLOT(slotRefreshOutputPorts()) );
+		connect( pushButton_refreshInputPorts, SIGNAL(clicked()),
+				this, SLOT(slotRefreshInputPorts()) );
+		
+		connect( pushButton_addLV2Device, SIGNAL(clicked()),
+				this, SLOT(slotAddLV2Device()) );
+		
+		// dialog box buttons
 		QDialogButtonBox* bbox;
+		// connect help button
 		bbox = findChild<QDialogButtonBox*>( "buttonBox" );
 		connect( bbox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()) );
+		// connect close button
+		QPushButton *pbClose;
+		pbClose = bbox->button( QDialogButtonBox::Close );
+		connect( pbClose, SIGNAL(clicked()), this, SLOT(slotClose()) );
 		
 		// buttons
 		connect(pushButton_newPlaybackDevice, SIGNAL(clicked()), this, SLOT(slotAddPlaybackDevice()));
@@ -800,6 +940,7 @@ namespace Rosegarden
 		
 		connect(pushButton_manageBanksOfPlaybackDevice, SIGNAL(clicked()), this, SLOT(slotManageBanksOfPlaybackDevice()));
 		connect(pushButton_editControllerDefinitions, SIGNAL(clicked()), this, SLOT(slotEditControllerDefinitions()));
+		
 		
 	}// end connectSignalsToSlots()
 	
