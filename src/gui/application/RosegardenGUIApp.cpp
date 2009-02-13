@@ -380,7 +380,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                         );
 	
 
-    m_parameterArea = new RosegardenParameterArea(m_dockLeft, "Rosegarden Parameter Area");
+    m_parameterArea = new RosegardenParameterArea(m_dockLeft, "RosegardenParameterArea");
     m_dockLeft->setWidget(m_parameterArea);
 
     // Populate the parameter-box area with the respective
