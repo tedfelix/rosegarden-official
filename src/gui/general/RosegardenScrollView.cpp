@@ -217,9 +217,9 @@ void RosegardenScrollView::updateContents()
 void RosegardenScrollView::updateScrollBars()
 {
 	this->horizontalScrollBar()->setPageStep(visibleWidth());
-	this->horizontalScrollBar()->setMaximum(contentsWidth()-visibleWidth());
+	this->horizontalScrollBar()->setMaximum(std::max(contentsWidth()-visibleWidth(),0));
 	this->verticalScrollBar()->setPageStep(visibleHeight());
-	this->verticalScrollBar()->setMaximum(contentsHeight()-visibleHeight());
+	this->verticalScrollBar()->setMaximum(std::max(contentsHeight()-visibleHeight(),0));
 
 //	RG_DEBUG << "RosegardenScrollView::updateScrollBars :" << " pagewidth - " << visibleWidth() << " pageheight - " << visibleHeight() << endl;
 }
@@ -557,7 +557,7 @@ void RosegardenScrollView::slotScrollVertSmallSteps(int vpos)
 {
     QScrollBar* vbar = verticalScrollBar();
 
-    //    RG_DEBUG << "RosegardenCanvasView::slotScrollVertSmallSteps: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;
+    //    RG_DEBUG << "RosegardenCanvasView::slotScrollVertSmallSteps - Start: vpos is " << vpos << ", contentsY is " << contentsY() << ", visibleHeight is " << visibleHeight() << endl;
 
     // As a special case (or hack), ignore any request made before we've
     // actually been rendered and sized
@@ -613,14 +613,12 @@ void RosegardenScrollView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenScrollView::resizeEvent(QResizeEvent* e)
 {
-	RG_DEBUG << "RosegardenScrollView::resizeEvent" << endl;
 //    Q3ScrollView::resizeEvent(e);
 	QAbstractScrollArea::resizeEvent(e);
 	updateScrollBars();
 //### What was the purpose of this?
 //    if (!horizontalScrollBar()->isVisible())
     updateBottomWidgetGeometry();
-
 }
 
 void RosegardenScrollView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
