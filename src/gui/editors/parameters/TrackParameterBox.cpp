@@ -130,6 +130,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // track label
     //
     m_trackLabel = new SqueezedLabel (tr("<untitled>"), this );
+    //@@@m_trackLabel->setObjectName("SPECIAL_LABEL");
     m_trackLabel->setAlignment(Qt::AlignCenter);
     //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     mainLayout->addWidget(m_trackLabel, 0, 0);
@@ -274,6 +275,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     groupLayout->addWidget(m_psetLbl, row, 0, Qt::AlignLeft);
 
     m_presetLbl = new QLabel(tr("<none>"), m_defaultsGroup);
+    m_presetLbl->setObjectName("SPECIAL_LABEL");
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_presetLbl->setFixedWidth(width20);
     groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
@@ -336,6 +338,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     groupLayout->addWidget(new QLabel(tr("Lowest"), m_defaultsGroup), row, 1, Qt::AlignRight);
 
     m_lowButton = new QPushButton(tr("---"), m_defaultsGroup);
+    m_lowButton->setMinimumSize(75,0); //### this should be calculated with font metrics or something
     m_lowButton->setToolTip(tr("Choose the lowest suggested playable note, using a staff"));
     groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 

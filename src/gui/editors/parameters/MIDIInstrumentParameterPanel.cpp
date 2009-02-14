@@ -426,6 +426,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // with the existing rotary widget.
 
             QLabel *label = rmi->second.second;
+            label->setObjectName("ROTARY_LABEL");
             label->setText(strtoqstr(it->getName()));
 
             ++rmi;
@@ -455,6 +456,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
             QLabel *label = new SqueezedLabel(strtoqstr(it->getName()), hbox);
+            label->setObjectName("ROTARY_LABEL");
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;

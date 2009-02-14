@@ -183,11 +183,11 @@ indicator is styled using the the ::indicator subcontrol. The spacing property
 can be used to control the spacing between the text and indicator. */
 
 QGroupBox {
-   background-color: #808080;
-   color: white;
-   border: 2px solid #2CD0FC;
-   border-radius: 4px;
-   padding: 2px;
+    background-color: #000000;
+    color: white;
+    border: 2px solid #2CD0FC;
+    border-radius: 4px;
+    padding: 2px;
 }
 
 
@@ -215,7 +215,7 @@ QLabel {
      * putting a background in for now makes it easier to see all the places
      * that are affected by this change. */
     /* background-color: blue; */
-    color: #ABCDEF;
+    color: #EEEEEE;
 }
 
 
@@ -328,13 +328,21 @@ For QPushButton with a menu, the menu indicator is styled using the ::menu-indic
 
 QPushButton {
     border: 1px solid #AAAAAA;
-    border-radius: 6px;
-    background-color: #808080;
-/*    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                       stop: 0 #f6f7fa, stop: 1 #dadbde); 
-    min-width: 80px; */
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD)
 }
 
+/* too obnoxious?
+ *
+QPushButton::hover {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
+} */
+
+QPushButton::checked {
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
+}
 
 
 
@@ -656,7 +664,9 @@ QToolBar is styled using the ::separator subcontrol.  The handle (to move the
 toolbar) is styled using the ::handle subcontrol. */
 
 QToolBar {
-    background-color: #808080;
+/*    background-color: #808080; */
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+
 }
 
 QToolBar::handle {
@@ -681,7 +691,11 @@ property to some value. This is because, by default, the QToolButton draws a
 native border which completely overlaps the background-color. For example,
 QToolButton { background-color: red; border: none; } */
 
+/* toolbar buttons,
+ * TPB collapsing frame texts (eg. "Create segments with") */
 QToolButton {
+    color: white;
+    background-color: transparent;
 }
 
 
@@ -743,14 +757,14 @@ QWidget {
 }
 
 QWidget#TRACK_BUTTONS {
-    background-color: yellow;
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: white;
     selection-background-color: blue;
     selection-color: yellow;
 }
 
 QWidget#TRACK_LABEL {
-    background-color: yellow;
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: white;
     selection-background-color: blue;
     selection-color: yellow;
@@ -768,11 +782,6 @@ QWidget#MATRIX {
     background-color: #000000;
 }
 
-/* the parameter area in the matrix views, I think */
-QWidget#DOCK {
-    background-color: #000000; 
-}
-
 /* the audio and MIDI mixer windows */
 /* (actually only affects audio, because the MIDI mixer window is more
  * complicated) */
@@ -786,3 +795,155 @@ QWidget#FADER {
      * further investigation */
     background-color: transparent;
 }
+
+
+/* MAIN WINDOW PARAMETER AREA OVERRIDES
+ *
+ * Painting the parameter area is tediously difficult.
+ *
+ * First, we have to slop a bucket of black paint all over everything...
+ */
+
+#RosegardenParameterArea QWidget {
+    background: #000000; 
+}
+
+/* Then we have to re-specify group boxes, scrollbars, buttons, the whole
+ * freaking nine yards all over again, local to just RosegardenParameterArea, in
+ * order to override the default sweeping black we had to inflict upon ourselves
+ * just to color the damn background
+ */
+#RosegardenParameterArea QWidget#SQUEEZED {
+    background-color: transparent;
+}
+
+#RosegardenParameterArea QGroupBox {
+    background: #404040;
+    color: white;
+    border: 2px solid #303030;
+    border-radius: 4px;
+    padding: 2px;
+}
+
+#RosegardenParameterArea QLabel {
+    color: white;
+}
+
+#RosegardenParameterArea QToolButton {
+    color: white;
+    background-color: transparent;
+}
+
+#RosegardenParameterArea QPushButton {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD)
+}
+
+#RosegardenParameterArea QPushButton::checked {
+    border: 1px solid #E0E0E0;
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
+}
+
+
+#RosegardenParameterArea QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 18px 1px 3px;
+    min-width: 6em;
+}
+
+#RosegardenParameterArea QComboBox:editable {
+    background: white;
+}
+
+#RosegardenParameterArea QComboBox:!editable, QComboBox::drop-down:editable {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+}
+
+/* QComboBox gets the "on" state when the popup is open */
+#RosegardenParameterArea QComboBox:!editable:on, QComboBox::drop-down:editable:on {
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+                                stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
+                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+}
+
+#RosegardenParameterArea QComboBox:on { /* shift the text when the popup opens */
+    padding-top: 3px;
+    padding-left: 4px;
+}
+
+#RosegardenParameterArea QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+#RosegardenParameterArea QComboBox::down-arrow {
+    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);
+}
+
+#RosegardenParameterArea QComboBox::down-arrow:on { /* shift the arrow when popup is open */
+    top: 1px;
+    left: 1px;
+}
+
+/* The pop-up of the QComboBox is a QAbstractItemView and is styled using the
+descendant selector: */
+
+#RosegardenParameterArea QComboBox QAbstractItemView {
+    border: 2px solid darkgray;
+    selection-background-color: #2CD0FC;
+    background-color: #000000;
+}
+
+
+#RosegardenParameterArea QMenu {
+    background-color: #000000;
+}
+
+#RosegardenParameterArea QMenu::item {
+    /* sets background of menu item. set this to something non-transparent
+       if you want menu color and menu item color to be different */
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+#RosegardenParameterArea QMenu::item:selected { /* when user selects item using mouse or keyboard */
+    background-color: #2CD0FC;
+}
+
+#RosegardenParameterArea QLabel#SPECIAL_LABEL {
+    color: #000000;
+    background-color: #AAAAAA;
+}
+
+#RosegardenParameterArea QFrame {
+    background-color: transparent;
+}
+
+#RosegardenParameterArea QCheckBox {
+    background-color: transparent;
+}
+
+#RosegardenParameterArea QWidget#ROTARY{
+    background-color: #404040; /* same as local QGroupBox background */
+}
+
+#RosegardenParameterArea QWidget#ROTARY QLabel {
+    background-color: #404040;
+}
+
+#RosegardenParameterArea QWidget#ROTARY_LABEL {
+    background-color: #404040;
+}
+

@@ -137,6 +137,7 @@ SegmentParameterBox::initBox()
 
     // Label ..
     m_label = new QLabel(this);
+    m_label->setObjectName("SPECIAL_LABEL");
     m_label->setFont(font);
     m_label->setFixedWidth(width);
     //m_label->setFixedHeight(comboHeight);

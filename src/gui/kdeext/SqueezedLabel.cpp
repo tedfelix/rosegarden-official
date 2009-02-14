@@ -21,6 +21,7 @@ namespace Rosegarden
 SqueezedLabel::SqueezedLabel(QString label, QWidget* parent) :
     QLabel(label, parent)
 {
+    setObjectName("SQUEEZED");
 	//### maybe fix: not really the same as KSqueezedTextLabel,
 	//    but should work for now.
 
