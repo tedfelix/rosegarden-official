@@ -231,7 +231,7 @@ namespace Rosegarden
 
 RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
                                    QObject *startupStatusMessageReceiver) :
-    QMainWindow(0, Qt::WindowContextHelpButtonHint),
+    QMainWindow(0),
     m_actionsSetup(false),
     m_view(0),
     m_swapView(0),
@@ -278,6 +278,7 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
     m_parameterArea(0),
 	m_devicesManagerNew(0)
 {
+    setObjectName("App");
     m_myself = this;
 
     if (startupStatusMessageReceiver) {

@@ -121,6 +121,7 @@ RosegardenGUIView::RosegardenGUIView(bool showTrackLabels,
         m_instrumentParameterBox(instrumentParameterBox),
         m_trackParameterBox(trackParameterBox)
 {
+    setObjectName("View");
     RosegardenGUIDoc* doc = getDocument();
     Composition *comp = &doc->getComposition();
     QVBoxLayout *layout = new QVBoxLayout;

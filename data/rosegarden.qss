@@ -18,6 +18,9 @@
 
 /*                         Qt4.3 List of Stylable Widgets                    */
 
+
+QWidget { background: #000000; }
+
 /*  QAbstractScrollArea.
 
 Supports the box model. All derivatives of QAbstractScrollArea, including
@@ -277,7 +280,7 @@ Supports the box model. The spacing property specifies the spacing between menu
 items. Individual items are styled using the ::item subcontrol. */
 
 QMenuBar {
-    background-color: #454545;
+    background-color: #000000;
 }
 
 QMenuBar::item {
@@ -756,20 +759,6 @@ QWidget {
      * turns out to be good for something after all, apparently. */
 }
 
-QWidget#TRACK_BUTTONS {
-    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: white;
-    selection-background-color: blue;
-    selection-color: yellow;
-}
-
-QWidget#TRACK_LABEL {
-    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: white;
-    selection-background-color: blue;
-    selection-color: yellow;
-}
-
 QWidget#ROTARY {
     background-color: transparent;
 }
@@ -945,5 +934,47 @@ descendant selector: */
 
 #RosegardenParameterArea QWidget#ROTARY_LABEL {
     background-color: #404040;
+}
+
+#App QToolBar {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+}
+
+#App QLabel {
+    background: transparent;
+    color: white;
+}
+
+#App QToolTip {
+    foreground: purple;
+    background-color: yellow;
+}
+
+#View QWidget {
+    background-color: transparent;
+}
+
+#View QWidget#StandardRuler {
+    background-color: #eda813;
+}
+
+
+#View QWidget#TRACK_BUTTONS {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: white;
+    selection-background-color: blue;
+    selection-color: yellow;
+}
+
+#View QWidget#TRACK_LABEL {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: white;
+    selection-background-color: blue;
+    selection-color: yellow;
+}
+
+#View QLabel {
+    background: transparent;
+    color: white;
 }
 

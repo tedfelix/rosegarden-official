@@ -54,6 +54,7 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_markerRuler(0)
 {
+    setObjectName("StandardRuler");
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(0);
