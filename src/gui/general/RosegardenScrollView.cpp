@@ -202,6 +202,8 @@ void RosegardenScrollView::updateContents(int x, int y, int w, int h) 	// Code l
     //}
 
     vp->update(x, y, w, h);
+
+    updateScrollBars();
 }
 
 void RosegardenScrollView::updateContents(const QRect& r)
