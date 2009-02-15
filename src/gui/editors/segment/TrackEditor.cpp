@@ -181,6 +181,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                      false,
                                      this, "topbarbuttons");
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
+    m_topStandardRuler->setContentsMargins(2,0,0,0);
 
     grid->addWidget(m_topStandardRuler, 2, 1);
 
@@ -225,6 +226,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         true,
                                         m_compositionView, "bottombarbuttons");
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
+    m_bottomStandardRuler->setContentsMargins(2,0,0,0);
 
 //    m_bottomStandardRuler->hide();
 
