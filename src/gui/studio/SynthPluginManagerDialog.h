@@ -29,7 +29,11 @@ class QWidget;
 class QPushButton;
 class QCloseEvent;
 class QComboBox;
-
+class QDialogButtonBox;
+class QVBoxLayout;
+class QGridLayout;
+class QGroupBox;
+class QScrollArea;
 
 namespace Rosegarden
 {
@@ -55,6 +59,9 @@ public:
     virtual ~SynthPluginManagerDialog();
 
     void updatePlugin(InstrumentId id, int plugin);
+    
+    void setupGuiMain();
+    void setupGuiCreatePluginList();
 
 signals:
     void closing();
@@ -67,6 +74,8 @@ protected slots:
     void slotPluginChanged(int index);
     void slotControlsButtonClicked();
     void slotGUIButtonClicked();
+    
+    void slotHelpRequested();
 
 protected:
     virtual void closeEvent(QCloseEvent *);
@@ -79,7 +88,22 @@ protected:
     std::vector<QComboBox *> m_synthCombos;
     std::vector<QPushButton *> m_controlsButtons;
     std::vector<QPushButton *> m_guiButtons;
-
+    
+    
+    QWidget     *m_centralWidget;
+    QVBoxLayout *m_mainLayout;
+    QGroupBox   *m_groupBoxPluginList;
+    QVBoxLayout *m_verticalLayout_2;
+    QScrollArea *m_scrollArea;
+    QWidget     *m_scrollWidget;
+     
+    QGridLayout *m_scrollWidgetLayout;
+//     QMenuBar    *m_menubar;
+//     QStatusBar  *m_statusbar;
+    
+    QDialogButtonBox* m_dialogButtonBox;
+    
+    
 #ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_guiManager;
 #endif

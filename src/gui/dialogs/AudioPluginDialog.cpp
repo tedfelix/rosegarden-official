@@ -75,22 +75,23 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 {
     //setHelp("studio-plugins");
 
-    setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
-                              QSizePolicy::Fixed));
-
+//     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
+//                               QSizePolicy::Fixed));
+    
     setModal(false);
     setWindowTitle(tr("Audio Plugin"));
-
+    
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
+    
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
+    vbox->setLayout(vboxLayout);
     metagrid->addWidget(vbox, 0, 0);
-
-
+    
+    
     QGroupBox *pluginSelectionBox = new QGroupBox( tr("Plugin"), vbox );
     vboxLayout->addWidget(pluginSelectionBox);
-    vbox->setLayout(vboxLayout);
 
     makePluginParamsBox(vbox, 0, 10);
     vboxLayout->addWidget(m_pluginParamsBox);
@@ -188,6 +189,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
+
+
 #ifdef HAVE_LIBLO
 void
 AudioPluginDialog::slotDetails()
@@ -195,6 +198,8 @@ AudioPluginDialog::slotDetails()
     slotShowGUI();
 }
 #endif
+
+
 
 void
 AudioPluginDialog::slotShowGUI()

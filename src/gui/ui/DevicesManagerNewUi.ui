@@ -137,6 +137,7 @@ p, li { white-space: pre-wrap; }
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" text-decoration: underline;">New controllers add a knob&lt;/span> to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="text" >
@@ -163,7 +164,8 @@ p, li { white-space: pre-wrap; }
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Bank definitions define, how the programs (sounds) of the the device are called, which settings to use for it, etc..&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Bank definitions define, how the programs (sounds) of a device are called, which settings to use for it, etc..&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">It is possible to load and save these (bank-) settings as *.rgd files in order to export, import and share it.&lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
               </property>
               <property name="text" >
@@ -397,7 +399,9 @@ p, li { white-space: pre-wrap; }
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Create your record devices here. Connect them to incoming ports at right. Double click the device name to change it.&lt;/p>&lt;/body>&lt;/html></string>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Create your record devices here. Connect them to incoming ports at right. &lt;span style=" text-decoration: underline;">Double click the device name to change it.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;">&lt;span style=" text-decoration:none;">Double click an entry in the "Enabled" column, &lt;/span>to enable the device for recording!&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;">&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <property name="autoFillBackground" >
             <bool>false</bool>
@@ -488,8 +492,8 @@ p, li { white-space: pre-wrap; }
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select (or create) a record device (left). Then &lt;span style=" font-weight:600;">double-click&lt;/span> here &lt;span style=" font-weight:600;">to connect&lt;/span> it to an incoming alsa-&lt;span style=" font-weight:600;">midi port.&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. software-synthesizers. &lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select (or create) a record device (at left). Then &lt;span style=" text-decoration: underline;">double-click&lt;/span> here&lt;span style=" text-decoration: underline;"> to connect&lt;/span> it to an incoming alsa-&lt;span style=" text-decoration: underline;">midi port.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by other midi-sequencers. &lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <column>
@@ -636,8 +640,8 @@ p, li { white-space: pre-wrap; }
 &lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select a playback device (left). Then &lt;span style=" font-weight:600;">double-click&lt;/span> here &lt;span style=" font-weight:600;">to connect&lt;/span> it to an alsa-&lt;span style=" font-weight:600;">midi port.&lt;/span>&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. software-synthesizers. &lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">First select (or create) a playback device (at left). Then &lt;span style=" text-decoration: underline;">double-click&lt;/span> here&lt;span style=" text-decoration: underline;"> to connect&lt;/span> it to an outgoing alsa-&lt;span style=" text-decoration: underline;">midi port.&lt;/span>&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p>
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
            </property>
            <column>

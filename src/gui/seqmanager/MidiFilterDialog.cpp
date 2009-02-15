@@ -154,7 +154,6 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     connect(m_recordBox, SIGNAL(released(int)),
             this, SLOT(slotSetModified()));
 
-    setModified(false);
     m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok    |
                                        QDialogButtonBox::Apply |
                                        QDialogButtonBox::Close |
@@ -163,6 +162,8 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    
+    setModified(false); // to call after the creation of buttonBox
 }
 
 void
@@ -244,11 +245,18 @@ MidiFilterDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-
+    
+    QPushButton* pbApply;
+    pbApply = m_buttonBox->button(QDialogButtonBox::Apply);
+    
+    if( ! pbApply ){
+//         RG_DEBUG << "Warning: PushButton-Apply is Null in MidiFilterDialog::setModified() " << endl;
+//         return;
+    }
     if (value) {
-        m_buttonBox->button(QDialogButtonBox::Apply)->setEnabled(true);
+        pbApply->setEnabled(true);
     } else {
-        m_buttonBox->button(QDialogButtonBox::Apply)->setEnabled(false);
+        pbApply->setEnabled(false);
     }
 
     m_modified = value;

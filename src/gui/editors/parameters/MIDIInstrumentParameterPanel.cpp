@@ -102,7 +102,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     m_connectionLabel->setAlignment(Qt::AlignCenter);
     
     
-    QString programTip = tr("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track)</qt>");
+    QString programTip = tr("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
     m_evalMidiPrgChgLabel = new QLabel(tr("Receive external"), this);
     m_evalMidiPrgChgLabel->setToolTip(programTip);
