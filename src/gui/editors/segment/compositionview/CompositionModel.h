@@ -117,6 +117,7 @@ public:
     virtual const rectcontainer& getRectanglesIn(const QRect& rect,
                                                  RectRanges* notationRects, AudioPreviewDrawData* audioRects) = 0;
 
+    virtual unsigned int getHeight() = 0;
     virtual heightlist getTrackDividersIn(const QRect& rect) = 0;
 
     virtual itemcontainer getItemsAt (const QPoint&) = 0;

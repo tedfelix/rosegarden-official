@@ -105,6 +105,8 @@ public:
     virtual void setLength(int width);
     virtual int  getLength();
 
+    virtual unsigned int getHeight();
+    
     void setAudioPreviewThread(AudioPreviewThread *thread);
     AudioPreviewThread* getAudioPreviewThread() { return m_audioPreviewThread; }
 

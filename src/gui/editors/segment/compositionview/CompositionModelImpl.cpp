@@ -946,6 +946,11 @@ int CompositionModelImpl::getLength()
     return w;
 }
 
+unsigned int CompositionModelImpl::getHeight()
+{
+    return (unsigned int)m_grid.getYBinCoordinate(getNbRows());
+}
+
 timeT CompositionModelImpl::getRepeatTimeAt(const QPoint& p, const CompositionItem& cItem)
 {
     //     timeT timeAtClick = m_grid.getRulerScale()->getTimeForX(p.x());

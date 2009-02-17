@@ -463,7 +463,8 @@ void TrackEditor::paintEvent(QPaintEvent* e)
         m_trackButtons->slotUpdateTracks(); 
         m_compositionView->clearSegmentRectsCache(true);
 		
-         m_compositionView->updateContents();
+        m_compositionView->updateContents();
+         
 //		m_compositionView->update();
 
         Composition &composition = m_doc->getComposition();
