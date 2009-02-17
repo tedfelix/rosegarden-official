@@ -8,9 +8,9 @@ You will need admin privileges to do the following. On Red Hat based distros you
 
 First install the soundfont
 
-''sudo apt-get install FluidR3_GM.sf2'' \\
+''sudo apt-get install fluid-soundfont-gm fluid-soundfont-gs'' \\
 or\\
-''sudo yum install FluidR3_GM.sf2'' (if you're on a Red Hat based distro)
+''sudo yum install fluid-soundfont'' (if you're on a Red Hat based distro)
 
 Other people you're on your own. :-D
 

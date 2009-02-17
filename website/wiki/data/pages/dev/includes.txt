@@ -1,0 +1,14 @@
+This needs to link in from some best practices thing for developers that hasn't been written yet.
+
+As I've gone through the Qt4 port, I'm enforcing these standards as I come to includes that need to be diddled.  I think we should follow the same pattern everywhere for consistency.  Do we still have templates somewhere?  If so, we should update them to reflect this.
+
+#include "ThisClassHeader.h"
+
+#include "local/RosegardenStuff.h"
+
+#include <QtStuff>
+
+#include <STL_Stuff>
+
+
+namespace rosegarden {

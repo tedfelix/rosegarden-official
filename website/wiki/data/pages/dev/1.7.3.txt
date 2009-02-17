@@ -1,18 +1,20 @@
-ROSEGARDEN 1.7.3 (to be) RELEASED
+ROSEGARDEN 1.7.3 RELEASED
 
-The Rosegarden team is proud to announce the release of version 1.7.3
-of Rosegarden, an audio and MIDI sequencer and musical notation editor
-for Linux.
+The Rosegarden team is proud to announce the release of version 1.7.3 of Rosegarden, an audio and MIDI sequencer and musical notation editor for Linux.
 
   http://www.rosegardenmusic.com/
 
-This is a bug fix release.
+This is primarily a bug fix/maintenance release.  It addresses some critical track-related crashes that have been affecting users over the last couple of releases, and introduces assorted other minor fixes, such as improved multi-track recording for transposing instruments.  It also includes the incomplete beginnings of several improvement projects that have all been postponed for now while we focus all our attention on the port to Qt4.
+
+We hope for this to be the final release of the KDE/Qt3-based Rosegarden.  All work on this line of code has been suspended, and all of our effort is going into the new Qt4-based Rosegarden "Thorn" which we hope to release at some point in 2009.  Unless we discover some truly critical problems with this release, any bugs and usability complaints will be deferred until after Thorn has entered the beta testing phase, and all new work will be done on the new code.
+
+Interested contributors should submit any patches against Thorn, as patches against 1.7.3 and earlier releases will no longer be accepted unless there are extenuating circumstances.  Please inquire on the rosegarden-devel mailing list if you have any questions or concerns.
+
+We thank you, the Rosegarden community, for your patience during the long wait leading up to this current release, and for the even longer wait for Thorn.
 
 ====New Features====
   * Emanuel 9051: Rosegarden can respond to live program and bank changes transmitted from, eg. your MIDI keyboard
   * Rosegarden Handbook updates from Shelagh Manton
-  * (should I release the notation editor icons, or save them for 2.0?  I'm inclined to save them really, but that would be more work)
-
 
 ====Significant Bug Fixes====
  
@@ -26,16 +28,47 @@ This is a bug fix release.
      * Fix a bug in Composition -- track deleted notification should have happened when a track was detached as well, not just when it was deleted and destroyed
   * Yves 9447: Fix a bug in TextEventDialog
      * The problem occurred when "Lyric" was selected in the text combo. Selecting anything else in this combo didn't remove the verse spinbox.
+  * Michael 9489: LilyPond export tweaks
+     * Disable the code to pad out short bars, because bars are often short by design
+     * Tweak the OFFSET_Y to height on staff scaling for micropositioned rests exported as \rest in an attempt to offer exportable rest positioning that still leaves something to be desired
+  * Chris 9490: Fix crash on tempo change
+     * Simplify HSpinBox a bit, hopefully fixing #1960906
+     * Make MIDIInstrumentParameterPanel::slotToggleChangeListOnProgChange an actual slot rather than just a function!
+  * Heikki 9494: Improve fix 9489
+     * Make short bar padder smarter instead of eliminating it (note that all of this still suffers from underlying problems with Rosegarden's inability to understand that sometimes there are barlines in the middle of a bar, at segment boundaries)
+  * Michael 9497: Add include to improve odds of building on Mandriva
+  * Chris 9498: Fix potential overflow
+     * divide by the relevant int size's minimum value (abs of) not maximum value, as otherwise the minimum value will be technically in overflow
+  * Chris 9499: Unsuccessful saves of .rgd files show an error rather than fail silently
+  * Heikki 9500: Improve Michael's broken approach to \rest export
+  * Heikki 9509: Use explicit braces to avoid ambiguous 'else': if if else -> if { if else }
+  * Henrik 9519: Add velocity tool to matrix
+  * Henrik 9521: Selected events in Notation/Matrix-View is represented in the property view, this update fulfills the feature requestid: 2018387
+  * Henrik 9523: Support for adding events with different durations. (In the matrix?  Ruler?  Not sure what this is.)
+  * Henrik 9526: Fixed a drawing issue of control items where the items with an height got drawn behind ControlRuler lines
+  * Henrik 9528: Change the whole implementation of how selection is reflected in the ControlRuler this implementation uses an  ObserverPattern for observing event additions in an EventSelection. The controlruler is an observer and gets notified when a selection is added/changed etc.
+  * Emanuel 9653: fix /dev/pts/0 problem (we also need to remember to port the sox changes if we haven't done so already; I skipped over all of that discussion about sox using different whatzits on different systems)
+  * Chris 9677: Add support for SoX "rate" effect (apparently higher quality than rabbit or polyphase)
+  * Chris 9741: Handle property attributes with capital letters in them (e.g. Int="0").  Working around an export bug for Turkish locale.
+  * Michael 9756: Fix future compile bug with gcc-4.4 (already merged to Qt4 branch)
 
+====Welcome to====
+   * Henrik Andersson
 
 ====Thanks to====
-Active translators for this release:
-  * N/A
 
-Other people who contributed to Rosegarden development:
-
-  * N/A
+Translators who worked on this release
+  * D. Michael McIntyre
+  * Yves Guillemot
+  * Alessandro Musesti
+  * Heikki Junes
+  * Oota Toshiya
+  * Emanuel Rumpf
 
 People who contributed device files to the Rosegarden Library
 
   * Greg Lyons
+  * Alf Tonny Bätz
+  * David Crosby
+  * Angelo Calafato
+  * Patrick Noffke

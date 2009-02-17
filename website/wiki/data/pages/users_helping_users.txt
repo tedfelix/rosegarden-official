@@ -10,3 +10,5 @@ Complete articles written by users for users.
   * [[Setting up the FluidR3_GM.sf2 for timidity]]: may need some tweaking. SOM
 
   * [[Keystrokes]]: Using keystrokes for workflow continuity.
+
+  * [[RecordingaMidiTrackToAnAudioTrack]]: Recording a Midi-Track played in Rosegarden to an Audio-Track within Rosegarden

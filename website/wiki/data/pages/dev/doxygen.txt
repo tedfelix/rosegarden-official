@@ -1,0 +1,7 @@
+====== Doxygenification ======
+
+There is apparently somebody out there [[http://rosegarden.sourcearchive.com/|bored enough]] to publish our Doxygenized code for the entire world to see.  This makes it that much more important that we update and clean up our Doxygen-targeted internal comment documentation.
+
+Please have a look at the existing Doxygen-based docs, and then look at the [[http://www.stack.nl/~dimitri/doxygen/docblocks.html|doxygen style info page]] for help figuring out how to clean up the existing mess, and extend it into something vastly more useful going forward.
+
+(More suggestions/guidelines may appear as Michael gains more experience twiddling all of this.)

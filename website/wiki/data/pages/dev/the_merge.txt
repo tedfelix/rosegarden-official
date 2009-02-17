@@ -1,0 +1,45 @@
+====== The Merge ======
+
+It's nearly time to merge all the changes that went into 1.7.3 after the fork that became the qt4 branch.
+
+OLD TRUNK:  stable_1_7/
+NEW TRUNK:  trunk/ <= qt4/ <= qt4-graphicsview
+
+
+===== Bugs =====
+  * Assigning a port (connection) to a record-device re-sets the Recording-Enabled status of all record-devices to "No"
+
+
+===== Revisions Remaining =====
+
+I'm just listing revision numbers by design here, with the idea of encouraging the person doing each merge to do a bit of research before proceeding.  There may be some revisions missing, but hopefully this list is thorough enough.  It's extracted from the [[dev:1.7.3|release]] note, which was extracted from the commit logs fairly methodically.
+
+//Note that we really should try to get Henrik back in here to merge his own ruler and matrix changes, if possible, and encourage him to continue the work he left undone when he realized we were in the middle of something big at the time.  Hopefully he's still around, and will come back and look after his code.//
+
+  * 9440
+  * 9442
+  * 9447
+  * 9051
+  * 9489
+  * 9490
+  * 9494
+  * 9497
+  * 9498
+  * 9499
+  * 9500
+  * 9509
+  * 9519
+  * 9521
+  * 9523
+  * 9526
+  * 9528
+
+  * 9677
+  * 9741
+
+===== Revisions Completed =====
+
+  * 9756 [dmm]
+  * 9653 [dmm]
+  * 9864 [dmm]
+  * 9869 [dmm]

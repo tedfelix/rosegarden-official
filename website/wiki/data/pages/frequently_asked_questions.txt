@@ -144,7 +144,7 @@ No. A matrix editor shows a single segment only.
 
 ====Notation rendering is rather slow====
 
-It can be. Unlike many other notation applications (including Rosegarden 2.1), we render the full length of each segment to a canvas when the notation editor starts, instead of rendering sections at a
+It can be. Unlike many other notation applications (including the old X11 Rosegarden), we render the full length of each segment to a canvas when the notation editor starts, instead of rendering sections at a
 
 time when it scrolls. This means scrolling should be smooth and quick but the initial rendering phase relatively slow. This can be a problem for long segments, although for other practical reasons you're
 

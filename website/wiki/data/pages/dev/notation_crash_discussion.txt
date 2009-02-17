@@ -1,0 +1,91 @@
+We're up to 9736 now, and I have the impression that other people are at least able to start digging into the notation editor's problems.  It still crashes here.
+
+  - Create one bar segment
+  - Open segment in notation editor
+  - Long pause, some draw action, and then kaboom
+
+QWidgetPrivate::endSharedPainter: Attempting to end a null painter
+[generic]  EditView::paintEvent()
+
+QPaintEngine::setSystemClip: Should not be changed while engine is active
+QPaintEngine::setSystemClip: Should not be changed while engine is active
+QWidgetPrivate::beginSharedPainter: Painter is already active
+QWidget::repaint: Recursive repaint detected
+[generic]  EditView::paintEvent()
+
+Segmentation fault (core dumped)
+
+
+#0  0xb74d085c in QPainter::worldMatrixEnabled () from /usr/lib/libQtGui.so.4
+
+#1  0xb742c654 in QWidgetPrivate::paintSiblingsRecursive () from /usr/lib/libQtGui.so.4
+
+#2  0xb742bb56 in QWidgetPrivate::drawWidget () from /usr/lib/libQtGui.so.4
+
+#3  0xb759144d in ?? () from /usr/lib/libQtGui.so.4
+
+#4  0xb75917f7 in ?? () from /usr/lib/libQtGui.so.4
+
+#5  0xb7431a2f in QWidget::event () from /usr/lib/libQtGui.so.4
+
+#6  0xb7789a55 in QMainWindow::event () from /usr/lib/libQtGui.so.4
+
+#7  0xb73d9f9c in QApplicationPrivate::notify_helper () from /usr/lib/libQtGui.so.4
+
+#8  0xb73dece8 in QApplication::notify () from /usr/lib/libQtGui.so.4
+
+#9  0xb70590b9 in QCoreApplication::notifyInternal () from /usr/lib/libQtCore.so.4
+
+#10 0xb745cb81 in QWidgetPrivate::dirtyWidget_sys () from /usr/lib/libQtGui.so.4
+
+#11 0xb758f8e0 in ?? () from /usr/lib/libQtGui.so.4
+
+#12 0xb7590f99 in QWidget::repaint () from /usr/lib/libQtGui.so.4
+
+#13 0xb74277e8 in QWidget::repaint () from /usr/lib/libQtGui.so.4
+
+#14 0xb77d846c in QStatusBar::hideOrShow () from /usr/lib/libQtGui.so.4
+
+#15 0xb77d88ec in QStatusBar::clearMessage () from /usr/lib/libQtGui.so.4
+
+#16 0xb79c555b in QStatusBar::qt_metacall () from /usr/lib/libQtGui.so.4
+
+#17 0xb706df79 in QMetaObject::activate () from /usr/lib/libQtCore.so.4
+
+#18 0xb706e642 in QMetaObject::activate () from /usr/lib/libQtCore.so.4
+
+#19 0xb70ab817 in QTimer::timeout () from /usr/lib/libQtCore.so.4
+
+#20 0xb70750fe in QTimer::timerEvent () from /usr/lib/libQtCore.so.4
+
+#21 0xb70689fa in QObject::event () from /usr/lib/libQtCore.so.4
+
+#22 0xb73d9f9c in QApplicationPrivate::notify_helper () from /usr/lib/libQtGui.so.4
+
+#23 0xb73debf9 in QApplication::notify () from /usr/lib/libQtGui.so.4
+
+#24 0xb70590b9 in QCoreApplication::notifyInternal () from /usr/lib/libQtCore.so.4
+
+#25 0xb7086c01 in ?? () from /usr/lib/libQtCore.so.4
+
+#26 0xb70844a0 in ?? () from /usr/lib/libQtCore.so.4
+
+#27 0xb6815cc6 in g_main_context_dispatch () from /usr/lib/libglib-2.0.so.0
+
+#28 0xb6819083 in ?? () from /usr/lib/libglib-2.0.so.0
+
+#29 0xb681963e in g_main_context_iteration () from /usr/lib/libglib-2.0.so.0
+
+#30 0xb70849f8 in QEventDispatcherGlib::processEvents () from /usr/lib/libQtCore.so.4
+
+#31 0xb746da25 in ?? () from /usr/lib/libQtGui.so.4
+
+#32 0xb705833d in QEventLoop::processEvents () from /usr/lib/libQtCore.so.4
+
+#33 0xb70584cd in QEventLoop::exec () from /usr/lib/libQtCore.so.4
+
+#34 0xb705a74d in QCoreApplication::exec () from /usr/lib/libQtCore.so.4
+
+#35 0xb73d9897 in QApplication::exec () from /usr/lib/libQtGui.so.4
+
+#36 0x082b8cc2 in main (argc=1, argv=0xbf8716d4) at src/gui/application/main.cpp:725

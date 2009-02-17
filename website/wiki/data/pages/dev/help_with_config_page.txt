@@ -1,0 +1,92 @@
+This is the heart of the whole thing, and until we solve this, everything else is completely irrelevant.  I have a decent roadmap to follow rearranging the GUI, thanks to Luis Garrido, but it seems completely pointless to me to fix the GUI while the whole configuration dialog itself remains broken.  One way or another, this problem needs to be solved up front.
+
+I'm completely stuck, and have no idea how to make further progress from here.
+
+
+The configuration pages aren't working because their individual apply() 
+methods are never called by:
+src/gui/dialogs/ConfigureDialogBase.cpp
+
+void
+ConfigureDialogBase::slotApply()
+{
+    for (configurationpages::iterator i = m_configurationPages.begin();
+            i != m_configurationPages.end(); ++i)
+        (*i)->apply();
+}
+
+
+configurationpages is:
+src/gui/dialogs/ConfigureDialogBase.h
+
+    typedef std::vector<ConfigurationPage*> configurationpages;
+
+
+ConfigurationPage is:
+src/gui/configuration/ConfigurationPage.h
+
+class ConfigurationPage : public QWidget
+{
+    Q_OBJECT
+
+
+So the std::vector is supposed to contain a list of pointers to 
+ConfigurationPage objects, and this code in slotApply() is supposed to 
+iterate through that list and call each object's apply() method.
+
+The list is empty, because all the code is broken with comments:
+src/gui/dialogs/ConfigureDialog.cpp
+
+    pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
+                         GeneralConfigurationPage::title(),
+                         il.load( GeneralConfigurationPage::iconName()) );
+
+
+    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new GeneralConfigurationPage(doc, pageWidget);
+    vlay->addWidget(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    //m_configurationPages.push_back(page);
+
+
+I'm not sure what page->setPageIndex(blah); used to do, but the new 
+m_tabWidget->setCurrentIndex(blah) only serves to make sure the configuration 
+dialog always opens on the Notation tab, as far as I can tell.  No matter.  I 
+only mention that in passing.
+
+The real problem is the m_configurationPages.push_back(page) has been 
+commented out, because it fails with:
+
+src/gui/dialogs/ConfigureDialog.cpp:75: error: invalid conversion 
+from ‘QWidget*’ to ‘Rosegarden::ConfigurationPage*’
+src/gui/dialogs/ConfigureDialog.cpp:75: error:   initializing argument 1 
+of ‘void std::vector<_Tp, _Alloc>::push_back(const _Tp&) [with _Tp = 
+Rosegarden::ConfigurationPage*, _Alloc = 
+std::allocator<Rosegarden::ConfigurationPage*>]’
+
+====== 
+m_configurationPages is a std::vector<ConfigurationPage*>
+
+and page is used as a pointer to GeneralConfigurationPage, MIDIConfigurationPage, etc... which are TabbedConfigurationPage 
+
+and TabbedConfigurationPage is a ConfigurationPage.
+
+So replacing the new declaration
+    QWidget* page = 0;
+with the old one
+    ConfigurationPage* page = 0;
+should fix the issue.
+
+That said, at first glance, I don't think 
+    page->setPageIndex(pageIndex(pageWidget));
+will compile as pageIndex() doesn't seem to be a member of ConfigureDialog.
+
+(--yg) ======
+
+
+
+
+This is where a completely fruitless evening ends.  I can make no further 
+progress until someone who understands this problem explains what I have to 
+do to fix it.

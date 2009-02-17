@@ -1,0 +1,37 @@
+
+====== Tutorial: Midi-Track to Audio-Track with the Rosegarden Sequencer ======
+
+A quick and rough Tutorial, how to record a Midi-track played
+in Rosegarden to an Audio-track in Rosegarden using QSynth (a GUI for Fluidsynth).
+
+
+  1. First start jackd (I recommend to use qjackctl for doing that. You can see the created connections there too.)
+  
+  2. Start QSynth (in the options, select jack as audio driver/output). Load a SoundFont(TM Creative Technologies Ldt.).
+
+  3. Start Rosegarden
+
+  4. In RG, in the device manager create a new device, name it QSYNTH and connect it to QSynth 
+  (the entry is called somehow like "131:0 snyth input port (qsynth:0) (write)")
+
+  5. Select a MIDI track. In the playback parameter panel choose the QSYNTH device as output. 
+  Further select instrument, channel and program for the track using the QSYNTH device.
+
+  6. For a testing purpose, you can playback the midi track now. You should hear it.
+
+  7. select an AUDIO track. Make it stereo. As input select "In 1"
+
+  8. use QJackCtls connection dialog (audio-connections)
+  - delete the connection system input (capture) ==> rosegarden (record)
+  - connect qsynth to rosegarden (record) input
+  - (optional: delete qsynth ==> system playback (out) )
+
+  9. In Rosegarden activate the audio track for recording (red LED)
+
+  10. Press the record button in the Rosegarden transport panel. 
+  The playback starts and the midi track is being recorded to the audio track. 
+  (Note: If you de-connected QSynth from system-playback, you may not hear anything now)
+
+
+
+

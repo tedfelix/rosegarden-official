@@ -1,0 +1,132 @@
+=====Rosegarden 09.04 (ha ha) Fake Bug Tracker=====
+We're going to try just using this wiki page as a tracker for now.  To report a bug, just jot something down.  To claim a bug, tack your initials after it in brackets, like [dmm] or [cc] or [jjjs] (John Jacob Jingelheimer Schmidt of course) or whatever.  Like thus:
+====Bugs====
+  * right click assignment menus were QPopupMenu.  Our code compiles, but it's totally non-functional, and needs to be rewritten. [ ] (or possibly dumped?  unless I'm just missing the obvious, it seems like it needs rewritten completely from scratch, not just tweaked, and it could be too much effort for a redundant feature, as the TPB controls accomplish the same thing -dmm)
+
+  * if two copies of RG are started, the second one is unable to connect to JACK (bug or feature?  will we have a KUniqueApplication replacement, or try to allow multiple instances?  multiple instances has some potential to be cool and useful, but RG is a pretty huge and hungry app, and Rich's old MDI idea probably makes more sense...  not that we ever got **anywhere** implementing Rich's MDI idea, and probably won't now either)
+
+  * crash after successful looking audio recording
+<code>
+#0  0xb742d4aa in QWidgetPrivate::clipRect () from /usr/lib/libQtGui.so.4
+#1  0xb742d7c2 in QWidget::repaint () from /usr/lib/libQtGui.so.4
+#2  0x0814403f in Rosegarden::RosegardenGUIDoc::slotUpdateAllViews (this=0x8c3a4c0, sender=0x0) at src/document/RosegardenGUIDoc.cpp:235
+#3  0x0814484d in Rosegarden::RosegardenGUIDoc::finalizeAudioFile (this=0x8c3a4c0, iid=1000) at src/document/RosegardenGUIDoc.cpp:2773
+#4  0x084aa633 in Rosegarden::SequenceManager::processAsynchronousMidi (this=0x8dffb68, mC=@0xbfcd6ec8, audioManagerDialog=0x0)
+    at src/gui/seqmanager/SequenceManager.cpp:934
+#5  0x082d0c39 in Rosegarden::RosegardenGUIApp::slotCheckTransportStatus (this=0x8b4c300) at src/gui/application/RosegardenGUIApp.cpp:3954
+#6  0x082f3ee9 in Rosegarden::RosegardenGUIApp::qt_metacall (this=0x8b4c300, _c=QMetaObject::InvokeMetaMethod, _id=216, _a=0xbfcd7008)
+    at src/gui/application/RosegardenGUIApp.moc:697
+#7  0xb7073f79 in QMetaObject::activate () from /usr/lib/libQtCore.so.4
+#8  0xb7074642 in QMetaObject::activate () from /usr/lib/libQtCore.so.4
+#9  0xb70b1817 in QTimer::timeout () from /usr/lib/libQtCore.so.4
+#10 0xb707b0fe in QTimer::timerEvent () from /usr/lib/libQtCore.so.4
+#11 0xb706e9fa in QObject::event () from /usr/lib/libQtCore.so.4
+#12 0xb73dff9c in QApplicationPrivate::notify_helper () from /usr/lib/libQtGui.so.4
+#13 0xb73e4bf9 in QApplication::notify () from /usr/lib/libQtGui.so.4
+#14 0xb705f0b9 in QCoreApplication::notifyInternal () from /usr/lib/libQtCore.so.4
+#15 0xb708cc01 in ?? () from /usr/lib/libQtCore.so.4
+#16 0xb708a4a0 in ?? () from /usr/lib/libQtCore.so.4
+#17 0xb681bcc6 in g_main_context_dispatch () from /usr/lib/libglib-2.0.so.0
+#18 0xb681f083 in ?? () from /usr/lib/libglib-2.0.so.0
+#19 0xb681f63e in g_main_context_iteration () from /usr/lib/libglib-2.0.so.0
+#20 0xb708a9f8 in QEventDispatcherGlib::processEvents () from /usr/lib/libQtCore.so.4
+#21 0xb7473a25 in ?? () from /usr/lib/libQtGui.so.4
+#22 0xb705e33d in QEventLoop::processEvents () from /usr/lib/libQtCore.so.4
+#23 0xb705e4cd in QEventLoop::exec () from /usr/lib/libQtCore.so.4
+#24 0xb706074d in QCoreApplication::exec () from /usr/lib/libQtCore.so.4
+#25 0xb73df897 in QApplication::exec () from /usr/lib/libQtGui.so.4
+#26 0x082bc3ef in main (argc=1, argv=0xbfcd7b44) at src/gui/application/main.cpp:760
+</code>
+
+  * changing the grid size in the matrix randomly results in some insane number being written out to Rosegarden.conf.  Subsequent matrix starts crash on this insane number.  (Uninitialized variable maybe?  Some problem with QVariant?  I looked at the static_cast<unsigned long long> for Rosegarden::timeT, but this doesn't seem in of itself to be the culprit) [dmm]
+
+  * The notation editor core dumps on an empty segment [rev 9704] [[notation_crash_discussion]]
+
+  * Undo/redo buttons don't appear properly on toolbar [cc]
+
+  * Notation garbled, and generally all sorts of problems there beyond the scope of this page [cc]
+
+  * Configure dialog contains tab widget inside a tab widget, which is a definite no.  It needs to look more like the old one.  [NOTE: Michael has working sample code for creating a similar widget and everything, but is still waiting on someone to [[help_with_config_page|help]] him understand how to solve one underlying problem that's throwing a spanner in the entire works]
+  * Configure dialog buttons (across the bottom) have no labels and don't work
+
+  * Progress dialogs generally don't work (I have yet to see a working progress bar inside one, although I did get a working progress bar _outside_ the dialog on audio file import)
+
+  * Lilypond export progress dialog never disappears, RG seems to think it has never completed -- I suspect this means we aren't getting feedback from the lilypond export process properly?  Pity, because we took a bit of care over that one I think (dmm - when I try "preview with LilyPond" Rosegarden just becomes totally unresponsive, and has to be killed, though it never stops repainting itself, and doesn't look hung. No LilyPond anything ever takes place, or takes place too fast to catch with ps.) (Lilypond preview does actually work for me --cc)
+
+  * File dialogs generally need a bit of care and attention to make sure previous paths per file type are used, etc. [hjj]
+
+  * File dialog doesn't know where to find example files (and neither do I, actually) (unlike many resources, examples will probably want to be installed -- and they will be installed at /usr/share/rosegarden/examples I think -- but you're right that the dialog doesn't know that --cc) [cc]
+
+  * File -> Close from e.g. notation window crashes the application
+
+  * In Manage Metronome dialog, the pitch chooser doesn't show a note on a little staff. (may be related to general notation view brokenness --cc) (staff and clef are visible again, but no note yet [rev. 9758] --yg) 
+
+  * Main composition view doesn't scroll correctly -- if I use Select tool to drag "off the top", the whole widget containing the composition view moves down!  It's very weird. (yes, very, very weird -dmm) [cjf]
+
+  * Rosegarden rotary widgets drawn with incorrect colors or something.  They look off. [dmm -- the backgrounds are fixed with the new styling work, and the rest of this will fall under the umbrella of changes I'm making in that process.  I'm probably going to tweak the colors users can pick from for the knobs, so they coordinate better, and along the way I'm going to try to address this drawing problem, which seems to have something to do with drawing on white instead of on the expected background color.]
+
+====Bugs that were listed above, now fixed====
+  * save after previous successful save fails with [hjj]
+
+  * after saving file "test" then modifying it, the main window title is "test*.rg"  Should probably be "test.rg*" I imagine.  Oh, nevermind, I thought that was the "document is modified" renaming I seem to remember, but in fact it's just "*.rg" added to the end of the file, and it's actually trying to write "test*.rg" to disk, so it fails. [dmm]
+
+  * File dialog doesn't seem to know about .rgd or .rgp files, and defaults to * instead of *.rg [hjj]
+
+  * No File -> New on main window File menu [hjj]
+
+  * File -> Save As, save to eg. /tmp/foo.rg leads to dialog "This is not a local file." [dmm]
+  * the other error about "not local filesystem" or whatever  [dmm] (Commented out code poorly adapted from KURL::isLocalFile() that was originally supposed to determine that the file was free of any protocols etc.  I'm not sure if this matters, and I'm sure it matters less than just being able to save a damn file at all, so this will certainly do for now.)
+  * all saving fails with either the "failed to rename temporary output file" error or the, um, [dmm]
+
+  * Parameter area in main view lacks scrollbar (just disappears off the bottom) (and needs a horizontal scrollbar or an enforced minimum size too (I vote scrollbar) (I vote no horiz scrollbar, but more work to make it less stupidly wide --cc)  (looking much better now though!) (the current behavior seems great now...  it's minimum sized by default, and you can't stupidly make it wider than it needs to be, but you **do** have the option to make it less wide if you want to, and you get a horizontal scrollbar then, and only then.  Best of all possible words, I think.  Calling it fixed -dmm)
+
+  * Ticks on ruler don't have dark gray background [fixed by CJ I guess; rulers top and bottom look normal now]
+
+  * Currently selected track has white foreground, but background does not become dark blue [dmm] [fixed with caveats; this solution really isn't stylesheet compatible, and I'm uncertain how to make it so]
+
+  * The transport dialog disappears when the mouse goes outside of the main window. [[dev:transport_focus]] [dmm]
+  * the transport dialog disappears when the matrix is open, [[dev:transport_focus]] [dmm]
+
+  * Main window zoom slider is completely trashed, garbled, and apparently dysfunctional [not sure who fixed this, but the default toolbar layout is also fixed now -dmm]
+  
+
+  * The percussion matrix editor layout is comically borked in innumerable ways; just look at it  (dmm - looks more or less OK now, certainly in the ballpark; not sure who fixed this)
+ 
+  * The regular matrix core dumps on an empty segment [rev 9704] (dmm - no longer true; not sure who fixed this)
+
+  * I have yet to get the new RG to actually _play_ anything (though the pointer will move) [cc]  [I get noise out of my emu10k1!!  nothing else yet though]
+
+  * The main window is "Untitled" instead of calling itself "Rosegarden" or something.  The "Untitled" might be correct for the name of the current document, in which case the application name is simply missing from the title bar.  Investigating...  [dmm]
+
+  * Minimum draggable height of main window exceeds 945 px., which is too tall for a 1050 px. high screen with a large KDE panel, and surely much too large for 1280x800/1024x768/etc.  [fixed by cc, dmm thinks]
+
+
+  * Main window load presets was failing due to legacy slotOk() from KDialogBase -> QDialog conversion.  Fixed by changing to use overridden accept() instead.  Changed throughout code, hopefully all cases are solved now. [dmm]
+
+  * Transport dialog buttons don't work
+
+  * Manage MIDI Devices crashes
+
+  * Time sig dialog "big buttons" lack icons
+
+  * The bit of the transport window that normally shows the current time in the format of choice is empty (it does actually show the numbers when non-zero, it's just missing the default zeroes and punctuation. I think they just need loading in Designer --cc)
+
+  * Notation editor doesn't set a default tool, so crashes when you move mouse over it unless you can select a tool first [cc]
+
+  * GUI is very slow altogether -- it appears to be stuck in a continuous repaint loop
+
+  * The transport window "show additional controls" icon is missing.
+
+  * When playing (trying to play), the transport shows junk like "D#(I18N_ARGU" instead of the octave number [fixed by hjj]
+
+  * The event list editor has some weird "<numintg>1</numintg>" nonsense in its title (in fact this appears everywhere a %1-parameter argument goes into an i18n() string I think -- cc) [fixed by hjj]
+
+  * Studio -> Manage Metronome crashes the application.
+
+  * QDeferScrollView implementations (e.g. track buttons) do not scroll with the canvas as they are intended to
+
+  * Event list editor scrolls very slowly.  I wonder if this is a tree widget when it should be some sort of list widget?  Was there some issue like the new tree widget was the only thing that closely matched the old list widget, or something?  I can't remember and I didn't handle this conversion, but I do know that lists using e.g. QTableView in other Qt4 applications scroll much faster than this  (dmm - Fixed?  I tested with a fairly long segment, and it scrolls very fast here.) (yes, I think this was a side-effect of the general gui repaint loop problem --cc)
+
+  * Quick marker functions absent from Composition menu
+
+  * Fader widgets don't update while sliding up and down. Update only happens after letting go.  Float is several hundred pixels away from the widget being manipulated, and usually way outside of the Rosegarden window space.  

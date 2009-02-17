@@ -1,0 +1,60 @@
+====== ROSEGARDEN 09.X (to be) RELEASED ======
+
+**IMPORTANT: THIS HAS NOT HAPPENED YET**
+
+**This page is only a working area for making notes about what is being done for the 09.x release, so that we don't forget anything when the code is finally ready to be released -- which will not be for some time yet.**
+
+
+The Rosegarden team is proud to announce the release of version 09.x of Rosegarden, an audio and MIDI sequencer and musical notation editor for Linux.  This is version 9x of the modern 21st century Rosegarden (formerly known as Rosegarden-4) and should not be confused with the old, obsolete X11 Rosegarden (formerly known as Rosegarden).
+
+http://www.rosegardenmusic.com/
+
+With this release, Rosegarden has become a modern Qt4 application that no longer uses the KDE libraries, which we hope will facilitate future maintenance.  The primary focus of this release has been the effort to port from Qt3 and KDE3 to Qt4, which was a very difficult, time-consuming job that involved a great deal of rewriting.  There should be as little difference as possible between this version and 1.7.3, and this is one release where no news is good news.  We will be able to take full advantage of Qt4 in future releases to offer a number of planned improvements.
+
+=====The Porting Team=====
+
+We'd like to give special thanks to the following members and contributors, some old, some new, for their outstanding work on the long and difficult port.  These brave few are the authors of a new chapter in our history.
+
+  * David Willis
+  * Emanuel Rumpf
+  * Julie Swango
+  * Yves Guillemot
+  * Heikki Junes
+  * Michael McIntyre
+  * Chris Cannam
+  * Chris "CJ" Fryer
+  * Luis Garrido
+
+=====Graphic Design Team=====
+
+Rosegarden now looks like Rosegarden whether you run KDE, GNOME, Xfce, or something else entirely.  This feat would not have been possible without the many long hours these fine folks invested in making it all happen.
+
+  * D. Michael McIntyre
+  * Vladimir Savic
+
+
+======New Features======
+  * Ported to Qt4
+    * Removed all ties to KDE for a lower dependency footprint and better behavior within other desktop environments
+    * Most application resources are now bundled inside the application itself, reducing its installation footprint, and making it easier to run multiple different versions of Rosegarden, such as running a new trial version alongside a proven distro package without the usual installation version conflicts that used to make this difficult
+    * It is now possible to run more than one copy of Rosegarden simultaneously [although at this writing I don't know if that will actually work out well, and we might have to implement our own version of KUniqueApplication to avoid problems.  What happens when Rosegarden tries to connect to Rosegarden though ALSA MIDI or JACK?  I bet it gets ugly.]
+  * New stylesheet-based look
+  * Completely new icons for the notation editor
+
+
+====Significant Bug Fixes====
+ 
+  * Michael 9682: Exporting project files to paths that have spaces no longer fails
+
+
+====Thanks to====
+===Active translators for this release:===
+  * Heikki Junes
+  * D. Michael McIntyre
+===Other people who contributed to Rosegarden development:===
+  * N/A
+
+===People who contributed device files to the Rosegarden Library===
+
+  * Greg Lyons
+  * Georg Balzer

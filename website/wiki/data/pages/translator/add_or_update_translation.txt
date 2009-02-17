@@ -1,4 +1,5 @@
-
+**OBSOLETE 1.X DOCUMENTATION: PLEASE DISREGARD**
+<del>
 ======Adding or updating translations======
 
 This page is about translating Rosegarden to your language. For developers, there is also page [[dev:Making strings translatable]].
@@ -118,3 +119,4 @@ Take your file or a diff or the file against svn, and choose from the following:
   * [[http://sourceforge.net/tracker/?func=add&group_id=4932&atid=354932|Submit new feature request]], describe briefly your work and attach the file to the request.
 
   * Send it to the [[mailto:rosegarden-devel@lists.sourceforge.net|rosegarden-devel@lists.sourceforge.net]] list.
+</del>
