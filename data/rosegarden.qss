@@ -15,11 +15,101 @@
     COPYING included with this distribution for more information.
 */
 
+/* Start off with a global black background, because it has proven impossible to
+ * address every last bit of background color without resorting to this.  This
+ * requires an unfortunate amount of override code.
+ */
+QWidget {
+    background: #000000;
+}
 
-/*                         Qt4.3 List of Stylable Widgets                    */
+/* Set the dock title foreground color to white so it shows up */
+QDockWidget QWidget > QWidget > QWidget {
+    background-color red;
+    color: white;
+}
+
+/* Color the View (formerly RosegardenGUIView, not sure what the class will be
+ * renamed to, so we're using the objectName to reference it) background
+ * transparent, because this allows the overrides for the track buttons and
+ * whatnot to show through.
+ */
+#View QWidget {
+    background-color: transparent;
+}
+
+/* Toolbars use gradient backgrounds that must be light enough to allow contrast
+ * with black icons.  Top/bottom and left/right require different gradients to
+ * get the proper look.
+ */
+#App QToolBar::top,
+#App QToolBar::bottom {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+}
+
+#App QToolBar::left,
+#App QToolBar::right {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);
+}
+
+#App QToolBar::handle {
+    /* The style mechanism does not appear to be sophisticated enough to allow
+     * for a different pixmap for vertical toolbars.  As we have a mix of
+     * horizontal and vertical toolbars by default, this won't fly:
+     *
+    image: url(/home/silvan/SVN/qt4/data/pixmaps/style/toolbar-separator.png); */
+    
+    background-color: #404040;
+    width: 5px; 
+}
 
 
-QWidget { background: #000000; }
+/* QLabel is an awful lot of foreground text throughout the application,
+ * including the contents of message boxes and various other texts one wouldn't
+ * necessarily expect to be QLabel per se.
+ */
+#App QLabel {
+    background: transparent;
+    color: white;
+}
+
+
+#View QMenu {
+    background-color: #000000;
+}
+
+#View QMenu::item {
+    /* sets background of menu item. set this to something non-transparent
+       if you want menu color and menu item color to be different */
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+#View QMenu::item:selected { /* when user selects item using mouse or keyboard */
+/*  background-color: #2CD0FC; */
+    background-color: #ABCDEF;
+} 
+
+
+#View QWidget#TRACK_BUTTONS {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: black;
+    selection-background-color: blue;
+    selection-color: yellow;
+}
+
+#View QWidget#TRACK_LABEL {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: white;
+    selection-background-color: blue;
+    selection-color: yellow;
+}
+
+#View QLabel {
+    background: transparent;
+    color: white;
+}
+
 
 /*  QAbstractScrollArea.
 
@@ -186,7 +276,7 @@ indicator is styled using the the ::indicator subcontrol. The spacing property
 can be used to control the spacing between the text and indicator. */
 
 QGroupBox {
-    background-color: #000000;
+    background-color: red;
     color: white;
     border: 2px solid #2CD0FC;
     border-radius: 4px;
@@ -307,7 +397,7 @@ The messagebox-text-interaction-flags property can be used to alter the
 interaction with text in the message box. */
 
 QMessageBox {
-    background: #949494;
+    background: #404040;
 }
 
 
@@ -382,39 +472,52 @@ rectangle of the sub-line subcontrol.  The ::sub-page subcontrol can be used to
 style the region of the slider that subtracts a page. The ::add-page subcontrol
 can be used to style the region of the slider that adds a page. */
 
+
 QScrollBar {
 }
 
-/* horizontal scrollbars */
-QScrollBar:horizontal {
-    border: 2px solid grey;
-    background: #32CC99;
-    height: 15px;
-    margin: 0px 20px 0 20px;
+/* HORIZONTAL */
+QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+    border: 2px solid #404040;
+    width: 3px;
+    height: 3px; 
+    background: #404040;
 }
 
-QScrollBar::handle:horizontal {
-    background: white;
-    min-width: 20px;
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {
+     background: #404040;
 }
 
 QScrollBar::add-line:horizontal {
-    border: 2px solid grey;
-    background: #32CC99;
+    border: 2px solid #404040;
+    background: #808080;
     width: 20px;
     subcontrol-position: right;
     subcontrol-origin: margin;
 }
 
 QScrollBar::sub-line:horizontal {
-    border: 2px solid grey;
-    background: #32CC99;
+    border: 2px solid #404040;
+    background: #808080;
     width: 20px;
     subcontrol-position: left;
     subcontrol-origin: margin;
 }
 
-/* vertical scrollbars */
+QScrollBar:horizontal {
+    border: 2px solid #404040;
+    background-color: none;
+    height: 15px;
+    margin: 0px 20px 0 20px;
+}
+
+QScrollBar::handle:horizontal {
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    min-width: 20px;
+}
+
+
+/* VERTICAL */
 QScrollBar:vertical {
     border: 2px solid grey;
     background: #32CC99;
@@ -666,15 +769,18 @@ line group (See QStyleOptionToolBar::positionWithinLine).  The separator of a
 QToolBar is styled using the ::separator subcontrol.  The handle (to move the
 toolbar) is styled using the ::handle subcontrol. */
 
-QToolBar {
-/*    background-color: #808080; */
+/*
+ *
+ * QToolBar::top {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-
 }
 
 QToolBar::handle {
-    image: url(toolbar-separator.png);
+    image: url(/home/silvan/SVN/qt4/data/pixmaps/style/toolbar-separator.png);
 }
+ *
+ * (will #App style everything else or is the above still needed?)
+ */
 
 
 
@@ -892,23 +998,8 @@ descendant selector: */
 #RosegardenParameterArea QComboBox QAbstractItemView {
     border: 2px solid darkgray;
     selection-background-color: #2CD0FC;
-    background-color: #000000;
-}
-
-
-#RosegardenParameterArea QMenu {
-    background-color: #000000;
-}
-
-#RosegardenParameterArea QMenu::item {
-    /* sets background of menu item. set this to something non-transparent
-       if you want menu color and menu item color to be different */
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-#RosegardenParameterArea QMenu::item:selected { /* when user selects item using mouse or keyboard */
-    background-color: #2CD0FC;
+    background-color: darkgray;
+    color: #EEEEEE;
 }
 
 #RosegardenParameterArea QLabel#SPECIAL_LABEL {
@@ -936,45 +1027,7 @@ descendant selector: */
     background-color: #404040;
 }
 
-#App QToolBar {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-}
-
-#App QLabel {
-    background: transparent;
-    color: white;
-}
-
 #App QToolTip {
-    foreground: purple;
-    background-color: yellow;
+    background-color: #fffbd4;
+    color: #000000;
 }
-
-#View QWidget {
-    background-color: transparent;
-}
-
-#View QWidget#StandardRuler {
-    background-color: #eda813;
-}
-
-
-#View QWidget#TRACK_BUTTONS {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: white;
-    selection-background-color: blue;
-    selection-color: yellow;
-}
-
-#View QWidget#TRACK_LABEL {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    color: white;
-    selection-background-color: blue;
-    selection-color: yellow;
-}
-
-#View QLabel {
-    background: transparent;
-    color: white;
-}
-
