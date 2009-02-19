@@ -120,7 +120,7 @@ ConfigureDialogBase::~ConfigureDialogBase()
 {}
 
 
-
+///### is this necessary?
 void ConfigureDialogBase::slotButtonBoxButtonClicked(QAbstractButton * button){
     
     QDialogButtonBox::ButtonRole bRole = m_dialogButtonBox->buttonRole( button );

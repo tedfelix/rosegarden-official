@@ -661,6 +661,7 @@ TrackEditor::addCommandToHistory(Command *command)
 void
 TrackEditor::slotScrollToTrack(int track)
 {
+    ///!!! Reconfigure to use m_compositionmodel to return y value for track number
     // Find the vertical track pos
     int newY = track * getTrackCellHeight();
 
@@ -669,7 +670,12 @@ TrackEditor::slotScrollToTrack(int track)
 
     // Scroll the segment view; it will scroll tracks by connected signals
     //    slotVerticalScrollTrackButtons(newY);
+
+    // This is currently a bit broke
     m_compositionView->slotScrollVertSmallSteps(newY);
+
+    // This works but is basic McBasic
+    //m_compositionView->setContentsPos(m_compositionView->contentsX(),newY);
 }
 
 void
