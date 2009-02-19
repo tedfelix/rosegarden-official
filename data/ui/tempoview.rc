@@ -18,7 +18,7 @@
     <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <Action name="insert_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" shortcut="I" />
-    <Action name="insert_timesig" text="Add Time Si&amp;gnature Change..." icon="event-inserttimesig" shortcut="G" />
+    <Action name="insert_timesig" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" shortcut="G" />
     <!-- JAS added Ctrl+D shortcut to "delete" for uniformity -->
     <Action name="delete" text="&amp;Delete" icon="event-delete" shortcut="Delete, Ctrl+D" />
     <Action name="edit" text="&amp;Edit Item" icon="event-edit" shortcut="E" />

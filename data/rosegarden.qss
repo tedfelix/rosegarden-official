@@ -23,8 +23,37 @@ QWidget {
     background: #000000;
 }
 
+/* Sets background to same color as text background, but pixmap is currently
+ * missing, because the global black always kills a background pixmap.
+ */
+Rosegarden--StartupLogo QWidget {
+    background: #202020;
+}
+
+/* Transport buttons are styled independently, with a smaller radius and a
+ * lighter "pressed" state
+ */
+Rosegarden--TransportDialog QPushButton {
+    border: 1px solid #AAAAAA;
+    border-radius: 1px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
+}
+
+Rosegarden--TransportDialog QPushButton::checked,
+Rosegarden--TransportDialog QPushButton::pressed
+{
+    border: 1px solid #E0E0E0;
+    border-radius: 1px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #DDDDDD, stop:1 #FFFFFF);
+}
+
+
 /* Set the dock title foreground color to white so it shows up */
-QDockWidget QWidget > QWidget > QWidget {
+/* NB: none of this ever works, and it looks like "Special Parameters" is in
+ * unaddressable territory.  Propose removing the string so at least there is no
+ * longer a stupid empty gap, but maybe there is yet some other solution. */
+QDockWidget QWidget > QWidget > QWidget > QWidget {
     background-color red;
     color: white;
 }
@@ -38,21 +67,85 @@ QDockWidget QWidget > QWidget > QWidget {
     background-color: transparent;
 }
 
+#View QDialog {
+    background-color: red;
+    background: red;
+}
+
+#tempoview QWidget {
+    background: red;
+}
+
+
+/* QToolBar
+
+Supports the box model.  The :top, :left, :right, :bottom pseudo states
+depending on the area in which the tool bar is grouped.  The :first, :last,
+:middle, :only-one pseudo states indicator the position of the tool bar within a
+line group (See QStyleOptionToolBar::positionWithinLine).  The separator of a
+QToolBar is styled using the ::separator subcontrol.  The handle (to move the
+toolbar) is styled using the ::handle subcontrol. */
+
 /* Toolbars use gradient backgrounds that must be light enough to allow contrast
  * with black icons.  Top/bottom and left/right require different gradients to
  * get the proper look.
  */
+QToolBar::top,
+QToolBar::bottom,
 #App QToolBar::top,
-#App QToolBar::bottom {
+#App QToolBar::bottom,
+Rosegarden--MatrixView QToolBar::top,
+Rosegarden--MatrixView QToolBar::bottom,
+#tempoview QToolBar::top,
+#tempoview QToolBar::bottom
+{
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
 }
 
+QToolBar::left,
+QToolBar::right,
 #App QToolBar::left,
-#App QToolBar::right {
+#App QToolBar::right,
+Rosegarden--MatrixView QToolBar::left,
+Rosegarden--MatrixView QToolBar::right,
+#tempoview QToolBar::left,
+#tempoview QToolBar::right
+{
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);
+    color: #000000;
 }
 
-#App QToolBar::handle {
+/* Toolbars must be light enough for black icons, therefore black text on
+ * QLabels, rather than white, is more appropriate.
+ */
+QToolBar::top QLabel,
+QToolBar::bottom QLabel,
+#App QToolBar::top QLabel,
+#App QToolBar::bottom QLabel,
+Rosegarden--MatrixView QToolBar::top QLabel,
+Rosegarden--MatrixView QToolBar::bottom QLabel,
+#tempoview QToolBar::top QLabel,
+#tempoview QToolBar::bottom QLabel,
+QToolBar::left QLabel,
+QToolBar::right QLabel,
+#App QToolBar::left QLabel,
+#App QToolBar::right QLabel,
+Rosegarden--MatrixView QToolBar::left QLabel,
+Rosegarden--MatrixView QToolBar::right QLabel,
+#tempoview QToolBar::left QLabel,
+#tempoview QToolBar::right QLabel
+{
+    background-color: transparent;
+    color: #000000;
+}
+
+
+QToolBar::handle,
+#tempoview QToolBar::handle,
+Rosegarden--MatrixView QToolBar::handle,
+#App QToolBar::handle
+{
     /* The style mechanism does not appear to be sophisticated enough to allow
      * for a different pixmap for vertical toolbars.  As we have a mix of
      * horizontal and vertical toolbars by default, this won't fly:
@@ -64,42 +157,85 @@ QDockWidget QWidget > QWidget > QWidget {
 }
 
 
+/*  QLabel
+ 
+Supports the box model. Does not support the :hover pseudo-state.  Since 4.3,
+setting a stylesheet on a QLabel automatically sets the QFrame::frameStyle
+property to QFrame::StyledPanel. */
+
 /* QLabel is an awful lot of foreground text throughout the application,
  * including the contents of message boxes and various other texts one wouldn't
  * necessarily expect to be QLabel per se.
  */
-#App QLabel {
+QLabel,
+#View QLabel,
+#tempoview QLabel,
+Rosegarden--MatrixView QLabel,
+#RosegardenParameterArea QLabel
+#App QLabel
+{
     background: transparent;
     color: white;
 }
 
+/*  QMenu
+  
+Supports the box model.  Individual items are styled using the ::item
+subcontrol. In addition to the usually supported pseudo states, item subcontrol
+supports the :selected, :default, :exclusive and the non-exclusive pseudo
+states.  The indicator of checkable menu items is styled using the ::indicator
+subcontrol.  The separator is styled using the ::separator subcontrol.  For
+items with a sub menu, the arrow marks are styled using the right-arrow and
+left-arrow.  The scroller is styled using the ::scroller.  The tear-off is
+styled using the ::tear-off. */
 
-#View QMenu {
-    background-color: #000000;
+QMenu,
+#tempoview QMenu,
+Rosegarden--MatrixView QMenu,
+#App QMenu,
+#View QMenu
+{
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);
+    border: 1px solid black;
 }
 
-#View QMenu::item {
+QMenu::item,
+#tempoview QMenu::item,
+Rosegarden--MatrixView QMenu::item,
+#App QMenu::item,
+#View QMenu::item
+{
     /* sets background of menu item. set this to something non-transparent
        if you want menu color and menu item color to be different */
     background-color: transparent;
     color: #FFFFFF;
+    padding: 2px 25px 2px 20px;
+    border: 1px solid transparent;
 }
 
-#View QMenu::item:selected { /* when user selects item using mouse or keyboard */
-/*  background-color: #2CD0FC; */
-    background-color: #ABCDEF;
+/* Menu selection background color
+ */
+QMenu::item:selected,
+#tempoview QMenu::item:selected,
+Rosegarden--MatrixView QMenu::item:selected,
+#App QMenu::item:selected,
+#View QMenu::item:selected
+{
+    background-color: #2CD0FC; 
+    color: #FFFFFF;
 } 
 
 
+/* The track buttons are under the View, and need special overrides */
 #View QWidget#TRACK_BUTTONS {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
     color: black;
     selection-background-color: blue;
     selection-color: yellow;
 }
 
 #View QWidget#TRACK_LABEL {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
     color: white;
     selection-background-color: blue;
     selection-color: yellow;
@@ -158,66 +294,6 @@ the widget. The arrow mark inside the drop-down button can be styled using the
 ::down-arrow subcontrol. By default, the arrow is placed in the center of the
 contents rectangle of the drop-down subcontrol. */
 
-/* pasted example code again */
-QComboBox {
-    border: 1px solid gray;
-    border-radius: 3px;
-    padding: 1px 18px 1px 3px;
-    min-width: 6em;
-}
-
-QComboBox:editable {
-    background: white;
-}
-
-QComboBox:!editable, QComboBox::drop-down:editable {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-}
-
-/* QComboBox gets the "on" state when the popup is open */
-QComboBox:!editable:on, QComboBox::drop-down:editable:on {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-                                stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
-                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
-}
-
-QComboBox:on { /* shift the text when the popup opens */
-    padding-top: 3px;
-    padding-left: 4px;
-}
-
-QComboBox::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    width: 15px;
-
-    border-left-width: 1px;
-    border-left-color: darkgray;
-    border-left-style: solid; /* just a single line */
-    border-top-right-radius: 3px; /* same radius as the QComboBox */
-    border-bottom-right-radius: 3px;
-}
-
-QComboBox::down-arrow {
-    image: url(/usr/share/icons/crystalsvg/16x16/actions/1downarrow.png);
-}
-
-QComboBox::down-arrow:on { /* shift the arrow when popup is open */
-    top: 1px;
-    left: 1px;
-}
-
-/* The pop-up of the QComboBox is a QAbstractItemView and is styled using the
-descendant selector: */
-
-QComboBox QAbstractItemView {
-    border: 2px solid darkgray;
-    selection-background-color: lightgray;
-}
-
-
 /*  QDateEdit   See QSpinBox.
     QDateTimeEdit   See QSpinBox. */
 
@@ -239,7 +315,7 @@ The above code is a no-operation if there is no stylesheet set.
 Warning: Make sure you define the Q_OBJECT macro for your custom widget. */
 
 QDialog {
-    background: #101010;
+/*    background: #101010;*/
 }
 
 
@@ -267,21 +343,14 @@ QFrame {
 }
 
 
-/*  QGroupBox
 
-Supports the box model. The title can be styled using the ::title subcontrol.
-By default, the title is placed depending on QGroupBox::textAlignment.  In the
-case of a checkable QGroupBox, the title includes the check indicator. The
-indicator is styled using the the ::indicator subcontrol. The spacing property
-can be used to control the spacing between the text and indicator. */
-
-QGroupBox {
+/*QGroupBox {
     background-color: red;
     color: white;
     border: 2px solid #2CD0FC;
     border-radius: 4px;
     padding: 2px;
-}
+}*/
 
 
 /*  QHeaderView 
@@ -293,22 +362,6 @@ Sort indicator in can be styled using the ::up-arrow and the ::down-arrow
 Sub-control. */
 
 QHeaderView {
-}
-
-
-/*  QLabel
- 
-Supports the box model. Does not support the :hover pseudo-state.  Since 4.3,
-setting a stylesheet on a QLabel automatically sets the QFrame::frameStyle
-property to QFrame::StyledPanel. */
-
-QLabel {
-    /* we don't want to specify a background color for QLabel, because we use
-     * them in many different places that should have different backgrounds, but
-     * putting a background in for now makes it easier to see all the places
-     * that are affected by this change. */
-    /* background-color: blue; */
-    color: #EEEEEE;
 }
 
 
@@ -335,32 +388,6 @@ QListView {
 }
 
 
-/*  QMenu
-  
-Supports the box model.  Individual items are styled using the ::item
-subcontrol. In addition to the usually supported pseudo states, item subcontrol
-supports the :selected, :default, :exclusive and the non-exclusive pseudo
-states.  The indicator of checkable menu items is styled using the ::indicator
-subcontrol.  The separator is styled using the ::separator subcontrol.  For
-items with a sub menu, the arrow marks are styled using the right-arrow and
-left-arrow.  The scroller is styled using the ::scroller.  The tear-off is
-styled using the ::tear-off. */
-
-QMenu {
-    background-color: #000000;
-}
-
-QMenu::item {
-    /* sets background of menu item. set this to something non-transparent
-       if you want menu color and menu item color to be different */
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-QMenu::item:selected { /* when user selects item using mouse or keyboard */
-    background-color: #2CD0FC;
-}
-
 
 
 
@@ -369,25 +396,38 @@ QMenu::item:selected { /* when user selects item using mouse or keyboard */
 Supports the box model. The spacing property specifies the spacing between menu
 items. Individual items are styled using the ::item subcontrol. */
 
-QMenuBar {
+QMenuBar,
+#tempoview QMenuBar
+#App QMenuBar
+{
     background-color: #000000;
 }
 
-QMenuBar::item {
+QMenuBar::item,
+#tempoview QMenuBar::item,
+#App QMenuBar::item
+{
     spacing: 3px; /* spacing between menu bar items */
     padding: 1px 4px;
     background: transparent;
-    border-radius: 4px;
     font: bold;
     color: white;
 }
 
-QMenuBar::item:selected { /* when selected using mouse or keyboard */
-    background: #0088E8;
+/* Selected item background
+ */
+QMenuBar::item:selected,
+#tempoview QMenuBar::item:selected,
+#App QMenuBar::item:selected
+{ 
+    background: #2CD0FC;
 }
 
-QMenuBar::item:pressed {
-    background: #2CD0FC;
+QMenuBar::item:pressed,
+#tempoview QMenuBar::item:pressed,
+#App QMenuBar::item:pressed
+{
+    background: #3DE1FD;
 }
 
 
@@ -411,30 +451,6 @@ position the text.  Indeterminate progress bars have the :indeterminate pseudo
 state set. */
 
 QProgressBar {
-}
-
-
-/*  QPushButton
- 
-Supports the box model. Supports the :default, :flat, :checked pseudo states.
-For QPushButton with a menu, the menu indicator is styled using the ::menu-indicator subcontrol. Appearance of checkable push buttons can be customized using the :open and :closed pseudo-states. */
-
-QPushButton {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD)
-}
-
-/* too obnoxious?
- *
-QPushButton::hover {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
-} */
-
-QPushButton::checked {
-    border: 1px solid #E0E0E0;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
 }
 
 
@@ -477,7 +493,15 @@ QScrollBar {
 }
 
 /* HORIZONTAL */
-QScrollBar:left-arrow:horizontal, QScrollBar::right-arrow:horizontal {
+QScrollBar:left-arrow:horizontal {
+    image: url(/usr/share/icons/crystalsvg/16x16/actions/1leftarrow.png);
+    /*border: 2px solid #404040;
+    width: 3px;
+    height: 3px; 
+    background: #404040;*/
+}
+
+QScrollBar::right-arrow:horizontal {
     border: 2px solid #404040;
     width: 3px;
     height: 3px; 
@@ -580,41 +604,32 @@ subcontrol moves in the Contents rectangle of the groove subcontrol. */
  * this actually looks a lot better than the stock default, though this is by no
  * means a suggestion for what it should ultimately look like */
 
-QSlider::groove:horizontal {
-    border: 1px solid #999999;
-    height: 8px; /* the groove expands to the size of the slider by default. by giving it a height, it has a fixed size */
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);
-    margin: 2px 0;
+
+QSlider::horizontal
+{
+    border: 0px solid transparent;
+    background: transparent;
+    min-width: 50px;
+    min-height: 5px;
 }
 
-QSlider::handle:horizontal {
+QSlider::handle:horizontal
+{
     background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #b4b4b4, stop:1 #8f8f8f);
     border: 1px solid #5c5c5c;
-    width: 18px;
-    margin: -2px 0; /* handle is placed by default on the contents rect of the groove. Expand outside the groove */
+    width: 8px;
+    height 8px;
+    margin: -5px 0;
     border-radius: 3px;
 }
 
-/* what is this green white pink stuff?  doesn't seem to be visible.  anyway,
- * this is just boilerplate code pasted from an example */
-QSlider::groove:vertical {
-    background: red;
+QSlider::groove:horizontal
+{
+/*    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #B1B1B1, stop:1 #c4c4c4);*/
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 #E0E0E0, stop:1 #EEEEEE);
+    height: 5px;
     position: absolute; /* absolutely position 4px from the left and right of the widget. setting margins on the widget should work too... */
     left: 4px; right: 4px;
-}
-
-QSlider::handle:vertical {
-    height: 10px;
-    background: green;
-    margin: 0 -4px; /* expand outside the groove */
-}
-
-QSlider::add-page:vertical {
-    background: white;
-}
-
-QSlider::sub-page:vertical {
-    background: pink;
 }
 
 
@@ -760,65 +775,6 @@ QTextEdit {
 }
 
 
-/* QToolBar
-
-Supports the box model.  The :top, :left, :right, :bottom pseudo states
-depending on the area in which the tool bar is grouped.  The :first, :last,
-:middle, :only-one pseudo states indicator the position of the tool bar within a
-line group (See QStyleOptionToolBar::positionWithinLine).  The separator of a
-QToolBar is styled using the ::separator subcontrol.  The handle (to move the
-toolbar) is styled using the ::handle subcontrol. */
-
-/*
- *
- * QToolBar::top {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-}
-
-QToolBar::handle {
-    image: url(/home/silvan/SVN/qt4/data/pixmaps/style/toolbar-separator.png);
-}
- *
- * (will #App style everything else or is the above still needed?)
- */
-
-
-
-/*  QToolButton
-  
-Supports the box model.  If the QToolButton has a menu, is ::menu-indicator
-subcontrol can be used to style the indicator. By default, the menu-indicator is
-positioned at the bottom right of the Padding rectangle of the widget.  If the
-QToolButton is in QToolButton::MenuButtonPopup mode, the ::menu-button
-subcontrol is used to draw the menu button. ::menu-arrow subcontrol is used to
-draw the menu arrow inside the menu-button. By default, it is positioned in the
-center of the Contents rectangle of the the menu-button subcontrol.  When the
-QToolButton displays arrows, the ::up-arrow, ::down-arrow, ::left-arrow and
-::right-arrow subcontrols are used.  Warning: If you only set a background-color
-on a QToolButton, the background will not appear unless you set the border
-property to some value. This is because, by default, the QToolButton draws a
-native border which completely overlaps the background-color. For example,
-QToolButton { background-color: red; border: none; } */
-
-/* toolbar buttons,
- * TPB collapsing frame texts (eg. "Create segments with") */
-QToolButton {
-    color: white;
-    background-color: transparent;
-}
-
-
-/*  QToolBox
-
-Supports the box model.  The individual tabs can by styled using the ::tab
-subcontrol. The tabs support the :only-one, :first, :last, :middle,
-:previous-selected, :next-selected, :selected pseudo states. */
-
-QToolBox {
-}
-
-
-
 /*  QToolTip
 
 Supports the box model. The opacity property controls the opacity of the tooltip. */
@@ -899,9 +855,9 @@ QWidget#FADER {
  * First, we have to slop a bucket of black paint all over everything...
  */
 
-#RosegardenParameterArea QWidget {
+/*#RosegardenParameterArea QWidget {
     background: #000000; 
-}
+}*/
 
 /* Then we have to re-specify group boxes, scrollbars, buttons, the whole
  * freaking nine yards all over again, local to just RosegardenParameterArea, in
@@ -912,41 +868,128 @@ QWidget#FADER {
     background-color: transparent;
 }
 
-#RosegardenParameterArea QGroupBox {
+/* Put a little padding at the top and bottom of QFrame to force some separation
+ * between elements for improved clarity
+ */
+#RosegardenParameterArea QFrame {
+    margin-top: 2px;
+    margin-bottom: 2px;
+    border: 0px solid none;
+}
+
+/*  QGroupBox
+
+Supports the box model. The title can be styled using the ::title subcontrol.
+By default, the title is placed depending on QGroupBox::textAlignment.  In the
+case of a checkable QGroupBox, the title includes the check indicator. The
+indicator is styled using the the ::indicator subcontrol. The spacing property
+can be used to control the spacing between the text and indicator. */
+
+QGroupBox,
+#View QGroupBox,
+#App QGroupBox,
+#RosegardenParameterArea QGroupBox
+{
     background: #404040;
     color: white;
-    border: 2px solid #303030;
+    border: 2px solid #2CD0FC; /*303030*/
     border-radius: 4px;
     padding: 2px;
 }
 
-#RosegardenParameterArea QLabel {
-    color: white;
-}
+/* Widgets under group boxes need to take the group box background, rather than
+ * the system background.  (When eventually shuffling this around to improve
+ * specificity, this group of overrides should go lower in the file than the
+ * widgets that are represented in this section, so these overrides can share
+ * other style attributes with their kin further up.)
+ */
 
-#RosegardenParameterArea QToolButton {
+/* NO!  DUH!  I don't need this for QLabel. Something else has gone goofy.  Sort
+ * out tomorrow or later.  My right pinky is killing me from hitting shift to
+ * type the letter Q 10,000,000 times. Why coulnt' it just be qt?
+ *
+ * QGroupBox QLabel,
+#View QGroupBox QLabel,
+#App QGroupBox QLabel,
+#RosegardenParameterArea QGroupBox QLabel
+{
+    background: #404040; 
+    color: #FFFFFF;
+}*/
+
+
+/*  QToolButton
+  
+Supports the box model.  If the QToolButton has a menu, is ::menu-indicator
+subcontrol can be used to style the indicator. By default, the menu-indicator is
+positioned at the bottom right of the Padding rectangle of the widget.  If the
+QToolButton is in QToolButton::MenuButtonPopup mode, the ::menu-button
+subcontrol is used to draw the menu button. ::menu-arrow subcontrol is used to
+draw the menu arrow inside the menu-button. By default, it is positioned in the
+center of the Contents rectangle of the the menu-button subcontrol.  When the
+QToolButton displays arrows, the ::up-arrow, ::down-arrow, ::left-arrow and
+::right-arrow subcontrols are used.  Warning: If you only set a background-color
+on a QToolButton, the background will not appear unless you set the border
+property to some value. This is because, by default, the QToolButton draws a
+native border which completely overlaps the background-color. For example,
+QToolButton { background-color: red; border: none; } */
+
+/* We use tool buttons for the TPB collapsing frame texts, eg. "Playback
+ * parameters" and for toolbar buttons
+ */
+QToolButton,
+#tempoview,
+#View QToolButton,
+#App QToolButton,
+#RosegardenParameterArea QToolButton
+{
     color: white;
     background-color: transparent;
 }
 
-#RosegardenParameterArea QPushButton {
+
+
+/*  QPushButton
+ 
+Supports the box model. Supports the :default, :flat, :checked pseudo states.
+For QPushButton with a menu, the menu indicator is styled using the ::menu-indicator subcontrol. Appearance of checkable push buttons can be customized using the :open and :closed pseudo-states. */
+
+QPushButton,
+Rosegarden--MatrixView QPushButton,
+#tempoview QPushButton,
+#View QPushButton,
+#App QPushButton,
+#RosegardenParameterArea QPushButton
+{
     border: 1px solid #AAAAAA;
     border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD)
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
 }
 
-#RosegardenParameterArea QPushButton::checked {
+QPushButton::checked,
+QPushButton::pressed,
+#tempoview QPushButton::checked,
+#tempoview QPushButton::pressed,
+#App QPushButton::checked,
+#App QPushButton::pressed,
+#View QPushButton::checked,
+#View QPushButton::pressed,
+#RosegardenParameterArea QPushButton::checked,
+#RosegardenParameterArea QPushButton::pressed
+{
     border: 1px solid #E0E0E0;
     border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE)
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
 
 #RosegardenParameterArea QComboBox {
-    border: 1px solid gray;
+    border: 1px solid #AAAAAA;
     border-radius: 3px;
     padding: 1px 18px 1px 3px;
     min-width: 6em;
+    color: #000000;
 }
 
 #RosegardenParameterArea QComboBox:editable {
@@ -954,16 +997,18 @@ QWidget#FADER {
 }
 
 #RosegardenParameterArea QComboBox:!editable, QComboBox::drop-down:editable {
-     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    /* background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                  stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
-                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
+                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);*/
 }
 
 /* QComboBox gets the "on" state when the popup is open */
 #RosegardenParameterArea QComboBox:!editable:on, QComboBox::drop-down:editable:on {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    /*background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                 stop: 0 #D3D3D3, stop: 0.4 #D8D8D8,
-                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);
+                                stop: 0.5 #DDDDDD, stop: 1.0 #E1E1E1);*/
 }
 
 #RosegardenParameterArea QComboBox:on { /* shift the text when the popup opens */
@@ -1004,7 +1049,7 @@ descendant selector: */
 
 #RosegardenParameterArea QLabel#SPECIAL_LABEL {
     color: #000000;
-    background-color: #AAAAAA;
+    background-color: #999999;
 }
 
 #RosegardenParameterArea QFrame {

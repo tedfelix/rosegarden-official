@@ -16,13 +16,11 @@
 */
 
 
-#include <Q3Canvas>
-#include <Q3CanvasPixmap>
+/*#include <Q3Canvas>
+#include <Q3CanvasPixmap>*/
 #include "TempoView.h"
 
-// #include <QDir>
-// #include <kglobal.h>
-// #include <kxmlguiclient.h>
+#include "TempoListItem.h"
 
 #include "misc/Debug.h"
 #include "base/Composition.h"
@@ -42,7 +40,6 @@
 #include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "misc/Strings.h"
-#include "TempoListItem.h"
 
 #include <QAction>
 #include <QSettings>
@@ -58,8 +55,6 @@
 #include <QVBoxLayout>
 #include <QStatusBar>
 #include <QList>
-
-// #include <qptrlist.h>
 
 
 namespace Rosegarden

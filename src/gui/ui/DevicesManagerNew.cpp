@@ -79,6 +79,7 @@ namespace Rosegarden
 	{
 		// start constructor
 		//setAttribute( Qt::WA_DeleteOnClose, true );
+                setObjectName("DeviceManager");
 		setWindowModality( Qt::NonModal );
 		//setWindowFlags( Qt::Dialog );	//| Qt::WindowStaysOnTopHint );
 		
