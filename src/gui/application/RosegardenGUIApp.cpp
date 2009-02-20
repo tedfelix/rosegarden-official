@@ -947,8 +947,16 @@ void RosegardenGUIApp::initView()
     setCentralWidget(m_swapView);
 
     setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
-
-
+    
+    /*
+    // if we wanted to apply a qt4-qss stylesheet in code:
+    //
+    QFile qss("data/rosegarden.qss");
+    qss.open(QFile::ReadOnly);
+    qApp->setStyleSheet(qss.readAll());
+    qss.close();
+    // */
+    
     // Transport setup
     //
     std::string transportMode = m_doc->getConfiguration().
