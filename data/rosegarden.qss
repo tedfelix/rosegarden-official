@@ -15,9 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+/* NOTE: using #setObjectNamedObject has higher specificity than
+ * Rosegarden--OurClass
+ */
+
 /* Start off with a global black background, because it has proven impossible to
- * address every last bit of background color without resorting to this.  This
- * requires an unfortunate amount of override code.
+ * address every last bit of background color without resorting to this.
  */
 QWidget {
     background: #000000;
@@ -27,7 +30,7 @@ QWidget {
  * missing, because the global black always kills a background pixmap.
  */
 Rosegarden--StartupLogo QWidget {
-    background: #202020;
+    background-color: orange;
 }
 
 /* Set the dock title foreground color to white so it shows up */
@@ -48,8 +51,9 @@ QDockWidget QWidget > QWidget > QWidget > QWidget {
     background-color: transparent;
 }
 
+#View QDialog QWidget,
 #tempoview QWidget {
-    background-color: purple;
+    background-color: #000000;
 }
 
 
@@ -248,7 +252,9 @@ subcontrol. By default, the indicator is placed in the Top Left corner of the
 Contents rectangle of the widget.  The spacing property specifies the spacing
 between the check indicator and the text. */
 
+QCheckBox QLabel,
 QCheckBox {
+    color: #FFFFFF
 }
 
 
@@ -319,16 +325,6 @@ QFrame {
 }
 
 
-
-/*QGroupBox {
-    background-color: red;
-    color: white;
-    border: 2px solid #2CD0FC;
-    border-radius: 4px;
-    padding: 2px;
-}*/
-
-
 /*  QHeaderView 
 
 Supports the box model. The sections of the header view are styled using the
@@ -337,7 +333,13 @@ Supports the box model. The sections of the header view are styled using the
 Sort indicator in can be styled using the ::up-arrow and the ::down-arrow
 Sub-control. */
 
-QHeaderView {
+/* This is the headers for various list views in various dialogs, especially.
+ * Apparently we can't style the background easily, and at this point I'm
+ * willing to live with that. White on black it is.
+ */
+QHeaderView
+{
+    color: #FFFFFF;
 }
 
 
@@ -366,6 +368,8 @@ QListView,
 {
     background-color: green;
 }
+
+QList QWidget {background-color: green;}
 
 
 
@@ -442,7 +446,8 @@ subcontrol. By default, the indicator is placed in the Top Left corner of the
 Contents rectangle of the widget.  The spacing property specifies the spacing
 between the check indicator and the text. */
 
-QRadioButton {
+QRadioButton QLabel {
+    color: #FFFFFF;
 }
 
 
@@ -629,6 +634,7 @@ rectangle. The bottom-arrow is placed in the center of the Contents rectangle of
 the bottom-button. */
 
 QSpinBox {
+    color: #FFFFFF;
 }
 
 
@@ -775,9 +781,14 @@ styled using the ::branch subcontrol. The ::branch Sub-control supports the
 :open, :closed, :has-sibling and :has-children pseudo states.  See
 QAbsractScrollArea to style scrollable backgrounds. */
 
-QTreeView {
+QTreeView,
+#View QTreeView {
+    background-color: #FFFFFF;
 }
 
+#View QTreeView QLabel {
+    color: #FFFFFF;
+}
 
 /*  QWidget
 
@@ -872,7 +883,7 @@ QGroupBox,
 {
     background: #404040;
     color: white;
-    border: 2px solid #2CD0FC; /*303030*/
+    border: 2px solid #ABCDEF;
     border-radius: 4px;
     padding: 2px;
 }
@@ -954,6 +965,7 @@ QGroupBox QPushButton,
     border-radius: 3px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
+    min-width: 60px;
 }
 
 QPushButton::checked,
@@ -1070,15 +1082,15 @@ descendant selector: */
 /* Transport buttons are styled independently, with a smaller radius and a
  * lighter "pressed" state
  */
-Rosegarden--TransportDialog QPushButton {
+#RosegardenTransport QPushButton {
     border: 1px solid #AAAAAA;
-    border-radius: 1px;
+    border-radius: 2px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-/*    color: #000000; */
+    min-width: 0px;
 }
 
-Rosegarden--TransportDialog QPushButton::checked,
-Rosegarden--TransportDialog QPushButton::pressed
+#RosegardenTransport QPushButton::checked,
+#RosegardenTransport QPushButton::pressed
 {
     border: 1px solid #E0E0E0;
     border-radius: 1px;
