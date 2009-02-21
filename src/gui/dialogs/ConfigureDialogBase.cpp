@@ -79,16 +79,11 @@ ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const 
     
     // qt4 connctions for QDialogButtonBox:
     //
-    //@@@### this connection doesn't work: - but why ???
-//     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), \
-//             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton * button)) );
-     connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
-     connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
-     ///!!! There is no "Apply" signal so we need to implement clicked(QAbstractButton*)
-     /// Might as well just use that signal
-    
-    
-    
+     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton *)),
+             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton *)) );
+//    connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+//    connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
+        
     /*
     // setup dialog buttons OLD CODE:
     QWidget *buttWidget = new QWidget( this );
@@ -122,14 +117,13 @@ ConfigureDialogBase::~ConfigureDialogBase()
 {}
 
 
-///### is this necessary?
 void ConfigureDialogBase::slotButtonBoxButtonClicked(QAbstractButton * button){
     
     QDialogButtonBox::ButtonRole bRole = m_dialogButtonBox->buttonRole( button );
     
     if( bRole == QDialogButtonBox::ApplyRole ){
         slotApply();
-        close();
+//        close();
     }
     else if( bRole == QDialogButtonBox::AcceptRole ){
         slotOk();
