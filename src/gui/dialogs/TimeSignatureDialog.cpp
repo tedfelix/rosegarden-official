@@ -17,7 +17,6 @@
 
 
 #include "TimeSignatureDialog.h"
-#include <QApplication>
 
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
@@ -25,6 +24,8 @@
 #include "gui/widgets/TimeWidget.h"
 #include "gui/widgets/BigArrowButton.h"
 #include "misc/Strings.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -65,6 +66,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 {
     setModal(true);
     setWindowTitle(tr("Time Signature"));
+    setObjectName("MinorDialog");
 
     static QFont *timeSigFont = 0;
 

@@ -54,6 +54,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
 
     setModal(true);
     setWindowTitle(tr("Insert Tempo Change"));
+    setObjectName("MinorDialog");
 
 	QWidget* vbox = dynamic_cast<QWidget*>( this );
 	QVBoxLayout *vboxLayout = new QVBoxLayout;

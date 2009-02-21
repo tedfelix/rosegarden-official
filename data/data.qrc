@@ -317,6 +317,17 @@
 <file>pixmaps/toolbar/turn.xpm</file>
 <file>pixmaps/toolbar/un-mute-all.xpm</file>
 <file>pixmaps/toolbar/up-bow.xpm</file>
+<file>pixmaps/style/</file>
+<file>pixmaps/style/arrow-down.png</file>
+<file>pixmaps/style/arrow-down-small.png</file>
+<file>pixmaps/style/arrow-left.png</file>
+<file>pixmaps/style/arrow-right.png</file>
+<file>pixmaps/style/arrow-up.png</file>
+<file>pixmaps/style/checkbox-checked.png</file>
+<file>pixmaps/style/htoolbar-separator.png</file>
+<file>pixmaps/style/title-close.png</file>
+<file>pixmaps/style/title-undock.png</file>
+<file>pixmaps/style/vtoolbar-separator.png</file>
 <file>pixmaps/transport/button-bar-time.xpm</file>
 <file>pixmaps/transport/button-clock.xpm</file>
 <file>pixmaps/transport/button-ffwd-end.xpm</file>

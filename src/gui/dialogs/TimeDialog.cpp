@@ -38,6 +38,7 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 {
     setModal(true);
     setWindowTitle(title);
+    setObjectName("MinorDialog");
 
     QGridLayout *metagrid = new QGridLayout;
     QWidget *vbox = new QWidget(this);

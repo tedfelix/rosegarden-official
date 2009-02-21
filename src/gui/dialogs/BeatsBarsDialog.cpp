@@ -17,9 +17,10 @@
 
 
 #include "BeatsBarsDialog.h"
-#include <QLayout>
 
 #include "base/Segment.h"
+
+#include <QLayout>
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -27,7 +28,6 @@
 #include <QGroupBox>
 #include <QSpinBox>
 #include <QWidget>
-
 
 
 namespace Rosegarden
@@ -38,6 +38,7 @@ BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
 {
     setModal(true);
     setWindowTitle(tr("Audio Segment Duration"));
+    setObjectName("MinorDialog");
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
 

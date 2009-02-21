@@ -17,21 +17,19 @@
 */
 
 
-// #include <ktip.h>
-// #include <QDir>
-
-#include <unistd.h>
 #include "StartupLogo.h"
+
 #include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
-
 
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QPainter>
 #include <QFontMetrics>
 #include <QSettings>
+
+#include <unistd.h>
 
 namespace Rosegarden
 {
@@ -43,7 +41,7 @@ StartupLogo::StartupLogo(QWidget * parent, const char *name) :
     m_readyToHide(false),
     m_showTip(true)
 {
-//     QString pixmapFile = locate("appdata", "pixmaps/splash.png");
+    setObjectName("Splash");
     m_pixmap = IconLoader().loadPixmap("splash");
     setBackgroundPixmap(m_pixmap);
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
