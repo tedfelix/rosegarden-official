@@ -92,6 +92,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
                                  frame), row, 0, 1, 2);
     
     m_midiPitchOctave = new QSpinBox(frame);
+    connect(m_midiPitchOctave, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
     m_midiPitchOctave->setMaximum(10);
     m_midiPitchOctave->setMinimum( -10);
     m_midiPitchOctave->setValue( settings.value("midipitchoctave", -2).toInt() );
@@ -106,6 +107,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
                                       frame), row, 0, 1, 2);
 
     m_studio = new QCheckBox(frame);
+    connect(m_studio, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_studio->setChecked( qStrToBool( settings.value("alwaysusedefaultstudio", "false" ) ) );
     layout->addWidget(m_studio, row, 2);
     ++row;
@@ -121,6 +123,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_sendControllersAtPlay = new QCheckBox(frame);
+    connect(m_sendControllersAtPlay, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     bool sendControllers = qStrToBool( settings.value("alwayssendcontrollers", "false" ) ) ;
     m_sendControllersAtPlay->setChecked(sendControllers);
     m_sendControllersAtPlay->setToolTip(controllerTip);
@@ -135,6 +138,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0, row- row+1, 1- 0+1);
 
     m_timer = new QComboBox(frame);
+    connect(m_timer, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_timer, row, 2, row- row+1, 3-2+1);
 
     QStringList timers = m_doc->getTimers();
@@ -162,6 +166,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(lbl, row, 0, row- row+1, 1- 0+1);
 
     m_sfxLoadEnabled = new QCheckBox(frame);
+    connect(m_sfxLoadEnabled, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_sfxLoadEnabled, row, 2);
     m_sfxLoadEnabled->setToolTip(tooltip);
     ++row;
@@ -221,6 +226,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     label = new QLabel(tr("MIDI Clock and System messages"), frame);
     layout->addWidget(label, row, 0);
     m_midiSync = new QComboBox(frame);
+    connect(m_midiSync, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_midiSync, row, 1);
 
     m_midiSync->addItem(tr("Off"));
@@ -240,6 +246,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0);
 
     m_mmcTransport = new QComboBox(frame);
+    connect(m_mmcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mmcTransport, row, 1); //, Qt::AlignHCenter);
 
     m_mmcTransport->addItem(tr("Off"));
@@ -259,6 +266,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     layout->addWidget(label, row, 0);
 
     m_mtcTransport = new QComboBox(frame);
+    connect(m_mtcTransport, SIGNAL(activated(int)), this, SLOT(slotModified()));
     layout->addWidget(m_mtcTransport, row, 1);
 
     m_mtcTransport->addItem(tr("Off"));
@@ -281,6 +289,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     hboxLayout->addWidget(label);
 //    layout->addWidget(label, row, 0);
     m_midiSyncAuto = new QCheckBox( hbox );
+    connect(m_midiSyncAuto, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     hboxLayout->addWidget(m_midiSyncAuto);
     hbox->setLayout(hboxLayout);
 //    layout->addWidget(m_midiSyncAuto, row, 1);

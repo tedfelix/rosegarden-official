@@ -28,5 +28,11 @@
 
 namespace Rosegarden
 {
+void
+ConfigurationPage::slotModified()
+{
+    emit modified();
+}
+
 }
 #include "ConfigurationPage.moc"

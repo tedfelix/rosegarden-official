@@ -84,6 +84,8 @@ ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const 
 //             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton * button)) );
      connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
      connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
+     ///!!! There is no "Apply" signal so we need to implement clicked(QAbstractButton*)
+     /// Might as well just use that signal
     
     
     

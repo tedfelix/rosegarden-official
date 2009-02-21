@@ -91,6 +91,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                                  frame), row, 0);
 
     m_previewStyle = new QComboBox(frame);
+    connect(m_previewStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_previewStyle->addItem(tr("Linear - easier to see loud peaks"));
     m_previewStyle->addItem(tr("Meter scaling - easier to see quiet activity"));
     m_previewStyle->setCurrentIndex( settings.value("audiopreviewstyle", 1).toUInt() );
@@ -104,6 +105,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     label = new QLabel(tr("Record audio files as"), frame);
     m_audioRecFormat = new QComboBox(frame);
+    connect(m_audioRecFormat, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_audioRecFormat->addItem(tr("16-bit PCM WAV format (smaller files)"));
     m_audioRecFormat->addItem(tr("32-bit float WAV format (higher quality)"));
     m_audioRecFormat->setCurrentIndex( settings.value("audiorecordfileformat", 1).toUInt() );
@@ -132,6 +134,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     }
 
     m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
+    connect(m_externalAudioEditorPath, SIGNAL(textChanged(QString &)), this, SLOT(slotModified()));
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
     
@@ -152,6 +155,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     m_createFaderOuts = new QCheckBox(tr("for individual audio instruments"), frame);
+    connect(m_createFaderOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_createFaderOuts->setChecked( qStrToBool( settings.value("audiofaderouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -159,6 +163,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     m_createSubmasterOuts = new QCheckBox(tr("for submasters"), frame);
+    connect(m_createSubmasterOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "                                      false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -200,6 +205,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     //
     bool startJack = qStrToBool( settings.value("jackstart", "false" ) ) ;
     m_startJack = new QCheckBox(frame);
+    connect(m_startJack, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_startJack->setChecked(startJack);
 
     layout->addWidget(new QLabel(tr("Start JACK when Rosegarden starts"), frame), 2, 0);
@@ -214,6 +220,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                                         // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
                                         "/usr/bin/qjackctl -s").toString();
     m_jackPath = new QLineEdit(jackPath, frame);
+    connect(m_jackPath, SIGNAL(textChanged(QString &)), this, SLOT(slotModified()));
 
     layout->addWidget(m_jackPath, row, 1, row- row+1, 3);
     ++row;

@@ -72,6 +72,12 @@ public:
     void setPageIndex( int aPageIndex ) { m_pageIndex = aPageIndex; }
     int pageIndex() const { return m_pageIndex; }
 
+signals:
+    void modified();
+
+protected slots:
+    virtual void slotModified();
+
 protected:
 
     //--------------- Data members ---------------------------------

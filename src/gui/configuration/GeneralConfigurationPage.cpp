@@ -18,6 +18,7 @@
 
 #include "GeneralConfigurationPage.h"
 
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
@@ -83,6 +84,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_client = new QComboBox(frame);
+    connect(m_client, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_client->addItem(tr("Notation editor"));
     m_client->addItem(tr("Matrix editor"));
     m_client->addItem(tr("Event List editor"));
@@ -95,6 +97,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_countIn = new QSpinBox(frame);
+    connect(m_countIn, SIGNAL(valueChanged()), this, SLOT(slotModified()));
     m_countIn->setValue( settings.value("countinbars", 0).toUInt() );
     m_countIn->setMaximum(10);
     m_countIn->setMinimum(0);
@@ -104,6 +107,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(tr("Auto-save interval"), frame), row, 0);
     
     m_autoSave = new QComboBox(frame);
+    connect(m_autoSave, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_autoSave->addItem(tr("Every 30 seconds"));
     m_autoSave->addItem(tr("Every minute"));
     m_autoSave->addItem(tr("Every five minutes"));
@@ -131,6 +135,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(label, row, 0);
 
     m_appendLabel = new QCheckBox(frame);
+    connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_appendLabel->setChecked( qStrToBool( settings.value("appendlabel", "true" ) ) );
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
@@ -145,6 +150,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(label, row, 0);
 
     m_jackTransport = new QCheckBox(frame);
+    connect(m_jackTransport, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_jackTransport, row, 1, row- row+1, 2);
 
 //    m_jackTransport->addItem(tr("Ignore JACK transport"));
@@ -225,6 +231,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_sidebarStyle = new QComboBox(frame);
+    connect(m_sidebarStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_sidebarStyle->addItem(tr("Vertically stacked"),
                                RosegardenParameterArea::CLASSIC_STYLE);
     m_sidebarStyle->addItem(tr("Tabbed"),
@@ -239,6 +246,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_nameStyle = new QComboBox(frame);
+    connect(m_nameStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_nameStyle->addItem(tr("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->addItem(tr("Localized (where available)"));
     m_nameStyle->setCurrentIndex( settings.value("notenamestyle", Local).toUInt() );
@@ -257,12 +265,15 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     layout->addWidget(new QLabel(tr("Show textured background on"), frame), row, 0);
 
     m_backgroundTextures = new QCheckBox(tr("Main window"), frame);
+    connect(m_backgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_backgroundTextures, row, 1);
 
     m_matrixBackgroundTextures = new QCheckBox(tr("Matrix"), frame);
+    connect(m_matrixBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_matrixBackgroundTextures, row, 2);
 
     m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
+    connect(m_notationBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_notationBackgroundTextures, row, 3);
 
     m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
@@ -284,6 +295,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->addWidget(new QLabel(tr("Use bundled Klearlook theme"), frame), row, 0);
     m_globalStyle = new QComboBox(frame);
+    connect(m_globalStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_globalStyle->addItem(tr("Never"));
     m_globalStyle->addItem(tr("When not running under KDE"));
     m_globalStyle->addItem(tr("Always"));

@@ -69,6 +69,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     
     vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new GeneralConfigurationPage(doc, pageWidget);
+    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
+    
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
     m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
@@ -85,6 +87,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          il.load( MIDIConfigurationPage::iconName()) );
     vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new MIDIConfigurationPage(doc, pageWidget);
+    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
     m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
@@ -95,6 +98,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          il.load(AudioConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new AudioConfigurationPage(doc, pageWidget);
+    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
     m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
@@ -106,6 +110,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
                          il.load(NotationConfigurationPage::iconName()));
     vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
     page = new NotationConfigurationPage(pageWidget);
+    connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
     m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
