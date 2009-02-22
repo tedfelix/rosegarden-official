@@ -149,6 +149,10 @@ ConfigureDialogBase::slotApply()
     for (configurationpages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i)
         (*i)->apply();
+
+    QPushButton * btApply;
+    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
+    btApply->setEnabled( false );
 }
 
 void
