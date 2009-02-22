@@ -564,7 +564,7 @@ int main(int argc, char *argv[])
 
     if (qStrToBool(settings.value("Logo", "true")) && !nosplash) {
         startLogo = StartupLogo::getInstance();
-	startLogo->setShowTip(!newVersion);
+//	    startLogo->setShowTip(!newVersion);
         startLogo->show();
         app.processEvents();	
     }

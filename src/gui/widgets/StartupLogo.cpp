@@ -37,13 +37,14 @@ namespace Rosegarden
 // NOTE: use QSplashScreen instead ??
 
 StartupLogo::StartupLogo(QWidget * parent, const char *name) :
-    QWidget(parent, name, Qt::SplashScreen),
+//    QWidget(parent, name, Qt::SplashScreen),
+    QWidget(parent, Qt::SplashScreen),
     m_readyToHide(false),
     m_showTip(true)
 {
     setObjectName("Splash");
     m_pixmap = IconLoader().loadPixmap("splash");
-    setBackgroundPixmap(m_pixmap);
+    //setBackgroundPixmap(m_pixmap); This is Qt3 support - doesn't work with style sheets
     setGeometry(QApplication::desktop()->width() / 2 - m_pixmap.width() / 2,
                 QApplication::desktop()->height() / 2 - m_pixmap.height() / 2,
                 m_pixmap.width(), m_pixmap.height());
@@ -60,6 +61,9 @@ void StartupLogo::paintEvent(QPaintEvent*)
     // Print version number
     QPainter paint(this);
 
+    // Draw the splash screen image
+    paint.drawPixmap(0,0,m_pixmap);
+    
     QFont defaultFont;
     defaultFont.setPixelSize(12);
     paint.setFont(defaultFont);
