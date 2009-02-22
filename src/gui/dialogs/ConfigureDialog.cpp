@@ -73,7 +73,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     connect(page, SIGNAL(updateAutoSaveInterval(unsigned int)),
@@ -90,7 +90,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     pageWidget = addPage(AudioConfigurationPage::iconLabel(),
@@ -101,7 +101,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     // Notation Page
@@ -113,7 +113,7 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
     vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 }
 

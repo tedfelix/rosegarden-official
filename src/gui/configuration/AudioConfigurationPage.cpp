@@ -134,7 +134,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     }
 
     m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
-    connect(m_externalAudioEditorPath, SIGNAL(textChanged(QString &)), this, SLOT(slotModified()));
+    connect(m_externalAudioEditorPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
     
@@ -220,7 +220,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                                         // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
                                         "/usr/bin/qjackctl -s").toString();
     m_jackPath = new QLineEdit(jackPath, frame);
-    connect(m_jackPath, SIGNAL(textChanged(QString &)), this, SLOT(slotModified()));
+    connect(m_jackPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 
     layout->addWidget(m_jackPath, row, 1, row- row+1, 3);
     ++row;

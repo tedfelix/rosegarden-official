@@ -97,7 +97,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
                                  frame), row, 0);
 
     m_countIn = new QSpinBox(frame);
-    connect(m_countIn, SIGNAL(valueChanged()), this, SLOT(slotModified()));
+    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
     m_countIn->setValue( settings.value("countinbars", 0).toUInt() );
     m_countIn->setMaximum(10);
     m_countIn->setMinimum(0);
