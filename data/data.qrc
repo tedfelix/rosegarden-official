@@ -323,7 +323,14 @@
 <file>pixmaps/style/arrow-left.png</file>
 <file>pixmaps/style/arrow-right.png</file>
 <file>pixmaps/style/arrow-up.png</file>
-<file>pixmaps/style/checkbox-checked.png</file>
+<file>pixmaps/style/checkbox_checked.png</file>
+<file>pixmaps/style/checkbox_checked_pressed.png</file>
+<file>pixmaps/style/checkbox_indeterminate_hover.png</file>
+<file>pixmaps/style/checkbox_indeterminate.png</file>
+<file>pixmaps/style/checkbox_indeterminate_pressed.png</file>
+<file>pixmaps/style/checkbox_unchecked_hover.png</file>
+<file>pixmaps/style/checkbox_unchecked.png</file>
+<file>pixmaps/style/checkbox_unchecked_pressed.png</file>
 <file>pixmaps/style/htoolbar-separator.png</file>
 <file>pixmaps/style/title-close.png</file>
 <file>pixmaps/style/title-undock.png</file>
