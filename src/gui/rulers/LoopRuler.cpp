@@ -72,6 +72,7 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
      */
     m_mainWindow = (name != 0 && std::string(name).length() != 0);
     
+    setAutoFillBackground(true);
     setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
 
     // Always snap loop extents to beats; by default apply no snap to
