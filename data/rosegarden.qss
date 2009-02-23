@@ -241,8 +241,13 @@ Rosegarden--MatrixView QMenu::item:selected,
     color: #FFFFFF;
 } 
 
+/*
+#View QLabel
+{
+    background-color: transparent;
+    color: #FFFFFF;
+}
 
-/* The track buttons are under the View, and need special overrides */
 #TRACK_BUTTONS QWidget
 {
     background-color: #DDDDDD;
@@ -251,33 +256,20 @@ Rosegarden--MatrixView QMenu::item:selected,
     selection-color: yellow;
 }
 
-#TRACK_LABEL QWidget
+#InstrumentLabel QWidget,
+#TrackLabel QWidget
 {
     background-color: #DDDDDD;
-    selection-background-color: blue;
-    selection-color: yellow;
-}
-
-#TRACK_LABEL QWidget QLabel
-{
     color: #000000;
 }
 
-#TRACK_LABEL QDialog
+#InstrumentLabelSelected QWidget,
+#TrackLabelSelected QWidget
 {
     background-color: red;
-}
-
-#SELECTED_LABEL QWidget
-{
-    background-color: purple;
-}
-
-#View QLabel
-{
-    background-color: #ABCDEF;
     color: #FFFFFF;
-}
+}*/
+
 
 
 /*  QAbstractScrollArea.
@@ -949,10 +941,15 @@ QWidget#LED
     background-color: transparent;
 }
 
-QWidget#MATRIX
+QWidget#FADER
+{
+    background-color: transparent;
+}
+
+/*QWidget#MATRIX
 {
     background-color: #000000;
-}
+}*/
 
 /* the audio and MIDI mixer windows */
 /* (actually only affects audio, because the MIDI mixer window is more
@@ -983,6 +980,7 @@ can be used to control the spacing between the text and indicator. */
 QGroupBox,
 #View QGroupBox,
 #App QGroupBox,
+#App QWidget QGroupBox,
 #RosegardenParameterArea QGroupBox
 {
     background: #404040;
@@ -997,6 +995,7 @@ QGroupBox,
 QGroupBox::title,
 #View QGroupBox::title,
 #App QGroupBox:title,
+#App QWidget QGroupBox:title,
 #RosegardenParameterArea QGroupBox::title
 {
     color: #FFFFFF;
@@ -1062,6 +1061,7 @@ QWidget#tempoview QPushButton,
 #App QPushButton,
 QGroupBox QPushButton,
 #App QGroupBox QPushButton,
+#App QWidget QPushButton,
 #RosegardenParameterArea QPushButton
 {
     border: 1px solid #AAAAAA;
@@ -1078,6 +1078,7 @@ Rosegarden--MatrixView QPushButton:hover,
 #tempoview QPushButton:hover,
 #View QPushButton:hover,
 #App QPushButton:hover, 
+#App QWidget QPushButton:hover,
 QGroupBox QPushButton:hover,
 #App QGroupBox QPushButton:hover,
 #RosegardenParameterArea QPushButton:hover 
@@ -1091,12 +1092,14 @@ QGroupBox QPushButton:hover,
 
 QPushButton::checked,
 QPushButton::pressed,
-#MinorDialog QPushButton::checked,
-#MinorDialog QPushButton::pressed,
+/*#MinorDialog QPushButton::checked,
+#MinorDialog QPushButton::pressed,*/
 #tempoview QPushButton::checked,
 #tempoview QPushButton::pressed,
 #App QPushButton::checked,
 #App QPushButton::pressed,
+#App QWidget QPushButton::checked,
+#App QWidget QPushButton::pressed,
 #View QPushButton::checked,
 #View QPushButton::pressed,
 #RosegardenParameterArea
@@ -1119,9 +1122,10 @@ the widget. The arrow mark inside the drop-down button can be styled using the
 contents rectangle of the drop-down subcontrol. */
 
 QComboBox,
-#MinorDialog QComboBox,
+/*#MinorDialog QComboBox,*/
 #View QComboBox,
 #App QComboBox,
+#App QWidget QComboBox,
 #RosegardenParameterArea QComboBox
 {
     border: 1px solid #AAAAAA;
@@ -1133,6 +1137,8 @@ QComboBox,
 
 QComboBox:hover,
 QComboBox::drop-down:hover,
+#App QWidget QComboBox:hover,
+#App QWidget QComboBox::drop-down:hover,
 #RosegardenParameterArea QComboBox:hover,
 #RosegardenParameterArea QComboBox::drop-down:hover
 {
@@ -1140,21 +1146,30 @@ QComboBox::drop-down:hover,
 }
 
 QComboBox::editable,
-#MinorDialog QComboBox::editable,
+/*#MinorDialog QComboBox::editable,*/
 #View QComboBox::editable,
 #App QComboBox::editable,
+#App QWidget QComboBox::editable,
 #RosegardenParameterArea QComboBox:editable
 {
     background-color: orange;
 }
 
+QComboBox::!editable,
+QComboBox::drop-down:!editable,
+#App QWidget QComboBox::!editable,
+#App QWidget QComboBox::drop-down:!editable,
 #RosegardenParameterArea QComboBox:!editable,
-#RosegardenParameterArea QComboBox::drop-down:editable
+#RosegardenParameterArea QComboBox::drop-down:!editable
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
 }
 
 /* QComboBox gets the "on" state when the popup is open */
+QComboBox::!editable:on,
+QComboBox::drop-down:editable:on
+#App QWidget QComboBox::!editable:on,
+#App QWidget QComboBox::drop-down:editable:on,
 #RosegardenParameterArea QComboBox:!editable:on,
 #RosegardenParameterArea QComboBox::drop-down:editable:on
 {
@@ -1162,6 +1177,7 @@ QComboBox::editable,
 }
 
 QComboBox::on,
+#App QWidget QComboBox::on,
 #RosegardenParameterArea QComboBox:on
 { /* shift the text when the popup opens */
     padding-top: 3px;
@@ -1169,6 +1185,7 @@ QComboBox::on,
 }
 
 QComboBox::drop-down,
+#App QWidget QComboBox::drop-down,
 #RosegardenParameterArea QComboBox::drop-down
 {
     subcontrol-origin: padding;
@@ -1183,12 +1200,14 @@ QComboBox::drop-down,
 }
 
 QComboBox::down-arrow,
+#App QWidget QComboBox::down-arrow,
 #RosegardenParameterArea QComboBox::down-arrow
 {
     image: url(:pixmaps/style/arrow-down-small.png);
 }
 
 QComboBox::down-arrow:on,
+#App QWidget QComboBox::down-arrow:on,
 #RosegardenParameterArea QComboBox::down-arrow:on
 {
     top: 1px;
@@ -1199,6 +1218,7 @@ QComboBox::down-arrow:on,
 descendant selector: */
 
 QComboBox QAbstractItemView,
+#App QWidget QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
     border: 2px solid darkgray;
@@ -1207,19 +1227,19 @@ QComboBox QAbstractItemView,
     color: #EEEEEE;
 }
 
-#RosegardenParameterArea QWidget#SQUEEZED
+QWidget#SQUEEZED
 {
     background-color: transparent;
     color: #FFFFFF;
 }
 
-#RosegardenParameterArea QLabel#SPECIAL_LABEL
+QWidget#SPECIAL_LABEL
 {
     color: #000000;
     background-color: #999999;
 }
 
-#RosegardenParameterArea QFrame
+/*#RosegardenParameterArea QFrame
 {
     background-color: transparent;
 }
@@ -1244,7 +1264,7 @@ QComboBox QAbstractItemView,
 #RosegardenParameterArea QWidget#ROTARY_LABEL
 {
     background-color: transparent;
-}
+}*/
 
 
 

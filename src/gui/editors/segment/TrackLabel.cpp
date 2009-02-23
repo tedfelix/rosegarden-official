@@ -50,7 +50,7 @@ TrackLabel::TrackLabel(TrackId id,
         m_id(id),
         m_position(position)
 {
-    this->setObjectName( name );
+    this->setObjectName(name);
     
     QFont font;
     font.setPointSize(font.pointSize() * 95 / 100);
@@ -60,18 +60,14 @@ TrackLabel::TrackLabel(TrackId id,
     m_instrumentLabel->setFont(font);
     m_trackLabel->setFont(font);
 
-    // style
-    m_instrumentLabel->setObjectName("TRACK_LABEL");
-    m_trackLabel->setObjectName("TRACK_LABEL");
-
     m_instrumentLabel->setAutoFillBackground(true);
     m_trackLabel->setAutoFillBackground(true);
     
     this->setLayout( new QHBoxLayout() );
         layout()->setMargin(0);
     
-    m_instrumentLabel->setObjectName( "InstrumentLabel" );
-    m_trackLabel->setObjectName( "TrackLabel" );
+    m_instrumentLabel->setObjectName("InstrumentLabel");
+    m_trackLabel->setObjectName("TrackLabel");
     
     layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
     layout()->addWidget(m_trackLabel);            //, ShowTrack);
@@ -152,7 +148,8 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_trackLabel->foregroundRole(), palette().highlightedText());
     
         // if we have an active stylesheet
-        m_instrumentLabel->setObjectName("SELECTED_LABEL");
+//        m_instrumentLabel->setObjectName("InstrumentLabelSelected");
+//        m_trackLabel->setObjectName("TrackLabelSelected");
 
     } else {
         m_selected = false;
@@ -162,7 +159,8 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_trackLabel->backgroundRole(), palette().background());
         pal.setColor(m_trackLabel->foregroundRole(), palette().text());
 
-        m_instrumentLabel->setObjectName("TRACK_LABEL");
+//        m_instrumentLabel->setObjectName("InstrumentLabel");
+//        m_trackLabel->setObjectName("TrackLabel");
     }
 
     m_instrumentLabel->setPalette(pal);
