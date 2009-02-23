@@ -28,6 +28,7 @@ QWidget
     color: #FFFFFF; /* undocumented, but it works, and it's necessary */
 }
 
+
 /* Sets background to same color as text background, but pixmap is currently
  * missing, because the global black always kills a background pixmap.
  */
@@ -246,7 +247,7 @@ Rosegarden--MatrixView QMenu::item:selected,
 {
     background-color: transparent;
     color: #FFFFFF;
-}
+}*/
 
 #TRACK_BUTTONS QWidget
 {
@@ -268,7 +269,13 @@ Rosegarden--MatrixView QMenu::item:selected,
 {
     background-color: red;
     color: #FFFFFF;
-}*/
+}
+
+#TrackButtonFrame QFrame
+{
+/*    background-color: none;*/
+    color: red;
+}
 
 
 

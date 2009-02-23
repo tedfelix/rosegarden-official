@@ -142,6 +142,7 @@ TrackButtons::makeButtons()
 
         if (track) {
             QFrame *trackHBox = makeButton(track->getId());
+            trackHBox->setObjectName("TrackButtonFrame");
 
             if (trackHBox) {
                 m_layout->addWidget(trackHBox);

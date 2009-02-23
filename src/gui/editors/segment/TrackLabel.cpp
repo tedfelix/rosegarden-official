@@ -146,10 +146,6 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_instrumentLabel->foregroundRole(), palette().highlightedText());
         pal.setColor(m_trackLabel->backgroundRole(), palette().highlight());
         pal.setColor(m_trackLabel->foregroundRole(), palette().highlightedText());
-    
-        // if we have an active stylesheet
-//        m_instrumentLabel->setObjectName("InstrumentLabelSelected");
-//        m_trackLabel->setObjectName("TrackLabelSelected");
 
     } else {
         m_selected = false;
@@ -159,8 +155,6 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_trackLabel->backgroundRole(), palette().background());
         pal.setColor(m_trackLabel->foregroundRole(), palette().text());
 
-//        m_instrumentLabel->setObjectName("InstrumentLabel");
-//        m_trackLabel->setObjectName("TrackLabel");
     }
 
     m_instrumentLabel->setPalette(pal);
