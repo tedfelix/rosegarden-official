@@ -44,14 +44,14 @@ TrackLabel::TrackLabel(TrackId id,
                        int position,
                        QWidget *parent,
                        const char *name):
-		QStackedWidget(parent),
+        QStackedWidget(parent),
         m_instrumentLabel(new QLabel(this)),
         m_trackLabel(new QLabel(this)),
         m_id(id),
         m_position(position)
 {
-	this->setObjectName( name );
-	
+    this->setObjectName( name );
+    
     QFont font;
     font.setPointSize(font.pointSize() * 95 / 100);
     if (font.pixelSize() > 14)
@@ -66,19 +66,19 @@ TrackLabel::TrackLabel(TrackId id,
 
     m_instrumentLabel->setAutoFillBackground(true);
     m_trackLabel->setAutoFillBackground(true);
-	
-	this->setLayout( new QHBoxLayout() );
+    
+    this->setLayout( new QHBoxLayout() );
         layout()->setMargin(0);
-	
-	m_instrumentLabel->setObjectName( "InstrumentLabel" );
-	m_trackLabel->setObjectName( "TrackLabel" );
-	
-    layout()->addWidget(m_instrumentLabel);		//, ShowInstrument);
-	layout()->addWidget(m_trackLabel);			//, ShowTrack);
-	
-// 	raiseWidget(ShowTrack);
-	setCurrentWidget( m_trackLabel );
-	
+    
+    m_instrumentLabel->setObjectName( "InstrumentLabel" );
+    m_trackLabel->setObjectName( "TrackLabel" );
+    
+    layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
+    layout()->addWidget(m_trackLabel);            //, ShowTrack);
+    
+//     raiseWidget(ShowTrack);
+    setCurrentWidget( m_trackLabel );
+    
     m_instrumentLabel->setFrameShape(QFrame::NoFrame);
     m_trackLabel->setFrameShape(QFrame::NoFrame);
 
@@ -128,14 +128,14 @@ void TrackLabel::clearAlternativeLabel()
 
 void TrackLabel::showLabel(InstrumentTrackLabels l)
 {
-// 	raiseWidget(l);
-	if( l == ShowTrack ){
-		setCurrentWidget( m_trackLabel );
-		
-	} else if( l == ShowInstrument ){
-		setCurrentWidget( m_instrumentLabel );
-		
-	}
+//     raiseWidget(l);
+    if( l == ShowTrack ){
+        setCurrentWidget( m_trackLabel );
+        
+    } else if( l == ShowInstrument ){
+        setCurrentWidget( m_instrumentLabel );
+        
+    }
 }
 
 void
@@ -150,6 +150,9 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_instrumentLabel->foregroundRole(), palette().highlightedText());
         pal.setColor(m_trackLabel->backgroundRole(), palette().highlight());
         pal.setColor(m_trackLabel->foregroundRole(), palette().highlightedText());
+    
+        // if we have an active stylesheet
+        m_instrumentLabel->setObjectName("SELECTED_LABEL");
 
     } else {
         m_selected = false;
@@ -158,14 +161,16 @@ TrackLabel::setSelected(bool on)
         pal.setColor(m_instrumentLabel->foregroundRole(), palette().text());
         pal.setColor(m_trackLabel->backgroundRole(), palette().background());
         pal.setColor(m_trackLabel->foregroundRole(), palette().text());
+
+        m_instrumentLabel->setObjectName("TRACK_LABEL");
     }
 
     m_instrumentLabel->setPalette(pal);
     m_trackLabel->setPalette(pal);
 
-    if( currentWidget() ){
+    if (currentWidget()){
         currentWidget()->update();
-	}
+    }
 }
 
 void
@@ -214,14 +219,14 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     bool ok = false;
 
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
-
+    
     QString newText = QInputDialog::getText(this,
-										   tr("Change track name"),
-                                            tr("Enter new track name"),
-													QLineEdit::Normal,
-                                            m_trackLabel->text(),
-                                            &ok
-										   );
+                                           tr("Change track name"),
+                                           tr("Enter new track name"),
+                                           QLineEdit::Normal,
+                                           m_trackLabel->text(),
+                                           &ok
+                                           );
 //                                             &validator);
 
     if ( ok )

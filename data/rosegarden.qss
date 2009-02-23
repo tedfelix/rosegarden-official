@@ -70,15 +70,24 @@ QDockWidget::float-button
  * transparent, because this allows the overrides for the track buttons and
  * whatnot to show through.
  */
-#View QWidget
+/*#View QWidget
 {
-/*    background-color: transparent;*/
+    background-color: transparent;
+}*/
+
+/*#View QWidget > QWidget > QWidget > QWidget
+{
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
+    color: #000000;
 }
 
-#View QWidget > QWidget > QWidget
+
+#View QWidget > QWidget > QWidget > QWidget > QWidget
 {
-    background-color: purple;
-}
+    background-color: #000000;
+    color: #000000;
+}*/
+
 
 #View QDialog QWidget,
 #MinorDialog QWidget,
@@ -234,25 +243,39 @@ Rosegarden--MatrixView QMenu::item:selected,
 
 
 /* The track buttons are under the View, and need special overrides */
-#View QWidget#TRACK_BUTTONS
+#TRACK_BUTTONS QWidget
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
-    color: black;
+    background-color: #DDDDDD;
+    color: #000000;
     selection-background-color: blue;
     selection-color: yellow;
 }
 
-#View QWidget#TRACK_LABEL
+#TRACK_LABEL QWidget
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
-    color: white;
+    background-color: #DDDDDD;
     selection-background-color: blue;
     selection-color: yellow;
+}
+
+#TRACK_LABEL QWidget QLabel
+{
+    color: #000000;
+}
+
+#TRACK_LABEL QDialog
+{
+    background-color: red;
+}
+
+#SELECTED_LABEL QWidget
+{
+    background-color: purple;
 }
 
 #View QLabel
 {
-    background: transparent;
+    background-color: #ABCDEF;
     color: #FFFFFF;
 }
 
@@ -1032,8 +1055,10 @@ customized using the :open and :closed pseudo-states. */
 QPushButton,
 Rosegarden--MatrixView QPushButton,
 #MinorDialog QPushButton,
-#tempoview QWidget QPushButton,
+#tempoview QPushButton,
+QWidget#tempoview QPushButton,
 #View QPushButton,
+#View QDialog QPushButton,
 #App QPushButton,
 QGroupBox QPushButton,
 #App QGroupBox QPushButton,
