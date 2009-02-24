@@ -5697,14 +5697,15 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 
     if (transport) {
 		
-		//### check shortcuts:
-		sc_tmp = new QShortcut( QKeySequence(Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
-		//sc_tmp = m_jumpToQuickMarkerAction->shortcut();
-		connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()) );
+        // Should not use just Qt::Key_M, because it is used for "Open in MatrixView"
+        // Are these needed, because we also have "Ctrl + 1" ... "Ctrl + 9" and "1" ... "9"
+        sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
+        //sc_tmp = m_jumpToQuickMarkerAction->shortcut();
+        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()) );
 		
-		sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
-		//sc_tmp = m_setQuickMarkerAction->shortcut();
-		connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()) );
+        sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
+        //sc_tmp = m_setQuickMarkerAction->shortcut();
+        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()) );
 		
 
         connect(transport->PlayButton(),
