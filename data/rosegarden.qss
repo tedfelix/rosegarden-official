@@ -229,7 +229,7 @@ QMenu::item:selected,
 #App QMenu::item:selected,
 #View QMenu::item:selected
 {
-    background-color: #2CD0FC;
+    background-color: #C0D8FF;
     color: #FFFFFF;
 } 
 
@@ -527,7 +527,7 @@ QMenuBar::item:selected,
 #tempoview QMenuBar::item:selected,
 #App QMenuBar::item:selected
 {
-    background: #2CD0FC;
+    background: #C0D8FF;
 }
 
 QMenuBar::item:pressed,
@@ -1028,18 +1028,18 @@ For QPushButton with a menu, the menu indicator is styled using the
 ::menu-indicator subcontrol. Appearance of checkable push buttons can be
 customized using the :open and :closed pseudo-states. */
 
-QPushButton,
-#MatrixView QPushButton,
-#MinorDialog QPushButton,
-#tempoview QPushButton,
-QWidget#tempoview QPushButton,
-#View QPushButton,
-#View QDialog QPushButton,
-#App QPushButton,
-QInputDialog QPushButton,
-QGroupBox QPushButton,
-#App QGroupBox QPushButton,
-#App QWidget QPushButton,
+QPushButton::enabled,
+#MatrixView QPushButton::enabled,
+#MinorDialog QPushButton::enabled,
+#tempoview QPushButton::enabled,
+QWidget#tempoview QPushButton::enabled,
+#View QPushButton::enabled,
+#View QDialog QPushButton::enabled,
+#App QPushButton::enabled,
+QInputDialog QPushButton::enabled,
+QGroupBox QPushButton::enabled,
+#App QGroupBox QPushButton::enabled,
+#App QWidget QPushButton::enabled,
 #RosegardenParameterArea QPushButton
 {
     border: 1px solid #AAAAAA;
@@ -1214,7 +1214,7 @@ QInputDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
     border: 2px solid darkgray;
-    selection-background-color: #2CD0FC;
+    selection-background-color: #C0D8FF;
     background-color: darkgray;
     color: #EEEEEE;
 }
@@ -1275,10 +1275,27 @@ QToolTip,
 }
 
 
+/* Give the non-LED parts of the dialog the groupbox "lighter black" background
+ * for improved constrast, and set foreground color to "LED blue" as used
+ * elsewhere
+ */
+#RosegardenTransport QWidget
+{
+    background-color: #404040;
+    color: #C0D8FF;
+}
+
+#RosegardenTransport QFrame QWidget
+{
+    background-color: #000000;
+}
+
+
 /* Transport buttons are styled independently, with a smaller radius and a
  * lighter "pressed" state
  */
-#RosegardenTransport QPushButton
+#RosegardenTransport QPushButton::enabled,
+#RosegardenTransport QFrame QWidget QPushbutton
 {
     border: 1px solid #AAAAAA;
     border-radius: 2px;
@@ -1286,6 +1303,7 @@ QToolTip,
     min-width: 0;
 }
 
+#RosegardenTransport QFrame QWidget QPushbutton:hover,
 #RosegardenTransport QPushButton:hover
 {
     border: 1px solid #AAAAAA;
@@ -1295,6 +1313,8 @@ QToolTip,
     min-width: 0;
 }
 
+#RosegardenTransport QFrame QWidget QPushbutton:checked,
+#RosegardenTransport QFrame QWidget QPushbutton:pressed,
 #RosegardenTransport QPushButton::checked,
 #RosegardenTransport QPushButton::pressed
 {
