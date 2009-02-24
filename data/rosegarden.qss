@@ -106,8 +106,8 @@ QToolBar::top,
 QToolBar::bottom,
 #App QToolBar::top,
 #App QToolBar::bottom,
-Rosegarden--MatrixView QToolBar::top,
-Rosegarden--MatrixView QToolBar::bottom,
+#MatrixView QToolBar::top,
+#MatrixView QToolBar::bottom,
 #tempoview QToolBar::top,
 #tempoview QToolBar::bottom
 {
@@ -119,8 +119,8 @@ QToolBar::left,
 QToolBar::right,
 #App QToolBar::left,
 #App QToolBar::right,
-Rosegarden--MatrixView QToolBar::left,
-Rosegarden--MatrixView QToolBar::right,
+#MatrixView QToolBar::left,
+#MatrixView QToolBar::right,
 #tempoview QToolBar::left,
 #tempoview QToolBar::right
 {
@@ -135,16 +135,16 @@ QToolBar::top QLabel,
 QToolBar::bottom QLabel,
 #App QToolBar::top QLabel,
 #App QToolBar::bottom QLabel,
-Rosegarden--MatrixView QToolBar::top QLabel,
-Rosegarden--MatrixView QToolBar::bottom QLabel,
+#MatrixView QToolBar::top QLabel,
+#MatrixView QToolBar::bottom QLabel,
 #tempoview QToolBar::top QLabel,
 #tempoview QToolBar::bottom QLabel,
 QToolBar::left QLabel,
 QToolBar::right QLabel,
 #App QToolBar::left QLabel,
 #App QToolBar::right QLabel,
-Rosegarden--MatrixView QToolBar::left QLabel,
-Rosegarden--MatrixView QToolBar::right QLabel,
+#MatrixView QToolBar::left QLabel,
+#MatrixView QToolBar::right QLabel,
 #tempoview QToolBar::left QLabel,
 #tempoview QToolBar::right QLabel
 {
@@ -154,7 +154,7 @@ Rosegarden--MatrixView QToolBar::right QLabel,
 
 QToolBar::handle,
 #tempoview QToolBar::handle,
-Rosegarden--MatrixView QToolBar::handle,
+#MatrixView QToolBar::handle,
 #App QToolBar::handle
 {
     image: url(:/pixmaps/style/htoolbar-separator.png);
@@ -178,7 +178,7 @@ QLabel,
 #View QLabel,
 #MinorDialog QLabel,
 #tempoview QLabel,
-Rosegarden--MatrixView QLabel,
+#MatrixView QLabel,
 #RosegardenParameterArea QLabel,
 #App QLabel
 {
@@ -199,7 +199,7 @@ styled using the ::tear-off. */
 
 QMenu,
 #tempoview QMenu,
-Rosegarden--MatrixView QMenu,
+#MatrixView QMenu,
 #App QMenu,
 #View QMenu
 {
@@ -209,7 +209,7 @@ Rosegarden--MatrixView QMenu,
 
 QMenu::item,
 #tempoview QMenu::item,
-Rosegarden--MatrixView QMenu::item,
+#MatrixView QMenu::item,
 #App QMenu::item,
 #View QMenu::item
 {
@@ -225,7 +225,7 @@ Rosegarden--MatrixView QMenu::item,
  */
 QMenu::item:selected,
 #tempoview QMenu::item:selected,
-Rosegarden--MatrixView QMenu::item:selected,
+#MatrixView QMenu::item:selected,
 #App QMenu::item:selected,
 #View QMenu::item:selected
 {
@@ -923,7 +923,7 @@ QWidget#LED
     background-color: transparent;
 }
 
-/*QWidget#MATRIX
+/*QWidget##MatrixView
 {
     background-color: #000000;
 }*/
@@ -1029,7 +1029,7 @@ For QPushButton with a menu, the menu indicator is styled using the
 customized using the :open and :closed pseudo-states. */
 
 QPushButton,
-Rosegarden--MatrixView QPushButton,
+#MatrixView QPushButton,
 #MinorDialog QPushButton,
 #tempoview QPushButton,
 QWidget#tempoview QPushButton,
@@ -1051,7 +1051,7 @@ QGroupBox QPushButton,
 }
 
 QPushButton:hover,
-Rosegarden--MatrixView QPushButton:hover,
+#MatrixView QPushButton:hover,
 #MinorDialog QPushButton:hover,
 #tempoview QPushButton:hover,
 #View QPushButton:hover,

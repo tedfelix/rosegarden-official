@@ -724,9 +724,9 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 
     if (m_currentMode == BarMetronomeMode && unit < 2) {
         if (beat == 1) {
-            slotSetBackground(QColor(Qt::red));
+            slotSetBackground("red");
         } else {
-            slotSetBackground(QColor(Qt::cyan));
+            slotSetBackground("cyan");
         }
     } else {
         slotResetBackground();
@@ -1132,35 +1132,24 @@ TransportDialog::slotEditTime()
 }
 
 void
-TransportDialog::slotSetBackground(QColor c)
+TransportDialog::slotSetBackground(QString c)
 {
     if (!m_haveOriginalBackground) {
-        m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+        //m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+        m_originalBackground = "black";
         m_haveOriginalBackground = true;
     }
 
-    m_transport->LCDBoxFrame->setPaletteBackgroundColor(c);
-    m_transport->NegativePixmap->setPaletteBackgroundColor(c);
-    m_transport->TenHoursPixmap->setPaletteBackgroundColor(c);
-    m_transport->UnitHoursPixmap->setPaletteBackgroundColor(c);
-    m_transport->TimeDisplayLabel->setPaletteBackgroundColor(c);
+    QString localStyle = "QWidget { background-color: " + c + "; }";
 
-    /* this is a bit more thorough, but too slow and flickery:
-     
-    const QObjectList *children = m_transport->LCDBoxFrame->children();
-    QObjectListIt it(*children);
-    QObject *obj;
-     
-    while ((obj = it.current()) != 0) {
-     
-    QWidget *w = dynamic_cast<QWidget *>(obj);
-    if (w) {
-    w->setPaletteBackgroundColor(c);
-    }
-    ++it;
-    }
-     
-    */
+    // The upshot of stylesheets is we only have to set the style on this one
+    // widget now.  It hits the area behind the SIG, DIV and TEMPO panels, which
+    // didn't flash before.  My read of the code is that they weren't flashing
+    // because there was too much overhead hunting them down and setting all
+    // their palettes individually.  I redid the LCD pixmaps (actually these are
+    // LEDs aren't they?) with transparent backgrounds, and now the whole thing
+    // flashes evenly.  I like it. (dmm)
+    m_transport->LCDBoxFrame->setStyleSheet(localStyle);
 
     m_isBackgroundSet = true;
 }

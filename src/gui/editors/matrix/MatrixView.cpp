@@ -194,15 +194,13 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	m_zoomToolBar->setMinimumHeight( 32 );
 	m_zoomToolBar->setMinimumWidth( 80 );
 */	
-        // set the styling name for the matrix
-	setObjectName("MATRIX");
+	setObjectName("MatrixView");
 
 	m_dockLeft = new QDockWidget( tr("Instrument Parameters"),  this );
 	m_dockLeft->setAllowedAreas( Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea );
 	m_dockLeft->setFeatures( QDockWidget::AllDockWidgetFeatures );
 
-        // set the styling name for the dock
-        m_dockLeft->setObjectName("DOCK");
+        m_dockLeft->setObjectName("RosegardenParameterArea");
 
 	// set min/max size for InstrumentPanelWidget instead
 // 	m_dockLeft->setMaximumSize( 300, 460 );

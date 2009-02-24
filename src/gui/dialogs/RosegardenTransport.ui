@@ -2538,7 +2538,7 @@
     </property>
     <property name="icon" >
      <iconset resource="../../../data/data.qrc" >
-      <normaloff>:/pixmaps/transport/button-loop-2.xpm</normaloff>:/pixmaps/transport/button-loop-2.xpm</iconset>
+      <normaloff>:/pixmaps/transport/button-loop-3.png</normaloff>:/pixmaps/transport/button-loop-3.png</iconset>
     </property>
     <property name="iconSize" >
      <size>
@@ -3036,7 +3036,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3055,7 +3055,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-colon.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-colon.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3074,7 +3074,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3093,7 +3093,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3112,7 +3112,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3131,7 +3131,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3150,7 +3150,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3169,7 +3169,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led--.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led--.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -3188,7 +3188,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -6011,7 +6011,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -6030,7 +6030,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-colon.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-colon.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -6087,7 +6087,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
@@ -6106,7 +6106,7 @@
       </rect>
      </property>
      <property name="pixmap" stdset="0" >
-      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.xpm</pixmap>
+      <pixmap resource="../../../data/data.qrc" >:/pixmaps/transport/led-0.png</pixmap>
      </property>
      <property name="scaledContents" stdset="0" >
       <bool>true</bool>
