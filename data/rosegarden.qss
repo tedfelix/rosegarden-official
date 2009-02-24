@@ -28,15 +28,6 @@ QWidget
     color: #FFFFFF; /* undocumented, but it works, and it's necessary */
 }
 
-
-/* Sets background to same color as text background, but pixmap is currently
- * missing, because the global black always kills a background pixmap.
- */
-#Splash QWidget
-{
-    background-color: purple;
-}
-
 QMainWindow::separator
 {
     width: 5px; /* when vertical */
@@ -253,29 +244,20 @@ Rosegarden--MatrixView QMenu::item:selected,
 {
     background-color: #DDDDDD;
     color: #000000;
-    selection-background-color: blue;
-    selection-color: yellow;
 }
 
-#InstrumentLabel QWidget,
-#TrackLabel QWidget
+/*#TrackButtonFrame QFrame
 {
-    background-color: #DDDDDD;
-    color: #000000;
-}
-
-#InstrumentLabelSelected QWidget,
-#TrackLabelSelected QWidget
-{
-    background-color: red;
-    color: #FFFFFF;
-}
-
-#TrackButtonFrame QFrame
-{
-/*    background-color: none;*/
     color: red;
-}
+}*/
+
+/*QInputDialog QLabel,
+#View QInputDialog QLabel
+{
+    background-color: transparent;
+    color #FFFFFF;
+}*/
+
 
 
 
@@ -490,19 +472,6 @@ Sub-control. */
 QHeaderView
 {
     color: #FFFFFF;
-}
-
-
-/*  QLineEdit
-
-Supports the box model.  The color and background of the selected item is styled
-using selection-color and selection-background-color respectively.  The password
-character can be styled using the lineedit-password-character property. */
-
-QLineEdit
-{
-    background-color: pink;
-    color: purple;
 }
 
 
@@ -931,6 +900,7 @@ QTreeView,
 #View QTreeView
 {
     background-color: #FFFFFF;
+    color: #000000;
 }
 
 #View QTreeView QLabel
@@ -948,7 +918,7 @@ QWidget#LED
     background-color: transparent;
 }
 
-QWidget#FADER
+#Fader
 {
     background-color: transparent;
 }
@@ -1066,6 +1036,7 @@ QWidget#tempoview QPushButton,
 #View QPushButton,
 #View QDialog QPushButton,
 #App QPushButton,
+QInputDialog QPushButton,
 QGroupBox QPushButton,
 #App QGroupBox QPushButton,
 #App QWidget QPushButton,
@@ -1086,6 +1057,7 @@ Rosegarden--MatrixView QPushButton:hover,
 #View QPushButton:hover,
 #App QPushButton:hover, 
 #App QWidget QPushButton:hover,
+QInputDialog QPushButton:hover,
 QGroupBox QPushButton:hover,
 #App QGroupBox QPushButton:hover,
 #RosegardenParameterArea QPushButton:hover 
@@ -1107,6 +1079,8 @@ QPushButton::pressed,
 #App QPushButton::pressed,
 #App QWidget QPushButton::checked,
 #App QWidget QPushButton::pressed,
+QInputDialog QPushButton::checked,
+QInputDialog QPushButton:pressed,
 #View QPushButton::checked,
 #View QPushButton::pressed,
 #RosegardenParameterArea
@@ -1133,6 +1107,7 @@ QComboBox,
 #View QComboBox,
 #App QComboBox,
 #App QWidget QComboBox,
+QInputDialog QComboBox,
 #RosegardenParameterArea QComboBox
 {
     border: 1px solid #AAAAAA;
@@ -1146,6 +1121,8 @@ QComboBox:hover,
 QComboBox::drop-down:hover,
 #App QWidget QComboBox:hover,
 #App QWidget QComboBox::drop-down:hover,
+QInputDialog QComboBox:hover,
+QInputDialog QComboBox::drop-down:hover,
 #RosegardenParameterArea QComboBox:hover,
 #RosegardenParameterArea QComboBox::drop-down:hover
 {
@@ -1157,6 +1134,7 @@ QComboBox::editable,
 #View QComboBox::editable,
 #App QComboBox::editable,
 #App QWidget QComboBox::editable,
+QInputDialog QComboBox::edtiable,
 #RosegardenParameterArea QComboBox:editable
 {
     background-color: orange;
@@ -1166,6 +1144,7 @@ QComboBox::!editable,
 QComboBox::drop-down:!editable,
 #App QWidget QComboBox::!editable,
 #App QWidget QComboBox::drop-down:!editable,
+QInputDialog QComboBox::drop-down:!edtiable,
 #RosegardenParameterArea QComboBox:!editable,
 #RosegardenParameterArea QComboBox::drop-down:!editable
 {
@@ -1177,6 +1156,7 @@ QComboBox::!editable:on,
 QComboBox::drop-down:editable:on
 #App QWidget QComboBox::!editable:on,
 #App QWidget QComboBox::drop-down:editable:on,
+QInputDialog QComboBox::drop-down:edtiable:on,
 #RosegardenParameterArea QComboBox:!editable:on,
 #RosegardenParameterArea QComboBox::drop-down:editable:on
 {
@@ -1185,6 +1165,7 @@ QComboBox::drop-down:editable:on
 
 QComboBox::on,
 #App QWidget QComboBox::on,
+QInputDialog QComboBox::on,
 #RosegardenParameterArea QComboBox:on
 { /* shift the text when the popup opens */
     padding-top: 3px;
@@ -1193,6 +1174,7 @@ QComboBox::on,
 
 QComboBox::drop-down,
 #App QWidget QComboBox::drop-down,
+QInputDialog QComboBox::drop-down,
 #RosegardenParameterArea QComboBox::drop-down
 {
     subcontrol-origin: padding;
@@ -1208,6 +1190,7 @@ QComboBox::drop-down,
 
 QComboBox::down-arrow,
 #App QWidget QComboBox::down-arrow,
+QInputDialog QComboBox::down-arrow,
 #RosegardenParameterArea QComboBox::down-arrow
 {
     image: url(:pixmaps/style/arrow-down-small.png);
@@ -1215,6 +1198,7 @@ QComboBox::down-arrow,
 
 QComboBox::down-arrow:on,
 #App QWidget QComboBox::down-arrow:on,
+QInputDialog QComboBox::down-arrow:on,
 #RosegardenParameterArea QComboBox::down-arrow:on
 {
     top: 1px;
@@ -1226,6 +1210,7 @@ descendant selector: */
 
 QComboBox QAbstractItemView,
 #App QWidget QComboBox QAbstractItemView,
+QInputDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
     border: 2px solid darkgray;
@@ -1317,5 +1302,34 @@ QToolTip,
     border-radius: 1px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #DDDDDD, stop:1 #FFFFFF);
 }
+
+
+/*  QLineEdit
+
+Supports the box model.  The color and background of the selected item is styled
+using selection-color and selection-background-color respectively.  The password
+character can be styled using the lineedit-password-character property. */
+
+QLineEdit,
+#View QLineEdit QWidget
+{
+    background-color: pink;
+    color: purple;
+}
+
+QInputDialog,
+QInputDialog QWidget,
+#View QInputDialog,
+#View QInputDialog QWidget,
+#TrackLabel QInputDialog QWidget > QWidget,
+#RosegardenParameterArea QInputDialog QWidget > QWidget
+{
+    background-color: #000000;
+    color: #FFFFFF;
+    selection-color: #FFFFFF;
+    selection-background-color: #ABCDEF;
+}
+
+
 
 

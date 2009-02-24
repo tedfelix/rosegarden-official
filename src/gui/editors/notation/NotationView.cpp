@@ -155,7 +155,6 @@
 #include <QAction>
 #include <QComboBox>
 #include <QSettings>
-#include <QInputDialog>
 #include <QMessageBox>
 #include <QProcess>
 #include <QProgressBar>
@@ -191,6 +190,8 @@
 #include <QTemporaryFile>
 #include <QPrinter>
 #include <QPrintDialog>
+#include <QLineEdit>
+#include <QInputDialog>
 
 #include <list>
 #include <algorithm>
@@ -205,12 +206,12 @@ class NoteActionData
 public:
     NoteActionData();
     NoteActionData(const QString& _title,
-		   QString _actionName,
-		   QString _pixmapName,
-		   int _keycode,
-		   bool _rest,
-		   Note::Type _noteType,
-		   int _dots);
+           QString _actionName,
+           QString _pixmapName,
+           int _keycode,
+           bool _rest,
+           Note::Type _noteType,
+           int _dots);
     
     QString title;
     QString actionName;
@@ -233,12 +234,12 @@ NoteActionData::NoteActionData()
 }
 
 NoteActionData::NoteActionData(const QString& _title,
-			       QString _actionName,
-			       QString _pixmapName,
-			       int _keycode,
-			       bool _rest,
-			       Note::Type _noteType,
-			       int _dots)
+                   QString _actionName,
+                   QString _pixmapName,
+                   int _keycode,
+                   bool _rest,
+                   Note::Type _noteType,
+                   int _dots)
     : title(_title),
       actionName(_actionName),
       pixmapName(_pixmapName),
@@ -259,11 +260,11 @@ class NoteChangeActionData
 public:
     NoteChangeActionData();
     NoteChangeActionData(const QString &_title,
-			 QString _actionName,
-			 QString _pixmapName,
-			 int _keycode,
-			 bool _notationOnly,
-			 Note::Type _noteType);
+             QString _actionName,
+             QString _pixmapName,
+             int _keycode,
+             bool _notationOnly,
+             Note::Type _noteType);
 
     QString title;
     QString actionName;
@@ -284,11 +285,11 @@ NoteChangeActionData::NoteChangeActionData()
 }
 
 NoteChangeActionData::NoteChangeActionData(const QString& _title,
-					   QString _actionName,
-					   QString _pixmapName,
-					   int _keycode,
-					   bool _notationOnly,
-					   Note::Type _noteType)
+                       QString _actionName,
+                       QString _pixmapName,
+                       int _keycode,
+                       bool _notationOnly,
+                       Note::Type _noteType)
     : title(_title),
       actionName(_actionName),
       pixmapName(_pixmapName),
@@ -409,7 +410,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     initStatusBar();
 
 //     setBackgroundMode(PaletteBase);
-	setBackgroundRole( QPalette::Base );
+    setBackgroundRole( QPalette::Base );
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2);
@@ -436,7 +437,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_rawNoteRuler->show();
 
     // All toolbars should be created before this is called
-//     setAutoSaveSettings("NotationView", true);	//&&& FIX: save manually ??
+//     setAutoSaveSettings("NotationView", true);    //&&& FIX: save manually ??
 
     // All rulers must have been created before this is called,
     // or the program will crash
@@ -464,22 +465,22 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
 
      m_headersGroupView->setVScrollBarMode(Q3ScrollView::AlwaysOff);
      m_headersGroupView->setHScrollBarMode(Q3ScrollView::AlwaysOff);
-//	m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-//	m_headersGroupView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	
- 	m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
-//	m_headersGroupView->setFixedWidth( m_headersGroupView->widget()->width() );
-	m_canvasView->setLeftFixedWidget(m_headersGroupView);
+//    m_headersGroupView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    m_headersGroupView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    
+     m_headersGroupView->setFixedWidth(m_headersGroupView->contentsWidth());
+//    m_headersGroupView->setFixedWidth( m_headersGroupView->widget()->width() );
+    m_canvasView->setLeftFixedWidget(m_headersGroupView);
 
     // Add a close button just above the track headers.
     // The grid layout is only here to maintain the button in a
     // right place
     m_headersTopFrame = new QFrame(getCentralWidget());
     QGridLayout * headersTopGrid = new QGridLayout(m_headersTopFrame);
-	
+    
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 //     Q3CanvasPixmap pixmap(pixmapDir + "/misc/close.xpm");
-	
+    
     QPushButton * hideHeadersButton
         = new QPushButton(m_headersTopFrame);
     headersTopGrid->addWidget(hideHeadersButton, 1, 1,
@@ -705,7 +706,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     
     leaveActionState("rest_insert_tool_current");
     slotTestClipboard();
-	
+    
     if (getSegmentsOnlyRestsAndClefs()) {
         if (!m_selectDefaultNote) {
             std::cerr << "ERROR: No default note action available" << std::endl;
@@ -861,7 +862,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
 
 //     setBackgroundMode(PaletteBase);
-	setBackgroundRole( QPalette::Base );
+    setBackgroundRole( QPalette::Base );
 
     Q3Canvas *tCanvas = new Q3Canvas(this);
     tCanvas->resize(width() * 2, height() * 2); //!!!
@@ -1276,8 +1277,8 @@ void NotationView::positionStaffs()
 
             m_headersGroup->completeToHeight(canvas()->height());
 
- 			m_headersGroupView->addChild(m_headersGroup);
-//			m_headersGroupView->layout()->addWidget(m_headersGroup);
+             m_headersGroupView->addChild(m_headersGroup);
+//            m_headersGroupView->layout()->addWidget(m_headersGroup);
 
             getCanvasView()->updateLeftWidgetGeometry();
 
@@ -1428,10 +1429,10 @@ void NotationView::setOneToolbar(const char *actionName,
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
         return ;
     }
-// 	QWidget *toolbar = toolBar(toolbarName);
-	QWidget *toolbar = findChild<QToolBar*>( toolbarName );
-	
-	if (!toolbar) {
+//     QWidget *toolbar = toolBar(toolbarName);
+    QWidget *toolbar = findChild<QToolBar*>( toolbarName );
+    
+    if (!toolbar) {
         std::cerr << "WARNING: No such toolbar as " << toolbarName << std::endl;
         return ;
     }
@@ -1721,8 +1722,8 @@ void NotationView::setupActions()
 bool
 NotationView::isInChordMode()
 {
-	QAction* tac = findAction("chord_mode");
-	return tac->isChecked();
+    QAction* tac = findAction("chord_mode");
+    return tac->isChecked();
 //     return ((/* was toggle */ QAction *)actionCollection()->action("chord_mode"))->
 //            isChecked();
 }
@@ -1730,18 +1731,18 @@ NotationView::isInChordMode()
 bool
 NotationView::isInTripletMode()
 {
-	QAction* tac = findAction("triplet_mode");
-	return tac->isChecked();
-// 	return ((/* was toggle */ QAction *)actionCollection()->action("triplet_mode"))->
+    QAction* tac = findAction("triplet_mode");
+    return tac->isChecked();
+//     return ((/* was toggle */ QAction *)actionCollection()->action("triplet_mode"))->
 //            isChecked();
 }
 
 bool
 NotationView::isInGraceMode()
 {
-	QAction* tac = findAction("grace_mode");
-	return tac->isChecked();
-// 	return ((/* was toggle */ QAction *)actionCollection()->action("grace_mode"))->
+    QAction* tac = findAction("grace_mode");
+    return tac->isChecked();
+//     return ((/* was toggle */ QAction *)actionCollection()->action("grace_mode"))->
 //            isChecked();
 }
 
@@ -1775,9 +1776,9 @@ NotationView::setupFontSizeMenu(std::string oldFontName)
         if (!sizeAction) {
             sizeAction = createAction
                 (actionName, SLOT(slotChangeFontSizeFromStringValue()));
-// 			sizeAction->setText( tr("%n pixel(s)", "", sizes[i]));
-			sizeAction->setText( tr("%n pixel(s)", "", sizes[i]) );
-			sizeAction->setCheckable(true);
+//             sizeAction->setText( tr("%n pixel(s)", "", sizes[i]));
+            sizeAction->setText( tr("%n pixel(s)", "", sizes[i]) );
+            sizeAction->setCheckable(true);
         }
 
         sizeAction->setChecked(sizes[i] == m_fontSize);
@@ -1814,7 +1815,7 @@ bool NotationView::isCurrentStaff(int i)
 
 void NotationView::initLayoutToolbar()
 {
-// 	KToolBar *layoutToolbar = toolBar("Layout Toolbar");
+//     KToolBar *layoutToolbar = toolBar("Layout Toolbar");
     QToolBar *layoutToolbar = findToolbar("Layout Toolbar");
 
     if (!layoutToolbar) {
@@ -1880,10 +1881,10 @@ void NotationView::initLayoutToolbar()
     }
     // set combo's current value to default
     value.setNum(m_fontSize);
-// 	m_fontSizeCombo->setItemText(value);
- 	m_fontSizeCombo->setCurrentText(value);
-// 	m_fontSizeCombo->setCurrentIndex( m_fontSizeCombo->indexOf(value) );
-	
+//     m_fontSizeCombo->setItemText(value);
+     m_fontSizeCombo->setCurrentText(value);
+//     m_fontSizeCombo->setCurrentIndex( m_fontSizeCombo->indexOf(value) );
+    
     connect(m_fontSizeCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeFontSizeFromStringValue(const QString&)));
 
@@ -1907,9 +1908,9 @@ void NotationView::initLayoutToolbar()
     // set combo's current value to default
     value.setNum(defaultSpacing);
     value += "%";
-// 	m_spacingCombo->setItemText(value);
- 	m_spacingCombo->setCurrentText(value);
-// 	m_spacingCombo->setCurrentIndex( m_spacingCombo->indexOf(value) );
+//     m_spacingCombo->setItemText(value);
+     m_spacingCombo->setCurrentText(value);
+//     m_spacingCombo->setCurrentIndex( m_spacingCombo->indexOf(value) );
 
     connect(m_spacingCombo, SIGNAL(activated(const QString&)),
             this, SLOT(slotChangeSpacingFromStringValue(const QString&)));
@@ -1946,7 +1947,7 @@ void NotationView::initStatusBar()
 
     sb->showMessage(KTmpStatusMsg::getDefaultMsg(),
                    KTmpStatusMsg::getDefaultId() );
-	
+    
 //     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
 //                          AlignLeft | AlignVCenter);
 
@@ -2025,7 +2026,7 @@ NotationView::setPageMode(LinedStaff::PageMode pageMode)
     bool layoutApplied = applyLayout();
     if (!layoutApplied)
         /* was sorry */ 
-		QMessageBox::warning(this, "", "Couldn't apply layout");
+        QMessageBox::warning(this, "", "Couldn't apply layout");
     else {
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
             m_staffs[i]->markChanged();
@@ -2596,7 +2597,7 @@ bool
 NotationView::hasSegment(Segment *segment)
 {
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
-	if (segment == m_segments[i]) return true;
+    if (segment == m_segments[i]) return true;
     }
     return false;
 }
@@ -2700,10 +2701,10 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
             s->getLayoutCoordsForCanvasCoords(x, y);
 
         timeT t = m_hlayout->getTimeForX(coords.first);
-	// In order to find the correct starting and ending bar of the segment,
-	// make infinitesimal shifts (+1 and -1) towards its center.
-	timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[m_currentStaff]->getSegment().getStartTime()+1);
-	timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[m_currentStaff]->getSegment().getEndTime()-1);
+    // In order to find the correct starting and ending bar of the segment,
+    // make infinitesimal shifts (+1 and -1) towards its center.
+    timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[m_currentStaff]->getSegment().getStartTime()+1);
+    timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[m_currentStaff]->getSegment().getEndTime()-1);
         if (t >= t0 && t < t1) {
             return m_staffs[m_currentStaff];
         }
@@ -2718,12 +2719,12 @@ NotationView::getStaffForCanvasCoords(int x, int y) const
             LinedStaff::LinedStaffCoords coords =
                 s->getLayoutCoordsForCanvasCoords(x, y);
 
-	    timeT t = m_hlayout->getTimeForX(coords.first);
-	    // In order to find the correct starting and ending bar of the segment,
-	    // make infinitesimal shifts (+1 and -1) towards its center.
-	    timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[i]->getSegment().getStartTime()+1);
-	    timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[i]->getSegment().getEndTime()-1);
-	    if (t >= t0 && t < t1) {
+        timeT t = m_hlayout->getTimeForX(coords.first);
+        // In order to find the correct starting and ending bar of the segment,
+        // make infinitesimal shifts (+1 and -1) towards its center.
+        timeT t0 = getDocument()->getComposition().getBarStartForTime(m_staffs[i]->getSegment().getStartTime()+1);
+        timeT t1 = getDocument()->getComposition().getBarEndForTime(m_staffs[i]->getSegment().getEndTime()-1);
+        if (t >= t0 && t < t1) {
                 return m_staffs[i];
             }
         }
@@ -2764,23 +2765,23 @@ void NotationView::print(bool previewOnly)
             maxPageCount = pageCount;
     }
 
-	QPrinter printer( QPrinter::HighResolution );
-// 	printer.setPageSize( QPrinter::A4 );
-	printer.setPrintRange( QPrinter::AllPages );
-// 	printer.setColorMode( QPrinter::GrayScale );
-	
+    QPrinter printer( QPrinter::HighResolution );
+//     printer.setPageSize( QPrinter::A4 );
+    printer.setPrintRange( QPrinter::AllPages );
+//     printer.setColorMode( QPrinter::GrayScale );
+    
 //     printer.setPageSelection( QPrinter::ApplicationSide );
     printer.setMinMax(1, maxPageCount + 1);
 
     if (previewOnly)
-		printer.setResolution( QPrinter::ScreenResolution );
-		//printer.setPreviewOnly(true);
+        printer.setResolution( QPrinter::ScreenResolution );
+        //printer.setPreviewOnly(true);
     else if (!printer.setup((QWidget *)parent()))
         return ;
 
     Q3PaintDeviceMetrics pdm(&printer);
-// 	int pdm = this->depth();
-	
+//     int pdm = this->depth();
+    
     QPainter printpainter(&printer);
 
     // Ideally we should aim to retain the aspect ratio and to move the
@@ -2795,17 +2796,17 @@ void NotationView::print(bool previewOnly)
     printpainter.scale(ratio, ratio);
 
     //    printpainter.scale((double)pdm.width()  / (double)(pageWidth - leftMargin*2),
-    //		       (double)pdm.height() / (double)(pageHeight - topMargin*2));
+    //               (double)pdm.height() / (double)(pageHeight - topMargin*2));
     printpainter.translate( -leftMargin, -topMargin);
 
-	
-	QPrintDialog printDialog( & printer, this);
-	if( printDialog.exec() == QDialog::Accepted ){
+    
+    QPrintDialog printDialog( & printer, this);
+    if( printDialog.exec() == QDialog::Accepted ){
         // print ...
-	}
-	
-	//&&& re-implement printer
-	/*
+    }
+    
+    //&&& re-implement printer
+    /*
     QLinkedList<int> pages = printer.pageList();
 
     for (QLinkedList<int>::Iterator pli = pages.begin();
@@ -2897,8 +2898,8 @@ void NotationView::print(bool previewOnly)
             PixmapArrayGC::deleteAll();
         }
     }// end for page
-	*/
-	
+    */
+    
     for (size_t i = 0; i < m_staffs.size(); ++i) {
         for (Segment::iterator j = m_staffs[i]->getSegment().begin();
                 j != m_staffs[i]->getSegment().end(); ++j) {
@@ -2944,9 +2945,9 @@ NotationView::updateThumbnails(bool complete)
         thumbPainter.setBrush(QColor(Qt::white));
 
         /*
-        	Q3Canvas *canvas = getCanvasView()->canvas();
-        	canvas->drawArea(QRect(0, 0, canvas->width(), canvas->height()),
-        			 &thumbPainter, false);
+            Q3Canvas *canvas = getCanvasView()->canvas();
+            canvas->drawArea(QRect(0, 0, canvas->width(), canvas->height()),
+                     &thumbPainter, false);
         */ 
         // hide small texts, as we get a crash in Xft when trying to
         // render them at this scale
@@ -3112,11 +3113,11 @@ void NotationView::setMenuStates()
 }
 
 #define UPDATE_PROGRESS(n) \
-	progressCount += (n); \
-	if (progressTotal > 0) { \
-	    emit setValue(progressCount * 100 / progressTotal); \
-	    ProgressDialog::processEvents(); \
-	}
+    progressCount += (n); \
+    if (progressTotal > 0) { \
+        emit setValue(progressCount * 100 / progressTotal); \
+        ProgressDialog::processEvents(); \
+    }
 
 void NotationView::readjustCanvasSize()
 {
@@ -3198,7 +3199,7 @@ void NotationView::readjustCanvasSize()
     // Give a correct vertical alignment to track headers
     if ((m_pageMode == LinedStaff::LinearMode) && m_showHeadersGroup) {
         m_headersGroupView->setContentsPos( 0, getCanvasView()->contentsY() );
-	}
+    }
 }
 
 void NotationView::slotNoteAction()
@@ -3220,11 +3221,11 @@ void NotationView::slotNoteAction()
 
 void NotationView::slotLastNoteAction()
 {
-// 	QAction *action = actionCollection()->action(m_lastNoteAction);
-	QAction *action = findAction(m_lastNoteAction);
-	
-	if (!action)
-		action = findAction("crotchet");
+//     QAction *action = actionCollection()->action(m_lastNoteAction);
+    QAction *action = findAction(m_lastNoteAction);
+    
+    if (!action)
+        action = findAction("crotchet");
 
     if (action) {
         action->setEnabled(true);
@@ -3427,7 +3428,7 @@ void NotationView::updateViewCaption()
         int trackPosition = -1;
         if (track)
             trackPosition = track->getPosition();
-        //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
+        //    std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
         setWindowTitle(tr("%1 - Segment Track #%2 - Notation")
                     .arg(getDocument()->getTitle())
                     .arg(trackPosition + 1));
@@ -3556,10 +3557,10 @@ NotationView::slotChangeSpacing(int spacing)
     //     m_spacingSlider->setSize(spacing);
 
     /* was toggle */ 
-// 	QAction *action = dynamic_cast<QAction*>
+//     QAction *action = dynamic_cast<QAction*>
 //                             (actionCollection()->action(QString("spacing_%1").arg(spacing)));
-	QAction *action = findAction( QString("spacing_%1").arg(spacing) );
-	
+    QAction *action = findAction( QString("spacing_%1").arg(spacing) );
+    
     if (action)
         action->setChecked(true);
     else {
@@ -3617,10 +3618,10 @@ NotationView::slotChangeProportion(int proportion)
     //    m_proportionSlider->setSize(proportion);
 
     /* was toggle */ 
-// 	QAction *action = dynamic_cast<QAction*>
+//     QAction *action = dynamic_cast<QAction*>
 //                             (actionCollection()->action(QString("proportion_%1").arg(proportion)));
-	QAction *action = findAction( QString("proportion_%1").arg(proportion) );
-	
+    QAction *action = findAction( QString("proportion_%1").arg(proportion) );
+    
     if (action)
         action->setChecked(true);
     else {
@@ -3779,10 +3780,10 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         if (thisOne)
             m_fontCombo->setCurrentIndex(i);
         /* was toggle */ 
-// 		QAction *action = dynamic_cast<QAction*>
+//         QAction *action = dynamic_cast<QAction*>
 //                                 (actionCollection()->action("note_font_" + strtoqstr(f[i])));
-		QAction *action = findAction( "note_font_" + strtoqstr(f[i]) );
-		
+        QAction *action = findAction( "note_font_" + strtoqstr(f[i]) );
+        
         NOTATION_DEBUG << "inspecting " << f[i] << (action ? ", have action" : ", no action") << endl;
         if (action)
             action->setChecked(thisOne);
@@ -3804,8 +3805,8 @@ NotationView::slotChangeFont(std::string newName, int newSize)
         m_fontSizeCombo->addItem(value);
     }
     value.setNum(m_fontSize);
-// 	m_fontSizeCombo->setItemText(value);
-	m_fontSizeCombo->setCurrentText(value);
+//     m_fontSizeCombo->setItemText(value);
+    m_fontSizeCombo->setCurrentText(value);
 
     setupFontSizeMenu(oldName);
 
@@ -3886,10 +3887,10 @@ void NotationView::slotPrintLilyPond()
     KTmpStatusMsg msg(tr("Printing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
-	
+    
     if (!file->open()) {
-//         CurrentProgressDialog::freeze();		//&&& which progressDlg ?
-		QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
+//         CurrentProgressDialog::freeze();        //&&& which progressDlg ?
+        QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
     QString filename = file->fileName();
@@ -3916,14 +3917,14 @@ void NotationView::slotPreviewLilyPond()
     KTmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
-	
+    
     if (!file->open()) {
-//         CurrentProgressDialog::freeze();	//&&& what's the current progress dialog?
+//         CurrentProgressDialog::freeze();    //&&& what's the current progress dialog?
         /* was sorry */ 
-		QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
+        QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
         delete file;
     }
-	
+    
     QString filename = file->fileName();
     file->close(); // we just want the filename
     if (!exportLilyPondFile(filename, true)) {
@@ -3976,7 +3977,7 @@ bool NotationView::exportLilyPondFile(QString file, bool forPreview)
     if (!e.write()) {
         // CurrentProgressDialog::freeze();
         /* was sorry */ 
-		QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -4070,8 +4071,8 @@ void NotationView::slotEditPaste()
         (segment, clipboard, insertionTime, defaultType);
 
     if (!command->isPossible()) {
-        QMessageBox::warning	//detailedError
-				(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
+        QMessageBox::warning    //detailedError
+                (this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
              tr("Couldn't paste at this point.") );
     } else {
         addCommandToHistory(command);
@@ -4121,8 +4122,8 @@ void NotationView::slotEditGeneralPaste()
             (segment, clipboard, insertionTime, type);
 
         if (!command->isPossible()) {
-            QMessageBox::warning	//detailedError
-					(this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
+            QMessageBox::warning    //detailedError
+                    (this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
                  tr("Couldn't paste at this point.") );
         } else {
             addCommandToHistory(command);
@@ -4395,8 +4396,8 @@ void NotationView::slotToggleTransportToolBar()
 
 void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
 {
-// 	QToolBar *namedToolBar = toolBar(toolBarName);
-	QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
+//     QToolBar *namedToolBar = toolBar(toolBarName);
+    QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
 
     if (!namedToolBar) {
         NOTATION_DEBUG << "NotationView::toggleNamedToolBar() : toolBar "
@@ -4418,7 +4419,7 @@ void NotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
             namedToolBar->hide();
     }
 
-//     setSettingsDirty();	//&&& not required ?
+//     setSettingsDirty();    //&&& not required ?
 
 }
 
@@ -4601,8 +4602,8 @@ void NotationView::slotSwitchFromRestToNote()
     actionName = actionName.replace("-", "_");
 
 //     KRadioAction *action = dynamic_cast<KRadioAction *>
-//         (actionCollection()->action(actionName));	
-	QAction *action = findAction( actionName );
+//         (actionCollection()->action(actionName));    
+    QAction *action = findAction( actionName );
 
     if (!action) {
         std::cerr << "WARNING: Failed to find note action \""
@@ -4638,7 +4639,7 @@ void NotationView::slotSwitchFromNoteToRest()
 
 //     KRadioAction *action = dynamic_cast<KRadioAction *>
 //         (actionCollection()->action(actionName));
-	QAction *action = findAction( actionName );
+    QAction *action = findAction( actionName );
 
     if (!action) {
         std::cerr << "WARNING: Failed to find rest action \""
@@ -4903,7 +4904,7 @@ void NotationView::slotEditAddKeySignature()
 
         bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
-	bool ignorePercussion = dialog.shouldIgnorePercussion();
+    bool ignorePercussion = dialog.shouldIgnorePercussion();
 
         if (applyToAll) {
             addCommandToHistory
@@ -4913,7 +4914,7 @@ void NotationView::slotEditAddKeySignature()
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
                   transposeKey,
-		  ignorePercussion));
+          ignorePercussion));
         } else {
             addCommandToHistory
                 (new KeyInsertionCommand
@@ -4922,7 +4923,7 @@ void NotationView::slotEditAddKeySignature()
                   conversion == KeySignatureDialog::Convert,
                   conversion == KeySignatureDialog::Transpose,
                   transposeKey,
-		  false));
+          false));
         }
     }
 }
@@ -5015,19 +5016,19 @@ void NotationView::slotEditSwitchPreset()
         Composition& comp = getDocument()->getComposition();
         TrackId selectedTrack = getCurrentSegment()->getTrack();
 
-	// satisfy #1885251 the way that seems most reasonble to me at the
-	// moment, only changing track parameters when acting on all segments on
-	// this track from the notation view 
-	//
-	//!!! This won't be undoable, and I'm not sure if that's seriously
-	// wrong, or just mildly wrong, but I'm betting somebody will tell me
-	// about it if this was inappropriate
-	Track *track = comp.getTrackById(selectedTrack);
-	track->setPresetLabel( qstrtostr(dialog.getName()) );
-	track->setClef(dialog.getClef());
-	track->setTranspose(dialog.getTranspose());
-	track->setLowestPlayable(dialog.getLowRange());
-	track->setHighestPlayable(dialog.getHighRange());
+    // satisfy #1885251 the way that seems most reasonble to me at the
+    // moment, only changing track parameters when acting on all segments on
+    // this track from the notation view 
+    //
+    //!!! This won't be undoable, and I'm not sure if that's seriously
+    // wrong, or just mildly wrong, but I'm betting somebody will tell me
+    // about it if this was inappropriate
+    Track *track = comp.getTrackById(selectedTrack);
+    track->setPresetLabel( qstrtostr(dialog.getName()) );
+    track->setClef(dialog.getClef());
+    track->setTranspose(dialog.getTranspose());
+    track->setLowestPlayable(dialog.getLowRange());
+    track->setHighestPlayable(dialog.getHighRange());
 
         addCommandToHistory(new SegmentSyncCommand(comp.getSegments(), selectedTrack,
                             dialog.getTranspose(), 
@@ -5110,7 +5111,7 @@ void NotationView::slotEditElement(NotationStaff *staff,
                       conversion == KeySignatureDialog::Convert,
                       conversion == KeySignatureDialog::Transpose,
                       dialog.shouldBeTransposed(),
-		      dialog.shouldIgnorePercussion()));
+              dialog.shouldIgnorePercussion()));
             }
 
         } catch (Exception e) {
@@ -5124,17 +5125,17 @@ void NotationView::slotEditElement(NotationStaff *staff,
         try {
             TextEventDialog dialog
                 (this, m_notePixmapFactory, Text(*element->event()));
-			
+            
             if (dialog.exec() == QDialog::Accepted) {
                 TextInsertionCommand *command = new TextInsertionCommand
                     (staff->getSegment(),
                      element->event()->getAbsoluteTime(),
                      dialog.getText());
-				
-// 				MacroCommand *macroCommand = new MacroCommand( command->objectName() );
-				MacroCommand *macroCommand = new MacroCommand( "macro_command" );	//@@@
-				
-				macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
+                
+//                 MacroCommand *macroCommand = new MacroCommand( command->objectName() );
+                MacroCommand *macroCommand = new MacroCommand( "macro_command" );    //@@@
+                
+                macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                                                element->event(), false));
                 macroCommand->addCommand(command);
                 addCommandToHistory(macroCommand);
@@ -5355,20 +5356,20 @@ NotationView::slotCurrentSegmentPrior()
     //
     for (int i = m_staffs.size()-1; i >= 0; --i) {
         if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
-	    if (lastStaffOnTrack < 0) {
+        if (lastStaffOnTrack < 0) {
                 lastStaffOnTrack = i;
-	    } 
-	    if (i < m_currentStaff) {
-		slotSetCurrentStaff(i);
-		slotEditSelectWholeStaff();
-		return ;
-	    }
+        } 
+        if (i < m_currentStaff) {
+        slotSetCurrentStaff(i);
+        slotEditSelectWholeStaff();
+        return ;
+        }
         }
     }
     if (lastStaffOnTrack >= 0) {
-	slotSetCurrentStaff(lastStaffOnTrack);
-	slotEditSelectWholeStaff();
-	return ;
+    slotSetCurrentStaff(lastStaffOnTrack);
+    slotEditSelectWholeStaff();
+    return ;
     }
 }
 
@@ -5394,20 +5395,20 @@ NotationView::slotCurrentSegmentNext()
     //
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         if (m_staffs[i]->getSegment().getTrack() == track->getId()) {
-	    if (firstStaffOnTrack < 0) {
+        if (firstStaffOnTrack < 0) {
                 firstStaffOnTrack = i;
-	    } 
-	    if (i > m_currentStaff) {
-		slotSetCurrentStaff(i);
-		slotEditSelectWholeStaff();
-		return ;
-	    }
+        } 
+        if (i > m_currentStaff) {
+        slotSetCurrentStaff(i);
+        slotEditSelectWholeStaff();
+        return ;
+        }
         }
     }
     if (firstStaffOnTrack >= 0) {
-	slotSetCurrentStaff(firstStaffOnTrack);
-	slotEditSelectWholeStaff();
-	return ;
+    slotSetCurrentStaff(firstStaffOnTrack);
+    slotEditSelectWholeStaff();
+    return ;
     }
 }
 
@@ -5830,7 +5831,7 @@ void NotationView::slotEditLyrics()
             macro->addCommand(command);
         }
         for (int i = dialog.getVerseCount(); i < oldVerseCount; ++i) {
-	    // (hjj) verse count decreased, delete extra verses.
+        // (hjj) verse count decreased, delete extra verses.
             SetLyricsCommand *command = new SetLyricsCommand
                 (&segment, i, QString(""));
             macro->addCommand(command);
@@ -5863,10 +5864,10 @@ void NotationView::slotItemPressed(int height, int staffNo,
     }
 
 //     ButtonState btnState = e->state();
-	Qt::MouseButtons buts = e->buttons();
-	
-	if ((buts & Qt::LeftButton ) && (e->modifiers() & Qt::ControlModifier) ){
-		//Qt::Key_CTRL) { // on ctrl-click, set cursor position
+    Qt::MouseButtons buts = e->buttons();
+    
+    if ((buts & Qt::LeftButton ) && (e->modifiers() & Qt::ControlModifier) ){
+        //Qt::Key_CTRL) { // on ctrl-click, set cursor position
 
         slotSetInsertCursorPosition(e->x(), (int)e->y());
 
@@ -5906,13 +5907,13 @@ void NotationView::slotNonNotationItemPressed(QMouseEvent *e, Q3CanvasItem *it)
         bool ok = false;
         QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
 
-        QString newText = QInputDialog::getText( this, QString("Change staff name"),
-                                                QString("Enter new staff name"),
-														QLineEdit::Normal,
-                                                strtoqstr(name),
-                                                &ok,
-														Qt::Dialog );
-//                                                 &validator);
+        QString newText = QInputDialog::getText(this, QString("Change staff name"),
+                                               QString("Enter new staff name"),
+                                               QLineEdit::Normal,
+                                               strtoqstr(name),
+                                               &ok,
+                                               Qt::Dialog );
+//                                               &validator);
 
         if (ok) {
             addCommandToHistory(new RenameTrackCommand
@@ -6035,9 +6036,9 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
     //the most recently activated.  How about that?
 
     /* was toggle */
-// 	QAction *action = dynamic_cast<QAction*>
+//     QAction *action = dynamic_cast<QAction*>
 //         (actionCollection()->action("toggle_step_by_step"));
-	QAction *action = findAction("toggle_step_by_step");
+    QAction *action = findAction("toggle_step_by_step");
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -6167,11 +6168,11 @@ void
 NotationView::slotToggleStepByStep()
 {
     /* was toggle */ 
-// 	QAction *action = dynamic_cast<QAction*>
+//     QAction *action = dynamic_cast<QAction*>
 //         (actionCollection()->action("toggle_step_by_step"));
-	QAction *action = findAction("toggle_step_by_step");
-	
-	if (!action) {
+    QAction *action = findAction("toggle_step_by_step");
+    
+    if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
     }
@@ -6186,9 +6187,9 @@ void
 NotationView::slotStepByStepTargetRequested(QObject *obj)
 {
     /* was toggle */ 
-	QAction *action = findAction("toggle_step_by_step");
+    QAction *action = findAction("toggle_step_by_step");
 //         (actionCollection()->action("toggle_step_by_step"));
-	
+    
     if (!action) {
         NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
         return ;
@@ -6274,9 +6275,9 @@ NotationView::slotRenderSomething()
     // Update track headers when rendering is done
     // (better late than never)
     m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
-	
-     m_headersGroupView->setContentsPos(	//&&& FIX contentsPos
- 					getCanvasView()->contentsX(),getCanvasView()->contentsY()); 
+    
+     m_headersGroupView->setContentsPos(    //&&& FIX contentsPos
+                     getCanvasView()->contentsX(),getCanvasView()->contentsY()); 
 }
 
 NotationCanvasView* NotationView::getCanvasView()
@@ -6287,7 +6288,7 @@ NotationCanvasView* NotationView::getCanvasView()
 void
 NotationView::slotVerticalScrollHeadersGroup(int y)
 {
-    m_headersGroupView->setContentsPos(0, y);	//&&& FIX contentsPos
+    m_headersGroupView->setContentsPos(0, y);    //&&& FIX contentsPos
 }
 
 void
@@ -6334,7 +6335,7 @@ void
 NotationView::slotUpdateHeaders(int x, int y)
 {
     m_headersGroup->slotUpdateAllHeaders(x, y);
- 	m_headersGroupView->setContentsPos(x, y);	//&&& FIX contentsPos
+     m_headersGroupView->setContentsPos(x, y);    //&&& FIX contentsPos
 }
 
 void

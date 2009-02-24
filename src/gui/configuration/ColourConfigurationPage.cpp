@@ -32,7 +32,6 @@
 
 #include <QColorDialog>
 #include <QSettings>
-#include <QInputDialog>
 #include <QColor>
 #include <QFrame>
 #include <QPushButton>
@@ -43,6 +42,8 @@
 #include <QWidget>
 #include <QLayout>
 #include <QMessageBox>
+#include <QLineEdit>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -124,20 +125,20 @@ ColourConfigurationPage::slotAddNew()
     bool ok = false;
 
     QString newName = QInputDialog::getText(this, tr("New Color Name"),
-											tr("Enter new name"), QLineEdit::Normal,
-                                            tr("New"),
-                                            &ok, 0);
-	
-	bool c_ok;
-	
+                                           tr("Enter new name"), QLineEdit::Normal,
+                                           tr("New"),
+                                           &ok, 0);
+    
+    bool c_ok;
+    
     if ((ok == true) && (!newName.isEmpty())) {
         //QColorDialog box(this, "", true);
 
         //int result = box.getColor( temp );
-		//QColor col = QColorDialog::getColor();
-		QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );	// 0 == parent
-		
-		if ( c_ok ) {
+        //QColor col = QColorDialog::getColor();
+        QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
+        
+        if ( c_ok ) {
             Colour temp2 = GUIPalette::convertColour(temp);
             m_map.addItem(temp2, qstrtostr(newName));
             m_colourtable->populate_table(m_map, m_listmap);
@@ -152,16 +153,16 @@ void
 ColourConfigurationPage::slotDelete()
 {
     //old: QTableWidgetSelection temp = m_colourtable->selection(0);
-	QList<QTableWidgetItem *> temp = m_colourtable->selectedItems();
-	
-//    if ((!temp.isActive()) || (temp.topRow() == 0))	//&&& check re-implementation
+    QList<QTableWidgetItem *> temp = m_colourtable->selectedItems();
+    
+//    if ((!temp.isActive()) || (temp.topRow() == 0))    //&&& check re-implementation
 //        return ;
-	
-	if( temp.isEmpty() ){
-		QMessageBox::warning
-			(this, "Error: Selection is empty!", tr("Please select an item in the list!"), QMessageBox::Yes );
-		return;
-	}
+    
+    if( temp.isEmpty() ){
+        QMessageBox::warning
+            (this, "Error: Selection is empty!", tr("Please select an item in the list!"), QMessageBox::Yes );
+        return;
+    }
 
     unsigned int toDel = (*temp[0]).row();
 

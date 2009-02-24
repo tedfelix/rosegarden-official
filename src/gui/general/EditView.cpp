@@ -86,7 +86,6 @@
 #include <QPushButton>
 #include <QDialog>
 #include <QFrame>
-#include <QInputDialog>
 #include <QLabel>
 #include <QObjectList>
 #include <QMenu>
@@ -97,6 +96,7 @@
 #include <QToolBar>
 #include <QVBoxLayout>
 #include <QMatrix>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -1706,8 +1706,6 @@ void EditView::slotTranspose()
                      tr("By number of semitones: "),
                      dialogDefault, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
-
-    //### settings.beginGroup( EditViewConfigGroup );
 
     settings.setValue("lasttransposition", semitones);
 

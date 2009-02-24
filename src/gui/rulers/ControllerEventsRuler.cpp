@@ -40,12 +40,12 @@
 #include "gui/widgets/TextFloat.h"
 
 #include <QMouseEvent>
-#include <QInputDialog>
 #include <QColor>
 #include <QPoint>
 #include <QString>
 #include <QValidator>
 #include <QWidget>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -273,9 +273,9 @@ void ControllerEventsRuler::insertControllerEvent()
         QIntValidator intValidator(0, 128, this);
 //         QString res = KLineEditDlg::getText(tr("Controller Event Number"), "0",
 //                                             &ok, this, &intValidator);
-		QString res = QInputDialog::getText( this, "", tr("Controller Event Number"),
-											 QLineEdit::Normal, "0", &ok );
-		
+        QString res = QInputDialog::getText(this, "", tr("Controller Event Number"),
+                                           QLineEdit::Normal, "0", &ok);
+        
         if (ok)
             number = res.toULong();
     }

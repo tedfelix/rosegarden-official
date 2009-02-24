@@ -20,7 +20,6 @@
 
 #include "base/Track.h"
 
-#include <QInputDialog>
 #include <QFont>
 #include <QFrame>
 #include <QLabel>
@@ -33,9 +32,10 @@
 #include <QValidator>
 #include <QLayout>
 #include <QHBoxLayout>
-// #include <QEvent>
 #include <QMouseEvent>
 #include <QHeaderView>
+#include <QLineEdit>
+#include <QInputDialog>
 
 namespace Rosegarden
 {
@@ -137,28 +137,31 @@ void TrackLabel::showLabel(InstrumentTrackLabels l)
 void
 TrackLabel::setSelected(bool on)
 {
-    QPalette pal;
+//###
+// NOTES: Using QPalette works fine if there is no stylesheet.  If there is a
+// stylesheet, the QPalette-based stuff can no longer set the background if the
+// background is controlled in any way by the stylesheet.  (This is apparently
+// what the warnings in the API docs are all about.)
+//
+// We could use setObjectName() to change the name, and thus change how these
+// widgets would be styled, but we'd have to unset and reset the entire
+// stylesheet for that to work, apparently.  I've elected just to resort to hard
+// code instead, and use spot stylesheets.  This is bound to be less complicated
+// and have less overhead, though it comes with some side effects that may have
+// to be revisited.
+//
+    QString localStyle = "";
 
     if (on) {
         m_selected = true;
-
-        pal.setColor(m_instrumentLabel->backgroundRole(), palette().highlight());
-        pal.setColor(m_instrumentLabel->foregroundRole(), palette().highlightedText());
-        pal.setColor(m_trackLabel->backgroundRole(), palette().highlight());
-        pal.setColor(m_trackLabel->foregroundRole(), palette().highlightedText());
-
+        localStyle="QLabel { background-color: #2CD0FC; color: #FFFFFF; }";
     } else {
         m_selected = false;
-
-        pal.setColor(m_instrumentLabel->backgroundRole(), palette().background());
-        pal.setColor(m_instrumentLabel->foregroundRole(), palette().text());
-        pal.setColor(m_trackLabel->backgroundRole(), palette().background());
-        pal.setColor(m_trackLabel->foregroundRole(), palette().text());
-
+        localStyle="QLabel { background-color: transparent; color: #000000; }";
     }
 
-    m_instrumentLabel->setPalette(pal);
-    m_trackLabel->setPalette(pal);
+    m_instrumentLabel->setStyleSheet(localStyle);
+    m_trackLabel->setStyleSheet(localStyle);
 
     if (currentWidget()){
         currentWidget()->update();

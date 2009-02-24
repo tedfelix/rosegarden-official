@@ -51,7 +51,6 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <QFileDialog>
-#include <QInputDialog>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QMessageBox>
@@ -76,6 +75,8 @@
 #include <QKeySequence>
 #include <Q3DragObject>
 #include <Q3UriDrag>
+#include <QLineEdit>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -95,26 +96,26 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
         m_audiblePreview(true)
 {
     setWindowTitle(tr("Audio File Manager"));
-	this->setAttribute( Qt::WA_DeleteOnClose );
+    this->setAttribute( Qt::WA_DeleteOnClose );
 
     QWidget *box = new QWidget(this);
     QVBoxLayout *boxLayout = new QVBoxLayout(this);
-	box->setLayout(boxLayout);
-	
+    box->setLayout(boxLayout);
+    
     setCentralWidget(box);
     boxLayout->setMargin(10);
     boxLayout->setSpacing(5);
-	
+    
     m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     m_fileList = new AudioListView( box );
-	m_fileList->setSelectionMode( QAbstractItemView::SingleSelection );
-	m_fileList->setSelectionBehavior( QAbstractItemView::SelectRows );
-//	m_fileList->setSelectionBehavior( QAbstractItemView::SelectItems );
-	
+    m_fileList->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_fileList->setSelectionBehavior( QAbstractItemView::SelectRows );
+//    m_fileList->setSelectionBehavior( QAbstractItemView::SelectItems );
+    
     boxLayout->addWidget(m_fileList);
 
-    m_wrongSampleRates = new QLabel( "...or adjusting the sample rate of the JACK server.", box );	//### FIX: text was cut
+    m_wrongSampleRates = new QLabel( "...or adjusting the sample rate of the JACK server.", box );    //### FIX: text was cut
     boxLayout->addWidget(m_wrongSampleRates);
     m_wrongSampleRates->hide();
 
@@ -133,36 +134,36 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Set the column names
     //
-	//
-	
-	//m_fileList->setHorizontalHeaderItem( 0, new QTreeWidgetItem( tr("File")));           // 6	
-	QStringList sl;
-	
-	sl << tr("Name");           // 0
-	sl << tr("Duration");       // 1	
-	sl << tr("Envelope");       // 2
-	sl << tr("Sample rate");    // 3
-	sl << tr("Channels");       // 4
-	sl << tr("Resolution");     // 5
-	sl << tr("File");           // 6	
-	
-	m_fileList->setColumnCount(7);
-	m_fileList->setHeaderItem( new QTreeWidgetItem( sl ) );
-	
-	//m_fileList->sortByColumn ( int column=1, Qt::AscendingOrder );
-	m_fileList->setSortingEnabled( true );
-	
-	/*
-	//&&& table widget - column alignment
+    //
+    
+    //m_fileList->setHorizontalHeaderItem( 0, new QTreeWidgetItem( tr("File")));           // 6    
+    QStringList sl;
+    
+    sl << tr("Name");           // 0
+    sl << tr("Duration");       // 1    
+    sl << tr("Envelope");       // 2
+    sl << tr("Sample rate");    // 3
+    sl << tr("Channels");       // 4
+    sl << tr("Resolution");     // 5
+    sl << tr("File");           // 6    
+    
+    m_fileList->setColumnCount(7);
+    m_fileList->setHeaderItem( new QTreeWidgetItem( sl ) );
+    
+    //m_fileList->sortByColumn ( int column=1, Qt::AscendingOrder );
+    m_fileList->setSortingEnabled( true );
+    
+    /*
+    //&&& table widget - column alignment
     m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(3, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
     m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
-	
-	*/
-	
-//	m_fileList->restoreLayout(m_listViewLayoutName);	// &&&
+    
+    */
+    
+//    m_fileList->restoreLayout(m_listViewLayoutName);    // &&&
 
     // a minimum width for the list box
     //m_fileList->setMinimumWidth(300);
@@ -173,38 +174,38 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // show tooltips when columns are partially hidden
 //    m_fileList->setShowToolTips(true);
 
-	
-	
-// 	old: 
+    
+    
+//     old: 
 //    connect(m_fileList, SIGNAL(selectionChanged(QTreeWidgetItem*)),
 //             SLOT(slotSelectionChanged(QTreeWidgetItem*)));
-	//
-	// connect selection mechanism
-	connect( m_fileList, SIGNAL(itemSelectionChanged()),
-			this, SLOT(slotSelectionChanged()) );
-	
-	
-	// not really used:
-	//connect( m_fileList, SIGNAL(currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)), this, SLOT(slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)) );
-	
-	
-// // 	connect( m_fileList, SIGNAL(itemActivated ( QTreeWidgetItem * item, int column )), this, SLOT(slotFileItemActivated()) );
-	
-	
-	//### TODO: Fix drag n drop
+    //
+    // connect selection mechanism
+    connect( m_fileList, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotSelectionChanged()) );
+    
+    
+    // not really used:
+    //connect( m_fileList, SIGNAL(currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)), this, SLOT(slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)) );
+    
+    
+// //     connect( m_fileList, SIGNAL(itemActivated ( QTreeWidgetItem * item, int column )), this, SLOT(slotFileItemActivated()) );
+    
+    
+    //### TODO: Fix drag n drop
     connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
 
-	//
-	// setup local shortcuts
-	 //
+    //
+    // setup local shortcuts
+     //
 
     // delete
     //
-	m_shortcuts = new QShortcut( QKeySequence(Qt::Key_Delete), this );
-	connect( m_shortcuts, SIGNAL(activated()), this, SLOT(slotRemove()) );
-	
-	
+    m_shortcuts = new QShortcut( QKeySequence(Qt::Key_Delete), this );
+    connect( m_shortcuts, SIGNAL(activated()), this, SLOT(slotRemove()) );
+    
+    
     slotPopulateFileList();
 
     // Connect command history for updates
@@ -217,10 +218,10 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_playTimer, SIGNAL(timeout()),
             this, SLOT(slotCancelPlayingAudio()));
 
-	
+    
 //    KStandardAction::close(this,
-						   
-	connect( this, SIGNAL(close()), this,
+                           
+    connect( this, SIGNAL(close()), this,
                       SLOT(slotClose()) );
 
     createGUI( "audiomanager.rc"); //@@@ JAS orig. 0
@@ -231,16 +232,16 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
 
 void slotFileItemActivated(){
-	
-	return;
+    
+    return;
 }
 
 
 AudioManagerDialog::~AudioManagerDialog()
 {
     RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
-	
-//    m_fileList->saveLayout(m_listViewLayoutName);	//&&&
+    
+//    m_fileList->saveLayout(m_listViewLayoutName);    //&&&
     //saveDialogSize(AudioManagerDialogConfigGroup);
 }
 
@@ -253,8 +254,8 @@ AudioManagerDialog::slotPopulateFileList()
     // Store last selected item if we have one
     //
    // AudioListItem *selectedItem = dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
-	AudioListItem *selectedItem = dynamic_cast<AudioListItem*>( m_fileList->currentItem() );
-	
+    AudioListItem *selectedItem = dynamic_cast<AudioListItem*>( m_fileList->currentItem() );
+    
     AudioFileId lastId = 0;
     Segment *lastSegment = 0;
     bool findSelection = false;
@@ -273,15 +274,15 @@ AudioManagerDialog::slotPopulateFileList()
 
     // clear file list and disable associated action buttons
     m_fileList->clear();
-	AudioListItem* auItem;
+    AudioListItem* auItem;
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end()) {
         // Turn off selection and report empty list
         //
-		//new AudioListItem(m_fileList, tr("<no audio files>"), 0);
-		auItem = new AudioListItem( m_fileList, QStringList( tr("<no audio files>")) );
-		
-		m_fileList->setSelectionMode( QAbstractItemView::NoSelection );
+        //new AudioListItem(m_fileList, tr("<no audio files>"), 0);
+        auItem = new AudioListItem( m_fileList, QStringList( tr("<no audio files>")) );
+        
+        m_fileList->setSelectionMode( QAbstractItemView::NoSelection );
 //        m_fileList->setRootIsDecorated(false);
 
         m_fileList->blockSignals(false);
@@ -293,7 +294,7 @@ AudioManagerDialog::slotPopulateFileList()
 //    m_fileList->setRootIsDecorated(true); //&&&
 
     // enable selection
-	m_fileList->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_fileList->setSelectionMode( QAbstractItemView::SingleSelection );
 
     // for the sample file length
     QString msecs, sRate;
@@ -338,17 +339,17 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Set the label, duration, envelope pixmap and filename
         //
-		
-		//AudioListItem *item = new AudioListItem(m_fileList, label, (*it)->getId());
-		AudioListItem *item = new AudioListItem( m_fileList, QStringList(label) ); //, (*it)->getId() );
-//		m_fileList->setItem(0, item);
-		
+        
+        //AudioListItem *item = new AudioListItem(m_fileList, label, (*it)->getId());
+        AudioListItem *item = new AudioListItem( m_fileList, QStringList(label) ); //, (*it)->getId() );
+//        m_fileList->setItem(0, item);
+        
         // Duration
         //
         length = (*it)->getLength();
         msecs.sprintf("%03d", length.nsec / 1000000);
         //item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
-		item->setText( 1,QString("%1.%2s").arg(length.sec).arg(msecs) );	// row, col
+        item->setText( 1,QString("%1.%2s").arg(length.sec).arg(msecs) );    // row, col
 
         // set start time and duration
         item->setStartTime(RealTime::zeroTime);
@@ -357,8 +358,8 @@ AudioManagerDialog::slotPopulateFileList()
         // Envelope pixmap
         //
         //item->setPixmap(2, *audioPixmap);
-		item->setIcon( 2, QIcon(*audioPixmap) );	// row, col	
-		
+        item->setIcon( 2, QIcon(*audioPixmap) );    // row, col    
+        
 
         // File location
         //
@@ -368,11 +369,11 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Resolution
         //
-		item->setText( 5, QString("%1 bits").arg((*it)->getBitsPerSample()));
+        item->setText( 5, QString("%1 bits").arg((*it)->getBitsPerSample()));
 
         // Channels
         //
-		item->setText( 4, QString("%1").arg((*it)->getChannels()));
+        item->setText( 4, QString("%1").arg((*it)->getChannels()));
 
         // Sample rate
         //
@@ -382,15 +383,15 @@ AudioManagerDialog::slotPopulateFileList()
         } else {
             sRate.sprintf("%.1f KHz", float((*it)->getSampleRate()) / 1000.0);
         }
-		item->setText( 3, sRate );
+        item->setText( 3, sRate );
 
         // Test audio file element for selection criteria
         //
         if (findSelection && lastSegment == 0 && lastId == (*it)->getId()) {
-			//m_fileList->setSelected(item, true);
-			m_fileList->setCurrentItem( item );
-			
-			findSelection = false;
+            //m_fileList->setSelected(item, true);
+            m_fileList->setCurrentItem( item );
+            
+            findSelection = false;
         }
 
         // Add children
@@ -430,15 +431,15 @@ AudioManagerDialog::slotPopulateFileList()
 
                 // set pixmap
                 //
-				//childItem->setPixmap(2, *audioPixmap);
-				childItem->setIcon(2, QIcon(*audioPixmap) );
+                //childItem->setPixmap(2, *audioPixmap);
+                childItem->setIcon(2, QIcon(*audioPixmap) );
 
                 // set segment
                 //
                 childItem->setSegment(*iit);
 
                 if (findSelection && lastSegment == (*iit)) {
-                    m_fileList->setCurrentItem( childItem );	// select
+                    m_fileList->setCurrentItem( childItem );    // select
                     findSelection = false;
                     foundSelection = true;
                 }
@@ -463,13 +464,13 @@ AudioFile*
 AudioManagerDialog::getCurrentSelection()
 {
     // try and get the selected item
-	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
-	if (til.isEmpty()){
-		//QMessageBox::warning
-		//		(this, "Error: Selection is empty!", 
-		//		tr("Please select an audio item in the list!"), QMessageBox::Yes );
-		return 0;
-	}
+    QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
+    if (til.isEmpty()){
+        //QMessageBox::warning
+        //        (this, "Error: Selection is empty!", 
+        //        tr("Please select an audio item in the list!"), QMessageBox::Yes );
+        return 0;
+    }
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
     if (item == 0)
         return 0;
@@ -494,18 +495,18 @@ AudioManagerDialog::slotExportAudio()
     WAVAudioFile *sourceFile
     = dynamic_cast<WAVAudioFile*>(getCurrentSelection());
 
-	QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
-	if (til.isEmpty()){
-		QMessageBox::warning
-				(this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
-		return;
-	}
-	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
+    QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
+    if (til.isEmpty()){
+        QMessageBox::warning
+                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+        return;
+    }
+    AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
     Segment *segment = item->getSegment();
 
     QString saveFile =
-			QFileDialog::getSaveFileName( this, tr("Choose a name to save this file as ").arg(":WAVS"), QDir::currentPath(), tr("*.wav|WAV files (*.wav)" ) );
+            QFileDialog::getSaveFileName( this, tr("Choose a name to save this file as ").arg(":WAVS"), QDir::currentPath(), tr("*.wav|WAV files (*.wav)" ) );
 
     if (sourceFile == 0 || item == 0 || saveFile.isEmpty())
         return ;
@@ -558,12 +559,12 @@ void
 AudioManagerDialog::slotRemove()
 {
     AudioFile *audioFile = getCurrentSelection();
-	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
-	if (til.isEmpty() ){
-		QMessageBox::warning
-				(this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
-		return;
-	}
+    QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
+    if (til.isEmpty() ){
+        QMessageBox::warning
+                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+        return;
+    }
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
     if (audioFile == 0 || item == 0)
@@ -575,10 +576,10 @@ AudioManagerDialog::slotRemove()
     if (item->getSegment()) {
         // Get the next item to highlight
         //
-//		QTreeWidgetItem *newItem = item->itemBelow();
-		//QTreeWidgetItem *newItem = m_fileList->item( (item->row()+1), item->column() );
-		QTreeWidgetItem *newItem = m_fileList->itemBelow( item );
-		
+//        QTreeWidgetItem *newItem = item->itemBelow();
+        //QTreeWidgetItem *newItem = m_fileList->item( (item->row()+1), item->column() );
+        QTreeWidgetItem *newItem = m_fileList->itemBelow( item );
+        
         // Or try above
         //
         if (newItem == 0)
@@ -636,12 +637,12 @@ AudioManagerDialog::slotRemove()
                            .arg(QString(audioFile->getFilename().c_str()));
 
         // Ask the question
-		int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel );
-		
+        int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel , QMessageBox::Cancel );
+        
         if (reply != QMessageBox::Yes)
             return ;
     }
-	
+    
     for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
         if ((*it)->getType() == Segment::Audio &&
                 (*it)->getAudioFileId() == id)
@@ -664,14 +665,14 @@ void
 AudioManagerDialog::slotPlayPreview()
 {
     AudioFile *audioFile = getCurrentSelection();
-	
-	QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
-	if (til.isEmpty() ){
-		QMessageBox::warning
-				(this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
-		return;
-	}
-	AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
+    
+    QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
+    if (til.isEmpty() ){
+        QMessageBox::warning
+                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+        return;
+    }
+    AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
 
     if (item == 0 || audioFile == 0)
         return ;
@@ -725,9 +726,9 @@ AudioManagerDialog::slotAdd()
                             tr("All files") + " (*)";
     
     if (RosegardenGUIApp::self()->haveAudioImporter()) {
-	//!!! This list really needs to come from the importer helper program
-	// (which has an option to supply it -- we just haven't recorded it)
-	//
+    //!!! This list really needs to come from the importer helper program
+    // (which has an option to supply it -- we just haven't recorded it)
+    //
         extensionList = tr("Audio files") + " (*.wav *.flac *.ogg *.mp3 *.WAV *.FLAC *.OGG *.MP3)" + ";;" +
                         tr("WAV files") + " (*.wav *.WAV)" + ";;" + 
                         tr("FLAC files") + " (*.flac *.FLAC)" + ";;" +
@@ -795,7 +796,7 @@ AudioManagerDialog::slotRemoveAll()
     QString question =
         tr("This will unload all audio files and remove their associated segments.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-	int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
+    int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel);
 
     if (reply != QMessageBox::Yes)
         return ;
@@ -832,7 +833,7 @@ AudioManagerDialog::slotRemoveAllUnused()
     QString question =
         tr("This will unload all audio files that are not associated with any segments in this composition.\nThis action cannot be undone, and associations with these files will be lost.\nFiles will not be removed from your disk.\nAre you sure?");
 
-	int reply = QMessageBox::warning(this, "", question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
+    int reply = QMessageBox::warning(this, "", question,QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
 
     if (reply != QMessageBox::Yes)
         return ;
@@ -907,7 +908,7 @@ AudioManagerDialog::slotDeleteUnused()
             QString question =
                 tr("<qt>About to delete %n audio file(s) permanently from the hard disk.<br>This action cannot be undone, and there will be no way to recover the files.<br>Are you sure?</qt>", "", names.size());
 
-			int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
+            int reply = QMessageBox::warning(this, "", question, QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel );
 
             if (reply != QMessageBox::Yes) {
                 delete dialog;
@@ -950,14 +951,14 @@ AudioManagerDialog::slotRename()
 
     bool ok = false;
 
-    QString newText = QInputDialog::getText( this, 
+    QString newText = QInputDialog::getText(this, 
                           tr("Change Audio File label"),
-							   tr("Enter new label"), 
-							QLineEdit::Normal, 
+                          tr("Enter new label"), 
+                          QLineEdit::Normal, 
                           QString(audioFile->getName().c_str()),
                           &ok );
 
-    if ( ok && !newText.isEmpty() )
+    if (ok && !newText.isEmpty())
         audioFile->setName(qstrtostr(newText));
 
     slotPopulateFileList();
@@ -967,34 +968,34 @@ AudioManagerDialog::slotRename()
 /*
 void AudioManagerDialog::slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)
 {
-	//std::cerr << "Warning: AudioManagerDialog::slotItemChanged not implemented" << std::endl;
-	return;
+    //std::cerr << "Warning: AudioManagerDialog::slotItemChanged not implemented" << std::endl;
+    return;
 }
 */
 
 //void AudioManagerDialog::slotSelectionChanged(QTreeWidgetItem *item)
 void AudioManagerDialog::slotSelectionChanged()
 {
-	AudioListItem *aItem = 0;
+    AudioListItem *aItem = 0;
     //AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
-	
-	QList<QTreeWidgetItem *> itemsx = m_fileList->selectedItems();
-	if( itemsx.count() > 0 ){
-		aItem = dynamic_cast<AudioListItem*>( itemsx.at(0) );
-	}
-	
-	// en/disable Actions
-	//QAction *ea = findAction("export_audio");
-	//if( ea ) ea->setEnabled("false");
-	
+    
+    QList<QTreeWidgetItem *> itemsx = m_fileList->selectedItems();
+    if( itemsx.count() > 0 ){
+        aItem = dynamic_cast<AudioListItem*>( itemsx.at(0) );
+    }
+    
+    // en/disable Actions
+    //QAction *ea = findAction("export_audio");
+    //if( ea ) ea->setEnabled("false");
+    
     // If we're on a segment then send a "select" signal
     // and enable appropriate buttons.
     //
     if (aItem && aItem->getSegment()) {
-		
-		//### required to enable it? 
-		//if( ea ) ea->setEnabled("true");
-		
+        
+        //### required to enable it? 
+        //if( ea ) ea->setEnabled("true");
+        
         SegmentSelection selection;
         selection.insert(aItem->getSegment());
         emit segmentsSelected(selection);
@@ -1011,7 +1012,7 @@ AudioManagerDialog::setSelected(AudioFileId id,
     QTreeWidgetItem *it = m_fileList->itemAt(0,0); //firstChild();
     QTreeWidgetItem *chIt = 0;
     AudioListItem *aItem;
-	int nn;
+    int nn;
     while (it) {
         // If we're looking for a top level audio file
         if (segment == 0) {
@@ -1024,12 +1025,12 @@ AudioManagerDialog::setSelected(AudioFileId id,
         } else // look for a child
         {
             if (it->childCount() > 0)
-				//chIt = it->firstChild();
-				//chIt = it->itemAt(0,0);
-				chIt = it->child(0);
-			nn = 0;
-			while (chIt && (chIt->childCount() < nn) ) {
-				nn +=1;
+                //chIt = it->firstChild();
+                //chIt = it->itemAt(0,0);
+                chIt = it->child(0);
+            nn = 0;
+            while (chIt && (chIt->childCount() < nn) ) {
+                nn +=1;
                 aItem = dynamic_cast<AudioListItem*>(chIt);
 
                 if (aItem) {
@@ -1046,15 +1047,15 @@ AudioManagerDialog::setSelected(AudioFileId id,
                         return ;
                     }
                 }
-				//chIt = chIt->nextSibling();
-				//chIt = it->itemBelow( chIt );
-				chIt = it->child( nn );
-			}
+                //chIt = chIt->nextSibling();
+                //chIt = it->itemBelow( chIt );
+                chIt = it->child( nn );
+            }
         }
 
         //it = it->nextSibling();
-		chIt = m_fileList->itemBelow( chIt );
-	}
+        chIt = m_fileList->itemBelow( chIt );
+    }
 
 }
 
@@ -1065,10 +1066,10 @@ AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)
 
     if (it) {
 //        m_fileList->ensureItemVisible(it);
-		m_fileList->scrollToItem(it, QAbstractItemView::PositionAtTop );
-//		m_fileList->setSelected(it, true);
-		m_fileList->setCurrentItem( it );
-	} else {
+        m_fileList->scrollToItem(it, QAbstractItemView::PositionAtTop );
+//        m_fileList->setSelected(it, true);
+        m_fileList->setCurrentItem( it );
+    } else {
         m_fileList->clearSelection();
     }
 
@@ -1136,12 +1137,12 @@ AudioManagerDialog::addFile(const QUrl& kurl)
     AudioFileManager &aFM = m_doc->getAudioFileManager();
 
     if (! QFile::exists(kurl.toLocalFile()) ) {
-		
-		if (!RosegardenGUIApp::self()->testAudioPath(tr("importing a remote audio file"))) return false;
+        
+        if (!RosegardenGUIApp::self()->testAudioPath(tr("importing a remote audio file"))) return false;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
         if (!RosegardenGUIApp::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return false;
     }
-	
+    
     ProgressDialog progressDlg(tr("Adding audio file..."),
                                100,
                                this);
@@ -1203,19 +1204,19 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
 void
 AudioManagerDialog::slotDropped(QDropEvent *event, QTreeWidgetItem*)
-		// dropEvent
+        // dropEvent
 {
-	//QStrList uri;
-	QList<QString> uri;
+    //QStrList uri;
+    QList<QString> uri;
 
     // see if we can decode a URI.. if not, just ignore it
-//    if (QUriDrag::decode(event, uri)) {			//&&& QUriDrag, implement drag/drop
-		
+//    if (QUriDrag::decode(event, uri)) {            //&&& QUriDrag, implement drag/drop
+        
         // okay, we have a URI.. process it
 //        for (QString url = uri.first(); !url.isEmpty(); url = uri.next()) { //!!! this one is really weird and uncertain
-		for( int i=0; i < uri.size(); i++ ){
-			QString url = uri.at(i);
-			
+        for( int i=0; i < uri.size(); i++ ){
+            QString url = uri.at(i);
+            
             RG_DEBUG << "AudioManagerDialog::dropEvent() : got "
             << url << endl;
 
@@ -1254,9 +1255,9 @@ AudioManagerDialog::setAudioSubsystemStatus(bool ok)
 bool
 AudioManagerDialog::addAudioFile(const QString &filePath)
 {
-	QString fp = QFileInfo(filePath).absFilePath();
-	RG_DEBUG << "\\_AudioFilePath : " << fp << endl;
-	return addFile( fp );
+    QString fp = QFileInfo(filePath).absFilePath();
+    RG_DEBUG << "\\_AudioFilePath : " << fp << endl;
+    return addFile( fp );
 }
 
 bool
@@ -1289,14 +1290,14 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
     //Composition &comp = m_doc->getComposition();
 
     QList<RosegardenGUIView*> viewList_ = m_doc->getViewList();
-	QListIterator<RosegardenGUIView*> viewList( viewList_ );
+    QListIterator<RosegardenGUIView*> viewList( viewList_ );
 
     RosegardenGUIView *w = 0;
     SegmentSelection selection;
 
-	viewList.toFront();
-	while( viewList.hasNext() ){
-		w = viewList.next();
+    viewList.toFront();
+    while( viewList.hasNext() ){
+        w = viewList.next();
         selection = w->getSelection();
     }
 

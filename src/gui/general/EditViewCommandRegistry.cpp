@@ -25,7 +25,6 @@
 #include "EditViewCommandRegistry.h"
 
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QFile>
 #include <QMenu>
 
@@ -34,6 +33,7 @@
 #include "misc/Strings.h"
 
 #include <QCoreApplication>
+#include <QInputDialog>
 
 namespace Rosegarden
 {
@@ -113,8 +113,8 @@ public:
     EditViewCommandArgumentQuerier(EditView *view) : m_view(view) { }
     QString getText(QString message, bool *ok) {
         return QInputDialog::getText(m_view,
-                                     tr("Rosegarden - Query"),
-                                     message, QLineEdit::Normal, "", ok);
+                                    tr("Rosegarden - Query"),
+                                    message, QLineEdit::Normal, "", ok);
     }
 
 protected:

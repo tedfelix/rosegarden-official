@@ -169,7 +169,7 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
-#include <gui/kdeext/KTmpStatusMsg.h>
+#include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/ui/DevicesManagerNew.h"
 
 #include <Q3Canvas>
@@ -189,7 +189,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QIcon>
-#include <QInputDialog>
 #include <QLabel>
 #include <QObject>
 #include <QObjectList>
@@ -215,11 +214,11 @@
 #include <QUrl>
 #include <QDialog>
 #include <QFileDialog>
-#include <QInputDialog>
 #include <QPrintDialog>
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QPageSetupDialog>
+#include <QInputDialog>
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>

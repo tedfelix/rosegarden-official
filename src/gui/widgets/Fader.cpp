@@ -53,8 +53,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_float(new TextFloat(this)),
         m_floatTimer(new QTimer())
 {
-    // enable styling; internal string, no tr()
-    setObjectName("FADER");
+    setObjectName("Fader");
 
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional

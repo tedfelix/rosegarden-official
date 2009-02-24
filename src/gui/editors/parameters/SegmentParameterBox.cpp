@@ -18,7 +18,6 @@
 
 #include "SegmentParameterBox.h"
 
-
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
@@ -48,13 +47,11 @@
 #include "RosegardenParameterBox.h"
 #include "document/Command.h"
 
-
 #include <QColorDialog>
 #include <QLayout>
 #include <QApplication>
 #include <QComboBox>
 #include <QSettings>
-#include <QInputDialog>
 #include <QTabWidget>
 #include <QPushButton>
 #include <QCheckBox>
@@ -75,6 +72,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStackedWidget>
+#include <QLineEdit>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -124,7 +123,7 @@ SegmentParameterBox::initBox()
     gridLayout->setMargin(0);
     gridLayout->setSpacing(2);
 
-    QLabel *label	= new QLabel(tr("Label"), this);
+    QLabel *label     = new QLabel(tr("Label"), this);
     QLabel *repeatLabel = new QLabel(tr("Repeat"), this);
     QLabel *quantizeLabel = new QLabel(tr("Quantize"), this);
     QLabel *transposeLabel = new QLabel(tr("Transpose"), this);
@@ -279,14 +278,14 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-	gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
+     gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
     gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
     gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
 
-	gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
+     gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
     gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
@@ -670,20 +669,20 @@ SegmentParameterBox::populateBoxFromSegments()
         // 2nd arg of "true" means "add if necessary"
     case All:
         m_transposeValue->
-// 		setCurrentIndex(QString("%1").arg(transposeLevel), true);
-		setCurrentText( QString("%1").arg(transposeLevel) );
-		break;
+//           setCurrentIndex(QString("%1").arg(transposeLevel), true);
+          setCurrentText( QString("%1").arg(transposeLevel) );
+          break;
 
     case Some:
-// 		m_transposeValue->setCurrentIndex(QString(""), true);
-		m_transposeValue->setCurrentText(QString(""));
-		break;
+//           m_transposeValue->setCurrentIndex(QString(""), true);
+          m_transposeValue->setCurrentText(QString(""));
+          break;
 
     case None:
     default:
-// 		m_transposeValue->setCurrentIndex("0");
-		m_transposeValue->setCurrentText("0");
-		break;
+//           m_transposeValue->setCurrentIndex("0");
+          m_transposeValue->setCurrentText("0");
+          break;
     }
 
     m_transposeValue->setEnabled(transposed != NotApplicable);
@@ -697,21 +696,21 @@ SegmentParameterBox::populateBoxFromSegments()
             QString label = NotationStrings::makeNoteMenuLabel(delayLevel,
                             true,
                             error);
-// 			m_delayValue->setCurrentIndex(label, true);
-			m_delayValue->setCurrentText(label);
+//                m_delayValue->setCurrentIndex(label, true);
+               m_delayValue->setCurrentText(label);
 
         } else if (delayLevel < 0) {
 
-// 			m_delayValue->setCurrentIndex(tr("%1 ms").arg(-delayLevel),true);
-			m_delayValue->setCurrentText( tr("%1 ms").arg(-delayLevel) );
-		}
+//                m_delayValue->setCurrentIndex(tr("%1 ms").arg(-delayLevel),true);
+               m_delayValue->setCurrentText( tr("%1 ms").arg(-delayLevel) );
+          }
 
         break;
 
     case Some:
-// 		m_delayValue->setCurrentIndex("", true);
-		m_delayValue->setCurrentText("");
-		break;
+//           m_delayValue->setCurrentIndex("", true);
+          m_delayValue->setCurrentText("");
+          break;
 
     case None:
     default:
@@ -783,7 +782,7 @@ SegmentParameterBox::populateBoxFromSegments()
                 m_fadeOutLabel->show();
                 m_fadeOutSpin->show();
          
-        	instead:
+             instead:
         
         m_fadeInLabel->hide();
         m_fadeInSpin->hide();
@@ -989,14 +988,16 @@ SegmentParameterBox::slotColourSelected(int value)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = QInputDialog::getText(this, tr("New Color Name"), tr("Enter new name"),
-									QLineEdit::Normal,
-									tr("New"), &ok);
+        QString newName = QInputDialog::getText(this,
+                                               tr("New Color Name"),
+                                               tr("Enter new name"),
+                                               QLineEdit::Normal,
+                                               tr("New"), &ok);
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
-			
-			//QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
-			QColor newColor = QColorDialog::getColor( Qt::white, this );
+               
+               //QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
+               QColor newColor = QColorDialog::getColor( Qt::white, this );
 
 //             int result = box.getColor(newColour);
 
@@ -1104,10 +1105,12 @@ SegmentParameterBox::slotEditSegmentLabel()
     if (label == "*")
         label = "";
 
-    QString newLabel = QInputDialog::getText( this, 
-											  tr("Enter new label"), editLabel, QLineEdit::Normal,
-                       m_label->text(),
-                       &ok );
+    QString newLabel = QInputDialog::getText(this, 
+                                            tr("Enter new label"),
+                                            editLabel,
+                                            QLineEdit::Normal,
+                                            m_label->text(),
+                                            &ok );
 
     if (ok) {
         SegmentSelection segments;
@@ -1120,8 +1123,8 @@ SegmentParameterBox::slotEditSegmentLabel()
 
         addCommandToHistory(command);
 
-	// fix #1776915, maybe?
-	update();
+     // fix #1776915, maybe?
+     update();
     }
 }
 

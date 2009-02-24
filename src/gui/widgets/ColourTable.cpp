@@ -22,8 +22,8 @@
 #include "base/ColourMap.h"
 #include "ColourTableItem.h"
 #include "gui/general/GUIPalette.h"
+
 #include <QColorDialog>
-#include <QInputDialog>
 #include <QColor>
 #include <QPoint>
 #include <QString>
@@ -31,6 +31,7 @@
 #include <QWidget>
 #include <QLineEdit>
 #include <QHeaderView>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -38,24 +39,24 @@ namespace Rosegarden
 
 ColourTable::ColourTable
 (QWidget *parent, ColourMap &input, ColourList &list)
-	: QTableWidget(1, 2, parent )	//, "RColourTable")
+    : QTableWidget(1, 2, parent )    //, "RColourTable")
 {
-	this->setObjectName( "RColourTable" );
-	
+    this->setObjectName( "RColourTable" );
+    
     //### JAS Deactivated next line 
     //&&& setSorting(FALSE);
 
     //@@@ JAS in Qt4 use QTableWidget()::sortItems(), but only options are ascending
     //@@@ JAS or descendings.  There is no "unsorted" option.
 
-	setSelectionBehavior( QAbstractItemView::SelectRows );
-	
-	/*
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+    /*
     horizontalHeader()->setLabel(0, tr("Name"));
     horizontalHeader()->setLabel(1, tr("Color"));
-	*/
-	setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
-	
+    */
+    setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
+    
     populate_table(input, list);
     connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
             SLOT(slotEditEntry(int, int)));
@@ -73,8 +74,10 @@ ColourTable::slotEditEntry(int row, int col)
             bool ok = false;
             //@@@ QInputDialog replaces KLineEditDlg.  This is not a clean swap,
             // and this is untested
-            QString newName = QInputDialog::getText(tr("Modify Color Name"), tr("Enter new name"),
-                                                    QLineEdit::Normal, item(row, col)->text(), &ok);
+            QString newName = QInputDialog::getText(tr("Modify Color Name"),
+                                                   tr("Enter new name"),
+                                                   QLineEdit::Normal,
+                                                   item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty())) {
                 emit entryTextChanged(row, newName);
@@ -110,12 +113,12 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
 {
     m_colours.reserve(input.size());
 //     setNumRows(input.size());
-	setRowCount( input.size() );
+    setRowCount( input.size() );
 
     QString name;
 
     unsigned int i = 0;
-	QStringList vHeaderLabels;
+    QStringList vHeaderLabels;
 
     for (RCMap::const_iterator it = input.begin(); it != input.end(); ++it) {
         if (it->second.second == std::string(""))
@@ -123,11 +126,11 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         else
             name = strtoqstr(it->second.second);
 
-// 		QTableWidgetItem *text = new QTableWidgetItem(
-// 				dynamic_cast<QTableWidget *>(this),
-// 											 QTableWidgetItem::Never, name);
-		QTableWidgetItem *text = new QTableWidgetItem( );
-//  		text->setObjectName(name);	//@@@ does not exist for QTreeWidgetItem
+//         QTableWidgetItem *text = new QTableWidgetItem(
+//                 dynamic_cast<QTableWidget *>(this),
+//                                              QTableWidgetItem::Never, name);
+        QTableWidgetItem *text = new QTableWidgetItem( );
+//          text->setObjectName(name);    //@@@ does not exist for QTreeWidgetItem
 
         setItem(i, 0, text);
 
@@ -138,11 +141,11 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         setItem(i, 1, temp);
 
 //         verticalHeader()->setLabel(i, QString::number(it->first));
-		vHeaderLabels << QString::number(it->first);
+        vHeaderLabels << QString::number(it->first);
 
         ++i;
     }
-	setVerticalHeaderLabels( vHeaderLabels );
+    setVerticalHeaderLabels( vHeaderLabels );
 
 }
 

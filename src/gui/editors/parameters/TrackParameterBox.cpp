@@ -59,7 +59,6 @@
 #include <QApplication>
 #include <QComboBox>
 #include <QSettings>
-#include <QInputDialog>
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QColor>
@@ -78,20 +77,22 @@
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QCheckBox>
+#include <QLineEdit>
+#include <QInputDialog>
 
 
 namespace Rosegarden
 {
 
-TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
-                                      QWidget *parent)
+TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
+                                     QWidget *parent)
         : RosegardenParameterBox(tr("Track"),
                                  tr("Track Parameters"),
                                  parent),
-        m_doc(doc),
-        m_highestPlayable(127),
-        m_lowestPlayable(0),
-        m_selectedTrackId( -1)
+                                 m_doc(doc),
+                                 m_highestPlayable(127),
+                                 m_lowestPlayable(0),
+                                 m_selectedTrackId( -1)
 {
     setObjectName("Track Parameter Box");
 
@@ -314,7 +315,7 @@ TrackParameterBox::TrackParameterBox( RosegardenGUIDoc *doc,
     // default transpose
     //
     m_transpLbl = new QLabel(tr("Transpose"), m_defaultsGroup);
-	groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
+    groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
 
     connect(m_defTranspose, SIGNAL(activated(int)),
@@ -638,9 +639,9 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
         return ;
 
     m_defClef->setCurrentIndex(trk->getClef());
-// 	m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
-	m_defTranspose->setCurrentText( QString("%1").arg(trk->getTranspose()) );
-	m_defColor->setCurrentIndex(trk->getColor());
+//     m_defTranspose->setCurrentIndex(QString("%1").arg(trk->getTranspose()), true);
+    m_defTranspose->setCurrentText( QString("%1").arg(trk->getTranspose()) );
+    m_defColor->setCurrentIndex(trk->getColor());
     m_highestPlayable = trk->getHighestPlayable();
     m_lowestPlayable = trk->getLowestPlayable();
     updateHighLow();
@@ -895,23 +896,26 @@ TrackParameterBox::slotColorChanged(int index)
         QColor newColour;
         bool ok = false;
         
-		QString newName = QInputDialog::getText(0, tr("New Color Name"), tr("Enter new name"),
-				QLineEdit::Normal, tr("New"), &ok );
-		
+        QString newName = QInputDialog::getText(this,
+                                               tr("New Color Name"),
+                                               tr("Enter new name"),
+                                               QLineEdit::Normal,
+                                               tr("New"), &ok );
+        
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 //             int result = box.getColor(newColour);
-			
-			//QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
-			QColor newColor = QColorDialog::getColor( Qt::white, this );
+            
+            //QRgb QColorDialog::getRgba( 0xffffffff, &ok, this );
+            QColor newColor = QColorDialog::getColor( Qt::white, this );
 
-            if ( newColor.isValid() ) {
+            if (newColor.isValid()) {
                 Colour newRColour = GUIPalette::convertColour(newColour);
                 newMap.addItem(newRColour, qstrtostr(newName));
                 slotDocColoursChanged();
             }
         }
-        // Else we don't do anything as they either didn't give a name�
+        // Else we don't do anything as they either didn't give a name
         // or didn't give a colour
     }
 }
@@ -966,25 +970,26 @@ TrackParameterBox::slotPresetPressed()
     if (!trk)
         return ;
 
-    PresetHandlerDialog dialog(this);
+    //PresetHandlerDialog dialog(this);
+    PresetHandlerDialog dialog(0); // no parent means no style from group box parent, but what about popup location?
 
     try {
         if (dialog.exec() == QDialog::Accepted) {
             m_presetLbl->setText(dialog.getName());
             trk->setPresetLabel(qstrtostr(dialog.getName()));
             if (dialog.getConvertAllSegments()) {
-            	SegmentSyncCommand* command = new SegmentSyncCommand(
-            			comp.getSegments(), comp.getSelectedTrack(),
-            			dialog.getTranspose(), dialog.getLowRange(), 
-            			dialog.getHighRange(),
-            			clefIndexToClef(dialog.getClef()));
+                SegmentSyncCommand* command = new SegmentSyncCommand(
+                        comp.getSegments(), comp.getSelectedTrack(),
+                        dialog.getTranspose(), dialog.getLowRange(), 
+                        dialog.getHighRange(),
+                        clefIndexToClef(dialog.getClef()));
                 CommandHistory::getInstance()->addCommand(command);
             }
             m_defClef->setCurrentIndex(dialog.getClef());
-// 			m_defTranspose->setCurrentIndex(QString("%1").arg
-// 					(dialog.getTranspose()), true);
-			m_defTranspose->setCurrentText( QString("%1").arg
-					(dialog.getTranspose()) );
+//             m_defTranspose->setCurrentIndex(QString("%1").arg
+//                     (dialog.getTranspose()), true);
+            m_defTranspose->setCurrentText( QString("%1").arg
+                    (dialog.getTranspose()) );
 
             m_highestPlayable = dialog.getHighRange();
             m_lowestPlayable = dialog.getLowRange();
