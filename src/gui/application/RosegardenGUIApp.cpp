@@ -2483,21 +2483,29 @@ void RosegardenGUIApp::createAndSetupTransport()
     m_transport = new TransportDialog(this);
 	
     plugShortcuts(m_transport, m_transport->getShortcuts());
+
+
+    /*### (hjj)
+     * We do not need to be able to (only) close Transport dialog with "T" Key.
+     * The Matrix view is neither closed with "M" key, Notation view with "N", etc.
+     * Just select the dialog and hit Alt+F4, or, press T from main view.
+     */
 /*
     m_transport->getShortcuts()->connectItem
         (m_transport->getShortcuts()->addItem(Qt::Key_T),
          this,
          SLOT(slotHideTransport()));
-*/	
-	
-	// new qt4: 
-	QWidget* sc_parent = this;
-	QShortcut* sc_tmp;
-	
-	// types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) );
-	
+
+    // new qt4:
+    QWidget* sc_parent = this;
+    QShortcut* sc_tmp;
+
+    // types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut );
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) );
+*/
+
+
 	
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
@@ -5666,8 +5674,14 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 	QShortcut* sc_tmp;
 	
 	// types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
-//	sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-//	connect( sc_tmp, SIGNAL(activated(), this, SLOT(slotHideTransport()) )
+
+    /*### (hjj)
+     * We do not need to be able to (only) close Transport dialog with "T" Key.
+     * The Matrix view is neither closed with "M" key, Notation view with "N", etc.
+     * Just select the dialog and hit Alt+F4, or, press T from main view.
+     */
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) )
 	
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
