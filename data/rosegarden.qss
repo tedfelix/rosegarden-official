@@ -1102,12 +1102,12 @@ the widget. The arrow mark inside the drop-down button can be styled using the
 ::down-arrow subcontrol. By default, the arrow is placed in the center of the
 contents rectangle of the drop-down subcontrol. */
 
-QComboBox,
-/*#MinorDialog QComboBox,*/
-#View QComboBox,
-#App QComboBox,
-#App QWidget QComboBox,
-QInputDialog QComboBox,
+QComboBox::enabled,
+/*#MinorDialog QComboBox::enabled,*/
+#View QComboBox::enabled,
+#App QComboBox::enabled,
+#App QWidget QComboBox::enabled,
+QInputDialog QComboBox::enabled,
 #RosegardenParameterArea QComboBox
 {
     border: 1px solid #AAAAAA;
@@ -1219,18 +1219,6 @@ QInputDialog QComboBox QAbstractItemView,
     color: #EEEEEE;
 }
 
-QWidget#SQUEEZED
-{
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-QWidget#SPECIAL_LABEL
-{
-    color: #000000;
-    background-color: #999999;
-}
-
 /*#RosegardenParameterArea QFrame
 {
     background-color: transparent;
@@ -1272,6 +1260,33 @@ QToolTip,
     background-color: #fffbd4;
     color: #000000;
     opacity: 50;
+}
+
+QInputDialog,
+QInputDialog QWidget,
+#View QInputDialog,
+#View QInputDialog QWidget,
+#TrackLabel QInputDialog QWidget > QWidget,
+#RosegardenParameterArea QInputDialog QWidget > QWidget
+{
+    background-color: #000000;
+    color: #FFFFFF;
+    selection-color: #FFFFFF;
+    selection-background-color: #ABCDEF;
+}
+
+QWidget#SQUEEZED,
+#RosegardenParameterArea QWidget#SQUEEZED
+{
+    background-color: transparent;
+    color: #FFFFFF;
+}
+
+QWidget#SPECIAL_LABEL,
+#RosegardenParameterArea QWidget#SPECIAL_LABEL
+{
+    color: #000000;
+    background-color: #999999;
 }
 
 
@@ -1336,20 +1351,5 @@ QLineEdit,
     background-color: pink;
     color: purple;
 }
-
-QInputDialog,
-QInputDialog QWidget,
-#View QInputDialog,
-#View QInputDialog QWidget,
-#TrackLabel QInputDialog QWidget > QWidget,
-#RosegardenParameterArea QInputDialog QWidget > QWidget
-{
-    background-color: #000000;
-    color: #FFFFFF;
-    selection-color: #FFFFFF;
-    selection-background-color: #ABCDEF;
-}
-
-
 
 
