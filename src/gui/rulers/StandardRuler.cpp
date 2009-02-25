@@ -54,7 +54,8 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
         m_rulerScale(rulerScale),
         m_markerRuler(0)
 {
-    setObjectName("StandardRuler");
+    QString localStyle("QWidget { background-color: #EEEEEE; color: #000000; }");
+
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setMargin(0);
     layout->setSpacing(0);
@@ -75,6 +76,10 @@ StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
         layout->addWidget(m_markerRuler);
     }
+
+    m_markerRuler->setStyleSheet(localStyle);
+    m_loopRuler->setStyleSheet(localStyle);
+    m_markerRuler->setToolTip(QString("I am m_markerRuler. My style is: %1").arg(localStyle));
 
 
     QObject::connect

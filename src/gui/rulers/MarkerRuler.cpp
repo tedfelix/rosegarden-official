@@ -73,8 +73,8 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
     // Otherwise we'll end up adding all actions to the same
     // (document-level) action collection regardless of which window
     // we're in.
-	
-	this->setObjectName( name );
+    
+    this->setObjectName(name);
     QObject *probe = parent;
     while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
     if (probe) m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
@@ -408,12 +408,12 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         if (!m_menu)
             createMenu();
         if (m_menu) {
-// 			actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
-// 			actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
-			findAction("delete_marker")->setEnabled(clickedMarker != 0);
-			findAction("edit_marker")->setEnabled(clickedMarker != 0);
-			
-			m_menu->exec(QCursor::pos());
+//             actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
+//             actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
+            findAction("delete_marker")->setEnabled(clickedMarker != 0);
+            findAction("edit_marker")->setEnabled(clickedMarker != 0);
+            
+            m_menu->exec(QCursor::pos());
         }
         return;       
     }
