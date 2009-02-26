@@ -286,7 +286,7 @@
     </Menu>
   <Separator append="show_merge" />
     <!-- JAS "show_inst_parameters" is state dependent but not checkable -->
-    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" append="show_merge" />
+    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" checked="true" append="show_merge" />
    <Seperator/>
     <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
     <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />

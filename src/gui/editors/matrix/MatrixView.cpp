@@ -824,6 +824,11 @@ MatrixView::isInChordMode()
 
 void MatrixView::slotDockParametersBack()
 {
+    if (findAction("show_inst_parameters")->isChecked()) {
+        m_dockLeft->setVisible(true);
+    } else {
+        m_dockLeft->setVisible(false);
+    }
 //     m_dockLeft->dockBack();		//&&& not required ?
 }
 
