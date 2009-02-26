@@ -365,8 +365,6 @@ RosegardenGUIApp::RosegardenGUIApp(bool useSequencer,
 //            this, SLOT(slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition)));
 	
 
-    leaveActionState("parametersbox_closed"); //@@@JAS orig. KXMLGUIClient::StateReverse	
-
     RosegardenGUIDoc* doc = new RosegardenGUIDoc(this, m_pluginManager);
 
     m_dockLeft = new QDockWidget(tr("Special Parameters"), this);
@@ -1592,7 +1590,6 @@ void RosegardenGUIApp::readOptions()
     m_dockLeft->setFloating( true );
         //m_dockLeft->hide();
     m_dockLeft->setVisible( false );
-    enterActionState("parametersbox_closed"); //@@@ JAS KXMLGUIClient::StateNoReverse);
     m_dockVisible = false;
     }
 */
@@ -3005,6 +3002,12 @@ void RosegardenGUIApp::slotTogglePreviews()
 
 void RosegardenGUIApp::slotDockParametersBack()
 {
+    if (findAction("show_inst_segment_parameters")->isChecked()) {
+        m_dockLeft->setVisible(true);
+    } else {
+        m_dockLeft->setVisible(false);
+    }
+
 //    m_dockLeft->dockBack();
 /*&&&
 	m_dockLeft->setFloating(false);
@@ -3014,14 +3017,12 @@ void RosegardenGUIApp::slotDockParametersBack()
 
 void RosegardenGUIApp::slotParametersClosed()
 {
-    enterActionState("parametersbox_closed"); //@@@ JAS orig. 0
     m_dockVisible = false;
 }
 
 void RosegardenGUIApp::slotParametersDockedBack(QDockWidget* dw, int ) //qt4: Qt::DockWidgetAreas //qt3 was: QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
-	leaveActionState("parametersbox_closed"); //@@@ JAS KXMLGUIClient::StateReverse
         m_dockVisible = true;
     }
 }

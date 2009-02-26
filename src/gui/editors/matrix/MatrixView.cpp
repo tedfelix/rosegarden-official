@@ -422,8 +422,6 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
     setupActions();
     setupAddControlRulerMenu();
 
-    leaveActionState("parametersbox_closed");
-
     // tool bars
     initActionsToolbar();
     initZoomToolbar();
@@ -710,7 +708,6 @@ void MatrixView::readOptions()
 //         m_dockLeft->hide();
         m_dockLeft->setFloating( false );
         m_dockLeft->setVisible( false );
-        enterActionState("parametersbox_closed");
         m_dockVisible = false;
     }
 
@@ -832,14 +829,12 @@ void MatrixView::slotDockParametersBack()
 
 void MatrixView::slotParametersClosed()
 {
-    enterActionState("parametersbox_closed");
     m_dockVisible = false;
 }
 
 void MatrixView::slotParametersDockedBack(QDockWidget* dw, int )//QDockWidget::DockPosition)
 {
     if (dw == m_dockLeft) {
-        leaveActionState("parametersbox_closed");
         m_dockVisible = true;
     }
 }

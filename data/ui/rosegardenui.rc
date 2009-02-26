@@ -516,12 +516,6 @@
      </enable>
 </State>
 
-<State name="parametersbox_closed">
-    <enable>
-         <Action name="show_inst_segment_parameters" />
-    </enable>
-</State>
-
 <State name="have_range">
     <enable>
 	 <Action name="cut_range"/>

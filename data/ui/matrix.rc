@@ -435,11 +435,5 @@
   </disable>
 </State>
 
-<State name="parametersbox_closed">
-    <enable>
-         <Action name="show_inst_parameters" />
-    </enable>
-</State>
-
 </kpartgui>
  
