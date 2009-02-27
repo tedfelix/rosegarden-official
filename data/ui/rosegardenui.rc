@@ -163,7 +163,7 @@
   <Menu name="Tracks">
     <text>Trac&amp;ks</text>
     <Action name="add_track" text="Add &amp;Track" icon="add_tracks" shortcut="Ctrl+T" />
-    <Action name="add_tracks" text="&amp;Add Tracks..." />
+    <Action name="add_tracks" text="&amp;Add Tracks..." shortcut="Ctrl+Shift+T" />
     <Action name="delete_track" text="D&amp;elete Track" icon="delete_track" shortcut="Ctrl+D" />
   <Separator/>
     <Action name="move_track_down" text="Move Track &amp;Down" icon="move_track_down" shortcut="Shift+Down" />
