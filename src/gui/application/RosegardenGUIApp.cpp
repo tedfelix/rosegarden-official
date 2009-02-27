@@ -2482,28 +2482,6 @@ void RosegardenGUIApp::createAndSetupTransport()
     plugShortcuts(m_transport, m_transport->getShortcuts());
 
 
-    /*### (hjj)
-     * We do not need to be able to (only) close Transport dialog with "T" Key.
-     * The Matrix view is neither closed with "M" key, Notation view with "N", etc.
-     * Just select the dialog and hit Alt+F4, or, press T from main view.
-     */
-/*
-    m_transport->getShortcuts()->connectItem
-        (m_transport->getShortcuts()->addItem(Qt::Key_T),
-         this,
-         SLOT(slotHideTransport()));
-
-    // new qt4:
-    QWidget* sc_parent = this;
-    QShortcut* sc_tmp;
-
-    // types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut );
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) );
-*/
-
-
-	
     // Ensure that the checkbox is unchecked if the dialog
     // is closed
     connect(m_transport, SIGNAL(closed()),
@@ -2949,6 +2927,26 @@ void RosegardenGUIApp::slotToggleTransport()
     }
 }
 
+void RosegardenGUIApp::slotToggleTransportVisibility()
+{
+    /**
+     * We need this because selecting the menu items automatically toggles
+     * the "show_transport" state, while pressing "T" key does not.
+     */
+    KTmpStatusMsg msg(tr("Toggle the Transport"), this);
+
+    QAction *a = findAction("show_transport");
+    if (a->isChecked()) {
+        a->setChecked(false);
+    } else {
+        a->setChecked(true);
+    }
+    slotToggleTransport();
+}
+
+/*###
+ * Not used anymore -- is here something valuable to save for slotToggleTransport ? (hjj)
+ *
 void RosegardenGUIApp::slotHideTransport()
 {
     QAction *a = findAction("show_transport");
@@ -2960,6 +2958,7 @@ void RosegardenGUIApp::slotHideTransport()
     getTransport()->hide();
     getTransport()->blockSignals(true);
 }        
+ */
 
 void RosegardenGUIApp::slotToggleTrackLabels()
 {
@@ -5676,13 +5675,8 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 	
 	// types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
 
-    /*### (hjj)
-     * We do not need to be able to (only) close Transport dialog with "T" Key.
-     * The Matrix view is neither closed with "M" key, Notation view with "N", etc.
-     * Just select the dialog and hit Alt+F4, or, press T from main view.
-     */
-    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) )
+        sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()) );
 	
 	
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 

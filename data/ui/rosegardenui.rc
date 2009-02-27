@@ -196,13 +196,13 @@
     <Menu name="Transport">
       <text>T&amp;ransport</text>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" shortcut="KP_Enter" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Ins" /> 
+      <Action name="play" text="&amp;Play" icon="transport-play" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
-      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="End" /> 
-      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" /> 
+      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" /> 
+      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" /> 
       <Action name="record" text="&amp;Record" icon="transport-record" />
-      <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" />
+      <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" />
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
     </Menu>
@@ -229,7 +229,7 @@
       <Action name="show_tempo_ruler" text="Show Te&amp;mpo Ruler" checked="true" append="show_merge" />
     </Menu>
   <Separator append="show_merge" />
-    <Action name="show_transport" text="Show Tra&amp;nsport" shortcut="T" checked="true" append="show_merge" />
+    <Action name="show_transport" text="Show Tra&amp;nsport" checked="true" append="show_merge" />
     <!-- JAS "show_inst_segment_parameters" is state dependent but not checkable -->
     <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" checked="true" append="show_merge" />
   <Separator append="show_merge" />
