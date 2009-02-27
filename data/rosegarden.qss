@@ -1108,22 +1108,22 @@ QComboBox::enabled,
 #App QComboBox::enabled,
 #App QWidget QComboBox::enabled,
 QInputDialog QComboBox::enabled,
-#RosegardenParameterArea QComboBox
+#RosegardenParameterArea QComboBox::enabled
 {
     border: 1px solid #AAAAAA;
     border-radius: 3px;
-    padding: 1px 18px 1px 3px;
-    min-width: 6em;
+    padding: 0 5px 0 5px;
+/*    min-width: 6em;*/
     color: #000000;
 }
 
-QComboBox:hover,
+QComboBox::enabled:hover,
 QComboBox::drop-down:hover,
-#App QWidget QComboBox:hover,
+#App QWidget QComboBox::enabled:hover,
 #App QWidget QComboBox::drop-down:hover,
-QInputDialog QComboBox:hover,
+QInputDialog QComboBox::enabled:hover,
 QInputDialog QComboBox::drop-down:hover,
-#RosegardenParameterArea QComboBox:hover,
+#RosegardenParameterArea QComboBox::enabled:hover,
 #RosegardenParameterArea QComboBox::drop-down:hover
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
@@ -1182,7 +1182,7 @@ QInputDialog QComboBox::drop-down,
     width: 15px;
 
     border-left-width: 1px;
-    border-left-color: darkgray;
+    border-left-color: #AAAAAA;
     border-left-style: solid; /* just a single line */
     border-top-right-radius: 3px; /* same radius as the QComboBox */
     border-bottom-right-radius: 3px;
@@ -1213,10 +1213,10 @@ QComboBox QAbstractItemView,
 QInputDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
-    border: 2px solid darkgray;
+    border: 1px solid #AAAAAA;
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);
     selection-background-color: #C0D8FF;
-    background-color: darkgray;
-    color: #EEEEEE;
+    color: #000000;
 }
 
 /*#RosegardenParameterArea QFrame

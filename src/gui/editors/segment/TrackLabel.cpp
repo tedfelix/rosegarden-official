@@ -154,7 +154,7 @@ TrackLabel::setSelected(bool on)
 
     if (on) {
         m_selected = true;
-        localStyle="QLabel { background-color: #C0D8FF; color: #FFFFFF; }";
+        localStyle="QLabel { background-color: #AAAAAA; color: #FFFFFF; }";
     } else {
         m_selected = false;
         localStyle="QLabel { background-color: transparent; color: #000000; }";
