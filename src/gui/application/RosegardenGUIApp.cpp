@@ -5669,58 +5669,78 @@ RosegardenGUIApp::slotTestClipboard()
 void
 RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 {
-	// new qt4: 
-	QWidget* sc_parent = this;
-	QShortcut* sc_tmp;
+    // new qt4: 
+    QWidget* sc_parent = this;
+    QShortcut* sc_tmp;
 	
-	// types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
+    // types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
 
-        sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()) );
+    /**
+     * Shortcuts for showing/hiding Transport.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()) );
 	
+    /**
+     * Shortcuts for playing.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
-	// alternative Shortcut for Play command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
-	
-	// alternative Shortcut for Play command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 
+    /**
+     * Shortcuts for stopping.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
+	
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
+	
+    /**
+     * Shortcuts for fast forwarding.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
+	
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
+	
+    /**
+     * Shortcuts for rewinding.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
+	
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
 
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
-	
-	// alternative Shortcut for Stop command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
-	
+    /**
+     * Shortcuts for fast forwarding to end.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_End), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastForwardToEnd()) );
 
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
-	
-	// alternative Shortcut for Fastforward command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
-	
+    /**
+     * Shortcuts for rewinding to beginning.
+     */
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Home), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewindToBeginning()) );
 
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
-	
-	// alternative Shortcut for Rewind command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
-	
+    /**
+     * Shortcuts for recording.
+     */
 
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
-	// alternative Shortcut for Record command
-	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
+    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
 
 
