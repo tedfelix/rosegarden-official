@@ -78,7 +78,7 @@
     <Action name="cut_range" text="Cut &amp;Range" shortcut="Ctrl+Shift+X" />
     <Action name="copy_range" text="Cop&amp;y Range" shortcut="Ctrl+Shift+C" />
     <Action name="paste_range" text="Pa&amp;ste Range" shortcut="Ctrl+Shift+V" />
-    <Action name="insert_range" text="&amp;Insert Range..." shortcut="Shift+Ins" />
+    <Action name="insert_range" text="&amp;Insert Range..." shortcut="Ctrl+Shift+Ins" />
   <Separator/>
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
   </Menu>

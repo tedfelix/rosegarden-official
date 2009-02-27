@@ -406,7 +406,18 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
     if (actionName == "" || shortcut == "") return false;
     QAction *action = findAction(actionName);
     if (!action) return false;
-    action->setShortcut(translate(actionName, shortcut, "shortcut"));
+
+    /*
+     * Enable one or multiple shortcuts.  Only the first shortcut, which is
+     * considered as the primary one, will be shown in the menus.
+     */
+    QStringList shortcuts = shortcut.split(", ");
+    QList<QKeySequence> shortcutList;
+    for (int i = 0; i < shortcuts.size(); i++) {
+        shortcutList.append(translate(actionName, shortcuts.at(i), "shortcut"));
+    }
+    action->setShortcuts(shortcutList);
+
     return true;
 }
 
