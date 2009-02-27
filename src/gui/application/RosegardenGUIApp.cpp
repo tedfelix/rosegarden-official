@@ -5685,23 +5685,46 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
     // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotHideTransport()) )
 	
 	
+	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+	
+	// alternative Shortcut for Play command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
 	// alternative Shortcut for Play command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+
+
+	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
 	
-	
+	// alternative Shortcut for Stop command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
 	
+
+	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
+	
+	// alternative Shortcut for Fastforward command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
 	
+
+	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
+	
+	// alternative Shortcut for Rewind command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
 	
+
+	sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
+	
+	// alternative Shortcut for Record command
 	sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
 	connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
