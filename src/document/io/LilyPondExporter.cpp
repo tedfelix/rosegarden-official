@@ -2172,9 +2172,9 @@ LilyPondExporter::writeBar(Segment *s,
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();
                 if (octaveOffset > 0) {
-                    str << "^" << 8*octaveOffset;
+                    str << "^" << 1 + 7*octaveOffset;
                 } else if (octaveOffset < 0) {
-                    str << "_" << -8*octaveOffset;
+                    str << "_" << 1 + 7*(-octaveOffset);
                 }
 
                 str << "\"" << std::endl << indent(col);
