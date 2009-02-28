@@ -414,7 +414,13 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
     QStringList shortcuts = shortcut.split(", ");
     QList<QKeySequence> shortcutList;
     for (int i = 0; i < shortcuts.size(); i++) {
-        shortcutList.append(translate(actionName, shortcuts.at(i), "shortcut"));
+        QString sc( shortcuts.at(i) );
+        if (sc.startsWith("0x")) {
+            bool ok;
+            shortcutList.append(QKeySequence(sc.toInt(&ok, 16)));
+        } else {
+            shortcutList.append(translate(actionName, sc, "shortcut"));
+        }
     }
     action->setShortcuts(shortcutList);
 
