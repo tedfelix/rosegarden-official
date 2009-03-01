@@ -72,7 +72,7 @@ protected:
 
     bool setActionText(QString actionName, QString text);
     bool setActionIcon(QString actionName, QString icon);
-    bool setActionShortcut(QString actionName, QString shortcut);
+    bool setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext);
     bool setActionGroup(QString actionName, QString group);
     bool setActionChecked(QString actionName, bool);
 

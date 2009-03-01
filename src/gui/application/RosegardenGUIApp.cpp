@@ -5669,78 +5669,81 @@ RosegardenGUIApp::slotTestClipboard()
 void
 RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 {
+    //
+    // Shortcuts are now defined in *.rc files.
+    //
     // new qt4: 
-    QWidget* sc_parent = this;
-    QShortcut* sc_tmp;
+    // QWidget* sc_parent = this;
+    // QShortcut* sc_tmp;
 	
     // types:Qt::WidgetShortcut, Qt::ApplicationShortcut, Qt::WindowShortcut
 
     /**
      * Shortcuts for showing/hiding Transport.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_T), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleTransportVisibility()) );
 	
     /**
      * Shortcuts for playing.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPlay), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_Enter), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_Return + Qt::CTRL), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotPlay()) );
 
     /**
      * Shortcuts for stopping.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaStop), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_Insert), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotStop()) );
 	
     /**
      * Shortcuts for fast forwarding.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaNext), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageDown), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastforward()) );
 	
     /**
      * Shortcuts for rewinding.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaPrevious), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_PageUp), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewind()) );
 
     /**
      * Shortcuts for fast forwarding to end.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_End), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastForwardToEnd()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_End), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotFastForwardToEnd()) );
 
     /**
      * Shortcuts for rewinding to beginning.
      */
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Home), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewindToBeginning()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_Home), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotRewindToBeginning()) );
 
     /**
      * Shortcuts for recording.
      */
 
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_MediaRecord), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
-    sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
-    connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
+    // sc_tmp = new QShortcut( QKeySequence(Qt::Key_Space), sc_parent, 0, 0, Qt::ApplicationShortcut ); 
+    // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotToggleRecord()) );
 	
 
 
@@ -5751,13 +5754,13 @@ RosegardenGUIApp::plugShortcuts(QWidget *widget, QShortcut *acc)
 		
         // Should not use just Qt::Key_M, because it is used for "Open in MatrixView"
         // Are these needed, because we also have "Ctrl + 1" ... "Ctrl + 9" and "1" ... "9"
-        sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
+        // sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
         //sc_tmp = m_jumpToQuickMarkerAction->shortcut();
-        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()) );
+        // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotJumpToQuickMarker()) );
 		
-        sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
+        // sc_tmp = new QShortcut( QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_M), sc_parent, 0, 0, Qt::ApplicationShortcut );
         //sc_tmp = m_setQuickMarkerAction->shortcut();
-        connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()) );
+        // connect( sc_tmp, SIGNAL(activated()), this, SLOT(slotSetQuickMarker()) );
 		
 
         connect(transport->PlayButton(),

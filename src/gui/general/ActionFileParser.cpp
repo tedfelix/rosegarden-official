@@ -152,13 +152,14 @@ ActionFileParser::startElement(const QString& namespaceURI,
         QString text = atts.value("text");
         QString icon = atts.value("icon");
         QString shortcut = atts.value("shortcut");
+        QString shortcutContext = atts.value("shortcut-context");
         QString group = atts.value("group");
         QString checked = atts.value("checked");
 
         //!!! return values
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
-        if (shortcut != "") setActionShortcut(actionName, shortcut);
+        if (shortcut != "") setActionShortcut(actionName, shortcut, shortcutContext.toLower() == "application");
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
                                             checked.toLower() == "true");
@@ -401,7 +402,7 @@ ActionFileParser::setActionIcon(QString actionName, QString icon)
 }
 
 bool
-ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
+ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext)
 {
     if (actionName == "" || shortcut == "") return false;
     QAction *action = findAction(actionName);
@@ -414,15 +415,16 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut)
     QStringList shortcuts = shortcut.split(", ");
     QList<QKeySequence> shortcutList;
     for (int i = 0; i < shortcuts.size(); i++) {
-        QString sc( shortcuts.at(i) );
-        if (sc.startsWith("0x")) {
-            bool ok;
-            shortcutList.append(QKeySequence(sc.toInt(&ok, 16)));
-        } else {
-            shortcutList.append(translate(actionName, sc, "shortcut"));
-        }
+        shortcutList.append(translate(actionName, shortcuts.at(i), "shortcut"));
     }
     action->setShortcuts(shortcutList);
+
+    /*
+     * Check if the shortcut should be available globally.
+     */
+    if (isApplicationContext) {
+        action->setShortcutContext(Qt::ApplicationShortcut);
+    }
 
     return true;
 }
