@@ -106,8 +106,8 @@ QToolBar::top,
 QToolBar::bottom,
 #App QToolBar::top,
 #App QToolBar::bottom,
-#MatrixView QToolBar::top,
-#MatrixView QToolBar::bottom,
+#matrixview QToolBar::top,
+#matrixview QToolBar::bottom,
 #tempoview QToolBar::top,
 #tempoview QToolBar::bottom
 {
@@ -119,8 +119,8 @@ QToolBar::left,
 QToolBar::right,
 #App QToolBar::left,
 #App QToolBar::right,
-#MatrixView QToolBar::left,
-#MatrixView QToolBar::right,
+#matrixview QToolBar::left,
+#matrixview QToolBar::right,
 #tempoview QToolBar::left,
 #tempoview QToolBar::right
 {
@@ -135,16 +135,16 @@ QToolBar::top QLabel,
 QToolBar::bottom QLabel,
 #App QToolBar::top QLabel,
 #App QToolBar::bottom QLabel,
-#MatrixView QToolBar::top QLabel,
-#MatrixView QToolBar::bottom QLabel,
+#matrixview QToolBar::top QLabel,
+#matrixview QToolBar::bottom QLabel,
 #tempoview QToolBar::top QLabel,
 #tempoview QToolBar::bottom QLabel,
 QToolBar::left QLabel,
 QToolBar::right QLabel,
 #App QToolBar::left QLabel,
 #App QToolBar::right QLabel,
-#MatrixView QToolBar::left QLabel,
-#MatrixView QToolBar::right QLabel,
+#matrixview QToolBar::left QLabel,
+#matrixview QToolBar::right QLabel,
 #tempoview QToolBar::left QLabel,
 #tempoview QToolBar::right QLabel
 {
@@ -154,7 +154,7 @@ QToolBar::right QLabel,
 
 QToolBar::handle,
 #tempoview QToolBar::handle,
-#MatrixView QToolBar::handle,
+#matrixview QToolBar::handle,
 #App QToolBar::handle
 {
     image: url(:/pixmaps/style/htoolbar-separator.png);
@@ -178,7 +178,7 @@ QLabel,
 #View QLabel,
 #MinorDialog QLabel,
 #tempoview QLabel,
-#MatrixView QLabel,
+#matrixview QLabel,
 #RosegardenParameterArea QLabel,
 #App QLabel
 {
@@ -199,7 +199,7 @@ styled using the ::tear-off. */
 
 QMenu,
 #tempoview QMenu,
-#MatrixView QMenu,
+#matrixview QMenu,
 #App QMenu,
 #View QMenu
 {
@@ -209,7 +209,7 @@ QMenu,
 
 QMenu::item,
 #tempoview QMenu::item,
-#MatrixView QMenu::item,
+#matrixview QMenu::item,
 #App QMenu::item,
 #View QMenu::item
 {
@@ -225,7 +225,7 @@ QMenu::item,
  */
 QMenu::item:selected,
 #tempoview QMenu::item:selected,
-#MatrixView QMenu::item:selected,
+#matrixview QMenu::item:selected,
 #App QMenu::item:selected,
 #View QMenu::item:selected
 {
@@ -923,7 +923,7 @@ QWidget#LED
     background-color: transparent;
 }
 
-/*QWidget##MatrixView
+/*QWidget##matrixview
 {
     background-color: #000000;
 }*/
@@ -1029,7 +1029,7 @@ For QPushButton with a menu, the menu indicator is styled using the
 customized using the :open and :closed pseudo-states. */
 
 QPushButton::enabled,
-#MatrixView QPushButton::enabled,
+#matrixview QPushButton::enabled,
 #MinorDialog QPushButton::enabled,
 #tempoview QPushButton::enabled,
 QWidget#tempoview QPushButton::enabled,
@@ -1040,7 +1040,7 @@ QInputDialog QPushButton::enabled,
 QGroupBox QPushButton::enabled,
 #App QGroupBox QPushButton::enabled,
 #App QWidget QPushButton::enabled,
-#RosegardenParameterArea QPushButton
+#RosegardenParameterArea QPushButton::enabled
 {
     border: 1px solid #AAAAAA;
     border-radius: 3px;
@@ -1050,8 +1050,30 @@ QGroupBox QPushButton::enabled,
     padding: 0 5px 0 5px;
 }
 
+QPushButton::!enabled,
+#matrixview QPushButton::!enabled,
+#MinorDialog QPushButton::!enabled,
+#tempoview QPushButton::!enabled,
+QWidget#tempoview QPushButton::!enabled,
+#View QPushButton::!enabled,
+#View QDialog QPushButton::!enabled,
+#App QPushButton::!enabled,
+QInputDialog QPushButton::!enabled,
+QGroupBox QPushButton::!enabled,
+#App QGroupBox QPushButton::!enabled,
+#App QWidget QPushButton::!enabled,
+#RosegardenParameterArea QPushButton::!enabled
+{
+    border: 1px solid #808080;
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); 
+    color: #000000;
+/*    min-width: 60px;*/
+    padding: 0 5px 0 5px;
+}
+
 QPushButton:hover,
-#MatrixView QPushButton:hover,
+#matrixview QPushButton:hover,
 #MinorDialog QPushButton:hover,
 #tempoview QPushButton:hover,
 #View QPushButton:hover,
@@ -1103,28 +1125,55 @@ the widget. The arrow mark inside the drop-down button can be styled using the
 contents rectangle of the drop-down subcontrol. */
 
 QComboBox::enabled,
-/*#MinorDialog QComboBox::enabled,*/
+QComboBox,
 #View QComboBox::enabled,
+#View QComboBox,
 #App QComboBox::enabled,
+#App QComboBox,
 #App QWidget QComboBox::enabled,
+#App QWidget QComboBox,
 QInputDialog QComboBox::enabled,
-#RosegardenParameterArea QComboBox::enabled
+QInputDialog QComboBox,
+#RosegardenParameterArea QComboBox::enabled,
+#RosegardenParameterArea QComboBox
 {
     border: 1px solid #AAAAAA;
     border-radius: 3px;
     padding: 0 5px 0 5px;
 /*    min-width: 6em;*/
+    min-width: 2em;
     color: #000000;
 }
 
+QComboBox::!enabled,
+/*#MinorDialog QComboBox::enabled,*/
+#View QComboBox::!enabled,
+#App QComboBox::!enabled,
+#App QWidget QComboBox::!enabled,
+QInputDialog QComboBox::!enabled,
+#RosegardenParameterArea QComboBox::!enabled
+{
+    border: 1px solid #808080;
+    border-radius: 3px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); 
+}
+
 QComboBox::enabled:hover,
+QComboBox::hover,
 QComboBox::drop-down:hover,
+QComboBox:hover,
 #App QWidget QComboBox::enabled:hover,
+#App QWidget QComboBox:hover,
 #App QWidget QComboBox::drop-down:hover,
+#App QWidget QComboBox:hover,
 QInputDialog QComboBox::enabled:hover,
+QInputDialog QComboBox:hover,
 QInputDialog QComboBox::drop-down:hover,
+QInputDialog QComboBox:hover,
 #RosegardenParameterArea QComboBox::enabled:hover,
-#RosegardenParameterArea QComboBox::drop-down:hover
+#RosegardenParameterArea QComboBox:hover,
+#RosegardenParameterArea QComboBox::drop-down:hover,
+#RosegardenParameterArea QComboBox:hover
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
 }
@@ -1352,4 +1401,39 @@ QLineEdit,
     color: purple;
 }
 
+#MatrixParameters QWidget
+{
+    background-color: #000000;
+    color: #FFFFFF;
+}
 
+#MatrixParameters QLabel
+{
+    background: transparent;
+    color: white;
+}
+
+
+#MatrixParameters QGroupBox
+{
+    background: #404040;
+    color: #FFFFFF;
+    border: 2px solid #BBBBBB;
+    border-radius: 4px;
+    padding: 2px;
+    margin-top: 1ex;
+}
+
+
+#MatrixParameters QGroupBox::title
+{
+    color: #FFFFFF;
+    subcontrol-origin: margin;
+    subcontrol-position: top center;
+    padding: 0 5px;
+}
+
+#MatrixParameters QGroupBox QWidget
+{
+    background: #404040;
+}
