@@ -22,8 +22,7 @@
 #include "gui/configuration/HeadersConfigurationPage.h"
 #include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
-
-//#include <klineedit.h>
+#include "misc/Debug.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -65,7 +64,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     QWidget *mainbox = new QWidget(this);
     QVBoxLayout *mainboxLayout = new QVBoxLayout;
     metagrid->addWidget(mainbox, 0, 0);
-
 
     //
     // Arrange options in "General" and "Advanced" tabs.
@@ -134,10 +132,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->addItem(tr("US Letter"));
     m_lilyPaperSize->addItem(tr("Tabloid"));
     m_lilyPaperSize->addItem(tr("do not specify"));
-    int defaultPaperSize = 1; // A4
-    if (QLocale::system().country() == QLocale::UnitedStates) {
-        defaultPaperSize = 5; // Letter
-    }
 
     m_lilyPaperLandscape = new QCheckBox(tr("Landscape"), frameBasic);
 
@@ -213,11 +207,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
  
     m_lilyExportLyrics = new QCheckBox(
                              tr("Export lyrics"), frameNotation);
-    // default to lyric export == false because if you export the default
-    // empty "- - -" lyrics, crap results ensue, and people will know if they
-    // do need to export the lyrics - DMM
-    // fixed, no "- - -" lyrics are generated for an empty lyrics
-    // default again into lyrics - HJJ
     layoutNotation->addWidget(m_lilyExportLyrics, 1, 0, 0+1, 1- 0+1);
 
     m_lilyExportBeams = new QCheckBox(
@@ -369,6 +358,11 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyfontsize", m_lilyFontSize->currentIndex());
     settings.setValue("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
     settings.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
+    // default to lyric export == false because if you export the default
+    // empty "- - -" lyrics, crap results ensue, and people will know if they
+    // do need to export the lyrics - DMM
+    // fixed, no "- - -" lyrics are generated for an empty lyrics
+    // default again into lyrics - HJJ
     settings.setValue("lilyexportlyrics", m_lilyExportLyrics->isChecked());
     settings.setValue("lilyexportmidi", m_lilyExportMidi->isChecked());
     settings.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
