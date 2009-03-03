@@ -71,6 +71,7 @@ protected:
     QComboBox *m_lilyMarkerMode;
     HeadersConfigurationPage *m_headersPage;
 
+    void populateDefaultValues();
 };
 
 
