@@ -62,7 +62,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
 
     QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
     QWidget *mainbox = new QWidget(this);
     QVBoxLayout *mainboxLayout = new QVBoxLayout;
     metagrid->addWidget(mainbox, 0, 0);
@@ -74,34 +73,26 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     QTabWidget *tabWidget = new QTabWidget( mainbox );
     mainboxLayout->addWidget(tabWidget);
-    mainbox->setLayout(mainboxLayout);
 
-    QFrame *generalFrame;
-    QFrame *advancedFrame;
-    QGridLayout *generalGrid;
-    QGridLayout *advancedGrid;
-
-    generalFrame = new QFrame();
+    QFrame *generalFrame = new QFrame();
     tabWidget->addTab(generalFrame, tr("General options"));
 
     generalFrame->setContentsMargins(5, 5, 5, 5);
-    generalGrid = new QGridLayout;
+    QGridLayout *generalGrid = new QGridLayout;
     generalGrid->setSpacing(5);
 
-    advancedFrame = new QFrame();
+    QFrame *advancedFrame = new QFrame();
     tabWidget->addTab(advancedFrame, tr("Advanced options"));
 
     advancedFrame->setContentsMargins(5, 5, 5, 5);
-    advancedGrid = new QGridLayout;
+    QGridLayout *advancedGrid = new QGridLayout;
     advancedGrid->setSpacing(5);
+//     advancedGrid->setMargin(5);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
-
 //     m_headersPage->setSpacing(5);
 //     m_headersPage->setMargin(5);
-	advancedGrid->setSpacing(5);
-	advancedGrid->setMargin(5);
 	
 	
     //
@@ -123,7 +114,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                           tr("Compatibility level"), frameBasic), 0, 0);
 
     m_lilyLanguage = new QComboBox(frameBasic);
-    // See also setDefaultLilyPondVersion below
 
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.6")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
@@ -166,8 +156,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     }
     layoutBasic->addWidget(m_lilyFontSize, 2, 1);
 
-    frameBasic->setLayout(layoutBasic);
-
     //
     // LilyPond export: Staff level options
     //
@@ -199,7 +187,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutStaff->addWidget(m_lilyExportStaffMerge, 1, 0, 0+1, 1- 0+1);
 
 
-    frameStaff->setLayout(layoutStaff);
 
     //
     // LilyPond export: Notation options
@@ -243,8 +230,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                                  tr("Export track staff brackets"), frameNotation);
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1); 
 
-    frameNotation->setLayout(layoutNotation);
-
     generalGrid->setRowStretch(4, 10);
 
     //
@@ -279,7 +264,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                            tr("Interpret chord texts as lead sheet chord names"), frameAdvancedLayout);
     layoutAdvancedLayout->addWidget(m_lilyChordNamesMode, 2, 0, 0+1, 1- 0+1);
 
-    frameAdvancedLayout->setLayout(layoutAdvancedLayout);
 
     QGroupBox *miscOptionsBox = new QGroupBox(tr("Miscellaneous options"), advancedFrame);
     QVBoxLayout *miscOptionsBoxLayout = new QVBoxLayout;
@@ -308,7 +292,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                              tr("Export markers"), frameMisc),2, 0 );
     layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
 
-    frameMisc->setLayout(layoutMisc);
 
     advancedGrid->setRowStretch(2, 10);
 
@@ -318,13 +301,24 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     notationOptionsBox->setLayout(notationOptionsBoxLayout);
     staffOptionsBox->setLayout(staffOptionsBoxLayout);
 
+    frameMisc->setLayout(layoutMisc);
+    frameAdvancedLayout->setLayout(layoutAdvancedLayout);
     generalFrame->setLayout(generalGrid);
+
+    frameNotation->setLayout(layoutNotation);
+    frameStaff->setLayout(layoutStaff);
+    frameBasic->setLayout(layoutBasic);
     advancedFrame->setLayout(advancedGrid);
+
+    mainbox->setLayout(mainboxLayout);
 
     resize(minimumSize());
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
+
+    setLayout(metagrid);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
