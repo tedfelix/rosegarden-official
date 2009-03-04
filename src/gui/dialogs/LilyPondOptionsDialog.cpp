@@ -60,10 +60,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     setModal(true);
     setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
 
-    QGridLayout *metagrid = new QGridLayout;
+    QGridLayout *metaGridLayout = new QGridLayout;
+
     QWidget *mainbox = new QWidget(this);
     QVBoxLayout *mainboxLayout = new QVBoxLayout;
-    metagrid->addWidget(mainbox, 0, 0);
+    metaGridLayout->addWidget(mainbox, 0, 0);
 
     //
     // Arrange options in "General" and "Advanced" tabs.
@@ -301,12 +302,14 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    resize(minimumSize());
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    // resize(minimumSize()); // HANGS!!!
 
-    setLayout(metagrid);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metaGridLayout->addWidget(buttonBox, 1, 0);
+    metaGridLayout->setRowStretch(0, 10);
+
+    setLayout(metaGridLayout);
+
 
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));

@@ -27,7 +27,6 @@ class QWidget;
 class QCheckBox;
 class QComboBox;
 class QLineEdit;
-class QLineEdit;
 
 namespace Rosegarden
 {
