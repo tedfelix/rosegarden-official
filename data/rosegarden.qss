@@ -1083,7 +1083,7 @@ QToolButton::checked,
 #RosegardenParameterArea QToolButton::pressed,
 #RosegardenParameterArea QToolButton::checked
 {
-    border: 1px solid #E0E0E0;
+    border: 1px solid #AAAAAA;
     border-radius: 2px;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
@@ -1529,6 +1529,7 @@ tooltip. */
  * in fact haven't.  Ugh.
  */
 QToolTip,
+QWidget QToolTip,
 QToolButton QToolTip,
 #RosegardenTransport QPushButton QToolTip,
 #RosegardenParameterArea QPushButton QToolTip,
