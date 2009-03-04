@@ -18,10 +18,11 @@
 
 #include "CollapsingFrame.h"
 #include "misc/Strings.h"
+#include "gui/general/IconLoader.h"
+
 #include <QApplication>
 #include <QDir>
 #include <QSettings>
-#include "gui/general/IconLoader.h"
 #include <QFont>
 #include <QFrame>
 #include <QLayout>
@@ -29,6 +30,7 @@
 #include <QString>
 #include <QToolButton>
 #include <QWidget>
+
 #include <cassert>
 
 
@@ -60,7 +62,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
     font.setBold(true);
     m_toggleButton->setFont(font);
 
-    m_toggleButton->setIcon(IconLoader().load("arrow-expanded"));
+    m_toggleButton->setIcon(IconLoader().load("style/arrow-down-small-inverted"));
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
@@ -123,9 +125,9 @@ CollapsingFrame::toggle()
     QPixmap pixmap;
 
     if (m_collapsed) {
-        pixmap = IconLoader().loadPixmap("arrow-contracted");
+        pixmap = IconLoader().loadPixmap("style/arrow-right-small-inverted");
     } else {
-        pixmap = IconLoader().loadPixmap("arrow-expanded");
+        pixmap = IconLoader().loadPixmap("style/arrow-down-small-inverted");
     }
 
     if (objectName().isEmpty()) {               // name(0)

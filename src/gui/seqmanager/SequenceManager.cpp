@@ -1287,7 +1287,15 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
  * StandardButtons buttons = NoButton, QWidget * parent = 0, Qt::WindowFlags f =
  * Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint )
  */
-    if (!(m_soundDriverStatus & AUDIO_OK)) {
+
+//###
+//@@@
+//
+// This dialog is really getting on my nerves, and I don't have time to rewrite
+// it so it can have a don't show this again button
+//
+// TODO!!!
+/*    if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenGUIApp::self()->awaitDialogClearance();
         QMessageBox::information(RosegardenGUIApp::self(),
                                  tr("Failed to connect to JACK"),
@@ -1300,7 +1308,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
                                  // removed from the dialog above.  It used to
                                  // use the "startup-jack-failed" key for this
                                  // purpose.
-    }
+    }*/
 #endif
     CurrentProgressDialog::thaw();
 }

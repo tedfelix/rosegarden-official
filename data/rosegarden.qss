@@ -36,7 +36,6 @@ QMainWindow::separator
 
 QMainWindow::separator:hover
 {
-/*    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
     background-color: #CCDFFF;
 }
 
@@ -204,7 +203,8 @@ QMenu,
 #App QMenu,
 #View QMenu
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);
+/*    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);*/
+    background-color: #EEEEEE;
     border: 1px solid black;
 }
 
@@ -217,7 +217,7 @@ QMenu::item,
     /* sets background of menu item. set this to something non-transparent
        if you want menu color and menu item color to be different */
        background-color: transparent;
-       color: #FFFFFF;
+       color: #000000;
        padding: 2px 25px 2px 20px;
        border: 1px solid transparent;
 }
@@ -230,11 +230,52 @@ QMenu::item:selected,
 #App QMenu::item:selected,
 #View QMenu::item:selected
 {
-/*    background-color: #EEEEEE;*/
-    background-color: #CCDFFF;
-    color: #000000;
+    background-color: #80AFFF;
+    color: #FFFFFF;
     font: bold;
-} 
+}
+
+/* non-exclusive indicator = check box style indicator (see QActionGroup::setExclusive) */
+QMenu::indicator:non-exclusive:unchecked
+{
+    image: url(:pixmaps/style/checkbox_unchecked.png);
+}
+
+QMenu::indicator:non-exclusive:unchecked:selected
+{
+    image: url(:pixmaps/style/checkbox_unchecked_hover.png);
+}
+
+QMenu::indicator:non-exclusive:checked
+{
+    image: url(:pixmaps/style/checkbox_checked.png);
+}
+
+QMenu::indicator:non-exclusive:checked:selected
+{
+    image: url(:pixmaps/style/checkbox_checked_hover.png);
+}
+
+/* exclusive indicator = radio button style indicator (see QActionGroup::setExclusive) */
+QMenu::indicator:exclusive:unchecked
+{
+    image: url(:pixmaps/style/radiobutton_unchecked.png);
+}
+
+QMenu::indicator:exclusive:unchecked:selected
+{
+    image: url(:pixmaps/style/radiobutton_unchecked_hover.png);
+}
+
+QMenu::indicator:exclusive:checked
+{
+    image: url(:pixmaps/style/radiobutton_checked.png);
+}
+
+QMenu::indicator:exclusive:checked:selected
+{
+    image: url(:pixmaps/style/radiobutton_checked_hover.png);
+}
 
 /*
 #View QLabel
@@ -520,8 +561,7 @@ QMenuBar::item,
     spacing: 3px; /* spacing between menu bar items */
     padding: 1px 4px;
     background: transparent;
-    font: bold;
-    color: white;
+    color: #FFFFFF;
 }
 
 /* Selected item background
@@ -530,9 +570,9 @@ QMenuBar::item:selected,
 #tempoview QMenuBar::item:selected,
 #App QMenuBar::item:selected
 {
-/*    background: #DDDDDD;*/
-    background-color: #CCDFFF;
-    color: #000000;
+    background-color: #80AFFF;
+    color: #FFFFFF;
+    font: bold;
 }
 
 QMenuBar::item:pressed,
@@ -1208,21 +1248,21 @@ QInputDialog QComboBox::!enabled,
 }
 
 QComboBox::enabled:hover,
-QComboBox::hover,
-QComboBox::drop-down:hover,
 QComboBox:hover,
+QComboBox::drop-down:hover,
+QComboBox::down-arrow:hover,
 #App QWidget QComboBox::enabled:hover,
 #App QWidget QComboBox:hover,
 #App QWidget QComboBox::drop-down:hover,
-#App QWidget QComboBox:hover,
+#App QComboBox::down-arrow:hover,
 QInputDialog QComboBox::enabled:hover,
 QInputDialog QComboBox:hover,
 QInputDialog QComboBox::drop-down:hover,
-QInputDialog QComboBox:hover,
+QInputDialog QComboBox::down-arrow:hover,
+#RosegardenParameterArea QComboBox::down-arrow:hover,
 #RosegardenParameterArea QComboBox::enabled:hover,
 #RosegardenParameterArea QComboBox:hover,
-#RosegardenParameterArea QComboBox::drop-down:hover,
-#RosegardenParameterArea QComboBox:hover
+#RosegardenParameterArea QComboBox::drop-down:hover
 {
 /*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
     background-color: #CCDFFF;
@@ -1302,7 +1342,6 @@ QInputDialog QComboBox::down-arrow:on,
 {
     top: 1px;
     left: 1px;
-    background-color: #CCDFFF;
 }
 
 /* The pop-up of the QComboBox is a QAbstractItemView and is styled using the
@@ -1314,12 +1353,10 @@ QInputDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
     border: 1px solid #AAAAAA;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);
-/*    selection-background-color: #AAAAAA;*/
-    selection-background-color: #CCDFFF;
-/*    selection-color: #FFFFFF;*/
-    selection-color: #000000;
-    color: #FFFFFF;
+    background-color: #FFFFFF;
+    selection-background-color: #80AFFF;
+    selection-color: #FFFFFF;
+    color: #000000;
     font: bold;
 }
 
@@ -1413,7 +1450,6 @@ QWidget#SPECIAL_LABEL,
 {
     border: 1px solid #AAAAAA;
     border-radius: 2px;
-/*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
     background-color: #CCDFFF;
     color: #000000;
     min-width: 0;
@@ -1426,7 +1462,7 @@ QWidget#SPECIAL_LABEL,
 {
     border: 1px solid #E0E0E0;
     border-radius: 1px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #DDDDDD, stop:1 #FFFFFF);
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
 
