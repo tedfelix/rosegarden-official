@@ -22,6 +22,7 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
+
 #include <QApplication>
 #include <QBrush>
 #include <QColor>
@@ -37,6 +38,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QMouseEvent>
+
 #include <cmath>
 
 
@@ -82,8 +84,7 @@ Rotary::Rotary(QWidget *parent,
         m_lastX(0),
         m_knobColour(0, 0, 0)
 {
-    // permit styling; internal string, no tr()
-    setObjectName("ROTARY");
+    setObjectName("RotaryWidget");
 
     setBackgroundMode(Qt::NoBackground);
 
@@ -218,7 +219,8 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.setBrush(Qt::NoBrush);
 
-    pen.setColor(palette().dark());
+//    pen.setColor(palette().dark());
+    pen.setColor(Qt::white);
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -230,13 +232,33 @@ Rotary::paintEvent(QPaintEvent *)
                  width, i != 0 && i != numTicks - 1);
     }
 
-    // now the bright metering bit
+    // the potential knob space left empty between the knob itself and the outer
+    // circle looked terrible against a styled background, so we'll draw the
+    // full swing in a suitable color, then...
+    
+    //!!! This is never getting set properly elsewhere in the code.  Must
+    //investigate.
+//    m_centred = true;
 
+    pen.setWidth(indent);
+    paint.setPen(pen);
+
+    // left arc bit
+    pen.setColor(QColor(0xEE, 0xEE, 0xEE)); //!!! search key: localStyle
+    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
+                  90 * 16, - 180 * 16);
+    // right arc bit                  
+    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle
+    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
+                      (180 + 45) * 16, -(180 - 45) * 16);
+
+    // ... paint over it with the bright metering bit
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
     pen.setWidth(indent);
     paint.setPen(pen);
 
     if (m_centred) {
+        std::cout << "CENTERED" << std::endl;
         paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                       90 * 16, -(degrees - 180) * 16);
     } else {
@@ -248,29 +270,35 @@ Rotary::paintEvent(QPaintEvent *)
     paint.setPen(pen);
 
     int shadowAngle = -720;
-    c = palette().dark();
+//    c = palette().dark();
+    c = Qt::black;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
         paint.drawArc(indent, indent, width - 2*indent, width - 2*indent, shadowAngle + arc, 240);
         paint.drawArc(indent, indent, width - 2*indent, width - 2*indent, shadowAngle - arc, 240);
-        c = c.light( 110 );
+        c = c.lighter(110);
     }
 
     shadowAngle = 2160;
-    c = palette().dark();
+//    c = palette().dark();
+    c = Qt::black;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
         paint.drawArc(scale / 2, scale / 2, width - scale, width - scale, shadowAngle + arc, 240);
         paint.drawArc(scale / 2, scale / 2, width - scale, width - scale, shadowAngle - arc, 240);
-        c = c.light( 109 );
+        c = c.lighter(109);
     }
 
     // and un-draw the bottom part
+    //
+    // we no longer un-draw the bottom part, but instead complete the black
+    // outer circle  (MAYBE)
+//    pen.setColor(Qt::black);
     pen.setColor(paletteBackgroundColor());
     paint.setPen(pen);
-    paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
+    paint.drawArc(scale / 2, scale / 2, width + 2 - scale, width + 2 - scale,
                   -45 * 16, -90 * 16);
 
     double hyp = double(width) / 2.0;
@@ -284,7 +312,8 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-    pen.setColor(palette().dark());
+//    pen.setColor(palette().dark());
+    pen.setColor(Qt::black);
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));
@@ -395,7 +424,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
 
     if (!_float)
         _float = new TextFloat(this);
-    _float->reparent(this);
+//    _float->reparent(this);
     _float->move(totalPos + QPoint(width() + 2, -height() / 2));
     if (m_logarithmic) {
         _float->setText(QString("%1").arg(powf(10, m_position)));

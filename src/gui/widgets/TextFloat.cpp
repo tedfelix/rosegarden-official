@@ -16,11 +16,11 @@
 */
 
 
-#include <QPaintEvent>
 #include "TextFloat.h"
-#include <QApplication>
-
 #include "gui/general/GUIPalette.h"
+
+#include <QPaintEvent>
+#include <QApplication>
 #include <QFontMetrics>
 #include <QPainter>
 #include <QPalette>

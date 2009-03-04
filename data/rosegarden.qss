@@ -954,7 +954,7 @@ QTreeView,
     color: #FFFFFF;
 }
 
-QWidget#ROTARY
+QWidget#RotaryWidget
 {
     background-color: transparent;
 }
@@ -1371,18 +1371,18 @@ QInputDialog QComboBox QAbstractItemView,
     color: #FFFFFF;
 }
 
-#RosegardenParameterArea QWidget#ROTARY
+#RosegardenParameterArea QWidget#RotaryWidget
 {
     background-color: transparent;
 }
 
-#RosegardenParameterArea QWidget#ROTARY QLabel
+#RosegardenParameterArea QWidget#RotaryWidget QLabel
 {
     background-color: transparent;
     color: #FFFFFF;
 }
 
-#RosegardenParameterArea QWidget#ROTARY_LABEL
+#RosegardenParameterArea QWidget#RotaryWidget_LABEL
 {
     background-color: transparent;
 }*/
