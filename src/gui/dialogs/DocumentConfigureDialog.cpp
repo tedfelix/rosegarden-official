@@ -41,48 +41,51 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         const char *name)
 	: ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
-    QWidget *pageWidget = 0;
-    QVBoxLayout *vlay = 0;
-    ConfigurationPage* page = 0;
-
+//    QWidget *pageWidget = 0;
+//    QVBoxLayout *vlay = 0;
+//    ConfigurationPage* page = 0;
+    QWidget *page = 0;
     // Document Meta Page
     //
 	IconLoader il;
-    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
-                         DocumentMetaConfigurationPage::title(),
-                         il.load( DocumentMetaConfigurationPage::iconName()) );
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new DocumentMetaConfigurationPage(doc, pageWidget);
-    vlay->addWidget(page);
+//    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
+//                         DocumentMetaConfigurationPage::title(),
+//                         il.load( DocumentMetaConfigurationPage::iconName()) );
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new DocumentMetaConfigurationPage(doc, this);
+    addPage(DocumentMetaConfigurationPage::iconLabel(),DocumentMetaConfigurationPage::title(),il.loadPixmap( DocumentMetaConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
 //    page->setPageIndex(pageIndex(pageWidget));
-	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back(page);
+//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back((ConfigurationPage *)page);
 
     // Audio Page
     //
-    pageWidget = addPage(AudioPropertiesPage::iconLabel(),
-                         AudioPropertiesPage::title(),
-                         il.load(AudioPropertiesPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new AudioPropertiesPage(doc, pageWidget);
-    vlay->addWidget(page);
+//    pageWidget = addPage(AudioPropertiesPage::iconLabel(),
+//                         AudioPropertiesPage::title(),
+//                         il.load(AudioPropertiesPage::iconName()));
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new AudioPropertiesPage(doc, this);
+    addPage(AudioPropertiesPage::iconLabel(),AudioPropertiesPage::title(),il.loadPixmap(AudioPropertiesPage::iconName()),page);
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back(page);
+//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back((ConfigurationPage *)page);
 
     // Colour Page
-    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
-                         ColourConfigurationPage::title(),
-                         il.load(ColourConfigurationPage::iconName()));
+//    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
+//                         ColourConfigurationPage::title(),
+//                         il.load(ColourConfigurationPage::iconName()));
 
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new ColourConfigurationPage(doc, pageWidget);
-    vlay->addWidget(page);
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new ColourConfigurationPage(doc, this);
+    addPage(ColourConfigurationPage::iconLabel(),ColourConfigurationPage::title(),il.loadPixmap(ColourConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back(page);
+//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+	m_configurationPages.push_back((ConfigurationPage *)page);
 
-    resize(minimumSize());
+//    resize(minimumSize());
 }
 
 void
@@ -102,7 +105,7 @@ DocumentConfigureDialog::showAudioPage()
         }
 
         //showPage(index);
-		m_tabWidget->setCurrentIndex( index );
+//		m_tabWidget->setCurrentIndex( index );
 		return ;
     }
 }

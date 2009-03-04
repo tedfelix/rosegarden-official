@@ -19,6 +19,7 @@
 #include "ConfigureDialogBase.h"
 
 #include "gui/configuration/ConfigurationPage.h"
+#include "gui/widgets/IconStackedWidget.h"
 #include "misc/Debug.h"
 
 #include <QDialog>
@@ -30,6 +31,7 @@
 #include <QMessageBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QLabel>
 
 namespace Rosegarden
 {
@@ -40,7 +42,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
         KDialogBase(IconList, !label.isEmpty() ? label : tr("Configure"), Help | Apply | Ok | Cancel,
                     Ok, parent, name, true) // modal
 */
-ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const char *name  ):QDialog(parent)
+/*ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const char *name  ):QDialog(parent)
 //        , QMessageBox::StandardButtons buttons ) :QDialog(parent)
 {
     
@@ -84,34 +86,75 @@ ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const 
 //    connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
 //    connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
         
-    /*
-    // setup dialog buttons OLD CODE:
-    QWidget *buttWidget = new QWidget( this );
-    dlgLay->addWidget( buttWidget );
+    //// setup dialog buttons OLD CODE:
+    //QWidget *buttWidget = new QWidget( this );
+    //dlgLay->addWidget( buttWidget );
     
-    QPushButton *applyButt = new QPushButton("Apply");
-    QPushButton *okButt = new QPushButton("Ok");
-    QPushButton *cancelButt = new QPushButton("Cancel");
+    //QPushButton *applyButt = new QPushButton("Apply");
+    //QPushButton *okButt = new QPushButton("Ok");
+    //QPushButton *cancelButt = new QPushButton("Cancel");
     
-    QHBoxLayout *buttLay = new QHBoxLayout( buttWidget );
-    buttLay->addWidget( applyButt );
-    buttLay->addWidget( okButt );
-    buttLay->addWidget( cancelButt );
-    */
+    //QHBoxLayout *buttLay = new QHBoxLayout( buttWidget );
+    //buttLay->addWidget( applyButt );
+    //buttLay->addWidget( okButt );
+    //buttLay->addWidget( cancelButt );
     
+}*/
+
+ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const char *name  )
+: QDialog(parent)
+{
+    this->setAttribute( Qt::WA_DeleteOnClose );
+    
+    this->setWindowTitle( tr("Configure Rosegarden") );
+    this->setObjectName( (name) );
+
+    QVBoxLayout *dlgLayout = new QVBoxLayout(this);
+
+    m_iconWidget = new IconStackedWidget(this);
+    dlgLayout->addWidget(m_iconWidget);
+    
+    QWidget *buttonBox = new QWidget(this);
+    QPushButton *helpButton = new QPushButton("Help",buttonBox);
+//    connect(helpButton, SIGNAL(clicked()), this, SLOT(slotHelp()));
+    QPushButton *okButton = new QPushButton("OK",buttonBox);
+    connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
+    QPushButton *applyButton = new QPushButton("Apply",buttonBox);
+    connect(applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+    QPushButton *cancelButton = new QPushButton("Cancel",buttonBox);
+    connect(cancelButton, SIGNAL(clicked()), this, SLOT(slotCancelOrClose()));
+    
+    QHBoxLayout *btnLayout = new QHBoxLayout(buttonBox);
+    btnLayout->addWidget(helpButton);
+    btnLayout->addStretch(1);
+    btnLayout->addWidget(okButton);
+    btnLayout->addWidget(applyButton);
+    btnLayout->addWidget(cancelButton);
+    
+    dlgLayout->addWidget(buttonBox);
 }
 
-QWidget* ConfigureDialogBase::addPage( const QString& iconLabel, const QString& label, const QIcon& icon ){
-    /**     add a configuration options tab to the tabWidget ; return the tab-page <QWidget*>  */
-    QWidget *page = new QWidget();
-    if( ! m_tabWidget ){
-        std::cerr << "ERROR: m_tabWidget is NULL in ConfigureDialogBase::addPage " << std::endl;
-        return 0;
-    }
-    m_tabWidget->addTab( page, icon, label );
-    return page;
+void ConfigureDialogBase::addPage(const QString& name, const QString& title, const QPixmap& icon, QWidget *page)
+{
+    QWidget * titledPage = new QWidget(this);
+    QLayout * pageLayout = new QVBoxLayout(titledPage);
+    QLabel * titleLabel = new QLabel(title);
+    pageLayout->addWidget(titleLabel);
+    pageLayout->addWidget(page);
+    
+    m_iconWidget->addPage(name, titledPage, icon);
 }
 
+//QWidget* ConfigureDialogBase::addPage( const QString& iconLabel, const QString& label, const QIcon& icon ){
+    ///**     add a configuration options tab to the tabWidget ; return the tab-page <QWidget*>  */
+    //QWidget *page = new QWidget();
+    //if( ! m_tabWidget ){
+        //std::cerr << "ERROR: m_tabWidget is NULL in ConfigureDialogBase::addPage " << std::endl;
+        //return 0;
+    //}
+    //m_tabWidget->addTab( page, icon, label );
+    //return page;
+//}
 
 ConfigureDialogBase::~ConfigureDialogBase()
 {}
@@ -150,9 +193,9 @@ ConfigureDialogBase::slotApply()
             i != m_configurationPages.end(); ++i)
         (*i)->apply();
 
-    QPushButton * btApply;
-    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-    btApply->setEnabled( false );
+//    QPushButton * btApply;
+//    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
+//    btApply->setEnabled( false );
 }
 
 void
@@ -165,16 +208,17 @@ ConfigureDialogBase::slotActivateApply()
         return;
     }
     
-    QPushButton * btApply;
-    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-    btApply->setEnabled( true );
+//    QPushButton * btApply;
+//    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
+//    btApply->setEnabled( true );
 }
 
 void
 ConfigureDialogBase::slotOk()
 {
     slotApply();
-    accept();
+//    accept();
+    close();
 }
 
 void

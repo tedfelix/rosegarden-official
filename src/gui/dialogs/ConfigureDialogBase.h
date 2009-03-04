@@ -28,6 +28,7 @@
 class QWidget;
 class QTabWidget;
 class QDialogButtonBox;
+class IconStackedWidget;
 
 namespace Rosegarden
 {
@@ -50,7 +51,7 @@ public:
 
     typedef std::vector<ConfigurationPage*> configurationpages;
 
-	QWidget* addPage( const QString& iconLabel, const QString& title, const QIcon& icon );
+	void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
 	
 	QTabWidget* m_tabWidget;
 	
@@ -68,7 +69,7 @@ protected:
     configurationpages m_configurationPages;
 	
 	QDialogButtonBox *m_dialogButtonBox;
-	
+    IconStackedWidget * m_iconWidget;	
 };
 
 

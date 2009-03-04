@@ -52,8 +52,8 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
 //    this->setWindowTitle( tr("Configure Rosegarden") );
 //    this->setObjectName( objName );
     
-    QWidget *pageWidget = 0;
-    QVBoxLayout *vlay = 0;
+//    QWidget *pageWidget = 0;
+//    QVBoxLayout *vlay = 0;
 //    ConfigurationPage* page = 0;
     QWidget* page = 0;
     
@@ -62,16 +62,16 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
     IconLoader il;
     
     
-    pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
-                         GeneralConfigurationPage::title(),
-                         il.load( GeneralConfigurationPage::iconName()) );
+//    pageWidget = addPage(GeneralConfigurationPage::iconLabel(),
+//                         GeneralConfigurationPage::title(),
+//                         il.load( GeneralConfigurationPage::iconName()) );
     
     
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new GeneralConfigurationPage(doc, pageWidget);
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new GeneralConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    
-    vlay->addWidget(page);
+    addPage(GeneralConfigurationPage::iconLabel(),GeneralConfigurationPage::title(),il.loadPixmap(GeneralConfigurationPage::iconName()),page);    
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
 //    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
@@ -82,36 +82,39 @@ ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
             this, SIGNAL(updateSidebarStyle(unsigned int)));
 
 //    IconLoader il;
-    pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
-                         MIDIConfigurationPage::title(),
-                         il.load( MIDIConfigurationPage::iconName()) );
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new MIDIConfigurationPage(doc, pageWidget);
+//    pageWidget = addPage(MIDIConfigurationPage::iconLabel(),
+//                         MIDIConfigurationPage::title(),
+//                         il.load( MIDIConfigurationPage::iconName()) );
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new MIDIConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    vlay->addWidget(page);
+    addPage(MIDIConfigurationPage::iconLabel(),MIDIConfigurationPage::title(),il.loadPixmap( MIDIConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
 //    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
-    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
-                         AudioConfigurationPage::title(),
-                         il.load(AudioConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new AudioConfigurationPage(doc, pageWidget);
+//    pageWidget = addPage(AudioConfigurationPage::iconLabel(),
+//                         AudioConfigurationPage::title(),
+//                         il.load(AudioConfigurationPage::iconName()));
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new AudioConfigurationPage(doc, this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    vlay->addWidget(page);
+    addPage(AudioConfigurationPage::iconLabel(),AudioConfigurationPage::title(),il.loadPixmap(AudioConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
 //    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
 
     // Notation Page
-    pageWidget = addPage(NotationConfigurationPage::iconLabel(),
-                         NotationConfigurationPage::title(),
-                         il.load(NotationConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
-    page = new NotationConfigurationPage(pageWidget);
+//    pageWidget = addPage(NotationConfigurationPage::iconLabel(),
+//                         NotationConfigurationPage::title(),
+//                         il.load(NotationConfigurationPage::iconName()));
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new NotationConfigurationPage(this);
     connect(page,SIGNAL(modified()),this,SLOT(slotActivateApply()));
-    vlay->addWidget(page);
+    addPage(NotationConfigurationPage::iconLabel(),NotationConfigurationPage::title(),il.loadPixmap(NotationConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
 //    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
     m_configurationPages.push_back((ConfigurationPage*)page);
