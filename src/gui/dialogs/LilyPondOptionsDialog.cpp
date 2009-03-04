@@ -302,8 +302,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    // resize(minimumSize()); // HANGS!!!
-
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
@@ -315,6 +313,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
     populateDefaultValues();
+
+    resize(minimumSizeHint());
 }
 
 void

@@ -85,7 +85,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
 //	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
 	m_configurationPages.push_back((ConfigurationPage *)page);
 
-//    resize(minimumSize());
+    // resize(minimumSizeHint());
 }
 
 void
