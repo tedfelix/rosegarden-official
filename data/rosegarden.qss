@@ -36,7 +36,8 @@ QMainWindow::separator
 
 QMainWindow::separator:hover
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
+/*    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
+    background-color: #CCDFFF;
 }
 
 QDockWidget
@@ -229,8 +230,10 @@ QMenu::item:selected,
 #App QMenu::item:selected,
 #View QMenu::item:selected
 {
-    background-color: #C0D8FF;
-    color: #FFFFFF;
+/*    background-color: #EEEEEE;*/
+    background-color: #CCDFFF;
+    color: #000000;
+    font: bold;
 } 
 
 /*
@@ -507,7 +510,7 @@ QMenuBar,
 #tempoview QMenuBar,
 #App QMenuBar
 {
-    background-color: #000000;
+    background-color: #202020;
 }
 
 QMenuBar::item,
@@ -527,14 +530,17 @@ QMenuBar::item:selected,
 #tempoview QMenuBar::item:selected,
 #App QMenuBar::item:selected
 {
-    background: #C0D8FF;
+/*    background: #DDDDDD;*/
+    background-color: #CCDFFF;
+    color: #000000;
 }
 
 QMenuBar::item:pressed,
 #tempoview QMenuBar::item:pressed,
 #App QMenuBar::item:pressed
 {
-    background: #3DE1FD;
+/*    background: #EEEEEE;*/
+    background-color: #BBCEFF;
 }
 
 
@@ -1010,15 +1016,57 @@ QToolButton { background-color: red; border: none; } */
  * parameters" and for toolbar buttons
  */
 QToolButton,
-#tempoview,
+QToolButton::enabled,
+#tempoview QToolButton,
+#tempoview QToolButton::enabled,
 #View QToolButton,
+#View QToolButton::enabled,
 #App QToolButton,
-#RosegardenParameterArea QToolButton
+#App QToolButton::enabled,
+#RosegardenParameterArea QToolButton,
+#RosegardenParameterArea QToolButton::enabled
 {
     color: #FFFFFF;
     background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 2px;
 }
 
+QToolButton::pressed,
+QToolButton::checked,
+#tempoview QToolButton::pressed,
+#tempoview QToolButton::checked,
+#View QToolButton::pressed,
+#View QToolButton::checked,
+#App QToolButton::pressed,
+#App QToolButton::checked,
+#RosegardenParameterArea QToolButton::pressed,
+#RosegardenParameterArea QToolButton::checked
+{
+    border: 1px solid #E0E0E0;
+    border-radius: 2px;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
+}
+
+QToolButton::enabled:hover,
+#tempoview QToolButton::enabled:hover,
+#View QToolButton::enabled:hover,
+#App QToolButton::enabled:hover,
+#RosegardenParameterArea QToolButton::enabled:hover
+{
+    border: 1px solid #AAAAAA;
+    border-radius: 2px;
+    background-color: #CCDFFF;
+}
+
+QToolButton::!enabled,
+#tempoview QToolButton::!enabled,
+#View QToolButton::!enabled,
+#App QToolButton::!enabled,
+#RosegardenParameterArea QToolButton::!enabled
+{
+    background-color: transparent;
+}
 
 
 /*  QPushButton
@@ -1086,7 +1134,8 @@ QGroupBox QPushButton:hover,
 {
     border: 1px solid #AAAAAA;
     border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
+/*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
+    background-color: #CCDFFF;
     color: #000000;
 /*    min-width: 60px;*/
 }
@@ -1175,7 +1224,8 @@ QInputDialog QComboBox:hover,
 #RosegardenParameterArea QComboBox::drop-down:hover,
 #RosegardenParameterArea QComboBox:hover
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
+/*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
+    background-color: #CCDFFF;
 }
 
 QComboBox::editable,
@@ -1252,6 +1302,7 @@ QInputDialog QComboBox::down-arrow:on,
 {
     top: 1px;
     left: 1px;
+    background-color: #CCDFFF;
 }
 
 /* The pop-up of the QComboBox is a QAbstractItemView and is styled using the
@@ -1264,8 +1315,12 @@ QInputDialog QComboBox QAbstractItemView,
 {
     border: 1px solid #AAAAAA;
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #AAAAAA stop:1 #999999);
-    selection-background-color: #C0D8FF;
-    color: #000000;
+/*    selection-background-color: #AAAAAA;*/
+    selection-background-color: #CCDFFF;
+/*    selection-color: #FFFFFF;*/
+    selection-color: #000000;
+    color: #FFFFFF;
+    font: bold;
 }
 
 /*#RosegardenParameterArea QFrame
@@ -1296,20 +1351,6 @@ QInputDialog QComboBox QAbstractItemView,
 }*/
 
 
-
-/*  QToolTip
-
-Supports the box model. The opacity property controls the opacity of the
-tooltip. */
-
-QToolTip,
-#RosegardenParameterArea QPushButton QToolTip,
-#App QToolTip
-{
-    background-color: #fffbd4;
-    color: #000000;
-    opacity: 50;
-}
 
 QInputDialog,
 QInputDialog QWidget,
@@ -1372,7 +1413,8 @@ QWidget#SPECIAL_LABEL,
 {
     border: 1px solid #AAAAAA;
     border-radius: 2px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);
+/*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
+    background-color: #CCDFFF;
     color: #000000;
     min-width: 0;
 }
@@ -1437,3 +1479,27 @@ QLineEdit,
 {
     background: #404040;
 }
+
+/*  QToolTip
+
+Supports the box model. The opacity property controls the opacity of the
+tooltip. */
+
+/* Tooltips are going to be hell to get right.  They're dependent on the styling
+ * of whatever random widget under whatever random class happens to create them,
+ * and to make matters worse, Qt is really buggy in this area, and tends to use
+ * the same colors for the next tooltip as the last tooltip you picked, so it is
+ * very, very easy to get false positives and think you've fixed something you
+ * in fact haven't.  Ugh.
+ */
+QToolTip,
+QToolButton QToolTip,
+#RosegardenTransport QPushButton QToolTip,
+#RosegardenParameterArea QPushButton QToolTip,
+#View QWidget QToolTip,
+#App QWidget QToolTip
+{
+    background-color: #fffbd4;
+    color: #000000;
+}
+
