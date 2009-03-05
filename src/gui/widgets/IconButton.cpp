@@ -1,16 +1,37 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
+ 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
 #include "IconButton.h"
 
 #include <QPainter>
 #include <QWidget>
 #include <QPixmap>
-
 #include <QDebug>
 
-IconButton::IconButton(QWidget* parent, const QPixmap& icon, const QString & name)
-: QAbstractButton(parent),
-m_margin(5),
-m_textColor(QColor(0,0,0)),
-m_checkedColor(QColor(64,64,192))
+IconButton::IconButton(QWidget* parent, const QPixmap& icon, const QString & name) :
+        QAbstractButton(parent),
+        m_margin(5),
+        //@@@ these should pull from GUIPalette, and these hard-coded colors are
+        // not stylesheet agnostic.  (So many other things already aren't that I
+        // say stylesheet agnosticism is out the window anyway.)
+        //
+        // search key: localStyle
+        m_textColor(Qt::black),
+        m_checkedColor(QColor(0x80,0xAF,0xFF))
 {
     // Store the icon and name, these will be rendered in the paint event
     m_pixmap = icon;
@@ -37,8 +58,12 @@ void IconButton::paintEvent(QPaintEvent* event)
     }
 
     paint.drawPixmap((width()-m_pixmap.width())/2,(height()-m_pixmap.height()-m_labelSize.height())/2,m_pixmap);
-
-    paint.setPen(m_textColor);
+   
+    //@@@ even uglier, we don't even name the constant for the selection
+    // foreground color
+    //
+    // Make the selection foreground color lighter
+    paint.setPen(isChecked() ? Qt::white : m_textColor);
     paint.setFont(m_font);
     paint.drawText((width()-m_labelSize.width())/2, height()-m_margin, m_labelText);
 }

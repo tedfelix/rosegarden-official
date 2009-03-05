@@ -1,3 +1,20 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
+ 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
 #include "IconStackedWidget.h"
 #include "IconButton.h"
 
@@ -9,11 +26,11 @@
 #include <QHBoxLayout>
 #include <QDebug>
 
-IconStackedWidget::IconStackedWidget(QWidget *parent)
-: QWidget(parent),
-m_buttonHeight(0),
-m_buttonWidth(0),
-m_backgroundColor(QColor(255,255,255))
+IconStackedWidget::IconStackedWidget(QWidget *parent) :
+        QWidget(parent),
+        m_buttonHeight(0),
+        m_buttonWidth(0),
+        m_backgroundColor(QColor(255,255,255))
 {
     
     // Use a frame widget for the icon panel, it will hold a bunch of buttons
@@ -21,12 +38,13 @@ m_backgroundColor(QColor(255,255,255))
     m_iconPanel->setFrameStyle(QFrame::Panel | QFrame::Sunken);
     m_iconPanel->setLineWidth(2);
 
-    // Use a QPalette to set the iconPanel background
-    ///@@@ Needs attention for style sheets
-    QPalette colorPalette;
-    colorPalette.setColor(QPalette::Window, m_backgroundColor);
-    m_iconPanel->setPalette(colorPalette);
-    m_iconPanel->setAutoFillBackground(true);
+    // Since this code was born with hard coded colors anyway, and since we live
+    // in a stylesheet world now, let's dump the original QPalette
+    // implementation in favor of a spot stylesheet.  (I've never gotten
+    // QPalette backgrounds to play nice with stylesheets elsewhere, and this is
+    // probably the best solution anyway.)
+    QString localStyle("background-color: #FFFFFF; color: #000000;");
+    m_iconPanel->setStyleSheet(localStyle);
 
     // Use a VBoxLayout for the icon buttons
     m_iconLayout = new QVBoxLayout;

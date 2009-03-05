@@ -244,11 +244,12 @@ Rotary::paintEvent(QPaintEvent *)
     paint.setPen(pen);
 
     // left arc bit
-    pen.setColor(QColor(0xEE, 0xEE, 0xEE)); //!!! search key: localStyle
+//    pen.setColor(QColor(0xEE, 0xEE, 0xEE)); //!!! search key: localStyle
+    pen.setColor(Qt::black);
     paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                   90 * 16, - 180 * 16);
     // right arc bit                  
-    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle
+//    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle*/
     paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                       (180 + 45) * 16, -(180 - 45) * 16);
 
@@ -283,6 +284,7 @@ Rotary::paintEvent(QPaintEvent *)
     shadowAngle = 2160;
 //    c = palette().dark();
     c = Qt::black;
+    c = Qt::white;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -297,8 +299,9 @@ Rotary::paintEvent(QPaintEvent *)
     // outer circle  (MAYBE)
 //    pen.setColor(Qt::black);
     pen.setColor(paletteBackgroundColor());
+//    pen.setColor(Qt::red);
     paint.setPen(pen);
-    paint.drawArc(scale / 2, scale / 2, width + 2 - scale, width + 2 - scale,
+    paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
 
     double hyp = double(width) / 2.0;

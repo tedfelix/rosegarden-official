@@ -57,6 +57,96 @@ QDockWidget::float-button
     icon-size: 16px; /* maximum icon size */
 }
 
+
+/*  QTabBar
+  
+Individual tabs may be styled using the ::tab subcontrol. The tabs support the
+:only-one, :first, :last, :middle, :previous--selected, :next-selected,
+:selected pseudo states.  The :top, :left, :right, :bottom pseudo states
+depending on the orientation of the tabs.  Overlapping tabs for the selected
+state are created by using negative margins or using the absolute position
+scheme.  The tear indicator of the QTabBar is styled using the ::tear
+subcontrol.  QTabBar used two QToolButtons for its scrollers that can be styled
+using the QTabBar QToolButton selector. To specify the width of the scroll
+button use the ::scroller subcontrol.  The alignment of the tabs within the
+QTabBar is styled using the alignment property.  Warning: To change the position
+of the QTabBar within a QTabWidget, use the tab-bar subcontrol (and set
+subcontrol-position). */
+
+/* Style this early so hopefully a lot of it will be overridden without even
+ * more special code
+ */
+
+QTabWidget::pane
+{ /* The tab widget frame */
+    color: #FFFFFF;
+    border: 2px solid #BBBBBB;
+    border-radius: 4px;
+    padding: 2px;
+/*    margin-top: 1ex;*/
+}
+
+/* the background of the pane requires a QWidget hack to take the groupbox
+ * background, because ::pane's background-color: doesn't work */
+QTabWidget::pane QWidget
+{
+    background: #404040;
+}
+
+QTabWidget::tab-bar
+{
+    left: 5px; /* move to the right by 5px */
+}
+
+/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
+QTabBar::tab
+{
+    border: 1px solid #AAAAAA;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
+    border-bottom-color: #BBBBBB; /* same as the pane color */
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 8ex;
+    padding: 2px;
+}
+
+QTabBar::tab:hover
+{
+    background-color: #CCDFFF;
+}
+
+QTabBar::tab:selected
+{
+    border: 1px solid #E0E0E0;
+    border-bottom-color: #BBBBBB; /*same as pane color */
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
+}
+
+QTabBar::tab:!selected
+{
+    margin-top: 2px; /* make non-selected tabs look smaller*/
+}
+
+
+/*  QTabWidget
+
+The frame of the tab widget is styled using the ::pane subcontrol. The left and
+right corners are styled using the ::left-corner and ::right-corner
+respectively. The position of the the tab bar is controlled using the ::tab-bar
+subcontrol.  By default, the subcontrols have positions of a QTabWidget in the
+QWindowsStyle. To place the QTabBar in the center, set the subcontrol-position
+of the tab-bar subcontrol.  The :top, :left, :right, :bottom pseudo states
+depending on the orientation of the tabs. */
+
+/*QTabWidget
+{
+    background-color: #000000;
+    color: #FFFFFF;
+}*/
+
+
+
 /* Color the View (formerly RosegardenGUIView, not sure what the class will be
  * renamed to, so we're using the objectName to reference it) background
  * transparent, because this allows the overrides for the track buttons and
@@ -818,89 +908,6 @@ style using the ::item subcontrol. */
 QStatusBar
 {
 }
-
-
-
-/*  QTabBar
-  
-Individual tabs may be styled using the ::tab subcontrol. The tabs support the
-:only-one, :first, :last, :middle, :previous--selected, :next-selected,
-:selected pseudo states.  The :top, :left, :right, :bottom pseudo states
-depending on the orientation of the tabs.  Overlapping tabs for the selected
-state are created by using negative margins or using the absolute position
-scheme.  The tear indicator of the QTabBar is styled using the ::tear
-subcontrol.  QTabBar used two QToolButtons for its scrollers that can be styled
-using the QTabBar QToolButton selector. To specify the width of the scroll
-button use the ::scroller subcontrol.  The alignment of the tabs within the
-QTabBar is styled using the alignment property.  Warning: To change the position
-of the QTabBar within a QTabWidget, use the tab-bar subcontrol (and set
-subcontrol-position). */
-
-/*QTabBar
-{
-    background-color: green;
-    color: yellow;
-    font: bold;
-}*/
-
-/* pasted demo code -- QTabBar and QTabWidget are somewhat complicated to
-style, rather like menus */
-
-QTabWidget::pane
-{ /* The tab widget frame */
-    border-top: 2px solid #C2C7CB;
-}
-
-QTabWidget::tab-bar
-{
-    left: 5px; /* move to the right by 5px */
-}
-
-/* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
-QTabBar::tab
-{
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #E1E1E1, stop: 0.4 #DDDDDD, stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
-    border: 2px solid #C4C4C3;
-    border-bottom-color: #C2C7CB; /* same as the pane color */
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    min-width: 8ex;
-    padding: 2px;
-}
-
-QTabBar::tab:selected,
-QTabBar::tab:hover
-{
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #fafafa, stop: 0.4 #f4f4f4, stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);
-}
-
-QTabBar::tab:selected
-{
-    border-color: #9B9B9B;
-    border-bottom-color: #C2C7CB; /*same as pane color */
-}
-
-QTabBar::tab:!selected
-{
-    margin-top: 2px; /* make non-selected tabs look smaller*/
-}
-
-
-/*  QTabWidget
-
-The frame of the tab widget is styled using the ::pane subcontrol. The left and
-right corners are styled using the ::left-corner and ::right-corner
-respectively. The position of the the tab bar is controlled using the ::tab-bar
-subcontrol.  By default, the subcontrols have positions of a QTabWidget in the
-QWindowsStyle. To place the QTabBar in the center, set the subcontrol-position
-of the tab-bar subcontrol.  The :top, :left, :right, :bottom pseudo states
-depending on the orientation of the tabs. */
-
-/*QTabWidget
-{
-    background-color: #000000;
-    color: #FFFFFF;
-}*/
 
 
 
