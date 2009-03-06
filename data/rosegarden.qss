@@ -885,7 +885,76 @@ the bottom-button. */
 
 QSpinBox
 {
-    color: #FFFFFF;
+    padding-right: 15px; /* make room for the arrows */
+    border-image: url(:pixmaps/style/frame.png) 4;
+    border-width: 3;
+}
+
+QSpinBox::up-button
+{
+    subcontrol-origin: border;
+    subcontrol-position: top right; /* position at the top right corner */
+
+    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */
+    border-image: url(:pixmaps/style/spinup.png) 1;
+    border-width: 1px;
+}
+
+QSpinBox::up-button:hover
+{
+    border-image: url(:pixmaps/style/spinup_hover.png) 1;
+}
+
+QSpinBox::up-button:pressed
+{
+    border-image: url(:pixmaps/style/spinup_pressed.png) 1;
+}
+
+QSpinBox::up-arrow
+{
+    image: url(:pixmaps/style/up_arrow.png);
+    width: 7px;
+    height: 7px;
+}
+
+QSpinBox::up-arrow:disabled,
+QSpinBox::up-arrow:off
+{  /* off state when value is max */
+   image: url(:pixmaps/style/up_arrow_disabled.png);
+}
+
+QSpinBox::down-button
+{
+    subcontrol-origin: border;
+    subcontrol-position: bottom right; /* position at bottom right corner */
+
+    width: 16px;
+    border-image: url(:pixmaps/style/spindown.png) 1;
+    border-width: 1px;
+    border-top-width: 0;
+}
+
+QSpinBox::down-button:hover
+{
+    border-image: url(:pixmaps/style/spindown_hover.png) 1;
+}
+
+QSpinBox::down-button:pressed
+{
+    border-image: url(:pixmaps/style/spindown_pressed.png) 1;
+}
+
+QSpinBox::down-arrow
+{
+    image: url(:pixmaps/style/down_arrow.png);
+    width: 7px;
+    height: 7px;
+}
+
+QSpinBox::down-arrow:disabled,
+QSpinBox::down-arrow:off
+{  /* off state when value in min */
+   image: url(:pixmaps/style/down_arrow_disabled.png);
 }
 
 
@@ -1367,34 +1436,6 @@ QInputDialog QComboBox QAbstractItemView,
     font: bold;
 }
 
-/*#RosegardenParameterArea QFrame
-{
-    background-color: transparent;
-}
-
-#RosegardenParameterArea QCheckBox
-{
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-#RosegardenParameterArea QWidget#RotaryWidget
-{
-    background-color: transparent;
-}
-
-#RosegardenParameterArea QWidget#RotaryWidget QLabel
-{
-    background-color: transparent;
-    color: #FFFFFF;
-}
-
-#RosegardenParameterArea QWidget#RotaryWidget_LABEL
-{
-    background-color: transparent;
-}*/
-
-
 
 QInputDialog,
 QInputDialog QWidget,
@@ -1473,19 +1514,6 @@ QWidget#SPECIAL_LABEL,
 }
 
 
-/*  QLineEdit
-
-Supports the box model.  The color and background of the selected item is styled
-using selection-color and selection-background-color respectively.  The password
-character can be styled using the lineedit-password-character property. */
-
-QLineEdit,
-#View QLineEdit QWidget
-{
-    background-color: pink;
-    color: purple;
-}
-
 #MatrixParameters QWidget
 {
     background-color: #000000;
@@ -1546,4 +1574,22 @@ QToolButton QToolTip,
     background-color: #fffbd4;
     color: #000000;
 }
+
+
+/*  QLineEdit
+
+Supports the box model.  The color and background of the selected item is styled
+using selection-color and selection-background-color respectively.  The password
+character can be styled using the lineedit-password-character property. */
+
+QLineEdit,
+QLineEdit QWidget > QWidget
+{
+    border: 1px solid #AAAAAA;
+    background-color: #FFFFFF;
+    selection-background-color: #80AFFF;
+    color: #000000;
+    selection-color: #FFFFFF;
+}
+
 

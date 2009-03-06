@@ -15,21 +15,34 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Template.h"
+#include "LineEdit.h"
 
-// local includes
-#include "local/LocalInclude.h"
-
-// Qt includes
-#include <QtInclude>
-
-// STL & other includes
-#include <vector>
+#include <QLineEdit>
 
 
 namespace Rosegarden
 {
 
+LineEdit::LineEdit(QWidget *parent) :
+        QLineEdit(parent)
+{
+    // Leave everything but the background to the external stylesheet
+    QString localStyle = "background: #FFFFFF";
+    setStyleSheet(localStyle);
 }
 
-#include "Template.moc"
+LineEdit::LineEdit(const QString& string, QWidget *parent) :
+        QLineEdit(string, parent)
+{
+    // Leave everything but the background to the external stylesheet
+    QString localStyle = "background: #FFFFFF";
+    setStyleSheet(localStyle);
+}
+
+LineEdit::~LineEdit()
+{
+}
+
+}
+
+#include "LineEdit.moc"

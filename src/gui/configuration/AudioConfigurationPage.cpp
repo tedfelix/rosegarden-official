@@ -32,6 +32,7 @@
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
 #include "misc/Strings.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -133,7 +134,7 @@ AudioConfigurationPage::AudioConfigurationPage(
         settings.setValue("externalaudioeditor", externalAudioEditor);
     }
 
-    m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
+    m_externalAudioEditorPath = new LineEdit(externalAudioEditor, frame);
     connect(m_externalAudioEditorPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
