@@ -17,7 +17,6 @@
 
 
 #include "TimeWidget.h"
-#include <QLayout>
 
 #include "misc/Debug.h"
 #include "base/Composition.h"
@@ -25,15 +24,17 @@
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPixmap>
 #include <QSpinBox>
 #include <QString>
 #include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -136,7 +137,7 @@ TimeWidget::init(bool editable)
                             (m_time, false, error);
             if (error != 0)
                 label = tr("<inexact>");
-            QLineEdit *le = new QLineEdit(label);
+            LineEdit *le = new LineEdit(label);
             le->setReadOnly(true);
             layout->addWidget(le, 0, 1, 0- 0+1, 3);
         }
@@ -154,7 +155,7 @@ TimeWidget::init(bool editable)
             layout->addWidget(m_timeT, 0, 5);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time));
+            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 5);
         }
@@ -177,7 +178,7 @@ TimeWidget::init(bool editable)
             layout->addWidget(new QLabel(tr("units")), 0, 2);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time));
+            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 2);
         }
@@ -197,7 +198,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_bar, 1, 1);
     } else {
         m_bar = 0;
-        m_barLabel = new QLineEdit;
+        m_barLabel = new LineEdit;
         m_barLabel->setReadOnly(true);
         layout->addWidget(m_barLabel, 1, 1);
     }
@@ -215,7 +216,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_beat, 1, 3);
     } else {
         m_beat = 0;
-        m_beatLabel = new QLineEdit;
+        m_beatLabel = new LineEdit;
         m_beatLabel->setReadOnly(true);
         layout->addWidget(m_beatLabel, 1, 3);
     }
@@ -234,7 +235,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_fraction, 1, 5);
     } else {
         m_fraction = 0;
-        m_fractionLabel = new QLineEdit;
+        m_fractionLabel = new LineEdit;
         m_fractionLabel->setReadOnly(true);
         layout->addWidget(m_fractionLabel, 1, 5);
     }
@@ -256,7 +257,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_sec, 2, 1);
     } else {
         m_sec = 0;
-        m_secLabel = new QLineEdit;
+        m_secLabel = new LineEdit;
         m_secLabel->setReadOnly(true);
         layout->addWidget(m_secLabel, 2, 1);
     }
@@ -275,7 +276,7 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_msec, 2, 3);
     } else {
         m_msec = 0;
-        m_msecLabel = new QLineEdit;
+        m_msecLabel = new LineEdit;
         m_msecLabel->setReadOnly(true);
         layout->addWidget(m_msecLabel, 2, 3);
     }

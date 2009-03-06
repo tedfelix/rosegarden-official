@@ -74,7 +74,7 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QTreeWidgetItem *);
+    void slotEdit(QTreeWidgetItem *, int);
     void slotItemClicked(QTreeWidgetItem *);
 
     void slotMusicalTime();

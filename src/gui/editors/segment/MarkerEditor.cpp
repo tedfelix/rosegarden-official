@@ -22,13 +22,6 @@
 #include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
 
-// #include <kglobal.h>
-// #include <kmainwindow.h>
-// #include <kstandardshortcut.h>
-// #include <kstandardaction.h>
-// #include <QDir>
-// #include <kstandardshortcut.h>
-
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -49,7 +42,6 @@
 #include <QMainWindow>
 #include <QLayout>
 #include <QVBoxLayout>
-// #include <QHBoxLayout>
 #include <QAction>
 #include <QShortcut>
 #include <QDialog>
@@ -68,7 +60,6 @@
 #include <QStringList>
 
 #include <QList>
-// #include <qptrlist.h>
 
 
 namespace Rosegarden
@@ -80,8 +71,8 @@ MarkerEditor::MarkerEditor(QWidget *parent,
         m_doc(doc),
         m_modified(false)
 {
-	this->setObjectName( "markereditordialog" );
-	
+    this->setObjectName( "markereditordialog" );
+    
     QWidget *mainFrame = new QWidget(this);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
@@ -90,24 +81,24 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
-	
-	QStringList sl;
-	sl	<< tr("Marker time  ")
-		<< tr("Marker text  ")
-		<< tr("Marker description ");
-	
-	m_listView->setHeaderLabels( sl );
-	/*
+    
+    QStringList sl;
+    sl    << tr("Marker time  ")
+        << tr("Marker text  ")
+        << tr("Marker description ");
+    
+    m_listView->setHeaderLabels( sl );
+    /*
     m_listView->addColumn(tr("Marker time  "));
     m_listView->addColumn(tr("Marker text  "));
     m_listView->addColumn(tr("Marker description "));
-	*/
+    */
     
-	// Align centrally
+    // Align centrally
 //     for (int i = 0; i < 3; ++i)
-//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);	//&&& align items now
-	
-	
+//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align items now
+    
+    
     QGroupBox *posGroup = new QGroupBox(tr("Pointer position"), mainFrame);
     mainFrameLayout->addWidget(posGroup);
 
@@ -177,13 +168,13 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 
     setupActions();
 
-//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
-	
+//     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
+    
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
-            SLOT(slotEdit(QTreeWidgetItem *)));
+    connect(m_listView, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+            SLOT(slotEdit(QTreeWidgetItem *, int)));
 
     connect(m_listView, SIGNAL(pressed(QTreeWidgetItem *)),
             this, SLOT(slotItemClicked(QTreeWidgetItem *)));
@@ -191,19 +182,19 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-// 	m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
-	m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
-	
-// 	m_listView->setItemsRenameable(true);	
-	QTreeWidgetItem* item;
-	for( int i=0; i< m_listView->topLevelItemCount(); i++ ){
-		item = m_listView->topLevelItem( i );
-		item->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
-	}
-	
+//     m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+    
+//     m_listView->setItemsRenameable(true);    
+    QTreeWidgetItem* item;
+    for( int i=0; i< m_listView->topLevelItemCount(); i++ ){
+        item = m_listView->topLevelItem( i );
+        item->setFlags( Qt::ItemIsEnabled | Qt::ItemIsEditable );
+    }
+    
     initDialog();
 
-//     setAutoSaveSettings(MarkerEditorConfigGroup, true);	//&&&
+//     setAutoSaveSettings(MarkerEditorConfigGroup, true);    //&&&
 
     m_shortcuts = new QShortcut(this);
 }
@@ -255,10 +246,10 @@ MarkerEditor::~MarkerEditor()
 {
     RG_DEBUG << "MarkerEditor::~MarkerEditor" << endl;
 
-//     m_listView->saveLayout(MarkerEditorConfigGroup);	//&&&
+//     m_listView->saveLayout(MarkerEditorConfigGroup);    //&&&
 
 //     if (m_doc)
-//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());    //&&&
 }
 
 void
@@ -293,13 +284,13 @@ MarkerEditor::slotUpdate()
         QString timeString = makeTimeString((*it)->getTime(), timeMode);
 
         item = new MarkerEditorViewItem(
-									m_listView,
+                                    m_listView,
                                     (*it)->getID(),
-									QStringList()
-										<< timeString
-                                    	<< strtoqstr((*it)->getName())
-                                    	<< strtoqstr((*it)->getDescription())
-									);
+                                    QStringList()
+                                        << timeString
+                                        << strtoqstr((*it)->getName())
+                                        << strtoqstr((*it)->getDescription())
+                                    );
 
         // Set this for the MarkerEditor
         //
@@ -310,13 +301,13 @@ MarkerEditor::slotUpdate()
 
     if (m_listView->topLevelItemCount() == 0) {
         QTreeWidgetItem *item = new MarkerEditorViewItem(m_listView, 0, QStringList(tr("<none>")) );
-		
-		((MarkerEditorViewItem *)item)->setFake(true);
+        
+        ((MarkerEditorViewItem *)item)->setFake(true);
         m_listView->addTopLevelItem(item);
 
-		m_listView->setSelectionMode( QAbstractItemView::NoSelection );
+        m_listView->setSelectionMode( QAbstractItemView::NoSelection );
     } else {
-		m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+        m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     }
 
     updatePosition();
@@ -330,17 +321,17 @@ MarkerEditor::slotDeleteAll()
     RG_DEBUG << "MarkerEditor::slotDeleteAll" << endl;
     MacroCommand *command = new MacroCommand(tr("Remove all markers"));
 
-// 	QTreeWidgetItem *item = m_listView->firstChild();
-	QTreeWidgetItem *item;
-	int cnt = m_listView->topLevelItemCount();
+//     QTreeWidgetItem *item = m_listView->firstChild();
+    QTreeWidgetItem *item;
+    int cnt = m_listView->topLevelItemCount();
 
 //     do {
-	for( int i=0; i< cnt; i++ ){
-		item = m_listView->topLevelItem( i );
-		
+    for( int i=0; i< cnt; i++ ){
+        item = m_listView->topLevelItem( i );
+        
         MarkerEditorViewItem *ei =
                 dynamic_cast<MarkerEditorViewItem *>(item);
-		
+        
         if (!ei || ei->isFake())
                 continue;
 
@@ -351,7 +342,7 @@ MarkerEditor::slotDeleteAll()
                                     qstrtostr(item->text(1)),
                                     qstrtostr(item->text(2)));
         command->addCommand(rc);
-    };	// while ((item = item->nextSibling()));
+    };    // while ((item = item->nextSibling()));
 
     addCommandToHistory(command);
 }
@@ -399,7 +390,7 @@ MarkerEditor::slotClose()
     RG_DEBUG << "MarkerEditor::slotClose" << endl;
 
 //     if (m_doc)
-//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());    //&&&
     m_doc = 0;
 
     close();
@@ -409,7 +400,7 @@ void
 MarkerEditor::setupActions()
 {
     createAction("file_close", SLOT(slotClose())); //!!! uh-oh, file_close_discard in rc file
-	
+    
     m_closeButton->setText(tr("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
 
@@ -460,7 +451,7 @@ MarkerEditor::checkModified()
 }
 
 void
-MarkerEditor::slotEdit(QTreeWidgetItem *i)
+MarkerEditor::slotEdit(QTreeWidgetItem *i, int)
 {
     RG_DEBUG << "MarkerEditor::slotEdit" << endl;
 
@@ -503,7 +494,7 @@ void
 MarkerEditor::closeEvent(QCloseEvent *e)
 {
     emit closing();
-	close();
+    close();
 //     KMainWindow::closeEvent(e);
 }
 
