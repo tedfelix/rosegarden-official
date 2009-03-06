@@ -199,7 +199,7 @@ private:
     bool m_exportPointAndClick;
     bool m_exportBeams;
     bool m_exportStaffGroup;
-    bool m_exportStaffMerge;
+
     bool m_raggedBottom;
 
     unsigned int m_exportMarkerMode;

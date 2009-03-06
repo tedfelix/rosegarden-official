@@ -127,7 +127,6 @@ LilyPondExporter::readConfigVariables(void)
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
     m_exportPointAndClick = qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) ;
     m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
-    m_exportStaffMerge = qStrToBool( settings.value("lilyexportstaffmerge", "false" ) ) ;
     m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
     m_lyricsHAlignment = qStrToBool( settings.value("lilylyricshalignment", "LEFT_ALIGN" ) ) ;
 
@@ -1130,15 +1129,13 @@ LilyPondExporter::write()
                     staffName << protectIllegalChars(m_composition->
                                                      getTrackById(lastTrackIndex)->getLabel());
 
-                    if (!m_exportStaffMerge || staffName.str() == "") {
-                        str << std::endl << indent(col)
+                    /*
+                     * The context name is unique to a single track.
+                     */
+                    str << std::endl << indent(col)
                         << "\\context Staff = \"track "
-                        << (trackPos + 1) << "\" ";
-                    } else {
-                        str << std::endl << indent(col)
-                        << "\\context Staff = \"" << staffName.str()
-                        << "\" ";
-                    }
+                        << (trackPos + 1) << (staffName.str() == "" ? "" : ", " )
+                        << staffName.str() << "\" ";
 
                     str << "<< " << std::endl;
 

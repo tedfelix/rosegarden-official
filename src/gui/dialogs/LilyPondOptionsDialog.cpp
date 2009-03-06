@@ -177,12 +177,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     layoutStaff->addWidget(m_lilyExportSelection, 0, 1);
 
-    m_lilyExportStaffMerge = new QCheckBox(
-                                 tr("Merge tracks that have the same name"), frameStaff);
-    layoutStaff->addWidget(m_lilyExportStaffMerge, 1, 0, 0+1, 1- 0+1);
-
-
-
     //
     // LilyPond export: Notation options
     //
@@ -340,7 +334,6 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyExportSelection->setCurrentIndex( settings.value("lilyexportselection", 1).toUInt() );
     m_lilyExportPointAndClick->setChecked( qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) );
     m_lilyExportBeams->setChecked( qStrToBool( settings.value("lilyexportbeamings", "false" ) ) );
-    m_lilyExportStaffMerge->setChecked( qStrToBool( settings.value("lilyexportstaffmerge", "false" ) ) );
     m_lilyExportStaffGroup->setChecked( qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) );
     m_lilyLyricsHAlignment->setCurrentIndex( settings.value("lilylyricshalignment", 0).toUInt() );
     m_lilyMarkerMode->setCurrentIndex( settings.value("lilyexportmarkermode", 0).toUInt() );
@@ -372,7 +365,6 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
     settings.setValue("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    settings.setValue("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilylyricshalignment", m_lilyLyricsHAlignment->currentIndex());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());

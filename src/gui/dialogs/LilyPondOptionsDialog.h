@@ -65,7 +65,6 @@ protected:
     QCheckBox *m_lilyExportMidi;
     QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBeams;
-    QCheckBox *m_lilyExportStaffMerge;
     QCheckBox *m_lilyExportStaffGroup;
     QComboBox *m_lilyMarkerMode;
     HeadersConfigurationPage *m_headersPage;
