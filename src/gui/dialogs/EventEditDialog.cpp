@@ -25,6 +25,7 @@
 #include "base/PropertyName.h"
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -33,7 +34,6 @@
 #include <QFont>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QObject>
 #include <QObjectList>
 #include <QPushButton>
@@ -90,7 +90,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
     intrinsicGridLay->addWidget(new QLabel(tr("Event type: ")), row, 0);
     intrinsicGridLay->addWidget(new QLabel("", intrinsicGrid), row, 1);
     intrinsicGridLay->addWidget(new QLabel("", intrinsicGrid), row, 2);
-    QLineEdit *lineEdit = new QLineEdit(intrinsicGrid);
+    LineEdit *lineEdit = new LineEdit(intrinsicGrid);
     lineEdit->setText(strtoqstr(event.getType()));
     intrinsicGridLay->addWidget(lineEdit, row, 3);
     row++;
@@ -253,7 +253,7 @@ EventEditDialog::EventEditDialog(QWidget *parent,
         m_nonPersistentView = new QScrollArea;
         m_nonPersistentView->setWidget(m_nonPersistentGrid);
         m_nonPersistentView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-//		m_nonPersistentView->setResizePolicy( QScrollView::AutoOneFit );
+//        m_nonPersistentView->setResizePolicy( QScrollView::AutoOneFit );
         nonPersistentBoxLayout->addWidget(m_nonPersistentView);
 
         nonPersistentBox->setLayout(nonPersistentBoxLayout);
@@ -358,7 +358,7 @@ EventEditDialog::addPersistentProperty(const PropertyName &name)
         }
 
     case String: {
-            QLineEdit *lineEdit = new QLineEdit
+            LineEdit *lineEdit = new LineEdit
                                   (strtoqstr(m_originalEvent.get<String>(name)));
             lineEdit->setObjectName(strtoqstr(name));
             m_persistentGridLay->addWidget(lineEdit, m_persistentGridRow, 2);
@@ -495,7 +495,7 @@ void
 EventEditDialog::slotStringPropertyChanged(const QString &value)
 {
     const QObject *s = sender();
-    const QLineEdit *lineEdit = dynamic_cast<const QLineEdit *>(s);
+    const LineEdit *lineEdit = dynamic_cast<const LineEdit *>(s);
     if (!lineEdit)
         return ;
 

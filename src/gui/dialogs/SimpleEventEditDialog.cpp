@@ -26,6 +26,7 @@
 #include "misc/Strings.h"
 #include "PitchDialog.h"
 #include "TimeDialog.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QDialog>
@@ -36,7 +37,6 @@
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>
@@ -178,7 +178,7 @@ SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
 
     m_metaLabel = new QLabel(tr("Meta string:"), frame);
     layout->addWidget(m_metaLabel, 6, 0);
-    m_metaEdit = new QLineEdit(frame);
+    m_metaEdit = new LineEdit(frame);
     layout->addWidget(m_metaEdit, 6, 1);
 
     m_sysexLoadButton = new QPushButton(tr("Load data"), frame);

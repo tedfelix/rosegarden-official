@@ -17,8 +17,8 @@
 
 
 #include "ControlParameterEditDialog.h"
-#include <QLayout>
 
+#include "gui/widgets/LineEdit.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Colour.h"
@@ -27,6 +27,7 @@
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "document/RosegardenGUIDoc.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -34,12 +35,12 @@
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPixmap>
 #include <QSpinBox>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -73,7 +74,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->setSpacing(5);
 
     layout->addWidget(new QLabel(tr("Name:"), frame), 0, 0);
-    m_nameEdit = new QLineEdit(frame);
+    m_nameEdit = new LineEdit(frame);
     layout->addWidget(m_nameEdit, 0, 1);
 
     layout->addWidget(new QLabel(tr("Type:"), frame), 1, 0);
@@ -81,7 +82,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     layout->addWidget(m_typeCombo, 1, 1, 1, 2);
 
     layout->addWidget(new QLabel(tr("Description:"), frame), 2, 0);
-    m_description = new QLineEdit(frame);
+    m_description = new LineEdit(frame);
     layout->addWidget(m_description, 2, 1, 1, 2);
 
     // hex value alongside decimal value

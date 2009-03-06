@@ -43,7 +43,6 @@
 #include <QDataStream>
 #include <QFrame>
 #include <QLabel>
-#include <QLineEdit>
 #include <QObject>
 #include <QPushButton>
 #include <QLayout>
@@ -220,7 +219,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     QString jackPath = settings.value("jackcommand",
                                         // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
                                         "/usr/bin/qjackctl -s").toString();
-    m_jackPath = new QLineEdit(jackPath, frame);
+    m_jackPath = new LineEdit(jackPath, frame);
     connect(m_jackPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 
     layout->addWidget(m_jackPath, row, 1, row- row+1, 3);

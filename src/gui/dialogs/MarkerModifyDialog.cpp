@@ -17,23 +17,24 @@
 
 
 #include "MarkerModifyDialog.h"
-#include <QLayout>
 
 #include "base/Composition.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/widgets/TimeWidget.h"
+#include "misc/Strings.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QLayout>
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QSpinBox>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -104,11 +105,11 @@ MarkerModifyDialog::initialise(Composition *composition,
     groupBoxLayout->addWidget(frame);
 
     layout->addWidget(new QLabel(tr("Text:"), frame), 0, 0);
-    m_nameEdit = new QLineEdit(name, frame);
+    m_nameEdit = new LineEdit(name, frame);
     layout->addWidget(m_nameEdit, 0, 1);
 
     layout->addWidget(new QLabel(tr("Description:"), frame), 1, 0);
-    m_desEdit = new QLineEdit(des, frame);
+    m_desEdit = new LineEdit(des, frame);
     layout->addWidget(m_desEdit, 1, 1);
 
     m_nameEdit->selectAll();

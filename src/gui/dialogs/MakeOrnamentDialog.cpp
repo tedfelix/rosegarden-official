@@ -19,11 +19,12 @@
 #include "MakeOrnamentDialog.h"
 
 #include "gui/widgets/PitchChooser.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -64,7 +65,7 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
     QLabel *child_3 = new QLabel(tr("Name:  "));
     hboxLayout->addWidget(child_3);
 
-    m_name = new QLineEdit(defaultName);
+    m_name = new LineEdit(defaultName);
     hboxLayout->addWidget(m_name);
     hbox->setLayout(hboxLayout);
 

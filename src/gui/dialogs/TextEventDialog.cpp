@@ -21,6 +21,7 @@
 #include "document/ConfigGroups.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -30,7 +31,6 @@
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QObject>
 #include <QPainter>
 #include <QPixmap>
@@ -61,11 +61,11 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 //    QGridLayout *metagrid = new QGridLayout;
 //    setLayout(metagrid);
 //    metagrid->addWidget(vbox, 0, 0);
-	
+    
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-//	QWidget *vbox = new QWidget(this);
-	QWidget *vbox = dynamic_cast<QWidget*>( this );
-	vbox->setLayout( vboxLayout );
+//    QWidget *vbox = new QWidget(this);
+    QWidget *vbox = dynamic_cast<QWidget*>( this );
+    vbox->setLayout( vboxLayout );
 
     QGroupBox *entryBox = new QGroupBox( tr("Specification"), vbox );
     vboxLayout->addWidget(entryBox);
@@ -75,7 +75,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     QGridLayout *entryGridLay = new QGridLayout;
     entryGridLay->addWidget(new QLabel(tr("Text:  ")), 0, 0);
-    m_text = new QLineEdit;
+    m_text = new LineEdit;
     m_text->setText(strtoqstr(defaultText.getText()));
     if (maxLength > 0)
         m_text->setMaxLength(maxLength);
@@ -382,10 +382,10 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // imagine would cost so much more.
     m_text->setText(strtoqstr(defaultText.getText()));
     
-	QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox, 1, 0);
     //vboxLayout->setRowStretch(0, 10);
-	
+    
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

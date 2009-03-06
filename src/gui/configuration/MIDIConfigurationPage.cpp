@@ -33,6 +33,7 @@
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
 #include "misc/Debug.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -43,7 +44,6 @@
 #include <QDataStream>
 #include <QFrame>
 #include <QLabel>
-#include <QLineEdit>
 #include <QObject>
 #include <QPushButton>
 #include <QLayout>
@@ -172,14 +172,14 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new QLineEdit(settings.value("sfxloadpath", "/bin/sfxload").toString() , frame);
+    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/bin/sfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
     ++row;
 
     layout->addWidget(new QLabel(tr("SoundFont"), frame), row, 0);
-	m_soundFontPath = new QLineEdit(settings.value("soundfontpath", "").toString() , frame);
+    m_soundFontPath = new LineEdit(settings.value("soundfontpath", "").toString() , frame);
     layout->addWidget(m_soundFontPath, row, 1, row- row+1, 2);
     m_soundFontChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_soundFontChoose, row, 3);

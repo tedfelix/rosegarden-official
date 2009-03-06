@@ -21,13 +21,16 @@
 
 #include "base/TriggerSegment.h"
 #include "base/NotationTypes.h"
-#include <string>
+#include "gui/widgets/LineEdit.h"
+
 #include <QDialog>
+
+#include <string>
 #include <vector>
 
 
 class QWidget;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QCheckBox;
 class QComboBox;
@@ -64,7 +67,7 @@ protected:
     QComboBox     *m_ornament;
     QComboBox     *m_mark;
     QLabel        *m_textLabel;
-    QLineEdit     *m_text;
+    LineEdit      *m_text;
     QCheckBox     *m_retune;
     QComboBox     *m_adjustTime;
 };

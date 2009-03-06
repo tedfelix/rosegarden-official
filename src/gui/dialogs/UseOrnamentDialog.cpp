@@ -25,6 +25,7 @@
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QSettings>
@@ -34,7 +35,6 @@
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QLineEdit>
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
@@ -101,7 +101,7 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     m_textLabel = new QLabel(tr("   Text:  "));
     layout->addWidget(m_textLabel, 0, 2);
 
-    m_text = new QLineEdit;
+    m_text = new LineEdit;
     layout->addWidget(m_text, 0, 3);
     notationBox->setLayout(layout);
 

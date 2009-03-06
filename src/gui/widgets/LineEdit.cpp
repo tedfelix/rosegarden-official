@@ -18,6 +18,7 @@
 #include "LineEdit.h"
 
 #include <QLineEdit>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -27,7 +28,7 @@ LineEdit::LineEdit(QWidget *parent) :
         QLineEdit(parent)
 {
     // Leave everything but the background to the external stylesheet
-    QString localStyle = "background: #FFFFFF";
+    QString localStyle = "background-color: #FFFFFF;";
     setStyleSheet(localStyle);
 }
 
@@ -35,7 +36,7 @@ LineEdit::LineEdit(const QString& string, QWidget *parent) :
         QLineEdit(string, parent)
 {
     // Leave everything but the background to the external stylesheet
-    QString localStyle = "background: #FFFFFF";
+    QString localStyle = "background-color: #FFFFFF;";
     setStyleSheet(localStyle);
 }
 

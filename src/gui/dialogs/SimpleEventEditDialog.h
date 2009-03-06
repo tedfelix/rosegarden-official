@@ -20,15 +20,18 @@
 #define _RG_SIMPLEEVENTEDITDIALOG_H_
 
 #include "base/Event.h"
-#include <string>
+#include "gui/widgets/LineEdit.h"
+
 #include <QDialog>
+
+#include <string>
 
 
 class QWidget;
 class QString;
 class QSpinBox;
 class QPushButton;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
@@ -115,7 +118,7 @@ protected:
     QPushButton             *m_notationDurationEditButton;
     QCheckBox               *m_lockNotationValues;
 
-    QLineEdit               *m_metaEdit;
+    LineEdit                *m_metaEdit;
 
     bool                     m_modified;
 };

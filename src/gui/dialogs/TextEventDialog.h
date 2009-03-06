@@ -20,6 +20,8 @@
 #define _RG_TEXTEVENTDIALOG_H_
 
 #include "base/NotationTypes.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <string>
 #include <QDialog>
 #include <QString>
@@ -27,7 +29,7 @@
 
 
 class QWidget;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QComboBox;
 class QSpinBox;
@@ -82,7 +84,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QLineEdit *m_text;
+    LineEdit *m_text;
     QComboBox *m_typeCombo;
     QSpinBox  *m_verseSpin;
     QComboBox *m_dynamicShortcutCombo;

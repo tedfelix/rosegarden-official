@@ -19,9 +19,10 @@
 #define _RG_MIDICONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <QString>
 #include <QSlider>
-#include <QLineEdit>
 #include <QCheckBox>
 
 
@@ -32,6 +33,7 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QComboBox;
+class LineEdit;
 
 
 namespace Rosegarden
@@ -68,9 +70,9 @@ protected:
     QCheckBox *m_sendControllersAtPlay;
 
     QCheckBox   *m_sfxLoadEnabled;
-    QLineEdit   *m_sfxLoadPath;
+    LineEdit    *m_sfxLoadPath;
     QPushButton *m_sfxLoadChoose;
-    QLineEdit   *m_soundFontPath;
+    LineEdit    *m_soundFontPath;
     QPushButton *m_soundFontChoose;
 
     // Sync and timing

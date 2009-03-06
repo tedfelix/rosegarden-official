@@ -24,17 +24,16 @@
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QApplication>
 #include <QSettings>
 #include <QListWidget>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-
 #include <QGroupBox>
 #include <QLabel>
 #include <QLayout>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QString>
 #include <QTabWidget>
@@ -48,9 +47,9 @@ namespace Rosegarden
 {
 
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
-	RosegardenGUIDoc *doc) :
-	QWidget(parent),
-	m_doc(doc)
+    RosegardenGUIDoc *doc) :
+    QWidget(parent),
+    m_doc(doc)
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -58,7 +57,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     // LilyPond export: Printable headers
     //
 
-    QGroupBox *headersBox = new QGroupBox( tr("Printable headers"), this );
+    QGroupBox *headersBox = new QGroupBox(tr("Printable headers"), this);
     QHBoxLayout *headersBoxLayout = new QHBoxLayout;
     layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
@@ -72,91 +71,91 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     Configuration metadata = (&m_doc->getComposition())->getMetadata();
     std::vector<std::string> propertyNames = metadata.getPropertyNames();
     std::vector<PropertyName> fixedKeys =
-	CompositionMetadataKeys::getFixedKeys();
+    CompositionMetadataKeys::getFixedKeys();
 
     std::set<std::string> shown;
 
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-	std::string key = fixedKeys[index].getName();
-	std::string header = "";
-	for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-	    std::string property = propertyNames [i];
-	    if (property == key) {
-		header = metadata.get<String>(property);
-	    }
-	}
+    std::string key = fixedKeys[index].getName();
+    std::string header = "";
+    for (unsigned int i = 0; i < propertyNames.size(); ++i) {
+        std::string property = propertyNames [i];
+        if (property == key) {
+        header = metadata.get<String>(property);
+        }
+    }
 
-	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit(strtoqstr( header ), frameHeaders);
-	QString trName;
-	if (key == headerDedication) {  
-	    m_editDedication = editHeader;
-	    row = 0; col = 2; width = 2;
-	    trName = tr("Dedication");
-	} else if (key == headerTitle) {       
-	    m_editTitle = editHeader;	
-	    row = 1; col = 1; width = 4;
-	    trName = tr("Title");
-	} else if (key == headerSubtitle) {
-	    m_editSubtitle = editHeader;
-	    row = 2; col = 1; width = 4;
-	    trName = tr("Subtitle");
-	} else if (key == headerSubsubtitle) { 
-	    m_editSubsubtitle = editHeader;
-	    row = 3; col = 2; width = 2;
-	    trName = tr("Subsubtitle");
-	} else if (key == headerPoet) {        
-	    m_editPoet = editHeader;
-	    row = 4; col = 0; width = 2;
-	    trName = tr("Poet");
-	} else if (key == headerInstrument) {  
-	    m_editInstrument = editHeader;
-	    row = 4; col = 2; width = 2;
-	    trName = tr("Instrument");
-	} else if (key == headerComposer) {    
-	    m_editComposer = editHeader;
-	    row = 4; col = 4; width = 2; 
-	    trName = tr("Composer");
-	} else if (key == headerMeter) {       
-	    m_editMeter = editHeader;
-	    row = 5; col = 0; width = 3; 
-	    trName = tr("Meter");
-	} else if (key == headerArranger) {    
-	    m_editArranger = editHeader;
-	    row = 5; col = 3; width = 3; 
-	    trName = tr("Arranger");
-	} else if (key == headerPiece) {       
-	    m_editPiece = editHeader;
-	    row = 6; col = 0; width = 3; 
-	    trName = tr("Piece");
-	} else if (key == headerOpus) {        
-	    m_editOpus = editHeader;
-	    row = 6; col = 3; width = 3; 
-	    trName = tr("Opus");
-	} else if (key == headerCopyright) {   
-	    m_editCopyright = editHeader;
-	    row = 8; col = 1; width = 4; 
-	    trName = tr("Copyright");
-	} else if (key == headerTagline) {     
-	    m_editTagline = editHeader;
-	    row = 9; col = 1; width = 4; 
-	    trName = tr("Tagline");
-	}
+    unsigned int row = 0, col = 0, width = 1;
+    LineEdit *editHeader = new LineEdit(strtoqstr(header), frameHeaders);
+    QString trName;
+    if (key == headerDedication) {  
+        m_editDedication = editHeader;
+        row = 0; col = 2; width = 2;
+        trName = tr("Dedication");
+    } else if (key == headerTitle) {       
+        m_editTitle = editHeader;    
+        row = 1; col = 1; width = 4;
+        trName = tr("Title");
+    } else if (key == headerSubtitle) {
+        m_editSubtitle = editHeader;
+        row = 2; col = 1; width = 4;
+        trName = tr("Subtitle");
+    } else if (key == headerSubsubtitle) { 
+        m_editSubsubtitle = editHeader;
+        row = 3; col = 2; width = 2;
+        trName = tr("Subsubtitle");
+    } else if (key == headerPoet) {        
+        m_editPoet = editHeader;
+        row = 4; col = 0; width = 2;
+        trName = tr("Poet");
+    } else if (key == headerInstrument) {  
+        m_editInstrument = editHeader;
+        row = 4; col = 2; width = 2;
+        trName = tr("Instrument");
+    } else if (key == headerComposer) {    
+        m_editComposer = editHeader;
+        row = 4; col = 4; width = 2; 
+        trName = tr("Composer");
+    } else if (key == headerMeter) {       
+        m_editMeter = editHeader;
+        row = 5; col = 0; width = 3; 
+        trName = tr("Meter");
+    } else if (key == headerArranger) {    
+        m_editArranger = editHeader;
+        row = 5; col = 3; width = 3; 
+        trName = tr("Arranger");
+    } else if (key == headerPiece) {       
+        m_editPiece = editHeader;
+        row = 6; col = 0; width = 3; 
+        trName = tr("Piece");
+    } else if (key == headerOpus) {        
+        m_editOpus = editHeader;
+        row = 6; col = 3; width = 3; 
+        trName = tr("Opus");
+    } else if (key == headerCopyright) {   
+        m_editCopyright = editHeader;
+        row = 8; col = 1; width = 4; 
+        trName = tr("Copyright");
+    } else if (key == headerTagline) {     
+        m_editTagline = editHeader;
+        row = 9; col = 1; width = 4; 
+        trName = tr("Tagline");
+    }
 
-	// editHeader->setReadOnly( true );
-	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
+    // editHeader->setReadOnly(true);
+    editHeader->setAlignment((col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter)));
 
-	layoutHeaders->addWidget(editHeader, row, col, 1, width);
+    layoutHeaders->addWidget(editHeader, row, col, 1, width);
 
-	//
-	// ToolTips
-	//
-	editHeader->setToolTip(trName );
+    //
+    // ToolTips
+    //
+    editHeader->setToolTip(trName);
 
-	shown.insert(key);
+    shown.insert(key);
     }
     QLabel *separator = new QLabel(tr("The composition comes here."), frameHeaders);
-    separator->setAlignment( Qt::AlignCenter );
+    separator->setAlignment(Qt::AlignCenter);
     layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
 
     frameHeaders->setLayout(layoutHeaders);
@@ -172,9 +171,9 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //@@@ QSettings settings ; // was: confq4
     //@@@ QString groupTemp = settings.group();
     QSettings settings;
-    settings.beginGroup( "CollapsingFrame" );
+    settings.beginGroup("CollapsingFrame");
 
-    bool expanded = qStrToBool( settings.value("nonprintableheaders", "false" ) ) ;
+    bool expanded = qStrToBool(settings.value("nonprintableheaders", "false")) ;
     settings.setValue("nonprintableheaders", expanded);
     settings.endGroup();
 
@@ -195,13 +194,13 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders);
     layoutOtherHeaders->setSpacing(5);
 
-	m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
-	
-	m_metadata->setItem( 0, 0, new QTableWidgetItem(tr("Name"))  ); // row, column, item
-	m_metadata->setItem( 0, 2, new QTableWidgetItem(tr("Value"))  ); // row, column, item
+    m_metadata = new QTableWidget(2, 2, frameOtherHeaders); // rows, columns
+    
+    m_metadata->setItem(0, 0, new QTableWidgetItem(tr("Name")) ); // row, column, item
+    m_metadata->setItem(0, 2, new QTableWidgetItem(tr("Value")) ); // row, column, item
 //    m_metadata->setFullWidth(true);
-	m_metadata->setMinimumSize( 40, 40 ); // width, height
-//    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor ( QTableWidgetItem * item )
+    m_metadata->setMinimumSize(40, 40); // width, height
+//    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor (QTableWidgetItem * item)
 //    m_metadata->setRenameable(0);
 //    m_metadata->setRenameable(1);
 //    m_metadata->setItemMargin(5);
@@ -209,13 +208,13 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 //    m_metadata->setShowSortIndicator(true);
 
     std::vector<std::string> names(metadata.getPropertyNames());
-	
-	QTableWidgetItem* tabItem;
-	int row = m_metadata->rowCount();
-	int col = 0;
-	m_metadata->setRowCount( row + 1 );
     
-	for (unsigned int i = 0; i < names.size(); ++i) {
+    QTableWidgetItem* tabItem;
+    int row = m_metadata->rowCount();
+    int col = 0;
+    m_metadata->setRowCount(row + 1);
+    
+    for (unsigned int i = 0; i < names.size(); ++i) {
 
         if (shown.find(names[i]) != shown.end())
             continue;
@@ -225,10 +224,10 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         // property names stored in lower case
         name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-//		new QListWidgetItem( m_metadata, name, strtoqstr(metadata.get<String>(names[i])) );
-		// qt4: icon, text, type
-		tabItem = new QTableWidgetItem( strtoqstr(metadata.get<String>(names[i])) );
-		m_metadata->setItem( row, col, tabItem );
+//        new QListWidgetItem(m_metadata, name, strtoqstr(metadata.get<String>(names[i])));
+        // qt4: icon, text, type
+        tabItem = new QTableWidgetItem(strtoqstr(metadata.get<String>(names[i])));
+        m_metadata->setItem(row, col, tabItem);
 
         shown.insert(names[i]);
     }
@@ -257,40 +256,40 @@ HeadersConfigurationPage::slotAddNewProperty()
 {
     QString propertyName;
     int i = 0;
-	
-	QList<QTableWidgetItem*> foundItems;
+    
+    QList<QTableWidgetItem*> foundItems;
     while (1) {
         propertyName =
             (i > 0 ? tr("{new property %1}").arg(i) : tr("{new property}"));
-		//<QTableWidgetItem*>
-		foundItems = m_metadata->findItems( propertyName, Qt::MatchContains | Qt::MatchCaseSensitive );
-	
-		if ( !m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
-					 foundItems.isEmpty() ){
+        //<QTableWidgetItem*>
+        foundItems = m_metadata->findItems(propertyName, Qt::MatchContains | Qt::MatchCaseSensitive);
+    
+        if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
+                     foundItems.isEmpty()){
             break;
-		}
+        }
         ++i;
     }
 
-	//new QTableWidgetItem(m_metadata, propertyName, tr("{undefined}"));
-	int rc = m_metadata->rowCount();
-	int col = 0;
-	m_metadata->setRowCount( rc + 1 );
-	m_metadata->setItem( rc, col, new QTableWidgetItem(propertyName) );
+    //new QTableWidgetItem(m_metadata, propertyName, tr("{undefined}"));
+    int rc = m_metadata->rowCount();
+    int col = 0;
+    m_metadata->setRowCount(rc + 1);
+    m_metadata->setItem(rc, col, new QTableWidgetItem(propertyName));
 }
 
 void
 HeadersConfigurationPage::slotDeleteProperty()
 {
-	//delete m_metadata->currentIndex();
-	m_metadata->removeRow( m_metadata->currentRow() );
+    //delete m_metadata->currentIndex();
+    m_metadata->removeRow(m_metadata->currentRow());
 }
 
 void HeadersConfigurationPage::apply()
 {
     //@@@ Next two lines not needed in this function.  Commented out
     //@@@ QSettings settings;
-    //@@@ settings.beginGroup( NotationViewConfigGroup );
+    //@@@ settings.beginGroup(NotationViewConfigGroup);
 
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
@@ -318,29 +317,29 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
-//	for (QTableWidgetItem *item = m_metadata->firstChild();
-//			item != 0; item = item->nextSibling()) {
-	
-	QTableWidgetItem* tabItem;
-	QTableWidgetItem* tabItem2;
-	int c = 0;
-	for( int r=0; r < m_metadata->rowCount(); r++ ){
-		//for( int c=0; c < m_metadata->columnCount(); c++ ){
-			
-		tabItem = m_metadata->item( r, c );
-		tabItem2 = m_metadata->item( r, c+1 );
-		
-		if( (!tabItem) || (!tabItem2) ){
-			RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
-			continue;
-		}
-			
-		metadata.set<String>( qstrtostr(tabItem->text().toLower()),
-							  qstrtostr(tabItem2->text()) );
-//		metadata.set<String>(qstrtostr(item->text(0).toLower()),
-//							 qstrtostr(item->text(1)));
-		//}//end for(c)
-	}//end for(r)
+//    for (QTableWidgetItem *item = m_metadata->firstChild();
+//            item != 0; item = item->nextSibling()) {
+    
+    QTableWidgetItem* tabItem;
+    QTableWidgetItem* tabItem2;
+    int c = 0;
+    for(int r=0; r < m_metadata->rowCount(); r++){
+        //for(int c=0; c < m_metadata->columnCount(); c++){
+            
+        tabItem = m_metadata->item(r, c);
+        tabItem2 = m_metadata->item(r, c+1);
+        
+        if((!tabItem) || (!tabItem2)){
+            RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
+            continue;
+        }
+            
+        metadata.set<String>(qstrtostr(tabItem->text().toLower()),
+                              qstrtostr(tabItem2->text()));
+//        metadata.set<String>(qstrtostr(item->text(0).toLower()),
+//                             qstrtostr(item->text(1)));
+        //}//end for(c)
+    }//end for(r)
 
     m_doc->slotDocumentModified();
 }

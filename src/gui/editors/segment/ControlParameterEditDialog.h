@@ -20,13 +20,15 @@
 #define _RG_CONTROLPARAMETEREDITDIALOG_H_
 
 #include "base/ControlParameter.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <QDialog>
 
 
 class QWidget;
 class QString;
 class QSpinBox;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QComboBox;
 
@@ -66,16 +68,16 @@ protected:
     ControlParameter *m_control;
     ControlParameter  m_dialogControl;
 
-    QLineEdit                    *m_nameEdit;
-    QComboBox                    *m_typeCombo;
-    QLineEdit                    *m_description;
-    QSpinBox                     *m_controllerBox;
-    QSpinBox                     *m_minBox;
-    QSpinBox                     *m_maxBox;
-    QSpinBox                     *m_defaultBox;
-    QComboBox                    *m_colourCombo;
-    QComboBox                    *m_ipbPosition;
-    QLabel                       *m_hexValue;
+    LineEdit                    *m_nameEdit;
+    QComboBox                   *m_typeCombo;
+    LineEdit                    *m_description;
+    QSpinBox                    *m_controllerBox;
+    QSpinBox                    *m_minBox;
+    QSpinBox                    *m_maxBox;
+    QSpinBox                    *m_defaultBox;
+    QComboBox                   *m_colourCombo;
+    QComboBox                   *m_ipbPosition;
+    QLabel                      *m_hexValue;
 };
 
 

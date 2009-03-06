@@ -19,9 +19,10 @@
 #define _RG_AUDIOCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
+#include "gui/widgets/LineEdit.h"
+
 #include <QString>
 #include <QSettings>
-#include <QLineEdit>
 
 
 class QWidget;
@@ -32,6 +33,7 @@ class QLabel;
 class QComboBox;
 class QCheckBox;
 class QComboBox;
+class LineEdit;
 
 
 namespace Rosegarden
@@ -87,7 +89,7 @@ protected:
 
 #endif // HAVE_LIBJACK
 
-    QLineEdit* m_externalAudioEditorPath;
+    LineEdit*  m_externalAudioEditorPath;
     QComboBox* m_previewStyle;
 
 };

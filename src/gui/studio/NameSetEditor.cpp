@@ -18,6 +18,7 @@
 
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
+#include "gui/widgets/LineEdit.h"
 
 
 #include <QFrame>
@@ -35,7 +36,7 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLineEdit>
+
 #include <iostream>
 
 namespace Rosegarden
@@ -131,7 +132,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
 
                 if (showEntryButtons) {
-// 					QPushButton *button = new QPushButton("", numBox, numberText);
+//                     QPushButton *button = new QPushButton("", numBox, numberText);
                     QPushButton *button = new QPushButton(numberText, numBox);
                     numBoxLayout->addWidget(button);
                     button->setMaximumWidth(40);
@@ -142,19 +143,19 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                     m_entryButtons.push_back(button);
                 }
 
-                QLineEdit* lineEdit = new QLineEdit(numberText, numBox );
+                LineEdit* lineEdit = new LineEdit(numberText, numBox);
                 numBoxLayout->addWidget(lineEdit);
                 numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
-				
-//			lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);//&&& FIX: use setCompleter(..)	
-// 				QCompleter completer;
-// 				completer->setCompletitionMode( QCompleter::InlineCompletion );
-				
+                
+//            lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);//&&& FIX: use setCompleter(..)    
+//                 QCompleter completer;
+//                 completer->setCompletitionMode( QCompleter::InlineCompletion );
+                
 //                 lineEdit->setCompletionObject(&m_completion);
 
                 lineEdit->setCompleter(new QCompleter(m_completions));
-				
+                
                 m_names.push_back(lineEdit);
 
                 connect(m_names[labelId],

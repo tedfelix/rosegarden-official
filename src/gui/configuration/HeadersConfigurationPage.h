@@ -19,10 +19,12 @@
 #ifndef _RG_HEADERSCONFIGURATIONPAGE_H_
 #define _RG_HEADERSCONFIGURATIONPAGE_H_
 
+#include "gui/widgets/LineEdit.h"
+
 #include <QWidget>
 
 class QWidget;
-class QLineEdit;
+class LineEdit;
 class QTableWidget;
 
 namespace Rosegarden
@@ -49,19 +51,19 @@ protected:
     RosegardenGUIDoc *m_doc;
  
     // Header fields
-    QLineEdit *m_editDedication;
-    QLineEdit *m_editTitle;
-    QLineEdit *m_editSubtitle;
-    QLineEdit *m_editSubsubtitle;
-    QLineEdit *m_editPoet;
-    QLineEdit *m_editComposer;
-    QLineEdit *m_editMeter;
-    QLineEdit *m_editOpus;
-    QLineEdit *m_editArranger;
-    QLineEdit *m_editInstrument;
-    QLineEdit *m_editPiece;
-    QLineEdit *m_editCopyright;
-    QLineEdit *m_editTagline;
+    LineEdit *m_editDedication;
+    LineEdit *m_editTitle;
+    LineEdit *m_editSubtitle;
+    LineEdit *m_editSubsubtitle;
+    LineEdit *m_editPoet;
+    LineEdit *m_editComposer;
+    LineEdit *m_editMeter;
+    LineEdit *m_editOpus;
+    LineEdit *m_editArranger;
+    LineEdit *m_editInstrument;
+    LineEdit *m_editPiece;
+    LineEdit *m_editCopyright;
+    LineEdit *m_editTagline;
 
     QTableWidget *m_metadata;
 };
