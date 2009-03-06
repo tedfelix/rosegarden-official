@@ -1558,8 +1558,8 @@ Supports the box model.  The color and background of the selected item is styled
 using selection-color and selection-background-color respectively.  The password
 character can be styled using the lineedit-password-character property. */
 
-QLineEdit
-/*QLineEdit QWidget > QWidget*/
+QLineEdit,
+/*QLineEdit QWidget > QWidget /* still required for LineEdit on headers page */
 {
     border: 1px solid #AAAAAA;
     background-color: #FFFFFF;

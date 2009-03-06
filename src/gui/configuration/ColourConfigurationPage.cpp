@@ -29,6 +29,8 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <QColorDialog>
 #include <QSettings>
@@ -42,8 +44,6 @@
 #include <QWidget>
 #include <QLayout>
 #include <QMessageBox>
-#include <QLineEdit>
-#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -124,8 +124,8 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = QInputDialog::getText(this, tr("New Color Name"),
-                                           tr("Enter new name"), QLineEdit::Normal,
+    QString newName = InputDialog::getText(this, tr("New Color Name"),
+                                           tr("Enter new name"), LineEdit::Normal,
                                            tr("New"),
                                            &ok, 0);
     

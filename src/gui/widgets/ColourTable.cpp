@@ -22,6 +22,8 @@
 #include "base/ColourMap.h"
 #include "ColourTableItem.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <QColorDialog>
 #include <QColor>
@@ -29,9 +31,7 @@
 #include <QString>
 #include <QTableWidget>
 #include <QWidget>
-#include <QLineEdit>
 #include <QHeaderView>
-#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -72,11 +72,10 @@ ColourTable::slotEditEntry(int row, int col)
             if (row == 0)
                 return ;
             bool ok = false;
-            //@@@ QInputDialog replaces KLineEditDlg.  This is not a clean swap,
-            // and this is untested
-            QString newName = QInputDialog::getText(tr("Modify Color Name"),
+            QString newName = InputDialog::getText(this,
+                                                   tr("Modify Color Name"),
                                                    tr("Enter new name"),
-                                                   QLineEdit::Normal,
+                                                   LineEdit::Normal,
                                                    item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty())) {
@@ -88,12 +87,6 @@ ColourTable::slotEditEntry(int row, int col)
     case 1: {
             QColor temp = m_colours[row];
 
-            //@@@ KColorDialog to QColorDialog is a really weird conversion.
-            // This syntax seems to do the equivalent of the old job.  It
-            // returns a QColor.  Test that result for isValid() to see if the
-            // dialog was accepted (else it was cancelled.)  This builds now,
-            // and I'm pretty sure this is the right thing, but I'm flagging it
-            // as a future source of mysterious bugs.
             QColor result = QColorDialog::getColor(temp);
 
             if (result.isValid()) {
@@ -112,8 +105,7 @@ void
 ColourTable::populate_table(ColourMap &input, ColourList &list)
 {
     m_colours.reserve(input.size());
-//     setNumRows(input.size());
-    setRowCount( input.size() );
+    setRowCount(input.size());
 
     QString name;
 
@@ -130,7 +122,6 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
 //                 dynamic_cast<QTableWidget *>(this),
 //                                              QTableWidgetItem::Never, name);
         QTableWidgetItem *text = new QTableWidgetItem( );
-//          text->setObjectName(name);    //@@@ does not exist for QTreeWidgetItem
 
         setItem(i, 0, text);
 

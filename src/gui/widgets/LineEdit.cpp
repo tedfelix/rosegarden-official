@@ -27,14 +27,23 @@ namespace Rosegarden
 LineEdit::LineEdit(QWidget *parent) :
         QLineEdit(parent)
 {
-    // Leave everything but the background to the external stylesheet
-    //
-    // Correction: the local stylesheet in InputDialog overrides the foreground
-    // color (but not the selection foreground or background color) specified in
-    // the external stylesheet, so we need to style the foreground color here
-    // too.  ARGH!
+    // This just gets more and more ugly.  Even here, no selector is specific
+    // enough to avoid the colors getting broken, so we have to set the
+    // background in a stylesheet with no selector and no brackets to get the
+    // background color to work.  We also have to specify the foreground color
+    // here, it turns out, to make it work everywhere, as it only comes in from
+    // the external stylesheet about half the time, and white text on a white
+    // background isn't very useful.
     QString localStyle = "background-color: #FFFFFF; color: #000000;";
     setStyleSheet(localStyle);
+
+    // Now we have to re-style the tool tip in a second stylesheet, because this
+    // does have to have a selector to work.  If there are any other widgets
+    // that ever launch off of a LineEdit, we'll have to duplicate their styles
+    // here too.
+    localStyle = "QToolTip {background-color: #FFFBD4; color: #000000}";
+    setStyleSheet(localStyle);
+    setToolTip("I am a LineEdit, not a QLineEdit");
 }
 
 LineEdit::LineEdit(const QString& string, QWidget *parent) :
