@@ -147,30 +147,6 @@ depending on the orientation of the tabs. */
 
 
 
-/* Color the View (formerly RosegardenGUIView, not sure what the class will be
- * renamed to, so we're using the objectName to reference it) background
- * transparent, because this allows the overrides for the track buttons and
- * whatnot to show through.
- */
-/*#View QWidget
-{
-    background-color: transparent;
-}*/
-
-/*#View QWidget > QWidget > QWidget > QWidget
-{
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #BBBBBB, stop:1 #DDDDDD);
-    color: #000000;
-}
-
-
-#View QWidget > QWidget > QWidget > QWidget > QWidget
-{
-    background-color: #000000;
-    color: #000000;
-}*/
-
-
 #View QDialog QWidget,
 #MinorDialog QWidget,
 #tempoview QWidget
@@ -1582,8 +1558,8 @@ Supports the box model.  The color and background of the selected item is styled
 using selection-color and selection-background-color respectively.  The password
 character can be styled using the lineedit-password-character property. */
 
-QLineEdit,
-QLineEdit QWidget > QWidget
+QLineEdit
+/*QLineEdit QWidget > QWidget*/
 {
     border: 1px solid #AAAAAA;
     background-color: #FFFFFF;

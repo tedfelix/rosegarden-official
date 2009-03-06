@@ -20,7 +20,7 @@
 
 #include <QLineEdit>
 
-/* This subclass of QLineEdit uses a spot stylesheet to set its own background
+/**This subclass of QLineEdit uses a spot stylesheet to set its own background
  * color.
  *
  * The normal styling process has involved painting broad "widgetless" areas

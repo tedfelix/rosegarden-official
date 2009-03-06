@@ -46,6 +46,8 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include "document/Command.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -72,8 +74,8 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStackedWidget>
-#include <QLineEdit>
-#include <QInputDialog>
+//#include <QLineEdit>
+//#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -988,10 +990,10 @@ SegmentParameterBox::slotColourSelected(int value)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        QString newName = QInputDialog::getText(this,
+        QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
                                                tr("Enter new name"),
-                                               QLineEdit::Normal,
+                                               LineEdit::Normal,
                                                tr("New"), &ok);
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
@@ -1105,10 +1107,10 @@ SegmentParameterBox::slotEditSegmentLabel()
     if (label == "*")
         label = "";
 
-    QString newLabel = QInputDialog::getText(this, 
+    QString newLabel = InputDialog::getText(this, 
                                             tr("Enter new label"),
                                             editLabel,
-                                            QLineEdit::Normal,
+                                            LineEdit::Normal,
                                             m_label->text(),
                                             &ok );
 

@@ -28,7 +28,12 @@ LineEdit::LineEdit(QWidget *parent) :
         QLineEdit(parent)
 {
     // Leave everything but the background to the external stylesheet
-    QString localStyle = "background-color: #FFFFFF;";
+    //
+    // Correction: the local stylesheet in InputDialog overrides the foreground
+    // color (but not the selection foreground or background color) specified in
+    // the external stylesheet, so we need to style the foreground color here
+    // too.  ARGH!
+    QString localStyle = "background-color: #FFFFFF; color: #000000;";
     setStyleSheet(localStyle);
 }
 
