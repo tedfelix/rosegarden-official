@@ -184,7 +184,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     settings.endGroup();
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
-        (tr("Non-printable headers"), this, "nonprintableheaders");
+        (tr("Additional headers"), this, "nonprintableheaders");
         
     layout->addWidget(otherHeadersBox);
     setLayout(layout);        
@@ -200,10 +200,10 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders);
     layoutOtherHeaders->setSpacing(5);
 
-    m_metadata = new QTableWidget(2, 2, frameOtherHeaders); // rows, columns
-    
-    m_metadata->setItem(0, 0, new QTableWidgetItem(tr("Name")) ); // row, column, item
-    m_metadata->setItem(0, 2, new QTableWidgetItem(tr("Value")) ); // row, column, item
+    m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
+	
+    m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
+    m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item
 //    m_metadata->setFullWidth(true);
     m_metadata->setMinimumSize(40, 40); // width, height
 //    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor (QTableWidgetItem * item)
