@@ -594,12 +594,17 @@ selection-background-color respectively.  The selection behavior is controlled
 by the #show-decoration-selected-prop property.  See QAbsractScrollArea to style
 scrollable backgrounds. */
 
+/* file dialogs */
+
 QListView,
 #MinorDialog,
 #tempoview QListView,
 #App QListView
 {
-    background-color: green;
+    background-color: #FFFFFF;
+    color: #000000;
+    selection-background-color: #80AFFF;
+    selection-color: #FFFFFF;
 }
 
 QList QWidget
@@ -617,7 +622,7 @@ QMenuBar,
 #tempoview QMenuBar,
 #App QMenuBar
 {
-    background-color: #202020;
+    background-color: #404040;
 }
 
 QMenuBar::item,
@@ -698,6 +703,7 @@ style the region of the slider that subtracts a page. The ::add-page subcontrol
 can be used to style the region of the slider that adds a page. */
 
 /* HORIZONTAL */
+QTabWidget QScrollBar:left-arrow:horizontal,
 QScrollBar:left-arrow:horizontal
 {
     image: url(:pixmaps/style/arrow-left.png);
@@ -758,6 +764,8 @@ QScrollBar::down-arrow:vertical
     image: url(:pixmaps/style/arrow-down.png);
 }
 
+QTabWidget QScrollBar::add-page:vertical,
+QTabWidget QScrollBar::sub-page:vertical,
 QScrollBar::add-page:vertical,
 QScrollBar::sub-page:vertical
 {
@@ -939,9 +947,16 @@ QSpinBox::down-arrow:off
 Supports the box model. The handle of the splitter is styled using the ::handle
 subcontrol. */
 
+/* these are the little vertical grab bars in file dialogs */
+
 QSplitter
 {
-    background: yellow;
+    background: #000000;
+}
+
+QSplitter:hover
+{
+    background-color: #CCDFFF;
 }
 
 
@@ -950,10 +965,20 @@ QSplitter
 Supports only the background property. The frame for individual items can be
 style using the ::item subcontrol. */
 
-QStatusBar
+/* Styling of QStatusBar doesn't seem to be very fine grained, and after some
+ * experiments here, I think we may be better off leaving this one well enough
+ * alone
+ */
+
+/*QStatusBar
 {
+    background: #404040;
 }
 
+QStatusBar::item
+{
+    border: 1px solid #BBBBBB;
+}*/
 
 
 /*   QTableView (affects QTableWidget)
@@ -969,6 +994,7 @@ backgrounds. */
 
 QTableView
 {
+    background: purple;
 }
 
 
@@ -1559,7 +1585,10 @@ using selection-color and selection-background-color respectively.  The password
 character can be styled using the lineedit-password-character property. */
 
 QLineEdit,
-/*QLineEdit QWidget > QWidget /* still required for LineEdit on headers page */
+/* thanks be to Gaia this override actually works, for once!, and I dodged a
+ * very nasty bullet here:
+ */
+QFileDialog QLineEdit
 {
     border: 1px solid #AAAAAA;
     background-color: #FFFFFF;
@@ -1567,4 +1596,3 @@ QLineEdit,
     color: #000000;
     selection-color: #FFFFFF;
 }
-

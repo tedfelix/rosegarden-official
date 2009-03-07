@@ -29,9 +29,6 @@
 #include <QString>
 #include <QWidget>
 
-//#include <kdialogbase.h>
-//#include <QDir>
-
 
 namespace Rosegarden
 {
@@ -39,7 +36,7 @@ namespace Rosegarden
 DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
         QWidget *parent,
         const char *name)
-	: ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
+    : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
 //    QWidget *pageWidget = 0;
 //    QVBoxLayout *vlay = 0;
@@ -47,7 +44,7 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     QWidget *page = 0;
     // Document Meta Page
     //
-	IconLoader il;
+    IconLoader il;
 //    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
 //                         DocumentMetaConfigurationPage::title(),
 //                         il.load( DocumentMetaConfigurationPage::iconName()) );
@@ -56,8 +53,8 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     addPage(DocumentMetaConfigurationPage::iconLabel(),DocumentMetaConfigurationPage::title(),il.loadPixmap( DocumentMetaConfigurationPage::iconName()),page);
 //    vlay->addWidget(page);
 //    page->setPageIndex(pageIndex(pageWidget));
-//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back((ConfigurationPage *)page);
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page);
 
     // Audio Page
     //
@@ -69,9 +66,21 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     addPage(AudioPropertiesPage::iconLabel(),AudioPropertiesPage::title(),il.loadPixmap(AudioPropertiesPage::iconName()),page);
 //    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back((ConfigurationPage *)page);
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page);
 
+//&&&
+//
+// I've been looking into the color configuration bits, and beyond mere style
+// issues, these are quite thoroughly busted.  I don't want to take the approach
+// of just tossing something aside merely because it is challenging to fix, but
+// in this case I think we may well be justified in removing the color table
+// editor.  It was rarely, if ever used, and it is very likely that anybody who
+// actually cares about segment colors already has all the colors they could
+// ever want pre-defined since I added the gigantic (400+) list of named colors
+// to the default studio some time back.  This isn't a drawing application, and
+// people won't likely care if they can't have the exact shade of red they want.
+/*
     // Colour Page
 //    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
 //                         ColourConfigurationPage::title(),
@@ -82,8 +91,8 @@ DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
     addPage(ColourConfigurationPage::iconLabel(),ColourConfigurationPage::title(),il.loadPixmap(ColourConfigurationPage::iconName()),page);
 //    vlay->addWidget(page);
     //page->setPageIndex(pageIndex(pageWidget));
-//	m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
-	m_configurationPages.push_back((ConfigurationPage *)page);
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page); */
 
     // resize(minimumSizeHint());
 }
@@ -105,8 +114,8 @@ DocumentConfigureDialog::showAudioPage()
         }
 
         //showPage(index);
-//		m_tabWidget->setCurrentIndex( index );
-		return ;
+//        m_tabWidget->setCurrentIndex( index );
+        return ;
     }
 }
 
