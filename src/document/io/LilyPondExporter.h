@@ -177,13 +177,12 @@ private:
     static const unsigned int FONT_23	= 5;
     static const unsigned int FONT_26	= 6;
 
-    bool m_exportLyrics;
+    unsigned int m_exportLyrics;
+    static const unsigned int EXPORT_NO_LYRICS = 0;
+    static const unsigned int EXPORT_LYRICS_LEFT = 1;
+    static const unsigned int EXPORT_LYRICS_CENTER = 2;
+    static const unsigned int EXPORT_LYRICS_RIGHT = 3;
 
-    unsigned int m_lyricsHAlignment;
-    static const unsigned int LEFT_ALIGN   = 0;
-    static const unsigned int CENTER_ALIGN = 1;
-    static const unsigned int RIGHT_ALIGN  = 2;
-    
     unsigned int m_exportTempoMarks;
     static const unsigned int EXPORT_NONE_TEMPO_MARKS = 0;
     static const unsigned int EXPORT_FIRST_TEMPO_MARK = 1;

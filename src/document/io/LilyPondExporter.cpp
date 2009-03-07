@@ -122,11 +122,10 @@ LilyPondExporter::readConfigVariables(void)
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool( settings.value("lilyraggedbottom", "false" ) ) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
-    m_exportLyrics = qStrToBool( settings.value("lilyexportlyrics", "true" ) ) ;
+    m_exportLyrics = qStrToBool( settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT ) ) ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
     m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
     m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
-    m_lyricsHAlignment = qStrToBool( settings.value("lilylyricshalignment", "LEFT_ALIGN" ) ) ;
 
     m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS ).toUInt() ;
@@ -1337,7 +1336,7 @@ LilyPondExporter::write()
                 //
 		// Sync the code below with LyricEditDialog::unparse() !!
 		//
-                if (m_exportLyrics) {
+                if (m_exportLyrics != EXPORT_NO_LYRICS) {
 		    for (long currentVerse = 0, lastVerse = 0; 
                          currentVerse <= lastVerse; 
 			 currentVerse++) {
@@ -1409,10 +1408,10 @@ LilyPondExporter::write()
 		    
 			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
 			        << " \\new Lyrics \\lyricmode {" << std::endl;
-			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
+			    if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
 				    << std::endl;
-			    } else if (m_lyricsHAlignment == CENTER_ALIGN) {
+			    } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
 				    << std::endl;
 			    } else {
@@ -1466,7 +1465,7 @@ LilyPondExporter::write()
     if (m_chordNamesMode) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
     }
-    if (m_exportLyrics) {
+    if (m_exportLyrics != EXPORT_NO_LYRICS) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"Lyrics\" }" << std::endl;
     }
     str << indent(--col) << "}" << std::endl;
