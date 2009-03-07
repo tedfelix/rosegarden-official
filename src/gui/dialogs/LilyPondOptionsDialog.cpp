@@ -67,18 +67,18 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     metaGridLayout->addWidget(mainbox, 0, 0);
 
     //
-    // Arrange options in "General" and "Headers" tabs.
+    // Arrange options in "Layout" and "Headers" tabs.
     //
 
     QTabWidget *tabWidget = new QTabWidget( mainbox );
     mainboxLayout->addWidget(tabWidget);
 
-    QFrame *generalFrame = new QFrame();
-    tabWidget->addTab(generalFrame, tr("General options"));
+    QFrame *layoutFrame = new QFrame();
+    tabWidget->addTab(layoutFrame, tr("Layout"));
 
-    generalFrame->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *generalGrid = new QGridLayout;
-    generalGrid->setSpacing(5);
+    layoutFrame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layoutGrid = new QGridLayout;
+    layoutGrid->setSpacing(5);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
@@ -90,10 +90,10 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     // LilyPond export: Basic options
     //
 
-    QGroupBox *basicOptionsBox = new QGroupBox(tr("Basic options"), generalFrame);
+    QGroupBox *basicOptionsBox = new QGroupBox(tr("Basic options"), layoutFrame);
     QVBoxLayout *basicOptionsBoxLayout = new QVBoxLayout;
 
-    generalGrid->addWidget(basicOptionsBox, 0, 0);
+    layoutGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
     frameBasic->setContentsMargins(10, 10, 10, 10);
@@ -158,15 +158,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     // LilyPond export: Notation options
     //
 
-    QGroupBox *notationOptionsBox = new QGroupBox(tr("Notation options"), generalFrame);
-    QVBoxLayout *notationOptionsBoxLayout = new QVBoxLayout;
-    generalGrid->addWidget(notationOptionsBox, 2, 0);
+    QGroupBox *specificOptionsBox = new QGroupBox(tr("Specific options"), layoutFrame);
+    QVBoxLayout *specificOptionsBoxLayout = new QVBoxLayout;
+    layoutGrid->addWidget(specificOptionsBox, 2, 0);
 
-    QFrame *frameNotation = new QFrame(notationOptionsBox);
+    QFrame *frameNotation = new QFrame(specificOptionsBox);
     frameNotation->setContentsMargins(10, 10, 10, 10);
     QGridLayout *layoutNotation = new QGridLayout;
     layoutNotation->setSpacing(5);
-    notationOptionsBoxLayout->addWidget(frameNotation);
+    specificOptionsBoxLayout->addWidget(frameNotation);
 
     m_lilyTempoMarks = new QComboBox( frameNotation );
     m_lilyTempoMarks->addItem(tr("None"));
@@ -197,7 +197,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                                  tr("Export track staff brackets"), frameNotation);
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1); 
 
-    generalGrid->setRowStretch(4, 10);
+    layoutGrid->setRowStretch(4, 10);
 
     m_lilyChordNamesMode = new QCheckBox(
                            tr("Interpret chord texts as lead sheet chord names"), frameNotation);
@@ -218,9 +218,9 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
-    notationOptionsBox->setLayout(notationOptionsBoxLayout);
+    specificOptionsBox->setLayout(specificOptionsBoxLayout);
 
-    generalFrame->setLayout(generalGrid);
+    layoutFrame->setLayout(layoutGrid);
 
     frameNotation->setLayout(layoutNotation);
     frameBasic->setLayout(layoutBasic);
