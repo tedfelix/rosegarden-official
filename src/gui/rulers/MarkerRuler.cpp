@@ -382,7 +382,9 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 // disable worldXForm for text
                 bool enableXForm = painter.hasWorldXForm();
                 painter.setWorldXForm(false);
-
+                
+                QString localStyle("color: #000000;");
+                this->setStyleSheet(localStyle);
                 painter.drawText(textDrawPoint, name);
 
                 painter.setWorldXForm(enableXForm);
