@@ -286,6 +286,7 @@ QMenu::item,
        color: #000000;
        padding: 2px 25px 2px 20px;
        border: 1px solid transparent;
+       min-width: 12em; /* leaves room for space between item and hotkey */
 }
 
 /* Menu selection background color
