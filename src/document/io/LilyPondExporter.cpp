@@ -123,9 +123,7 @@ LilyPondExporter::readConfigVariables(void)
     m_raggedBottom = qStrToBool( settings.value("lilyraggedbottom", "false" ) ) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
     m_exportLyrics = qStrToBool( settings.value("lilyexportlyrics", "true" ) ) ;
-    m_exportMidi = qStrToBool( settings.value("lilyexportmidi", "false" ) ) ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
-    m_exportPointAndClick = qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) ;
     m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
     m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
     m_lyricsHAlignment = qStrToBool( settings.value("lilylyricshalignment", "LEFT_ALIGN" ) ) ;
@@ -575,12 +573,8 @@ LilyPondExporter::write()
 
     // enable "point and click" debugging via pdf to make finding the
     // unfortunately inevitable errors easier
-    if (m_exportPointAndClick) {
-        str << "% point and click debugging is enabled" << std::endl;
-    } else {
-        str << "% point and click debugging is disabled" << std::endl;
-        str << "#(ly:set-option 'point-and-click #f)" << std::endl;
-    }
+    str << "% uncomment to enable point and click debugging" << std::endl;
+    str << "% #(ly:set-option 'point-and-click #f)" << std::endl;
 
     // LilyPond \header block
 
@@ -1170,16 +1164,14 @@ LilyPondExporter::write()
 			    << staffNameWithTranspose.str() << std::endl;
 		    }
 
-                    if (m_exportMidi) {
-                        // Set midi instrument for the Staff
-                        std::ostringstream staffMidiName;
-                        Instrument *instr = m_studio->getInstrumentById(
+                    // Set always midi instrument for the Staff
+                    std::ostringstream staffMidiName;
+                    Instrument *instr = m_studio->getInstrumentById(
 			        m_composition->getTrackById(lastTrackIndex)->getInstrument());
-                        staffMidiName << instr->getProgramName();
+                    staffMidiName << instr->getProgramName();
 
-                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
-			    << "\"" << std::endl;
-                    }
+                    str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
+		        << "\"" << std::endl;
 
 		    // multi measure rests are used by default
                     str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
@@ -1479,19 +1471,18 @@ LilyPondExporter::write()
     }
     str << indent(--col) << "}" << std::endl;
 
-    // write initial tempo in Midi block, if user wishes (added per user request...
+    // write initial tempo in Midi block, always, but commented out
     // makes debugging the .ly file easier because fewer "noisy" errors are
     // produced during the process of rendering MIDI...)
-    if (m_exportMidi) {
-        int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
-        // Incomplete?  Can I get away without converting tempo relative to the time
-        // signature for this purpose?  we'll see...
-        str << indent(col++) << "\\midi {" << std::endl;
-        if (m_languageLevel < LILYPOND_VERSION_2_10) {
-            str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
-        }
-        str << indent(--col) << "} " << std::endl;
+    int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
+    // Incomplete?  Can I get away without converting tempo relative to the time
+    // signature for this purpose?  we'll see...
+    str << "% " << indent(col++) << "uncomment to enable generating midi file from the lilypond source" << std::endl;
+    str << "% " << indent(col++) << "\\midi {" << std::endl;
+    if (m_languageLevel < LILYPOND_VERSION_2_10) {
+        str << "% " << indent(col) << "\\tempo 4 = " << tempo << std::endl;
     }
+    str << "% " << indent(--col) << "} " << std::endl;
 
     // close \score section and close out the file
     str << "} % score" << std::endl;

@@ -259,13 +259,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutMisc->setSpacing(5);
     miscOptionsBoxLayout->addWidget(frameMisc);
 
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    tr("Enable \"point and click\" debugging"), frameMisc);
-    layoutMisc->addWidget(m_lilyExportPointAndClick, 0, 0, 0- 0+1, 1- 0+1);
-
-    m_lilyExportMidi = new QCheckBox(
-                           tr("Export \\midi block"), frameMisc);
-    layoutMisc->addWidget(m_lilyExportMidi, 1, 0, 0+1, 1- 0+1);
 
     m_lilyMarkerMode = new QComboBox(frameMisc);
     m_lilyMarkerMode->addItem(tr("No markers"));
@@ -329,10 +322,8 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyRaggedBottom->setChecked( qStrToBool( settings.value("lilyraggedbottom", "false" ) ) );
     m_lilyChordNamesMode->setChecked( qStrToBool( settings.value("lilychordnamesmode", "false" ) ) );
     m_lilyExportLyrics->setChecked( qStrToBool( settings.value("lilyexportlyrics", "true" ) ) );
-    m_lilyExportMidi->setChecked( qStrToBool( settings.value("lilyexportmidi", "false" ) ) );
     m_lilyTempoMarks->setCurrentIndex( settings.value("lilyexporttempomarks", 0).toUInt() );
     m_lilyExportSelection->setCurrentIndex( settings.value("lilyexportselection", 1).toUInt() );
-    m_lilyExportPointAndClick->setChecked( qStrToBool( settings.value("lilyexportpointandclick", "false" ) ) );
     m_lilyExportBeams->setChecked( qStrToBool( settings.value("lilyexportbeamings", "false" ) ) );
     m_lilyExportStaffGroup->setChecked( qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) );
     m_lilyLyricsHAlignment->setCurrentIndex( settings.value("lilylyricshalignment", 0).toUInt() );
@@ -360,10 +351,8 @@ LilyPondOptionsDialog::slotApply()
     // fixed, no "- - -" lyrics are generated for an empty lyrics
     // default again into lyrics - HJJ
     settings.setValue("lilyexportlyrics", m_lilyExportLyrics->isChecked());
-    settings.setValue("lilyexportmidi", m_lilyExportMidi->isChecked());
     settings.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
     settings.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
-    settings.setValue("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilylyricshalignment", m_lilyLyricsHAlignment->currentIndex());

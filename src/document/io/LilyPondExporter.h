@@ -178,7 +178,6 @@ private:
     static const unsigned int FONT_26	= 6;
 
     bool m_exportLyrics;
-    bool m_exportMidi;
 
     unsigned int m_lyricsHAlignment;
     static const unsigned int LEFT_ALIGN   = 0;
@@ -196,7 +195,6 @@ private:
     static const unsigned int EXPORT_SELECTED_TRACK = 2;
     static const unsigned int EXPORT_SELECTED_SEGMENTS = 3;
 
-    bool m_exportPointAndClick;
     bool m_exportBeams;
     bool m_exportStaffGroup;
 

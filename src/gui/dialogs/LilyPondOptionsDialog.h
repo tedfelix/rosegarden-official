@@ -62,8 +62,6 @@ protected:
     QCheckBox *m_lilyRaggedBottom;
     QCheckBox *m_lilyChordNamesMode;
     QCheckBox *m_lilyExportLyrics;
-    QCheckBox *m_lilyExportMidi;
-    QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBeams;
     QCheckBox *m_lilyExportStaffGroup;
     QComboBox *m_lilyMarkerMode;
