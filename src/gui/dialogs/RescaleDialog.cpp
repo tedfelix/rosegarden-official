@@ -22,6 +22,7 @@
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
 #include "misc/Strings.h"
+
 #include <QSettings>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -45,7 +46,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
         QDialog(parent)
 {
     setModal(true);
-    setWindowTitle(tr("Rescale"));
+    setWindowTitle(tr("Stretch or Squash"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -87,6 +88,8 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    updateGeometry();
 }
 
 timeT

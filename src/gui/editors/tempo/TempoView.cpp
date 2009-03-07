@@ -77,16 +77,18 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // define some note filtering buttons in a group
     //
-//     m_filterGroup = new QGroupBox(1, Qt::Horizontal, tr("Filter"), getCentralWidget());
     m_filterGroup = new QGroupBox(tr("Filter"), getCentralWidget());
     QVBoxLayout *filterGroupLayout = new QVBoxLayout;
     m_filterGroup->setLayout(filterGroupLayout);
 
     m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
-    filterGroupLayout->addWidget(m_tempoCheckBox);
+    filterGroupLayout->addWidget(m_tempoCheckBox, 50, Qt::AlignTop);
 
     m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
-    filterGroupLayout->addWidget(m_timeSigCheckBox);
+    filterGroupLayout->addWidget(m_timeSigCheckBox, 50, Qt::AlignTop);
+
+    // hard coded spacers are evil, but I can't find any other way to fix this
+    filterGroupLayout->addSpacing(200);
 
     m_filterGroup->setLayout(filterGroupLayout);
     m_grid->addWidget(m_filterGroup, 2, 0);

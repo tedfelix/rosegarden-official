@@ -171,6 +171,7 @@
 #include "StartupTester.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "gui/ui/DevicesManagerNew.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <Q3Canvas>
 #include <QApplication>
@@ -218,7 +219,6 @@
 #include <QColorDialog>
 #include <QFontDialog>
 #include <QPageSetupDialog>
-#include <QInputDialog>
 
 #ifdef HAVE_LIBJACK
 #include <jack/jack.h>
@@ -6135,7 +6135,7 @@ RosegardenGUIApp::slotRelabelSegments()
 
     bool ok = false;
 
-    QString newLabel = QInputDialog::getText(dynamic_cast<QWidget*>(this), QString("Input"), tr("Enter new label"));
+    QString newLabel = InputDialog::getText(dynamic_cast<QWidget*>(this), QString("Input"), tr("Enter new label"));
 
     if (ok) {
         CommandHistory::getInstance()->addCommand

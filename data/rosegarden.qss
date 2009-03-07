@@ -147,6 +147,7 @@ depending on the orientation of the tabs. */
 
 
 
+QDialog,
 #View QDialog QWidget,
 #MinorDialog QWidget,
 #tempoview QWidget
@@ -598,7 +599,6 @@ scrollable backgrounds. */
 /* file dialogs */
 
 QListView,
-#MinorDialog,
 #tempoview QListView,
 #App QListView
 {
@@ -663,7 +663,7 @@ interaction with text in the message box. */
 
 QMessageBox
 {
-    background: #404040;
+    background: #000000;
 }
 
 

@@ -34,14 +34,7 @@ LineEdit::LineEdit(QWidget *parent) :
     // here, it turns out, to make it work everywhere, as it only comes in from
     // the external stylesheet about half the time, and white text on a white
     // background isn't very useful.
-    QString localStyle = "background-color: #FFFFFF; color: #000000;";
-    setStyleSheet(localStyle);
-
-    // Now we have to re-style the tool tip in a second stylesheet, because this
-    // does have to have a selector to work.  If there are any other widgets
-    // that ever launch off of a LineEdit, we'll have to duplicate their styles
-    // here too.
-    localStyle = "QToolTip {background-color: #FFFBD4; color: #000000}";
+    QString localStyle = "QWidget {background-color: #FFFFFF; color: #000000;} QToolTip {background-color: #FFFBD4; color: #000000;}";
     setStyleSheet(localStyle);
     setToolTip("I am a LineEdit, not a QLineEdit");
 }

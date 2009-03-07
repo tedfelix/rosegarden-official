@@ -20,6 +20,7 @@
 
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QString>
@@ -69,6 +70,7 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 {
     setModal(true);
     setWindowTitle(title);
+    setObjectName("MinorDialog");
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
