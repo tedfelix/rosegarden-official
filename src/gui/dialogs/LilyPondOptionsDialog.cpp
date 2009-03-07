@@ -67,7 +67,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     metaGridLayout->addWidget(mainbox, 0, 0);
 
     //
-    // Arrange options in "General" and "Advanced" tabs.
+    // Arrange options in "General" and "Headers" tabs.
     //
 
     QTabWidget *tabWidget = new QTabWidget( mainbox );
@@ -79,14 +79,6 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     generalFrame->setContentsMargins(5, 5, 5, 5);
     QGridLayout *generalGrid = new QGridLayout;
     generalGrid->setSpacing(5);
-
-    QFrame *advancedFrame = new QFrame();
-    tabWidget->addTab(advancedFrame, tr("Advanced options"));
-
-    advancedFrame->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *advancedGrid = new QGridLayout;
-    advancedGrid->setSpacing(5);
-//     advancedGrid->setMargin(5);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
@@ -211,62 +203,27 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                            tr("Interpret chord texts as lead sheet chord names"), frameNotation);
     layoutNotation->addWidget(m_lilyChordNamesMode, 4, 0, 0+1, 1- 0+1);
 
-    //
-    // LilyPond export: Advanced options
-    //
-
-    QGroupBox *advancedLayoutOptionsBox = new QGroupBox( tr("Layout options"), advancedFrame);
-    QVBoxLayout *advancedLayoutOptionsBoxLayout = new QVBoxLayout;
-    advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
-
-    QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
-    frameAdvancedLayout->setContentsMargins(10, 10, 10, 10);
-    QGridLayout *layoutAdvancedLayout = new QGridLayout;
-    layoutAdvancedLayout->setSpacing(5);
-    advancedLayoutOptionsBoxLayout->addWidget(frameAdvancedLayout);
-
     m_lilyRaggedBottom = new QCheckBox(
-                           tr("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
-    layoutAdvancedLayout->addWidget(m_lilyRaggedBottom, 1, 0, 0+1, 1- 0+1);
+                           tr("Ragged bottom (systems will not be spread vertically across the page)"), frameNotation);
+    layoutNotation->addWidget(m_lilyRaggedBottom, 5, 0, 0+1, 1- 0+1);
 
-
-
-
-    QGroupBox *miscOptionsBox = new QGroupBox(tr("Miscellaneous options"), advancedFrame);
-    QVBoxLayout *miscOptionsBoxLayout = new QVBoxLayout;
-    advancedGrid->addWidget(miscOptionsBox, 1, 0);
-
-    QFrame *frameMisc = new QFrame(miscOptionsBox);
-    frameMisc->setContentsMargins(10, 10, 10, 10);
-    QGridLayout *layoutMisc = new QGridLayout;
-    layoutMisc->setSpacing(5);
-    miscOptionsBoxLayout->addWidget(frameMisc);
-
-
-    m_lilyMarkerMode = new QComboBox(frameMisc);
+    m_lilyMarkerMode = new QComboBox(frameNotation);
     m_lilyMarkerMode->addItem(tr("No markers"));
     m_lilyMarkerMode->addItem(tr("Rehearsal marks"));
     m_lilyMarkerMode->addItem(tr("Marker text"));
 
-    layoutMisc->addWidget( new QLabel( 
-                             tr("Export markers"), frameMisc),2, 0 );
-    layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
+    layoutNotation->addWidget( new QLabel( 
+                                   tr("Export markers"), frameNotation),6, 0 );
+    layoutNotation->addWidget(m_lilyMarkerMode, 6, 1);
 
-
-    advancedGrid->setRowStretch(2, 10);
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
-    advancedLayoutOptionsBox->setLayout(advancedLayoutOptionsBoxLayout);
-    miscOptionsBox->setLayout(miscOptionsBoxLayout);
     notationOptionsBox->setLayout(notationOptionsBoxLayout);
 
-    frameMisc->setLayout(layoutMisc);
-    frameAdvancedLayout->setLayout(layoutAdvancedLayout);
     generalFrame->setLayout(generalGrid);
 
     frameNotation->setLayout(layoutNotation);
     frameBasic->setLayout(layoutBasic);
-    advancedFrame->setLayout(advancedGrid);
 
     mainbox->setLayout(mainboxLayout);
 
