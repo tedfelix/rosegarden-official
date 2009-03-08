@@ -108,7 +108,7 @@ MarkerModifyDialog::initialise(Composition *composition,
     m_nameEdit = new LineEdit(name, frame);
     layout->addWidget(m_nameEdit, 0, 1);
 
-    layout->addWidget(new QLabel(tr("Description:"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("Comment:"), frame), 1, 0);
     m_desEdit = new LineEdit(des, frame);
     layout->addWidget(m_desEdit, 1, 1);
 

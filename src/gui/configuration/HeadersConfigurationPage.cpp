@@ -201,6 +201,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     layoutOtherHeaders->setSpacing(5);
 
     m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
+    m_metadata->setObjectName("StyledTable");
 	
     m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
     m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item

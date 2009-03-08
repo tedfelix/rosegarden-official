@@ -83,21 +83,11 @@ MarkerEditor::MarkerEditor(QWidget *parent,
     mainFrameLayout->addWidget(m_listView);
     
     QStringList sl;
-    sl    << tr("Marker time  ")
-        << tr("Marker text  ")
-        << tr("Marker description ");
+    sl    << tr("Time  ")
+        << tr("Text  ")
+        << tr("Comment ");
     
     m_listView->setHeaderLabels( sl );
-    /*
-    m_listView->addColumn(tr("Marker time  "));
-    m_listView->addColumn(tr("Marker text  "));
-    m_listView->addColumn(tr("Marker description "));
-    */
-    
-    // Align centrally
-//     for (int i = 0; i < 3; ++i)
-//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align items now
-    
     
     QGroupBox *posGroup = new QGroupBox(tr("Pointer position"), mainFrame);
     mainFrameLayout->addWidget(posGroup);

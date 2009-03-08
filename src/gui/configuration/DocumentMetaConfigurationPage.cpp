@@ -17,6 +17,7 @@
 
 
 #include "DocumentMetaConfigurationPage.h"
+#include "TabbedConfigurationPage.h"
 
 #include "base/Event.h"
 #include "base/BaseProperties.h"
@@ -34,7 +35,7 @@
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
 #include "gui/general/GUIPalette.h"
-#include "TabbedConfigurationPage.h"
+
 #include <QSettings>
 #include <QListWidget>
 #include <QFrame>
@@ -55,32 +56,32 @@ namespace Rosegarden
 class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTableWidget *t, QString s) : QTableWidgetItem(s) { }	//### removed t from p-class
-	
+    SegmentDataItem(QTableWidget *t, QString s) : QTableWidgetItem(s) { }    //### removed t from p-class
+    
     virtual int alignment() const { return Qt::AlignCenter; }
 
     virtual QString key() const {
 
-	// It doesn't seem to be possible to specify a comparator so
-	// as to get the right sorting for numeric items (what am I
-	// missing here?), only to override this function to return a
-	// string for comparison.  So for integer items we'll return a
-	// string that starts with a single digit corresponding to the
-	// number of digits in the integer, which should ensure that
-	// dictionary sorting works correctly.
-	// 
-	// This relies on the assumption that any item whose text
-	// starts with a digit will contain nothing other than a
-	// single non-negative integer of no more than 9 digits.  That
-	// assumption should hold for all current uses of this class,
-	// but may need checking for future uses...
+    // It doesn't seem to be possible to specify a comparator so
+    // as to get the right sorting for numeric items (what am I
+    // missing here?), only to override this function to return a
+    // string for comparison.  So for integer items we'll return a
+    // string that starts with a single digit corresponding to the
+    // number of digits in the integer, which should ensure that
+    // dictionary sorting works correctly.
+    // 
+    // This relies on the assumption that any item whose text
+    // starts with a digit will contain nothing other than a
+    // single non-negative integer of no more than 9 digits.  That
+    // assumption should hold for all current uses of this class,
+    // but may need checking for future uses...
 
-	QString s(text());
-	if (s[0].digitValue() >= 0) {
-	    return QString("%1%2").arg(s.length()).arg(s);
-	} else {
-	    return s;
-	}
+    QString s(text());
+    if (s[0].digitValue() >= 0) {
+        return QString("%1%2").arg(s.length()).arg(s);
+    } else {
+        return s;
+    }
     }
 };
 
@@ -146,26 +147,27 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     layout = new QGridLayout(frame);
     layout->setSpacing(5);
 
-	QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
-	//table->setSelectionMode(QTableWidget::NoSelection);
-	table->setSelectionBehavior( QAbstractItemView::SelectRows );
-	table->setSelectionMode( QAbstractItemView::SingleSelection );
-	table->setSortingEnabled(true);
-	
-	table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));	// p1=column
-	table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
-	table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Label")));
-	table->setHorizontalHeaderItem( 3, new QTableWidgetItem( tr("Time")));
-	table->setHorizontalHeaderItem( 4, new QTableWidgetItem( tr("Duration")));
-	table->setHorizontalHeaderItem( 5, new QTableWidgetItem( tr("Events")));
-	table->setHorizontalHeaderItem( 6, new QTableWidgetItem( tr("Polyphony")));
-	table->setHorizontalHeaderItem( 7, new QTableWidgetItem( tr("Repeat")));
-	table->setHorizontalHeaderItem( 8, new QTableWidgetItem( tr("Quantize")));
-	table->setHorizontalHeaderItem( 9, new QTableWidgetItem( tr("Transpose")));
-	table->setHorizontalHeaderItem( 10, new QTableWidgetItem( tr("Delay")));
-	
-	//table->setNumRows(audioSegments + internalSegments);
-	table->setRowCount(audioSegments + internalSegments);
+    QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
+    table->setObjectName("StyledTable");
+    //table->setSelectionMode(QTableWidget::NoSelection);
+    table->setSelectionBehavior( QAbstractItemView::SelectRows );
+    table->setSelectionMode( QAbstractItemView::SingleSelection );
+    table->setSortingEnabled(true);
+    
+    table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));    // p1=column
+    table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
+    table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Label")));
+    table->setHorizontalHeaderItem( 3, new QTableWidgetItem( tr("Time")));
+    table->setHorizontalHeaderItem( 4, new QTableWidgetItem( tr("Duration")));
+    table->setHorizontalHeaderItem( 5, new QTableWidgetItem( tr("Events")));
+    table->setHorizontalHeaderItem( 6, new QTableWidgetItem( tr("Polyphony")));
+    table->setHorizontalHeaderItem( 7, new QTableWidgetItem( tr("Repeat")));
+    table->setHorizontalHeaderItem( 8, new QTableWidgetItem( tr("Quantize")));
+    table->setHorizontalHeaderItem( 9, new QTableWidgetItem( tr("Transpose")));
+    table->setHorizontalHeaderItem( 10, new QTableWidgetItem( tr("Delay")));
+    
+    //table->setNumRows(audioSegments + internalSegments);
+    table->setRowCount(audioSegments + internalSegments);
 
     table->setColumnWidth(0, 50);
     table->setColumnWidth(1, 50);
@@ -201,10 +203,10 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         colourPixmap.fill(GUIPalette::convertColour(colour));
 
         table->setItem(i, 2,
-					   new QTableWidgetItem( colourPixmap, strtoqstr(s->getLabel())) );
-//		new QTableWidgetItem(table, QTableWidgetItem::Never,
-	//						 strtoqstr(s->getLabel()),
-		//							   colourPixmap));
+                       new QTableWidgetItem( colourPixmap, strtoqstr(s->getLabel())) );
+//        new QTableWidgetItem(table, QTableWidgetItem::Never,
+    //                         strtoqstr(s->getLabel()),
+        //                               colourPixmap));
 
         table->setItem(i, 3, new SegmentDataItem
                        (table,

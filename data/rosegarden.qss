@@ -300,7 +300,6 @@ QMenu::item:selected,
 {
     background-color: #80AFFF;
     color: #FFFFFF;
-    font: bold;
 }
 
 /* non-exclusive indicator = check box style indicator (see QActionGroup::setExclusive) */
@@ -577,13 +576,28 @@ Supports the box model. The sections of the header view are styled using the
 Sort indicator in can be styled using the ::up-arrow and the ::down-arrow
 Sub-control. */
 
-/* This is the headers for various list views in various dialogs, especially.
- * Apparently we can't style the background easily, and at this point I'm
- * willing to live with that. White on black it is.
+/* This is the headers for various list views and tables.  The "sort indicators"
+ * appear on the segment summary for one thing, allowing you to sort the table
+ * by the column you click on.
  */
-QHeaderView
+QHeaderView::section
 {
+    border: 1px solid #AAAAAA;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #707070, stop:1 #808080);
     color: #FFFFFF;
+    padding-left: 4px;
+    padding-right: 1em;
+}
+
+/* style the sort indicator */
+QHeaderView::down-arrow
+{
+    image: url(:pixmaps/style/arrow-down-small-inverted.png);
+}
+
+QHeaderView::up-arrow
+{
+    image: url(:pixmaps/style/arrow-up-small-inverted.png);
 }
 
 
@@ -644,7 +658,6 @@ QMenuBar::item:selected,
 {
     background-color: #80AFFF;
     color: #FFFFFF;
-    font: bold;
 }
 
 QMenuBar::item:pressed,
@@ -993,10 +1006,22 @@ QTableCornerButton::section" selector.  The color of the grid can be specified
 using the gridline-color property.  See QAbsractScrollArea to style scrollable
 backgrounds. */
 
-QTableView
+QTableView,
+#StyledTable
 {
-    background: purple;
+    background: #FFFFFF;
+    alternate-background-color: #EEEEFF;
+    color: #000000;
+    gridline-color: #202020;
+    selection-background-color: #80AFFF;
+    selection-color: #FFFFFF;
 }
+
+/* I don't think we actually want/need to style this corner button
+#StyledTable QTableCornerButton::section
+{
+    background: green;
+}*/
 
 
 /*  QTextEdit
@@ -1008,6 +1033,8 @@ QAbsractScrollArea to style scrollable backgrounds.  QTimeEdit   See QSpinBox.
 
 QTextEdit
 {
+    background: #FFFFFF;
+    color: #000000;
 }
 
 
@@ -1442,22 +1469,8 @@ QInputDialog QComboBox QAbstractItemView,
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
     color: #000000;
-    font: bold;
 }
 
-
-/*QInputDialog,
-QInputDialog QWidget,
-#View QInputDialog,
-#View QInputDialog QWidget,
-#TrackLabel QInputDialog QWidget > QWidget,
-#RosegardenParameterArea QInputDialog QWidget > QWidget
-{
-    background-color: #000000;
-    color: #FFFFFF;
-    selection-color: #FFFFFF;
-    selection-background-color: #ABCDEF;
-}*/
 
 QWidget#SQUEEZED,
 #RosegardenParameterArea QWidget#SQUEEZED
@@ -1574,7 +1587,8 @@ tooltip. */
  */
 QToolTip,
 QWidget QToolTip,
-QToolButton QToolTip,
+#App QToolTip,
+QMainWindow QToolTip,
 #RosegardenTransport QPushButton QToolTip,
 #RosegardenParameterArea QPushButton QToolTip,
 #View QWidget QToolTip,
