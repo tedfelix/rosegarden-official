@@ -72,6 +72,9 @@ public:
     static const char* const LoopRulerForeground;
     static const char* const LoopHighlight;
 
+    static const char* const RulerForeground;
+    static const char* const RulerBackground;
+
     static const char* const TempoBase;
 
     static const char* const TextRulerBackground;

@@ -36,6 +36,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include <QBrush>
 
 
 namespace Rosegarden
@@ -49,20 +50,20 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      QWidget *parent,
                      const char *name) : 
     QWidget(parent, name),
-    m_doc(doc),
     m_height(height),
     m_xorigin(xorigin),
     m_invert(invert),
     m_currentXOffset(0),
     m_width( -1),
     m_activeMousePress(false),
+    m_doc(doc),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
     m_loopGrid(rulerScale),
     m_grid(&m_defaultGrid),
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_loopingMode(false),
-    m_startLoop(0), m_endLoop(0),
-    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
+    m_startLoop(0), m_endLoop(0)
 {
     /*
      * I need to understand if this ruler is being built for the main
@@ -72,8 +73,10 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
      */
     m_mainWindow = (name != 0 && std::string(name).length() != 0);
     
-    setAutoFillBackground(true);
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+    //setAutoFillBackground(true);
+    //setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+//    QString localStyle=("background: #787878; color: #FFFFFF;");
+//    this->setStyleSheet(localStyle);
 
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -81,7 +84,9 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid.setSnapTime(SnapGrid::SnapToBeat);
 
-    this->setToolTip(tr("Click and drag to move the playback pointer.\nShift-click and drag to set a range for looping or editing.\nShift-click to clear the loop or range.\nDouble-click to start playback."));
+    this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range"
+                        "for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to  "
+                        "start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -102,7 +107,7 @@ void LoopRuler::scrollHoriz(int x)
         return;
     }
 
-    int w = width(), h = height();
+    int w = width(); //, h = height();
     int dx = x - ( -m_currentXOffset);
     m_currentXOffset = -x;
 
@@ -155,6 +160,12 @@ void LoopRuler::paintEvent(QPaintEvent* e)
 
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
+
+    // In a stylesheet world, we have to draw the ruler backgrounds.  Hopefully
+    // this won't be too flickery.  (Seems OK, and best of all it actually
+    // worked!)
+    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+    paint.fillRect(e->rect(), bg);
 
     paint.setBrush(palette().foreground());
     drawBarSections(&paint);

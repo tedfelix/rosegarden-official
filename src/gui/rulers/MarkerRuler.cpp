@@ -281,6 +281,15 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
     QRect clipRect = visibleRect();
 
+    // In a stylesheet world, we have to paint our our own background to rescue
+    // it from the muddle of QWidget background style hacks
+    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::RulerBackground));
+    painter.fillRect(clipRect, bg);
+
+    // Now we set the pen dungle flungy to the newly defined foreground color in
+    // GUIPalette to make the text all pretty like again.  (Whew.)
+    painter.setPen(GUIPalette::getColour(GUIPalette::RulerForeground));
+
     int firstBar = m_rulerScale->getBarForX(clipRect.x() -
                                             m_currentXOffset -
                                             m_xorigin);
@@ -383,8 +392,6 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 bool enableXForm = painter.hasWorldXForm();
                 painter.setWorldXForm(false);
                 
-                QString localStyle("color: #000000;");
-                this->setStyleSheet(localStyle);
                 painter.drawText(textDrawPoint, name);
 
                 painter.setWorldXForm(enableXForm);

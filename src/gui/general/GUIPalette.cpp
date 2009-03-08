@@ -113,6 +113,9 @@ GUIPalette::GUIPalette()
     m_defaultsMap[LoopRulerForeground] = QColor(Qt::white);
     m_defaultsMap[LoopHighlight] = QColor(Qt::white);
 
+    m_defaultsMap[RulerForeground] = Qt::black;
+    m_defaultsMap[RulerBackground] = QColor(0xEE, 0xEE, 0xEE);
+
     m_defaultsMap[TempoBase] = QColor(197, 211, 125);
 
     //m_defaultsMap[TextRulerBackground] = QColor(60, 205, 230, QColor::Hsv);
@@ -121,7 +124,7 @@ GUIPalette::GUIPalette()
     m_defaultsMap[TextRulerBackground] = QColor(226, 232, 187);
     m_defaultsMap[TextRulerForeground] = QColor(Qt::white);
 
-    m_defaultsMap[ChordNameRulerBackground] = QColor(230, 230, 230);
+    m_defaultsMap[ChordNameRulerBackground] = QColor(0xEE, 0xEE, 0xEE);
     m_defaultsMap[ChordNameRulerForeground] = QColor(Qt::black);
 
     m_defaultsMap[RawNoteRulerBackground] = QColor(240, 240, 240);
@@ -239,6 +242,9 @@ const char* const GUIPalette::MatrixOverlapBlock = "matrixoverlapblock";
 const char* const GUIPalette::LoopRulerBackground = "looprulerbackground";
 const char* const GUIPalette::LoopRulerForeground = "looprulerforeground";
 const char* const GUIPalette::LoopHighlight = "loophighlight";
+
+const char* const GUIPalette::RulerForeground = "rulerforeground";
+const char* const GUIPalette::RulerBackground = "rulerbackground";
 
 const char* const GUIPalette::TempoBase = "tempobase";
 
