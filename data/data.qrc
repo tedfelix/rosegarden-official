@@ -1182,6 +1182,8 @@
 <file>pixmaps/DevicesManagerNew/icon-midi-connect.png</file>
 <file>pixmaps/DevicesManagerNew/image-connect.png</file>
 
+<file>pixmaps/tooltip/repeats.png</file>
+
 </qresource>
 </RCC>
 

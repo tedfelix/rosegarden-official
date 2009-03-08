@@ -147,6 +147,7 @@ SegmentParameterBox::initBox()
     // .. and edit button
     m_labelButton = new QPushButton(tr("Edit"), this);
     m_labelButton->setFont(font);
+    m_labelButton->setToolTip(tr("<qt>Edit the segment label for any selected segments</qt>"));
     //    m_labelButton->setFixedWidth(50);
 
     connect(m_labelButton, SIGNAL(released()),
@@ -154,6 +155,12 @@ SegmentParameterBox::initBox()
 
     m_repeatValue = new TristateCheckBox(this);
     m_repeatValue->setFont(font);
+    m_repeatValue->setToolTip(tr("<qt><p>When checked,     any selected segments will repeat until they run into another segment,  "
+                                 "or the end of the composition.</p><p>When viewed in the notation editor or printed via LilyPond, "
+                                 "the segments will be bracketed by repeat signs.</p><p><center><img src=\":pixmaps/tooltip/repeats"
+                                 ".png\"</img></center></p><br>These can be used in conjunction with special LilyPond export direct"
+                                 "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
+                                 "orial.</qt>"));
     //m_repeatValue->setFixedHeight(comboHeight);
 
     // handle state changes
@@ -162,6 +169,7 @@ SegmentParameterBox::initBox()
     // non-reversing motif style read-only combo
     m_quantizeValue = new QComboBox(this);
     m_quantizeValue->setFont(font);
+    m_quantizeValue->setToolTip(tr("Chris, what exactly does this do anyway?  I've never used it."));
     //m_quantizeValue->setFixedHeight(comboHeight);
 
     // handle quantize changes from drop down
@@ -171,6 +179,10 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_transposeValue = new QComboBox(this);
     m_transposeValue->setFont(font);
+    m_transposeValue->setToolTip(tr("<qt><p>Raise or lower playback of any selected segments by this number of semitones</p><p>"
+                                    "<i>NOTE: This control changes segments that already exist.</i></p><p><i>Use the transpose "
+                                    "control in <b>Track Parameters</b> under <b>Create segments with</b> to pre-select this   "
+                                    "setting before drawing or recording new segments.</i></p></qt>"));
     //m_transposeValue->setFixedHeight(comboHeight);
 
     // handle transpose combo changes
@@ -184,6 +196,11 @@ SegmentParameterBox::initBox()
     // reversing motif style read-write combo
     m_delayValue = new QComboBox(this);
     m_delayValue->setFont(font);
+    m_delayValue->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of miliseconds</p><p><i>NOTE: "
+                                "Rosegarden does not support negative delay.  If you need a negative delay effect, set the   "
+                                "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
+                                " while doing this for fine-grained control, though doing so will have harsh effects on music"
+                                " notation rendering as viewed in the notation editor.</i></p></qt>"));
     //m_delayValue->setFixedHeight(comboHeight);
 
     // handle delay combo changes
@@ -202,6 +219,7 @@ SegmentParameterBox::initBox()
     m_colourValue = new QComboBox(this);
     m_colourValue->setEditable(false);
     m_colourValue->setFont(font);
+    m_colourValue->setToolTip(tr("<qt><p>Change the color of any selected segments</p></qt>"));
     //m_colourValue->setFixedHeight(comboHeight);
     //    m_colourValue->setMaximumWidth(width);
     m_colourValue->setMaxVisibleItems(20);
@@ -210,52 +228,9 @@ SegmentParameterBox::initBox()
     connect(m_colourValue, SIGNAL(activated(int)),
             SLOT(slotColourSelected(int)));
 
-    // pre-set width of buttons so they don't grow later
-//    width = fontMetrics.width(tr("used internally for spacing", "High: ----"));
-
-    // highest playable note
-    //
-//    m_highButton = new QPushButton(tr("High: ---"), this);
-//    QToolTip::add
-//        (m_highButton, tr("Choose the highest suggested playable note, using a staff"));
-//    m_highButton->setFont(font);
-//    m_highButton->setMinimumWidth(width);
-
-//    connect(m_highButton, SIGNAL(released()),
-//            SLOT(slotHighestPressed()));
-
-    // lowest playable note
-    //
-//    m_lowButton = new QPushButton(tr("Low: ----"), this);
-//    QToolTip::add
-//        (m_lowButton, tr("Choose the lowest suggested playable note, using a staff"));
-//    m_lowButton->setFont(font);
-//    m_lowButton->setMinimumWidth(width);
-
-//    connect(m_lowButton, SIGNAL(released()),
-//            SLOT(slotLowestPressed()));
-
-    // Audio autofade enabled
-    //
-//    m_autoFadeBox = new QCheckBox(this);
-//    connect(m_autoFadeBox, SIGNAL(stateChanged(int)),
-//            this, SLOT(slotAudioFadeChanged(int)));
-
-    // Fade in and out times
-    //
-//    m_fadeInSpin = new QSpinBox(this);
-//    m_fadeInSpin->setMinimum(0);
-//    m_fadeInSpin->setMaximum(5000);
-//    m_fadeInSpin->setSuffix(tr(" ms"));
-//    connect(m_fadeInSpin, SIGNAL(valueChanged(int)),
-//            this, SLOT(slotFadeInChanged(int)));
-
-//    m_fadeOutSpin = new QSpinBox(this);
-//    m_fadeOutSpin->setMinimum(0);
-//    m_fadeOutSpin->setMaximum(5000);
-//    m_fadeOutSpin->setSuffix(tr(" ms"));
-//    connect(m_fadeOutSpin, SIGNAL(valueChanged(int)),
-//            this, SLOT(slotFadeOutChanged(int)));
+    //!!! I deleted some legacy commented out code from the automatic audio
+    // crossfaders Rich never finished, and from the segment-level controls to
+    // change highest/lowest playable that I decided not to add after all.
 
     label->setFont(font);
     repeatLabel->setFont(font);
@@ -263,10 +238,6 @@ SegmentParameterBox::initBox()
     transposeLabel->setFont(font);
     delayLabel->setFont(font);
     colourLabel->setFont(font);
-//    m_autoFadeLabel->setFont(font);
-//    m_fadeInLabel->setFont(font);
-//    m_fadeOutLabel->setFont(font);
-//    m_rangeLabel->setFont(font);
 
     int row = 0;
 
@@ -280,14 +251,14 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(repeatLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_repeatValue, row, 1); //, AlignLeft);
 
-     gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
+    gridLayout->addWidget(transposeLabel, row, 2, row- row+1, 3- 2+1, Qt::AlignRight);
     gridLayout->addWidget(m_transposeValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
     gridLayout->addWidget(quantizeLabel, row, 0); //, AlignRight);
     gridLayout->addWidget(m_quantizeValue, row, 1, row- row+1, 2); //, AlignLeft);
 
-     gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
+    gridLayout->addWidget(delayLabel, row, 3, Qt::AlignRight);
     gridLayout->addWidget(m_delayValue, row, 4, row- row+1, 5- 4+1);
     ++row;
 
@@ -295,20 +266,6 @@ SegmentParameterBox::initBox()
     gridLayout->addWidget(m_colourValue, row, 1, row- row+1, 5);
     ++row;
 
-//    gridLayout->addWidget(m_rangeLabel, row, 0); //, AlignRight);
-//    gridLayout->addWidget(m_lowButton, row, 1, row- row+1, 2);
-//    gridLayout->addWidget(m_highButton, row, 3, row- row+1, 4- 3+1);
-//    ++row;
-
-//    m_autoFadeLabel->hide();
-//    m_autoFadeBox->hide();
-    /*
-        gridLayout->addWidget(m_fadeInLabel,   5, 0, AlignRight);
-        gridLayout->addWidget(m_fadeInSpin,  5, 1);
-     
-        gridLayout->addWidget(m_fadeOutLabel,  5, 2, AlignRight);
-        gridLayout->addWidget(m_fadeOutSpin, 5, 3);
-    */ 
     // Configure the empty final row to accomodate any extra vertical space.
 
     gridLayout->setRowStretch(gridLayout->rowCount() - 1, 1);
@@ -376,13 +333,6 @@ SegmentParameterBox::initBox()
 
     // populate m_colourValue
     slotDocColoursChanged();
-
-    //!!! disabled until after 1.3
-//    m_highButton->hide();
-//    m_lowButton->hide();
-//    m_rangeLabel->hide();
-    //////////////////////////////
-
 }
 
 void
@@ -504,8 +454,17 @@ SegmentParameterBox::populateBoxFromSegments()
     else
         m_label->setText(strtoqstr(m_segments[0]->getLabel()));
 
+    // I never noticed this after all this time, but it seems to go all the way
+    // back to the "..." button that this was never disabled if there was no
+    // segment, and therefore no label to edit.  So we disable it first:
+    m_labelButton->setEnabled(false);
+
     for (it = m_segments.begin(); it != m_segments.end(); it++) {
         // ok, first thing is we know we have at least one segment
+        //
+        // and since there is at least one segment, we can re-enable the edit button:
+        m_labelButton->setEnabled(true);
+
         if (repeated == NotApplicable)
             repeated = None;
         if (quantized == NotApplicable)

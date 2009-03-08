@@ -1233,7 +1233,12 @@ QGroupBox QPushButton::!enabled,
 {
     border: 1px solid #808080;
     border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); 
+    /* background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); */
+
+    /* use the same background for disabled buttons, as Qt does the sunken
+     * effect on these, and that looks fine.
+     */
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
 /*    min-width: 60px;*/
     padding: 0 5px 0 5px;
@@ -1323,25 +1328,26 @@ QInputDialog QComboBox::!enabled,
 {
     border: 1px solid #808080;
     border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); 
+
+    /* This didn't actually work, and I can live with that.  I set the push
+     * button background to just not change, and both of these simply rely on Qt
+     * to provide the sunken effect for disabled text.  Good enough.
+     */
+   /* background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); */
 }
 
 QComboBox::enabled:hover,
 QComboBox:hover,
 QComboBox::drop-down:hover,
-QComboBox::down-arrow:hover,
 #App QWidget QComboBox::enabled:hover,
 #App QWidget QComboBox:hover,
 #App QWidget QComboBox::drop-down:hover,
-#App QComboBox::down-arrow:hover,
 QInputDialog QComboBox::enabled:hover,
 QInputDialog QComboBox:hover,
 QInputDialog QComboBox::drop-down:hover,
-QInputDialog QComboBox::down-arrow:hover,
 #RosegardenParameterArea QComboBox::down-arrow:hover,
 #RosegardenParameterArea QComboBox::enabled:hover,
-#RosegardenParameterArea QComboBox:hover,
-#RosegardenParameterArea QComboBox::drop-down:hover
+#RosegardenParameterArea QComboBox:hover
 {
 /*    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999FAF, stop:1 #CCDFFF);*/
     background-color: #CCDFFF;
@@ -1440,7 +1446,7 @@ QInputDialog QComboBox QAbstractItemView,
 }
 
 
-QInputDialog,
+/*QInputDialog,
 QInputDialog QWidget,
 #View QInputDialog,
 #View QInputDialog QWidget,
@@ -1451,7 +1457,7 @@ QInputDialog QWidget,
     color: #FFFFFF;
     selection-color: #FFFFFF;
     selection-background-color: #ABCDEF;
-}
+}*/
 
 QWidget#SQUEEZED,
 #RosegardenParameterArea QWidget#SQUEEZED
