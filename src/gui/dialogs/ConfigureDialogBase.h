@@ -57,7 +57,7 @@ public:
 	
 protected slots:
 	
-	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
+//	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
 	virtual void slotOk();
     virtual void slotApply();
     virtual void slotCancelOrClose();
@@ -68,6 +68,7 @@ protected:
 
     configurationpages m_configurationPages;
 	
+	QPushButton * m_applyButton;
 	QDialogButtonBox *m_dialogButtonBox;
     IconStackedWidget * m_iconWidget;	
 };

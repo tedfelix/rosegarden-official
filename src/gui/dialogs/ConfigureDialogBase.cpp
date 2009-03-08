@@ -119,8 +119,11 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
 //    connect(helpButton, SIGNAL(clicked()), this, SLOT(slotHelp()));
     QPushButton *okButton = new QPushButton("OK",buttonBox);
     connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
-    QPushButton *applyButton = new QPushButton("Apply",buttonBox);
-    connect(applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+
+    m_applyButton = new QPushButton("Apply",buttonBox);
+    m_applyButton->setEnabled(false);
+    connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
+
     QPushButton *cancelButton = new QPushButton("Cancel",buttonBox);
     connect(cancelButton, SIGNAL(clicked()), this, SLOT(slotCancelOrClose()));
     
@@ -128,20 +131,42 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
     btnLayout->addWidget(helpButton);
     btnLayout->addStretch(1);
     btnLayout->addWidget(okButton);
-    btnLayout->addWidget(applyButton);
+    btnLayout->addWidget(m_applyButton);
     btnLayout->addWidget(cancelButton);
     
     dlgLayout->addWidget(buttonBox);
 }
 
+// ConfigureDialogBase::addPage(const QString& name, const QString& title, const QPixmap& icon, QWidget *page)
+// where:
+// name - The name written in the page select icon button
+// title - The title placed at the top of the configuration page
+// icon - The icon shown on the page select icon button
+// page - pointer to a configuration page widget
 void ConfigureDialogBase::addPage(const QString& name, const QString& title, const QPixmap& icon, QWidget *page)
 {
+    // New widget to hold the title, dividing line and configuration page
     QWidget * titledPage = new QWidget(this);
     QLayout * pageLayout = new QVBoxLayout(titledPage);
-    QLabel * titleLabel = new QLabel(title);
+
+    // Create the title label widget for the configration page
+    QLabel * titleLabel = new QLabel(titledPage,title);
+    QFont font;
+    font.setBold(true);
+    font.setPixelSize(12);
+    titleLabel->setFont(font);
+    
+    // Create the dividing line
+    QFrame * divideLine = new QFrame(titledPage);
+    divideLine->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+    divideLine->setLineWidth(2);
+
+    // Add these widgets to the layout
     pageLayout->addWidget(titleLabel);
+    pageLayout->addWidget(divideLine);
     pageLayout->addWidget(page);
     
+    // Add the page to the IconStackedWidgget (creating the select button)
     m_iconWidget->addPage(name, titledPage, icon);
 }
 
@@ -160,29 +185,29 @@ ConfigureDialogBase::~ConfigureDialogBase()
 {}
 
 
-void ConfigureDialogBase::slotButtonBoxButtonClicked(QAbstractButton * button){
+//void ConfigureDialogBase::slotButtonBoxButtonClicked(QAbstractButton * button){
     
-    QDialogButtonBox::ButtonRole bRole = m_dialogButtonBox->buttonRole( button );
+    //QDialogButtonBox::ButtonRole bRole = m_dialogButtonBox->buttonRole( button );
     
-    if( bRole == QDialogButtonBox::ApplyRole ){
-        slotApply();
-//        close();
-    }
-    else if( bRole == QDialogButtonBox::AcceptRole ){
-        slotOk();
-    }
-    else if( bRole == QDialogButtonBox::HelpRole ){
-//         slotHelp();
-    }
-    else if( bRole == QDialogButtonBox::ResetRole ){
-//         slotRestoreDefaults();
-    }else{
-        // cancel
-        //### do we need to reset/restore anything here, before closing the conf dialog ?
-        slotCancelOrClose();
-        //close();
-    }
-}
+    //if( bRole == QDialogButtonBox::ApplyRole ){
+        //slotApply();
+////        close();
+    //}
+    //else if( bRole == QDialogButtonBox::AcceptRole ){
+        //slotOk();
+    //}
+    //else if( bRole == QDialogButtonBox::HelpRole ){
+////         slotHelp();
+    //}
+    //else if( bRole == QDialogButtonBox::ResetRole ){
+////         slotRestoreDefaults();
+    //}else{
+        //// cancel
+        ////### do we need to reset/restore anything here, before closing the conf dialog ?
+        //slotCancelOrClose();
+        ////close();
+    //}
+//}
 
 
 void
@@ -196,6 +221,7 @@ ConfigureDialogBase::slotApply()
 //    QPushButton * btApply;
 //    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
 //    btApply->setEnabled( false );
+    m_applyButton->setEnabled(false);
 }
 
 void
@@ -203,14 +229,15 @@ ConfigureDialogBase::slotActivateApply()
 {
     
     //QDialogButtonBox *dbb = findChild<QDialogButtonBox *>( "dialog_base_button_box" );
-    if( ! m_dialogButtonBox ){
-        std::cerr << "ERROR: QDialogButtonBox is NULL in ConfigureDialogBase::slotActivateApply() " << std::endl;
-        return;
-    }
+//    if( ! m_dialogButtonBox ){
+//        std::cerr << "ERROR: QDialogButtonBox is NULL in ConfigureDialogBase::slotActivateApply() " << std::endl;
+//        return;
+//    }
     
 //    QPushButton * btApply;
 //    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
 //    btApply->setEnabled( true );
+    m_applyButton->setEnabled(true);
 }
 
 void
