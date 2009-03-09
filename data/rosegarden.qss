@@ -617,6 +617,7 @@ QListView,
 #App QListView
 {
     background-color: #FFFFFF;
+    alternate-background-color: #EEEEFF;
     color: #000000;
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
@@ -1052,6 +1053,7 @@ QTreeView,
 #View QTreeView
 {
     background-color: #FFFFFF;
+    alternate-background-color: #EEEEFF;
     color: #000000;
 }
 
@@ -1072,7 +1074,7 @@ QWidget#LED
 
 #Fader
 {
-    background-color: transparent;
+    background-color: #404040;
 }
 
 /*QWidget##matrixview

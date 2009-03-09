@@ -53,8 +53,6 @@ Fader::Fader(AudioLevel::FaderType type,
         m_float(new TextFloat(this)),
         m_floatTimer(new QTimer())
 {
-    setObjectName("Fader");
-
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
     calculateButtonPixmap();
@@ -250,6 +248,7 @@ void
 Fader::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
+
     int position = value_to_position(m_value);
 
     if (m_vertical) {
@@ -447,14 +446,29 @@ Fader::calculateGroovePixmap()
 
     delete map;
     map = new QPixmap(width(), height());
-    map->fill(palette().background());
+
+    // we'll try giving their little surrounds a color that shows up on purpose
+    QColor bg = m_outlineColour;
+    int H = 0;
+    int S = 0;
+    int V = 0;
+    int A = 0;
+    bg.getHsv(&H, &S, &V, &A);
+    if (S >= 200) S -= 100;
+    if (V >= 50) V -= 25;
+    bg = QColor::fromHsv(H, S, V, A);
+    map->fill(bg);
+
     QPainter paint(map);
-    paint.setBrush(palette().background());
+    paint.setBrush(bg);
 
     if (m_vertical) {
 
         paint.setPen(m_outlineColour);
         paint.drawRect(0, 0, width(), height());
+        paint.setPen(m_outlineColour.darker(200));
+        paint.drawLine(1, height() - 1, width() - 1, height() - 1);
+        paint.drawLine(width() - 1, 0, width() - 1, height() - 1); 
 
         if (m_integral) {
             //...
@@ -477,10 +491,12 @@ Fader::calculateGroovePixmap()
             }
         }
 
-        paint.setPen(palette().dark());
-        paint.setBrush(palette().mid());
-        paint.drawRect(width() / 2 - 3, height() - m_sliderMax,
-                       6, m_sliderMax - m_sliderMin);
+        // the "groove" is a dark rounded rectangle like the ones on my real
+        // mixer
+        paint.setPen(Qt::black);
+        paint.setBrush(QColor(0x20, 0x20, 0x20));
+        paint.drawRoundedRect(width() / 2 - 3, height() - m_sliderMax,
+                       6, m_sliderMax - m_sliderMin, 2, 2);
         paint.end();
     } else {
         //...
@@ -507,11 +523,22 @@ Fader::calculateButtonPixmap()
         buttonWidth /= 5;
         ++buttonWidth;
         buttonWidth *= 5;
+        buttonWidth -= 2;
         if (buttonWidth > width() - 2)
             buttonWidth = width() - 2;
 
         map = new QPixmap(buttonWidth, buttonHeight);
-        map->fill(palette().background());
+
+        // we have to draw something with our own stylesheet-compatible colors
+        // instead of pulling button colors from the palette, and presumably
+        // the active system style.  I tried to use a QLinearGradient for this
+        // to match the stylesheet, but it didn't work, or I made a mistake in
+        // the code.  We'll just use a solid color and be done with it then.
+        // This should come out of GUIPalette, I suppose, but I don't feel like
+        // rebuilding half the application every time I tweak the following
+        // number:
+        QBrush bg(QColor(0xBB, 0xBB, 0xBB));
+        map->fill(bg);
 
         int x = 0;
         int y = 0;
@@ -551,11 +578,11 @@ Fader::calculateButtonPixmap()
         paint.drawLine(x + 1, y + buttonHeight / 2 + 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 + 1);
 
-        paint.setPen(palette().button());
-        paint.setBrush(palette().button());
-        paint.drawRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4);
-        paint.drawRect(x + 2, y + buttonHeight / 2 + 2,
-                       buttonWidth - 4, buttonHeight / 2 - 4);
+        paint.setPen(bg);
+        paint.setBrush(bg);
+        paint.drawRoundedRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
+        paint.drawRoundedRect(x + 2, y + buttonHeight / 2 + 2,
+                       buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
 
         paint.end();
     } else {

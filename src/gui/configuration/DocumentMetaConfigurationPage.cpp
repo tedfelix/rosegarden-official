@@ -37,10 +37,8 @@
 #include "gui/general/GUIPalette.h"
 
 #include <QSettings>
-#include <QListWidget>
 #include <QFrame>
 #include <QLabel>
-#include <QListWidget>
 #include <QPixmap>
 #include <QPushButton>
 #include <QString>
@@ -149,6 +147,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
     QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
     table->setObjectName("StyledTable");
+    table->setAlternatingRowColors(true);
     //table->setSelectionMode(QTableWidget::NoSelection);
     table->setSelectionBehavior( QAbstractItemView::SelectRows );
     table->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -316,42 +315,6 @@ DocumentMetaConfigurationPage::apply()
 
     m_doc->slotDocumentModified();
 }
-
-/* hjj: WHAT TO DO WITH THIS ?
-void
-DocumentMetaConfigurationPage::selectMetadata(QString name)
-{
-    std::vector<PropertyName> fixedKeys =
-        CompositionMetadataKeys::getFixedKeys();
-    std::vector<PropertyName>::iterator i = fixedKeys.begin();
-
-    for (QListWidgetItem *item = m_fixed->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        if (i == fixedKeys.end())
-            break;
-
-        if (name == strtoqstr(i->getName())) {
-            m_fixed->setSelected(item, true);
-            m_fixed->setCurrentIndex(item);
-            return ;
-        }
-
-        ++i;
-    }
-
-    for (QListWidgetItem *item = m_metadata->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        if (item->text(0).toLower() != name)
-            continue;
-
-        m_metadata->setSelected(item, true);
-        m_metadata->setCurrentIndex(item);
-        return ;
-    }
-}
-*/
 
 }
 #include "DocumentMetaConfigurationPage.moc"

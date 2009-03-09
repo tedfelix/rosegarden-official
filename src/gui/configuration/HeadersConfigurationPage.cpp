@@ -202,6 +202,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
 
     m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
     m_metadata->setObjectName("StyledTable");
+    m_metadata->setAlternatingRowColors(true);
 	
     m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
     m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item
