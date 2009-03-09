@@ -63,14 +63,16 @@ TrackLabel::TrackLabel(TrackId id,
     m_instrumentLabel->setAutoFillBackground(true);
     m_trackLabel->setAutoFillBackground(true);
     
-    this->setLayout( new QHBoxLayout() );
-        layout()->setMargin(0);
+//    this->setLayout( new QHBoxLayout() );
+//        layout()->setMargin(0);
     
     m_instrumentLabel->setObjectName("InstrumentLabel");
     m_trackLabel->setObjectName("TrackLabel");
     
-    layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
-    layout()->addWidget(m_trackLabel);            //, ShowTrack);
+//    layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
+    addWidget(m_instrumentLabel);        //, ShowInstrument);
+//    layout()->addWidget(m_trackLabel);            //, ShowTrack);
+    addWidget(m_trackLabel);        //, ShowInstrument);
     
 //     raiseWidget(ShowTrack);
     setCurrentWidget( m_trackLabel );
