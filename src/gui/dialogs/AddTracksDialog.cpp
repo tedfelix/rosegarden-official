@@ -74,7 +74,7 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     posBox->setLayout(posBoxLayout);
     m_position->addItem(tr("At the top"));
     m_position->addItem(tr("Above the current selected track"));
-    m_position->addItem(tr("TicksBelow the current selected track"));
+    m_position->addItem(tr("Below the current selected track"));
     m_position->addItem(tr("At the bottom"));
 
     QSettings settings;

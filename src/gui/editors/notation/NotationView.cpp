@@ -4172,7 +4172,7 @@ NotationView::slotMoveEventsDownStaff()
     if (!m_currentEventSelection) return;
     Segment &targetSegment = targetStaff->getSegment();
     
-    MacroCommand *command = new MacroCommand(tr("Move Events to Staff TicksBelow"));
+    MacroCommand *command = new MacroCommand(tr("Move Events to Staff Below"));
 
     timeT insertionTime = m_currentEventSelection->getStartTime();
 
