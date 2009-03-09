@@ -104,7 +104,7 @@
   <Menu name="Studio">
     <text>&amp;Studio</text>
     <Action name="audio_mixer" text="&amp;Audio Mixer" icon="mixer" />
-    <Action name="midi_mixer" text="MIDI Mi&amp;ixer" icon="midimixer" />
+    <Action name="midi_mixer" text="MIDI Mi&amp;xer" icon="midimixer" />
   <Separator/>
     <Action name="open_devices_manager_new" text="Manage MIDI &amp;Devices (NEW)" icon="manage-midi-devices" />
     <Action name="manage_devices" text="OLD Manage MIDI &amp;Devices" icon="mixer" /> 
