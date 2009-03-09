@@ -1,9 +1,20 @@
 =====Rosegarden 09.04 (ha ha) Fake Bug Tracker=====
-We're going to try just using this wiki page as a tracker for now.  To report a bug, just jot something down.  To claim a bug, tack your initials after it in brackets, like [dmm] or [cc] or [jjjs] (John Jacob Jingelheimer Schmidt of course) or whatever.  Like thus:
-====Bugs====
-  * right click assignment menus were QPopupMenu.  Our code compiles, but it's totally non-functional, and needs to be rewritten. [ ] (or possibly dumped?  unless I'm just missing the obvious, it seems like it needs rewritten completely from scratch, not just tweaked, and it could be too much effort for a redundant feature, as the TPB controls accomplish the same thing -dmm)
+We're going to try just using this wiki page as a tracker for now.  To report a bug, just jot something down.  To claim a bug, tack your initials after it in brackets, like [dmm] or [cc] or [jjjs]
 
-  * if two copies of RG are started, the second one is unable to connect to JACK (bug or feature?  will we have a KUniqueApplication replacement, or try to allow multiple instances?  multiple instances has some potential to be cool and useful, but RG is a pretty huge and hungry app, and Rich's old MDI idea probably makes more sense...  not that we ever got **anywhere** implementing Rich's MDI idea, and probably won't now either)
+[[style_bugs|Style Bugs]] [dmm]
+====Bugs====
+  * TrackVUMeter has all the right bits to be showing the track number texts, but they never appear, stylesheet or no.  I think it's due to the broken VUMeter class painting over them or something.  I can't quite work this out.  We could probably release without VU meters the way KDE 4.0 and 4.1 released without a working taskbar if we really had to, and replace them with plain QLabels, but I figure this whole project looks like a nice bit of work for one of you looking for something small but important to do.
+
+  * VU meters are broken because they're of a highly Qt3-dependent design.  VUMeter <= QLabel <= QFrame, and QFrame used to have drawContents() and drawFrame().  We are apparently getting a working drawFrame() in here from having Qt3-compatibility mode on, but drawContents() is gone.
+
+Porting guide says:
+<code>QFrame used to have drawFrame(QPainter *) and drawContents(QPainter *) virtual functions. These are now gone. In Qt 4, the frame is drawn by the QFrame::paintEvent() function. If you want to change the way QFrame paints itself, reimplement this function. To draw the contents of the frame, reimplement QFrame:paintEvent() and call the base class implementation of the function before you use the contentsRect() function inherited from QWidget, to retrieve the rectangle to paint on.</code>
+
+I tried a quick go at something like that, didn't get anywhere, and set it aside.  I'm thinking this whole thing could probably use a total rethink if someone would like to play with it.  Do a new implementation, make it look cool, and fix it in the process.
+
+  * right click assignment menus were QPopupMenu.  Emanuel got this tweaked implementation off the ground, then dropped the ball.  [er]
+
+  * if two copies of RG are started, the second one is unable to connect to JACK.  Chris says we can sort this out and what needs fixing in an email I've misplaced.
 
   * crash after successful looking audio recording
 <code>

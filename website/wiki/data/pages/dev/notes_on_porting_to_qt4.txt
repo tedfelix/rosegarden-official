@@ -11,7 +11,8 @@ See also:
   * [[dev:rg_qt4_dialogs|Comments on dialogs and the buttons in them]]
 
 =====Work so far=====
-[[dev:rg_qt4_task_list|List of current and completed developer tasks for RG Qt4 port]]
+[[dev:rg_qt4_task_list|List of current and completed developer tasks for RG Qt4 port]]...
+
 
 =====Structuring the work=====
 

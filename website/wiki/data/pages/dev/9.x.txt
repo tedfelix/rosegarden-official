@@ -15,36 +15,35 @@ With this release, Rosegarden has become a modern Qt4 application that no longer
 
 We'd like to give special thanks to the following members and contributors, some old, some new, for their outstanding work on the long and difficult port.  These brave few are the authors of a new chapter in our history.
 
-  * David Willis
-  * Emanuel Rumpf
-  * Julie Swango
-  * Yves Guillemot
-  * Heikki Junes
-  * Michael McIntyre
   * Chris Cannam
+  * Michael McIntyre
+  * Julie Swango
+  * Emanuel Rumpf
+  * Yves Guillemot
   * Chris "CJ" Fryer
+  * Heikki Junes
+
+===== Thanks To =====
   * Luis Garrido
-
-=====Graphic Design Team=====
-
-Rosegarden now looks like Rosegarden whether you run KDE, GNOME, Xfce, or something else entirely.  This feat would not have been possible without the many long hours these fine folks invested in making it all happen.
-
-  * D. Michael McIntyre
-  * Vladimir Savic
-
+  * David Willis
 
 ======New Features======
   * Ported to Qt4
-    * Removed all ties to KDE for a lower dependency footprint and better behavior within other desktop environments
-    * Most application resources are now bundled inside the application itself, reducing its installation footprint, and making it easier to run multiple different versions of Rosegarden, such as running a new trial version alongside a proven distro package without the usual installation version conflicts that used to make this difficult
-    * It is now possible to run more than one copy of Rosegarden simultaneously [although at this writing I don't know if that will actually work out well, and we might have to implement our own version of KUniqueApplication to avoid problems.  What happens when Rosegarden tries to connect to Rosegarden though ALSA MIDI or JACK?  I bet it gets ugly.]
-  * New stylesheet-based look
-  * Completely new icons for the notation editor
+  * Removed all ties to KDE for a lower dependency footprint
+  * Stunning new look that is equally at home on KDE, GNOME, or any other Linux desktop
+  * Most application resources are now bundled inside the application itself, reducing its installation footprint, and allowing you to run different versions (eg. a stable production version and a release candidate) in parallel without data file version conflicts
+  * You can finally run more than one copy of Rosegarden at the same time
+  * Completely new icons for the notation editor, and anywhere else we could benefit from true antialiasing as opposed to simple transparency
+  * New MIDI device manager
+  * Improved flashing metronome mode and more realistic looking LEDs for the transport
+  * Markers now have a "Comment" instead of a "Description" to make it more clear which bit of text is going to show up on the marker ruler, and be exported to LilyPond
 
 
 ====Significant Bug Fixes====
  
-  * Michael 9682: Exporting project files to paths that have spaces no longer fails
+  * Exporting project files to paths that have spaces no longer fails
+  * Faders can now be moved in both directions with the mouse scroll wheel
+  * Corrected LilyPond export of double octave clefs
 
 
 ====Thanks to====
@@ -58,3 +57,4 @@ Rosegarden now looks like Rosegarden whether you run KDE, GNOME, Xfce, or someth
 
   * Greg Lyons
   * Georg Balzer
+  * Theo Smit
