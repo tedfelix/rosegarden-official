@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,9 +20,11 @@
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
+
 #include <QDialog>
 #include <QString>
 #include <QStringList>
+
 #include <vector>
 
 
@@ -31,7 +32,8 @@ class QWidget;
 class QPushButton;
 class QLabel;
 class QGridLayout;
-class QFrame;
+//class QFrame;
+class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
 class QShortcut;
@@ -122,7 +124,7 @@ protected:
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 
-    QFrame              *m_pluginParamsBox;
+    QGroupBox           *m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;
     QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;

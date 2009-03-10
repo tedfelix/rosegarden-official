@@ -76,26 +76,20 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_guiShown(false)
 {
     //setHelp("studio-plugins");
-    //attempt to make it possible to resize the thing for a look at its guts,
-    //which appear to be unrecognizably mangled, and don't offer much of a clue
-    //where to start sorting them out
-    setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 //     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
 //                               QSizePolicy::Fixed));
     
     setModal(false);
     setWindowTitle(tr("Audio Plugin"));
-    
+ 
     QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    vbox->setLayout(vboxLayout);
+    setLayout(metagrid);    
     metagrid->addWidget(vbox, 0, 0);
-    
-    
-    QGroupBox *pluginSelectionBox = new QGroupBox( tr("Plugin"), vbox );
+    vbox->setLayout(vboxLayout);
+   
+    QGroupBox *pluginSelectionBox = new QGroupBox(tr("Plugin"), vbox);
     vboxLayout->addWidget(pluginSelectionBox);
 
     makePluginParamsBox(vbox, 0, 10);
@@ -111,6 +105,9 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_pluginCategoryBox->setLayout(pluginCategoryBoxLayout);
     m_pluginCategoryList->setMaxVisibleItems(20);
 
+    m_pluginCategoryList->setToolTip("m_pluginCategoryList");
+    m_pluginCategoryBox->setToolTip("m_pluginCategoryBox");
+/*
     QWidget *hbox = new QWidget(pluginSelectionBox);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
 
@@ -191,7 +188,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));/**/
 }
 
 
@@ -362,7 +359,8 @@ void
 AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
                                        int tooManyPorts)
 {
-    m_pluginParamsBox = new QFrame(parent);
+    m_pluginParamsBox = new QGroupBox(parent, tr("Controls:"));
+    m_pluginParamsBox->setToolTip("m_pluginsParamsBox");
 
     int columns = 2;
     if (portCount > tooManyPorts) {
@@ -381,7 +379,9 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
     }
 
     m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
-    m_gridLayout = new QGridLayout(m_pluginParamsBox);
+//    m_gridLayout = new QGridLayout(m_pluginParamsBox);
+    m_gridLayout = new QGridLayout(m_pluginParamsBox, 1, columns * perColumn);
+    m_pluginParamsBox->setLayout(m_gridLayout);
 
     m_gridLayout->setColumnStretch(3, 2);
     m_gridLayout->setColumnStretch(7, 2);

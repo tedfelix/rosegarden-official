@@ -1621,3 +1621,6 @@ QFileDialog QLineEdit
     color: #000000;
     selection-color: #FFFFFF;
 }
+
+/* make frames visible for sorting out layout problems */
+QFrame { border: 2px solid red; }
