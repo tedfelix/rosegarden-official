@@ -202,6 +202,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     row++;
     groupLayout->addWidget(new QLabel(tr("Channel"), m_recordGroup), row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
+    m_recChannel->setToolTip(tr("<qt><p>Choose the channel to which you want to record.</p></qt>"));
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
@@ -233,6 +234,8 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
+     m_staffSizeCombo->setToolTip(tr("<qt><p>Allows you to change the size of the individual staff on exporting to LilyPond.<p>"
+"<p> This can be useful if the staff is for the purposes of ....what??? </p></qt>"));
     m_staffSizeCombo->setMinimumWidth(width11);
     m_staffSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
     m_staffSizeCombo->addItem(tr("Small"), StaffTypes::Small);
@@ -246,6 +249,8 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_grandStaffLbl = new QLabel(tr("Bracket type:"), m_staffGroup);
     groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
+    m_staffBracketCombo->setToolTip(tr("<qt><p>This allows you to set the Grand Staff Brackets that suit the track.</p>"
+"<p>For example if you have two tracks that belong to a piano score, each would have this set for export to LilyPond.</p></qt>"));
     m_staffBracketCombo->setMinimumWidth(width11);
     m_staffBracketCombo->addItem(tr("-----"), Brackets::None);
     m_staffBracketCombo->addItem(tr("[----"), Brackets::SquareOn);
@@ -281,10 +286,14 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_presetLbl = new QLabel(tr("<none>"), m_defaultsGroup);
     m_presetLbl->setObjectName("SPECIAL_LABEL");
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+    m_presetLbl->setToolTip(tr("<qt><p>The name of the <b>preset</b> that you have loaded will appear here.</p></qt>"));
     m_presetLbl->setFixedWidth(width20);
     groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
 
     m_presetButton = new QPushButton(tr("Load"), m_defaultsGroup);
+    m_presetButton->setToolTip(tr("<qt><p>A dialog will appear which will allow you to choose some preset parameters for your track.</p>"
+                                  "<p>Instruments are grouped for easy discovery, you can choose the level of ability of your player and whether to change existing segment parameters or just new segments in the track.</p>"
+                                  "<p>If you use a preset, you don't have to change any of the other parameters for new segments.</p></qt>"));
     groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5-4+1);
 
     // default clef
@@ -293,6 +302,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_clefLbl = new QLabel(tr("Clef"), m_defaultsGroup);
     groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
     m_defClef = new QComboBox(m_defaultsGroup);
+    m_defClef->setToolTip(tr("<qt><p>Choose from an array of Clefs suited to your instrument.</p></qt>"));
     m_defClef->setMinimumWidth(width11);
     m_defClef->addItem(tr("treble"), TrebleClef);
     m_defClef->addItem(tr("bass"), BassClef);
@@ -320,7 +330,8 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_transpLbl = new QLabel(tr("Transpose"), m_defaultsGroup);
     groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
-
+    m_defTranspose->setToolTip(tr("<qt><p>Set the transpose for your instrument. This will play in the proper key but will export to the correct key for your instrument.</p>"
+                                  "<p>For example a trumpet in Bb needs to be 2 tones below its written notation. <b>OK Michael, is this little factoid correct? I tried the preset out in 1.7.3 to see what it did and extrapolated from there.</b></p></qt>"));
     connect(m_defTranspose, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
 
@@ -360,6 +371,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     m_colorLbl = new QLabel(tr("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
     m_defColor = new QComboBox(m_defaultsGroup);
+    m_defColor->setToolTip(tr("<qt><p>Set the default color of <b>new</b> segments in the track.</p></qt>"));
     m_defColor->setEditable(false);
     m_defColor->setMaxVisibleItems(20);
     groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);
