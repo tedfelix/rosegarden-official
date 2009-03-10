@@ -81,47 +81,46 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     
     setModal(false);
     setWindowTitle(tr("Audio Plugin"));
- 
-    QGridLayout *metagrid = new QGridLayout;
+
+    QGridLayout *metagrid = new QGridLayout(this);
+
     QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    setLayout(metagrid);    
+    QVBoxLayout *vboxLayout = new QVBoxLayout(vbox);
     metagrid->addWidget(vbox, 0, 0);
-    vbox->setLayout(vboxLayout);
-   
+  
     QGroupBox *pluginSelectionBox = new QGroupBox(tr("Plugin"), vbox);
+    QVBoxLayout *pluginSelectionBoxLayout = new QVBoxLayout(pluginSelectionBox);
     vboxLayout->addWidget(pluginSelectionBox);
 
-    makePluginParamsBox(vbox, 0, 10);
+    makePluginParamsBox(vbox, 0, 10); // creates a GroupBox
     vboxLayout->addWidget(m_pluginParamsBox);
 
-    m_pluginCategoryBox = new QWidget(pluginSelectionBox);
-    QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout;
-    pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"),
-                                                  m_pluginCategoryBox));
+    // the Category label/combo
+    m_pluginCategoryBox = new QFrame(pluginSelectionBox);
+    QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout(m_pluginCategoryBox);
+    pluginSelectionBoxLayout->addWidget(m_pluginCategoryBox);
+
+    pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"), m_pluginCategoryBox));
 
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
     pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
-    m_pluginCategoryBox->setLayout(pluginCategoryBoxLayout);
     m_pluginCategoryList->setMaxVisibleItems(20);
 
-    m_pluginCategoryList->setToolTip("m_pluginCategoryList");
-    m_pluginCategoryBox->setToolTip("m_pluginCategoryBox");
-/*
-    QWidget *hbox = new QWidget(pluginSelectionBox);
-    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    // the Plugin label/combo 
+    QWidget *pluginPluginBox = new QFrame(pluginSelectionBox);
+    QHBoxLayout *pluginPluginBoxLayout = new QHBoxLayout(pluginPluginBox);
+    pluginSelectionBoxLayout->addWidget(pluginPluginBox);
 
-    m_pluginLabel = new QLabel(tr("Plugin:"), hbox );
-    hboxLayout->addWidget(m_pluginLabel);
-    m_pluginList = new QComboBox( hbox );
-    hboxLayout->addWidget(m_pluginList);
-    hbox->setLayout(hboxLayout);
+    pluginPluginBoxLayout->addWidget(new QLabel(tr("Plugin:"), pluginPluginBox));
+
+    m_pluginList = new QComboBox(pluginPluginBox);
+    pluginPluginBoxLayout->addWidget(m_pluginList);
     m_pluginList->setMaxVisibleItems(20);
     m_pluginList->setToolTip(tr("Select a plugin from this list."));
 
-    QWidget *h = new QWidget(pluginSelectionBox);
+    /*QWidget *h = new QWidget(pluginSelectionBox);
     QHBoxLayout *hLayout = new QHBoxLayout;
-
+/*
 // top line
     m_bypass = new QCheckBox(tr("Bypass"), h );
     hLayout->addWidget(m_bypass);
@@ -359,7 +358,10 @@ void
 AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
                                        int tooManyPorts)
 {
-    m_pluginParamsBox = new QGroupBox(parent, tr("Controls:"));
+    // we want to put this in a container now so it will get the same style as
+    // other, related controls, though a group box might, ultimately, not be the
+    // final choice
+    m_pluginParamsBox = new QGroupBox(parent);
     m_pluginParamsBox->setToolTip("m_pluginsParamsBox");
 
     int columns = 2;
