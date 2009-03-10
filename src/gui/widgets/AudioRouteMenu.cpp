@@ -25,6 +25,7 @@
 #include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+
 #include <QComboBox>
 #include <QCursor>
 #include <QObject>

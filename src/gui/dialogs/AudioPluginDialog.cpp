@@ -16,9 +16,7 @@
 */
 
 
-#include <QCloseEvent>
 #include "AudioPluginDialog.h"
-#include <QLayout>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -33,10 +31,13 @@
 #include "gui/widgets/PluginControl.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+
+#include <QLayout>
+#include <QCloseEvent>
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <qshortcut.h>
+#include <QShortcut>
 #include <QCheckBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -49,6 +50,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+
 #include <set>
 
 namespace Rosegarden
@@ -74,7 +76,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_guiShown(false)
 {
     //setHelp("studio-plugins");
-
+    //attempt to make it possible to resize the thing for a look at its guts,
+    //which appear to be unrecognizably mangled, and don't offer much of a clue
+    //where to start sorting them out
+    setSizePolicy(QSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored));
 //     setSizePolicy(QSizePolicy(QSizePolicy::Preferred,
 //                               QSizePolicy::Fixed));
     
@@ -130,12 +135,12 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
 
     m_insOuts = new QLabel(tr("<ports>"), h );
-	hLayout->addWidget(m_insOuts, Qt::AlignRight );
+    hLayout->addWidget(m_insOuts, Qt::AlignRight );
 //    m_insOuts->setAlignment(AlignRight);
     m_insOuts->setToolTip(tr("Input and output port counts."));
 
     m_pluginId = new QLabel(tr("<id>"), h );
-	hLayout->addWidget(m_pluginId, Qt::AlignRight );
+    hLayout->addWidget(m_pluginId, Qt::AlignRight );
 //    m_pluginId->setAlignment(AlignRight);
     m_pluginId->setToolTip(tr("Unique ID of plugin."));
 
@@ -415,8 +420,8 @@ AudioPluginDialog::slotPluginSelected(int i)
 //        QToolTip::hideText(false);
 //        QToolTip::remove(m_pluginList);
 //        QToolTip::add(m_pluginList, tr("Select a plugin from this list."));
-	      m_pluginList->setToolTip( tr("Select a plugin from this list.") );
-	}
+          m_pluginList->setToolTip( tr("Select a plugin from this list.") );
+    }
 
     AudioPlugin *plugin = m_pluginManager->getPlugin(number - 1);
 
@@ -466,7 +471,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 //        QToolTip::setVisible(false);
 //        QToolTip::remove(m_pluginList);
 //        QToolTip::add(m_pluginList, pluginInfo);
-		m_pluginList->setToolTip( pluginInfo );
+        m_pluginList->setToolTip( pluginInfo );
 
         std::string identifier = qstrtostr( plugin->getIdentifier() );
 
@@ -606,7 +611,7 @@ AudioPluginDialog::slotPluginSelected(int i)
 
 #ifdef HAVE_LIBLO
     bool gui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
-//    actionButton(Details)->setEnabled(gui);	//
+//    actionButton(Details)->setEnabled(gui);    //
 #endif
 
 }
@@ -703,7 +708,7 @@ AudioPluginDialog::updatePluginProgramControl()
         std::string program = inst->getProgram();
         if (m_programCombo) {
             m_programCombo->blockSignals(true);
-			m_programCombo->setItemText( m_index, strtoqstr(program) );	//@@@ m_index param correct ? (=index-nr)
+            m_programCombo->setItemText( m_index, strtoqstr(program) );    //@@@ m_index param correct ? (=index-nr)
             m_programCombo->blockSignals(false);
         }
         for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
@@ -896,7 +901,7 @@ AudioPluginDialog::slotPaste()
         // and set the program
         //
         if (m_programCombo && clipboard->m_program != "") {
-			m_programCombo->setItemText( count, strtoqstr(clipboard->m_program));
+            m_programCombo->setItemText( count, strtoqstr(clipboard->m_program));
             slotPluginProgramChanged(strtoqstr(clipboard->m_program));
         }
 

@@ -265,6 +265,7 @@ left-arrow.  The scroller is styled using the ::scroller.  The tear-off is
 styled using the ::tear-off. */
 
 QMenu,
+#MixerWindow QPushButton QMenu,
 #tempoview QMenu,
 #matrixview QMenu,
 #App QMenu,
@@ -276,6 +277,7 @@ QMenu,
 }
 
 QMenu::item,
+#MixerWindow QPushButton QMenu::item,
 #tempoview QMenu::item,
 #matrixview QMenu::item,
 #App QMenu::item,

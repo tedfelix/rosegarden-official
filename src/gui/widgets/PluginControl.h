@@ -45,12 +45,12 @@ public:
         NumericSlider
     } ControlType;
 
-	//### This is just garbage
+    //### This is just garbage
 
     PluginControl(QWidget *parent,
                   QGridLayout *layout,
-		  int row,
-		  int col,
+                  int row,
+                  int col,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
@@ -79,8 +79,8 @@ protected:
 
     QGridLayout         *m_layout;
 
-	int m_row;
-	int m_col;
+    int m_row;
+    int m_col;
 
     ControlType          m_type;
     PluginPort          *m_port;

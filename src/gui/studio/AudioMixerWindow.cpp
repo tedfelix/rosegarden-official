@@ -18,11 +18,6 @@
 
 #include "AudioMixerWindow.h"
 
-// #include <QDir>
-// #include <kglobal.h>
-// #include <kmainwindow.h>
-// #include <kstandardaction.h>
-
 #include "AudioPlugin.h"
 #include "AudioPluginManager.h"
 #include "MixerWindow.h"
@@ -72,6 +67,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -92,15 +88,10 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
         m_surroundBoxLayout(0),
         m_mainBox (0)
 {
-    populate();
+    setObjectName("MixerWindow");
 
-//     KStandardAction::close(this,
-//                       SLOT(slotClose()),
-//                       actionCollection());
-    createAction( "file_close", SLOT(slotClose()) );
-	
-//     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-
+    createAction("file_close", SLOT(slotClose()));
+    
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
     createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
@@ -124,6 +115,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     createAction("show_plugin_buttons", SLOT(slotTogglePluginButtons()))
         ->setChecked(!(mixerOptions & MIXER_OMIT_PLUGINS));
 
+    RG_DEBUG << "AudioMixerWindow::CTOR: action \"show_plugin_buttons\" has been created.  State should be: "
+             << ( !(mixerOptions & MIXER_OMIT_PLUGINS) ? "true" : "false") << endl;
+
     createAction("show_unassigned_faders", SLOT(slotToggleUnassignedFaders()))
         ->setChecked(mixerOptions & MIXER_SHOW_UNASSIGNED_FADERS);
 
@@ -131,22 +125,35 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
 
     for (int i = 1; i <= 16; i *= 2) {
         action = createAction
-            ( QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()) );
+            (QString("inputs_%1").arg(i), SLOT(slotSetInputCountFromAction()));
         if (i == int(m_studio->getRecordIns().size()))
             action->setChecked(true);
     }
 
-    createAction( "submasters_0", SLOT(slotSetSubmasterCountFromAction()) );
-	
+    createAction("submasters_0", SLOT(slotSetSubmasterCountFromAction()));
+    
     for (int i = 2; i <= 8; i *= 2) {
         action = createAction
-            ( QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()) );
-		
+            (QString("submasters_%1").arg(i), SLOT(slotSetSubmasterCountFromAction()));
+        
         if (i == int(m_studio->getBusses().size()) - 1)
             action->setChecked(true);
     }
 
     createGUI("mixer.rc");
+
+    // We must populate AFTER the actions are created, or else all the
+    // action->isChecked() based tests will use a default false action on the
+    // first pass here in the ctor.  This is apparently a change from KDE/Qt3.
+    //
+    // This has the interesting side effect that the menu bar comes out with a
+    // much smaller font than normal, as do all the buttons.  The small font on
+    // the buttons is very useful, and it makes me wonder if the buttons weren't
+    // always supposed to have a tiny font in the first place, in order to be
+    // more compact.  Interesting.  Let's see how it flies.  It's nice not
+    // having the "<none>" buttons spilling out of bounds.  There's probably
+    // some way to fix the menu bar font if it's really worth it.
+    populate();
 }
 
 AudioMixerWindow::~AudioMixerWindow()
@@ -189,8 +196,7 @@ AudioMixerWindow::populate()
         depopulate();
 
     } else {
-
-        m_surroundBox = new QWidget(this);
+        m_surroundBox = new QGroupBox(this);
         m_surroundBoxLayout = new QHBoxLayout;
         m_surroundBox->setLayout(m_surroundBoxLayout);
         setCentralWidget(m_surroundBox);
@@ -210,9 +216,8 @@ AudioMixerWindow::populate()
     InstrumentList instruments = m_studio->getPresentationInstruments();
     BussList busses = m_studio->getBusses();
 
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     IconLoader il;
-	
+    
     m_monoPixmap = il.loadPixmap("mono");
     m_stereoPixmap = il.loadPixmap("stereo");
 
@@ -332,6 +337,7 @@ AudioMixerWindow::populate()
         }
 
         rec.m_pluginBox->setLayout(pluginBoxLayout);
+        rec.m_pluginBox->show();
 
         QLabel *idLabel;
         QString idString;
@@ -350,8 +356,8 @@ AudioMixerWindow::populate()
             mainLayout->addWidget(rec.m_input->getWidget(), 1, col, 1, 2);
         }
         mainLayout->addWidget(rec.m_output->getWidget(), 2, col, 1, 2);
-        //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
-        //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
+        //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+        //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
 
         mainLayout->addWidget(idLabel, 0, col, 0- 0+1, col + 1- col+1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_pan, 5, col, Qt::AlignCenter);
@@ -360,13 +366,13 @@ AudioMixerWindow::populate()
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
 
         // commented out until implemented
-        //	mainLayout->addWidget(rec.m_muteButton, 4, col);
-        //	mainLayout->addWidget(rec.m_soloButton, 4, col+1);
+        //    mainLayout->addWidget(rec.m_muteButton, 4, col);
+        //    mainLayout->addWidget(rec.m_soloButton, 4, col+1);
         rec.m_muteButton->hide();
         rec.m_soloButton->hide();
 
-        //	mainLayout->addWidget(rec.m_recordButton, 5, col);
-        //	mainLayout->addWidget(rec.m_stereoButton, 5, col+1);
+        //    mainLayout->addWidget(rec.m_recordButton, 5, col);
+        //    mainLayout->addWidget(rec.m_stereoButton, 5, col+1);
 
         rec.m_recordButton->hide();
         mainLayout->addWidget(rec.m_stereoButton, 5, col + 1);
@@ -466,16 +472,16 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(tr("Sub %1").arg(count), m_mainBox, "subMaster");
         idLabel->setFont(boldFont);
 
-        //	mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
+        //    mainLayout->addWidget(idLabel, 2, col, Qt::AlignCenter);
         mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
 
-        //	mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
+        //    mainLayout->addWidget(rec.m_pan, 2, col+1, Qt::AlignLeft);
         mainLayout->addWidget(rec.m_pan, 5, col, 1, col + 1- col+1, Qt::AlignCenter);
 
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
 
-        //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
+        //    mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();
 
         if (rec.m_pluginBox) {
@@ -523,11 +529,22 @@ AudioMixerWindow::populate()
         QLabel *idLabel = new QLabel(tr("Master"), m_mainBox);
         idLabel->setFont(boldFont);
 
-        mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
+//@@@
+//      WTF?  This looks like some script gone wrong:
+//      mainLayout->addWidget(idLabel, 0, col, 0- 1, col + 1- col+1, Qt::AlignCenter);
+//
+//      There are a lot of similar 0- 1, col + 1- col+1 throughout the code, but
+//      this was the only label that was drawn in totally the wrong place.  I
+//      can't figure out what to make of this, and the old code had
+//      addMultiCellWidget() for all of these, whereas our new code has a simple
+//      addWidget() for all but this one.  I'm not sure what to make of that
+//      either, other than to think if it ain't broke, I'll just leave the mess
+//      for later, and be on the lookout for weird label layout problems.
+        mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
 
-        //	mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
+        //    mainLayout->addWidget(rec.m_muteButton, 4, col, 1, col+1- col+1);
         rec.m_muteButton->hide();
 
         mainLayout->addMultiCell(new QSpacerItem(2, 0), 0, 6, col + 2, col + 2);
@@ -685,7 +702,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 
 void
 AudioMixerWindow::slotPluginBypassed(InstrumentId instrumentId,
-                                     int , bool )
+                                     int , bool)
 {
     RG_DEBUG << "AudioMixerWindow::slotPluginBypassed(" << instrumentId << ")" << endl;
 
@@ -770,7 +787,7 @@ AudioMixerWindow::updateStereoButton(int id)
 }
 
 void
-AudioMixerWindow::updateMiscButtons(int )
+AudioMixerWindow::updateMiscButtons(int)
 {
     //... complications here, because the mute/solo status is actually
     // per-track rather than per-instrument... doh.
@@ -1514,9 +1531,7 @@ AudioMixerWindow::slotUpdateFaderVisibility()
 {
     bool d = !(m_studio->getMixerDisplayOptions() & MIXER_OMIT_FADERS);
 
-//    QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("show_audio_faders"));
-	QAction *action = findAction( "show_audio_faders" );
+    QAction *action = findAction("show_audio_faders");
     if (action) {
         action->setChecked(d);
     }
@@ -1547,10 +1562,8 @@ AudioMixerWindow::slotToggleSynthFaders()
 void
 AudioMixerWindow::slotUpdateSynthFaderVisibility()
 {
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("show_synth_faders"));
-	QAction *action = findAction( "show_synth_faders" );
-	if (!action)
+    QAction *action = findAction("show_synth_faders");
+    if (!action)
         return ;
 
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
@@ -1580,9 +1593,7 @@ AudioMixerWindow::slotToggleSubmasters()
 void
 AudioMixerWindow::slotUpdateSubmasterVisibility()
 {
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("show_audio_submasters"));
-	QAction *action = findAction( "show_audio_submasters" );
+    QAction *action = findAction("show_audio_submasters");
 
     if (!action)
         return ;
@@ -1612,14 +1623,15 @@ AudioMixerWindow::slotTogglePluginButtons()
 void
 AudioMixerWindow::slotUpdatePluginButtonVisibility()
 {
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("show_plugin_buttons"));
-	QAction *action = findAction( "show_plugin_buttons" );
+    QAction *action = findAction("show_plugin_buttons");
     if (!action)
         return ;
 
     action->setChecked(!(m_studio->getMixerDisplayOptions() &
                          MIXER_OMIT_PLUGINS));
+
+    RG_DEBUG << "AudioMixerWindow::slotUpdatePluginButtonVisibility() action->isChecked("
+             << (action->isChecked() ? "true" : "false") << ")" << endl;
 
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
         FaderRec rec = i->second;
@@ -1632,9 +1644,7 @@ AudioMixerWindow::slotUpdatePluginButtonVisibility()
 void
 AudioMixerWindow::slotToggleUnassignedFaders()
 {
-//     QAction *action = dynamic_cast<QAction*>
-//                             (actionCollection()->action("show_unassigned_faders"));
-	QAction *action = findAction( "show_unassigned_faders" );
+    QAction *action = findAction("show_unassigned_faders");
     if (!action)
         return ;
 
@@ -1652,9 +1662,9 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
 {
     QLayoutIterator it = m_mainBox->layout()->iterator();
     QLayoutItem *child;
-    while ( (child = it.current()) != 0 ) {
+    while ((child = it.current()) != 0) {
         QWidget * widget = child->widget();
-        if (widget && (!widget->objectName().isEmpty()) && !strcmp( qStrToCharPtrUtf8(widget->objectName()), name)) {
+        if (widget && (!widget->objectName().isEmpty()) && !strcmp(qStrToCharPtrUtf8(widget->objectName()), name)) {
             if (show)
                 widget->show();
             else
