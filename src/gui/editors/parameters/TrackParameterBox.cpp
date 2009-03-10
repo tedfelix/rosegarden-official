@@ -157,6 +157,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     QLabel *devLabel = new QLabel(tr("Device"), m_playbackGroup);
     groupLayout->addWidget(devLabel, row, 0);
     m_playDevice = new QComboBox(m_playbackGroup);
+    m_playDevice->setToolTip(tr("<qt><p>This allows you to choose how you play sound with MIDI. It can be a hardware interface, the various devices available to your soundcard or a software synth interface such as Timidity.</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_playDevice, row, 1, row- row+1, 2);
 
@@ -166,6 +167,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
     groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
+    m_instrument->setToolTip(tr("<qt><p>You can choose the sound your MIDI interface will make. The patches available will depend on your MIDI device set in the MIDI Device Manager.</p></qt>"));
     m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
@@ -191,6 +193,7 @@ TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
     // recording device
     groupLayout->addWidget(new QLabel(tr("Device"), m_recordGroup), row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
+    m_recDevice->setToolTip(tr("<qt><p>Things you can choose to record through.</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
