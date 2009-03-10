@@ -32,7 +32,7 @@
     <Menu name="Inputs">
       <text>Number of Stereo &amp;Inputs</text>
       <Action name="inputs_1" text="&amp;1 Input" checked="false" group="inputs" />
-      <Action name="inputs_2" text="&amp;2 Inputs" checked="true" />
+      <Action name="inputs_2" text="&amp;2 Inputs" checked="true" group="inputs" />
       <Action name="inputs_4" text="&amp;4 Inputs" checked="false" group="inputs" />
       <Action name="inputs_8" text="&amp;8 Inputs" checked="false" group="inputs" />
       <Action name="inputs_16" text="1&amp;6 Inputs" checked="false" group="inputs" />
@@ -68,7 +68,6 @@
     <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
   <Separator/> 
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
-    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
   </Menu>
 
 </MenuBar>
