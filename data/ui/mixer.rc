@@ -46,12 +46,12 @@
     </Menu>
     <!-- JAS "show_midi" does not appear in pulldown menu. -->
     <Action name="show_midi" append="show_merge" />
-    <Action name="show_audio_faders" text="" checked="true" append="show_merge" />
-    <Action name="show_synth_faders" text="" checked="true" append="show_merge" />
-    <Action name="show_audio_submasters" text="" checked="true" append="show_merge" />
-    <Action name="show_plugin_buttons" text="" checked="true" append="show_merge" />
+    <Action name="show_audio_faders" text="Show &amp;Audio Faders" checked="true" append="show_merge" />
+    <Action name="show_synth_faders" text="Show &amp;Synth Faders" checked="true" append="show_merge" />
+    <Action name="show_audio_submasters" text="Show Audio Su&amp;bmasters" checked="true" append="show_merge" />
+    <Action name="show_plugin_buttons" text="Show &amp;Plugin Buttons" checked="true" append="show_merge" />
   <Separator append="show_merge"/>
-    <Action name="show_unassigned_faders" text="" checked="false" append="show_merge" />
+    <Action name="show_unassigned_faders" text="Show &amp;Unassigned Faders" checked="false" append="show_merge" />
   </Menu> 
 
   <Menu name="help" append="about_merge">
