@@ -112,7 +112,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QVBoxLayout *pluginSelectionBoxLayout = new QVBoxLayout(pluginSelectionBox);
     vboxLayout->addWidget(pluginSelectionBox);
 
-    makePluginParamsBox(vbox, 0, 10); // creates a GroupBox
+    makePluginParamsBox(vbox); // creates a GroupBox
     vboxLayout->addWidget(m_pluginParamsBox);
 
     // the Category label/combo
@@ -206,9 +206,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 #ifdef HAVE_LIBLO
-    QPushButton *detailsButton = new QPushButton(tr("Editor"));
-    buttonBox->addButton(detailsButton, QDialogButtonBox::ActionRole);
-    connect(detailsButton, SIGNAL(clicked(bool)), this, SLOT(slotDetails()));
+    m_editorButton = new QPushButton(tr("Editor"));
+    buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
+    connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
+    m_editorButton->setEnabled(false);
 #endif
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
@@ -220,7 +221,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
 #ifdef HAVE_LIBLO
 void
-AudioPluginDialog::slotDetails()
+AudioPluginDialog::slotEditor()
 {
     slotShowGUI();
 }
@@ -241,6 +242,7 @@ AudioPluginDialog::slotShowGUI()
 void
 AudioPluginDialog::populatePluginCategoryList()
 {
+    RG_DEBUG << "AudioPluginDialog::populatePluginCategoryList()" << endl;
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     std::set
         <QString> categories;
@@ -270,9 +272,13 @@ AudioPluginDialog::populatePluginCategoryList()
     if (categories.empty()) {
         // there was a crash when clicking on the <synth> button because the
         // label was getting hidden before it existed, apparently
+    RG_DEBUG << "Crash locator A" << endl;
         if (m_pluginCategoryBox) m_pluginCategoryBox->hide();
+    RG_DEBUG << "Crash locator B" << endl;
         if (m_pluginLabel) m_pluginLabel->hide();
+    RG_DEBUG << "Crash locator C" << endl;
     }
+
 
     m_pluginCategoryList->clear();
     m_pluginCategoryList->addItem(tr("(any)"));
@@ -289,11 +295,14 @@ AudioPluginDialog::populatePluginCategoryList()
             m_pluginCategoryList->setCurrentIndex(m_pluginCategoryList->count() - 1);
         }
     }
+    RG_DEBUG << "Crash locator Z" << endl;
 }
 
 void
 AudioPluginDialog::populatePluginList()
 {
+    RG_DEBUG << "AudioPluginDialog::populatePluginList()" << endl;
+
     m_pluginList->clear();
     m_pluginsInList.clear();
 
@@ -383,28 +392,18 @@ AudioPluginDialog::populatePluginList()
 }
 
 void
-AudioPluginDialog::makePluginParamsBox(QWidget *parent, int portCount,
-                                       int tooManyPorts)
+AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 {
     //@@@ //!!!
     // There really isn't anything to do here now.  It used to calculate how
     // many rows and columns to use to create a QGridLayout, but in Qt4 there is
     // no ctor like this at all.  You have to create an empty QGridLayout and
     // let it expand to fit what you stuff into it, apparently.
-    //
-    // This means we're passing around a lot of useless crap unless we edit this
-    // to get rid of the parameters.  Let's just sort out how to make the new
-    // layout actually work first, and leave that for later.
     
-    portCount = tooManyPorts; // to shut up unused variable warnings
-
-    //m_pluginParamsBox = new QGroupBox(parent);
     m_pluginParamsBox = new QGroupBox(parent);
 
     m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
     m_pluginParamsBoxLayout = new QGridLayout(m_pluginParamsBox);
-    //m_pluginParamsBoxLayout->setColumnStretch(3, 2);
-    //m_pluginParamsBoxLayout->setColumnStretch(7, 2);
 }
 
 void
@@ -437,9 +436,6 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_insOuts->setText(tr("<ports>"));
         m_pluginId->setText(tr("<id>"));
 
-//        QToolTip::hideText(false);
-//        QToolTip::remove(m_pluginList);
-//        QToolTip::add(m_pluginList, tr("Select a plugin from this list."));
         m_pluginList->setToolTip( tr("Select a plugin from this list") );
     }
 
@@ -453,6 +449,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
     m_programCombo = 0;
 
+    // count up how many controller inputs the plugin has
     int portCount = 0;
     if (plugin) {
         for (AudioPlugin::PortIterator it = plugin->begin(); it != plugin->end(); ++it) {
@@ -462,12 +459,11 @@ AudioPluginDialog::slotPluginSelected(int i)
         }
     }
 
-    // Qt4 port : parent should be an old Qt3 QHBox now replaced for a
-    //            QWidget with a QHBoxLayout
     int tooManyPorts = 96;
-    makePluginParamsBox(parent, portCount, tooManyPorts);
+    makePluginParamsBox(parent);
     parent->layout()->addWidget(m_pluginParamsBox);
     bool showBounds = (portCount <= 48);
+    bool hidden = false;
 
     if (portCount > tooManyPorts) {
 
@@ -475,6 +471,7 @@ AudioPluginDialog::slotPluginSelected(int i)
             new QLabel(tr("This plugin has too many controls to edit here"),
                             m_pluginParamsBox),
                        1, 1, 0, m_pluginParamsBoxLayout->columnCount() - 1, Qt::AlignCenter);
+            hidden = true;
     }
 
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
@@ -488,9 +485,6 @@ AudioPluginDialog::slotPluginSelected(int i)
         QString pluginInfo = plugin->getAuthor() + QString("\n") +
             plugin->getCopyright();
 
-//        QToolTip::setVisible(false);
-//        QToolTip::remove(m_pluginList);
-//        QToolTip::add(m_pluginList, pluginInfo);
         m_pluginList->setToolTip(pluginInfo);
 
         std::string identifier = qstrtostr(plugin->getIdentifier());
@@ -568,8 +562,8 @@ AudioPluginDialog::slotPluginSelected(int i)
             m_programCombo = new QComboBox(m_pluginParamsBox);
             m_programCombo->setMaxVisibleItems(20);
             m_programCombo->addItem(tr("<none selected>"));
-            m_pluginParamsBoxLayout->addWidget(m_programLabel, 0, 0, 0, 0, Qt::AlignRight);
-            m_pluginParamsBoxLayout->addWidget(m_programCombo, 0, 0, 1, m_pluginParamsBoxLayout->columnCount() - 1, Qt::AlignLeft);
+            m_pluginParamsBoxLayout->addWidget(m_programLabel, 0, 0, Qt::AlignRight);
+            m_pluginParamsBoxLayout->addWidget(m_programCombo, 0, 1, Qt::AlignLeft);
             connect(m_programCombo, SIGNAL(activated(const QString &)),
                     this, SLOT(slotPluginProgramChanged(const QString &)));
 
@@ -600,8 +594,16 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       count,
                                       inst->getPort(count)->value,
                                       showBounds,
-                                      portCount > tooManyPorts);
-                m_pluginParamsBoxLayout->addWidget(control, row, col);
+                                      hidden);
+                if (!hidden) {
+                    m_pluginParamsBoxLayout->addWidget(control, row, col);
+                }
+
+                RG_DEBUG << "Added PluginControl: showBounds: "
+                         << (showBounds ? "true" : "false")
+                         << " hidden: "
+                         << (hidden ? "true" : "false")
+                         << endl;
                 
                 // I have no idea how all of this used to work before, and I
                 // haven't worked out how to put some sane upper limit on the
@@ -634,8 +636,9 @@ AudioPluginDialog::slotPluginSelected(int i)
     }
 
 #ifdef HAVE_LIBLO
-    bool gui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
-//&&&    actionButton(Details)->setEnabled(gui);    
+    bool gui = false;
+    if (m_pluginGUIManager) m_pluginGUIManager->hasGUI(m_containerId, m_index);
+    if (m_editorButton) m_editorButton->setEnabled(gui);    
 #endif
 
 }
@@ -727,6 +730,8 @@ AudioPluginDialog::updatePluginPortControl(int port)
 void
 AudioPluginDialog::updatePluginProgramControl()
 {
+    RG_DEBUG << "AudioPluginDialog::updatePluginProgramControl()" << endl;
+
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
     if (inst) {
         std::string program = inst->getProgram();
@@ -748,6 +753,8 @@ AudioPluginDialog::updatePluginProgramControl()
 void
 AudioPluginDialog::updatePluginProgramList()
 {
+    RG_DEBUG << "AudioPluginDialog::updatePluginProgramList()" << endl;
+
     if (!m_programLabel)
         return ;
 
@@ -767,8 +774,8 @@ AudioPluginDialog::updatePluginProgramList()
             m_programCombo = new QComboBox(m_pluginParamsBox);
             m_programCombo->setMaxVisibleItems(20);
             m_programCombo->addItem(tr("<none selected>"));
-            m_pluginParamsBoxLayout->addWidget(m_programLabel, 0, 0, 0, 0, Qt::AlignRight);
-            m_pluginParamsBoxLayout->addWidget(m_programCombo, 0, 0, 1, m_pluginParamsBoxLayout->columnCount() - 1, Qt::AlignLeft);
+            m_pluginParamsBoxLayout->addWidget(m_programLabel, 0, 0, Qt::AlignRight);
+            m_pluginParamsBoxLayout->addWidget(m_programCombo, 0, 1, Qt::AlignLeft);
 
             m_programCombo->clear();
             m_programCombo->addItem(tr("<none selected>"));

@@ -87,7 +87,7 @@ public slots:
     void slotShowGUI();
 
 #ifdef HAVE_LIBLO
-    virtual void slotDetails();
+    virtual void slotEditor();
 #endif
 
 signals:
@@ -112,7 +112,7 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
     virtual void windowActivationChange(bool);
 
-    void makePluginParamsBox(QWidget*, int portCount, int tooManyPorts);
+    void makePluginParamsBox(QWidget*);
     QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);
 
     //--------------- Data members ---------------------------------
@@ -137,6 +137,7 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
+    QPushButton         *m_editorButton;
     
     QLabel              *m_programLabel;
     QComboBox           *m_programCombo;
