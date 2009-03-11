@@ -268,8 +268,10 @@ AudioPluginDialog::populatePluginCategoryList()
     }
 
     if (categories.empty()) {
-        m_pluginCategoryBox->hide();
-        m_pluginLabel->hide();
+        // there was a crash when clicking on the <synth> button because the
+        // label was getting hidden before it existed, apparently
+        if (m_pluginCategoryBox) m_pluginCategoryBox->hide();
+        if (m_pluginLabel) m_pluginLabel->hide();
     }
 
     m_pluginCategoryList->clear();
