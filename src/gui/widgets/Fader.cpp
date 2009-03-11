@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -214,15 +214,15 @@ Fader::position_to_value(int position)
     /*
         RG_DEBUG << "Fader::position_to_value - position = " << position
                  << ", new value = " << value << endl;
-     
+
         if (m_min != m_max) // works for integral case
         {
             if (value > m_max) value = float(m_max);
             if (value < m_min) value = float(m_min);
         }
-     
+
         RG_DEBUG << "Fader::position_to_value - limited value = " << value << endl;
-    */ 
+    */
     return value;
 }
 
@@ -468,7 +468,7 @@ Fader::calculateGroovePixmap()
         paint.drawRect(0, 0, width(), height());
         paint.setPen(m_outlineColour.darker(200));
         paint.drawLine(1, height() - 1, width() - 1, height() - 1);
-        paint.drawLine(width() - 1, 0, width() - 1, height() - 1); 
+        paint.drawLine(width() - 1, 0, width() - 1, height() - 1);
 
         if (m_integral) {
             //...
@@ -495,7 +495,7 @@ Fader::calculateGroovePixmap()
         // mixer
         paint.setPen(Qt::black);
         paint.setBrush(QColor(0x20, 0x20, 0x20));
-        paint.drawRoundedRect(width() / 2 - 3, height() - m_sliderMax,
+        paint.drawRoundRect(width() / 2 - 3, height() - m_sliderMax,
                        6, m_sliderMax - m_sliderMin, 2, 2);
         paint.end();
     } else {
@@ -580,8 +580,8 @@ Fader::calculateButtonPixmap()
 
         paint.setPen(bg);
         paint.setBrush(bg);
-        paint.drawRoundedRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
-        paint.drawRoundedRect(x + 2, y + buttonHeight / 2 + 2,
+        paint.drawRoundRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
+        paint.drawRoundRect(x + 2, y + buttonHeight / 2 + 2,
                        buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
 
         paint.end();
