@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -235,7 +235,7 @@ Rotary::paintEvent(QPaintEvent *)
     // the potential knob space left empty between the knob itself and the outer
     // circle looked terrible against a styled background, so we'll draw the
     // full swing in a suitable color, then...
-    
+
     //!!! This is never getting set properly elsewhere in the code.  Must
     //investigate.
 //    m_centred = true;
@@ -248,7 +248,7 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setColor(Qt::black);
     paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                   90 * 16, - 180 * 16);
-    // right arc bit                  
+    // right arc bit
 //    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle*/
     paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                       (180 + 45) * 16, -(180 - 45) * 16);
@@ -418,7 +418,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     }
 
-    QWidget *par = parentWidget();
+    QWidget *par = this;
     QPoint totalPos = this->pos();
     while (par->parentWidget() && !par->isWindow()) {
         par = par->parentWidget();
@@ -433,7 +433,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
         _float->setText(QString("%1").arg(powf(10, m_position)));
     } else {
         _float->setText(QString("%1").arg(m_position));
-    }        
+    }
     _float->show();
 
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
