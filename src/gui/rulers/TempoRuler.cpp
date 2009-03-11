@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -273,10 +273,10 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         if (!m_menu)
             createMenu();
         if (m_menu) {
-            // enable 'delete' action only if cursor is actually over a tempo change            
+            // enable 'delete' action only if cursor is actually over a tempo change
 // 			actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
 			findAction("delete_tempo")->setEnabled(m_illuminatePoint);
-			
+
 			m_menu->exec(QCursor::pos());
         }
 
@@ -588,16 +588,16 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-    //    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
+      //  std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
 
-    QWidget *parent = parentWidget();
+    QWidget *parent = this;
     QPoint mp = this->pos();
     while (parent->parentWidget() && !parent->isWindow()) {
         parent = parent->parentWidget();
         mp += parent->pos();
     }
 
-    QPoint offset = QPoint(10, 30 - cp.y() - m_textFloat->height());
+    QPoint offset = QPoint(10, 25 - cp.y() - m_textFloat->height());
 
     m_textFloat->move(mp + cp + offset);
     m_textFloat->show();
@@ -788,7 +788,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
         	int drawh = height() - 4;
         	int y = drawh / 2;
         	if (maxTempo > minTempo) {
-        	    y = drawh - 
+        	    y = drawh -
         		int((double(tempo - minTempo) / double(maxTempo - minTempo))
         		    * drawh + 0.5);
         	}
@@ -809,7 +809,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
                 ry = getYForTempo(ramping.second);
                 ry += 2;
                 /*!!!
-                		ry = drawh - 
+                		ry = drawh -
                 		    int((double(ramping.second - minTempo) /
                 			 double(maxTempo - minTempo))
                 			* drawh + 0.5);
@@ -1047,14 +1047,14 @@ void
 TempoRuler::createMenu()
 {
     createGUI("temporuler.rc");
-    
+
     m_menu = findChild<QMenu *>("tempo_ruler_menu");
 
 //    if (!tmp) {
 //        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
 //                 << domDocument().toString(4) << endl;
 //    }
-    
+
     if (!m_menu) {
         RG_DEBUG << "TempoRuler::createMenu() failed\n";
     }
