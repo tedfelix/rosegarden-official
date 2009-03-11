@@ -1623,4 +1623,4 @@ QFileDialog QLineEdit
 }
 
 /* make frames visible for sorting out layout problems */
-QFrame { border: 1px solid red; }
+/*QFrame { border: 1px solid red; }*/

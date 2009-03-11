@@ -49,7 +49,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     frame = new QFrame(m_tabWidget, tr("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
 
-    layout->addMultiCellWidget(new QLabel(tr("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
+    layout->addWidget(new QLabel(tr("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
                                0, 0,
                                0, 3);
 
