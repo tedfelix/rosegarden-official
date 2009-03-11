@@ -141,7 +141,7 @@ protected:
     QLabel              *m_programLabel;
     QComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
-    QGridLayout         *m_gridLayout;
+    QGridLayout         *m_pluginParamsBoxLayout;
 
     int                  m_index;
 

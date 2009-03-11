@@ -38,9 +38,6 @@ namespace Rosegarden
 {
 
 PluginControl::PluginControl(QWidget *parent,
-                             QGridLayout *layout,
-                             int row,
-                             int col,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
@@ -48,15 +45,14 @@ PluginControl::PluginControl(QWidget *parent,
                              float initialValue,
                              bool showBounds,
                              bool hidden):
-        QObject(parent),
-        m_layout(layout),
-        m_row(row),
-        m_col(col),
+        QWidget(parent),
         m_type(type),
         m_port(port),
         m_pluginManager(aPM),
         m_index(index)
 {
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 ) / 10);
 
@@ -160,28 +156,28 @@ PluginControl::PluginControl(QWidget *parent,
 
         if (!hidden) {
             controlTitle->show();
-            m_layout->addWidget(controlTitle, m_row, m_col, Qt::AlignRight | Qt::AlignBottom);
+            hbox->addWidget(controlTitle, Qt::AlignLeft | Qt::AlignBottom);
         } else {
             controlTitle->hide();
         }
 
         if (showBounds && !hidden) {
             low->show();
-            m_layout->addWidget(low, m_row, m_col+1, Qt::AlignRight | Qt::AlignBottom);
+            hbox->addWidget(low, Qt::AlignLeft | Qt::AlignBottom);
         } else {
             low->hide();
         }
 
         if (!hidden) {
             m_dial->show();
-            m_layout->addWidget(m_dial, m_row, m_col+2, Qt::AlignCenter);
+            hbox->addWidget(m_dial, Qt::AlignLeft | Qt::AlignBottom);
         } else {
             m_dial->hide();
         }
 
         if (showBounds && !hidden) {
             upp->show();
-            m_layout->addWidget(upp, m_row, m_col+3, Qt::AlignLeft | Qt::AlignBottom);
+            hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
         } else {
             upp->hide();
         }

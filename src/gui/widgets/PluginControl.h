@@ -18,7 +18,7 @@
 #ifndef _RG_PLUGINCONTROL_H_
 #define _RG_PLUGINCONTROL_H_
 
-#include <QObject>
+#include <QWidget>
 
 
 class QWidget;
@@ -33,7 +33,7 @@ class PluginPort;
 class AudioPluginManager;
 class Studio;
 
-class PluginControl : public QObject
+class PluginControl : public QWidget
 {
     Q_OBJECT
 public:
@@ -45,12 +45,7 @@ public:
         NumericSlider
     } ControlType;
 
-    //### This is just garbage
-
     PluginControl(QWidget *parent,
-                  QGridLayout *layout,
-                  int row,
-                  int col,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
@@ -76,11 +71,6 @@ signals:
 protected:
 
     //--------------- Data members ---------------------------------
-
-    QGridLayout         *m_layout;
-
-    int m_row;
-    int m_col;
 
     ControlType          m_type;
     PluginPort          *m_port;
