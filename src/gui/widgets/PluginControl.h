@@ -51,8 +51,7 @@ public:
                   AudioPluginManager *pluginManager,
                   int index,
                   float initialValue,
-                  bool showBounds,
-                  bool hidden);
+                  bool showBounds);
  
     void setValue(float value, bool emitSignals = true);
     float getValue() const;

@@ -474,9 +474,8 @@ AudioPluginDialog::slotPluginSelected(int i)
     if (portCount > tooManyPorts) {
 
         m_pluginParamsBoxLayout->addWidget(
-            new QLabel(tr("This plugin has too many controls to edit here"),
-                            m_pluginParamsBox),
-                       1, 1, 0, m_pluginParamsBoxLayout->columnCount() - 1, Qt::AlignCenter);
+            new QLabel(tr("This plugin has too many controls to edit here.  Use the external editor, when we fix it."),
+                            m_pluginParamsBox), 1, 0, 1, 2, Qt::AlignCenter);
             hidden = true;
     }
 
@@ -598,8 +597,14 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       m_pluginManager,
                                       count,
                                       inst->getPort(count)->value,
-                                      showBounds,
-                                      hidden);
+                                      showBounds);
+                // Even though the controls were hidden in their own layout in
+                // PluginControl, m_pluginParamsBoxLayout (a QGridLayout) was
+                // expanding to show a whole lot of empty space.  I pulled
+                // responsibility for hiding the controls out of PluginControl
+                // and put it here.  If the controls are to be hidden, simply
+                // refrain from adding them to the layout here at all, and
+                // everything is copacetic.  This works nicely.
                 if (!hidden) {
                     m_pluginParamsBoxLayout->addWidget(control, row, col);
                 }

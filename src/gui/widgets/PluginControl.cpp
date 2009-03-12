@@ -43,8 +43,7 @@ PluginControl::PluginControl(QWidget *parent,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue,
-                             bool showBounds,
-                             bool hidden):
+                             bool showBounds):
         QWidget(parent),
         m_type(type),
         m_port(port),
@@ -154,32 +153,18 @@ PluginControl::PluginControl(QWidget *parent,
         }
         upp->setFont(plainFont);
 
-        if (!hidden) {
-            controlTitle->show();
-            hbox->addWidget(controlTitle, Qt::AlignLeft | Qt::AlignBottom);
-        } else {
-            controlTitle->hide();
-        }
+        hbox->addWidget(controlTitle, Qt::AlignLeft | Qt::AlignBottom);
 
-        if (showBounds && !hidden) {
+        if (showBounds) {
             low->show();
             hbox->addWidget(low, Qt::AlignLeft | Qt::AlignBottom);
-        } else {
-            low->hide();
         }
 
-        if (!hidden) {
-            m_dial->show();
-            hbox->addWidget(m_dial, Qt::AlignLeft | Qt::AlignBottom);
-        } else {
-            m_dial->hide();
-        }
+        hbox->addWidget(m_dial, Qt::AlignLeft | Qt::AlignBottom);
 
-        if (showBounds && !hidden) {
+        if (showBounds) {
             upp->show();
             hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
-        } else {
-            upp->hide();
         }
     }
 }
