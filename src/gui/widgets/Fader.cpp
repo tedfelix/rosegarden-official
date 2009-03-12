@@ -496,7 +496,7 @@ Fader::calculateGroovePixmap()
         paint.setPen(Qt::black);
         paint.setBrush(QColor(0x20, 0x20, 0x20));
         paint.drawRoundedRect(width() / 2 - 3, height() - m_sliderMax,
-                       6, m_sliderMax - m_sliderMin, 2, 2);
+                       6, m_sliderMax - m_sliderMin, 2.0, 2.0);
         paint.end();
     } else {
         //...
@@ -580,9 +580,9 @@ Fader::calculateButtonPixmap()
 
         paint.setPen(bg);
         paint.setBrush(bg);
-        paint.drawRoundedRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
+        paint.drawRoundedRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4.0, 4.0);
         paint.drawRoundedRect(x + 2, y + buttonHeight / 2 + 2,
-                       buttonWidth - 4, buttonHeight / 2 - 4, 4, 4);
+                       buttonWidth - 4, buttonHeight / 2 - 4, 4.0, 4.0);
 
         paint.end();
     } else {
