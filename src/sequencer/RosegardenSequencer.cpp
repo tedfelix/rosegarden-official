@@ -1177,6 +1177,8 @@ RosegardenSequencer::getNextTransportRequest(TransportRequest &request,
 
     //!!! review transport token management -- jumpToTime has an
     // extra incrementTransportToken() below
+
+    return true;  // fix "control reaches end of non-void function warning"
 }
 
 MappedComposition
