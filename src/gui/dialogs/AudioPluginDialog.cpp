@@ -584,7 +584,7 @@ AudioPluginDialog::slotPluginSelected(int i)
         AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 
-        int row = 0;
+        int row = 2;
         int col = 0;
 
         for (; it != plugin->end(); ++it) {

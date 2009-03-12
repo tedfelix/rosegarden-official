@@ -56,7 +56,7 @@ PluginControl::PluginControl(QWidget *parent,
     plainFont.setPointSize((plainFont.pointSize() * 9 ) / 10);
 
     QLabel *controlTitle =
-        new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), parent);
+        new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), this);
     controlTitle->setFont(plainFont);
 
     if (type == Rotary) {
@@ -114,9 +114,9 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *low;
         if (port->getDisplayHint() &
             (PluginPort::Integer | PluginPort::Toggled)) {
-            low = new QLabel(QString("%1").arg(int(displayLower)), parent);
+            low = new QLabel(QString("%1").arg(int(displayLower)), this);
         } else {
-            low = new QLabel(QString("%1").arg(displayLower), parent);
+            low = new QLabel(QString("%1").arg(displayLower), this);
         }
         low->setFont(plainFont);
 
@@ -127,7 +127,7 @@ PluginControl::PluginControl(QWidget *parent,
 //                  << ", actual upper " << upperBound << ", step "
 //                  << step << std::endl;
 
-        m_dial = new ::Rosegarden::Rotary(parent,
+        m_dial = new ::Rosegarden::Rotary(this,
                                           lowerBound,    // min
                                           upperBound,    // max
                                           step,          // step
@@ -147,9 +147,9 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *upp;
         if (port->getDisplayHint() &
             (PluginPort::Integer | PluginPort::Toggled)) {
-            upp = new QLabel(QString("%1").arg(int(displayUpper)), parent);
+            upp = new QLabel(QString("%1").arg(int(displayUpper)), this);
         } else {
-            upp = new QLabel(QString("%1").arg(displayUpper), parent);
+            upp = new QLabel(QString("%1").arg(displayUpper), this);
         }
         upp->setFont(plainFont);
 
@@ -158,6 +158,8 @@ PluginControl::PluginControl(QWidget *parent,
         if (showBounds) {
             low->show();
             hbox->addWidget(low, Qt::AlignLeft | Qt::AlignBottom);
+        } else {
+            low->hide();
         }
 
         hbox->addWidget(m_dial, Qt::AlignLeft | Qt::AlignBottom);
@@ -165,6 +167,8 @@ PluginControl::PluginControl(QWidget *parent,
         if (showBounds) {
             upp->show();
             hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
+        } else {
+            upp->hide();
         }
     }
 }
