@@ -85,9 +85,12 @@ public slots:
     void slotPaste();
     void slotDefault();
     void slotShowGUI();
+    virtual void slotEditor();
 
 #ifdef HAVE_LIBLO
-    virtual void slotEditor();
+//@@@
+// moc can't find this slot when it's inside the ifdef, even though -DHAVE_LIBLO
+//    virtual void slotEditor();
 #endif
 
 signals:

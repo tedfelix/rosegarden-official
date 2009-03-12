@@ -195,10 +195,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_defaultButton, SIGNAL(clicked()),
             this, SLOT(slotDefault()));
     m_defaultButton->setToolTip(tr("Reset plugin controls to factory defaults"));
-
-    populatePluginCategoryList();
-    populatePluginList();
-
+    
     m_generating = false;
 
     m_shortcuts = new QShortcut(this);
@@ -207,6 +204,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 #ifdef HAVE_LIBLO
     m_editorButton = new QPushButton(tr("Editor"));
+    RG_DEBUG << "AudioPluginDialog::ctor - created Editor button" << endl;
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
     connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
     m_editorButton->setEnabled(false);
@@ -215,6 +213,11 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    RG_DEBUG << "About to KABOOM in the ctor!" << endl;
+    populatePluginCategoryList();
+    populatePluginList();
+    RG_DEBUG << "Or not. Whew!" << endl;
 }
 
 
@@ -270,13 +273,14 @@ AudioPluginDialog::populatePluginCategoryList()
     }
 
     if (categories.empty()) {
-        // there was a crash when clicking on the <synth> button because the
-        // label was getting hidden before it existed, apparently
-    RG_DEBUG << "Crash locator A" << endl;
-        if (m_pluginCategoryBox) m_pluginCategoryBox->hide();
-    RG_DEBUG << "Crash locator B" << endl;
-        if (m_pluginLabel) m_pluginLabel->hide();
-    RG_DEBUG << "Crash locator C" << endl;
+        m_pluginCategoryBox->hide();
+        //&&&
+        // No idea yet why this would randomly crash, even though m_pluginLabel
+        // had always been initialized before trying to hide it.  Removing this
+        // line hasn't actually manifested itself in any visual symptoms yet,
+        // oddly enough, so until it does, let's just leave it out and whistle
+        // past the cemetary.
+        //m_pluginLabel->hide();
     }
 
 
@@ -295,7 +299,6 @@ AudioPluginDialog::populatePluginCategoryList()
             m_pluginCategoryList->setCurrentIndex(m_pluginCategoryList->count() - 1);
         }
     }
-    RG_DEBUG << "Crash locator Z" << endl;
 }
 
 void
@@ -394,6 +397,7 @@ AudioPluginDialog::populatePluginList()
 void
 AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 {
+    RG_DEBUG << "AudioPluginDialog::makePluginParamsBox()" << endl;
     //@@@ //!!!
     // There really isn't anything to do here now.  It used to calculate how
     // many rows and columns to use to create a QGridLayout, but in Qt4 there is
@@ -409,6 +413,7 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 void
 AudioPluginDialog::slotCategorySelected(int)
 {
+    RG_DEBUG << "AudioPluginDialog::slotCategorySelected" << endl;
     populatePluginList();
 }
 
@@ -446,6 +451,7 @@ AudioPluginDialog::slotPluginSelected(int i)
     QWidget* parent = dynamic_cast<QWidget*>(m_pluginParamsBox->parent());
 
     delete m_pluginParamsBox;
+    RG_DEBUG << "AudioPluginDialog::slotPluginSelected - deleted m_pluginParamsBox" << endl;
     m_pluginWidgets.clear(); // The widgets are deleted with the parameter box
     m_programCombo = 0;
 
@@ -545,7 +551,6 @@ AudioPluginDialog::slotPluginSelected(int i)
 
     adjustSize();
 //&&&    setFixedSize(minimumSizeHint());
-//    setFixedSize(minimumSizeHint());
 
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
@@ -637,8 +642,8 @@ AudioPluginDialog::slotPluginSelected(int i)
 
 #ifdef HAVE_LIBLO
     bool gui = false;
-    if (m_pluginGUIManager) m_pluginGUIManager->hasGUI(m_containerId, m_index);
-    if (m_editorButton) m_editorButton->setEnabled(gui);    
+    m_pluginGUIManager->hasGUI(m_containerId, m_index);
+    m_editorButton->setEnabled(gui);    
 #endif
 
 }
@@ -668,6 +673,7 @@ AudioPluginDialog::getProgramsForInstance(AudioPluginInstance *inst, int &curren
 void
 AudioPluginDialog::slotPluginPortChanged(float value)
 {
+    RG_DEBUG << "AudioPluginDialog::slotPluginPortChanged()" << endl;
     const QObject* object = sender();
 
     const PluginControl* control = dynamic_cast<const PluginControl*>(object);
