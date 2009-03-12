@@ -308,8 +308,9 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     }
 
     if (m_active) {
-        QPainter paint(this);
-        drawMeterLevel(&paint);
+        //QPainter paint(this);
+        //drawMeterLevel(&paint);
+        repaint();
     }
 }
 
