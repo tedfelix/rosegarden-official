@@ -150,6 +150,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     m_bypass = new QCheckBox(tr("Bypass"), pluginDonglesBox);
     pluginDonglesBoxLayout->addWidget(m_bypass);
+    pluginDonglesBoxLayout->addStretch(20); // spread these out some so they don't clump together
     m_bypass->setToolTip(tr("Bypass this plugin"));
 
     connect(m_bypass, SIGNAL(toggled(bool)),
@@ -158,6 +159,7 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     m_insOuts = new QLabel(tr("<ports>"), pluginDonglesBox);
     pluginDonglesBoxLayout->addWidget(m_insOuts, Qt::AlignRight);
+    pluginDonglesBoxLayout->addStretch(20); // spread these out some so they don't clump together
     m_insOuts->setToolTip(tr("<qt><p>Tells you if the plugin is <b>mono</b>, <b>stereo</b>, or has some other combination of input and output ports, such as <b>2 in, 1 out</b>, which would take a stereo input and output mono</p></qt>"));
 
     m_pluginId = new QLabel(tr("<id>", "'id' is short for 'identification'"), pluginDonglesBox);
@@ -274,12 +276,8 @@ AudioPluginDialog::populatePluginCategoryList()
 
     if (categories.empty()) {
         m_pluginCategoryBox->hide();
-        //&&&
-        // No idea yet why this would randomly crash, even though m_pluginLabel
-        // had always been initialized before trying to hide it.  Removing this
-        // line hasn't actually manifested itself in any visual symptoms yet,
-        // oddly enough, so until it does, let's just leave it out and whistle
-        // past the cemetary.
+        //&&& Still needs disabling after all the other fixes worked.  No
+        // obvious side effects of just not hiding this though.
         //m_pluginLabel->hide();
     }
 
@@ -402,12 +400,14 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
     // There really isn't anything to do here now.  It used to calculate how
     // many rows and columns to use to create a QGridLayout, but in Qt4 there is
     // no ctor like this at all.  You have to create an empty QGridLayout and
-    // let it expand to fit what you stuff into it, apparently.
+    // let it expand to fit what you stuff into it.  So we have to manage that
+    // on the stuffing into it end now.
     
     m_pluginParamsBox = new QGroupBox(parent);
 
     m_pluginParamsBox->setContentsMargins(5, 5, 5, 5);
     m_pluginParamsBoxLayout = new QGridLayout(m_pluginParamsBox);
+    m_pluginParamsBoxLayout->setVerticalSpacing(0);
 }
 
 void
@@ -471,12 +471,20 @@ AudioPluginDialog::slotPluginSelected(int i)
     bool showBounds = (portCount <= 48);
     bool hidden = false;
 
+    // FluidSynth-DSSI just doesn't have any controls, rather than too many, and
+    // the lack of warning struck me as inconsistent.
+    int insRow = (m_programCombo && m_programCombo->isVisible() ? 2 : 1);
+
     if (portCount > tooManyPorts) {
 
         m_pluginParamsBoxLayout->addWidget(
-            new QLabel(tr("This plugin has too many controls to edit here.  Use the external editor, when we fix it."),
-                            m_pluginParamsBox), 1, 0, 1, 2, Qt::AlignCenter);
+            new QLabel(tr("<qt><p>This plugin has too many controls to edit here.</p><p>Use the external editor, if available.</p></qt>"),
+                            m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
             hidden = true;
+    } else if (portCount == 0 && plugin) {
+        m_pluginParamsBoxLayout->addWidget(
+            new QLabel(tr("This plugin does not have any controls that can be edited here."),
+                           m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
     }
 
     AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
@@ -549,8 +557,13 @@ AudioPluginDialog::slotPluginSelected(int i)
     }
 
     adjustSize();
-//&&&    setFixedSize(minimumSizeHint());
-
+//&&& It would be nice to do something to size the dialog back down after going
+// from a big number of controls to a small number of controls, which leaves it
+// in an inflated, empty looking state.  However, the following currently leaves
+// the dialog totally unusuable, because minimumSizeHint() is just way too
+// small:
+//    setFixedSize(minimumSizeHint());
+    
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
 
@@ -584,12 +597,46 @@ AudioPluginDialog::slotPluginSelected(int i)
         AudioPlugin::PortIterator it = plugin->begin();
         int count = 0;
 
-        int row = 2;
+        int row = insRow + 1;
         int col = 0;
 
+        int wrap = 3;
+        int portCalc = portCount;
+
+        // if it isn't even, make it so
+        if (portCount % 2 != 0) {
+            portCalc++;
+            //std::cout << "was: " << portCount << " now: " << portCalc << std::endl;
+        }
+
+        // balance by the smallest number of columns that suits
+        for (int c = 2; c < 7; c++) {
+            if ((portCalc % c) && portCalc > c + 1) wrap = c;
+        }
+
+        // stick in some overrides for known cases where the above chooses
+        // poorly...  I'm sure it's all pure crap, but unless I write another
+        // gigantic switch statement to spell out how to resolve all 95 cases
+        // exactly the way I want, this is probably as close as I'm going to
+        // get.  I'm just not much good at manipulating numbers this way.
+        if (portCalc == 4) wrap = 2;
+        if (portCalc == 6) wrap = 3;
+        if (portCalc == 8) wrap = 4;
+        if (portCalc == 16) wrap = 4;
+        if (portCalc == 10) wrap = 5;
+        if (portCalc == 11) wrap = 4;
+        if (portCalc == 12) wrap = 4;
+
+//        std::cout << "final wrap was " << wrap << " for " << portCount << " plugins." << std::endl;
+//        std::cout << "this equals " << (portCount / wrap) << " rows by " << wrap << " columns." << std::endl;
+
+
+        // Create the plugin controls, but only if they're going to be visible.
+        // (Else what's the point of creating them at all?)
         for (; it != plugin->end(); ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
-                ((*it)->getType() & PluginPort::Input)) {
+                ((*it)->getType() & PluginPort::Input) &&
+                !hidden) {
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
                                       PluginControl::Rotary,
@@ -598,35 +645,19 @@ AudioPluginDialog::slotPluginSelected(int i)
                                       count,
                                       inst->getPort(count)->value,
                                       showBounds);
-                // Even though the controls were hidden in their own layout in
-                // PluginControl, m_pluginParamsBoxLayout (a QGridLayout) was
-                // expanding to show a whole lot of empty space.  I pulled
-                // responsibility for hiding the controls out of PluginControl
-                // and put it here.  If the controls are to be hidden, simply
-                // refrain from adding them to the layout here at all, and
-                // everything is copacetic.  This works nicely.
-                if (!hidden) {
-                    m_pluginParamsBoxLayout->addWidget(control, row, col);
-                }
+                m_pluginParamsBoxLayout->addWidget(control, row, col);
+//                m_pluginParamsBoxLayout->setColumnStretch(col, 20);
 
-                RG_DEBUG << "Added PluginControl: showBounds: "
-                         << (showBounds ? "true" : "false")
-                         << " hidden: "
-                         << (hidden ? "true" : "false")
-                         << endl;
+//                RG_DEBUG << "Added PluginControl: showBounds: "
+//                         << (showBounds ? "true" : "false")
+//                         << " hidden: "
+//                         << (hidden ? "true" : "false")
+//                         << endl;
                 
-                // I have no idea how all of this used to work before, and I
-                // haven't worked out how to put some sane upper limit on the
-                // number of rows and columns.  Let's just do this to have
-                // something done, and I'll work on it more later.  There was
-                // all kinds of business about > and < and tooManyPorts that
-                // just doesn't work anymore.  Plus none of this is working for
-                // synth plugins at all yet.
-                if (col++ >= 5) {
+                if (++col >= wrap) {
                     row++;
                     col = 0;
                 }
-
 
                 connect(control, SIGNAL(valueChanged(float)),
                         this, SLOT(slotPluginPortChanged(float)));

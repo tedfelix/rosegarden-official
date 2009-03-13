@@ -1624,3 +1624,9 @@ QFileDialog QLineEdit
 
 /* make frames visible for sorting out layout problems */
 /*QFrame { border: 1px solid red; }*/
+
+#PluginControl QWidget
+{
+  margin-bottom: -25px;
+  margin-top: -25px;
+}

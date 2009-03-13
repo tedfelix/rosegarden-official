@@ -50,6 +50,7 @@ PluginControl::PluginControl(QWidget *parent,
         m_pluginManager(aPM),
         m_index(index)
 {
+    setObjectName("PluginControl");
     QHBoxLayout *hbox = new QHBoxLayout(this);
 
     QFont plainFont;
@@ -157,16 +158,18 @@ PluginControl::PluginControl(QWidget *parent,
 
         if (showBounds) {
             low->show();
-            hbox->addWidget(low, Qt::AlignLeft | Qt::AlignBottom);
+            hbox->addStretch(20);
+            hbox->addWidget(low, Qt::AlignRight | Qt::AlignBottom);
         } else {
             low->hide();
         }
 
-        hbox->addWidget(m_dial, Qt::AlignLeft | Qt::AlignBottom);
+        hbox->addWidget(m_dial, Qt::AlignCenter | Qt::AlignBottom);
 
         if (showBounds) {
             upp->show();
             hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
+            hbox->addStretch(20);
         } else {
             upp->hide();
         }
