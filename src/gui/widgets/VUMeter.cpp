@@ -638,8 +638,9 @@ VUMeter::slotReduceLevelRight()
         meterStop();
     }
 
-    QPainter paint(this);
-    drawMeterLevel(&paint);
+    //QPainter paint(this);
+    //drawMeterLevel(&paint);
+    repaint();
 }
 
 void
@@ -673,8 +674,9 @@ VUMeter::slotReduceLevelLeft()
         meterStop();
     }
 
-    QPainter paint(this);
-    drawMeterLevel(&paint);
+    //QPainter paint(this);
+    //drawMeterLevel(&paint);
+    repaint();
 }
 
 void
