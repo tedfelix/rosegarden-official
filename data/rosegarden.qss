@@ -729,6 +729,8 @@ QTabWidget QScrollBar:left-arrow:horizontal,
 QScrollBar:left-arrow:horizontal
 {
     image: url(:pixmaps/style/arrow-left.png);
+    width: 10px;
+    height 10px;
 }
 
 QScrollBar::right-arrow:horizontal
@@ -892,8 +894,12 @@ the bottom-button. */
 QSpinBox
 {
     padding-right: 15px; /* make room for the arrows */
+    /* we will use the stock demo frame image after all, since it was suitable,
+     * and actually fixes background problems that would otherwise be annoying
+     * to solve*/
     border-image: url(:pixmaps/style/frame.png) 4;
     border-width: 3;
+    color: #000000;
 }
 
 QSpinBox::up-button
