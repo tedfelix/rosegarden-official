@@ -20,7 +20,7 @@
 
 #include "base/Instrument.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/kdeext/SqueezedLabel.h"
+#include "gui/widgets/SqueezedLabel.h"
 #include <QFontMetrics>
 #include <QFrame>
 #include <QLabel>

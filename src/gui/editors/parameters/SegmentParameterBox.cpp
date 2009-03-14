@@ -456,14 +456,19 @@ SegmentParameterBox::populateBoxFromSegments()
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
-    // segment, and therefore no label to edit.  So we disable it first:
+    // segment, and therefore no label to edit.  So we disable the edit button
+    // and repeat checkbox first:
     m_labelButton->setEnabled(false);
+    m_repeatValue->setEnabled(false);
+
 
     for (it = m_segments.begin(); it != m_segments.end(); it++) {
         // ok, first thing is we know we have at least one segment
         //
-        // and since there is at least one segment, we can re-enable the edit button:
+        // and since there is at least one segment, we can re-enable the edit button
+        // and repeat checkbox:
         m_labelButton->setEnabled(true);
+        m_repeatValue->setEnabled(true);
 
         if (repeated == NotApplicable)
             repeated = None;

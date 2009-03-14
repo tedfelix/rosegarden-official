@@ -9301,7 +9301,7 @@
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/sound/PeakFileManager.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/sound/PeakFile.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/Event.h
-./src/gui/editors/parameters/InstrumentParameterPanel.o: src/gui/kdeext/SqueezedLabel.h
+./src/gui/editors/parameters/InstrumentParameterPanel.o: src/gui/widgets/SqueezedLabel.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: ./src/gui/editors/parameters/InstrumentParameterPanel.moc
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: ./src/gui/editors/parameters/AudioInstrumentParameterPanel.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/MidiProgram.h
@@ -9431,7 +9431,7 @@
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/ControlParameter.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Controllable.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: ./src/gui/editors/parameters/InstrumentParameterPanel.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/gui/kdeext/SqueezedLabel.h
+./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/gui/widgets/SqueezedLabel.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/Midi.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/misc/Debug.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/misc/Strings.h
@@ -9519,7 +9519,7 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/ColourTable.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/editors/parameters/RosegardenParameterArea.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/editors/parameters/RosegardenParameterBox.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/gui/kdeext/SqueezedLabel.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/SqueezedLabel.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/misc/Debug.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/misc/Strings.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/general/ClefIndex.h
@@ -10775,8 +10775,8 @@
 ./src/gui/kdeext/QCanvasGroupableItem.o: ./src/gui/kdeext/QCanvasGroupableItem.h
 ./src/gui/kdeext/KTmpStatusMsg.o: ./src/gui/kdeext/KTmpStatusMsg.h
 ./src/gui/kdeext/KTmpStatusMsg.o: src/gui/application/RosegardenApplication.h
-./src/gui/kdeext/SqueezedLabel.o: ./src/gui/kdeext/SqueezedLabel.h
-./src/gui/kdeext/SqueezedLabel.o: ./src/gui/kdeext/SqueezedLabel.moc
+./src/gui/widgets/SqueezedLabel.o: ./src/gui/widgets/SqueezedLabel.h
+./src/gui/widgets/SqueezedLabel.o: ./src/gui/widgets/SqueezedLabel.moc
 ./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenGUIView.h
 ./src/gui/application/RosegardenGUIView.o: src/base/Event.h
 ./src/gui/application/RosegardenGUIView.o: src/base/PropertyMap.h

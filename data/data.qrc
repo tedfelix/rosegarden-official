@@ -323,6 +323,7 @@
 <file>pixmaps/style/arrow-left.png</file>
 <file>pixmaps/style/arrow-right.png</file>
 <file>pixmaps/style/arrow-up.png</file>
+<file>pixmaps/style/checkbox_disabled.png</file>
 <file>pixmaps/style/checkbox_checked.png</file>
 <file>pixmaps/style/checkbox_checked_pressed.png</file>
 <file>pixmaps/style/checkbox_indeterminate_hover.png</file>

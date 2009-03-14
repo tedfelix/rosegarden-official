@@ -100,7 +100,7 @@ Rotary::Rotary(QWidget *parent,
             SLOT(slotFloatTimeout()));
     _float->hide();
 
-    this->setToolTip(tr("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
+    this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
@@ -232,26 +232,18 @@ Rotary::paintEvent(QPaintEvent *)
                  width, i != 0 && i != numTicks - 1);
     }
 
-    // the potential knob space left empty between the knob itself and the outer
-    // circle looked terrible against a styled background, so we'll draw the
-    // full swing in a suitable color, then...
-
-    //!!! This is never getting set properly elsewhere in the code.  Must
-    //investigate.
-//    m_centred = true;
-
     pen.setWidth(indent);
     paint.setPen(pen);
 
     // left arc bit
 //    pen.setColor(QColor(0xEE, 0xEE, 0xEE)); //!!! search key: localStyle
-    pen.setColor(Qt::black);
+/*    pen.setColor(Qt::blue);
     paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
-                  90 * 16, - 180 * 16);
+                  90 * 16, - 180 * 16);*/
     // right arc bit
 //    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle*/
-    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
-                      (180 + 45) * 16, -(180 - 45) * 16);
+/*    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
+                      (180 + 45) * 16, -(180 - 45) * 16);*/
 
     // ... paint over it with the bright metering bit
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
@@ -271,8 +263,7 @@ Rotary::paintEvent(QPaintEvent *)
     paint.setPen(pen);
 
     int shadowAngle = -720;
-//    c = palette().dark();
-    c = Qt::black;
+    c = palette().dark();
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -282,9 +273,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     shadowAngle = 2160;
-//    c = palette().dark();
-    c = Qt::black;
-    c = Qt::white;
+    c = palette().dark();
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -294,12 +283,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     // and un-draw the bottom part
-    //
-    // we no longer un-draw the bottom part, but instead complete the black
-    // outer circle  (MAYBE)
-//    pen.setColor(Qt::black);
     pen.setColor(paletteBackgroundColor());
-//    pen.setColor(Qt::red);
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);

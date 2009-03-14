@@ -22,8 +22,7 @@
 
 #include "TrackParameterBox.h"
 
-#include "gui/kdeext/SqueezedLabel.h"
-
+#include "gui/widgets/SqueezedLabel.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"

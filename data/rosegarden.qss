@@ -421,6 +421,11 @@ QCheckBox::indicator:unchecked
     image: url(:pixmaps/style/checkbox_unchecked.png);
 }
 
+QCheckBox::indicator:!enabled
+{
+    image: url(:pixmaps/style/checkbox_disabled.png);
+}
+
 QCheckBox::indicator:unchecked:hover
 {
     image: url(:pixmaps/style/checkbox_unchecked_hover.png);

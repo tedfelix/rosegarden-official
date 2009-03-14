@@ -18,8 +18,7 @@
 
 #include "MIDIInstrumentParameterPanel.h"
 
-#include "gui/kdeext/SqueezedLabel.h"
-
+#include "gui/widgets/SqueezedLabel.h"
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
