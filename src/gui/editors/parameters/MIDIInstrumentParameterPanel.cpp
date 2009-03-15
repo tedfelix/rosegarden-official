@@ -89,15 +89,22 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
     
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
-    QFontMetrics metrics(m_programValue->font());
-    int width22 = metrics.width("1234567890123456789012");
-    int width25 = metrics.width("1234567890123456789012345");
+
+    // setMinimumWidth() using QFontMetrics wasn't cutting it at all, so let's
+    // try what I used in the plugin manager dialog, with
+    // setMinimumContentsLength() instead:
+    QString metric("Acoustic Grand Piano #42B");
+    int width22 = metric.size();
     
-    m_bankValue->setMinimumWidth(width22);
-    m_programValue->setMinimumWidth(width22);
-    m_variationValue->setMinimumWidth(width22);
-    
-    m_connectionLabel->setFixedWidth(width25);
+    m_bankValue->setMinimumContentsLength(width22);
+    m_programValue->setMinimumContentsLength(width22);
+    m_variationValue->setMinimumContentsLength(width22);
+
+    // we still have to use the QFontMetrics here, or a SqueezedLabel will
+    // squeeze itself down to 0.
+    QFontMetrics metrics(m_connectionLabel->font());
+    int width30 = metrics.width("123456789012345678901234567890");
+    m_connectionLabel->setFixedWidth(width30);
     m_connectionLabel->setAlignment(Qt::AlignCenter);
     
     

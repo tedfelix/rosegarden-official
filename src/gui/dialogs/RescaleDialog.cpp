@@ -48,11 +48,9 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     setModal(true);
     setWindowTitle(tr("Stretch or Squash"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
 
     m_newDuration = new TimeWidget(tr("Duration of selection"), vbox,
@@ -63,18 +61,16 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     if (showCloseGapOption) {
         QGroupBox *optionBox = new QGroupBox( tr("Options"), vbox );
         QVBoxLayout *optionBoxLayout = new QVBoxLayout;
+        optionBox->setLayout(optionBoxLayout);
         vboxLayout->addWidget(optionBox);
-        vbox->setLayout(vboxLayout);
         m_closeGap = new QCheckBox(tr("Adjust times of following events accordingly"),
                                    optionBox);
         optionBoxLayout->addWidget(m_closeGap);
-        optionBox->setLayout(optionBoxLayout);
 
         QSettings settings;
         settings.beginGroup( GeneralOptionsConfigGroup );
 
-        m_closeGap->setChecked
-        ( qStrToBool( settings.value("rescaledialogadjusttimes", "true" ) ) );
+        m_closeGap->setChecked(qStrToBool(settings.value("rescaledialogadjusttimes", "true")));
 
         settings.endGroup();
     } else {
@@ -84,8 +80,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     connect(this, SIGNAL(ResetClicked()),
             m_newDuration, SLOT(slotResetToDefault()));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

@@ -41,22 +41,18 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     setWindowTitle(title);
     setObjectName("MinorDialog");
 
-    QGridLayout *metagrid = new QGridLayout;
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    setLayout(metagrid);
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
     m_timeWidget = new TimeWidget(title, vbox, composition,
                 defaultTime, true, constrainToCompositionDuration);
-    vboxLayout->addWidget(m_timeWidget);
     vboxLayout->addWidget(m_timeWidget);
 
     connect(this, SIGNAL(ResetClicked()),
             m_timeWidget, SLOT(slotResetToDefault()));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -72,24 +68,18 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     setWindowTitle(title);
     setObjectName("MinorDialog");
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
     m_timeWidget = new TimeWidget(title, vbox, composition, startTime,
                 defaultTime, true, constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
-    vbox->setLayout(vboxLayout);
-    vboxLayout->addWidget(m_timeWidget);
-    vbox->setLayout(vboxLayout);
 
     connect(this, SIGNAL(ResetClicked()),
             m_timeWidget, SLOT(slotResetToDefault()));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
