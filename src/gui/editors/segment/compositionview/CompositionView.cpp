@@ -94,7 +94,7 @@ CompositionView::CompositionView(RosegardenGUIDoc* doc,
         m_showPreviews(false),
         m_showSegmentLabels(true),
         m_fineGrain(false),
-	m_pencilOverExisting(false),
+    m_pencilOverExisting(false),
         m_minWidth(m_model->getLength()),
         m_stepSize(0),
         m_rectFill(0xF0, 0xF0, 0xF0),
@@ -305,8 +305,8 @@ void CompositionView::updateSelectionContents()
 
 
     QRect selectionRect = getModel()->getSelectionContentsRect();
- 	updateContents(selectionRect);
-//	update(selectionRect);
+     updateContents(selectionRect);
+//    update(selectionRect);
 }
 
 void CompositionView::slotContentsMoving(int x, int y)
@@ -439,8 +439,8 @@ void CompositionView::slotUpdateSegmentsDrawBuffer()
 {
     //     RG_DEBUG << "CompositionView::slotUpdateSegmentsDrawBuffer()\n";
     slotAllDrawBuffersNeedRefresh();
- 	updateContents();
-//	update();
+     updateContents();
+//    update();
 }
 
 void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
@@ -451,12 +451,12 @@ void CompositionView::slotUpdateSegmentsDrawBuffer(const QRect& rect)
     slotAllDrawBuffersNeedRefresh(rect);
 
     if (rect.isValid()) {
- 		updateContents(rect);
-//		update(rect);
-	} else {
- 		updateContents();
-//		update();
-	}
+         updateContents(rect);
+//        update(rect);
+    } else {
+         updateContents();
+//        update();
+    }
 }
 
 void CompositionView::slotRefreshColourCache()
@@ -531,7 +531,7 @@ void CompositionView::viewportPaintRect(QRect r)
         QRect copyRect(r | m_artifactsDrawBufferRefresh);
         copyRect.moveBy( -contentsX(), -contentsY());
 
-        //	RG_DEBUG << "copying from segment to artifacts buffer: " << copyRect << endl;
+        //    RG_DEBUG << "copying from segment to artifacts buffer: " << copyRect << endl;
 
         bitBlt(&m_artifactsDrawBuffer,
                copyRect.x(), copyRect.y(),
@@ -576,8 +576,8 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 
     if (scroll) {
 
-        //	RG_DEBUG << "checkScrollAndRefreshDrawBuffer: scrolling by ("
-        //		 << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
+        //    RG_DEBUG << "checkScrollAndRefreshDrawBuffer: scrolling by ("
+        //         << cx - m_lastBufferRefreshX << "," << cy - m_lastBufferRefreshY << ")" << endl;
 
         if (refreshRect.isValid()) {
 
@@ -662,7 +662,7 @@ void CompositionView::refreshSegmentsDrawBuffer(const QRect& rect)
 {
     //    Profiler profiler("CompositionView::refreshDrawBuffer", true);
     //      RG_DEBUG << "CompositionView::refreshSegmentsDrawBuffer() r = "
-    //  	     << rect << endl;
+    //           << rect << endl;
 
 //### This constructor used to mean "start painting on the draw buffer, taking your default paint configuration from the viewport".  I don't think it's supported any more -- I had to look it up (I'd never known it was possible to do this in the first place!)
 //@@@    QPainter p(&m_segmentsDrawBuffer, viewport());
@@ -958,12 +958,12 @@ void CompositionView::drawGuides(QPainter * p, const QRect& /*clipRect*/)
 {
     // no need to check for clipping, these guides are meant to follow the mouse cursor
     QPoint guideOrig(m_topGuidePos, m_foreGuidePos);
-	
+    
     int contentsHeight = this->contentsHeight();
     int contentsWidth = this->contentsWidth();
-//	int contentsHeight = this->widget()->height();	//@@@
-//	int contentsWidth = this->widget()->width();
-	
+//    int contentsHeight = this->widget()->height();    //@@@
+//    int contentsWidth = this->widget()->width();
+    
     p->save();
     p->setPen(m_guideColor);
     p->drawLine(guideOrig.x(), 0, guideOrig.x(), contentsHeight);
@@ -1286,8 +1286,8 @@ void CompositionView::drawIntersections(const CompositionModel::rectcontainer& r
 void CompositionView::drawPointer(QPainter *p, const QRect& clipRect)
 {
     //     RG_DEBUG << "CompositionView::drawPointer: clipRect "
-    // 	     << clipRect.x() << "," << clipRect.y() << " " << clipRect.width()
-    // 	     << "x" << clipRect.height() << " pointer pos is " << m_pointerPos << endl;
+    //          << clipRect.x() << "," << clipRect.y() << " " << clipRect.width()
+    //          << "x" << clipRect.height() << " pointer pos is " << m_pointerPos << endl;
 
     if (m_pointerPos >= clipRect.x() && m_pointerPos <= (clipRect.x() + clipRect.width())) {
         p->save();

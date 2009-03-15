@@ -18,9 +18,6 @@
 
 #include "TrackEditor.h"
 
-// #include <QDir>
-// #include <kglobal.h>
-
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
@@ -76,7 +73,6 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-//#include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
 #include <Q3DragObject>
 #include <Q3UriDrag>
 #include <Q3TextDrag>
@@ -106,9 +102,7 @@ TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
                          double initialUnitsPerPixel,
-                         QWidget* parent, const char* name
-//                         WFlags
-	) :
+                         QWidget* parent, const char* name) :
     QWidget(parent),
     m_doc(doc),
     m_rulerScale(rulerScale),
@@ -147,7 +141,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
-	
+    
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
                                           m_doc,
                                           0.0,
@@ -202,7 +196,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
     IconLoader il;
-	
+    
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
@@ -235,8 +229,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
 //    grid->addWidget(m_compositionView, 3, 1);
     grid->addWidget(m_compositionView, 3, 1, 2, 1); // Multi-cell widget FromRow, FromCol, RowSpan, ColSpan
 
-	QSize hsbSize = m_compositionView->horizontalScrollBar()->sizeHint();
-	grid->setRowMinimumHeight(4,hsbSize.height() + m_bottomStandardRuler->height());
+    QSize hsbSize = m_compositionView->horizontalScrollBar()->sizeHint();
+    grid->setRowMinimumHeight(4,hsbSize.height() + m_bottomStandardRuler->height());
 
     grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
@@ -244,11 +238,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
     // Track Buttons
     //
 //    m_trackButtonScroll = new QDeferScrollView(this);
-//	m_trackButtonScroll = new QScrollArea(this);
-	m_trackButtonScroll = new TrackButtonScroll(this);
-	// Scroll bars always off
-	m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-	m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+//    m_trackButtonScroll = new QScrollArea(this);
+    m_trackButtonScroll = new TrackButtonScroll(this);
+    // Scroll bars always off
+    m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     grid->addWidget(m_trackButtonScroll, 3, 0);
 
 
@@ -265,24 +259,24 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       "TRACK_BUTTONS"); // permit styling; internal string; no tr()
 //    m_trackButtons->hide();
 //    m_trackButtonScroll->addChild(m_trackButtons);
-	m_trackButtonScroll->setWidget(m_trackButtons);
+    m_trackButtonScroll->setWidget(m_trackButtons);
 
 //    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
 
 //    m_trackButtonScroll->layout()->setMargin(0);
-//	m_trackButtonScroll->layout()->addWidget(m_trackButtons);
-	
-// 		m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+//    m_trackButtonScroll->layout()->addWidget(m_trackButtons);
+    
+//         m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
 //    m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
-//	m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-//	m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	
+//    m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    
 //     m_trackButtonScroll->setResizePolicy(Q3ScrollView::AutoOneFit);
-//	QSizePolicy poli;
-//	poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
-//	poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
-//	m_trackButtonScroll->setSizePolicy( poli );
-	
+//    QSizePolicy poli;
+//    poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
+//    poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
+//    m_trackButtonScroll->setSizePolicy( poli );
+    
 //    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
 //                                        m_compositionView->horizontalScrollBar()->height());
 
@@ -322,8 +316,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
     connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
-//	connect(m_vertScrollBar, SIGNAL(valueChanged(int)),
-//		this, SLOT(slotVerticalScrollTrackButtons(int)));
+//    connect(m_vertScrollBar, SIGNAL(valueChanged(int)),
+//        this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
@@ -458,14 +452,14 @@ void TrackEditor::paintEvent(QPaintEvent* e)
 
         RG_DEBUG << "TrackEditor::paintEvent: Composition modified" << endl;
 
-		//!!! These calls from within a paintEvent look ugly
+        //!!! These calls from within a paintEvent look ugly
         slotReadjustCanvasSize();
         m_trackButtons->slotUpdateTracks(); 
         m_compositionView->clearSegmentRectsCache(true);
-		
+        
         m_compositionView->updateContents();
          
-//		m_compositionView->update();
+//        m_compositionView->update();
 
         Composition &composition = m_doc->getComposition();
 
@@ -541,8 +535,8 @@ TrackEditor::slotCanvasScrolled(int x, int y)
         m_compositionView->setPointerPos(x + mx);
 
         // bad idea, creates a feedback loop
-        // 	timeT t = m_compositionView->grid().getRulerScale()->getTimeForX(x + mx);
-        // 	slotSetPointerPosition(t);
+        //     timeT t = m_compositionView->grid().getRulerScale()->getTimeForX(x + mx);
+        //     slotSetPointerPosition(t);
     }
 }
 
@@ -743,9 +737,9 @@ TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
 //     m_trackButtonScroll->setContentsPos(0, y);
 m_trackButtonScroll->verticalScrollBar()->setValue(y);
-	
-// 	ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
-//	m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
+    
+//     ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
+//    m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
 void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
@@ -806,17 +800,17 @@ void TrackEditor::dropEvent(QDropEvent* e)
 
 //     QPoint posInCompositionView =
 //         m_compositionView->viewportToContents(m_compositionView->
-//          								viewport()->mapFrom(this, event->pos()));	
-	// 
-	QPoint posInCompositionView;
-	QPoint pt;
-	
-	pt = this->mapToGlobal( e->pos() );			//@@@
-	pt = m_compositionView->mapFromGlobal( pt );
-	posInCompositionView = pt;
-	// note: Base of m_compositionView is CompositionView, RosegardenScrollView, [[QScrollArea]]
-	
-	
+//                                          viewport()->mapFrom(this, event->pos()));    
+    // 
+    QPoint posInCompositionView;
+    QPoint pt;
+    
+    pt = this->mapToGlobal( e->pos() );            //@@@
+    pt = m_compositionView->mapFromGlobal( pt );
+    posInCompositionView = pt;
+    // note: Base of m_compositionView is CompositionView, RosegardenScrollView, [[QScrollArea]]
+    
+    
 
     int trackPos = m_compositionView->grid().getYBin(posInCompositionView.y());
 
