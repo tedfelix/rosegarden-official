@@ -453,6 +453,23 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
                      val,
                      step);
 
+    // Reposition - we need to sum the relative positions up to the
+    // topLevel or dialog to please move(). Move just top/right of the rotary
+    //
+    // (Copied from the text float moving code Yves fixed up.)
+    //
+    dialog.reparent(this);
+
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+    while (par->parentWidget() && !par->isWindow()) {
+        par = par->parentWidget();
+        totalPos += par->pos();
+    }
+
+    dialog.move(totalPos + QPoint(width() + 2, -height() / 2));
+    dialog.show();
+
     if (dialog.exec() == QDialog::Accepted) {
         float newval = dialog.getValue();
         if (m_logarithmic) {

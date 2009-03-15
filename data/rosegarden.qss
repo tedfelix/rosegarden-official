@@ -526,10 +526,6 @@ QColumnView
 }
 
 
-/*  QDateEdit   See QSpinBox.
-    QDateTimeEdit   See QSpinBox. */
-
-
 /*  QDialog
 
 Supports only the background, background-clip and background-origin properties.
@@ -557,9 +553,6 @@ QDialogButtonBox
     background-color: yellow;
     color: red;
 }
-
-
-/*  QDoubleSpinBox   See QSpinBox. */
 
 
 /*  QFrame
@@ -881,101 +874,6 @@ QSlider::groove:horizontal
     right: 4px;
 }
 
-
-
-/*  QSpinBox
-  
-The frame of the spin box can be styled using the box model.  The up button and
-arrow can be styled using the ::up-button and ::up-arrow subcontrols. By
-default, the up-button is placed in the top right corner in the Padding
-rectangle of the widget. Without an explicit size, it occupies half the height
-of its reference rectangle. The up-arrow is placed in the center of the Contents
-rectangle of the up-button.  The down button and arrow can be styled using the
-::down-button and ::down-arrow subcontrols. By default, the down-button is
-placed in the bottom right corner in the Padding rectangle of the widget.
-Without an explicit size, it occupies half the height of its reference
-rectangle. The bottom-arrow is placed in the center of the Contents rectangle of
-the bottom-button. */
-
-QSpinBox
-{
-    padding-right: 15px; /* make room for the arrows */
-    /* we will use the stock demo frame image after all, since it was suitable,
-     * and actually fixes background problems that would otherwise be annoying
-     * to solve*/
-    border-image: url(:pixmaps/style/frame.png) 4;
-    border-width: 3;
-    color: #000000;
-    selection-color: #FFFFFF;
-    selection-background-color: #80AFFF;
-}
-
-QSpinBox::up-button
-{
-    subcontrol-origin: border;
-    subcontrol-position: top right; /* position at the top right corner */
-
-    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */
-    border-image: url(:pixmaps/style/spinup.png) 1;
-    border-width: 1px;
-}
-
-QSpinBox::up-button:hover
-{
-    border-image: url(:pixmaps/style/spinup_hover.png) 1;
-}
-
-QSpinBox::up-button:pressed
-{
-    border-image: url(:pixmaps/style/spinup_pressed.png) 1;
-}
-
-QSpinBox::up-arrow
-{
-    image: url(:pixmaps/style/arrow-up-small.png);
-    width: 7px;
-    height: 7px;
-}
-
-QSpinBox::up-arrow:disabled,
-QSpinBox::up-arrow:off
-{  /* off state when value is max */
-   image: url(:pixmaps/style/arrow-up-small-inverted.png);
-}
-
-QSpinBox::down-button
-{
-    subcontrol-origin: border;
-    subcontrol-position: bottom right; /* position at bottom right corner */
-
-    width: 16px;
-    border-image: url(:pixmaps/style/spindown.png) 1;
-    border-width: 1px;
-    border-top-width: 0;
-}
-
-QSpinBox::down-button:hover
-{
-    border-image: url(:pixmaps/style/spindown_hover.png) 1;
-}
-
-QSpinBox::down-button:pressed
-{
-    border-image: url(:pixmaps/style/spindown_pressed.png) 1;
-}
-
-QSpinBox::down-arrow
-{
-    image: url(:pixmaps/style/arrow-down-small.png);
-    width: 7px;
-    height: 7px;
-}
-
-QSpinBox::down-arrow:disabled,
-QSpinBox::down-arrow:off
-{  /* off state when value in min */
-   image: url(:pixmaps/style/arrow-down-small-inverted.png);
-}
 
 
 /*  QSplitter
@@ -1655,3 +1553,118 @@ QFileDialog QLineEdit
   margin-bottom: -25px;
   margin-top: -25px;
 }
+
+#MinorDialog
+{
+  background-color: #000000;
+}
+
+
+/*  QSpinBox
+  
+The frame of the spin box can be styled using the box model.  The up button and
+arrow can be styled using the ::up-button and ::up-arrow subcontrols. By
+default, the up-button is placed in the top right corner in the Padding
+rectangle of the widget. Without an explicit size, it occupies half the height
+of its reference rectangle. The up-arrow is placed in the center of the Contents
+rectangle of the up-button.  The down button and arrow can be styled using the
+::down-button and ::down-arrow subcontrols. By default, the down-button is
+placed in the bottom right corner in the Padding rectangle of the widget.
+Without an explicit size, it occupies half the height of its reference
+rectangle. The bottom-arrow is placed in the center of the Contents rectangle of
+the bottom-button. */
+
+QSpinBox,
+QDoubleSpinBox
+{
+    padding-right: 15px; /* make room for the arrows */
+    /* we will use the stock demo frame image after all, since it was suitable,
+     * and actually fixes background problems that would otherwise be annoying
+     * to solve*/
+    border-image: url(:pixmaps/style/frame.png) 4;
+    border-width: 3;
+    color: #000000;
+    selection-color: #FFFFFF;
+    selection-background-color: #80AFFF;
+}
+
+QSpinBox::up-button,
+QDoubleSpinBox::up-button
+{
+    subcontrol-origin: border;
+    subcontrol-position: top right; /* position at the top right corner */
+
+    width: 16px; /* 16 + 2*1px border-width = 15px padding + 3px parent border */
+    border-image: url(:pixmaps/style/spinup.png) 1;
+    border-width: 1px;
+}
+
+QSpinBox::up-button:hover,
+QDoubleSpinBox::up-button:hover
+{
+    border-image: url(:pixmaps/style/spinup_hover.png) 1;
+}
+
+QSpinBox::up-button:pressed,
+QDoubleSpinBox::up-button:pressed
+{
+    border-image: url(:pixmaps/style/spinup_pressed.png) 1;
+}
+
+QSpinBox::up-arrow,
+QDoubleSpinBox::up-arrow
+{
+    image: url(:pixmaps/style/arrow-up-small.png);
+    width: 7px;
+    height: 7px;
+}
+
+QSpinBox::up-arrow:disabled,
+QSpinBox::up-arrow:off,
+QDoubleSpinBox::up-arrow:disabled,
+QDoubleSpinBox::up-arrow:off
+{  /* off state when value is max */
+   image: url(:pixmaps/style/arrow-up-small-inverted.png);
+}
+
+QSpinBox::down-button,
+QDoubleSpinBox::down-button
+{
+    subcontrol-origin: border;
+    subcontrol-position: bottom right; /* position at bottom right corner */
+
+    width: 16px;
+    border-image: url(:pixmaps/style/spindown.png) 1;
+    border-width: 1px;
+    border-top-width: 0;
+}
+
+QSpinBox::down-button:hover,
+QDoubleSpinBox::down-button:hover
+{
+    border-image: url(:pixmaps/style/spindown_hover.png) 1;
+}
+
+QSpinBox::down-button:pressed,
+QDoubleSpinBox::down-button:pressed
+{
+    border-image: url(:pixmaps/style/spindown_pressed.png) 1;
+}
+
+QSpinBox::down-arrow,
+QDoubleSpinBox::down-arrow
+{
+    image: url(:pixmaps/style/arrow-down-small.png);
+    width: 7px;
+    height: 7px;
+}
+
+QSpinBox::down-arrow:disabled,
+QSpinBox::down-arrow:off,
+QDoubleSpinBox::down-arrow:disabled,
+QDoubleSpinBox::down-arrow:off
+{  /* off state when value in min */
+   image: url(:pixmaps/style/arrow-down-small-inverted.png);
+}
+
+

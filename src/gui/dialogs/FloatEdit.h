@@ -32,6 +32,8 @@ namespace Rosegarden
 {
 
 
+/** A simple input dialog for requesting a float value
+ */
 class FloatEdit : public QDialog
 {
     Q_OBJECT
@@ -45,14 +47,18 @@ public:
               float value,
               float step);
 
+    /// Get a float value from the dialog
     float getValue() const;
+
+    /// Reparent the float edit dialog correctly by context, so it can be made
+    /// to appear in a sensible place
+    void reparent(QWidget *newParent);
 
 protected:
 
     QLabel            *m_text;
     QDoubleSpinBox    *m_spin;
 };
-
 
 
 }

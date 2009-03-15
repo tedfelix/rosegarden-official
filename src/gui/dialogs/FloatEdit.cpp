@@ -43,6 +43,7 @@ FloatEdit::FloatEdit(QWidget *parent,
 {
     setModal(true);
     setWindowTitle(title);
+    setObjectName("MinorDialog");
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -83,6 +84,23 @@ FloatEdit::getValue() const
 {
     return m_spin->value();
 }
+
+
+void
+FloatEdit::reparent(QWidget *newParent)
+{
+
+    // Reparent to either top level or dialog
+    //
+    while (newParent->parentWidget() && !newParent->isWindow()) {
+        newParent = newParent->parentWidget();
+    }
+
+    setParent(newParent, Qt::Dialog);
+
+    // FloatEdit widget is now at top left corner of newParent (Qt4)
+}
+
 
 }
 #include "FloatEdit.moc"
