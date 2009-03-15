@@ -447,16 +447,17 @@ Fader::calculateGroovePixmap()
     delete map;
     map = new QPixmap(width(), height());
 
-    // we'll try giving their little surrounds a color that shows up on purpose
+    // The area between the groove and the border takes a very translucent tint
+    // of border color
     QColor bg = m_outlineColour;
     int H = 0;
     int S = 0;
     int V = 0;
     int A = 0;
     bg.getHsv(&H, &S, &V, &A);
-    if (S >= 200) S -= 100;
-    if (V >= 50) V -= 25;
+    A = 40;
     bg = QColor::fromHsv(H, S, V, A);
+
     map->fill(bg);
 
     QPainter paint(map);
@@ -465,10 +466,7 @@ Fader::calculateGroovePixmap()
     if (m_vertical) {
 
         paint.setPen(m_outlineColour);
-        paint.drawRect(0, 0, width(), height());
-        paint.setPen(m_outlineColour.darker(200));
-        paint.drawLine(1, height() - 1, width() - 1, height() - 1);
-        paint.drawLine(width() - 1, 0, width() - 1, height() - 1); 
+        paint.drawRect(0, 0, width() - 1, height() - 1);
 
         if (m_integral) {
             //...
@@ -493,10 +491,10 @@ Fader::calculateGroovePixmap()
 
         // the "groove" is a dark rounded rectangle like the ones on my real
         // mixer
-        paint.setPen(Qt::black);
+        paint.setPen(QColor(0x20, 0x20, 0x20));
         paint.setBrush(QColor(0x20, 0x20, 0x20));
-        paint.drawRoundedRect(width() / 2 - 3, height() - m_sliderMax,
-                       6, m_sliderMax - m_sliderMin, 2.0, 2.0);
+        paint.drawRect(width() / 2 - 3, height() - m_sliderMax,
+                       6, m_sliderMax - m_sliderMin);
         paint.end();
     } else {
         //...
@@ -512,20 +510,23 @@ Fader::calculateButtonPixmap()
 
     QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].second;
 
+    int h = height() - 1;
+    int w = width() - 1;
+
     if (m_vertical) {
 
-        int buttonHeight = height() / 7;
+        int buttonHeight = h / 7;
         buttonHeight /= 10;
         ++buttonHeight;
         buttonHeight *= 10;
         ++buttonHeight;
-        int buttonWidth = width() * 2 / 3;
+        int buttonWidth = w * 2 / 3;
         buttonWidth /= 5;
         ++buttonWidth;
         buttonWidth *= 5;
         buttonWidth -= 2;
-        if (buttonWidth > width() - 2)
-            buttonWidth = width() - 2;
+        if (buttonWidth > w - 2)
+            buttonWidth = w - 2;
 
         map = new QPixmap(buttonWidth, buttonHeight);
 

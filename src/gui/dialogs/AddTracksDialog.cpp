@@ -41,49 +41,43 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     setModal(true);
     setWindowTitle(tr("Add Tracks"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
     QWidget *vBox = new QWidget(this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(vBox, 0, 0);
+    setLayout(vBoxLayout);
 
-	QVBoxLayout* countBoxLayout;
-	countBoxLayout = vBoxLayout;		// assigned alias
-//    countBoxLayout->setSpacing(4);
-	vBox->setLayout( countBoxLayout );
-	
-    QLabel *child_8 = new QLabel(tr("How many tracks do you want to add?") );
-    countBoxLayout->addWidget(child_8);
-	
-    m_count = new QSpinBox();
-    countBoxLayout->addWidget(m_count);
+    vBoxLayout->addWidget(new QLabel(tr("How many tracks do you want to add?")));
     
-	m_count->setMinimum(1);
-    m_count->setMaximum(32);
+    m_count = new QSpinBox();
+    vBoxLayout->addWidget(m_count);
+    m_count->setMinimum(1);
+    m_count->setMaximum(256); // why not 256?  32 seemed like a silly upper bound
     m_count->setValue(1);
 
-    QWidget *posBox = new QWidget( vBox );
+    QWidget *posBox = new QWidget(vBox);
     vBoxLayout->addWidget(posBox);
-    vBox->setLayout(vBoxLayout);
+
     QHBoxLayout *posBoxLayout = new QHBoxLayout;
-    posBoxLayout->setSpacing(4);
-    QLabel *child_4 = new QLabel(tr("Add tracks"), posBox );
-    posBoxLayout->addWidget(child_4);
-    m_position = new QComboBox( posBox );
-    posBoxLayout->addWidget(m_position);
     posBox->setLayout(posBoxLayout);
+
+    posBoxLayout->addWidget(new QLabel(tr("Add tracks")));
+
+    m_position = new QComboBox(posBox);
+    posBoxLayout->addWidget(m_position);
     m_position->addItem(tr("At the top"));
     m_position->addItem(tr("Above the current selected track"));
     m_position->addItem(tr("Below the current selected track"));
     m_position->addItem(tr("At the bottom"));
 
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    QString metric(tr("Above the current selected track"));
+    m_position->setMinimumContentsLength(metric.size());
 
-    m_position->setCurrentIndex( settings.value("lastaddtracksposition", 2).toUInt() );
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    m_position->setCurrentIndex(settings.value("lastaddtracksposition", 2).toUInt());
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vBoxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 

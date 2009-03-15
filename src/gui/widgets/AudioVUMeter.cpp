@@ -68,16 +68,37 @@ AudioVUMeter::AudioVUMeter(QWidget *parent,
 void
 AudioVUMeter::paintEvent(QPaintEvent *e)
 {
+    //###
+    // See note in VUMeter.cpp explaining the width/height - 1 issue
+    int w = width() - 1;
+    int h = height() - 1;
     QPainter paint(this);
-    paint.setPen(palette().mid());
-    paint.drawRect(0, 0, width(), height());
 
-    paint.setPen(palette().background());
+    // we'll try giving the area between the border and the actual meter the
+    // same tint as the faders, for consistency of appearance
+
+    // first, we'll fill the whole background rect with a 10% alpha version of
+    // the border color
+    QColor fill = palette().mid();
+    int H = 0;
+    int S = 0;
+    int V = 0;
+    int A = 0;
+    fill.getHsv(&H, &S, &V, &A);
+    A = 40;
+    fill = QColor::fromHsv(H, S, V, A);
+    paint.fillRect(0, 0, w, h, fill);
+    
+    // now we draw the border outline around it
+    paint.setPen(palette().mid());
+    paint.drawRect(0, 0, w, h);
+
+/*    paint.setPen(palette().background());
     paint.setBrush(palette().background());
-    paint.drawRect(1, 1, width() - 2, m_yoff / 2 - 1);
-    paint.drawRect(1, 1, m_xoff / 2 - 1, height() - 2);
-    paint.drawRect(width() - m_xoff / 2 - 1, 1, m_xoff / 2, height() - 2);
-    paint.drawRect(1, height() - m_yoff / 2 - 1, width() - 2, m_yoff / 2);
+    paint.drawRect(1, 1, w - 2, m_yoff / 2 - 1);
+    paint.drawRect(1, 1, m_xoff / 2 - 1, h - 2);
+    paint.drawRect(w - m_xoff / 2 - 1, 1, m_xoff / 2, h - 2);
+    paint.drawRect(1, h - m_yoff / 2 - 1, w - 2, m_yoff / 2);*/
     paint.end();
 
     m_meter->paintEvent(e);

@@ -26,6 +26,7 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
+
 #include <cmath>
 
 namespace Rosegarden
@@ -42,6 +43,7 @@ FloatEdit::FloatEdit(QWidget *parent,
 {
     setModal(true);
     setWindowTitle(title);
+
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
     QGroupBox *groupBox = new QGroupBox();
