@@ -23,6 +23,7 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -42,17 +43,24 @@ InputDialog::InputDialog(const QString &title, const QString &label,
 
     // set the window title
     setWindowTitle(title);
-    QVBoxLayout *vbox = new QVBoxLayout(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(this);
 
     // add the passed label to our layout
-    QLabel *lbl = new QLabel(label, this);
-    vbox->addWidget(lbl);
-    vbox->addStretch(1);
+/*    QLabel *lbl = new QLabel(label, this);
+    vboxLayout->addWidget(lbl);
+    vboxLayout->addStretch(1);*/
+
+    // make a group box to hold the controls, for visual consistency with other
+    // dialogs; the question asked is the group box title
+    QGroupBox *gbox = new QGroupBox(label, this);
+    vboxLayout->addWidget(gbox);
+    QVBoxLayout *gboxLayout = new QVBoxLayout;
+    gbox->setLayout(gboxLayout);
 
     // add the passed input widget to our layout, and reparent it
     input->setParent(this);
-    vbox->addWidget(input);
-    vbox->addStretch(1);
+    gboxLayout->addWidget(input);
+    gboxLayout->addStretch(1);
 
     // I have no idea what this is for, but Qt had it, so we'll keep it in our
     // doctored version
@@ -61,10 +69,9 @@ InputDialog::InputDialog(const QString &title, const QString &label,
     // Put some clicky buttons and hook them up
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel,
                                                        Qt::Horizontal, this);
-//    buttonBox->setObjectName(QLatin1String("qt_inputdlg_buttonbox"));
     QPushButton *okButton = static_cast<QPushButton *>(buttonBox->addButton(QDialogButtonBox::Ok));
     okButton->setDefault(true);
-    vbox->addWidget(buttonBox);
+    vboxLayout->addWidget(buttonBox);
 
     QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));

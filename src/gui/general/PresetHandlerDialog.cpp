@@ -5,9 +5,6 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
 
-    This file is Copyright 2006-2009
-	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
- 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
  
@@ -39,7 +36,6 @@
 #include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QLayout>
 #include <QApplication>
 
 // #define DEBUG_CATEGORIES
@@ -74,33 +70,48 @@ PresetHandlerDialog::initDialog()
 
     setModal(true);
     setWindowTitle(tr("Load track parameters preset"));
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    setLayout(vboxLayout);
 
-    QFrame *frame = new QFrame;
-    frame->setContentsMargins(10, 10, 10, 10);
-    QGridLayout *layout = new QGridLayout;
-    layout->setSpacing(5);
-    frame->setLayout(layout);
-
-    metagrid->addWidget(frame, 0, 0);
-
-    QLabel *title = new QLabel(tr("Select preset track parameters for:"), frame);
+    QLabel *title = new QLabel(tr("Select preset track parameters for:"), this);
     if (m_fromNotation) title->setText(tr("Create appropriate notation for:"));
+    vboxLayout->addWidget(title);
 
-    QLabel *catlabel = new QLabel(tr("Category"), frame);
-    m_categoryCombo = new QComboBox(frame);
+    QGroupBox *gbox = new QGroupBox(this);
+    QGridLayout *gboxLayout = new QGridLayout;
+    gbox->setLayout(gboxLayout);
 
-    QLabel *inslabel = new QLabel(tr("Instrument"), frame);
-    m_instrumentCombo = new QComboBox(frame);
+    vboxLayout->addWidget(gbox);
 
-    QLabel *plylabel = new QLabel(tr("Player Ability"), frame);
-    m_playerCombo = new QComboBox(frame);
+    gboxLayout->addWidget(new QLabel(tr("Category")), 0, 0, Qt::AlignLeft);
+
+    m_categoryCombo = new QComboBox(gbox);
+    gboxLayout->addWidget(m_categoryCombo, 0, 1, Qt::AlignRight);
+
+    // use longest string in database for setting width of combos (since I have
+    // no luck with or understanding of how to use spacing or stretch &c to
+    // accomplish the same sort of aim)
+    QString metric(tr("Electronic organ (manual) (treble)"));
+    m_categoryCombo->setMinimumContentsLength(metric.size());
+
+    gboxLayout->addWidget(new QLabel(tr("Instrument")), 1, 0, Qt::AlignLeft);
+    m_instrumentCombo = new QComboBox(gbox);
+    m_instrumentCombo->setMinimumContentsLength(metric.size());
+    gboxLayout->addWidget(m_instrumentCombo, 1, 1, Qt::AlignRight);
+
+    gboxLayout->addWidget(new QLabel(tr("Player Ability")), 2, 0, Qt::AlignLeft);
+    m_playerCombo = new QComboBox(gbox);
     m_playerCombo->addItem(tr("Amateur"));
     m_playerCombo->addItem(tr("Professional"));
+    m_playerCombo->setMinimumContentsLength(metric.size());
+    gboxLayout->addWidget(m_playerCombo, 2, 1, Qt::AlignRight);
 
     QGroupBox *scopeBox = new QGroupBox(tr("Scope"));
     QVBoxLayout *scopeBoxLayout = new QVBoxLayout;
+    scopeBox->setLayout(scopeBoxLayout);
+
+    vboxLayout->addWidget(scopeBox);
+
     if (m_fromNotation) {
         QRadioButton *onlySelectedSegments = new
             QRadioButton(tr("Only selected segments"));
@@ -119,16 +130,6 @@ PresetHandlerDialog::initDialog()
         scopeBoxLayout->addWidget(m_convertSegments);
         onlyNewSegments->setChecked(true);
     }
-    scopeBox->setLayout(scopeBoxLayout);
-
-    layout->addWidget(title, 0, 0, 0- 0+1, 1-0+ 1, Qt::AlignLeft);
-    layout->addWidget(catlabel, 1, 0, Qt::AlignRight);
-    layout->addWidget(m_categoryCombo, 1, 1);
-    layout->addWidget(inslabel, 2, 0, Qt::AlignRight);
-    layout->addWidget(m_instrumentCombo, 2, 1);
-    layout->addWidget(plylabel, 3, 0, Qt::AlignRight);
-    layout->addWidget(m_playerCombo, 3, 1);
-    layout->addWidget(scopeBox, 4, 0, 0+1, 1-0+ 1, Qt::AlignLeft);
 
     populateCategoryCombo();
 
@@ -163,8 +164,8 @@ PresetHandlerDialog::initDialog()
 
     QDialogButtonBox *buttonBox
         = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }

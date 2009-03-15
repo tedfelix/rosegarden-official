@@ -18,6 +18,8 @@
 
 #include "AddTracksDialog.h"
 
+#include "document/ConfigGroups.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QLabel>
@@ -27,8 +29,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QSettings>
-
-#include "document/ConfigGroups.h"
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -45,16 +46,22 @@ AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
     setLayout(vBoxLayout);
 
-    vBoxLayout->addWidget(new QLabel(tr("How many tracks do you want to add?")));
+   // vBoxLayout->addWidget(new QLabel(tr("How many tracks do you want to add?")));
+
+    QGroupBox *gbox = new QGroupBox(tr("How many tracks do you want to add?"), vBox);
+    vBoxLayout->addWidget(gbox);
+
+    QVBoxLayout *gboxLayout = new QVBoxLayout;
+    gbox->setLayout(gboxLayout);
     
     m_count = new QSpinBox();
-    vBoxLayout->addWidget(m_count);
+    gboxLayout->addWidget(m_count);
     m_count->setMinimum(1);
     m_count->setMaximum(256); // why not 256?  32 seemed like a silly upper bound
     m_count->setValue(1);
 
     QWidget *posBox = new QWidget(vBox);
-    vBoxLayout->addWidget(posBox);
+    gboxLayout->addWidget(posBox);
 
     QHBoxLayout *posBoxLayout = new QHBoxLayout;
     posBox->setLayout(posBoxLayout);

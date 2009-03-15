@@ -1072,8 +1072,8 @@ SegmentParameterBox::slotEditSegmentLabel()
         label = "";
 
     QString newLabel = InputDialog::getText(this, 
-                                            tr("Enter new label"),
                                             editLabel,
+                                            tr("Enter new label:"),
                                             LineEdit::Normal,
                                             m_label->text(),
                                             &ok );

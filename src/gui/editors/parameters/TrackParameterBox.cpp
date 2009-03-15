@@ -52,6 +52,8 @@
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
 #include "sound/PluginIdentifier.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -76,8 +78,6 @@
 #include <QVBoxLayout>
 #include <QStackedWidget>
 #include <QCheckBox>
-#include <QLineEdit>
-#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -910,10 +910,10 @@ TrackParameterBox::slotColorChanged(int index)
         QColor newColour;
         bool ok = false;
         
-        QString newName = QInputDialog::getText(this,
+        QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
-                                               tr("Enter new name"),
-                                               QLineEdit::Normal,
+                                               tr("Enter new name:"),
+                                               LineEdit::Normal,
                                                tr("New"), &ok );
         
         if ((ok == true) && (!newName.isEmpty())) {

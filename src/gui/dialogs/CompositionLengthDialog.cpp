@@ -27,6 +27,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QGroupBox>
 
 
 namespace Rosegarden
@@ -41,43 +42,69 @@ CompositionLengthDialog::CompositionLengthDialog(
     setModal(true);
     setWindowTitle(tr("Change Composition Length"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *startBox = new QWidget(this);
-    QVBoxLayout *startBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(startBox, 0, 0);
+    //###
+    // This note applies in many other places, but since this is the nth time
+    // I've gotten rid of the QWidget + metagrid + QWidget + layout paradigm, I
+    // thought I'd explain.  We have a QWidget coming in here, the QDialog.  We
+    // can set its layout.  If we create something like a QFrame or a QGroupBox,
+    // we have a widget there, too, and can set that widget's layout.  It won't
+    // be that often we really have to make a random QWidget just to hold a
+    // layout, and also there's no real need to have an overall grid layout just
+    // to contain sublayouts.  We used to lay out most simple dialogs on an HBox
+    // or VBox, and we can still do that directly, without the extra
+    // complication.
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    setLayout(vboxLayout);
 
+    vboxLayout->addWidget(new QLabel(tr("Change the start and end markers for the composition:")));
 
-    QLabel *label = new QLabel(tr("Set the Start and End bar markers for this Composition"));
-    startBoxLayout->addWidget(label);
+    QGroupBox *gbox = new QGroupBox(this);
+    vboxLayout->addWidget(gbox);
 
-    QLabel *child_7 = new QLabel(tr("Start Bar"), startBox );
-    startBoxLayout->addWidget(child_7, 0, Qt::AlignLeft);
-    m_startMarkerSpinBox = new QSpinBox( startBox );
-    startBoxLayout->addWidget(m_startMarkerSpinBox);
+    QVBoxLayout *gboxLayout = new QVBoxLayout;
+    gbox->setLayout(gboxLayout);
+
+    // Since we want to stack two hbox layouts in a vbox layout (inside a group
+    // box inside another vbox layout), we do have to create a QWidget here.
+    // This is the widget/hbox combo for the top set of controls:
+    QWidget *startBox = new QWidget(gbox);
+    QHBoxLayout *startBoxLayout = new QHBoxLayout;
     startBox->setLayout(startBoxLayout);
+
+    gboxLayout->addWidget(startBox);
+    
+    startBoxLayout->addWidget(new QLabel(tr("Start Bar")), Qt::AlignLeft);
+
+    m_startMarkerSpinBox = new QSpinBox(startBox);
     m_startMarkerSpinBox->setMinimum( -10);
     m_startMarkerSpinBox->setMaximum(10000);
-    m_startMarkerSpinBox->setValue(
-        m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
+    m_startMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getStartMarker()) + 1);
+    startBoxLayout->addWidget(m_startMarkerSpinBox);
 
-    QWidget *endBox = new QWidget( startBox );
-    startBoxLayout->addWidget(endBox);
-    startBox->setLayout(startBoxLayout);
+    // Now we need another widget/hbox for the bottom set of controls (or I
+    // guess we could have laid everything out on a grid layout inside the combo
+    // box, in retrospect, but whatever.  This works.  This is the bottom set of
+    // controls:
+    QWidget *endBox = new QWidget(gbox);
     QHBoxLayout *endBoxLayout = new QHBoxLayout;
-    QLabel *child_4 = new QLabel(tr("End Bar"), endBox );
-    endBoxLayout->addWidget(child_4, 0, Qt::AlignLeft);
-    m_endMarkerSpinBox = new QSpinBox( endBox );
-    endBoxLayout->addWidget(m_endMarkerSpinBox);
     endBox->setLayout(endBoxLayout);
+
+    gboxLayout->addWidget(endBox);
+
+    endBoxLayout->addWidget(new QLabel(tr("End Bar")), Qt::AlignLeft);
+
+    m_endMarkerSpinBox = new QSpinBox(endBox);
     m_endMarkerSpinBox->setMinimum( -10);
     m_endMarkerSpinBox->setMaximum(10000);
-    m_endMarkerSpinBox->setValue(
-        m_composition->getBarNumber(m_composition->getEndMarker()));
+    m_endMarkerSpinBox->setValue(m_composition->getBarNumber(m_composition->getEndMarker()));
+    endBoxLayout->addWidget(m_endMarkerSpinBox);
 
+    // Now the button box on the bottom, outside the group box and any of the
+    // previous layouts, just gets added to the vbox under the QDialog widget
+    // we're coming in with.  No overall grid layout required.
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vboxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
