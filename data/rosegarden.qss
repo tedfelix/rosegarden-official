@@ -1601,12 +1601,17 @@ QWidget#SPECIAL_LABEL,
 Supports the box model. The opacity property controls the opacity of the
 tooltip. */
 
-/* Tooltips are going to be hell to get right.  They're dependent on the styling
- * of whatever random widget under whatever random class happens to create them,
- * and to make matters worse, Qt is really buggy in this area, and tends to use
- * the same colors for the next tooltip as the last tooltip you picked, so it is
- * very, very easy to get false positives and think you've fixed something you
- * in fact haven't.  Ugh.
+/* I learned a trick from the stylesheet demo for spinboxes.  At deep layers of
+ * QWidget hacks, the backgrounds are the hard bit to style.  You wind up with
+ * buttons that have a bad normal state, but still hover properly, for example.
+ * The stock pixmaps from the stylesheet demo magically addressed this bitchy
+ * problem with deep spinboxes by styling their backgrounds with PIXMAPS.  Well
+ * there you go.  Lesson learned.  So now tooltips have a pixmap full of solid
+ * color that won't have any scaling or tiling problems, and because they use a
+ * pixmap instead of some nebulous background property, ka-wham, all the
+ * tooltips everywhere now behave properly, through the magic of a really big
+ * sledge hammer.  I'm quite happy to have hit upon this trick.  This would have
+ * been almost impossible to fix any other way.  W00T!!!  :)
  */
 QToolTip,
 QWidget QToolTip,
@@ -1618,6 +1623,7 @@ QMainWindow QToolTip,
 #App QWidget QToolTip
 {
     background-color: #fffbd4;
+    border-image: url(:pixmaps/style/tooltip.png);
     color: #000000;
 }
 
