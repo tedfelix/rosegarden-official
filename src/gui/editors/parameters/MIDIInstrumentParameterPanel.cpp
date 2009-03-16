@@ -432,7 +432,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // with the existing rotary widget.
 
             QLabel *label = rmi->second.second;
-            label->setObjectName("ROTARY_LABEL");
             label->setText(strtoqstr(it->getName()));
 
             ++rmi;
@@ -452,17 +451,24 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             else if (it->getMax() - it->getMin() < 20)
                 bigStep = 2.0;
 
-//@@@ Rotary takes a lot more args than this!           rotary = new Rotary( hbox ,
-//                      it->getDefault() == 64);
-            rotary = new Rotary(hbox);
+            rotary = new Rotary(hbox,
+                                it->getMin(),
+                                it->getMax(),
+                                smallStep,
+                                bigStep,
+                                it->getDefault(),
+                                20,
+                                Rotary::NoTicks,
+                                false,
+                                it->getDefault() == 64); //!!! hacky
+
             hboxLayout->addWidget(rotary);
-            hbox->setLayout(hboxLayout); //!!! hacky
+            hbox->setLayout(hboxLayout);
 
             rotary->setKnobColour(knobColour);
 
             // Add a label
             QLabel *label = new SqueezedLabel(strtoqstr(it->getName()), hbox);
-            label->setObjectName("ROTARY_LABEL");
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;

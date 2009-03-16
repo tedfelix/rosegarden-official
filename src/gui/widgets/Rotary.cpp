@@ -134,6 +134,30 @@ Rotary::setKnobColour(const QColor &colour)
 void
 Rotary::paintEvent(QPaintEvent *)
 {
+    //!!! This should be pulled from GUIPalette eventually.  We're no longer
+    // relying on Qt to come up with dark and mid and highlight and whatnot
+    // colors, because they're getting inverted to a far lighter color than is
+    // appropriate, even against my stock lightish slate blue default KDE
+    // background, let alone the new darker scheme we're imposing through the
+    // stylesheet.
+     
+    // same color as slider grooves and VU meter backgrounds
+    const QColor Dark = QColor(0x20, 0x20, 0x20);
+
+    // this is the undefined color state for a knob, which probably indicates
+    // some issue with our internal color hanlding.  It looks like this was a
+    // hack to try to get around black knobs related to a bug setting up the
+    // color index when making new knobs in the studio controller editor.  We'll
+    // just make these a really obvious ah hah color then:
+    const QColor Base = Qt::white;
+
+    // the knob pointer should be a sharp, high contrast color
+    const QColor Pointer = Qt::black;
+
+    // tick marks should contrast against Dark and Base
+    const QColor Ticks = QColor(0xAA, 0xAA, 0xAA);
+
+
     QPainter paint;
 
     double angle = ROTARY_MIN // offset
@@ -178,15 +202,14 @@ Rotary::paintEvent(QPaintEvent *)
     paint.begin(&map);
 
     QPen pen;
-    pen.setColor(qApp->palette().color(QPalette::Active, QColorGroup::Dark));
+    pen.setColor(Dark);
     pen.setWidth(scale);
     paint.setPen(pen);
 
     if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
     } else {
-        paint.setBrush(
-            qApp->palette().color(QPalette::Active, QColorGroup::Base));
+        paint.setBrush(Base);
     }
 
     QColor c(m_knobColour);
@@ -195,13 +218,13 @@ Rotary::paintEvent(QPaintEvent *)
 
     int indent = width * 0.15 + 1;
 
+    // draw a base knob color circle
     paint.drawEllipse(indent, indent, width - 2*indent, width - 2*indent);
 
+    // draw a highlight computed from the knob color
     pen.setWidth(2 * scale);
     int pos = indent + (width - 2 * indent) / 8;
     int darkWidth = (width - 2 * indent) * 2 / 3;
-    //@@@ unused variable:
-    // int darkQuote = (130 * 2 / (darkWidth ? darkWidth : 1)) + 100;
     while (darkWidth) {
         c = c.light(101);
         pen.setColor(c);
@@ -219,8 +242,8 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.setBrush(Qt::NoBrush);
 
-//    pen.setColor(palette().dark());
-    pen.setColor(Qt::white);
+    // draw the tick marks on larger sized knobs
+    pen.setColor(Ticks);
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -232,26 +255,13 @@ Rotary::paintEvent(QPaintEvent *)
                  width, i != 0 && i != numTicks - 1);
     }
 
-    pen.setWidth(indent);
-    paint.setPen(pen);
 
-    // left arc bit
-//    pen.setColor(QColor(0xEE, 0xEE, 0xEE)); //!!! search key: localStyle
-/*    pen.setColor(Qt::blue);
-    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
-                  90 * 16, - 180 * 16);*/
-    // right arc bit
-//    pen.setColor(QColor(0x80, 0x80, 0x80)); //!!! search key: localStyle*/
-/*    paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
-                      (180 + 45) * 16, -(180 - 45) * 16);*/
-
-    // ... paint over it with the bright metering bit
+    // draw the bright metering bit
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
     pen.setWidth(indent);
     paint.setPen(pen);
 
     if (m_centred) {
-        std::cout << "CENTERED" << std::endl;
         paint.drawArc(indent / 2, indent / 2, width - indent, width - indent,
                       90 * 16, -(degrees - 180) * 16);
     } else {
@@ -260,10 +270,11 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     pen.setWidth(scale);
-    paint.setPen(pen);
+    paint.setPen(pen); 
 
+    // draw a dark circle to outline the knob
     int shadowAngle = -720;
-    c = palette().dark();
+    c = Dark;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -272,8 +283,9 @@ Rotary::paintEvent(QPaintEvent *)
         c = c.lighter(110);
     }
 
+    // draw a computed trough thingie all the way around the knob
     shadowAngle = 2160;
-    c = palette().dark();
+    c = Dark;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -282,12 +294,13 @@ Rotary::paintEvent(QPaintEvent *)
         c = c.lighter(109);
     }
 
-    // and un-draw the bottom part
+    // and un-draw the bottom part of the arc
     pen.setColor(paletteBackgroundColor());
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
 
+    // calculate and draw the pointer
     double hyp = double(width) / 2.0;
     double len = hyp - indent;
     --len;
@@ -299,11 +312,10 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-//    pen.setColor(palette().dark());
-    pen.setColor(Qt::black);
+    pen.setColor(Pointer);
     paint.setPen(pen);
 
-    paint.drawLine(int(x0), int(y0), int(x), int(y));
+    paint.drawLine(int(x0), int(y0), int(x), int(y)); 
 
     paint.end();
 

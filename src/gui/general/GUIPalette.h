@@ -20,10 +20,10 @@
 #define _RG_GUIPALETTE_H_
 
 #include "base/Colour.h"
-#include <map>
+
 #include <QColor>
 
-
+#include <map>
 
 
 namespace Rosegarden
