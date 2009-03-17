@@ -75,16 +75,9 @@ void StartupLogo::paintEvent(QPaintEvent*)
 
     int y = m_pixmap.height() - 12;
 
-    // grep me: splash color
-    //    QColor bg(49, 94, 19); // color for 2006 splash
-    QColor bg(19, 19, 19);  // color for the 2009 splash
-    paint.setPen(bg);
-    paint.setBrush(bg);
-    paint.drawRect(QRect(m_pixmap.width() - 220, m_pixmap.height() - 43,
-                         220, (y + 8) - (m_pixmap.height() - 43)));
+    // removed: why paint a colored rectangle to draw on instead of just drawing
+    // on the splash directly?
 
-    //    paint.setPen(QColor(Qt::black));
-    //    paint.setBrush(QColor(Qt::black));
     paint.setPen(QColor(Qt::white));
     paint.setBrush(QColor(Qt::white));
 

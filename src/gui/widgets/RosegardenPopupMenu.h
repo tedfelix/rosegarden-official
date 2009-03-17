@@ -26,7 +26,7 @@ class RosegardenPopupMenu : public QMenu
 {
     // just to make itemHeight public
 public:
-	RosegardenPopupMenu(QWidget *parent) : QMenu(parent) { }
+	RosegardenPopupMenu(QWidget *parent) : QMenu(parent) { setStyleSheet("background-color: #EEEEEE;"); }
 	using QMenu::itemHeight;
 };
 

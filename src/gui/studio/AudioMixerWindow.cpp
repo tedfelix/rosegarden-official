@@ -218,8 +218,11 @@ AudioMixerWindow::populate()
 
     IconLoader il;
     
-    m_monoPixmap = il.loadPixmap("mono");
-    m_stereoPixmap = il.loadPixmap("stereo");
+    // perhaps due to the compression enacted through the stylesheet, the icons
+    // on these buttons were bug eyed monstrosities, so I created an alternate
+    // set for use here
+    m_monoPixmap = il.loadPixmap("mono-tiny");
+    m_stereoPixmap = il.loadPixmap("stereo-tiny");
 
     // Total cols: is 2 for each fader, submaster or master, plus 1
     // for each spacer.

@@ -68,15 +68,7 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     //
     setupTabs();
 
-	/*!!!###
-    KStandardAction::close(this,
-                      SLOT(slotClose()),
-                      actionCollection());
-	*/
     createAction( "file_close", SLOT(slotClose()) );
-	
-//     QIcon icon = QIcon(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-//                              ("transport-play")));
 
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
@@ -104,8 +96,15 @@ MidiMixerWindow::setupTabs()
 
     // Setup m_tabFrame
     //
-    m_tabWidget = new QTabWidget(this);
-    setCentralWidget(m_tabWidget);
+
+    QWidget *blackWidget = new QWidget(this);
+    setCentralWidget(blackWidget);
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    blackWidget->setLayout(centralLayout);
+
+    m_tabWidget = new QTabWidget;
+    centralLayout->addWidget(m_tabWidget);
+
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
@@ -128,20 +127,14 @@ MidiMixerWindow::setupTabs()
                 continue;
 
             m_tabFrame = new QFrame(m_tabWidget);
-            m_tabFrame->setFrameStyle(QFrame::StyledPanel);
             m_tabFrame->setContentsMargins(10, 10, 10, 10);
 
             // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
             QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
 
             // MIDI Mixer label
-            //
-            //QLabel *label = new QLabel(QString("%1 %2").
-            //arg(strtoqstr(dev->getName()))
-            //.arg(tr("MIDI Mixer")), m_tabFrame);
-
             QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addWidget(label, 0, 0, 0- 0+1, 16- 0+1, Qt::AlignCenter);
+            mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i) {
@@ -150,10 +143,7 @@ MidiMixerWindow::setupTabs()
             }
 
             // meter label
-            //
-            //label = new QLabel(tr("Meter"), m_tabFrame);
-            //mainLayout->addWidget(label,
-            //controls.size() + 1, 0, Qt::AlignCenter);
+            // (obsolete abandoned code deleted here)
 
             // volume label
             label = new QLabel(tr("Volume"), m_tabFrame);
@@ -162,8 +152,9 @@ MidiMixerWindow::setupTabs()
 
             // instrument label
             label = new QLabel(tr("Instrument"), m_tabFrame);
+            label->setFixedWidth(80); //!!! this should come from metrics
             mainLayout->addWidget(label, controls.size() + 3, 0,
-                                  Qt::AlignCenter);
+                                  Qt::AlignLeft);
 
             int posCount = 1;
             int firstInstrument = -1;
@@ -237,7 +228,6 @@ MidiMixerWindow::setupTabs()
                 mainLayout->addWidget(fader, controls.size() + 2,
                                       posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_volumeFader = fader;
-                //fader->setFader(float((*iIt)->getVolume()));
 
                 // Label
                 //

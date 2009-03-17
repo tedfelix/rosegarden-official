@@ -152,8 +152,10 @@
 <file>pixmaps/misc/connected-selected.xpm</file>
 <file>pixmaps/misc/connected-used.xpm</file>
 <file>pixmaps/misc/connected.xpm</file>
-<file>pixmaps/misc/mono.xpm</file>
-<file>pixmaps/misc/stereo.xpm</file>
+<file>pixmaps/misc/mono.png</file>
+<file>pixmaps/misc/mono-tiny.png</file>
+<file>pixmaps/misc/stereo.png</file>
+<file>pixmaps/misc/stereo-tiny.png</file>
 <file>pixmaps/misc/unconnected-selected.xpm</file>
 <file>pixmaps/misc/unconnected-used.xpm</file>
 <file>pixmaps/misc/unconnected.xpm</file>
@@ -324,6 +326,8 @@
 <file>pixmaps/style/arrow-left.png</file>
 <file>pixmaps/style/arrow-right.png</file>
 <file>pixmaps/style/arrow-up.png</file>
+<file>pixmaps/style/arrow-left-small.png</file>
+<file>pixmaps/style/arrow-right-small.png</file>
 <file>pixmaps/style/checkbox_disabled.png</file>
 <file>pixmaps/style/checkbox_checked.png</file>
 <file>pixmaps/style/checkbox_checked_pressed.png</file>
@@ -337,6 +341,9 @@
 <file>pixmaps/style/title-close.png</file>
 <file>pixmaps/style/title-undock.png</file>
 <file>pixmaps/style/vtoolbar-separator.png</file>
+<file>pixmaps/style/tab-scroll-button.png</file>
+<file>pixmaps/style/tab-scroll-button-hover.png</file>
+<file>pixmaps/style/tab-scroll-button-disabled.png</file>
 <file>pixmaps/transport/button-bar-time.xpm</file>
 <file>pixmaps/transport/button-clock.xpm</file>
 <file>pixmaps/transport/button-ffwd-end.xpm</file>

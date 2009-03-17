@@ -249,6 +249,32 @@ Fader::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
 
+    // sanity check
+    //
+    //!!!
+    //@@@
+    //
+    // I really can't figure out why this suddenly became necessary, and I don't
+    // understand why faders in the MIDI mixer that weren't on the very first
+    // tab didn't have these pixmaps calculated.  When I just had the return,
+    // all but the first page had blank faders, and they'd still crash if you
+    // clicked on their undrawn blank areas.  So I thought what the hell, what
+    // happens if we try to re-create the pixmaps here if they're not already
+    // present?  And it seems to work.  The volume fader on page 2 controls the
+    // volume in the IPB for device 2.  The whole thing has an air of fragility
+    // about it though, and I wish I truly understood what was going on here.
+    if (!buttonPixmap()) {
+        calculateButtonPixmap();
+    }
+
+    if (!buttonPixmap()) return;
+
+    if (!groovePixmap()) {
+        calculateGroovePixmap();
+    }
+
+    if (!groovePixmap()) return;
+
     int position = value_to_position(m_value);
 
     if (m_vertical) {

@@ -77,6 +77,44 @@ subcontrol-position). */
  * more special code
  */
 
+QTabBar::tear
+{
+    image: url(tear_indicator.png);
+}
+
+QTabBar::scroller
+{ /* the width of the scroll buttons */
+    width: 13px;
+}
+
+QTabBar QToolButton
+{ /* the scroll buttons are tool buttons */
+    border-image: url(:pixmaps/style/tab-scroll-button.png) 1;
+    border-width: 1px;
+}
+
+QTabBar QToolButton:hover
+{
+    border-image: url(:pixmaps/style/tab-scroll-button-hover.png) 1;
+    border-width: 1px;
+}
+
+QTabBar QToolButton:!enabled
+{
+    border-image: url(:pixmaps/style/tab-scroll-button-disabled.png) 1;
+    border-width: 1px;
+}
+
+QTabBar QToolButton::right-arrow
+{ /* the arrow mark in the tool buttons */
+    image: url(:pixmaps/style/arrow-right-small.png);
+}
+
+QTabBar QToolButton::left-arrow
+{
+    image: url(:pixmaps/style/arrow-left-small.png);
+}
+
 QTabWidget::pane
 { /* The tab widget frame */
     color: #FFFFFF;
@@ -99,7 +137,7 @@ QTabWidget::tab-bar
 }
 
 /* Style the tab using the tab sub-control. Note that it reads QTabBar _not_ QTabWidget */
-QTabBar::tab
+QTabBar::tab:top
 {
     border: 1px solid #AAAAAA;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
@@ -111,23 +149,50 @@ QTabBar::tab
     padding: 2px;
 }
 
+/* flipped version for upside down tab bars (MIDI mixer window, control
+ * rulers)
+ */
+QTabBar::tab:bottom
+{
+    border: 1px solid #AAAAAA;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
+    border-top-color: #BBBBBB; /* same as the pane color */
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    min-width: 8ex;
+    padding: 2px;
+}
+
 QTabBar::tab:hover
 {
     background-color: #CCDFFF;
 }
 
-QTabBar::tab:selected
+QTabBar::tab:top:selected
 {
     border: 1px solid #E0E0E0;
     border-bottom-color: #BBBBBB; /*same as pane color */
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
-QTabBar::tab:!selected
+QTabBar::tab:bottom:selected
+{
+    border: 1px solid #E0E0E0;
+    border-top-color: #BBBBBB; /*same as pane color */
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
+}
+
+QTabBar::tab:top:!selected
 {
     margin-top: 2px; /* make non-selected tabs look smaller*/
 }
 
+
+QTabBar::tab:bottom:!selected
+{
+    margin-bottom: 2px; /* make non-selected tabs look smaller*/
+}
 
 /*  QTabWidget
 
@@ -1665,6 +1730,11 @@ QDoubleSpinBox::down-arrow:disabled,
 QDoubleSpinBox::down-arrow:off
 {  /* off state when value in min */
    image: url(:pixmaps/style/arrow-down-small-inverted.png);
+}
+
+#Splash QWidget
+{
+    border-image: url(:pixmaps/splash.png);
 }
 
 

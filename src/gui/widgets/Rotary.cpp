@@ -142,7 +142,8 @@ Rotary::paintEvent(QPaintEvent *)
     // stylesheet.
      
     // same color as slider grooves and VU meter backgrounds
-    const QColor Dark = QColor(0x20, 0x20, 0x20);
+//    const QColor Dark = QColor(0x20, 0x20, 0x20);
+    const QColor Dark = QColor(0x10, 0x10, 0x10);
 
     // this is the undefined color state for a knob, which probably indicates
     // some issue with our internal color hanlding.  It looks like this was a
