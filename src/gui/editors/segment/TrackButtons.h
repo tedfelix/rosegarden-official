@@ -143,7 +143,7 @@ public slots:
 
     void slotInstrumentSelection(int);
     void slotInstrumentPopupActivated(int);		// old kde3
-    void slotInstrumentPopupActionTriggered( QAction* );	// new qt4
+    void slotInstrumentPopupActivated(QAction*);		// old kde3
     
     void slotTrackInstrumentSelection(TrackId, int);
     

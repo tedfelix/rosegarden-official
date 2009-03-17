@@ -641,7 +641,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     std::vector<QMenu*> instrumentSubMenus;
 
     // position index
-    int i = 0;
+    int count = 0;
 
     // Get the list
     InstrumentList list = studio.getPresentationInstruments();
@@ -748,7 +748,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             //
 //             connect(subMenu, SIGNAL(activated(int)),
 //                     SLOT(slotInstrumentPopupActivated(int)));
-            connect( subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentPopupActionTriggered(QAction*)) );
+            connect( subMenu, SIGNAL(triggered(QAction*)), this, SLOT(slotInstrumentPopupActivated(QAction*)) );
 
         } else if (!instrUsedByMe) {
 
@@ -782,8 +782,11 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                 tempMenu = new QAction(instrumentPopup);
                 tempMenu->setIcon( iconSet );
                 tempMenu->setText( iname );	// for QAction
+                tempMenu->setData( QVariant( count ) );
 //                 tempMenu->setTitle( iname );	// for QMenu
-                tempMenu->setObjectName( iname + QString(i++) );
+                tempMenu->setObjectName( iname + QString(count) );
+                
+                count++;
                 
                 instrumentSubMenus[instrumentSubMenus.size() - 1]->addAction( tempMenu );
 //                instrumentSubMenus[instrumentSubMenus.size() - 1]->addMenu( tempMenu );
@@ -792,14 +795,10 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
 }
 
-
-void TrackButtons:: slotInstrumentPopupActionTriggered( QAction* act ){
-		QMessageBox:: information( 
-			this, (""), 
-			( QString("Thank you! \n You've clicked the instrument ") + QString( act->text() ) ),
-			QMessageBox::Ok,
-			QMessageBox::Ok
-			);
+void
+TrackButtons::slotInstrumentPopupActivated(QAction* act)
+{
+    slotInstrumentPopupActivated(act->data().toInt());
 }
 
 void
