@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -13,36 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include <QDesktopWidget>
 #include <Q3Canvas>
-#include <QTimer>
-#include <QApplication>
-#include <sys/time.h>
-#include "base/RealTime.h"
-
-//@@@ required ? :
-//#include <kcmdlineargs.h>
-//#include <kaboutdata.h>
-//#include <ktip.h>
-//#include <kglobalsettings.h>
-
-#include <QSettings>
-#include <QMessageBox>
-#include <QDir>
-#include <QFile>
-#include <QProcess>
-
-#include <QTranslator>
-#include <QLocale>
-#include <QLibraryInfo>
-
-#include <QStringList>
-#include <QRegExp>
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QLabel>
-#include <QDialog>
-#include <QDialogButtonBox>
 
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
@@ -53,8 +24,29 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/IconLoader.h"
-
 #include "gui/application/RosegardenApplication.h"
+#include "base/RealTime.h"
+
+#include <QSettings>
+#include <QDesktopWidget>
+#include <QMessageBox>
+#include <QDir>
+#include <QFile>
+#include <QProcess>
+#include <QTranslator>
+#include <QLocale>
+#include <QLibraryInfo>
+#include <QStringList>
+#include <QRegExp>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QTimer>
+#include <QApplication>
+
+#include <sys/time.h>
 
 using namespace Rosegarden;
 
@@ -341,13 +333,13 @@ static KCmdLineOptions options[] =
 #include <X11/Xatom.h>
 #include <X11/SM/SMlib.h>
 
-static int _x_errhandler( Display *dpy, XErrorEvent *err )
+static int _x_errhandler(Display *dpy, XErrorEvent *err)
 {
     char errstr[256];
-    XGetErrorText( dpy, err->error_code, errstr, 256 );
-    if ( err->error_code != BadWindow )
-	cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
-		  << "\n  Major opcode:  " << err->request_code << endl;
+    XGetErrorText(dpy, err->error_code, errstr, 256);
+    if (err->error_code != BadWindow)
+    cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
+         << "\n  Major opcode:  " << err->request_code << endl;
     return 0;
 }
 #endif
@@ -368,66 +360,6 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
-/*&&& Leaving this here for reference; we have to decide what to do with
-      the About box.  To be honest I think a single big bit of HTML in a
-      suitable window should be fine, but let's see
-
-    KAboutData aboutData( "rosegarden", "", RosegardenApplication::tr("Rosegarden"),
-                          VERSION, description, KAboutData::License_GPL,
-                          RosegardenApplication::tr("Copyright 2000 - 2009 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
-                          QString(),
-                          "http://www.rosegardenmusic.com/",
-                          "rosegarden-devel@lists.sourceforge.net");
-
-    aboutData.addAuthor(RosegardenApplication::tr("Guillaume Laurent (lead)"), QString(), "glaurent@telegraph-road.org", "http://telegraph-road.org");
-    aboutData.addAuthor(RosegardenApplication::tr("Chris Cannam (lead)"), QString(), "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor(RosegardenApplication::tr("Richard Bown (lead)"), QString(), "richard.bown@ferventsoftware.com");
-    aboutData.addAuthor(RosegardenApplication::tr("D. Michael McIntyre"), QString(), "dmmcintyr@users.sourceforge.net");
-    aboutData.addAuthor(RosegardenApplication::tr("Pedro Lopez-Cabanillas"), QString(), "plcl@users.sourceforge.net");
-    aboutData.addAuthor(RosegardenApplication::tr("Heikki Johannes Junes"), QString(), "hjunes@users.sourceforge.net");
-
-    aboutData.addCredit(RosegardenApplication::tr("Randall Farmer"), RosegardenApplication::tr("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit(RosegardenApplication::tr("Hans  Kieserman"), RosegardenApplication::tr("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit(RosegardenApplication::tr("Levi Burton"), RosegardenApplication::tr("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
-    aboutData.addCredit(RosegardenApplication::tr("Mark Hymers"), RosegardenApplication::tr("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
-    aboutData.addCredit(RosegardenApplication::tr("Alexandre Prokoudine"), RosegardenApplication::tr("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit(RosegardenApplication::tr("Jörg Schumann"), RosegardenApplication::tr("German translation"), "jrschumann@gmx.de");
-    aboutData.addCredit(RosegardenApplication::tr("Eckhard Jokisch"), RosegardenApplication::tr("German translation"), "e.jokisch@u-code.de");
-    aboutData.addCredit(RosegardenApplication::tr("Kevin Donnelly"), RosegardenApplication::tr("Welsh translation"));
-    aboutData.addCredit(RosegardenApplication::tr("Didier Burli"), RosegardenApplication::tr("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit(RosegardenApplication::tr("Yves Guillemot"), RosegardenApplication::tr("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
-    aboutData.addCredit(RosegardenApplication::tr("Daniele Medri"), RosegardenApplication::tr("Italian translation"), "madrid@linuxmeeting.net");
-    aboutData.addCredit(RosegardenApplication::tr("Alessandro Musesti"), RosegardenApplication::tr("Italian translation"), "a.musesti@dmf.unicatt.it");
-    aboutData.addCredit(RosegardenApplication::tr("Stefan Asserhäll"), RosegardenApplication::tr("Swedish translation"), "stefan.asserhall@comhem.se");
-    aboutData.addCredit(RosegardenApplication::tr("Erik Magnus Johansson"), RosegardenApplication::tr("Swedish translation"), "erik.magnus.johansson@telia.com");
-    aboutData.addCredit(RosegardenApplication::tr("Hasso Tepper"), RosegardenApplication::tr("Estonian translation"), "hasso@estpak.ee");
-    aboutData.addCredit(RosegardenApplication::tr("Jelmer Vernooij"), RosegardenApplication::tr("Dutch translation"), "jelmer@samba.org");
-    aboutData.addCredit(RosegardenApplication::tr("Jasper Stein"), RosegardenApplication::tr("Dutch translation"), "jasper.stein@12move.nl");
-    aboutData.addCredit(RosegardenApplication::tr("Arnout Engelen"), RosegardenApplication::tr("Transposition by interval"));
-    aboutData.addCredit(RosegardenApplication::tr("Thorsten Wilms"), RosegardenApplication::tr("Original designs for rotary controllers"), "t_w_@freenet.de");
-    aboutData.addCredit(RosegardenApplication::tr("Oota Toshiya"), RosegardenApplication::tr("Japanese translation"), "ribbon@users.sourceforge.net");
-    aboutData.addCredit(RosegardenApplication::tr("William"), RosegardenApplication::tr("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
-    aboutData.addCredit(RosegardenApplication::tr("Liu Songhe"), RosegardenApplication::tr("Simplified Chinese translation"), "jackliu9999@msn.com");
-    aboutData.addCredit(RosegardenApplication::tr("Toni Arnold"), RosegardenApplication::tr("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
-    aboutData.addCredit(RosegardenApplication::tr("Vince Negri"), RosegardenApplication::tr("MTC slave timing implementation"), "vince.negri@gmail.com");
-    aboutData.addCredit(RosegardenApplication::tr("Jan Bína"), RosegardenApplication::tr("Czech translation"), "jbina@sky.cz");
-    aboutData.addCredit(RosegardenApplication::tr("Thomas Nagy"), RosegardenApplication::tr("SCons/bksys building system"), "tnagy256@yahoo.fr");
-    aboutData.addCredit(RosegardenApplication::tr("Vladimir Savic"), RosegardenApplication::tr("icons, icons, icons"), "vladimir@vladimirsavic.net");
-    aboutData.addCredit(RosegardenApplication::tr("Marcos Germán Guglielmetti"), RosegardenApplication::tr("Spanish translation"), "marcospcmusica@yahoo.com.ar");
-    aboutData.addCredit(RosegardenApplication::tr("Lisandro Damián Nicanor Pérez Meyer"), RosegardenApplication::tr("Spanish translation"), "perezmeyer@infovia.com.ar");
-    aboutData.addCredit(RosegardenApplication::tr("Javier Castrillo"), RosegardenApplication::tr("Spanish translation"), "riverplatense@gmail.com");
-    aboutData.addCredit(RosegardenApplication::tr("Lucas Godoy"), RosegardenApplication::tr("Spanish translation"), "godoy.lucas@gmail.com");
-    aboutData.addCredit(RosegardenApplication::tr("Feliu Ferrer"), RosegardenApplication::tr("Catalan translation"), "mverge2@pie.xtec.es");
-    aboutData.addCredit(RosegardenApplication::tr("Quim Perez i Noguer"), RosegardenApplication::tr("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit(RosegardenApplication::tr("Carolyn McIntyre"), RosegardenApplication::tr("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
-    aboutData.addCredit(RosegardenApplication::tr("Stephen Torri"), RosegardenApplication::tr("Initial guitar chord editing code"), "storri@torri.org");
-    aboutData.addCredit(RosegardenApplication::tr("Piotr Sawicki"), RosegardenApplication::tr("Polish translation"), "pelle@plusnet.pl");
-    aboutData.addCredit(RosegardenApplication::tr("David García-Abad"), RosegardenApplication::tr("Basque translation"), "davidgarciabad@telefonica.net");
-
-    aboutData.setTranslator(RosegardenApplication::tr("NAME OF TRANSLATORS", "Your names"),
-			    RosegardenApplication::tr("EMAIL OF TRANSLATORS", "Your emails"));
-*/
-
     RosegardenApplication app(argc, argv);
 
     RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
@@ -437,7 +369,7 @@ int main(int argc, char *argv[])
     bool qtTranslationsLoaded = 
       qtTranslator.load("qt_" + QLocale::system().name(),
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    if ( qtTranslationsLoaded ) {
+    if (qtTranslationsLoaded) {
         app.installTranslator(&qtTranslator);
         RG_DEBUG << "QT translations loaded successfully." << endl;
     } else {
@@ -454,7 +386,7 @@ int main(int argc, char *argv[])
     //
     bool rgTranslationsLoaded = 
       rgTranslator.load(QLocale::system().name(), "locale/");
-    if ( rgTranslationsLoaded ) {
+    if (rgTranslationsLoaded) {
         RG_DEBUG << "RG translations loaded successfully." << endl;
         app.installTranslator(&rgTranslator);
     } else {
@@ -472,38 +404,38 @@ int main(int argc, char *argv[])
     int nonOptArgs = 0;
 
     for (int i = 1; i < args.size(); ++i) {
-	if (args[i].startsWith("-")) {
-	    if (args[i] == "--nosplash") nosplash = true;
-	    else if (args[i] == "--nosequencer") nosequencer = true;
-	    else usage();
-	} else {
-	    ++nonOptArgs;
-	}
+        if (args[i].startsWith("-")) {
+            if (args[i] == "--nosplash") nosplash = true;
+            else if (args[i] == "--nosequencer") nosequencer = true;
+            else usage();
+        } else {
+            ++nonOptArgs;
+        }
     }
     if (nonOptArgs > 1) usage();
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
     for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
-	QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
-	QPixmap pixmap = IconLoader().loadPixmap(name);
-	if (!pixmap.isNull()) {
-	    cerr << "Loaded application icon \"" << name << "\"" << endl;
-	    icon.addPixmap(pixmap);
-	}
+        QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
+        QPixmap pixmap = IconLoader().loadPixmap(name);
+        if (!pixmap.isNull()) {
+            cerr << "Loaded application icon \"" << name << "\"" << endl;
+            icon.addPixmap(pixmap);
+        }
     }
     app.setWindowIcon(icon);
 
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
-	cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << endl;
-	QFile file(stylepath);
-	if (!file.open(QFile::ReadOnly)) {
-	    cerr << "(Failed to open file)" << endl;
-	} else {
-	    QString styleSheet = QLatin1String(file.readAll());
-	    app.setStyleSheet(styleSheet);
-	}
+        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << endl;
+        QFile file(stylepath);
+        if (!file.open(QFile::ReadOnly)) {
+            cerr << "(Failed to open file)" << endl;
+        } else {
+            QString styleSheet = QLatin1String(file.readAll());
+            app.setStyleSheet(styleSheet);
+        }
     }
 
     // Ensure quit on last window close
@@ -512,13 +444,13 @@ int main(int argc, char *argv[])
     QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
-	cerr << "*** This is the first time running this Rosegarden version" << endl;
-	settings.setValue("lastversion", VERSION);
+    cerr << "*** This is the first time running this Rosegarden version" << endl;
+    settings.setValue("lastversion", VERSION);
     }
 
     // If there is no config setting for the startup window size, set
@@ -533,28 +465,28 @@ int main(int argc, char *argv[])
     // under Xinerama).  These are obtained from QDesktopWidget.
 
     settings.endGroup();
-    settings.beginGroup( "MainView" );
+    settings.beginGroup("MainView");
 
     int windowWidth = 0, windowHeight = 0;
 
     QDesktopWidget *desktop = app.desktop();
     if (desktop) {
-	QRect totalRect(desktop->screenGeometry());
-	QRect desktopRect = desktop->availableGeometry();
-	QSize startupSize;
-	if (desktopRect.height() <= 800) {
-	    startupSize = QSize((desktopRect.width() * 6) / 7,
-				(desktopRect.height() * 6) / 7);
-	} else {
-	    startupSize = QSize((desktopRect.width() * 4) / 5,
-				(desktopRect.height() * 4) / 5);
-	}
-	QString widthKey = QString("Width %1").arg(totalRect.width());
-	QString heightKey = QString("Height %1").arg(totalRect.height());
-	windowWidth = settings.value
-	    (widthKey, startupSize.width()).toInt();
-	windowHeight = settings.value
-	    (heightKey, startupSize.height()).toInt();
+    QRect totalRect(desktop->screenGeometry());
+    QRect desktopRect = desktop->availableGeometry();
+    QSize startupSize;
+    if (desktopRect.height() <= 800) {
+        startupSize = QSize((desktopRect.width() * 6) / 7,
+                (desktopRect.height() * 6) / 7);
+    } else {
+        startupSize = QSize((desktopRect.width() * 4) / 5,
+                (desktopRect.height() * 4) / 5);
+    }
+    QString widthKey = QString("Width %1").arg(totalRect.width());
+    QString heightKey = QString("Height %1").arg(totalRect.height());
+    windowWidth = settings.value
+        (widthKey, startupSize.width()).toInt();
+    windowHeight = settings.value
+        (heightKey, startupSize.height()).toInt();
     }
 
     settings.endGroup();
@@ -564,9 +496,9 @@ int main(int argc, char *argv[])
 
     if (qStrToBool(settings.value("Logo", "true")) && !nosplash) {
         startLogo = StartupLogo::getInstance();
-	    startLogo->setShowTip(!newVersion);
+        startLogo->setShowTip(!newVersion);
         startLogo->show();
-        app.processEvents();	
+        app.processEvents();    
     }
 
     struct timeval logoShowTime;
@@ -601,13 +533,13 @@ int main(int argc, char *argv[])
 
         rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(), startLogo);
 
-	rosegardengui->setIsFirstRun(newVersion);
+    rosegardengui->setIsFirstRun(newVersion);
 
         app.setMainWidget(rosegardengui);
 
-	if (windowWidth != 0 && windowHeight != 0) {
-	    rosegardengui->resize(windowWidth, windowHeight);
-	}
+    if (windowWidth != 0 && windowHeight != 0) {
+        rosegardengui->resize(windowWidth, windowHeight);
+    }
 
         rosegardengui->show();
 
@@ -619,13 +551,13 @@ int main(int argc, char *argv[])
             app.flushX();
         }
 
-	for (int i = 1; i < args.size(); ++i) {
-	    if (args[i].startsWith("-")) continue;
-	    rosegardengui->openFile(args[i], RosegardenGUIApp::ImportCheckType);
-	    break;
+    for (int i = 1; i < args.size(); ++i) {
+        if (args[i].startsWith("-")) continue;
+        rosegardengui->openFile(args[i], RosegardenGUIApp::ImportCheckType);
+        break;
         }
 
-	//@@@???
+    //@@@???
     QObject::connect(&app, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 
@@ -650,11 +582,11 @@ int main(int argc, char *argv[])
     }
 
     settings.endGroup();
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
     // See if the settings wants us to load a soundfont
     //
-    if ( qStrToBool( settings.value("sfxloadenabled", "false" ) ) ) {
+    if (qStrToBool(settings.value("sfxloadenabled", "false"))) {
         QString sfxLoadPath = settings.value("sfxloadpath", "/bin/sfxload").toString();
         QString soundFontPath = settings.value("soundfontpath", "").toString();
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
@@ -679,7 +611,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_WS_X11
-    XSetErrorHandler( _x_errhandler );
+    XSetErrorHandler(_x_errhandler);
 #endif
 
     if (startLogo) {
@@ -707,14 +639,9 @@ int main(int argc, char *argv[])
         // if the start logo is there, it's responsible for showing this;
         // otherwise we have to
 
-//&&& We lack startup tips! Do we want to restore them?
-	if (!newVersion) {
-	    RosegardenGUIApp::self()->awaitDialogClearance();
-	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
-	    if (tipResource != "") {
-// 			KTipDialog::showTip(tipResource);	//&&&
-	    }
-	}
+        if (!newVersion) {
+            RosegardenGUIApp::self()->awaitDialogClearance();
+        }
     }
 
     if (newVersion) {
@@ -735,7 +662,7 @@ int main(int argc, char *argv[])
         hbLayout->addWidget(image);
         image->setAlignment(Qt::AlignTop);
 
-	image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
+        image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
 
         QLabel *label = new QLabel;
         hbLayout->addWidget(label);
@@ -747,13 +674,13 @@ int main(int argc, char *argv[])
         QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
         metagrid->addWidget(buttonBox, 1, 0);
         metagrid->setRowStretch(0, 10);
-	QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-	QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+        QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+        QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
 
         rosegardengui->awaitDialogClearance();
         dialog->exec();
 
-	CurrentProgressDialog::thaw();
+        CurrentProgressDialog::thaw();
     }
     settings.endGroup();
 

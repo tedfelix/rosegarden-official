@@ -341,20 +341,30 @@ QMenu,
     border: 1px solid black;
 }
 
-QMenu::item,
-#MixerWindow QPushButton QMenu::item,
-#tempoview QMenu::item,
-#matrixview QMenu::item,
-#App QMenu::item,
-#View QMenu::item
+QMenu::item:enabled,
+#MixerWindow QPushButton QMenu::item:enabled,
+#tempoview QMenu::item:enabled,
+#matrixview QMenu::item:enabled,
+#App QMenu::item:enabled,
+#View QMenu::item:enabled
 {
     /* sets background of menu item. set this to something non-transparent
-       if you want menu color and menu item color to be different */
-       background-color: transparent;
-       color: #000000;
-       padding: 2px 25px 2px 20px;
-       border: 1px solid transparent;
-       min-width: 12em; /* leaves room for space between item and hotkey */
+    if you want menu color and menu item color to be different */
+    background-color: transparent;
+    color: #000000;
+    padding: 2px 25px 2px 20px;
+    border: 1px solid transparent;
+    min-width: 12em; /* leaves room for space between item and hotkey */
+}
+
+QMenu::item:!enabled,
+#MixerWindow QPushButton QMenu::item:!enabled,
+#tempoview QMenu::item:!enabled,
+#matrixview QMenu::item:!enabled,
+#App QMenu::item:!enabled,
+#View QMenu::item:!enabled
+{
+    color: #E5E5E5;
 }
 
 /* Menu selection background color
