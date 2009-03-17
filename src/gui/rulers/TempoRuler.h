@@ -75,7 +75,7 @@ public:
                const char *name = 0);
 
     ~TempoRuler();
-    
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -123,7 +123,7 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     void createMenu();
-    
+
 private:
     double m_xorigin;
     int  m_height;
@@ -158,15 +158,15 @@ private:
                        bool showTime = false);
 
     Composition *m_composition;
-    RulerScale 	*m_rulerScale;
-    TextFloat 	*m_textFloat;
-    QMenu 		*m_menu;
+    RulerScale  *m_rulerScale;
+    TextFloat   *m_textFloat;
+    QMenu       *m_menu;
     QMainWindow *m_parentMainWindow;
 
-    QFont 		m_font;
-    QFont 		m_boldFont;
+    QFont        m_font;
+    QFont        m_boldFont;
     QFontMetrics m_fontMetrics;
-    QPixmap 	m_buffer;
+    QPixmap      m_buffer;
 };
 
 

@@ -32,7 +32,7 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-
+class TextFloat;
 
 class Rotary : public QWidget
 {
@@ -87,9 +87,6 @@ public:
 signals:
     void valueChanged(float);
 
-protected slots:
-    void slotFloatTimeout();
-
 protected:
     virtual void paintEvent(QPaintEvent *e);
     virtual void mousePressEvent(QMouseEvent *e);
@@ -97,6 +94,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
+    virtual void enterEvent(QEvent *e);
+    virtual void leaveEvent(QEvent *e);
 
     void snapPosition();
     void drawPosition();
@@ -150,8 +149,9 @@ protected:
 
     typedef std::map<CacheIndex, QPixmap> PixmapCache;
     static PixmapCache m_pixmaps;
-};
 
+    TextFloat        *m_textFloat;
+};
 
 
 }

@@ -22,6 +22,7 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
+#include "gui/application/RosegardenGUIApp.h"
 
 #include <QApplication>
 #include <QBrush>
@@ -48,9 +49,6 @@ namespace Rosegarden
 #define ROTARY_MIN (0.25 * M_PI)
 #define ROTARY_MAX (1.75 * M_PI)
 #define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
-
-static TextFloat* _float = 0;
-static QTimer *_floatTimer = 0;
 
 Rotary::PixmapCache Rotary::m_pixmaps;
 
@@ -82,23 +80,12 @@ Rotary::Rotary(QWidget *parent,
         m_buttonPressed(false),
         m_lastY(0),
         m_lastX(0),
-        m_knobColour(0, 0, 0)
+        m_knobColour(0, 0, 0),
+        m_textFloat(TextFloat::getTextFloat())
 {
     setObjectName("RotaryWidget");
 
     setBackgroundMode(Qt::NoBackground);
-
-    if (!_float)
-        _float = new TextFloat(this);
-
-    if (!_floatTimer) {
-        _floatTimer = new QTimer();
-    }
-
-    // connect timer
-    connect(_floatTimer, SIGNAL(timeout()), this,
-            SLOT(slotFloatTimeout()));
-    _float->hide();
 
     this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
     setFixedSize(size, size);
@@ -108,20 +95,6 @@ Rotary::Rotary(QWidget *parent,
 
 Rotary::~Rotary()
 {
-    // Remove this connection
-    //
-    disconnect(_floatTimer, SIGNAL(timeout()), this,
-               SLOT(slotFloatTimeout()));
-
-    delete _float;
-    _float = 0;
-}
-
-void
-Rotary::slotFloatTimeout()
-{
-    if (_float)
-        _float->hide();
 }
 
 void
@@ -140,7 +113,7 @@ Rotary::paintEvent(QPaintEvent *)
     // appropriate, even against my stock lightish slate blue default KDE
     // background, let alone the new darker scheme we're imposing through the
     // stylesheet.
-     
+
     // same color as slider grooves and VU meter backgrounds
 //    const QColor Dark = QColor(0x20, 0x20, 0x20);
     const QColor Dark = QColor(0x10, 0x10, 0x10);
@@ -271,7 +244,7 @@ Rotary::paintEvent(QPaintEvent *)
     }
 
     pen.setWidth(scale);
-    paint.setPen(pen); 
+    paint.setPen(pen);
 
     // draw a dark circle to outline the knob
     int shadowAngle = -720;
@@ -316,7 +289,7 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setColor(Pointer);
     paint.setPen(pen);
 
-    paint.drawLine(int(x0), int(y0), int(x), int(y)); 
+    paint.drawLine(int(x0), int(y0), int(x), int(y));
 
     paint.end();
 
@@ -415,30 +388,21 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     }
 
-    QWidget *par = this;
-    QPoint totalPos = this->pos();
-    while (par->parentWidget() && !par->isWindow()) {
-        par = par->parentWidget();
-        totalPos += par->pos();
+    if (m_logarithmic) {
+        m_textFloat->setText(QString("%1").arg(powf(10, m_position)));
+    } else {
+        m_textFloat->setText(QString("%1").arg(m_position));
     }
 
-    if (!_float)
-        _float = new TextFloat(this);
-//    _float->reparent(this);
-    _float->move(totalPos + QPoint(width() + 2, -height() / 2));
-    if (m_logarithmic) {
-        _float->setText(QString("%1").arg(powf(10, m_position)));
-    } else {
-        _float->setText(QString("%1").arg(m_position));
-    }
-    _float->show();
+    QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    m_textFloat->display(offset);
 
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
 //              << ", position = " << m_position << std::endl;
 
     if (e->button() == Qt::RightButton || e->button() == Qt::MidButton) {
-        // one shot, 500ms
-        _floatTimer->start(500, true);
+        // wait 500ms then hide text float
+        m_textFloat->hideAfterDelay(500);
     }
 }
 
@@ -508,8 +472,7 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
 
         // Hide the float text
         //
-        if (_float)
-            _float->hide();
+        m_textFloat->hideAfterDelay(500);
     }
 }
 
@@ -544,9 +507,9 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 
         // draw on the float text
         if (m_logarithmic) {
-            _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+            m_textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
         } else {
-            _float->setText(QString("%1").arg(m_snapPosition));
+            m_textFloat->setText(QString("%1").arg(m_snapPosition));
         }
     }
 }
@@ -568,37 +531,38 @@ Rotary::wheelEvent(QWheelEvent *e)
     snapPosition();
     update();
 
-    if (!_float)
-        _float = new TextFloat(this);
-
     // draw on the float text
     if (m_logarithmic) {
-        _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+        m_textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
     } else {
-        _float->setText(QString("%1").arg(m_snapPosition));
+        m_textFloat->setText(QString("%1").arg(m_snapPosition));
     }
 
-    // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move(). Move just top/right of the rotary
-    //
-    _float->reparent(this);
+    // Move just top/right of the rotary
+    QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    m_textFloat->display(offset);
 
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
-    while (par->parentWidget() && !par->isWindow()) {
-        par = par->parentWidget();
-        totalPos += par->pos();
-    }
+    // Keep text float visible for 500ms
+    m_textFloat->hideAfterDelay(500);
 
-    _float->move(totalPos + QPoint(width() + 2, -height() / 2));
-    _float->show();
-
-    // one shot, 500ms
-    _floatTimer->start(500, true);
-
-    // set it to show for a timeout value
     emit valueChanged(m_snapPosition);
 }
+
+void
+Rotary::enterEvent(QEvent *)
+{
+    m_textFloat->attach(this);
+}
+
+
+void
+Rotary::leaveEvent(QEvent *)
+{
+    // To avoid a crash when matrix editor is closed
+    // if one of the matrix IPB has just been used
+    m_textFloat->setParent(RosegardenGUIApp::self());
+}
+
 
 void
 Rotary::setPosition(float position)

@@ -1,12 +1,12 @@
 # to rebuild the list:
 # find commands/ document/ gui/ -iname '*.cpp' -or -iname '*.h' > list.txt
 
-SET(ui_SRCS 
+SET(ui_SRCS
 	data/ui/RosegardenTransport.ui
-	
+
 	data/ui/DevicesManagerNew.h
 	data/ui/DevicesManagerNew.cpp
-	
+
 	data/ui/DevicesManagerNewUi.h
 	data/ui/DevicesManagerNewUi.ui
 )
@@ -316,7 +316,7 @@ SET(commands_SRCS
 SET(document_SRCS
 	document/GzipFile.h
 	document/GzipFile.cpp
-	
+
 	document/BasicCommand.cpp
 	document/BasicCommand.h
 	document/BasicSelectionCommand.cpp
@@ -684,7 +684,7 @@ SET(gui_SRCS
 	gui/editors/tempo/TempoListItem.h
 	gui/editors/tempo/TempoView.cpp
 	gui/editors/tempo/TempoView.h
-	
+
 	gui/general/ActionFileParser.cpp
 	gui/general/ActionFileParser.h
 	gui/general/ActionFileClient.cpp
@@ -763,7 +763,7 @@ SET(gui_SRCS
 	gui/kdeext/KLedButton.h
 	gui/kdeext/KTmpStatusMsg.cpp
 	gui/kdeext/KTmpStatusMsg.h
-	
+
 	gui/kdeext/SqueezedLabel.cpp
 	gui/kdeext/SqueezedLabel.h
 
@@ -903,6 +903,8 @@ SET(gui_SRCS
 	gui/widgets/AudioRouteMenu.h
 	gui/widgets/AudioVUMeter.cpp
 	gui/widgets/AudioVUMeter.h
+	gui/widgets/BaseTextFloat.cpp
+	gui/widgets/BaseTextFloat.h
 	gui/widgets/BigArrowButton.h
 	gui/widgets/CollapsingFrame.cpp
 	gui/widgets/CollapsingFrame.h

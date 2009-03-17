@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -50,8 +50,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_max(0),
         m_type(type),
         m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_float(TextFloat::getTextFloat())
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -74,9 +73,6 @@ Fader::Fader(AudioLevel::FaderType type,
 
     calculateGroovePixmap();
     setFader(0.0);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -87,8 +83,7 @@ Fader::Fader(int min, int max, int deflt,
         m_min(min),
         m_max(max),
         m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_float(TextFloat::getTextFloat())
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -111,9 +106,6 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -124,8 +116,7 @@ Fader::Fader(int min, int max, int deflt,
         m_min(min),
         m_max(max),
         m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_float(TextFloat::getTextFloat())
 {
     setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
@@ -142,9 +133,6 @@ Fader::Fader(int min, int max, int deflt,
 
     calculateGroovePixmap();
     setFader(deflt);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::~Fader()
@@ -214,15 +202,15 @@ Fader::position_to_value(int position)
     /*
         RG_DEBUG << "Fader::position_to_value - position = " << position
                  << ", new value = " << value << endl;
-     
+
         if (m_min != m_max) // works for integral case
         {
             if (value > m_max) value = float(m_max);
             if (value < m_min) value = float(m_min);
         }
-     
+
         RG_DEBUG << "Fader::position_to_value - limited value = " << value << endl;
-    */ 
+    */
     return value;
 }
 
@@ -414,6 +402,12 @@ Fader::wheelEvent(QWheelEvent *e)
 }
 
 void
+Fader::enterEvent(QEvent *)
+{
+    m_float->attach(this);
+}
+
+void
 Fader::showFloatText()
 {
     // draw on the float text
@@ -436,33 +430,12 @@ Fader::showFloatText()
 
     m_float->setText(text);
 
-    // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move().
-    // (TextFloat position origin is toplevel or dialog top left corner)
-    //
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
+    // Reposition : Move just top/right
+    QPoint offset = QPoint(width() + width() / 5, + height() / 5);
+    m_float->display(offset);
 
-    while (par->parentWidget() && !par->isWindow()) {
-        par = par->parentWidget();
-        totalPos += par->pos();
-    }
-
-    // Move just top/right
-    //
-    m_float->move(totalPos + QPoint(width() + 2, 0));
-
-    // Show
-    m_float->show();
-
-    // one shot, 500ms
-    m_floatTimer->start(500, true);
-}
-
-void
-Fader::slotFloatTimeout()
-{
-    m_float->hide();
+    // Keep text float visible for 500ms
+    m_float->hideAfterDelay(500);
 }
 
 void
