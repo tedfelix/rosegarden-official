@@ -31,6 +31,7 @@
 #include "Rotary.h"
 #include "gui/general/IconLoader.h"
 #include "VUMeter.h"
+#include "gui/widgets/PluginPushButton.h"
 
 #include <QFrame>
 #include <QLabel>
@@ -64,7 +65,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     // Plugin box
     //
-    QPushButton *plugin;
+    PluginPushButton *plugin;
     QWidget *pluginVbox = 0;
 
     pluginVbox = new QWidget(this);
@@ -73,11 +74,11 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     pluginVboxLayout->setMargin(0);
 
     for (int i = 0; i < 5; i++) {
-        plugin = new QPushButton(pluginVbox);
+        plugin = new PluginPushButton(pluginVbox);
         pluginVboxLayout->addWidget(plugin);
         plugin->setText(tr("<no plugin>"));
 
-        plugin->setToolTip(tr("Audio plugin button"));
+        plugin->setToolTip(tr("Click to load an audio plugin"));
 
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
@@ -86,9 +87,9 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     }
     pluginVbox->setLayout(pluginVboxLayout);
 
-    m_synthButton = new QPushButton(this);
+    m_synthButton = new PluginPushButton(this);
     m_synthButton->setText(tr("<no synth>"));
-    m_synthButton->setToolTip(tr("Synth plugin button"));
+    m_synthButton->setToolTip(tr("Click to load a synth plugin for playing MIDI"));
 
     // VU meter and fader
     //
@@ -164,7 +165,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     }
 
     m_pan->setToolTip(tr("Set the audio pan position in the stereo field"));
-    m_synthGUIButton->setToolTip(tr("Open synth plugin's native editor"));
+    m_synthGUIButton->setToolTip(tr("Open the synth plugin's native editor"));
     m_stereoButton->setToolTip(tr("Mono or Stereo Instrument"));
     m_recordFader->setToolTip(tr("Record level"));
     m_fader->setToolTip(tr("Playback level"));

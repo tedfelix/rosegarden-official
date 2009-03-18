@@ -20,11 +20,14 @@
 #define _RG_AUDIOMIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
-#include <map>
 #include "MixerWindow.h"
 #include "gui/general/ActionFileClient.h"
+#include "gui/widgets/PluginPushButton.h"
+
 #include <QPixmap>
+
 #include <vector>
+#include <map>
 
 
 class QWidget;
@@ -43,6 +46,7 @@ class MappedEvent;
 class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
+class PluginPushButton;
 
 
 class AudioMixerWindow : public MixerWindow, public ActionFileClient
@@ -148,7 +152,7 @@ private:
         bool m_stereoness;
 
         QWidget *m_pluginBox;
-        std::vector<QPushButton *> m_plugins;
+        std::vector<PluginPushButton *> m_plugins;
     };
 
     QWidget *m_surroundBox;

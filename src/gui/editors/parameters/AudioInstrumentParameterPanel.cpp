@@ -17,8 +17,6 @@
 
 
 #include "AudioInstrumentParameterPanel.h"
-#include <QLayout>
-#include <QApplication>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -37,6 +35,8 @@
 #include "InstrumentParameterPanel.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
+#include "gui/widgets/PluginPushButton.h"
+
 #include <QColor>
 #include <QFrame>
 #include <QLabel>
@@ -46,7 +46,10 @@
 #include <QString>
 #include <QToolTip>
 #include <QWidget>
+#include <QLayout>
 #include <QSignalMapper>
+#include <QApplication>
+
 
 
 namespace Rosegarden
@@ -126,7 +129,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
         return ;
 
     //    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
-    //	      << dB << ")" << std::endl;
+    //          << dB << ")" << std::endl;
 
     if (m_selectedInstrument->getType() == Instrument::Audio) {
         m_selectedInstrument->setRecordLevel(dB);
@@ -150,14 +153,14 @@ AudioInstrumentParameterPanel::slotPluginSelected(InstrumentId instrumentId,
         return ;
 
     RG_DEBUG << "AudioInstrumentParameterPanel::slotPluginSelected - "
-    << "instrument = " << instrumentId
-    << ", index = " << index
-    << ", plugin = " << plugin << endl;
+             << "instrument = " << instrumentId
+             << ", index = " << index
+             << ", plugin = " << plugin << endl;
 
     QColor pluginBackgroundColour = QColor(Qt::black);
     bool bypassed = false;
 
-    QPushButton *button = 0;
+    PluginPushButton *button = 0;
     QString noneText;
 
     // updates synth gui button &c:
@@ -242,7 +245,7 @@ AudioInstrumentParameterPanel::setButtonColour(
     << ", bypassState = " << bypassState
     << ", rgb = " << colour.name() << endl;
 
-    QPushButton *button = 0;
+    PluginPushButton *button = 0;
 
     if (pluginIndex == Instrument::SYNTH_PLUGIN_POSITION) {
         button = m_audioFader->m_synthButton;
@@ -253,29 +256,17 @@ AudioInstrumentParameterPanel::setButtonColour(
     if (!button)
         return ;
 
-    // Set the bypass colour on the plugin button
+    // Set the plugin active, plugin bypassed, or stock color.  For the moment
+    // this is still figured using the old "colour" parameter that is still
+    // passed around, so this conversion is a bit hacky, and we really should
+    // (//!!!) create some enabled/disabled/active state for the plugins
+    // themselves that doesn't depend on colo(u)r for calculation.
     if (bypassState) {
-        button->
-        setPaletteForegroundColor(qApp->palette().
-                                  color(QPalette::Active, QColorGroup::Button));
-
-        button->
-        setPaletteBackgroundColor(qApp->palette().
-                                  color(QPalette::Active, QColorGroup::ButtonText));
+        button->setState(PluginPushButton::Bypassed);
     } else if (colour == QColor(Qt::black)) {
-        button->
-        setPaletteForegroundColor(qApp->palette().
-                                  color(QPalette::Active, QColorGroup::ButtonText));
-
-        button->
-        setPaletteBackgroundColor(qApp->palette().
-                                  color(QPalette::Active, QColorGroup::Button));
+        button->setState(PluginPushButton::Normal);
     } else {
-        button->
-        setPaletteForegroundColor(QColor(Qt::white));
-
-        button->
-        setPaletteBackgroundColor(colour);
+        button->setState(PluginPushButton::Active);
     }
 }
 
@@ -312,7 +303,7 @@ AudioInstrumentParameterPanel::setAudioMeter(float dBleft, float dBright,
         float recDBleft, float recDBright)
 {
     //    RG_DEBUG << "AudioInstrumentParameterPanel::setAudioMeter: (" << dBleft
-    //	     << "," << dBright << ")" << endl;
+    //             << "," << dBright << ")" << endl;
 
     if (m_selectedInstrument) {
         // Always set stereo, because we have to reflect what's happening
@@ -343,7 +334,7 @@ AudioInstrumentParameterPanel::setupForInstrument(Instrument* instrument)
 
     for (int i = start; i < int(m_audioFader->m_plugins.size()); i++) {
         int index;
-        QPushButton *button;
+        PluginPushButton *button;
         QString noneText;
 
         if (i == -1) {

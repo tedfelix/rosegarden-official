@@ -19,9 +19,12 @@
 #ifndef _RG_AUDIOFADERBOX_H_
 #define _RG_AUDIOFADERBOX_H_
 
+#include "gui/widgets/PluginPushButton.h"
+
 #include <QFrame>
 #include <QPixmap>
 #include <QString>
+
 #include <vector>
 
 
@@ -41,6 +44,7 @@ class Instrument;
 class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
+class PluginPushButton;
 
 
 class AudioFaderBox : public QFrame
@@ -59,31 +63,32 @@ public:
 
     bool owns(const QObject *object);
 
-    QPushButton               *m_synthButton;
-    std::vector<QPushButton*>  m_plugins;
+    PluginPushButton        *m_synthButton;
+    std::vector
+        <PluginPushButton*>  m_plugins;
 
-    AudioVUMeter              *m_vuMeter;
+    AudioVUMeter            *m_vuMeter;
 
-    Fader           *m_fader;
-    Fader           *m_recordFader;
-    Rotary          *m_pan;
+    Fader                   *m_fader;
+    Fader                   *m_recordFader;
+    Rotary                  *m_pan;
 
-    QPixmap                    m_monoPixmap;
-    QPixmap                    m_stereoPixmap;
+    QPixmap                  m_monoPixmap;
+    QPixmap                  m_stereoPixmap;
 
-    QSignalMapper             *m_signalMapper;
+    QSignalMapper           *m_signalMapper;
 
-    QLabel                    *m_inputLabel;
-    QLabel                    *m_outputLabel;
+    QLabel                  *m_inputLabel;
+    QLabel                  *m_outputLabel;
 
-    AudioRouteMenu            *m_audioInput; 
-    AudioRouteMenu            *m_audioOutput; 
+    AudioRouteMenu          *m_audioInput; 
+    AudioRouteMenu          *m_audioOutput; 
 
-    QPushButton               *m_synthGUIButton;
+    QPushButton             *m_synthGUIButton;
 
-    QString                    m_id;
+    QString                  m_id;
 
-    bool                       isStereo() const { return m_isStereo; }
+    bool                     isStereo() const { return m_isStereo; }
 
 signals:
     void audioChannelsChanged(int);

@@ -47,6 +47,7 @@
 #include "sound/MappedCommon.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
+#include "gui/widgets/PluginPushButton.h"
 
 #include <QLayout>
 #include <QApplication>
@@ -147,12 +148,9 @@ AudioMixerWindow::AudioMixerWindow(QWidget *parent,
     // first pass here in the ctor.  This is apparently a change from KDE/Qt3.
     //
     // This has the interesting side effect that the menu bar comes out with a
-    // much smaller font than normal, as do all the buttons.  The small font on
-    // the buttons is very useful, and it makes me wonder if the buttons weren't
-    // always supposed to have a tiny font in the first place, in order to be
-    // more compact.  Interesting.  Let's see how it flies.  It's nice not
-    // having the "<none>" buttons spilling out of bounds.  There's probably
-    // some way to fix the menu bar font if it's really worth it.
+    // much smaller font than normal, as do all the buttons.  (The button fonts
+    // returned to normal after I implemented Rosegarden::PluginPushButton.  Oh
+    // well.)
     populate();
 }
 
@@ -329,11 +327,14 @@ AudioMixerWindow::populate()
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
-            QPushButton *plugin = new QPushButton(rec.m_pluginBox, "pluginButton");
+            PluginPushButton *plugin = new PluginPushButton(rec.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
+            QFont font;
+            font.setPointSize(6);
+            plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
-            plugin->setToolTip(tr("Audio plugin button"));
+            plugin->setToolTip(tr("Click to load an audio plugin"));
             rec.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
@@ -460,11 +461,14 @@ AudioMixerWindow::populate()
         QVBoxLayout *pluginBoxLayout = new QVBoxLayout;
 
         for (int p = 0; p < 5; ++p) {
-            QPushButton *plugin = new QPushButton(rec.m_pluginBox, "pluginButton");
+            PluginPushButton *plugin = new PluginPushButton(rec.m_pluginBox);
             pluginBoxLayout->addWidget(plugin);
+            QFont font;
+            font.setPointSize(6);
+            plugin->setFont(font);
             plugin->setText(tr("<none>"));
             plugin->setMaximumWidth(45);
-            plugin->setToolTip(tr("Audio plugin button"));
+            plugin->setToolTip(tr("Click to load an audio plugin"));
             rec.m_plugins.push_back(plugin);
             connect(plugin, SIGNAL(clicked()),
                     this, SLOT(slotSelectPlugin()));
@@ -543,6 +547,11 @@ AudioMixerWindow::populate()
 //      addWidget() for all but this one.  I'm not sure what to make of that
 //      either, other than to think if it ain't broke, I'll just leave the mess
 //      for later, and be on the lookout for weird label layout problems.
+//
+//      Response:  It must have been the conversion script.  addMultiCellWidget
+//      is no more.  It's an alternate ctor for addWidget.  When this is broken,
+//      fix it.  When it's not, it's probably OK to simplify all the
+//      0-0+10-10+3-3+1 down to 1 &c
         mainLayout->addMultiCellWidget(idLabel, 0, 0, col, col + 1, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_fader, 3, col, Qt::AlignCenter);
         mainLayout->addWidget(rec.m_meter, 3, col + 1, Qt::AlignCenter);
@@ -645,11 +654,14 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
 
         } else {
 
-            AudioPlugin *pluginClass
-            = m_document->getPluginManager()->getPlugin(plugin);
+            AudioPlugin *pluginClass = m_document->getPluginManager()->getPlugin(plugin);
 
-            QColor pluginBgColour =
-                qApp->palette().color(QPalette::Active, QColorGroup::Light);
+            //!!! Hacky.  We still rely on the old "colour" property to figure
+            // out the state, instead of doing something far more pleasant and
+            // intelligible three years from now.  (Remember this when you wince
+            // in 2012.  Kind of like that photo of you wearing nothing but a
+            // sock and an electric guitar, drunk off your ass, innit?)
+            QColor pluginBgColour = Qt::blue;  // anything random will do
 
             if (pluginClass) {
                 rec.m_plugins[index]->
@@ -659,9 +671,24 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
                 pluginBgColour = pluginClass->getColour();
             }
 
+            //!!! NB - Before I added more code later on in slotUpdateButtons, I
+            // never saw this code here do anything.  I'm not at all sure I've
+            // hit on the correct assumptions about what the colo(u)r property
+            // was supposed to tell this code here, and this might well be a
+            // future source of mysterious bugs.  So far, I can't find any
+            // problems though, and I wonder exactly what this code here was
+            // really for at all.  If other people would write some comments
+            // once in awhile, I might already have a clear idea.  Oh wait,
+            // code gazelles don't need to write no stinkin' comments.
 
-            rec.m_plugins[index]->setPaletteForegroundColor(QColor(Qt::white));
-            rec.m_plugins[index]->setPaletteBackgroundColor(pluginBgColour);
+            if (pluginBgColour == Qt::darkRed) {
+                rec.m_plugins[index]->setState(PluginPushButton::Active);
+            } else if (pluginBgColour == Qt::black) {
+                rec.m_plugins[index]->setState(PluginPushButton::Bypassed);
+            } else {
+                rec.m_plugins[index]->setState(PluginPushButton::Normal);
+            }
+
         }
     } else if (id > 0 && id <= m_submasters.size()) {
 
@@ -835,8 +862,7 @@ AudioMixerWindow::updatePluginButtons(int id)
 
             if (inst && inst->isAssigned()) {
 
-                AudioPlugin *pluginClass
-                = m_document->getPluginManager()->getPlugin(
+                AudioPlugin *pluginClass = m_document->getPluginManager()->getPlugin(
                       m_document->getPluginManager()->
                       getPositionByIdentifier(inst->getIdentifier().c_str()));
 
@@ -860,30 +886,11 @@ AudioMixerWindow::updatePluginButtons(int id)
             }
 
             if (bypass) {
-
-                rec->m_plugins[i]->setPaletteForegroundColor
-                (qApp->palette().
-                 color(QPalette::Active, QColorGroup::Button));
-
-                rec->m_plugins[i]->setPaletteBackgroundColor
-                (qApp->palette().
-                 color(QPalette::Active, QColorGroup::ButtonText));
-
+                rec->m_plugins[i]->setState(PluginPushButton::Bypassed);
             } else if (used) {
-
-                rec->m_plugins[i]->setPaletteForegroundColor(QColor(Qt::white));
-                rec->m_plugins[i]->setPaletteBackgroundColor(pluginBgColour);
-
-
+                rec->m_plugins[i]->setState(PluginPushButton::Active);
             } else {
-
-                rec->m_plugins[i]->setPaletteForegroundColor
-                (qApp->palette().
-                 color(QPalette::Active, QColorGroup::ButtonText));
-
-                rec->m_plugins[i]->setPaletteBackgroundColor
-                (qApp->palette().
-                 color(QPalette::Active, QColorGroup::Button));
+                rec->m_plugins[i]->setState(PluginPushButton::Normal);
             }
         }
     }
@@ -901,7 +908,7 @@ AudioMixerWindow::slotSelectPlugin()
         if (!i->second.m_populated || !i->second.m_pluginBox)
             continue;
 
-        for (std::vector<QPushButton *>::iterator pli = i->second.m_plugins.begin();
+        for (std::vector<PluginPushButton *>::iterator pli = i->second.m_plugins.begin();
                 pli != i->second.m_plugins.end(); ++pli) {
 
             if (*pli == s) {
@@ -924,7 +931,7 @@ AudioMixerWindow::slotSelectPlugin()
         if (!i->m_populated || !i->m_pluginBox)
             continue;
 
-        for (std::vector<QPushButton *>::iterator pli = i->m_plugins.begin();
+        for (std::vector<PluginPushButton *>::iterator pli = i->m_plugins.begin();
                 pli != i->m_plugins.end(); ++pli) {
 
             if (*pli == s) {
