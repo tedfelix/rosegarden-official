@@ -73,6 +73,7 @@ protected slots:
     void slotMoveSelected();
     void slotEraseSelected();
     void slotResizeSelected();
+    void slotVelocityChangeSelected();
     void slotDrawSelected();
 
 protected:

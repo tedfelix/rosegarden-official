@@ -1344,6 +1344,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 }
 
 bool RosegardenGUIDoc::exportStudio(const QString& filename,
+                                    QString &errMsg,
                                     std::vector<DeviceId> devices)
 {
     Profiler profiler("RosegardenGUIDoc::exportStudio");
@@ -1370,6 +1371,7 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
 
     bool okay = GzipFile::writeToFile(filename, outText);
     if (!okay) {
+        errMsg = tr(QString("Could not open file '%1' for writing").arg(filename));
         return false;
     }
 
@@ -1776,11 +1778,13 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
         return ;
 
     if (mC.size() > 0) {
-        MappedComposition::const_iterator i;
+
         Event *rEvent = 0;
         timeT duration, absTime;
         timeT updateFrom = m_composition.getDuration();
         bool haveNotes = false;
+
+        MappedComposition::const_iterator i;
 
         // process all the incoming MappedEvents
         //
@@ -1788,6 +1792,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 		RosegardenGUIView *v;
 		int k = 0;
 		for (i = mC.begin(); i != mC.end(); ++i) {
+
             if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
                 // send to GUI
 				
@@ -1815,20 +1820,13 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
             rEvent = 0;
             bool isNoteOn = false;
-            int pitch = 0;
+            int pitch = (*i)->getPitch();
             int channel = (*i)->getRecordedChannel();
             int device = (*i)->getRecordedDevice();
 
-	    TrackId tid = (*i)->getTrackId();
-	    Track *track = getComposition().getTrackById(tid);
-
             switch ((*i)->getType()) {
-            case MappedEvent::MidiNote:
 
-                // adjust the notation by the opposite of track transpose so the
-                // resulting recording will play correctly, and notation will
-                // read correctly; tentative fix for #1597279
-                pitch = (*i)->getPitch() - track->getTranspose();
+            case MappedEvent::MidiNote:
 
                 if ((*i)->getDuration() < RealTime::zeroTime) {
 
@@ -1837,24 +1835,20 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                     // mental note to stick it in the note-on map
                     // for when we see the corresponding note-off
 
-                    duration =
-                        Note(Note::Crotchet).getDuration();
+                    duration = Note(Note::Crotchet).getDuration();
                     isNoteOn = true;
 
                     rEvent = new Event(Note::EventType,
                                        absTime,
                                        duration);
 
-                    rEvent->set
-                    <Int>(PITCH, pitch);
-                    rEvent->set
-                    <Int>(VELOCITY, (*i)->getVelocity());
+                    rEvent->set<Int>(PITCH, pitch);
+                    rEvent->set<Int>(VELOCITY, (*i)->getVelocity());
 
                 } else {
 
                     // it's a note-off
 
-                    //NoteOnMap::iterator mi = m_noteOnEvents.find((*i)->getPitch());
                     PitchMap *pm = &m_noteOnEvents[device][channel];
                     PitchMap::iterator mi = pm->find(pitch);
 
@@ -1864,10 +1858,9 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                         NoteOnRecSet rec_vec = mi->second;
                         Event *oldEv = *rec_vec[0].m_segmentIterator;
                         Event *newEv = new Event
-                                       (*oldEv, oldEv->getAbsoluteTime(), duration);
+                            (*oldEv, oldEv->getAbsoluteTime(), duration);
 
-                        newEv->set
-                        <Int>(RECORDED_CHANNEL, channel);
+                        newEv->set<Int>(RECORDED_CHANNEL, channel);
                         NoteOnRecSet *replaced =
                             replaceRecordedEvent(rec_vec, newEv);
                         delete replaced;
@@ -1889,15 +1882,13 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
             case MappedEvent::MidiPitchBend:
                 rEvent = PitchBend
                          ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set
-                <Int>(RECORDED_CHANNEL, channel);
+                rEvent->set<Int>(RECORDED_CHANNEL, channel);
                 break;
 
             case MappedEvent::MidiController:
                 rEvent = Controller
                          ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set
-                <Int>(RECORDED_CHANNEL, channel);
+                rEvent->set<Int>(RECORDED_CHANNEL, channel);
                 break;
 
             case MappedEvent::MidiProgramChange:
@@ -1909,15 +1900,13 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
             case MappedEvent::MidiKeyPressure:
                 rEvent = KeyPressure
                          ((*i)->getData1(), (*i)->getData2()).getAsEvent(absTime);
-                rEvent->set
-                <Int>(RECORDED_CHANNEL, channel);
+                rEvent->set<Int>(RECORDED_CHANNEL, channel);
                 break;
 
             case MappedEvent::MidiChannelPressure:
                 rEvent = ChannelPressure
                          ((*i)->getData1()).getAsEvent(absTime);
-                rEvent->set
-                <Int>(RECORDED_CHANNEL, channel);
+                rEvent->set<Int>(RECORDED_CHANNEL, channel);
                 break;
 
             case MappedEvent::MidiSystemMessage:
@@ -1961,8 +1950,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 
             // Set the recorded input port
             //
-            rEvent->set
-            <Int>(RECORDED_PORT, device);
+            rEvent->set<Int>(RECORDED_PORT, device);
 
             // Set the proper start index (if we haven't before)
             //
@@ -2050,17 +2038,64 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
-RosegardenGUIDoc::NoteOnRecSet *
+void
+RosegardenGUIDoc::transposeRecordedSegment(Segment *s)
+{
+        // get a selection of all the events in the segment, since we apparently
+        // can't just iterate through a segment's events without one.  (?)
+        EventSelection *selectedWholeSegment = new EventSelection(
+            *s,
+            s->getStartTime(),
+            s->getEndMarkerTime());
 
+         // Say we've got a recorded segment destined for a Bb trumpet track.
+         // It will have transpose of -2, and we want to move the notation +2 to
+         // compensate, so the user hears the same thing she just recorded
+         //
+         // (All debate over whether this is the right way to go with this whole
+         // issue is now officially settled, and no longer tentative.)
+         Composition *c = s->getComposition();
+         if (c) {
+             Track *t = c->getTrackById(s->getTrack());
+             if (t) {
+                 // pull transpose from the destination track
+                 int semitones = t->getTranspose();
+
+                 for (EventSelection::eventcontainer::iterator i =
+                      selectedWholeSegment->getSegmentEvents().begin();
+                     i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
+                     
+                     if ((*i)->isa(Note::EventType)) {
+                         if (semitones != 0) {
+                            if (!(*i)->has(PITCH)) {
+                                std::cerr << "WARNING! RosegardenGUIDoc::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
+                            } else {
+                                int pitch = (*i)->get<Int>(PITCH) - semitones;
+                                std::cerr << "pitch = " << pitch
+                                          << " after transpose = "
+                                          << semitones << " (for track "
+                                          << s->getTrack() << ")" << std::endl;
+                                (*i)->set<Int>(PITCH, pitch);
+                            }
+                        }
+                    }
+                 }
+             }
+        }
+} 
+
+RosegardenGUIDoc::NoteOnRecSet *
 RosegardenGUIDoc::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
 {
     NoteOnRecSet *new_vector = new NoteOnRecSet();
-    for ( NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
         Segment *recordMIDISegment = i->m_segment;
         recordMIDISegment->erase(i->m_segmentIterator);
         NoteOnRec noteRec;
         noteRec.m_segment = recordMIDISegment;
         noteRec.m_segmentIterator = recordMIDISegment->insert(new Event(*fresh));
+        // don't need to transpose this event; it was copied from an
+        // event that had been transposed already (in storeNoteOnEvent)
         new_vector->push_back(noteRec);
     }
     return new_vector;
@@ -2072,8 +2107,9 @@ RosegardenGUIDoc::storeNoteOnEvent(Segment *s, Segment::iterator it, int device,
     NoteOnRec record;
     record.m_segment = s;
     record.m_segmentIterator = it;
-    int pitch = (*it)->get
-                <Int>(PITCH);
+
+    int pitch = (*it)->get<Int>(PITCH);
+
     m_noteOnEvents[device][channel][pitch].push_back(record);
 }
 
@@ -2092,7 +2128,8 @@ RosegardenGUIDoc::insertRecordedEvent(Event *ev, int device, int channel, bool i
             int chan_filter = track->getMidiInputChannel();
             int dev_filter = track->getMidiInputDevice();
             if (((chan_filter < 0) || (chan_filter == channel)) &&
-                    ((dev_filter == int(Device::ALL_DEVICES)) || (dev_filter == device))) {
+                ((dev_filter == int(Device::ALL_DEVICES)) || (dev_filter == device))) {
+
                 it = recordMIDISegment->insert(new Event(*ev));
                 if (isNoteOn) {
                     storeNoteOnEvent(recordMIDISegment, it, device, channel);
@@ -2240,6 +2277,16 @@ RosegardenGUIDoc::stopRecordingMidi()
                              c.getBarEndForTime(s->getEndTime())));
 
         command->addCommand(new SegmentRecordCommand(s));
+
+        // Transpose the entire recorded segment as a unit, rather than
+        // transposing its individual events one time.  This allows the same
+        // source recording to be transposed to multiple destination tracks in
+        // different transpositions as part of one simultaneous operation from
+        // the user's perspective.  This wasn't done as a command, because it
+        // will be undone if the segment itself is undone, and I wanted to avoid
+        // writing a new command at a time when we've got something completely
+        // different over in the new Qt4 branch; to facilitate porting.
+        transposeRecordedSegment(s);
 
         CommandHistory::getInstance()->addCommand(command);
     }
@@ -2511,11 +2558,11 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
     recordMIDISegment->setLabel(appendLabel(label,
             qstrtostr(tr("(recorded)"))));
 
+    // set segment transpose, color, highest/lowest playable from track parameters
     Clef clef = clefIndexToClef(track->getClef());
     recordMIDISegment->insert(clef.getAsEvent
-                              (recordMIDISegment->getStartTime()));
+                            (recordMIDISegment->getStartTime()));
 
-    // set segment transpose, color, highest/lowest playable from track parameters
     recordMIDISegment->setTranspose(track->getTranspose());
     recordMIDISegment->setColourIndex(track->getColor());
     recordMIDISegment->setHighestPlayable(track->getHighestPlayable());

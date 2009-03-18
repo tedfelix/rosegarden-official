@@ -27,14 +27,14 @@ namespace Rosegarden {
 
 const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
-static int _canvasItemZ = 30;
 
 ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
                          int xx, int width)
     : Q3CanvasRectangle(ruler->canvas()),
       m_value(0),
       m_controlRuler(ruler),
-      m_elementAdapter(elementAdapter)
+      m_elementAdapter(elementAdapter),
+	m_highlighted(false)
 {
     if (width < DefaultWidth/4) {
         width = DefaultWidth/4; // avoid invisible zero-duration items
@@ -45,7 +45,7 @@ ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
 
     setX(xx);
     setY(canvas()->height());
-    setZ(_canvasItemZ++); // we should make this work against controlruler
+    setZ(50+canvas()->height());
 
     updateFromValue();
     setEnabled(false);
@@ -94,12 +94,16 @@ void ControlItem::draw(QPainter &painter)
 {
     if (!isEnabled())
         updateFromValue();
-
-    setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
+    
+    //ElementAdapter *ea=getElementAdapter();
+   // if(ea && m_controlRuler->isEventSelected(ea->getEvent()))
+    if(m_highlighted)
+	setBrush(Qt::blue);
+    else
+        setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
     Q3CanvasRectangle::draw(painter);
     
-
     /*
 
     // Attempt to get overlapping rectangles ordered automatically - 

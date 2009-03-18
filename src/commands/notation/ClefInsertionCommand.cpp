@@ -128,6 +128,9 @@ ClefInsertionCommand::modifySegment()
                         (*i)->set
                         <Int>(PITCH, pitch);
                     }
+                } else if (*i != m_lastInsertedEvent && (*i)->isa(Clef::EventType)) {
+		    // Stop changing octaves when next clef is encountered.
+		    break;
                 }
                 ++i;
             }

@@ -40,9 +40,9 @@ class ChangeVelocityCommand : public BasicSelectionCommand
     Q_DECLARE_TR_FUNCTIONS(ChangeVelocityCommand)
 
 public:
-    ChangeVelocityCommand(int delta, EventSelection &selection) :
+    ChangeVelocityCommand(int delta, EventSelection &selection,bool rounddelta=true) :
         BasicSelectionCommand(getGlobalName(delta), selection, true),
-        m_selection(&selection), m_delta(delta) { }
+        m_selection(&selection), m_delta(delta),m_rounddelta(rounddelta) { }
 
     static QString getGlobalName(int delta = 0) {
         if (delta > 0) return tr("&Increase Velocity");
@@ -55,6 +55,7 @@ protected:
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
     int m_delta;
+    bool m_rounddelta;
 };
 
 

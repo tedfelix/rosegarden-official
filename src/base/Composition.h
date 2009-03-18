@@ -118,6 +118,8 @@ public:
 
     Track* getTrackById(TrackId track) const;
 
+    bool haveTrack(TrackId track) const;
+
     Track* getTrackByPosition(int position) const;
  
     int getTrackPositionById(TrackId track) const; // -1 if not found

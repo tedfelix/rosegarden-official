@@ -140,7 +140,8 @@
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
     <!-- JAS '&amp;' before the 'R' in rosegardenui.rc -->
     <Action name="resize" text="Resi&amp;ze" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
-    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" />
+<!--    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" /> -->
+    <Action name="velocity" text="&amp;Velocity" icon="velocity" shortcut="F7" group="tools_segment" checked="false" />
   <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>
@@ -323,6 +324,7 @@
   <Action name="erase" />
   <Action name="move" />
   <Action name="resize" />
+  <Action name="velocity" />
   <Separator/>
   <Action name="toggle_step_by_step" />
   <Action name="filter_selection" />

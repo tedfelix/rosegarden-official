@@ -25,6 +25,7 @@
 #include "MatrixMover.h"
 #include "MatrixResizer.h"
 #include "MatrixScene.h"
+#include "MatrixVelocity.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -66,6 +67,10 @@ MatrixToolBox::createTool(QString toolName)
 
         tool = new MatrixResizer(m_widget);
 
+    else if (toolNamelc == MatrixVelocity::ToolName)
+
+        tool = new MatrixVelocity(m_widget);
+    
     else {
         QMessageBox::critical(0, "", QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));

@@ -105,6 +105,12 @@ MatrixTool::slotDrawSelected()
     invokeInParentView("draw");
 }
 
+void 
+MatrixTool::slotVelocityChangeSelected()
+{
+    invokeInParentView("velocity");
+}
+
 const SnapGrid *
 MatrixTool::getSnapGrid() const
 {

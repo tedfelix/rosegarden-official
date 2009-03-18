@@ -110,7 +110,8 @@ ControllerEventsRuler::init()
         if (m_controller->getType() != (*i)->getType())
             continue;
 
-        int width = getDefaultItemWidth();
+        //int width = getDefaultItemWidth();
+	int width=m_rulerScale->getXForTime((*i)->getDuration());
 
         // Check for specific controller value if we need to
         //
@@ -222,7 +223,9 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
 
     double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
 
-    int width = getDefaultItemWidth();
+    //int width = getDefaultItemWidth();
+    int width=m_rulerScale->getXForTime(e->getDuration());
+
 
     if (m_controller->getType() == PitchBend::EventType)
         width /= 4;

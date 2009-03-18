@@ -35,7 +35,8 @@ public:
                                    timeT insertTime, 
                                    long number, 
                                    long initialValue,
-                                   Segment &segment);
+                                   Segment &segment,
+				    timeT duration=0);
 
     virtual ~ControlRulerEventInsertCommand() {;}
 

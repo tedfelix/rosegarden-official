@@ -96,7 +96,7 @@ protected:
     Clef m_lastClefFound;
 
     void readConfigVariables(void);
-    void writeBar(Segment *, int barNo, int barStart, int barEnd, int col,
+    void writeBar(Segment *, int barNo, timeT barStart, timeT barEnd, int col,
                   Rosegarden::Key &key, std::string &lilyText,
                   std::string &prevStyle,
                   eventendlist &preEventsInProgress, eventendlist &postEventsInProgress,
@@ -118,7 +118,12 @@ protected:
     void handleEndingPostEvents(eventendlist &postEventsInProgress,
                                 const Segment::iterator &j, std::ofstream &str);
 
-    // convert note pitch into LilyPond format note string
+    // convert note pitch into LilyPond format note name string
+    std::string convertPitchToLilyNoteName(int pitch,
+                                           Accidental accidental,
+                                           const Rosegarden::Key &key);
+
+    // convert note pitch into LilyPond format note name string with octavation
     std::string convertPitchToLilyNote(int pitch,
                                        Accidental accidental,
                                        const Rosegarden::Key &key);

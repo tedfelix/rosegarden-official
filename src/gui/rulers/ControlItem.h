@@ -36,7 +36,10 @@ public:
     int getValue() const { return m_value; }
 
     void setWidth(int w)  { setSize(w, height()); }
-    void setHeight(int h) { setSize(width(), h); }
+    void setHeight(int h) { 
+	setSize(width(), h); 
+	setZ(50.0+(h/2.0));
+    }
     int getHeight()       { return size().height(); }
 
     virtual void draw(QPainter &painter);
@@ -47,7 +50,7 @@ public:
     virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool yes);
-
+    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
     virtual void updateFromValue();
 
@@ -62,6 +65,7 @@ protected:
 
     long m_value;
     bool m_handlingMouseMove;
+    bool m_highlighted;
 
     ControlRuler* m_controlRuler;
     ElementAdapter* m_elementAdapter;

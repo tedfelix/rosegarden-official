@@ -22,6 +22,7 @@
 #include <Q3CanvasItemList>
 #include <Q3CanvasRectangle>
 #include "base/Segment.h"
+#include "base/Selection.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include <QColor>
 #include <QPoint>
@@ -55,7 +56,7 @@ class EditViewBase;
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public RosegardenCanvasView, public SegmentObserver
+class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
 {
     Q_OBJECT
 
@@ -84,6 +85,13 @@ public:
 
     RulerScale* getRulerScale() { return m_rulerScale; }
 
+    /// EventSelectionObserver
+    virtual void eventSelected(EventSelection *,Event *);
+    virtual void eventDeselected(EventSelection *,Event *);    
+    virtual void eventSelectionDestroyed(EventSelection *);
+    
+    void assignEventSelection(EventSelection *);
+    
     // SegmentObserver interface
     virtual void segmentDeleted(const Segment *);
 
@@ -142,7 +150,7 @@ protected:
     EditViewBase*               m_parentEditView;
     QScrollBar*                 m_mainHorizontalScrollBar;
     RulerScale*     m_rulerScale;
-    EventSelection* m_eventSelection;
+    EventSelection* m_eventSelection,*m_assignedEventSelection;
     Segment*        m_segment;
 
     ControlItem* m_currentIndex;
@@ -169,6 +177,9 @@ protected:
     TextFloat  *m_numberFloat;
 
     bool m_hposUpdatePending;
+    
+    typedef std::list<Event *> SelectionSet;
+    SelectionSet m_selectedEvents;
 };
 
 

@@ -108,6 +108,7 @@
 #include "gui/dialogs/TextEventDialog.h"
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
+#include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/general/ActiveItem.h"
 #include "gui/general/ClefIndex.h"
@@ -2338,6 +2339,10 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with matrixview -- could much of
     // this be in editview?
 
+    ControlRuler *ruler=EditView::getCurrentControlRuler();
+    if(ruler)
+	ruler->assignEventSelection(s);
+	
     if (m_currentEventSelection == s)
         return ;
     NOTATION_DEBUG << "XXX " << endl;
@@ -2678,6 +2683,19 @@ NotationView::getInsertionTime(Clef &clef,
     // set m_insertionTime to the right value when we first placed
     // the insert cursor.  We could get clef and key directly from
     // the segment but the staff has a more efficient lookup
+    // 
+    // TODO: When changing clef or key, the dialog should show
+    //       the clef which is affected. The use of function
+    //       getElementUnderLayoutX(...) function may not work,
+    //       because when InsertCursor is on a bar line and
+    //       the clef change is just after the bar line,
+    //       the previous clef will be shown, not the affected one:
+    //
+    //       G-clef (notes)     | F-clef (notes)
+    //                          ^ <--- InsertCursor
+    //
+    //       From above situation F-clef should be returned, while
+    //       currently G-clef is being returned. (hjj)
 
     LinedStaff *staff = m_staffs[m_currentStaff];
     double layoutX = staff->getLayoutXOfInsertCursor();

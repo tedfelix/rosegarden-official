@@ -57,7 +57,6 @@ public:
     void reconfigure(timeT time, timeT duration, int pitch, int velocity);
 
     static MatrixElement *getMatrixElement(QGraphicsItem *);
-
 protected:
     MatrixScene *m_scene;
     bool m_drum;

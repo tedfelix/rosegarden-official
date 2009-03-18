@@ -285,6 +285,7 @@ public slots:
     void slotSelectSelected();
     void slotMoveSelected();
     void slotResizeSelected();
+    void slotVelocityChangeSelected();
 
     void slotToggleStepByStep();
 

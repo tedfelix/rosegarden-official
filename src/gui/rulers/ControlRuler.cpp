@@ -72,6 +72,7 @@ ControlRuler::ControlRuler(Segment *segment,
         m_mainHorizontalScrollBar(0),
         m_rulerScale(rulerScale),
         m_eventSelection(new EventSelection(*segment)),
+	m_assignedEventSelection(0),
         m_segment(segment),
         m_currentIndex(0),
         m_tool(0),
@@ -104,6 +105,9 @@ ControlRuler::ControlRuler(Segment *segment,
 
 ControlRuler::~ControlRuler()
 {
+    if(m_assignedEventSelection)
+	    m_assignedEventSelection->removeObserver(this);
+    
     if (m_segment) {
         m_segment->removeObserver(this);
     }
@@ -160,6 +164,80 @@ void ControlRuler::setControlTool(ControlTool* tool)
     if (m_tool)
         delete m_tool;
     m_tool = tool;
+}
+
+void ControlRuler::eventSelected(EventSelection *es,Event *e) {
+    if(es==m_assignedEventSelection) {
+        Q3CanvasItemList list = canvas()->allItems();
+        Q3CanvasItemList::Iterator it = list.begin();
+        for (; it != list.end(); ++it) {
+            if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+    		if(item->getElementAdapter()->getEvent()==e) {
+			item->setHighlighted(true);
+			return;
+		}
+	    }
+        }
+    }
+}
+
+void ControlRuler::eventDeselected(EventSelection *es,Event *e) {
+    if(es==m_assignedEventSelection) {
+        Q3CanvasItemList list = canvas()->allItems();
+        Q3CanvasItemList::Iterator it = list.begin();
+        for (; it != list.end(); ++it) {
+            if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+	        if(item->getElementAdapter()->getEvent()==e) {
+		    item->setHighlighted(false);
+		    return;
+	        }
+            }
+        }
+    }
+}
+
+void ControlRuler::eventSelectionDestroyed(EventSelection *es) {
+	/// Someone destroyed  ES  lets handle that
+	if(es==m_assignedEventSelection)
+		m_assignedEventSelection=NULL;
+}
+    
+
+void ControlRuler::assignEventSelection(EventSelection *es) 
+{
+    // Clear all selected ControllItem
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) 
+	    item->setHighlighted(false);
+    }		
+
+    if(es) {
+	// Dont observe the old selection anymore
+	m_assignedEventSelection=es;
+
+	Q3CanvasItemList list = canvas()->allItems();
+        const EventSelection::eventcontainer ec=es->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator e = ec.begin(); e != ec.end(); ++e) {
+	    Q3CanvasItemList::Iterator it = list.begin();
+	    for (; it != list.end(); ++it) {
+                if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+    		    if(item->getElementAdapter()->getEvent()==*e) {
+			item->setHighlighted(true);
+			break;
+	    	    }
+	        }
+            }
+        } 
+	
+        es->addObserver(this);
+
+    } else {
+	m_assignedEventSelection=NULL;
+    }
+    
+    slotUpdate();
 }
 
 void

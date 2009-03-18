@@ -106,6 +106,7 @@ NewMatrixView::setupActions()
     createAction("erase", SLOT(slotSetEraseTool()));
     createAction("move", SLOT(slotSetMoveTool()));
     createAction("resize", SLOT(slotSetResizeTool()));
+    createAction("velocity", SLOT(slotSetVelocityTool()));
     createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
     createAction("quantize", SLOT(slotQuantize()));
@@ -371,6 +372,12 @@ void
 NewMatrixView::slotSetResizeTool()
 {
     if (m_matrixWidget) m_matrixWidget->slotSetResizeTool();
+}
+
+void
+NewMatrixView::slotSetVelocityTool()
+{
+    if (m_matrixWidget) m_matrixWidget->slotSetVelocityTool();
 }
 
 Segment *

@@ -345,7 +345,7 @@ DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
 	// **************************************************************************
 	//
     //@@@### this connection doesn't work: - but why ???
-//     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), \
+//     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), 
 //             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton * button)) );
 //	connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
 	connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotClose()));
@@ -915,7 +915,18 @@ DeviceManagerDialog::slotExport()
         }
     }
 
-    m_document->exportStudio(name, devices);
+    QString errMsg;
+    if (!m_document->exportStudio(name, errMsg, devices)) {
+        if (errMsg != "") {
+            QMessageBox::critical
+                (0, "", tr(QString("Could not export studio to file at %1\n(%2)")
+                           .arg(name).arg(errMsg)));
+        } else {
+            QMessageBox::critical
+                (0, "", tr(QString("Could not export studio to file at %1")
+                           .arg(name)));
+        }
+    }
 }
 
 void
@@ -933,4 +944,5 @@ DeviceManagerDialog::slotSetControllers()
 }
 
 }
+
 #include "DeviceManagerDialog.moc"

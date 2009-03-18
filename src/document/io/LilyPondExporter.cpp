@@ -366,7 +366,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
         const Rosegarden::Key &key)
 {
     Pitch p(pitch, accidental);
@@ -383,6 +383,39 @@ LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
         lilyNote += "is";
     else if (acc == Accidentals::DoubleSharp)
         lilyNote += "isis";
+
+    return lilyNote;
+}
+
+std::string
+LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+        const Rosegarden::Key &key)
+{
+    // calculate note name and write note
+    std::string lilyNote;
+
+    lilyNote = convertPitchToLilyNoteName(pitch, accidental, key);
+
+    // generate and write octave marks
+    std::string octaveMarks = "";
+    int octave = (int)(pitch / 12);
+
+    // tweak the octave break for B# / Cb
+    if ((lilyNote == "bisis") || (lilyNote == "bis")) {
+        octave--;
+    } else if ((lilyNote == "ceses") || (lilyNote == "ces")) {
+        octave++;
+    }
+
+    if (octave < 4) {
+        for (; octave < 4; octave++)
+            octaveMarks += ",";
+    } else {
+        for (; octave > 4; octave--)
+            octaveMarks += "\'";
+    }
+
+    lilyNote += octaveMarks;
 
     return lilyNote;
 }
@@ -759,9 +792,14 @@ LilyPondExporter::write()
             str << indent(col);
             timeT leftTime = m_composition->getBarStart(leftBar);
             timeT rightTime = m_composition->getBarStart(rightBar + 1);
+            // Check for a partial measure in the beginning of the composition
             if (leftTime < compositionStartTime) {
                 leftTime = compositionStartTime;
             }
+            // Check for a partial measure in the end of the composition
+            if (rightTime > compositionEndTime) {
+                rightTime = compositionEndTime;
+            };
             writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
             str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
 
@@ -1227,11 +1265,15 @@ LilyPondExporter::write()
 
                 if (firstBar > 0) {
                     // Add a skip for the duration until the start of the first
-                    // bar in the segment.  If the segment doesn't start on a bar
-                    // line, an additional skip will be written (in the form of
-                    // a series of rests) at the start of writeBar, below.
+                    // bar in the segment.  If the segment doesn't start on a
+                    // bar line, an additional skip will be written at the start
+                    // of writeBar, below.
                     //!!! This doesn't cope correctly yet with time signature changes
                     // during this skipped section.
+                    // dmm - changed this to call writeSkip with false, to avoid
+                    // writing actual rests, and write a skip instead, so
+                    // visible rests do not appear before the start of short
+                    // bars
                     str << std::endl << indent(col);
                     writeSkip(timeSignature, compositionStartTime,
 		              m_composition->getBarStart(firstBar) - compositionStartTime,
@@ -1262,8 +1304,25 @@ LilyPondExporter::write()
 
                     timeT barStart = m_composition->getBarStart(barNo);
                     timeT barEnd = m_composition->getBarEnd(barNo);
+                    timeT currentSegmentStartTime = (*i)->getStartTime();
+                    timeT currentSegmentEndTime = (*i)->getEndMarkerTime();
+		    // Check for a partial measure in the beginning of the composition
                     if (barStart < compositionStartTime) {
                         barStart = compositionStartTime;
+                    }
+		    // Check for a partial measure in the end of the composition
+                    if (barEnd > compositionEndTime) {
+                        barEnd = compositionEndTime;
+                    }
+                    // Check for a partial measure beginning in the middle of a
+                    // theoretical bar
+                    if (barStart < currentSegmentStartTime) {
+                        barStart = currentSegmentStartTime;
+                    }
+                    // Check for a partial measure ending in the middle of a
+                    // theoretical bar
+                    if (barEnd > currentSegmentEndTime) {
+                        barEnd = currentSegmentEndTime;
                     }
 
                     // open \repeat section if this is the first bar in the
@@ -1409,8 +1468,14 @@ LilyPondExporter::write()
 		        QRegExp rx( "\"" );
 		        if ( rx.search( text ) != -1 ) {
 		    
-			    str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
-			        << " \\new Lyrics \\lyricmode {" << std::endl;
+		            if (m_languageLevel <= LILYPOND_VERSION_2_10) {
+			        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
+			            << " \\new Lyrics \\lyricmode {" << std::endl;
+                            } else {
+			        str << indent(col)
+			            << "\\new Lyrics \\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} "
+                                    << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
+                            }
 			    if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
 				    << std::endl;
@@ -1599,7 +1664,7 @@ LilyPondExporter::calculateDuration(Segment *s,
 
 void
 LilyPondExporter::writeBar(Segment *s,
-                           int barNo, int barStart, int barEnd, int col,
+                           int barNo, timeT barStart, timeT barEnd, int col,
                            Rosegarden::Key &key,
                            std::string &lilyText,
                            std::string &prevStyle,
@@ -1659,7 +1724,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), true, str);
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
         // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
@@ -1948,12 +2013,13 @@ LilyPondExporter::writeBar(Segment *s,
             handleEndingPostEvents(postEventsInProgress, i, str);
             handleStartingPostEvents(postEventsToStart, str);
 
-        if (tiedForward){
-			if (tiedUp) 
-				str << "^~ ";
-			else
-				str << "_~ ";
-		}
+            if (tiedForward) {
+	        if (tiedUp) {
+                    str << "^~ ";
+		} else {
+		    str << "_~ ";
+	        }
+	    }
 
 	    if ( hiddenNote ) {
 	        str << "\\unHideNotes ";
@@ -1989,6 +2055,14 @@ LilyPondExporter::writeBar(Segment *s,
                 }
             }
 
+            // If the rest has a manually repositioned Y coordinate, we try to
+            // create a letter note of an appropriate height, and bind a \rest
+            // to it, in order to make repositioned rests exportable.  This is
+            // necessary because LilyPond's automatic rest collision avoidance
+            // frequently chokes to death on our untidy machine-generated files,
+            // and yields terrible results, so we have to offer some manual
+            // mechanism for adjusting the rests unless we want users to have to
+            // edit .ly files by hand to correct for this, which we do not.
             bool offsetRest = false;
             int restOffset  = 0;
             if ((*i)->has(DISPLACED_Y)) {
@@ -2004,10 +2078,12 @@ LilyPondExporter::writeBar(Segment *s,
 
 	    if (MultiMeasureRestCount == 0) {
 		if (hiddenRest) {
+                    std::cout << "HIDDEN REST" << std::endl;
 		    str << "s";
 		} else if (duration == timeSignature.getBarDuration()) {
 		    // Look ahead the segment in order to detect
 		    // the number of measures in the multi measure rest.
+                    std::cout << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)" << std::endl;
 		    Segment::iterator mm_i = i;
 		    while (s->isBeforeEndMarker(++mm_i)) {
 			if ((*mm_i)->isa(Note::EventRestType) &&
@@ -2020,65 +2096,43 @@ LilyPondExporter::writeBar(Segment *s,
 		    }
 		    str << "R";
 		} else {
-                     handleEndingPreEvents(preEventsInProgress, i, str);
-                     handleStartingPreEvents(preEventsToStart, str);
+                    handleEndingPreEvents(preEventsInProgress, i, str);
+                    handleStartingPreEvents(preEventsToStart, str);
 
-                     if (offsetRest) {
-                         // use offset height to get an approximate corresponding
-                          // height on staff
-                         restOffset = restOffset / 1000;
-                          restOffset -= restOffset * 2;
+                    if (offsetRest) {
+			// translate the fine tuning of steps into steps
+			int offset = -(restOffset / 500);
 
-                          // use height on staff to get a MIDI pitch
-                          // get clef from whatever the last clef event was
-                          Rosegarden::Key  k;
-                          Accidental a;
-                         Pitch helper(restOffset, m_lastClefFound, k, a);
+			// accept only even steps to imitate Rosegarden's behaviour
+			if (offset % 2 != 0) {
+			    offset += (offset > 0 ? -1 : 1);
+			}
+			// move the default position of the rest
+			int heightOnStaff = 4 + offset;
 
-                          // port some code from writePitch() here, rather than
-                          // rewriting writePitch() to do both jobs, which
-                          // somebody could conceivably clean up one day if anyone
-                          // is bored
+			// find out the pitch corresponding to the rest position
+			Clef m_lastClefFound((*s).getClefAtTime((*i)->getAbsoluteTime()));
+			Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
 
-                          // use MIDI pitch to get a named note
-                          int p = helper.getPerformancePitch();
-                          std::string n = convertPitchToLilyNote(p, a, k);
+                        // use MIDI pitch to get a named note with octavation
+                        int p = helper.getPerformancePitch();
+                        std::string n = convertPitchToLilyNote(p, Accidentals::NoAccidental, Rosegarden::Key::DefaultKey);
 
-                          // write named note
-                          str << n;
-    
-                          // generate and write octave marks
-                          std::string m = "";
-                          int o = (int)(p / 12);
+                        // write named note
+                        str << n;
 
-                          // mystery hack (it was always aiming too low)
-                          o++;
+                        std::cout << "Offsetting rest: "
+                                  << "offset = " << offset << ", "
+				  << "heightOnStaff = " << heightOnStaff << ", "
+				  << "pitch = " << p << ", "
+				  << "note = " << n
+                                  << std::endl;
 
-                          if (o < 4) {
-                              for (; o < 4; o++)
-                                   m += ",";
-                          } else {
-                              for (; o > 4; o--)
-                                   m += "\'";
-                          }
+                        // defer the \rest until after any duration, because it
+                        // can't come before a duration
+                        // necessary, which is all determined a bit further on
+                        needsSlashRest = true;
 
-                          str << m;
-
-                          // defer the \rest until after any duration, because it
-                          // can't come before a duration if a duration change is
-                          // necessary, which is all determined a bit further on
-                          needsSlashRest = true;
-
-
-                          std::cout << "using pitch letter:"
-                                    << n << m
-                                     << " for offset: " 
-                                     << restOffset
-                                     << " for calculated octave: "
-                                     << o
-                                     << " in clef: "
-                                     << m_lastClefFound.getClefType()
-                                    << std::endl;
                      } else {
                          str << "r";
                      }
@@ -2092,12 +2146,12 @@ LilyPondExporter::writeBar(Segment *s,
 		    prevDuration = duration;
 		}
 
-                 // have to add \rest to a fake rest note after any required
-                 // duration change
-                 if (needsSlashRest) {
-                     str << "\\rest";
-                     needsSlashRest = false;
-                 }
+                // have to add \rest to a fake rest note after any required
+                // duration change
+                if (needsSlashRest) {
+                    str << "\\rest";
+                    needsSlashRest = false;
+                }
 
 		if (lilyText != "") {
 		    str << lilyText;
@@ -2192,7 +2246,7 @@ LilyPondExporter::writeBar(Segment *s,
 
                     Accidental accidental = Accidentals::NoAccidental;
 
-                    str << convertPitchToLilyNote(key.getTonicPitch(), accidental, key);
+                    str << convertPitchToLilyNoteName(key.getTonicPitch(), accidental, key);
 
                     if (key.isMinor()) {
                         str << " \\minor";
@@ -2309,17 +2363,26 @@ LilyPondExporter::writeBar(Segment *s,
                   arg(tr("warning: overlong bar truncated here")));
     }
 
-    if (fractionSmaller(durationRatioSum, barDurationRatio)) {
+    //
+    // Pad bars whose notes do not add up to the length of the bar.
+    // This may happen if the note quantization fails somehow. 
+    //
+    if ((barStart + writtenDuration < barEnd) &&
+        fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
                 arg(tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
-        qstrtostr(QString("% %1/%2 < %3/%4").
+        qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
+                  arg(barStart).
+                  arg(writtenDuration).
+                  arg(barEnd).
                   arg(durationRatioSum.first).
                   arg(durationRatioSum.second).
                   arg(barDurationRatio.first).
                   arg(barDurationRatio.second))
 	    << std::endl << indent(col);
+        
         durationRatio = writeSkip(timeSignature, writtenDuration,
 				  (barEnd - barStart) - writtenDuration, true, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
@@ -2540,27 +2603,6 @@ LilyPondExporter::writePitch(const Event *note,
     lilyNote = convertPitchToLilyNote(pitch, accidental, key);
 
     str << lilyNote;
-
-    // generate and write octave marks
-    std::string octaveMarks = "";
-    int octave = (int)(pitch / 12);
-
-    // tweak the octave break for B# / Cb
-    if ((lilyNote == "bisis") || (lilyNote == "bis")) {
-        octave--;
-    } else if ((lilyNote == "ceses") || (lilyNote == "ces")) {
-        octave++;
-    }
-
-    if (octave < 4) {
-        for (; octave < 4; octave++)
-            octaveMarks += ",";
-    } else {
-        for (; octave > 4; octave--)
-            octaveMarks += "\'";
-    }
-
-    str << octaveMarks;
 }
 
 void

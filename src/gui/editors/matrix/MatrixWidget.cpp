@@ -25,6 +25,7 @@
 #include "MatrixEraser.h"
 #include "MatrixMover.h"
 #include "MatrixResizer.h"
+#include "MatrixVelocity.h"
 #include "MatrixMouseEvent.h"
 
 #include <QGraphicsView>
@@ -309,6 +310,12 @@ void
 MatrixWidget::slotSetResizeTool()
 {
     slotSetTool(MatrixResizer::ToolName);
+}
+
+void
+MatrixWidget::slotSetVelocityTool()
+{
+    slotSetTool(MatrixVelocity::ToolName);
 }
 
 }

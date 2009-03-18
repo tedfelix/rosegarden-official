@@ -25,6 +25,15 @@
 
 namespace Rosegarden {
 
+class EventSelection;	
+	
+class EventSelectionObserver {
+public:
+    virtual void eventSelected(EventSelection *e,Event *)=0;
+    virtual void eventDeselected(EventSelection *e,Event *)=0; 
+    virtual void eventSelectionDestroyed(EventSelection *e)=0;
+};
+	
 /**
  * EventSelection records a (possibly non-contiguous) selection
  * of Events in a single Segment, used for cut'n paste operations.
@@ -52,6 +61,13 @@ public:
     EventSelection(const EventSelection&);
 
     virtual ~EventSelection();
+
+    /**
+     *
+     */
+    void addObserver(EventSelectionObserver *obs);
+
+    void removeObserver(EventSelectionObserver *obs);
 
     /**
      * Add an Event to the selection.  The Event should come from
@@ -134,6 +150,9 @@ public:
     
 private:
     EventSelection &operator=(const EventSelection &);
+  
+    typedef std::list<EventSelectionObserver *> ObserverSet;
+    ObserverSet m_observers;
 
 protected:
     //--------------- Data members ---------------------------------

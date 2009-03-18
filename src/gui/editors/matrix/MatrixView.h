@@ -95,6 +95,7 @@ protected slots:
     void slotSetSelectTool();
     void slotSetMoveTool();
     void slotSetResizeTool();
+    void slotSetVelocityTool();
 
     /// Set the snaptime of the grid from an item in the snap combo
     void slotSetSnapFromIndex(int);

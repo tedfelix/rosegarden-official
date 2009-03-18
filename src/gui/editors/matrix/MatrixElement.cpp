@@ -51,13 +51,11 @@ MatrixElement::~MatrixElement()
 {
     delete m_item;
 }
-
 void
 MatrixElement::reconfigure()
 {
     timeT time = event()->getAbsoluteTime();
     timeT duration = event()->getDuration();
-
     reconfigure(time, duration);
 }
 

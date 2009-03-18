@@ -90,6 +90,7 @@ public slots:
     void slotSetSelectTool();
     void slotSetMoveTool();
     void slotSetResizeTool();
+    void slotSetVelocityTool();
 
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
     void slotSetSnap(timeT);

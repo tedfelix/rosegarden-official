@@ -45,9 +45,12 @@ ChangeVelocityCommand::modifySegment()
             <Int>(VELOCITY, velocity);
 
             // round velocity up to the next multiple of delta
-            velocity /= m_delta;
-            velocity *= m_delta;
-            velocity += m_delta;
+	    if(m_rounddelta) {
+                velocity /= m_delta;
+                velocity *= m_delta;
+                velocity += m_delta;
+	    } else
+	        velocity+=m_delta;
 
             if (velocity < 0)
                 velocity = 0;

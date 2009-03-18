@@ -168,6 +168,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc
 
     m_mainGrid->addWidget(m_variationLabel, 6, 0);
     m_mainGrid->addWidget(m_variationCheckBox, 6, 1);
+
 	m_mainGrid->addWidget(m_variationValue, 6, 2, Qt::AlignRight);
       
 	m_mainGrid->addWidget(m_evalMidiPrgChgLabel, 7, 0, Qt::AlignLeft);

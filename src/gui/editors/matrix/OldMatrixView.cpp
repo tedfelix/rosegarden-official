@@ -79,6 +79,7 @@
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
@@ -95,6 +96,7 @@
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
 #include "MatrixResizer.h"
+#include "MatrixVelocity.h"
 #include "MatrixSelector.h"
 #include "MatrixStaff.h"
 #include "MatrixToolBox.h"
@@ -1009,6 +1011,14 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     //!!! rather too much here shared with notationview -- could much of
     // this be in editview?
 
+    /// The assignment of event selection to the ruler needs to be first
+    /// otherwise we get some unsafe thread usages that i had hard to solve.
+    ///  Let's leave this alone as is for now...
+    ControlRuler *ruler=EditView::getCurrentControlRuler();
+    if(ruler)
+	ruler->assignEventSelection(s);
+
+	
     if (m_currentEventSelection == s)	{
         updateQuantizeCombo();
         return ;
@@ -1044,8 +1054,7 @@ void MatrixView::setCurrentSelection(EventSelection* s, bool preview,
     bool updateRequired = true;
 
     if (s) {
-
-        bool foundNewEvent = false;
+         bool foundNewEvent = false;
 
         for (EventSelection::eventcontainer::iterator i =
                     s->getSegmentEvents().begin();
@@ -1231,6 +1240,13 @@ void MatrixView::slotResizeSelected()
     EditTool* resizer = m_toolBox->getTool(MatrixResizer::ToolName);
 
     setTool(resizer);
+}
+
+void MatrixView::slotVelocityChangeSelected()
+{
+    EditTool* velocity = m_toolBox->getTool(MatrixVelocity::ToolName);
+
+    setTool(velocity);
 }
 
 void MatrixView::slotTransformsQuantize()
