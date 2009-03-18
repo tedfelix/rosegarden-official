@@ -851,7 +851,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     int prg;
     int bnk_msb;
     int bnk_lsb;
-    bnk_lsb = -1;
+    bnk_msb = -1;
     bnk_lsb = -1;
 
     for (i = mC.begin(); i != mC.end(); ++i ) {
