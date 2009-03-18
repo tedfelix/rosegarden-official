@@ -35,7 +35,7 @@ void
 AddTextMarkCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "text-mark", "", "add_text_mark",
+        ("add_text_mark",
          new ArgumentAndSelectionCommandBuilder<AddTextMarkCommand>());
 }
 

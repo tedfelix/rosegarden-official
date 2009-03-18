@@ -135,19 +135,17 @@
       <Action name="add_staccato" text="Add Sta&amp;ccato" icon="staccato" />
       <Action name="add_staccatissimo" text="Add &amp;Staccatissimo" icon="staccatissimo" />
       <Action name="add_marcato" text="Add &amp;Marcato" icon="marcato" />
-      <Action name="add_text_sf" text="Add S&amp;forzando" icon="text_sf" />
-      <Action name="add_text_rf" text="Add R&amp;inforzando" icon="text_rf" />
+      <Action name="add_text_sf" text="Add S&amp;forzando" icon="sf" />
+      <Action name="add_text_rf" text="Add R&amp;inforzando" icon="rf" />
     <Separator/>
       <Action name="add_trill" text="Add Tri&amp;ll" icon="trill" />
-      <Action name="add_long-trill" text="Add Trill &amp;with Line" icon="trill" />
-      <!-- JAS need line icon for 'add_trill-line' -->
-      <Action name="add_trill-line" text="Add Trill Line" />
+      <Action name="add_long-trill" text="Add Trill &amp;with Line" icon="trill-with-squiggle" />
+      <Action name="add_trill-line" text="Add Trill Line" icon="squiggle" />
       <Action name="add_turn" text="Add &amp;Turn" icon="turn" />
-      <!-- JAS need line icon for 'add_mordent...' actions -->
-      <Action name="add_mordent" text="Add M&amp;ordent" />
-      <Action name="add_mordent-inverted" text="Add I&amp;nverted Mordent" />
-      <Action name="add_mordent-long" text="Add Long Mordent" />
-      <Action name="add_mordent-long-inverted" text="Add Lon&amp;g Inverted Mordent" />
+      <Action name="add_mordent" text="Add M&amp;ordent" icon="mordent" />
+      <Action name="add_mordent-inverted" text="Add I&amp;nverted Mordent" icon="inverted-mordent" />
+      <Action name="add_mordent-long" text="Add Long Mordent" icon="long-mordent" />
+      <Action name="add_mordent-long-inverted" text="Add Lon&amp;g Inverted Mordent" icon="long-inverted-mordent" />
     <Separator/>
       <Action name="add_up-bow" text="Add &amp;Up-Bow" icon="up-bow" />
       <Action name="add_down-bow" text="Add &amp;Down-Bow" icon="down-bow" />
@@ -217,7 +215,7 @@
 
   <Menu name="Phrase">
     <text>&amp;Phrase</text>
-    <!-- JAS need icon name for action 'make_chord" -->
+    <!-- JAS need icon name for action 'make_chord' -->
     <Action name="make_chord" text="&amp;Make Chord" />
   <Separator/>
     <Action name="beam" text="&amp;Beam Group" icon="group-beam" shortcut="Ctrl+B" />
@@ -347,7 +345,7 @@
     <!-- JAS Other tools in group are not selectable from menu -->
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
-    <Menu noMerge="1" name="Notes">
+    <Menu noMerge="1" name="NoteTools">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->
       <Action name="breve" text="&amp;Double Whole Note" icon="menu-breve" shortcut="5" />
@@ -369,7 +367,7 @@
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />
     </Menu>
-    <Menu noMerge="1" name="Rests">
+    <Menu noMerge="1" name="RestTools">
       <text>&amp;Rests</text>
 	    <!-- Reference names, but with _ instead of - -->
       <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" />
@@ -555,7 +553,7 @@
     <Action name="triplet_mode" text="Triplet Insert Mo&amp;de" icon="triplet" shortcut="G" />
     <Action name="grace_mode" text="Grace Insert &amp;Mode" icon="group-grace" />
   <Separator/>
-    <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step-by-step" checked="false" />
+    <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
 
   <Menu name="settings">

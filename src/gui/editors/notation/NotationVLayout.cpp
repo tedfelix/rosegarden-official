@@ -22,11 +22,11 @@
 
 #include "base/Composition.h"
 #include "base/Event.h"
-#include "base/LayoutEngine.h"
+#include "base/LayoutEngine2.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
-#include "base/Staff.h"
+#include "base/ViewSegment.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/guitar/Chord.h"
 #include "NotationChord.h"
@@ -65,7 +65,7 @@ NotationVLayout::~NotationVLayout()
 
 NotationVLayout::SlurList &
 
-NotationVLayout::getSlurList(Staff &staff)
+NotationVLayout::getSlurList(ViewSegment &staff)
 {
     SlurListMap::iterator i = m_slurs.find(&staff);
     if (i == m_slurs.end()) {
@@ -82,13 +82,13 @@ NotationVLayout::reset()
 }
 
 void
-NotationVLayout::resetStaff(Staff &staff, timeT, timeT)
+NotationVLayout::resetViewSegment(ViewSegment &staff, timeT, timeT)
 {
     getSlurList(staff).clear();
 }
 
 void
-NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
+NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
 {
     START_TIMING;
 
@@ -408,7 +408,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
         }
     }
 
-    PRINT_ELAPSED("NotationVLayout::scanStaff");
+    PRINT_ELAPSED("NotationVLayout::scanViewSegment");
 }
 
 void

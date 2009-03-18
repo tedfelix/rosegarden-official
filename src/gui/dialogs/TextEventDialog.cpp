@@ -425,8 +425,7 @@ TextEventDialog::slotTextChanged(const QString &qtext)
         text = "Sample";
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap
-    (NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
+    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 }
 
 void
@@ -442,8 +441,7 @@ TextEventDialog::slotTypeChanged(const QString &)
         text = "Sample";
 
     Text rtext(text, type);
-    m_textExampleLabel->setPixmap
-    (NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeTextPixmap(rtext)));
+    m_textExampleLabel->setPixmap(m_notePixmapFactory->makeTextPixmap(rtext));
 
     //
     // swap widgets in and out, depending on the current text type

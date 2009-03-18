@@ -19,6 +19,8 @@
 #ifndef _RG_MATRIXSTAFF_H_
 #define _RG_MATRIXSTAFF_H_
 
+#ifdef NOT_DEFINED
+
 #include <Q3Canvas>
 #include "base/Staff.h"
 #include "gui/general/LinedStaff.h"
@@ -102,4 +104,5 @@ private:
 
 }
 
+#endif
 #endif

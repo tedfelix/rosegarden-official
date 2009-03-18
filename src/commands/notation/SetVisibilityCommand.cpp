@@ -35,10 +35,10 @@ void
 SetVisibilityCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (tr("Make &Visible"), "", "", "make_visible",
+        ("make_visible",
          new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
     r->registerCommand
-        (tr("Make &Invisible"), "", "", "make_invisible",
+        ("make_invisible",
          new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
 }
 

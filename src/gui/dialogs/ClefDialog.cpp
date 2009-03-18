@@ -239,8 +239,7 @@ ClefDialog::slotOctaveDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    QPixmap pmap = NotePixmapFactory::toQPixmap
-                   (m_notePixmapFactory->makeClefDisplayPixmap(m_clef));
+    QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
     m_clefLabel->setPixmap(pmap);
 
     QString name;

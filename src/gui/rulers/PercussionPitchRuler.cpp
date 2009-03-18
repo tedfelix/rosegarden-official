@@ -152,7 +152,7 @@ void PercussionPitchRuler::drawHoverNote(int evPitch)
 void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
 {
     // ugh
-
+/*!!!
     MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
     if (matrixView) {
         MatrixStaff *staff = matrixView->getStaff(0);
@@ -160,7 +160,7 @@ void PercussionPitchRuler::mouseMoveEvent(QMouseEvent* e)
             drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
         }
     }
-
+*/
     if (m_mouseDown)
         if (m_selecting)
             emit keySelected(e->y(), true);

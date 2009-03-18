@@ -443,6 +443,14 @@ public:
     Clef getClefAtTime(timeT time, timeT &ctime) const;
 
     /**
+     * If there is another clef change following the given time,
+     * return its time in nextTime and return true.  If there is no
+     * further clef change after the given time, return false.  This
+     * is a reasonably quick call.
+     */
+    bool getNextClefTime(timeT time, timeT &nextTime) const;
+
+    /**
      * Return the key signature in effect at the given time.  This is
      * a reasonably quick call.
      */
@@ -454,6 +462,14 @@ public:
      * quick call.
      */
     Key getKeyAtTime(timeT time, timeT &ktime) const;
+
+    /**
+     * If there is another key change following the given time, return
+     * its time in nextTime and return true.  If there is no further
+     * key change after the given time, return false.  This is a
+     * reasonably quick call.
+     */
+    bool getNextKeyTime(timeT time, timeT &nextTime) const;
 
     /**
      * Return the clef and key signature in effect at the beginning of the

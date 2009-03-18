@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,38 +15,38 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LINEDSTAFFMANAGER_H_
-#define _RG_LINEDSTAFFMANAGER_H_
+#ifndef _NOTATION_MOUSE_EVENT_H_
+#define _NOTATION_MOUSE_EVENT_H_
 
-
-
-
+#include "base/NotationTypes.h"
+#include <QString>
 
 namespace Rosegarden
 {
 
-class LinedStaff;
-
-
-/**
- * LinedStaffManager is a trivial abstract base for classes that own
- * and position sets of LinedStaffs, as a convenient API to permit
- * clients (such as canvas implementations) to discover which staff
- * lies where.
- * 
- * LinedStaffManager is not used by LinedStaff.
- */
-
-class LinedStaff;
-
-class LinedStaffManager
+class NotationMouseEvent
 {
 public:
-    virtual ~LinedStaffManager() {}
-    virtual LinedStaff *getStaffForCanvasCoords(int x, int y) const = 0;
+    NotationStaff *staff;   // under event, if any
+    NotationElement *element; // under event, if any
+    bool exact; // exact click on this element (wasn't just the nearest)
+    Clef clef;
+    Key key;
+
+    timeT time;
+    int height; // height on staff
+    double sceneX;
+    int sceneY;
+
+    Qt::KeyboardModifiers modifiers;
+    Qt::MouseButtons buttons;
+
+    NotationMouseEvent() :
+        staff(0), element(0), exact(false),
+        time(0), height(0),
+        sceneX(0), sceneY(0),
+        modifiers(0), buttons(0) { }
 };
-
-
 
 }
 

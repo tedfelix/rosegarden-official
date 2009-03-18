@@ -32,12 +32,11 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "base/Staff.h"
 #include "base/ViewElement.h"
 #include "commands/edit/SelectionPropertyCommand.h"
+#include "document/CommandHistory.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
-#include "gui/general/LinedStaff.h"
 #include <Q3Canvas>
 #include <QColor>
 #include <QPoint>
@@ -49,22 +48,22 @@ namespace Rosegarden
 {
 
 PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
-        Staff* staff,
-        RulerScale* rulerScale,
-        EditViewBase* parentView,
-        Q3Canvas* c, QWidget* parent,
-        const char* name	//, WFlags f) :
-		):
-        ControlRuler(&(staff->getSegment()), rulerScale,
-                     parentView, c, parent), // name, f),
-        m_propertyName(propertyName),
-        m_staff(staff),
-        m_propertyLine(new Q3CanvasLine(canvas())),
-        m_propertyLineShowing(false),
-        m_propertyLineX(0),
-        m_propertyLineY(0)
+                                           ViewSegment *viewSegment,
+                                           RulerScale *rulerScale,
+                                           EditViewBase *parentView,
+                                           Q3Canvas *c,
+                                           QWidget *parent,
+                                           const char *name) :
+    ControlRuler(&(viewSegment->getSegment()), rulerScale,
+                 parentView, c, parent),
+    m_propertyName(propertyName),
+    m_viewSegment(viewSegment),
+    m_propertyLine(new Q3CanvasLine(canvas())),
+    m_propertyLineShowing(false),
+    m_propertyLineX(0),
+    m_propertyLineY(0)
 {
-    m_staff->addObserver(this);
+    m_viewSegment->addObserver(this);
     m_propertyLine->setZ(1000); // bring to front
 
     setMenuName("property_ruler_menu");
@@ -73,15 +72,15 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
 }
 
 void
-PropertyControlRuler::setStaff(Staff *staff)
+PropertyControlRuler::setViewSegment(ViewSegment *viewSegment)
 {
-    RG_DEBUG << "PropertyControlRuler::setStaff(" << staff << ")" << endl;
+    RG_DEBUG << "PropertyControlRuler::setViewSegment(" << viewSegment << ")" << endl;
 
-    m_staff->removeObserver(this);
+    m_viewSegment->removeObserver(this);
     m_segment->removeObserver(this);
-    m_staff = staff;
-    m_segment = &m_staff->getSegment();
-    m_staff->addObserver(this);
+    m_viewSegment = viewSegment;
+    m_segment = &m_viewSegment->getSegment();
+    m_viewSegment->addObserver(this);
     m_segment->addObserver(this);
 
     //!!! need to delete the control items here
@@ -132,8 +131,8 @@ PropertyControlRuler::drawBackground()
 
 PropertyControlRuler::~PropertyControlRuler()
 {
-    if (m_staff) {
-        m_staff->removeObserver(this);
+    if (m_viewSegment) {
+        m_viewSegment->removeObserver(this);
     }
 }
 
@@ -144,12 +143,18 @@ QString PropertyControlRuler::getName()
 
 void PropertyControlRuler::init()
 {
-    ViewElementList* viewElementList = m_staff->getViewElementList();
+    ViewElementList* viewElementList = m_viewSegment->getViewElementList();
+
+/*!!!
+
+  LinedStaff no longer exists; need a different way to do this
+  (whatever its purpose happens to be
 
     LinedStaff* lStaff = dynamic_cast<LinedStaff*>(m_staff);
 
     if (lStaff)
         m_staffOffset = lStaff->getX();
+*/
 
     for (ViewElementList::iterator i = viewElementList->begin();
             i != viewElementList->end(); ++i) {
@@ -158,14 +163,14 @@ void PropertyControlRuler::init()
             continue;
 
         double x = m_rulerScale->getXForTime((*i)->getViewAbsoluteTime());
-        new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_staffOffset),
+        new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_viewSegmentOffset),
                         int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
                                                       (*i)->getViewDuration()) - x));
 
     }
 }
 
-void PropertyControlRuler::elementAdded(const Staff *, ViewElement *el)
+void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 {
     RG_DEBUG << "PropertyControlRuler::elementAdded()\n";
 
@@ -174,12 +179,12 @@ void PropertyControlRuler::elementAdded(const Staff *, ViewElement *el)
 
     double x = m_rulerScale->getXForTime(el->getViewAbsoluteTime());
 
-    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x + m_staffOffset),
+    new ControlItem(this, new ViewElementAdapter(el, getPropertyName()), int(x + m_viewSegmentOffset),
                     int(m_rulerScale->getXForTime(el->getViewAbsoluteTime() +
                                                   el->getViewDuration()) - x));
 }
 
-void PropertyControlRuler::elementRemoved(const Staff *, ViewElement *el)
+void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 {
     RG_DEBUG << "PropertyControlRuler::elementRemoved(\n";
 
@@ -198,9 +203,9 @@ void PropertyControlRuler::elementRemoved(const Staff *, ViewElement *el)
     }
 }
 
-void PropertyControlRuler::staffDeleted(const Staff *)
+void PropertyControlRuler::viewSegmentDeleted(const ViewSegment *)
 {
-    m_staff = 0;
+    m_viewSegment = 0;
 }
 
 void
@@ -216,11 +221,16 @@ PropertyControlRuler::endMarkerTimeChanged(const Segment *s, bool)
     init();
 }
 
-void PropertyControlRuler::computeStaffOffset()
+void PropertyControlRuler::computeViewSegmentOffset()
 {
+/*!!!
+  LinedStaff no longer exists; need a different way to do this
+  (whatever its purpose happens to be
+
     LinedStaff* lStaff = dynamic_cast<LinedStaff*>(m_staff);
     if (lStaff)
         m_staffOffset = lStaff->getX();
+*/
 }
 
 void PropertyControlRuler::startPropertyLine()
@@ -389,7 +399,7 @@ PropertyControlRuler::drawPropertyLine(timeT startTime,
                                          startValue,
                                          endValue);
 
-        m_parentEditView->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
     } else {
 

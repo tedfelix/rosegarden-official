@@ -3,14 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-
-    This program is Copyright 2000-2007
-        Guillaume Laurent   <glaurent@telegraph-road.org>,
-        Chris Cannam        <cannam@all-day-breakfast.com>,
-        Richard Bown        <richard.bown@ferventsoftware.com>
-
-    The moral rights of Guillaume Laurent, Chris Cannam, and Richard
-    Bown to claim authorship of this work have been asserted.
+    Copyright 2000-2009 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -23,8 +16,6 @@
 */
 
 #include "NotationCommandRegistry.h"
-
-#include "gui/general/EditView.h"
 
 #include "commands/notation/MakeChordCommand.h"
 #include "commands/notation/BeamCommand.h"
@@ -57,22 +48,12 @@
 #include "commands/notation/TieNotesCommand.h"
 #include "commands/notation/UnTupletCommand.h"
 #include "commands/notation/UntieNotesCommand.h"
-#include "misc/Strings.h"
-
-#include "NoteFontFactory.h"
-#include "NoteFont.h"
-#include "NoteCharacter.h"
-#include "NoteStyleFactory.h"
-
-
-#include <QIcon>
-
 
 namespace Rosegarden
 {
 
-NotationCommandRegistry::NotationCommandRegistry(EditView *v) :
-    EditViewCommandRegistry(v)
+NotationCommandRegistry::NotationCommandRegistry(ActionFileClient *client) :
+    ActionCommandRegistry(client)
 {
     AddFingeringMarkCommand::registerCommand(this);
     AddIndicationCommand::registerCommand(this);

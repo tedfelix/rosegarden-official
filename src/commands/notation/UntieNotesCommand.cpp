@@ -34,7 +34,7 @@ using namespace BaseProperties;
 void
 UntieNotesCommand::registerCommand(CommandRegistry *r)
 {
-    r->registerCommand(getGlobalName(), "", "", "untie_notes",
+    r->registerCommand("untie_notes",
                        new SelectionCommandBuilder<UntieNotesCommand>());
 }
 

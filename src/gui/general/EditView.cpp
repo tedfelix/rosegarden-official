@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NO_LONGER_USED
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>
@@ -26,7 +27,6 @@
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "ActiveItem.h"
 #include "document/CommandRegistry.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"
@@ -48,7 +48,6 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/SoftSynthDevice.h"
-#include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/ViewElement.h"
 #include "commands/edit/InvertCommand.h"
@@ -118,7 +117,6 @@ EditView::EditView(RosegardenGUIDoc *doc,
                    QWidget *parent, const char *name) :
         EditViewBase(doc, segments, cols, parent, name),
         m_currentEventSelection(0),
-        m_activeItem(0),
         m_canvasView(0),
         m_rulerBox(new QVBoxLayout),  // top ruler box - added to grid later on
         m_rulerBoxFiller(0),          // On the left of m_rulerBox
@@ -208,6 +206,8 @@ void EditView::updateBottomWidgetGeometry()
 
 void EditView::paintEvent(QPaintEvent* e)
 {
+    EditViewBase::paintEvent(e); return;//&&& //!!! for experimental purposes
+
     RG_DEBUG << "EditView::paintEvent()\n";
     EditViewBase::paintEvent(e);
 
@@ -508,6 +508,7 @@ EditView::getInsertionTime(Clef &clef,
 
     return t;
 }
+/*!!!
 
 void EditView::slotActiveItemPressed(QMouseEvent* e,
                                      Q3CanvasItem* item)
@@ -533,13 +534,12 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 
     }
 }
-
+*/
 void
 EditView::slotStepBackward()
 {
     Staff *staff = getCurrentStaff();
-    if (!staff)
-        return ;
+    if (!staff) return;
     ViewElementList *vel = staff->getViewElementList();
 
     timeT time = getInsertionTime();
@@ -1933,3 +1933,5 @@ RosegardenCanvasView* EditView::getCanvasView()
 
 }
 #include "EditView.moc"
+
+#endif

@@ -79,7 +79,6 @@ public slots:
                            timeT endLoop);
 
 protected:
-    // ActiveItem interface
     virtual void mousePressEvent       (QMouseEvent*);
     virtual void mouseReleaseEvent     (QMouseEvent*);
     virtual void mouseDoubleClickEvent (QMouseEvent*);

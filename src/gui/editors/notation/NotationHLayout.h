@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef _RG_NOTATIONHLAYOUT_H_
 #define _RG_NOTATIONHLAYOUT_H_
 
-#include "base/LayoutEngine.h"
+#include "base/LayoutEngine2.h"
 #include "base/NotationTypes.h"
 #include "NotationElement.h"
 #include "gui/general/ProgressReporter.h"
@@ -36,7 +35,7 @@ namespace Rosegarden
 {
 
 class ViewElement;
-class Staff;
+class ViewSegment;
 class Quantizer;
 class NotePixmapFactory;
 class NotationProperties;
@@ -55,7 +54,7 @@ class AccidentalTable;
  */
 
 class NotationHLayout : public ProgressReporter,
-                        public HorizontalLayoutEngine
+                        public HorizontalLayoutEngine2
 {
 public:
     NotationHLayout(Composition *c,
@@ -76,21 +75,21 @@ public:
      * The map should be cleared (by calling reset()) before a full
      * set of staffs is preparsed.
      */
-    virtual void scanStaff(Staff &staff,
+    virtual void scanViewSegment(ViewSegment &staff,
                            timeT startTime = 0,
                            timeT endTime = 0);
 
     /**
      * Resets internal data stores, notably the BarDataMap that is
-     * used to retain the data computed by scanStaff().
+     * used to retain the data computed by scanViewSegment().
      */
     virtual void reset();
 
     /**
      * Resets internal data stores, notably the given staff's entry
-     * in the BarDataMap used to retain the data computed by scanStaff().
+     * in the BarDataMap used to retain the data computed by scanViewSegment().
      */
-    virtual void resetStaff(Staff &staff,
+    virtual void resetViewSegment(ViewSegment &staff,
                             timeT startTime = 0,
                             timeT endTime = 0);
 
@@ -170,7 +169,7 @@ public:
      * Returns the number of the first visible bar line on the given
      * staff
      */
-    virtual int getFirstVisibleBarOnStaff(Staff &staff);
+    virtual int getFirstVisibleBarOnViewSegment(ViewSegment &staff) const;
 
     /**
      * Returns the number of the first visible bar line on any
@@ -182,7 +181,7 @@ public:
      * Returns the number of the last visible bar line on the given
      * staff
      */
-    virtual int getLastVisibleBarOnStaff(Staff &staff) const;
+    virtual int getLastVisibleBarOnViewSegment(ViewSegment &staff) const;
 
     /**
      * Returns the number of the first visible bar line on any
@@ -218,7 +217,7 @@ public:
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrectOnStaff(Staff &staff, int barNo);
+    virtual bool isBarCorrectOnViewSegment(ViewSegment &staff, int barNo) const;
 
     /**
      * Returns true if there is a new time signature in the given bar,
@@ -226,11 +225,11 @@ public:
      * x-coord
      */
     virtual bool getTimeSignaturePosition
-    (Staff &staff, int barNo,
-     TimeSignature &timeSig, double &timeSigX);
+    (ViewSegment &staff, int barNo,
+     TimeSignature &timeSig, double &timeSigX) const;
 
     /// purely optional, used only for value() reporting
-    void setStaffCount(int staffCount) {
+    void setViewSegmentCount(int staffCount) {
         m_staffCount = staffCount;
     }
 
@@ -251,7 +250,7 @@ protected:
     typedef std::vector<Chunk> ChunkList;
 
     /**
-     * Inner class for bar data, used by scanStaff()
+     * Inner class for bar data, used by scanViewSegment()
      */
     struct BarData
     {
@@ -305,13 +304,13 @@ protected:
 
     typedef std::map<int, BarData> BarDataList;
     typedef BarDataList::value_type BarDataPair;
-    typedef std::map<Staff *, BarDataList> BarDataMap;
+    typedef std::map<ViewSegment *, BarDataList> BarDataMap;
     typedef std::map<int, double> BarPositionList;
 
-    typedef std::map<Staff *, int> StaffIntMap;
+    typedef std::map<ViewSegment *, int> ViewSegmentIntMap;
     typedef std::map<long, NotationGroup *> NotationGroupMap;
 
-    void clearBarList(Staff &);
+    void clearBarList(ViewSegment &);
 
 
     /**
@@ -319,7 +318,7 @@ protected:
      * beyond the end of the existing bar data list, create new
      * records and/or fill with empty ones as appropriate.
      */
-    void setBarBasicData(Staff &staff, int barNo,
+    void setBarBasicData(ViewSegment &staff, int barNo,
                          NotationElementList::iterator start, bool correct,
                          TimeSignature timeSig, bool newTimeSig);
 
@@ -328,18 +327,18 @@ protected:
      * beyond the end of the existing bar data list, create new
      * records and/or fill with empty ones as appropriate.
      */
-    void setBarSizeData(Staff &staff, int barNo,
+    void setBarSizeData(ViewSegment &staff, int barNo,
                         float fixedWidth, timeT actualDuration);
 
     /**
      * Returns the bar positions for a given staff, provided that
      * staff has been preparsed since the last reset
      */
-    BarDataList& getBarData(Staff &staff);
-    const BarDataList& getBarData(Staff &staff) const;
+    BarDataList& getBarData(ViewSegment &staff);
+    const BarDataList& getBarData(ViewSegment &staff) const;
 
     /// Find the staff in which bar "barNo" is widest
-    Staff *getStaffWithWidestBar(int barNo);
+    ViewSegment *getViewSegmentWithWidestBar(int barNo);
 
     /// Find width of clef+key in the staff in which they're widest in this bar
     int getMaxRepeatedClefAndKeyWidth(int barNo);
@@ -375,21 +374,21 @@ protected:
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
     void positionChord
-    (Staff &staff, 
+    (ViewSegment &staff, 
      NotationElementList::iterator &, const Clef &clef,
      const ::Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
 
     void sampleGroupElement
-    (Staff &staff, const Clef &clef,
+    (ViewSegment &staff, const Clef &clef,
      const ::Rosegarden::Key &key, const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
     timeT getSpacingDuration
-    (Staff &staff, const NotationElementList::iterator &);
+    (ViewSegment &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
     timeT getSpacingDuration
-    (Staff &staff, const NotationChord &);
+    (ViewSegment &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
                          NotePixmapFactory *,
@@ -400,13 +399,13 @@ protected:
     int getPostBarMargin() const;
     int getFixedItemSpacing() const;
 
-    NotePixmapFactory *getNotePixmapFactory(Staff &);
-    NotePixmapFactory *getGraceNotePixmapFactory(Staff &);
+    NotePixmapFactory *getNotePixmapFactory(ViewSegment &);
+    NotePixmapFactory *getGraceNotePixmapFactory(ViewSegment &);
 
     //--------------- Data members ---------------------------------
 
     BarDataMap m_barData;
-    StaffIntMap m_staffNameWidths;
+    ViewSegmentIntMap m_staffNameWidths;
     BarPositionList m_barPositions;
     NotationGroupMap m_groupsExtant;
 
@@ -429,7 +428,7 @@ protected:
     const NotationProperties &m_properties;
 
     int m_timePerProgressIncrement;
-    std::map<Staff *, bool> m_haveOttavaSomewhere;
+    std::map<ViewSegment *, bool> m_haveOttavaSomewhere;
     int m_staffCount; // purely for value() reporting
 };
 

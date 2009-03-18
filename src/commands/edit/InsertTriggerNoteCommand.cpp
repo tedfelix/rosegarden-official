@@ -28,6 +28,7 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "base/BaseProperties.h"
+#include "misc/Strings.h"
 
 namespace Rosegarden
 {
@@ -72,22 +73,16 @@ InsertTriggerNoteCommand::modifySegment()
 
     Event *e = new Event(Note::EventType, m_time, m_note.getDuration());
 
-    e->set
-    <Int>(PITCH, m_pitch);
-    e->set
-    <Int>(VELOCITY, m_velocity);
+    e->set<Int>(PITCH, m_pitch);
+    e->set<Int>(VELOCITY, m_velocity);
 
     if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
-        e->set
-        <String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+        e->set<String>(NotationProperties::NOTE_STYLE, qstrtostr(m_noteStyle));
     }
 
-    e->set
-    <Int>(TRIGGER_SEGMENT_ID, m_id);
-    e->set
-    <Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
-    e->set
-    <String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
+    e->set<Int>(TRIGGER_SEGMENT_ID, m_id);
+    e->set<Bool>(TRIGGER_SEGMENT_RETUNE, m_retune);
+    e->set<String>(TRIGGER_SEGMENT_ADJUST_TIMES, m_timeAdjust);
 
     if (m_mark != Marks::NoMark) {
         Marks::addMark(*e, m_mark, true);
@@ -99,16 +94,14 @@ InsertTriggerNoteCommand::modifySegment()
     Segment::iterator j = i;
     while (++j != s.end()) {
         if ((*j)->getAbsoluteTime() >
-                (*i)->getAbsoluteTime() + (*i)->getDuration())
+            (*i)->getAbsoluteTime() + (*i)->getDuration())
             break;
         if ((*j)->isa(Note::EventType)) {
             if ((*j)->getAbsoluteTime() ==
-                    (*i)->getAbsoluteTime() + (*i)->getDuration()) {
-                if ((*j)->has(TIED_BACKWARD) && (*j)->get
-                        <Bool>(TIED_BACKWARD) &&
-                        (*j)->has(PITCH) && ((*j)->get<Int>(PITCH) == m_pitch)) {
-                    (*i)->set
-                    <Bool>(TIED_FORWARD, true);
+                (*i)->getAbsoluteTime() + (*i)->getDuration()) {
+                if ((*j)->has(TIED_BACKWARD) && (*j)->get<Bool>(TIED_BACKWARD) &&
+                    (*j)->has(PITCH) && ((*j)->get<Int>(PITCH) == m_pitch)) {
+                    (*i)->set<Bool>(TIED_FORWARD, true);
                 }
             }
         }

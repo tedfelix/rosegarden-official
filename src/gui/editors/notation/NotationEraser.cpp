@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "NotationEraser.h"
 #include <QApplication>
@@ -99,3 +100,4 @@ const QString NotationEraser::ToolName   = "notationeraser";
 
 }
 #include "NotationEraser.moc"
+#endif

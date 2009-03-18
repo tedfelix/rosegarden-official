@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "ClefInserter.h"
 
@@ -111,3 +112,5 @@ const QString ClefInserter::ToolName     = "clefinserter";
 
 }
 #include "ClefInserter.moc"
+#endif
+

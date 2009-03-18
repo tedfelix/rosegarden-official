@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#ifdef NOT_JUST_NOW //!!!
 #include "GuitarChordInserter.h"
 
 
@@ -167,3 +167,4 @@ const QString GuitarChordInserter::ToolName = "guitarchordinserter";
 
 }
 #include "GuitarChordInserter.moc"
+#endif

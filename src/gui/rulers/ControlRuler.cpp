@@ -34,8 +34,9 @@
 #include "ControlTool.h"
 #include "DefaultVelocityColour.h"
 #include "ElementAdapter.h"
-#include "gui/general/EditView.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/general/RosegardenCanvasView.h"
+#include "document/CommandHistory.h"
 #include "gui/widgets/TextFloat.h"
 #include <algorithm>
 
@@ -75,7 +76,7 @@ ControlRuler::ControlRuler(Segment *segment,
         m_currentIndex(0),
         m_tool(0),
         m_maxItemValue(127),
-        m_staffOffset(0),
+        m_viewSegmentOffset(0),
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
@@ -123,7 +124,7 @@ void ControlRuler::slotUpdateElementsHPos()
 {
     RG_DEBUG << "ControlRuler::slotUpdateElementsHPos()\n";
 
-    computeStaffOffset();
+    computeViewSegmentOffset();
 
     Q3CanvasItemList list = canvas()->allItems();
 
@@ -144,7 +145,7 @@ void ControlRuler::layoutItem(ControlItem* item)
 
     double x = m_rulerScale->getXForTime(itemTime);
 
-    item->setX(x + m_staffOffset);
+    item->setX(x + m_viewSegmentOffset);
     int itemElementDuration = item->getElementAdapter()->getDuration();
 
     int width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);
@@ -287,7 +288,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
                                         m_eventSelection->getEndTime());
 
         RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
-        m_parentEditView->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         m_itemMoved = false;
     }
@@ -316,8 +317,12 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
     //
     QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
 
+/*!!! EditView is no longer used -- need another way to do this
+
     int scrollX = dynamic_cast<EditView*>(m_parentEditView)->getRawCanvasView()->
                   horizontalScrollBar()->value();
+*/
+    int scrollX = 0; //!!!
 
     /*
     RG_DEBUG << "ControlRuler::contentsMouseMoveEvent - total pos = " << totalPos.x()

@@ -15,12 +15,26 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include "LinedStaffManager.h"
-
-#include "LinedStaff.h"
-
+#ifndef _SELECTION_MANAGER_H_
+#define _SELECTION_MANAGER_H_
 
 namespace Rosegarden
 {
+
+class EventSelection;
+
+/**
+ * Trivial interface to be implemented by classes that own, or have
+ * access to, an event selection.
+ */
+class SelectionManager
+{
+public:
+    virtual EventSelection *getSelection() const = 0;
+    virtual void setSelection(EventSelection *s, bool preview) = 0;
+};
+
 }
+
+#endif
+

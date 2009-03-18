@@ -22,7 +22,7 @@
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "gui/general/EditViewBase.h"
+#include "gui/general/ListEditView.h"
 #include "base/Event.h"
 
 #include <set>
@@ -51,7 +51,7 @@ class RosegardenGUIDoc;
 class Event;
 
 
-class EventView : public EditViewBase, public SegmentObserver
+class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
 

@@ -44,7 +44,6 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
-#include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/NotationQuantizer.h"
@@ -963,8 +962,10 @@ LilyPondExporter::write()
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
                     if ((*it) == (*i)) currentSegmentSelected = true;
                 }
+#ifdef NOT_JUST_NOW //!!!
             } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
 		currentSegmentSelected = m_notationView->hasSegment(*i);
+#endif
 	    }
 
 	    // Check whether the track is a non-midi track.
@@ -976,8 +977,10 @@ LilyPondExporter::write()
                 ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
                 ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
 		 (track->getId() == m_composition->getSelectedTrack())) ||
+#ifdef NOT_JUST_NOW //!!!
                 ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) &&
 		 (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
+#endif
                 ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {

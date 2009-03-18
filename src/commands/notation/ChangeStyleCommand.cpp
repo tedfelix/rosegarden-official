@@ -40,11 +40,9 @@ ChangeStyleCommand::registerCommand(CommandRegistry *r)
     for (std::vector<NoteStyleName>::iterator i = styles.begin();
          i != styles.end(); ++i) {
 
-        QString styleQName(strtoqstr(*i));
-        r->registerCommand(styleQName, 0, "", "style_" + styleQName,
-                           new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>(),
-
-                           tr("Note &Style"), "note_style_actionmenu");
+        QString styleQName(*i);
+        r->registerCommand("style_" + styleQName,
+                           new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>());
     }
 }
 
@@ -54,7 +52,7 @@ ChangeStyleCommand::getArgument(QString actionName, CommandArgumentQuerier &)
     QString pfx = "style_";
     if (actionName.startsWith(pfx)) {
         QString remainder = actionName.right(actionName.length() - pfx.length());
-        return qstrtostr(remainder);
+        return remainder;
     }
     return "";
 }
@@ -62,7 +60,7 @@ ChangeStyleCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 QString
 ChangeStyleCommand::getGlobalName(NoteStyleName style)
 {
-    return strtoqstr(style);
+    return style;
 }
 
 void
@@ -77,7 +75,8 @@ ChangeStyleCommand::modifySegment()
             if (m_style == NoteStyleFactory::DefaultStyle) {
                 (*i)->unset(NotationProperties::NOTE_STYLE);
             } else {
-                (*i)->set<String>(NotationProperties::NOTE_STYLE, m_style);
+                (*i)->set<String>(NotationProperties::NOTE_STYLE,
+                                  qstrtostr(m_style));
             }
         }
     }

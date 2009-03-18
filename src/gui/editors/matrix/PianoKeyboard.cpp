@@ -23,7 +23,7 @@
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/rulers/PitchRuler.h"
 #include "MatrixStaff.h"
-#include "MatrixView.h"
+//!!!#include "MatrixView.h"
 
 #include <QColor>
 #include <QCursor>
@@ -244,6 +244,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     // RWB (20040220)
     //
+/*!!!
     MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
     if (matrixView) {
         MatrixStaff *staff = matrixView->getStaff(0);
@@ -252,7 +253,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
             drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
         }
     }
-
+*/
     if (e->state() & Qt::LeftButton) {
         if (m_selecting)
             emit keySelected(e->y(), true);

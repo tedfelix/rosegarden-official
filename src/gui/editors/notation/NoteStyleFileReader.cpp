@@ -32,7 +32,7 @@
 namespace Rosegarden {
 
 
-NoteStyleFileReader::NoteStyleFileReader(std::string name) :
+NoteStyleFileReader::NoteStyleFileReader(QString name) :
     m_style(new NoteStyle(name)),
     m_haveNote(false)
 {
@@ -43,16 +43,15 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
 	QString styleDirectory = il.getResourcePath( "styles" );
 	
     QString styleFileName =
-	QString("%1/%2.xml").arg(styleDirectory).arg(strtoqstr(name));
+	QString("%1/%2.xml").arg(styleDirectory).arg(name);
 */
     QString styleFileName = ResourceFinder().getResourcePath
-        ("styles", QString("%1.xml").arg(strtoqstr(name)));
+        ("styles", QString("%1.xml").arg(name));
 
     QFileInfo fileInfo(styleFileName);
 
     if (styleFileName == "" || !fileInfo.isReadable()) {
-        throw StyleFileReadFailed
-	    (qstrtostr(tr("Can't open style file %1").arg(styleFileName)));
+        throw StyleFileReadFailed(tr("Can't open style file %1").arg(styleFileName));
     }
 
     QFile styleFile(styleFileName);
@@ -65,7 +64,7 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
     styleFile.close();
 
     if (!ok) {
-	throw StyleFileReadFailed(qstrtostr(m_errorString));
+	throw StyleFileReadFailed(m_errorString);
     }
 }
 
@@ -79,7 +78,7 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
     if (lcName == "rosegarden-note-style") {
 
 	QString s = attributes.value("base-style");
-	if ( !s.isEmpty() ) m_style->setBaseStyle(qstrtostr(s));
+	if ( !s.isEmpty() ) m_style->setBaseStyle(s);
 
     } else if (lcName == "note") {
 
@@ -125,7 +124,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
 
     s = attributes.value("shape");
 	if (!s.isEmpty() ) {
-	m_style->setShape(type, qstrtostr(s.toLower()));
+	m_style->setShape(type, s.toLower());
 	haveShape = true;
     }
     
@@ -137,7 +136,7 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
 	    return false;
 	}
 	m_style->setShape(type, NoteStyle::CustomCharName);
-	m_style->setCharName(type, qstrtostr(s));
+	m_style->setCharName(type, s);
     }
 
     s = attributes.value("filled");

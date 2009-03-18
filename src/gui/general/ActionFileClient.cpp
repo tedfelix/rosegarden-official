@@ -58,6 +58,23 @@ ActionFileClient::createAction(QString actionName, QString connection)
 }
 
 QAction *
+ActionFileClient::createAction(QString actionName, QObject *target, QString connection)
+{
+    QObject *obj = dynamic_cast<QObject *>(this);
+    if (!obj) {
+        std::cerr << "ERROR: ActionFileClient::createAction: ActionFileClient subclass is not a QObject" << std::endl;
+        return 0;
+    }
+    QAction *action = new QAction(obj);
+    action->setObjectName(actionName);
+    if (connection != "") {
+        QObject::connect(action, SIGNAL(triggered()),
+                         target, qStrToCharPtrUtf8(connection) );
+    }
+    return action;
+}
+
+QAction *
 ActionFileClient::findAction(QString actionName)
 {
     QObject *obj = dynamic_cast<QObject *>(this);

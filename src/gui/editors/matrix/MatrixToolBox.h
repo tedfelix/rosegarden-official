@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef _RG_MATRIXTOOLBOX_H_
 #define _RG_MATRIXTOOLBOX_H_
 
-#include "gui/general/EditToolBox.h"
+#include "gui/general/BaseToolBox.h"
 
 class QString;
 
@@ -27,26 +26,29 @@ class QString;
 namespace Rosegarden
 {
 
-class EditTool;
-class MatrixView;
-class MatrixElement;
-class MatrixStaff;
+class MatrixWidget;
+class MatrixScene;
 
-class MatrixToolBox : public EditToolBox
+
+/**
+ * MatrixToolBox : maintains a single instance of each registered tool
+ *
+ * Tools are fetched by name
+ */
+class MatrixToolBox : public BaseToolBox
 {
     Q_OBJECT
+
 public:
-    MatrixToolBox(MatrixView* parent);
+    MatrixToolBox(MatrixWidget *parent);
+
+    void setScene(MatrixScene *scene);
 
 protected:
-
-    virtual EditTool* createTool(const QString& toolName);
-
-    //--------------- Data members ---------------------------------
-
-    MatrixView* m_mParentView;
+    virtual BaseTool *createTool(QString toolName);
+    MatrixWidget *m_widget;
+    MatrixScene *m_scene;
 };
-
 
 }
 

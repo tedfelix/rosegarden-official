@@ -91,8 +91,7 @@ AddMarkCommand::registerCommand(CommandRegistry *r)
     for (int i = 0; i < marks.size(); ++i) {
         Mark mark = marks[i];
         r->registerCommand
-            (getGlobalName(mark), getIconName(mark),
-             getShortcut(mark), getActionName(mark),
+            (getActionName(mark),
              new ArgumentAndSelectionCommandBuilder<AddMarkCommand>());
     }
 }

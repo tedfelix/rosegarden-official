@@ -15,12 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <Q3CanvasPixmap>
 #include "MatrixMover.h"
 
 #include "base/BaseProperties.h"
-#include <QDir>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -29,29 +26,23 @@
 #include "commands/matrix/MatrixModifyCommand.h"
 #include "commands/matrix/MatrixInsertionCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "document/CommandHistory.h"
 #include "MatrixElement.h"
-#include "MatrixStaff.h"
+#include "MatrixScene.h"
+#include "MatrixWidget.h"
 #include "MatrixTool.h"
-#include "MatrixView.h"
-#include "MatrixVLayout.h"
-#include <QAction>
-#include <QIcon>
-#include <QPoint>
-#include <QString>
+#include "MatrixMouseEvent.h"
+#include "MatrixViewSegment.h"
 #include "misc/Debug.h"
-#include <QMouseEvent>
-
 
 
 namespace Rosegarden
 {
 
-MatrixMover::MatrixMover(MatrixView* parent) :
-    MatrixTool("MatrixMover", parent),
+MatrixMover::MatrixMover(MatrixWidget *parent) :
+    MatrixTool("matrixmover.rc", "MatrixMover", parent),
     m_currentElement(0),
-    m_currentStaff(0),
+    m_currentViewSegment(0),
     m_lastPlayedPitch(-1)
 {
     createAction("select", SLOT(slotSelectSelected()));
@@ -59,26 +50,28 @@ MatrixMover::MatrixMover(MatrixView* parent) :
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("resize", SLOT(slotResizeSelected()));
 
-    createMenu("matrixmover.rc");
+    createMenu();
 }
 
-void MatrixMover::handleEventRemoved(Event *event)
+void
+MatrixMover::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
         m_currentElement = 0;
     }
 }
 
-void MatrixMover::handleLeftButtonPress(timeT time,
-                                        int pitch,
-                                        int staffNo,
-                                        QMouseEvent* e,
-                                        ViewElement* el)
+void
+MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : time = " << time << ", el = " << el << endl;
-    if (!el) return;
+    MATRIX_DEBUG << "MatrixMover::handleLeftButtonPress() : snapped time = " << e->snappedLeftTime << ", el = " << e->element << endl;
 
-    m_quickCopy = (e->state() & Qt::ControlModifier);
+    if (!e->element) return;
+
+    m_currentViewSegment = e->viewSegment;
+    m_currentElement = e->element;
+
+    m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
     if (!m_duplicateElements.empty()) {
         for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
@@ -88,115 +81,89 @@ void MatrixMover::handleLeftButtonPress(timeT time,
         m_duplicateElements.clear();
     }
 
-    m_currentElement = dynamic_cast<MatrixElement*>(el);
-    m_currentStaff = m_mParentView->getStaff(staffNo);
+    // Add this element and allow movement
+    //
+    EventSelection* selection = m_scene->getSelection();
+    Event *event = m_currentElement->event();
 
-    if (m_currentElement) {
-
-        // Add this element and allow movement
-        //
-        EventSelection* selection = m_mParentView->getCurrentSelection();
-
-        if (selection) {
-            EventSelection *newSelection;
-
-            if ((e->state() & Qt::ShiftModifier) ||
-                    selection->contains(m_currentElement->event()))
-                newSelection = new EventSelection(*selection);
-            else
-                newSelection = new EventSelection(m_currentStaff->getSegment());
-
-            // if the selection already contains the event, remove it from the
-            // selection if shift is pressed
-            if (selection->contains(m_currentElement->event())){
-                if (e->state() & Qt::ShiftModifier)
-                    newSelection->removeEvent(m_currentElement->event());
-            } else {
-                newSelection->addEvent(m_currentElement->event());
-            }
-            m_mParentView->setCurrentSelection(newSelection, true, true);
-            m_mParentView->canvas()->update();
-            selection = newSelection;
+    if (selection) {
+        EventSelection *newSelection;
+        
+        if ((e->modifiers & Qt::ShiftModifier) ||
+            selection->contains(event)) {
+            newSelection = new EventSelection(*selection);
         } else {
-            m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                                  m_currentElement->event(),
-                                                  true);
-            m_mParentView->canvas()->update();
+            newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
-
-        long velocity = m_mParentView->getCurrentVelocity();
-        m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_mParentView->playNote(m_currentStaff->getSegment(), pitch, velocity);
-        m_lastPlayedPitch = pitch;
-
-        if (m_quickCopy && selection) {
-            for (EventSelection::eventcontainer::iterator i =
-                     selection->getSegmentEvents().begin();
-                 i != selection->getSegmentEvents().end(); ++i) {
-
-                MatrixElement *element = m_currentStaff->getElement(*i);
-                if (!element) continue;
-
-                MatrixElement *duplicate = new MatrixElement
-                    (new Event(**i), m_mParentView->isDrumMode());
-                duplicate->setLayoutY(element->getLayoutY());
-                duplicate->setLayoutX(element->getLayoutX());
-                duplicate->setWidth(element->getWidth());
-                duplicate->setHeight(element->getHeight());
-                duplicate->setCanvasZ(-1);
-                m_currentStaff->positionElement(duplicate);
-                m_duplicateElements.push_back(duplicate);
+        
+        // if the selection already contains the event, remove it from the
+        // selection if shift is pressed
+        if (selection->contains(event)) {
+            if (e->modifiers & Qt::ShiftModifier) {
+                newSelection->removeEvent(event);
             }
+        } else {
+            newSelection->addEvent(event);
+        }
+        m_scene->setSelection(newSelection, true);
+//            m_mParentView->canvas()->update();
+        selection = newSelection;
+    } else {
+        m_scene->setSingleSelectedEvent(m_currentViewSegment,
+                                        m_currentElement, true);
+//            m_mParentView->setSingleSelectedEvent(m_currentViewSegment->getSegment(),
+//                                                  m_currentElement->event(),
+//                                                  true);
+//            m_mParentView->canvas()->update();
+    }
+    
+    long velocity = m_widget->getCurrentVelocity();
+    event->get<Int>(BaseProperties::VELOCITY, velocity);
+    long pitch = 60;
+    event->get<Int>(BaseProperties::PITCH, pitch);
+    m_scene->playNote(m_currentViewSegment->getSegment(), pitch, velocity);
+    m_lastPlayedPitch = pitch;
+    
+    if (m_quickCopy && selection) {
+        for (EventSelection::eventcontainer::iterator i =
+                 selection->getSegmentEvents().begin();
+             i != selection->getSegmentEvents().end(); ++i) {
+            
+            MatrixElement *duplicate = new MatrixElement
+                (m_scene, new Event(**i), m_widget->isDrumMode());
+/*
+  duplicate->setLayoutY(element->getLayoutY());
+  duplicate->setLayoutX(element->getLayoutX());
+  duplicate->setWidth(element->getWidth());
+  duplicate->setHeight(element->getHeight());
+  duplicate->setCanvasZ(-1);
+  m_currentViewSegment->positionElement(duplicate);
+*/
+            m_duplicateElements.push_back(duplicate);
         }
     }
-    
-    m_clickX = m_mParentView->inverseMapPoint(e->pos()).x();
 }
 
-timeT
-MatrixMover::getDragTime(QMouseEvent *e, timeT candidate)
+MatrixTool::FollowMode
+MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
 {
-    int x = m_mParentView->inverseMapPoint(e->pos()).x();
-    int xdiff = x - m_clickX;
+    if (!e) return NoFollow;
 
-    const SnapGrid &grid = getSnapGrid();
-    const RulerScale &scale = *grid.getRulerScale();
-    
-    timeT eventTime = m_currentElement->getViewAbsoluteTime();
-    int eventX = scale.getXForTime(eventTime);
-    timeT preSnapTarget = scale.getTimeForX(eventX + xdiff);
-    
-    candidate = grid.snapTime(preSnapTarget, SnapGrid::SnapEither);
-    
-    if (xdiff == 0 ||
-        (abs(eventTime - preSnapTarget) < abs(candidate - preSnapTarget))) {
-        candidate = eventTime;
-    }
+    MATRIX_DEBUG << "MatrixMover::handleMouseMove() snapped time = "
+                 << e->snappedLeftTime << endl;
 
-    return candidate;
-}
+    setBasicContextHelp(e->modifiers & Qt::ControlModifier);
 
-int MatrixMover::handleMouseMove(timeT newTime,
-                                 int newPitch,
-                                 QMouseEvent *e)
-{
-    MATRIX_DEBUG << "MatrixMover::handleMouseMove() time = "
-    << newTime << endl;
+    if (!m_currentElement || !m_currentViewSegment) return NoFollow;
 
-    if (e) {
-        setBasicContextHelp(e->state() & Qt::ControlModifier);
-    }
-
-    if (!m_currentElement || !m_currentStaff)
-        return RosegardenCanvasView::NoFollow;
-
-    if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
+    if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
 
-    if (e) newTime = getDragTime(e, newTime);
+    timeT newTime = e->snappedLeftTime;
+    int newPitch = e->pitch;
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
 
@@ -205,72 +172,89 @@ int MatrixMover::handleMouseMove(timeT newTime,
     if (m_currentElement->event()->has(PITCH)) {
         diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
     }
-
+/*
     int diffY =
-        int(((m_currentStaff->getLayoutYForHeight(newPitch) -
-              m_currentStaff->getElementHeight() / 2) -
+        int(((m_currentViewSegment->getLayoutYForHeight(newPitch) -
+              m_currentViewSegment->getElementHeight() / 2) -
              m_currentElement->getLayoutY()));
+*/
+    EventSelection* selection = m_scene->getSelection();
 
-    EventSelection* selection = m_mParentView->getCurrentSelection();
-    EventSelection::eventcontainer::iterator it =
-        selection->getSegmentEvents().begin();
+//    MatrixElement *element = 0;
+//    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
 
-    MatrixElement *element = 0;
-    int maxY = m_currentStaff->getCanvasYForHeight(0);
+    for (EventSelection::eventcontainer::iterator it =
+             selection->getSegmentEvents().begin();
+         it != selection->getSegmentEvents().end(); ++it) {
 
-    for (; it != selection->getSegmentEvents().end(); it++) {
-        element = m_currentStaff->getElement(*it);
+//        MatrixElement *element = m_currentViewSegment->getElement(*it);
+//        if (!element) continue;
 
-        if (element) {
 
-            timeT diffTime = element->getViewAbsoluteTime() -
-                m_currentElement->getViewAbsoluteTime();
-
-            int newX = getSnapGrid().getRulerScale()->
-                getXForTime(newTime + diffTime);
-
-            if (newX < 0) newX = 0;
-
-            int newY = int(element->getLayoutY() + diffY);
-
-            if (newY < 0) newY = 0;
-            if (newY > maxY) newY = maxY;
-
-            element->setLayoutX(newX);
-            element->setLayoutY(newY);
-
-            m_currentStaff->positionElement(element);
+        MatrixElement *element = 0;
+        ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
+        if (vi != m_currentViewSegment->getViewElementList()->end()) {
+            element = static_cast<MatrixElement *>(*vi);
         }
+        if (!element) continue;
+
+        timeT diffTime = element->getViewAbsoluteTime() -
+            m_currentElement->getViewAbsoluteTime();
+
+        int epitch = 0;
+        if (element->event()->has(PITCH)) {
+            epitch = element->event()->get<Int>(PITCH);
+        }
+
+        element->reconfigure(newTime + diffTime,
+                             element->getViewDuration(),
+                             epitch + diffPitch);
+                             
+        
+//        int newX = getSnapGrid().getRulerScale()->
+//            getXForTime(newTime + diffTime);
+
+//        if (newX < 0) newX = 0;
+
+//        int newY = int(element->getLayoutY() + diffY);
+
+//            if (newY < 0) newY = 0;
+//            if (newY > maxY) newY = maxY;
+
+//            element->setLayoutX(newX);
+//            element->setLayoutY(newY);
+
+//            m_currentViewSegment->positionElement(element);
+        
+//        }
     }
 
     if (newPitch != m_lastPlayedPitch) {
-        long velocity = m_mParentView->getCurrentVelocity();
+        long velocity = m_widget->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_mParentView->playNote(m_currentStaff->getSegment(), newPitch, velocity);
+        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch, velocity);
         m_lastPlayedPitch = newPitch;
     }
 
-    m_mParentView->canvas()->update();
-    return RosegardenCanvasView::FollowHorizontal |
-           RosegardenCanvasView::FollowVertical;
+//    m_mParentView->canvas()->update();
+    return FollowMode(FollowHorizontal | FollowVertical);
 }
 
-void MatrixMover::handleMouseRelease(timeT newTime,
-                                     int newPitch,
-                                     QMouseEvent *e)
+void
+MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 {
+    if (!e) return;
+
     MATRIX_DEBUG << "MatrixMover::handleMouseRelease() - newPitch = "
-    << newPitch << endl;
+                 << e->pitch << endl;
 
-    if (!m_currentElement || !m_currentStaff)
-        return;
+    if (!m_currentElement || !m_currentViewSegment) return;
 
-    if (newPitch > MatrixVLayout::maxMIDIPitch)
-        newPitch = MatrixVLayout::maxMIDIPitch;
-    if (newPitch < 0)
-        newPitch = 0;
+    timeT newTime = e->snappedLeftTime;
+    int newPitch = e->pitch;
 
-    if (e) newTime = getDragTime(e, newTime);
+    if (newPitch > 127) newPitch = 127;
+    if (newPitch < 0) newPitch = 0;
 
     using BaseProperties::PITCH;
     timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
@@ -279,7 +263,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         diffPitch = newPitch - m_currentElement->event()->get<Int>(PITCH);
     }
 
-    EventSelection *selection = m_mParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
 
     if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
         for (size_t i = 0; i < m_duplicateElements.size(); ++i) {
@@ -287,15 +271,15 @@ void MatrixMover::handleMouseRelease(timeT newTime,
             delete m_duplicateElements[i];
         }
         m_duplicateElements.clear();
-        m_mParentView->canvas()->update();
+//        m_mParentView->canvas()->update();
         m_currentElement = 0;
         return;
     }
 
     if (newPitch != m_lastPlayedPitch) {
-        long velocity = m_mParentView->getCurrentVelocity();
+        long velocity = m_widget->getCurrentVelocity();
         m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_mParentView->playNote(m_currentStaff->getSegment(), newPitch, velocity);
+        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch, velocity);
         m_lastPlayedPitch = newPitch;
     }
 
@@ -319,7 +303,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
     EventSelection::eventcontainer::iterator it =
         selection->getSegmentEvents().begin();
 
-    Segment &segment = m_currentStaff->getSegment();
+    Segment &segment = m_currentViewSegment->getSegment();
 
     EventSelection *newSelection = new EventSelection(segment);
 
@@ -358,7 +342,7 @@ void MatrixMover::handleMouseRelease(timeT newTime,
         }
 
         if (newTime + (*it)->getDuration() >= segment.getEndMarkerTime()) {
-            timeT limit = getSnapGrid().snapTime
+            timeT limit = getSnapGrid()->snapTime
                 (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
             if (newTime > limit) newTime = limit;
             timeT newDuration = std::min
@@ -385,11 +369,11 @@ void MatrixMover::handleMouseRelease(timeT newTime,
                                                 normalizeStart,
                                                 normalizeEnd));
     
-    m_mParentView->setCurrentSelection(0, false, false);
-    m_mParentView->addCommandToHistory(macro);
-    m_mParentView->setCurrentSelection(newSelection, false, false);
+    m_scene->setSelection(0, false);
+    CommandHistory::getInstance()->addCommand(macro);
+    m_scene->setSelection(newSelection, false);
 
-    m_mParentView->canvas()->update();
+//    m_mParentView->canvas()->update();
     m_currentElement = 0;
 
     setBasicContextHelp();
@@ -397,22 +381,25 @@ void MatrixMover::handleMouseRelease(timeT newTime,
 
 void MatrixMover::ready()
 {
-    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotMatrixScrolled(int, int)));
+//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+//            this, SLOT(slotMatrixScrolled(int, int)));
+
     connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-            m_mParentView, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-    m_mParentView->setCanvasCursor(Qt::sizeAllCursor);
+            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+
+    m_widget->setCanvasCursor(Qt::sizeAllCursor);
     setBasicContextHelp();
 }
 
 void MatrixMover::stow()
 {
-    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotMatrixScrolled(int, int)));
+//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+//               this, SLOT(slotMatrixScrolled(int, int)));
     disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-               m_mParentView, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 }
 
+/*
 void MatrixMover::slotMatrixScrolled(int newX, int newY)
 {
     if (!m_currentElement)
@@ -429,14 +416,14 @@ void MatrixMover::slotMatrixScrolled(int newX, int newY)
     p += offset;
 
     timeT newTime = getSnapGrid().snapX(p.x());
-    int newPitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
+    int newPitch = m_currentViewSegment->getHeightAtCanvasCoords(p.x(), p.y());
 
     handleMouseMove(newTime, newPitch, 0);
 }
-
+*/
 void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
-    EventSelection *selection = m_mParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
     if (!selection || selection->getAddedEvents() < 2) {
         if (!ctrlPressed) {
             setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
@@ -455,4 +442,5 @@ void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 const QString MatrixMover::ToolName = "mover";
 
 }
+
 #include "MatrixMover.moc"

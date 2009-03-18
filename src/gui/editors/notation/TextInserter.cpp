@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "TextInserter.h"
 
@@ -146,3 +147,4 @@ const QString TextInserter::ToolName     = "textinserter";
 
 }
 #include "TextInserter.moc"
+#endif

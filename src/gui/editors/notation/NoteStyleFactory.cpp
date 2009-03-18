@@ -48,7 +48,7 @@ NoteStyleFactory::getAvailableStyleNames()
     bool foundDefault = false;
 
     for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
-        std::string styleName = qstrtostr(QFileInfo(*i).baseName());
+        QString styleName = QFileInfo(*i).baseName();
         if (styleName == DefaultStyle) foundDefault = true;
         names.push_back(styleName);
     }
@@ -88,9 +88,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 NoteStyle *
 NoteStyleFactory::getStyleForEvent(Event *event)
 {
-    NoteStyleName styleName;
-    if (event->get
-            <String>(NotationProperties::NOTE_STYLE, styleName)) {
+    std::string sname;
+    if (event->get<String>(NotationProperties::NOTE_STYLE, sname)) {
+        NoteStyleName styleName = strtoqstr(sname);
         return getStyle(styleName);
     }
     else {

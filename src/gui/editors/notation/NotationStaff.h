@@ -18,13 +18,9 @@
 #ifndef _RG_NOTATIONSTAFF_H_
 #define _RG_NOTATIONSTAFF_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasItem>
-#include <Q3CanvasPixmap>
-#include "base/FastVector.h"
-#include "base/Staff.h"
+#include "base/ViewSegment.h"
 #include "base/ViewElement.h"
-#include "gui/general/LinedStaff.h"
+#include "StaffLayout.h"
 #include "gui/general/ProgressReporter.h"
 #include <map>
 #include <set>
@@ -35,10 +31,8 @@
 
 
 class QPainter;
-class Q3CanvasPixmap;
-class Q3CanvasItem;
-class Q3Canvas;
-class LinedStaffCoords;
+class QGraphicsItem;
+class StaffLayoutCoords;
 
 
 namespace Rosegarden
@@ -48,46 +42,29 @@ class ViewElement;
 class TimeSignature;
 class SnapGrid;
 class Segment;
-class QCanvasSimpleSprite;
 class NotePixmapParameters;
 class NotePixmapFactory;
 class Note;
-class NotationView;
+class NotationScene;
 class NotationProperties;
 class Key;
 class Event;
 class Clef;
 
 
-/**
- * The Staff is a repository for information about the notation
- * representation of a single Segment.  This includes all of the
- * NotationElements representing the Events on that Segment, the staff
- * lines, as well as basic positional and size data.  This class
- * used to be in gui/staff.h, but it's been moved and renamed
- * following the introduction of the core Staff base class, and
- * much of the functionality has been extracted into the LinedStaff
- * base class.
- */
-
-class NotationStaff : public ProgressReporter, public LinedStaff
+class NotationStaff : public ViewSegment,
+                      public StaffLayout,
+                      public ProgressReporter //!!! maybe remove if we can make this fast enough
 {
 public:
-
-    /**
-     * Creates a new NotationStaff for the specified Segment
-     * \a id is the id of the staff in the NotationView
-     */
-    NotationStaff(Q3Canvas *, Segment *, SnapGrid *,
-                  int id, NotationView *view,
-                  std::string fontName, int resolution);
+    NotationStaff(NotationScene *, Segment *, SnapGrid *,
+                  int id,
+                  NotePixmapFactory *normalFactory,
+                  NotePixmapFactory *smallFactory);
     virtual ~NotationStaff();
 
-    /**
-     * Changes the resolution of the note pixmap factory and the
-     * staff lines, etc
-     */
-    virtual void changeFont(std::string fontName, int resolution);
+    void setNotePixmapFactories(NotePixmapFactory *normal,
+                                NotePixmapFactory *small);
 
     void setLegerLineCount(int legerLineCount) {
         if (legerLineCount == -1) m_legerLineCount = 8;
@@ -98,11 +75,14 @@ public:
         m_barNumbersEvery = barNumbersEvery;
     }
 
-    LinedStaff::setPageMode;
-    LinedStaff::setPageWidth;
-    LinedStaff::setRowsPerPage;
-    LinedStaff::setRowSpacing;
-    LinedStaff::setConnectingLineLength;
+    StaffLayout::setPageMode;
+    StaffLayout::setPageWidth;
+    StaffLayout::setRowsPerPage;
+    StaffLayout::setRowSpacing;
+    StaffLayout::setConnectingLineLength;
+
+    SegmentRefreshStatus &getRefreshStatus() const;
+    void resetRefreshStatus();
 
     /**
      * Gets a read-only reference to the pixmap factory used by the
@@ -115,8 +95,10 @@ public:
         return grace ? *m_graceNotePixmapFactory : *m_notePixmapFactory;
     }
 
+    void regenerate(timeT from, timeT to, bool secondary);
+
     /**
-     * Generate or re-generate sprites for all the elements between
+     * Generate or re-generate items for all the elements between
      * from and to.  Call this when you've just made a change,
      * specifying the extents of the change in the from and to
      * parameters.
@@ -135,16 +117,16 @@ public:
      * based entirely on the layout X and Y coordinates they were
      * given by the horizontal and vertical layout processes.
      *
-     * This is necessary because the sprites that are being positioned
+     * This is necessary because the items that are being positioned
      * may have been created either after the layout process completed
      * (by renderElements) or before (by the previous renderElements
-     * call, if the sprites are unchanged but have moved) -- so
+     * call, if the items are unchanged but have moved) -- so
      * neither the layout nor renderElements can authoritatively set
      * their final positions.
      *
      * This method also updates the selected-ness of any elements it
      * sees (i.e. it turns the selected ones blue and the unselected
-     * ones black), and re-generates sprites for any elements for
+     * ones black), and re-generates items for any elements for
      * which it seems necessary.  In general it will only notice a
      * element needs regenerating if its position has changed, not if
      * the nature of the element has changed, so this is no substitute
@@ -252,15 +234,15 @@ public:
      * Return the clef and key in force at the given canvas
      * coordinates
      */
-    virtual void getClefAndKeyAtCanvasCoords(double x, int y,
+    virtual void getClefAndKeyAtSceneCoords(double x, int y,
                                              Clef &clef,
                                              ::Rosegarden::Key &key) const;
 
     /**
      * Return the note name (C4, Bb3, whatever) corresponding to the
-     * given canvas coordinates
+     * given scene coordinates
      */
-    virtual std::string getNoteNameAtCanvasCoords
+    virtual std::string getNoteNameAtSceneCoords
     (double x, int y,
      Accidental accidental =
      Accidentals::NoAccidental) const;
@@ -326,9 +308,9 @@ public:
     virtual double getBarInset(int barNo, bool isFirstBarInRow) const;
 
     /**
-     * Return the time at the given canvas coordinates
+     * Return the time at the given scene coordinates
      */
-    timeT getTimeAtCanvasCoords(double x, int y) const;
+    timeT getTimeAtSceneCoords(double x, int y) const;
 
 protected:
 
@@ -344,7 +326,7 @@ protected:
     virtual BarStyle getBarStyle(int barNo) const;
 
     /** 
-     * Assign a suitable sprite to the given element (the clef is
+     * Assign a suitable item to the given element (the clef is
      * needed in case it's a key event, in which case we need to judge
      * the correct pitch for the key)
      */
@@ -358,7 +340,7 @@ protected:
     void setTuplingParameters(NotationElement *, NotePixmapParameters &);
 
     /**
-     * Set a sprite representing the given note event to the given notation element
+     * Set an item representing the given note event to the given notation element
      */
     virtual void renderNote(ViewElementList::iterator &);
 
@@ -377,13 +359,13 @@ protected:
     NotationElementList::iterator findUnchangedBarEnd(timeT);
 
     /**
-     * Return true if the element has a canvas item that is already
+     * Return true if the element has a scene item that is already
      * at the correct coordinates
      */
     virtual bool elementNotMoved(NotationElement *);
 
     /**
-     * Return true if the element has a canvas item that is already
+     * Return true if the element has a scene item that is already
      * at the correct y-coordinate
      */
     virtual bool elementNotMovedInY(NotationElement *);
@@ -393,7 +375,7 @@ protected:
      * moved horizontally without the spacing around it changing.
      * 
      * In practice, calculates the offset between the intended layout
-     * and current canvas coordinates of the item at the given
+     * and current scene coordinates of the item at the given
      * iterator, and returns true if this offset is equal to those of
      * all other following iterators at the same time as well as the
      * first iterator found at a greater time.
@@ -413,52 +395,51 @@ protected:
      * right edge of the row if it would otherwise overrun.  The
      * return value is the amount of the object visible on this row
      * (i.e. the increment in offset for the next call to this method)
-     * or zero if no crop was necessary.  The canvas coords at which
+     * or zero if no crop was necessary.  The scene coords at which
      * the object should subsequently be drawn are returned in coords.
      *
      * This function calls painter.save(), and the caller must call
      * painter.restore() after use.
      */
     virtual double setPainterClipping(QPainter *, double layoutX, int layoutY,
-                                      double dx, double w, LinedStaffCoords &coords,
+                                      double dx, double w, StaffLayoutCoords &coords,
                                       FitPolicy policy);
 
     /**
-     * Set a single pixmap to a notation element, or split it into
-     * bits if it overruns the end of a row and set the bits
-     * separately.
+     * Set a single item to a notation element, or split it into bits
+     * if it overruns the end of a row and can be split, and set the
+     * bits separately.
      */
-    virtual void setPixmap(NotationElement *, Q3CanvasPixmap *, int z,
-                           FitPolicy policy);
+    virtual void setItem(NotationElement *, QGraphicsItem *, int z,
+                         FitPolicy policy);
 
     bool isSelected(NotationElementList::iterator);
 
-    typedef std::set<QCanvasSimpleSprite *> SpriteSet;
-    SpriteSet m_timeSigs;
-
-    typedef std::set<Q3CanvasItem *> ItemSet;
+    typedef std::set<QGraphicsItem *> ItemSet;
+    ItemSet m_timeSigs;
     ItemSet m_repeatedClefsAndKeys;
 
     typedef std::pair<int, Clef> ClefChange;
-    FastVector<ClefChange> m_clefChanges;
+    std::vector<ClefChange> m_clefChanges;
 
     typedef std::pair<int, ::Rosegarden::Key> KeyChange;
-    FastVector<KeyChange> m_keyChanges;
+    std::vector<KeyChange> m_keyChanges;
 
     void truncateClefsAndKeysAt(int);
 
-    /** Verify that a possible Clef or Key in bar is already inserted
+    /**
+     * Verify that a possible Clef or Key in bar is already inserted
      * in m_clefChange or m_keyChange.
      * If not, do the insertion.
      */
     void checkAndCompleteClefsAndKeys(int bar);
 
-    NotePixmapFactory *m_notePixmapFactory;
-    NotePixmapFactory *m_graceNotePixmapFactory;
-    QCanvasSimpleSprite *m_previewSprite;
-    QCanvasSimpleSprite *m_staffName;
+    NotePixmapFactory *m_notePixmapFactory; // I do not own this
+    NotePixmapFactory *m_graceNotePixmapFactory; // I do not own this
+    QGraphicsItem *m_previewItem;
+    QGraphicsItem *m_staffName;
     std::string m_staffNameText;
-    NotationView *m_notationView;
+    NotationScene *m_notationScene;
     int m_legerLineCount;
     int m_barNumbersEvery;
     bool m_colourQuantize;
@@ -469,12 +450,12 @@ protected:
 
     QPainter *m_printPainter;
 
+    unsigned int m_refreshStatusId;
     enum BarStatus { UnRendered = 0, Rendered, Positioned };
     typedef std::map<int, BarStatus> BarStatusMap;
     BarStatusMap m_status;
     std::pair<int, int> m_lastRenderCheck;
     bool m_ready;
-
     int m_lastRenderedBar;
 };
 

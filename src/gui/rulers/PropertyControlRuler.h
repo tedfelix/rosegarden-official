@@ -22,10 +22,10 @@
 #include <Q3Canvas>
 #include <Q3CanvasLine>
 #include "base/PropertyName.h"
-#include "base/Staff.h"
 #include "ControlRuler.h"
 #include <QString>
 #include "base/Event.h"
+#include "base/ViewSegment.h"
 
 
 class QWidget;
@@ -39,7 +39,6 @@ namespace Rosegarden
 {
 
 class ViewElement;
-class Staff;
 class Segment;
 class RulerScale;
 class EditViewBase;
@@ -49,11 +48,12 @@ class EditViewBase;
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler : public ControlRuler, public StaffObserver
+class PropertyControlRuler : public ControlRuler,
+			     public ViewSegmentObserver
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
-                         Staff*,
+                         ViewSegment*,
                          RulerScale*,
                          EditViewBase* parentView,
                          Q3Canvas*,
@@ -68,12 +68,13 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    void setStaff(Staff *);
+    void setViewSegment(ViewSegment *);
 
-    // StaffObserver interface
-    virtual void elementAdded(const Staff *, ViewElement*);
-    virtual void elementRemoved(const Staff *, ViewElement*);
-    virtual void staffDeleted(const Staff *);
+    // ViewSegmentObserver interface
+    virtual void elementAdded(const ViewSegment *, ViewElement*);
+    virtual void elementRemoved(const ViewSegment *, ViewElement*);
+    virtual void viewSegmentDeleted(const ViewSegment *);
+
     virtual void startPropertyLine();
     virtual void selectAllProperties();
 
@@ -94,18 +95,18 @@ protected:
 
     virtual void init();
     virtual void drawBackground();
-    virtual void computeStaffOffset();
+    virtual void computeViewSegmentOffset();
 
     //--------------- Data members ---------------------------------
 
-    PropertyName       m_propertyName;
-    Staff*             m_staff;
+    PropertyName m_propertyName;
+    ViewSegment *m_viewSegment;
 
-    Q3CanvasLine                   *m_propertyLine;
+    Q3CanvasLine *m_propertyLine;
     
-    bool                           m_propertyLineShowing;
-    int                            m_propertyLineX;
-    int                            m_propertyLineY;
+    bool m_propertyLineShowing;
+    int m_propertyLineX;
+    int m_propertyLineY;
 };
 
 

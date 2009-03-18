@@ -33,7 +33,7 @@ void
 CollapseRestsCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "collapse_rests_aggressively",
+        ("collapse_rests_aggressively",
          new SelectionCommandBuilder<CollapseRestsCommand>());
 }
 

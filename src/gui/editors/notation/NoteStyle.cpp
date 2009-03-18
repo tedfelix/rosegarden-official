@@ -22,6 +22,7 @@
 #include "base/PropertyName.h"
 #include "NoteCharacterNames.h"
 #include "NoteStyleFactory.h"
+#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -394,9 +395,10 @@ NoteStyle::getTimeSignatureDigitName(int digit)
 }
 
 CharName
-NoteStyle::getSomeCharName(std::string thing)
+NoteStyle::getSomeCharName(QString qthing)
 {
     CharName name;
+    std::string thing = qstrtostr(qthing);
 
     try {
         name = getAccidentalCharName(Accidental(thing));
@@ -427,14 +429,14 @@ NoteStyle::setBaseStyle(NoteStyleName name)
     } catch (NoteStyleFactory::StyleUnavailable u) {
         if (name != NoteStyleFactory::DefaultStyle) {
             std::cerr
-            << "NoteStyle::setBaseStyle: Base style "
-            << name << " not available, defaulting to "
-            << NoteStyleFactory::DefaultStyle << std::endl;
+                << "NoteStyle::setBaseStyle: Base style "
+                << name << " not available, defaulting to "
+                << NoteStyleFactory::DefaultStyle << std::endl;
             setBaseStyle(NoteStyleFactory::DefaultStyle);
         } else {
             std::cerr
-            << "NoteStyle::setBaseStyle: Base style "
-            << name << " not available" << std::endl;
+                << "NoteStyle::setBaseStyle: Base style "
+                << name << " not available" << std::endl;
             m_baseStyle = 0;
         }
     }

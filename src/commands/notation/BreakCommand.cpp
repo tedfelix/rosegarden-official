@@ -35,7 +35,7 @@ void
 BreakCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "group-unbeam", "Ctrl+U", "break_group",
+        ("break_group",
          new SelectionCommandBuilder<BreakCommand>());
 }
 

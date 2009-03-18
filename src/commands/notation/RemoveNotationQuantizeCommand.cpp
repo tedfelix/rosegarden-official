@@ -32,7 +32,7 @@ void
 RemoveNotationQuantizeCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "remove_quantization",
+        ("remove_quantization",
          new SelectionCommandBuilder<RemoveNotationQuantizeCommand>());
 }
 

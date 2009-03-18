@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,7 +21,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "gui/dialogs/TempoDialog.h"
-#include "gui/general/EditViewBase.h"
+#include "gui/general/ListEditView.h"
 #include <QSize>
 #include <QString>
 #include <vector>
@@ -52,7 +51,7 @@ class Composition;
  * should prove considerably simpler, anyway.
  */
 
-class TempoView : public EditViewBase, public CompositionObserver
+class TempoView : public ListEditView, public CompositionObserver
 {
     Q_OBJECT
 

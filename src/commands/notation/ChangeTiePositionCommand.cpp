@@ -34,10 +34,10 @@ void
 ChangeTiePositionCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(true), "", "", "ties_above",
+        ("ties_above",
          new ArgumentAndSelectionCommandBuilder<ChangeTiePositionCommand>());
     r->registerCommand
-        (getGlobalName(false), "", "", "ties_below",
+        ("ties_below",
          new ArgumentAndSelectionCommandBuilder<ChangeTiePositionCommand>());
 }
 

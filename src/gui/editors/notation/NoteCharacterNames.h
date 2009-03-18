@@ -16,11 +16,11 @@
 #ifndef _NOTE_CHAR_NAME_H_
 #define _NOTE_CHAR_NAME_H_
 
-#include "PropertyName.h"
+#include <QString>
 
 namespace Rosegarden {
 
-typedef PropertyName CharName;
+typedef QString CharName;
 
 /// A selection of Unicode character names for symbols in a note font
 

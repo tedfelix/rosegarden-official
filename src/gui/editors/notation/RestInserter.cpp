@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "RestInserter.h"
 
@@ -138,3 +139,6 @@ const QString RestInserter::ToolName     = "restinserter";
 
 }
 #include "RestInserter.moc"
+
+#endif
+

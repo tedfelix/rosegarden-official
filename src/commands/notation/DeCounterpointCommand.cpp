@@ -33,7 +33,7 @@ void
 DeCounterpointCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "transforms-decounterpoint", "", "de_counterpoint",
+        ("de_counterpoint",
          new SelectionCommandBuilder<DeCounterpointCommand>());
 }
 

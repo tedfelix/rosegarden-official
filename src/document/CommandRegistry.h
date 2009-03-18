@@ -61,8 +61,8 @@ class AbstractCommandBuilder
 public:
     // may throw CommandCancelled
     virtual Command *build(QString actionName,
-                            EventSelection &s,
-                            CommandArgumentQuerier &querier) = 0;
+                           EventSelection &s,
+                           CommandArgumentQuerier &querier) = 0;
 
     virtual EventSelection *getSubsequentSelection(Command *) { return 0; }
 };
@@ -73,8 +73,8 @@ class SelectionCommandBuilder : public AbstractCommandBuilder
 public:
     // may throw CommandCancelled
     virtual Command *build(QString /* actionName */,
-                            EventSelection &s,
-                            CommandArgumentQuerier &querier) {
+                           EventSelection &s,
+                           CommandArgumentQuerier &/* querier */) {
         return new CommandType(s);
     }
 
@@ -91,8 +91,8 @@ class ArgumentAndSelectionCommandBuilder : public AbstractCommandBuilder
 public:
     // may throw CommandCancelled
     virtual Command *build(QString actionName,
-                            EventSelection &s,
-                            CommandArgumentQuerier &querier) {
+                           EventSelection &s,
+                           CommandArgumentQuerier &querier) {
         return new CommandType(CommandType::getArgument(actionName, querier), s);
     }
 
@@ -114,20 +114,9 @@ class CommandRegistry : public QObject
 public:
     virtual ~CommandRegistry();
 
-    void registerCommand(QString title,
-                         QString icon,
-                         QString shortcut,
-                         QString actionName,
-                         AbstractCommandBuilder *builder,
-                         QString menuTitle = "",
-                         QString menuName = "") {
-        addAction(title,
-                  icon,
-                  shortcut,
-                  actionName,
-                  menuTitle,
-                  menuName);
-
+    void registerCommand(QString actionName,
+                         AbstractCommandBuilder *builder) {
+        addAction(actionName);
         m_builders[actionName] = builder;
     }
 
@@ -140,13 +129,7 @@ protected:
     typedef std::map<QString, AbstractCommandBuilder *> ActionBuilderMap;
     ActionBuilderMap m_builders;
 	
-    virtual void addAction(QString title,	
-                           QString icon,
-                           QString shortcut, 
-                           QString actionName,
-                           QString menuTitle,
-                           QString menuName) = 0;
-	
+    virtual void addAction(QString actionName) = 0;
     virtual void invokeCommand(QString actionName) = 0;
 
 private:

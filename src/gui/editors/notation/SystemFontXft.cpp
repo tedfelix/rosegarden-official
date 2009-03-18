@@ -69,17 +69,17 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
     success = false;
 
     if (glyph < 0 && code < 0) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point for character " << charName.getName() << ", can't render" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: Have neither glyph nor code point for character " << charName << ", can't render" << endl;
 	return QPixmap();
     }
 
     if (code < 0 && strategy == OnlyCodes) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyCodes but no code point provided for character " << charName.getName() << " (glyph is " << glyph << ")" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyCodes but no code point provided for character " << charName << " (glyph is " << glyph << ")" << endl;
 	return QPixmap();
     }
 
     if (glyph < 0 && strategy == OnlyGlyphs) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyGlyphs but no glyph index provided for character " << charName.getName() << " (code is " << code << ")" << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: strategy is OnlyGlyphs but no glyph index provided for character " << charName << " (code is " << code << ")" << endl;
 	return QPixmap();
     }
 
@@ -88,7 +88,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
     bool useGlyph = true;
     if (glyph < 0 || (strategy == PreferCodes && code >= 0)) useGlyph = false;
     if (glyph >= 0 && useGlyph == false && !XftCharExists(m_dpy, m_font, code)) {
-	NOTATION_DEBUG << "SystemFontXft::renderChar: code " << code << " is preferred for character " << charName.getName() << ", but it doesn't exist in font!  Falling back to glyph " << glyph << endl;
+	NOTATION_DEBUG << "SystemFontXft::renderChar: code " << code << " is preferred for character " << charName << ", but it doesn't exist in font!  Falling back to glyph " << glyph << endl;
 	useGlyph = true;
     }
 
@@ -98,7 +98,7 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 	if (extents.width == 0 || extents.height == 0) {
 	    NOTATION_DEBUG
 		<< "SystemFontXft::renderChar: zero extents for character "
-		<< charName.getName() << " (glyph " << glyph << ")" << endl;
+		<< charName << " (glyph " << glyph << ")" << endl;
 	    return QPixmap();
 	}
     } else {
@@ -107,13 +107,13 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 	if (extents.width == 0 || extents.height == 0) {
 	    NOTATION_DEBUG
 		<< "SystemFontXft::renderChar: zero extents for character "
-		<< charName.getName() << " (code " << code << ")" << endl;
+		<< charName << " (code " << code << ")" << endl;
 	    return QPixmap();
 	}
     }
  
     QPixmap map(extents.width, extents.height);
-    map.fill();
+    map.fill(Qt::white);
 
     Drawable drawable = (Drawable)map.handle();
     if (!drawable) {
@@ -136,13 +136,13 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 
     if (useGlyph) {
 	NOTATION_DEBUG << "NoteFont: drawing raw character glyph "
-		       << glyph << " for " << charName.getName()
+		       << glyph << " for " << charName
 		       << " using Xft" << endl;
 	FT_UInt ui(glyph);
 	XftDrawGlyphs(draw, &col, m_font, extents.x, extents.y, &ui, 1);
     } else {
 	NOTATION_DEBUG << "NoteFont: drawing character code "
-		       << code << " for " << charName.getName()
+		       << code << " for " << charName
 		       << " using Xft" << endl;
 	FcChar32 char32(code);
 	XftDrawString32(draw, &col, m_font, extents.x, extents.y, &char32, 1);
@@ -150,9 +150,19 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 
     XftDrawDestroy(draw);
 
-    map.setMask(PixmapFunctions::generateMask(map, QColor(Qt::white).rgb()));
     success = true;
 
+    QImage im = map.toImage();
+
+    for (int y = 0; y < im.height(); ++y) {
+        for (int x = 0; x < im.width(); ++x) {
+            if (im.pixel(x, y) == Qt::white) {
+                im.setPixel(x, y, qRgba(0, 0, 0, 255));
+            }
+        }
+    }
+
+    map = QPixmap::fromImage(im);
     
     //!!! experimental stuff
 /*!!!

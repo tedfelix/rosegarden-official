@@ -31,7 +31,7 @@ void
 RemoveFingeringMarksCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "remove_fingering_marks",
+        ("remove_fingering_marks",
          new SelectionCommandBuilder<RemoveFingeringMarksCommand>());
 }
 

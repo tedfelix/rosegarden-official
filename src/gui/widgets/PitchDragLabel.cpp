@@ -223,14 +223,8 @@ PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
         }
     }
 
-    Q3CanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
-                          (m_pitch,
-                           Clef(clefType, octaveOffset),
-                           octave, step);
-
-    m_pixmap = *pmap;
-
-    delete pmap;
+    m_pixmap = m_npf->makePitchDisplayPixmap
+        (m_pitch, Clef(clefType, octaveOffset), octave, step);
 }
 
 void
@@ -252,14 +246,8 @@ PitchDragLabel::calculatePixmap() const
         }
     }
 
-    Q3CanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
-                          (m_pitch,
-                           Clef(clefType, octaveOffset),
-                           m_usingSharps);
-
-    m_pixmap = *pmap;
-
-    delete pmap;
+    m_pixmap = m_npf->makePitchDisplayPixmap
+        (m_pitch, Clef(clefType, octaveOffset), m_usingSharps);
 }
 
 }

@@ -29,6 +29,7 @@
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "base/BaseProperties.h"
 #include "base/Selection.h"
+#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -149,7 +150,8 @@ NoteInsertionCommand::modifySegment()
     }
 
     if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
-        e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+        e->set<String>(NotationProperties::NOTE_STYLE,
+                       qstrtostr(m_noteStyle));
     }
 
     if (m_grace != GraceModeOff) {

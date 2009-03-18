@@ -34,7 +34,7 @@ void
 FixNotationQuantizeCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "fix_quantization",
+        ("fix_quantization",
          new SelectionCommandBuilder<FixNotationQuantizeCommand>());
 }
 

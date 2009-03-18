@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -48,7 +47,7 @@ class Segment;
 class RosegardenGUIDoc;
 class RealTime;
 class NotationView;
-class MatrixView;
+class NewMatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
 class EventView;
@@ -316,7 +315,7 @@ signals:
 
 protected:
     NotationView *createNotationView(std::vector<Segment *>);
-    MatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
+    NewMatrixView   *createMatrixView  (std::vector<Segment *>, bool drumMode);
     EventView    *createEventView   (std::vector<Segment *>);
 
     virtual void windowActivationChange(bool);

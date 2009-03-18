@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,11 +21,14 @@
 #include <QPainter>
 #include <Q3PointArray>
 
+#include "misc/Debug.h"
+
 
 namespace Rosegarden {
 
 class NotePixmapPainter
 {
+    //!!! update -- no masks, transparency instead
     // Just a trivial class that instructs two painters to do the
     // same thing (one for the pixmap, one for the mask).  We only
     // duplicate those methods we actually use in NotePixmapFactory
@@ -38,7 +40,6 @@ public:
     void beginExternal(QPainter *painter) {
 
 	m_externalPainter = painter;
-	m_useMask = false;
 
 	painter->setPen(QPen(QColor(Qt::black), 1, Qt::SolidLine,
 			     Qt::RoundCap, Qt::RoundJoin));
@@ -50,23 +51,20 @@ public:
 	}
     }
 
-    bool begin(QPaintDevice *device, QPaintDevice *mask = 0, bool unclipped = false) {
+    bool begin(QPaintDevice *device) {
 
 	m_externalPainter = 0;
 
-	if (mask) {
-	    m_useMask = true;
-	    m_maskPainter.begin(mask);//, unclipped);
-	} else {
-	    m_useMask = false;
-	}
-
+        if (m_myPainter.isActive()) {
+            NOTATION_DEBUG << "WARNING: NotePixmapPainter::begin(): Painter already active" << endl;
+            assert(!m_myPainter.isActive());
+        }
+        
 	m_painter = &m_myPainter;
-	return m_painter->begin(device);//, unclipped);
+	return m_painter->begin(device);
     }
 
     bool end() {
-	if (m_useMask) m_maskPainter.end();
 	return m_painter->end();
     }
 
@@ -74,62 +72,46 @@ public:
 	return *m_painter;
     }
 
-    QPainter &maskPainter() {
-	return m_maskPainter;
-    }
-
     void drawPoint(int x, int y) {
 	m_painter->drawPoint(x, y);
-	if (m_useMask) m_maskPainter.drawPoint(x, y);
     }
 
     void drawLine(int x1, int y1, int x2, int y2) {
 	m_painter->drawLine(x1, y1, x2, y2);
-	if (m_useMask) m_maskPainter.drawLine(x1, y1, x2, y2);
     }
 
     void drawRect(int x, int y, int w, int h) {
 	m_painter->drawRect(x, y, w, h);
-	if (m_useMask) m_maskPainter.drawRect(x, y, w, h);
     }
     
     void drawArc(int x, int y, int w, int h, int a, int alen) {
 	m_painter->drawArc(x, y, w, h, a, alen);
-	if (m_useMask) m_maskPainter.drawArc(x, y, w, h, a, alen);
     }
 
     void drawPolygon(const Q3PointArray &a, bool winding = false,
 		     int index = 0, int n = -1) {
 	m_painter->drawPolygon(a, winding, index, n);
-	if (m_useMask) m_maskPainter.drawPolygon(a, winding, index, n);
     }
 
     void drawPolyline(const Q3PointArray &a, int index = 0, int n = -1) {
 	m_painter->drawPolyline(a, index, n);
-	if (m_useMask) m_maskPainter.drawPolyline(a, index, n);
     }
 
     void drawPixmap(int x, int y, const QPixmap &pm,
-		    				int sx = 0, int sy = 0, int sw = -1, int sh = -1) {
-		
-		m_painter->drawPixmap(x, y, pm, sx, sy, sw, sh);
-// 		if (m_useMask) m_maskPainter.drawPixmap(x, y, *(pm.mask()), sx, sy, sw, sh);
-		if (m_useMask) m_maskPainter.drawPixmap(x, y, (pm.mask()), sx, sy, sw, sh);	//### removed *
-	}
+		    int sx = 0, int sy = 0, int sw = -1, int sh = -1) {
+        m_painter->drawPixmap(x, y, pm, sx, sy, sw, sh);
+    }
 
     void drawText(int x, int y, const QString &string) {
 	m_painter->drawText(x, y, string);
-	if (m_useMask) m_maskPainter.drawText(x, y, string);
     }
 
     void drawNoteCharacter(int x, int y, const NoteCharacter &character) {
 	character.draw(m_painter, x, y);
-	if (m_useMask) character.drawMask(&m_maskPainter, x, y);
     }
 
     void drawEllipse(int x, int y, int w, int h) {
-      m_painter->drawEllipse(x, y, w, h);
-      if (m_useMask) m_maskPainter.drawEllipse(x, y, w, h);
+        m_painter->drawEllipse(x, y, w, h);
     }
 
 private:

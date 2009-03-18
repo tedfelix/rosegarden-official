@@ -36,7 +36,7 @@ void
 AutoBeamCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "auto_beam",
+        ("auto_beam",
          new SelectionCommandBuilder<AutoBeamCommand>());
 }
 

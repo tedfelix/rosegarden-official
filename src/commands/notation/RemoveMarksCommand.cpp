@@ -34,7 +34,7 @@ void
 RemoveMarksCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "remove_marks",
+        ("remove_marks",
          new SelectionCommandBuilder<RemoveMarksCommand>());
 }
 

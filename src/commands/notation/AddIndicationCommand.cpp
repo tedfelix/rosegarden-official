@@ -90,8 +90,7 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
     
     for (int i = 0; i < standardIndications.size(); ++i) {
         r->registerCommand
-            (getGlobalName(standardIndications[i]), icons[i],
-             shortcuts[i], actionNames[i],
+            (actionNames[i],
              new ArgumentAndSelectionCommandBuilder<AddIndicationCommand>());
     }
 }

@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include <Q3CanvasItemList>
 #include <Q3CanvasRectangle>
@@ -912,3 +913,5 @@ const QString NotationSelector::ToolName = "notationselector";
 
 }
 #include "NotationSelector.moc"
+
+#endif

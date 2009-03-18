@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,34 +15,35 @@
     COPYING included with this distribution for more information.
 */
 
-#include "EditToolBox.h"
+#ifndef _RG_ACTIONCOMMANDREGISTRY_H_
+#define _RG_ACTIONCOMMANDREGISTRY_H_
 
-#include "BaseToolBox.h"
-#include "EditTool.h"
-#include "EditView.h"
-#include <QObject>
-#include <QString>
-#include <QMessageBox>
+#include <QCoreApplication>
 
-namespace Rosegarden
+#include "document/CommandRegistry.h"
+
+class QIcon;
+
+namespace Rosegarden {
+
+class ActionFileClient;
+
+class ActionCommandRegistry : public CommandRegistry
 {
+    Q_DECLARE_TR_FUNCTIONS(ActionCommandRegistry)
 
-EditToolBox::EditToolBox(EditView *parent)
-        : BaseToolBox(parent),
-        m_parentView(parent)
-{
+public:
+    ActionCommandRegistry(ActionFileClient *c);
+    virtual ~ActionCommandRegistry();
+
+protected:
+    ActionFileClient *m_client;
+
+    virtual void addAction(QString actionName);
+    virtual void invokeCommand(QString actionName);
+};
+
 }
 
-EditTool* EditToolBox::getTool(const QString& toolName)
-{
-    return dynamic_cast<EditTool*>(BaseToolBox::getTool(toolName));
-}
+#endif
 
-EditTool* EditToolBox::createTool(const QString&)
-{
-    QMessageBox::critical(0, "", tr("EditToolBox::createTool called - this should never happen"));
-    return 0;
-}
-
-}
-#include "EditToolBox.moc"

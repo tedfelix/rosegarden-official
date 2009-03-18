@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -35,7 +34,8 @@ namespace Rosegarden
 
 class ViewElement;
 class Segment;
-class NotationView;
+class NotationWidget;
+class NotationStaff;
 class Event;
 
 
@@ -51,19 +51,11 @@ class NoteInserter : public NotationTool
 public:
     ~NoteInserter();
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent*,
-                                       ViewElement* el);
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
 
-    virtual int handleMouseMove(timeT time,
-                                int height,
-                                QMouseEvent*);
+    virtual FollowMode handleMouseMove(const NotationMouseEvent *);
 
-    virtual void handleMouseRelease(timeT time,
-                                    int height,
-                                    QMouseEvent*);
+    virtual void handleMouseRelease(const NotationMouseEvent *);
 
     virtual void ready();
 
@@ -91,12 +83,12 @@ public slots:
     void slotSetAccidental(Accidental, bool follow);
 
 protected:
-    NoteInserter(NotationView*);
+    NoteInserter(NotationWidget *);
 
     /// this ctor is used by RestInserter
-    NoteInserter(const QString& menuName, NotationView*);
+    NoteInserter(QString rcFileName, QString menuName, NotationWidget *);
 
-    timeT getOffsetWithinRest(int staffNo,
+    timeT getOffsetWithinRest(NotationStaff *,
                               const NotationElementList::iterator&,
                               double &canvasX);
 
@@ -108,7 +100,7 @@ protected:
                                 const Note &,
                                 int pitch, Accidental);
 
-    virtual bool computeLocationAndPreview(QMouseEvent *e);
+    virtual bool computeLocationAndPreview(const NotationMouseEvent *e);
     virtual void showPreview();
     virtual void clearPreview();
 
@@ -142,7 +134,7 @@ protected:
     int m_clickSubordering;
     int m_clickPitch;
     int m_clickHeight;
-    int m_clickStaffNo;
+    NotationStaff *m_clickStaff;
     double m_clickInsertX;
     float m_targetSubordering;
 

@@ -33,7 +33,7 @@ using namespace BaseProperties;
 void
 UnTupletCommand::registerCommand(CommandRegistry *r)
 {
-    r->registerCommand(getGlobalName(), "", "", "break_tuplets",
+    r->registerCommand("break_tuplets",
                        new SelectionCommandBuilder<UnTupletCommand>());
 }
 

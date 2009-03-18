@@ -359,8 +359,7 @@ void
 KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
-        QPixmap pmap =
-            NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef));
+        QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
         m_keyLabel->setPixmap(pmap);
     } else {
         m_keyLabel->setText(tr("No such key"));

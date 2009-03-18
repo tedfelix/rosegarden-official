@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,37 +15,40 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_BARLINE_H_
-#define _RG_BARLINE_H_
+#ifndef _RG_BARLINE_ITEM_H_
+#define _RG_BARLINE_ITEM_H_
 
-#include <Q3PointArray>
-#include <Q3Canvas>
-#include <Q3CanvasPolygonalItem>
+#include <QGraphicsItem>
 
-#include "LinedStaff.h"
-
+#include "StaffLayout.h"
 
 
 namespace Rosegarden {
 
-class BarLine : public Q3CanvasPolygonalItem
+class BarLineItem : public QGraphicsItem
 {
 public:
-    BarLine(Q3Canvas *canvas, double layoutX,
-            int barLineHeight, int baseBarThickness, int lineSpacing,
-            int inset, LinedStaff::BarStyle style) :
-        Q3CanvasPolygonalItem(canvas),
+    BarLineItem(double layoutX,
+		int barLineHeight, int baseBarThickness, int lineSpacing,
+		int inset, StaffLayout::BarStyle style) :
+        QGraphicsItem(),
         m_layoutX(layoutX),
         m_barLineHeight(barLineHeight),
         m_baseBarThickness(baseBarThickness),
         m_lineSpacing(lineSpacing),
         m_inset(inset),
+        m_colour(Qt::black),
         m_style(style) { }
 
     double getLayoutX() const { return m_layoutX; }
-    
-    virtual Q3PointArray areaPoints() const;
-    virtual void drawShape(QPainter &);
+
+    void setColour(QColor colour) { m_colour = colour; }
+
+    QRectF boundingRect() const;
+
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget);
 
 protected:
     double m_layoutX;
@@ -54,9 +56,10 @@ protected:
     int m_baseBarThickness;
     int m_lineSpacing;
     int m_inset;
-    LinedStaff::BarStyle m_style;
+    QColor m_colour;
+    StaffLayout::BarStyle m_style;
 };
 
 }
 
-#endif /*BARLINE_H_*/
+#endif

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 #ifndef _RG_GUITAR_CHORD_INSERTER_H_
 #define _RG_GUITAR_CHORD_INSERTER_H_
 
@@ -87,4 +87,5 @@ private:
 
 }
 
+#endif
 #endif

@@ -112,8 +112,7 @@ TimeWidget::init(bool editable)
                     timeT error = 0;
                     QString label = NotationStrings::makeNoteMenuLabel
                                     (dottedDuration, false, error);
-                    QPixmap pmap = NotePixmapFactory::toQPixmap
-                                   (NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error));
+                    QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error);
                     m_note->addItem(pmap, label); // ignore error
                 }
 
@@ -121,8 +120,7 @@ TimeWidget::init(bool editable)
                 timeT error = 0;
                 QString label = NotationStrings::makeNoteMenuLabel
                                 (duration, false, error);
-                QPixmap pmap = NotePixmapFactory::toQPixmap
-                               (NotePixmapFactory::makeNoteMenuPixmap(duration, error));
+                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
                 m_note->addItem(pmap, label); // ignore error
             }
             connect(m_note, SIGNAL(activated(int)),

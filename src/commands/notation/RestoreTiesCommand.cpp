@@ -34,7 +34,7 @@ void
 RestoreTiesCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "restore_ties",
+        ("restore_ties",
          new SelectionCommandBuilder<RestoreTiesCommand>());
 }
 

@@ -20,7 +20,7 @@
 #define _RG_NOTATIONVLAYOUT_H_
 
 #include "base/FastVector.h"
-#include "base/LayoutEngine.h"
+#include "base/LayoutEngine2.h"
 #include "gui/general/ProgressReporter.h"
 #include <map>
 #include "base/Event.h"
@@ -35,7 +35,7 @@ class QObject;
 namespace Rosegarden
 {
 
-class Staff;
+class ViewSegment;
 class Quantizer;
 class Composition;
 class NotePixmapFactory;
@@ -51,7 +51,7 @@ class Composition;
  */
 
 class NotationVLayout : public ProgressReporter,
-                        public VerticalLayoutEngine
+                        public VerticalLayoutEngine2
 {
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
@@ -72,14 +72,14 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(Staff &,
+    virtual void resetViewSegment(ViewSegment &,
                             timeT = 0,
                             timeT = 0);
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(Staff &,
+    virtual void scanViewSegment(ViewSegment &,
                            timeT = 0,
                            timeT = 0);
 
@@ -96,12 +96,12 @@ private:
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 
     typedef FastVector<NotationElementList::iterator> SlurList;
-    typedef std::map<Staff *, SlurList> SlurListMap;
+    typedef std::map<ViewSegment *, SlurList> SlurListMap;
 
     //--------------- Data members ---------------------------------
 
     SlurListMap m_slurs;
-    SlurList &getSlurList(Staff &);
+    SlurList &getSlurList(ViewSegment &);
 
     Composition *m_composition;
     NotePixmapFactory *m_npf;

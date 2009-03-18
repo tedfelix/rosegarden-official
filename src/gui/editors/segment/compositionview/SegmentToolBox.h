@@ -39,10 +39,10 @@ class SegmentToolBox : public BaseToolBox
 public:
     SegmentToolBox(CompositionView* parent, RosegardenGUIDoc*);
 
-    virtual SegmentTool* getTool(const QString& toolName);
+    virtual SegmentTool* getTool(QString toolName);
     
 protected:
-    virtual SegmentTool* createTool(const QString& toolName);
+    virtual SegmentTool* createTool(QString toolName);
 
     //--------------- Data members ---------------------------------
 

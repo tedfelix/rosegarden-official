@@ -48,7 +48,7 @@
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
-#include "gui/general/EditViewBase.h"
+#include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
@@ -93,7 +93,7 @@ EventView::m_lastSetEventFilter = -1;
 EventView::EventView(RosegardenGUIDoc *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
-        EditViewBase(doc, segments, 2, parent, "eventview"),
+        ListEditView(doc, segments, 2, parent, "eventview"),
         m_eventFilter(Note | Text | SystemExclusive | Controller |
                       ProgramChange | PitchBend | Indication | Other),
         m_menu(0)
@@ -286,8 +286,6 @@ EventView::EventView(RosegardenGUIDoc *doc,
     makeInitialSelection(doc->getComposition().getPosition());
 
     slotCompositionStateUpdate();
-
-    setOutOfCtor();
 }
 
 EventView::~EventView()
@@ -1207,7 +1205,7 @@ EventView::slotFilterSelection()
 void
 EventView::setupActions()
 {
-    EditViewBase::setupActions("eventlist.rc");
+    ListEditView::setupActions("eventlist.rc");
 
     createAction("insert", SLOT(slotEditInsert()));
     createAction("delete", SLOT(slotEditDelete()));

@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>
@@ -483,3 +484,5 @@ NotationCanvasView::slotExternalWheelEvent(QWheelEvent* e)
 
 }
 #include "NotationCanvasView.moc"
+
+#endif

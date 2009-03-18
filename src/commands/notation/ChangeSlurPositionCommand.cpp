@@ -33,10 +33,10 @@ void
 ChangeSlurPositionCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(true), "", "", "slurs_above",
+        ("slurs_above",
          new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
     r->registerCommand
-        (getGlobalName(false), "", "", "slurs_below",
+        ("slurs_below",
          new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
 }
 

@@ -36,8 +36,7 @@ using namespace BaseProperties;
 void
 TieNotesCommand::registerCommand(CommandRegistry *r)
 {
-    r->registerCommand(getGlobalName(), "transforms-tie", "AsciiTilde",
-                       "tie_notes",
+    r->registerCommand("tie_notes",
                        new SelectionCommandBuilder<TieNotesCommand>());
 }
 

@@ -90,9 +90,8 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
                                  };
 
     for (size_t i = 0; i < m_marks.size(); ++i) {
-        m_mark->addItem(NotePixmapFactory::toQPixmap
-                           (NotePixmapFactory::makeMarkMenuPixmap(m_marks[i])),
-                           markLabels[i]);
+        m_mark->addItem(NotePixmapFactory::makeMarkMenuPixmap(m_marks[i]),
+                        markLabels[i]);
     }
     m_mark->addItem(tr("Text mark"));
 

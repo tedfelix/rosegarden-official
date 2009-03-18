@@ -15,12 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3CanvasPixmap>
-#include <Q3PointArray>
-
-//#include <QDir>
-//#include <kglobal.h>
-
 #include <cmath>
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
@@ -80,16 +74,11 @@ static clock_t makeNotesTime = 0;
 static int drawBeamsCount = 0;
 static int drawBeamsBeamCount = 0;
 
-class NotePixmapCache : public std::map<CharName, Q3CanvasPixmap*>
-{
-    // nothing to add -- just so we can predeclare it in the header
-};
-
 const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Serif";
 const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
 const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
-NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
+NotePixmapFactory::NotePixmapFactory(QString fontName, int size) :
         m_selected(false),
         m_shaded(false),
         m_tupletCountFont(defaultSerifFontFamily, 8, QFont::Bold),
@@ -111,12 +100,10 @@ NotePixmapFactory::NotePixmapFactory(std::string fontName, int size) :
         m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
         m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
         m_generatedPixmap(0),
-        m_generatedMask(0),
         m_generatedWidth( -1),
         m_generatedHeight( -1),
         m_inPrinterMethod(false),
-        m_p(new NotePixmapPainter()),
-        m_dottedRestCache(new NotePixmapCache)
+        m_p(new NotePixmapPainter())
 {
     init(fontName, size);
 }
@@ -143,12 +130,10 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
         m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
         m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
         m_generatedPixmap(0),
-        m_generatedMask(0),
         m_generatedWidth( -1),
         m_generatedHeight( -1),
         m_inPrinterMethod(false),
-        m_p(new NotePixmapPainter()),
-        m_dottedRestCache(new NotePixmapCache)
+        m_p(new NotePixmapPainter())
 {
     init(npf.m_font->getName(), npf.m_font->getSize());
 }
@@ -178,14 +163,13 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
         m_trackHeaderBoldFont = npf.m_trackHeaderBoldFont;
         m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
         init(npf.m_font->getName(), npf.m_font->getSize());
-        m_dottedRestCache->clear();
         m_textFontCache.clear();
     }
     return *this;
 }
 
 void
-NotePixmapFactory::init(std::string fontName, int size)
+NotePixmapFactory::init(QString fontName, int size)
 {
     try {
         m_style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
@@ -275,10 +259,9 @@ NotePixmapFactory::init(std::string fontName, int size)
 NotePixmapFactory::~NotePixmapFactory()
 {
     delete m_p;
-    delete m_dottedRestCache;
 }
 
-std::string
+QString
 NotePixmapFactory::getFontName() const
 {
     return m_font->getName();
@@ -288,14 +271,6 @@ int
 NotePixmapFactory::getSize() const
 {
     return m_font->getSize();
-}
-
-QPixmap
-NotePixmapFactory::toQPixmap(Q3CanvasPixmap* cp)
-{
-    QPixmap p = *cp;
-    delete cp;
-    return p;
 }
 
 void
@@ -318,8 +293,8 @@ NotePixmapFactory::dumpStats(std::ostream &s)
     (void)s; // avoid warnings
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeNote(const NotePixmapParameters &params)
 {
     Profiler profiler("NotePixmapFactory::makeNotePixmap");
     clock_t startTime = clock();
@@ -350,7 +325,7 @@ NotePixmapFactory::makeNotePixmap(const NotePixmapParameters &params)
     clock_t endTime = clock();
     makeNotesTime += (endTime - startTime);
 
-    return makeCanvasPixmap(hotspot);
+    return makeItem(hotspot);
 }
 
 void
@@ -496,11 +471,11 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     if (painter) {
         painter->save();
         m_p->beginExternal(painter);
-        //	NOTATION_DEBUG << "Translate: (" << x << "," << y << ")" << endl;
+//        NOTATION_DEBUG << "Translate: (" << x << "," << y << ")" << endl;
         painter->translate(x - m_left, y - m_above - m_noteBodyHeight / 2);
     } else {
-        createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
-                            m_noteBodyHeight + m_above + m_below);
+        createPixmap(m_noteBodyWidth + m_left + m_right,
+                     m_noteBodyHeight + m_above + m_below);
     }
 
     if (params.m_tupletCount > 0) {
@@ -516,7 +491,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
     }
 
     NoteStyle::CharNameRec charNameRec
-    (m_style->getNoteHeadCharName(params.m_noteType));
+        (m_style->getNoteHeadCharName(params.m_noteType));
     CharName charName = charNameRec.first;
     bool inverted = charNameRec.second;
     NoteCharacter body = getCharacter
@@ -604,18 +579,18 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 }
 
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeNoteHaloPixmap(const NotePixmapParameters &params)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeNoteHalo(const NotePixmapParameters &params)
 {
     int nbh0 = getNoteBodyHeight();
     int nbh = getNoteBodyHeight(params.m_noteType);
     int nbw0 = getNoteBodyHeight();
     int nbw = getNoteBodyWidth(params.m_noteType);
 
-    createPixmapAndMask(nbw + nbw0, nbh + nbh0);
+    createPixmap(nbw + nbw0, nbh + nbh0);
     drawNoteHalo(0, 0, nbw + nbw0, nbh + nbh0);
 
-    return makeCanvasPixmap(QPoint(nbw0 / 2, nbh0));
+    return makeItem(QPoint(nbw0 / 2, nbh0));
 }
 
 
@@ -691,7 +666,7 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
 
 void
 NotePixmapFactory::makeRoomForAccidental(Accidental a,
-        bool cautionary, int shift, bool extra)
+                                         bool cautionary, int shift, bool extra)
 {
     // General observation: where we're only using a character to
     // determine its dimensions, we should (for the moment) just
@@ -781,7 +756,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
     std::vector<Mark> aboveMarks = params.getAboveMarks();
 
     for (std::vector<Mark>::iterator i = normalMarks.begin();
-            i != normalMarks.end(); ++i) {
+         i != normalMarks.end(); ++i) {
 
         if (!Marks::isTextMark(*i)) {
 
@@ -816,7 +791,7 @@ NotePixmapFactory::makeRoomForMarks(bool isStemmed,
     }
 
     for (std::vector<Mark>::iterator i = aboveMarks.begin();
-            i != aboveMarks.end(); ++i) {
+         i != aboveMarks.end(); ++i) {
 
         if (!Marks::isFingeringMark(*i)) {
 
@@ -871,7 +846,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     bool normalMarksAreAbove = !(isStemmed && params.m_stemGoesUp);
 
     for (std::vector<Mark>::iterator i = normalMarks.begin();
-            i != normalMarks.end(); ++i) {
+         i != normalMarks.end(); ++i) {
 
         if (!Marks::isTextMark(*i)) {
 
@@ -893,8 +868,8 @@ NotePixmapFactory::drawMarks(bool isStemmed,
             QRect bounds = m_textMarkFontMetrics.boundingRect(text);
 
             m_p->painter().setFont(m_textMarkFont);
-            if (!m_inPrinterMethod)
-                m_p->maskPainter().setFont(m_textMarkFont);
+//            if (!m_inPrinterMethod)
+//                m_p->maskPainter().setFont(m_textMarkFont);
 
             int x = m_left + m_noteBodyWidth / 2 - bounds.width() / 2;
             int y = (normalMarksAreAbove ?
@@ -919,7 +894,7 @@ NotePixmapFactory::drawMarks(bool isStemmed,
     }
 
     for (std::vector<Mark>::iterator i = aboveMarks.begin();
-            i != aboveMarks.end(); ++i) {
+         i != aboveMarks.end(); ++i) {
 
         if (m_selected)
             m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -978,8 +953,8 @@ NotePixmapFactory::drawMarks(bool isStemmed,
             QRect bounds = m_fingeringFontMetrics.boundingRect(text);
 
             m_p->painter().setFont(m_fingeringFont);
-            if (!m_inPrinterMethod)
-                m_p->maskPainter().setFont(m_fingeringFont);
+//            if (!m_inPrinterMethod)
+//                m_p->maskPainter().setFont(m_fingeringFont);
 
             int x = m_left + m_noteBodyWidth / 2 - bounds.width() / 2;
             int y = m_above - dy - 3;
@@ -1246,6 +1221,7 @@ NotePixmapFactory::drawFlags(int flagCount,
             else
                 y -= (flag * flagSpace) + flagChar.getHeight();
 
+/*
             if (!m_inPrinterMethod) {
 
                 m_p->end();
@@ -1256,17 +1232,17 @@ NotePixmapFactory::drawFlags(int flagCount,
                                                   *m_generatedMask,
                                                   m_left + s1.x() - hotspot.x(),
                                                   y,
-                                                  *flagChar.getPixmap());
+                                                  flagChar.getPixmap());
 
                 m_p->begin(m_generatedPixmap, m_generatedMask);
 
             } else {
-
+*/
                 // No problem with mask here
                 m_p->drawNoteCharacter(m_left + s1.x() - hotspot.x(),
                                        y,
                                        flagChar);
-            }
+//            }
         }
 
     } else { // the normal case
@@ -1630,8 +1606,8 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     }
 
     m_p->painter().setFont(m_tupletCountFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(m_tupletCountFont);
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setFont(m_tupletCountFont);
 
     int textX = endX + countSpace;
     int textY = endY + cr.height() / 2;
@@ -1734,8 +1710,8 @@ NotePixmapFactory::drawTie(bool above, int length, int shift)
 #endif
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeRest(const NotePixmapParameters &params)
 {
     Profiler profiler("NotePixmapFactory::makeRestPixmap");
 
@@ -1755,27 +1731,14 @@ NotePixmapFactory::makeRestPixmap(const NotePixmapParameters &params)
             !params.m_restOutsideStave) {
 
         if (params.m_dots == 0) {
-            return getCharacter(charName, PlainColour, false).getCanvasPixmap();
-        } else {
-            NotePixmapCache::iterator ci(m_dottedRestCache->find(charName));
-            if (ci != m_dottedRestCache->end())
-                return new Q3CanvasPixmap
-                       (*ci->second, QPoint(ci->second->offsetX(),
-                                            ci->second->offsetY()));
-            else
-                encache = true;
+            return getCharacter(charName, PlainColour, false).makeItem();
         }
     }
 
     QPoint hotspot(m_font->getHotspot(charName));
     drawRestAux(params, hotspot, 0, 0, 0);
 
-    Q3CanvasPixmap* canvasMap = makeCanvasPixmap(hotspot);
-    if (encache) {
-        m_dottedRestCache->insert(std::pair<CharName, Q3CanvasPixmap*>
-                                  (charName, new Q3CanvasPixmap
-                                   (*canvasMap, hotspot)));
-    }
+    QGraphicsPixmapItem *canvasMap = makeItem(hotspot);
     return canvasMap;
 }
 
@@ -1829,8 +1792,8 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
         m_p->beginExternal(painter);
         painter->translate(x - m_left, y - m_above - hotspot.y());
     } else {
-        createPixmapAndMask(m_noteBodyWidth + m_left + m_right,
-                            m_noteBodyHeight + m_above + m_below);
+        createPixmap(m_noteBodyWidth + m_left + m_right,
+                     m_noteBodyHeight + m_above + m_below);
     }
 
     m_p->drawNoteCharacter(m_left, m_above, character);
@@ -1863,16 +1826,15 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeClefPixmap(const Clef &clef)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeClef(const Clef &clef)
 {
-    Profiler profiler("NotePixmapFactory::makeClefPixmap");
+    Profiler profiler("NotePixmapFactory::makeClef");
     NoteCharacter plain = getCharacter(m_style->getClefCharName(clef),
                                        PlainColour, false);
 
     int oct = clef.getOctaveOffset();
-    if (oct == 0)
-        return plain.getCanvasPixmap();
+    if (oct == 0) return plain.makeItem();
 
     // fix #1522784 and use 15 rather than 16 for double octave offset
     int adjustedOctave = (8 * (oct < 0 ? -oct : oct));
@@ -1884,8 +1846,8 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     QString text = QString("%1").arg(adjustedOctave);
     QRect rect = m_clefOttavaFontMetrics.boundingRect(text);
 
-    createPixmapAndMask(plain.getWidth(),
-                        plain.getHeight() + rect.height());
+    createPixmap(plain.getWidth(),
+                 plain.getHeight() + rect.height());
 
     if (m_selected) {
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -1894,8 +1856,8 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     m_p->drawNoteCharacter(0, oct < 0 ? 0 : rect.height(), plain);
 
     m_p->painter().setFont(m_clefOttavaFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(m_clefOttavaFont);
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setFont(m_clefOttavaFont);
 
     m_p->drawText(plain.getWidth() / 2 - rect.width() / 2,
                   oct < 0 ? plain.getHeight() + rect.height() - 1 :
@@ -1904,32 +1866,32 @@ NotePixmapFactory::makeClefPixmap(const Clef &clef)
     m_p->painter().setPen(QColor(Qt::black));
     QPoint hotspot(plain.getHotspot());
     if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
-    return makeCanvasPixmap(hotspot, true);
+    return makeItem(hotspot);
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makePedalDownPixmap()
+QGraphicsPixmapItem *
+NotePixmapFactory::makePedalDown()
 {
     return getCharacter(NoteCharacterNames::PEDAL_MARK, PlainColour, false)
-           .getCanvasPixmap();
+           .makeItem();
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makePedalUpPixmap()
+QGraphicsPixmapItem *
+NotePixmapFactory::makePedalUp()
 {
     return getCharacter(NoteCharacterNames::PEDAL_UP_MARK, PlainColour, false)
-           .getCanvasPixmap();
+           .makeItem();
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeUnknownPixmap()
+QGraphicsPixmapItem *
+NotePixmapFactory::makeUnknown()
 {
     Profiler profiler("NotePixmapFactory::makeUnknownPixmap");
     return getCharacter(NoteCharacterNames::UNKNOWN, PlainColour, false)
-           .getCanvasPixmap();
+           .makeItem();
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
 {
 //     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
@@ -1944,18 +1906,18 @@ NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
     if (menuSize) fileBase += "menu-";
     fileBase += name;
     if (QFile(fileBase + ".png").exists()) {
-        return new Q3CanvasPixmap(fileBase + ".png");
+        return QPixmap(fileBase + ".png");
     } else if (QFile(fileBase + ".xpm").exists()) {
-        return new Q3CanvasPixmap(fileBase + ".xpm");
+        return QPixmap(fileBase + ".xpm");
     } else if (menuSize) {
         return makeToolbarPixmap(name, false);
     } else {
         // this will fail, but we don't want to return a null pointer
-        return new Q3CanvasPixmap(fileBase + ".png");
+        return QPixmap(fileBase + ".png");
     }
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makeNoteMenuPixmap(timeT duration,
                                       timeT &errorReturn)
 {
@@ -1974,13 +1936,12 @@ NotePixmapFactory::makeNoteMenuPixmap(timeT duration,
     }
 
     QString noteName = NotationStrings::getReferenceName(nearestNote);
-    if (triplet)
-        noteName = "3-" + noteName;
+    if (triplet) noteName = "3-" + noteName;
     noteName = "menu-" + noteName;
-    return makeToolbarPixmap( qStrToCharPtrUtf8(noteName), true );
+    return makeToolbarPixmap(noteName.toLocal8Bit().data(), true);
 }
 
-Q3CanvasPixmap *
+QPixmap
 NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
 {
     if (mark == Marks::Sforzando || mark == Marks::Rinforzando) {
@@ -1998,14 +1959,14 @@ NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
         NoteCharacter character = font->getCharacter
                                   (NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle)->
                                    getMarkCharName(mark));
-        return character.getCanvasPixmap();
+        return character.getPixmap();
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeKeyPixmap(const Key &key,
-                                 const Clef &clef,
-                                 Key previousKey)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeKey(const Key &key,
+                           const Clef &clef,
+                           Key previousKey)
 {
     Profiler profiler("NotePixmapFactory::makeKeyPixmap");
 
@@ -2043,8 +2004,9 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
         between = cancelCharacter.getWidth();
     }
 
-    createPixmapAndMask(keyDelta * ah1.size() + cancelDelta * cancelCount + between +
-                        keyCharacter.getWidth() / 4, lw * 8 + 1);
+    createPixmap(keyDelta * ah1.size() + cancelDelta * cancelCount + between +
+                 keyCharacter.getWidth() / 4,
+                 lw * 8 + 1);
 
     if (key.isSharp() != previousKey.isSharp()) {
 
@@ -2094,35 +2056,37 @@ NotePixmapFactory::makeKeyPixmap(const Key &key,
         }
     }
 
-    return makeCanvasPixmap(m_pointZero);
+    return makeItem(m_pointZero);
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
 {
-    Q3CanvasPixmap* clefPixmap = makeClefPixmap(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef);
 
     int lw = getLineSpacing();
-    int width = clefPixmap->width() + 6 * getNoteBodyWidth();
+    int width = clefItem->pixmap().width() + 6 * getNoteBodyWidth();
 
-    createPixmapAndMask(width, lw * 10 + 1);
+    createPixmap(width, lw * 10 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
     int x = 3 * getNoteBodyWidth();
-    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
         m_p->drawLine(x / 2, y, m_generatedWidth - x / 2 - 1, y);
     }
 
-    delete clefPixmap;
+    delete clefItem;
 
-    return makeCanvasPixmap(m_pointZero);
+    QPixmap pmap(*m_generatedPixmap);
+    delete m_generatedPixmap;
+    return pmap;
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
@@ -2131,21 +2095,22 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    Q3CanvasPixmap* clefPixmap = makeClefPixmap(clef);
-    QPixmap accidentalPixmap(*m_font->getCharacter(charName).getPixmap());
+    QGraphicsPixmapItem *clefItem = makeClef(clef);
+
+    QPixmap accidentalPixmap(m_font->getCharacter(charName).getPixmap());
     QPoint hotspot(m_font->getHotspot(charName));
 
     int lw = getLineSpacing();
     int delta = accidentalPixmap.width() - hotspot.x();
     int maxDelta = getAccidentalWidth(Sharp);
-    int width = clefPixmap->width() + 5 * maxDelta + 7 * maxDelta;
-    int x = clefPixmap->width() + 5 * maxDelta / 2;
+    int width = clefItem->pixmap().width() + 5 * maxDelta + 7 * maxDelta;
+    int x = clefItem->pixmap().width() + 5 * maxDelta / 2;
 
-    createPixmapAndMask(width, lw * 10 + 1);
+    createPixmap(width, lw * 10 + 1);
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(2 * maxDelta, y - clefPixmap->offsetY(), *clefPixmap);
+    m_p->drawPixmap(2 * maxDelta, y - clefItem->offset().y(), clefItem->pixmap());
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
@@ -2162,8 +2127,11 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
         m_p->drawLine(maxDelta, y, m_generatedWidth - 2*maxDelta - 1, y);
     }
 
-    delete clefPixmap;
-    return makeCanvasPixmap(m_pointZero);
+    delete clefItem;
+
+    QPixmap pmap(*m_generatedPixmap);
+    delete m_generatedPixmap;
+    return pmap;
 }
 
 int
@@ -2183,15 +2151,15 @@ NotePixmapFactory::getClefAndKeyWidth(const Key &key, const Clef &clef)
     return width;
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeTrackHeaderPixmap(
-        int width, int height, TrackHeader *header)
+#ifdef NOT_JUST_NOW //!!!
+QPixmap
+NotePixmapFactory::makeTrackHeaderPixmap(int width, int height, TrackHeader *header)
 {
 
     height -= 4;    // Make room to the label frame :
                     // 4 = 2 * (margin + lineWidth)
 
-    createPixmapAndMask(width, height);
+    createPixmap(width, height);
 
     int lw = getLineSpacing();
     int h;
@@ -2357,7 +2325,9 @@ NotePixmapFactory::makeTrackHeaderPixmap(
         m_p->drawText(charWidth / 4, lowerTextY, textLine);
     }
 
-    return makeCanvasPixmap(m_pointZero, true);
+    QPixmap pmap(*m_generatedPixmap);
+    delete m_generatedPixmap;
+    return pmap;
 }
 
 int
@@ -2414,10 +2384,11 @@ NotePixmapFactory::getOneLine(QString &text, int width)
 
     return str;
 }
+#endif
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
-        bool useSharps)
+                                          bool useSharps)
 {
     NotationRules rules;
 
@@ -2425,7 +2396,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     Accidental accidental(pitch.getAccidental(useSharps));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
 
-    Q3CanvasPixmap* clefPixmap = makeClefPixmap(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef);
 
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
@@ -2445,7 +2416,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     params.setIsOnLine(h % 2 == 0);
     params.setSelected(m_selected);
 
-    Q3CanvasPixmap *notePixmap = makeNotePixmap(params);
+    QGraphicsPixmapItem *noteItem = makeNote(params);
 
     int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
@@ -2456,35 +2427,40 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         pixmapHeight += 6 * lw;
     }
 
-    createPixmapAndMask(width, pixmapHeight);
+    createPixmap(width, pixmapHeight);
 
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
-    int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
-    m_p->drawPixmap(x, y, *notePixmap);
+    int y = yoffset + ((8 - h) * lw) / 2 - noteItem->offset().y();
+    m_p->drawPixmap(x, y, noteItem->pixmap());
 
     h = clef.getAxisHeight();
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
         m_p->drawLine(x / 2, y, m_generatedWidth - x / 2, y);
     }
 
-    delete clefPixmap;
-    delete notePixmap;
+    delete noteItem;
+    delete clefItem;
 
     //### Force the mask generation (following arg. true) to have
     //### a staff and a clef displayed in the pitch chooser widget
-    return makeCanvasPixmap(m_pointZero, true);
+
+//    return makeItem(m_pointZero, true);
+
+    QPixmap pmap(*m_generatedPixmap);
+    delete m_generatedPixmap;
+    return pmap;
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
-        int octave, int step)
+                                          int octave, int step)
 {
     NotationRules rules;
 
@@ -2492,7 +2468,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     Accidental accidental = pitch.getDisplayAccidental(Key("C major"));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
 
-    Q3CanvasPixmap* clefPixmap = makeClefPixmap(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef);
 
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
@@ -2514,7 +2490,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     params.setIsOnLine(h % 2 == 0);
     params.setSelected(m_selected);
 
-    Q3CanvasPixmap *notePixmap = makeNotePixmap(params);
+    QGraphicsPixmapItem *noteItem = makeNote(params);
 
     int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
@@ -2525,38 +2501,42 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
         pixmapHeight += 6 * lw;
     }
 
-    createPixmapAndMask(width, pixmapHeight);
+    createPixmap(width, pixmapHeight);
 
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
-    int y = yoffset + ((8 - h) * lw) / 2 - notePixmap->offsetY();
-    m_p->drawPixmap(x, y, *notePixmap);
+    int y = yoffset + ((8 - h) * lw) / 2 - noteItem->offset().y();
+    m_p->drawPixmap(x, y, noteItem->pixmap());
 
     h = clef.getAxisHeight();
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(x, y - clefPixmap->offsetY(), *clefPixmap);
+    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
         m_p->drawLine(x / 2, y, m_generatedWidth - x / 2, y);
     }
 
-    delete clefPixmap;
-    delete notePixmap;
-
+    delete noteItem;
+    delete clefItem;
+    
     //### Force the mask generation (following arg. true) to have
     //### a staff and a clef displayed in the pitch chooser widget
-    return makeCanvasPixmap(m_pointZero, true);
+//    return makeItem(m_pointZero, true);
+
+    QPixmap pmap(*m_generatedPixmap);
+    delete m_generatedPixmap;
+    return pmap;
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeHairpinPixmap(int length, bool isCrescendo)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeHairpin(int length, bool isCrescendo)
 {
     Profiler profiler("NotePixmapFactory::makeHairpinPixmap");
     drawHairpinAux(length, isCrescendo, 0, 0, 0);
-    return makeCanvasPixmap(QPoint(0, m_generatedHeight / 2));
+    return makeItem(QPoint(0, m_generatedHeight / 2));
 }
 
 void
@@ -2593,7 +2573,7 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
         m_p->beginExternal(painter);
         painter->translate(x, y - height / 2);
     } else {
-        createPixmapAndMask(length, height);
+        createPixmap(length, height);
     }
 
     if (m_selected) {
@@ -2621,8 +2601,8 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above, bool phrasing)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
 {
     Profiler profiler("NotePixmapFactory::makeSlurPixmap");
 
@@ -2645,20 +2625,22 @@ NotePixmapFactory::makeSlurPixmap(int length, int dy, bool above, bool phrasing)
         i = i.smoothScale(i.width() / 2, i.height() / 2);
 
         delete m_generatedPixmap;
-        delete m_generatedMask;
+//        delete m_generatedMask;
         QPixmap newPixmap(i);
-        Q3CanvasPixmap *p = new Q3CanvasPixmap(newPixmap, hotspot);
-        p->setMask(PixmapFunctions::generateMask(newPixmap,
-                   QColor(Qt::white).rgb()));
+        QGraphicsPixmapItem *p = new QGraphicsPixmapItem(newPixmap);
+        p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
+//!!!        p->setMask(PixmapFunctions::generateMask(newPixmap,
+//                   QColor(Qt::white).rgb()));
         return p;
 
     } else {
 
-        Q3CanvasPixmap *p = new Q3CanvasPixmap(*m_generatedPixmap, hotspot);
-        p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap,
-                   QColor(Qt::white).rgb()));
+        QGraphicsPixmapItem *p = new QGraphicsPixmapItem(*m_generatedPixmap);
+        p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
+//!!!        p->setMask(PixmapFunctions::generateMask(*m_generatedPixmap,
+//                   QColor(Qt::white).rgb()));
         delete m_generatedPixmap;
-        delete m_generatedMask;
+//        delete m_generatedMask;
         return p;
     }
 }
@@ -2725,6 +2707,8 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 
     for (int i = 0; i < thickness; ++i) {
 
+        //!!! use QPainterPath::cubicTo
+
         Spline::PointList pl;
 
         if (!phrasing) {
@@ -2770,19 +2754,18 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
                         painter->rotate(theta);
                 } else {
                     m_p->painter().save();
-                    m_p->maskPainter().save();
+//                    m_p->maskPainter().save();
                     m_p->painter().translate(x, y);
-                    m_p->maskPainter().translate(x, y);
+//                    m_p->maskPainter().translate(x, y);
                     if (rotate) {
                         m_p->painter().rotate(theta);
-                        m_p->maskPainter().rotate(theta);
+//                        m_p->maskPainter().rotate(theta);
                     }
                 }
 
             } else {
-                createPixmapAndMask(smooth ? width*2 + 1 : width,
-                                    smooth ? height*2 + thickness*2 : height + thickness,
-                                    width, height);
+                createPixmap(smooth ? width*2 + 1 : width,
+                             smooth ? height*2 + thickness*2 : height + thickness);
 
                 QMatrix m;
                 if (smooth)
@@ -2791,7 +2774,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
                     m.translate(hotspot.x(), hotspot.y());
                 m.rotate(theta);
                 m_p->painter().setWorldMatrix(m);
-                m_p->maskPainter().setWorldMatrix(m);
+//                m_p->maskPainter().setWorldMatrix(m);
             }
 
             if (m_selected)
@@ -2853,18 +2836,18 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 
     if (painter) {
         painter->restore();
-        if (!m_inPrinterMethod)
-            m_p->maskPainter().restore();
+//        if (!m_inPrinterMethod)
+//            m_p->maskPainter().restore();
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeOttavaPixmap(int length, int octavesUp)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeOttava(int length, int octavesUp)
 {
     Profiler profiler("NotePixmapFactory::makeOttavaPixmap");
     m_inPrinterMethod = false;
     drawOttavaAux(length, octavesUp, 0, 0, 0);
-    return makeCanvasPixmap(QPoint(0, m_generatedHeight - 1));
+    return makeItem(QPoint(0, m_generatedHeight - 1));
 }
 
 void
@@ -2904,7 +2887,7 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
         painter->translate(x - backpedal, y - height);
     } else {
         NOTATION_DEBUG << "NotePixmapFactory::drawOttavaAux: making pixmap and mask " << width << "x" << height << endl;
-        createPixmapAndMask(width, height);
+        createPixmap(width, height);
     }
 
     int thickness = getStemThickness();
@@ -2919,8 +2902,8 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     }
 
     m_p->painter().setFont(m_ottavaFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(m_ottavaFont);
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setFont(m_ottavaFont);
 
     m_p->drawText(0, m_ottavaFontMetrics.ascent(), label);
 
@@ -2945,8 +2928,8 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     m_p->drawLine(x1, y0, x1, y1);
 
     m_p->painter().setPen(QPen());
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setPen(QPen());
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setPen(QPen());
 
     if (painter) {
         painter->restore();
@@ -3020,8 +3003,8 @@ NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
 {
     Profiler profiler("NotePixmapFactory::makeTimeSigPixmap");
 
@@ -3037,16 +3020,16 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         }
 
         if (getCharacter(charName, character, PlainColour, false)) {
-            createPixmapAndMask(character.getWidth(), character.getHeight());
+            createPixmap(character.getWidth(), character.getHeight());
             m_p->drawNoteCharacter(0, 0, character);
-            return makeCanvasPixmap(QPoint(0, character.getHeight() / 2));
+            return makeItem(QPoint(0, character.getHeight() / 2));
         }
 
         QString c("c");
         QRect r = m_bigTimeSigFontMetrics.boundingRect(c);
 
         int dy = getLineSpacing() / 4;
-        createPixmapAndMask(r.width(), r.height() + dy*2);
+        createPixmap(r.width(), r.height() + dy*2);
 
         if (m_selected) {
             m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -3055,8 +3038,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         }
 
         m_p->painter().setFont(m_bigTimeSigFont);
-        if (!m_inPrinterMethod)
-            m_p->maskPainter().setFont(m_bigTimeSigFont);
+//        if (!m_inPrinterMethod)
+//            m_p->maskPainter().setFont(m_bigTimeSigFont);
 
         m_p->drawText(0, r.height() + dy, c);
 
@@ -3070,7 +3053,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         }
 
         m_p->painter().setPen(QColor(Qt::black));
-        return makeCanvasPixmap(QPoint(0, r.height() / 2 + dy));
+        return makeItem(QPoint(0, r.height() / 2 + dy));
 
     } else {
 
@@ -3095,7 +3078,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
             int width = std::max(numW, denomW);
             int height = getLineSpacing() * 4 - getStaffLineThickness();
 
-            createPixmapAndMask(width, height);
+            createPixmap(width, height);
 
             for (unsigned int i = 0; i < numS.length(); ++i) {
                 int x = width - (width - numW) / 2 - (i + 1) * character.getWidth();
@@ -3117,7 +3100,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
                 denominator /= 10;
             }
 
-            return makeCanvasPixmap(QPoint(0, height / 2));
+            return makeItem(QPoint(0, height / 2));
         }
 
         QRect numR = m_timeSigFontMetrics.boundingRect(numS);
@@ -3125,7 +3108,7 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         int width = std::max(numR.width(), denomR.width()) + 2;
         int x;
 
-        createPixmapAndMask(width, denomR.height() * 2 + getNoteBodyHeight());
+        createPixmap(width, denomR.height() * 2 + getNoteBodyHeight());
 
         if (m_selected) {
             m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -3134,8 +3117,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
         }
 
         m_p->painter().setFont(m_timeSigFont);
-        if (!m_inPrinterMethod)
-            m_p->maskPainter().setFont(m_timeSigFont);
+//        if (!m_inPrinterMethod)
+//            m_p->maskPainter().setFont(m_timeSigFont);
 
         x = (width - numR.width()) / 2 - 1;
         m_p->drawText(x, denomR.height(), numS);
@@ -3145,9 +3128,8 @@ NotePixmapFactory::makeTimeSigPixmap(const TimeSignature& sig)
 
         m_p->painter().setPen(QColor(Qt::black));
 
-        return makeCanvasPixmap(QPoint(0, denomR.height() +
-                                       (getNoteBodyHeight() / 4) - 1),
-                                true);
+        return makeItem(QPoint(0, denomR.height() +
+                               (getNoteBodyHeight() / 4) - 1));
     }
 }
 
@@ -3276,8 +3258,17 @@ NotePixmapFactory::getTextFont(const Text &text) const
     return textFont;
 }
 
-Q3CanvasPixmap*
+QPixmap
 NotePixmapFactory::makeTextPixmap(const Text &text)
+{
+    QGraphicsPixmapItem *item = makeText(text);
+    QPixmap map = item->pixmap();
+    delete item;
+    return map;
+}
+
+QGraphicsPixmapItem *
+NotePixmapFactory::makeText(const Text &text)
 {
     Profiler profiler("NotePixmapFactory::makeTextPixmap");
 
@@ -3285,15 +3276,15 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
 
     if (type == Text::Annotation ||
         type == Text::LilyPondDirective) {
-        return makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
+        return makeAnnotation(text, (type == Text::LilyPondDirective));
     }
 
     drawTextAux(text, 0, 0, 0);
-    return makeCanvasPixmap(QPoint(2, 2), true);
+    return makeItem(QPoint(2, 2));
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
+QGraphicsPixmapItem *
+NotePixmapFactory::makeGuitarChord(const Guitar::Fingering &fingering,
                                        int x,
                                        int y)
 {
@@ -3303,7 +3294,7 @@ NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
     int guitarChordWidth = getLineSpacing() * 6;
     int guitarChordHeight = getLineSpacing() * 6;
 
-    createPixmapAndMask(guitarChordWidth, guitarChordHeight);
+    createPixmap(guitarChordWidth, guitarChordHeight);
 
     if (m_selected) {
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -3316,7 +3307,7 @@ NotePixmapFactory::makeGuitarChordPixmap(const Guitar::Fingering &fingering,
     Guitar::NoteSymbols ns(Guitar::Fingering::DEFAULT_NB_STRINGS, FingeringBox::DEFAULT_NB_DISPLAYED_FRETS);
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, ns, &(m_p->painter()));
 
-    return makeCanvasPixmap(QPoint (x, y), true);
+    return makeItem(QPoint (x, y));
 }
 
 void
@@ -3332,8 +3323,9 @@ NotePixmapFactory::drawText(const Text &text,
 
     if (type == Text::Annotation ||
         type == Text::LilyPondDirective) {
-        Q3CanvasPixmap *map = makeAnnotationPixmap(text, (type == Text::LilyPondDirective));
-        painter.drawPixmap(x, y, *map);
+        QGraphicsPixmapItem *map = makeAnnotation(text, (type == Text::LilyPondDirective));
+        painter.drawPixmap(x, y, map->pixmap());
+        delete map;
         return ;
     }
 
@@ -3359,7 +3351,7 @@ NotePixmapFactory::drawTextAux(const Text &text,
         m_p->beginExternal(painter);
         painter->translate(x - offset, y - offset);
     } else {
-        createPixmapAndMask(width, height);
+        createPixmap(width, height);
     }
 
     if (m_selected)
@@ -3368,8 +3360,8 @@ NotePixmapFactory::drawTextAux(const Text &text,
         m_p->painter().setPen(QColor(Qt::gray));
 
     m_p->painter().setFont(textFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(textFont);
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setFont(textFont);
 
     m_p->drawText(offset, textMetrics.ascent() + offset, s);
 
@@ -3380,14 +3372,14 @@ NotePixmapFactory::drawTextAux(const Text &text,
     }
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeAnnotationPixmap(const Text &text)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeAnnotation(const Text &text)
 {
-    return makeAnnotationPixmap(text, false);
+    return makeAnnotation(text, false);
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondDirective)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeAnnotation(const Text &text, const bool isLilyPondDirective)
 {
     QString s(strtoqstr(text.getText()));
 
@@ -3407,7 +3399,7 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondD
     int pixmapWidth = r.width() + sideGap * 2;
     int pixmapHeight = r.height() + topGap + bottomGap;
 
-    createPixmapAndMask(pixmapWidth, pixmapHeight);
+    createPixmap(pixmapWidth, pixmapHeight);
 
     if (m_selected)
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
@@ -3415,8 +3407,8 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondD
         m_p->painter().setPen(QColor(Qt::gray));
 
     m_p->painter().setFont(textFont);
-    if (!m_inPrinterMethod)
-        m_p->maskPainter().setFont(textFont);
+//    if (!m_inPrinterMethod)
+//        m_p->maskPainter().setFont(textFont);
 
     if (isLilyPondDirective) {
         m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::TextLilyPondDirectiveBackground));
@@ -3438,55 +3430,66 @@ NotePixmapFactory::makeAnnotationPixmap(const Text &text, const bool isLilyPondD
     		  Qt::TextWordWrap, s);
     */
 
-    return makeCanvasPixmap(QPoint(0, 0));
+    return makeItem(QPoint(0, 0));
 }
 
 void
-NotePixmapFactory::createPixmapAndMask(int width, int height,
-                                       int maskWidth, int maskHeight)
+NotePixmapFactory::createPixmap(int width, int height)
 {
-    if (maskWidth < 0)
-        maskWidth = width;
-    if (maskHeight < 0)
-        maskHeight = height;
+    if (width == 0 || height == 0) {
+        std::cerr << "NotePixmapFactory::createPixmap: WARNING: invalid size " << width << "x" << height << std::endl;
+        m_generatedPixmap = new QPixmap();
+        return;
+    }
 
     m_generatedWidth = width;
     m_generatedHeight = height;
     m_generatedPixmap = new QPixmap(width, height);
-    m_generatedMask = new QBitmap(maskWidth, maskHeight);
+    m_generatedPixmap->fill(Qt::transparent);
 
     static unsigned long total = 0;
     total += width * height;
-//    NOTATION_DEBUG << "createPixmapAndMask: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+//    NOTATION_DEBUG << "createPixmap: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
 
     // clear up pixmap and mask
-    m_generatedPixmap->fill();
-    m_generatedMask->fill(QColor(Qt::color0));
+//    m_generatedPixmap->fill();
+//    m_generatedMask->fill(QColor(Qt::color0));
 
     // initiate painting
-    m_p->begin(m_generatedPixmap, m_generatedMask);
+    NOTATION_DEBUG << "NotePixmapFactory::createPixmap(" << width << "," << height << "): about to begin painter" << endl;
+    m_p->begin(m_generatedPixmap);
 
     m_p->painter().setPen(QColor(Qt::black));
     m_p->painter().setBrush(QColor(Qt::black));
-    m_p->maskPainter().setPen(QColor(Qt::white));
-    m_p->maskPainter().setBrush(QColor(Qt::white));
+//    m_p->maskPainter().setPen(QColor(Qt::white));
+//    m_p->maskPainter().setBrush(QColor(Qt::white));
 }
 
-Q3CanvasPixmap*
-NotePixmapFactory::makeCanvasPixmap(QPoint hotspot, bool generateMask)
+QGraphicsPixmapItem *
+NotePixmapFactory::makeItem(QPoint hotspot)
 {
-    m_p->end();
+    NOTATION_DEBUG << "NotePixmapFactory::makeItem(" << hotspot << ")" << endl;
 
-    Q3CanvasPixmap* p = new Q3CanvasPixmap(*m_generatedPixmap, hotspot);
+    if (!m_generatedPixmap->isNull()) {
+        m_p->end();
+    }
 
+    QGraphicsPixmapItem *p = new QGraphicsPixmapItem;
+/*!!!
     if (generateMask) {
         p->setMask(PixmapFunctions::generateMask(*p));
     } else {
         p->setMask(*m_generatedMask);
     }
+*/
+
+    p->setPixmap(*m_generatedPixmap);
+    p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
+
+    NOTATION_DEBUG << "NotePixmapFactory::makeItem: item = " << p << " (scene = " << p->scene() << ")" << endl;
 
     delete m_generatedPixmap;
-    delete m_generatedMask;
+//    delete m_generatedMask; //!!! lose
     return p;
 }
 

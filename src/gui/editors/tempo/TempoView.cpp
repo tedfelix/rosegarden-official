@@ -34,7 +34,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
-#include "gui/general/EditViewBase.h"
+#include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/kdeext/KTmpStatusMsg.h"
 #include "misc/Strings.h"
@@ -63,7 +63,7 @@ TempoView::m_lastSetFilter = -1;
 
 
 TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
-        EditViewBase(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
+        ListEditView(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)
 {
@@ -146,7 +146,6 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     makeInitialSelection(openTime);
 
     m_ignoreUpdates = false;
-    setOutOfCtor();
 }
 
 TempoView::~TempoView()
@@ -624,7 +623,7 @@ TempoView::slotClearSelection()
 void
 TempoView::setupActions()
 {
-    EditViewBase::setupActions("tempoview.rc", false);
+    ListEditView::setupActions("tempoview.rc", false);
 
     createAction("insert_tempo", SLOT(slotEditInsertTempo()));
     createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));

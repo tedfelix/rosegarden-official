@@ -18,7 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#ifdef NOT_JUST_NOW //!!!
 
 #include "TrackHeader.h"
 #include "HeadersGroup.h"
@@ -440,3 +440,5 @@ TrackHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 
 }
 #include "TrackHeader.moc"
+
+#endif

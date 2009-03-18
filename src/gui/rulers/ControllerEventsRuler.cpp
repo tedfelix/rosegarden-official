@@ -38,6 +38,7 @@
 #include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/TextFloat.h"
+#include "document/CommandHistory.h"
 
 #include <QMouseEvent>
 #include <QColor>
@@ -129,7 +130,7 @@ ControllerEventsRuler::init()
 
         double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
         new ControlItem(this, new ControllerEventAdapter(*i),
-                        int(x + m_staffOffset), width);
+                        int(x + m_viewSegmentOffset), width);
     }
 }
 
@@ -226,7 +227,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
     if (m_controller->getType() == PitchBend::EventType)
         width /= 4;
 
-    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_staffOffset), width);
+    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_viewSegmentOffset), width);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
@@ -285,7 +286,7 @@ void ControllerEventsRuler::insertControllerEvent()
                                            insertTime, number,
                                            initialValue, *m_segment);
 
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void ControllerEventsRuler::eraseControllerEvent()
@@ -297,7 +298,7 @@ void ControllerEventsRuler::eraseControllerEvent()
                                         *m_segment,
                                         m_eventSelection->getStartTime(),
                                         m_eventSelection->getEndTime());
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
     updateSelection();
 }
 
@@ -328,7 +329,7 @@ void ControllerEventsRuler::clearControllerEvents()
     }
 
     EraseCommand *command = new EraseCommand(*es);
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
 }
 
@@ -428,7 +429,7 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
 {
     timeT itemTime = item->getElementAdapter()->getTime();
 
-    double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
+    double x = m_rulerScale->getXForTime(itemTime) + m_viewSegmentOffset;
 
     item->setX(x);
 
@@ -492,7 +493,7 @@ ControllerEventsRuler::drawControlLine(timeT startTime,
             time += quantDur;
     }
 
-    m_parentEditView->addCommandToHistory(macro);
+    CommandHistory::getInstance()->addCommand(macro);
 }
 
 }

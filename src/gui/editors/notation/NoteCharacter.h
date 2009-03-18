@@ -18,14 +18,13 @@
 #ifndef _RG_NOTECHARACTER_H_
 #define _RG_NOTECHARACTER_H_
 
-#include <Q3CanvasPixmap>
+#include <QGraphicsPixmapItem>
 #include <QPixmap>
 #include <QPoint>
 #include <QPolygon>
 
 
 class QPainter;
-class Q3CanvasPixmap;
 
 namespace Rosegarden
 {
@@ -60,20 +59,18 @@ public:
     int getWidth() const;
     int getHeight() const;
     
+    QPixmap getPixmap() const;
     QPoint getHotspot() const;
-
-    QPixmap *getPixmap() const;
-    Q3CanvasPixmap *getCanvasPixmap() const;
+    QGraphicsPixmapItem *makeItem() const;
 
     void draw(QPainter *painter, int x, int y) const;
-    void drawMask(QPainter *painter, int x, int y) const;
 
 private:
     friend class NoteFont;
     NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
 
     QPoint m_hotspot;
-    QPixmap *m_pixmap; // I own this
+    QPixmap m_pixmap; 
     NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
 };
     

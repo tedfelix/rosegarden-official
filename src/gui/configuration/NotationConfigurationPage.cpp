@@ -153,6 +153,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     m_showTrackHeaders = new QComboBox(frame);
     connect(m_showTrackHeaders, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_showTrackHeaders->setEditable(false);
+
+#ifdef NOT_JUST_NOW //!!!
     m_showTrackHeaders->addItem(tr("Never"), HeadersGroup::ShowNever);
     m_showTrackHeaders->addItem(tr("When needed"), HeadersGroup::ShowWhenNeeded);
     m_showTrackHeaders->addItem(tr("Always"), HeadersGroup::ShowAlways);
@@ -161,6 +163,8 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
     }
+#endif
+
     m_showTrackHeaders->setToolTip(QString(tr(
         "\"Always\" and \"Never\" mean what they usually mean\n"
         "\"When needed\" means \"when staves are too many to all fit"
@@ -267,14 +271,14 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     m_noteStyle->setEditable(false);
     m_untranslatedNoteStyle.clear();
 
-    QString defaultStyle = settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString();
+    QString defaultStyle = settings.value("style", NoteStyleFactory::DefaultStyle).toString();
     std::vector<NoteStyleName> styles
     (NoteStyleFactory::getAvailableStyleNames());
 
     for (std::vector<NoteStyleName>::iterator i = styles.begin();
             i != styles.end(); ++i) {
 
-        QString styleQName(strtoqstr(*i));
+        QString styleQName(*i);
         m_untranslatedNoteStyle.append(styleQName);
         m_noteStyle->addItem(tr(styleQName.toUtf8()));
         if (styleQName == defaultStyle) {
@@ -606,11 +610,11 @@ void
 NotationConfigurationPage::slotViewButtonPressed()
 {
 #ifdef HAVE_XFT
-    std::string fontName = qstrtostr(m_untranslatedFont[m_font->currentIndex()]);
+    QString fontName = m_untranslatedFont[m_font->currentIndex()];
 
     try {
         NoteFont *noteFont = NoteFontFactory::getFont
-                             (fontName, NoteFontFactory::getDefaultSize(fontName));
+            (fontName, NoteFontFactory::getDefaultSize(fontName));
         const NoteFontMap &map(noteFont->getNoteFontMap());
         QStringList systemFontNames(map.getSystemFontNames());
         if (systemFontNames.count() == 0) {
@@ -633,31 +637,28 @@ NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
 
-    QString defaultFont = settings.value("notefont",
-            strtoqstr(NoteFontFactory::getDefaultFontName())).toString();
+    QString defaultFont = settings.value
+        ("notefont", NoteFontFactory::getDefaultFontName()).toString();
 
     try {
         (void)NoteFontFactory::getFont
-        (qstrtostr(defaultFont),
-         NoteFontFactory::getDefaultSize(qstrtostr(defaultFont)));
+            (defaultFont, NoteFontFactory::getDefaultSize(defaultFont));
     } catch (Exception e) {
-        defaultFont = strtoqstr(NoteFontFactory::getDefaultFontName());
+        defaultFont = NoteFontFactory::getDefaultFontName();
     }
 
-    std::set
-        <std::string> fs(NoteFontFactory::getFontNames(rescan));
-    std::vector<std::string> f(fs.begin(), fs.end());
+    std::set<QString> fs(NoteFontFactory::getFontNames(rescan));
+    std::vector<QString> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
     m_untranslatedFont.clear();
     m_font->clear();
 
-    for (std::vector<std::string>::iterator i = f.begin(); i != f.end(); ++i) {
-        QString s(strtoqstr(*i));
+    for (std::vector<QString>::iterator i = f.begin(); i != f.end(); ++i) {
+        QString s(*i);
         m_untranslatedFont.append(s);
-        m_font->addItem(tr(s.toUtf8()));
-        if (s == defaultFont)
-            m_font->setCurrentIndex(m_font->count() - 1);
+        m_font->addItem(s);
+        if (s == defaultFont) m_font->setCurrentIndex(m_font->count() - 1);
     }
 
     slotFontComboChanged(m_font->currentIndex());
@@ -666,17 +667,19 @@ NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
 void
 NotationConfigurationPage::slotFontComboChanged(int index)
 {
-    std::string fontStr = qstrtostr(m_untranslatedFont[index]);
+    QString fontStr = m_untranslatedFont[index];
 
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
 
-    populateSizeCombo(m_singleStaffSize, fontStr, settings.value(
-            "singlestaffnotesize",
-            NoteFontFactory::getDefaultSize(fontStr)).toInt());
-    populateSizeCombo(m_multiStaffSize, fontStr, settings.value(
-            "multistaffnotesize",
-            NoteFontFactory::getDefaultSize(fontStr)).toInt());
+    populateSizeCombo
+        (m_singleStaffSize, fontStr,
+         settings.value("singlestaffnotesize",
+                        NoteFontFactory::getDefaultSize(fontStr)).toInt());
+    populateSizeCombo
+        (m_multiStaffSize, fontStr,
+         settings.value("multistaffnotesize",
+                        NoteFontFactory::getDefaultSize(fontStr)).toInt());
 
     int printpt = settings.value("printingnotesize", 5).toUInt() ;
     for (int i = 2; i < 16; ++i) {
@@ -690,28 +693,26 @@ NotationConfigurationPage::slotFontComboChanged(int index)
         NoteFont *noteFont = NoteFontFactory::getFont
                              (fontStr, NoteFontFactory::getDefaultSize(fontStr));
         const NoteFontMap &map(noteFont->getNoteFontMap());
-		m_fontOriginLabel->setText( tr( map.getOrigin().c_str() ) );
-		m_fontCopyrightLabel->setText( tr( map.getCopyright().c_str() ) );
-		m_fontMappedByLabel->setText( tr( map.getMappedBy().c_str() ) );
+        m_fontOriginLabel->setText(tr(map.getOrigin()));
+        m_fontCopyrightLabel->setText(tr(map.getCopyright()));
+        m_fontMappedByLabel->setText(tr(map.getMappedBy()));
         if (map.isSmooth()) {
-            m_fontTypeLabel->setText(
-									 tr("%1 (smooth)").arg(tr( map.getType().c_str() )) );
+            m_fontTypeLabel->setText(tr("%1 (smooth)").arg(tr(map.getType())));
         } else {
-            m_fontTypeLabel->setText(
-									 tr("%1 (jaggy)").arg(tr( map.getType().c_str() )) );
+            m_fontTypeLabel->setText(tr("%1 (jaggy)").arg(tr(map.getType())));
         }
         if (m_viewButton) {
             m_viewButton->setEnabled(map.getSystemFontNames().count() > 0);
         }
     } catch (Exception f) {
-		QMessageBox::critical(0, "", tr( f.getMessage().c_str() ) );
+        QMessageBox::critical(0, "", strtoqstr(f.getMessage()));
     }
 }
 
 void
 NotationConfigurationPage::populateSizeCombo(QComboBox *combo,
-        std::string font,
-        int defaultSize)
+                                             QString font,
+                                             int defaultSize)
 {
     std::vector<int> sizes = NoteFontFactory::getScreenSizes(font);
     combo->clear();

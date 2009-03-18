@@ -17,6 +17,7 @@
 #define _EXCEPTION_H_
 
 #include <string>
+#include <QString>
 #include <exception>
 
 namespace Rosegarden {
@@ -24,8 +25,14 @@ namespace Rosegarden {
 class Exception : public virtual std::exception
 {
 public:
+    Exception(const char *message);
+    Exception(const char *message, const char *file, int line);
+
     Exception(std::string message);
     Exception(std::string message, std::string file, int line);
+
+    Exception(QString message);
+    Exception(QString message, QString file, int line);
 
     virtual ~Exception() throw () {}
 

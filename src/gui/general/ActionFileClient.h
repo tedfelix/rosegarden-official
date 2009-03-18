@@ -23,6 +23,7 @@
 class QAction;
 class QMenu;
 class QToolBar;
+class QObject;
 
 namespace Rosegarden
 {
@@ -59,8 +60,10 @@ protected:
     ActionFileClient();
     virtual ~ActionFileClient();
 
-    virtual QAction *createAction(QString actionName, QString connection);
-    virtual bool createGUI(QString rcname);
+    QAction *createAction(QString actionName, QString connection);
+    QAction *createAction(QString actionName, QObject *target, QString connection);
+    bool createGUI(QString rcname);
+    friend class ActionCommandRegistry;
 
 private:
     ActionFileParser *m_actionFileParser;

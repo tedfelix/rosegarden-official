@@ -69,7 +69,7 @@ public:
     virtual QString getCurrentContextHelp() const;
 
 signals:
-    void showContextHelp(const QString &);
+    void showContextHelp(QString);
 
 protected:
     /**
@@ -77,7 +77,7 @@ protected:
      *
      * \a menuName : the name of the menu defined in the XML rc file
      */
-    BaseTool(const QString& menuName, QObject* parent);
+    BaseTool(const QString &menuName, QObject *parent);
 
     virtual void createMenu() = 0;
     virtual bool hasMenu() { return false; }
@@ -87,8 +87,8 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QString 	m_menuName;
-    QMenu*      m_menu;
+    QString m_menuName;
+    QMenu *m_menu;
 
     QString m_contextHelp;
 };

@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_DEFINED
 
 #include <Q3Canvas>
 #include "MatrixStaff.h"
@@ -224,3 +225,4 @@ MatrixStaff::getKeyMapping() const
 
 
 }
+#endif

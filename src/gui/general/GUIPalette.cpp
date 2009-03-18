@@ -108,6 +108,9 @@ GUIPalette::GUIPalette()
     m_defaultsMap[MatrixElementBorder] = QColor(Qt::black);
     m_defaultsMap[MatrixElementBlock] = QColor(98, 128, 232);
     m_defaultsMap[MatrixOverlapBlock] = QColor(Qt::black);
+    m_defaultsMap[MatrixHorizontalLine] = QColor(Qt::black);
+    m_defaultsMap[MatrixPitchHighlight] = QColor(128, 128, 128, 100);
+    m_defaultsMap[MatrixTonicHighlight] = QColor(128, 128, 128, 180);
 
     m_defaultsMap[LoopRulerBackground] = QColor(120, 120, 120);
     m_defaultsMap[LoopRulerForeground] = QColor(Qt::white);
@@ -211,6 +214,8 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[PlaybackFaderOutline] = QColor(211, 194, 238, QColor::Hsv);
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
+
+    m_defaultsMap[PannerOverlay] = QColor(211, 194, 238, QColor::Hsv);
 }
 
 GUIPalette* GUIPalette::getInstance() 
@@ -238,6 +243,9 @@ const char* const GUIPalette::SegmentSplitLine = "segmentsplitline";
 const char* const GUIPalette::MatrixElementBorder = "matrixelementborder";
 const char* const GUIPalette::MatrixElementBlock = "matrixelementblock";
 const char* const GUIPalette::MatrixOverlapBlock = "matrixoverlapblock";
+const char* const GUIPalette::MatrixHorizontalLine = "matrixhorizontalline";
+const char* const GUIPalette::MatrixPitchHighlight = "matrixpitchhighlight";
+const char* const GUIPalette::MatrixTonicHighlight = "matrixtonichighlight";
 
 const char* const GUIPalette::LoopRulerBackground = "looprulerbackground";
 const char* const GUIPalette::LoopRulerForeground = "looprulerforeground";
@@ -330,6 +338,7 @@ const char* const GUIPalette::RecordAudioTrackLED = "recordaudiotrackled";
 const char* const GUIPalette::PlaybackFaderOutline = "playbackfaderoutline";
 const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
 
+const char* const GUIPalette::PannerOverlay = "panneroverlay";
  
 GUIPalette* GUIPalette::m_instance = 0;
 

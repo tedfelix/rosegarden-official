@@ -34,16 +34,16 @@ void
 IncrementDisplacementsCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (tr("Push &Left"), "", "", "fine_position_left",
+        ("fine_position_left",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (tr("Push &Right"), "", "", "fine_position_right",
+        ("fine_position_right",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (tr("Push &Up"), "", "", "fine_position_up",
+        ("fine_position_up",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
     r->registerCommand
-        (tr("Push &Down"), "", "", "fine_position_down",
+        ("fine_position_down",
          new ArgumentAndSelectionCommandBuilder<IncrementDisplacementsCommand>());
 }
 

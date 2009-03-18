@@ -277,14 +277,14 @@ SegmentParameterBox::initBox()
 
     // populate the quantize combo
     //
-    QPixmap noMap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
 
         timeT time = m_standardQuantizations[i];
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-        QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
         m_quantizeValue->addItem(error ? noMap : pmap, label);
     }
     m_quantizeValue->addItem(noMap, tr("Off"));
@@ -318,7 +318,7 @@ SegmentParameterBox::initBox()
         //
         timeT error = 0;
         QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-        QPixmap pmap = NotePixmapFactory::toQPixmap(NotePixmapFactory::makeNoteMenuPixmap(time, error));
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
         m_delayValue->addItem((error ? noMap : pmap), label);
     }
 

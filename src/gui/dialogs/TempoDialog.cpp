@@ -385,22 +385,19 @@ TempoDialog::updateBeatLabels(double qpm)
         m_tempoBeat->hide();
         m_tempoBeatsPerMinute->hide();
     } else {
-        //	m_tempoBeatLabel->setText(" (");
         m_tempoBeatLabel->setText("  ");
 
         timeT error = 0;
-        m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
-                               (NotePixmapFactory::makeNoteMenuPixmap(beat, error)));
+        m_tempoBeat->setPixmap(NotePixmapFactory::makeNoteMenuPixmap(beat, error));
         m_tempoBeat->setMaximumWidth(25);
-        if (error)
-            m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
-                                   (NotePixmapFactory::makeToolbarPixmap
-                                    ("menu-no-note")));
+        if (error) {
+            m_tempoBeat->setPixmap
+                (NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
+        }
 
         m_tempoBeatsPerMinute->setText
-        //	    (QString("= %1 )").arg
-        (QString("= %1 ").arg
-         (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
+            (QString("= %1 ").arg
+             (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
         m_tempoBeatLabel->show();
         m_tempoBeat->show();
         m_tempoBeatsPerMinute->show();

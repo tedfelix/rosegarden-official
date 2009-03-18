@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -15,6 +14,7 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_MATRIXCANVASVIEW_H_
 #define _RG_MATRIXCANVASVIEW_H_
@@ -63,9 +63,9 @@ signals:
      *
      * @see Q3CanvasItem#setActive
      */
-    void activeItemPressed(QMouseEvent*,
+/*!!!    void activeItemPressed(QMouseEvent*,
                            Q3CanvasItem* item);
-
+*/
     /**
      * Emitted when the mouse cursor moves to a different height
      * on the staff.  Returns the new pitch.
@@ -154,4 +154,5 @@ protected:
 
 }
 
+#endif
 #endif

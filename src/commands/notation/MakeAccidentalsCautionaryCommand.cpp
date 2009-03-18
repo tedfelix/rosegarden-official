@@ -33,10 +33,10 @@ void
 MakeAccidentalsCautionaryCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(true), "", "", "show_cautionary",
+        ("show_cautionary",
          new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
     r->registerCommand
-        (getGlobalName(false), "", "", "cancel_cautionary",
+        ("cancel_cautionary",
          new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
 }
 

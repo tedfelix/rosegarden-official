@@ -1033,6 +1033,27 @@ Segment::getClefAtTime(timeT time, timeT &ctime) const
     }
 }
 
+bool
+Segment::getNextClefTime(timeT time, timeT &nextTime) const
+{
+    if (!m_clefKeyList) return false;
+
+    Event ec(Clef::EventType, time);
+    ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
+
+    while (i != m_clefKeyList->end() &&
+	   ((*i)->getAbsoluteTime() <= time ||
+	    (*i)->getType() != Clef::EventType)) {
+	++i;
+    }
+
+    if (i == m_clefKeyList->end()) return false;
+
+    nextTime = (*i)->getAbsoluteTime();
+
+    return true;
+}
+
 Key
 Segment::getKeyAtTime(timeT time) const
 {
@@ -1069,6 +1090,27 @@ Segment::getKeyAtTime(timeT time, timeT &ktime) const
 	(*i)->dump(std::cerr);
 	return Key();
     }
+}
+
+bool
+Segment::getNextKeyTime(timeT time, timeT &nextTime) const
+{
+    if (!m_clefKeyList) return false;
+
+    Event ec(Key::EventType, time);
+    ClefKeyList::iterator i = m_clefKeyList->lower_bound(&ec);
+
+    while (i != m_clefKeyList->end() &&
+	   ((*i)->getAbsoluteTime() <= time ||
+	    (*i)->getType() != Key::EventType)) {
+	++i;
+    }
+
+    if (i == m_clefKeyList->end()) return false;
+
+    nextTime = (*i)->getAbsoluteTime();
+
+    return true;
 }
 
 void

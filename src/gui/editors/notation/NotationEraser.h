@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -15,6 +14,8 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_NOTATIONERASER_H_
 #define _RG_NOTATIONERASER_H_
@@ -71,4 +72,5 @@ protected:
 
 }
 
+#endif
 #endif

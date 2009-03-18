@@ -15,64 +15,46 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <Q3CanvasPixmap>
 #include "MatrixEraser.h"
-#include "misc/Debug.h"
 
-#include <QDir>
+#include "MatrixMouseEvent.h"
+#include "MatrixViewSegment.h"
+#include "MatrixElement.h"
+#include "MatrixWidget.h"
+
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixEraseCommand.h"
-#include "gui/general/EditTool.h"
-#include "MatrixStaff.h"
-#include "MatrixTool.h"
-#include "MatrixView.h"
-#include <QAction>
-#include <QIcon>
-#include <QString>
-#include <QMouseEvent>
-
+#include "document/CommandHistory.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
 
-MatrixEraser::MatrixEraser(MatrixView* parent)
-        : MatrixTool("MatrixEraser", parent),
-        m_currentStaff(0)
+MatrixEraser::MatrixEraser(MatrixWidget *parent) :
+    MatrixTool("matrixeraser.rc", "MatrixEraser", parent)
 {
     createAction("resize", SLOT(slotResizeSelected()));
     createAction("draw", SLOT(slotDrawSelected()));
     createAction("select", SLOT(slotSelectSelected()));
     createAction("move", SLOT(slotMoveSelected()));
 
-    createMenu("matrixeraser.rc");
+    createMenu();
 }
 
-void MatrixEraser::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent*,
-        ViewElement* el)
+void MatrixEraser::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixEraser::handleLeftButtonPress : el = "
-    << el << endl;
-
-    if (!el)
-        return ; // nothing to erase
-
-    m_currentStaff = m_mParentView->getStaff(staffNo);
+    if (!e->element || !e->viewSegment) return; // nothing to erase
 
     MatrixEraseCommand* command =
-        new MatrixEraseCommand(m_currentStaff->getSegment(), el->event());
+        new MatrixEraseCommand(e->viewSegment->getSegment(),
+                               e->element->event());
 
-    m_mParentView->addCommandToHistory(command);
-
-    m_mParentView->update();
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void MatrixEraser::ready()
 {
-    m_mParentView->setCanvasCursor(Qt::pointingHandCursor);
+    if (m_widget) m_widget->setCanvasCursor(Qt::pointingHandCursor);
     setBasicContextHelp();
 }
 
@@ -81,6 +63,9 @@ void MatrixEraser::setBasicContextHelp()
     setContextHelp(tr("Click on a note to delete it"));
 }
 
-const QString MatrixEraser::ToolName    = "eraser";
+const QString MatrixEraser::ToolName = "eraser";
 
 }
+
+#include "MatrixEraser.moc"
+

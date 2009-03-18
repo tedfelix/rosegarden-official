@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -67,6 +66,9 @@ public:
     static const char* const MatrixElementBorder;
     static const char* const MatrixElementBlock;
     static const char* const MatrixOverlapBlock;
+    static const char* const MatrixHorizontalLine;
+    static const char* const MatrixPitchHighlight;
+    static const char* const MatrixTonicHighlight;
 
     static const char* const LoopRulerBackground;
     static const char* const LoopRulerForeground;
@@ -158,6 +160,8 @@ public:
 
     static const char* const PlaybackFaderOutline;
     static const char* const RecordFaderOutline;
+
+    static const char * const PannerOverlay;
 
     static const int AudioDefaultIndex;
     

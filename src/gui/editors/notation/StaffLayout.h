@@ -15,54 +15,45 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_LINEDSTAFF_H_
-#define _RG_LINEDSTAFF_H_
+#ifndef _RG_STAFFLAYOUT_H_
+#define _RG_STAFFLAYOUT_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasItem>
-#include <Q3CanvasLine>
 #include "base/Event.h"
-#include "base/FastVector.h"
-#include "base/Staff.h"
 #include "base/ViewElement.h"
 #include <QRect>
 #include <utility>
 #include <vector>
 
-
-class Q3CanvasLine;
-class Q3CanvasItem;
-class Q3Canvas;
-class isFirstBarInRow;
-class barNo;
-
+class QGraphicsScene;
+class QGraphicsLineItem;
+class QGraphicsItem;
 
 namespace Rosegarden
 {
 
-class BarLine;
+class BarLineItem;
 class TimeSignature;
 class SnapGrid;
-class Segment;
-class HorizontalLayoutEngine;
+class ViewSegment;
+class HorizontalLayoutEngine2;
 class Event;
 
 
 /**
- * LinedStaff is a base class for implementations of Staff that
- * display the contents of a Segment on a set of horizontal lines
- * with optional vertical bar lines.  
- * Likely subclasses include the notation and piano-roll staffs.
+ * StaffLayout is a base for classes that display the contents of a
+ * Segment on a set of horizontal lines with optional vertical bar
+ * lines.  Possible subclasses include the notation and piano-roll
+ * staffs.
  *
  * In general, this class handles x coordinates in floating-point,
  * but y-coordinates as integers because of the requirement that
  * staff lines be a precise integral distance apart.
  */
 
-class LinedStaff : public Staff
+class StaffLayout
 {
 public:
-    typedef std::pair<double, int> LinedStaffCoords;
+    typedef std::pair<double, int> StaffLayoutCoords;
 
     enum PageMode {
         LinearMode = 0,
@@ -82,11 +73,11 @@ public:
 
 protected:
     /**
-     * Create a new LinedStaff for the given Segment, with a
+     * Create a new StaffLayout for the given ViewSegment, with a
      * linear layout.
      * 
      * \a id is an arbitrary id for the staff in its view,
-     *    not used within the LinedStaff implementation but
+     *    not used within the StaffLayout implementation but
      *    queryable via getId
      *
      * \a resolution is the number of blank pixels between
@@ -95,15 +86,15 @@ protected:
      * \a lineThickness is the number of pixels thick a
      *    staff line should be
      */
-    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
-               int id, int resolution, int lineThickness);
+    StaffLayout(QGraphicsScene *, ViewSegment *, SnapGrid *,
+                int id, int resolution, int lineThickness);
 
     /**
-     * Create a new LinedStaff for the given Segment, with a
+     * Create a new StaffLayout for the given ViewSegment, with a
      * page layout.
      * 
      * \a id is an arbitrary id for the staff in its view,
-     *    not used within the LinedStaff implementation but
+     *    not used within the StaffLayout implementation but
      *    queryable via getId
      *
      * \a resolution is the number of blank pixels between
@@ -121,20 +112,20 @@ protected:
      * \a rowSpacing is the distance in pixels between
      *    the tops of consecutive rows on this staff
      */
-    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
-               int id, int resolution, int lineThickness,
-               double pageWidth, int rowsPerPage, int rowSpacing);
+    StaffLayout(QGraphicsScene *, ViewSegment *, SnapGrid *,
+                int id, int resolution, int lineThickness,
+                double pageWidth, int rowsPerPage, int rowSpacing);
 
     /**
-     * Create a new LinedStaff for the given Segment, with
+     * Create a new StaffLayout for the given Segment, with
      * either page or linear layout.
      */
-    LinedStaff(Q3Canvas *, Segment *, SnapGrid *,
-               int id, int resolution, int lineThickness, PageMode pageMode,
-               double pageWidth, int rowsPerPage, int rowSpacing);
+    StaffLayout(QGraphicsScene *, ViewSegment *, SnapGrid *,
+                int id, int resolution, int lineThickness, PageMode pageMode,
+                double pageWidth, int rowsPerPage, int rowSpacing);
 
 public:
-    virtual ~LinedStaff();
+    virtual ~StaffLayout();
 
 protected:
     // Methods required to define the type of staff this is
@@ -241,61 +232,61 @@ protected:
 public:
     /**
      * Return the id of the staff.  This is only useful to external
-     * agents, it isn't used by the LinedStaff itself.
+     * agents, it isn't used by the StaffLayout itself.
      */
     virtual int getId() const;
 
     /**
-     * Set the canvas x-coordinate of the left-hand end of the staff.
-     * This does not move any canvas items that have already been
+     * Set the scene x-coordinate of the left-hand end of the staff.
+     * This does not move any scene items that have already been
      * created; it should be called before the sizeStaff/positionElements
      * procedure begins.
      */
     virtual void setX(double x);
 
     /**
-     * Get the canvas x-coordinate of the left-hand end of the staff.
+     * Get the scene x-coordinate of the left-hand end of the staff.
      */
     virtual double getX() const;
 
     /**
-     * Set the canvas y-coordinate of the top of the first staff row.
-     * This does not move any canvas items that have already been
+     * Set the scene y-coordinate of the top of the first staff row.
+     * This does not move any scene items that have already been
      * created; it should be called before the sizeStaff/positionElements
      * procedure begins.
      */
     virtual void setY(int y);
 
     /**
-     * Get the canvas y-coordinate of the top of the first staff row.
+     * Get the scene y-coordinate of the top of the first staff row.
      */
     virtual int getY() const;
 
     /**
-     * Set the canvas width of the margin to left and right of the
+     * Set the scene width of the margin to left and right of the
      * staff on each page (used only in MultiPageMode).  Each staff
      * row will still be pageWidth wide (that is, the margin is in
      * addition to the pageWidth, not included in it).  This does not
-     * move any canvas items that have already been created; it should
+     * move any scene items that have already been created; it should
      * be called before the sizeStaff/positionElements procedure
      * begins.
      */
     virtual void setMargin(double m);
     
     /**
-     * Get the canvas width of the left and right margins.
+     * Get the scene width of the left and right margins.
      */
     virtual double getMargin() const;
 
     /**
-     * Set the canvas height of the area at the top of the first page
+     * Set the scene height of the area at the top of the first page
      * reserved for the composition title and composer's name (used
      * only in MultiPageMode).
      */
     virtual void setTitleHeight(int h);
 
     /**
-     * Get the canvas height of the title area.
+     * Get the scene height of the title area.
      */
     virtual int getTitleHeight() const;
     
@@ -337,18 +328,18 @@ public:
     virtual int getHeightOfRow() const;
     
     /**
-     * Returns true if the given canvas coordinates fall within
+     * Returns true if the given scene coordinates fall within
      * (any of the rows of) this staff.  False if they fall in the
      * gap between two rows.
      */
-    virtual bool containsCanvasCoords(double canvasX, int canvasY) const; 
+    virtual bool containsSceneCoords(double sceneX, int sceneY) const; 
 
     /**
-     * Returns the canvas y coordinate of the specified line on the
-     * staff.  baseX/baseY are a canvas coordinates somewhere on the
+     * Returns the scene y coordinate of the specified line on the
+     * staff.  baseX/baseY are a scene coordinates somewhere on the
      * correct row, or -1 for the default row.
      */
-    virtual int getCanvasYForHeight(int height, double baseX = -1, int baseY = -1) const;
+    virtual int getSceneYForHeight(int height, double baseX = -1, int baseY = -1) const;
 
     /**
      * Returns the y coordinate of the specified line on the
@@ -358,13 +349,13 @@ public:
 
     /**
      * Returns the height-on-staff value nearest to the given
-     * canvas coordinates.
+     * scene coordinates.
      */
-    virtual int getHeightAtCanvasCoords(double x, int y) const;
+    virtual int getHeightAtSceneCoords(double x, int y) const;
 
     /**
      * Return the full width, height and origin of the bar containing
-     * the given canvas cooordinates.
+     * the given scene cooordinates.
      */
     virtual QRect getBarExtents(double x, int y) const;
 
@@ -383,11 +374,11 @@ public:
      * corresponding to the given time, and show it.
      */
     virtual void setPointerPosition
-    (HorizontalLayoutEngine&, timeT);
+    (HorizontalLayoutEngine2&, timeT);
 
     /**
      * Move the playback pointer to the layout-X coordinate
-     * corresponding to the given canvas coordinates, and show it.
+     * corresponding to the given scene coordinates, and show it.
      */
     virtual void setPointerPosition(double x, int y);
 
@@ -404,7 +395,7 @@ public:
     virtual double getLayoutXOfPointer() const;
 
     /**
-     * Returns the canvas coordinates of the top of the playback
+     * Returns the scene coordinates of the top of the playback
      * pointer.
      */
     virtual void getPointerPosition(double &x, int &y) const;
@@ -418,11 +409,11 @@ public:
      * Move the insertion cursor to the layout-X coordinate
      * corresponding to the given time, and show it.
      */
-    virtual void setInsertCursorPosition(HorizontalLayoutEngine&, timeT);
+    virtual void setInsertCursorPosition(HorizontalLayoutEngine2&, timeT);
 
     /**
      * Move the insertion cursor to the layout-X coordinate
-     * corresponding to the given canvas coordinates, and show it.
+     * corresponding to the given scene coordinates, and show it.
      */
     virtual void setInsertCursorPosition(double x, int y);
 
@@ -436,10 +427,10 @@ public:
     /**
      * Return the time of the insert cursor.
      */
-    virtual timeT getInsertCursorTime(HorizontalLayoutEngine&) const;
+    virtual timeT getInsertCursorTime(HorizontalLayoutEngine2&) const;
 
     /**
-     * Return the canvas coordinates of the top of the insert
+     * Return the scene coordinates of the top of the insert
      * cursor.
      */
     virtual void getInsertCursorPosition(double &x, int &y) const;
@@ -460,7 +451,7 @@ public:
      * No bars or staff lines will appear unless this method has
      * been called.
      */
-    virtual void sizeStaff(HorizontalLayoutEngine& layout);
+    virtual void sizeStaff(HorizontalLayoutEngine2& layout);
 
     /**
      * Generate or re-generate sprites for all the elements between
@@ -503,7 +494,7 @@ public:
 
     /**
      * Return an iterator pointing to the nearest view element to the
-     * given canvas coordinates.
+     * given scene coordinates.
      * 
      * If notesAndRestsOnly is true, do not return any view element
      * other than a note or rest.
@@ -517,11 +508,11 @@ public:
      * The default implementation should suit for subclasses that only
      * show a single element per layout X coordinate.
      */
-    virtual ViewElementList::iterator getClosestElementToCanvasCoords
+    virtual ViewElementList::iterator getClosestElementToSceneCoords
     (double x, int y, 
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(x, y);
         return getClosestElementToLayoutX
             (layoutCoords.first, clef, key,
              notesAndRestsOnly, proximityThreshold);
@@ -539,20 +530,15 @@ public:
      * If proximityThreshold is less than zero, treat it as infinite.
      *
      * Also return the clef and key in force at these coordinates.
-     *
-     * The subclass may decide whether to implement this method or not
-     * based on the semantics and intended usage of the class.
      */
     virtual ViewElementList::iterator getClosestElementToLayoutX
     (double x,
      Event *&clef, Event *&key,
-     bool notesAndRestsOnly = false, int proximityThreshold = 10) {
-        return getViewElementList()->end();
-    }
+     bool notesAndRestsOnly = false, int proximityThreshold = 10) = 0;
 
     /**
      * Return an iterator pointing to the element "under" the given
-     * canvas coordinates.
+     * scene coordinates.
      *
      * Return end() if there is no such element.
      *
@@ -562,27 +548,22 @@ public:
      * The default implementation should suit for subclasses that only
      * show a single element per layout X coordinate.
      */
-    virtual ViewElementList::iterator getElementUnderCanvasCoords
+    virtual ViewElementList::iterator getElementUnderSceneCoords
     (double x, int y, Event *&clef, Event *&key) {
-        LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(x, y);
+        StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(x, y);
         return getElementUnderLayoutX(layoutCoords.first, clef, key);
     }
 
     /**
      * Return an iterator pointing to the element "under" the given
-     * canvas coordinates.
+     * scene coordinates.
      *
      * Return end() if there is no such element.
      *
      * Also return the clef and key in force at these coordinates.
-     *
-     * The subclass may decide whether to implement this method or not
-     * based on the semantics and intended usage of the class.
      */
     virtual ViewElementList::iterator getElementUnderLayoutX
-    (double x, Event *&clef, Event *&key) {
-        return getViewElementList()->end();
-    }
+    (double x, Event *&clef, Event *&key) = 0;
 
     // The default implementation of the following is empty.  The
     // subclass is presumed to know what the staff's name is and
@@ -602,17 +583,17 @@ public:
     // protected methods below -- but we have some code that needs
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
-    //!!! fix NotationView::getStaffForCanvasCoords
-    LinedStaffCoords
-    getLayoutCoordsForCanvasCoords(double x, int y) const;
+    //!!! fix NotationView::getStaffForSceneCoords
+    StaffLayoutCoords
+    getLayoutCoordsForSceneCoords(double x, int y) const;
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
     //!!! fix NotationView::scrollToTime
-    LinedStaffCoords
-    getCanvasCoordsForLayoutCoords(double x, int y) const;//!!!
+    StaffLayoutCoords
+    getSceneCoordsForLayoutCoords(double x, int y) const;//!!!
 
     // This should not really be public -- it should be one of the
     // protected methods below -- but we have some code that needs
@@ -623,15 +604,16 @@ public:
 
 protected:
     // Methods that the subclass may (indeed, should) use to convert
-    // between the layout coordinates of elements and their canvas
+    // between the layout coordinates of elements and their scene
     // coordinates.  These are deliberately not virtual.
 
     // Note that even linear-layout staffs have multiple rows; their
     // rows all have the same y coordinate but increasing x
     // coordinates, instead of the other way around.  (The only reason
-    // for this is that it seems to be more efficient from the Q3Canvas
+    // for this is that it seems to be more efficient from the Q3Scene
     // perspective to create and manipulate many relatively short
-    // canvas lines rather than a smaller number of very long ones.)
+    // scene lines rather than a smaller number of very long ones.)
+    //!!! review that for qgraphicsview
 
     int getTopLineOffset() const {
         return getLineSpacing() * getLegerLineCount();
@@ -645,27 +627,27 @@ protected:
         return (int)(x / m_pageWidth);
     }
 
-    int getRowForCanvasCoords(double x, int y) const;
+    int getRowForSceneCoords(double x, int y) const;
 
-    int getCanvasYForTopOfStaff(int row = -1) const;
+    int getSceneYForTopOfStaff(int row = -1) const;
 
-    int getCanvasYForTopLine(int row = -1) const {
-        return getCanvasYForTopOfStaff(row) + getTopLineOffset();
+    int getSceneYForTopLine(int row = -1) const {
+        return getSceneYForTopOfStaff(row) + getTopLineOffset();
     }
 
-    double getCanvasXForLeftOfRow(int row) const;
+    double getSceneXForLeftOfRow(int row) const;
 
-    double getCanvasXForRightOfRow(int row) const {
-        return getCanvasXForLeftOfRow(row) + m_pageWidth;
+    double getSceneXForRightOfRow(int row) const {
+        return getSceneXForLeftOfRow(row) + m_pageWidth;
     }
 
-    LinedStaffCoords
-    getCanvasOffsetsForLayoutCoords(double x, int y) const {
-        LinedStaffCoords cc = getCanvasCoordsForLayoutCoords(x, y);
-        return LinedStaffCoords(cc.first - x, cc.second - y);
+    StaffLayoutCoords
+    getSceneOffsetsForLayoutCoords(double x, int y) const {
+        StaffLayoutCoords cc = getSceneCoordsForLayoutCoords(x, y);
+        return StaffLayoutCoords(cc.first - x, cc.second - y);
     }
 
-    double getCanvasXForLayoutX(double x) const;
+    double getSceneXForLayoutX(double x) const;
 
     int getRowsPerPage() const {
         return m_rowsPerPage;
@@ -699,13 +681,16 @@ protected:
     virtual void deleteRepeatedClefsAndKeys();
     virtual void insertRepeatedClefAndKey(double layoutX, int barNo);
 
+    QGraphicsScene *getScene() { return m_scene; }
+
     void initCursors();
 
 protected:
 
     //--------------- Data members ---------------------------------
 
-    Q3Canvas *m_canvas;
+    QGraphicsScene *m_scene;
+    ViewSegment *m_viewSegment;
     SnapGrid *m_snapGrid;
 
     int      m_id;
@@ -728,23 +713,23 @@ protected:
 
     bool     m_current;
 
-    typedef std::vector<Q3CanvasItem *> ItemList;
+    typedef std::vector<QGraphicsItem *> ItemList;
     typedef std::vector<ItemList> ItemMatrix;
     ItemMatrix m_staffLines;
     ItemList m_staffConnectingLines;
 
-    typedef std::pair<double, Q3CanvasItem *> LineRec; // layout-x, line
-    typedef FastVector<LineRec> LineRecList;
-    typedef FastVector<BarLine *> BarLineList;//!!! should be multiset I reckon
-    static bool compareBars(const BarLine *, const BarLine *);
-    static bool compareBarToLayoutX(const BarLine *, int);
+    typedef std::pair<double, QGraphicsItem *> LineRec; // layout-x, line
+    typedef std::vector<LineRec> LineRecList;
+    typedef std::multiset<BarLineItem *> BarLineList;
+    static bool compareBars(const BarLineItem *, const BarLineItem *);
+    static bool compareBarToLayoutX(const BarLineItem *, int);
     BarLineList m_barLines;
     LineRecList m_beatLines;
     LineRecList m_barConnectingLines;
     ItemList m_barNumbers;
 
-    Q3CanvasLine *m_pointer;
-    Q3CanvasLine *m_insertCursor;
+    QGraphicsLineItem *m_pointer;
+    QGraphicsLineItem *m_insertCursor;
     timeT m_insertCursorTime;
     bool m_insertCursorTimeValid;
 };

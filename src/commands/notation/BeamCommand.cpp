@@ -35,7 +35,7 @@ void
 BeamCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "group-beam", "Ctrl+B", "beam",
+        ("beam",
          new SelectionCommandBuilder<BeamCommand>());
 }
 

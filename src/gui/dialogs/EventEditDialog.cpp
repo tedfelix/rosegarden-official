@@ -411,7 +411,7 @@ EventEditDialog::slotDurationChanged(int value)
 {
     timeT error = 0;
     m_durationDisplay->setPixmap
-    (NotePixmapFactory::toQPixmap(m_notePixmapFactory.makeNoteMenuPixmap(timeT(value), error)));
+        (m_notePixmapFactory.makeNoteMenuPixmap(timeT(value), error));
 
     if (error >= value / 2) {
         m_durationDisplayAux->setText("++ ");

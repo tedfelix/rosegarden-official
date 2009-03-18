@@ -44,7 +44,7 @@ NoteFont::DrawRepMap *NoteFont::m_drawRepMap = 0;
 QPixmap *NoteFont::m_blankPixmap = 0;
 
 
-NoteFont::NoteFont(std::string fontName, int size) :
+NoteFont::NoteFont(QString fontName, int size) :
         m_fontMap(fontName)
 {
     // Do the size checks first, to avoid doing the extra work if they fail
@@ -54,12 +54,12 @@ NoteFont::NoteFont(std::string fontName, int size) :
     if (sizes.size() > 0) {
         m_size = *sizes.begin();
     } else {
-        throw BadNoteFont(std::string("No sizes listed for font ") + fontName);
+        throw BadNoteFont(QObject::tr("No sizes listed for font \"%1\"").arg(fontName));
     }
 
     if (size > 0) {
         if (sizes.find(size) == sizes.end()) {
-            throw BadNoteFont(qstrtostr(QString("Font \"%1\" not available in size %2").arg(strtoqstr(fontName)).arg(size)));
+            throw BadNoteFont(QObject::tr("Font \"%1\" not available in size %2").arg(fontName).arg(size));
         } else {
             m_size = size;
         }
@@ -73,14 +73,14 @@ NoteFont::NoteFont(std::string fontName, int size) :
 
     if (m_blankPixmap == 0) {
         m_blankPixmap = new QPixmap(10, 10);
-        m_blankPixmap->setMask(QBitmap(10, 10, TRUE));
+        m_blankPixmap->fill(Qt::transparent);
     }
 
     // Locate our font's pixmap map in the font map, create if necessary
 
-    std::string fontKey = qstrtostr(QString("__%1__%2__")
-                                    .arg(strtoqstr(m_fontMap.getName()))
-                                    .arg(m_size));
+    QString fontKey = QString("__%1__%2__")
+        .arg(m_fontMap.getName())
+        .arg(m_size);
 
     FontPixmapMap::iterator i = m_fontPixmapMap->find(fontKey);
     if (i == m_fontPixmapMap->end()) {
@@ -254,41 +254,25 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     }
 
     if (inverted && !m_fontMap.hasInversion(m_size, charName)) {
-        if (!getPixmap(charName, pixmap, !inverted))
-            return false;
+        if (!getPixmap(charName, pixmap, !inverted)) return false;
         found = new QPixmap(PixmapFunctions::flipVertical(pixmap));
         add(charName, inverted, found);
         pixmap = *found;
         return true;
     }
 
-    std::string src;
+    QString src;
     ok = false;
 
-    if (!inverted)
-        ok = m_fontMap.getSrc(m_size, charName, src);
-    else
-        ok = m_fontMap.getInversionSrc(m_size, charName, src);
+    if (!inverted) ok = m_fontMap.getSrc(m_size, charName, src);
+    else ok = m_fontMap.getInversionSrc(m_size, charName, src);
 
     if (ok) {
-        NOTATION_DEBUG
-        << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
+        NOTATION_DEBUG << "NoteFont::getPixmap: Loading \"" << src << "\"" << endl;
 
-        found = new QPixmap(strtoqstr(src));
+        found = new QPixmap(src);
 
         if (!found->isNull()) {
- 			QBitmap bmask = found->mask();
-			
-            if ( bmask.isNull() ) {
-                std::cerr << "NoteFont::getPixmap: Warning: No automatic mask "
-                << "for character \"" << charName << "\""
-                << (inverted ? " (inverted)" : "") << " in font \""
-                << m_fontMap.getName() << "-" << m_size
-                << "\"; consider making xpm background transparent"
-                << std::endl;
-                found->setMask(PixmapFunctions::generateMask(*found));
-            }
-
             add(charName, inverted, found);
             pixmap = *found;
             return true;
@@ -298,21 +282,17 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
     } else {
 
         int code = -1;
-        if (!inverted)
-            ok = m_fontMap.getCode(m_size, charName, code);
-        else
-            ok = m_fontMap.getInversionCode(m_size, charName, code);
+        if (!inverted) ok = m_fontMap.getCode(m_size, charName, code);
+        else ok = m_fontMap.getInversionCode(m_size, charName, code);
 
         int glyph = -1;
-        if (!inverted)
-            ok = m_fontMap.getGlyph(m_size, charName, glyph);
-        else
-            ok = m_fontMap.getInversionGlyph(m_size, charName, glyph);
+        if (!inverted) ok = m_fontMap.getGlyph(m_size, charName, glyph);
+        else ok = m_fontMap.getInversionGlyph(m_size, charName, glyph);
 
         if (code < 0 && glyph < 0) {
             std::cerr << "NoteFont::getPixmap: Warning: No pixmap, code, or glyph for character \""
-            << charName << "\"" << (inverted ? " (inverted)" : "")
-            << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
+                      << charName << "\"" << (inverted ? " (inverted)" : "")
+                      << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
             add(charName, inverted, 0);
             pixmap = *m_blankPixmap;
             return false;
@@ -333,8 +313,8 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
             }
 
             std::cerr << "NoteFont::getPixmap: Warning: No system font for character \""
-            << charName << "\"" << (inverted ? " (inverted)" : "")
-            << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
+                      << charName << "\"" << (inverted ? " (inverted)" : "")
+                      << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
 
             add(charName, inverted, 0);
             pixmap = *m_blankPixmap;
@@ -437,13 +417,13 @@ NoteFont::getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
 CharName
 NoteFont::getNameWithColour(CharName base, int hue) const
 {
-    return qstrtostr(QString("%1__%2").arg(hue).arg(strtoqstr(base)));
+    return QString("%1__%2").arg(hue).arg(base);
 }
 
 CharName
 NoteFont::getNameShaded(CharName base) const
 {
-    return qstrtostr(QString("shaded__%1").arg(strtoqstr(base)));
+    return QString("shaded__%1").arg(base);
 }
 
 bool

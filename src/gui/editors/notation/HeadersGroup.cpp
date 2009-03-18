@@ -18,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include <limits>
 
@@ -163,3 +164,6 @@ HeadersGroup::resizeEvent(QResizeEvent * ev)
 
 }
 #include "HeadersGroup.moc"
+
+#endif
+

@@ -208,8 +208,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
 
     setLayout(m_mainLayout);
 
-    QPixmap noMap = NotePixmapFactory::toQPixmap
-                    (NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
+    QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     int defaultType = 0;
     timeT defaultUnit =
@@ -282,8 +281,7 @@ QuantizeParameters::QuantizeParameters(QWidget *parent,
         timeT time = m_standardQuantizations[i];
         timeT error = 0;
 
-        QPixmap pmap = NotePixmapFactory::toQPixmap
-                       (NotePixmapFactory::makeNoteMenuPixmap(time, error));
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
         QString label = NotationStrings::makeNoteMenuLabel(time, false, error);
 
         if (error == 0) {

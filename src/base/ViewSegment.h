@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _STAFF_H_
-#define _STAFF_H_
+#ifndef _RG_VIEW_SEGMENT_H_
+#define _RG_VIEW_SEGMENT_H_
 
 #include "ViewElement.h"
 #include "Segment.h"
@@ -25,21 +25,22 @@
 namespace Rosegarden 
 {
 
-class StaffObserver;
+class ViewSegmentObserver;
 
 /**
- * Staff is the base class for classes which represent a Segment as an
+ * ViewSegment is the base class for classes which represent a Segment as an
  * on-screen graphic.  It manages the relationship between Segment/Event
  * and specific implementations of ViewElement.
  *
- * The template argument T must be a subclass of ViewElement.
- *
- * Staff was formerly known as ViewElementsManager.
+ * ViewSegment was formerly known as Staff, and before that as
+ * ViewElementsManager.  It was renamed from Staff to ViewSegment to
+ * avoid confusion with classes that draw staff lines and other
+ * surrounding context.  All this does is manage the view elements.
  */
-class Staff : public SegmentObserver
+class ViewSegment : public SegmentObserver
 {
 public: 
-    virtual ~Staff();
+    virtual ~ViewSegment();
 
     /**
      * Create a new ViewElementList wrapping all Events in the
@@ -53,7 +54,7 @@ public:
      * (even if passed new arguments)
      */
     ViewElementList *getViewElementList(Segment::iterator from,
-                                           Segment::iterator to);
+					Segment::iterator to);
 
     /**
      * Return the Segment wrapped by this object 
@@ -66,7 +67,7 @@ public:
     const Segment &getSegment() const { return m_segment; }
 
     /**
-     * Return the location of the given event in this Staff
+     * Return the location of the given event in this ViewSegment
      */
     ViewElementList::iterator findEvent(Event *);
 
@@ -93,11 +94,11 @@ public:
      */
     virtual void segmentDeleted(const Segment *);
 
-    void addObserver   (StaffObserver *obs) { m_observers.push_back(obs); }
-    void removeObserver(StaffObserver *obs) { m_observers.remove(obs); }
+    void addObserver   (ViewSegmentObserver *obs) { m_observers.push_back(obs); }
+    void removeObserver(ViewSegmentObserver *obs) { m_observers.remove(obs); }
 
 protected:
-    Staff(Segment &);
+    ViewSegment(Segment &);
     virtual ViewElement* makeViewElement(Event*) = 0;
     
     /**
@@ -116,23 +117,27 @@ protected:
     Segment &m_segment;
     ViewElementList *m_viewElementList;
 
-    typedef std::list<StaffObserver*> ObserverSet;
+    typedef std::list<ViewSegmentObserver*> ObserverSet;
     ObserverSet m_observers;
 
+    bool m_modified;
+    timeT m_modStart;
+    timeT m_modEnd;
+
 private: // not provided
-    Staff(const Staff &);
-    Staff &operator=(const Staff &);
+    ViewSegment(const ViewSegment &);
+    ViewSegment &operator=(const ViewSegment &);
 };
 
-class StaffObserver
+class ViewSegmentObserver
 {
 public:
-    virtual ~StaffObserver() {}
-    virtual void elementAdded(const Staff *, ViewElement *) = 0;
-    virtual void elementRemoved(const Staff *, ViewElement *) = 0;
+    virtual ~ViewSegmentObserver() {}
+    virtual void elementAdded(const ViewSegment *, ViewElement *) = 0;
+    virtual void elementRemoved(const ViewSegment *, ViewElement *) = 0;
 
     /// called when the observed object is being deleted
-    virtual void staffDeleted(const Staff *) = 0;
+    virtual void viewSegmentDeleted(const ViewSegment *) = 0;
 };
 
 

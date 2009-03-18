@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include <Q3Canvas>
 #include <Q3CanvasItem>
@@ -96,7 +97,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
     Q3CanvasItemList itemList = canvas()->collisions(p);
     Q3CanvasItemList::Iterator it;
     MatrixElement* mel = 0;
-    Q3CanvasItem* activeItem = 0;
+//!!!    Q3CanvasItem* activeItem = 0;
 
     for (it = itemList.begin(); it != itemList.end(); ++it) {
 
@@ -105,7 +106,7 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
         QCanvasMatrixRectangle *mRect = 0;
 
         if (item->active()) {
-            activeItem = item;
+//!!!            activeItem = item;
             break;
         }
 
@@ -136,19 +137,20 @@ void MatrixCanvasView::contentsMousePressEvent(QMouseEvent* e)
         }
     }
 
+/*!!!
     if (activeItem) { // active item takes precedence over notation elements
         emit activeItemPressed(e, activeItem);
         m_mouseWasPressed = true;
         return ;
     }
-
+*/
     emit mousePressed(evTime, evPitch, e, mel);
     m_mouseWasPressed = true;
 
     // Ignore click if it was above the staff and not
     // on an active item
     //
-    if (!m_staff.containsCanvasCoords(p.x(), p.y()) && !activeItem)
+    if (!m_staff.containsCanvasCoords(p.x(), p.y()) /*!!! && !activeItem */)
         m_ignoreClick = true;
 }
 
@@ -298,3 +300,4 @@ void MatrixCanvasView::leaveEvent(QEvent *e)
 
 }
 #include "MatrixCanvasView.moc"
+#endif

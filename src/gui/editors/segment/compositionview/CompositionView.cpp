@@ -220,7 +220,7 @@ void CompositionView::slotUpdateSize()
 //    int height = std::max(getModel()->getNbRows() * vStep, (unsigned)visibleHeight());
     int height = std::max(getModel()->getHeight(), (unsigned) visibleHeight());
 
-    RulerScale *ruler = grid().getRulerScale();
+    const RulerScale *ruler = grid().getRulerScale();
 
     int minWidth = sizeHint().width();
     int computedWidth = int(nearbyint(ruler->getTotalWidth()));
@@ -1439,7 +1439,7 @@ void CompositionView::contentsMouseDoubleClickEvent(QMouseEvent* e)
 
     if (!m_currentIndex) {
         RG_DEBUG << "CompositionView::contentsMouseDoubleClickEvent - no currentIndex\n";
-        RulerScale *ruler = grid().getRulerScale();
+        const RulerScale *ruler = grid().getRulerScale();
         if (ruler) emit setPointerPosition(ruler->getTimeForX(e->pos().x()));
         return ;
     }

@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "NoteInserter.h"
 #include "misc/Debug.h"
 
@@ -26,20 +25,20 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "base/Staff.h"
 #include "base/ViewElement.h"
+#include "base/Composition.h"
 #include "commands/notation/NoteInsertionCommand.h"
 #include "commands/notation/RestInsertionCommand.h"
 #include "commands/notation/TupletCommand.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/LinedStaff.h"
+#include "document/CommandHistory.h"
 #include "gui/general/IconLoader.h"
-#include "gui/general/RosegardenCanvasView.h"
 #include "NotationProperties.h"
+#include "NotationMouseEvent.h"
 #include "NotationStrings.h"
 #include "NotationTool.h"
-#include "NotationView.h"
+#include "NotationWidget.h"
 #include "NotationStaff.h"
+#include "NotationScene.h"
 #include "NotePixmapFactory.h"
 #include "NoteStyleFactory.h"
 #include "document/Command.h"
@@ -55,14 +54,14 @@
 namespace Rosegarden
 {
 
-NoteInserter::NoteInserter(NotationView* view)
-        : NotationTool("NoteInserter", view),
-        m_noteType(Note::Quaver),
-        m_noteDots(0),
-        m_autoBeam(true),
-        m_accidental(Accidentals::NoAccidental),
-        m_lastAccidental(Accidentals::NoAccidental),
-        m_followAccidental(false)
+NoteInserter::NoteInserter(NotationWidget* widget) :
+    NotationTool("noteinserter.rc", "NoteInserter", widget),
+    m_noteType(Note::Quaver),
+    m_noteDots(0),
+    m_autoBeam(true),
+    m_accidental(Accidentals::NoAccidental),
+    m_lastAccidental(Accidentals::NoAccidental),
+    m_followAccidental(false)
 {
     QIcon icon;
 
@@ -71,7 +70,7 @@ NoteInserter::NoteInserter(NotationView* view)
 
     m_autoBeam = qStrToBool( settings.value("autobeam", "true" ) ) ;
     m_matrixInsertType = (settings.value("inserttype", 0).toInt()  > 0);
-    m_defaultStyle = qstrtostr(settings.value("style", strtoqstr(NoteStyleFactory::DefaultStyle)).toString());
+    m_defaultStyle = settings.value("style", NoteStyleFactory::DefaultStyle).toString();
     settings.endGroup();
 
     QAction *a;
@@ -80,7 +79,7 @@ NoteInserter::NoteInserter(NotationView* view)
     if (m_autoBeam) { a->setCheckable(true); a->setChecked(true); }
 
     for (unsigned int i = 0; i < 6; ++i) {
-        a = createAction(m_actionsAccidental[i][2], m_actionsAccidental[i][1]);
+        a = createAction(m_actionsAccidental[i][1], m_actionsAccidental[i][0]);
     }
 
     createAction("toggle_dot", SLOT(slotToggleDot()));
@@ -89,32 +88,35 @@ NoteInserter::NoteInserter(NotationView* view)
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("rests", SLOT(slotRestsSelected()));
 
-    createMenu("noteinserter.rc");
-
-    connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
+    connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
 
     // Push down the default RadioAction on Accidentals.
     invokeInParentView("no_accidental");
 }
 
-NoteInserter::NoteInserter(const QString& menuName, NotationView* view)
-        : NotationTool(menuName, view),
-        m_noteType(Note::Quaver),
-        m_noteDots(0),
-        m_autoBeam(false),
-        m_clickHappened(false),
-        m_accidental(Accidentals::NoAccidental),
-        m_lastAccidental(Accidentals::NoAccidental),
-        m_followAccidental(false)
+NoteInserter::NoteInserter(QString rcFileName, QString menuName,
+                           NotationWidget* widget) :
+    NotationTool(rcFileName, menuName, widget),
+    m_noteType(Note::Quaver),
+    m_noteDots(0),
+    m_autoBeam(false),
+    m_clickHappened(false),
+    m_accidental(Accidentals::NoAccidental),
+    m_lastAccidental(Accidentals::NoAccidental),
+    m_followAccidental(false)
 {
     // Constructor used by subclass (e.g. RestInserter)
 
-    connect(m_parentView, SIGNAL(changeAccidental(Accidental, bool)),
+    connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
             this, SLOT(slotSetAccidental(Accidental, bool)));
 
     // Push down the default RadioAction on Accidentals.
     invokeInParentView("no_accidental");
+
+    //!!! grace & triplet mode should be stored by this tool, not by widget!
+
+    //!!! selection should be in scene, not widget!
 }
 
 NoteInserter::~NoteInserter()
@@ -123,80 +125,76 @@ NoteInserter::~NoteInserter()
 void NoteInserter::ready()
 {
     m_clickHappened = false;
-    m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setHeightTracking(true);
+    m_clickStaff = 0;
+    m_widget->setCanvasCursor(Qt::crossCursor);
+//!!!   m_widget->setHeightTracking(true);
 }
 
 void
-NoteInserter::handleLeftButtonPress(timeT,
-                                    int,
-                                    int staffNo,
-                                    QMouseEvent* e,
-                                    ViewElement*)
+NoteInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    if (staffNo < 0)
-        return ;
     computeLocationAndPreview(e);
 }
 
-int
-NoteInserter::handleMouseMove(timeT,
-                              int,
-                              QMouseEvent *e)
+NoteInserter::FollowMode
+NoteInserter::handleMouseMove(const NotationMouseEvent *e)
 {
     if (m_clickHappened) {
         computeLocationAndPreview(e);
     }
 
-    return RosegardenCanvasView::NoFollow;
+    return NoFollow;
 }
 
 void
-NoteInserter::handleMouseRelease(timeT,
-                                 int,
-                                 QMouseEvent *e)
+NoteInserter::handleMouseRelease(const NotationMouseEvent *e)
 {
-    if (!m_clickHappened)
-        return ;
+    NOTATION_DEBUG << "NoteInserter::handleMouseRelease: staff = " <<
+        m_clickStaff << ", clicked = " << m_clickHappened << endl;
+    
+    NotationStaff *staff = m_clickStaff;
+    if (!m_clickHappened || !staff) return;
+
     bool okay = computeLocationAndPreview(e);
     m_clickHappened = false;
-    if (!okay)
-        return ;
+    m_clickStaff = 0;
+    if (!okay) return;
+
     clearPreview();
 
     Note note(m_noteType, m_noteDots);
     timeT endTime = m_clickTime + note.getDuration();
-    Segment &segment = m_nParentView->getStaff(m_clickStaffNo)->getSegment();
+    Segment &segment = staff->getSegment();
 
     Segment::iterator realEnd = segment.findTime(endTime);
-    if (!segment.isBeforeEndMarker( realEnd) ||
-            !segment.isBeforeEndMarker(++realEnd)) {
+    if (!segment.isBeforeEndMarker(realEnd) ||
+        !segment.isBeforeEndMarker(++realEnd)) {
         endTime = segment.getEndMarkerTime();
     } else {
         endTime = std::max(endTime, (*realEnd)->getNotationAbsoluteTime());
     }
 
-    Event *lastInsertedEvent = doAddCommand
-                               (segment, m_clickTime, endTime, note, m_clickPitch,
-                                (m_accidental == Accidentals::NoAccidental &&
-                                 m_followAccidental) ?
-                                m_lastAccidental : m_accidental);
+    Event *lastInsertedEvent =
+        doAddCommand
+        (segment, m_clickTime, endTime, note, m_clickPitch,
+         ((m_accidental == Accidentals::NoAccidental && m_followAccidental) ?
+          m_lastAccidental : m_accidental));
 
     if (lastInsertedEvent) {
 
-        m_nParentView->setSingleSelectedEvent
-        (m_clickStaffNo, lastInsertedEvent);
-
-        if (m_nParentView->isInChordMode()) {
-            m_nParentView->slotSetInsertCursorAndRecentre
+        m_widget->setSingleSelectedEvent(staff->getId(), lastInsertedEvent);
+/*!!!
+        if (m_widget->isInChordMode()) {
+            m_widget->slotSetInsertCursorAndRecentre
             (lastInsertedEvent->getAbsoluteTime(), e->x(), (int)e->y(),
              false);
         } else {
-            m_nParentView->slotSetInsertCursorAndRecentre
+            m_widget->slotSetInsertCursorAndRecentre
             (lastInsertedEvent->getAbsoluteTime() +
              lastInsertedEvent->getDuration(), e->x(), (int)e->y(),
              false);
         }
+*/
     }
 }
 
@@ -221,112 +219,100 @@ NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 
     if (lastInsertedEvent) {
 
-        m_nParentView->setSingleSelectedEvent(segment, lastInsertedEvent);
+        m_widget->setSingleSelectedEvent(segment, lastInsertedEvent);
 
-        if (m_nParentView->isInChordMode()) {
-            m_nParentView->slotSetInsertCursorPosition
-            (lastInsertedEvent->getAbsoluteTime(), true, false);
+        if (m_widget->isInChordMode()) {
+            if (m_scene) {
+                m_scene->slotSetInsertCursorPosition
+                    (lastInsertedEvent->getAbsoluteTime(), true, false);
+            }
         } else {
-            m_nParentView->slotSetInsertCursorPosition
-            (lastInsertedEvent->getAbsoluteTime() +
-             lastInsertedEvent->getDuration(), true, false);
+            if (m_scene) {
+                m_scene->slotSetInsertCursorPosition
+                    (lastInsertedEvent->getAbsoluteTime() +
+                     lastInsertedEvent->getDuration(), true, false);
+            }
         }
     }
 
-    if (!suppressPreview)
-        m_nParentView->playNote(segment, pitch);
+    if (!suppressPreview) {
+        if (m_scene) {
+            m_scene->playNote(segment, pitch);
+        }
+    }
 }
 
 bool
-NoteInserter::computeLocationAndPreview(QMouseEvent *e)
+NoteInserter::computeLocationAndPreview(const NotationMouseEvent *e)
 {
-    double x = e->x();
-    int y = (int)e->y();
-
-    LinedStaff *staff = m_nParentView->getStaffForCanvasCoords(e->x(), y);
-    if (!staff) {
+    if (!e->staff || !e->element) {
+        NOTATION_DEBUG << "computeLocationAndPreview: staff and/or element not supplied" << endl;
         clearPreview();
         return false;
     }
 
-    int staffNo = staff->getId();
-    if (m_clickHappened && staffNo != m_clickStaffNo) {
+    if (m_clickHappened && (e->staff != m_clickStaff)) {
+        NOTATION_DEBUG << "computeLocationAndPreview: staff changed from originally clicked one (" << e->staff << " vs " << m_clickStaff << ")" << endl;
         // abandon
         clearPreview();
         return false;
     }
 
+    double x = e->sceneX;
+    int y = e->sceneY;
+
     // If we're inserting grace notes, then we need to "dress to the
     // right", as it were
-    bool grace = m_nParentView->isInGraceMode();
+    bool grace = m_widget->isInGraceMode();
 
-    int height = staff->getHeightAtCanvasCoords(x, y);
-
-    Event *clefEvt = 0, *keyEvt = 0;
-    Clef clef;
-    Rosegarden::Key key;
-
-    NotationElementList::iterator itr =
-        staff->getElementUnderCanvasCoords(x, y, clefEvt, keyEvt);
-    if (itr == staff->getViewElementList()->end()) {
-        clearPreview();
+    NotationElement *el = e->element;
+    ViewElementList::iterator itr = e->staff->getViewElementList()->findSingle(el);
+    if (itr == e->staff->getViewElementList()->end()) {
+        NOTATION_DEBUG << "computeLocationAndPreview: element provided is not found in staff" << endl;
         return false;
     }
 
-    NotationElement* el = static_cast<NotationElement*>(*itr);
-
     timeT time = el->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
     m_clickInsertX = el->getLayoutX();
-    if (clefEvt)
-        clef = Clef(*clefEvt);
-    if (keyEvt)
-        key = Rosegarden::Key(*keyEvt);
 
     int subordering = el->event()->getSubOrdering();
     float targetSubordering = subordering;
 
-    if (grace && el->getCanvasItem()) {
+    if (grace && el->getItem()) {
 
-        NotationStaff *ns = dynamic_cast<NotationStaff *>(staff);
-        if (!ns) {
-            std::cerr << "WARNING: NoteInserter: Staff is not a NotationStaff"
-                      << std::endl;
-        } else {
-            std::cerr << "x=" << x << ", el->getCanvasX()=" << el->getCanvasX() << std::endl;
-            if (el->isRest()) std::cerr << "elt is a rest" << std::endl;
-            if (x - el->getCanvasX() >
-                ns->getNotePixmapFactory(false).getNoteBodyWidth()) {
-                NotationElementList::iterator j(itr);
-                while (++j != staff->getViewElementList()->end()) {
-                    NotationElement *candidate = static_cast<NotationElement *>(*j);
-                    if ((candidate->isNote() || candidate->isRest()) &&
-                        (candidate->getViewAbsoluteTime()
-                         > el->getViewAbsoluteTime() ||
-                         candidate->event()->getSubOrdering()
-                         > el->event()->getSubOrdering())) {
-                        itr = j;
-                        el = candidate;
-                        m_clickInsertX = el->getLayoutX();
-                        time = el->event()->getAbsoluteTime();
-                        subordering = el->event()->getSubOrdering();
-                        targetSubordering = subordering;
-                        break;
-                    }
+        std::cerr << "x=" << x << ", el->getSceneX()=" << el->getSceneX() << std::endl;
+
+        if (el->isRest()) std::cerr << "elt is a rest" << std::endl;
+        if (x - el->getSceneX() >
+            e->staff->getNotePixmapFactory(false).getNoteBodyWidth()) {
+            NotationElementList::iterator j(itr);
+            while (++j != e->staff->getViewElementList()->end()) {
+                NotationElement *candidate = static_cast<NotationElement *>(*j);
+                if ((candidate->isNote() || candidate->isRest()) &&
+                    (candidate->getViewAbsoluteTime() > el->getViewAbsoluteTime() ||
+                     candidate->event()->getSubOrdering() > el->event()->getSubOrdering())) {
+                    itr = j;
+                    el = candidate;
+                    m_clickInsertX = el->getLayoutX();
+                    time = el->event()->getAbsoluteTime();
+                    subordering = el->event()->getSubOrdering();
+                    targetSubordering = subordering;
+                    break;
                 }
             }
         }
 
-        if (x - el->getCanvasX() < 1) {
+        if (x - el->getSceneX() < 1) {
             targetSubordering -= 0.5;
         }
     }
 
-    if (el->isRest() && el->getCanvasItem()) {
-        time += getOffsetWithinRest(staffNo, itr, x);
-        m_clickInsertX += (x - el->getCanvasX());
+    if (el->isRest() && el->getItem()) {
+        time += getOffsetWithinRest(e->staff, itr, x);
+        m_clickInsertX += (x - el->getSceneX());
     }
 
-    Pitch p(height, clef, key, m_accidental);
+    Pitch p(e->height, e->clef, e->key, m_accidental);
     int pitch = p.getPerformancePitch();
 
     // [RFE 987960] When inserting via mouse, if no accidental is
@@ -336,7 +322,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
     if (m_accidental == Accidentals::NoAccidental &&
         m_followAccidental) {
-        Segment &segment = staff->getSegment();
+        Segment &segment = e->staff->getSegment();
         m_lastAccidental = m_accidental;
         Segment::iterator i = segment.findNearestTime(time);
         while (i != segment.end()) {
@@ -345,7 +331,7 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
                 if ((*i)->has(NotationProperties::HEIGHT_ON_STAFF) &&
                     (*i)->has(BaseProperties::PITCH)) {
                     int h = (*i)->get<Int>(NotationProperties::HEIGHT_ON_STAFF);
-                    if (h == height) {
+                    if (h == e->height) {
                         pitch = (*i)->get<Int>(BaseProperties::PITCH);
                         (*i)->get<String>(BaseProperties::ACCIDENTAL,
                                           m_lastAccidental);
@@ -364,12 +350,13 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         if (time != m_clickTime ||
             subordering != m_clickSubordering ||
             pitch != m_clickPitch ||
-            height != m_clickHeight ||
-            staffNo != m_clickStaffNo) {
+            e->height != m_clickHeight ||
+            e->staff != m_clickStaff) {
             changed = true;
         }
     } else {
         m_clickHappened = true;
+        m_clickStaff = e->staff;
         changed = true;
     }
 
@@ -377,8 +364,8 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
         m_clickTime = time;
         m_clickSubordering = subordering;
         m_clickPitch = pitch;
-        m_clickHeight = height;
-        m_clickStaffNo = staffNo;
+        m_clickHeight = e->height;
+        m_clickStaff = e->staff;
         m_targetSubordering = targetSubordering;
 
         showPreview();
@@ -389,41 +376,43 @@ NoteInserter::computeLocationAndPreview(QMouseEvent *e)
 
 void NoteInserter::showPreview()
 {
-    Segment &segment = m_nParentView->getStaff(m_clickStaffNo)->getSegment();
+    if (!m_clickStaff) return;
+    Segment &segment = m_clickStaff->getSegment();
 
     int pitch = m_clickPitch;
     pitch += getOttavaShift(segment, m_clickTime) * 12;
 
-    m_nParentView->showPreviewNote(m_clickStaffNo, m_clickInsertX,
-                                   pitch, m_clickHeight,
-                                   Note(m_noteType, m_noteDots),
-                                   m_nParentView->isInGraceMode());
+    if (m_scene) {
+        m_scene->showPreviewNote(m_clickStaff, m_clickInsertX,
+                                 pitch, m_clickHeight,
+                                 Note(m_noteType, m_noteDots),
+                                 m_widget->isInGraceMode());
+    }
 }
 
 void NoteInserter::clearPreview()
 {
-    m_nParentView->clearPreviewNote();
+    if (m_scene) {
+        m_scene->clearPreviewNote(m_clickStaff);
+    }
 }
 
 timeT
-NoteInserter::getOffsetWithinRest(int staffNo,
+NoteInserter::getOffsetWithinRest(NotationStaff *staff,
                                   const NotationElementList::iterator &i,
-                                  double &canvasX) // will be snapped
+                                  double &sceneX) // will be snapped
 {
     //!!! To make this work correctly in tuplet mode, our divisor would
     // have to be the tupletified duration of the tuplet unit -- we can
     // do that, we just haven't yet
-    if (m_nParentView->isInTripletMode())
+    if (m_widget->isInTripletMode())
         return 0;
 
-    Staff *staff = m_nParentView->getStaff(staffNo);
     NotationElement* el = static_cast<NotationElement*>(*i);
-    if (!el->getCanvasItem())
-        return 0;
-    double offset = canvasX - el->getCanvasX();
+    if (!el->getItem()) return 0;
+    double offset = sceneX - el->getSceneX();
 
-    if (offset < 0)
-        return 0;
+    if (offset < 0) return 0;
 
     double airX, airWidth;
     el->getLayoutAirspace(airX, airWidth);
@@ -450,7 +439,7 @@ NoteInserter::getOffsetWithinRest(int staffNo,
             visibleWidth = (*j)->getLayoutX() - (*i)->getLayoutX();
         }
         offset = (visibleWidth * result) / unitCount;
-        canvasX = el->getCanvasX() + offset;
+        sceneX = el->getSceneX() + offset;
 
         result *= unit;
         return result;
@@ -499,35 +488,38 @@ Event *
 NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
                            const Note &note, int pitch, Accidental accidental)
 {
+    NOTATION_DEBUG << "doAddCommand: time " << time << ", endTime " << endTime
+                   << ", pitch " << pitch << endl;
+
     timeT noteEnd = time + note.getDuration();
 
     // #1046934: make it possible to insert triplet at end of segment!
-    if (m_nParentView->isInTripletMode()) {
+    if (m_widget->isInTripletMode()) {
         noteEnd = time + (note.getDuration() * 2 / 3);
     }
 
-    if ( time < segment.getStartTime() ||
-        	endTime > segment.getEndMarkerTime() ||
-        	noteEnd > segment.getEndMarkerTime() ){
+    if (time < segment.getStartTime() ||
+        endTime > segment.getEndMarkerTime() ||
+        noteEnd > segment.getEndMarkerTime()) {
         return 0;
     }
 
     pitch += getOttavaShift(segment, time) * 12;
 
     float targetSubordering = 0;
-    if (m_nParentView->isInGraceMode()) {
+    if (m_widget->isInGraceMode()) {
         targetSubordering = m_targetSubordering;
     }
 
     NoteInsertionCommand *insertionCommand =
         new NoteInsertionCommand
         (segment, time, endTime, note, pitch, accidental,
-         (m_autoBeam && !m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) ?
+         (m_autoBeam && !m_widget->isInTripletMode() && !m_widget->isInGraceMode()) ?
          NoteInsertionCommand::AutoBeamOn : NoteInsertionCommand::AutoBeamOff,
-         m_matrixInsertType && !m_nParentView->isInGraceMode() ?
+         m_matrixInsertType && !m_widget->isInGraceMode() ?
          NoteInsertionCommand::MatrixModeOn : NoteInsertionCommand::MatrixModeOff,
-         m_nParentView->isInGraceMode() ?
-         (m_nParentView->isInTripletMode() ?
+         m_widget->isInGraceMode() ?
+         (m_widget->isInTripletMode() ?
           NoteInsertionCommand::GraceAndTripletModesOn :
           NoteInsertionCommand::GraceModeOn)
          : NoteInsertionCommand::GraceModeOff,
@@ -536,14 +528,12 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     Command *activeCommand = insertionCommand;
 
-    if (m_nParentView->isInTripletMode() && !m_nParentView->isInGraceMode()) {
+    if (m_widget->isInTripletMode() && !m_widget->isInGraceMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
             
-// 			MacroCommand *command = new MacroCommand(insertionCommand->objectName());
-			MacroCommand *command = new MacroCommand( "insertion_command" );	//@@@
-
+            MacroCommand *command = new MacroCommand(insertionCommand->getName());
             //## Attempted fix to bug reported on rg-user by SlowPic
             //## <slowpic@web.de> 28/02/2005 22:32:56 UTC: Triplet input error
             //# HJJ: Comment out this attempt. It breaks the splitting of
@@ -566,10 +556,10 @@ NoteInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         }
     }
 
-    m_nParentView->addCommandToHistory(activeCommand);
+    CommandHistory::getInstance()->addCommand(activeCommand);
 
     NOTATION_DEBUG << "NoteInserter::doAddCommand: accidental is "
-    << accidental << endl;
+                   << accidental << endl;
 
     return insertionCommand->getLastInsertedEvent();
 }
@@ -585,7 +575,7 @@ void NoteInserter::slotSetDots(unsigned int dots)
 // 	QAction *dotsAction = dynamic_cast<QAction*>
 //                                 (actionCollection()->action("toggle_dot"));
 	
-    QAction* dotsAction = m_parentView->findAction( "toggle_dot" );
+    QAction* dotsAction = findActionInParentView( "toggle_dot" );
 	
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
@@ -598,7 +588,7 @@ void NoteInserter::slotSetAccidental(Accidental accidental,
                                      bool follow)
 {
     NOTATION_DEBUG << "NoteInserter::setAccidental: accidental is "
-    << accidental << endl;
+                   << accidental << endl;
     m_accidental = accidental;
     m_followAccidental = follow;
 }
@@ -645,12 +635,12 @@ void NoteInserter::slotToggleDot()
     QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp("-"), "_");
 	
-    QAction* action = m_parentView->findAction(actionName);
+    QAction* action = findActionInParentView(actionName);
 	
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
-        action->setEnabled(true);
+        action->setChecked(true);
     }
 }
 
@@ -680,30 +670,23 @@ void NoteInserter::slotRestsSelected()
     if (!action) {
         std::cerr << "WARNING: No such action as " << actionName << std::endl;
     } else {
-        action->setEnabled(true);
+        action->trigger();
     }
 }
 
-//### half of these will become obsolete with the new whatsit (see also NotationView structs)
 const char* NoteInserter::m_actionsAccidental[][4] =
 {
-    { "No accidental",  "1slotNoAccidental()",  "no_accidental",
-      "accidental-none" },
-    { "Follow accidental",  "1slotFollowAccidental()",  "follow_accidental",
-      "accidental-follow" },
-    { "Sharp",          "1slotSharp()",         "sharp_accidental",
-      "accidental-sharp" },
-    { "Flat",           "1slotFlat()",          "flat_accidental",
-      "accidental-flat" },
-    { "Natural",        "1slotNatural()",       "natural_accidental",
-      "accidental-natural" },
-    { "Double sharp",   "1slotDoubleSharp()",   "double_sharp_accidental",
-      "accidental-doublesharp" },
-    { "Double flat",    "1slotDoubleFlat()",    "double_flat_accidental",
-      "accidental-doubleflat" }
+    { "1slotNoAccidental()",  "no_accidental" },
+    { "1slotFollowAccidental()",  "follow_accidental" },
+    { "1slotSharp()",         "sharp_accidental" },
+    { "1slotFlat()",          "flat_accidental" },
+    { "1slotNatural()",       "natural_accidental" },
+    { "1slotDoubleSharp()",   "double_sharp_accidental" },
+    { "1slotDoubleFlat()",    "double_flat_accidental" }
 };
 
 const QString NoteInserter::ToolName     = "noteinserter";
 
 }
 #include "NoteInserter.moc"
+

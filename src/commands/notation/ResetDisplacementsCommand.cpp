@@ -34,7 +34,7 @@ void
 ResetDisplacementsCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "fine_position_restore",
+        ("fine_position_restore",
          new SelectionCommandBuilder<ResetDisplacementsCommand>());
 }
 

@@ -104,44 +104,44 @@ RespellCommand::registerCommand(CommandRegistry *r)
 
     type.accidental = DoubleFlat;
     r->registerCommand
-        (getGlobalName(type), "accmenu-doubleflat", "", "respell_doubleflat",
+        ("respell_doubleflat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
     type.accidental = Flat;
     r->registerCommand
-        (getGlobalName(type), "accmenu-flat", "", "respell_flat",
+        ("respell_flat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
     type.accidental = Natural;
     r->registerCommand
-        (getGlobalName(type), "accmenu-natural", "", "respell_natural",
+        ("respell_natural",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
     type.accidental = Sharp;
     r->registerCommand
-        (getGlobalName(type), "accmenu-sharp", "", "respell_sharp",
+        ("respell_sharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
     type.accidental = DoubleSharp;
     r->registerCommand
-        (getGlobalName(type), "accmenu-doublesharp", "", "respell_doublesharp",
+        ("respell_doublesharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
     type.accidental = Natural;
     
     type.type = RespellType::Up;
     r->registerCommand
-        (getGlobalName(type), "", "Ctrl+Shift+Up", "respell_up",
+        ("respell_up",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
     
     type.type = RespellType::Down;
     r->registerCommand
-        (getGlobalName(type), "", "Ctrl+Shift+Down", "respell_down",
+        ("respell_down",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
     
     type.type = RespellType::Restore;
     r->registerCommand
-        (getGlobalName(type), "", "", "respell_restore",
+        ("respell_restore",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 }
 

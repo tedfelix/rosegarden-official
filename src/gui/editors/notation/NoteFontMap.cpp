@@ -35,28 +35,27 @@
 namespace Rosegarden
 {
 
-NoteFontMap::NoteFontMap(std::string name) :
-        m_name(name),
-        m_smooth(false),
-        m_srcDirectory(name),
-        m_characterDestination(0),
-        m_hotspotCharName(""),
-        m_errorString(QObject::tr("unknown error")),
-        m_ok(true)
+NoteFontMap::NoteFontMap(QString name) :
+    m_name(name),
+    m_smooth(false),
+    m_srcDirectory(name),
+    m_characterDestination(0),
+    m_hotspotCharName(""),
+    m_errorString(QObject::tr("unknown error")),
+    m_ok(true)
 {
     QString mapFileName;
 
     ResourceFinder rf;
     
     QString mapFileMixedName =
-        rf.getResourcePath("fonts/mappings",
-                           QString("%1.xml").arg(strtoqstr(name)));
+        rf.getResourcePath("fonts/mappings", QString("%1.xml").arg(name));
 
     QFileInfo mapFileMixedInfo(mapFileMixedName);
 
     if (mapFileMixedName == "" || !mapFileMixedInfo.isReadable()) {
 
-        QString lowerName = strtoqstr(name).toLower();
+        QString lowerName = name.toLower();
         lowerName.replace(QRegExp(" "), "_");
 
         QString mapFileLowerName =
@@ -68,12 +67,12 @@ NoteFontMap::NoteFontMap(std::string name) :
         if (!mapFileLowerInfo.isReadable()) {
             if (mapFileLowerName != mapFileMixedName) {
                 throw MappingFileReadFailed
-                (qstrtostr(QObject::tr("Can't open font mapping file %1 or %2") 
-                           .arg(mapFileMixedName).arg(mapFileLowerName)));
+                (QObject::tr("Can't open font mapping file %1 or %2") 
+                 .arg(mapFileMixedName).arg(mapFileLowerName));
             } else {
                 throw MappingFileReadFailed
-                (qstrtostr(QObject::tr("Can't open font mapping file %1")
-                           .arg(mapFileMixedName)));
+                (QObject::tr("Can't open font mapping file %1")
+                 .arg(mapFileMixedName));
             }
         } else {
             mapFileName = mapFileLowerName;
@@ -92,7 +91,7 @@ NoteFontMap::NoteFontMap(std::string name) :
     mapFile.close();
 
     if (!ok) {
-        throw MappingFileReadFailed(qstrtostr(m_errorString));
+        throw MappingFileReadFailed(m_errorString);
     }
 }
 
@@ -107,9 +106,8 @@ NoteFontMap::~NoteFontMap()
 bool
 NoteFontMap::characters(const QString &chars)
 {
-    if (!m_characterDestination)
-        return true;
-    *m_characterDestination += qstrtostr(chars);
+    if (!m_characterDestination) return true;
+    *m_characterDestination += chars;
     return true;
 }
 
@@ -141,7 +139,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("name");
         if ( ! s.isEmpty() ) {
-            m_name = qstrtostr(s);
+            m_name = s;
             m_srcDirectory = m_name;
         }
 
@@ -151,19 +149,19 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         s = attributes.value("origin");
 		if ( ! s.isEmpty() )
-            m_origin = qstrtostr(s);
+            m_origin = s;
 
         s = attributes.value("copyright");
 		if ( ! s.isEmpty() )
-            m_copyright = qstrtostr(s);
+            m_copyright = s;
 
         s = attributes.value("mapped-by");
 		if ( ! s.isEmpty() )
-            m_mappedBy = qstrtostr(s);
+            m_mappedBy = s;
 
         s = attributes.value("type");
 		if ( ! s.isEmpty() )
-            m_type = qstrtostr(s);
+            m_type = s;
 
         s = attributes.value("autocrop");
 		if ( ! s.isEmpty() ) {
@@ -243,7 +241,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s;
 
         s = attributes.value("font-height");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             fontHeight = qstrtodouble(s);
         else {
             m_errorString = "font-height is a required attribute of font-scale";
@@ -251,32 +249,32 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         s = attributes.value("staff-line-thickness");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             staffLineThickness = qstrtodouble(s);
 
         s = attributes.value("leger-line-thickness");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             legerLineThickness = qstrtodouble(s);
 
         s = attributes.value("stem-thickness");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             stemThickness = qstrtodouble(s);
 
         s = attributes.value("beam-thickness");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             beamThickness = qstrtodouble(s);
 
         s = attributes.value("stem-length");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             stemLength = qstrtodouble(s);
 
         s = attributes.value("flag-spacing");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             flagSpacing = qstrtodouble(s);
 
         int fontId = 0;
         s = attributes.value("font-id");
-		if ( ! s.isEmpty() )
+        if ( ! s.isEmpty() )
             fontId = s.toInt();
 
         //!!! need to be able to calculate max size -- checkFont needs
@@ -296,27 +294,27 @@ NoteFontMap::startElement(const QString &, const QString &,
             unsigned int temp;
 
             if (sizeData.getStaffLineThickness(temp) == false &&
-                    staffLineThickness >= 0.0)
+                staffLineThickness >= 0.0)
                 sizeData.setStaffLineThickness(toSize(sz, staffLineThickness, true));
 
             if (sizeData.getLegerLineThickness(temp) == false &&
-                    legerLineThickness >= 0.0)
+                legerLineThickness >= 0.0)
                 sizeData.setLegerLineThickness(toSize(sz, legerLineThickness, true));
 
             if (sizeData.getStemThickness(temp) == false &&
-                    stemThickness >= 0.0)
+                stemThickness >= 0.0)
                 sizeData.setStemThickness(toSize(sz, stemThickness, true));
 
             if (sizeData.getBeamThickness(temp) == false &&
-                    beamThickness >= 0.0)
+                beamThickness >= 0.0)
                 sizeData.setBeamThickness(toSize(sz, beamThickness, true));
 
             if (sizeData.getStemLength(temp) == false &&
-                    stemLength >= 0.0)
+                stemLength >= 0.0)
                 sizeData.setStemLength(toSize(sz, stemLength, true));
 
             if (sizeData.getFlagSpacing(temp) == false &&
-                    flagSpacing >= 0.0)
+                flagSpacing >= 0.0)
                 sizeData.setFlagSpacing(toSize(sz, flagSpacing, true));
 
             if (sizeData.getFontHeight(fontId, temp) == false)
@@ -333,7 +331,7 @@ NoteFontMap::startElement(const QString &, const QString &,
             return false;
         }
 
-        m_srcDirectory = qstrtostr(d);
+        m_srcDirectory = d;
 
     } else if (lcName == "codebase") {
 
@@ -411,11 +409,11 @@ NoteFontMap::startElement(const QString &, const QString &,
             return false;
         }
 		if ( ! src.isEmpty())
-            symbolData.setSrc(qstrtostr(src));
+            symbolData.setSrc(src);
 
         QString inversionSrc = attributes.value("inversion-src");
 		if ( ! inversionSrc.isEmpty())
-            symbolData.setInversionSrc(qstrtostr(inversionSrc));
+            symbolData.setInversionSrc(inversionSrc);
 
         QString inversionCode = attributes.value("inversion-code");
 		if ( ! inversionCode.isEmpty()) {
@@ -453,18 +451,18 @@ NoteFontMap::startElement(const QString &, const QString &,
             symbolData.setFontId(n);
         }
 
-        m_data[qstrtostr(symbolName.toUpper())] = symbolData;
+        m_data[symbolName.toUpper()] = symbolData;
 
     } else if (lcName == "font-hotspots") {
     }
     else if (lcName == "hotspot") {
 
         QString s = attributes.value("name");
-		if (s.isEmpty()) {
+        if (s.isEmpty()) {
             m_errorString = "name is a required attribute of hotspot";
             return false;
         }
-        m_hotspotCharName = qstrtostr(s.toUpper());
+        m_hotspotCharName = s.toUpper();
 
     } else if (lcName == "scaled") {
 
@@ -475,11 +473,11 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString s = attributes.value("x");
         double x = -1.0;
-		if (! s.isEmpty())
+        if (! s.isEmpty())
             x = qstrtodouble(s);
 
         s = attributes.value("y");
-		if ( s.isEmpty()) {
+        if ( s.isEmpty()) {
             m_errorString = "y is a required attribute of scaled";
             return false;
         }
@@ -695,16 +693,16 @@ NoteFontMap::getCharNames() const
 }
 
 bool
-NoteFontMap::checkFile(int size, std::string &src) const
+NoteFontMap::checkFile(int size, QString &src) const
 {
     ResourceFinder rf;
 
     QString pixmapFileMixedName =
         rf.getResourcePath(QString("fonts/%2/%3")
-                           .arg(strtoqstr(m_srcDirectory))
+                           .arg(m_srcDirectory)
                            .arg(size),
                            QString("%1.xpm")
-                           .arg(strtoqstr(src)));
+                           .arg(src));
 
     QFileInfo pixmapFileMixedInfo(pixmapFileMixedName);
 
@@ -712,10 +710,10 @@ NoteFontMap::checkFile(int size, std::string &src) const
 
         QString pixmapFileLowerName =
             rf.getResourcePath(QString("fonts/%2/%3")
-                               .arg(strtoqstr(m_srcDirectory).toLower())
+                               .arg(m_srcDirectory.toLower())
                                .arg(size),
                                QString("%1.xpm")
-                               .arg(strtoqstr(src)));
+                               .arg(src));
 
         QFileInfo pixmapFileLowerInfo(pixmapFileLowerName);
 
@@ -730,10 +728,10 @@ NoteFontMap::checkFile(int size, std::string &src) const
             }
             return false;
         } else {
-            src = qstrtostr(pixmapFileLowerName);
+            src = pixmapFileLowerName;
         }
     } else {
-        src = qstrtostr(pixmapFileMixedName);
+        src = pixmapFileMixedName;
     }
 
     return true;
@@ -749,7 +747,7 @@ NoteFontMap::hasInversion(int, CharName charName) const
 }
 
 bool
-NoteFontMap::getSrc(int size, CharName charName, std::string &src) const
+NoteFontMap::getSrc(int size, CharName charName, QString &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end())
@@ -762,7 +760,7 @@ NoteFontMap::getSrc(int size, CharName charName, std::string &src) const
 }
 
 bool
-NoteFontMap::getInversionSrc(int size, CharName charName, std::string &src) const
+NoteFontMap::getInversionSrc(int size, CharName charName, QString &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
     if (i == m_data.end())
@@ -1044,11 +1042,11 @@ NoteFontMap::dump() const
         }
 
         for (std::set<CharName>::iterator namei = names.begin();
-                namei != names.end(); ++namei) {
+             namei != names.end(); ++namei) {
 
-            std::cout << "\nCharacter: " << namei->c_str() << std::endl;
+            std::cout << "\nCharacter: " << *namei << std::endl;
 
-            std::string s;
+            QString s;
             int x, y, c;
 
             if (getSrc(*sizei, *namei, s)) {

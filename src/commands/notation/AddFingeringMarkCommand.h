@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -45,7 +44,6 @@ public:
 
     static QString getGlobalName(std::string fingering = "");
     static QString getActionName(std::string fingering = "");
-    static QString getShortcut(std::string fingering = "");
 
     static std::string getArgument(QString actionName, CommandArgumentQuerier &);
 

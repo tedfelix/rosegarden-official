@@ -33,10 +33,10 @@ void
 ChangeStemsCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(true), "", "Ctrl+PageUp", "stems_up",
+        ("stems_up",
          new ArgumentAndSelectionCommandBuilder<ChangeStemsCommand>());
     r->registerCommand
-        (getGlobalName(false), "", "Ctrl+PageDown", "stems_down",
+        ("stems_down",
          new ArgumentAndSelectionCommandBuilder<ChangeStemsCommand>());
 }
 

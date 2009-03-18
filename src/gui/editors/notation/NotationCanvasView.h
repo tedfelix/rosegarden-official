@@ -16,6 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW
+
 #ifndef _RG_NOTATIONCANVASVIEW_H_
 #define _RG_NOTATIONCANVASVIEW_H_
 
@@ -212,4 +214,5 @@ protected:
 
 }
 
+#endif
 #endif

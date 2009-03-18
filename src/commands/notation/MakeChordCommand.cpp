@@ -34,7 +34,7 @@ void
 MakeChordCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "group-chord", "", "make_chord",
+        ("make_chord",
          new SelectionCommandBuilder<MakeChordCommand>());
 }
 

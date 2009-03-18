@@ -33,7 +33,7 @@ void
 MakeNotesViableCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "make_notes_viable",
+        ("make_notes_viable",
          new SelectionCommandBuilder<MakeNotesViableCommand>());
 }
 

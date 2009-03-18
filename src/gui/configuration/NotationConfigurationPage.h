@@ -97,7 +97,7 @@ protected:
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;
 
-    void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
+    void populateSizeCombo(QComboBox *combo, QString font, int dfltSize);
 };
 
 

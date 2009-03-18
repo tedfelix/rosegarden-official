@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -24,15 +23,11 @@
 #include "base/Event.h"
 
 
-class QMouseEvent;
-
-
 namespace Rosegarden
 {
 
 class ViewElement;
-class MatrixView;
-class MatrixStaff;
+class MatrixViewSegment;
 class MatrixElement;
 class Event;
 
@@ -44,53 +39,34 @@ class MatrixPainter : public MatrixTool
     friend class MatrixToolBox;
 
 public:
+    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
+    virtual void handleMouseRelease(const MatrixMouseEvent *);
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent *event,
-                                       ViewElement*);
-
-    /**
-     * Set the duration of the element
-     */
-    virtual int handleMouseMove(timeT,
-                                int height,
-                                QMouseEvent*);
-
-    /**
-     * Actually insert the new element
-     */
-    virtual void handleMouseRelease(timeT,
-                                    int height,
-                                    QMouseEvent*);
+    virtual void ready();
+    virtual void stow();
 
     static const QString ToolName;
 
+public slots:
     /**
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Event *event);
 
-    virtual void ready();
-    virtual void stow();
-
 protected slots:
-
-    void slotMatrixScrolled(int x, int y);
+    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
-    MatrixPainter(MatrixView*);
-    MatrixPainter(QString name, MatrixView*);
+    MatrixPainter(MatrixWidget *);
 
     void setBasicContextHelp();
 
-    MatrixElement* m_currentElement;
-    MatrixStaff*   m_currentStaff;
+    timeT m_clickTime;
+    MatrixElement *m_currentElement;
+    MatrixViewSegment *m_currentViewSegment;
 };
-
-
 
 
 }

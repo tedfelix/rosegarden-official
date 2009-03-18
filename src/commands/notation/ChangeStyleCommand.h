@@ -51,7 +51,7 @@ public:
 
     static QString getGlobalName(NoteStyleName style);
 
-    static Mark getArgument(QString actionName, CommandArgumentQuerier &);
+    static NoteStyleName getArgument(QString actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

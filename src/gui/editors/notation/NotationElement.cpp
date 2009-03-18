@@ -16,7 +16,7 @@
 */
 
 
-#include <Q3CanvasItem>
+#include <QGraphicsItem>
 #include "NotationElement.h"
 #include "misc/Debug.h"
 
@@ -26,17 +26,17 @@
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
 
-#include <Q3Canvas>
-
 namespace Rosegarden
 {
 
-NotationElement::NotationElement(Event *event)
-        : ViewElement(event),
-        m_recentlyRegenerated(false),
-        m_isColliding(false),
-        m_canvasItem(0),
-        m_extraItems(0)
+static const int NotationElementData = 1;
+
+NotationElement::NotationElement(Event *event) :
+    ViewElement(event),
+    m_recentlyRegenerated(false),
+    m_isColliding(false),
+    m_item(0),
+    m_extraItems(0)
 {
     //     NOTATION_DEBUG << "new NotationElement "
     //                          << this << " wrapping " << event << endl;
@@ -44,7 +44,7 @@ NotationElement::NotationElement(Event *event)
 
 NotationElement::~NotationElement()
 {
-    removeCanvasItem();
+    removeItem();
 }
 
 timeT
@@ -60,28 +60,28 @@ NotationElement::getViewDuration() const
 }
 
 double
-NotationElement::getCanvasX()
+NotationElement::getSceneX()
 {
-    if (m_canvasItem)
-        return m_canvasItem->x();
+    if (m_item)
+        return m_item->x();
     else {
-        std::cerr << "ERROR: No canvas item for this notation element:";
+        std::cerr << "ERROR: No scene item for this notation element:";
         event()->dump(std::cerr);
-        throw NoCanvasItem("No canvas item for notation element of type " +
-                           event()->getType(), __FILE__, __LINE__);
+        throw NoGraphicsItem("No scene item for notation element of type " +
+                             event()->getType(), __FILE__, __LINE__);
     }
 }
 
 double
-NotationElement::getCanvasY()
+NotationElement::getSceneY()
 {
-    if (m_canvasItem)
-        return m_canvasItem->y();
+    if (m_item)
+        return m_item->y();
     else {
-        std::cerr << "ERROR: No canvas item for this notation element:";
+        std::cerr << "ERROR: No scene item for this notation element:";
         event()->dump(std::cerr);
-        throw NoCanvasItem("No canvas item for notation element of type " +
-                           event()->getType(), __FILE__, __LINE__);
+        throw NoGraphicsItem("No scene item for notation element of type " +
+                             event()->getType(), __FILE__, __LINE__);
     }
 }
 
@@ -112,43 +112,44 @@ NotationElement::isGrace() const
 }
 
 void
-NotationElement::setCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY)
+NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
-    removeCanvasItem();
+    removeItem();
+    e->setData(NotationElementData, QVariant::fromValue((void *)this));
+    e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;
-    m_canvasItem = e;
-    e->move(canvasX, canvasY);
+    m_item = e;
 }
 
 void
-NotationElement::addCanvasItem(Q3CanvasItem *e, double canvasX, double canvasY)
+NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
-    if (!m_canvasItem) {
-        std::cerr << "ERROR: Attempt to add extra canvas item to element without main canvas item:";
+    if (!m_item) {
+        std::cerr << "ERROR: Attempt to add extra scene item to element without main scene item:";
         event()->dump(std::cerr);
-        throw NoCanvasItem("No canvas item for notation element of type " +
-                           event()->getType(), __FILE__, __LINE__);
+        throw NoGraphicsItem("No scene item for notation element of type " +
+                             event()->getType(), __FILE__, __LINE__);
     }
     if (!m_extraItems) {
         m_extraItems = new ItemList;
     }
-    e->move(canvasX, canvasY);
+    e->setData(NotationElementData, QVariant::fromValue((void *)this));
+    e->setPos(sceneX, sceneY);
     m_extraItems->push_back(e);
 }
 
 void
-NotationElement::removeCanvasItem()
+NotationElement::removeItem()
 {
     m_recentlyRegenerated = false;
 
-    delete m_canvasItem;
-    m_canvasItem = 0;
+    delete m_item;
+    m_item = 0;
 
     if (m_extraItems) {
 
         for (ItemList::iterator i = m_extraItems->begin();
-                i != m_extraItems->end(); ++i)
-            delete *i;
+             i != m_extraItems->end(); ++i) delete *i;
         m_extraItems->clear();
 
         delete m_extraItems;
@@ -157,19 +158,19 @@ NotationElement::removeCanvasItem()
 }
 
 void
-NotationElement::reposition(double canvasX, double canvasY)
+NotationElement::reposition(double sceneX, double sceneY)
 {
     m_recentlyRegenerated = false;
-    if (!m_canvasItem)
+    if (!m_item)
         return ;
 
-    double dx = canvasX - m_canvasItem->x();
-    double dy = canvasY - m_canvasItem->y();
-    m_canvasItem->move(canvasX, canvasY);
+    double dx = sceneX - m_item->x();
+    double dy = sceneY - m_item->y();
+    m_item->setPos(sceneX, sceneY);
 
     if (m_extraItems) {
         for (ItemList::iterator i = m_extraItems->begin();
-                i != m_extraItems->end(); ++i) {
+             i != m_extraItems->end(); ++i) {
             (*i)->moveBy(dx, dy);
         }
     }
@@ -178,15 +179,23 @@ NotationElement::reposition(double canvasX, double canvasY)
 bool
 NotationElement::isSelected()
 {
-    return m_canvasItem ? m_canvasItem->selected() : false;
+    return m_item ? m_item->isSelected() : false;
 }
 
 void
 NotationElement::setSelected(bool selected)
 {
     m_recentlyRegenerated = false;
-    if (m_canvasItem)
-        m_canvasItem->setSelected(selected);
+    if (m_item)
+        m_item->setSelected(selected);
+}
+
+NotationElement *
+NotationElement::getNotationElement(QGraphicsItem *item)
+{
+    QVariant v = item->data(NotationElementData);
+    if (v.isNull()) return 0;
+    return (NotationElement *)v.value<void *>();
 }
 
 }

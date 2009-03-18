@@ -33,7 +33,7 @@ void
 RestoreSlursCommand::registerCommand(CommandRegistry *r)
 {
     r->registerCommand
-        (getGlobalName(), "", "", "restore_slurs",
+        ("restore_slurs",
          new SelectionCommandBuilder<RestoreSlursCommand>());
 }
 

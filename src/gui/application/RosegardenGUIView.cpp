@@ -257,6 +257,7 @@ void RosegardenGUIView::print(Composition* p, bool previewOnly)
         return ;
     }
 
+#ifdef NOT_JUST_NOW //!!!
     NotationView *notationView = new NotationView(getDocument(),
                                  segmentsToEdit,
                                  this,
@@ -271,6 +272,7 @@ void RosegardenGUIView::print(Composition* p, bool previewOnly)
     notationView->print(previewOnly);
 
     delete notationView;
+#endif
 }
 
 void RosegardenGUIView::selectTool(const QString toolName)
@@ -438,14 +440,22 @@ void RosegardenGUIView::slotEditSegmentNotation(Segment* p)
 
 void RosegardenGUIView::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
 {
+    NewNotationView *notationView =
+        new NewNotationView(getDocument(), segmentsToEdit, this);
+
+    notationView->show();
+
+#ifdef NOT_JUST_NOW
     NotationView *view = createNotationView(segmentsToEdit);
     if (view)
         view->show();
+#endif
 }
 
 NotationView *
 RosegardenGUIView::createNotationView(std::vector<Segment *> segmentsToEdit)
 {
+#ifdef NOT_JUST_NOW
     NotationView *notationView =
         new NotationView(getDocument(), segmentsToEdit, this, true);
 
@@ -543,6 +553,7 @@ RosegardenGUIView::createNotationView(std::vector<Segment *> segmentsToEdit)
     }
 
     return notationView;
+#endif
 }
 
 void RosegardenGUIView::slotEditSegmentMatrix(Segment* p)
@@ -624,7 +635,7 @@ void RosegardenGUIView::slotEditSegmentsMatrix(std::vector<Segment *> segmentsTo
             i != segmentsToEdit.end(); ++i) {
         std::vector<Segment *> tmpvec;
         tmpvec.push_back(*i);
-        MatrixView *view = createMatrixView(tmpvec, false);
+        NewMatrixView *view = createMatrixView(tmpvec, false);
         if (view) {
             view->show();
             if (++count == maxEditorsToOpen)
@@ -640,7 +651,7 @@ void RosegardenGUIView::slotEditSegmentsPercussionMatrix(std::vector<Segment *> 
             i != segmentsToEdit.end(); ++i) {
         std::vector<Segment *> tmpvec;
         tmpvec.push_back(*i);
-        MatrixView *view = createMatrixView(tmpvec, true);
+        NewMatrixView *view = createMatrixView(tmpvec, true);
         if (view) {
             view->show();
             if (++count == maxEditorsToOpen)
@@ -649,13 +660,13 @@ void RosegardenGUIView::slotEditSegmentsPercussionMatrix(std::vector<Segment *> 
     }
 }
 
-MatrixView *
+NewMatrixView *
 RosegardenGUIView::createMatrixView(std::vector<Segment *> segmentsToEdit, bool drumMode)
 {
-    MatrixView *matrixView = new MatrixView(getDocument(),
-                                            segmentsToEdit,
-                                            this,
-                                            drumMode);
+    NewMatrixView *matrixView = new NewMatrixView(getDocument(),
+                                                  segmentsToEdit,
+                                                  drumMode,
+                                                  this);
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -738,8 +749,8 @@ RosegardenGUIView::createMatrixView(std::vector<Segment *> segmentsToEdit, bool 
         // + m_trackEditor->getCompositionView()->visibleWidth() / 2);
         timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
         // then scroll the notation view to that time, "localized" for the current segment
-        matrixView->scrollToTime(centerSegmentView);
-        matrixView->updateView();
+//!!!        matrixView->scrollToTime(centerSegmentView);
+//!!!        matrixView->updateView();
     }
 
     return matrixView;
@@ -1746,6 +1757,7 @@ RosegardenGUIView::slotUpdateRecordingSegment(Segment *segment,
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
+#ifdef NOT_JUST_NOW //!!!
     NotationView *view = createNotationView(segments);
     if (!view)
         return ;
@@ -1757,6 +1769,7 @@ RosegardenGUIView::slotUpdateRecordingSegment(Segment *segment,
     */
 
     view->show();
+#endif
 }
 
 void

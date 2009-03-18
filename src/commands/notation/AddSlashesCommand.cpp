@@ -36,7 +36,7 @@ AddSlashesCommand::registerCommand(CommandRegistry *r)
 
     for (int i = 0; i <= 5; ++i) {
         r->registerCommand
-            (slashTitles[i], "", "", QString("slashes_%1").arg(i),
+            (QString("slashes_%1").arg(i),
              new ArgumentAndSelectionCommandBuilder<AddSlashesCommand>());
     }
 }

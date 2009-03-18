@@ -16,10 +16,6 @@
 */
 
 
-#include <Q3Canvas>
-#include <Q3CanvasItem>
-#include <Q3CanvasPixmap>
-#include <Q3CanvasRectangle>
 #include "NotationStaff.h"
 #include "misc/Debug.h"
 #include <QApplication>
@@ -40,27 +36,27 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
-#include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/editors/guitar/Chord.h"
-#include "gui/general/LinedStaff.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/ProgressReporter.h"
-#include "gui/kdeext/QCanvasSimpleSprite.h"
 #include "NotationChord.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
-#include "NotationView.h"
+#include "NotationHLayout.h"
+#include "NotationScene.h"
 #include "NoteFontFactory.h"
 #include "NotePixmapFactory.h"
 #include "NotePixmapParameters.h"
 #include "NoteStyleFactory.h"
+#include "StaffLayout.h"
 #include <QSettings>
 #include <QMessageBox>
-#include <Q3Canvas>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>
@@ -69,30 +65,33 @@
 namespace Rosegarden
 {
 
-NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
+NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
                              SnapGrid *snapGrid, int id,
-                             NotationView *view,
-                             std::string fontName, int resolution) :
-        ProgressReporter(0),
-        LinedStaff(canvas, segment, snapGrid, id, resolution,
-                   resolution / 16 + 1,  // line thickness
-                   LinearMode, 0, 0,  // pageMode, pageWidth and pageHeight set later
-                   0 // row spacing
-                  ),
-        m_notePixmapFactory(0),
-        m_graceNotePixmapFactory(0),
-        m_previewSprite(0),
-        m_staffName(0),
-        m_notationView(view),
-        m_legerLineCount(8),
-        m_barNumbersEvery(0),
-        m_colourQuantize(true),
-        m_showUnknowns(true),
-        m_showRanges(true),
-        m_showCollisions(true),
-        m_printPainter(0),
-        m_ready(false),
-        m_lastRenderedBar(0)
+                             NotePixmapFactory *normalFactory,
+                             NotePixmapFactory *smallFactory) :
+    ViewSegment(*segment),
+    StaffLayout(scene, this, snapGrid, id,
+                normalFactory->getSize(),
+                normalFactory->getSize() / 16 + 1,  // line thickness
+                LinearMode, 0, 0,  // pageMode, pageWidth and pageHeight set later
+                0 // row spacing
+        ),
+    ProgressReporter(0),
+    m_notePixmapFactory(normalFactory),
+    m_graceNotePixmapFactory(smallFactory),
+    m_previewItem(0),
+    m_staffName(0),
+    m_notationScene(scene),
+    m_legerLineCount(8),
+    m_barNumbersEvery(0),
+    m_colourQuantize(true),
+    m_showUnknowns(true),
+    m_showRanges(true),
+    m_showCollisions(true),
+    m_printPainter(0),
+    m_refreshStatusId(segment->getNewRefreshStatusId()),
+    m_ready(false),
+    m_lastRenderedBar(0)
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -106,35 +105,35 @@ NotationStaff::NotationStaff(Q3Canvas *canvas, Segment *segment,
 
     m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
 
-    changeFont(fontName, resolution);
-
     settings.endGroup();
+
+    setLineThickness(m_notePixmapFactory->getStaffLineThickness());
 }
 
 NotationStaff::~NotationStaff()
 {
+    NOTATION_DEBUG << "NotationStaff::~NotationStaff()" << endl;
     deleteTimeSignatures();
-    delete m_notePixmapFactory;
-    delete m_graceNotePixmapFactory;
+}
+
+SegmentRefreshStatus &
+NotationStaff::getRefreshStatus() const
+{
+    return m_segment.getRefreshStatus(m_refreshStatusId);
 }
 
 void
-NotationStaff::changeFont(std::string fontName, int size)
+NotationStaff::resetRefreshStatus()
 {
-    setResolution(size);
+    m_segment.getRefreshStatus(m_refreshStatusId).setNeedsRefresh(false);
+}
 
-    delete m_notePixmapFactory;
-    m_notePixmapFactory = new NotePixmapFactory(fontName, size);
-
-    std::vector<int> sizes = NoteFontFactory::getScreenSizes(fontName);
-    int graceSize = size;
-    for (unsigned int i = 0; i < sizes.size(); ++i) {
-        if (sizes[i] == size || sizes[i] > size*3 / 4)
-            break;
-        graceSize = sizes[i];
-    }
-    delete m_graceNotePixmapFactory;
-    m_graceNotePixmapFactory = new NotePixmapFactory(fontName, graceSize);
+void
+NotationStaff::setNotePixmapFactories(NotePixmapFactory *normal,
+                                      NotePixmapFactory *small)
+{
+    m_notePixmapFactory = normal;
+    m_graceNotePixmapFactory = small;
 
     setLineThickness(m_notePixmapFactory->getStaffLineThickness());
 }
@@ -147,16 +146,17 @@ NotationStaff::insertTimeSignature(double layoutX,
         return ;
 
     m_notePixmapFactory->setSelected(false);
-    Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeTimeSigPixmap(timeSig);
-    QCanvasTimeSigSprite *sprite =
-        new QCanvasTimeSigSprite(layoutX, pixmap, m_canvas);
+    QGraphicsItem *item = m_notePixmapFactory->makeTimeSig(timeSig);
+//    QCanvasTimeSigSprite *sprite =
+//        new QCanvasTimeSigSprite(layoutX, pixmap, m_canvas);
 
-    LinedStaffCoords sigCoords =
-        getCanvasCoordsForLayoutCoords(layoutX, getLayoutYForHeight(4));
+    StaffLayoutCoords sigCoords =
+        getSceneCoordsForLayoutCoords(layoutX, getLayoutYForHeight(4));
 
-    sprite->move(sigCoords.first, (double)sigCoords.second);
-    sprite->show();
-    m_timeSigs.insert(sprite);
+    getScene()->addItem(item);
+    item->setPos(sigCoords.first, (double)sigCoords.second);
+    item->show();
+    m_timeSigs.insert(item);
 }
 
 void
@@ -164,8 +164,7 @@ NotationStaff::deleteTimeSignatures()
 {
     //    NOTATION_DEBUG << "NotationStaff::deleteTimeSignatures()" << endl;
 
-    for (SpriteSet::iterator i = m_timeSigs.begin();
-            i != m_timeSigs.end(); ++i) {
+    for (ItemSet::iterator i = m_timeSigs.begin(); i != m_timeSigs.end(); ++i) {
         delete *i;
     }
 
@@ -181,64 +180,57 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
     timeT barStart = getSegment().getComposition()->getBarStart(barNo);
 
     Clef clef = getSegment().getClefAtTime(barStart, t);
-    if (t < barStart)
-        needClef = true;
+    if (t < barStart) needClef = true;
 
     ::Rosegarden::Key key = getSegment().getKeyAtTime(barStart, t);
-    if (t < barStart)
-        needKey = true;
+    if (t < barStart) needKey = true;
 
     double dx = m_notePixmapFactory->getBarMargin() / 2;
 
-    if (!m_notationView->isInPrintMode())
+    if (!m_notationScene->isInPrintMode())
         m_notePixmapFactory->setShaded(true);
 
     if (needClef) {
 
         int layoutY = getLayoutYForHeight(clef.getAxisHeight());
 
-        LinedStaffCoords coords =
-            getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
+        StaffLayoutCoords coords =
+            getSceneCoordsForLayoutCoords(layoutX + dx, layoutY);
 
-        Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeClefPixmap(clef);
+        QGraphicsItem *item = m_notePixmapFactory->makeClef(clef);
+        getScene()->addItem(item);
+        item->setPos(coords.first, coords.second);
+        item->show();
+        m_repeatedClefsAndKeys.insert(item);
 
-        QCanvasNonElementSprite *sprite =
-            new QCanvasNonElementSprite(pixmap, m_canvas);
-
-        sprite->move(coords.first, coords.second);
-        sprite->show();
-        m_repeatedClefsAndKeys.insert(sprite);
-
-        dx += pixmap->width() + m_notePixmapFactory->getNoteBodyWidth() * 2 / 3;
+        dx += item->boundingRect().width() +
+            m_notePixmapFactory->getNoteBodyWidth() * 2 / 3;
     }
 
     if (needKey) {
 
         int layoutY = getLayoutYForHeight(12);
 
-        LinedStaffCoords coords =
-            getCanvasCoordsForLayoutCoords(layoutX + dx, layoutY);
+        StaffLayoutCoords coords =
+            getSceneCoordsForLayoutCoords(layoutX + dx, layoutY);
 
-        Q3CanvasPixmap *pixmap = m_notePixmapFactory->makeKeyPixmap(key, clef);
+        QGraphicsItem *item = m_notePixmapFactory->makeKey(key, clef);
+        getScene()->addItem(item);
+        item->setPos(coords.first, coords.second);
+        item->show();
+        m_repeatedClefsAndKeys.insert(item);
 
-        QCanvasNonElementSprite *sprite =
-            new QCanvasNonElementSprite(pixmap, m_canvas);
-
-        sprite->move(coords.first, coords.second);
-        sprite->show();
-        m_repeatedClefsAndKeys.insert(sprite);
-
-        dx += pixmap->width();
+        dx += item->boundingRect().width();
     }
 
     /* attempt to blot out things like slurs & ties that overrun this area: doesn't work
      
-        if (m_notationView->isInPrintMode() && (needClef || needKey)) {
+        if (m_notationScene->isInPrintMode() && (needClef || needKey)) {
      
     	int layoutY = getLayoutYForHeight(14);
     	int h = getLayoutYForHeight(-8) - layoutY;
      
-    	LinedStaffCoords coords =
+    	StaffLayoutCoords coords =
     	    getCanvasCoordsForLayoutCoords(layoutX, layoutY);
         
     	Q3CanvasRectangle *rect = new Q3CanvasRectangle(coords.first, coords.second,
@@ -275,16 +267,15 @@ NotationStaff::drawStaffName()
         getSegment().getComposition()->
         getTrackById(getSegment().getTrack())->getLabel();
 
-    Q3CanvasPixmap *map =
-        m_notePixmapFactory->makeTextPixmap
-        (Text(m_staffNameText, Text::StaffName));
+    m_staffName =
+        m_notePixmapFactory->makeText(Text(m_staffNameText, Text::StaffName));
 
-    m_staffName = new QCanvasStaffNameSprite(map, m_canvas);
+    getScene()->addItem(m_staffName);
 
     int layoutY = getLayoutYForHeight(3);
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(0, layoutY);
-    m_staffName->move(getX() + getMargin() + m_notePixmapFactory->getNoteBodyWidth(),
-                      coords.second - map->height() / 2);
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(0, layoutY);
+    m_staffName->setPos(getX() + getMargin() + m_notePixmapFactory->getNoteBodyWidth(),
+                        coords.second - m_staffName->boundingRect().height() / 2);
     m_staffName->show();
 }
 
@@ -297,19 +288,19 @@ NotationStaff::isStaffNameUpToDate()
 }
 
 timeT
-NotationStaff::getTimeAtCanvasCoords(double cx, int cy) const
+NotationStaff::getTimeAtSceneCoords(double cx, int cy) const
 {
-    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
-    RulerScale * rs = m_notationView->getHLayout();
+    StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(cx, cy);
+    RulerScale * rs = m_notationScene->getHLayout();
     return rs->getTimeForX(layoutCoords.first);
 }
 
 void
-NotationStaff::getClefAndKeyAtCanvasCoords(double cx, int cy,
-        Clef &clef,
-        ::Rosegarden::Key &key) const
+NotationStaff::getClefAndKeyAtSceneCoords(double cx, int cy,
+                                           Clef &clef,
+                                           ::Rosegarden::Key &key) const
 {
-    LinedStaffCoords layoutCoords = getLayoutCoordsForCanvasCoords(cx, cy);
+    StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(cx, cy);
     int i;
 
     for (i = 0; i < m_clefChanges.size(); ++i) {
@@ -425,12 +416,12 @@ NotationStaff::getElementUnderLayoutX(double x,
 }
 
 std::string
-NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
+NotationStaff::getNoteNameAtSceneCoords(double x, int y,
         Accidental) const
 {
     Clef clef;
     ::Rosegarden::Key key;
-    getClefAndKeyAtCanvasCoords(x, y, clef, key);
+    getClefAndKeyAtSceneCoords(x, y, clef, key);
 
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -438,7 +429,7 @@ NotationStaff::getNoteNameAtCanvasCoords(double x, int y,
     int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
     settings.endGroup();
 
-    Pitch p(getHeightAtCanvasCoords(x, y), clef, key);
+    Pitch p(getHeightAtSceneCoords(x, y), clef, key);
     //!!! tr() how?
     return p.getAsString(key.isSharp(), true, baseOctave);
 }
@@ -475,14 +466,14 @@ NotationStaff::renderElements(NotationElementList::iterator from,
 
         if (isDirectlyPrintable(*it)) {
             // notes are renderable direct to the printer, so don't render
-            // them to the canvas here
+            // them to the scene here
             continue;
         }
 
         if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
             // force rendering in positionElements instead
             NotationElement* el = static_cast<NotationElement*>(*it);
-            el->removeCanvasItem();
+            el->removeItem();
             continue;
         }
 
@@ -561,7 +552,7 @@ NotationStaff::renderPrintable(timeT from, timeT to)
 const NotationProperties &
 NotationStaff::getProperties() const
 {
-    return m_notationView->getProperties();
+    return m_notationScene->getProperties();
 }
 
 void
@@ -649,11 +640,11 @@ NotationStaff::positionElements(timeT from, timeT to)
         }
 
         bool selected = isSelected(it);
-        bool needNewSprite = (selected != el->isSelected());
+        bool needNewItem = (selected != el->isSelected());
 
-        if (!el->getCanvasItem()) {
+        if (!el->getItem()) {
 
-            needNewSprite = true;
+            needNewItem = true;
 
         } else if (el->isNote() && !el->isRecentlyRegenerated()) {
 
@@ -663,14 +654,14 @@ NotationStaff::positionElements(timeT from, timeT to)
             // user inserts a new clef; unfortunately this means
             // inserting clefs is rather slow.
 
-            needNewSprite = needNewSprite || !elementNotMovedInY(el);
+            needNewItem = needNewItem || !elementNotMovedInY(el);
 
-            if (!needNewSprite) {
+            if (!needNewItem) {
 
                 // If the event is a beamed or tied-forward note, then
-                // we might need a new sprite if the distance from
+                // we might need a new item if the distance from
                 // this note to the next has changed (because the beam
-                // or tie is part of the note's sprite).
+                // or tie is part of the note's item).
 
                 bool spanning = false;
                 (void)(el->event()->get
@@ -682,7 +673,7 @@ NotationStaff::positionElements(timeT from, timeT to)
                 }
 
                 if (spanning) {
-                    needNewSprite =
+                    needNewItem =
                         (el->getViewAbsoluteTime() < nextBarTime ||
                          !elementShiftedOnly(it));
                 }
@@ -690,10 +681,10 @@ NotationStaff::positionElements(timeT from, timeT to)
 
         } else if (el->event()->isa(Indication::EventType) &&
                    !el->isRecentlyRegenerated()) {
-            needNewSprite = true;
+            needNewItem = true;
         }
 
-        if (needNewSprite) {
+        if (needNewItem) {
             renderSingleElement(it, currentClef, currentKey, selected);
             ++elementsRendered;
         }
@@ -703,8 +694,8 @@ NotationStaff::positionElements(timeT from, timeT to)
             currentKey = ::Rosegarden::Key(*el->event());
         }
 
-        if (!needNewSprite) {
-            LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+        if (!needNewItem) {
+            StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
                                       (el->getLayoutX(), (int)el->getLayoutY());
             el->reposition(coords.first, (double)coords.second);
         }
@@ -731,16 +722,16 @@ NotationStaff::positionElements(timeT from, timeT to)
 void
 NotationStaff::truncateClefsAndKeysAt(int x)
 {
-    for (FastVector<ClefChange>::iterator i = m_clefChanges.begin();
-            i != m_clefChanges.end(); ++i) {
+    for (std::vector<ClefChange>::iterator i = m_clefChanges.begin();
+         i != m_clefChanges.end(); ++i) {
         if (i->first >= x) {
             m_clefChanges.erase(i, m_clefChanges.end());
             break;
         }
     }
 
-    for (FastVector<KeyChange>::iterator i = m_keyChanges.begin();
-            i != m_keyChanges.end(); ++i) {
+    for (std::vector<KeyChange>::iterator i = m_keyChanges.begin();
+         i != m_keyChanges.end(); ++i) {
         if (i->first >= x) {
             m_keyChanges.erase(i, m_keyChanges.end());
             break;
@@ -802,27 +793,26 @@ NotationStaff::findUnchangedBarEnd(timeT to)
 bool
 NotationStaff::elementNotMoved(NotationElement *elt)
 {
-    if (!elt->getCanvasItem())
-        return false;
+    if (!elt->getItem()) return false;
 
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-                              (elt->getLayoutX(), (int)elt->getLayoutY());
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
+        (elt->getLayoutX(), (int)elt->getLayoutY());
 
     bool ok =
-        (int)(elt->getCanvasX()) == (int)(coords.first) &&
-        (int)(elt->getCanvasY()) == (int)(coords.second);
+        (int)(elt->getSceneX()) == (int)(coords.first) &&
+        (int)(elt->getSceneY()) == (int)(coords.second);
 
     if (!ok) {
         NOTATION_DEBUG
-        << "elementNotMoved: elt at " << elt->getViewAbsoluteTime() <<
-        ", ok is " << ok << endl;
-        NOTATION_DEBUG << "(cf " << (int)(elt->getCanvasX()) << " vs "
-        << (int)(coords.first) << ", "
-        << (int)(elt->getCanvasY()) << " vs "
-        << (int)(coords.second) << ")" << endl;
+            << "elementNotMoved: elt at " << elt->getViewAbsoluteTime() <<
+            ", ok is " << ok << endl;
+        NOTATION_DEBUG << "(cf " << (int)(elt->getSceneX()) << " vs "
+                       << (int)(coords.first) << ", "
+                       << (int)(elt->getSceneY()) << " vs "
+                       << (int)(coords.second) << ")" << endl;
     } else {
         NOTATION_DEBUG << "elementNotMoved: elt at " << elt->getViewAbsoluteTime()
-        << " is ok" << endl;
+                       << " is ok" << endl;
     }
 
     return ok;
@@ -831,19 +821,18 @@ NotationStaff::elementNotMoved(NotationElement *elt)
 bool
 NotationStaff::elementNotMovedInY(NotationElement *elt)
 {
-    if (!elt->getCanvasItem())
-        return false;
+    if (!elt->getItem()) return false;
 
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
                               (elt->getLayoutX(), (int)elt->getLayoutY());
 
-    bool ok = (int)(elt->getCanvasY()) == (int)(coords.second);
+    bool ok = (int)(elt->getSceneY()) == (int)(coords.second);
 
     //     if (!ok) {
     // 	NOTATION_DEBUG
     // 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
     // 	    ", ok is " << ok << endl;
-    // 	NOTATION_DEBUG << "(cf " << (int)(elt->getCanvasY()) << " vs "
+    // 	NOTATION_DEBUG << "(cf " << (int)(elt->getSceneY()) << " vs "
     // 		  << (int)(coords.second) << ")" << std::endl;
     //     }
     return ok;
@@ -859,21 +848,17 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
             j != getViewElementList()->end(); ++j) {
 
         NotationElement *elt = static_cast<NotationElement*>(*j);
-        if (!elt->getCanvasItem())
-            break;
+        if (!elt->getItem()) break;
 
-        LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
+        StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
                                   (elt->getLayoutX(), (int)elt->getLayoutY());
 
         // regard any shift in y as suspicious
-        if ((int)(elt->getCanvasY()) != (int)(coords.second))
-            break;
+        if ((int)(elt->getSceneY()) != (int)(coords.second)) break;
 
-        int myShift = (int)(elt->getCanvasX()) - (int)(coords.first);
-        if (j == i)
-            shift = myShift;
-        else if (myShift != shift)
-            break;
+        int myShift = (int)(elt->getSceneX()) - (int)(coords.first);
+        if (j == i) shift = myShift;
+        else if (myShift != shift) break;
 
         if (elt->getViewAbsoluteTime() > (*i)->getViewAbsoluteTime()) {
             // all events up to and including this one have passed
@@ -946,19 +931,22 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     try {
 
-        Q3CanvasPixmap *pixmap = 0;
+        QGraphicsItem *item = 0;
 
         m_notePixmapFactory->setSelected(selected);
         m_notePixmapFactory->setShaded(invisible);
         int z = selected ? 3 : 0;
 
         // these are actually only used for the printer stuff
-        LinedStaffCoords coords;
-        if (m_printPainter)
-            coords = getCanvasCoordsForLayoutCoords
+        StaffLayoutCoords coords;
+        if (m_printPainter) {
+            coords = getSceneCoordsForLayoutCoords
                      (elt->getLayoutX(), (int)elt->getLayoutY());
+        }
 
         FitPolicy policy = PretendItFittedAllAlong;
+
+        NOTATION_DEBUG << "renderSingleElement: Inspecting a thingy" << endl;
 
         if (elt->isNote()) {
 
@@ -970,23 +958,21 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             // NotationHLayout sets this property if it finds the rest
             // in the middle of a chord -- Quantizer still sometimes gets
             // this wrong
-            elt->event()->get
-            <Bool>(properties.REST_TOO_SHORT, ignoreRest);
+            elt->event()->get<Bool>(properties.REST_TOO_SHORT, ignoreRest);
 
             if (!ignoreRest) {
 
-                Note::Type note = elt->event()->get
-                                  <Int>(BaseProperties::NOTE_TYPE);
-                int dots = elt->event()->get
-                           <Int>(BaseProperties::NOTE_DOTS);
+                Note::Type note =
+                    elt->event()->get<Int>(BaseProperties::NOTE_TYPE);
+                int dots =
+                    elt->event()->get<Int>(BaseProperties::NOTE_DOTS);
                 restParams.setNoteType(note);
                 restParams.setDots(dots);
                 setTuplingParameters(elt, restParams);
                 restParams.setQuantized(false);
                 bool restOutside = false;
-                elt->event()->get
-                <Bool>(properties.REST_OUTSIDE_STAVE,
-                       restOutside);
+                elt->event()->get<Bool>
+                    (properties.REST_OUTSIDE_STAVE, restOutside);
                 restParams.setRestOutside(restOutside);
                 if (restOutside) {
                     NOTATION_DEBUG << "NotationStaff::renderSingleElement() : rest outside staff" << endl;
@@ -998,17 +984,18 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 if (m_printPainter) {
                     m_notePixmapFactory->drawRest
-                    (restParams,
-                     *m_printPainter, int(coords.first), coords.second);
+                        (restParams,
+                         *m_printPainter, int(coords.first), coords.second);
                 } else {
-                    pixmap = m_notePixmapFactory->makeRestPixmap(restParams);
+                    NOTATION_DEBUG << "renderSingleElement: It's a normal rest" << endl;
+                    item = m_notePixmapFactory->makeRest(restParams);
                 }
             }
 
         } else if (elt->event()->isa(Clef::EventType)) {
 
-            pixmap = m_notePixmapFactory->makeClefPixmap
-                     (Clef(*elt->event()));
+            NOTATION_DEBUG << "renderSingleElement: It's a clef" << endl;
+            item = m_notePixmapFactory->makeClef(Clef(*elt->event()));
 
         } else if (elt->event()->isa(::Rosegarden::Key::EventType)) {
 
@@ -1028,34 +1015,29 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 }
             }
 
-            pixmap = m_notePixmapFactory->makeKeyPixmap
-                     (key, currentClef, cancelKey);
+            NOTATION_DEBUG << "renderSingleElement: It's a key" << endl;
+            item = m_notePixmapFactory->makeKey(key, currentClef, cancelKey);
 
         } else if (elt->event()->isa(Text::EventType)) {
 
             policy = MoveBackToFit;
 
             if (elt->event()->has(Text::TextTypePropertyName) &&
-                    elt->event()->get
-                    <String>
-                    (Text::TextTypePropertyName) ==
-                    Text::Annotation &&
-                    !m_notationView->areAnnotationsVisible()) {
+                elt->event()->get<String>(Text::TextTypePropertyName) ==
+                Text::Annotation &&
+                !m_notationScene->areAnnotationsVisible()) {
 
                 // nothing I guess
 
             }
             else if (elt->event()->has(Text::TextTypePropertyName) &&
-                     elt->event()->get
-                     <String>
-                     (Text::TextTypePropertyName) ==
+                     elt->event()->get<String>(Text::TextTypePropertyName) ==
                      Text::LilyPondDirective &&
-                     !m_notationView->areLilyPondDirectivesVisible()) {
+                     !m_notationScene->areLilyPondDirectivesVisible()) {
 
                 // nothing here either
 
-            }
-            else {
+            } else {
 
                 try {
                     if (m_printPainter) {
@@ -1072,8 +1054,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                             m_printPainter->restore();
                         }
                     } else {
-                        pixmap = m_notePixmapFactory->makeTextPixmap
-                                 (Text(*elt->event()));
+                        NOTATION_DEBUG << "renderSingleElement: It's a normal text" << endl;
+                        item = m_notePixmapFactory->makeText(Text(*elt->event()));
                     }
                 } catch (Exception e) { // Text ctor failed
                     NOTATION_DEBUG << "Bad text event" << endl;
@@ -1138,8 +1120,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 }
 
                 if (indicationType == Indication::Crescendo ||
-                        indicationType == Indication::Decrescendo) {
-
+                    indicationType == Indication::Decrescendo) {
+                    
                     if (m_printPainter) {
                         for (double w = -1, inc = 0; w != 0; inc += w) {
                             w = setPainterClipping(m_printPainter,
@@ -1153,8 +1135,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                             m_printPainter->restore();
                         }
                     } else {
-                        pixmap = m_notePixmapFactory->makeHairpinPixmap
-                                 (length, indicationType == Indication::Crescendo);
+                        item = m_notePixmapFactory->makeHairpin
+                            (length, indicationType == Indication::Crescendo);
                     }
 
                 } else if (indicationType == Indication::Slur ||
@@ -1164,12 +1146,9 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     long dy = 0;
                     long length = 10;
 
-                    elt->event()->get
-                    <Bool>(properties.SLUR_ABOVE, above);
-                    elt->event()->get
-                    <Int>(properties.SLUR_Y_DELTA, dy);
-                    elt->event()->get
-                    <Int>(properties.SLUR_LENGTH, length);
+                    elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
+                    elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
+                    elt->event()->get<Int>(properties.SLUR_LENGTH, length);
 
                     if (m_printPainter) {
                         for (double w = -1, inc = 0; w != 0; inc += w) {
@@ -1185,9 +1164,9 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                             m_printPainter->restore();
                         }
                     } else {
-                        pixmap = m_notePixmapFactory->makeSlurPixmap
-                                 (length, dy, above,
-                                  indicationType == Indication::PhrasingSlur);
+                        item = m_notePixmapFactory->makeSlur
+                            (length, dy, above,
+                             indicationType == Indication::PhrasingSlur);
                     }
 
                 } else {
@@ -1208,15 +1187,14 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                                 m_printPainter->restore();
                             }
                         } else {
-                            pixmap = m_notePixmapFactory->makeOttavaPixmap
-                                     (length, octaves);
+                            item = m_notePixmapFactory->makeOttava
+                                (length, octaves);
                         }
                     } else {
 
-                        NOTATION_DEBUG
-                        << "Unrecognised indicationType " << indicationType << endl;
+                        NOTATION_DEBUG << "Unrecognised indicationType " << indicationType << endl;
                         if (m_showUnknowns) {
-                            pixmap = m_notePixmapFactory->makeUnknownPixmap();
+                            item = m_notePixmapFactory->makeUnknown();
                         }
                     }
                 }
@@ -1232,7 +1210,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             elt->event()->get
             <Int>(Controller::NUMBER, controlNumber);
 
-            Studio *studio = &m_notationView->getDocument()->getStudio();
+            Studio *studio = &m_notationScene->getDocument()->getStudio();
             Track *track = getSegment().getComposition()->getTrackById
                            (getSegment().getTrack());
 
@@ -1267,18 +1245,17 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
             if (isSustain) {
                 long value = 0;
-                elt->event()->get
-                <Int>(Controller::VALUE, value);
+                elt->event()->get<Int>(Controller::VALUE, value);
                 if (value > 0) {
-                    pixmap = m_notePixmapFactory->makePedalDownPixmap();
+                    item = m_notePixmapFactory->makePedalDown();
                 } else {
-                    pixmap = m_notePixmapFactory->makePedalUpPixmap();
+                    item = m_notePixmapFactory->makePedalUp();
                 }
 
             } else {
 
                 if (m_showUnknowns) {
-                    pixmap = m_notePixmapFactory->makeUnknownPixmap();
+                    item = m_notePixmapFactory->makeUnknown();
                 }
             }
         } else if (elt->event()->isa(Guitar::Chord::EventType)) {
@@ -1305,9 +1282,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                 		    } else {
                 			*/
 
-                pixmap = m_notePixmapFactory->makeGuitarChordPixmap (chord.getFingering(),
-                         int(coords.first),
-                         coords.second);
+                item = m_notePixmapFactory->makeGuitarChord
+                    (chord.getFingering(), int(coords.first), coords.second);
                 //		    }
             } catch (Exception e) { // GuitarChord ctor failed
                 NOTATION_DEBUG << "Bad guitar chord event" << endl;
@@ -1316,7 +1292,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         } else {
 
             if (m_showUnknowns) {
-                pixmap = m_notePixmapFactory->makeUnknownPixmap();
+                item = m_notePixmapFactory->makeUnknown();
             }
         }
 
@@ -1326,19 +1302,18 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
             // No need, we already set and showed it in renderNote
 
-        } else if (pixmap) {
+        } else if (item) {
 
-            setPixmap(elt, pixmap, z, policy);
+            setItem(elt, item, z, policy);
 
         } else {
-            elt->removeCanvasItem();
+            elt->removeItem();
         }
 
         //	NOTATION_DEBUG << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
 
     } catch (...) {
-        std::cerr << "Event lacks the proper properties: "
-        << std::endl;
+        std::cerr << "Event lacks the proper properties: " << std::endl;
         elt->event()->dump(std::cerr);
     }
 
@@ -1348,16 +1323,16 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
 double
 NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
-                                  double dx, double w, LinedStaffCoords &coords,
+                                  double dx, double w, StaffLayoutCoords &coords,
                                   FitPolicy policy)
 {
     painter->save();
 
     //    NOTATION_DEBUG << "NotationStaff::setPainterClipping: lx " << lx << ", dx " << dx << ", w " << w << endl;
 
-    coords = getCanvasCoordsForLayoutCoords(lx + dx, ly);
+    coords = getSceneCoordsForLayoutCoords(lx + dx, ly);
     int row = getRowForLayoutX(lx + dx);
-    double rightMargin = getCanvasXForRightOfRow(row);
+    double rightMargin = getSceneXForRightOfRow(row);
     double available = rightMargin - coords.first;
 
     //    NOTATION_DEBUG << "NotationStaff::setPainterClipping: row " << row << ", rightMargin " << rightMargin << ", available " << available << endl;
@@ -1365,24 +1340,24 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
     switch (policy) {
 
     case SplitToFit: {
-            bool fit = (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth());
-            if (dx > 0.01 || !fit) {
-                int clipLeft = int(coords.first), clipWidth = int(available);
-                if (dx < 0.01) {
-                    // never clip the left side of the first part of something
-                    clipWidth += clipLeft;
-                    clipLeft = 0;
-                }
-                QRect clip(clipLeft, coords.second - getRowSpacing() / 2,
-                           clipWidth, getRowSpacing());
-				painter->setClipRect(clip, Qt::ReplaceClip); //QPainter::CoordPainter);
-                coords.first -= dx;
+        bool fit = (w - dx <= available + m_notePixmapFactory->getNoteBodyWidth());
+        if (dx > 0.01 || !fit) {
+            int clipLeft = int(coords.first), clipWidth = int(available);
+            if (dx < 0.01) {
+                // never clip the left side of the first part of something
+                clipWidth += clipLeft;
+                clipLeft = 0;
             }
-            if (fit) {
-                return 0.0;
-            }
-            return available;
+            QRect clip(clipLeft, coords.second - getRowSpacing() / 2,
+                       clipWidth, getRowSpacing());
+            painter->setClipRect(clip, Qt::ReplaceClip); //QPainter::CoordPainter);
+            coords.first -= dx;
         }
+        if (fit) {
+            return 0.0;
+        }
+        return available;
+    }
 
     case MoveBackToFit:
         if (w - dx > available + m_notePixmapFactory->getNoteBodyWidth()) {
@@ -1390,93 +1365,92 @@ NotationStaff::setPainterClipping(QPainter *painter, double lx, int ly,
         }
         return 0.0;
 
-    default:
+    case PretendItFittedAllAlong:
         return 0.0;
     }
+
+    return 0.0;
 }
 
 void
-NotationStaff::setPixmap(NotationElement *elt, Q3CanvasPixmap *pixmap, int z,
-                         FitPolicy policy)
+NotationStaff::setItem(NotationElement *elt, QGraphicsItem *item, int z,
+                       FitPolicy policy)
 {
     double layoutX = elt->getLayoutX();
     int layoutY = (int)elt->getLayoutY();
 
-    elt->removeCanvasItem();
+    elt->removeItem();
 
     while (1) {
 
-        LinedStaffCoords coords =
-            getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+        StaffLayoutCoords coords =
+            getSceneCoordsForLayoutCoords(layoutX, layoutY);
 
-        double canvasX = coords.first;
-        int canvasY = coords.second;
+        double sceneX = coords.first;
+        int sceneY = coords.second;
 
-        Q3CanvasItem *item = 0;
+        QGraphicsPixmapItem *pitem = dynamic_cast<QGraphicsPixmapItem *>(item);
 
-        if (m_pageMode == LinearMode || policy == PretendItFittedAllAlong) {
-
-            item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
-
-        } else {
+        if (m_pageMode != LinearMode &&
+            policy != PretendItFittedAllAlong &&
+            pitem) {
 
             int row = getRowForLayoutX(layoutX);
-            double rightMargin = getCanvasXForRightOfRow(row);
-            double extent = canvasX + pixmap->width();
+            double rightMargin = getSceneXForRightOfRow(row);
+            double extent = sceneX + pitem->pixmap().width();
 
-            //	    NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
+            NOTATION_DEBUG << "NotationStaff::setPixmap: row " << row << ", right margin " << rightMargin << ", extent " << extent << endl;
 
             if (extent > rightMargin + m_notePixmapFactory->getNoteBodyWidth()) {
 
                 if (policy == SplitToFit) {
 
-                    //		    NOTATION_DEBUG << "splitting at " << (rightMargin-canvasX) << endl;
+                    NOTATION_DEBUG << "splitting at " << (rightMargin-sceneX) << endl;
 
                     std::pair<QPixmap, QPixmap> split =
-                        PixmapFunctions::splitPixmap(*pixmap,
-                                                     int(rightMargin - canvasX));
+                        PixmapFunctions::splitPixmap(pitem->pixmap(),
+                                                     int(rightMargin - sceneX));
 
-                    Q3CanvasPixmap *leftCanvasPixmap = new Q3CanvasPixmap
-                                                      (split.first, QPoint(pixmap->offsetX(), pixmap->offsetY()));
+                    QGraphicsPixmapItem *left = new QGraphicsPixmapItem(split.first);
+                    left->setOffset(pitem->offset());
 
-                    Q3CanvasPixmap *rightCanvasPixmap = new Q3CanvasPixmap
-                                                       (split.second, QPoint(0, pixmap->offsetY()));
+                    QGraphicsPixmapItem *right = new QGraphicsPixmapItem(split.second);
+                    right->setOffset(QPointF(0, pitem->offset().y()));
+                    
+                    getScene()->addItem(left);
+                    left->setZValue(z);
+                    left->show();
 
-                    item = new QCanvasNotationSprite(*elt, leftCanvasPixmap, m_canvas);
-                    item->setZ(z);
-
-                    if (elt->getCanvasItem()) {
-                        elt->addCanvasItem(item, canvasX, canvasY);
+                    if (elt->getItem()) {
+                        elt->addItem(left, sceneX, sceneY);
                     } else {
-                        elt->setCanvasItem(item, canvasX, canvasY);
+                        elt->setItem(left, sceneX, sceneY);
                     }
 
-                    item->show();
+                    delete item;
+                    item = right;
 
-                    delete pixmap;
-                    pixmap = rightCanvasPixmap;
-
-                    layoutX += rightMargin - canvasX + 0.01; // ensure flip to next row
+                    layoutX += rightMargin - sceneX + 0.01; // ensure flip to next row
 
                     continue;
 
                 } else { // policy == MoveBackToFit
 
-                    item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
                     elt->setLayoutX(elt->getLayoutX() - (extent - rightMargin));
-                    coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
-                    canvasX = coords.first;
+                    coords = getSceneCoordsForLayoutCoords(layoutX, layoutY);
+                    sceneX = coords.first;
                 }
-            } else {
-                item = new QCanvasNotationSprite(*elt, pixmap, m_canvas);
             }
         }
 
-        item->setZ(z);
-        if (elt->getCanvasItem()) {
-            elt->addCanvasItem(item, canvasX, canvasY);
+        NOTATION_DEBUG << "NotationStaff::setItem: item = " << (void *)item << " (pitem = " << (void *)pitem << ", scene = " << item->scene() << ")" << endl;
+
+        getScene()->addItem(item);
+        item->setZValue(z);
+        if (elt->getItem()) {
+            elt->addItem(item, sceneX, sceneY);
         } else {
-            elt->setCanvasItem(item, canvasX, canvasY);
+            elt->setItem(item, sceneX, sceneY);
         }
         item->show();
         break;
@@ -1486,57 +1460,46 @@ NotationStaff::setPixmap(NotationElement *elt, Q3CanvasPixmap *pixmap, int z,
 void
 NotationStaff::renderNote(ViewElementList::iterator &vli)
 {
-    NotationElement* elt = static_cast<NotationElement*>(*vli);
+    NotationElement *elt = static_cast<NotationElement *>(*vli);
 
     const NotationProperties &properties(getProperties());
     static NotePixmapParameters params(Note::Crotchet, 0);
 
-    Note::Type note = elt->event()->get
-                      <Int>(BaseProperties::NOTE_TYPE);
-    int dots = elt->event()->get
-               <Int>(BaseProperties::NOTE_DOTS);
+    Note::Type note = elt->event()->get<Int>(BaseProperties::NOTE_TYPE);
+    int dots = elt->event()->get<Int>(BaseProperties::NOTE_DOTS);
 
     Accidental accidental = Accidentals::NoAccidental;
-    (void)elt->event()->get
-    <String>(properties.DISPLAY_ACCIDENTAL, accidental);
+    (void)elt->event()->get<String>(properties.DISPLAY_ACCIDENTAL, accidental);
 
     bool cautionary = false;
     if (accidental != Accidentals::NoAccidental) {
-        (void)elt->event()->get
-        <Bool>(properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY,
-               cautionary);
+        (void)elt->event()->get<Bool>
+            (properties.DISPLAY_ACCIDENTAL_IS_CAUTIONARY, cautionary);
     }
 
     bool up = true;
     //    (void)(elt->event()->get<Bool>(properties.STEM_UP, up));
-    (void)(elt->event()->get
-           <Bool>(properties.VIEW_LOCAL_STEM_UP, up));
+    (void)(elt->event()->get<Bool>(properties.VIEW_LOCAL_STEM_UP, up));
 
     bool flag = true;
-    (void)(elt->event()->get
-           <Bool>(properties.DRAW_FLAG, flag));
+    (void)(elt->event()->get<Bool>(properties.DRAW_FLAG, flag));
 
     bool beamed = false;
-    (void)(elt->event()->get
-           <Bool>(properties.BEAMED, beamed));
+    (void)(elt->event()->get<Bool>(properties.BEAMED, beamed));
 
     bool shifted = false;
-    (void)(elt->event()->get
-           <Bool>(properties.NOTE_HEAD_SHIFTED, shifted));
+    (void)(elt->event()->get<Bool>(properties.NOTE_HEAD_SHIFTED, shifted));
 
     bool dotShifted = false;
-    (void)(elt->event()->get
-           <Bool>(properties.NOTE_DOT_SHIFTED, dotShifted));
+    (void)(elt->event()->get<Bool>(properties.NOTE_DOT_SHIFTED, dotShifted));
 
     long stemLength = m_notePixmapFactory->getNoteBodyHeight();
-    (void)(elt->event()->get
-           <Int>(properties.UNBEAMED_STEM_LENGTH, stemLength));
+    (void)(elt->event()->get<Int>(properties.UNBEAMED_STEM_LENGTH, stemLength));
 
     long heightOnStaff = 0;
     int legerLines = 0;
 
-    (void)(elt->event()->get
-           <Int>(properties.HEIGHT_ON_STAFF, heightOnStaff));
+    (void)(elt->event()->get<Int>(properties.HEIGHT_ON_STAFF, heightOnStaff));
     if (heightOnStaff < 0) {
         legerLines = heightOnStaff;
     } else if (heightOnStaff > 8) {
@@ -1544,8 +1507,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     }
 
     long slashes = 0;
-    (void)(elt->event()->get
-           <Int>(properties.SLASHES, slashes));
+    (void)(elt->event()->get<Int>(properties.SLASHES, slashes));
 
     bool quantized = false;
     if (m_colourQuantize && !elt->isTuplet()) {
@@ -1556,8 +1518,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     params.setQuantized(quantized);
 
     bool trigger = false;
-    if (elt->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
-        trigger = true;
+    if (elt->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) trigger = true;
     params.setTrigger(trigger);
 
     bool inRange = true;
@@ -1591,13 +1552,11 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
     bool primary = false;
     int safeVertDistance = 0;
 
-    if (elt->event()->get
-            <Bool>(properties.CHORD_PRIMARY_NOTE, primary)
-            && primary) {
+    if (elt->event()->get<Bool>(properties.CHORD_PRIMARY_NOTE, primary)
+        && primary) {
 
         long marks = 0;
-        elt->event()->get
-        <Int>(properties.CHORD_MARK_COUNT, marks);
+        elt->event()->get<Int>(properties.CHORD_MARK_COUNT, marks);
         if (marks) {
             NotationChord chord(*getViewElementList(), vli,
                                 m_segment.getComposition()->getNotationQuantizer(),
@@ -1653,22 +1612,17 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
                 stemLength = -stemLength;
 
             int nextBeamCount =
-                elt->event()->get
-                <Int>(properties.BEAM_NEXT_BEAM_COUNT);
+                elt->event()->get<Int>(properties.BEAM_NEXT_BEAM_COUNT);
             int width =
-                elt->event()->get
-                <Int>(properties.BEAM_SECTION_WIDTH);
+                elt->event()->get<Int>(properties.BEAM_SECTION_WIDTH);
             int gradient =
-                elt->event()->get
-                <Int>(properties.BEAM_GRADIENT);
+                elt->event()->get<Int>(properties.BEAM_GRADIENT);
 
             bool thisPartialBeams(false), nextPartialBeams(false);
-            (void)elt->event()->get
-            <Bool>
-            (properties.BEAM_THIS_PART_BEAMS, thisPartialBeams);
-            (void)elt->event()->get
-            <Bool>
-            (properties.BEAM_NEXT_PART_BEAMS, nextPartialBeams);
+            (void)elt->event()->get<Bool>
+                (properties.BEAM_THIS_PART_BEAMS, thisPartialBeams);
+            (void)elt->event()->get<Bool>
+                (properties.BEAM_NEXT_PART_BEAMS, nextPartialBeams);
 
             params.setBeamed(true);
             params.setNextBeamCount(nextBeamCount);
@@ -1710,11 +1664,11 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
 
     if (m_printPainter) {
 
-        // Return no canvas item, but instead render straight to
+        // Return no scene item, but instead render straight to
         // the printer.
 
-        LinedStaffCoords coords = getCanvasCoordsForLayoutCoords
-                                  (elt->getLayoutX(), (int)elt->getLayoutY());
+        StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
+            (elt->getLayoutX(), (int)elt->getLayoutY());
 
         // We don't actually know how wide the note drawing will be,
         // but we should be able to use a fairly pessimistic estimate
@@ -1730,7 +1684,7 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
                                    SplitToFit);
 
             factory->drawNote
-            (params, *m_printPainter, int(coords.first), coords.second);
+                (params, *m_printPainter, int(coords.first), coords.second);
 
             m_printPainter->restore(); // save() called by setPainterClipping
         }
@@ -1740,35 +1694,33 @@ NotationStaff::renderNote(ViewElementList::iterator &vli)
         // The normal on-screen case
 
         bool collision = false;
-        Q3CanvasItem * haloItem = 0;
+        QGraphicsItem *haloItem = 0;
         if (m_showCollisions) {
             collision = elt->isColliding();
             if (collision) {
                 // Make collision halo
-                Q3CanvasPixmap *haloPixmap = factory->makeNoteHaloPixmap(params);
-                haloItem = new QCanvasNotationSprite(*elt, haloPixmap, m_canvas);
-                haloItem->setZ(-1);
+                haloItem = factory->makeNoteHalo(params);
+                haloItem->setZValue(-1);
             }
         }
 
-        Q3CanvasPixmap *pixmap = factory->makeNotePixmap(params);
+        QGraphicsItem *item = factory->makeNote(params);
 
         int z = 0;
-        if (factory->isSelected())
-            z = 3;
-        else if (quantized)
-            z = 2;
+        if (factory->isSelected()) z = 3;
+        else if (quantized) z = 2;
 
-        setPixmap(elt, pixmap, z, SplitToFit);
+        setItem(elt, item, z, SplitToFit);
 
         if (collision) {
             // Display collision halo
-            LinedStaffCoords coords =
-                getCanvasCoordsForLayoutCoords(elt->getLayoutX(),
+            StaffLayoutCoords coords =
+                getSceneCoordsForLayoutCoords(elt->getLayoutX(),
                                                elt->getLayoutY());
-            double canvasX = coords.first;
-            int canvasY = coords.second;
-            elt->addCanvasItem(haloItem, canvasX, canvasY);
+            double sceneX = coords.first;
+            int sceneY = coords.second;
+            elt->addItem(haloItem, sceneX, sceneY);
+            getScene()->addItem(haloItem);
             haloItem->show();
         }
     }
@@ -1782,28 +1734,26 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 
     params.setTupletCount(0);
     long tuplingLineY = 0;
-    bool tupled = (elt->event()->get
-                   <Int>(properties.TUPLING_LINE_MY_Y, tuplingLineY));
+    bool tupled =
+        (elt->event()->get<Int>(properties.TUPLING_LINE_MY_Y, tuplingLineY));
 
     if (tupled) {
 
         long tuplingLineWidth = 0;
-        if (!elt->event()->get
-                <Int>(properties.TUPLING_LINE_WIDTH, tuplingLineWidth)) {
+        if (!elt->event()->get<Int>
+            (properties.TUPLING_LINE_WIDTH, tuplingLineWidth)) {
             std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line width" << std::endl;
         }
 
         long tuplingLineGradient = 0;
-        if (!(elt->event()->get
-                <Int>(properties.TUPLING_LINE_GRADIENT,
-                      tuplingLineGradient))) {
+        if (!(elt->event()->get<Int>
+              (properties.TUPLING_LINE_GRADIENT, tuplingLineGradient))) {
             std::cerr << "WARNING: Tupled event at " << elt->event()->getAbsoluteTime() << " has no tupling line gradient" << std::endl;
         }
 
         bool tuplingLineFollowsBeam = false;
-        elt->event()->get
-        <Bool>(properties.TUPLING_LINE_FOLLOWS_BEAM,
-               tuplingLineFollowsBeam);
+        elt->event()->get<Bool>
+            (properties.TUPLING_LINE_FOLLOWS_BEAM, tuplingLineFollowsBeam);
 
         long tupletCount;
         if (elt->event()->get<Int>
@@ -1821,8 +1771,7 @@ NotationStaff::setTuplingParameters(NotationElement *elt,
 bool
 NotationStaff::isSelected(NotationElementList::iterator it)
 {
-    const EventSelection *selection =
-        m_notationView->getCurrentSelection();
+    const EventSelection *selection = m_notationScene->getSelection();
     return selection && selection->contains((*it)->event());
 }
 
@@ -1851,24 +1800,23 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
     params.setSelected(false);
     params.setHighlighted(true);
 
-    delete m_previewSprite;
-    m_previewSprite = new QCanvasSimpleSprite
-                      (npf->makeNotePixmap(params), m_canvas);
+    delete m_previewItem;
+    m_previewItem = npf->makeNote(params);
 
     int layoutY = getLayoutYForHeight(heightOnStaff);
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, layoutY);
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(layoutX, layoutY);
 
-    m_previewSprite->move(coords.first, (double)coords.second);
-    m_previewSprite->setZ(4);
-    m_previewSprite->show();
-    m_canvas->update();
+    getScene()->addItem(m_previewItem);
+    m_previewItem->setPos(coords.first, (double)coords.second);
+    m_previewItem->setZValue(4);
+    m_previewItem->show();
 }
 
 void
 NotationStaff::clearPreviewNote()
 {
-    delete m_previewSprite;
-    m_previewSprite = 0;
+    delete m_previewItem;
+    m_previewItem = 0;
 }
 
 bool
@@ -1891,8 +1839,7 @@ NotationStaff::wrapEvent(Event *e)
         }
     */
 
-    if (wrap)
-        wrap = Staff::wrapEvent(e);
+    if (wrap) wrap = ViewSegment::wrapEvent(e);
 
     return wrap;
 }
@@ -1901,13 +1848,51 @@ void
 NotationStaff::eventRemoved(const Segment *segment,
                             Event *event)
 {
-    LinedStaff::eventRemoved(segment, event);
-    m_notationView->handleEventRemoved(event);
+    ViewSegment::eventRemoved(segment, event);
+    m_notationScene->handleEventRemoved(event);
 }
+
+void
+NotationStaff::regenerate(timeT from, timeT to, bool secondary)
+{
+    // Secondary is true if this regeneration was caused by edits to
+    // another staff, and the content of this staff has not itself
+    // changed.
+
+    // The staff must have been re-layed-out (by the layout engine)
+    // before this is called to regenerate its elements.
+
+    //!!! NB This does not yet correctly handle clef and key lists!
+
+    NotationElementList::iterator i = findUnchangedBarStart(from);
+    NotationElementList::iterator j = findUnchangedBarEnd(to);
+
+    if (!secondary) renderElements(i, j);
+
+    //!!! would be simpler if positionElements could also be called
+    //!!! with iterators -- if renderElements/positionElements are
+    //!!! going to be internal functions, it's OK and more consistent
+    //!!! for them both to take itrs.  positionElements has a quirk
+    //!!! that makes it not totally trivial to change (use of
+    //!!! nextBarTime)
+
+    if (i != getViewElementList()->end()) {
+        positionElements((*i)->getViewAbsoluteTime(), 
+                         getSegment().getEndMarkerTime());
+    } else {
+        // Shouldn't happen; if it does, let's re-do everything just in case
+        positionElements(getSegment().getStartTime(),
+                         getSegment().getEndMarkerTime());
+    }
+
+}
+
 
 void
 NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 {
+    abort();//!!!
+
     // first time through this, m_ready is false -- we mark it true
 
     NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
@@ -1921,7 +1906,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
         if (!movedOnly && m_ready) { // undo all the rendering we've already done
             for (NotationElementList::iterator i = getViewElementList()->begin();
                  i != getViewElementList()->end(); ++i) {
-                static_cast<NotationElement *>(*i)->removeCanvasItem();
+                static_cast<NotationElement *>(*i)->removeItem();
             }
 
             m_clefChanges.clear();
@@ -1951,15 +1936,14 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
         for (int bar = fromBar; bar <= finalBar; ++bar) {
 
-            if (bar > toBar)
-                movedOnly = true;
+            if (bar > toBar) movedOnly = true;
 
-            //	    NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
+            NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
 
             if (bar >= m_lastRenderCheck.first &&
-                    bar <= m_lastRenderCheck.second) {
+                bar <= m_lastRenderCheck.second) {
 
-                //		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
+                NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
 
                 if (!movedOnly || m_status[bar] == UnRendered) {
                     renderElements
@@ -1971,7 +1955,7 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
                 m_status[bar] = Positioned;
 
             } else if (!m_ready) {
-                //		NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
+                NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
 
                 // first time through -- we don't need a separate render phase,
                 // only to mark as not yet positioned
@@ -1979,12 +1963,12 @@ NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
 
             } else if (movedOnly) {
                 if (m_status[bar] == Positioned) {
-                    //		    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
+                    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
                     m_status[bar] = Rendered;
                 }
 
             } else {
-                //		NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
+                NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
 
                 m_status[bar] = UnRendered;
             }
@@ -2003,8 +1987,10 @@ NotationStaff::setPrintPainter(QPainter *painter)
 bool
 NotationStaff::checkRendered(timeT from, timeT to)
 {
-    if (!m_ready)
-        return false;
+    abort();//!!!
+
+    if (!m_ready) return false;
+
     Composition *composition = getSegment().getComposition();
     if (!composition) {
         NOTATION_DEBUG << "NotationStaff::checkRendered: warning: segment has no composition -- is my paint event late?" << endl;
@@ -2017,8 +2003,7 @@ NotationStaff::checkRendered(timeT from, timeT to)
     int toBar = composition->getBarNumber(to);
     bool something = false;
 
-    if (fromBar > toBar)
-        std::swap(fromBar, toBar);
+    if (fromBar > toBar) std::swap(fromBar, toBar);
 
     for (int bar = fromBar; bar <= toBar; ++bar) {
         //	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
@@ -2053,15 +2038,15 @@ NotationStaff::checkRendered(timeT from, timeT to)
 bool
 NotationStaff::doRenderWork(timeT from, timeT to)
 {
-    if (!m_ready)
-        return true;
+    abort();//!!!
+
+    if (!m_ready) return true;
     Composition *composition = getSegment().getComposition();
 
     int fromBar = composition->getBarNumber(from);
     int toBar = composition->getBarNumber(to);
 
-    if (fromBar > toBar)
-        std::swap(fromBar, toBar);
+    if (fromBar > toBar) std::swap(fromBar, toBar);
 
     for (int bar = fromBar; bar <= toBar; ++bar) {
 
@@ -2106,10 +2091,13 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
     timeT barEndTime = composition->getBarEnd(bar);
 
     for (ViewElementList::iterator it =
-                          getViewElementList()->findTime(barStartTime);
-             (it != getViewElementList()->end()) 
-                 && ((*it)->getViewAbsoluteTime() < barEndTime); ++it) {
+             getViewElementList()->findTime(barStartTime);
+         (it != getViewElementList()->end()) &&
+             ((*it)->getViewAbsoluteTime() < barEndTime);
+         ++it) {
+
         if ((*it)->event()->isa(Clef::EventType)) {
+
             // Clef found
             Clef clef = *(*it)->event();
 
@@ -2130,6 +2118,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
             }
     
         } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
+
             ::Rosegarden::Key key = *(*it)->event();
     
             // Is this key already in m_keyChanges list ?
@@ -2151,7 +2140,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
     }
 }
 
-LinedStaff::BarStyle
+StaffLayout::BarStyle
 NotationStaff::getBarStyle(int barNo) const
 {
     const Segment *s = &getSegment();
@@ -2200,7 +2189,7 @@ NotationStaff::getBarStyle(int barNo) const
 double
 NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 {
-    LinedStaff::BarStyle style = getBarStyle(barNo);
+    StaffLayout::BarStyle style = getBarStyle(barNo);
 
     NOTATION_DEBUG << "getBarInset(" << barNo << "," << isFirstBarInRow << ")" << endl;
 
@@ -2222,8 +2211,8 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
     Clef clef;
 
     for (Segment::iterator i = s.findTime(barStart);
-            s.isBeforeEndMarker(i) && ((*i)->getNotationAbsoluteTime() == barStart);
-            ++i) {
+         s.isBeforeEndMarker(i) && ((*i)->getNotationAbsoluteTime() == barStart);
+         ++i) {
 
         NOTATION_DEBUG << "type " << (*i)->getType() << " at " << (*i)->getNotationAbsoluteTime() << endl;
 
@@ -2296,7 +2285,8 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
     return inset;
 }
 
-Rosegarden::ViewElement* NotationStaff::makeViewElement(Rosegarden::Event* e)
+Rosegarden::ViewElement *
+NotationStaff::makeViewElement(Rosegarden::Event* e)
 {
     return new NotationElement(e);
 }

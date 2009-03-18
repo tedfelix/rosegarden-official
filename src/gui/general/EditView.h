@@ -16,6 +16,8 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NO_LONGER_USED
+
 #ifndef _RG_EDITVIEW_H_
 #define _RG_EDITVIEW_H_
 
@@ -94,12 +96,12 @@ public:
     /**
      * Return the active item
      */
-    ActiveItem* activeItem() { return m_activeItem; }
+//!!!    ActiveItem* activeItem() { return m_activeItem; }
 
     /**
      * Set the active item
      */
-    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
+//!!!    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
 
     /**
      * Set the current event selection.
@@ -137,7 +139,7 @@ public slots:
      * @see ActiveItem
      * @see Q3CanvasItem#setActive
      */
-    virtual void slotActiveItemPressed(QMouseEvent*, Q3CanvasItem*);
+//!!!    virtual void slotActiveItemPressed(QMouseEvent*, Q3CanvasItem*);
 
     virtual void slotSetInsertCursorPosition(timeT position) = 0;
     
@@ -374,7 +376,7 @@ protected:
     /// The current selection of Events (for cut/copy/paste)
     EventSelection* m_currentEventSelection;
 
-    ActiveItem* m_activeItem;
+//!!!    ActiveItem* m_activeItem;
 
     RosegardenCanvasView *m_canvasView;
 
@@ -399,5 +401,7 @@ protected:
 
 
 }
+
+#endif
 
 #endif

@@ -39,12 +39,11 @@ AddFingeringMarkCommand::registerCommand(CommandRegistry *r)
     for (int i = 0; i < fingerings.size(); ++i) {
         std::string fingering = fingerings[i];
         r->registerCommand
-            (getGlobalName(fingering), "",
-             getShortcut(fingering), getActionName(fingering),
+            (getActionName(fingering),
              new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
     }
     r->registerCommand
-        (getGlobalName(), "", "", getActionName(),
+        (getActionName(),
          new ArgumentAndSelectionCommandBuilder<AddFingeringMarkCommand>());
 }
 
@@ -74,20 +73,6 @@ AddFingeringMarkCommand::getActionName(std::string fingering)
     }
 }    
 
-QString
-AddFingeringMarkCommand::getShortcut(std::string fingering)
-{
-    if (fingering == "") {
-        return "";
-    }
-    QString base = "Alt+%1";
-    if (fingering == "+") {
-        return base.arg(9);
-    } else {
-        return base.arg(strtoqstr(fingering));
-    }
-}    
-
 std::string
 AddFingeringMarkCommand::getArgument(QString actionName,
                                      CommandArgumentQuerier &querier)
@@ -106,6 +91,7 @@ AddFingeringMarkCommand::getArgument(QString actionName,
             return qstrtostr(remainder);
         }
     }
+    return "";
 }
 
 std::vector<std::string>
@@ -125,13 +111,15 @@ AddFingeringMarkCommand::getStandardFingerings()
 void
 AddFingeringMarkCommand::modifySegment()
 {
+    if (m_fingering == "") return;
+
     EventSelection::eventcontainer::iterator i;
     Segment &segment(m_selection->getSegment());
 
     std::set<Event *> done;
 
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
 
         if (done.find(*i) != done.end())
             continue;

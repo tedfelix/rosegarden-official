@@ -32,7 +32,7 @@ namespace Rosegarden
 void
 RestoreStemsCommand::registerCommand(CommandRegistry *r)
 {
-    r->registerCommand(getGlobalName(), "", "", "restore_stems",
+    r->registerCommand("restore_stems",
                        new SelectionCommandBuilder<RestoreStemsCommand>());
 }
 

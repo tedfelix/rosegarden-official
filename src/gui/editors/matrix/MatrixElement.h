@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,109 +18,51 @@
 #ifndef _RG_MATRIXELEMENT_H_
 #define _RG_MATRIXELEMENT_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasRectangle>
 #include "base/ViewElement.h"
-#include <QBrush>
-#include <Q3Canvas>
-#include "QCanvasMatrixRectangle.h"
 
 class QColor;
-
+class QGraphicsItem;
 
 namespace Rosegarden
 {
 
+class MatrixScene;
 class Event;
 
 class MatrixElement : public ViewElement
 {
-
-    typedef std::vector <Q3CanvasRectangle *> OverlapRectangles;
-
-
 public:
-    MatrixElement(Event *event, bool drum);
-
+    MatrixElement(MatrixScene *scene, 
+                  Event *event,
+                  bool drum);
     virtual ~MatrixElement();
-
-    void setCanvas(Q3Canvas* c);
-
-    /**
-     * Returns the actual x coordinate of the element on the canvas
-     */
-    double getCanvasX() const { return m_canvasRect->x(); }
-
-    /**
-     * Returns the actual y coordinate of the element on the canvas
-     */
-    double getCanvasY() const { return m_canvasRect->y(); }
-
-    double getCanvasZ() const { return m_canvasRect->z(); }
-
-    /**
-     * Sets the x coordinate of the element on the canvas
-     */
-    void setCanvasX(double x) { m_canvasRect->setX(x); }
-
-    /**
-     * Sets the y coordinate of the element on the canvas
-     */
-    void setCanvasY(double y) { m_canvasRect->setY(y); }
-
-    void setCanvasZ(double z) { m_canvasRect->setZ(z); }
-
-    /**
-     * Sets the width of the rectangle on the canvas
-     */
-    void setWidth(int w)   { m_canvasRect->setSize(w, m_canvasRect->height()); }
-    int getWidth() { return m_canvasRect->width(); }
-
-    /**
-     * Sets the height of the rectangle on the canvas
-     */
-    void setHeight(int h)   { m_canvasRect->setSize(m_canvasRect->width(), h); }
-    int getHeight() { return m_canvasRect->height(); }
 
     /// Returns true if the wrapped event is a note
     bool isNote() const;
 
-    /*
-     * Set the colour of the element
-     */
-    void setColour(const QColor &colour)
-        { m_canvasRect->setBrush(QBrush(colour)); }
+    double getWidth() const { return m_width; }
 
-    /**
-     * Draws overlap rectangles (if any)
-     * (should not be called in drum mode)
-     */
-    void drawOverlapRectangles();
+    void setSelected(bool selected);
 
-    /**
-     * Removes overlap rectangles if any
-     */
-    void removeOverlapRectangles();
+    /// Adjust the item to reflect the values of our event
+    void reconfigure();
 
-    /**
-     * If element rectangle is currently visible gets its size and returns true.
-     * Returns false if element rectangle is undefined or not visible.
-     */
-    bool getVisibleRectangle(QRect &rectangle);
+    /// Adjust the item to reflect the given values, not those of our event
+    void reconfigure(timeT time, timeT duration);
 
-    /**
-     * Redraw overlap rectangles of all matrix elements colliding with rect
-     */
-    void redrawOverlaps(QRect rect);
+    /// Adjust the item to reflect the given values, not those of our event
+    void reconfigure(timeT time, timeT duration, int pitch);
+
+    /// Adjust the item to reflect the given values, not those of our event
+    void reconfigure(timeT time, timeT duration, int pitch, int velocity);
+
+    static MatrixElement *getMatrixElement(QGraphicsItem *);
 
 protected:
-
-    //--------------- Data members ---------------------------------
-
-    QCanvasMatrixRectangle *m_canvasRect;
-
-    OverlapRectangles *m_overlapRectangles;
-
+    MatrixScene *m_scene;
+    bool m_drum;
+    QGraphicsItem *m_item;
+    double m_width;
 };
 
 

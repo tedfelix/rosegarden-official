@@ -16,47 +16,42 @@
 */
 
 
-#include <Q3Canvas>
-#include <Q3CanvasItem>
-#include <Q3CanvasLine>
-#include <Q3CanvasRectangle>
-#include <Q3CanvasText>
-#include "LinedStaff.h"
+#include "StaffLayout.h"
 
 #include "misc/Debug.h"
 #include "base/Event.h"
-#include "base/LayoutEngine.h"
+#include "base/LayoutEngine2.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
-#include "base/Segment.h"
+#include "base/ViewSegment.h"
 #include "base/SnapGrid.h"
-#include "base/Staff.h"
 #include "base/ViewElement.h"
-#include "GUIPalette.h"
-#include "BarLine.h"
-#include <Q3Canvas>
+#include "gui/general/GUIPalette.h"
+#include "BarLineItem.h"
 #include <QColor>
 #include <QFont>
 #include <QFontMetrics>
 #include <QPen>
 #include <QRect>
 #include <QString>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QGraphicsLineItem>
+#include <QGraphicsRectItem>
+#include <QGraphicsSimpleTextItem>
 #include <algorithm>
 
 
 namespace Rosegarden
 {
 
-// width of pointer
-//
 const int pointerWidth = 3;
 
-
-LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
-                       SnapGrid *snapGrid, int id,
-                       int resolution, int lineThickness) :
-    Staff(*segment),
-    m_canvas(canvas),
+StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
+                         SnapGrid *snapGrid, int id,
+                         int resolution, int lineThickness) :
+    m_scene(scene),
+    m_viewSegment(viewSegment),
     m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
@@ -73,20 +68,21 @@ LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new Q3CanvasLine(canvas)),
-    m_insertCursor(new Q3CanvasLine(canvas)),
-    m_insertCursorTime(segment->getStartTime()),
+    m_pointer(new QGraphicsLineItem()),
+    m_insertCursor(new QGraphicsLineItem()),
+    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
     m_insertCursorTimeValid(false)
 {
+    //!!! need to ensure our own disposal when segment destroyed
     initCursors();
 }
 
-LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
-                       SnapGrid *snapGrid,
-                       int id, int resolution, int lineThickness,
-                       double pageWidth, int rowsPerPage, int rowSpacing) :
-    Staff(*segment),
-    m_canvas(canvas),
+StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
+                         SnapGrid *snapGrid,
+                         int id, int resolution, int lineThickness,
+                         double pageWidth, int rowsPerPage, int rowSpacing) :
+    m_scene(scene),
+    m_viewSegment(viewSegment),
     m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
@@ -103,21 +99,21 @@ LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new Q3CanvasLine(canvas)),
-    m_insertCursor(new Q3CanvasLine(canvas)),
-    m_insertCursorTime(segment->getStartTime()),
+    m_pointer(new QGraphicsLineItem()),
+    m_insertCursor(new QGraphicsLineItem()),
+    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
     m_insertCursorTimeValid(false)
 {
     initCursors();
 }
 
-LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
-                       SnapGrid *snapGrid,
-                       int id, int resolution, int lineThickness,
-                       PageMode pageMode, double pageWidth, int rowsPerPage,
-                       int rowSpacing) :
-    Staff(*segment),
-    m_canvas(canvas),
+StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
+                         SnapGrid *snapGrid,
+                         int id, int resolution, int lineThickness,
+                         PageMode pageMode, double pageWidth, int rowsPerPage,
+                         int rowSpacing) :
+    m_scene(scene),
+    m_viewSegment(viewSegment),
     m_snapGrid(snapGrid),
     m_id(id),
     m_x(0.0),
@@ -134,118 +130,116 @@ LinedStaff::LinedStaff(Q3Canvas *canvas, Segment *segment,
     m_startLayoutX(0),
     m_endLayoutX(0),
     m_current(false),
-    m_pointer(new Q3CanvasLine(canvas)),
-    m_insertCursor(new Q3CanvasLine(canvas)),
-    m_insertCursorTime(segment->getStartTime()),
+    m_pointer(new QGraphicsLineItem()),
+    m_insertCursor(new QGraphicsLineItem()),
+    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
     m_insertCursorTimeValid(false)
 {
     initCursors();
 }
 
-LinedStaff::~LinedStaff()
+StaffLayout::~StaffLayout()
 {
-    /*!!! No, the canvas items are all deleted by the canvas on destruction.
-     
-        deleteBars();
-        for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
-    */
+    deleteBars();
+    for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
+    delete m_pointer;
+    delete m_insertCursor;
 }
 
 void
-LinedStaff::initCursors()
+StaffLayout::initCursors()
 {
     QPen pen(GUIPalette::getColour(GUIPalette::Pointer));
     pen.setWidth(pointerWidth);
-
     m_pointer->setPen(pen);
-    m_pointer->setBrush(GUIPalette::getColour(GUIPalette::Pointer));
 
     pen.setColor(GUIPalette::getColour(GUIPalette::InsertCursor));
-
     m_insertCursor->setPen(pen);
-    m_insertCursor->setBrush(GUIPalette::getColour(GUIPalette::InsertCursor));
+
+    m_scene->addItem(m_pointer);
+    m_scene->addItem(m_insertCursor);
 }
 
 void
-LinedStaff::setResolution(int resolution)
+StaffLayout::setResolution(int resolution)
 {
     m_resolution = resolution;
 }
 
 void
-LinedStaff::setLineThickness(int lineThickness)
+StaffLayout::setLineThickness(int lineThickness)
 {
     m_lineThickness = lineThickness;
 }
 
 void
-LinedStaff::setPageMode(PageMode pageMode)
+StaffLayout::setPageMode(PageMode pageMode)
 {
     m_pageMode = pageMode;
 }
 
 void
-LinedStaff::setPageWidth(double pageWidth)
+StaffLayout::setPageWidth(double pageWidth)
 {
     m_pageWidth = pageWidth;
 }
 
 void
-LinedStaff::setRowsPerPage(int rowsPerPage)
+StaffLayout::setRowsPerPage(int rowsPerPage)
 {
     m_rowsPerPage = rowsPerPage;
 }
 
 void
-LinedStaff::setRowSpacing(int rowSpacing)
+StaffLayout::setRowSpacing(int rowSpacing)
 {
     m_rowSpacing = rowSpacing;
 }
 
 void
-LinedStaff::setConnectingLineLength(int connectingLineLength)
+StaffLayout::setConnectingLineLength(int connectingLineLength)
 {
     m_connectingLineLength = connectingLineLength;
 }
 
 int
-LinedStaff::getId() const
+StaffLayout::getId() const
 {
     return m_id;
 }
 
 void
-LinedStaff::setX(double x)
+StaffLayout::setX(double x)
 {
     m_x = x;
 }
 
 double
-LinedStaff::getX() const
+StaffLayout::getX() const
 {
     return m_x;
 }
 
 void
-LinedStaff::setY(int y)
+StaffLayout::setY(int y)
 {
     m_y = y;
 }
 
 int
-LinedStaff::getY() const
+StaffLayout::getY() const
 {
     return m_y;
 }
 
 void
-LinedStaff::setMargin(double margin)
+StaffLayout::setMargin(double margin)
 {
     m_margin = margin;
 }
 
 double
-LinedStaff::getMargin() const
+StaffLayout::getMargin() const
 {
     if (m_pageMode != MultiPageMode)
         return 0;
@@ -253,71 +247,74 @@ LinedStaff::getMargin() const
 }
 
 void
-LinedStaff::setTitleHeight(int titleHeight)
+StaffLayout::setTitleHeight(int titleHeight)
 {
     m_titleHeight = titleHeight;
 }
 
 int
-LinedStaff::getTitleHeight() const
+StaffLayout::getTitleHeight() const
 {
     return m_titleHeight;
 }
 
 double
-LinedStaff::getTotalWidth() const
+StaffLayout::getTotalWidth() const
 {
     switch (m_pageMode) {
 
     case ContinuousPageMode:
-        return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
+        return getSceneXForRightOfRow(getRowForLayoutX(m_endLayoutX)) - m_x;
 
     case MultiPageMode:
-        return getCanvasXForRightOfRow(getRowForLayoutX(m_endLayoutX)) + m_margin - m_x;
+        return getSceneXForRightOfRow(getRowForLayoutX(m_endLayoutX)) + m_margin - m_x;
 
     case LinearMode:
     default:
-        return getCanvasXForLayoutX(m_endLayoutX) - m_x;
+        return getSceneXForLayoutX(m_endLayoutX) - m_x;
     }
 }
 
 int
-LinedStaff::getTotalHeight() const
+StaffLayout::getTotalHeight() const
 {
     switch (m_pageMode) {
 
     case ContinuousPageMode:
-        return getCanvasYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
+        return getSceneYForTopOfStaff(getRowForLayoutX(m_endLayoutX)) +
                getHeightOfRow() - m_y;
 
     case MultiPageMode:
-        return getCanvasYForTopOfStaff(m_rowsPerPage - 1) +
+        return getSceneYForTopOfStaff(m_rowsPerPage - 1) +
                getHeightOfRow() - m_y;
 
     case LinearMode:
     default:
-        return getCanvasYForTopOfStaff(0) + getHeightOfRow() - m_y;
+        return getSceneYForTopOfStaff(0) + getHeightOfRow() - m_y;
     }
 }
 
 int
-LinedStaff::getHeightOfRow() const
+StaffLayout::getHeightOfRow() const
 {
     return getTopLineOffset() + getLegerLineCount() * getLineSpacing()
            + getBarLineHeight() + m_lineThickness;
 }
 
 bool
-LinedStaff::containsCanvasCoords(double x, int y) const
+StaffLayout::containsSceneCoords(double x, int y) const
 {
+    std::cerr << "StaffLayout::containsSceneCoords(" << x << "," << y << ")" << std::endl;
+
     switch (m_pageMode) {
 
     case ContinuousPageMode:
 
         for (int row = getRowForLayoutX(m_startLayoutX);
-                row <= getRowForLayoutX(m_endLayoutX); ++row) {
-            if (y >= getCanvasYForTopOfStaff(row) &&
-                    y < getCanvasYForTopOfStaff(row) + getHeightOfRow()) {
+             row <= getRowForLayoutX(m_endLayoutX); ++row) {
+
+            if (y >= getSceneYForTopOfStaff(row) &&
+                y  < getSceneYForTopOfStaff(row) + getHeightOfRow()) {
                 return true;
             }
         }
@@ -327,11 +324,12 @@ LinedStaff::containsCanvasCoords(double x, int y) const
     case MultiPageMode:
 
         for (int row = getRowForLayoutX(m_startLayoutX);
-                row <= getRowForLayoutX(m_endLayoutX); ++row) {
-            if (y >= getCanvasYForTopOfStaff(row) &&
-                    y < getCanvasYForTopOfStaff(row) + getHeightOfRow() &&
-                    x >= getCanvasXForLeftOfRow(row) &&
-                    x <= getCanvasXForRightOfRow(row)) {
+             row <= getRowForLayoutX(m_endLayoutX); ++row) {
+
+            if (y >= getSceneYForTopOfStaff(row) &&
+                y  < getSceneYForTopOfStaff(row) + getHeightOfRow() &&
+                x >= getSceneXForLeftOfRow(row) &&
+                x <= getSceneXForRightOfRow(row)) {
                 return true;
             }
         }
@@ -341,26 +339,26 @@ LinedStaff::containsCanvasCoords(double x, int y) const
     case LinearMode:
     default:
 
-        return (y >= getCanvasYForTopOfStaff() &&
-                y < getCanvasYForTopOfStaff() + getHeightOfRow());
+        return (y >= getSceneYForTopOfStaff() &&
+                y < getSceneYForTopOfStaff() + getHeightOfRow());
     }
 }
 
 int
-LinedStaff::getCanvasYForHeight(int h, double baseX, int baseY) const
+StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
 {
     int y;
 
-    //    NOTATION_DEBUG << "LinedStaff::getCanvasYForHeight(" << h << "," << baseY
+    //    NOTATION_DEBUG << "StaffLayout::getSceneYForHeight(" << h << "," << baseY
     //		   << ")" << endl;
 
     if (baseX < 0)
         baseX = getX() + getMargin();
 
     if (baseY >= 0) {
-        y = getCanvasYForTopLine(getRowForCanvasCoords(baseX, baseY));
+        y = getSceneYForTopLine(getRowForSceneCoords(baseX, baseY));
     } else {
-        y = getCanvasYForTopLine();
+        y = getSceneYForTopLine();
     }
 
     y += getLayoutYForHeight(h);
@@ -369,7 +367,7 @@ LinedStaff::getCanvasYForHeight(int h, double baseX, int baseY) const
 }
 
 int
-LinedStaff::getLayoutYForHeight(int h) const
+StaffLayout::getLayoutYForHeight(int h) const
 {
     int y = ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
     if (h < getTopLineHeight() && (h % getHeightPerLine() != 0))
@@ -379,10 +377,10 @@ LinedStaff::getLayoutYForHeight(int h) const
 }
 
 int
-LinedStaff::getHeightAtCanvasCoords(double x, int y) const
+StaffLayout::getHeightAtSceneCoords(double x, int y) const
 {
     //!!! the lazy route: approximate, then get the right value
-    // by calling getCanvasYForHeight a few times... ugh
+    // by calling getSceneYForHeight a few times... ugh
 
     //    RG_DEBUG << "\nNotationStaff::heightOfYCoord: y = " << y
     //                         << ", getTopLineOffset() = " << getTopLineOffset()
@@ -392,8 +390,8 @@ LinedStaff::getHeightAtCanvasCoords(double x, int y) const
     if (x < 0)
         x = getX() + getMargin();
 
-    int row = getRowForCanvasCoords(x, y);
-    int ph = (y - getCanvasYForTopLine(row)) * getHeightPerLine() /
+    int row = getRowForSceneCoords(x, y);
+    int ph = (y - getSceneYForTopLine(row)) * getHeightPerLine() /
              getLineSpacing();
     ph = getTopLineHeight() - ph;
 
@@ -405,7 +403,7 @@ LinedStaff::getHeightAtCanvasCoords(double x, int y) const
     int testMd = 1000;
 
     for (i = -1; i <= 1; ++i) {
-        int d = y - getCanvasYForHeight(ph + i, x, y);
+        int d = y - getSceneYForHeight(ph + i, x, y);
         if (d < 0)
             d = -d;
         if (d < md) {
@@ -419,7 +417,7 @@ LinedStaff::getHeightAtCanvasCoords(double x, int y) const
     }
 
     if (mi > -2) {
-        //         RG_DEBUG << "LinedStaff::getHeightAtCanvasCoords: " << y
+        //         RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: " << y
         //                              << " -> " << (ph + mi) << " (mi is " << mi << ", distance "
         //                              << md << ")" << endl;
         //         if (mi == 0) {
@@ -429,43 +427,45 @@ LinedStaff::getHeightAtCanvasCoords(double x, int y) const
         //         }
         return ph + mi;
     } else {
-        RG_DEBUG << "LinedStaff::getHeightAtCanvasCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
+        RG_DEBUG << "StaffLayout::getHeightAtSceneCoords: heuristic got " << ph << ", nothing within range (closest was " << (ph + testi) << " which is " << testMd << " away)" << endl;
         return 0;
     }
 }
 
 QRect
-LinedStaff::getBarExtents(double x, int y) const
+StaffLayout::getBarExtents(double x, int y) const
 {
-    int row = getRowForCanvasCoords(x, y);
+    int row = getRowForSceneCoords(x, y);
 
-    for (int i = 1; i < m_barLines.size(); ++i) {
+    for (BarLineList::iterator i = m_barLines.begin();
+         i != m_barLines.end(); ++i) {
 
-        double layoutX = m_barLines[i]->getLayoutX();
+        BarLineItem *line = *i;
+
+        double layoutX = line->getLayoutX();
         int barRow = getRowForLayoutX(layoutX);
 
-        if (m_pageMode != LinearMode && (barRow < row))
-            continue;
+        if (m_pageMode != LinearMode && (barRow < row)) continue;
 
-        BarLine *line = m_barLines[i];
+        if (line->x() <= x) continue;
+        if (i == m_barLines.begin()) continue;
 
-        if (line) {
-            if (line->x() <= x)
-                continue;
+        BarLineList::iterator j = i;
+        --j;
+        BarLineItem *prevline = *j;
 
-            return QRect(int(m_barLines[i -1]->x()),
-                         getCanvasYForTopOfStaff(barRow),
-                         int(line->x() - m_barLines[i - 1]->x()),
-                         getHeightOfRow());
-        }
+        return QRect(int(prevline->x()),
+                     getSceneYForTopOfStaff(barRow),
+                     int(line->x() - prevline->x()),
+                     getHeightOfRow());
     }
 
     // failure
-    return QRect(int(getX() + getMargin()), getCanvasYForTopOfStaff(), 4, getHeightOfRow());
+    return QRect(int(getX() + getMargin()), getSceneYForTopOfStaff(), 4, getHeightOfRow());
 }
 
 double
-LinedStaff::getCanvasXForLayoutX(double x) const
+StaffLayout::getSceneXForLayoutX(double x) const
 {
     switch (m_pageMode) {
 
@@ -485,27 +485,25 @@ LinedStaff::getCanvasXForLayoutX(double x) const
     }
 }
 
-LinedStaff::LinedStaffCoords
-
-LinedStaff::getLayoutCoordsForCanvasCoords(double x, int y) const
+StaffLayout::StaffLayoutCoords
+StaffLayout::getLayoutCoordsForSceneCoords(double x, int y) const
 {
-    int row = getRowForCanvasCoords(x, y);
-    return LinedStaffCoords
-           ((row * m_pageWidth) + x - getCanvasXForLeftOfRow(row),
-            y - getCanvasYForTopOfStaff(row));
+    int row = getRowForSceneCoords(x, y);
+    return StaffLayoutCoords
+           ((row * m_pageWidth) + x - getSceneXForLeftOfRow(row),
+            y - getSceneYForTopOfStaff(row));
 }
 
-LinedStaff::LinedStaffCoords
-
-LinedStaff::getCanvasCoordsForLayoutCoords(double x, int y) const
+StaffLayout::StaffLayoutCoords
+StaffLayout::getSceneCoordsForLayoutCoords(double x, int y) const
 {
     int row = getRowForLayoutX(x);
-    return LinedStaffCoords
-           (getCanvasXForLayoutX(x), getCanvasYForTopLine(row) + y);
+    return StaffLayoutCoords
+           (getSceneXForLayoutX(x), getSceneYForTopLine(row) + y);
 }
 
 int
-LinedStaff::getRowForCanvasCoords(double x, int y) const
+StaffLayout::getRowForSceneCoords(double x, int y) const
 {
     switch (m_pageMode) {
 
@@ -527,7 +525,7 @@ LinedStaff::getRowForCanvasCoords(double x, int y) const
 }
 
 int
-LinedStaff::getCanvasYForTopOfStaff(int row) const
+StaffLayout::getSceneYForTopOfStaff(int row) const
 {
     switch (m_pageMode) {
 
@@ -552,7 +550,7 @@ LinedStaff::getCanvasYForTopOfStaff(int row) const
 }
 
 double
-LinedStaff::getCanvasXForLeftOfRow(int row) const
+StaffLayout::getSceneXForLeftOfRow(int row) const
 {
     switch (m_pageMode) {
 
@@ -570,17 +568,17 @@ LinedStaff::getCanvasXForLeftOfRow(int row) const
 }
 
 void
-LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
+StaffLayout::sizeStaff(HorizontalLayoutEngine2 &layout)
 {
-    Profiler profiler("LinedStaff::sizeStaff", true);
+    Profiler profiler("StaffLayout::sizeStaff", true);
 
     deleteBars();
     deleteRepeatedClefsAndKeys();
     deleteTimeSignatures();
 
-    //    RG_DEBUG << "LinedStaff::sizeStaff" << endl;
+    //    RG_DEBUG << "StaffLayout::sizeStaff" << endl;
 
-    int lastBar = layout.getLastVisibleBarOnStaff(*this);
+    int lastBar = layout.getLastVisibleBarOnViewSegment(*m_viewSegment);
 
     double xleft = 0, xright = 0;
     bool haveXLeft = false;
@@ -589,7 +587,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 
     TimeSignature currentTimeSignature;
 
-    for (int barNo = layout.getFirstVisibleBarOnStaff(*this);
+    for (int barNo = layout.getFirstVisibleBarOnViewSegment(*m_viewSegment);
             barNo <= lastBar; ++barNo) {
 
         double x = layout.getBarPosition(barNo);
@@ -601,15 +599,16 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 
         double timeSigX = 0;
         TimeSignature timeSig;
-        bool isNew = layout.getTimeSignaturePosition(*this, barNo, timeSig, timeSigX);
+        bool isNew = layout.getTimeSignaturePosition
+            (*m_viewSegment, barNo, timeSig, timeSigX);
 
         if (isNew && barNo < lastBar) {
             currentTimeSignature = timeSig;
             insertTimeSignature(timeSigX, currentTimeSignature);
-            RG_DEBUG << "LinedStaff[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX << endl;
+            RG_DEBUG << "StaffLayout[" << this << "]::sizeStaff: bar no " << barNo << " has time signature at " << timeSigX << endl;
         }
 
-        RG_DEBUG << "LinedStaff::sizeStaff: inserting bar at " << x << " on staff " << this << " (isNew " << isNew << ", timeSigX " << timeSigX << ")" << endl;
+        RG_DEBUG << "StaffLayout::sizeStaff: inserting bar at " << x << " on staff " << this << " (isNew " << isNew << ", timeSigX " << timeSigX << ")" << endl;
 
         bool showBarNo =
             (showBarNumbersEvery() > 0 &&
@@ -618,7 +617,7 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
         insertBar(x,
                   ((barNo == lastBar) ? 0 :
                    (layout.getBarPosition(barNo + 1) - x)),
-                  layout.isBarCorrectOnStaff(*this, barNo - 1),
+                  layout.isBarCorrectOnViewSegment(*m_viewSegment, barNo - 1),
                   currentTimeSignature,
                   barNo,
                   showBarNo);
@@ -632,29 +631,25 @@ LinedStaff::sizeStaff(HorizontalLayoutEngine &layout)
 }
 
 void
-LinedStaff::deleteBars()
+StaffLayout::deleteBars()
 {
     for (BarLineList::iterator i = m_barLines.begin();
-            i != m_barLines.end(); ++i) {
-        (*i)->hide();
+         i != m_barLines.end(); ++i) {
         delete *i;
     }
 
     for (LineRecList::iterator i = m_beatLines.begin();
-            i != m_beatLines.end(); ++i) {
-        i->second->hide();
+         i != m_beatLines.end(); ++i) {
         delete i->second;
     }
 
     for (LineRecList::iterator i = m_barConnectingLines.begin();
-            i != m_barConnectingLines.end(); ++i) {
-        i->second->hide();
+         i != m_barConnectingLines.end(); ++i) {
         delete i->second;
     }
 
     for (ItemList::iterator i = m_barNumbers.begin();
-            i != m_barNumbers.end(); ++i) {
-        (*i)->hide();
+         i != m_barNumbers.end(); ++i) {
         delete *i;
     }
 
@@ -665,7 +660,7 @@ LinedStaff::deleteBars()
 }
 
 void
-LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
+StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                       const TimeSignature &timeSig,
                       int barNo, bool showBarNo)
 {
@@ -686,8 +681,8 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     }
 
     int row = getRowForLayoutX(layoutX);
-    double x = getCanvasXForLayoutX(layoutX);
-    int y = getCanvasYForTopLine(row);
+    double x = getSceneXForLayoutX(layoutX);
+    int y = getSceneYForTopLine(row);
 
     bool firstBarInRow = false, lastBarInRow = false;
 
@@ -723,21 +718,20 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         inset = getBarInset(barNo, firstBarInRow);
     }
 
-    BarLine *line = new BarLine(m_canvas, layoutX,
-                                getBarLineHeight(), barThickness, getLineSpacing(),
-                                (int)inset, style);
+    BarLineItem *line = new BarLineItem(layoutX, getBarLineHeight(),
+                                        barThickness, getLineSpacing(),
+                                        (int)inset, style);
 
-    line->moveBy(x, y);
+    m_scene->addItem(line);
+    line->setPos(x, y);
 
     if (isCorrect) {
-        line->setPen(GUIPalette::getColour(GUIPalette::BarLine));
-        line->setBrush(GUIPalette::getColour(GUIPalette::BarLine));
+        line->setColour(GUIPalette::getColour(GUIPalette::BarLine));
     } else {
-        line->setPen(GUIPalette::getColour(GUIPalette::BarLineIncorrect));
-        line->setBrush(GUIPalette::getColour(GUIPalette::BarLineIncorrect));
+        line->setColour(GUIPalette::getColour(GUIPalette::BarLineIncorrect));
     }
 
-    line->setZ( -1);
+    line->setZValue( -1);
     if (hidden)
         line->hide();
     else
@@ -746,7 +740,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
     // The bar lines have to be in order of layout-x (there's no
     // such interesting stipulation for beat or connecting lines)
     BarLineList::iterator insertPoint = lower_bound
-                                        (m_barLines.begin(), m_barLines.end(), line, compareBars);
+        (m_barLines.begin(), m_barLines.end(), line, compareBars);
     m_barLines.insert(insertPoint, line);
 
     if (lastBarInRow) {
@@ -756,22 +750,22 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         if (style == RepeatBothBar)
             style = RepeatEndBar;
 
-        BarLine *eline = new BarLine(m_canvas, layoutX,
-                                     getBarLineHeight(), barThickness, getLineSpacing(),
-                                     0, style);
-        eline->moveBy(xe, y);
+        BarLineItem *eline = new BarLineItem(layoutX, getBarLineHeight(),
+                                             barThickness, getLineSpacing(),
+                                             0, style);
+        m_scene->addItem(eline);
+        eline->setPos(xe, y);
 
-        eline->setPen(GUIPalette::getColour(GUIPalette::BarLine));
-        eline->setBrush(GUIPalette::getColour(GUIPalette::BarLine));
+        eline->setColour(GUIPalette::getColour(GUIPalette::BarLine));
 
-        eline->setZ( -1);
+        eline->setZValue( -1);
         if (hidden)
             eline->hide();
         else
             eline->show();
 
         BarLineList::iterator insertPoint = lower_bound
-                                            (m_barLines.begin(), m_barLines.end(), eline, compareBars);
+            (m_barLines.begin(), m_barLines.end(), eline, compareBars);
         m_barLines.insert(insertPoint, eline);
     }
 
@@ -782,10 +776,11 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         QFontMetrics metrics(font);
         QString text = QString("%1").arg(barNo + 1);
 
-        Q3CanvasItem *barNoText = new Q3CanvasText(text, font, m_canvas);
-        barNoText->setX(x);
-        barNoText->setY(y - metrics.height() - m_resolution * 2);
-        barNoText->setZ( -1);
+        QGraphicsSimpleTextItem *barNoText = new QGraphicsSimpleTextItem(text);
+        barNoText->setFont(font);
+        barNoText->setPos(x, y - metrics.height() - m_resolution * 2);
+        barNoText->setZValue( -1);
+        m_scene->addItem(barNoText);
         if (hidden)
             barNoText->hide();
         else
@@ -794,7 +789,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
         m_barNumbers.push_back(barNoText);
     }
 
-    Q3CanvasRectangle *rect = 0;
+    QGraphicsRectItem *rect = 0;
 
     if (showBeatLines()) {
 
@@ -812,10 +807,11 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
         for (int gridLine = hidden ? 0 : 1; gridLine < gridLines; ++gridLine) {
 
-            rect = new Q3CanvasRectangle
-                   (0, 0, barThickness, getBarLineHeight(), m_canvas);
+            rect = new QGraphicsRectItem
+                (0, 0, barThickness, getBarLineHeight());
+            m_scene->addItem(rect);
 
-            rect->moveBy(x + gridLine * dx, y);
+            rect->setPos(x + gridLine * dx, y);
 
             double currentGrid = gridLines / double(timeSig.getBeatsPerBar());
 
@@ -829,7 +825,7 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
                 rect->setBrush(GUIPalette::getColour(GUIPalette::SubBeatLine));
             }
 
-            rect->setZ( -1);
+            rect->setZValue( -1);
             rect->show(); // show beat lines even if the bar lines are hidden
 
             LineRec beatLine(layoutX + gridLine * dx, rect);
@@ -839,14 +835,15 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 
     if (m_connectingLineLength > 0) {
 
-        rect = new Q3CanvasRectangle
-               (0, 0, barThickness, m_connectingLineLength, m_canvas);
+        rect = new QGraphicsRectItem
+               (0, 0, barThickness, m_connectingLineLength);
+        m_scene->addItem(rect);
 
-        rect->moveBy(x, y);
+        rect->setPos(x, y);
 
         rect->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
         rect->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
-        rect->setZ( -3);
+        rect->setZValue( -3);
         if (hidden)
             rect->hide();
         else
@@ -858,54 +855,56 @@ LinedStaff::insertBar(double layoutX, double width, bool isCorrect,
 }
 
 bool
-LinedStaff::compareBars(const BarLine *barLine1, const BarLine *barLine2)
+StaffLayout::compareBars(const BarLineItem *barLine1, const BarLineItem *barLine2)
 {
     return (barLine1->getLayoutX() < barLine2->getLayoutX());
 }
 
 bool
-LinedStaff::compareBarToLayoutX(const BarLine *barLine1, int x)
+StaffLayout::compareBarToLayoutX(const BarLineItem *barLine1, int x)
 {
     return (barLine1->getLayoutX() < x);
 }
 
 void
-LinedStaff::deleteTimeSignatures()
+StaffLayout::deleteTimeSignatures()
 {
     // default implementation is empty
 }
 
 void
-LinedStaff::insertTimeSignature(double, const TimeSignature &)
+StaffLayout::insertTimeSignature(double, const TimeSignature &)
 {
     // default implementation is empty
 }
 
 void
-LinedStaff::deleteRepeatedClefsAndKeys()
+StaffLayout::deleteRepeatedClefsAndKeys()
 {
     // default implementation is empty
 }
 
 void
-LinedStaff::insertRepeatedClefAndKey(double, int)
+StaffLayout::insertRepeatedClefAndKey(double, int)
 {
     // default implementation is empty
 }
 
 void
-LinedStaff::drawStaffName()
+StaffLayout::drawStaffName()
 {
     // default implementation is empty
 }
 
 void
-LinedStaff::resizeStaffLines()
+StaffLayout::resizeStaffLines()
 {
+    Profiler profiler("StaffLayout::resizeStaffLines");
+
     int firstRow = getRowForLayoutX(m_startLayoutX);
     int lastRow = getRowForLayoutX(m_endLayoutX);
 
-    RG_DEBUG << "LinedStaff::resizeStaffLines: firstRow "
+    RG_DEBUG << "StaffLayout::resizeStaffLines: firstRow "
     << firstRow << ", lastRow " << lastRow
     << " (startLayoutX " << m_startLayoutX
     << ", endLayoutX " << m_endLayoutX << ")" << endl;
@@ -931,15 +930,15 @@ LinedStaff::resizeStaffLines()
         double x1;
 
         if (i == firstRow) {
-            x0 = getCanvasXForLayoutX(m_startLayoutX);
+            x0 = getSceneXForLayoutX(m_startLayoutX);
         } else {
-            x0 = getCanvasXForLeftOfRow(i);
+            x0 = getSceneXForLeftOfRow(i);
         }
 
         if (i == lastRow) {
-            x1 = getCanvasXForLayoutX(m_endLayoutX);
+            x1 = getSceneXForLayoutX(m_endLayoutX);
         } else {
-            x1 = getCanvasXForRightOfRow(i);
+            x1 = getSceneXForRightOfRow(i);
         }
 
         resizeStaffLineRow(i, x0, x1 - x0);
@@ -954,7 +953,7 @@ LinedStaff::resizeStaffLines()
 }
 
 void
-LinedStaff::clearStaffLineRow(int row)
+StaffLayout::clearStaffLineRow(int row)
 {
     for (int h = 0; h < (int)m_staffLines[row].size(); ++h) {
         delete m_staffLines[row][h];
@@ -966,9 +965,9 @@ LinedStaff::clearStaffLineRow(int row)
 }
 
 void
-LinedStaff::resizeStaffLineRow(int row, double x, double length)
+StaffLayout::resizeStaffLineRow(int row, double x, double length)
 {
-    //    RG_DEBUG << "LinedStaff::resizeStaffLineRow: row "
+    //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
     //	     << row << ", x " << x << ", length "
     //	     << length << endl;
 
@@ -1006,12 +1005,13 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
         // rather arbitrary (dup in insertBar)
         int barThickness = m_resolution / 12 + 1;
-        y = getCanvasYForTopLine(row);
-        Q3CanvasRectangle *line = new Q3CanvasRectangle
-                                 (int(x + length), y, barThickness, m_connectingLineLength, m_canvas);
+        y = getSceneYForTopLine(row);
+        QGraphicsRectItem *line = new QGraphicsRectItem
+            (int(x + length), y, barThickness, m_connectingLineLength);
+        m_scene->addItem(line);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
-        line->setZ( -2);
+        line->setZValue( -2);
         line->show();
         m_staffConnectingLines[row] = line;
 
@@ -1027,38 +1027,40 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 
     for (h = 0; h < getLineCount(); ++h) {
 
-        y = getCanvasYForHeight
+        y = getSceneYForHeight
             (getBottomLineHeight() + getHeightPerLine() * h,
-             x, getCanvasYForTopLine(row));
+             x, getSceneYForTopLine(row));
 
         if (elementsInSpaces()) {
             y -= getLineSpacing() / 2 + 1;
         }
 
-        //      RG_DEBUG << "LinedStaff: drawing line from ("
+        //      RG_DEBUG << "StaffLayout: drawing line from ("
         //                           << x << "," << y << ") to (" << (x+length-1)
         //                           << "," << y << ")" << endl;
 
-        Q3CanvasItem *line;
+        QGraphicsItem *line;
         delete m_staffLines[row][lineIndex];
         m_staffLines[row][lineIndex] = 0;
 
         if (m_lineThickness > 1) {
-            Q3CanvasRectangle *rline = new Q3CanvasRectangle
-                                      (int(x), y, int(length), m_lineThickness, m_canvas);
+            QGraphicsRectItem *rline = new QGraphicsRectItem
+                (int(x), y, int(length), m_lineThickness);
+            m_scene->addItem(rline);
             rline->setPen(lineColour);
             rline->setBrush(lineColour);
             line = rline;
         } else {
-            Q3CanvasLine *lline = new Q3CanvasLine(m_canvas);
-            lline->setPoints(int(x), y, int(x + length), y);
+            QGraphicsLineItem *lline = new QGraphicsLineItem
+                (int(x), y, int(x + length), y);
+            m_scene->addItem(lline);
             lline->setPen(lineColour);
             line = lline;
         }
 
         //      if (j > 0) line->setSignificant(false);
 
-        line->setZ(z);
+        line->setZValue(z);
         m_staffLines[row][lineIndex] = line;
         line->show();
 
@@ -1073,7 +1075,7 @@ LinedStaff::resizeStaffLineRow(int row, double x, double length)
 }
 
 void
-LinedStaff::setCurrent(bool current)
+StaffLayout::setCurrent(bool current)
 {
     m_current = current;
     if (m_current) {
@@ -1084,38 +1086,38 @@ LinedStaff::setCurrent(bool current)
 }
 
 double
-LinedStaff::getLayoutXOfPointer() const
+StaffLayout::getLayoutXOfPointer() const
 {
     double x = m_pointer->x();
-    int row = getRowForCanvasCoords(x, int(m_pointer->y()));
-    return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
+    int row = getRowForSceneCoords(x, int(m_pointer->y()));
+    return getLayoutCoordsForSceneCoords(x, getSceneYForTopLine(row)).first;
 }
 
 void
-LinedStaff::getPointerPosition(double &cx, int &cy) const
+StaffLayout::getPointerPosition(double &cx, int &cy) const
 {
     cx = m_pointer->x();
-    cy = getCanvasYForTopOfStaff(getRowForCanvasCoords(cx, int(m_pointer->y())));
+    cy = getSceneYForTopOfStaff(getRowForSceneCoords(cx, int(m_pointer->y())));
 }
 
 double
-LinedStaff::getLayoutXOfInsertCursor() const
+StaffLayout::getLayoutXOfInsertCursor() const
 {
     if (!m_current) return -1;
     double x = m_insertCursor->x();
-    int row = getRowForCanvasCoords(x, int(m_insertCursor->y()));
-    return getLayoutCoordsForCanvasCoords(x, getCanvasYForTopLine(row)).first;
+    int row = getRowForSceneCoords(x, int(m_insertCursor->y()));
+    return getLayoutCoordsForSceneCoords(x, getSceneYForTopLine(row)).first;
 }
 
 timeT
-LinedStaff::getInsertCursorTime(HorizontalLayoutEngine &layout) const
+StaffLayout::getInsertCursorTime(HorizontalLayoutEngine2 &layout) const
 {
     if (m_insertCursorTimeValid) return m_insertCursorTime;
     return layout.getTimeForX(getLayoutXOfInsertCursor());
 }
 
 void
-LinedStaff::getInsertCursorPosition(double &cx, int &cy) const
+StaffLayout::getInsertCursorPosition(double &cx, int &cy) const
 {
     if (!m_current) {
         cx = -1;
@@ -1123,93 +1125,91 @@ LinedStaff::getInsertCursorPosition(double &cx, int &cy) const
         return ;
     }
     cx = m_insertCursor->x();
-    cy = getCanvasYForTopOfStaff(getRowForCanvasCoords(cx, int(m_insertCursor->y())));
+    cy = getSceneYForTopOfStaff(getRowForSceneCoords(cx, int(m_insertCursor->y())));
 }
 
 void
-LinedStaff::setPointerPosition(double canvasX, int canvasY)
+StaffLayout::setPointerPosition(double sceneX, int sceneY)
 {
-    int row = getRowForCanvasCoords(canvasX, canvasY);
-    canvasY = getCanvasYForTopOfStaff(row);
-    m_pointer->setX(int(canvasX));
-    m_pointer->setY(int(canvasY));
-    m_pointer->setZ( -30); // behind everything else
-    m_pointer->setPoints(0, 0, 0, getHeightOfRow() /* - 1 */);
+    int row = getRowForSceneCoords(sceneX, sceneY);
+    sceneY = getSceneYForTopOfStaff(row);
+    m_pointer->setPos(int(sceneX), int(sceneY));
+    m_pointer->setZValue( -30); // behind everything else
+    m_pointer->setLine(0, 0, 0, getHeightOfRow() /* - 1 */);
     m_pointer->show();
 }
 
 void
-LinedStaff::setPointerPosition(HorizontalLayoutEngine &layout,
+StaffLayout::setPointerPosition(HorizontalLayoutEngine2 &layout,
                                timeT time)
 {
     setPointerPosition(layout.getXForTime(time));
 }
 
 void
-LinedStaff::setPointerPosition(double layoutX)
+StaffLayout::setPointerPosition(double layoutX)
 {
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(layoutX, 0);
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(layoutX, 0);
     setPointerPosition(coords.first, coords.second);
 }
 
 void
-LinedStaff::hidePointer()
+StaffLayout::hidePointer()
 {
     m_pointer->hide();
 }
 
 void
-LinedStaff::setInsertCursorPosition(double canvasX, int canvasY)
+StaffLayout::setInsertCursorPosition(double sceneX, int sceneY)
 {
     if (!m_current) return;
 
-    int row = getRowForCanvasCoords(canvasX, canvasY);
-    canvasY = getCanvasYForTopOfStaff(row);
-    m_insertCursor->setX(canvasX);
-    m_insertCursor->setY(canvasY);
-    m_insertCursor->setZ( -28); // behind everything else except playback pointer
-    m_insertCursor->setPoints(0, 0, 0, getHeightOfRow() - 1);
+    int row = getRowForSceneCoords(sceneX, sceneY);
+    sceneY = getSceneYForTopOfStaff(row);
+    m_insertCursor->setPos(sceneX, sceneY);
+    m_insertCursor->setZValue( -28); // behind everything else except playback pointer
+    m_insertCursor->setLine(0, 0, 0, getHeightOfRow() - 1);
     m_insertCursor->show();
     m_insertCursorTimeValid = false;
 }
 
 void
-LinedStaff::setInsertCursorPosition(HorizontalLayoutEngine &layout,
-                                    timeT time)
+StaffLayout::setInsertCursorPosition(HorizontalLayoutEngine2 &layout,
+                                     timeT time)
 {
     double x = layout.getXForTime(time);
-    LinedStaffCoords coords = getCanvasCoordsForLayoutCoords(x, 0);
+    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(x, 0);
     setInsertCursorPosition(coords.first, coords.second);
     m_insertCursorTime = time;
     m_insertCursorTimeValid = true;
 }
 
 void
-LinedStaff::hideInsertCursor()
+StaffLayout::hideInsertCursor()
 {
     m_insertCursor->hide();
 }
 
 void
-LinedStaff::renderElements(ViewElementList::iterator,
-                           ViewElementList::iterator)
+StaffLayout::renderElements(ViewElementList::iterator,
+                            ViewElementList::iterator)
 {
     // nothing -- we assume rendering will be done by the implementation
     // of positionElements
 }
 
 void
-LinedStaff::renderAllElements()
+StaffLayout::renderAllElements()
 {
-    renderElements(getViewElementList()->begin(),
-                   getViewElementList()->end());
+    renderElements(m_viewSegment->getViewElementList()->begin(),
+                   m_viewSegment->getViewElementList()->end());
 }
 
 void
-LinedStaff::positionAllElements()
+StaffLayout::positionAllElements()
 {
-    positionElements(getSegment().getStartTime(),
-                     getSegment().getEndTime());
+    positionElements(m_viewSegment->getSegment().getStartTime(),
+                     m_viewSegment->getSegment().getEndTime());
 }
 
 }

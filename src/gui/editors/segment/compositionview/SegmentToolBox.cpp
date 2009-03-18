@@ -41,7 +41,7 @@ SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenGUIDoc* doc)
         m_doc(doc)
 {}
 
-SegmentTool* SegmentToolBox::createTool(const QString& toolName)
+SegmentTool* SegmentToolBox::createTool(QString toolName)
 {
     SegmentTool* tool = 0;
 
@@ -86,7 +86,7 @@ SegmentTool* SegmentToolBox::createTool(const QString& toolName)
     return tool;
 }
 
-SegmentTool* SegmentToolBox::getTool(const QString& toolName)
+SegmentTool* SegmentToolBox::getTool(QString toolName)
 {
     return dynamic_cast<SegmentTool*>(BaseToolBox::getTool(toolName));
 }

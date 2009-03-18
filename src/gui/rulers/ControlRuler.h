@@ -114,7 +114,7 @@ protected:
 
     virtual QScrollBar* getMainHorizontalScrollBar();
 
-    virtual void computeStaffOffset() {};
+    virtual void computeViewSegmentOffset() {};
 
     virtual void layoutItem(ControlItem*);
 
@@ -152,7 +152,7 @@ protected:
 
     int m_maxItemValue;
 
-    double m_staffOffset;
+    double m_viewSegmentOffset;
 
     double m_currentX;
 
