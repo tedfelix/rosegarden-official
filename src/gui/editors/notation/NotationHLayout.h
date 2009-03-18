@@ -18,7 +18,7 @@
 #ifndef _RG_NOTATIONHLAYOUT_H_
 #define _RG_NOTATIONHLAYOUT_H_
 
-#include "base/LayoutEngine2.h"
+#include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "NotationElement.h"
 #include "gui/general/ProgressReporter.h"
@@ -54,7 +54,7 @@ class AccidentalTable;
  */
 
 class NotationHLayout : public ProgressReporter,
-                        public HorizontalLayoutEngine2
+                        public HorizontalLayoutEngine
 {
 public:
     NotationHLayout(Composition *c,

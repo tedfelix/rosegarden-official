@@ -22,7 +22,7 @@
 #include <QApplication>
 
 #include "base/Composition.h"
-#include "base/LayoutEngine2.h"
+#include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/NotationQuantizer.h"
@@ -54,7 +54,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
                                  const NotationProperties &properties,
                                  QObject* parent, const char* name) :
     ProgressReporter(parent, name),
-    HorizontalLayoutEngine2(c),
+    HorizontalLayoutEngine(c),
     m_totalWidth(0.),
     m_pageMode(false),
     m_pageWidth(0.),

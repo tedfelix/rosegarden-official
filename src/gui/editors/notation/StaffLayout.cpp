@@ -20,7 +20,7 @@
 
 #include "misc/Debug.h"
 #include "base/Event.h"
-#include "base/LayoutEngine2.h"
+#include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/ViewSegment.h"
@@ -568,7 +568,7 @@ StaffLayout::getSceneXForLeftOfRow(int row) const
 }
 
 void
-StaffLayout::sizeStaff(HorizontalLayoutEngine2 &layout)
+StaffLayout::sizeStaff(HorizontalLayoutEngine &layout)
 {
     Profiler profiler("StaffLayout::sizeStaff", true);
 
@@ -1110,7 +1110,7 @@ StaffLayout::getLayoutXOfInsertCursor() const
 }
 
 timeT
-StaffLayout::getInsertCursorTime(HorizontalLayoutEngine2 &layout) const
+StaffLayout::getInsertCursorTime(HorizontalLayoutEngine &layout) const
 {
     if (m_insertCursorTimeValid) return m_insertCursorTime;
     return layout.getTimeForX(getLayoutXOfInsertCursor());
@@ -1140,7 +1140,7 @@ StaffLayout::setPointerPosition(double sceneX, int sceneY)
 }
 
 void
-StaffLayout::setPointerPosition(HorizontalLayoutEngine2 &layout,
+StaffLayout::setPointerPosition(HorizontalLayoutEngine &layout,
                                timeT time)
 {
     setPointerPosition(layout.getXForTime(time));
@@ -1174,7 +1174,7 @@ StaffLayout::setInsertCursorPosition(double sceneX, int sceneY)
 }
 
 void
-StaffLayout::setInsertCursorPosition(HorizontalLayoutEngine2 &layout,
+StaffLayout::setInsertCursorPosition(HorizontalLayoutEngine &layout,
                                      timeT time)
 {
     double x = layout.getXForTime(time);

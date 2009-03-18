@@ -22,7 +22,7 @@
 
 #include "base/Composition.h"
 #include "base/Event.h"
-#include "base/LayoutEngine2.h"
+#include "base/LayoutEngine.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"

@@ -35,7 +35,7 @@ class BarLineItem;
 class TimeSignature;
 class SnapGrid;
 class ViewSegment;
-class HorizontalLayoutEngine2;
+class HorizontalLayoutEngine;
 class Event;
 
 
@@ -374,7 +374,7 @@ public:
      * corresponding to the given time, and show it.
      */
     virtual void setPointerPosition
-    (HorizontalLayoutEngine2&, timeT);
+    (HorizontalLayoutEngine&, timeT);
 
     /**
      * Move the playback pointer to the layout-X coordinate
@@ -409,7 +409,7 @@ public:
      * Move the insertion cursor to the layout-X coordinate
      * corresponding to the given time, and show it.
      */
-    virtual void setInsertCursorPosition(HorizontalLayoutEngine2&, timeT);
+    virtual void setInsertCursorPosition(HorizontalLayoutEngine&, timeT);
 
     /**
      * Move the insertion cursor to the layout-X coordinate
@@ -427,7 +427,7 @@ public:
     /**
      * Return the time of the insert cursor.
      */
-    virtual timeT getInsertCursorTime(HorizontalLayoutEngine2&) const;
+    virtual timeT getInsertCursorTime(HorizontalLayoutEngine&) const;
 
     /**
      * Return the scene coordinates of the top of the insert
@@ -451,7 +451,7 @@ public:
      * No bars or staff lines will appear unless this method has
      * been called.
      */
-    virtual void sizeStaff(HorizontalLayoutEngine2& layout);
+    virtual void sizeStaff(HorizontalLayoutEngine& layout);
 
     /**
      * Generate or re-generate sprites for all the elements between

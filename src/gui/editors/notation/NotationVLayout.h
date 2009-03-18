@@ -20,7 +20,7 @@
 #define _RG_NOTATIONVLAYOUT_H_
 
 #include "base/FastVector.h"
-#include "base/LayoutEngine2.h"
+#include "base/LayoutEngine.h"
 #include "gui/general/ProgressReporter.h"
 #include <map>
 #include "base/Event.h"
@@ -51,7 +51,7 @@ class Composition;
  */
 
 class NotationVLayout : public ProgressReporter,
-                        public VerticalLayoutEngine2
+                        public VerticalLayoutEngine
 {
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,

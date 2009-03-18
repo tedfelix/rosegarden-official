@@ -14,14 +14,14 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _LAYOUT_ENGINE_H_
-#define _LAYOUT_ENGINE_H_
+#ifndef _LAYOUT_ENGINE_2_H_
+#define _LAYOUT_ENGINE_2_H_
 
 #include "RulerScale.h"
 
 namespace Rosegarden {
 
-class Staff;
+class ViewSegment;
 class TimeSignature;
 
 
@@ -29,49 +29,49 @@ class TimeSignature;
  * Base classes for layout engines.  The intention is that
  * different sorts of renderers (piano-roll, score etc) can be
  * implemented by simply plugging different implementations
- * of Staff and LayoutEngine into a single view class.
+ * of ViewSegment and LayoutEngine into a single view class.
  */
 class LayoutEngine
 {
 public: 
-    LayoutEngine();
-    virtual ~LayoutEngine();
+    LayoutEngine() { }
+    virtual ~LayoutEngine() { }
 
     /**
-     * Resets internal data stores for all staffs
+     * Resets internal data stores for all segments
      */
     virtual void reset() = 0;
 
     /**
-     * Resets internal data stores for a specific staff.
+     * Resets internal data stores for a specific segment.
      * 
-     * If startTime == endTime, act on the whole staff; otherwise only
+     * If startTime == endTime, act on the whole segment; otherwise only
      * the given section.
      */
-    virtual void resetStaff(Staff &staff,
-                            timeT startTime = 0,
-                            timeT endTime = 0) = 0;
+    virtual void resetViewSegment(ViewSegment &viewSegment,
+				  timeT startTime = 0,
+				  timeT endTime = 0) = 0;
 
     /**
-     * Precomputes layout data for a single staff, updating any
-     * internal data stores associated with that staff and updating
-     * any layout-related properties in the events on the staff's
+     * Precomputes layout data for a single segment, updating any
+     * internal data stores associated with that segment and updating
+     * any layout-related properties in the events on the segment's
      * segment.
      * 
-     * If startTime == endTime, act on the whole staff; otherwise only
+     * If startTime == endTime, act on the whole segment; otherwise only
      * the given section.
      */
-    virtual void scanStaff(Staff &staff,
-                           timeT startTime = 0,
-                           timeT endTime = 0) = 0;
+    virtual void scanViewSegment(ViewSegment &viewSegment,
+				 timeT startTime = 0,
+				 timeT endTime = 0) = 0;
 
     /**
      * Computes any layout data that may depend on the results of
-     * scanning more than one staff.  This may mean doing most of
+     * scanning more than one segment.  This may mean doing most of
      * the layout (likely for horizontal layout) or nothing at all
      * (likely for vertical layout).
      * 
-     * If startTime == endTime, act on the whole staff; otherwise only
+     * If startTime == endTime, act on the whole segment; otherwise only
      * the given section.
      */
     virtual void finishLayout(timeT startTime = 0,
@@ -85,11 +85,11 @@ protected:
 
 
 class HorizontalLayoutEngine : public LayoutEngine,
-                               public RulerScale
+				public RulerScale
 {
 public:
-    HorizontalLayoutEngine(Composition *c);
-    virtual ~HorizontalLayoutEngine();
+    HorizontalLayoutEngine(Composition *c) : LayoutEngine(), RulerScale(c) { }
+    virtual ~HorizontalLayoutEngine() { }
 
     /**
      * Sets a page width for the layout.
@@ -97,7 +97,7 @@ public:
      * A layout implementation does not have to use this.  Some might
      * use it (for example) to ensure that bar lines fall precisely at
      * the right-hand margin of each page.  The computed x-coordinates
-     * will still require to be wrapped into lines by the staff or
+     * will still require to be wrapped into lines by the segment or
      * view implementation, however.
      *
      * A width of zero indicates no requirement for division into
@@ -107,24 +107,24 @@ public:
 
     /**
      * Returns the number of the first visible bar line on the given
-     * staff
+     * segment
      */
-    virtual int getFirstVisibleBarOnStaff(Staff &) {
+    virtual int getFirstVisibleBarOnViewSegment(ViewSegment &) const {
         return  getFirstVisibleBar();
     }
 
     /**
      * Returns the number of the last visible bar line on the given
-     * staff
+     * segment
      */
-    virtual int getLastVisibleBarOnStaff(Staff &) {
+    virtual int getLastVisibleBarOnViewSegment(ViewSegment &) const {
         return  getLastVisibleBar();
     }
 
     /**
      * Returns true if the specified bar has the correct length
      */
-    virtual bool isBarCorrectOnStaff(Staff &, int/* barNo */) {
+    virtual bool isBarCorrectOnViewSegment(ViewSegment &, int/* barNo */) const {
         return true;
     }
 
@@ -134,7 +134,7 @@ public:
      * x-coord
      */
     virtual bool getTimeSignaturePosition
-    (Staff &, int /* barNo */, TimeSignature &, double &/* timeSigX */) {
+    (ViewSegment &, int /* barNo */, TimeSignature &, double &/* timeSigX */) const {
         return 0;
     }
 };
@@ -144,8 +144,8 @@ public:
 class VerticalLayoutEngine : public LayoutEngine
 {
 public:
-    VerticalLayoutEngine();
-    virtual ~VerticalLayoutEngine();
+    VerticalLayoutEngine() { }
+    virtual ~VerticalLayoutEngine() { }
 
     // I don't think we need to add anything here for now
 };
