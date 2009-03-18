@@ -4390,18 +4390,6 @@
 ./src/base/Sets.o: src/base/CompositionTimeSliceAdapter.h
 ./src/base/Sets.o: src/base/BaseProperties.h src/base/MidiTypes.h
 ./src/base/Sets.o: src/base/Quantizer.h src/base/FastVector.h
-./src/base/LayoutEngine.o: ./src/base/LayoutEngine.h ./src/base/RulerScale.h
-./src/base/LayoutEngine.o: src/base/Event.h src/base/PropertyMap.h
-./src/base/LayoutEngine.o: src/base/Property.h src/base/RealTime.h
-./src/base/LayoutEngine.o: src/base/PropertyName.h src/base/Exception.h
-./src/base/LayoutEngine.o: src/base/Segment.h src/base/Track.h
-./src/base/LayoutEngine.o: src/base/XmlExportable.h src/base/Instrument.h
-./src/base/LayoutEngine.o: src/base/MidiProgram.h src/base/Device.h
-./src/base/LayoutEngine.o: src/base/NotationTypes.h src/base/RefreshStatus.h
-./src/base/LayoutEngine.o: src/base/Selection.h src/base/Composition.h
-./src/base/LayoutEngine.o: src/base/FastVector.h src/base/Configuration.h
-./src/base/LayoutEngine.o: src/base/ColourMap.h src/base/Colour.h
-./src/base/LayoutEngine.o: src/base/TriggerSegment.h src/base/Marker.h
 ./src/base/CompositionTimeSliceAdapter.o: src/base/CompositionTimeSliceAdapter.h
 ./src/base/CompositionTimeSliceAdapter.o: src/base/Segment.h src/base/Track.h
 ./src/base/CompositionTimeSliceAdapter.o: src/base/XmlExportable.h
@@ -4593,12 +4581,12 @@
 ./src/base/Selection.o: src/base/TriggerSegment.h src/base/Marker.h
 ./src/base/Selection.o: ./src/base/SegmentNotationHelper.h
 ./src/base/Selection.o: src/base/BaseProperties.h
+./src/base/MidiTypes.o: src/base/MidiTypes.h src/base/Event.h
+./src/base/MidiTypes.o: src/base/PropertyMap.h src/base/Property.h
+./src/base/MidiTypes.o: src/base/RealTime.h src/base/PropertyName.h
+./src/base/MidiTypes.o: src/base/Exception.h src/base/Instrument.h
+./src/base/MidiTypes.o: src/base/XmlExportable.h src/base/MidiProgram.h
 
-./src/base/MidiTypes.o: ./src/base/MidiTypes.h ./src/base/Event.h
-./src/base/MidiTypes.o: ./src/base/PropertyMap.h ./src/base/Property.h
-./src/base/MidiTypes.o: ./src/base/RealTime.h ./src/base/PropertyName.h
-./src/base/MidiTypes.o: ./src/base/Exception.h ./src/base/Instrument.h
-./src/base/MidiTypes.o: ./src/base/XmlExportable.h ./src/base/MidiProgram.h
 ./src/base/Quantizer.o: ./src/base/Quantizer.h ./src/base/Segment.h
 ./src/base/Quantizer.o: ./src/base/Track.h ./src/base/XmlExportable.h
 ./src/base/Quantizer.o: ./src/base/Instrument.h ./src/base/MidiProgram.h
@@ -6037,23 +6025,13 @@
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/AudioPluginInstance.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: src/document/ConfigGroups.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: src/sound/MappedEvent.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Composition.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/FastVector.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/RealTime.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Segment.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Track.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Event.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/PropertyMap.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Property.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/PropertyName.h
 ./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Exception.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/NotationTypes.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/RefreshStatus.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Configuration.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/ColourMap.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Colour.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/TriggerSegment.h
-./src/gui/studio/ChangeRecordDeviceCommand.o: ./src/base/Marker.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/gui/studio/MidiMixerWindow.h
 ./src/gui/studio/MidiMixerWindow.o: src/base/MidiProgram.h
 ./src/gui/studio/MidiMixerWindow.o: src/gui/general/ActionFileClient.h
@@ -6102,7 +6080,6 @@
 ./src/gui/studio/MidiMixerWindow.o: src/sound/SequencerDataBlock.h
 ./src/gui/studio/MidiMixerWindow.o: src/sound/ControlBlock.h
 ./src/gui/studio/MidiMixerWindow.o: src/sound/MappedEvent.h
-./src/gui/studio/MidiMixerWindow.o: ./src/base/Composition.h
 ./src/gui/studio/MidiMixerWindow.o: src/gui/widgets/Fader.h
 ./src/gui/studio/MidiMixerWindow.o: src/base/AudioLevel.h
 ./src/gui/studio/MidiMixerWindow.o: src/gui/widgets/Rotary.h
@@ -6258,9 +6235,9 @@
 ./src/gui/studio/AudioMixerWindow.o: src/sound/SequencerDataBlock.h
 ./src/gui/studio/AudioMixerWindow.o: src/sound/ControlBlock.h
 ./src/gui/studio/AudioMixerWindow.o: src/sound/MappedEvent.h
-./src/gui/studio/AudioMixerWindow.o: ./src/base/Composition.h
 ./src/gui/studio/AudioMixerWindow.o: src/gui/seqmanager/SequenceManager.h
 ./src/gui/studio/AudioMixerWindow.o: src/sound/MappedComposition.h
+./src/gui/studio/AudioMixerWindow.o: ./src/base/Composition.h
 ./src/gui/studio/AudioMixerWindow.o: src/sound/MappedEvent.h
 ./src/gui/studio/AudioMixerWindow.o: src/gui/widgets/AudioRouteMenu.h
 ./src/gui/studio/AudioMixerWindow.o: src/gui/widgets/AudioVUMeter.h
@@ -6705,20 +6682,22 @@
 ./src/gui/general/RosegardenCanvasView.o: ./src/gui/general/RosegardenCanvasView.moc
 ./src/gui/general/CanvasItemGC.o: ./src/gui/general/CanvasItemGC.h
 ./src/gui/general/CanvasItemGC.o: src/misc/Debug.h
-
 ./src/gui/general/PresetGroup.o: ./src/gui/general/PresetGroup.h
 ./src/gui/general/PresetGroup.o: src/base/Exception.h
 ./src/gui/general/PresetGroup.o: ./src/gui/general/CategoryElement.h
 ./src/gui/general/PresetGroup.o: ./src/gui/general/PresetElement.h
 ./src/gui/general/PresetGroup.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/general/PresetGroup.o: ./src/base/PropertyName.h
+./src/gui/general/PresetGroup.o: ./src/base/Exception.h
 ./src/gui/general/PresetGroup.o: src/gui/general/ClefIndex.h
-./src/gui/general/PresetGroup.o: src/base/NotationTypes.h src/base/Event.h
-./src/gui/general/PresetGroup.o: src/base/PropertyMap.h src/base/Property.h
-./src/gui/general/PresetGroup.o: src/base/RealTime.h src/base/PropertyName.h
-./src/gui/general/PresetGroup.o: src/base/Exception.h src/base/Instrument.h
-./src/gui/general/PresetGroup.o: src/base/XmlExportable.h
-./src/gui/general/PresetGroup.o: src/base/MidiProgram.h
+./src/gui/general/PresetGroup.o: src/base/NotationTypes.h ./src/base/Event.h
+./src/gui/general/PresetGroup.o: ./src/base/PropertyMap.h
+./src/gui/general/PresetGroup.o: ./src/base/Property.h ./src/base/RealTime.h
+./src/gui/general/PresetGroup.o: ./src/base/Instrument.h
+./src/gui/general/PresetGroup.o: ./src/base/XmlExportable.h
+./src/gui/general/PresetGroup.o: ./src/base/MidiProgram.h
 ./src/gui/general/PresetGroup.o: src/gui/general/ResourceFinder.h
+
 ./src/gui/general/BaseToolBox.o: ./src/gui/general/BaseToolBox.h
 ./src/gui/general/BaseToolBox.o: ./src/gui/general/BaseTool.h
 ./src/gui/general/BaseToolBox.o: ./src/gui/general/BaseToolBox.moc
@@ -6833,6 +6812,7 @@
 ./src/gui/editors/matrix/MatrixToolBox.o: ./src/gui/editors/matrix/MatrixResizer.h
 ./src/gui/editors/matrix/MatrixToolBox.o: ./src/gui/editors/matrix/MatrixScene.h
 ./src/gui/editors/matrix/MatrixToolBox.o: src/base/Composition.h
+./src/gui/editors/matrix/MatrixToolBox.o: ./src/gui/editors/matrix/MatrixVelocity.h
 ./src/gui/editors/matrix/MatrixToolBox.o: ./src/gui/editors/matrix/MatrixToolBox.moc
 ./src/gui/editors/matrix/MatrixResizer.o: ./src/gui/editors/matrix/MatrixResizer.h
 ./src/gui/editors/matrix/MatrixResizer.o: ./src/gui/editors/matrix/MatrixTool.h
@@ -7081,6 +7061,8 @@
 ./src/gui/editors/matrix/MatrixTool.o: src/gui/general/BaseTool.h
 ./src/gui/editors/matrix/MatrixTool.o: src/gui/general/ActionFileClient.h
 ./src/gui/editors/matrix/MatrixTool.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/editors/matrix/MatrixTool.o: src/base/PropertyName.h
+./src/gui/editors/matrix/MatrixTool.o: src/base/Exception.h
 ./src/gui/editors/matrix/MatrixTool.o: ./src/gui/editors/matrix/MatrixWidget.h
 ./src/gui/editors/matrix/MatrixTool.o: src/base/Event.h
 ./src/gui/editors/matrix/MatrixTool.o: src/gui/general/SelectionManager.h
@@ -7135,20 +7117,67 @@
 ./src/gui/editors/matrix/MatrixPainter.o: ./src/gui/editors/matrix/MatrixMouseEvent.h
 ./src/gui/editors/matrix/MatrixPainter.o: src/misc/Debug.h
 ./src/gui/editors/matrix/MatrixPainter.o: ./src/gui/editors/matrix/MatrixPainter.moc
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixVelocity.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixTool.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/gui/general/BaseTool.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/gui/general/ActionFileClient.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Event.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Segment.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Track.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/XmlExportable.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Instrument.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/MidiProgram.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Device.h src/base/Event.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/PropertyMap.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Property.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/RealTime.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/PropertyName.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Exception.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/NotationTypes.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/RefreshStatus.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Selection.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/SnapGrid.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/RulerScale.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Segment.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Selection.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Composition.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/FastVector.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Configuration.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/ColourMap.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Colour.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/TriggerSegment.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Marker.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/ViewElement.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/document/CommandHistory.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/commands/edit/ChangeVelocityCommand.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/document/BasicSelectionCommand.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/document/BasicCommand.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/document/Command.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/misc/Debug.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixElement.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixViewSegment.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/ViewSegment.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/ViewElement.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixMouseEvent.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixScene.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/base/Composition.h
+./src/gui/editors/matrix/MatrixVelocity.o: src/gui/general/SelectionManager.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixWidget.h
+./src/gui/editors/matrix/MatrixVelocity.o: ./src/gui/editors/matrix/MatrixVelocity.moc
 ./src/gui/editors/matrix/MatrixSelector.o: ./src/gui/editors/matrix/MatrixSelector.h
 ./src/gui/editors/matrix/MatrixSelector.o: ./src/gui/editors/matrix/MatrixTool.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/gui/general/BaseTool.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/gui/general/ActionFileClient.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/Event.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/misc/Strings.h
-./src/gui/editors/matrix/MatrixSelector.o: src/base/BaseProperties.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/PropertyName.h
+./src/gui/editors/matrix/MatrixSelector.o: src/base/Exception.h
+./src/gui/editors/matrix/MatrixSelector.o: src/base/BaseProperties.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/NotationTypes.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/Event.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/PropertyMap.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/Property.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/RealTime.h
-./src/gui/editors/matrix/MatrixSelector.o: src/base/Exception.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/Instrument.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/XmlExportable.h
 ./src/gui/editors/matrix/MatrixSelector.o: src/base/MidiProgram.h
@@ -7283,6 +7312,7 @@
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixEraser.h
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixMover.h
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixResizer.h
+./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixVelocity.h
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixMouseEvent.h
 ./src/gui/editors/matrix/MatrixWidget.o: src/document/RosegardenGUIDoc.h
 ./src/gui/editors/matrix/MatrixWidget.o: src/base/Configuration.h
@@ -7451,6 +7481,8 @@
 ./src/gui/editors/guitar/GuitarChordSelectorDialog.o: ./src/gui/editors/guitar/FingeringListBoxItem.h
 ./src/gui/editors/guitar/GuitarChordSelectorDialog.o: src/gui/general/ResourceFinder.h
 ./src/gui/editors/guitar/GuitarChordSelectorDialog.o: src/misc/Strings.h
+./src/gui/editors/guitar/GuitarChordSelectorDialog.o: src/base/PropertyName.h
+./src/gui/editors/guitar/GuitarChordSelectorDialog.o: src/base/Exception.h
 ./src/gui/editors/guitar/GuitarChordSelectorDialog.o: ./src/gui/editors/guitar/GuitarChordSelectorDialog.moc
 ./src/gui/editors/guitar/NoteSymbols.o: ./src/gui/editors/guitar/NoteSymbols.h
 ./src/gui/editors/guitar/NoteSymbols.o: ./src/gui/editors/guitar/Fingering.h
@@ -7462,8 +7494,11 @@
 ./src/gui/editors/guitar/Chord.o: ./src/gui/editors/guitar/Chord.h
 ./src/gui/editors/guitar/Chord.o: ./src/gui/editors/guitar/Fingering.h
 ./src/gui/editors/guitar/Chord.o: src/base/Event.h src/misc/Debug.h
-./src/gui/editors/guitar/Chord.o: src/misc/Strings.h
+./src/gui/editors/guitar/Chord.o: src/misc/Strings.h src/base/PropertyName.h
+./src/gui/editors/guitar/Chord.o: src/base/Exception.h
 ./src/gui/editors/guitar/ChordMap.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/editors/guitar/ChordMap.o: src/base/PropertyName.h
+./src/gui/editors/guitar/ChordMap.o: src/base/Exception.h
 ./src/gui/editors/guitar/ChordMap.o: ./src/gui/editors/guitar/ChordMap.h
 ./src/gui/editors/guitar/ChordMap.o: ./src/gui/editors/guitar/Chord.h
 ./src/gui/editors/guitar/ChordMap.o: ./src/gui/editors/guitar/Fingering.h
@@ -7816,7 +7851,7 @@
 ./src/gui/editors/notation/NotationStaff.o: ./src/gui/editors/notation/NotationProperties.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/PropertyName.h
 ./src/gui/editors/notation/NotationStaff.o: ./src/gui/editors/notation/NotationHLayout.h
-./src/gui/editors/notation/NotationStaff.o: src/base/LayoutEngine2.h
+./src/gui/editors/notation/NotationStaff.o: src/base/LayoutEngine.h
 ./src/gui/editors/notation/NotationStaff.o: ./src/gui/editors/notation/NotationScene.h
 ./src/gui/editors/notation/NotationStaff.o: src/gui/general/SelectionManager.h
 ./src/gui/editors/notation/NotationStaff.o: ./src/gui/editors/notation/NoteFontFactory.h
@@ -7837,7 +7872,7 @@
 ./src/gui/editors/notation/StaffLayout.o: src/base/PropertyName.h
 ./src/gui/editors/notation/StaffLayout.o: src/base/Exception.h
 ./src/gui/editors/notation/StaffLayout.o: src/misc/Debug.h
-./src/gui/editors/notation/StaffLayout.o: src/base/LayoutEngine2.h
+./src/gui/editors/notation/StaffLayout.o: src/base/LayoutEngine.h
 ./src/gui/editors/notation/StaffLayout.o: src/base/RulerScale.h
 ./src/gui/editors/notation/StaffLayout.o: src/base/Segment.h
 ./src/gui/editors/notation/StaffLayout.o: src/base/Selection.h
@@ -7909,7 +7944,7 @@
 ./src/gui/editors/notation/NotationElement.o: src/base/XmlExportable.h
 ./src/gui/editors/notation/NotationElement.o: src/base/MidiProgram.h
 ./src/gui/editors/notation/NotationHLayout.o: ./src/gui/editors/notation/NotationHLayout.h
-./src/gui/editors/notation/NotationHLayout.o: src/base/LayoutEngine2.h
+./src/gui/editors/notation/NotationHLayout.o: src/base/LayoutEngine.h
 ./src/gui/editors/notation/NotationHLayout.o: src/base/RulerScale.h
 ./src/gui/editors/notation/NotationHLayout.o: src/base/Event.h
 ./src/gui/editors/notation/NotationHLayout.o: src/base/PropertyMap.h
@@ -7979,11 +8014,15 @@
 ./src/gui/editors/notation/NoteFontMap.o: ./src/gui/editors/notation/SystemFont.h
 ./src/gui/editors/notation/NoteFontMap.o: src/gui/editors/notation/NoteCharacterNames.h
 ./src/gui/editors/notation/NoteFontMap.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/editors/notation/NoteFontMap.o: src/base/PropertyName.h
+./src/gui/editors/notation/NoteFontMap.o: src/base/Exception.h
 ./src/gui/editors/notation/NoteFontMap.o: src/gui/general/ResourceFinder.h
 ./src/gui/editors/notation/NoteFontFactory.o: ./src/gui/editors/notation/NoteFontFactory.h
 ./src/gui/editors/notation/NoteFontFactory.o: src/base/Exception.h
 ./src/gui/editors/notation/NoteFontFactory.o: src/misc/Debug.h
 ./src/gui/editors/notation/NoteFontFactory.o: src/misc/Strings.h
+./src/gui/editors/notation/NoteFontFactory.o: src/base/PropertyName.h
+./src/gui/editors/notation/NoteFontFactory.o: src/base/Exception.h
 ./src/gui/editors/notation/NoteFontFactory.o: src/document/ConfigGroups.h
 ./src/gui/editors/notation/NoteFontFactory.o: src/gui/widgets/StartupLogo.h
 ./src/gui/editors/notation/NoteFontFactory.o: ./src/gui/editors/notation/NoteFont.h
@@ -8077,7 +8116,7 @@
 ./src/gui/editors/notation/NotationScene.o: ./src/gui/editors/notation/NotationElement.h
 ./src/gui/editors/notation/NotationScene.o: src/base/Exception.h
 ./src/gui/editors/notation/NotationScene.o: ./src/gui/editors/notation/NotationHLayout.h
-./src/gui/editors/notation/NotationScene.o: src/base/LayoutEngine2.h
+./src/gui/editors/notation/NotationScene.o: src/base/LayoutEngine.h
 ./src/gui/editors/notation/NotationScene.o: src/base/RulerScale.h
 ./src/gui/editors/notation/NotationScene.o: src/base/Selection.h
 ./src/gui/editors/notation/NotationScene.o: src/base/Composition.h
@@ -8292,6 +8331,8 @@
 ./src/gui/editors/notation/NotationView.o: ./src/gui/editors/notation/NotationView.moc
 ./src/gui/editors/notation/FontViewFrame.o: ./src/gui/editors/notation/FontViewFrame.h
 ./src/gui/editors/notation/FontViewFrame.o: src/misc/Strings.h
+./src/gui/editors/notation/FontViewFrame.o: src/base/PropertyName.h
+./src/gui/editors/notation/FontViewFrame.o: src/base/Exception.h
 ./src/gui/editors/notation/FontViewFrame.o: ./src/gui/editors/notation/FontViewFrame.moc
 ./src/gui/editors/notation/NotationProperties.o: ./src/gui/editors/notation/NotationProperties.h
 ./src/gui/editors/notation/NotationProperties.o: src/base/PropertyName.h
@@ -8302,10 +8343,12 @@
 ./src/gui/editors/notation/NoteFont.o: ./src/gui/editors/notation/SystemFont.h
 ./src/gui/editors/notation/NoteFont.o: src/gui/editors/notation/NoteCharacterNames.h
 ./src/gui/editors/notation/NoteFont.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/editors/notation/NoteFont.o: src/base/PropertyName.h
+./src/gui/editors/notation/NoteFont.o: src/base/Exception.h
 ./src/gui/editors/notation/NoteFont.o: src/gui/general/PixmapFunctions.h
 ./src/gui/editors/notation/NotationVLayout.o: ./src/gui/editors/notation/NotationVLayout.h
 ./src/gui/editors/notation/NotationVLayout.o: src/base/FastVector.h
-./src/gui/editors/notation/NotationVLayout.o: src/base/LayoutEngine2.h
+./src/gui/editors/notation/NotationVLayout.o: src/base/LayoutEngine.h
 ./src/gui/editors/notation/NotationVLayout.o: src/base/RulerScale.h
 ./src/gui/editors/notation/NotationVLayout.o: src/base/Event.h
 ./src/gui/editors/notation/NotationVLayout.o: src/base/PropertyMap.h
@@ -8395,6 +8438,8 @@
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: ./src/gui/editors/parameters/InstrumentParameterPanel.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/misc/Debug.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/misc/Strings.h
+./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/PropertyName.h
+./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Exception.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/AudioPluginInstance.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/XmlExportable.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Instrument.h
@@ -8406,8 +8451,6 @@
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/RealTime.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/PropertyMap.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Property.h
-./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/PropertyName.h
-./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Exception.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Device.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/RealTime.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Segment.h
@@ -8459,6 +8502,8 @@
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Event.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/misc/Debug.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/misc/Strings.h
+./src/gui/editors/parameters/SegmentParameterBox.o: src/base/PropertyName.h
+./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Exception.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/document/ConfigGroups.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Colour.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/ColourMap.h
@@ -8468,8 +8513,6 @@
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/PropertyMap.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Property.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/RealTime.h
-./src/gui/editors/parameters/SegmentParameterBox.o: src/base/PropertyName.h
-./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Exception.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Instrument.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/XmlExportable.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/MidiProgram.h
@@ -8529,6 +8572,8 @@
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/Midi.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/misc/Debug.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/misc/Strings.h
+./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/PropertyName.h
+./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Exception.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Colour.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Composition.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/ControlParameter.h
@@ -8538,8 +8583,6 @@
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/RealTime.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/PropertyMap.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Property.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/PropertyName.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Exception.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Device.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/RealTime.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Segment.h
@@ -8561,14 +8604,6 @@
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/MappedCommon.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/gui/widgets/Rotary.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/MappedEvent.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Composition.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/FastVector.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Segment.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Configuration.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/ColourMap.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Colour.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/TriggerSegment.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Marker.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/MappedInstrument.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/sound/MappedDevice.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.moc
@@ -8619,31 +8654,39 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/ColourTable.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/editors/parameters/RosegardenParameterArea.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/editors/parameters/RosegardenParameterBox.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Composition.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/FastVector.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/RealTime.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Segment.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Track.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/XmlExportable.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Instrument.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/MidiProgram.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Device.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Configuration.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/PropertyMap.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Property.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/PropertyName.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Exception.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/ColourMap.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Colour.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/TriggerSegment.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Marker.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/base/Event.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/SqueezedLabel.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/misc/Debug.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/misc/Strings.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/general/ClefIndex.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/NotationTypes.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Event.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/PropertyMap.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Property.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/RealTime.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/PropertyName.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Exception.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Instrument.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/XmlExportable.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/MidiProgram.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/document/ConfigGroups.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/AudioPluginInstance.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Colour.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/ColourMap.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Colour.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Composition.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Device.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Exception.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Instrument.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/MidiDevice.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Device.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/MidiMetronome.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/ControlParameter.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Controllable.h
@@ -8658,7 +8701,6 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Configuration.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/RealTime.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Segment.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/base/Track.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/NotationTypes.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/RefreshStatus.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
@@ -8671,7 +8713,7 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/PitchChooser.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/general/GUIPalette.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/general/PresetHandlerDialog.h
-./src/gui/editors/parameters/TrackParameterBox.o: ./src/gui/general/CategoryElement.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/gui/general/CategoryElement.h
 ./src/gui/editors/parameters/TrackParameterBox.o: ./src/gui/general/PresetElement.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/CollapsingFrame.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/sound/PluginIdentifier.h
@@ -8843,13 +8885,13 @@
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Event.h
 ./src/gui/editors/segment/MarkerEditor.o: ./src/gui/editors/segment/MarkerEditorViewItem.h
 ./src/gui/editors/segment/MarkerEditor.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/editors/segment/MarkerEditor.o: src/base/PropertyName.h
+./src/gui/editors/segment/MarkerEditor.o: src/base/Exception.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Composition.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Marker.h src/base/Event.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/PropertyMap.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Property.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/RealTime.h
-./src/gui/editors/segment/MarkerEditor.o: src/base/PropertyName.h
-./src/gui/editors/segment/MarkerEditor.o: src/base/Exception.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/XmlExportable.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/RealTime.h
 ./src/gui/editors/segment/MarkerEditor.o: src/commands/edit/AddMarkerCommand.h
@@ -8955,14 +8997,14 @@
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Event.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/misc/Debug.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/misc/Strings.h
+./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/PropertyName.h
+./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Exception.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/gui/general/ClefIndex.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/NotationTypes.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Event.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/PropertyMap.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Property.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/RealTime.h
-./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/PropertyName.h
-./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Exception.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Instrument.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/XmlExportable.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/MidiProgram.h
@@ -11032,7 +11074,7 @@
 ./src/gui/configuration/NotationConfigurationPage.o: src/sound/PeakFile.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/gui/editors/notation/HeadersGroup.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/gui/editors/notation/NotationHLayout.h
-./src/gui/configuration/NotationConfigurationPage.o: src/base/LayoutEngine2.h
+./src/gui/configuration/NotationConfigurationPage.o: src/base/LayoutEngine.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/RulerScale.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Segment.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Selection.h
@@ -11541,14 +11583,6 @@
 ./src/gui/seqmanager/MetronomeMmapper.o: src/sound/PeakFileManager.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/sound/PeakFile.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/sound/MappedEvent.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/Composition.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/FastVector.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/Segment.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/Configuration.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/ColourMap.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/Colour.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/base/Marker.h
 ./src/gui/seqmanager/SequencerMapper.o: ./src/gui/seqmanager/SequencerMapper.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/MidiProgram.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/RealTime.h src/base/Track.h
@@ -11560,6 +11594,9 @@
 ./src/gui/seqmanager/SequencerMapper.o: src/base/Instrument.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/Device.h src/base/RealTime.h
 ./src/gui/seqmanager/SequencerMapper.o: src/sound/MappedEvent.h
+./src/gui/seqmanager/SequencerMapper.o: src/base/Event.h src/misc/Debug.h
+./src/gui/seqmanager/SequencerMapper.o: src/base/Exception.h
+./src/gui/seqmanager/SequencerMapper.o: src/sound/MappedComposition.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/Composition.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/FastVector.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/Segment.h
@@ -11571,9 +11608,7 @@
 ./src/gui/seqmanager/SequencerMapper.o: src/base/ColourMap.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/Colour.h
 ./src/gui/seqmanager/SequencerMapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/SequencerMapper.o: src/base/Marker.h src/base/Event.h
-./src/gui/seqmanager/SequencerMapper.o: src/misc/Debug.h src/base/Exception.h
-./src/gui/seqmanager/SequencerMapper.o: src/sound/MappedComposition.h
+./src/gui/seqmanager/SequencerMapper.o: src/base/Marker.h
 ./src/gui/seqmanager/SequencerMapper.o: src/sound/MappedEvent.h
 ./src/gui/seqmanager/SequencerMapper.o: src/misc/Strings.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: ./src/gui/seqmanager/AudioSegmentMmapper.h
@@ -11610,14 +11645,6 @@
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/sound/PeakFileManager.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/sound/PeakFile.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/sound/MappedEvent.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Composition.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/FastVector.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Segment.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Configuration.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/ColourMap.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Colour.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Marker.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: ./src/gui/seqmanager/TimeSigSegmentMmapper.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: ./src/gui/seqmanager/SpecialSegmentMmapper.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: ./src/gui/seqmanager/SegmentMmapper.h
@@ -11653,14 +11680,6 @@
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/sound/PeakFileManager.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/sound/PeakFile.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/sound/MappedEvent.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Composition.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/FastVector.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Segment.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Configuration.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/ColourMap.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Colour.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Marker.h
 ./src/gui/seqmanager/SegmentMmapper.o: ./src/gui/seqmanager/SegmentMmapper.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/Event.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/PropertyMap.h
@@ -11970,26 +11989,26 @@
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/NotationTypes.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/RefreshStatus.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/RealTime.h
-./src/gui/rulers/ControllerEventsRuler.o: src/gui/general/RosegardenCanvasView.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/Event.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/PropertyMap.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/Property.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/PropertyName.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/Exception.h
-./src/gui/rulers/ControllerEventsRuler.o: src/misc/Debug.h src/misc/Strings.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/ControlParameter.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/MidiTypes.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/NotationTypes.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/RulerScale.h
-./src/gui/rulers/ControllerEventsRuler.o: src/base/Segment.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Selection.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/PropertyName.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/Segment.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Composition.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/FastVector.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Configuration.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/PropertyMap.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/Property.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/Exception.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/ColourMap.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Colour.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/TriggerSegment.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Marker.h
+./src/gui/rulers/ControllerEventsRuler.o: src/gui/general/RosegardenCanvasView.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/Event.h src/misc/Debug.h
+./src/gui/rulers/ControllerEventsRuler.o: src/misc/Strings.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/ControlParameter.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/MidiTypes.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/NotationTypes.h
+./src/gui/rulers/ControllerEventsRuler.o: src/base/RulerScale.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/base/Selection.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/commands/edit/EraseCommand.h
 ./src/gui/rulers/ControllerEventsRuler.o: src/document/BasicSelectionCommand.h
@@ -12050,15 +12069,23 @@
 ./src/gui/rulers/PropertyControlRuler.o: src/base/NotationTypes.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/RefreshStatus.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/RealTime.h
-./src/gui/rulers/PropertyControlRuler.o: src/gui/general/RosegardenCanvasView.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Event.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Selection.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/PropertyName.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Segment.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Composition.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/FastVector.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Configuration.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/PropertyMap.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/Property.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/PropertyName.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/Exception.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/ColourMap.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Colour.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/TriggerSegment.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Marker.h
+./src/gui/rulers/PropertyControlRuler.o: src/gui/general/RosegardenCanvasView.h
+./src/gui/rulers/PropertyControlRuler.o: src/base/Event.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/ViewSegment.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/ViewElement.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Segment.h
 ./src/gui/rulers/PropertyControlRuler.o: ./src/gui/rulers/ControlItem.h
 ./src/gui/rulers/PropertyControlRuler.o: ./src/gui/rulers/ViewElementAdapter.h
 ./src/gui/rulers/PropertyControlRuler.o: ./src/gui/rulers/ElementAdapter.h
@@ -12067,14 +12094,6 @@
 ./src/gui/rulers/PropertyControlRuler.o: src/base/BaseProperties.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/NotationTypes.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/RulerScale.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Selection.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Composition.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/FastVector.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Configuration.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/ColourMap.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Colour.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/TriggerSegment.h
-./src/gui/rulers/PropertyControlRuler.o: src/base/Marker.h
 ./src/gui/rulers/PropertyControlRuler.o: src/base/Selection.h
 ./src/gui/rulers/PropertyControlRuler.o: src/commands/edit/SelectionPropertyCommand.h
 ./src/gui/rulers/PropertyControlRuler.o: src/document/BasicSelectionCommand.h
@@ -12105,7 +12124,16 @@
 ./src/gui/rulers/ControlSelector.o: src/base/MidiProgram.h src/base/Device.h
 ./src/gui/rulers/ControlSelector.o: src/base/Event.h src/base/NotationTypes.h
 ./src/gui/rulers/ControlSelector.o: src/base/RefreshStatus.h
-./src/gui/rulers/ControlSelector.o: src/base/RealTime.h
+./src/gui/rulers/ControlSelector.o: src/base/RealTime.h src/base/Selection.h
+./src/gui/rulers/ControlSelector.o: src/base/PropertyName.h
+./src/gui/rulers/ControlSelector.o: src/base/Segment.h src/base/Composition.h
+./src/gui/rulers/ControlSelector.o: src/base/FastVector.h
+./src/gui/rulers/ControlSelector.o: src/base/Configuration.h
+./src/gui/rulers/ControlSelector.o: src/base/PropertyMap.h
+./src/gui/rulers/ControlSelector.o: src/base/Property.h src/base/Exception.h
+./src/gui/rulers/ControlSelector.o: src/base/ColourMap.h src/base/Colour.h
+./src/gui/rulers/ControlSelector.o: src/base/TriggerSegment.h
+./src/gui/rulers/ControlSelector.o: src/base/Marker.h
 ./src/gui/rulers/ControlSelector.o: src/gui/general/RosegardenCanvasView.h
 ./src/gui/rulers/PropertyBox.o: ./src/gui/rulers/PropertyBox.h
 ./src/gui/rulers/PropertyBox.o: src/gui/general/GUIPalette.h
@@ -12172,17 +12200,17 @@
 ./src/gui/rulers/ControlRuler.o: src/base/Device.h src/base/Event.h
 ./src/gui/rulers/ControlRuler.o: src/base/NotationTypes.h
 ./src/gui/rulers/ControlRuler.o: src/base/RefreshStatus.h src/base/RealTime.h
-./src/gui/rulers/ControlRuler.o: src/gui/general/RosegardenCanvasView.h
-./src/gui/rulers/ControlRuler.o: src/base/Event.h src/base/PropertyMap.h
-./src/gui/rulers/ControlRuler.o: src/base/Property.h src/base/PropertyName.h
-./src/gui/rulers/ControlRuler.o: src/base/Exception.h src/misc/Debug.h
-./src/gui/rulers/ControlRuler.o: src/base/RulerScale.h src/base/Segment.h
-./src/gui/rulers/ControlRuler.o: src/base/Selection.h src/base/Composition.h
+./src/gui/rulers/ControlRuler.o: src/base/Selection.h src/base/PropertyName.h
+./src/gui/rulers/ControlRuler.o: src/base/Segment.h src/base/Composition.h
 ./src/gui/rulers/ControlRuler.o: src/base/FastVector.h
 ./src/gui/rulers/ControlRuler.o: src/base/Configuration.h
-./src/gui/rulers/ControlRuler.o: src/base/ColourMap.h src/base/Colour.h
-./src/gui/rulers/ControlRuler.o: src/base/TriggerSegment.h src/base/Marker.h
-./src/gui/rulers/ControlRuler.o: src/base/Selection.h
+./src/gui/rulers/ControlRuler.o: src/base/PropertyMap.h src/base/Property.h
+./src/gui/rulers/ControlRuler.o: src/base/Exception.h src/base/ColourMap.h
+./src/gui/rulers/ControlRuler.o: src/base/Colour.h src/base/TriggerSegment.h
+./src/gui/rulers/ControlRuler.o: src/base/Marker.h
+./src/gui/rulers/ControlRuler.o: src/gui/general/RosegardenCanvasView.h
+./src/gui/rulers/ControlRuler.o: src/base/Event.h src/misc/Debug.h
+./src/gui/rulers/ControlRuler.o: src/base/RulerScale.h src/base/Selection.h
 ./src/gui/rulers/ControlRuler.o: ./src/gui/rulers/ControlChangeCommand.h
 ./src/gui/rulers/ControlRuler.o: src/document/BasicCommand.h
 ./src/gui/rulers/ControlRuler.o: ./src/gui/rulers/ControlItem.h
@@ -12205,11 +12233,17 @@
 ./src/gui/rulers/ControlItem.o: src/base/Device.h src/base/Event.h
 ./src/gui/rulers/ControlItem.o: src/base/NotationTypes.h
 ./src/gui/rulers/ControlItem.o: src/base/RefreshStatus.h src/base/RealTime.h
+./src/gui/rulers/ControlItem.o: src/base/Selection.h src/base/PropertyName.h
+./src/gui/rulers/ControlItem.o: src/base/Segment.h src/base/Composition.h
+./src/gui/rulers/ControlItem.o: src/base/FastVector.h
+./src/gui/rulers/ControlItem.o: src/base/Configuration.h
+./src/gui/rulers/ControlItem.o: src/base/PropertyMap.h src/base/Property.h
+./src/gui/rulers/ControlItem.o: src/base/Exception.h src/base/ColourMap.h
+./src/gui/rulers/ControlItem.o: src/base/Colour.h src/base/TriggerSegment.h
+./src/gui/rulers/ControlItem.o: src/base/Marker.h
 ./src/gui/rulers/ControlItem.o: src/gui/general/RosegardenCanvasView.h
 ./src/gui/rulers/ControlItem.o: ./src/gui/rulers/ElementAdapter.h
-./src/gui/rulers/ControlItem.o: src/base/Event.h src/base/PropertyMap.h
-./src/gui/rulers/ControlItem.o: src/base/Property.h src/base/PropertyName.h
-./src/gui/rulers/ControlItem.o: src/base/Exception.h src/misc/Debug.h
+./src/gui/rulers/ControlItem.o: src/base/Event.h src/misc/Debug.h
 ./src/gui/rulers/ViewElementAdapter.o: ./src/gui/rulers/ViewElementAdapter.h
 ./src/gui/rulers/ViewElementAdapter.o: ./src/gui/rulers/ElementAdapter.h
 ./src/gui/rulers/ViewElementAdapter.o: src/base/Event.h
@@ -12433,22 +12467,25 @@
 ./src/sequencer/SequencerMmapper.o: src/sound/SequencerDataBlock.h
 ./src/sequencer/SequencerMmapper.o: src/sound/ControlBlock.h
 ./src/sequencer/SequencerMmapper.o: src/base/RealTime.h
-./src/sequencer/SequencerMmapper.o: src/sound/MappedEvent.h src/base/Event.h
-./src/sequencer/SequencerMmapper.o: src/base/RealTime.h src/misc/Debug.h
-./src/sequencer/SequencerMmapper.o: src/misc/Strings.h
+./src/sequencer/SequencerMmapper.o: src/sound/MappedEvent.h src/base/Track.h
+./src/sequencer/SequencerMmapper.o: src/base/XmlExportable.h
+./src/sequencer/SequencerMmapper.o: src/base/Instrument.h
+./src/sequencer/SequencerMmapper.o: src/base/MidiProgram.h src/base/Device.h
+./src/sequencer/SequencerMmapper.o: src/base/Event.h src/base/RealTime.h
+./src/sequencer/SequencerMmapper.o: src/misc/Debug.h src/misc/Strings.h
 ./src/sequencer/SequencerMmapper.o: src/base/PropertyName.h
 ./src/sequencer/SequencerMmapper.o: src/base/Exception.h src/base/Exception.h
 ./src/sequencer/SequencerMmapper.o: src/sound/MappedEvent.h
 ./src/sequencer/SequencerMmapper.o: src/sound/MappedComposition.h
 ./src/sequencer/MmappedControlBlock.o: src/sequencer/MmappedControlBlock.h
 ./src/sequencer/MmappedControlBlock.o: src/sound/MappedEvent.h
-./src/sequencer/MmappedControlBlock.o: src/base/Event.h
-./src/sequencer/MmappedControlBlock.o: src/sound/ControlBlock.h
-./src/sequencer/MmappedControlBlock.o: src/base/MidiProgram.h
-./src/sequencer/MmappedControlBlock.o: src/base/Track.h
+./src/sequencer/MmappedControlBlock.o: src/base/RealTime.h src/base/Track.h
 ./src/sequencer/MmappedControlBlock.o: src/base/XmlExportable.h
 ./src/sequencer/MmappedControlBlock.o: src/base/Instrument.h
-./src/sequencer/MmappedControlBlock.o: src/base/Device.h src/misc/Debug.h
+./src/sequencer/MmappedControlBlock.o: src/base/MidiProgram.h
+./src/sequencer/MmappedControlBlock.o: src/base/Device.h src/base/Event.h
+./src/sequencer/MmappedControlBlock.o: src/sound/ControlBlock.h
+./src/sequencer/MmappedControlBlock.o: src/misc/Debug.h
 ./src/sequencer/SequencerThread.o: ./src/sequencer/RosegardenSequencer.h
 ./src/sequencer/SequencerThread.o: src/base/Composition.h
 ./src/sequencer/SequencerThread.o: src/base/FastVector.h src/base/RealTime.h
@@ -12557,11 +12594,11 @@
 ./src/sequencer/RosegardenSequencer.o: src/base/MidiTypes.h src/base/Studio.h
 ./src/sequencer/MmappedSegment.o: src/sequencer/MmappedSegment.h
 ./src/sequencer/MmappedSegment.o: src/sequencer/MmappedControlBlock.h
-./src/sequencer/MmappedSegment.o: src/sound/MappedEvent.h src/base/Event.h
-./src/sequencer/MmappedSegment.o: src/sound/ControlBlock.h
-./src/sequencer/MmappedSegment.o: src/base/MidiProgram.h src/base/Track.h
-./src/sequencer/MmappedSegment.o: src/base/XmlExportable.h
-./src/sequencer/MmappedSegment.o: src/base/Instrument.h src/base/Device.h
+./src/sequencer/MmappedSegment.o: src/sound/MappedEvent.h src/base/RealTime.h
+./src/sequencer/MmappedSegment.o: src/base/Track.h src/base/XmlExportable.h
+./src/sequencer/MmappedSegment.o: src/base/Instrument.h
+./src/sequencer/MmappedSegment.o: src/base/MidiProgram.h src/base/Device.h
+./src/sequencer/MmappedSegment.o: src/base/Event.h src/sound/ControlBlock.h
 ./src/sequencer/MmappedSegment.o: src/sound/MappedInstrument.h
 ./src/sequencer/MmappedSegment.o: src/sound/MappedDevice.h
 ./src/sequencer/MmappedSegment.o: src/sound/MappedCommon.h src/misc/Debug.h
@@ -12664,7 +12701,10 @@
 ./src/sound/MappedStudio.o: ./src/sound/PluginFactory.h src/misc/Strings.h
 ./src/sound/MappedStudio.o: src/base/PropertyName.h
 ./src/sound/MappedComposition.o: src/sound/MappedComposition.h
-./src/sound/MappedComposition.o: src/sound/MappedEvent.h src/base/Event.h
+./src/sound/MappedComposition.o: src/sound/MappedEvent.h src/base/RealTime.h
+./src/sound/MappedComposition.o: src/base/Track.h src/base/XmlExportable.h
+./src/sound/MappedComposition.o: src/base/Instrument.h src/base/MidiProgram.h
+./src/sound/MappedComposition.o: src/base/Device.h src/base/Event.h
 ./src/sound/AudioFile.o: src/sound/AudioFile.h src/sound/SoundFile.h
 ./src/sound/AudioFile.o: src/base/Exception.h src/base/RealTime.h
 ./src/sound/JackDriver.o: ./src/sound/JackDriver.h ./src/sound/AlsaDriver.h
@@ -12784,9 +12824,11 @@
 ./src/sound/LADSPAPluginInstance.o: src/base/XmlExportable.h
 ./src/sound/LADSPAPluginInstance.o: src/base/MidiProgram.h
 ./src/sound/LADSPAPluginInstance.o: ./src/sound/LADSPAPluginFactory.h
-./src/sound/MappedEvent.o: src/sound/MappedEvent.h src/base/Event.h
-./src/sound/MappedEvent.o: ./src/sound/Midi.h src/base/Instrument.h
-./src/sound/MappedEvent.o: src/base/XmlExportable.h src/base/MidiProgram.h
+./src/sound/MappedEvent.o: src/sound/MappedEvent.h src/base/RealTime.h
+./src/sound/MappedEvent.o: src/base/Track.h src/base/XmlExportable.h
+./src/sound/MappedEvent.o: src/base/Instrument.h src/base/MidiProgram.h
+./src/sound/MappedEvent.o: src/base/Device.h src/base/Event.h
+./src/sound/MappedEvent.o: ./src/sound/Midi.h src/base/NotationTypes.h
 ./src/sound/SoundDriver.o: ./src/sound/SoundDriver.h src/base/Device.h
 ./src/sound/SoundDriver.o: src/base/XmlExportable.h src/base/Instrument.h
 ./src/sound/SoundDriver.o: src/base/MidiProgram.h
@@ -13050,6 +13092,14 @@
 ./src/document/BasicSelectionCommand.o: src/base/PropertyName.h
 ./src/document/BasicSelectionCommand.o: src/base/Exception.h src/misc/Debug.h
 ./src/document/BasicSelectionCommand.o: src/base/Selection.h
+./src/document/BasicSelectionCommand.o: src/base/Segment.h
+./src/document/BasicSelectionCommand.o: src/base/Composition.h
+./src/document/BasicSelectionCommand.o: src/base/FastVector.h
+./src/document/BasicSelectionCommand.o: src/base/Configuration.h
+./src/document/BasicSelectionCommand.o: src/base/ColourMap.h
+./src/document/BasicSelectionCommand.o: src/base/Colour.h
+./src/document/BasicSelectionCommand.o: src/base/TriggerSegment.h
+./src/document/BasicSelectionCommand.o: src/base/Marker.h
 ./src/document/XmlSubHandler.o: ./src/document/XmlSubHandler.h
 ./src/document/io/HydrogenLoader.o: ./src/document/io/HydrogenLoader.h
 ./src/document/io/HydrogenLoader.o: src/base/PropertyName.h
@@ -13267,6 +13317,7 @@
 ./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenApplication.h
 ./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenGUIView.h
 ./src/document/io/LilyPondExporter.o: src/base/Selection.h
+./src/document/io/LilyPondExporter.o: src/base/Composition.h
 ./src/document/io/LilyPondExporter.o: src/sound/AudioFile.h
 ./src/document/io/LilyPondExporter.o: src/gui/editors/segment/TrackEditor.h
 ./src/document/io/LilyPondExporter.o: src/gui/editors/segment/TrackButtons.h
