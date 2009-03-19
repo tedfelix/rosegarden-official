@@ -26,15 +26,15 @@
 #include <Q3Canvas>
 #include "misc/Debug.h"
 
-#include "QCanvasGroupableItem.h"
+#include "CanvasGroupableItem.h"
 
-QCanvasGroupableItem::QCanvasGroupableItem(Q3CanvasItem *i,
+CanvasGroupableItem::CanvasGroupableItem(Q3CanvasItem *i,
         QCanvasItemGroup *g,
         bool withRelativeCoords)
         : m_group(g),
         m_item(i)
 {
-    //     RG_DEBUG << "QCanvasGroupableItem() - this : " << this
+    //     RG_DEBUG << "CanvasGroupableItem() - this : " << this
     //                          << " - group : " << g
     //                          << " - item : " << i << endl;
 
@@ -44,9 +44,9 @@ QCanvasGroupableItem::QCanvasGroupableItem(Q3CanvasItem *i,
         group()->addItem(item());
 }
 
-QCanvasGroupableItem::~QCanvasGroupableItem()
+CanvasGroupableItem::~CanvasGroupableItem()
 {
-    //     RG_DEBUG << "~QCanvasGroupableItem() - this : " << this
+    //     RG_DEBUG << "~CanvasGroupableItem() - this : " << this
     //                          << " - group : " << group()
     //                          << " - item : " << item() << endl;
 
@@ -56,14 +56,14 @@ QCanvasGroupableItem::~QCanvasGroupableItem()
 }
 
 void
-QCanvasGroupableItem::relativeMoveBy(double dx, double dy)
+CanvasGroupableItem::relativeMoveBy(double dx, double dy)
 {
     m_item->moveBy(dx + m_group->x(),
                    dy + m_group->y());
 }
 
 void
-QCanvasGroupableItem::detach()
+CanvasGroupableItem::detach()
 {
     m_group = 0;
 }
@@ -83,7 +83,7 @@ QCanvasItemGroup::~QCanvasItemGroup()
     // Tell all our items that we're being destroyed
     Q3CanvasItemList::Iterator i;
     for (i = m_items.begin(); i != m_items.end(); ++i) {
-        QCanvasGroupableItem *t = dynamic_cast<QCanvasGroupableItem*>(*i);
+        CanvasGroupableItem *t = dynamic_cast<CanvasGroupableItem*>(*i);
         if (t)
             t->detach();
     }
@@ -247,7 +247,7 @@ QCanvasItemGroup::removeItem(Q3CanvasItem *i)
 QCanvasLineGroupable::QCanvasLineGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
         : Q3CanvasLine(c),
-        QCanvasGroupableItem(this, g)
+        CanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ QCanvasLineGroupable::QCanvasLineGroupable(Q3Canvas *c,
 QCanvasRectangleGroupable::QCanvasRectangleGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
         : Q3CanvasRectangle(c),
-        QCanvasGroupableItem(this, g)
+        CanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
@@ -264,13 +264,13 @@ QCanvasTextGroupable::QCanvasTextGroupable(const QString& label,
         Q3Canvas *c,
         QCanvasItemGroup *g)
         : Q3CanvasText(label, c),
-        QCanvasGroupableItem(this, g)
+        CanvasGroupableItem(this, g)
 {}
 
 QCanvasTextGroupable::QCanvasTextGroupable(Q3Canvas *c,
         QCanvasItemGroup *g)
         : Q3CanvasText(c),
-        QCanvasGroupableItem(this, g)
+        CanvasGroupableItem(this, g)
 {}
 
 //////////////////////////////////////////////////////////////////////
@@ -279,5 +279,5 @@ QCanvasSpriteGroupable::QCanvasSpriteGroupable(Q3CanvasPixmapArray *pa,
         Q3Canvas *c,
         QCanvasItemGroup *g)
         : Q3CanvasSprite(pa, c),
-        QCanvasGroupableItem(this, g)
+        CanvasGroupableItem(this, g)
 {}

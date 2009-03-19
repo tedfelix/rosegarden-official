@@ -24,7 +24,7 @@
 #include "base/Clipboard.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 
 #include "misc/Debug.h"
 
@@ -178,7 +178,7 @@ void EditViewBase::slotCloseWindow()
 /*
 void EditViewBase::slotToggleToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the toolbar..."), this);
 
     if (m_toolBar->isVisible())
 		m_toolBar->hide();
@@ -188,7 +188,7 @@ void EditViewBase::slotToggleToolBar()
 */
 void EditViewBase::slotToggleStatusBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the statusbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the statusbar..."), this);
 
     if (statusBar()->isVisible())
         statusBar()->hide();

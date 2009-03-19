@@ -46,7 +46,7 @@
 #include "sound/WAVAudioFile.h"
 #include "UnusedAudioSelectionDialog.h"
 #include "document/Command.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 
 #include <QApplication>
 #include <QMainWindow>

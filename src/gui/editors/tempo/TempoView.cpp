@@ -36,7 +36,7 @@
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "misc/Strings.h"
 
 #include <QAction>
@@ -655,11 +655,11 @@ TempoView::initStatusBar()
 {
     QStatusBar* sb = statusBar();
 
-    sb->showMessage(KTmpStatusMsg::getDefaultMsg());
+    sb->showMessage(TmpStatusMsg::getDefaultMsg());
     
-//     sb->addItem(KTmpStatusMsg::getDefaultMsg(),
-//                    KTmpStatusMsg::getDefaultId(), 1);
-//     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//     sb->addItem(TmpStatusMsg::getDefaultMsg(),
+//                    TmpStatusMsg::getDefaultId(), 1);
+//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //                          AlignLeft | AlignVCenter);
 }
 

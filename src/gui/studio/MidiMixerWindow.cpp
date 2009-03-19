@@ -37,7 +37,7 @@
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"

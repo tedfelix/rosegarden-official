@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef QCANVASGROUPABLEITEM_H
-#define QCANVASGROUPABLEITEM_H
+#ifndef CANVASGROUPABLEITEM_H
+#define CANVASGROUPABLEITEM_H
 
 #include <Q3Canvas>
 #include <Q3CanvasEllipse>
@@ -41,7 +41,7 @@ class QCanvasItemGroup;
  * @see QCanvasSpriteGroupable
  * @see QCanvasLineGroupable
  */
-class QCanvasGroupableItem
+class CanvasGroupableItem
 {
     friend class QCanvasItemGroup;
 
@@ -55,10 +55,10 @@ public:
      *
      * @see QCanvasItemGroup#addItemWithRelativeCoords()
      */
-    QCanvasGroupableItem(Q3CanvasItem*, QCanvasItemGroup*,
+    CanvasGroupableItem(Q3CanvasItem*, QCanvasItemGroup*,
                          bool withRelativeCoords = false);
 
-    virtual ~QCanvasGroupableItem();
+    virtual ~CanvasGroupableItem();
 
     /// Returns the QCanvasItemGroup this groupable item belongs to
     QCanvasItemGroup* group() { return m_group; }
@@ -167,7 +167,7 @@ protected:
 /**
  * A Q3CanvasLine which can be put in a QCanvasGroup
  */
-class QCanvasLineGroupable : public Q3CanvasLine, public QCanvasGroupableItem
+class QCanvasLineGroupable : public Q3CanvasLine, public CanvasGroupableItem
 {
 public: 
     QCanvasLineGroupable(Q3Canvas *c, QCanvasItemGroup *g);
@@ -176,7 +176,7 @@ public:
 /**
  * A Q3CanvasRectangle which can be put in a QCanvasGroup
  */
-class QCanvasRectangleGroupable : public Q3CanvasRectangle, public QCanvasGroupableItem
+class QCanvasRectangleGroupable : public Q3CanvasRectangle, public CanvasGroupableItem
 {
 public: 
     QCanvasRectangleGroupable(Q3Canvas *c, QCanvasItemGroup *g);
@@ -185,7 +185,7 @@ public:
 /**
  * A Q3CanvasText which can be put in a QCanvasGroup
  */
-class QCanvasTextGroupable : public Q3CanvasText, public QCanvasGroupableItem
+class QCanvasTextGroupable : public Q3CanvasText, public CanvasGroupableItem
 {
 public: 
     QCanvasTextGroupable(Q3Canvas *c, QCanvasItemGroup *g);
@@ -195,7 +195,7 @@ public:
 /**
  * A Q3CanvasSprite that can be put in a QCanvasGroup
  */
-class QCanvasSpriteGroupable : public Q3CanvasSprite, public QCanvasGroupableItem
+class QCanvasSpriteGroupable : public Q3CanvasSprite, public CanvasGroupableItem
 {
 public:
     QCanvasSpriteGroupable(Q3CanvasPixmapArray*,

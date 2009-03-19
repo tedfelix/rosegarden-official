@@ -40,7 +40,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/StaffExportTypes.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "commands/segment/SegmentSyncCommand.h"
 #include "document/RosegardenGUIDoc.h"
 #include "gui/dialogs/PitchPickerDialog.h"

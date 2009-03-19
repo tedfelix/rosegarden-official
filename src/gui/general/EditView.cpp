@@ -69,8 +69,8 @@
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/rulers/StandardRuler.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/kdeext/QCanvasGroupableItem.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/CanvasGroupableItem.h"
 #include "gui/rulers/ControllerEventsRuler.h"
 #include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/PropertyControlRuler.h"
@@ -519,7 +519,7 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 
     // Check if it's a groupable item, if so get its group
     //
-    QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
+    CanvasGroupableItem *gitem = dynamic_cast<CanvasGroupableItem*>(item);
     if (gitem)
         item = gitem->group();
 
@@ -1658,7 +1658,7 @@ EditView::slotHalveDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(tr("Halving durations..."), this);
+    TmpStatusMsg msg(tr("Halving durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1672,7 +1672,7 @@ EditView::slotDoubleDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(tr("Doubling durations..."), this);
+    TmpStatusMsg msg(tr("Doubling durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1696,7 +1696,7 @@ EditView::slotRescale()
      true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Rescaling..."), this);
+        TmpStatusMsg msg(tr("Rescaling..."), this);
         addCommandToHistory(new RescaleCommand
                             (*m_currentEventSelection,
                              dialog.getNewDuration(),
@@ -1723,7 +1723,7 @@ void EditView::slotTranspose()
 
     settings.setValue("lasttransposition", semitones);
 
-    KTmpStatusMsg msg(tr("Transposing..."), this);
+    TmpStatusMsg msg(tr("Transposing..."), this);
     addCommandToHistory(new TransposeCommand
                         (semitones, *m_currentEventSelection));
 
@@ -1747,7 +1747,7 @@ void EditView::slotDiatonicTranspose()
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
-    KTmpStatusMsg msg(tr("Transposing..."), this);
+    TmpStatusMsg msg(tr("Transposing..."), this);
     if (intervalDialog.getChangeKey())
     {
 		std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
@@ -1765,7 +1765,7 @@ void EditView::slotTransposeUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Transposing up one semitone..."), this);
+    TmpStatusMsg msg(tr("Transposing up one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
 }
@@ -1774,7 +1774,7 @@ void EditView::slotTransposeUpOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Transposing up one octave..."), this);
+    TmpStatusMsg msg(tr("Transposing up one octave..."), this);
 
     addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
 }
@@ -1783,7 +1783,7 @@ void EditView::slotTransposeDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Transposing down one semitone..."), this);
+    TmpStatusMsg msg(tr("Transposing down one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand( -1, *m_currentEventSelection));
 }
@@ -1792,7 +1792,7 @@ void EditView::slotTransposeDownOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Transposing down one octave..."), this);
+    TmpStatusMsg msg(tr("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransposeCommand( -12, *m_currentEventSelection));
 }
@@ -1804,7 +1804,7 @@ void EditView::slotInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(tr("Inverting..."), this);
+    TmpStatusMsg msg(tr("Inverting..."), this);
     addCommandToHistory(new InvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1816,7 +1816,7 @@ void EditView::slotRetrograde()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(tr("Retrograding..."), this);
+    TmpStatusMsg msg(tr("Retrograding..."), this);
     addCommandToHistory(new RetrogradeCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1828,7 +1828,7 @@ void EditView::slotRetrogradeInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(tr("Retrograde inverting..."), this);
+    TmpStatusMsg msg(tr("Retrograde inverting..."), this);
     addCommandToHistory(new RetrogradeInvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1837,7 +1837,7 @@ void EditView::slotJogLeft()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Jogging left..."), this);
+    TmpStatusMsg msg(tr("Jogging left..."), this);
 
     RG_DEBUG << "EditView::slotJogLeft" << endl;
 
@@ -1852,7 +1852,7 @@ void EditView::slotJogRight()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Jogging right..."), this);
+    TmpStatusMsg msg(tr("Jogging right..."), this);
 
     RG_DEBUG << "EditView::slotJogRight" << endl;
 

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef QCANVASSIMPLESPRITE_H
-#define QCANVASSIMPLESPRITE_H
+#ifndef CANVASSIMPLESPRITE_H
+#define CANVASSIMPLESPRITE_H
 
 #include <Q3Canvas>
 #include <Q3CanvasPixmap>
@@ -30,17 +30,17 @@ namespace Rosegarden {
 /**
  * A Q3CanvasSprite with 1 frame only
  */
-class QCanvasSimpleSprite : public Q3CanvasSprite
+class CanvasSimpleSprite : public Q3CanvasSprite
 {
 public:
-    QCanvasSimpleSprite(QPixmap*, Q3Canvas*);
-    QCanvasSimpleSprite(Q3CanvasPixmap*, Q3Canvas*);
-    QCanvasSimpleSprite(const QString &pixmapfile, Q3Canvas*);
+    CanvasSimpleSprite(QPixmap*, Q3Canvas*);
+    CanvasSimpleSprite(Q3CanvasPixmap*, Q3Canvas*);
+    CanvasSimpleSprite(const QString &pixmapfile, Q3Canvas*);
 
     // For lazy pixmap rendering, when we get around looking at it
-    QCanvasSimpleSprite(Q3Canvas*);
+    CanvasSimpleSprite(Q3Canvas*);
 
-    virtual ~QCanvasSimpleSprite();
+    virtual ~CanvasSimpleSprite();
 
 protected:
     static Q3CanvasPixmapArray* makePixmapArray(QPixmap *pixmap);
@@ -59,7 +59,7 @@ class NotationElement;
 /**
  * A Q3CanvasSprite referencing a NotationElement
  */
-class QCanvasNotationSprite : public QCanvasSimpleSprite
+class QCanvasNotationSprite : public CanvasSimpleSprite
 {
 public:
     QCanvasNotationSprite(Rosegarden::NotationElement&, QPixmap*, Q3Canvas*);
@@ -75,7 +75,7 @@ protected:
     Rosegarden::NotationElement& m_notationElement;
 };
 
-class QCanvasNonElementSprite : public QCanvasSimpleSprite
+class QCanvasNonElementSprite : public CanvasSimpleSprite
 {
 public:
     QCanvasNonElementSprite(QPixmap *, Q3Canvas *);

@@ -51,7 +51,7 @@
 #include "gui/general/ListEditView.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
@@ -953,7 +953,7 @@ EventView::slotEditPaste()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
+    TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
     timeT insertionTime = 0;
 
@@ -1400,11 +1400,11 @@ EventView::initStatusBar()
     // addItem becomes addWidget (left aligned) or addPremanentWidget (right aligned)
     // or showMessage
     //    
-    sb->showMessage( KTmpStatusMsg::getDefaultMsg() );
+    sb->showMessage( TmpStatusMsg::getDefaultMsg() );
     
-//     sb->setItem(KTmpStatusMsg::getDefaultMsg(),
-//                 KTmpStatusMsg::getDefaultId(), 1);
-//     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//     sb->setItem(TmpStatusMsg::getDefaultMsg(),
+//                 TmpStatusMsg::getDefaultId(), 1);
+//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //                          Qt::AlignLeft | Qt::AlignVCenter);
 
     //m_selectionCounter = new QLabel(sb);

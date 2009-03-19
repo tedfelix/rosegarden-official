@@ -136,7 +136,7 @@
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/AutoSaveFinder.h"
 #include "gui/widgets/StartupLogo.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/seqmanager/SequencerMapper.h"
@@ -169,7 +169,7 @@
 #include "sound/PluginIdentifier.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/ui/DevicesManagerNew.h"
 #include "gui/widgets/InputDialog.h"
 
@@ -870,16 +870,16 @@ void RosegardenGUIApp::initZoomToolbar()
 
 void RosegardenGUIApp::initStatusBar()
 {
-    KTmpStatusMsg::setDefaultMsg("");
+    TmpStatusMsg::setDefaultMsg("");
     // QStatusBar::addPermanentWidget (QWidget * widget, int stretch = 0)
-//    statusBar()->addPermanentWidget(KTmpStatusMsg::getDefaultMsg(),
-//              KTmpStatusMsg::getDefaultId(), 1);
-//    statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//    statusBar()->addPermanentWidget(TmpStatusMsg::getDefaultMsg(),
+//              TmpStatusMsg::getDefaultId(), 1);
+//    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //              AlignLeft | AlignVCenter);
     m_statusBarLabel1 = new QLabel(tr("status"), this);
     
     statusBar()->addPermanentWidget(m_statusBarLabel1);
-//    statusBar()->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//    statusBar()->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //              AlignLeft | AlignVCenter);
 
     m_progressBar = new ProgressBar(100, true, statusBar());
@@ -1714,7 +1714,7 @@ bool RosegardenGUIApp::queryExit()
 
 void RosegardenGUIApp::slotFileNewWindow()
 {
-    KTmpStatusMsg msg(tr("Opening a new application window..."), this);
+    TmpStatusMsg msg(tr("Opening a new application window..."), this);
 
     RosegardenGUIApp *new_window = new RosegardenGUIApp();
     new_window->show();
@@ -1724,7 +1724,7 @@ void RosegardenGUIApp::slotFileNew()
 {
     RG_DEBUG << "RosegardenGUIApp::slotFileNew()\n";
 
-    KTmpStatusMsg msg(tr("Creating new document..."), this);
+    TmpStatusMsg msg(tr("Creating new document..."), this);
 
     bool makeNew = false;
 
@@ -1887,7 +1887,7 @@ void RosegardenGUIApp::slotFileOpenRecent()
     QString path = action->text();
     if (path == "") return;
 
-    KTmpStatusMsg msg(tr("Opening file..."), this);
+    TmpStatusMsg msg(tr("Opening file..."), this);
 
     if (m_doc) {
         if (!m_doc->saveIfModified()) {
@@ -1903,7 +1903,7 @@ void RosegardenGUIApp::slotFileSave()
     if (!m_doc /*|| !m_doc->isModified()*/)
         return ; // ALWAYS save, even if doc is not modified.
 
-    KTmpStatusMsg msg(tr("Saving file..."), this);
+    TmpStatusMsg msg(tr("Saving file..."), this);
 
     // if it's a new file (no file path), or an imported file
     // (file path doesn't end with .rg), call saveAs
@@ -1995,7 +1995,7 @@ bool RosegardenGUIApp::slotFileSaveAs()
     if (!m_doc)
         return false;
 
-    KTmpStatusMsg msg(tr("Saving file with a new filename..."), this);
+    TmpStatusMsg msg(tr("Saving file with a new filename..."), this);
 
     QString newName = getValidWriteFileName
                       (tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
@@ -2038,7 +2038,7 @@ void RosegardenGUIApp::slotFileClose()
     if (!m_doc)
         return ;
 
-    KTmpStatusMsg msg(tr("Closing file..."), this);
+    TmpStatusMsg msg(tr("Closing file..."), this);
 
     if (m_doc->saveIfModified()) {
         setDocument(new RosegardenGUIDoc(this, m_pluginManager));
@@ -2055,7 +2055,7 @@ void RosegardenGUIApp::slotFilePrint()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Printing..."), this);
+    TmpStatusMsg msg(tr("Printing..."), this);
 
     m_view->print(&m_doc->getComposition());
 }
@@ -2067,7 +2067,7 @@ void RosegardenGUIApp::slotFilePrintPreview()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Previewing..."), this);
+    TmpStatusMsg msg(tr("Previewing..."), this);
 
     m_view->print(&m_doc->getComposition(), true);
 }
@@ -2085,7 +2085,7 @@ void RosegardenGUIApp::slotEditCut()
 {
     if (!m_view->haveSelection())
         return ;
-    KTmpStatusMsg msg(tr("Cutting selection..."), this);
+    TmpStatusMsg msg(tr("Cutting selection..."), this);
 
     SegmentSelection selection(m_view->getSelection());
     CommandHistory::getInstance()->addCommand
@@ -2096,7 +2096,7 @@ void RosegardenGUIApp::slotEditCopy()
 {
     if (!m_view->haveSelection())
         return ;
-    KTmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
 
     SegmentSelection selection(m_view->getSelection());
     CommandHistory::getInstance()->addCommand
@@ -2106,10 +2106,10 @@ void RosegardenGUIApp::slotEditCopy()
 void RosegardenGUIApp::slotEditPaste()
 {
     if (m_clipboard->isEmpty()) {
-        KTmpStatusMsg msg(tr("Clipboard is empty"), this);
+        TmpStatusMsg msg(tr("Clipboard is empty"), this);
         return ;
     }
-    KTmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
+    TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
@@ -2855,7 +2855,7 @@ void RosegardenGUIApp::slotEditTempos()
 
 void RosegardenGUIApp::slotToggleToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the toolbar..."), this);
 
     if (findAction("show_stock_toolbar")->isChecked())
         findToolbar("Main Toolbar")->show();
@@ -2865,7 +2865,7 @@ void RosegardenGUIApp::slotToggleToolBar()
 
 void RosegardenGUIApp::slotToggleToolsToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the tools toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the tools toolbar..."), this);
 
     if (findAction("show_tools_toolbar")->isChecked())
         findToolbar("Tools Toolbar")->show();
@@ -2875,7 +2875,7 @@ void RosegardenGUIApp::slotToggleToolsToolBar()
 
 void RosegardenGUIApp::slotToggleTracksToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the tracks toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the tracks toolbar..."), this);
 
     if (findAction("show_tracks_toolbar")->isChecked())
         findToolbar("Tracks Toolbar")->show();
@@ -2885,7 +2885,7 @@ void RosegardenGUIApp::slotToggleTracksToolBar()
 
 void RosegardenGUIApp::slotToggleEditorsToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the editor toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the editor toolbar..."), this);
 
     if (findAction("show_editors_toolbar")->isChecked())
         findToolbar("Editors Toolbar")->show();
@@ -2895,7 +2895,7 @@ void RosegardenGUIApp::slotToggleEditorsToolBar()
 
 void RosegardenGUIApp::slotToggleTransportToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the transport toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the transport toolbar..."), this);
 
     if (findAction("show_transport_toolbar")->isChecked())
         findToolbar("Transport Toolbar")->show();
@@ -2905,7 +2905,7 @@ void RosegardenGUIApp::slotToggleTransportToolBar()
 
 void RosegardenGUIApp::slotToggleZoomToolBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the zoom toolbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the zoom toolbar..."), this);
 
     if (findAction("show_zoom_toolbar")->isChecked())
         findToolbar("Zoom Toolbar")->show();
@@ -2915,7 +2915,7 @@ void RosegardenGUIApp::slotToggleZoomToolBar()
 
 void RosegardenGUIApp::slotToggleTransport()
 {
-    KTmpStatusMsg msg(tr("Toggle the Transport"), this);
+    TmpStatusMsg msg(tr("Toggle the Transport"), this);
 
     if (findAction("show_transport")->isChecked()) {
         getTransport()->show();
@@ -2933,7 +2933,7 @@ void RosegardenGUIApp::slotToggleTransportVisibility()
      * We need this because selecting the menu items automatically toggles
      * the "show_transport" state, while pressing "T" key does not.
      */
-    KTmpStatusMsg msg(tr("Toggle the Transport"), this);
+    TmpStatusMsg msg(tr("Toggle the Transport"), this);
 
     QAction *a = findAction("show_transport");
     if (a->isChecked()) {
@@ -3028,7 +3028,7 @@ void RosegardenGUIApp::slotParametersDockedBack(QDockWidget* dw, int) //qt4: Qt:
 
 void RosegardenGUIApp::slotToggleStatusBar()
 {
-    KTmpStatusMsg msg(tr("Toggle the statusbar..."), this);
+    TmpStatusMsg msg(tr("Toggle the statusbar..."), this);
 
     if (!findAction("show_status_bar")->isChecked())
         statusBar()->hide();
@@ -4498,7 +4498,7 @@ void RosegardenGUIApp::slotSequencerExited()
 
 void RosegardenGUIApp::slotExportProject()
 {
-    KTmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
+    TmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
@@ -4543,7 +4543,7 @@ void RosegardenGUIApp::slotExportProject()
 
 void RosegardenGUIApp::slotExportMIDI()
 {
-    KTmpStatusMsg msg(tr("Exporting MIDI file..."), this);
+    TmpStatusMsg msg(tr("Exporting MIDI file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("Standard MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
@@ -4583,7 +4583,7 @@ void RosegardenGUIApp::exportMIDIFile(QString file)
 
 void RosegardenGUIApp::slotExportCsound()
 {
-    KTmpStatusMsg msg(tr("Exporting Csound score file..."), this);
+    TmpStatusMsg msg(tr("Exporting Csound score file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("Csound files") + " (*.csd *.CSD)" + ";;" +
@@ -4618,7 +4618,7 @@ void RosegardenGUIApp::exportCsoundFile(QString file)
 
 void RosegardenGUIApp::slotExportMup()
 {
-    KTmpStatusMsg msg(tr("Exporting Mup file..."), this);
+    TmpStatusMsg msg(tr("Exporting Mup file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("Mup files") + " (*.mup *.MUP)" + ";;" +
@@ -4652,7 +4652,7 @@ void RosegardenGUIApp::exportMupFile(QString file)
 
 void RosegardenGUIApp::slotExportLilyPond()
 {
-    KTmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("LilyPond files") + " (*.ly *.LY)" + ";;" +
@@ -4669,7 +4669,7 @@ std::map<QProcess *, QTemporaryFile *> RosegardenGUIApp::m_lilyTempFileMap;
 
 void RosegardenGUIApp::slotPrintLilyPond()
 {
-    KTmpStatusMsg msg(tr("Printing LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Printing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
     if (!file->open()) {
@@ -4696,7 +4696,7 @@ void RosegardenGUIApp::slotPrintLilyPond()
 
 void RosegardenGUIApp::slotPreviewLilyPond()
 {
-    KTmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
     if (!file->open()) {
@@ -4765,7 +4765,7 @@ bool RosegardenGUIApp::exportLilyPondFile(QString file, bool forPreview)
 
 void RosegardenGUIApp::slotExportMusicXml()
 {
-    KTmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
+    TmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
 
     QString fileName = getValidWriteFileName
                        (tr("XML files") + " (*.xml *.XML)" + ";;" +
@@ -6122,7 +6122,7 @@ RosegardenGUIApp::slotRelabelSegments()
     else
         editLabel = tr("Modify Segments label");
 
-    KTmpStatusMsg msg(tr("Relabelling selection..."), this);
+    TmpStatusMsg msg(tr("Relabelling selection..."), this);
 
     // Generate label
     QString label = strtoqstr((*selection.begin())->getLabel());
@@ -7429,7 +7429,7 @@ RosegardenGUIApp::slotSaveDefaultStudio()
     if (reply != QMessageBox::Yes)
         return ;
 
-    KTmpStatusMsg msg(tr("Saving current document as default studio..."), this);
+    TmpStatusMsg msg(tr("Saving current document as default studio..."), this);
 
     QString autoloadFile = ResourceFinder().getAutoloadSavePath();
     

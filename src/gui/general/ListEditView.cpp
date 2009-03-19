@@ -30,7 +30,7 @@
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/EditViewTimeSigNotifier.h"
 #include "misc/Strings.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "document/Command.h"
 
 #include <QSettings>

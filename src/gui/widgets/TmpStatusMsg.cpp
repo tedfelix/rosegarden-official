@@ -13,22 +13,16 @@
     COPYING included with this distribution for more information.
 */
 
+#include "TmpStatusMsg.h"
+
+#include "gui/application/RosegardenApplication.h"
+
 #include <QApplication>
 #include <QEventLoop>
-
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QString>
 #include <QLabel>
-
-
-#include "KTmpStatusMsg.h"
-#include "gui/application/RosegardenApplication.h"
-
-
-/**********************************************************************/
-/**********************************************************************/
-
 #include <QSettings>
 #include <QUrl>
 
@@ -37,36 +31,36 @@
 // class RgRecentFileClass 
 RgTempQtIV::RgTempQtIV()
 {
-	// pass
+    // pass
 }
 
 QString RgTempQtIV::checkRecoverFile(QString &filePath, bool canRecover)
 {
-	//### TODO: implement 
+    //### TODO: implement 
 }
 
 void  RgTempQtIV::stateChanged( const char*  var1, unsigned int var2 ){ // var2 = KXMLGUIClient::state
-	//
+    //
 }
 
 // simulate qApp->tempSaveName(filename);
 QString RgTempQtIV::tempSaveName(QString &filePath)
 {
-	//### TODO: implement 
+    //### TODO: implement 
 }
 
 void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state )
 {
-	// used in RosegardenGUIApp
+    // used in RosegardenGUIApp
 
-	//### TODO: implement
+    //### TODO: implement
 }
 
 
 void RgTempQtIV::createGUI( const char* xml_rcfile, bool var1 )
 {
-	//### TODO: implement 
-	// create menu and actions from xml file (kxmlclient rc file)
+    //### TODO: implement 
+    // create menu and actions from xml file (kxmlclient rc file)
 }
 
 RgTempQtIV __mm;
@@ -78,7 +72,7 @@ RgTempQtIV* rgTempQtIV = &__mm;
 
 
 
-KTmpStatusMsg::KTmpStatusMsg(const QString& msg, QMainWindow* window, int id)
+TmpStatusMsg::TmpStatusMsg(const QString& msg, QMainWindow* window, int id)
         : m_mainWindow(window),
         m_id(id)
 {
@@ -87,7 +81,7 @@ KTmpStatusMsg::KTmpStatusMsg(const QString& msg, QMainWindow* window, int id)
     Rosegarden::rgapp->refreshGUI(50);
 }
 
-KTmpStatusMsg::~KTmpStatusMsg()
+TmpStatusMsg::~TmpStatusMsg()
 {
     m_mainWindow->statusBar()->clearMessage();
 //    m_mainWindow->statusBar()->changeItem(m_defaultMsg, m_id);
@@ -97,27 +91,27 @@ KTmpStatusMsg::~KTmpStatusMsg()
 }
 
 
-void KTmpStatusMsg::setDefaultMsg(const QString& m)
+void TmpStatusMsg::setDefaultMsg(const QString& m)
 {
     m_defaultMsg = m;
 }
 
-const QString& KTmpStatusMsg::getDefaultMsg()
+const QString& TmpStatusMsg::getDefaultMsg()
 {
     return m_defaultMsg;
 }
 
-void KTmpStatusMsg::setDefaultId(int id)
+void TmpStatusMsg::setDefaultId(int id)
 {
     m_defaultId = id;
 }
 
-int KTmpStatusMsg::getDefaultId()
+int TmpStatusMsg::getDefaultId()
 {
     return m_defaultId;
 }
 
 
-int KTmpStatusMsg::m_defaultId = 1;
-QString KTmpStatusMsg::m_defaultMsg = "";
+int TmpStatusMsg::m_defaultId = 1;
+QString TmpStatusMsg::m_defaultMsg = "";
 

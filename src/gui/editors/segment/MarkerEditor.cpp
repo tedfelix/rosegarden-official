@@ -35,7 +35,7 @@
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/general/IconLoader.h"
 
 #include <QApplication>

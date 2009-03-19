@@ -78,7 +78,7 @@
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/ResourceFinder.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
@@ -872,9 +872,9 @@ void MatrixView::initStatusBar()
     sb->addWidget(m_insertModeLabel);
 
 	/*
-    sb->addItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId(), 1);
-    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+    sb->addItem(TmpStatusMsg::getDefaultMsg(),
+                   TmpStatusMsg::getDefaultId(), 1);
+    sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
                          AlignLeft | AlignVCenter);
 	*/
 	
@@ -920,7 +920,7 @@ void MatrixView::slotMouseEnteredCanvasView()
 void MatrixView::slotMouseLeftCanvasView()
 {
     m_mouseInCanvasView = false;
-//     statusBar()->changeItem(KTmpStatusMsg::getDefaultMsg(), 1);
+//     statusBar()->changeItem(TmpStatusMsg::getDefaultMsg(), 1);
 	statusBar()->showMessage( "default message" );	//### fix default message
 }
 
@@ -1257,7 +1257,7 @@ void MatrixView::slotTransformsQuantize()
     QuantizeDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Quantizing..."), this);
+        TmpStatusMsg msg(tr("Quantizing..."), this);
         addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
                              dialog.getQuantizer()));
@@ -1269,7 +1269,7 @@ void MatrixView::slotTransformsRepeatQuantize()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(tr("Quantizing..."), this);
+    TmpStatusMsg msg(tr("Quantizing..."), this);
     addCommandToHistory(new EventQuantizeCommand
                         (*m_currentEventSelection,
                          "Quantize Dialog Grid", false)); // no i18n (config group name)
@@ -1279,7 +1279,7 @@ void MatrixView::slotTransformsCollapseNotes()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Collapsing notes..."), this);
+    TmpStatusMsg msg(tr("Collapsing notes..."), this);
 
     addCommandToHistory(new CollapseNotesCommand
                         (*m_currentEventSelection));
@@ -1290,7 +1290,7 @@ void MatrixView::slotTransformsLegato()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(tr("Making legato..."), this);
+    TmpStatusMsg msg(tr("Making legato..."), this);
     addCommandToHistory(new EventQuantizeCommand
                         (*m_currentEventSelection,
                          new LegatoQuantizer(0))); // no quantization
@@ -1520,7 +1520,7 @@ void MatrixView::slotEditCut()
 
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
                                        getDocument()->getClipboard()));
@@ -1530,7 +1530,7 @@ void MatrixView::slotEditCopy()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
                                         getDocument()->getClipboard()));
@@ -1545,7 +1545,7 @@ void MatrixView::slotEditPaste()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
+    TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
 
     PasteEventsCommand *command = new PasteEventsCommand
                                   (m_staffs[0]->getSegment(), getDocument()->getClipboard(),
@@ -1563,7 +1563,7 @@ void MatrixView::slotEditDelete()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Deleting selection..."), this);
+    TmpStatusMsg msg(tr("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 
@@ -1758,7 +1758,7 @@ void MatrixView::slotInsertNoteFromAction()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Inserting note"), this);
+    TmpStatusMsg msg(tr("Inserting note"), this);
 
     MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
 
@@ -2006,7 +2006,7 @@ MatrixView::slotQuantizeSelection(int q)
          Note(Note::Shortest).getDuration(), false);
 
     if (unit) {
-        KTmpStatusMsg msg(tr("Quantizing..."), this);
+        TmpStatusMsg msg(tr("Quantizing..."), this);
         if (m_currentEventSelection &&
                 m_currentEventSelection->getAddedEvents()) {
             addCommandToHistory(new EventQuantizeCommand
@@ -2018,7 +2018,7 @@ MatrixView::slotQuantizeSelection(int q)
                                  quant));
         }
     } else {
-        KTmpStatusMsg msg(tr("Unquantizing..."), this);
+        TmpStatusMsg msg(tr("Unquantizing..."), this);
         if (m_currentEventSelection &&
                 m_currentEventSelection->getAddedEvents()) {
             addCommandToHistory(new EventUnquantizeCommand
@@ -2532,7 +2532,7 @@ void MatrixView::slotVelocityUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Raising velocities..."), this);
+    TmpStatusMsg msg(tr("Raising velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand(10, *m_currentEventSelection));
@@ -2544,7 +2544,7 @@ void MatrixView::slotVelocityDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Lowering velocities..."), this);
+    TmpStatusMsg msg(tr("Lowering velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand( -10, *m_currentEventSelection));
@@ -2564,7 +2564,7 @@ MatrixView::slotSetVelocities()
                                 getCurrentVelocity());
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Setting Velocities..."), this);
+        TmpStatusMsg msg(tr("Setting Velocities..."), this);
         addCommandToHistory(new SelectionPropertyCommand
                             (m_currentEventSelection,
                              BaseProperties::VELOCITY,
@@ -2804,7 +2804,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     pitch -= segment.getTranspose();
 
-    KTmpStatusMsg msg(tr("Inserting note"), this);
+    TmpStatusMsg msg(tr("Inserting note"), this);
 
     MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
 

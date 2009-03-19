@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef KTMPSTATUSMSG_H
-#define KTMPSTATUSMSG_H
+#ifndef TMPSTATUSMSG_H
+#define TMPSTATUSMSG_H
 
 #include <QUrl>
 #include <QLabel>
@@ -55,14 +55,14 @@ extern RgTempQtIV* rgTempQtIV;
  *
  * Use as follows :
  * { // some block of code starts here
- *  KTmpStatusMsg tmpMsg("doing something...", mainWindow);
+ *  TmpStatusMsg tmpMsg("doing something...", mainWindow);
  *
  *  // do something
  *
  * } // the message goes away
  *
  */
-class KTmpStatusMsg
+class TmpStatusMsg
 {
 public:
 
@@ -71,9 +71,9 @@ public:
      * of the specified KMainWindow.
      * The id of the text widget in the status bar can be specified
      */
-    KTmpStatusMsg(const QString& msg, QMainWindow*, int id = m_defaultId);
+    TmpStatusMsg(const QString& msg, QMainWindow*, int id = m_defaultId);
 
-    ~KTmpStatusMsg();
+    ~TmpStatusMsg();
 
     /**
      * Sets the message which will replace the temporary one in the

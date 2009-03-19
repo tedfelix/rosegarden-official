@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
 #include "document/RosegardenGUIDoc.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "RosegardenGUIApp.h"
 //#include <kcmdlineargs.h>
 #include <QMainWindow>
@@ -77,8 +77,8 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
     QMainWindow* mainWindow = dynamic_cast<QMainWindow*>(mainWidget());
     if (mainWindow) {
         if (msg.isEmpty())
-            msg = KTmpStatusMsg::getDefaultMsg();
-//@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), KTmpStatusMsg::getDefaultId());
+            msg = TmpStatusMsg::getDefaultMsg();
+//@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), TmpStatusMsg::getDefaultId());
         mainWindow->statusBar()->showMessage(QString("  %1").arg(msg));
     }
 

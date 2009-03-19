@@ -4988,7 +4988,7 @@
 ./src/gui/dialogs/AudioManagerDialog.o: src/sound/RIFFAudioFile.h
 ./src/gui/dialogs/AudioManagerDialog.o: ./src/gui/dialogs/UnusedAudioSelectionDialog.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/document/Command.h
-./src/gui/dialogs/AudioManagerDialog.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/dialogs/AudioManagerDialog.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/dialogs/AudioManagerDialog.o: ./src/gui/dialogs/AudioManagerDialog.moc
 ./src/gui/dialogs/ManageMetronomeDialog.o: ./src/gui/dialogs/ManageMetronomeDialog.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/MidiMetronome.h
@@ -6085,7 +6085,7 @@
 ./src/gui/studio/MidiMixerWindow.o: src/gui/widgets/Rotary.h
 ./src/gui/studio/MidiMixerWindow.o: src/gui/widgets/VUMeter.h
 ./src/gui/studio/MidiMixerWindow.o: src/gui/general/IconLoader.h
-./src/gui/studio/MidiMixerWindow.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/studio/MidiMixerWindow.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/gui/studio/MidiMixerVUMeter.h
 ./src/gui/studio/MidiMixerWindow.o: src/sound/MappedEvent.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/gui/studio/StudioControl.h
@@ -6171,7 +6171,7 @@
 ./src/gui/studio/DeviceManagerDialog.o: src/gui/dialogs/ExportDeviceDialog.h
 ./src/gui/studio/DeviceManagerDialog.o: src/gui/dialogs/ImportDeviceDialog.h
 ./src/gui/studio/DeviceManagerDialog.o: src/gui/general/ResourceFinder.h
-./src/gui/studio/DeviceManagerDialog.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/studio/DeviceManagerDialog.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/studio/DeviceManagerDialog.o: ./src/gui/studio/DeviceManagerDialog.moc
 ./src/gui/studio/AudioMixerWindow.o: ./src/gui/studio/AudioMixerWindow.h
 ./src/gui/studio/AudioMixerWindow.o: src/base/MidiProgram.h
@@ -6499,7 +6499,7 @@
 ./src/gui/studio/BankEditorDialog.o: src/document/ConfigGroups.h
 ./src/gui/studio/BankEditorDialog.o: src/gui/dialogs/ExportDeviceDialog.h
 ./src/gui/studio/BankEditorDialog.o: src/gui/dialogs/ImportDeviceDialog.h
-./src/gui/studio/BankEditorDialog.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/studio/BankEditorDialog.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/studio/BankEditorDialog.o: src/gui/general/ResourceFinder.h
 ./src/gui/studio/BankEditorDialog.o: ./src/gui/studio/MidiBankListViewItem.h
 ./src/gui/studio/BankEditorDialog.o: ./src/gui/studio/MidiDeviceListViewItem.h
@@ -6595,7 +6595,7 @@
 ./src/gui/general/EditViewBase.o: ./src/base/Composition.h
 ./src/gui/general/EditViewBase.o: src/commands/segment/SegmentReconfigureCommand.h
 ./src/gui/general/EditViewBase.o: src/base/Track.h src/document/Command.h
-./src/gui/general/EditViewBase.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/general/EditViewBase.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/general/EditViewBase.o: src/misc/Debug.h
 ./src/gui/general/EditViewBase.o: ./src/gui/general/EditViewBase.moc
 ./src/gui/general/Spline.o: ./src/gui/general/Spline.h src/base/FastVector.h
@@ -6646,7 +6646,7 @@
 ./src/gui/general/ListEditView.o: src/gui/dialogs/TimeDialog.h
 ./src/gui/general/ListEditView.o: src/gui/general/EditViewTimeSigNotifier.h
 ./src/gui/general/ListEditView.o: src/misc/Strings.h
-./src/gui/general/ListEditView.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/general/ListEditView.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/general/ListEditView.o: ./src/gui/general/ListEditView.moc
 ./src/gui/general/CategoryElement.o: ./src/gui/general/CategoryElement.h
 ./src/gui/general/CategoryElement.o: ./src/gui/general/PresetElement.h
@@ -6792,7 +6792,7 @@
 ./src/gui/editors/eventlist/EventView.o: src/gui/widgets/LineEdit.h
 ./src/gui/editors/eventlist/EventView.o: src/gui/general/IconLoader.h
 ./src/gui/editors/eventlist/EventView.o: src/gui/general/MidiPitchLabel.h
-./src/gui/editors/eventlist/EventView.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/editors/eventlist/EventView.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/editors/eventlist/EventView.o: src/misc/Strings.h
 ./src/gui/editors/eventlist/EventView.o: ./src/gui/editors/eventlist/EventView.moc
 ./src/gui/editors/eventlist/EventViewItem.o: ./src/gui/editors/eventlist/EventViewItem.h
@@ -7457,7 +7457,7 @@
 ./src/gui/editors/tempo/TempoView.o: src/document/ConfigGroups.h
 ./src/gui/editors/tempo/TempoView.o: src/gui/dialogs/TimeSignatureDialog.h
 ./src/gui/editors/tempo/TempoView.o: src/gui/general/IconLoader.h
-./src/gui/editors/tempo/TempoView.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/editors/tempo/TempoView.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/editors/tempo/TempoView.o: src/misc/Strings.h
 ./src/gui/editors/tempo/TempoView.o: ./src/gui/editors/tempo/TempoView.moc
 ./src/gui/editors/tempo/TempoListItem.o: ./src/gui/editors/tempo/TempoListItem.h
@@ -8692,7 +8692,7 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Controllable.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Studio.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/StaffExportTypes.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/commands/segment/SegmentSyncCommand.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/document/Command.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Event.h
@@ -8921,7 +8921,7 @@
 ./src/gui/editors/segment/MarkerEditor.o: src/document/ConfigGroups.h
 ./src/gui/editors/segment/MarkerEditor.o: src/gui/dialogs/MarkerModifyDialog.h
 ./src/gui/editors/segment/MarkerEditor.o: src/gui/widgets/TimeWidget.h
-./src/gui/editors/segment/MarkerEditor.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/editors/segment/MarkerEditor.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/editors/segment/MarkerEditor.o: src/gui/general/IconLoader.h
 ./src/gui/editors/segment/MarkerEditor.o: ./src/gui/editors/segment/MarkerEditor.moc
 ./src/gui/editors/segment/PlayListDialog.o: ./src/gui/editors/segment/PlayListDialog.h
@@ -9881,7 +9881,7 @@
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/gui/dialogs/TimeDialog.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/gui/general/MidiPitchLabel.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/gui/general/IconLoader.h
-./src/gui/editors/segment/TriggerSegmentManager.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/editors/segment/TriggerSegmentManager.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: ./src/gui/editors/segment/TriggerSegmentManager.moc
 ./src/gui/editors/segment/ControlParameterEditDialog.o: ./src/gui/editors/segment/ControlParameterEditDialog.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/ControlParameter.h
@@ -9925,26 +9925,26 @@
 ./src/gui/editors/segment/ControlParameterEditDialog.o: ./src/gui/editors/segment/ControlParameterEditDialog.moc
 ./src/gui/editors/segment/TrackHeader.o: ./src/gui/editors/segment/TrackHeader.h
 ./src/gui/editors/segment/ControlParameterItem.o: ./src/gui/editors/segment/ControlParameterItem.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/misc/Debug.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: ./src/gui/kdeext/QCanvasSimpleSprite.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/gui/editors/notation/NotePixmapFactory.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/NotationTypes.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/Event.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/Instrument.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/XmlExportable.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/MidiProgram.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/gui/editors/notation/NoteCharacter.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/Event.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/PropertyMap.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/Property.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/RealTime.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/PropertyName.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/base/Exception.h
-./src/gui/kdeext/QCanvasSimpleSprite.o: src/gui/editors/notation/NoteCharacterNames.h
-./src/gui/kdeext/QCanvasGroupableItem.o: src/misc/Debug.h
-./src/gui/kdeext/QCanvasGroupableItem.o: ./src/gui/kdeext/QCanvasGroupableItem.h
-./src/gui/kdeext/KTmpStatusMsg.o: ./src/gui/kdeext/KTmpStatusMsg.h
-./src/gui/kdeext/KTmpStatusMsg.o: src/gui/application/RosegardenApplication.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/misc/Debug.h
+./src/gui/widgets/CanvasSimpleSprite.o: ./src/gui/widgets/CanvasSimpleSprite.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/gui/editors/notation/NotePixmapFactory.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/NotationTypes.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/Event.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/Instrument.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/XmlExportable.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/MidiProgram.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/gui/editors/notation/NoteCharacter.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/Event.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/PropertyMap.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/Property.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/RealTime.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/PropertyName.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/base/Exception.h
+./src/gui/widgets/CanvasSimpleSprite.o: src/gui/editors/notation/NoteCharacterNames.h
+./src/gui/widgets/CanvasGroupableItem.o: src/misc/Debug.h
+./src/gui/widgets/CanvasGroupableItem.o: ./src/gui/widgets/CanvasGroupableItem.h
+./src/gui/widgets/TmpStatusMsg.o: ./src/gui/widgets/TmpStatusMsg.h
+./src/gui/widgets/TmpStatusMsg.o: src/gui/application/RosegardenApplication.h
 ./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenGUIView.h
 ./src/gui/application/RosegardenGUIView.o: src/base/Event.h
 ./src/gui/application/RosegardenGUIView.o: src/base/PropertyMap.h
@@ -10258,7 +10258,7 @@
 ./src/gui/application/RosegardenGUIApp.o: src/gui/general/ResourceFinder.h
 ./src/gui/application/RosegardenGUIApp.o: src/gui/general/AutoSaveFinder.h
 ./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/StartupLogo.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/application/RosegardenGUIApp.o: src/gui/seqmanager/MidiFilterDialog.h
 ./src/gui/application/RosegardenGUIApp.o: src/gui/seqmanager/SequenceManager.h
 ./src/gui/application/RosegardenGUIApp.o: src/sound/MappedComposition.h
@@ -10395,7 +10395,7 @@
 ./src/gui/application/RosegardenApplication.o: src/sound/PeakFileManager.h
 ./src/gui/application/RosegardenApplication.o: src/sound/PeakFile.h
 ./src/gui/application/RosegardenApplication.o: src/base/Event.h
-./src/gui/application/RosegardenApplication.o: src/gui/kdeext/KTmpStatusMsg.h
+./src/gui/application/RosegardenApplication.o: src/gui/widgets/TmpStatusMsg.h
 ./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenGUIApp.h
 ./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenApplication.moc
 ./src/gui/application/StartupTester.o: ./src/gui/application/StartupTester.h

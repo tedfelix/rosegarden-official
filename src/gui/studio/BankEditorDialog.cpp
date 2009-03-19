@@ -31,7 +31,7 @@
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/general/ResourceFinder.h"
 #include "MidiBankListViewItem.h"
 #include "MidiDeviceListViewItem.h"

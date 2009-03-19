@@ -120,8 +120,8 @@
 #include "gui/general/ProgressReporter.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/kdeext/QCanvasSimpleSprite.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/CanvasSimpleSprite.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/RawNoteRuler.h"
 #include "gui/rulers/TempoRuler.h"
@@ -1947,10 +1947,10 @@ void NotationView::initStatusBar()
     hbox->setLayout(hboxLayout);
     sb->addWidget(hbox);
 
-    sb->showMessage(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId() );
+    sb->showMessage(TmpStatusMsg::getDefaultMsg(),
+                   TmpStatusMsg::getDefaultId() );
 	
-//     sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
+//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
 //                          AlignLeft | AlignVCenter);
 
     m_selectionCounter = new QLabel(sb);
@@ -2475,8 +2475,8 @@ void NotationView::setCurrentSelection(EventSelection* s, bool preview,
 
     delete oldSelection;
 
-    statusBar()->showMessage(KTmpStatusMsg::getDefaultMsg(),
-                            KTmpStatusMsg::getDefaultId());
+    statusBar()->showMessage(TmpStatusMsg::getDefaultMsg(),
+                            TmpStatusMsg::getDefaultId());
 
     if (s) {
         int eventsSelected = s->getSegmentEvents().size();
@@ -3065,8 +3065,8 @@ void NotationView::refreshSegment(Segment *segment,
 
     PixmapArrayGC::deleteAll();
 
-    statusBar()->showMessage(KTmpStatusMsg::getDefaultMsg(),
-                            KTmpStatusMsg::getDefaultId());
+    statusBar()->showMessage(TmpStatusMsg::getDefaultMsg(),
+                            TmpStatusMsg::getDefaultId());
 
     Event::dumpStats(std::cerr);
     if (m_deferredCursorMove == NoCursorMoveNeeded) {
@@ -3411,7 +3411,7 @@ void NotationView::slotSetOperationNameAndStatus(QString name)
 {
     emit setOperationName(name);
     statusBar()->showMessage(QString("  %1").arg(name),
-                            KTmpStatusMsg::getDefaultId());
+                            TmpStatusMsg::getDefaultId());
 }
 
 void NotationView::disconnectProgress()
@@ -3870,7 +3870,7 @@ NotationView::slotChangeFont(std::string newName, int newSize)
 void
 NotationView::slotFilePrint()
 {
-    KTmpStatusMsg msg(tr("Printing..."), this);
+    TmpStatusMsg msg(tr("Printing..."), this);
 
     SetWaitCursor waitCursor;
     NotationView printingView(getDocument(), m_segments,
@@ -3887,7 +3887,7 @@ NotationView::slotFilePrint()
 void
 NotationView::slotFilePrintPreview()
 {
-    KTmpStatusMsg msg(tr("Previewing..."), this);
+    TmpStatusMsg msg(tr("Previewing..."), this);
 
     SetWaitCursor waitCursor;
     NotationView printingView(getDocument(), m_segments,
@@ -3905,7 +3905,7 @@ std::map<QProcess *, QTemporaryFile *> NotationView::m_lilyTempFileMap;
 
 void NotationView::slotPrintLilyPond()
 {
-    KTmpStatusMsg msg(tr("Printing LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Printing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
 	
@@ -3935,7 +3935,7 @@ void NotationView::slotPrintLilyPond()
 
 void NotationView::slotPreviewLilyPond()
 {
-    KTmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
 	
@@ -4009,7 +4009,7 @@ void NotationView::slotEditCut()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutCommand(*m_currentEventSelection,
                                        getDocument()->getClipboard()));
@@ -4019,7 +4019,7 @@ void NotationView::slotEditDelete()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Deleting selection..."), this);
+    TmpStatusMsg msg(tr("Deleting selection..."), this);
 
     addCommandToHistory(new EraseCommand(*m_currentEventSelection));
 }
@@ -4028,7 +4028,7 @@ void NotationView::slotEditCopy()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Copying selection to clipboard..."), this);
 
     addCommandToHistory(new CopyCommand(*m_currentEventSelection,
                                         getDocument()->getClipboard()));
@@ -4038,7 +4038,7 @@ void NotationView::slotEditCutAndClose()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
+    TmpStatusMsg msg(tr("Cutting selection to clipboard..."), this);
 
     addCommandToHistory(new CutAndCloseCommand(*m_currentEventSelection,
                         getDocument()->getClipboard()));
@@ -4305,7 +4305,7 @@ void NotationView::slotVelocityUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Raising velocities..."), this);
+    TmpStatusMsg msg(tr("Raising velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand(10, *m_currentEventSelection));
@@ -4315,7 +4315,7 @@ void NotationView::slotVelocityDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Lowering velocities..."), this);
+    TmpStatusMsg msg(tr("Lowering velocities..."), this);
 
     addCommandToHistory
     (new ChangeVelocityCommand( -10, *m_currentEventSelection));
@@ -4355,7 +4355,7 @@ void NotationView::slotSetVelocities()
                                 getVelocityFromSelection());
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Setting Velocities..."), this);
+        TmpStatusMsg msg(tr("Setting Velocities..."), this);
         addCommandToHistory(new SelectionPropertyCommand
                             (m_currentEventSelection,
                              BaseProperties::VELOCITY,
@@ -4526,7 +4526,7 @@ void NotationView::slotTransformsNormalizeRests()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Normalizing rests..."), this);
+    TmpStatusMsg msg(tr("Normalizing rests..."), this);
 
     addCommandToHistory(new NormalizeRestsCommand
                         (*m_currentEventSelection));
@@ -4536,7 +4536,7 @@ void NotationView::slotTransformsCollapseNotes()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Collapsing notes..."), this);
+    TmpStatusMsg msg(tr("Collapsing notes..."), this);
 
     addCommandToHistory(new CollapseNotesCommand
                         (*m_currentEventSelection));
@@ -4574,7 +4574,7 @@ void NotationView::slotInsertNoteFromAction()
         return ;
     }
 
-    KTmpStatusMsg msg(tr("Inserting note"), this);
+    TmpStatusMsg msg(tr("Inserting note"), this);
 
     NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
 
@@ -4717,7 +4717,7 @@ void NotationView::slotTransformsQuantize()
     QuantizeDialog dialog(this, true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Quantizing..."), this);
+        TmpStatusMsg msg(tr("Quantizing..."), this);
         addCommandToHistory(new EventQuantizeCommand
                             (*m_currentEventSelection,
                              dialog.getQuantizer()));
@@ -4732,7 +4732,7 @@ void NotationView::slotTransformsInterpret()
     InterpretDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(tr("Interpreting selection..."), this);
+        TmpStatusMsg msg(tr("Interpreting selection..."), this);
         addCommandToHistory(new InterpretCommand
                             (*m_currentEventSelection,
                              getDocument()->getComposition().getNotationQuantizer(),
@@ -4745,7 +4745,7 @@ void NotationView::slotSetNoteDurations(Note::Type type, bool notationOnly)
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Setting note durations..."), this);
+    TmpStatusMsg msg(tr("Setting note durations..."), this);
     addCommandToHistory(new SetNoteTypeCommand(*m_currentEventSelection, type, notationOnly));
 }
 */
@@ -4754,7 +4754,7 @@ void NotationView::slotAddDot()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Adding dot..."), this);
+    TmpStatusMsg msg(tr("Adding dot..."), this);
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, false));
 }
 
@@ -4762,7 +4762,7 @@ void NotationView::slotAddDotNotationOnly()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(tr("Adding dot..."), this);
+    TmpStatusMsg msg(tr("Adding dot..."), this);
     addCommandToHistory(new AddDotCommand(*m_currentEventSelection, true));
 }
 
@@ -6098,7 +6098,7 @@ NotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool note
 
     pitch -= segment.getTranspose();
 
-    //    KTmpStatusMsg msg(tr("Inserting note"), this);
+    //    TmpStatusMsg msg(tr("Inserting note"), this);
 
     // We need to ensure that multiple notes hit at once come out as
     // chords, without imposing the interpretation that overlapping

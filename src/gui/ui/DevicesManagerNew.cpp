@@ -46,7 +46,7 @@
 
 #include "gui/general/IconLoader.h"
 //#include "gui/general/ResourceFinder.h"
-//#include "gui/kdeext/KTmpStatusMsg.h"
+//#include "gui/widgets/TmpStatusMsg.h"
 
 
 #include <QWidget>

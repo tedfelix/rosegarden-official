@@ -36,7 +36,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include "gui/kdeext/QCanvasSimpleSprite.h"
+#include "gui/widgets/CanvasSimpleSprite.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
 #include "NotationStaff.h"

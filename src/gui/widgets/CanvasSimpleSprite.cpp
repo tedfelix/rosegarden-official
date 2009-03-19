@@ -23,11 +23,11 @@
 
 #include <QPainter>
 
-#include "QCanvasSimpleSprite.h"
+#include "CanvasSimpleSprite.h"
 
 namespace Rosegarden {
 
-QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, Q3Canvas *canvas)
+CanvasSimpleSprite::CanvasSimpleSprite(QPixmap *pixmap, Q3Canvas *canvas)
         : Q3CanvasSprite(0, canvas),
         m_pixmapArray(0)
 {
@@ -35,7 +35,7 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(QPixmap *pixmap, Q3Canvas *canvas)
     setSequence(m_pixmapArray);
 }
 
-QCanvasSimpleSprite::QCanvasSimpleSprite(Q3CanvasPixmap *pixmap, Q3Canvas *canvas)
+CanvasSimpleSprite::CanvasSimpleSprite(Q3CanvasPixmap *pixmap, Q3Canvas *canvas)
         : Q3CanvasSprite(0, canvas),
         m_pixmapArray(0)
 {
@@ -43,7 +43,7 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(Q3CanvasPixmap *pixmap, Q3Canvas *canva
     setSequence(m_pixmapArray);
 }
 
-QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
+CanvasSimpleSprite::CanvasSimpleSprite(const QString &pixmapfile,
         Q3Canvas *canvas)
         : Q3CanvasSprite(0, canvas),
         m_pixmapArray(0)
@@ -52,7 +52,7 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(const QString &pixmapfile,
     setSequence(m_pixmapArray);
 }
 
-QCanvasSimpleSprite::QCanvasSimpleSprite(Q3Canvas *canvas)
+CanvasSimpleSprite::CanvasSimpleSprite(Q3Canvas *canvas)
         : Q3CanvasSprite(0, canvas),
         m_pixmapArray(0)
 {
@@ -61,7 +61,7 @@ QCanvasSimpleSprite::QCanvasSimpleSprite(Q3Canvas *canvas)
 }
 
 
-QCanvasSimpleSprite::~QCanvasSimpleSprite()
+CanvasSimpleSprite::~CanvasSimpleSprite()
 {
     PixmapArrayGC::registerForDeletion(m_pixmapArray);
     m_pixmapArray = 0;
@@ -79,7 +79,7 @@ QCanvasSimpleSprite::~QCanvasSimpleSprite()
 }
 
 Q3CanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
+CanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 {
 // 	QList<QPixmap*> pixlist;	// qt4
 	Q3PtrList<QPixmap> pixlist;
@@ -108,7 +108,7 @@ QCanvasSimpleSprite::makePixmapArray(QPixmap *pixmap)
 }
 
 Q3CanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(Q3CanvasPixmap *pixmap)
+CanvasSimpleSprite::makePixmapArray(Q3CanvasPixmap *pixmap)
 {
 //     QList<QPixmap*> pixlist;		// qt4
 	Q3PtrList<QPixmap> pixlist;
@@ -133,7 +133,7 @@ QCanvasSimpleSprite::makePixmapArray(Q3CanvasPixmap *pixmap)
 }
 
 Q3CanvasPixmapArray*
-QCanvasSimpleSprite::makePixmapArray(const QString &pixmapfile)
+CanvasSimpleSprite::makePixmapArray(const QString &pixmapfile)
 {
     return new Q3CanvasPixmapArray(pixmapfile);
 }
@@ -143,14 +143,14 @@ QCanvasSimpleSprite::makePixmapArray(const QString &pixmapfile)
 QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
         QPixmap* pixmap,
         Q3Canvas* canvas)
-        : QCanvasSimpleSprite(pixmap, canvas),
+        : CanvasSimpleSprite(pixmap, canvas),
         m_notationElement(n)
 {}
 
 QCanvasNotationSprite::QCanvasNotationSprite(NotationElement& n,
         Q3CanvasPixmap* pixmap,
         Q3Canvas* canvas)
-        : QCanvasSimpleSprite(pixmap, canvas),
+        : CanvasSimpleSprite(pixmap, canvas),
         m_notationElement(n)
 
 {}
@@ -161,12 +161,12 @@ QCanvasNotationSprite::~QCanvasNotationSprite()
 
 QCanvasNonElementSprite::QCanvasNonElementSprite(QPixmap *pixmap,
         Q3Canvas *canvas) :
-        QCanvasSimpleSprite(pixmap, canvas)
+        CanvasSimpleSprite(pixmap, canvas)
 {}
 
 QCanvasNonElementSprite::QCanvasNonElementSprite(Q3CanvasPixmap *pixmap,
         Q3Canvas *canvas) :
-        QCanvasSimpleSprite(pixmap, canvas)
+        CanvasSimpleSprite(pixmap, canvas)
 {}
 
 QCanvasNonElementSprite::~QCanvasNonElementSprite()
