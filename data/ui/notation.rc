@@ -140,7 +140,7 @@
     <Separator/>
       <Action name="add_trill" text="Add Tri&amp;ll" icon="trill" />
       <Action name="add_long-trill" text="Add Trill &amp;with Line" icon="trill-with-squiggle" />
-      <Action name="add_trill-line" text="Add Trill Line" icon="squiggle" />
+      <Action name="add_trill-line" text="Add Trill Line" />
       <Action name="add_turn" text="Add &amp;Turn" icon="turn" />
       <Action name="add_mordent" text="Add M&amp;ordent" icon="mordent" />
       <Action name="add_mordent-inverted" text="Add I&amp;nverted Mordent" icon="inverted-mordent" />
