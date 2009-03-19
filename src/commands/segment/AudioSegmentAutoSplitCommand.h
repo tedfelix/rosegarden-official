@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 class AudioFileManager;
 
@@ -41,7 +41,7 @@ class AudioSegmentAutoSplitCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(AudioSegmentAutoSplitCommand)
 
 public:
-    AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,
+    AudioSegmentAutoSplitCommand(RosegardenDocument *doc,
                                  Segment *segment,
                                  int threshold);
     virtual ~AudioSegmentAutoSplitCommand();

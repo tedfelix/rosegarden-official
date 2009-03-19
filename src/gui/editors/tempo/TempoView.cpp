@@ -30,7 +30,7 @@
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/RemoveTimeSignatureCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
@@ -62,7 +62,7 @@ int
 TempoView::m_lastSetFilter = -1;
 
 
-TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
+TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
         ListEditView(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)

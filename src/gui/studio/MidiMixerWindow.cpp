@@ -30,7 +30,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/seqmanager/SequencerMapper.h"
 #include "gui/widgets/Fader.h"
@@ -60,7 +60,7 @@ namespace Rosegarden
 {
 
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
-                                 RosegardenGUIDoc *document):
+                                 RosegardenDocument *document):
         MixerWindow(parent, document),
         m_tabFrame(0)
 {

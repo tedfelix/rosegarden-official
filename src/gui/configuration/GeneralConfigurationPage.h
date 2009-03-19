@@ -34,7 +34,7 @@ class QWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -60,7 +60,7 @@ public:
         Local
     };
 
-    GeneralConfigurationPage(RosegardenGUIDoc *doc,
+    GeneralConfigurationPage(RosegardenDocument *doc,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
@@ -83,7 +83,7 @@ protected:
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
     
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;

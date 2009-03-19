@@ -29,7 +29,7 @@
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/MappedEvent.h"
 #include <QFile>
 #include <QString>
@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
+SegmentMmapper::SegmentMmapper(RosegardenDocument* doc,
                                Segment* segment, const QString& fileName)
         : m_doc(doc),
         m_segment(segment),

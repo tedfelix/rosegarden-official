@@ -25,7 +25,7 @@
 #include <QCoreApplication>
 #include "misc/Strings.h"
 #include "document/Command.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 class Add;
@@ -35,7 +35,7 @@ namespace Rosegarden
 {
 
 //class Composition;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MultiKeyInsertionCommand : public MacroCommand
@@ -44,7 +44,7 @@ class MultiKeyInsertionCommand : public MacroCommand
 
 public:
     
-    MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
+    MultiKeyInsertionCommand(RosegardenDocument* doc,
                              timeT time,
                              Key key,
                              bool shouldConvert,

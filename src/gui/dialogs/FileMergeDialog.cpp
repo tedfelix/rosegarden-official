@@ -27,7 +27,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden

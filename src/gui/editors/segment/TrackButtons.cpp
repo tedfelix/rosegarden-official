@@ -32,9 +32,9 @@
 #include "base/Track.h"
 
 #include "commands/segment/RenameTrackCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/LedButton.h"
@@ -62,7 +62,7 @@ namespace Rosegarden
 {
 
 
-TrackButtons::TrackButtons(RosegardenGUIDoc* doc,
+TrackButtons::TrackButtons(RosegardenDocument* doc,
                            unsigned int trackCellHeight,
                            unsigned int trackLabelWidth,
                            bool showTrackLabels,
@@ -414,7 +414,7 @@ TrackButtons::slotToggleRecordTrack(int position)
                                      tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                                      QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
                ) == QMessageBox::Yes) {
-                RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+                RosegardenMainWindow::self()->slotOpenAudioPathSettings();
             }
         }
     }

@@ -18,7 +18,7 @@
 
 #include "ConfigurationPage.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include <QSettings>
 #include <QWidget>

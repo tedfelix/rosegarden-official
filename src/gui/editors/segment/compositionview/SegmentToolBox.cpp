@@ -19,7 +19,7 @@
 #include "SegmentToolBox.h"
 
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseToolBox.h"
 #include "SegmentTool.h"
 #include "SegmentSelector.h"
@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenGUIDoc* doc)
+SegmentToolBox::SegmentToolBox(CompositionView* parent, RosegardenDocument* doc)
         : BaseToolBox(parent),
         m_canvas(parent),
         m_doc(doc)

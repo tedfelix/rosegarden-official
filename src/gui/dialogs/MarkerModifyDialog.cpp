@@ -19,7 +19,7 @@
 #include "MarkerModifyDialog.h"
 
 #include "base/Composition.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/widgets/TimeWidget.h"
 #include "misc/Strings.h"
 #include "gui/widgets/LineEdit.h"

@@ -144,7 +144,7 @@ public slots:
 signals:
     void closed();
 
-    // Set and unset the loop at the RosegardenGUIApp
+    // Set and unset the loop at the RosegardenMainWindow
     //
     void setLoop();
     void unsetLoop();

@@ -23,7 +23,7 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RulerScale.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
@@ -50,7 +50,7 @@
 namespace Rosegarden
 {
 
-MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
+MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
                          int barHeight,
                          double xorigin,

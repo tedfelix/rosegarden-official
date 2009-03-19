@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 class TimeWidget;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -60,7 +60,7 @@ protected:
                     const QString &name,
                     const QString &des);
 
-    RosegardenGUIDoc             *m_doc;
+    RosegardenDocument             *m_doc;
 
     TimeWidget         *m_timeEdit;
     QLineEdit                    *m_nameEdit;

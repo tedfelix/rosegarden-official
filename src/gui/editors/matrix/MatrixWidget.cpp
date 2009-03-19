@@ -33,7 +33,7 @@
 #include <QScrollBar>
 #include <QTimer>
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
@@ -85,7 +85,7 @@ MatrixWidget::~MatrixWidget()
 }
 
 void
-MatrixWidget::setSegments(RosegardenGUIDoc *document,
+MatrixWidget::setSegments(RosegardenDocument *document,
 			  std::vector<Segment *> segments)
 {
     m_document = document;

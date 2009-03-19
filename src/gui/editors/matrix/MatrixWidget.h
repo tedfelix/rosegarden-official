@@ -29,7 +29,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Segment;
 class MatrixScene;
 class MatrixToolBox;
@@ -51,7 +51,7 @@ public:
     MatrixWidget(bool drumMode);
     virtual ~MatrixWidget();
 
-    void setSegments(RosegardenGUIDoc *document, 
+    void setSegments(RosegardenDocument *document, 
                      std::vector<Segment *> segments);
 
     MatrixScene *getScene() { return m_scene; }
@@ -104,7 +104,7 @@ protected slots:
     void slotEnsureLastMouseMoveVisible();
 
 private:
-    RosegardenGUIDoc *m_document; // I do not own this
+    RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
     Panner *m_hpanner; // I own this
     MatrixScene *m_scene; // I own this

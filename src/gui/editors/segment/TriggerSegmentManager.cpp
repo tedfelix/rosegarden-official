@@ -41,7 +41,7 @@
 #include "commands/segment/DeleteTriggerSegmentCommand.h"
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
@@ -73,7 +73,7 @@ namespace Rosegarden
 {
 
 TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
-        RosegardenGUIDoc *doc):
+        RosegardenDocument *doc):
         QMainWindow(parent),	//, "triggereditordialog"),
         m_doc(doc),
         m_modified(false)
@@ -490,7 +490,7 @@ TriggerSegmentManager::closeEvent(QCloseEvent *e)
 }
 
 void
-TriggerSegmentManager::setDocument(RosegardenGUIDoc *doc)
+TriggerSegmentManager::setDocument(RosegardenDocument *doc)
 {
     // reset our pointers
     m_doc = doc;

@@ -16,7 +16,7 @@
 */
 
 
-#include "RosegardenGUIDoc.h"
+#include "RosegardenDocument.h"
 
 #include "CommandHistory.h"
 #include "RoseXmlHandler.h"
@@ -53,8 +53,8 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/general/ClefIndex.h"
 #include "gui/application/TransportStatus.h"
-#include "gui/application/RosegardenGUIApp.h"
-#include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainWidget.h"
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPreviewThread.h"
 #include "gui/editors/segment/TrackLabel.h"
@@ -112,7 +112,7 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
+RosegardenDocument::RosegardenDocument(QWidget *parent,
                                    AudioPluginManager *pluginManager,
                                    bool skipAutoload,
                                    const char *name)
@@ -146,9 +146,9 @@ RosegardenGUIDoc::RosegardenGUIDoc(QWidget *parent,
     newDocument();
 }
 
-RosegardenGUIDoc::~RosegardenGUIDoc()
+RosegardenDocument::~RosegardenDocument()
 {
-    RG_DEBUG << "~RosegardenGUIDoc()\n";
+    RG_DEBUG << "~RosegardenDocument()\n";
     m_beingDestroyed = true;
 
     m_audioPreviewThread.finish();
@@ -162,7 +162,7 @@ RosegardenGUIDoc::~RosegardenGUIDoc()
 }
 
 unsigned int
-RosegardenGUIDoc::getAutoSavePeriod() const
+RosegardenDocument::getAutoSavePeriod() const
 {
 	QSettings settings;
 	settings.beginGroup( GeneralOptionsConfigGroup );
@@ -174,29 +174,29 @@ RosegardenGUIDoc::getAutoSavePeriod() const
 	return ret;
 }
 
-void RosegardenGUIDoc::attachView(RosegardenGUIView *view)
+void RosegardenDocument::attachView(RosegardenMainWidget *view)
 {
     m_viewList.append(view);
 }
 
-void RosegardenGUIDoc::detachView(RosegardenGUIView *view)
+void RosegardenDocument::detachView(RosegardenMainWidget *view)
 {
     m_viewList.remove(view);
 }
 
-void RosegardenGUIDoc::attachEditView(EditViewBase *view)
+void RosegardenDocument::attachEditView(EditViewBase *view)
 {
     m_editViewList.append(view);
 }
 
-void RosegardenGUIDoc::detachEditView(EditViewBase *view)
+void RosegardenDocument::detachEditView(EditViewBase *view)
 {
     // auto-deletion is disabled, as
     // the editview detaches itself when being deleted
     m_editViewList.remove(view);
 }
 
-void RosegardenGUIDoc::deleteEditViews()
+void RosegardenDocument::deleteEditViews()
 {
     // enabled auto-deletion : edit views will be deleted
     
@@ -204,29 +204,29 @@ void RosegardenGUIDoc::deleteEditViews()
     m_editViewList.clear();
 }
 
-void RosegardenGUIDoc::setAbsFilePath(const QString &filename)
+void RosegardenDocument::setAbsFilePath(const QString &filename)
 {
     m_absFilePath = filename;
 }
 
-void RosegardenGUIDoc::setTitle(const QString &_t)
+void RosegardenDocument::setTitle(const QString &_t)
 {
     m_title = _t;
 }
 
-const QString &RosegardenGUIDoc::getAbsFilePath() const
+const QString &RosegardenDocument::getAbsFilePath() const
 {
     return m_absFilePath;
 }
 
-const QString& RosegardenGUIDoc::getTitle() const
+const QString& RosegardenDocument::getTitle() const
 {
     return m_title;
 }
 
-void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
+void RosegardenDocument::slotUpdateAllViews(RosegardenMainWidget *sender)
 {
-    RosegardenGUIView *w;
+    RosegardenMainWidget *w;
 	
     //for ((*w) = m_viewList.first(); w != 0; (*w) = *m_viewList.next()) {
 	for (int i=0; i < m_viewList.size(); ++i ){
@@ -237,51 +237,51 @@ void RosegardenGUIDoc::slotUpdateAllViews(RosegardenGUIView *sender)
     }
 }
 
-void RosegardenGUIDoc::setModified(bool m)
+void RosegardenDocument::setModified(bool m)
 {
     m_modified = m;
-    RG_DEBUG << "RosegardenGUIDoc[" << this << "]::setModified(" << m << ")\n";
+    RG_DEBUG << "RosegardenDocument[" << this << "]::setModified(" << m << ")\n";
 }
 
-void RosegardenGUIDoc::clearModifiedStatus()
+void RosegardenDocument::clearModifiedStatus()
 {
     setModified(false);
     setAutoSaved(true);
     emit documentModified(false);
 }
 
-void RosegardenGUIDoc::slotDocumentModified()
+void RosegardenDocument::slotDocumentModified()
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotDocumentModified()" << endl;
+    RG_DEBUG << "RosegardenDocument::slotDocumentModified()" << endl;
     setModified(true);
     setAutoSaved(false);
     emit documentModified(true);
 }
 
-void RosegardenGUIDoc::slotDocumentRestored()
+void RosegardenDocument::slotDocumentRestored()
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotDocumentRestored()\n";
+    RG_DEBUG << "RosegardenDocument::slotDocumentRestored()\n";
     setModified(false);
 }
 
 void
-RosegardenGUIDoc::setQuickMarker()
+RosegardenDocument::setQuickMarker()
 {
-    RG_DEBUG << "RosegardenGUIDoc::setQuickMarker" << endl;
+    RG_DEBUG << "RosegardenDocument::setQuickMarker" << endl;
     
     m_quickMarkerTime = getComposition().getPosition();
 }
 
 void
-RosegardenGUIDoc::jumpToQuickMarker()
+RosegardenDocument::jumpToQuickMarker()
 {
-    RG_DEBUG << "RosegardenGUIDoc::jumpToQuickMarker" << endl;
+    RG_DEBUG << "RosegardenDocument::jumpToQuickMarker" << endl;
 
     if (m_quickMarkerTime >= 0)
         slotSetPointerPosition(m_quickMarkerTime);
 }
 
-QString RosegardenGUIDoc::getAutoSaveFileName()
+QString RosegardenDocument::getAutoSaveFileName()
 {
     QString filename = getAbsFilePath();
     if (filename.isEmpty())
@@ -293,23 +293,23 @@ QString RosegardenGUIDoc::getAutoSaveFileName()
     //!!! so they aren't appropriate for recovery purposes.
 
     QString autoSaveFileName = AutoSaveFinder().getAutoSavePath(filename);
-    RG_DEBUG << "RosegardenGUIDoc::getAutoSaveFilename(): returning "
+    RG_DEBUG << "RosegardenDocument::getAutoSaveFilename(): returning "
              << autoSaveFileName
              << endl;
 
     return autoSaveFileName;
 }
 
-void RosegardenGUIDoc::slotAutoSave()
+void RosegardenDocument::slotAutoSave()
 {
-    //     RG_DEBUG << "RosegardenGUIDoc::slotAutoSave()\n" << endl;
+    //     RG_DEBUG << "RosegardenDocument::slotAutoSave()\n" << endl;
 
     if (isAutoSaved() || !isModified())
         return ;
 
     QString autoSaveFileName = getAutoSaveFileName();
 
-    RG_DEBUG << "RosegardenGUIDoc::slotAutoSave() - doc modified - saving '"
+    RG_DEBUG << "RosegardenDocument::slotAutoSave() - doc modified - saving '"
     << getAbsFilePath() << "' as "
     << autoSaveFileName << endl;
 
@@ -319,21 +319,21 @@ void RosegardenGUIDoc::slotAutoSave()
 
 }
 
-bool RosegardenGUIDoc::isRegularDotRGFile()
+bool RosegardenDocument::isRegularDotRGFile()
 {
     return getAbsFilePath().right(3).toLower() == ".rg";
 }
 
-bool RosegardenGUIDoc::saveIfModified()
+bool RosegardenDocument::saveIfModified()
 {
-    RG_DEBUG << "RosegardenGUIDoc::saveIfModified()" << endl;
+    RG_DEBUG << "RosegardenDocument::saveIfModified()" << endl;
     bool completed = true;
 
     if (!isModified())
         return completed;
 
 
-    RosegardenGUIApp *win = (RosegardenGUIApp *)parent();
+    RosegardenMainWindow *win = (RosegardenMainWindow *)parent();
 
     int wantSave = QMessageBox::warning( dynamic_cast<QWidget*>(win), tr("Warning"), tr("The current file has been modified.\n"                          "Do you want to save it?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
 
@@ -345,12 +345,12 @@ bool RosegardenGUIDoc::saveIfModified()
 
         if (!isRegularDotRGFile()) {
 
-            RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : new or imported file\n";
+            RG_DEBUG << "RosegardenDocument::saveIfModified() : new or imported file\n";
             completed = win->slotFileSaveAs();
 
         } else {
 
-            RG_DEBUG << "RosegardenGUIDoc::saveIfModified() : regular file\n";
+            RG_DEBUG << "RosegardenDocument::saveIfModified() : regular file\n";
             QString errMsg;
             completed = saveDocument(getAbsFilePath(), errMsg);
 
@@ -395,7 +395,7 @@ bool RosegardenGUIDoc::saveIfModified()
 }
 
 bool
-RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
+RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 {
     std::vector<QString> recordedOrphans;
     std::vector<QString> derivedOrphans;
@@ -540,7 +540,7 @@ RosegardenGUIDoc::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     return true;
 }
 
-void RosegardenGUIDoc::newDocument()
+void RosegardenDocument::newDocument()
 {
     setModified(false);
     setAbsFilePath(QString::null);
@@ -548,14 +548,14 @@ void RosegardenGUIDoc::newDocument()
     CommandHistory::getInstance()->clear();
 }
 
-void RosegardenGUIDoc::performAutoload()
+void RosegardenDocument::performAutoload()
 {
     QString autoloadFile = ResourceFinder().getAutoloadPath();
 
     QFileInfo autoloadFileInfo(autoloadFile);
 
     if (autoloadFile == "" || !autoloadFileInfo.isReadable()) {
-        std::cerr << "WARNING: RosegardenGUIDoc::performAutoload - "
+        std::cerr << "WARNING: RosegardenDocument::performAutoload - "
                   << "can't find autoload file - defaulting" << std::endl;
         return ;
     }
@@ -563,11 +563,11 @@ void RosegardenGUIDoc::performAutoload()
     openDocument(autoloadFile);
 }
 
-bool RosegardenGUIDoc::openDocument(const QString& filename,
+bool RosegardenDocument::openDocument(const QString& filename,
                                     bool permanent,
                                     const char* /*format*/ /*=0*/)
 {
-    RG_DEBUG << "RosegardenGUIDoc::openDocument(" << filename << ")" << endl;
+    RG_DEBUG << "RosegardenDocument::openDocument(" << filename << ")" << endl;
 
     if ( filename.isEmpty() )
         return false;
@@ -624,7 +624,7 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         return false;
     }
 
-    RG_DEBUG << "RosegardenGUIDoc::openDocument() end - "
+    RG_DEBUG << "RosegardenDocument::openDocument() end - "
     << "m_composition : " << &m_composition
     << " - m_composition->getNbSegments() : "
     << m_composition.getNbSegments()
@@ -687,13 +687,13 @@ bool RosegardenGUIDoc::openDocument(const QString& filename,
         initialiseControllers();
     }
 
-    std::cerr << "RosegardenGUIDoc::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
+    std::cerr << "RosegardenDocument::openDocument: Successfully opened document \"" << filename << "\"" << std::endl;
 
     return true;
 }
 
 void
-RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
+RosegardenDocument::mergeDocument(RosegardenDocument *doc,
                                 int options)
 {
     MacroCommand *command = new MacroCommand(tr("Merge"));
@@ -802,17 +802,17 @@ RosegardenGUIDoc::mergeDocument(RosegardenGUIDoc *doc,
     emit makeTrackVisible(firstAlteredTrack + yrNrTracks/2 + 1);
 }
 
-void RosegardenGUIDoc::clearStudio()
+void RosegardenDocument::clearStudio()
 {
     RosegardenSequencer::getInstance()->clearStudio();
     RG_DEBUG << "cleared studio\n";
 }
 
-void RosegardenGUIDoc::initialiseStudio()
+void RosegardenDocument::initialiseStudio()
 {
     Profiler profiler("initialiseStudio", true);
 
-    RG_DEBUG << "RosegardenGUIDoc::initialiseStudio - "
+    RG_DEBUG << "RosegardenDocument::initialiseStudio - "
     << "clearing down and initialising" << endl;
 
     clearStudio();
@@ -1119,9 +1119,9 @@ void RosegardenGUIDoc::initialiseStudio()
 }
 
 SequenceManager *
-RosegardenGUIDoc::getSequenceManager()
+RosegardenDocument::getSequenceManager()
 {
-    return (dynamic_cast<RosegardenGUIApp*>(parent()))->getSequenceManager();
+    return (dynamic_cast<RosegardenMainWindow*>(parent()))->getSequenceManager();
 }
 
 
@@ -1144,11 +1144,11 @@ RosegardenGUIDoc::getSequenceManager()
 // When updating major, reset minor to zero; when updating minor,
 // reset point to zero.
 //
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR = 1;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR = 4;
-int RosegardenGUIDoc::FILE_FORMAT_VERSION_POINT = 0;
+int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
+int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 4;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 0;
 
-bool RosegardenGUIDoc::saveDocument(const QString& filename,
+bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
                                     bool autosave)
 {
@@ -1203,12 +1203,12 @@ bool RosegardenGUIDoc::saveDocument(const QString& filename,
 }
 
 
-bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
+bool RosegardenDocument::saveDocumentActual(const QString& filename,
                                           QString& errMsg,
                                           bool autosave)
 {
-    Profiler profiler("RosegardenGUIDoc::saveDocumentActual");
-    RG_DEBUG << "RosegardenGUIDoc::saveDocumentActual(" << filename << ")\n";
+    Profiler profiler("RosegardenDocument::saveDocumentActual");
+    RG_DEBUG << "RosegardenDocument::saveDocumentActual(" << filename << ")\n";
 
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
@@ -1241,7 +1241,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
 
     } else {
 
-        progress = ((RosegardenGUIApp *)parent())->getProgressBar();	//
+        progress = ((RosegardenMainWindow *)parent())->getProgressBar();	//
     }
 
     // Send out Composition (this includes Tracks, Instruments, Tempo
@@ -1327,7 +1327,7 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
         return false;
     }
 
-    RG_DEBUG << endl << "RosegardenGUIDoc::saveDocument() finished\n";
+    RG_DEBUG << endl << "RosegardenDocument::saveDocument() finished\n";
 
     if (!autosave) {
         emit documentModified(false);
@@ -1343,12 +1343,12 @@ bool RosegardenGUIDoc::saveDocumentActual(const QString& filename,
     return true;
 }
 
-bool RosegardenGUIDoc::exportStudio(const QString& filename,
+bool RosegardenDocument::exportStudio(const QString& filename,
                                     QString &errMsg,
                                     std::vector<DeviceId> devices)
 {
-    Profiler profiler("RosegardenGUIDoc::exportStudio");
-    RG_DEBUG << "RosegardenGUIDoc::exportStudio("
+    Profiler profiler("RosegardenDocument::exportStudio");
+    RG_DEBUG << "RosegardenDocument::exportStudio("
     << filename << ")\n";
 
     QString outText;
@@ -1375,11 +1375,11 @@ bool RosegardenGUIDoc::exportStudio(const QString& filename,
         return false;
     }
 
-    RG_DEBUG << endl << "RosegardenGUIDoc::exportStudio() finished\n";
+    RG_DEBUG << endl << "RosegardenDocument::exportStudio() finished\n";
     return true;
 }
 
-void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
+void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                                    QProgressBar* progress, long totalEvents, long &count,
                                    QString extraAttributes)
 {
@@ -1560,11 +1560,11 @@ void RosegardenGUIDoc::saveSegment(QTextStream& outStream, Segment *segment,
 
 }
 
-bool RosegardenGUIDoc::isSequencerRunning()
+bool RosegardenDocument::isSequencerRunning()
 {
-    RosegardenGUIApp* parentApp = dynamic_cast<RosegardenGUIApp*>(parent());
+    RosegardenMainWindow* parentApp = dynamic_cast<RosegardenMainWindow*>(parent());
     if (!parentApp) {
-        RG_DEBUG << "RosegardenGUIDoc::isSequencerRunning() : parentApp == 0\n";
+        RG_DEBUG << "RosegardenDocument::isSequencerRunning() : parentApp == 0\n";
         return false;
     }
 
@@ -1572,7 +1572,7 @@ bool RosegardenGUIDoc::isSequencerRunning()
 }
 
 bool
-RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
+RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                            ProgressDialog *progress,
                            bool permanent,
                            bool &cancelled)
@@ -1611,7 +1611,7 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 
     START_TIMING;
     bool ok = reader.parse(source);
-    PRINT_ELAPSED("RosegardenGUIDoc::xmlParse (reader.parse())");
+    PRINT_ELAPSED("RosegardenDocument::xmlParse (reader.parse())");
 
     if (!ok) {
 
@@ -1740,9 +1740,9 @@ RosegardenGUIDoc::xmlParse(QString fileContents, QString &errMsg,
 }
 
 void
-RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
+RosegardenDocument::insertRecordedMidi(const MappedComposition &mC)
 {
-    RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi: " << mC.size() << " events" << endl;
+    RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events" << endl;
 
     // Just create a new record Segment if we don't have one already.
     // Make sure we don't recreate the record segment if it's already
@@ -1789,14 +1789,14 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
         // process all the incoming MappedEvents
         //
 		int lenx = m_viewList.size();
-		RosegardenGUIView *v;
+		RosegardenMainWidget *v;
 		int k = 0;
 		for (i = mC.begin(); i != mC.end(); ++i) {
 
             if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
                 // send to GUI
 				
-				//QList<RosegardenGUIView *>::iterator v;
+				//QList<RosegardenMainWidget *>::iterator v;
                 //for( v=m_viewList.begin(); v!=m_viewList.end(); v++ ) {
 				for( k=0; k<lenx; k++){
 					v = m_viewList.value( k );
@@ -1892,7 +1892,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                 break;
 
             case MappedEvent::MidiProgramChange:
-                RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi()"
+                RG_DEBUG << "RosegardenDocument::insertRecordedMidi()"
                 << " - got Program Change (unsupported)"
                 << endl;
                 break;
@@ -1922,7 +1922,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                 break;
 
             case MappedEvent::MidiNoteOneShot:
-                RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
                 << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
                 << endl;
                 break;
@@ -1937,7 +1937,7 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
                 break;
 
             default:
-                RG_DEBUG << "RosegardenGUIDoc::insertRecordedMidi() - "
+                RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
                 << "GOT UNSUPPORTED MAPPED EVENT"
                 << endl;
                 break;
@@ -2000,9 +2000,9 @@ RosegardenGUIDoc::insertRecordedMidi(const MappedComposition &mC)
 }
 
 void
-RosegardenGUIDoc::updateRecordingMIDISegment()
+RosegardenDocument::updateRecordingMIDISegment()
 {
-    //RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment" << endl;
+    //RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
 
     if (m_recordMIDISegments.size() == 0) {
         // make this call once to create one
@@ -2011,7 +2011,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
             return ; // not recording any MIDI
     }
 
-    //RG_DEBUG << "RosegardenGUIDoc::updateRecordingMIDISegment: have record MIDI segment" << endl;
+    //RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment" << endl;
 
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
@@ -2039,7 +2039,7 @@ RosegardenGUIDoc::updateRecordingMIDISegment()
 }
 
 void
-RosegardenGUIDoc::transposeRecordedSegment(Segment *s)
+RosegardenDocument::transposeRecordedSegment(Segment *s)
 {
         // get a selection of all the events in the segment, since we apparently
         // can't just iterate through a segment's events without one.  (?)
@@ -2068,7 +2068,7 @@ RosegardenGUIDoc::transposeRecordedSegment(Segment *s)
                      if ((*i)->isa(Note::EventType)) {
                          if (semitones != 0) {
                             if (!(*i)->has(PITCH)) {
-                                std::cerr << "WARNING! RosegardenGUIDoc::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
+                                std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
                             } else {
                                 int pitch = (*i)->get<Int>(PITCH) - semitones;
                                 std::cerr << "pitch = " << pitch
@@ -2084,8 +2084,8 @@ RosegardenGUIDoc::transposeRecordedSegment(Segment *s)
         }
 } 
 
-RosegardenGUIDoc::NoteOnRecSet *
-RosegardenGUIDoc::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
+RosegardenDocument::NoteOnRecSet *
+RosegardenDocument::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
 {
     NoteOnRecSet *new_vector = new NoteOnRecSet();
     for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
@@ -2102,7 +2102,7 @@ RosegardenGUIDoc::replaceRecordedEvent(NoteOnRecSet& rec_vec, Event *fresh)
 }
 
 void
-RosegardenGUIDoc::storeNoteOnEvent(Segment *s, Segment::iterator it, int device, int channel)
+RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int device, int channel)
 {
     NoteOnRec record;
     record.m_segment = s;
@@ -2114,7 +2114,7 @@ RosegardenGUIDoc::storeNoteOnEvent(Segment *s, Segment::iterator it, int device,
 }
 
 void
-RosegardenGUIDoc::insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn)
+RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn)
 {
     Segment::iterator it;
     for ( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
@@ -2134,18 +2134,18 @@ RosegardenGUIDoc::insertRecordedEvent(Event *ev, int device, int channel, bool i
                 if (isNoteOn) {
                     storeNoteOnEvent(recordMIDISegment, it, device, channel);
                 }
-                RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - matches filter" << endl;
+                RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - matches filter" << endl;
             } else {
-                RG_DEBUG << "RosegardenGUIDoc::insertRecordedEvent() - unmatched event discarded" << endl;
+                RG_DEBUG << "RosegardenDocument::insertRecordedEvent() - unmatched event discarded" << endl;
             }
         }
     }
 }
 
 void
-RosegardenGUIDoc::stopRecordingMidi()
+RosegardenDocument::stopRecordingMidi()
 {
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi" << endl;
+    RG_DEBUG << "RosegardenDocument::stopRecordingMidi" << endl;
 
     Composition &c = getComposition();
 
@@ -2195,7 +2195,7 @@ RosegardenGUIDoc::stopRecordingMidi()
 
     if (!haveMeaning) return;
 
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingMidi: have something" << endl;
+    RG_DEBUG << "RosegardenDocument::stopRecordingMidi: have something" << endl;
 
     // adjust the clef timings so as not to leave a clef stranded at
     // the start of an otherwise empty count-in
@@ -2297,7 +2297,7 @@ RosegardenGUIDoc::stopRecordingMidi()
 }
 
 void
-RosegardenGUIDoc::prepareAudio()
+RosegardenDocument::prepareAudio()
 {
     if (!isSequencerRunning()) return;
 
@@ -2319,20 +2319,20 @@ RosegardenGUIDoc::prepareAudio()
 }
 
 void
-RosegardenGUIDoc::slotSetPointerPosition(timeT t)
+RosegardenDocument::slotSetPointerPosition(timeT t)
 {
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);
 }
 
 void
-RosegardenGUIDoc::setPlayPosition(timeT t)
+RosegardenDocument::setPlayPosition(timeT t)
 {
     emit playPositionChanged(t);
 }
 
 void
-RosegardenGUIDoc::setLoop(timeT t0, timeT t1)
+RosegardenDocument::setLoop(timeT t0, timeT t1)
 {
     m_composition.setLoopStart(t0);
     m_composition.setLoopEnd(t1);
@@ -2340,9 +2340,9 @@ RosegardenGUIDoc::setLoop(timeT t0, timeT t1)
 }
 
 void
-RosegardenGUIDoc::syncDevices()
+RosegardenDocument::syncDevices()
 {
-    Profiler profiler("RosegardenGUIDoc::syncDevices", true);
+    Profiler profiler("RosegardenDocument::syncDevices", true);
 
     // Start up the sequencer
     //
@@ -2366,20 +2366,20 @@ RosegardenGUIDoc::syncDevices()
 
     unsigned int devices = RosegardenSequencer::getInstance()->getDevices();
 
-    RG_DEBUG << "RosegardenGUIDoc::syncDevices - devices = "
+    RG_DEBUG << "RosegardenDocument::syncDevices - devices = "
              << devices << endl;
 
     
     for (unsigned int i = 0; i < devices; i++) {
 
-        RG_DEBUG << "RosegardenGUIDoc::syncDevices - i = "
+        RG_DEBUG << "RosegardenDocument::syncDevices - i = "
                  << i << endl;
 
         getMappedDevice(i);
     }
 	
 	
-    RG_DEBUG << "RosegardenGUIDoc::syncDevices - "
+    RG_DEBUG << "RosegardenDocument::syncDevices - "
              << "Sequencer alive - Instruments synced" << endl;
 
     // Force update of view on current track selection
@@ -2394,7 +2394,7 @@ RosegardenGUIDoc::syncDevices()
     if (opt)
         labels = TrackLabel::ShowTrack;
 
-    RosegardenGUIView *w;
+    RosegardenMainWidget *w;
 	int lenx = m_viewList.size();
 	
 //	for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
@@ -2408,7 +2408,7 @@ RosegardenGUIDoc::syncDevices()
 }
 
 void
-RosegardenGUIDoc::getMappedDevice(DeviceId id)
+RosegardenDocument::getMappedDevice(DeviceId id)
 {
     MappedDevice md = RosegardenSequencer::getInstance()->getMappedDevice(id);
 
@@ -2426,7 +2426,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
         if (md.getType() != Device::Midi ||
             md.getDirection() != MidiDevice::Record) {
 
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice() - "
+            RG_DEBUG << "RosegardenDocument::getMappedDevice() - "
                      << "no instruments found" << endl;
             if (device) m_studio.removeDevice(id);
             return;
@@ -2442,7 +2442,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
             dynamic_cast<MidiDevice *>(device)->setRecording(md.isRecording());
             m_studio.addDevice(device);
 
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
                      << "adding MIDI Device \""
                      << device->getName() << "\" id = " << id
                      << " direction = " << md.getDirection()
@@ -2454,7 +2454,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
             device = new SoftSynthDevice(id, md.getName());
             m_studio.addDevice(device);
 
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
                      << "adding soft synth Device \""
                      << device->getName() << "\" id = " << id << endl;
 
@@ -2463,12 +2463,12 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
             device = new AudioDevice(id, md.getName());
             m_studio.addDevice(device);
 
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
                      << "adding audio Device \""
                      << device->getName() << "\" id = " << id << endl;
 
         } else {
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - "
+            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
                      << "unknown device - \"" << md.getName()
                      << "\" (type = "
                      << md.getType() << ")\n";
@@ -2488,7 +2488,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
     }
 
     std::string connection(md.getConnection());
-    RG_DEBUG << "RosegardenGUIDoc::getMappedDevice - got \"" << connection
+    RG_DEBUG << "RosegardenDocument::getMappedDevice - got \"" << connection
              << "\", direction " << md.getDirection()
              << " recording " << md.isRecording()
              << endl;
@@ -2513,7 +2513,7 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
         }
 
         if (!haveInstrument) {
-            RG_DEBUG << "RosegardenGUIDoc::getMappedDevice: new instr " << (*it)->getId() << endl;
+            RG_DEBUG << "RosegardenDocument::getMappedDevice: new instr " << (*it)->getId() << endl;
             instrument = new Instrument((*it)->getId(),
                                         (*it)->getType(),
                                         (*it)->getName(),
@@ -2525,9 +2525,9 @@ RosegardenGUIDoc::getMappedDevice(DeviceId id)
 }
 
 void
-RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
+RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
-    RG_DEBUG << "RosegardenGUIDoc::addRecordMIDISegment(" << tid << ")" << endl;
+    RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")" << endl;
 //    std::cerr << kdBacktrace() << std::endl;
 
     Segment *recordMIDISegment;
@@ -2572,7 +2572,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
 
-    RosegardenGUIView *w;
+    RosegardenMainWidget *w;
 	int lenx = m_viewList.count();
 	int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
@@ -2585,7 +2585,7 @@ RosegardenGUIDoc::addRecordMIDISegment(TrackId tid)
 }
 
 void
-RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
+RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
                                         AudioFileId auid)
 {
     Segment *recordSegment = new Segment
@@ -2611,7 +2611,7 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
     }
 
     if (!recordTrack) {
-        RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment(" << iid << ", "
+        RG_DEBUG << "RosegardenDocument::addRecordAudioSegment(" << iid << ", "
         << auid << "): No record-armed track found for instrument!"
         << endl;
         return ;
@@ -2640,7 +2640,7 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
         }
     }
 
-    recordSegment->setLabel(appendLabel(label, qstrtostr(RosegardenGUIDoc::tr("(recorded)"))));
+    recordSegment->setLabel(appendLabel(label, qstrtostr(RosegardenDocument::tr("(recorded)"))));
     recordSegment->setAudioFileId(auid);
 
     // set color for audio segment to distinguish it from a MIDI segment on an
@@ -2652,10 +2652,10 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
     // this new color for new audio segments (DMM)
     recordSegment->setColourIndex(GUIPalette::AudioDefaultIndex);
 
-    RG_DEBUG << "RosegardenGUIDoc::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
+    RG_DEBUG << "RosegardenDocument::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
 
-    RosegardenGUIView *w;
+    RosegardenMainWidget *w;
 	int lenx = m_viewList.count();
 	int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
@@ -2668,7 +2668,7 @@ RosegardenGUIDoc::addRecordAudioSegment(InstrumentId iid,
 }
 
 void
-RosegardenGUIDoc::updateRecordingAudioSegments()
+RosegardenDocument::updateRecordingAudioSegments()
 {
     const Composition::recordtrackcontainer &tr =
         getComposition().getRecordTracks();
@@ -2697,7 +2697,7 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
                                                         m_composition.getPosition()));
 
             } else {
-                // 		RG_DEBUG << "RosegardenGUIDoc::updateRecordingAudioSegments: no segment for instr "
+                // 		RG_DEBUG << "RosegardenDocument::updateRecordingAudioSegments: no segment for instr "
                 // 			 << iid << endl;
             }
         }
@@ -2705,9 +2705,9 @@ RosegardenGUIDoc::updateRecordingAudioSegments()
 }
 
 void
-RosegardenGUIDoc::stopRecordingAudio()
+RosegardenDocument::stopRecordingAudio()
 {
-    RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio" << endl;
+    RG_DEBUG << "RosegardenDocument::stopRecordingAudio" << endl;
 
     for (RecordingSegmentMap::iterator ri = m_recordAudioSegments.begin();
             ri != m_recordAudioSegments.end(); ++ri) {
@@ -2724,7 +2724,7 @@ RosegardenGUIDoc::stopRecordingAudio()
                                                 m_composition.getPosition()));
 
         // now add the Segment
-        RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
+        RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "
         << "got recorded segment" << endl;
 
         // now move the segment back by the record latency
@@ -2753,7 +2753,7 @@ RosegardenGUIDoc::stopRecordingAudio()
         	timeT shiftedStartTime =
         	    m_composition.getElapsedTimeForRealTime(adjustedStartTime);
          
-        	RG_DEBUG << "RosegardenGUIDoc::stopRecordingAudio - "
+        	RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "
                          << "shifted recorded audio segment by "
                          <<  recordSegment->getStartTime() - shiftedStartTime
         		 << " clicks (from " << recordSegment->getStartTime()
@@ -2766,22 +2766,22 @@ RosegardenGUIDoc::stopRecordingAudio()
 }
 
 void
-RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
+RosegardenDocument::finalizeAudioFile(InstrumentId iid)
 {
-    RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile(" << iid << ")" << endl;
+    RG_DEBUG << "RosegardenDocument::finalizeAudioFile(" << iid << ")" << endl;
 
     Segment *recordSegment = 0;
     recordSegment = m_recordAudioSegments[iid];
 
     if (!recordSegment) {
-        RG_DEBUG << "RosegardenGUIDoc::finalizeAudioFile: Failed to find segment" << endl;
+        RG_DEBUG << "RosegardenDocument::finalizeAudioFile: Failed to find segment" << endl;
         return ;
     }
 
     AudioFile *newAudioFile = m_audioFileManager.getAudioFile
                               (recordSegment->getAudioFileId());
     if (!newAudioFile) {
-        std::cerr << "WARNING: RosegardenGUIDoc::finalizeAudioFile: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")" << std::endl;
+        std::cerr << "WARNING: RosegardenDocument::finalizeAudioFile: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")" << std::endl;
         return ;
     }
 
@@ -2835,25 +2835,25 @@ RosegardenGUIDoc::finalizeAudioFile(InstrumentId iid)
 }
 
 RealTime
-RosegardenGUIDoc::getAudioPlayLatency()
+RosegardenDocument::getAudioPlayLatency()
 {
     return RosegardenSequencer::getInstance()->getAudioPlayLatency();
 }
 
 RealTime
-RosegardenGUIDoc::getAudioRecordLatency()
+RosegardenDocument::getAudioRecordLatency()
 {
     return RosegardenSequencer::getInstance()->getAudioRecordLatency();
 }
 
 void
-RosegardenGUIDoc::updateAudioRecordLatency()
+RosegardenDocument::updateAudioRecordLatency()
 {
     m_audioRecordLatency = getAudioRecordLatency();
 }
 
 QStringList
-RosegardenGUIDoc::getTimers()
+RosegardenDocument::getTimers()
 {
     QStringList list;
 
@@ -2867,19 +2867,19 @@ RosegardenGUIDoc::getTimers()
 }
 
 QString
-RosegardenGUIDoc::getCurrentTimer()
+RosegardenDocument::getCurrentTimer()
 {
     return RosegardenSequencer::getInstance()->getCurrentTimer();
 }
 
 void
-RosegardenGUIDoc::setCurrentTimer(QString name)
+RosegardenDocument::setCurrentTimer(QString name)
 {
     RosegardenSequencer::getInstance()->setCurrentTimer(name);
 }
 
 void
-RosegardenGUIDoc::initialiseControllers()
+RosegardenDocument::initialiseControllers()
 {
     InstrumentList list = m_studio.getAllInstruments();
     MappedComposition mC;
@@ -2922,7 +2922,7 @@ RosegardenGUIDoc::initialiseControllers()
 }
 
 void
-RosegardenGUIDoc::clearAllPlugins()
+RosegardenDocument::clearAllPlugins()
 {
     //RG_DEBUG << "clearAllPlugins" << endl;
 
@@ -2938,7 +2938,7 @@ RosegardenGUIDoc::clearAllPlugins()
                 if ((*pIt)->getMappedId() != -1) {
                     if (StudioControl::
                         destroyStudioObject((*pIt)->getMappedId()) == false) {
-                        RG_DEBUG << "RosegardenGUIDoc::clearAllPlugins - "
+                        RG_DEBUG << "RosegardenDocument::clearAllPlugins - "
                                  << "couldn't find plugin instance "
                                  << (*pIt)->getMappedId() << endl;
                     }
@@ -2948,7 +2948,7 @@ RosegardenGUIDoc::clearAllPlugins()
             (*it)->emptyPlugins();
 
             /*
-            RG_DEBUG << "RosegardenGUIDoc::clearAllPlugins - "
+            RG_DEBUG << "RosegardenDocument::clearAllPlugins - "
                      << "cleared " << (*it)->getName() << endl;
             */
         }
@@ -2956,35 +2956,35 @@ RosegardenGUIDoc::clearAllPlugins()
 }
 
 Clipboard*
-RosegardenGUIDoc::getClipboard()
+RosegardenDocument::getClipboard()
 {
-    RosegardenGUIApp *app = (RosegardenGUIApp*)parent();
+    RosegardenMainWindow *app = (RosegardenMainWindow*)parent();
     return app->getClipboard();
 }
 
-void RosegardenGUIDoc::slotDocColoursChanged()
+void RosegardenDocument::slotDocColoursChanged()
 {
-    RG_DEBUG << "RosegardenGUIDoc::slotDocColoursChanged(): emitting docColoursChanged()" << endl;
+    RG_DEBUG << "RosegardenDocument::slotDocColoursChanged(): emitting docColoursChanged()" << endl;
 
     emit docColoursChanged();
 }
 
 void
-RosegardenGUIDoc::addOrphanedRecordedAudioFile(QString fileName)
+RosegardenDocument::addOrphanedRecordedAudioFile(QString fileName)
 {
     m_orphanedRecordedAudioFiles.push_back(fileName);
     slotDocumentModified();
 }
 
 void
-RosegardenGUIDoc::addOrphanedDerivedAudioFile(QString fileName)
+RosegardenDocument::addOrphanedDerivedAudioFile(QString fileName)
 {
     m_orphanedDerivedAudioFiles.push_back(fileName);
     slotDocumentModified();
 }
 
 void
-RosegardenGUIDoc::notifyAudioFileRemoval(AudioFileId id)
+RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
 {
     AudioFile *file = 0;
 
@@ -3002,4 +3002,4 @@ RosegardenGUIDoc::notifyAudioFileRemoval(AudioFileId id)
 }
 
 }
-#include "RosegardenGUIDoc.moc"
+#include "RosegardenDocument.moc"

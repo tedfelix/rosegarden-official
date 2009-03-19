@@ -21,7 +21,7 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "TrackLabel.h"
 #include <QFrame>
 #include <QString>
@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 class TrackVUMeter;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class LedButton;
 class Instrument;
 
@@ -55,7 +55,7 @@ class TrackButtons : public QFrame
     Q_OBJECT
 public:
 
-    TrackButtons(RosegardenGUIDoc* doc,
+    TrackButtons(RosegardenDocument* doc,
                  unsigned int trackCellHeight,
                  unsigned int trackLabelWidth,
                  bool showTrackLabels,
@@ -100,9 +100,9 @@ public:
     /**
      * Precalculate the Instrument popup so we don't have to every
      * time it appears
-     * not protected because also used by the RosegardenGUIApp
+     * not protected because also used by the RosegardenMainWindow
      *
-     * @see RosegardenGUIApp#slotPopulateTrackInstrumentPopup()
+     * @see RosegardenMainWindow#slotPopulateTrackInstrumentPopup()
      */
     void populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup);
 
@@ -184,7 +184,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc                 *m_doc;
+    RosegardenDocument                 *m_doc;
 
     QVBoxLayout                      *m_layout;
 

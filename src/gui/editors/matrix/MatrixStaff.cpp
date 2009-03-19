@@ -34,7 +34,7 @@
 #include "base/Track.h"
 #include "base/ViewElement.h"
 #include "base/SegmentMatrixHelper.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/rulers/DefaultVelocityColour.h"

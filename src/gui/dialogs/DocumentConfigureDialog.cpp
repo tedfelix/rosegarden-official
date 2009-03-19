@@ -18,7 +18,7 @@
 
 #include "DocumentConfigureDialog.h"
 #include "ConfigureDialogBase.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/configuration/AudioPropertiesPage.h"
 #include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
@@ -33,7 +33,7 @@
 namespace Rosegarden
 {
 
-DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
+DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
     : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )

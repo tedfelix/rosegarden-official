@@ -49,9 +49,9 @@
 #include "base/NotationQuantizer.h"
 #include "base/Marker.h"
 #include "base/StaffExportTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenMainWidget.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"
@@ -76,8 +76,8 @@ using namespace BaseProperties;
 const PropertyName LilyPondExporter::SKIP_PROPERTY
     = "LilyPondExportSkipThisEvent";
 
-LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
-                                   RosegardenGUIDoc *doc,
+LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
@@ -86,14 +86,14 @@ LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_view = ((RosegardenGUIApp *)parent)->getView();
+    m_view = ((RosegardenMainWindow *)parent)->getView();
     m_notationView = NULL;
 
     readConfigVariables();
 }
 
 LilyPondExporter::LilyPondExporter(NotationView *parent,
-                                   RosegardenGUIDoc *doc,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),

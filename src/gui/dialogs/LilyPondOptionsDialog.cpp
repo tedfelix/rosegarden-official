@@ -18,7 +18,7 @@
 
 #include "document/ConfigGroups.h"
 #include "document/io/LilyPondExporter.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
 #include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
@@ -49,7 +49,7 @@ namespace Rosegarden
 {
 
 LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
-	RosegardenGUIDoc *doc,
+	RosegardenDocument *doc,
         QString windowCaption,
         QString heading) :
         QDialog(parent),

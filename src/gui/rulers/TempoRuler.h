@@ -44,7 +44,7 @@ namespace Rosegarden
 
 class TextFloat;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -66,7 +66,7 @@ public:
      * The RulerScale will not be destroyed along with the TempoRuler.
      */
     TempoRuler(RulerScale *rulerScale,
-               RosegardenGUIDoc *doc,
+               RosegardenDocument *doc,
                QMainWindow *parentMainWindow,
                double xorigin = 0.0,
                int height = 0,

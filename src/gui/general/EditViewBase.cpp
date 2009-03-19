@@ -17,7 +17,7 @@
 
 #include "EditViewBase.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
@@ -37,7 +37,7 @@
 namespace Rosegarden
 {
 
-EditViewBase::EditViewBase(RosegardenGUIDoc *doc,
+EditViewBase::EditViewBase(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent, const char *name) :
     QMainWindow(parent, name),

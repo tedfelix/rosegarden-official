@@ -19,7 +19,7 @@
 #include "TabbedConfigurationPage.h"
 
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include <QSettings>
 #include <QString>
 #include <QTabWidget>
@@ -30,7 +30,7 @@
 namespace Rosegarden
 {
 
-TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
+TabbedConfigurationPage::TabbedConfigurationPage(RosegardenDocument *doc,
                                                  QWidget *parent,
                                                  const char *name)
     : ConfigurationPage(doc, parent, name)

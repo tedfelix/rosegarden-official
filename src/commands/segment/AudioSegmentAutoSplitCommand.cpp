@@ -25,7 +25,7 @@
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PeakFileManager.h"
 #include <QString>
@@ -45,7 +45,7 @@ struct AutoSplitPoint
 };
 
 AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     Segment *segment,
     int threshold) :
         NamedCommand(getGlobalName()),

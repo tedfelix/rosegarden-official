@@ -27,7 +27,7 @@
 #include "commands/studio/CreateOrDeleteDeviceCommand.h"
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "sequencer/RosegardenSequencer.h"
 #include <algorithm>
@@ -56,7 +56,7 @@ namespace Rosegarden
 {
 
 DeviceEditorDialog::DeviceEditorDialog(QWidget *parent,
-                                       RosegardenGUIDoc *document) :
+                                       RosegardenDocument *document) :
         QDialog(parent),
         m_document(document),
         m_studio(&document->getStudio()),

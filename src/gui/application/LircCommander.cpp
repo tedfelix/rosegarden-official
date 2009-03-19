@@ -24,10 +24,10 @@
 #ifdef HAVE_LIRC
 
 #include "misc/Debug.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/segment/TrackButtons.h"
-#include "RosegardenGUIApp.h"
-#include "RosegardenGUIView.h"
+#include "RosegardenMainWindow.h"
+#include "RosegardenMainWidget.h"
 
 #include <QObject>
 
@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-LircCommander::LircCommander(LircClient *lirc, RosegardenGUIApp *rgGUIApp)
+LircCommander::LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp)
         : QObject()
 {
     m_lirc = lirc;

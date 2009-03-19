@@ -30,7 +30,7 @@
 #include "base/Track.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 #include "NotePixmapFactory.h"
 #include "NotationView.h"

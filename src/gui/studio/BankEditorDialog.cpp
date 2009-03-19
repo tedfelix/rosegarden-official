@@ -27,7 +27,7 @@
 #include "base/Studio.h"
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
 #include "gui/dialogs/ImportDeviceDialog.h"
@@ -75,7 +75,7 @@ namespace Rosegarden
 {
 
 BankEditorDialog::BankEditorDialog(QWidget *parent,
-                                   RosegardenGUIDoc *doc,
+                                   RosegardenDocument *doc,
                                    DeviceId defaultDevice):
         QMainWindow(parent, "bankeditordialog"),
         m_studio(&doc->getStudio()),

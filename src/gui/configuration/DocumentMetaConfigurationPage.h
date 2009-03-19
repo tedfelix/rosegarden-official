@@ -31,7 +31,7 @@ class QListWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class HeadersConfigurationPage;
 
 /**
@@ -43,7 +43,7 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+    DocumentMetaConfigurationPage(RosegardenDocument *doc,
                                   QWidget *parent = 0, const char *name = 0);
     virtual void apply();
 

@@ -29,7 +29,7 @@ class QString;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -37,7 +37,7 @@ class SegmentToolBox : public BaseToolBox
 {
     Q_OBJECT
 public:
-    SegmentToolBox(CompositionView* parent, RosegardenGUIDoc*);
+    SegmentToolBox(CompositionView* parent, RosegardenDocument*);
 
     virtual SegmentTool* getTool(QString toolName);
     
@@ -47,7 +47,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     CompositionView* m_canvas;
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
 };
 
 

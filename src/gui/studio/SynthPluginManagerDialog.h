@@ -39,7 +39,7 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class AudioPluginOSCGUIManager;
 class AudioPluginManager;
 
@@ -50,7 +50,7 @@ class SynthPluginManagerDialog : public QMainWindow, public ActionFileClient
 
 public:
     SynthPluginManagerDialog(QWidget *parent,
-                             RosegardenGUIDoc *doc
+                             RosegardenDocument *doc
 #ifdef HAVE_LIBLO
                              , AudioPluginOSCGUIManager *guiManager
 #endif
@@ -81,7 +81,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
 protected:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
     AudioPluginManager *m_pluginManager;
     std::vector<int> m_synthPlugins;

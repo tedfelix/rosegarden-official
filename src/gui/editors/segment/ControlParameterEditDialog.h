@@ -36,7 +36,7 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class ControlParameterEditDialog : public QDialog
@@ -45,7 +45,7 @@ class ControlParameterEditDialog : public QDialog
 public:
     ControlParameterEditDialog(QWidget *parent,
                                ControlParameter *control,
-                               RosegardenGUIDoc *doc);
+                               RosegardenDocument *doc);
 
     ControlParameter& getControl() { return m_dialogControl; }
 
@@ -64,7 +64,7 @@ public slots:
 protected:
     void populate(); // populate the dialog
 
-    RosegardenGUIDoc             *m_doc;
+    RosegardenDocument             *m_doc;
     ControlParameter *m_control;
     ControlParameter  m_dialogControl;
 

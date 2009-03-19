@@ -29,7 +29,7 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -50,7 +50,7 @@ public:
     static const QString ToolName;
 
 protected:
-    SegmentEraser(CompositionView*, RosegardenGUIDoc*);
+    SegmentEraser(CompositionView*, RosegardenDocument*);
     void setBasicContextHelp();
 };
 

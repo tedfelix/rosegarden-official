@@ -25,7 +25,7 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include <QPainter>
 #include <QRect>
@@ -42,7 +42,7 @@
 namespace Rosegarden
 {
 
-LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
+LoopRuler::LoopRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
                      int height,
                      double xorigin,

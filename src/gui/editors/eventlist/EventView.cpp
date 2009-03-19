@@ -43,7 +43,7 @@
 #include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/PitchDialog.h"
@@ -90,7 +90,7 @@ int
 EventView::m_lastSetEventFilter = -1;
 
 
-EventView::EventView(RosegardenGUIDoc *doc,
+EventView::EventView(RosegardenDocument *doc,
                      std::vector<Segment *> segments,
                      QWidget *parent):
         ListEditView(doc, segments, 2, parent, "eventview"),

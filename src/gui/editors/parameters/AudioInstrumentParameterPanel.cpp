@@ -23,7 +23,7 @@
 #include "base/AudioPluginInstance.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/StudioControl.h"
@@ -55,7 +55,7 @@
 namespace Rosegarden
 {
 
-AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent)
+AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(RosegardenDocument* doc, QWidget* parent)
         : InstrumentParameterPanel(doc, parent),
         m_audioFader(new AudioFaderBox(this))
 {

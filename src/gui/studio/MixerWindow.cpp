@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include <QMainWindow>
 #include <QShortcut>
@@ -32,7 +32,7 @@ namespace Rosegarden
 {
 
 MixerWindow::MixerWindow(QWidget *parent,
-                         RosegardenGUIDoc *document) :
+                         RosegardenDocument *document) :
         QMainWindow(parent, "mixerwindow"),
         m_document(document),
         m_studio(&document->getStudio()),

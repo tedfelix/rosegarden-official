@@ -28,7 +28,7 @@
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
@@ -46,7 +46,7 @@
 namespace Rosegarden
 {
 
-SegmentMover::SegmentMover(CompositionView *c, RosegardenGUIDoc *d)
+SegmentMover::SegmentMover(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
     RG_DEBUG << "SegmentMover()\n";

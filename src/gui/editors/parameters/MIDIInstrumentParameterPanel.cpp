@@ -28,7 +28,7 @@
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Rotary.h"
 #include "InstrumentParameterPanel.h"
@@ -54,7 +54,7 @@
 namespace Rosegarden
 {
 
-MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent):
+MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent):
         InstrumentParameterPanel(doc, parent),
         m_rotaryFrame(0),
         m_rotaryMapper(new QSignalMapper(this))
@@ -1036,7 +1036,7 @@ void MIDIInstrumentParameterPanel::slotSelectProgramNoSend(int prog, int bank_ls
      * This function changes the program-list entry, if
      * a midi program change message occured.
      * 
-     * (the slot is being connected in RosegardenGUIApp.cpp,
+     * (the slot is being connected in RosegardenMainWindow.cpp,
      *  and called (signaled) by SequenceManger.cpp)
      * 
      * parameters:

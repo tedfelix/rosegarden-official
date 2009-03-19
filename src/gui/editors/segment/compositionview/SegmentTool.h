@@ -34,7 +34,7 @@ namespace Rosegarden
 
 class Command;
 class SegmentToolBox;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -71,7 +71,7 @@ public:
     void addCommandToHistory(Command *command);
 
 protected:
-    SegmentTool(CompositionView*, RosegardenGUIDoc *doc);
+    SegmentTool(CompositionView*, RosegardenDocument *doc);
 
     virtual void createMenu();
     virtual bool hasMenu() { return true; }
@@ -87,7 +87,7 @@ protected:
 
     CompositionView*  m_canvas;
     CompositionItem   m_currentIndex;
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     QPoint            m_origPos;
     bool              m_changeMade;
 };

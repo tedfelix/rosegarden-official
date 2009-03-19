@@ -42,7 +42,7 @@ class Event;
 class NotationScene;
 class NotationElement;
 class NotationWidget;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Segment;
 
 class NotationScene : public QGraphicsScene,
@@ -56,7 +56,7 @@ public:
     ~NotationScene();
 
     void setNotationWidget(NotationWidget *w);
-    void setStaffs(RosegardenGUIDoc *document, std::vector<Segment *> segments);
+    void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);
 
     Segment *getCurrentSegment();
 
@@ -65,7 +65,7 @@ public:
     NotationHLayout *getHLayout() { return m_hlayout; }
     NotationVLayout *getVLayout() { return m_vlayout; }
     NotationProperties &getProperties() { return *m_properties; }
-    RosegardenGUIDoc *getDocument() { return m_document; }
+    RosegardenDocument *getDocument() { return m_document; }
 
     virtual EventSelection *getSelection() const { return 0; } //!!!
     virtual void setSelection(EventSelection* s, bool preview) { } //!!!
@@ -138,7 +138,7 @@ private:
 
     NotationWidget *m_widget; // I do not own this
 
-    RosegardenGUIDoc *m_document; // I do not own this
+    RosegardenDocument *m_document; // I do not own this
     NotationProperties *m_properties; // I own this
 
     NotePixmapFactory *m_notePixmapFactory; // I own this

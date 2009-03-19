@@ -21,7 +21,7 @@
 #include "base/Instrument.h"
 #include "base/BasicQuantizer.h"
 #include "base/Selection.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include <QComboBox>
 #include <QFont>
@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-MatrixParameterBox::MatrixParameterBox(RosegardenGUIDoc *doc,
+MatrixParameterBox::MatrixParameterBox(RosegardenDocument *doc,
                                        QWidget *parent, const char* name):
         QFrame(parent),
         m_quantizations(BasicQuantizer::getStandardQuantizations()),

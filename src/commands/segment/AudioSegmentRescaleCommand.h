@@ -29,7 +29,7 @@ namespace Rosegarden
 class Segment;
 class AudioFileManager;
 class AudioFileTimeStretcher;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class ProgressDialog;
 
 class AudioSegmentRescaleCommand : public NamedCommand
@@ -37,9 +37,9 @@ class AudioSegmentRescaleCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(AudioSegmentRescaleCommand)
 
 public:
-    AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+    AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                Segment *segment, float ratio);
-    AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+    AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                Segment *segment, float ratio,
                                timeT newStartTime,
                                timeT newEndMarkerTime);

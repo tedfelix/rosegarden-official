@@ -34,7 +34,7 @@
 #include "base/Selection.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
 
@@ -53,7 +53,7 @@ namespace Rosegarden
 {
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
-                               RosegardenGUIDoc *doc,
+                               RosegardenDocument *doc,
                                double xorigin,
                                int height,
                                QWidget *parent,
@@ -94,7 +94,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 }
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
-                               RosegardenGUIDoc *doc,
+                               RosegardenDocument *doc,
                                std::vector<Segment *> &segments,
                                double xorigin,
                                int height,

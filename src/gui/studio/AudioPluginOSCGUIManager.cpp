@@ -31,7 +31,7 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Studio.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "OSCMessage.h"
 #include "sound/MappedEvent.h"
 #include "sound/PluginIdentifier.h"
@@ -77,7 +77,7 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
     return 0;
 }
 
-AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenGUIApp *app) :
+AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenMainWindow *app) :
         m_app(app),
         m_studio(0),
         m_haveOSCThread(false),
@@ -488,7 +488,7 @@ AudioPluginOSCGUIManager::dispatch()
         char type;
         const lo_arg *arg;
 
-        // These generally call back on the RosegardenGUIApp.  We'd
+        // These generally call back on the RosegardenMainWindow.  We'd
         // like to emit signals, but making AudioPluginOSCGUIManager a
         // QObject is problematic if it's only conditionally compiled.
 

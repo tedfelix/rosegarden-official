@@ -22,7 +22,7 @@
 #include "MatrixWidget.h"
 #include "MatrixElement.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "document/ConfigGroups.h"
 
@@ -79,7 +79,7 @@ MatrixScene::setMatrixWidget(MatrixWidget *w)
 }
 
 void
-MatrixScene::setSegments(RosegardenGUIDoc *document,
+MatrixScene::setSegments(RosegardenDocument *document,
                          std::vector<Segment *> segments)
 {
     if (m_document && document != m_document) {

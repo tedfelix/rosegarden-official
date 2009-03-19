@@ -26,7 +26,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class TimeSigSegmentMmapper : public SpecialSegmentMmapper
@@ -36,7 +36,7 @@ class TimeSigSegmentMmapper : public SpecialSegmentMmapper
 public:
 
 protected:
-    TimeSigSegmentMmapper(RosegardenGUIDoc* doc,
+    TimeSigSegmentMmapper(RosegardenDocument* doc,
                           QString baseFileName)
         : SpecialSegmentMmapper(doc, baseFileName) {}
 

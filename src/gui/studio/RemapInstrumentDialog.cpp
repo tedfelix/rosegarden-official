@@ -27,7 +27,7 @@
 #include "commands/studio/ModifyDeviceMappingCommand.h"
 #include "commands/studio/ModifyInstrumentMappingCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include <QComboBox>
 #include "document/Command.h"
 #include <QDialog>
@@ -43,7 +43,7 @@ namespace Rosegarden
 {
 
 RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
-        RosegardenGUIDoc *doc):
+        RosegardenDocument *doc):
         QDialog(parent),
         m_doc(doc)
 {

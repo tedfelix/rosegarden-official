@@ -42,7 +42,7 @@
 #include "base/StaffExportTypes.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "commands/segment/SegmentSyncCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/PresetHandlerDialog.h"
@@ -83,7 +83,7 @@
 namespace Rosegarden
 {
 
-TrackParameterBox::TrackParameterBox(RosegardenGUIDoc *doc,
+TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                      QWidget *parent)
         : RosegardenParameterBox(tr("Track"),
                                  tr("Track Parameters"),
@@ -434,7 +434,7 @@ TrackParameterBox::~TrackParameterBox()
 
 void
 
-TrackParameterBox::setDocument( RosegardenGUIDoc *doc )
+TrackParameterBox::setDocument( RosegardenDocument *doc )
 {
     if (m_doc != doc) {
         RG_DEBUG << "TrackParameterBox::setDocument\n";

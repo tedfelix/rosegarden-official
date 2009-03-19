@@ -20,9 +20,9 @@
 
 #include "misc/Debug.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/BaseTool.h"
 #include "SegmentToolBox.h"
 #include "document/Command.h"
@@ -36,7 +36,7 @@
 namespace Rosegarden
 {
 
-SegmentTool::SegmentTool(CompositionView* canvas, RosegardenGUIDoc *doc)
+SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
         : BaseTool("segment_tool_menu", canvas),
         m_canvas(canvas),
         m_doc(doc),
@@ -80,8 +80,8 @@ SegmentTool::createMenu()
 {
     RG_DEBUG << "SegmentTool::createMenu()\n";
 
-    RosegardenGUIApp *app =
-        dynamic_cast<RosegardenGUIApp*>(m_doc->parent());
+    RosegardenMainWindow *app =
+        dynamic_cast<RosegardenMainWindow*>(m_doc->parent());
 
     if (app) {
 

@@ -31,7 +31,7 @@ class QLineEdit;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class HeadersConfigurationPage;
 
 class LilyPondOptionsDialog : public QDialog
@@ -40,7 +40,7 @@ class LilyPondOptionsDialog : public QDialog
 
 public:
     LilyPondOptionsDialog(QWidget *parent,
-			  RosegardenGUIDoc *doc,
+			  RosegardenDocument *doc,
                           QString windowCaption = "",
                           QString heading = "");
 
@@ -51,7 +51,7 @@ public slots:
     void slotOk();
 
 protected:
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     QComboBox *m_lilyLanguage;
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;

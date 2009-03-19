@@ -22,7 +22,7 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
 #include "SpecialSegmentMmapper.h"

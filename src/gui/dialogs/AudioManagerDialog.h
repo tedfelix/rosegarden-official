@@ -44,7 +44,7 @@ namespace Rosegarden
 
 class SegmentSelection;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class RealTime;
 class AudioPlayingDialog;
 class AudioFile;
@@ -57,7 +57,7 @@ class AudioManagerDialog : public QMainWindow, public ActionFileClient
 
 public:
     AudioManagerDialog(QWidget *parent,
-                       RosegardenGUIDoc *doc);
+                       RosegardenDocument *doc);
     ~AudioManagerDialog();
 
     // Populate the file list from the AudioFileManager
@@ -179,7 +179,7 @@ protected:
 
     QTreeWidget        *m_fileList;
     QLabel           *m_wrongSampleRates;
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
 
     QShortcut           *m_shortcuts;
 

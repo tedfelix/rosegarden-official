@@ -23,7 +23,7 @@
 #include "AudioInstrumentParameterPanel.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "MIDIInstrumentParameterPanel.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
@@ -41,7 +41,7 @@
 namespace Rosegarden
 {
 
-InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
+InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
     : RosegardenParameterBox(tr("Instrument"),
                              tr("Instrument Parameters"),
@@ -171,7 +171,7 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 }
 
 void
-InstrumentParameterBox::setDocument(RosegardenGUIDoc* doc)
+InstrumentParameterBox::setDocument(RosegardenDocument* doc)
 {
     m_doc = doc;
     m_midiInstrumentParameters->setDocument(m_doc);

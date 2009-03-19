@@ -37,7 +37,7 @@
 #include "commands/studio/RemoveControlParameterCommand.h"
 #include "ControlParameterEditDialog.h"
 #include "ControlParameterItem.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
@@ -70,7 +70,7 @@ namespace Rosegarden
 ControlEditorDialog::ControlEditorDialog
 		(
 			QWidget *parent,
-			RosegardenGUIDoc *doc,
+			RosegardenDocument *doc,
 			DeviceId device
 		):
         QMainWindow(parent, "controleditordialog"),
@@ -440,7 +440,7 @@ ControlEditorDialog::closeEvent(QCloseEvent *e)
 }
 
 void
-ControlEditorDialog::setDocument(RosegardenGUIDoc *doc)
+ControlEditorDialog::setDocument(RosegardenDocument *doc)
 {
     // reset our pointers
     m_doc = doc;

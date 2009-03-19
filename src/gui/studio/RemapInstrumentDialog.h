@@ -33,7 +33,7 @@ namespace Rosegarden
 
 class Command;
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class RemapInstrumentDialog : public QDialog
@@ -41,7 +41,7 @@ class RemapInstrumentDialog : public QDialog
     Q_OBJECT
 public:
     RemapInstrumentDialog(QWidget *parent,
-                          RosegardenGUIDoc *doc);
+                          RosegardenDocument *doc);
 
     void populateCombo();
 
@@ -56,7 +56,7 @@ signals:
 
 protected:
 
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
 
     QRadioButton        *m_deviceButton;
     QRadioButton        *m_instrumentButton;

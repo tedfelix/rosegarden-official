@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 class Command;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 {
@@ -48,7 +48,7 @@ class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 
 public:
     TriggerSegmentManager(QWidget *parent,
-                          RosegardenGUIDoc *doc);
+                          RosegardenDocument *doc);
     ~TriggerSegmentManager();
 
     void initDialog();
@@ -59,7 +59,7 @@ public:
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
     QShortcut* getShortcuts() { return m_shortcuts; }
 
@@ -90,7 +90,7 @@ protected:
                                timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     QPushButton             *m_closeButton;
     QPushButton             *m_addButton;

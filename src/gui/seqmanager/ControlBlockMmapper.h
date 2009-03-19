@@ -30,14 +30,14 @@ namespace Rosegarden
 {
 
 class Track;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class ControlBlock;
 
 
 class ControlBlockMmapper
 {
 public:
-    ControlBlockMmapper(RosegardenGUIDoc*);
+    ControlBlockMmapper(RosegardenDocument*);
     ~ControlBlockMmapper();
     
     QString getFileName() { return m_fileName; }
@@ -49,7 +49,7 @@ public:
     bool updateSoloData(bool solo, TrackId selectedTrack);
     void updateMidiFilters(MidiFilter thruFilter,
                            MidiFilter recordFilter);
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
     void enableMIDIThruRouting(bool state);
 
 protected:
@@ -58,7 +58,7 @@ protected:
     QString createFileName();
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     QString m_fileName;
     int m_fd;
     void* m_mmappedBuffer;

@@ -25,7 +25,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/application/RosegardenApplication.h"
@@ -61,7 +61,7 @@ namespace Rosegarden
 {
 
 MIDIConfigurationPage::MIDIConfigurationPage(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     QWidget *parent,
     const char *name):
         TabbedConfigurationPage(parent, name),

@@ -29,7 +29,7 @@
 #include "base/Instrument.h"
 #include "base/NotationTypes.h"
 #include "base/XmlExportable.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/ProgressReporter.h"
 #include <QObject>
@@ -40,7 +40,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 MusicXmlExporter::MusicXmlExporter(QObject *parent,
-                                   RosegardenGUIDoc *doc,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter(parent, "musicXmlExporter"),
         m_doc(doc),

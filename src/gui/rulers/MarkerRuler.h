@@ -37,7 +37,7 @@ namespace Rosegarden
 
 class Marker;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
@@ -45,7 +45,7 @@ class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
     Q_OBJECT
 
 public:
-    MarkerRuler(RosegardenGUIDoc *doc,
+    MarkerRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
                      int buttonHeight,
                      double xorigin = 0.0,
@@ -102,7 +102,7 @@ protected:
     QFont 	*m_barFont;
     QMenu 	*m_menu;
     
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     RulerScale *m_rulerScale;
     QMainWindow* m_parentMainWindow;
 

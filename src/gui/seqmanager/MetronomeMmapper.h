@@ -33,7 +33,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiMetronome;
 
 
@@ -51,7 +51,7 @@ public:
     virtual unsigned int getSegmentRepeatCount();
 
 protected:
-    MetronomeMmapper(RosegardenGUIDoc* doc);
+    MetronomeMmapper(RosegardenDocument* doc);
 
     virtual size_t computeMmappedSize();
 

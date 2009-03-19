@@ -44,7 +44,7 @@ class Command;
 class TristateCheckBox;
 class SegmentSelection;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -63,7 +63,7 @@ public:
         NotApplicable // no applicable segments selected
     } Tristate;
 
-    SegmentParameterBox(RosegardenGUIDoc *doc,
+    SegmentParameterBox(RosegardenDocument *doc,
                         QWidget *parent=0);
     ~SegmentParameterBox();
 
@@ -74,7 +74,7 @@ public:
 
     void addCommandToHistory(Command *command);
 
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
 
     // CompositionObserver interface
     //
@@ -152,7 +152,7 @@ protected:
     std::vector<int> m_realTimeDelays;
     ColourTable::ColourList  m_colourList;
 
-    RosegardenGUIDoc           *m_doc;
+    RosegardenDocument           *m_doc;
 
     MidiByte        m_transposeRange;
 };

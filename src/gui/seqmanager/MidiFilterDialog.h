@@ -30,7 +30,7 @@ class QDialogButtonBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MidiFilterDialog : public QDialog
@@ -38,7 +38,7 @@ class MidiFilterDialog : public QDialog
     Q_OBJECT
 public:
     MidiFilterDialog(QWidget *parent,
-                     RosegardenGUIDoc *doc);
+                     RosegardenDocument *doc);
 
     void setModified(bool value);
 
@@ -50,7 +50,7 @@ public slots:
 
 protected:
 
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
 
     QGroupBox        *m_thruBox;
     QGroupBox        *m_recordBox;

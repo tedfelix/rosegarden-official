@@ -31,7 +31,7 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
 #include "gui/general/GUIPalette.h"
@@ -83,7 +83,7 @@ public:
     }
 };
 
-DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name) :
         TabbedConfigurationPage(doc, parent, name)

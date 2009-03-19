@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class LoopRuler;
 class MarkerRuler;
 class SnapGrid;
@@ -42,7 +42,7 @@ class StandardRuler : public QWidget
     Q_OBJECT
 
 public:
-    StandardRuler(RosegardenGUIDoc *doc,
+    StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
                   double xorigin,
                   int buttonHeight,
@@ -61,7 +61,7 @@ public:
      * If you don't call this, you'll have to connect the
      * LoopRuler's signals up to something yourself.
      */
-    void connectRulerToDocPointer(RosegardenGUIDoc *doc);
+    void connectRulerToDocPointer(RosegardenDocument *doc);
     
     void setMinimumWidth(int width);
 
@@ -87,7 +87,7 @@ private:
     int m_loopRulerHeight;
     int m_currentXOffset;
 
-    RosegardenGUIDoc       *m_doc;
+    RosegardenDocument       *m_doc;
     RulerScale *m_rulerScale;
 
     MarkerRuler *m_markerRuler;

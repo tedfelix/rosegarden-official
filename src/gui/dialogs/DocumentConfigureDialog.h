@@ -28,13 +28,13 @@ class QWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class DocumentConfigureDialog : public ConfigureDialogBase
 {
 public:
-    DocumentConfigureDialog(RosegardenGUIDoc *doc,
+    DocumentConfigureDialog(RosegardenDocument *doc,
                             QWidget *parent=0,
                             const char *name=0);
 

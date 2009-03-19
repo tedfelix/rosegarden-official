@@ -37,7 +37,7 @@ class QObject;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Key;
 class Clef;
 class AccidentalTable;
@@ -53,13 +53,13 @@ public:
     typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 public:
-    MusicXmlExporter(QObject *parent, RosegardenGUIDoc *, std::string fileName);
+    MusicXmlExporter(QObject *parent, RosegardenDocument *, std::string fileName);
     ~MusicXmlExporter();
 
     bool write();
 
 protected:
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     std::string m_fileName;
     void writeClef(Rosegarden::Clef, std::ofstream &str);
     void writeKey(Rosegarden::Key, std::ofstream &str);

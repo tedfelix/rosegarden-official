@@ -33,7 +33,7 @@ namespace Rosegarden
 
 class Studio;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 class AudioFileManager;
 
@@ -43,7 +43,7 @@ class AudioSegmentInsertCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(AudioSegmentInsertCommand)
 
 public:
-    AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
+    AudioSegmentInsertCommand(RosegardenDocument *doc,
                               TrackId track,
                               timeT startTime,
                               AudioFileId audioFileId,

@@ -31,7 +31,7 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -59,7 +59,7 @@ protected slots:
     void slotCanvasScrolled(int newX, int newY);
     
 protected:
-    SegmentPencil(CompositionView*, RosegardenGUIDoc*);
+    SegmentPencil(CompositionView*, RosegardenDocument*);
     void setContextHelpFor(QPoint p);
 
     //--------------- Data members ---------------------------------

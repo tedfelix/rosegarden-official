@@ -86,13 +86,13 @@
 #include "commands/segment/SegmentSyncCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "document/io/LilyPondExporter.h"
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
-#include "gui/application/RosegardenGUIView.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
@@ -302,7 +302,7 @@ NoteChangeActionData::NoteChangeActionData(const QString& _title,
 }
 */
 
-NotationView::NotationView(RosegardenGUIDoc *doc,
+NotationView::NotationView(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent,
                            bool showProgressive) :
@@ -747,7 +747,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     if (parent)
     {
         const TrackButtons * trackLabels =
-            ((RosegardenGUIView*)parent)->getTrackEditor()->getTrackButtons();
+            ((RosegardenMainWidget*)parent)->getTrackEditor()->getTrackButtons();
         QObject::connect
         (trackLabels, SIGNAL(nameChanged()),
          this, SLOT(slotUpdateStaffName()));
@@ -770,7 +770,7 @@ NotationView::NotationView(RosegardenGUIDoc *doc,
     NOTATION_DEBUG << "NotationView ctor exiting" << endl;
 }
 
-NotationView::NotationView(RosegardenGUIDoc *doc,
+NotationView::NotationView(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            QWidget *parent,
                            NotationView *referenceView)
@@ -5020,7 +5020,7 @@ void NotationView::slotEditTranspose()
     }
 
     // Fix #1885520 (Update track parameter widget when transpose changed from notation)
-    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
+    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 
     // And update track headers likewise
     m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
@@ -5067,7 +5067,7 @@ void NotationView::slotEditSwitchPreset()
     m_doc->slotDocumentModified();
 
     // Fix #1885520 (Update track parameter widget when preset changed from notation)
-    RosegardenGUIApp::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
+    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void NotationView::slotEditElement(NotationStaff *staff,

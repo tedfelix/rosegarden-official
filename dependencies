@@ -51,7 +51,7 @@
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/Studio.h
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/MidiMetronome.h
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/ControlParameter.h
-./src/commands/studio/ModifyDeviceMappingCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/studio/ModifyDeviceMappingCommand.o: src/document/RosegardenDocument.h
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/Configuration.h
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/RealTime.h
 ./src/commands/studio/ModifyDeviceMappingCommand.o: src/base/Segment.h
@@ -201,7 +201,7 @@
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/Studio.h
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/MidiMetronome.h
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/ControlParameter.h
-./src/commands/studio/ModifyInstrumentMappingCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/studio/ModifyInstrumentMappingCommand.o: src/document/RosegardenDocument.h
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/Configuration.h
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/Device.h
 ./src/commands/studio/ModifyInstrumentMappingCommand.o: src/base/RealTime.h
@@ -1469,7 +1469,7 @@
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/base/Exception.h
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/misc/Strings.h
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/document/Command.h
-./src/commands/notation/MultiKeyInsertionCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/notation/MultiKeyInsertionCommand.o: src/document/RosegardenDocument.h
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/base/Composition.h
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/base/FastVector.h
 ./src/commands/notation/MultiKeyInsertionCommand.o: src/base/Segment.h
@@ -2792,7 +2792,7 @@
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/TriggerSegment.h
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/Marker.h
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/Segment.h
-./src/commands/segment/DeleteTriggerSegmentCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/DeleteTriggerSegmentCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/Configuration.h
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/Device.h
 ./src/commands/segment/DeleteTriggerSegmentCommand.o: src/base/MidiProgram.h
@@ -2988,7 +2988,7 @@
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/Studio.h
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/MidiMetronome.h
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/ControlParameter.h
-./src/commands/segment/AudioSegmentInsertCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/AudioSegmentInsertCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/Configuration.h
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/Device.h
 ./src/commands/segment/AudioSegmentInsertCommand.o: src/base/MidiProgram.h
@@ -3378,7 +3378,7 @@
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/Marker.h
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/NotationTypes.h
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/Segment.h
-./src/commands/segment/AudioSegmentRescaleCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/AudioSegmentRescaleCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/Configuration.h
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/Device.h
 ./src/commands/segment/AudioSegmentRescaleCommand.o: src/base/MidiProgram.h
@@ -3480,7 +3480,7 @@
 ./src/commands/segment/SegmentColourMapCommand.o: src/base/Colour.h
 ./src/commands/segment/SegmentColourMapCommand.o: src/base/Segment.h
 ./src/commands/segment/SegmentColourMapCommand.o: src/document/Command.h
-./src/commands/segment/SegmentColourMapCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/SegmentColourMapCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/SegmentColourMapCommand.o: src/base/Composition.h
 ./src/commands/segment/SegmentColourMapCommand.o: src/base/FastVector.h
 ./src/commands/segment/SegmentColourMapCommand.o: src/base/RealTime.h
@@ -3737,7 +3737,7 @@
 ./src/commands/segment/SegmentInsertCommand.o: src/base/Studio.h
 ./src/commands/segment/SegmentInsertCommand.o: src/base/MidiMetronome.h
 ./src/commands/segment/SegmentInsertCommand.o: src/base/ControlParameter.h
-./src/commands/segment/SegmentInsertCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/SegmentInsertCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/SegmentInsertCommand.o: src/base/Configuration.h
 ./src/commands/segment/SegmentInsertCommand.o: src/base/Device.h
 ./src/commands/segment/SegmentInsertCommand.o: src/base/MidiProgram.h
@@ -3867,7 +3867,7 @@
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/TriggerSegment.h
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/Marker.h
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/Segment.h
-./src/commands/segment/AddTriggerSegmentCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/AddTriggerSegmentCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/Configuration.h
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/Device.h
 ./src/commands/segment/AddTriggerSegmentCommand.o: src/base/MidiProgram.h
@@ -4019,7 +4019,7 @@
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/Marker.h
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/RealTime.h
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/Segment.h
-./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/document/RosegardenGUIDoc.h
+./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/document/RosegardenDocument.h
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/Configuration.h
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/Device.h
 ./src/commands/segment/AudioSegmentAutoSplitCommand.o: src/base/MidiProgram.h
@@ -4760,7 +4760,7 @@
 ./src/gui/dialogs/ImportDeviceDialog.o: ./src/base/Exception.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/document/ConfigGroups.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/base/MidiProgram.h
-./src/gui/dialogs/ImportDeviceDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/ImportDeviceDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/base/Composition.h
 ./src/gui/dialogs/ImportDeviceDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/ImportDeviceDialog.o: ./src/base/RealTime.h
@@ -4784,7 +4784,7 @@
 ./src/gui/dialogs/ImportDeviceDialog.o: src/sound/SoundFile.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/sound/PeakFileManager.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/sound/PeakFile.h src/base/Event.h
-./src/gui/dialogs/ImportDeviceDialog.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/dialogs/ImportDeviceDialog.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/dialogs/ImportDeviceDialog.o: src/gui/general/RecentFiles.h
@@ -4816,7 +4816,7 @@
 ./src/gui/dialogs/TempoDialog.o: ./src/base/TriggerSegment.h
 ./src/gui/dialogs/TempoDialog.o: ./src/base/Marker.h src/misc/Debug.h
 ./src/gui/dialogs/TempoDialog.o: src/base/NotationTypes.h src/base/RealTime.h
-./src/gui/dialogs/TempoDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/TempoDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/TempoDialog.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/dialogs/TempoDialog.o: src/base/MidiProgram.h src/base/Segment.h
 ./src/gui/dialogs/TempoDialog.o: src/base/Studio.h ./src/base/MidiMetronome.h
@@ -4879,7 +4879,7 @@
 ./src/gui/dialogs/MarkerModifyDialog.o: ./src/base/Colour.h
 ./src/gui/dialogs/MarkerModifyDialog.o: ./src/base/TriggerSegment.h
 ./src/gui/dialogs/MarkerModifyDialog.o: ./src/base/Marker.h
-./src/gui/dialogs/MarkerModifyDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/MarkerModifyDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/MarkerModifyDialog.o: src/base/Configuration.h
 ./src/gui/dialogs/MarkerModifyDialog.o: src/base/Device.h
 ./src/gui/dialogs/MarkerModifyDialog.o: src/base/MidiProgram.h
@@ -4936,7 +4936,7 @@
 ./src/gui/dialogs/AudioManagerDialog.o: ./src/base/ControlParameter.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/base/Track.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/document/CommandHistory.h
-./src/gui/dialogs/AudioManagerDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/AudioManagerDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/base/Configuration.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/base/Device.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
@@ -4945,10 +4945,10 @@
 ./src/gui/dialogs/AudioManagerDialog.o: src/sound/SoundFile.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/sound/PeakFileManager.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/sound/PeakFile.h
-./src/gui/dialogs/AudioManagerDialog.o: src/gui/application/RosegardenGUIView.h
+./src/gui/dialogs/AudioManagerDialog.o: src/gui/application/RosegardenMainWidget.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/editors/segment/TrackEditor.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/editors/segment/TrackButtons.h
-./src/gui/dialogs/AudioManagerDialog.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/dialogs/AudioManagerDialog.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/dialogs/AudioManagerDialog.o: src/gui/general/RecentFiles.h
@@ -5025,7 +5025,7 @@
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/MidiProgram.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/RealTime.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/Studio.h
-./src/gui/dialogs/ManageMetronomeDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/ManageMetronomeDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/Configuration.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/base/Segment.h
 ./src/gui/dialogs/ManageMetronomeDialog.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
@@ -5170,7 +5170,7 @@
 ./src/gui/dialogs/SimpleEventEditDialog.o: ./src/base/XmlExportable.h
 ./src/gui/dialogs/SimpleEventEditDialog.o: ./src/base/MidiProgram.h
 ./src/gui/dialogs/SimpleEventEditDialog.o: src/base/NotationTypes.h
-./src/gui/dialogs/SimpleEventEditDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/SimpleEventEditDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/SimpleEventEditDialog.o: src/base/Composition.h
 ./src/gui/dialogs/SimpleEventEditDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/SimpleEventEditDialog.o: ./src/base/Segment.h
@@ -5216,7 +5216,7 @@
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: ./src/base/MidiMetronome.h
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: ./src/base/ControlParameter.h
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: ./src/base/Controllable.h
-./src/gui/dialogs/SplitByRecordingSrcDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/SplitByRecordingSrcDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: src/base/Composition.h
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/SplitByRecordingSrcDialog.o: ./src/base/RealTime.h
@@ -5349,7 +5349,7 @@
 ./src/gui/dialogs/AudioSplitDialog.o: ./src/base/RealTime.h
 ./src/gui/dialogs/AudioSplitDialog.o: ./src/base/NotationTypes.h
 ./src/gui/dialogs/AudioSplitDialog.o: ./src/base/RefreshStatus.h
-./src/gui/dialogs/AudioSplitDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/AudioSplitDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/AudioSplitDialog.o: src/base/Composition.h
 ./src/gui/dialogs/AudioSplitDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/AudioSplitDialog.o: ./src/base/Segment.h
@@ -5475,7 +5475,7 @@
 ./src/gui/dialogs/ConfigureDialogBase.o: ./src/gui/dialogs/ConfigureDialogBase.moc
 ./src/gui/dialogs/DocumentConfigureDialog.o: ./src/gui/dialogs/DocumentConfigureDialog.h
 ./src/gui/dialogs/DocumentConfigureDialog.o: ./src/gui/dialogs/ConfigureDialogBase.h
-./src/gui/dialogs/DocumentConfigureDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/DocumentConfigureDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/DocumentConfigureDialog.o: src/base/Composition.h
 ./src/gui/dialogs/DocumentConfigureDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/DocumentConfigureDialog.o: ./src/base/RealTime.h
@@ -5552,7 +5552,7 @@
 ./src/gui/dialogs/SplitByPitchDialog.o: ./src/gui/dialogs/SplitByPitchDialog.moc
 ./src/gui/dialogs/ConfigureDialog.o: ./src/gui/dialogs/ConfigureDialog.h
 ./src/gui/dialogs/ConfigureDialog.o: ./src/gui/dialogs/ConfigureDialogBase.h
-./src/gui/dialogs/ConfigureDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/ConfigureDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/ConfigureDialog.o: src/base/Composition.h
 ./src/gui/dialogs/ConfigureDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/ConfigureDialog.o: ./src/base/RealTime.h
@@ -5604,7 +5604,7 @@
 ./src/gui/dialogs/ConfigureDialog.o: src/gui/general/IconLoader.h
 ./src/gui/dialogs/ConfigureDialog.o: ./src/gui/dialogs/ConfigureDialog.moc
 ./src/gui/dialogs/FileMergeDialog.o: ./src/gui/dialogs/FileMergeDialog.h
-./src/gui/dialogs/FileMergeDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/FileMergeDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/FileMergeDialog.o: src/base/Composition.h
 ./src/gui/dialogs/FileMergeDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/FileMergeDialog.o: ./src/base/RealTime.h
@@ -5802,7 +5802,7 @@
 ./src/gui/dialogs/LilyPondOptionsDialog.o: ./src/base/NotationTypes.h
 ./src/gui/dialogs/LilyPondOptionsDialog.o: ./src/base/RefreshStatus.h
 ./src/gui/dialogs/LilyPondOptionsDialog.o: src/gui/general/ProgressReporter.h
-./src/gui/dialogs/LilyPondOptionsDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/dialogs/LilyPondOptionsDialog.o: src/document/RosegardenDocument.h
 ./src/gui/dialogs/LilyPondOptionsDialog.o: src/base/Composition.h
 ./src/gui/dialogs/LilyPondOptionsDialog.o: ./src/base/FastVector.h
 ./src/gui/dialogs/LilyPondOptionsDialog.o: ./src/base/Segment.h
@@ -5923,7 +5923,7 @@
 ./src/gui/studio/SynthPluginManagerDialog.o: ./src/base/Device.h
 ./src/gui/studio/SynthPluginManagerDialog.o: ./src/base/MidiMetronome.h
 ./src/gui/studio/SynthPluginManagerDialog.o: ./src/base/ControlParameter.h
-./src/gui/studio/SynthPluginManagerDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/SynthPluginManagerDialog.o: src/document/RosegardenDocument.h
 ./src/gui/studio/SynthPluginManagerDialog.o: src/base/Composition.h
 ./src/gui/studio/SynthPluginManagerDialog.o: ./src/base/FastVector.h
 ./src/gui/studio/SynthPluginManagerDialog.o: ./src/base/RealTime.h
@@ -5981,7 +5981,7 @@
 ./src/gui/studio/RemapInstrumentDialog.o: src/commands/studio/ModifyInstrumentMappingCommand.h
 ./src/gui/studio/RemapInstrumentDialog.o: src/base/MidiProgram.h
 ./src/gui/studio/RemapInstrumentDialog.o: src/document/CommandHistory.h
-./src/gui/studio/RemapInstrumentDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/RemapInstrumentDialog.o: src/document/RosegardenDocument.h
 ./src/gui/studio/RemapInstrumentDialog.o: src/base/Composition.h
 ./src/gui/studio/RemapInstrumentDialog.o: ./src/base/FastVector.h
 ./src/gui/studio/RemapInstrumentDialog.o: ./src/base/RealTime.h
@@ -6048,7 +6048,7 @@
 ./src/gui/studio/MidiMixerWindow.o: ./src/base/ControlParameter.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/base/Controllable.h
 ./src/gui/studio/MidiMixerWindow.o: src/base/Studio.h
-./src/gui/studio/MidiMixerWindow.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/MidiMixerWindow.o: src/document/RosegardenDocument.h
 ./src/gui/studio/MidiMixerWindow.o: src/base/Composition.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/base/FastVector.h
 ./src/gui/studio/MidiMixerWindow.o: ./src/base/RealTime.h
@@ -6123,7 +6123,7 @@
 ./src/gui/studio/DeviceManagerDialog.o: src/commands/studio/ReconnectDeviceCommand.h
 ./src/gui/studio/DeviceManagerDialog.o: src/commands/studio/RenameDeviceCommand.h
 ./src/gui/studio/DeviceManagerDialog.o: src/document/CommandHistory.h
-./src/gui/studio/DeviceManagerDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/DeviceManagerDialog.o: src/document/RosegardenDocument.h
 ./src/gui/studio/DeviceManagerDialog.o: src/base/Composition.h
 ./src/gui/studio/DeviceManagerDialog.o: ./src/base/FastVector.h
 ./src/gui/studio/DeviceManagerDialog.o: ./src/base/Segment.h
@@ -6213,7 +6213,7 @@
 ./src/gui/studio/AudioMixerWindow.o: src/base/Instrument.h src/base/Studio.h
 ./src/gui/studio/AudioMixerWindow.o: ./src/base/MidiMetronome.h
 ./src/gui/studio/AudioMixerWindow.o: ./src/base/ControlParameter.h
-./src/gui/studio/AudioMixerWindow.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/AudioMixerWindow.o: src/document/RosegardenDocument.h
 ./src/gui/studio/AudioMixerWindow.o: src/base/Configuration.h
 ./src/gui/studio/AudioMixerWindow.o: src/base/RealTime.h src/base/Segment.h
 ./src/gui/studio/AudioMixerWindow.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
@@ -6319,7 +6319,7 @@
 ./src/gui/studio/MixerWindow.o: ./src/base/MidiProgram.h ./src/base/Device.h
 ./src/gui/studio/MixerWindow.o: ./src/base/MidiMetronome.h
 ./src/gui/studio/MixerWindow.o: ./src/base/ControlParameter.h
-./src/gui/studio/MixerWindow.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/MixerWindow.o: src/document/RosegardenDocument.h
 ./src/gui/studio/MixerWindow.o: src/base/Composition.h
 ./src/gui/studio/MixerWindow.o: ./src/base/FastVector.h ./src/base/RealTime.h
 ./src/gui/studio/MixerWindow.o: ./src/base/Segment.h ./src/base/Track.h
@@ -6384,7 +6384,7 @@
 ./src/gui/studio/DeviceEditorDialog.o: src/document/Command.h
 ./src/gui/studio/DeviceEditorDialog.o: src/commands/studio/ReconnectDeviceCommand.h
 ./src/gui/studio/DeviceEditorDialog.o: src/commands/studio/RenameDeviceCommand.h
-./src/gui/studio/DeviceEditorDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/DeviceEditorDialog.o: src/document/RosegardenDocument.h
 ./src/gui/studio/DeviceEditorDialog.o: src/base/Composition.h
 ./src/gui/studio/DeviceEditorDialog.o: ./src/base/FastVector.h
 ./src/gui/studio/DeviceEditorDialog.o: ./src/base/RealTime.h
@@ -6477,7 +6477,7 @@
 ./src/gui/studio/BankEditorDialog.o: src/commands/studio/ModifyDeviceCommand.h
 ./src/gui/studio/BankEditorDialog.o: src/document/Command.h
 ./src/gui/studio/BankEditorDialog.o: src/document/CommandHistory.h
-./src/gui/studio/BankEditorDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/studio/BankEditorDialog.o: src/document/RosegardenDocument.h
 ./src/gui/studio/BankEditorDialog.o: src/base/Composition.h
 ./src/gui/studio/BankEditorDialog.o: ./src/base/FastVector.h
 ./src/gui/studio/BankEditorDialog.o: ./src/base/Segment.h ./src/base/Track.h
@@ -6558,7 +6558,7 @@
 ./src/gui/general/EditViewBase.o: src/gui/general/EditViewBase.h
 ./src/gui/general/EditViewBase.o: src/base/Event.h
 ./src/gui/general/EditViewBase.o: src/gui/general/ActionFileClient.h
-./src/gui/general/EditViewBase.o: src/document/RosegardenGUIDoc.h
+./src/gui/general/EditViewBase.o: src/document/RosegardenDocument.h
 ./src/gui/general/EditViewBase.o: src/base/Composition.h
 ./src/gui/general/EditViewBase.o: ./src/base/FastVector.h
 ./src/gui/general/EditViewBase.o: ./src/base/RealTime.h ./src/base/Segment.h
@@ -6628,7 +6628,7 @@
 ./src/gui/general/ListEditView.o: src/commands/segment/SegmentReconfigureCommand.h
 ./src/gui/general/ListEditView.o: src/base/Track.h
 ./src/gui/general/ListEditView.o: src/document/CommandHistory.h
-./src/gui/general/ListEditView.o: src/document/RosegardenGUIDoc.h
+./src/gui/general/ListEditView.o: src/document/RosegardenDocument.h
 ./src/gui/general/ListEditView.o: src/base/Composition.h
 ./src/gui/general/ListEditView.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/general/ListEditView.o: src/base/MidiProgram.h src/base/RealTime.h
@@ -6768,7 +6768,7 @@
 ./src/gui/editors/eventlist/EventView.o: src/commands/segment/SetTriggerSegmentDefaultRetuneCommand.h
 ./src/gui/editors/eventlist/EventView.o: src/commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h
 ./src/gui/editors/eventlist/EventView.o: src/document/ConfigGroups.h
-./src/gui/editors/eventlist/EventView.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/eventlist/EventView.o: src/document/RosegardenDocument.h
 ./src/gui/editors/eventlist/EventView.o: src/base/Composition.h
 ./src/gui/editors/eventlist/EventView.o: src/base/Configuration.h
 ./src/gui/editors/eventlist/EventView.o: src/base/Device.h
@@ -6913,7 +6913,7 @@
 ./src/gui/editors/matrix/MatrixView.o: src/gui/general/EditViewBase.h
 ./src/gui/editors/matrix/MatrixView.o: src/gui/general/ActionFileClient.h
 ./src/gui/editors/matrix/MatrixView.o: src/gui/widgets/ZoomSlider.h
-./src/gui/editors/matrix/MatrixView.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/matrix/MatrixView.o: src/document/RosegardenDocument.h
 ./src/gui/editors/matrix/MatrixView.o: src/base/Composition.h
 ./src/gui/editors/matrix/MatrixView.o: src/base/Configuration.h
 ./src/gui/editors/matrix/MatrixView.o: src/base/Instrument.h
@@ -7013,7 +7013,7 @@
 ./src/gui/editors/matrix/MatrixScene.o: src/base/RealTime.h
 ./src/gui/editors/matrix/MatrixScene.o: src/base/PropertyName.h
 ./src/gui/editors/matrix/MatrixScene.o: src/base/Exception.h
-./src/gui/editors/matrix/MatrixScene.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/matrix/MatrixScene.o: src/document/RosegardenDocument.h
 ./src/gui/editors/matrix/MatrixScene.o: src/base/Configuration.h
 ./src/gui/editors/matrix/MatrixScene.o: src/base/Instrument.h
 ./src/gui/editors/matrix/MatrixScene.o: src/base/XmlExportable.h
@@ -7232,7 +7232,7 @@
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/BasicQuantizer.h
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/Quantizer.h
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/Selection.h
-./src/gui/editors/matrix/MatrixParameterBox.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/matrix/MatrixParameterBox.o: src/document/RosegardenDocument.h
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/Composition.h
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/Configuration.h
 ./src/gui/editors/matrix/MatrixParameterBox.o: src/base/Instrument.h
@@ -7314,7 +7314,7 @@
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixResizer.h
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixVelocity.h
 ./src/gui/editors/matrix/MatrixWidget.o: ./src/gui/editors/matrix/MatrixMouseEvent.h
-./src/gui/editors/matrix/MatrixWidget.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/matrix/MatrixWidget.o: src/document/RosegardenDocument.h
 ./src/gui/editors/matrix/MatrixWidget.o: src/base/Configuration.h
 ./src/gui/editors/matrix/MatrixWidget.o: src/base/Instrument.h
 ./src/gui/editors/matrix/MatrixWidget.o: src/base/XmlExportable.h
@@ -7442,7 +7442,7 @@
 ./src/gui/editors/tempo/TempoView.o: src/commands/segment/AddTimeSignatureCommand.h
 ./src/gui/editors/tempo/TempoView.o: src/commands/segment/RemoveTempoChangeCommand.h
 ./src/gui/editors/tempo/TempoView.o: src/commands/segment/RemoveTimeSignatureCommand.h
-./src/gui/editors/tempo/TempoView.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/tempo/TempoView.o: src/document/RosegardenDocument.h
 ./src/gui/editors/tempo/TempoView.o: src/base/Configuration.h
 ./src/gui/editors/tempo/TempoView.o: src/base/Device.h src/base/MidiProgram.h
 ./src/gui/editors/tempo/TempoView.o: src/base/Studio.h
@@ -7830,7 +7830,7 @@
 ./src/gui/editors/notation/NotationStaff.o: src/base/Marker.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/Studio.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/Track.h
-./src/gui/editors/notation/NotationStaff.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/notation/NotationStaff.o: src/document/RosegardenDocument.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/Configuration.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/MidiProgram.h
 ./src/gui/editors/notation/NotationStaff.o: src/base/RealTime.h
@@ -8140,7 +8140,7 @@
 ./src/gui/editors/notation/NotationScene.o: src/misc/Strings.h
 ./src/gui/editors/notation/NotationScene.o: src/document/ConfigGroups.h
 ./src/gui/editors/notation/NotationScene.o: src/document/CommandHistory.h
-./src/gui/editors/notation/NotationScene.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/notation/NotationScene.o: src/document/RosegardenDocument.h
 ./src/gui/editors/notation/NotationScene.o: src/base/Configuration.h
 ./src/gui/editors/notation/NotationScene.o: src/base/Device.h
 ./src/gui/editors/notation/NotationScene.o: src/base/MidiProgram.h
@@ -8188,7 +8188,7 @@
 ./src/gui/editors/notation/NotationWidget.o: ./src/gui/editors/notation/NoteStyle.h
 ./src/gui/editors/notation/NotationWidget.o: ./src/gui/editors/notation/NoteCharacterNames.h
 ./src/gui/editors/notation/NotationWidget.o: ./src/gui/editors/notation/NotationMouseEvent.h
-./src/gui/editors/notation/NotationWidget.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/notation/NotationWidget.o: src/document/RosegardenDocument.h
 ./src/gui/editors/notation/NotationWidget.o: src/base/Configuration.h
 ./src/gui/editors/notation/NotationWidget.o: src/base/Device.h
 ./src/gui/editors/notation/NotationWidget.o: src/base/MidiProgram.h
@@ -8268,7 +8268,7 @@
 ./src/gui/editors/notation/NotationView.o: src/gui/general/EditViewBase.h
 ./src/gui/editors/notation/NotationView.o: src/base/Event.h
 ./src/gui/editors/notation/NotationView.o: src/gui/general/ActionFileClient.h
-./src/gui/editors/notation/NotationView.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/notation/NotationView.o: src/document/RosegardenDocument.h
 ./src/gui/editors/notation/NotationView.o: src/base/Composition.h
 ./src/gui/editors/notation/NotationView.o: src/base/Configuration.h
 ./src/gui/editors/notation/NotationView.o: src/base/Instrument.h
@@ -8403,7 +8403,7 @@
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/Instrument.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/XmlExportable.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/MidiProgram.h
-./src/gui/editors/parameters/InstrumentParameterPanel.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/InstrumentParameterPanel.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/Composition.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/Configuration.h
 ./src/gui/editors/parameters/InstrumentParameterPanel.o: src/base/Instrument.h
@@ -8444,7 +8444,7 @@
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/XmlExportable.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Instrument.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/MidiProgram.h
-./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Composition.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Configuration.h
 ./src/gui/editors/parameters/AudioInstrumentParameterPanel.o: src/base/Instrument.h
@@ -8533,7 +8533,7 @@
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/commands/segment/SegmentCommand.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/commands/segment/SegmentLabelCommand.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/document/CommandHistory.h
-./src/gui/editors/parameters/SegmentParameterBox.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/SegmentParameterBox.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Configuration.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Device.h
 ./src/gui/editors/parameters/SegmentParameterBox.o: src/base/Studio.h
@@ -8578,7 +8578,7 @@
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Composition.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/ControlParameter.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Instrument.h
-./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/Configuration.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/RealTime.h
 ./src/gui/editors/parameters/MIDIInstrumentParameterPanel.o: src/base/PropertyMap.h
@@ -8617,7 +8617,7 @@
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/Instrument.h
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/XmlExportable.h
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/MidiProgram.h
-./src/gui/editors/parameters/InstrumentParameterBox.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/InstrumentParameterBox.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/Composition.h
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/Configuration.h
 ./src/gui/editors/parameters/InstrumentParameterBox.o: src/base/Instrument.h
@@ -8697,7 +8697,7 @@
 ./src/gui/editors/parameters/TrackParameterBox.o: src/document/Command.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Event.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/document/CommandHistory.h
-./src/gui/editors/parameters/TrackParameterBox.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/parameters/TrackParameterBox.o: src/document/RosegardenDocument.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Configuration.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/RealTime.h
 ./src/gui/editors/parameters/TrackParameterBox.o: src/base/Segment.h
@@ -8728,7 +8728,7 @@
 ./src/gui/editors/segment/TrackButtons.o: ./src/gui/editors/segment/TrackButtons.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/MidiProgram.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/Track.h
-./src/gui/editors/segment/TrackButtons.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/editors/segment/TrackButtons.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/editors/segment/TrackButtons.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/Event.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/Composition.h
@@ -8765,7 +8765,7 @@
 ./src/gui/editors/segment/TrackButtons.o: src/base/Instrument.h
 ./src/gui/editors/segment/TrackButtons.o: src/commands/segment/RenameTrackCommand.h
 ./src/gui/editors/segment/TrackButtons.o: src/document/Command.h
-./src/gui/editors/segment/TrackButtons.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/TrackButtons.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/Configuration.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/RealTime.h
 ./src/gui/editors/segment/TrackButtons.o: src/base/Segment.h src/base/Track.h
@@ -8795,7 +8795,7 @@
 ./src/gui/editors/segment/TrackEditor.o: src/base/Event.h
 ./src/gui/editors/segment/TrackEditor.o: src/gui/editors/segment/TrackButtons.h
 ./src/gui/editors/segment/TrackEditor.o: src/base/Track.h
-./src/gui/editors/segment/TrackEditor.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/editors/segment/TrackEditor.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/editors/segment/TrackEditor.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/editors/segment/TrackEditor.o: src/base/Composition.h
 ./src/gui/editors/segment/TrackEditor.o: src/gui/widgets/ZoomSlider.h
@@ -8863,7 +8863,7 @@
 ./src/gui/editors/segment/TrackEditor.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/TrackEditor.o: src/gui/general/RosegardenScrollView.h
 ./src/gui/editors/segment/TrackEditor.o: src/document/CommandHistory.h
-./src/gui/editors/segment/TrackEditor.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/TrackEditor.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/TrackEditor.o: src/base/Configuration.h
 ./src/gui/editors/segment/TrackEditor.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
 ./src/gui/editors/segment/TrackEditor.o: src/sound/AudioFileManager.h
@@ -8899,7 +8899,7 @@
 ./src/gui/editors/segment/MarkerEditor.o: src/commands/edit/ModifyMarkerCommand.h
 ./src/gui/editors/segment/MarkerEditor.o: src/commands/edit/RemoveMarkerCommand.h
 ./src/gui/editors/segment/MarkerEditor.o: src/document/CommandHistory.h
-./src/gui/editors/segment/MarkerEditor.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/MarkerEditor.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Configuration.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/Instrument.h
 ./src/gui/editors/segment/MarkerEditor.o: src/base/MidiProgram.h
@@ -8969,7 +8969,7 @@
 ./src/gui/editors/segment/compositionview/SegmentMover.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/compositionview/SegmentMover.o: src/base/Selection.h
 ./src/gui/editors/segment/compositionview/SegmentMover.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentMover.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentMover.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentMover.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentMover.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentMover.o: src/base/MidiProgram.h
@@ -9031,7 +9031,7 @@
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Selection.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentPencil.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentPencil.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Composition.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentPencil.o: src/base/Device.h
@@ -9128,7 +9128,7 @@
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/base/Selection.h
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentSplitter.o: src/base/MidiProgram.h
@@ -9251,7 +9251,7 @@
 ./src/gui/editors/segment/compositionview/CompositionView.o: ./src/gui/editors/segment/compositionview/CompositionModelImpl.h
 ./src/gui/editors/segment/compositionview/CompositionView.o: ./src/gui/editors/segment/compositionview/SegmentOrderer.h
 ./src/gui/editors/segment/compositionview/CompositionView.o: ./src/gui/editors/segment/compositionview/AudioPreviewPainter.h
-./src/gui/editors/segment/compositionview/CompositionView.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/CompositionView.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/CompositionView.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/CompositionView.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/CompositionView.o: src/base/MidiProgram.h
@@ -9321,7 +9321,7 @@
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/base/Selection.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentResizer.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentResizer.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/base/MidiProgram.h
@@ -9335,7 +9335,7 @@
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/sound/SoundFile.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/sound/PeakFileManager.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/sound/PeakFile.h
-./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/editors/segment/compositionview/SegmentResizer.o: src/gui/general/RecentFiles.h
@@ -9394,7 +9394,7 @@
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: ./src/gui/editors/segment/compositionview/CompositionView.h
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentSelector.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentSelector.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentSelector.o: src/base/MidiProgram.h
@@ -9463,7 +9463,7 @@
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/base/Exception.h
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentToolBox.o: src/base/MidiProgram.h
@@ -9593,7 +9593,7 @@
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/base/Exception.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentTool.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentTool.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/base/MidiProgram.h
@@ -9608,7 +9608,7 @@
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/sound/PeakFileManager.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/sound/PeakFile.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/document/CommandHistory.h
-./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/editors/segment/compositionview/SegmentTool.o: src/gui/general/RecentFiles.h
@@ -9691,7 +9691,7 @@
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/base/Exception.h
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/gui/general/RosegardenScrollView.h
-./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentJoiner.o: src/base/MidiProgram.h
@@ -9750,7 +9750,7 @@
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: src/gui/general/RosegardenScrollView.h
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: ./src/gui/editors/segment/compositionview/CompositionItemImpl.h
-./src/gui/editors/segment/compositionview/SegmentEraser.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/compositionview/SegmentEraser.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: src/base/Configuration.h
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: src/base/Device.h
 ./src/gui/editors/segment/compositionview/SegmentEraser.o: src/base/MidiProgram.h
@@ -9798,7 +9798,7 @@
 ./src/gui/editors/segment/ControlEditorDialog.o: ./src/gui/editors/segment/ControlParameterEditDialog.h
 ./src/gui/editors/segment/ControlEditorDialog.o: src/gui/widgets/LineEdit.h
 ./src/gui/editors/segment/ControlEditorDialog.o: ./src/gui/editors/segment/ControlParameterItem.h
-./src/gui/editors/segment/ControlEditorDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/ControlEditorDialog.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/ControlEditorDialog.o: src/base/Configuration.h
 ./src/gui/editors/segment/ControlEditorDialog.o: src/base/MidiProgram.h
 ./src/gui/editors/segment/ControlEditorDialog.o: src/base/RealTime.h
@@ -9864,7 +9864,7 @@
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/commands/segment/DeleteTriggerSegmentCommand.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/commands/segment/PasteToTriggerSegmentCommand.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/document/CommandHistory.h
-./src/gui/editors/segment/TriggerSegmentManager.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/TriggerSegmentManager.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/base/Configuration.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/base/Device.h
 ./src/gui/editors/segment/TriggerSegmentManager.o: src/base/MidiProgram.h
@@ -9902,7 +9902,7 @@
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/Instrument.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/XmlExportable.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/MidiProgram.h
-./src/gui/editors/segment/ControlParameterEditDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/editors/segment/ControlParameterEditDialog.o: src/document/RosegardenDocument.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/Composition.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/Configuration.h
 ./src/gui/editors/segment/ControlParameterEditDialog.o: src/base/Device.h
@@ -9945,379 +9945,379 @@
 ./src/gui/widgets/CanvasGroupableItem.o: ./src/gui/widgets/CanvasGroupableItem.h
 ./src/gui/widgets/TmpStatusMsg.o: ./src/gui/widgets/TmpStatusMsg.h
 ./src/gui/widgets/TmpStatusMsg.o: src/gui/application/RosegardenApplication.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenGUIView.h
-./src/gui/application/RosegardenGUIView.o: src/base/Event.h
-./src/gui/application/RosegardenGUIView.o: src/base/PropertyMap.h
-./src/gui/application/RosegardenGUIView.o: src/base/Property.h
-./src/gui/application/RosegardenGUIView.o: src/base/RealTime.h
-./src/gui/application/RosegardenGUIView.o: src/base/PropertyName.h
-./src/gui/application/RosegardenGUIView.o: src/base/Exception.h
-./src/gui/application/RosegardenGUIView.o: src/base/MidiProgram.h
-./src/gui/application/RosegardenGUIView.o: src/base/Selection.h
-./src/gui/application/RosegardenGUIView.o: src/base/Track.h
-./src/gui/application/RosegardenGUIView.o: src/sound/AudioFile.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/TrackEditor.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/TrackButtons.h
-./src/gui/application/RosegardenGUIView.o: src/gui/application/RosegardenGUIApp.h
-./src/gui/application/RosegardenGUIView.o: src/gui/dialogs/TempoDialog.h
-./src/gui/application/RosegardenGUIView.o: src/base/Composition.h
-./src/gui/application/RosegardenGUIView.o: src/gui/widgets/ZoomSlider.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/RecentFiles.h
-./src/gui/application/RosegardenGUIView.o: src/sound/Midi.h
-./src/gui/application/RosegardenGUIView.o: src/base/Instrument.h
-./src/gui/application/RosegardenGUIView.o: src/base/XmlExportable.h
-./src/gui/application/RosegardenGUIView.o: src/base/MidiProgram.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/ActionFileClient.h
-./src/gui/application/RosegardenGUIView.o: src/gui/ui/DevicesManagerNew.h
-./src/gui/application/RosegardenGUIView.o: src/gui/ui/DevicesManagerNewUi.h
-./src/gui/application/RosegardenGUIView.o: src/base/Device.h
-./src/gui/application/RosegardenGUIView.o: src/base/MidiDevice.h
-./src/gui/application/RosegardenGUIView.o: src/base/Device.h
-./src/gui/application/RosegardenGUIView.o: src/base/MidiMetronome.h
-./src/gui/application/RosegardenGUIView.o: src/base/ControlParameter.h
-./src/gui/application/RosegardenGUIView.o: src/base/Controllable.h
-./src/gui/application/RosegardenGUIView.o: src/base/MidiTypes.h
-./src/gui/application/RosegardenGUIView.o: src/base/Event.h src/base/Studio.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/TrackLabel.h
-./src/gui/application/RosegardenGUIView.o: src/misc/Debug.h
-./src/gui/application/RosegardenGUIView.o: src/misc/Strings.h
-./src/gui/application/RosegardenGUIView.o: src/document/ConfigGroups.h
-./src/gui/application/RosegardenGUIView.o: src/gui/application/TransportStatus.h
-./src/gui/application/RosegardenGUIView.o: src/base/AudioLevel.h
-./src/gui/application/RosegardenGUIView.o: src/base/Instrument.h
-./src/gui/application/RosegardenGUIView.o: src/base/NotationTypes.h
-./src/gui/application/RosegardenGUIView.o: src/base/RealTime.h
-./src/gui/application/RosegardenGUIView.o: src/base/RulerScale.h
-./src/gui/application/RosegardenGUIView.o: src/base/Segment.h
-./src/gui/application/RosegardenGUIView.o: src/base/Selection.h
-./src/gui/application/RosegardenGUIView.o: src/base/NotationTypes.h
-./src/gui/application/RosegardenGUIView.o: src/base/Composition.h
-./src/gui/application/RosegardenGUIView.o: src/base/FastVector.h
-./src/gui/application/RosegardenGUIView.o: src/base/Track.h
-./src/gui/application/RosegardenGUIView.o: src/base/Configuration.h
-./src/gui/application/RosegardenGUIView.o: src/base/ColourMap.h
-./src/gui/application/RosegardenGUIView.o: src/base/Colour.h
-./src/gui/application/RosegardenGUIView.o: src/base/TriggerSegment.h
-./src/gui/application/RosegardenGUIView.o: src/base/Marker.h
-./src/gui/application/RosegardenGUIView.o: src/base/Segment.h
-./src/gui/application/RosegardenGUIView.o: src/base/RefreshStatus.h
-./src/gui/application/RosegardenGUIView.o: src/commands/segment/AudioSegmentAutoSplitCommand.h
-./src/gui/application/RosegardenGUIView.o: src/document/Command.h
-./src/gui/application/RosegardenGUIView.o: src/commands/segment/AudioSegmentInsertCommand.h
-./src/gui/application/RosegardenGUIView.o: src/commands/segment/SegmentSingleRepeatToCopyCommand.h
-./src/gui/application/RosegardenGUIView.o: src/document/CommandHistory.h
-./src/gui/application/RosegardenGUIView.o: src/document/RosegardenGUIDoc.h
-./src/gui/application/RosegardenGUIView.o: src/base/Configuration.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
-./src/gui/application/RosegardenGUIView.o: src/sound/AudioFileManager.h
-./src/gui/application/RosegardenGUIView.o: src/sound/AudioFile.h
-./src/gui/application/RosegardenGUIView.o: src/sound/SoundFile.h
-./src/gui/application/RosegardenGUIView.o: src/sound/PeakFileManager.h
-./src/gui/application/RosegardenGUIView.o: src/sound/PeakFile.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenApplication.h
-./src/gui/application/RosegardenGUIView.o: src/gui/configuration/GeneralConfigurationPage.h
-./src/gui/application/RosegardenGUIView.o: src/gui/configuration/TabbedConfigurationPage.h
-./src/gui/application/RosegardenGUIView.o: src/gui/configuration/ConfigurationPage.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/eventlist/EventView.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/ListEditView.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/EditViewBase.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/ActionFileClient.h
-./src/gui/application/RosegardenGUIView.o: src/document/CommandRegistry.h
-./src/gui/application/RosegardenGUIView.o: src/base/Exception.h
-./src/gui/application/RosegardenGUIView.o: src/gui/configuration/AudioConfigurationPage.h
-./src/gui/application/RosegardenGUIView.o: src/gui/widgets/LineEdit.h
-./src/gui/application/RosegardenGUIView.o: src/gui/dialogs/AudioSplitDialog.h
-./src/gui/application/RosegardenGUIView.o: src/gui/dialogs/AudioManagerDialog.h
-./src/gui/application/RosegardenGUIView.o: src/gui/dialogs/DocumentConfigureDialog.h
-./src/gui/application/RosegardenGUIView.o: src/gui/dialogs/ConfigureDialogBase.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/matrix/MatrixView.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/SelectionManager.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/EditViewBase.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/notation/NotationView.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/InstrumentParameterBox.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/RosegardenParameterArea.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/RosegardenParameterBox.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/SegmentParameterBox.h
-./src/gui/application/RosegardenGUIView.o: src/gui/widgets/ColourTable.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/TrackParameterBox.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/compositionview/CompositionView.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/editors/segment/compositionview/CompositionModel.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/editors/segment/compositionview/CompositionItem.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/RosegardenScrollView.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/segment/compositionview/SegmentSelector.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/editors/segment/compositionview/SegmentTool.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/BaseTool.h
-./src/gui/application/RosegardenGUIView.o: src/gui/seqmanager/SequenceManager.h
-./src/gui/application/RosegardenGUIView.o: src/sound/MappedComposition.h
-./src/gui/application/RosegardenGUIView.o: src/sound/MappedEvent.h
-./src/gui/application/RosegardenGUIView.o: src/sound/MappedEvent.h
-./src/gui/application/RosegardenGUIView.o: src/gui/seqmanager/SequencerMapper.h
-./src/gui/application/RosegardenGUIView.o: src/sound/SequencerDataBlock.h
-./src/gui/application/RosegardenGUIView.o: src/sound/ControlBlock.h
-./src/gui/application/RosegardenGUIView.o: src/gui/rulers/ChordNameRuler.h
-./src/gui/application/RosegardenGUIView.o: src/base/PropertyName.h
-./src/gui/application/RosegardenGUIView.o: src/gui/rulers/LoopRuler.h
-./src/gui/application/RosegardenGUIView.o: src/base/SnapGrid.h
-./src/gui/application/RosegardenGUIView.o: src/base/RulerScale.h
-./src/gui/application/RosegardenGUIView.o: src/gui/general/HZoomable.h
-./src/gui/application/RosegardenGUIView.o: src/gui/rulers/TempoRuler.h
-./src/gui/application/RosegardenGUIView.o: src/gui/rulers/StandardRuler.h
-./src/gui/application/RosegardenGUIView.o: src/gui/widgets/ProgressDialog.h
-./src/gui/application/RosegardenGUIView.o: src/gui/widgets/CurrentProgressDialog.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenGUIApp.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/application/SetWaitCursor.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/MIDIInstrumentParameterPanel.h
-./src/gui/application/RosegardenGUIView.o: src/gui/editors/parameters/InstrumentParameterPanel.h
-./src/gui/application/RosegardenGUIView.o: ./src/gui/application/RosegardenGUIView.moc
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/RosegardenGUIApp.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/TrackEditor.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiProgram.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Event.h
-./src/gui/application/RosegardenGUIApp.o: src/base/PropertyMap.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Property.h
-./src/gui/application/RosegardenGUIApp.o: src/base/RealTime.h
-./src/gui/application/RosegardenGUIApp.o: src/base/PropertyName.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Exception.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/TrackButtons.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Track.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/application/RosegardenGUIApp.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/TempoDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Composition.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/ZoomSlider.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/RecentFiles.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/AudioFile.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/Midi.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Instrument.h
-./src/gui/application/RosegardenGUIApp.o: src/base/XmlExportable.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiProgram.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ActionFileClient.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/ui/DevicesManagerNew.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/ui/DevicesManagerNewUi.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Device.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiDevice.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Device.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiMetronome.h
-./src/gui/application/RosegardenGUIApp.o: src/base/ControlParameter.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Controllable.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiTypes.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Event.h src/base/Studio.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/TrackLabel.h
-./src/gui/application/RosegardenGUIApp.o: src/misc/Debug.h src/misc/Strings.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/application/TransportStatus.h
-./src/gui/application/RosegardenGUIApp.o: src/base/AnalysisTypes.h
-./src/gui/application/RosegardenGUIApp.o: src/base/NotationTypes.h
-./src/gui/application/RosegardenGUIApp.o: src/base/AudioPluginInstance.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Clipboard.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Segment.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Selection.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Composition.h
-./src/gui/application/RosegardenGUIApp.o: src/base/FastVector.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Track.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Configuration.h
-./src/gui/application/RosegardenGUIApp.o: src/base/ColourMap.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Colour.h
-./src/gui/application/RosegardenGUIApp.o: src/base/TriggerSegment.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Marker.h
-./src/gui/application/RosegardenGUIApp.o: src/base/CompositionTimeSliceAdapter.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Configuration.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Exception.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Instrument.h
-./src/gui/application/RosegardenGUIApp.o: src/base/NotationTypes.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Profiler.h
-./src/gui/application/RosegardenGUIApp.o: src/base/RealTime.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Segment.h
-./src/gui/application/RosegardenGUIApp.o: src/base/RefreshStatus.h
-./src/gui/application/RosegardenGUIApp.o: src/base/SegmentNotationHelper.h
-./src/gui/application/RosegardenGUIApp.o: src/base/Selection.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/CopyCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/Command.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/CutCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/EventQuantizeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/BasicCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/PasteSegmentsCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/TransposeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/BasicSelectionCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/BasicCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/AddMarkerCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/ModifyMarkerCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/edit/RemoveMarkerCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/notation/KeyInsertionCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AddTempoChangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AddTimeSignatureAndNormalizeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AddTimeSignatureCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AudioSegmentAutoSplitCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AudioSegmentRescaleCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/AudioSegmentSplitCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/ChangeCompositionLengthCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/CreateTempoMapFromSegmentCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/CutRangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/DeleteRangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentJoinCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/InsertRangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/ModifyDefaultTempoCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/MoveTracksCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/PasteRangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/RemoveTempoChangeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentAutoSplitCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentChangeTransposeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentJoinCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentLabelCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentReconfigureCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentRescaleCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentSplitByPitchCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ClefIndex.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentSplitByRecordingSrcCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentSplitCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/segment/SegmentTransposeCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/CommandHistory.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/studio/CreateOrDeleteDeviceCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/commands/studio/ModifyDeviceCommand.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/CsoundExporter.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ProgressReporter.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/HydrogenLoader.h
-./src/gui/application/RosegardenGUIApp.o: src/base/PropertyName.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/LilyPondExporter.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/RG21Loader.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/MupExporter.h
-./src/gui/application/RosegardenGUIApp.o: src/document/io/MusicXmlExporter.h
-./src/gui/application/RosegardenGUIApp.o: src/document/RosegardenGUIDoc.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/AudioFileManager.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/AudioFile.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/SoundFile.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/PeakFileManager.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/PeakFile.h
-./src/gui/application/RosegardenGUIApp.o: src/document/ConfigGroups.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/application/RosegardenApplication.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/AddTracksDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/AudioManagerDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/AudioPluginDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/AudioSplitDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/BeatsBarsDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/CompositionLengthDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/ConfigureDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/ConfigureDialogBase.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/CountdownDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/DocumentConfigureDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/FileMergeDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/IdentifyTextCodecDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/IntervalDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/DiatonicPitchChooser.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/LilyPondOptionsDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/configuration/HeadersConfigurationPage.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/LineEdit.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/ManageMetronomeDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/base/MidiMetronome.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/QuantizeDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/RescaleDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/SplitByPitchDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/SplitByRecordingSrcDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/TimeDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/TimeSignatureDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/TransportDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/dialogs/RosegardenTransport.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/Label.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/InstrumentParameterBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/RosegardenParameterArea.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/RosegardenParameterBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/RosegardenParameterArea.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/SegmentParameterBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/ColourTable.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/parameters/TrackParameterBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/CompositionView.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/editors/segment/compositionview/CompositionModel.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/editors/segment/compositionview/CompositionItem.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/RosegardenScrollView.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/ControlEditorDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/MarkerEditor.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/PlayListDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/PlayList.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentEraser.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/editors/segment/compositionview/SegmentTool.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/BaseTool.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentJoiner.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentMover.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentPencil.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentResizer.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentSelector.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentSplitter.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/compositionview/SegmentToolBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/BaseToolBox.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/TrackLabel.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/segment/TriggerSegmentManager.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/editors/tempo/TempoView.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ListEditView.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/EditViewBase.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ActionFileClient.h
-./src/gui/application/RosegardenGUIApp.o: src/document/CommandRegistry.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/EditViewBase.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/IconLoader.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/FileSource.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/ResourceFinder.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/general/AutoSaveFinder.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/StartupLogo.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/TmpStatusMsg.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/seqmanager/MidiFilterDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/seqmanager/SequenceManager.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedComposition.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedEvent.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedEvent.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/seqmanager/SequencerMapper.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/SequencerDataBlock.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/ControlBlock.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioMixerWindow.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/MixerWindow.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/PluginPushButton.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioPlugin.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioPluginManager.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioPluginClipboard.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioPlugin.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/AudioPluginOSCGUIManager.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/BankEditorDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/DeviceManagerDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/MidiMixerWindow.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/RemapInstrumentDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/StudioControl.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedCommon.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedStudio.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedCommon.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/studio/SynthPluginManagerDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/CurrentProgressDialog.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/ProgressBar.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/ProgressDialog.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/LircClient.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/LircCommander.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/RosegardenGUIView.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/SetWaitCursor.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/RosegardenSequencer.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/RosegardenSequencerIface.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedDevice.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/ExternalTransport.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/MmappedSegment.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/MmappedControlBlock.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/ControlBlock.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedInstrument.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedDevice.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/SequencerMmapper.h
-./src/gui/application/RosegardenGUIApp.o: src/sequencer/SequencerThread.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MidiFile.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/Midi.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MidiEvent.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/PluginIdentifier.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/SoundDriver.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedComposition.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/MappedInstrument.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/SequencerDataBlock.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/PlayableAudioFile.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/RingBuffer.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/Scavenger.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/AudioCache.h
-./src/gui/application/RosegardenGUIApp.o: src/sound/RIFFAudioFile.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/StartupTester.h
-./src/gui/application/RosegardenGUIApp.o: src/gui/widgets/InputDialog.h
-./src/gui/application/RosegardenGUIApp.o: ./src/gui/application/RosegardenGUIApp.moc
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/application/RosegardenMainWidget.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Event.h
+./src/gui/application/RosegardenMainWidget.o: src/base/PropertyMap.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Property.h
+./src/gui/application/RosegardenMainWidget.o: src/base/RealTime.h
+./src/gui/application/RosegardenMainWidget.o: src/base/PropertyName.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Exception.h
+./src/gui/application/RosegardenMainWidget.o: src/base/MidiProgram.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Selection.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Track.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/AudioFile.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/TrackEditor.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/TrackButtons.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/application/RosegardenMainWindow.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/dialogs/TempoDialog.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Composition.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/widgets/ZoomSlider.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/RecentFiles.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/Midi.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Instrument.h
+./src/gui/application/RosegardenMainWidget.o: src/base/XmlExportable.h
+./src/gui/application/RosegardenMainWidget.o: src/base/MidiProgram.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/ActionFileClient.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/ui/DevicesManagerNew.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/ui/DevicesManagerNewUi.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Device.h
+./src/gui/application/RosegardenMainWidget.o: src/base/MidiDevice.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Device.h
+./src/gui/application/RosegardenMainWidget.o: src/base/MidiMetronome.h
+./src/gui/application/RosegardenMainWidget.o: src/base/ControlParameter.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Controllable.h
+./src/gui/application/RosegardenMainWidget.o: src/base/MidiTypes.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Event.h src/base/Studio.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/TrackLabel.h
+./src/gui/application/RosegardenMainWidget.o: src/misc/Debug.h
+./src/gui/application/RosegardenMainWidget.o: src/misc/Strings.h
+./src/gui/application/RosegardenMainWidget.o: src/document/ConfigGroups.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/application/TransportStatus.h
+./src/gui/application/RosegardenMainWidget.o: src/base/AudioLevel.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Instrument.h
+./src/gui/application/RosegardenMainWidget.o: src/base/NotationTypes.h
+./src/gui/application/RosegardenMainWidget.o: src/base/RealTime.h
+./src/gui/application/RosegardenMainWidget.o: src/base/RulerScale.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Segment.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Selection.h
+./src/gui/application/RosegardenMainWidget.o: src/base/NotationTypes.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Composition.h
+./src/gui/application/RosegardenMainWidget.o: src/base/FastVector.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Track.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Configuration.h
+./src/gui/application/RosegardenMainWidget.o: src/base/ColourMap.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Colour.h
+./src/gui/application/RosegardenMainWidget.o: src/base/TriggerSegment.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Marker.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Segment.h
+./src/gui/application/RosegardenMainWidget.o: src/base/RefreshStatus.h
+./src/gui/application/RosegardenMainWidget.o: src/commands/segment/AudioSegmentAutoSplitCommand.h
+./src/gui/application/RosegardenMainWidget.o: src/document/Command.h
+./src/gui/application/RosegardenMainWidget.o: src/commands/segment/AudioSegmentInsertCommand.h
+./src/gui/application/RosegardenMainWidget.o: src/commands/segment/SegmentSingleRepeatToCopyCommand.h
+./src/gui/application/RosegardenMainWidget.o: src/document/CommandHistory.h
+./src/gui/application/RosegardenMainWidget.o: src/document/RosegardenDocument.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Configuration.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/AudioFileManager.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/AudioFile.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/SoundFile.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/PeakFileManager.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/PeakFile.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/application/RosegardenApplication.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/configuration/GeneralConfigurationPage.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/configuration/TabbedConfigurationPage.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/configuration/ConfigurationPage.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/eventlist/EventView.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/ListEditView.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/EditViewBase.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/ActionFileClient.h
+./src/gui/application/RosegardenMainWidget.o: src/document/CommandRegistry.h
+./src/gui/application/RosegardenMainWidget.o: src/base/Exception.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/configuration/AudioConfigurationPage.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/widgets/LineEdit.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/dialogs/AudioSplitDialog.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/dialogs/AudioManagerDialog.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/dialogs/DocumentConfigureDialog.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/dialogs/ConfigureDialogBase.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/matrix/MatrixView.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/SelectionManager.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/EditViewBase.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/notation/NotationView.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/InstrumentParameterBox.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/RosegardenParameterArea.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/RosegardenParameterBox.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/SegmentParameterBox.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/widgets/ColourTable.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/TrackParameterBox.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/compositionview/CompositionView.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/editors/segment/compositionview/CompositionModel.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/editors/segment/compositionview/CompositionItem.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/RosegardenScrollView.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/segment/compositionview/SegmentSelector.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/editors/segment/compositionview/SegmentTool.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/BaseTool.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/seqmanager/SequenceManager.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/MappedComposition.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/MappedEvent.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/MappedEvent.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/seqmanager/SequencerMapper.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/SequencerDataBlock.h
+./src/gui/application/RosegardenMainWidget.o: src/sound/ControlBlock.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/rulers/ChordNameRuler.h
+./src/gui/application/RosegardenMainWidget.o: src/base/PropertyName.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/rulers/LoopRuler.h
+./src/gui/application/RosegardenMainWidget.o: src/base/SnapGrid.h
+./src/gui/application/RosegardenMainWidget.o: src/base/RulerScale.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/general/HZoomable.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/rulers/TempoRuler.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/rulers/StandardRuler.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/widgets/ProgressDialog.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/widgets/CurrentProgressDialog.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/application/RosegardenMainWindow.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/application/SetWaitCursor.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/MIDIInstrumentParameterPanel.h
+./src/gui/application/RosegardenMainWidget.o: src/gui/editors/parameters/InstrumentParameterPanel.h
+./src/gui/application/RosegardenMainWidget.o: ./src/gui/application/RosegardenMainWidget.moc
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/RosegardenMainWindow.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/TrackEditor.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiProgram.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Event.h
+./src/gui/application/RosegardenMainWindow.o: src/base/PropertyMap.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Property.h
+./src/gui/application/RosegardenMainWindow.o: src/base/RealTime.h
+./src/gui/application/RosegardenMainWindow.o: src/base/PropertyName.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Exception.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/TrackButtons.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Track.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/application/RosegardenMainWindow.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/TempoDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Composition.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/ZoomSlider.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/RecentFiles.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/AudioFile.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/Midi.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Instrument.h
+./src/gui/application/RosegardenMainWindow.o: src/base/XmlExportable.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiProgram.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ActionFileClient.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/ui/DevicesManagerNew.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/ui/DevicesManagerNewUi.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Device.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiDevice.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Device.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiMetronome.h
+./src/gui/application/RosegardenMainWindow.o: src/base/ControlParameter.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Controllable.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiTypes.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Event.h src/base/Studio.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/TrackLabel.h
+./src/gui/application/RosegardenMainWindow.o: src/misc/Debug.h src/misc/Strings.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/application/TransportStatus.h
+./src/gui/application/RosegardenMainWindow.o: src/base/AnalysisTypes.h
+./src/gui/application/RosegardenMainWindow.o: src/base/NotationTypes.h
+./src/gui/application/RosegardenMainWindow.o: src/base/AudioPluginInstance.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Clipboard.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Segment.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Selection.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Composition.h
+./src/gui/application/RosegardenMainWindow.o: src/base/FastVector.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Track.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Configuration.h
+./src/gui/application/RosegardenMainWindow.o: src/base/ColourMap.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Colour.h
+./src/gui/application/RosegardenMainWindow.o: src/base/TriggerSegment.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Marker.h
+./src/gui/application/RosegardenMainWindow.o: src/base/CompositionTimeSliceAdapter.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Configuration.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Exception.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Instrument.h
+./src/gui/application/RosegardenMainWindow.o: src/base/NotationTypes.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Profiler.h
+./src/gui/application/RosegardenMainWindow.o: src/base/RealTime.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Segment.h
+./src/gui/application/RosegardenMainWindow.o: src/base/RefreshStatus.h
+./src/gui/application/RosegardenMainWindow.o: src/base/SegmentNotationHelper.h
+./src/gui/application/RosegardenMainWindow.o: src/base/Selection.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/CopyCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/Command.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/CutCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/EventQuantizeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/BasicCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/PasteSegmentsCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/TransposeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/BasicSelectionCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/BasicCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/AddMarkerCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/ModifyMarkerCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/edit/RemoveMarkerCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/notation/KeyInsertionCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AddTempoChangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AddTimeSignatureAndNormalizeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AddTimeSignatureCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AudioSegmentAutoSplitCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AudioSegmentRescaleCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/AudioSegmentSplitCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/ChangeCompositionLengthCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/CreateTempoMapFromSegmentCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/CutRangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/DeleteRangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentJoinCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/InsertRangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/ModifyDefaultTempoCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/MoveTracksCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/PasteRangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/RemoveTempoChangeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentAutoSplitCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentChangeTransposeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentJoinCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentLabelCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentReconfigureCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentRescaleCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentSplitByPitchCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ClefIndex.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentSplitByRecordingSrcCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentSplitCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/segment/SegmentTransposeCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/CommandHistory.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/studio/CreateOrDeleteDeviceCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/commands/studio/ModifyDeviceCommand.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/CsoundExporter.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ProgressReporter.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/HydrogenLoader.h
+./src/gui/application/RosegardenMainWindow.o: src/base/PropertyName.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/LilyPondExporter.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/RG21Loader.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/MupExporter.h
+./src/gui/application/RosegardenMainWindow.o: src/document/io/MusicXmlExporter.h
+./src/gui/application/RosegardenMainWindow.o: src/document/RosegardenDocument.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/AudioFileManager.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/AudioFile.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/SoundFile.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/PeakFileManager.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/PeakFile.h
+./src/gui/application/RosegardenMainWindow.o: src/document/ConfigGroups.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/application/RosegardenApplication.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/AddTracksDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/AudioManagerDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/AudioPluginDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/AudioSplitDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/BeatsBarsDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/CompositionLengthDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/ConfigureDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/ConfigureDialogBase.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/CountdownDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/DocumentConfigureDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/FileMergeDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/IdentifyTextCodecDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/IntervalDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/DiatonicPitchChooser.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/LilyPondOptionsDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/configuration/HeadersConfigurationPage.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/LineEdit.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/ManageMetronomeDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/base/MidiMetronome.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/QuantizeDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/RescaleDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/SplitByPitchDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/SplitByRecordingSrcDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/TimeDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/TimeSignatureDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/TransportDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/dialogs/RosegardenTransport.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/Label.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/InstrumentParameterBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/RosegardenParameterArea.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/RosegardenParameterBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/RosegardenParameterArea.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/SegmentParameterBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/ColourTable.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/parameters/TrackParameterBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/CompositionView.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/editors/segment/compositionview/CompositionModel.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/editors/segment/compositionview/CompositionRect.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/editors/segment/compositionview/CompositionItem.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/RosegardenScrollView.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/ControlEditorDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/MarkerEditor.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/PlayListDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/PlayList.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentEraser.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/editors/segment/compositionview/SegmentTool.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/BaseTool.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentJoiner.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentMover.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentPencil.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentResizer.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentSelector.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentSplitter.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/compositionview/SegmentToolBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/BaseToolBox.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/TrackLabel.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/segment/TriggerSegmentManager.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/editors/tempo/TempoView.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ListEditView.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/EditViewBase.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ActionFileClient.h
+./src/gui/application/RosegardenMainWindow.o: src/document/CommandRegistry.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/EditViewBase.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/IconLoader.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/FileSource.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/ResourceFinder.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/general/AutoSaveFinder.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/StartupLogo.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/TmpStatusMsg.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/seqmanager/MidiFilterDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/seqmanager/SequenceManager.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedComposition.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedEvent.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedEvent.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/seqmanager/SequencerMapper.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/SequencerDataBlock.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/ControlBlock.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioMixerWindow.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/MixerWindow.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/PluginPushButton.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioPlugin.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioPluginManager.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioPluginClipboard.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioPlugin.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/AudioPluginOSCGUIManager.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/BankEditorDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/DeviceManagerDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/MidiMixerWindow.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/RemapInstrumentDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/StudioControl.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedCommon.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedStudio.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedCommon.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/studio/SynthPluginManagerDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/CurrentProgressDialog.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/ProgressBar.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/ProgressDialog.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/LircClient.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/LircCommander.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/RosegardenMainWidget.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/SetWaitCursor.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/RosegardenSequencer.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/RosegardenSequencerIface.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedDevice.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/ExternalTransport.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/MmappedSegment.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/MmappedControlBlock.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/ControlBlock.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedInstrument.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedDevice.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/SequencerMmapper.h
+./src/gui/application/RosegardenMainWindow.o: src/sequencer/SequencerThread.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MidiFile.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/Midi.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MidiEvent.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/PluginIdentifier.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/SoundDriver.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedComposition.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/MappedInstrument.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/SequencerDataBlock.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/PlayableAudioFile.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/RingBuffer.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/Scavenger.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/AudioCache.h
+./src/gui/application/RosegardenMainWindow.o: src/sound/RIFFAudioFile.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/StartupTester.h
+./src/gui/application/RosegardenMainWindow.o: src/gui/widgets/InputDialog.h
+./src/gui/application/RosegardenMainWindow.o: ./src/gui/application/RosegardenMainWindow.moc
 ./src/gui/application/SetWaitCursor.o: ./src/gui/application/SetWaitCursor.h
 ./src/gui/application/SetWaitCursor.o: src/gui/editors/segment/TrackEditor.h
 ./src/gui/application/SetWaitCursor.o: src/base/MidiProgram.h
@@ -10329,7 +10329,7 @@
 ./src/gui/application/SetWaitCursor.o: src/base/Exception.h
 ./src/gui/application/SetWaitCursor.o: src/gui/editors/segment/TrackButtons.h
 ./src/gui/application/SetWaitCursor.o: src/base/Track.h
-./src/gui/application/SetWaitCursor.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/application/SetWaitCursor.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/application/SetWaitCursor.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/application/SetWaitCursor.o: src/base/Composition.h
 ./src/gui/application/SetWaitCursor.o: src/gui/widgets/ZoomSlider.h
@@ -10360,12 +10360,12 @@
 ./src/gui/application/SetWaitCursor.o: ./src/gui/editors/segment/compositionview/CompositionItem.h
 ./src/gui/application/SetWaitCursor.o: src/gui/general/RosegardenScrollView.h
 ./src/gui/application/SetWaitCursor.o: src/misc/Debug.h
-./src/gui/application/SetWaitCursor.o: ./src/gui/application/RosegardenGUIApp.h
-./src/gui/application/SetWaitCursor.o: ./src/gui/application/RosegardenGUIView.h
+./src/gui/application/SetWaitCursor.o: ./src/gui/application/RosegardenMainWindow.h
+./src/gui/application/SetWaitCursor.o: ./src/gui/application/RosegardenMainWidget.h
 ./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenApplication.h
 ./src/gui/application/RosegardenApplication.o: src/misc/Debug.h
 ./src/gui/application/RosegardenApplication.o: src/document/ConfigGroups.h
-./src/gui/application/RosegardenApplication.o: src/document/RosegardenGUIDoc.h
+./src/gui/application/RosegardenApplication.o: src/document/RosegardenDocument.h
 ./src/gui/application/RosegardenApplication.o: src/base/Composition.h
 ./src/gui/application/RosegardenApplication.o: src/base/Configuration.h
 ./src/gui/application/RosegardenApplication.o: src/base/Instrument.h
@@ -10396,7 +10396,7 @@
 ./src/gui/application/RosegardenApplication.o: src/sound/PeakFile.h
 ./src/gui/application/RosegardenApplication.o: src/base/Event.h
 ./src/gui/application/RosegardenApplication.o: src/gui/widgets/TmpStatusMsg.h
-./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenGUIApp.h
+./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenMainWindow.h
 ./src/gui/application/RosegardenApplication.o: ./src/gui/application/RosegardenApplication.moc
 ./src/gui/application/StartupTester.o: ./src/gui/application/StartupTester.h
 ./src/gui/application/StartupTester.o: src/misc/Strings.h
@@ -10409,7 +10409,7 @@
 ./src/gui/application/main.o: src/document/ConfigGroups.h src/misc/Strings.h
 ./src/gui/application/main.o: src/base/PropertyName.h src/base/Exception.h
 ./src/gui/application/main.o: src/misc/Debug.h
-./src/gui/application/main.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/application/main.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/application/main.o: src/base/MidiProgram.h
 ./src/gui/application/main.o: src/gui/dialogs/TempoDialog.h src/base/Event.h
 ./src/gui/application/main.o: src/base/PropertyMap.h src/base/Property.h
@@ -10428,7 +10428,7 @@
 ./src/gui/application/main.o: src/base/Controllable.h src/base/MidiTypes.h
 ./src/gui/application/main.o: src/base/Event.h src/base/Studio.h
 ./src/gui/application/main.o: src/gui/widgets/CurrentProgressDialog.h
-./src/gui/application/main.o: src/document/RosegardenGUIDoc.h
+./src/gui/application/main.o: src/document/RosegardenDocument.h
 ./src/gui/application/main.o: src/base/Configuration.h src/base/RealTime.h
 ./src/gui/application/main.o: src/base/Segment.h src/base/Track.h
 ./src/gui/application/main.o: src/base/NotationTypes.h
@@ -10466,7 +10466,7 @@
 ./src/gui/ui/DevicesManagerNew.o: src/commands/studio/ReconnectDeviceCommand.h
 ./src/gui/ui/DevicesManagerNew.o: src/commands/studio/RenameDeviceCommand.h
 ./src/gui/ui/DevicesManagerNew.o: src/document/CommandHistory.h
-./src/gui/ui/DevicesManagerNew.o: src/document/RosegardenGUIDoc.h
+./src/gui/ui/DevicesManagerNew.o: src/document/RosegardenDocument.h
 ./src/gui/ui/DevicesManagerNew.o: src/base/Composition.h
 ./src/gui/ui/DevicesManagerNew.o: src/base/Configuration.h
 ./src/gui/ui/DevicesManagerNew.o: src/base/MidiProgram.h src/base/RealTime.h
@@ -10702,7 +10702,7 @@
 ./src/gui/widgets/AudioFaderBox.o: ./src/gui/widgets/Fader.h
 ./src/gui/widgets/AudioFaderBox.o: src/gui/general/GUIPalette.h
 ./src/gui/widgets/AudioFaderBox.o: src/base/Colour.h
-./src/gui/widgets/AudioFaderBox.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/widgets/AudioFaderBox.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/widgets/AudioFaderBox.o: src/base/MidiProgram.h
 ./src/gui/widgets/AudioFaderBox.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/widgets/AudioFaderBox.o: src/base/Event.h src/base/PropertyMap.h
@@ -10728,7 +10728,7 @@
 ./src/gui/widgets/Rotary.o: src/gui/general/GUIPalette.h src/base/Colour.h
 ./src/gui/widgets/Rotary.o: ./src/gui/widgets/TextFloat.h
 ./src/gui/widgets/Rotary.o: ./src/gui/widgets/BaseTextFloat.h
-./src/gui/widgets/Rotary.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/widgets/Rotary.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/widgets/Rotary.o: src/base/MidiProgram.h
 ./src/gui/widgets/Rotary.o: src/gui/dialogs/TempoDialog.h src/base/Event.h
 ./src/gui/widgets/Rotary.o: src/base/PropertyMap.h src/base/Property.h
@@ -10774,7 +10774,7 @@
 ./src/gui/configuration/MatrixConfigurationPage.o: src/gui/configuration/TabbedConfigurationPage.h
 ./src/gui/configuration/MatrixConfigurationPage.o: src/gui/configuration/ConfigurationPage.h
 ./src/gui/configuration/MatrixConfigurationPage.o: src/document/ConfigGroups.h
-./src/gui/configuration/MatrixConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/MatrixConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/MatrixConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/MatrixConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/MatrixConfigurationPage.o: src/base/Instrument.h
@@ -10840,7 +10840,7 @@
 ./src/gui/configuration/GeneralConfigurationPage.o: src/misc/Debug.h
 ./src/gui/configuration/GeneralConfigurationPage.o: src/misc/Strings.h
 ./src/gui/configuration/GeneralConfigurationPage.o: src/document/ConfigGroups.h
-./src/gui/configuration/GeneralConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/GeneralConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/GeneralConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/GeneralConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/GeneralConfigurationPage.o: src/base/Device.h
@@ -10917,7 +10917,7 @@
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/Studio.h
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/MidiMetronome.h
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/ControlParameter.h
-./src/gui/configuration/MIDIConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/MIDIConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/MIDIConfigurationPage.o: src/base/PropertyMap.h
@@ -10959,7 +10959,7 @@
 ./src/gui/configuration/LatencyConfigurationPage.o: src/gui/configuration/TabbedConfigurationPage.h
 ./src/gui/configuration/LatencyConfigurationPage.o: src/gui/configuration/ConfigurationPage.h
 ./src/gui/configuration/LatencyConfigurationPage.o: src/document/ConfigGroups.h
-./src/gui/configuration/LatencyConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/LatencyConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/LatencyConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/LatencyConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/LatencyConfigurationPage.o: src/base/Instrument.h
@@ -10993,7 +10993,7 @@
 ./src/gui/configuration/HeadersConfigurationPage.o: ./src/gui/configuration/HeadersConfigurationPage.h
 ./src/gui/configuration/HeadersConfigurationPage.o: src/gui/widgets/LineEdit.h
 ./src/gui/configuration/HeadersConfigurationPage.o: src/document/ConfigGroups.h
-./src/gui/configuration/HeadersConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/HeadersConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/HeadersConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/HeadersConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/HeadersConfigurationPage.o: src/base/Instrument.h
@@ -11057,7 +11057,7 @@
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Property.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/misc/Debug.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Selection.h
-./src/gui/configuration/NotationConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/NotationConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/NotationConfigurationPage.o: src/base/Device.h
@@ -11104,7 +11104,7 @@
 ./src/gui/configuration/NotationConfigurationPage.o: src/gui/widgets/FontRequester.h
 ./src/gui/configuration/NotationConfigurationPage.o: ./src/gui/configuration/NotationConfigurationPage.moc
 ./src/gui/configuration/ConfigurationPage.o: src/gui/configuration/ConfigurationPage.h
-./src/gui/configuration/ConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/ConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/ConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/ConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/ConfigurationPage.o: src/base/Instrument.h
@@ -11164,7 +11164,7 @@
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/Studio.h
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/MidiMetronome.h
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/ControlParameter.h
-./src/gui/configuration/AudioConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/AudioConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/AudioConfigurationPage.o: src/base/PropertyMap.h
@@ -11209,7 +11209,7 @@
 ./src/gui/configuration/AudioPropertiesPage.o: src/misc/Strings.h
 ./src/gui/configuration/AudioPropertiesPage.o: src/base/PropertyName.h
 ./src/gui/configuration/AudioPropertiesPage.o: src/base/Exception.h
-./src/gui/configuration/AudioPropertiesPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/AudioPropertiesPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/AudioPropertiesPage.o: src/base/Composition.h
 ./src/gui/configuration/AudioPropertiesPage.o: src/base/Configuration.h
 ./src/gui/configuration/AudioPropertiesPage.o: src/base/Instrument.h
@@ -11298,7 +11298,7 @@
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/Device.h
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/NotationTypes.h
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/RefreshStatus.h
-./src/gui/configuration/DocumentMetaConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/DocumentMetaConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/Device.h
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/MidiProgram.h
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: src/base/Studio.h
@@ -11318,7 +11318,7 @@
 ./src/gui/configuration/DocumentMetaConfigurationPage.o: ./src/gui/configuration/DocumentMetaConfigurationPage.moc
 ./src/gui/configuration/TabbedConfigurationPage.o: src/gui/configuration/TabbedConfigurationPage.h
 ./src/gui/configuration/TabbedConfigurationPage.o: src/gui/configuration/ConfigurationPage.h
-./src/gui/configuration/TabbedConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/TabbedConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/TabbedConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/TabbedConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/TabbedConfigurationPage.o: src/base/Instrument.h
@@ -11372,7 +11372,7 @@
 ./src/gui/configuration/ColourConfigurationPage.o: src/base/RefreshStatus.h
 ./src/gui/configuration/ColourConfigurationPage.o: src/base/RealTime.h
 ./src/gui/configuration/ColourConfigurationPage.o: src/document/Command.h
-./src/gui/configuration/ColourConfigurationPage.o: src/document/RosegardenGUIDoc.h
+./src/gui/configuration/ColourConfigurationPage.o: src/document/RosegardenDocument.h
 ./src/gui/configuration/ColourConfigurationPage.o: src/base/Composition.h
 ./src/gui/configuration/ColourConfigurationPage.o: src/base/Configuration.h
 ./src/gui/configuration/ColourConfigurationPage.o: src/base/PropertyMap.h
@@ -11402,7 +11402,7 @@
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/Instrument.h
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/XmlExportable.h
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/MidiProgram.h
-./src/gui/seqmanager/MidiFilterDialog.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/MidiFilterDialog.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/Composition.h
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/Configuration.h
 ./src/gui/seqmanager/MidiFilterDialog.o: src/base/RealTime.h
@@ -11481,7 +11481,7 @@
 ./src/gui/seqmanager/SequenceManager.o: src/base/ControlParameter.h
 ./src/gui/seqmanager/SequenceManager.o: src/base/TriggerSegment.h
 ./src/gui/seqmanager/SequenceManager.o: ./src/gui/seqmanager/CompositionMmapper.h
-./src/gui/seqmanager/SequenceManager.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/SequenceManager.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/SequenceManager.o: src/base/Configuration.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
 ./src/gui/seqmanager/SequenceManager.o: src/sound/AudioFileManager.h
@@ -11491,7 +11491,7 @@
 ./src/gui/seqmanager/SequenceManager.o: src/sound/PeakFile.h
 ./src/gui/seqmanager/SequenceManager.o: src/document/CommandHistory.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/application/RosegardenApplication.h
-./src/gui/seqmanager/SequenceManager.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/seqmanager/SequenceManager.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/general/RecentFiles.h
@@ -11502,7 +11502,7 @@
 ./src/gui/seqmanager/SequenceManager.o: src/base/MidiDevice.h
 ./src/gui/seqmanager/SequenceManager.o: src/base/Controllable.h
 ./src/gui/seqmanager/SequenceManager.o: src/base/MidiTypes.h
-./src/gui/seqmanager/SequenceManager.o: src/gui/application/RosegardenGUIView.h
+./src/gui/seqmanager/SequenceManager.o: src/gui/application/RosegardenMainWidget.h
 ./src/gui/seqmanager/SequenceManager.o: src/base/Selection.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/editors/segment/TrackEditor.h
 ./src/gui/seqmanager/SequenceManager.o: src/gui/editors/segment/TrackButtons.h
@@ -11572,7 +11572,7 @@
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/MidiMetronome.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/ControlParameter.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/MetronomeMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/MetronomeMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/Composition.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/MetronomeMmapper.o: src/base/Device.h
@@ -11631,7 +11631,7 @@
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/RefreshStatus.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/AudioSegmentMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/AudioSegmentMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/Device.h
 ./src/gui/seqmanager/AudioSegmentMmapper.o: src/base/MidiProgram.h
@@ -11665,7 +11665,7 @@
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/RefreshStatus.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Composition.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/TimeSigSegmentMmapper.o: src/base/Device.h
@@ -11708,7 +11708,7 @@
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/TriggerSegment.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/Marker.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/SegmentMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/SegmentMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/Device.h
 ./src/gui/seqmanager/SegmentMmapper.o: src/base/MidiProgram.h
@@ -11743,7 +11743,7 @@
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/RefreshStatus.h
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/TempoSegmentMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/TempoSegmentMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/Composition.h
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/FastVector.h
 ./src/gui/seqmanager/TempoSegmentMmapper.o: src/base/Segment.h
@@ -11788,7 +11788,7 @@
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/Segment.h
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/RefreshStatus.h
-./src/gui/seqmanager/CompositionMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/CompositionMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/Device.h
 ./src/gui/seqmanager/CompositionMmapper.o: src/base/MidiProgram.h
@@ -11836,7 +11836,7 @@
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/RefreshStatus.h
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/RealTime.h
-./src/gui/seqmanager/SegmentMmapperFactory.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/SegmentMmapperFactory.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/Composition.h
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/FastVector.h
 ./src/gui/seqmanager/SegmentMmapperFactory.o: src/base/Segment.h
@@ -11895,7 +11895,7 @@
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/Marker.h
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/Event.h
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/Exception.h
-./src/gui/seqmanager/ControlBlockMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/ControlBlockMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/Configuration.h
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/Device.h
 ./src/gui/seqmanager/ControlBlockMmapper.o: src/base/RealTime.h
@@ -11931,7 +11931,7 @@
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/NotationTypes.h
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/RefreshStatus.h
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/TriggerSegment.h
-./src/gui/seqmanager/SpecialSegmentMmapper.o: src/document/RosegardenGUIDoc.h
+./src/gui/seqmanager/SpecialSegmentMmapper.o: src/document/RosegardenDocument.h
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/Composition.h
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/FastVector.h
 ./src/gui/seqmanager/SpecialSegmentMmapper.o: src/base/Segment.h
@@ -12165,7 +12165,7 @@
 ./src/gui/rulers/StandardRuler.o: src/base/Device.h src/base/Configuration.h
 ./src/gui/rulers/StandardRuler.o: src/base/ColourMap.h src/base/Colour.h
 ./src/gui/rulers/StandardRuler.o: src/base/TriggerSegment.h src/base/Marker.h
-./src/gui/rulers/StandardRuler.o: src/document/RosegardenGUIDoc.h
+./src/gui/rulers/StandardRuler.o: src/document/RosegardenDocument.h
 ./src/gui/rulers/StandardRuler.o: src/base/Composition.h
 ./src/gui/rulers/StandardRuler.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/rulers/StandardRuler.o: src/base/MidiProgram.h src/base/RealTime.h
@@ -12178,7 +12178,7 @@
 ./src/gui/rulers/StandardRuler.o: src/sound/PeakFileManager.h
 ./src/gui/rulers/StandardRuler.o: src/sound/PeakFile.h
 ./src/gui/rulers/StandardRuler.o: src/document/CommandHistory.h
-./src/gui/rulers/StandardRuler.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/rulers/StandardRuler.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/rulers/StandardRuler.o: src/gui/dialogs/TempoDialog.h
 ./src/gui/rulers/StandardRuler.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/rulers/StandardRuler.o: src/gui/general/RecentFiles.h
@@ -12311,7 +12311,7 @@
 ./src/gui/rulers/MarkerRuler.o: src/base/Event.h src/base/RulerScale.h
 ./src/gui/rulers/MarkerRuler.o: src/base/Selection.h src/base/NotationTypes.h
 ./src/gui/rulers/MarkerRuler.o: src/base/Composition.h
-./src/gui/rulers/MarkerRuler.o: src/document/RosegardenGUIDoc.h
+./src/gui/rulers/MarkerRuler.o: src/document/RosegardenDocument.h
 ./src/gui/rulers/MarkerRuler.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/rulers/MarkerRuler.o: src/base/MidiProgram.h src/base/RealTime.h
 ./src/gui/rulers/MarkerRuler.o: src/base/Segment.h src/base/RefreshStatus.h
@@ -12349,7 +12349,7 @@
 ./src/gui/rulers/TempoRuler.o: src/base/Selection.h src/base/NotationTypes.h
 ./src/gui/rulers/TempoRuler.o: src/base/Composition.h src/base/SnapGrid.h
 ./src/gui/rulers/TempoRuler.o: src/base/RulerScale.h
-./src/gui/rulers/TempoRuler.o: src/document/RosegardenGUIDoc.h
+./src/gui/rulers/TempoRuler.o: src/document/RosegardenDocument.h
 ./src/gui/rulers/TempoRuler.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/rulers/TempoRuler.o: src/base/MidiProgram.h src/base/Segment.h
 ./src/gui/rulers/TempoRuler.o: src/base/RefreshStatus.h src/base/Studio.h
@@ -12361,7 +12361,7 @@
 ./src/gui/rulers/TempoRuler.o: src/sound/PeakFileManager.h
 ./src/gui/rulers/TempoRuler.o: src/sound/PeakFile.h
 ./src/gui/rulers/TempoRuler.o: src/document/CommandHistory.h
-./src/gui/rulers/TempoRuler.o: src/gui/application/RosegardenGUIApp.h
+./src/gui/rulers/TempoRuler.o: src/gui/application/RosegardenMainWindow.h
 ./src/gui/rulers/TempoRuler.o: src/gui/widgets/ZoomSlider.h
 ./src/gui/rulers/TempoRuler.o: src/gui/general/RecentFiles.h
 ./src/gui/rulers/TempoRuler.o: src/sound/AudioFile.h src/sound/Midi.h
@@ -12407,7 +12407,7 @@
 ./src/gui/rulers/ChordNameRuler.o: src/base/MidiMetronome.h
 ./src/gui/rulers/ChordNameRuler.o: src/base/ControlParameter.h
 ./src/gui/rulers/ChordNameRuler.o: src/base/Track.h
-./src/gui/rulers/ChordNameRuler.o: src/document/RosegardenGUIDoc.h
+./src/gui/rulers/ChordNameRuler.o: src/document/RosegardenDocument.h
 ./src/gui/rulers/ChordNameRuler.o: src/base/Configuration.h src/base/Device.h
 ./src/gui/rulers/ChordNameRuler.o: src/base/MidiProgram.h src/base/RealTime.h
 ./src/gui/rulers/ChordNameRuler.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
@@ -12445,7 +12445,7 @@
 ./src/gui/rulers/LoopRuler.o: src/base/Marker.h src/gui/general/GUIPalette.h
 ./src/gui/rulers/LoopRuler.o: src/base/Colour.h
 ./src/gui/rulers/LoopRuler.o: src/gui/general/RosegardenCanvasView.h
-./src/gui/rulers/LoopRuler.o: src/document/RosegardenGUIDoc.h
+./src/gui/rulers/LoopRuler.o: src/document/RosegardenDocument.h
 ./src/gui/rulers/LoopRuler.o: src/base/Composition.h src/base/Configuration.h
 ./src/gui/rulers/LoopRuler.o: src/base/Device.h src/base/MidiProgram.h
 ./src/gui/rulers/LoopRuler.o: src/base/RealTime.h src/base/Segment.h
@@ -12577,7 +12577,7 @@
 ./src/sequencer/RosegardenSequencer.o: src/base/Profiler.h
 ./src/sequencer/RosegardenSequencer.o: src/sound/PluginFactory.h
 ./src/sequencer/RosegardenSequencer.o: src/gui/application/RosegardenApplication.h
-./src/sequencer/RosegardenSequencer.o: src/gui/application/RosegardenGUIApp.h
+./src/sequencer/RosegardenSequencer.o: src/gui/application/RosegardenMainWindow.h
 ./src/sequencer/RosegardenSequencer.o: src/base/MidiProgram.h
 ./src/sequencer/RosegardenSequencer.o: src/gui/dialogs/TempoDialog.h
 ./src/sequencer/RosegardenSequencer.o: src/gui/widgets/ZoomSlider.h
@@ -12903,7 +12903,7 @@
 ./src/document/RoseXmlHandler.o: src/base/Segment.h src/base/NotationTypes.h
 ./src/document/RoseXmlHandler.o: src/base/RefreshStatus.h src/base/Studio.h
 ./src/document/RoseXmlHandler.o: src/base/Track.h src/base/TriggerSegment.h
-./src/document/RoseXmlHandler.o: src/gui/application/RosegardenGUIApp.h
+./src/document/RoseXmlHandler.o: src/gui/application/RosegardenMainWindow.h
 ./src/document/RoseXmlHandler.o: src/gui/dialogs/TempoDialog.h
 ./src/document/RoseXmlHandler.o: src/gui/widgets/ZoomSlider.h
 ./src/document/RoseXmlHandler.o: src/gui/general/RecentFiles.h
@@ -12938,7 +12938,7 @@
 ./src/document/RoseXmlHandler.o: src/gui/studio/AudioPlugin.h
 ./src/document/RoseXmlHandler.o: src/gui/widgets/CurrentProgressDialog.h
 ./src/document/RoseXmlHandler.o: src/gui/widgets/ProgressDialog.h
-./src/document/RoseXmlHandler.o: ./src/document/RosegardenGUIDoc.h
+./src/document/RoseXmlHandler.o: ./src/document/RosegardenDocument.h
 ./src/document/RoseXmlHandler.o: src/base/Configuration.h
 ./src/document/RoseXmlHandler.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
 ./src/document/RoseXmlHandler.o: src/sound/AudioFileManager.h
@@ -12958,122 +12958,122 @@
 ./src/document/CommandHistory.o: ./src/document/Command.h
 ./src/document/CommandHistory.o: ./src/document/CommandHistory.moc
 ./src/document/Command.o: ./src/document/Command.h
-./src/document/RosegardenGUIDoc.o: ./src/document/RosegardenGUIDoc.h
-./src/document/RosegardenGUIDoc.o: src/base/Composition.h
-./src/document/RosegardenGUIDoc.o: src/base/FastVector.h src/base/RealTime.h
-./src/document/RosegardenGUIDoc.o: src/base/Segment.h src/base/Track.h
-./src/document/RosegardenGUIDoc.o: src/base/XmlExportable.h
-./src/document/RosegardenGUIDoc.o: src/base/Instrument.h
-./src/document/RosegardenGUIDoc.o: src/base/MidiProgram.h src/base/Device.h
-./src/document/RosegardenGUIDoc.o: src/base/Configuration.h
-./src/document/RosegardenGUIDoc.o: src/base/PropertyMap.h src/base/Property.h
-./src/document/RosegardenGUIDoc.o: src/base/PropertyName.h
-./src/document/RosegardenGUIDoc.o: src/base/Exception.h src/base/ColourMap.h
-./src/document/RosegardenGUIDoc.o: src/base/Colour.h
-./src/document/RosegardenGUIDoc.o: src/base/TriggerSegment.h
-./src/document/RosegardenGUIDoc.o: src/base/Marker.h src/base/Event.h
-./src/document/RosegardenGUIDoc.o: src/base/Configuration.h src/base/Device.h
-./src/document/RosegardenGUIDoc.o: src/base/MidiProgram.h src/base/RealTime.h
-./src/document/RosegardenGUIDoc.o: src/base/Segment.h
-./src/document/RosegardenGUIDoc.o: src/base/NotationTypes.h
-./src/document/RosegardenGUIDoc.o: src/base/RefreshStatus.h src/base/Studio.h
-./src/document/RosegardenGUIDoc.o: src/base/MidiMetronome.h
-./src/document/RosegardenGUIDoc.o: src/base/ControlParameter.h
-./src/document/RosegardenGUIDoc.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
-./src/document/RosegardenGUIDoc.o: src/sound/AudioFileManager.h
-./src/document/RosegardenGUIDoc.o: src/sound/AudioFile.h
-./src/document/RosegardenGUIDoc.o: src/sound/SoundFile.h
-./src/document/RosegardenGUIDoc.o: src/sound/PeakFileManager.h
-./src/document/RosegardenGUIDoc.o: src/sound/PeakFile.h src/base/Event.h
-./src/document/RosegardenGUIDoc.o: ./src/document/CommandHistory.h
-./src/document/RosegardenGUIDoc.o: ./src/document/RoseXmlHandler.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/ProgressReporter.h
-./src/document/RosegardenGUIDoc.o: ./src/document/GzipFile.h
-./src/document/RosegardenGUIDoc.o: src/base/AudioDevice.h
-./src/document/RosegardenGUIDoc.o: src/base/AudioPluginInstance.h
-./src/document/RosegardenGUIDoc.o: src/base/BaseProperties.h
-./src/document/RosegardenGUIDoc.o: src/base/Clipboard.h src/base/Selection.h
-./src/document/RosegardenGUIDoc.o: src/base/Composition.h
-./src/document/RosegardenGUIDoc.o: src/base/Exception.h src/base/Instrument.h
-./src/document/RosegardenGUIDoc.o: src/base/MidiDevice.h
-./src/document/RosegardenGUIDoc.o: src/base/Controllable.h
-./src/document/RosegardenGUIDoc.o: src/base/MidiTypes.h
-./src/document/RosegardenGUIDoc.o: src/base/NotationTypes.h
-./src/document/RosegardenGUIDoc.o: src/base/Profiler.h
-./src/document/RosegardenGUIDoc.o: src/base/SoftSynthDevice.h
-./src/document/RosegardenGUIDoc.o: src/base/Track.h src/base/XmlExportable.h
-./src/document/RosegardenGUIDoc.o: src/commands/edit/EventQuantizeCommand.h
-./src/document/RosegardenGUIDoc.o: src/document/BasicCommand.h
-./src/document/RosegardenGUIDoc.o: src/commands/notation/NormalizeRestsCommand.h
-./src/document/RosegardenGUIDoc.o: src/commands/segment/AddTracksCommand.h
-./src/document/RosegardenGUIDoc.o: src/document/Command.h
-./src/document/RosegardenGUIDoc.o: src/commands/segment/SegmentInsertCommand.h
-./src/document/RosegardenGUIDoc.o: src/commands/segment/SegmentRecordCommand.h
-./src/document/RosegardenGUIDoc.o: src/commands/segment/ChangeCompositionLengthCommand.h
-./src/document/RosegardenGUIDoc.o: src/gui/editors/segment/TrackEditor.h
-./src/document/RosegardenGUIDoc.o: src/gui/editors/segment/TrackButtons.h
-./src/document/RosegardenGUIDoc.o: src/gui/application/RosegardenGUIApp.h
-./src/document/RosegardenGUIDoc.o: src/gui/dialogs/TempoDialog.h
-./src/document/RosegardenGUIDoc.o: src/gui/widgets/ZoomSlider.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/RecentFiles.h
-./src/document/RosegardenGUIDoc.o: src/sound/AudioFile.h src/sound/Midi.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/ActionFileClient.h
-./src/document/RosegardenGUIDoc.o: src/gui/ui/DevicesManagerNew.h
-./src/document/RosegardenGUIDoc.o: src/gui/ui/DevicesManagerNewUi.h
-./src/document/RosegardenGUIDoc.o: src/gui/editors/segment/TrackLabel.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/ClefIndex.h
-./src/document/RosegardenGUIDoc.o: src/gui/application/TransportStatus.h
-./src/document/RosegardenGUIDoc.o: src/gui/application/RosegardenGUIView.h
-./src/document/RosegardenGUIDoc.o: src/base/Selection.h
-./src/document/RosegardenGUIDoc.o: src/gui/dialogs/UnusedAudioSelectionDialog.h
-./src/document/RosegardenGUIDoc.o: src/gui/editors/segment/TrackLabel.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/EditViewBase.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/ActionFileClient.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/GUIPalette.h
-./src/document/RosegardenGUIDoc.o: src/base/Colour.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/ResourceFinder.h
-./src/document/RosegardenGUIDoc.o: src/gui/widgets/StartupLogo.h
-./src/document/RosegardenGUIDoc.o: src/gui/seqmanager/SequenceManager.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedComposition.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedEvent.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedEvent.h
-./src/document/RosegardenGUIDoc.o: src/gui/studio/AudioPluginManager.h
-./src/document/RosegardenGUIDoc.o: src/gui/studio/AudioPluginClipboard.h
-./src/document/RosegardenGUIDoc.o: src/gui/studio/AudioPlugin.h
-./src/document/RosegardenGUIDoc.o: src/gui/studio/StudioControl.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedCommon.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedStudio.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedCommon.h
-./src/document/RosegardenGUIDoc.o: src/gui/widgets/CurrentProgressDialog.h
-./src/document/RosegardenGUIDoc.o: src/gui/widgets/ProgressDialog.h
-./src/document/RosegardenGUIDoc.o: src/gui/widgets/ProgressBar.h
-./src/document/RosegardenGUIDoc.o: src/gui/general/AutoSaveFinder.h
-./src/document/RosegardenGUIDoc.o: src/sequencer/RosegardenSequencer.h
-./src/document/RosegardenGUIDoc.o: src/sequencer/RosegardenSequencerIface.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedDevice.h
-./src/document/RosegardenGUIDoc.o: src/sound/ExternalTransport.h
-./src/document/RosegardenGUIDoc.o: src/sequencer/MmappedSegment.h
-./src/document/RosegardenGUIDoc.o: src/sequencer/MmappedControlBlock.h
-./src/document/RosegardenGUIDoc.o: src/sound/ControlBlock.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedInstrument.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedDevice.h
-./src/document/RosegardenGUIDoc.o: src/sequencer/SequencerMmapper.h
-./src/document/RosegardenGUIDoc.o: src/sound/SequencerDataBlock.h
-./src/document/RosegardenGUIDoc.o: src/sound/ControlBlock.h
-./src/document/RosegardenGUIDoc.o: src/sound/PluginIdentifier.h
-./src/document/RosegardenGUIDoc.o: src/sound/SoundDriver.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedComposition.h
-./src/document/RosegardenGUIDoc.o: src/sound/MappedInstrument.h
-./src/document/RosegardenGUIDoc.o: src/sound/SequencerDataBlock.h
-./src/document/RosegardenGUIDoc.o: src/sound/PlayableAudioFile.h
-./src/document/RosegardenGUIDoc.o: src/sound/RingBuffer.h
-./src/document/RosegardenGUIDoc.o: src/sound/Scavenger.h
-./src/document/RosegardenGUIDoc.o: src/sound/AudioCache.h
-./src/document/RosegardenGUIDoc.o: src/sound/RIFFAudioFile.h
-./src/document/RosegardenGUIDoc.o: src/misc/AppendLabel.h src/misc/Debug.h
-./src/document/RosegardenGUIDoc.o: src/misc/Strings.h
-./src/document/RosegardenGUIDoc.o: src/document/ConfigGroups.h
-./src/document/RosegardenGUIDoc.o: ./src/document/RosegardenGUIDoc.moc
+./src/document/RosegardenDocument.o: ./src/document/RosegardenDocument.h
+./src/document/RosegardenDocument.o: src/base/Composition.h
+./src/document/RosegardenDocument.o: src/base/FastVector.h src/base/RealTime.h
+./src/document/RosegardenDocument.o: src/base/Segment.h src/base/Track.h
+./src/document/RosegardenDocument.o: src/base/XmlExportable.h
+./src/document/RosegardenDocument.o: src/base/Instrument.h
+./src/document/RosegardenDocument.o: src/base/MidiProgram.h src/base/Device.h
+./src/document/RosegardenDocument.o: src/base/Configuration.h
+./src/document/RosegardenDocument.o: src/base/PropertyMap.h src/base/Property.h
+./src/document/RosegardenDocument.o: src/base/PropertyName.h
+./src/document/RosegardenDocument.o: src/base/Exception.h src/base/ColourMap.h
+./src/document/RosegardenDocument.o: src/base/Colour.h
+./src/document/RosegardenDocument.o: src/base/TriggerSegment.h
+./src/document/RosegardenDocument.o: src/base/Marker.h src/base/Event.h
+./src/document/RosegardenDocument.o: src/base/Configuration.h src/base/Device.h
+./src/document/RosegardenDocument.o: src/base/MidiProgram.h src/base/RealTime.h
+./src/document/RosegardenDocument.o: src/base/Segment.h
+./src/document/RosegardenDocument.o: src/base/NotationTypes.h
+./src/document/RosegardenDocument.o: src/base/RefreshStatus.h src/base/Studio.h
+./src/document/RosegardenDocument.o: src/base/MidiMetronome.h
+./src/document/RosegardenDocument.o: src/base/ControlParameter.h
+./src/document/RosegardenDocument.o: src/gui/editors/segment/compositionview/AudioPreviewThread.h
+./src/document/RosegardenDocument.o: src/sound/AudioFileManager.h
+./src/document/RosegardenDocument.o: src/sound/AudioFile.h
+./src/document/RosegardenDocument.o: src/sound/SoundFile.h
+./src/document/RosegardenDocument.o: src/sound/PeakFileManager.h
+./src/document/RosegardenDocument.o: src/sound/PeakFile.h src/base/Event.h
+./src/document/RosegardenDocument.o: ./src/document/CommandHistory.h
+./src/document/RosegardenDocument.o: ./src/document/RoseXmlHandler.h
+./src/document/RosegardenDocument.o: src/gui/general/ProgressReporter.h
+./src/document/RosegardenDocument.o: ./src/document/GzipFile.h
+./src/document/RosegardenDocument.o: src/base/AudioDevice.h
+./src/document/RosegardenDocument.o: src/base/AudioPluginInstance.h
+./src/document/RosegardenDocument.o: src/base/BaseProperties.h
+./src/document/RosegardenDocument.o: src/base/Clipboard.h src/base/Selection.h
+./src/document/RosegardenDocument.o: src/base/Composition.h
+./src/document/RosegardenDocument.o: src/base/Exception.h src/base/Instrument.h
+./src/document/RosegardenDocument.o: src/base/MidiDevice.h
+./src/document/RosegardenDocument.o: src/base/Controllable.h
+./src/document/RosegardenDocument.o: src/base/MidiTypes.h
+./src/document/RosegardenDocument.o: src/base/NotationTypes.h
+./src/document/RosegardenDocument.o: src/base/Profiler.h
+./src/document/RosegardenDocument.o: src/base/SoftSynthDevice.h
+./src/document/RosegardenDocument.o: src/base/Track.h src/base/XmlExportable.h
+./src/document/RosegardenDocument.o: src/commands/edit/EventQuantizeCommand.h
+./src/document/RosegardenDocument.o: src/document/BasicCommand.h
+./src/document/RosegardenDocument.o: src/commands/notation/NormalizeRestsCommand.h
+./src/document/RosegardenDocument.o: src/commands/segment/AddTracksCommand.h
+./src/document/RosegardenDocument.o: src/document/Command.h
+./src/document/RosegardenDocument.o: src/commands/segment/SegmentInsertCommand.h
+./src/document/RosegardenDocument.o: src/commands/segment/SegmentRecordCommand.h
+./src/document/RosegardenDocument.o: src/commands/segment/ChangeCompositionLengthCommand.h
+./src/document/RosegardenDocument.o: src/gui/editors/segment/TrackEditor.h
+./src/document/RosegardenDocument.o: src/gui/editors/segment/TrackButtons.h
+./src/document/RosegardenDocument.o: src/gui/application/RosegardenMainWindow.h
+./src/document/RosegardenDocument.o: src/gui/dialogs/TempoDialog.h
+./src/document/RosegardenDocument.o: src/gui/widgets/ZoomSlider.h
+./src/document/RosegardenDocument.o: src/gui/general/RecentFiles.h
+./src/document/RosegardenDocument.o: src/sound/AudioFile.h src/sound/Midi.h
+./src/document/RosegardenDocument.o: src/gui/general/ActionFileClient.h
+./src/document/RosegardenDocument.o: src/gui/ui/DevicesManagerNew.h
+./src/document/RosegardenDocument.o: src/gui/ui/DevicesManagerNewUi.h
+./src/document/RosegardenDocument.o: src/gui/editors/segment/TrackLabel.h
+./src/document/RosegardenDocument.o: src/gui/general/ClefIndex.h
+./src/document/RosegardenDocument.o: src/gui/application/TransportStatus.h
+./src/document/RosegardenDocument.o: src/gui/application/RosegardenMainWidget.h
+./src/document/RosegardenDocument.o: src/base/Selection.h
+./src/document/RosegardenDocument.o: src/gui/dialogs/UnusedAudioSelectionDialog.h
+./src/document/RosegardenDocument.o: src/gui/editors/segment/TrackLabel.h
+./src/document/RosegardenDocument.o: src/gui/general/EditViewBase.h
+./src/document/RosegardenDocument.o: src/gui/general/ActionFileClient.h
+./src/document/RosegardenDocument.o: src/gui/general/GUIPalette.h
+./src/document/RosegardenDocument.o: src/base/Colour.h
+./src/document/RosegardenDocument.o: src/gui/general/ResourceFinder.h
+./src/document/RosegardenDocument.o: src/gui/widgets/StartupLogo.h
+./src/document/RosegardenDocument.o: src/gui/seqmanager/SequenceManager.h
+./src/document/RosegardenDocument.o: src/sound/MappedComposition.h
+./src/document/RosegardenDocument.o: src/sound/MappedEvent.h
+./src/document/RosegardenDocument.o: src/sound/MappedEvent.h
+./src/document/RosegardenDocument.o: src/gui/studio/AudioPluginManager.h
+./src/document/RosegardenDocument.o: src/gui/studio/AudioPluginClipboard.h
+./src/document/RosegardenDocument.o: src/gui/studio/AudioPlugin.h
+./src/document/RosegardenDocument.o: src/gui/studio/StudioControl.h
+./src/document/RosegardenDocument.o: src/sound/MappedCommon.h
+./src/document/RosegardenDocument.o: src/sound/MappedStudio.h
+./src/document/RosegardenDocument.o: src/sound/MappedCommon.h
+./src/document/RosegardenDocument.o: src/gui/widgets/CurrentProgressDialog.h
+./src/document/RosegardenDocument.o: src/gui/widgets/ProgressDialog.h
+./src/document/RosegardenDocument.o: src/gui/widgets/ProgressBar.h
+./src/document/RosegardenDocument.o: src/gui/general/AutoSaveFinder.h
+./src/document/RosegardenDocument.o: src/sequencer/RosegardenSequencer.h
+./src/document/RosegardenDocument.o: src/sequencer/RosegardenSequencerIface.h
+./src/document/RosegardenDocument.o: src/sound/MappedDevice.h
+./src/document/RosegardenDocument.o: src/sound/ExternalTransport.h
+./src/document/RosegardenDocument.o: src/sequencer/MmappedSegment.h
+./src/document/RosegardenDocument.o: src/sequencer/MmappedControlBlock.h
+./src/document/RosegardenDocument.o: src/sound/ControlBlock.h
+./src/document/RosegardenDocument.o: src/sound/MappedInstrument.h
+./src/document/RosegardenDocument.o: src/sound/MappedDevice.h
+./src/document/RosegardenDocument.o: src/sequencer/SequencerMmapper.h
+./src/document/RosegardenDocument.o: src/sound/SequencerDataBlock.h
+./src/document/RosegardenDocument.o: src/sound/ControlBlock.h
+./src/document/RosegardenDocument.o: src/sound/PluginIdentifier.h
+./src/document/RosegardenDocument.o: src/sound/SoundDriver.h
+./src/document/RosegardenDocument.o: src/sound/MappedComposition.h
+./src/document/RosegardenDocument.o: src/sound/MappedInstrument.h
+./src/document/RosegardenDocument.o: src/sound/SequencerDataBlock.h
+./src/document/RosegardenDocument.o: src/sound/PlayableAudioFile.h
+./src/document/RosegardenDocument.o: src/sound/RingBuffer.h
+./src/document/RosegardenDocument.o: src/sound/Scavenger.h
+./src/document/RosegardenDocument.o: src/sound/AudioCache.h
+./src/document/RosegardenDocument.o: src/sound/RIFFAudioFile.h
+./src/document/RosegardenDocument.o: src/misc/AppendLabel.h src/misc/Debug.h
+./src/document/RosegardenDocument.o: src/misc/Strings.h
+./src/document/RosegardenDocument.o: src/document/ConfigGroups.h
+./src/document/RosegardenDocument.o: ./src/document/RosegardenDocument.moc
 ./src/document/ConfigGroups.o: ./src/document/ConfigGroups.h
 ./src/document/BasicSelectionCommand.o: ./src/document/BasicSelectionCommand.h
 ./src/document/BasicSelectionCommand.o: src/document/BasicCommand.h
@@ -13148,7 +13148,7 @@
 ./src/document/io/MusicXmlExporter.o: src/base/CompositionTimeSliceAdapter.h
 ./src/document/io/MusicXmlExporter.o: src/base/Instrument.h
 ./src/document/io/MusicXmlExporter.o: src/base/XmlExportable.h
-./src/document/io/MusicXmlExporter.o: src/document/RosegardenGUIDoc.h
+./src/document/io/MusicXmlExporter.o: src/document/RosegardenDocument.h
 ./src/document/io/MusicXmlExporter.o: src/base/Configuration.h
 ./src/document/io/MusicXmlExporter.o: src/base/Device.h
 ./src/document/io/MusicXmlExporter.o: src/base/MidiProgram.h
@@ -13304,7 +13304,7 @@
 ./src/document/io/LilyPondExporter.o: src/base/NotationQuantizer.h
 ./src/document/io/LilyPondExporter.o: src/base/Marker.h
 ./src/document/io/LilyPondExporter.o: src/base/StaffExportTypes.h
-./src/document/io/LilyPondExporter.o: src/document/RosegardenGUIDoc.h
+./src/document/io/LilyPondExporter.o: src/document/RosegardenDocument.h
 ./src/document/io/LilyPondExporter.o: src/base/Device.h
 ./src/document/io/LilyPondExporter.o: src/base/MidiProgram.h
 ./src/document/io/LilyPondExporter.o: src/base/RealTime.h
@@ -13315,13 +13315,13 @@
 ./src/document/io/LilyPondExporter.o: src/sound/PeakFileManager.h
 ./src/document/io/LilyPondExporter.o: src/sound/PeakFile.h
 ./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenApplication.h
-./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenGUIView.h
+./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenMainWidget.h
 ./src/document/io/LilyPondExporter.o: src/base/Selection.h
 ./src/document/io/LilyPondExporter.o: src/base/Composition.h
 ./src/document/io/LilyPondExporter.o: src/sound/AudioFile.h
 ./src/document/io/LilyPondExporter.o: src/gui/editors/segment/TrackEditor.h
 ./src/document/io/LilyPondExporter.o: src/gui/editors/segment/TrackButtons.h
-./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenGUIApp.h
+./src/document/io/LilyPondExporter.o: src/gui/application/RosegardenMainWindow.h
 ./src/document/io/LilyPondExporter.o: src/gui/dialogs/TempoDialog.h
 ./src/document/io/LilyPondExporter.o: src/gui/widgets/ZoomSlider.h
 ./src/document/io/LilyPondExporter.o: src/gui/general/RecentFiles.h

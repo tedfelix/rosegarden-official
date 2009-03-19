@@ -27,7 +27,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
 
@@ -55,7 +55,7 @@ namespace Rosegarden
 
     SynthPluginManagerDialog::SynthPluginManagerDialog( 
             QWidget *parent,
-            RosegardenGUIDoc *doc
+            RosegardenDocument *doc
                                                         
 #ifdef HAVE_LIBLO
             , AudioPluginOSCGUIManager *guiManager
@@ -338,7 +338,7 @@ namespace Rosegarden
         InstrumentId id = SoftSynthInstrumentBase + instrumentNo;
 
         emit showPluginDialog ( this, id, Instrument::SYNTH_PLUGIN_POSITION );
-        // note: slot is in RosegardenGUIApp.cpp
+        // note: slot is in RosegardenMainWindow.cpp
     }
 
 

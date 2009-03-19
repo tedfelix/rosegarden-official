@@ -36,7 +36,7 @@ class QFrame;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MIDIInstrumentParameterPanel;
 class Instrument;
 class AudioInstrumentParameterPanel;
@@ -50,7 +50,7 @@ class InstrumentParameterBox : public RosegardenParameterBox
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(RosegardenGUIDoc *doc,
+    InstrumentParameterBox(RosegardenDocument *doc,
                            QWidget *parent = 0);
     ~InstrumentParameterBox();
 
@@ -61,7 +61,7 @@ public:
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 
-    void setDocument(RosegardenGUIDoc* doc);
+    void setDocument(RosegardenDocument* doc);
     
     MIDIInstrumentParameterPanel * getMIDIInstrumentParameterPanel();
     
@@ -110,7 +110,7 @@ protected:
 
     // So we can setModified()
     //
-    RosegardenGUIDoc                *m_doc;
+    RosegardenDocument                *m_doc;
     bool                            m_lastShowAdditionalControlsArg;
 };
 

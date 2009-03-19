@@ -35,7 +35,7 @@ namespace Rosegarden
 
 class Command;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Event;
 
  
@@ -44,15 +44,15 @@ class EditViewBase : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    EditViewBase(RosegardenGUIDoc *doc,
+    EditViewBase(RosegardenDocument *doc,
                  std::vector<Segment *> segments,
                  QWidget *parent,
                  const char *name = 0);
 
     virtual ~EditViewBase();
 
-    const RosegardenGUIDoc *getDocument() const { return m_doc; }
-    RosegardenGUIDoc *getDocument() { return m_doc; }
+    const RosegardenDocument *getDocument() const { return m_doc; }
+    RosegardenDocument *getDocument() { return m_doc; }
 
     /**
      * Return our local shortcut object
@@ -227,7 +227,7 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     std::vector<Segment *> m_segments;
 
     int m_configDialogPageIndex;

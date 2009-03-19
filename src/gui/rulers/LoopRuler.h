@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -49,7 +49,7 @@ class LoopRuler : public QWidget, public HZoomable
     Q_OBJECT
 
 public:
-    LoopRuler(RosegardenGUIDoc *doc,
+    LoopRuler(RosegardenDocument *doc,
               RulerScale *rulerScale,
               int height = 0,
               double xorigin = 0.0,
@@ -122,7 +122,7 @@ protected:
     int  m_width;
     bool m_activeMousePress;
 
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     bool m_mainWindow;
     RulerScale *m_rulerScale;
     SnapGrid    m_defaultGrid;

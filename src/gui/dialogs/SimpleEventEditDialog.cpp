@@ -21,7 +21,7 @@
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
 #include "PitchDialog.h"
@@ -50,7 +50,7 @@ namespace Rosegarden
 {
 
 SimpleEventEditDialog::SimpleEventEditDialog(QWidget *parent,
-        RosegardenGUIDoc *doc,
+        RosegardenDocument *doc,
         const Event &event,
         bool inserting) :
         QDialog(parent),

@@ -21,13 +21,13 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
+AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenDocument *doc,
         timeT duration,
         int basePitch,
         int baseVelocity) :

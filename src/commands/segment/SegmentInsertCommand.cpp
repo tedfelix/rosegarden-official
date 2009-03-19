@@ -22,13 +22,13 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
+SegmentInsertCommand::SegmentInsertCommand(RosegardenDocument *doc,
         TrackId track,
         timeT startTime,
         timeT endTime):

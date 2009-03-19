@@ -47,7 +47,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Event;
 
 
@@ -74,7 +74,7 @@ class EventView : public ListEditView, public SegmentObserver
     };
 
 public:
-    EventView(RosegardenGUIDoc *doc,
+    EventView(RosegardenDocument *doc,
               std::vector<Segment *> segments,
               QWidget *parent);
 

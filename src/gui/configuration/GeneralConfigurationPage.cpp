@@ -22,7 +22,7 @@
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/eventlist/EventView.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/studio/StudioControl.h"
@@ -52,7 +52,7 @@
 namespace Rosegarden
 {
 
-GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
+GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         QWidget *parent, const char *name)
         : TabbedConfigurationPage(parent, name),
         m_doc(doc),

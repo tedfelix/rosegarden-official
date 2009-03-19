@@ -56,7 +56,7 @@ namespace Rosegarden
 class Staff;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class QDeferScrollView;
 class PropertyViewRuler;
 class PropertyBox;
@@ -84,7 +84,7 @@ class MatrixView : public EditView
     friend class MatrixSelector;
 
 public:
-    MatrixView(RosegardenGUIDoc *doc,
+    MatrixView(RosegardenDocument *doc,
                std::vector<Segment *> segments,
                QWidget *parent, bool drumMode);
 

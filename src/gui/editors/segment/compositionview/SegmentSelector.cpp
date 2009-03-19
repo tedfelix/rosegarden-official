@@ -31,7 +31,7 @@
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -52,7 +52,7 @@
 namespace Rosegarden
 {
 
-SegmentSelector::SegmentSelector(CompositionView *c, RosegardenGUIDoc *d)
+SegmentSelector::SegmentSelector(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_segmentAddMode(false),
         m_segmentCopyMode(false),
@@ -190,7 +190,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         }
     }
 
-    // Tell the RosegardenGUIView that we've selected some new Segments -
+    // Tell the RosegardenMainWidget that we've selected some new Segments -
     // when the list is empty we're just unselecting.
     //
     m_canvas->getModel()->signalSelection();

@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiDevice;
 
 
@@ -48,7 +48,7 @@ class DeviceManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 public:
-    DeviceManagerDialog(QWidget *parent, RosegardenGUIDoc *document);
+    DeviceManagerDialog(QWidget *parent, RosegardenDocument *document);
     ~DeviceManagerDialog();
 
     void setModified(bool value);
@@ -85,7 +85,7 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
 	
 	QDialogButtonBox * m_dialogButtonBox;

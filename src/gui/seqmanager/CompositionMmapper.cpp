@@ -22,7 +22,7 @@
 #include <QDir>
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
@@ -36,7 +36,7 @@
 namespace Rosegarden
 {
 
-CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
+CompositionMmapper::CompositionMmapper(RosegardenDocument *doc)
         : m_doc(doc)
 {
     cleanup();

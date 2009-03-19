@@ -21,8 +21,8 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/compositionview/CompositionView.h"
 #include "misc/Debug.h"
-#include "RosegardenGUIApp.h"
-#include "RosegardenGUIView.h"
+#include "RosegardenMainWindow.h"
+#include "RosegardenMainWidget.h"
 #include <QCursor>
 #include <QWidget>
 #include <QApplication>
@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 SetWaitCursor::SetWaitCursor()
-        : m_guiApp(dynamic_cast<RosegardenGUIApp*>(qApp->mainWidget()))
+        : m_guiApp(dynamic_cast<RosegardenMainWindow*>(qApp->mainWidget()))
 {
     if (m_guiApp) {
 

@@ -25,7 +25,7 @@
 #include "base/Exception.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/ControlBlock.h"
 #include <QFile>
 #include <QString>
@@ -38,7 +38,7 @@
 namespace Rosegarden
 {
 
-ControlBlockMmapper::ControlBlockMmapper(RosegardenGUIDoc* doc)
+ControlBlockMmapper::ControlBlockMmapper(RosegardenDocument* doc)
         : m_doc(doc),
         m_fileName(createFileName()),
         m_fd( -1),
@@ -153,7 +153,7 @@ bool ControlBlockMmapper::updateSoloData(bool solo,
     return changed;
 }
 
-void ControlBlockMmapper::setDocument(RosegardenGUIDoc* doc)
+void ControlBlockMmapper::setDocument(RosegardenDocument* doc)
 {
     SEQMAN_DEBUG << "ControlBlockMmapper::setDocument()\n";
     m_doc = doc;

@@ -20,7 +20,7 @@
 
 #include "misc/Debug.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
@@ -33,7 +33,7 @@
 namespace Rosegarden
 {
 
-SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenGUIDoc *d)
+SegmentJoiner::SegmentJoiner(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
     RG_DEBUG << "SegmentJoiner() - not implemented\n";

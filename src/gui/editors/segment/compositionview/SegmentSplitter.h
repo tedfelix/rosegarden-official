@@ -31,7 +31,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -57,7 +57,7 @@ public:
     static const QString ToolName;
 
 protected:
-    SegmentSplitter(CompositionView*, RosegardenGUIDoc*);
+    SegmentSplitter(CompositionView*, RosegardenDocument*);
     
     void setBasicContextHelp();
 

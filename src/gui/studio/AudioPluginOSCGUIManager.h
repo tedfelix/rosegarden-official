@@ -35,7 +35,7 @@ namespace Rosegarden
 
 class TimerCallbackAssistant;
 class Studio;
-class RosegardenGUIApp;
+class RosegardenMainWindow;
 class OSCMessage;
 class AudioPluginOSCGUI;
 
@@ -45,7 +45,7 @@ class AudioPluginOSCGUIManager
     Q_DECLARE_TR_FUNCTIONS(AudioPluginOSCGUIManager)
 
 public:
-    AudioPluginOSCGUIManager(RosegardenGUIApp *app);
+    AudioPluginOSCGUIManager(RosegardenMainWindow *app);
     virtual ~AudioPluginOSCGUIManager();
 
     void setStudio(Studio *studio) { m_studio = studio; }
@@ -75,7 +75,7 @@ public:
     static void guiExitedCallback(void *data);
 
 protected:
-    RosegardenGUIApp *m_app;
+    RosegardenMainWindow *m_app;
     Studio *m_studio;
 
     bool m_haveOSCThread;

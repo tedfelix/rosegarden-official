@@ -26,7 +26,7 @@
 #include "base/Studio.h"
 #include "Fader.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/AudioPluginOSCGUIManager.h"
 #include "Rotary.h"
 #include "gui/general/IconLoader.h"
@@ -242,7 +242,7 @@ AudioFaderBox::slotSetInstrument(Studio *studio,
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth" << endl;
 #ifdef HAVE_LIBLO
 
-            gui = RosegardenGUIApp::self()->getPluginGUIManager()->hasGUI
+            gui = RosegardenMainWindow::self()->getPluginGUIManager()->hasGUI
                   (instrument->getId(), Instrument::SYNTH_PLUGIN_POSITION);
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui << endl;
 #endif

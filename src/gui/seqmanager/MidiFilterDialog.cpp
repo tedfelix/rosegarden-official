@@ -20,7 +20,7 @@
 
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
 #include <QDialog>
@@ -37,7 +37,7 @@ namespace Rosegarden
 {
 
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
-                                   RosegardenGUIDoc *doc):
+                                   RosegardenDocument *doc):
         QDialog(parent),
         m_doc(doc),
         m_modified(true),

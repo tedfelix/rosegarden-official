@@ -40,7 +40,7 @@ class XmlStorableEvent;
 class XmlSubHandler;
 class Studio;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Instrument;
 class Device;
 class Composition;
@@ -75,7 +75,7 @@ public:
      * Construct a new RoseXmlHandler which will put the data extracted
      * from the XML file into the specified composition
      */
-    RoseXmlHandler(RosegardenGUIDoc *doc,
+    RoseXmlHandler(RosegardenDocument *doc,
                    unsigned int elementCount,
                    bool createNewDevicesWhenNeeded);
 
@@ -128,7 +128,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
 

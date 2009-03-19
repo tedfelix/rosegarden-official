@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -63,7 +63,7 @@ class TempoView : public ListEditView, public CompositionObserver
     };
 
 public:
-    TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT);
+    TempoView(RosegardenDocument *doc, QWidget *parent, timeT);
     virtual ~TempoView();
 
     virtual bool applyLayout(int staffNo = -1);

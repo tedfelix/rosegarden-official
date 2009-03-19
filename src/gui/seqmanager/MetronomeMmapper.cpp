@@ -30,7 +30,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
 #include <QSettings>
@@ -41,7 +41,7 @@
 namespace Rosegarden
 {
 
-MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
+MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
         : SegmentMmapper(doc, 0, createFileName()),
         m_metronome(0),  // no metronome to begin with
         m_tickDuration(0, 100000000)

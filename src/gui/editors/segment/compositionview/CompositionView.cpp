@@ -32,7 +32,7 @@
 #include "CompositionModelImpl.h"
 #include "CompositionRect.h"
 #include "AudioPreviewPainter.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -82,7 +82,7 @@ protected:
     QColor m_color;
 };
 
-CompositionView::CompositionView(RosegardenGUIDoc* doc,
+CompositionView::CompositionView(RosegardenDocument* doc,
                                  CompositionModel* model,
                                  QWidget * parent, const char * name) :
     RosegardenScrollView(parent, name),

@@ -50,7 +50,7 @@ class SegmentToolBox;
 class SegmentTool;
 class SegmentSelector;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionRect;
 
 
@@ -58,7 +58,7 @@ class CompositionView : public RosegardenScrollView
 {
     Q_OBJECT
 public:
-    CompositionView(RosegardenGUIDoc*, CompositionModel*,
+    CompositionView(RosegardenDocument*, CompositionModel*,
                     QWidget * parent=0, const char* name=0); //, WFlags f=0);
 
     void setPointerPos(int pos);
@@ -195,7 +195,7 @@ public slots:
 
     void slotNewMIDIRecordingSegment(Segment*);
     void slotNewAudioRecordingSegment(Segment*);
-    // no longer used, see RosegardenGUIDoc::insertRecordedMidi
+    // no longer used, see RosegardenDocument::insertRecordedMidi
 //     void slotRecordMIDISegmentUpdated(Segment*, timeT updatedFrom);
     void slotStoppedRecording();
 

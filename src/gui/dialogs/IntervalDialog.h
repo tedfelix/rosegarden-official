@@ -33,7 +33,7 @@ class QCheckBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class IntervalDialog : public QDialog

@@ -21,7 +21,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/TimeWidget.h"
 
@@ -44,7 +44,7 @@
 namespace Rosegarden
 {
 
-TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                          bool timeEditable):
         QDialog(parent),
         m_doc(doc),

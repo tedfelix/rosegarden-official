@@ -29,7 +29,7 @@ class QGraphicsView;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Segment;
 class NotationScene;
 class Note;
@@ -46,7 +46,7 @@ public:
     NotationWidget();
     virtual ~NotationWidget();
 
-    void setSegments(RosegardenGUIDoc *document, 
+    void setSegments(RosegardenDocument *document, 
                      std::vector<Segment *> segments);
 
     NotationScene *getScene() { return m_scene; }
@@ -80,7 +80,7 @@ public:
 //    NotationHLayout *getHLayout() { return m_hlayout; }
 //    NotationVLayout *getVLayout() { return m_vlayout; }
 //    NotationProperties &getProperties() { return *m_properties; }
-//    RosegardenGUIDoc *getDocument() { return m_document; }
+//    RosegardenDocument *getDocument() { return m_document; }
 //    EventSelection *getCurrentSelection() { return 0; }
 //    void handleEventRemoved(Event *) { }
 //    bool areAnnotationsVisible() { return true; }
@@ -93,7 +93,7 @@ protected slots:
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
 
 private:
-    RosegardenGUIDoc *m_document; // I do not own this
+    RosegardenDocument *m_document; // I do not own this
     QGraphicsView *m_view; // I own this
     QGraphicsView *m_hpanner; // I own this
     NotationScene *m_scene; // I own this

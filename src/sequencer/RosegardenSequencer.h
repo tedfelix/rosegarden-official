@@ -46,8 +46,8 @@
 namespace Rosegarden { 
 
 // forward declaration of the RosegardenGUI classes
-class RosegardenGUIDoc;
-class RosegardenGUIView;
+class RosegardenDocument;
+class RosegardenMainWidget;
 class MmappedControlBlock;
 
 class MappedInstrument;

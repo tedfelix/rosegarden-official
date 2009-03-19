@@ -35,7 +35,7 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MatrixWidget;
 class Segment;
 class CommandRegistry;
@@ -48,7 +48,7 @@ class NewMatrixView : public EditViewBase,
     Q_OBJECT
 
 public:
-    NewMatrixView(RosegardenGUIDoc *doc,
+    NewMatrixView(RosegardenDocument *doc,
 		  std::vector<Segment *> segments,
 		  bool drumMode,
 		  QWidget *parent = 0);
@@ -122,7 +122,7 @@ protected:
     const SnapGrid *getSnapGrid() const;
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     MatrixWidget *m_matrixWidget;
     CommandRegistry *m_commandRegistry;
 

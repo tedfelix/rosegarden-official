@@ -31,7 +31,7 @@
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "commands/edit/RemoveMarkerCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "document/Command.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
@@ -66,7 +66,7 @@ namespace Rosegarden
 {
 
 MarkerEditor::MarkerEditor(QWidget *parent,
-                                       RosegardenGUIDoc *doc):
+                                       RosegardenDocument *doc):
         QMainWindow(parent),
         m_doc(doc),
         m_modified(false)
@@ -489,7 +489,7 @@ MarkerEditor::closeEvent(QCloseEvent *e)
 }
 
 void
-MarkerEditor::setDocument(RosegardenGUIDoc *doc)
+MarkerEditor::setDocument(RosegardenDocument *doc)
 {
     // reset our pointers
     m_doc = doc;

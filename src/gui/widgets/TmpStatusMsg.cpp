@@ -51,7 +51,7 @@ QString RgTempQtIV::tempSaveName(QString &filePath)
 
 void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state )
 {
-    // used in RosegardenGUIApp
+    // used in RosegardenMainWindow
 
     //### TODO: implement
 }

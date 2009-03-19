@@ -37,7 +37,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class AudioSplitDialog : public QDialog
@@ -46,7 +46,7 @@ class AudioSplitDialog : public QDialog
 public:
     AudioSplitDialog(QWidget *parent,
                      Segment *segment,
-                     RosegardenGUIDoc *doc);
+                     RosegardenDocument *doc);
 
     // Draw an audio preview over the segment and draw
     // the potential splits along it.
@@ -62,7 +62,7 @@ public slots:
     void slotThresholdChanged(int);
 
 protected:
-    RosegardenGUIDoc              *m_doc;
+    RosegardenDocument              *m_doc;
     Segment           *m_segment;
     Q3Canvas                       *m_canvas;
     Q3CanvasView                   *m_canvasView;

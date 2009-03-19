@@ -22,7 +22,7 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QApplication>
 #include <QBrush>
@@ -560,7 +560,7 @@ Rotary::leaveEvent(QEvent *)
 {
     // To avoid a crash when matrix editor is closed
     // if one of the matrix IPB has just been used
-    m_textFloat->setParent(RosegardenGUIApp::self());
+    m_textFloat->setParent(RosegardenMainWindow::self());
 }
 
 

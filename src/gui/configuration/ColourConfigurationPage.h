@@ -31,7 +31,7 @@ class QWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -44,7 +44,7 @@ class ColourConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    ColourConfigurationPage(RosegardenGUIDoc *doc,
+    ColourConfigurationPage(RosegardenDocument *doc,
                             QWidget *parent=0, const char *name=0);
     virtual void apply();
 

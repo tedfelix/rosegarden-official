@@ -32,7 +32,7 @@ class QDialogButtonBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class PitchChooser;
 class InstrumentParameterBox;
 class Device;
@@ -43,7 +43,7 @@ class ManageMetronomeDialog : public QDialog
     Q_OBJECT
 
 public:
-    ManageMetronomeDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    ManageMetronomeDialog(QWidget *parent, RosegardenDocument *doc);
 
     void setModified(bool value);
 
@@ -62,7 +62,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc       *m_doc;
+    RosegardenDocument       *m_doc;
 
     QDialogButtonBox       *m_buttonBox;
     QComboBox              *m_metronomeDevice;

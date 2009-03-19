@@ -47,7 +47,7 @@ class TimeSigSegmentMmapper;
 class TempoSegmentMmapper;
 class SequencerMapper;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MetronomeMmapper;
 class CountdownDialog;
 class ControlBlockMmapper;
@@ -60,19 +60,19 @@ class SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    SequenceManager(RosegardenGUIDoc *doc,
+    SequenceManager(RosegardenDocument *doc,
                     TransportDialog *transport);
     ~SequenceManager();
 
     /**
      * Replaces the internal document
      */
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
 
     /**
      * Return the current internal document
      */
-    RosegardenGUIDoc* getDocument();
+    RosegardenDocument* getDocument();
 
     //
     // Transport controls
@@ -248,7 +248,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     MappedComposition  m_mC;
-    RosegardenGUIDoc              *m_doc;
+    RosegardenDocument              *m_doc;
     CompositionMmapper            *m_compositionMmapper;
     ControlBlockMmapper           *m_controlBlockMmapper;
     MetronomeMmapper              *m_metronomeMmapper;

@@ -30,7 +30,7 @@ class QTableWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 class HeadersConfigurationPage : public QWidget
 {
@@ -38,7 +38,7 @@ class HeadersConfigurationPage : public QWidget
 
 public:
     HeadersConfigurationPage(QWidget *parent = 0,
-	       RosegardenGUIDoc *doc = 0);
+	       RosegardenDocument *doc = 0);
 
 public slots:
     void apply();
@@ -48,7 +48,7 @@ protected slots:
     void slotDeleteProperty();
  
 protected:
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
  
     // Header fields
     LineEdit *m_editDedication;

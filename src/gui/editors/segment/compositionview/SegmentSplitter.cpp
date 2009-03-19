@@ -25,7 +25,7 @@
 #include "commands/segment/SegmentSplitCommand.h"
 #include "CompositionItemHelper.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
@@ -39,7 +39,7 @@
 namespace Rosegarden
 {
 
-SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenGUIDoc *d)
+SegmentSplitter::SegmentSplitter(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_prevX(0),
         m_prevY(0)

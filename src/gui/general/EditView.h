@@ -48,7 +48,7 @@ namespace Rosegarden
 class Staff;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class RosegardenCanvasView;
 class PropertyControlRuler;
 class Key;
@@ -75,7 +75,7 @@ public:
      * \arg cols : number of columns, main column is always rightmost
      *
      */
-    EditView(RosegardenGUIDoc *doc,
+    EditView(RosegardenDocument *doc,
              std::vector<Segment *> segments,
              unsigned int cols,
              QWidget *parent,

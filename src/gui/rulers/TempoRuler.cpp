@@ -24,9 +24,9 @@
 #include "base/RealTime.h"
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
@@ -61,7 +61,7 @@ namespace Rosegarden
 {
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
-                       RosegardenGUIDoc *doc,
+                       RosegardenDocument *doc,
                        QMainWindow *parentMainWindow,
                        double xorigin,
                        int height,
@@ -148,7 +148,7 @@ TempoRuler::connectSignals()
 {
     connect(this,
             SIGNAL(doubleClicked(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempos(timeT)));
 
     connect(this,
@@ -156,7 +156,7 @@ TempoRuler::connectSignals()
                                tempoT,
                                tempoT,
                                TempoDialog::TempoDialogAction)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotChangeTempo(timeT,
                                  tempoT,
                                  tempoT,
@@ -165,28 +165,28 @@ TempoRuler::connectSignals()
     connect(this,
             SIGNAL(moveTempo(timeT,
                              timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotMoveTempo(timeT,
                                timeT)));
 
     connect(this,
             SIGNAL(deleteTempo(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotDeleteTempo(timeT)));
 
     connect(this,
             SIGNAL(editTempo(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempo(timeT)));
 
     connect(this,
             SIGNAL(editTimeSignature(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTimeSignature(timeT)));
 
     connect(this,
             SIGNAL(editTempos(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempos(timeT)));
 }
 
@@ -507,7 +507,7 @@ TempoRuler::leaveEvent(QEvent *)
 
         // To avoid a crash when matrix editor is closed
         // if mouse has just pass on the tempo ruler
-        m_textFloat->setParent(RosegardenGUIApp::self());
+        m_textFloat->setParent(RosegardenMainWindow::self());
 
         update();
     }

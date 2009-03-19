@@ -28,7 +28,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class SpecialSegmentMmapper : public SegmentMmapper
@@ -38,7 +38,7 @@ public:
     virtual unsigned int getSegmentRepeatCount();
 
 protected:
-    SpecialSegmentMmapper(RosegardenGUIDoc* doc,
+    SpecialSegmentMmapper(RosegardenDocument* doc,
                           QString baseFileName);
 
     QString createFileName(QString baseFileName);

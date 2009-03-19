@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIApp;
+class RosegardenMainWindow;
 
 
 /**
@@ -40,7 +40,7 @@ public:
     ~SetWaitCursor();
 
 protected:
-    RosegardenGUIApp* m_guiApp;
+    RosegardenMainWindow* m_guiApp;
     QCursor m_saveCursor;
     QCursor m_saveCompositionViewCursor;
 };

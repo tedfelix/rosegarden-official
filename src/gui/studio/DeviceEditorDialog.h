@@ -32,14 +32,14 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class DeviceEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
+    DeviceEditorDialog(QWidget *parent, RosegardenDocument *document);
     ~DeviceEditorDialog();
 
     void setModified(bool value);
@@ -55,7 +55,7 @@ protected slots:
     void slotValueChanged(int row, int col);
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
 
     QStringList m_playConnections;

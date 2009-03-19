@@ -30,7 +30,7 @@ namespace Rosegarden
 
 class MatrixWidget;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Event;
 class EventSelection;
 class MatrixElement;
@@ -50,12 +50,12 @@ public:
     ~MatrixScene();
 
     void setMatrixWidget(MatrixWidget *w);
-    void setSegments(RosegardenGUIDoc *doc, std::vector<Segment *> segments);
+    void setSegments(RosegardenDocument *doc, std::vector<Segment *> segments);
 
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);
 
-    RosegardenGUIDoc *getDocument() { return m_document; }
+    RosegardenDocument *getDocument() { return m_document; }
 
     virtual EventSelection *getSelection() const { return m_selection; }
     virtual void setSelection(EventSelection* s, bool preview);
@@ -111,7 +111,7 @@ protected:
 private:
     MatrixWidget *m_widget; // I do not own this
 
-    RosegardenGUIDoc *m_document; // I do not own this
+    RosegardenDocument *m_document; // I do not own this
 
     std::vector<Segment *> m_segments; // I do not own these
     std::vector<MatrixViewSegment *> m_viewSegments; // I own these

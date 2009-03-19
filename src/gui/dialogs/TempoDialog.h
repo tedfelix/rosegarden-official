@@ -38,7 +38,7 @@ namespace Rosegarden
 {
 
 class TimeWidget;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class TempoDialog : public QDialog
@@ -53,7 +53,7 @@ public:
         GlobalTempoWithDefault
     };
 
-    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+    TempoDialog(QWidget *parent, RosegardenDocument *doc,
                 bool timeEditable = false);
     ~TempoDialog();
 
@@ -85,7 +85,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc     *m_doc;
+    RosegardenDocument     *m_doc;
     timeT                 m_tempoTime;
     QDoubleSpinBox       *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;

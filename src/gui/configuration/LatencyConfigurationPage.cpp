@@ -21,7 +21,7 @@
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "TabbedConfigurationPage.h"
 #include <QSettings>
 #include <QFrame>
@@ -36,7 +36,7 @@
 namespace Rosegarden
 {
 
-LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
+LatencyConfigurationPage::LatencyConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, parent, name)

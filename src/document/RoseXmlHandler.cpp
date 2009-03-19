@@ -41,7 +41,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
 #include "gui/general/ProgressReporter.h"
@@ -50,7 +50,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "RosegardenGUIDoc.h"
+#include "RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
@@ -197,7 +197,7 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 
 
 
-RoseXmlHandler::RoseXmlHandler(RosegardenGUIDoc *doc,
+RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
                                unsigned int elementCount,
                                bool createNewDevicesWhenNeeded)
         : ProgressReporter(0),
@@ -432,13 +432,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             int major = smajor.toInt();
             int minor = sminor.toInt();
 
-            if (major > RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR) {
+            if (major > RosegardenDocument::FILE_FORMAT_VERSION_MAJOR) {
                 m_errorString = tr("This file was written by Rosegarden %1, and it uses\na different file format that cannot be read by this version.").arg(version);
                 return false;
             }
 
-            if (major == RosegardenGUIDoc::FILE_FORMAT_VERSION_MAJOR &&
-                    minor > RosegardenGUIDoc::FILE_FORMAT_VERSION_MINOR) {
+            if (major == RosegardenDocument::FILE_FORMAT_VERSION_MAJOR &&
+                    minor > RosegardenDocument::FILE_FORMAT_VERSION_MINOR) {
 
                 CurrentProgressDialog::freeze();
                 StartupLogo::hideIfStillThere();
@@ -1045,7 +1045,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 do {
 
-					//FileLocateDialog fL((RosegardenGUIApp *)m_doc->parent(),
+					//FileLocateDialog fL((RosegardenMainWindow *)m_doc->parent(),
 					FileLocateDialog fL((QWidget *)m_doc->parent(),
 												 file,
                                         QString(getAudioFileManager().getAudioPath().c_str()));

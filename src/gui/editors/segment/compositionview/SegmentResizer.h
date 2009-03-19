@@ -31,7 +31,7 @@ class CompositionItem;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CompositionView;
 
 
@@ -65,7 +65,7 @@ protected slots:
     void slotCanvasScrolled(int newX, int newY);
 
 protected:
-    SegmentResizer(CompositionView*, RosegardenGUIDoc*, int edgeThreshold = 10);
+    SegmentResizer(CompositionView*, RosegardenDocument*, int edgeThreshold = 10);
     void setBasicContextHelp(bool ctrlPressed = false);
 
     //--------------- Data members ---------------------------------

@@ -26,7 +26,7 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -71,7 +71,7 @@ NotationWidget::~NotationWidget()
 }
 
 void
-NotationWidget::setSegments(RosegardenGUIDoc *document,
+NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
 {
     m_document = document;

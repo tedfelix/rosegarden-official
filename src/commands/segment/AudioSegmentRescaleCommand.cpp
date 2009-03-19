@@ -24,7 +24,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/AudioFileTimeStretcher.h"
 #include "sound/AudioFileManager.h"
 #include "gui/widgets/ProgressDialog.h"
@@ -34,7 +34,7 @@
 namespace Rosegarden
 {
 
-AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                                        Segment *s,
 						       float ratio) :
     NamedCommand(getGlobalName()),
@@ -52,7 +52,7 @@ AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
     // nothing
 }
 
-AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                                        Segment *s,
 						       float ratio,
                                                        timeT st,

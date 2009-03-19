@@ -17,7 +17,7 @@
 
 #include "MatrixView.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "MatrixWidget.h"
 #include "base/SnapGrid.h"
 #include "base/Clipboard.h"
@@ -63,7 +63,7 @@
 namespace Rosegarden
 {
 
-NewMatrixView::NewMatrixView(RosegardenGUIDoc *doc,
+NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 			     std::vector<Segment *> segments,
 			     bool drumMode,
 			     QWidget *parent) :

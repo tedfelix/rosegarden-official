@@ -36,7 +36,7 @@ namespace Rosegarden
 
 class SequencerMapper;
 class Rotary;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiMixerVUMeter;
 class MappedEvent;
 class Fader;
@@ -47,7 +47,7 @@ class MidiMixerWindow : public MixerWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    MidiMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    MidiMixerWindow(QWidget *parent, RosegardenDocument *document);
 
     /**
      * Setup the tabs on the Mixer according to the Studio

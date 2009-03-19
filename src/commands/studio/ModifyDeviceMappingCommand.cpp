@@ -25,7 +25,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include <QString>
 
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 {
 
 ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     DeviceId fromDevice,
     DeviceId toDevice):
         NamedCommand(getGlobalName()),

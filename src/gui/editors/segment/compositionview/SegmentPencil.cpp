@@ -28,7 +28,7 @@
 #include "commands/segment/SegmentInsertCommand.h"
 #include "CompositionItemHelper.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/RosegardenCanvasView.h"
@@ -45,7 +45,7 @@
 namespace Rosegarden
 {
 
-SegmentPencil::SegmentPencil(CompositionView *c, RosegardenGUIDoc *d)
+SegmentPencil::SegmentPencil(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d),
         m_newRect(false),
         m_track(0),

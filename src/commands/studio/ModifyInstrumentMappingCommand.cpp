@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include <QString>
 
 
@@ -30,7 +30,7 @@ namespace Rosegarden
 {
 
 ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     InstrumentId fromInstrument,
     InstrumentId toInstrument):
         NamedCommand(getGlobalName()),

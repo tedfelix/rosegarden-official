@@ -29,7 +29,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class AudioSegmentMmapper : public SegmentMmapper
@@ -37,7 +37,7 @@ class AudioSegmentMmapper : public SegmentMmapper
     friend class SegmentMmapperFactory;
 
 protected:
-    AudioSegmentMmapper(RosegardenGUIDoc*, Segment*,
+    AudioSegmentMmapper(RosegardenDocument*, Segment*,
                         const QString& fileName);
 
     virtual size_t computeMmappedSize();

@@ -31,7 +31,7 @@ class QLabel;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -43,7 +43,7 @@ class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioPropertiesPage(RosegardenGUIDoc *doc,
+    AudioPropertiesPage(RosegardenDocument *doc,
                            QWidget *parent=0, const char *name=0);
     virtual void apply();
 

@@ -21,7 +21,7 @@
 
 #include "misc/Strings.h"
 #include "base/MidiDevice.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -37,7 +37,7 @@
 namespace Rosegarden
 {
 
-SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc) :
+SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, RosegardenDocument *doc) :
         QDialog(parent)
 {
     setModal(true);

@@ -58,9 +58,9 @@
 #include "commands/edit/SelectionPropertyCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/matrix/MatrixInsertionCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
@@ -137,7 +137,7 @@ namespace Rosegarden
 static double xorigin = 0.0;
 
 
-MatrixView::MatrixView(RosegardenGUIDoc *doc,
+MatrixView::MatrixView(RosegardenDocument *doc,
                        std::vector<Segment *> segments,
                        QWidget *parent,
                        bool drumMode)
@@ -353,7 +353,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
 	
     m_dockLeft->setWidget(m_parameterBox);
 
-    RosegardenGUIApp *app = RosegardenGUIApp::self();
+    RosegardenMainWindow *app = RosegardenMainWindow::self();
     connect(app,
             SIGNAL(pluginSelected(InstrumentId, int, int)),
             m_parameterBox,
@@ -378,7 +378,7 @@ MatrixView::MatrixView(RosegardenGUIDoc *doc,
             SIGNAL(showPluginGUI(InstrumentId, int)),
             app,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
-    connect(parent,  // RosegardenGUIView
+    connect(parent,  // RosegardenMainWidget
             SIGNAL(checkTrackAssignments()),
             this,
             SLOT(slotCheckTrackAssignments()));

@@ -45,7 +45,7 @@ namespace Rosegarden
 
 class Command;
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
 class MidiDeviceListViewItem;
@@ -58,7 +58,7 @@ class BankEditorDialog : public QMainWindow, public ActionFileClient
 
 public:
     BankEditorDialog(QWidget *parent,
-                     RosegardenGUIDoc *doc,
+                     RosegardenDocument *doc,
                      DeviceId defaultDevice =
                      Device::NO_DEVICE);
 
@@ -153,7 +153,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     Studio      *m_studio;
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;

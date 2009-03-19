@@ -29,14 +29,14 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class SplitByRecordingSrcDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    SplitByRecordingSrcDialog(QWidget *parent, RosegardenDocument *doc);
     
     int getChannel();
     int getDevice();

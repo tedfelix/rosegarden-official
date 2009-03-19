@@ -33,9 +33,9 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenMainWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/widgets/AudioListItem.h"
 #include "gui/widgets/AudioListView.h"
@@ -87,7 +87,7 @@ const int AudioManagerDialog::m_previewHeight              = 30;
 const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog Layout";
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
-                                       RosegardenGUIDoc *doc):
+                                       RosegardenDocument *doc):
         QMainWindow(parent, "audioManagerDialog"),
         m_doc(doc),
         m_playingAudioFile(0),
@@ -725,7 +725,7 @@ AudioManagerDialog::slotAdd()
     QString extensionList = tr("WAV files") + " (*.wav *.WAV);;" +
                             tr("All files") + " (*)";
     
-    if (RosegardenGUIApp::self()->haveAudioImporter()) {
+    if (RosegardenMainWindow::self()->haveAudioImporter()) {
     //!!! This list really needs to come from the importer helper program
     // (which has an option to supply it -- we just haven't recorded it)
     //
@@ -1138,9 +1138,9 @@ AudioManagerDialog::addFile(const QUrl& kurl)
 
     if (! QFile::exists(kurl.toLocalFile()) ) {
         
-        if (!RosegardenGUIApp::self()->testAudioPath(tr("importing a remote audio file"))) return false;
+        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing a remote audio file"))) return false;
     } else if (aFM.fileNeedsConversion(qstrtostr(kurl.path()), m_sampleRate)) {
-        if (!RosegardenGUIApp::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return false;
+        if (!RosegardenMainWindow::self()->testAudioPath(tr("importing an audio file that needs to be converted or resampled"))) return false;
     }
     
     ProgressDialog progressDlg(tr("Adding audio file..."),
@@ -1289,10 +1289,10 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 
     //Composition &comp = m_doc->getComposition();
 
-    QList<RosegardenGUIView*> viewList_ = m_doc->getViewList();
-    QListIterator<RosegardenGUIView*> viewList( viewList_ );
+    QList<RosegardenMainWidget*> viewList_ = m_doc->getViewList();
+    QListIterator<RosegardenMainWidget*> viewList( viewList_ );
 
-    RosegardenGUIView *w = 0;
+    RosegardenMainWidget *w = 0;
     SegmentSelection selection;
 
     viewList.toFront();

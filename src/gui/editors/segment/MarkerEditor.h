@@ -41,7 +41,7 @@ namespace Rosegarden
 {
 
 class Command;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MarkerEditor : public QMainWindow, public ActionFileClient
@@ -50,7 +50,7 @@ class MarkerEditor : public QMainWindow, public ActionFileClient
 
 public:
     MarkerEditor(QWidget *parent,
-                       RosegardenGUIDoc *doc);
+                       RosegardenDocument *doc);
     ~MarkerEditor();
 
     void initDialog();
@@ -61,7 +61,7 @@ public:
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
     // update pointer position
     void updatePosition();
@@ -106,7 +106,7 @@ protected:
     QString makeTimeString(timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     QLabel                  *m_absoluteTime;
     QLabel                  *m_realTime;

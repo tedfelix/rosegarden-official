@@ -37,7 +37,7 @@
 #include "commands/studio/RenameDeviceCommand.h"
 
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 //#include "document/ConfigGroups.h"
 #include "sequencer/RosegardenSequencer.h"
 
@@ -76,7 +76,7 @@ DevicesManagerNew::~DevicesManagerNew() {
 
 
 DevicesManagerNew::DevicesManagerNew(QWidget * parent,
-                                     RosegardenGUIDoc *
+                                     RosegardenDocument *
                                      doc) : QMainWindow(parent),
     Ui::DevicesManagerNewUi(), m_doc(doc) {
     // start constructor

@@ -20,7 +20,7 @@
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"

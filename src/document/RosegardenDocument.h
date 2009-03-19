@@ -47,7 +47,7 @@ namespace Rosegarden
 {
 
 class SequenceManager;
-class RosegardenGUIView;
+class RosegardenMainWidget;
 class ProgressDialog;
 class MappedComposition;
 class Event;
@@ -63,22 +63,22 @@ static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
 
 
 /**
-  * RosegardenGUIDoc provides a document object for a document-view model.
+  * RosegardenDocument provides a document object for a document-view model.
   *
-  * The RosegardenGUIDoc class provides a document object that can be
-  * used in conjunction with the classes RosegardenGUIApp and
-  * RosegardenGUIView to create a document-view model for standard KDE
+  * The RosegardenDocument class provides a document object that can be
+  * used in conjunction with the classes RosegardenMainWindow and
+  * RosegardenMainWidget to create a document-view model for standard KDE
   * applications based on KApplication and KTMainWindow. Thereby, the
-  * document object is created by the RosegardenGUIApp instance and
+  * document object is created by the RosegardenMainWindow instance and
   * contains the document structure with the according methods for
-  * manipulation of the document data by RosegardenGUIView
-  * objects. Also, RosegardenGUIDoc contains the methods for
+  * manipulation of the document data by RosegardenMainWidget
+  * objects. Also, RosegardenDocument contains the methods for
   * serialization of the document data from and to files.
   *
-  * RosegardenGUIDoc owns the Composition in the document.
+  * RosegardenDocument owns the Composition in the document.
   */
 
-class RosegardenGUIDoc : public QObject
+class RosegardenDocument : public QObject
 {
     Q_OBJECT
 public:
@@ -86,14 +86,14 @@ public:
     /**
      * Constructor for the fileclass of the application
      */
-    RosegardenGUIDoc(QWidget *parent,
+    RosegardenDocument(QWidget *parent,
                      AudioPluginManager *audioPluginManager = 0,
                      bool skipAutoload = false,
                      const char *name=0);
 
 private:
-    RosegardenGUIDoc(RosegardenGUIDoc *doc);
-    RosegardenGUIDoc& operator=(const RosegardenGUIDoc &doc);
+    RosegardenDocument(RosegardenDocument *doc);
+    RosegardenDocument& operator=(const RosegardenDocument &doc);
 
 public:
     static int FILE_FORMAT_VERSION_MAJOR;
@@ -103,18 +103,18 @@ public:
     /**
      * Destructor for the fileclass of the application
      */
-    ~RosegardenGUIDoc();
+    ~RosegardenDocument();
 
     /**
      * adds a view to the document which represents the document
      * contents. Usually this is your main view.
      */
-    void attachView(RosegardenGUIView *view);
+    void attachView(RosegardenMainWidget *view);
 
     /**
      * removes a view from the list of currently connected views
      */
-    void detachView(RosegardenGUIView *view);
+    void detachView(RosegardenMainWidget *view);
 
     /**
      * adds an Edit View (notation, matrix, event list)
@@ -181,7 +181,7 @@ public:
     /**
      * merge another document into this one
      */
-    void mergeDocument(RosegardenGUIDoc *doc, int options);
+    void mergeDocument(RosegardenDocument *doc, int options);
 
     /**
      * saves the document under filename and format.
@@ -290,7 +290,7 @@ public:
 
     /**
      * Update the recording value() -- called regularly from
-     * RosegardenGUIApp::slotUpdatePlaybackPosition() while recording
+     * RosegardenMainWindow::slotUpdatePlaybackPosition() while recording
      */
     void updateRecordingMIDISegment();
 
@@ -418,7 +418,7 @@ public:
     /**
      * return the list of the views currently connected to the document
      */
-    QList<RosegardenGUIView*>& getViewList() { return m_viewList; } //### prepended *
+    QList<RosegardenMainWidget*>& getViewList() { return m_viewList; } //### prepended *
 
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
@@ -431,7 +431,7 @@ public slots:
      * changed.  As this view normally repaints itself, it is excluded
      * from the paintEvent.
      */
-    void slotUpdateAllViews(RosegardenGUIView *sender);
+    void slotUpdateAllViews(RosegardenMainWidget *sender);
 
     /**
      * set the 'modified' flag of the document to true,
@@ -603,7 +603,7 @@ protected:
     /**
      * the list of the views currently connected to the document
      */
-	QList<RosegardenGUIView*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenGUIView*> instead QList<RosegardenGUIView> ? changed !!
+	QList<RosegardenMainWidget*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenMainWidget*> instead QList<RosegardenMainWidget> ? changed !!
 
     /**
      * the list of the edit views currently editing a part of this document

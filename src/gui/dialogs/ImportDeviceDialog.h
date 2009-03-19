@@ -41,7 +41,7 @@ class BankList;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class ImportDeviceDialog : public QDialog
@@ -91,7 +91,7 @@ protected:
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 
-    RosegardenGUIDoc   *m_fileDoc;
+    RosegardenDocument   *m_fileDoc;
     std::vector<MidiDevice *> m_devices;
     MidiDevice *m_device;
 };

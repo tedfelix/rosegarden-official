@@ -17,7 +17,7 @@
 
 #include "NotationView.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "document/ConfigGroups.h"
 #include "NotationWidget.h"
@@ -46,7 +46,7 @@
 namespace Rosegarden
 {
 
-NewNotationView::NewNotationView(RosegardenGUIDoc *doc,
+NewNotationView::NewNotationView(RosegardenDocument *doc,
                                  std::vector<Segment *> segments,
                                  QWidget *parent) :
     EditViewBase(doc, segments, parent),

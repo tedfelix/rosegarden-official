@@ -18,9 +18,9 @@
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/CurrentProgressDialog.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/IconLoader.h"
@@ -183,8 +183,8 @@ The base directory also contains various music-related helper classes:
  
 The GUI directory builds into a KDE/Qt application. Like most KDE
 applications, it follows a document/view model. The document (class
-RosegardenGUIDoc, which wraps a Composition) can have several views
-(class RosegardenGUIView), although at the moment only a single one is
+RosegardenDocument, which wraps a Composition) can have several views
+(class RosegardenMainWidget), although at the moment only a single one is
 used.
  
 This view is the TrackEditor, which shows all the Composition's
@@ -507,18 +507,18 @@ int main(int argc, char *argv[])
     //
     // Start application
     //
-    RosegardenGUIApp *rosegardengui = 0;
+    RosegardenMainWindow *rosegardengui = 0;
 
 /*&&& worry about this later
     if (app.isSessionRestored()) {
         RG_DEBUG << "Restoring from session\n";
 
-        // RESTORE(RosegardenGUIApp);
+        // RESTORE(RosegardenMainWindow);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
             // memory leak if more than one can be restored?
             RG_DEBUG << "Restoring from session - restoring app #" << n << endl;
-            (rosegardengui = new RosegardenGUIApp)->restore(n);
+            (rosegardengui = new RosegardenMainWindow)->restore(n);
             n++;
         }
 
@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
         app.setNoSequencerMode(true);
 #endif // NO_SOUND
 
-        rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(), startLogo);
+        rosegardengui = new RosegardenMainWindow(!app.noSequencerMode(), startLogo);
 
     rosegardengui->setIsFirstRun(newVersion);
 
@@ -553,7 +553,7 @@ int main(int argc, char *argv[])
 
     for (int i = 1; i < args.size(); ++i) {
         if (args[i].startsWith("-")) continue;
-        rosegardengui->openFile(args[i], RosegardenGUIApp::ImportCheckType);
+        rosegardengui->openFile(args[i], RosegardenMainWindow::ImportCheckType);
         break;
         }
 
@@ -640,7 +640,7 @@ int main(int argc, char *argv[])
         // otherwise we have to
 
         if (!newVersion) {
-            RosegardenGUIApp::self()->awaitDialogClearance();
+            RosegardenMainWindow::self()->awaitDialogClearance();
         }
     }
 

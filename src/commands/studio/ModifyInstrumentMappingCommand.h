@@ -34,7 +34,7 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -43,7 +43,7 @@ class ModifyInstrumentMappingCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(ModifyInstrumentMappingCommand)
 
 public:
-    ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,
+    ModifyInstrumentMappingCommand(RosegardenDocument *doc,
                                    InstrumentId fromInstrument,
                                    InstrumentId toInstrument);
 

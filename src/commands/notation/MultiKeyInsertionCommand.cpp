@@ -23,7 +23,7 @@
 #include "base/Segment.h"
 #include "KeyInsertionCommand.h"
 #include <QString>
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "base/Studio.h"
 #include "misc/Debug.h"
 
@@ -31,7 +31,7 @@
 namespace Rosegarden
 {
 
-MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
+MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument* doc,
         timeT time,
         Key key,
         bool convert,

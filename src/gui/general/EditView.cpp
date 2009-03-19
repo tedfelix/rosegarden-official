@@ -61,7 +61,7 @@
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "EditViewBase.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -112,7 +112,7 @@ const unsigned int EditView::CONTROLRULER_ROW     = CANVASVIEW_ROW + 1;
 //
 static int FeatureShowVelocity = 0x00001; // show the velocity ruler
 
-EditView::EditView(RosegardenGUIDoc *doc,
+EditView::EditView(RosegardenDocument *doc,
                    std::vector<Segment *> segments,
                    unsigned int cols,
                    QWidget *parent, const char *name) :

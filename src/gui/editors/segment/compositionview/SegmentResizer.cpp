@@ -33,9 +33,9 @@
 #include "CompositionItemHelper.h"
 #include "CompositionModel.h"
 #include "CompositionView.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "gui/widgets/ProgressDialog.h"
 #include "SegmentTool.h"
@@ -52,7 +52,7 @@
 namespace Rosegarden
 {
 
-SegmentResizer::SegmentResizer(CompositionView *c, RosegardenGUIDoc *d,
+SegmentResizer::SegmentResizer(CompositionView *c, RosegardenDocument *d,
                                int edgeThreshold)
         : SegmentTool(c, d),
         m_edgeThreshold(edgeThreshold)
@@ -150,7 +150,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 								QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
 								) 
 								== QMessageBox::Yes ) {
-                            RosegardenGUIApp::self()->slotOpenAudioPathSettings();
+                            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
                         }
                     }
 
@@ -181,7 +181,7 @@ void SegmentResizer::handleMouseButtonRelease(QMouseEvent *e)
 
                     int fid = command->getNewAudioFileId();
                     if (fid >= 0) {
-                        RosegardenGUIApp::self()->slotAddAudioFile(fid);
+                        RosegardenMainWindow::self()->slotAddAudioFile(fid);
                         m_doc->getAudioFileManager().generatePreview(fid);
                     }
                 

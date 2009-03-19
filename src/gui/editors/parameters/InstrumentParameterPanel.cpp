@@ -19,7 +19,7 @@
 #include "InstrumentParameterPanel.h"
 
 #include "base/Instrument.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/widgets/SqueezedLabel.h"
 #include <QFontMetrics>
 #include <QFrame>
@@ -30,7 +30,7 @@
 namespace Rosegarden
 {
 
-InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc,
+InstrumentParameterPanel::InstrumentParameterPanel(RosegardenDocument *doc,
         QWidget* parent)
         : QFrame(parent),
         m_instrumentLabel(new SqueezedLabel(this)),
@@ -45,7 +45,7 @@ InstrumentParameterPanel::InstrumentParameterPanel(RosegardenGUIDoc *doc,
 }
 
 void
-InstrumentParameterPanel::setDocument(RosegardenGUIDoc* doc)
+InstrumentParameterPanel::setDocument(RosegardenDocument* doc)
 {
     m_doc = doc;
 }

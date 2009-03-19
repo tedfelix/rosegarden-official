@@ -30,7 +30,7 @@
 #include "base/Exception.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
 #include "sound/AudioFileManager.h"
 #include <QDialog>
@@ -51,7 +51,7 @@ namespace Rosegarden
 
 AudioSplitDialog::AudioSplitDialog(QWidget *parent,
                                    Segment *segment,
-                                   RosegardenGUIDoc *doc):
+                                   RosegardenDocument *doc):
         QDialog(parent),
         m_doc(doc),
         m_segment(segment),

@@ -68,8 +68,8 @@ class SequenceManager;
 class SegmentSelection;
 class SegmentParameterBox;
 class RosegardenParameterArea;
-class RosegardenGUIView;
-class RosegardenGUIDoc;
+class RosegardenMainWidget;
+class RosegardenDocument;
 class RealTime;
 class ProgressBar;
 class PlayListDialog;
@@ -95,31 +95,31 @@ class SequencerThread;
   * The base class for the main Rosegarden application window.  This
   * sets up the main window and reads the config file as well as
   * providing a menubar, toolbar and statusbar.  The central widget
-  * is a RosegardenGUIView, connected to the window's document.
+  * is a RosegardenMainWidget, connected to the window's document.
   */
-class RosegardenGUIApp : public QMainWindow, public ActionFileClient
+class RosegardenMainWindow : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
     
-    friend class RosegardenGUIView;
+    friend class RosegardenMainWidget;
 
 public:
 
     /**
-     * construtor of RosegardenGUIApp, calls all init functions to
+     * construtor of RosegardenMainWindow, calls all init functions to
      * create the application.
      * \arg useSequencer : if true, the sequencer is launched
      * @see initMenuBar initToolBar
      */
-    RosegardenGUIApp(bool useSequencer = true,
+    RosegardenMainWindow(bool useSequencer = true,
                      QObject *startupStatusMessageReceiver = 0);
 
-    virtual ~RosegardenGUIApp();
+    virtual ~RosegardenMainWindow();
 
     /*
      * Get the current copy of the app object
      */
-    static RosegardenGUIApp *self() { return m_myself; }
+    static RosegardenMainWindow *self() { return m_myself; }
     
 	/**
 	 * Return current Main Toolbar
@@ -131,9 +131,9 @@ public:
      * KTMainWindow instance and is used by * the View class to access
      * the document object's methods
      */ 
-    RosegardenGUIDoc *getDocument() const;      
+    RosegardenDocument *getDocument() const;      
 
-    RosegardenGUIView* getView() { return m_view; }
+    RosegardenMainWidget* getView() { return m_view; }
 
     TransportDialog* getTransport();
 
@@ -332,29 +332,29 @@ protected:
     /**
      * Create document from a file
      */
-    RosegardenGUIDoc* createDocument(QString filePath, ImportType type = ImportRG4);
+    RosegardenDocument* createDocument(QString filePath, ImportType type = ImportRG4);
 	
 	
 	
     /**
      * Create a document from RG file
      */
-    RosegardenGUIDoc* createDocumentFromRGFile(QString filePath);
+    RosegardenDocument* createDocumentFromRGFile(QString filePath);
 
     /**
      * Create document from MIDI file
      */
-    RosegardenGUIDoc* createDocumentFromMIDIFile(QString filePath);
+    RosegardenDocument* createDocumentFromMIDIFile(QString filePath);
 
     /**
      * Create document from RG21 file
      */
-    RosegardenGUIDoc* createDocumentFromRG21File(QString filePath);
+    RosegardenDocument* createDocumentFromRG21File(QString filePath);
 
     /**
      * Create document from Hydrogen drum machine file
      */
-    RosegardenGUIDoc* createDocumentFromHydrogenFile(QString filePath);
+    RosegardenDocument* createDocumentFromHydrogenFile(QString filePath);
 
     /**/
     /**/
@@ -487,7 +487,7 @@ protected:
      * Do all the needed housework when the current document changes
      * (like closing edit views, emitting documentChanged signal, etc...)
      */
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
 
     /**
      * Jog a selection of segments by an amount
@@ -503,9 +503,9 @@ signals:
     void documentAboutToChange();
 
     /// emitted when the current document changes
-    void documentChanged(RosegardenGUIDoc*);
+    void documentChanged(RosegardenDocument*);
 
-    /// emitted when the set of selected segments changes (relayed from RosegardenGUIView)
+    /// emitted when the set of selected segments changes (relayed from RosegardenMainWidget)
     void segmentsSelected(const SegmentSelection &);
 
     /// emitted when the composition state (selected track, solo, etc...) changes
@@ -536,7 +536,7 @@ public slots:
 
     /**
      * open a new application window by creating a new instance of
-     * RosegardenGUIApp
+     * RosegardenMainWindow
      */
     void slotFileNewWindow();
 
@@ -1301,7 +1301,7 @@ public slots:
 
 
     /**
-     * This slot is here to be connected to RosegardenGUIView's
+     * This slot is here to be connected to RosegardenMainWidget's
      * stateChange signal. We use a bool for the 2nd arg rather than a
      * KXMLGUIClient::ReverseStateChange to spare the include of
      * kxmlguiclient.h just for one typedef.
@@ -1548,8 +1548,8 @@ private:
      * kept empty so you can create your view according to your
      * application's needs by changing the view class.
      */
-    RosegardenGUIView* m_view;
-    RosegardenGUIView* m_swapView;
+    RosegardenMainWidget* m_view;
+    RosegardenMainWidget* m_swapView;
 
     //QDockWidget* m_mainDockWidget;
 	QDockWidget *m_mainDockWidget;
@@ -1561,7 +1561,7 @@ private:
      * once. It keeps information such as filename and does the
      * serialization of your files.
      */
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
 	
 	
     /**
@@ -1634,7 +1634,7 @@ private:
     AudioPluginOSCGUIManager *m_pluginGUIManager;
 #endif
 
-    static RosegardenGUIApp *m_myself;
+    static RosegardenMainWindow *m_myself;
 
     static std::map<QProcess *, QTemporaryFile *> m_lilyTempFileMap;
 

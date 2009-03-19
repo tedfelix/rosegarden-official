@@ -38,8 +38,8 @@
 #include "compositionview/CompositionModelImpl.h"
 #include "compositionview/CompositionView.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
@@ -97,7 +97,7 @@ void TrackButtonScroll::wheelEvent(QWheelEvent* e)
 /********TrackButtonScroll*********/
 
 
-TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
+TrackEditor::TrackEditor(RosegardenDocument* doc,
                          QWidget* rosegardenguiview,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
@@ -153,7 +153,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
 
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
-                                  RosegardenGUIApp::self(),
+                                  RosegardenMainWindow::self(),
                                   0.0,
                                   24,
                                   true,
@@ -356,9 +356,9 @@ TrackEditor::init(QWidget* rosegardenguiview)
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 
     connect(m_compositionView, SIGNAL(zoomIn()),
-            RosegardenGUIApp::self(), SLOT(slotZoomIn()));
+            RosegardenMainWindow::self(), SLOT(slotZoomIn()));
     connect(m_compositionView, SIGNAL(zoomOut()),
-            RosegardenGUIApp::self(), SLOT(slotZoomOut()));
+            RosegardenMainWindow::self(), SLOT(slotZoomOut()));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));

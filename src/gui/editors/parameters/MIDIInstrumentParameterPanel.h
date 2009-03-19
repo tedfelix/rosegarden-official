@@ -37,7 +37,7 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiDevice;
 class Instrument;
 
@@ -47,7 +47,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
     Q_OBJECT
 public:
 
-    MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
+    MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
 
     void setupControllers(MidiDevice *); // setup ControlParameters on box
 

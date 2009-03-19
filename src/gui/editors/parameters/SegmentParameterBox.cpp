@@ -36,7 +36,7 @@
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
@@ -81,7 +81,7 @@
 namespace Rosegarden
 {
 
-SegmentParameterBox::SegmentParameterBox(RosegardenGUIDoc* doc,
+SegmentParameterBox::SegmentParameterBox(RosegardenDocument* doc,
         QWidget *parent)
         : RosegardenParameterBox(tr("Segment"),
                                  tr("Segment Parameters"),
@@ -336,7 +336,7 @@ SegmentParameterBox::initBox()
 }
 
 void
-SegmentParameterBox::setDocument(RosegardenGUIDoc* doc)
+SegmentParameterBox::setDocument(RosegardenDocument* doc)
 {
     if (m_doc != 0)
         disconnect(m_doc, SIGNAL(docColoursChanged()),

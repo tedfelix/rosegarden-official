@@ -46,7 +46,7 @@
 #include "sound/PluginFactory.h"
 
 #include "gui/application/RosegardenApplication.h" 
-#include "gui/application/RosegardenGUIApp.h" 
+#include "gui/application/RosegardenMainWindow.h" 
 
 
 
@@ -317,7 +317,7 @@ RosegardenSequencer::record(const RealTime &time,
         // to call any other locking sequencer functions.
 
         QVector<InstrumentId> armedInstruments =
-            RosegardenGUIApp::self()->getArmedInstruments();
+            RosegardenMainWindow::self()->getArmedInstruments();
 
         QVector<InstrumentId> audioInstruments;
         for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
@@ -332,7 +332,7 @@ RosegardenSequencer::record(const RealTime &time,
         if (audioInstruments.size() > 0) {
 
             audioFileNames =
-                RosegardenGUIApp::self()->createRecordAudioFiles
+                RosegardenMainWindow::self()->createRecordAudioFiles
                 (audioInstruments);
 
             if (audioFileNames.size() != audioInstruments.size()) {

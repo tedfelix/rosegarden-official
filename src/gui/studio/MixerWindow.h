@@ -32,7 +32,7 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MixerWindow: public QMainWindow
@@ -40,7 +40,7 @@ class MixerWindow: public QMainWindow
     Q_OBJECT
 
 public:
-    MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    MixerWindow(QWidget *parent, RosegardenDocument *document);
     QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
@@ -56,7 +56,7 @@ protected:
 
     virtual void sendControllerRefresh() = 0;
 
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
     InstrumentId m_currentId;
 

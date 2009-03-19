@@ -38,7 +38,7 @@ namespace Rosegarden
 
 class Command;
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class CommandHistory;
 
 
@@ -48,7 +48,7 @@ class ControlEditorDialog : public QMainWindow, public ActionFileClient
 
 public:
     ControlEditorDialog(QWidget *parent,
-                        RosegardenGUIDoc *doc,
+                        RosegardenDocument *doc,
                         DeviceId device);
 
     ~ControlEditorDialog();
@@ -62,7 +62,7 @@ public:
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
     DeviceId getDevice() { return m_device; }
 
@@ -92,7 +92,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     Studio      *m_studio;
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
     DeviceId     m_device;
 
     QPushButton             *m_closeButton;

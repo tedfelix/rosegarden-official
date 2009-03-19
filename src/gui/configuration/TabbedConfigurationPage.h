@@ -29,7 +29,7 @@ class QTabWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -41,7 +41,7 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
-    TabbedConfigurationPage(RosegardenGUIDoc *doc,
+    TabbedConfigurationPage(RosegardenDocument *doc,
                             QWidget *parent=0, const char *name=0);
 
     TabbedConfigurationPage(QWidget *parent=0, const char *name=0);

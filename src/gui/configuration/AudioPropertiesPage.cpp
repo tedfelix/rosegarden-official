@@ -19,7 +19,7 @@
 #include "AudioPropertiesPage.h"
 #include "misc/Strings.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/general/FileSource.h"
@@ -52,7 +52,7 @@
 namespace Rosegarden
 {
 
-AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
+AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, parent, name)

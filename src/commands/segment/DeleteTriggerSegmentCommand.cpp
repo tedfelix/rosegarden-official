@@ -21,13 +21,13 @@
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenDocument *doc,
         TriggerSegmentId id) :
         NamedCommand(tr("Delete Triggered Segment")),
         m_composition(&doc->getComposition()),

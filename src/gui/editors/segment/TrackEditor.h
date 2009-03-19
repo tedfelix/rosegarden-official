@@ -42,7 +42,7 @@ class TrackButtons;
 class TempoRuler;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class QDeferScrollView;
 class CompositionView;
 class CompositionModel;
@@ -82,7 +82,7 @@ public:
     /**
      * Create a new TrackEditor representing the document \a doc
      */
-    TrackEditor(RosegardenGUIDoc* doc,
+    TrackEditor(RosegardenDocument* doc,
                 QWidget* rosegardenguiview,
                 RulerScale *rulerScale,
                 bool showTrackLabels,
@@ -229,7 +229,7 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
     
     RulerScale  			*m_rulerScale;
     TempoRuler              *m_tempoRuler;

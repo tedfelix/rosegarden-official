@@ -39,7 +39,7 @@
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/ViewElement.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/ProgressReporter.h"

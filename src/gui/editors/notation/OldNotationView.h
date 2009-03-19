@@ -67,7 +67,7 @@ class Staff;
 class Segment;
 class ScrollBoxDialog;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class RawNoteRuler;
 class ProgressDialog;
 class ProgressBar;
@@ -111,7 +111,7 @@ class NotationView : public EditView,
     Q_OBJECT
 
 public:
-    explicit NotationView(RosegardenGUIDoc *doc,
+    explicit NotationView(RosegardenDocument *doc,
                           std::vector<Segment *> segments,
                           QWidget *parent,
                           bool showProgressive); // update during initial render?
@@ -122,7 +122,7 @@ public:
      * NotationView is provided, the fonts and other settings used
      * for printing will be taken from that view.
      */
-    explicit NotationView(RosegardenGUIDoc *doc,
+    explicit NotationView(RosegardenDocument *doc,
                           std::vector<Segment *> segments,
                           QWidget *parent,
                           NotationView *referenceView);

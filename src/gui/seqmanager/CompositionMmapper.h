@@ -30,7 +30,7 @@ namespace Rosegarden
 
 class SegmentMmapper;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class CompositionMmapper
@@ -38,7 +38,7 @@ class CompositionMmapper
     friend class SequenceManager;
 
 public:
-    CompositionMmapper(RosegardenGUIDoc *doc);
+    CompositionMmapper(RosegardenDocument *doc);
     ~CompositionMmapper();
 
     QString getSegmentFileName(Segment*);
@@ -56,7 +56,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     typedef std::map<Segment*, SegmentMmapper*> segmentmmapers;
 
     segmentmmapers m_segmentMmappers;

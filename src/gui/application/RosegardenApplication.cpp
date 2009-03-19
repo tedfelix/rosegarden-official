@@ -20,9 +20,9 @@
 
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/widgets/TmpStatusMsg.h"
-#include "RosegardenGUIApp.h"
+#include "RosegardenMainWindow.h"
 //#include <kcmdlineargs.h>
 #include <QMainWindow>
 #include <QStatusBar>
@@ -44,13 +44,13 @@ int RosegardenApplication::newInstance()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if (RosegardenGUIApp::self() && args->count() &&
-        RosegardenGUIApp::self()->getDocument() &&
-        RosegardenGUIApp::self()->getDocument()->saveIfModified()) {
+    if (RosegardenMainWindow::self() && args->count() &&
+        RosegardenMainWindow::self()->getDocument() &&
+        RosegardenMainWindow::self()->getDocument()->saveIfModified()) {
         // Check for modifications and save if necessary - if cancelled
         // then don't load the new file.
         //
-        RosegardenGUIApp::self()->openFile(args->arg(0));
+        RosegardenMainWindow::self()->openFile(args->arg(0));
     }
 
     return KUniqueApplication::newInstance();

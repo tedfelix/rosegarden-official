@@ -47,7 +47,7 @@ class QCheckBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class TrackParameterBox : public RosegardenParameterBox,
@@ -56,11 +56,11 @@ class TrackParameterBox : public RosegardenParameterBox,
 Q_OBJECT
         
 public:
-    TrackParameterBox( RosegardenGUIDoc *doc,
+    TrackParameterBox( RosegardenDocument *doc,
                        QWidget *parent=0);
     ~TrackParameterBox();
     
-    void setDocument( RosegardenGUIDoc *doc );
+    void setDocument( RosegardenDocument *doc );
     void populateDeviceLists();
     virtual void showAdditionalControls(bool showThem);
 
@@ -102,7 +102,7 @@ protected:
     void updateHighLow();
 
 private:
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
 
     QComboBox           *m_playDevice;
     QComboBox           *m_instrument;

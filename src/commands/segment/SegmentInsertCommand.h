@@ -31,7 +31,7 @@ namespace Rosegarden
 
 class Studio;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -40,7 +40,7 @@ class SegmentInsertCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(SegmentInsertCommand)
 
 public:
-    SegmentInsertCommand(RosegardenGUIDoc *doc,
+    SegmentInsertCommand(RosegardenDocument *doc,
                          TrackId track,
                          timeT startTime,
                          timeT endTime);

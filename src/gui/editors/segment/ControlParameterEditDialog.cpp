@@ -26,7 +26,7 @@
 #include "base/ControlParameter.h"
 #include "base/Event.h"
 #include "base/MidiTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include <QComboBox>
 #include <QDialog>
@@ -49,7 +49,7 @@ namespace Rosegarden
 ControlParameterEditDialog::ControlParameterEditDialog(
     QWidget *parent,
     ControlParameter *control,
-    RosegardenGUIDoc *doc):
+    RosegardenDocument *doc):
         QDialog(parent),
         m_doc(doc),
         m_control(control)

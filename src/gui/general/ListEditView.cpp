@@ -24,7 +24,7 @@
 #include "base/Segment.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "EditView.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
@@ -63,7 +63,7 @@ bool ListEditView::m_inPaintEvent = false;
 const unsigned int ListEditView::NbLayoutRows = 6;
 
 
-ListEditView::ListEditView(RosegardenGUIDoc *doc,
+ListEditView::ListEditView(RosegardenDocument *doc,
                            std::vector<Segment *> segments,
                            unsigned int cols,
                            QWidget *parent, const char *name) :

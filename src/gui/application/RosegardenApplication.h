@@ -35,7 +35,7 @@ namespace Rosegarden
 /**
  * RosegardenApplication
  *
- * Handles RosegardenGUIApps perceived uniqueness for us.
+ * Handles RosegardenMainWindows perceived uniqueness for us.
  *
  */
 class RosegardenApplication : public QApplication
@@ -67,7 +67,7 @@ public:
     //@@@ Need session manager commitData() call
 
 signals:
-    // connect this to RosegardenGUIApp
+    // connect this to RosegardenMainWindow
     void aboutToSaveState();
     
 public slots:

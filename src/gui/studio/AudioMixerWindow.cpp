@@ -32,7 +32,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
@@ -84,7 +84,7 @@ static const unsigned int MIXER_OMIT_SYNTH_FADERS      = 1 << 4;
 
 
 AudioMixerWindow::AudioMixerWindow(QWidget *parent,
-                                   RosegardenGUIDoc *document):
+                                   RosegardenDocument *document):
         MixerWindow(parent, document),
         m_surroundBoxLayout(0),
         m_mainBox (0)

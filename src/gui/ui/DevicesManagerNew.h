@@ -21,7 +21,7 @@ namespace Rosegarden
 
 	typedef std::vector<MidiDevice *> MidiDeviceList;
 	
-	class RosegardenGUIDoc;
+	class RosegardenDocument;
 	class Studio;
 	
 	class DevicesManagerNew : public QMainWindow, public Ui::DevicesManagerNewUi
@@ -30,7 +30,7 @@ namespace Rosegarden
 		
 		public:
 			
-			DevicesManagerNew ( QWidget* parent, RosegardenGUIDoc* doc );
+			DevicesManagerNew ( QWidget* parent, RosegardenDocument* doc );
 			~DevicesManagerNew();
 			
 			
@@ -129,7 +129,7 @@ namespace Rosegarden
 		// ---------------------------------------------------------
 		protected:
 			//
-			RosegardenGUIDoc *m_doc;
+			RosegardenDocument *m_doc;
 			Studio *m_studio;
 			
 			/**

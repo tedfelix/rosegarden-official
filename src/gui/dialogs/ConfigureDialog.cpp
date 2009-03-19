@@ -19,7 +19,7 @@
 #include "ConfigureDialog.h"
 #include "ConfigureDialogBase.h"
 
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/configuration/ConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/NotationConfigurationPage.h"
@@ -41,7 +41,7 @@ namespace Rosegarden
 
 
 
-ConfigureDialog::ConfigureDialog(RosegardenGUIDoc *doc,
+ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
                                  QWidget *parent,
                                  const char *name)
             //: QDialog(parent) //, tr("Configure Rosegarden"), name)

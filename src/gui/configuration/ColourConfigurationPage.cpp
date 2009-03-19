@@ -24,7 +24,7 @@
 #include "base/ColourMap.h"
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
@@ -49,7 +49,7 @@
 namespace Rosegarden
 {
 
-ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
+ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, parent, name)

@@ -39,14 +39,14 @@ class LineEdit;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class AudioConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioConfigurationPage(RosegardenGUIDoc *doc,
+    AudioConfigurationPage(RosegardenDocument *doc,
                                QWidget *parent=0,
                                const char *name=0);
 

@@ -41,7 +41,7 @@ namespace Rosegarden
 
 class SequencerMapper;
 class Rotary;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MappedEvent;
 class Fader;
 class AudioVUMeter;
@@ -54,7 +54,7 @@ class AudioMixerWindow : public MixerWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    AudioMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    AudioMixerWindow(QWidget *parent, RosegardenDocument *document);
     ~AudioMixerWindow();
 
     void updateMeters(SequencerMapper *mapper);

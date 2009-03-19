@@ -29,7 +29,7 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -38,7 +38,7 @@ class DeleteTriggerSegmentCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(DeleteTriggerSegmentCommand)
 
 public:
-    DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+    DeleteTriggerSegmentCommand(RosegardenDocument *doc,
                                 TriggerSegmentId);
     virtual ~DeleteTriggerSegmentCommand();
 

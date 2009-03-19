@@ -30,7 +30,7 @@ class QLabel;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Instrument;
 class Rotary;
 
@@ -44,13 +44,13 @@ class InstrumentParameterPanel : public QFrame
 {
     Q_OBJECT
 public:
-    InstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
+    InstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
 
     virtual ~InstrumentParameterPanel() {};
 
     virtual void setupForInstrument(Instrument*) = 0;
 
-    void setDocument(RosegardenGUIDoc* doc);
+    void setDocument(RosegardenDocument* doc);
 
     void showAdditionalControls(bool showThem);
 
@@ -61,7 +61,7 @@ protected:
     //--------------- Data members ---------------------------------
     QLabel                          *m_instrumentLabel;
     Instrument          *m_selectedInstrument;
-    RosegardenGUIDoc                *m_doc;
+    RosegardenDocument                *m_doc;
 };
 
 

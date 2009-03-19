@@ -21,12 +21,12 @@
 #include "misc/Debug.h"
 #include "MarkerRuler.h"
 #include "base/RulerScale.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include <QObject>
 #include <QToolTip>
@@ -37,7 +37,7 @@
 namespace Rosegarden
 {
 
-StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
+StandardRuler::StandardRuler(RosegardenDocument *doc,
                              RulerScale *rulerScale,
                              double xorigin,
                              int barHeight,
@@ -93,7 +93,7 @@ void StandardRuler::setSnapGrid(SnapGrid *grid)
     m_loopRuler->setSnapGrid(grid);
 }
 
-void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
+void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
 {
 
     RG_DEBUG << "StandardRuler::connectRulerToDocPointer" << endl;
@@ -112,15 +112,15 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     QObject::connect
     (m_markerRuler, SIGNAL(editMarkers()),
-     RosegardenGUIApp::self(), SLOT(slotEditMarkers()));
+     RosegardenMainWindow::self(), SLOT(slotEditMarkers()));
 
     QObject::connect
     (m_markerRuler, SIGNAL(addMarker(timeT)),
-     RosegardenGUIApp::self(), SLOT(slotAddMarker(timeT)));
+     RosegardenMainWindow::self(), SLOT(slotAddMarker(timeT)));
 
     QObject::connect
     (m_markerRuler, SIGNAL(deleteMarker(int, timeT, QString, QString)),
-     RosegardenGUIApp::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
+     RosegardenMainWindow::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
 
     QObject::connect
     (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),
@@ -132,7 +132,7 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     QObject::connect
     (m_loopRuler, SIGNAL(setPlayPosition(timeT)),
-     RosegardenGUIApp::self(), SLOT(slotSetPlayPosition(timeT)));
+     RosegardenMainWindow::self(), SLOT(slotSetPlayPosition(timeT)));
 
     QObject::connect
     (m_markerRuler, SIGNAL(setLoop(timeT, timeT)),

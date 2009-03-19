@@ -32,7 +32,7 @@
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/ExportDeviceDialog.h"
@@ -84,7 +84,7 @@ static const int RECORD_CONNECTION_COL = 2;
 
 
 DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
-            RosegardenGUIDoc *document) :
+            RosegardenDocument *document) :
             QMainWindow(parent),
             m_document(document),
             m_studio(&document->getStudio())

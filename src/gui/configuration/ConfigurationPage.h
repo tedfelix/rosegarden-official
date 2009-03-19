@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -42,7 +42,7 @@ public:
     ConfigurationPage(QWidget *parent=0, const char *name=0)
         : QWidget(parent), m_doc(0), m_pageIndex(0) {}
 
-    ConfigurationPage(RosegardenGUIDoc *doc, QWidget *parent=0,
+    ConfigurationPage(RosegardenDocument *doc, QWidget *parent=0,
                       const char *name=0)
         : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
 
@@ -82,7 +82,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
 
     int m_pageIndex;
 };

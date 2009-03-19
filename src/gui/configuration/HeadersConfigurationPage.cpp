@@ -19,7 +19,7 @@
 #include "HeadersConfigurationPage.h"
 
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
@@ -47,7 +47,7 @@ namespace Rosegarden
 {
 
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
-    RosegardenGUIDoc *doc) :
+    RosegardenDocument *doc) :
     QWidget(parent),
     m_doc(doc)
 {

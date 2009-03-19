@@ -32,7 +32,7 @@
 
 #include "document/ConfigGroups.h"
 #include "document/CommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
@@ -121,7 +121,7 @@ NotationScene::setNotationWidget(NotationWidget *w)
 }
 
 void
-NotationScene::setStaffs(RosegardenGUIDoc *document,
+NotationScene::setStaffs(RosegardenDocument *document,
                           vector<Segment *> segments)
 {
     if (m_document && document != m_document) {

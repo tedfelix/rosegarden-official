@@ -27,7 +27,7 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/StudioControl.h"
@@ -56,7 +56,7 @@ namespace Rosegarden
 {
 
 ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
-        RosegardenGUIDoc *doc) :
+        RosegardenDocument *doc) :
         QDialog(parent),
         m_doc(doc),
         m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | 

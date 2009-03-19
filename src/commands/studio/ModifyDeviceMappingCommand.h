@@ -34,7 +34,7 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -43,7 +43,7 @@ class ModifyDeviceMappingCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(ModifyDeviceMappingCommand)
 
 public:
-    ModifyDeviceMappingCommand(RosegardenGUIDoc *doc,
+    ModifyDeviceMappingCommand(RosegardenDocument *doc,
                                DeviceId fromDevice,
                                DeviceId toDevice);
 

@@ -30,7 +30,7 @@ class QWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class NotationWidget;
 class Segment;
 class CommandRegistry;
@@ -41,7 +41,7 @@ class NewNotationView : public EditViewBase,
     Q_OBJECT
 
 public:
-    NewNotationView(RosegardenGUIDoc *doc,
+    NewNotationView(RosegardenDocument *doc,
                     std::vector<Segment *> segments,
                     QWidget *parent = 0);
 
@@ -64,7 +64,7 @@ protected slots:
     void slotEditGeneralPaste();
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
 

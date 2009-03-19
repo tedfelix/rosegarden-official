@@ -22,7 +22,7 @@
 #include "commands/segment/SegmentEraseCommand.h"
 #include "CompositionView.h"
 #include "CompositionItemImpl.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentTool.h"
@@ -35,7 +35,7 @@
 namespace Rosegarden
 {
 
-SegmentEraser::SegmentEraser(CompositionView *c, RosegardenGUIDoc *d)
+SegmentEraser::SegmentEraser(CompositionView *c, RosegardenDocument *d)
         : SegmentTool(c, d)
 {
     RG_DEBUG << "SegmentEraser()\n";
