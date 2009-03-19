@@ -320,8 +320,10 @@
 <file>pixmaps/toolbar/transport-tracking.xpm</file>
 <file>pixmaps/toolbar/triplet.png</file>
 <file>pixmaps/toolbar/trill.png</file>
+<file>pixmaps/toolbar/turn.png</file>
 <file>pixmaps/toolbar/trill-with-squiggle.png</file>
 <file>pixmaps/toolbar/un-mute-all.xpm</file>
+<file>pixmaps/toolbar/up-bow.png</file>
 <file>pixmaps/style/</file>
 <file>pixmaps/style/tooltip.png</file>
 <file>pixmaps/style/arrow-down.png</file>
@@ -347,7 +349,6 @@
 <file>pixmaps/style/tab-scroll-button.png</file>
 <file>pixmaps/style/tab-scroll-button-hover.png</file>
 <file>pixmaps/style/tab-scroll-button-disabled.png</file>
-<file>pixmaps/toolbar/up-bow.png</file>
 <file>pixmaps/transport/button-bar-time.xpm</file>
 <file>pixmaps/transport/button-clock.xpm</file>
 <file>pixmaps/transport/button-ffwd-end.xpm</file>
