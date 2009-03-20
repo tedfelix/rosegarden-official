@@ -1,6 +1,8 @@
 #ifndef STABLEHEADERS_H_
 #define STABLEHEADERS_H_
 
+#ifdef THIS_LIST_IS_OBSOLETE
+
 // Standard C++ library
 #include <algorithm>
 #include <cassert>
@@ -204,4 +206,5 @@
 #include <kvalue().h>
 #undef private
 
+#endif // OBSOLETE
 #endif /*STABLEHEADERS_H_*/
