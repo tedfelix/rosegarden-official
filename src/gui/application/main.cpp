@@ -79,13 +79,13 @@ disastrous side-effects.
     generalization of the MIDI event.  Each note or rest, each key
     change or tempo change, is an event: there's no "note class" or
     "rest class" as such, they are simply represented by events whose
-    type htheAppens to be "note" or "rest".
+    type happens to be "note" or "rest".
     Each Event has a type code, absolute time (the moment at which the
     Event starts, relative only to the start of the Composition) and
     duration (usually non-zero only for notes and rests), together
     with an arbitrary set of named and typed properties that can be
     assigned and queried dynamically by other parts of the
-    theApplication.  So, for example, a note event is likely to have an
+    application.  So, for example, a note event is likely to have an
     integer property called "pitch", and probably a "velocity", as
     well as potentially many others -- but this is not fixed anywhere,
     and there's no definition of what exactly a note is: client code
@@ -113,7 +113,7 @@ disastrous side-effects.
     which there may be any number.
  
  - \link Instrument Instrument \endlink corresponds broadly to a MIDI or Audio channel, and is
-    the destination for a performed Event.  Each Track is mtheApped to a
+    the destination for a performed Event.  Each Track is mapped to a
     single Instrument (although many Tracks may have the same
     Instrument), and the Instrument is indicated in the header at the
     left of the Track's row in the GUI.
@@ -181,8 +181,8 @@ The base directory also contains various music-related helper classes:
  
 \section gui GUI
  
-The GUI directory builds into a KDE/Qt theApplication. Like most KDE
-theApplications, it follows a document/view model. The document (class
+The GUI directory builds into a KDE/Qt application. Like most KDE
+applications, it follows a document/view model. The document (class
 RosegardenDocument, which wraps a Composition) can have several views
 (class RosegardenMainViewWidget), although at the moment only a single one is
 used.
@@ -201,7 +201,7 @@ components:
     are derived from the LayoutEngine base-class in the base library.
  
  - Tools, which implement each editing function at the GUI (such as
-    insert, erase, cut and paste). These are the tools which theAppear on
+    insert, erase, cut and paste). These are the tools which appear on
     the EditView's toolbar.
  
  - Toolbox, which is a simple string => tool map.
@@ -242,7 +242,7 @@ and Events (our basic music element).  To help lift the ambiguity,
     example).  It locates where the event occured in terms of musical
     element: which note or staff line the user clicked on, which pitch
     and time this corresponds to, that kind of stuff.  (In the
-    Notation and Matrix views, the LinedStaff calculates mtheAppings
+    Notation and Matrix views, the LinedStaff calculates mappings
     between coordinates and staff lines: the former is especially
     complicated because of its support for page layout.)\n
  -# The canvas view transmits this kind of info as a signal, which is
@@ -257,12 +257,12 @@ through a SegmentHelper (for instance, base/SegmentNotationHelper)
 which "wraps" the complexity into simple calls and performs all the
 hidden tasks.
  
-The EditView also maintains (obviously) its visual theAppearance with the
-layout classes, theApplying them when theAppropriate.
+The EditView also maintains (obviously) its visual appearance with the
+layout classes, applying them when appropriate.
  
 \section sequencer Sequencer
  
-The sequencer directory also builds into a KDE/Qt theApplication, but one
+The sequencer directory also builds into a KDE/Qt application, but one
 which doesn't have a gui.  The Sequencer can be started automatically
 by the main Rosegarden GUI or manually if testing - it's sometimes
 more convenient to do the latter as the Sequencer needs to be connected
@@ -289,7 +289,7 @@ The main operations invoked from the GUI involve starting and
 stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
 that does most of the hard work.  Events are read from (or written to,
-when recording) a set of mmtheApped files shared between the threads.
+when recording) a set of mmapped files shared between the threads.
  
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
@@ -300,7 +300,7 @@ and libRosegardenSound:
    Rosegarden Sequencer.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
-   MIDI files) and the MtheAppedEvent and MtheAppedComposition classes (the
+   MIDI files) and the MappedEvent and MappedComposition classes (the
    communication class for transferring events back and forth between
    sequencer and GUI).  This library is needed by the GUI as well as
    the Sequencer.
@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {
-            cerr << "Loaded theApplication icon \"" << name << "\"" << endl;
+            cerr << "Loaded application icon \"" << name << "\"" << endl;
             icon.addPixmap(pixmap);
         }
     }
@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
 
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
-        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", theApplying it" << endl;
+        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << endl;
         QFile file(stylepath);
         if (!file.open(QFile::ReadOnly)) {
             cerr << "(Failed to open file)" << endl;
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
     }
 
     // If there is no config setting for the startup window size, set
-    // one now.  But base the default on the theAppropriate desktop size
+    // one now.  But base the default on the appropriate desktop size
     // (i.e. not the entire desktop, if Xinerama is in use).  This is
     // obtained from KGlobalSettings::desktopGeometry(), but we can't
     // give it a meaningful point to measure from at this stage so we
@@ -505,7 +505,7 @@ int main(int argc, char *argv[])
     gettimeofday(&logoShowTime, 0);
 
     //
-    // Start theApplication
+    // Start application
     //
     RosegardenMainWindow *rosegardengui = 0;
 
