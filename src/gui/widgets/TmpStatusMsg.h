@@ -25,31 +25,6 @@ class QString;
 //class QLabel;
 
 
-/*****************************************************************/
-
-
-/*!!!
-class RgTempQtIV
-{
-public:
-    RgTempQtIV();
-    
-    // simulate qApp->checkRecoverFile(filename);
-    QString checkRecoverFile(QString &filePath, bool canRecover);
-    
-    void stateChanged( const char*  var1, unsigned int var2 ); // var2 = KXMLGUIClient::state
-    void setAutoSaveSettings( const char*  config_group, bool state=0 );
-    
-    // simulate qApp->tempSaveName(filename);
-    QString tempSaveName(QString &filePath);
-
-    void createGUI( const char* xml_rcfile, bool var1 );
-    
-};
-extern RgTempQtIV* rgTempQtIV;
-*/
-
-
 /**
  * A class to create a temporary message on QMainWindow's status bar
  *

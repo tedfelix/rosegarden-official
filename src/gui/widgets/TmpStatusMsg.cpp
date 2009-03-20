@@ -26,51 +26,6 @@
 #include <QSettings>
 #include <QUrl>
 
-/*!!!
-
-// class RgRecentFileClass 
-RgTempQtIV::RgTempQtIV()
-{
-    // pass
-}
-
-QString RgTempQtIV::checkRecoverFile(QString &filePath, bool canRecover)
-{
-    //### TODO: implement 
-}
-
-void  RgTempQtIV::stateChanged( const char*  var1, unsigned int var2 ){ // var2 = KXMLGUIClient::state
-    //
-}
-
-// simulate qApp->tempSaveName(filename);
-QString RgTempQtIV::tempSaveName(QString &filePath)
-{
-    //### TODO: implement 
-}
-
-void RgTempQtIV::setAutoSaveSettings( const char*  config_group, bool state )
-{
-    // used in RosegardenMainWindow
-
-    //### TODO: implement
-}
-
-
-void RgTempQtIV::createGUI( const char* xml_rcfile, bool var1 )
-{
-    //### TODO: implement 
-    // create menu and actions from xml file (kxmlclient rc file)
-}
-
-RgTempQtIV __mm;
-RgTempQtIV* rgTempQtIV = &__mm;
-//RgTempQtIV* rgTempQtIV = new RgTempQtIV();
-*/
-
-/****************************************************************/
-
-
 
 TmpStatusMsg::TmpStatusMsg(const QString& msg, QMainWindow* window, int id)
         : m_mainWindow(window),
