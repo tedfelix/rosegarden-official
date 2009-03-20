@@ -63,11 +63,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     m_view = new Panned;
     m_view->setRenderHints(QPainter::Antialiasing);
+    m_view->setBackgroundBrush(Qt::white);
     layout->addWidget(m_view, 0, 0);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
     m_hpanner->setRenderHints(QPainter::Antialiasing);
+    m_hpanner->setBackgroundBrush(Qt::white);
     layout->addWidget(m_hpanner, 1, 0);
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
