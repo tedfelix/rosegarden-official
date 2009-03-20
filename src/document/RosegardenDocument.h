@@ -26,16 +26,17 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPreviewThread.h"
-#include <map>
 #include "sound/AudioFileManager.h"
-#include <QObject>
-#include <QString>
-#include <QStringList>
-#include <vector>
 #include "base/Event.h"
 
 #include <QProgressBar>
 #include <QProgressDialog>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+
+#include <map>
+#include <vector>
 
 class QWidget;
 class QTextStream;
@@ -47,7 +48,7 @@ namespace Rosegarden
 {
 
 class SequenceManager;
-class RosegardenMainWidget;
+class RosegardenMainViewWidget;
 class ProgressDialog;
 class MappedComposition;
 class Event;
@@ -67,11 +68,11 @@ static const int MERGE_KEEP_NEW_TIMINGS = (1 << 3);
   *
   * The RosegardenDocument class provides a document object that can be
   * used in conjunction with the classes RosegardenMainWindow and
-  * RosegardenMainWidget to create a document-view model for standard KDE
-  * applications based on KApplication and KTMainWindow. Thereby, the
+  * RosegardenMainViewWidget to create a document-view model 
+  * based on QApplication and QMainWindow. Thereby, the
   * document object is created by the RosegardenMainWindow instance and
-  * contains the document structure with the according methods for
-  * manipulation of the document data by RosegardenMainWidget
+  * contains the document structure with related methods for
+  * manipulation of the document data by RosegardenMainViewWidget
   * objects. Also, RosegardenDocument contains the methods for
   * serialization of the document data from and to files.
   *
@@ -109,12 +110,12 @@ public:
      * adds a view to the document which represents the document
      * contents. Usually this is your main view.
      */
-    void attachView(RosegardenMainWidget *view);
+    void attachView(RosegardenMainViewWidget *view);
 
     /**
      * removes a view from the list of currently connected views
      */
-    void detachView(RosegardenMainWidget *view);
+    void detachView(RosegardenMainViewWidget *view);
 
     /**
      * adds an Edit View (notation, matrix, event list)
@@ -342,41 +343,45 @@ public:
     void addRecordMIDISegment(TrackId);
     void addRecordAudioSegment(InstrumentId, AudioFileId);
 
-    // Audio play and record latencies direct from the sequencer
-    //
+    /**
+     * Audio play and record latencies direct from the sequencer
+     */
+    
     RealTime getAudioPlayLatency();
     RealTime getAudioRecordLatency();
     void updateAudioRecordLatency();
 
-    // Complete the add of an audio file when a new file has finished
-    // being recorded at the sequencer.  This method will ensure that
-    // the audio file is added to the AudioFileManager, that
-    // a preview is generated and that the sequencer also knows to add
-    // the new file to its own hash table.  Flow of control is a bit
-    // awkward around new audio files as timing is crucial - the gui can't
-    // access the file until lead-out information has been written by the 
-    // sequencer.
-    //
-    // Note that the sequencer doesn't know the audio file id (yet),
-    // only the instrument it was recorded to.  (It does know the
-    // filename, but the instrument id is enough for us.)
-    //
+    /** Complete the add of an audio file when a new file has finished
+     * being recorded at the sequencer.  This method will ensure that
+     * the audio file is added to the AudioFileManager, that
+     * a preview is generated and that the sequencer also knows to add
+     * the new file to its own hash table.  Flow of control is a bit
+     * awkward around new audio files as timing is crucial - the gui can't
+     * access the file until lead-out information has been written by the 
+     * sequencer.
+     *
+     * Note that the sequencer doesn't know the audio file id (yet),
+     * only the instrument it was recorded to.  (It does know the
+     * filename, but the instrument id is enough for us.)
+     */
+    
     void finalizeAudioFile(InstrumentId instrument);
 
-    // Tell the document that an audio file has been orphaned.  An
-    // orphaned audio file is a file that was created by recording in
-    // Rosegarden during the current session, but that has been
-    // unloaded from the audio file manager.  It's therefore likely
-    // that no other application will be using it, and that that user
-    // doesn't want to keep it.  We can offer to delete these files
-    // permanently when the document is saved.
-    //
+    /** Tell the document that an audio file has been orphaned.  An
+    * orphaned audio file is a file that was created by recording in
+    * Rosegarden during the current session, but that has been
+    * unloaded from the audio file manager.  It's therefore likely
+    * that no other application will be using it, and that that user
+    * doesn't want to keep it.  We can offer to delete these files
+    * permanently when the document is saved.
+    */
     void addOrphanedRecordedAudioFile(QString fileName);
     void addOrphanedDerivedAudioFile(QString fileName);
 
-    // Consider whether to orphan the given audio file which is about
-    // to be removed from the audio file manager.
-    //
+    /*
+     * Consider whether to orphan the given audio file which is about
+     * to be removed from the audio file manager.
+     */
     void notifyAudioFileRemoval(AudioFileId id);
 
     /*
@@ -386,29 +391,35 @@ public:
         { m_audioPlayLatency = latency; }
         */
 
-    // Return the AudioPluginManager
-    //
+    /**
+     * Return the AudioPluginManager
+     */
     AudioPluginManager* getPluginManager()
         { return m_pluginManager; }
 
-    // Clear all plugins from sequencer and from gui
-    //
+    /**
+     * Clear all plugins from sequencer and from gui
+     */
     void clearAllPlugins();
 
-    // Initialise the MIDI controllers after we've loaded a file
-    //
+    /**
+     * Initialise the MIDI controllers after we've loaded a file
+     */
     void initialiseControllers();
 
-    // Clear the studio at the sequencer
-    //
+    /**
+     * Clear the studio at the sequencer
+     */
     void clearStudio();
 
-    // Initialise the Studio with a new document's settings
-    //
+    /**
+     * Initialise the Studio with a new document's settings
+     */
     void initialiseStudio();
 
-    // Get the sequence manager from the app
-    //
+    /*
+     * Get the sequence manager from the app
+     */
     SequenceManager* getSequenceManager();
 
     QStringList getTimers();
@@ -418,7 +429,7 @@ public:
     /**
      * return the list of the views currently connected to the document
      */
-    QList<RosegardenMainWidget*>& getViewList() { return m_viewList; } //### prepended *
+    QList<RosegardenMainViewWidget*>& getViewList() { return m_viewList; } //### prepended *
 
     bool isBeingDestroyed() { return m_beingDestroyed; }
 
@@ -431,7 +442,7 @@ public slots:
      * changed.  As this view normally repaints itself, it is excluded
      * from the paintEvent.
      */
-    void slotUpdateAllViews(RosegardenMainWidget *sender);
+    void slotUpdateAllViews(RosegardenMainViewWidget *sender);
 
     /**
      * set the 'modified' flag of the document to true,
@@ -603,7 +614,7 @@ protected:
     /**
      * the list of the views currently connected to the document
      */
-	QList<RosegardenMainWidget*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenMainWidget*> instead QList<RosegardenMainWidget> ? changed !!
+	QList<RosegardenMainViewWidget*> m_viewList;		//@@@ shouldn't this be a ptr: QList<RosegardenMainViewWidget*> instead QList<RosegardenMainViewWidget> ? changed !!
 
     /**
      * the list of the edit views currently editing a part of this document
@@ -684,14 +695,14 @@ protected:
      */
     Studio m_studio;
 
-    /*
+    /**
      * A configuration object
-     *
      */
     DocumentConfiguration m_config;
 
-    // AudioPluginManager - sequencer and local plugin management
-    //
+    /**
+     * AudioPluginManager - sequencer and local plugin management
+     */
     AudioPluginManager *m_pluginManager;
 
     RealTime m_audioRecordLatency;
@@ -703,8 +714,9 @@ protected:
     std::vector<QString> m_orphanedRecordedAudioFiles;
     std::vector<QString> m_orphanedDerivedAudioFiles;
 
-    // Autosave period for this document in seconds
-    //
+    /**
+     *  Autosave period for this document in seconds
+     */
     int m_autoSavePeriod;
 
     // Set to true when the dtor starts

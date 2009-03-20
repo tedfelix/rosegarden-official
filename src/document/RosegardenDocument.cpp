@@ -54,7 +54,7 @@
 #include "gui/general/ClefIndex.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPreviewThread.h"
 #include "gui/editors/segment/TrackLabel.h"
@@ -174,12 +174,12 @@ RosegardenDocument::getAutoSavePeriod() const
 	return ret;
 }
 
-void RosegardenDocument::attachView(RosegardenMainWidget *view)
+void RosegardenDocument::attachView(RosegardenMainViewWidget *view)
 {
     m_viewList.append(view);
 }
 
-void RosegardenDocument::detachView(RosegardenMainWidget *view)
+void RosegardenDocument::detachView(RosegardenMainViewWidget *view)
 {
     m_viewList.remove(view);
 }
@@ -224,9 +224,9 @@ const QString& RosegardenDocument::getTitle() const
     return m_title;
 }
 
-void RosegardenDocument::slotUpdateAllViews(RosegardenMainWidget *sender)
+void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
-    RosegardenMainWidget *w;
+    RosegardenMainViewWidget *w;
 	
     //for ((*w) = m_viewList.first(); w != 0; (*w) = *m_viewList.next()) {
 	for (int i=0; i < m_viewList.size(); ++i ){
@@ -1789,14 +1789,14 @@ RosegardenDocument::insertRecordedMidi(const MappedComposition &mC)
         // process all the incoming MappedEvents
         //
 		int lenx = m_viewList.size();
-		RosegardenMainWidget *v;
+		RosegardenMainViewWidget *v;
 		int k = 0;
 		for (i = mC.begin(); i != mC.end(); ++i) {
 
             if ((*i)->getRecordedDevice() == Device::CONTROL_DEVICE) {
                 // send to GUI
 				
-				//QList<RosegardenMainWidget *>::iterator v;
+				//QList<RosegardenMainViewWidget *>::iterator v;
                 //for( v=m_viewList.begin(); v!=m_viewList.end(); v++ ) {
 				for( k=0; k<lenx; k++){
 					v = m_viewList.value( k );
@@ -2394,7 +2394,7 @@ RosegardenDocument::syncDevices()
     if (opt)
         labels = TrackLabel::ShowTrack;
 
-    RosegardenMainWidget *w;
+    RosegardenMainViewWidget *w;
 	int lenx = m_viewList.size();
 	
 //	for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
@@ -2572,7 +2572,7 @@ RosegardenDocument::addRecordMIDISegment(TrackId tid)
 
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
 
-    RosegardenMainWidget *w;
+    RosegardenMainViewWidget *w;
 	int lenx = m_viewList.count();
 	int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
@@ -2655,7 +2655,7 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
     RG_DEBUG << "RosegardenDocument::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId() << endl;
     m_recordAudioSegments[iid] = recordSegment;
 
-    RosegardenMainWidget *w;
+    RosegardenMainViewWidget *w;
 	int lenx = m_viewList.count();
 	int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {

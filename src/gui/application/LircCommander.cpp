@@ -27,7 +27,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "RosegardenMainWindow.h"
-#include "RosegardenMainWidget.h"
+#include "RosegardenMainViewWidget.h"
 
 #include <QObject>
 

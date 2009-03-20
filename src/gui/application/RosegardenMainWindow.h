@@ -66,7 +66,7 @@ class SequenceManager;
 class SegmentSelection;
 class SegmentParameterBox;
 class RosegardenParameterArea;
-class RosegardenMainWidget;
+class RosegardenMainViewWidget;
 class RosegardenDocument;
 class RealTime;
 class ProgressBar;
@@ -93,13 +93,13 @@ class SequencerThread;
   * The base class for the main Rosegarden application window.  This
   * sets up the main window and reads the config file as well as
   * providing a menubar, toolbar and statusbar.  The central widget
-  * is a RosegardenMainWidget, connected to the window's document.
+  * is a RosegardenMainViewWidget, connected to the window's document.
   */
 class RosegardenMainWindow : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
     
-    friend class RosegardenMainWidget;
+    friend class RosegardenMainViewWidget;
 
 public:
 
@@ -131,7 +131,7 @@ public:
      */ 
     RosegardenDocument *getDocument() const;      
 
-    RosegardenMainWidget* getView() { return m_view; }
+    RosegardenMainViewWidget* getView() { return m_view; }
 
     TransportDialog* getTransport();
 
@@ -503,7 +503,7 @@ signals:
     /// emitted when the current document changes
     void documentChanged(RosegardenDocument*);
 
-    /// emitted when the set of selected segments changes (relayed from RosegardenMainWidget)
+    /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
     void segmentsSelected(const SegmentSelection &);
 
     /// emitted when the composition state (selected track, solo, etc...) changes
@@ -1299,7 +1299,7 @@ public slots:
 
 
     /**
-     * This slot is here to be connected to RosegardenMainWidget's
+     * This slot is here to be connected to RosegardenMainViewWidget's
      * stateChange signal. We use a bool for the 2nd arg rather than a
      * KXMLGUIClient::ReverseStateChange to spare the include of
      * kxmlguiclient.h just for one typedef.
@@ -1546,8 +1546,8 @@ private:
      * kept empty so you can create your view according to your
      * application's needs by changing the view class.
      */
-    RosegardenMainWidget* m_view;
-    RosegardenMainWidget* m_swapView;
+    RosegardenMainViewWidget* m_view;
+    RosegardenMainViewWidget* m_swapView;
 
     QDockWidget *m_mainDockWidget;
     QDockWidget* m_dockLeft;

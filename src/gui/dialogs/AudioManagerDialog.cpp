@@ -35,7 +35,7 @@
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/widgets/AudioListItem.h"
 #include "gui/widgets/AudioListView.h"
@@ -1289,10 +1289,10 @@ AudioManagerDialog::slotDistributeOnMidiSegment()
 
     //Composition &comp = m_doc->getComposition();
 
-    QList<RosegardenMainWidget*> viewList_ = m_doc->getViewList();
-    QListIterator<RosegardenMainWidget*> viewList( viewList_ );
+    QList<RosegardenMainViewWidget*> viewList_ = m_doc->getViewList();
+    QListIterator<RosegardenMainViewWidget*> viewList( viewList_ );
 
-    RosegardenMainWidget *w = 0;
+    RosegardenMainViewWidget *w = 0;
     SegmentSelection selection;
 
     viewList.toFront();

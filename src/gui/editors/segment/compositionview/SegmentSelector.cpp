@@ -190,7 +190,7 @@ SegmentSelector::handleMouseButtonPress(QMouseEvent *e)
         }
     }
 
-    // Tell the RosegardenMainWidget that we've selected some new Segments -
+    // Tell the RosegardenMainViewWidget that we've selected some new Segments -
     // when the list is empty we're just unselecting.
     //
     m_canvas->getModel()->signalSelection();

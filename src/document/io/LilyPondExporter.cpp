@@ -51,7 +51,7 @@
 #include "base/StaffExportTypes.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"

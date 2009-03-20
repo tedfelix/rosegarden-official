@@ -91,7 +91,7 @@
 #include "document/io/LilyPondExporter.h"
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"
-#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/EventEditDialog.h"
@@ -747,7 +747,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     if (parent)
     {
         const TrackButtons * trackLabels =
-            ((RosegardenMainWidget*)parent)->getTrackEditor()->getTrackButtons();
+            ((RosegardenMainViewWidget*)parent)->getTrackEditor()->getTrackButtons();
         QObject::connect
         (trackLabels, SIGNAL(nameChanged()),
          this, SLOT(slotUpdateStaffName()));

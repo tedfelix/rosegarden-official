@@ -156,7 +156,7 @@
 #include "gui/widgets/ProgressDialog.h"
 #include "LircClient.h"
 #include "LircCommander.h"
-#include "RosegardenMainWidget.h"
+#include "RosegardenMainViewWidget.h"
 #include "SetWaitCursor.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sequencer/SequencerThread.h"
@@ -915,7 +915,7 @@ void RosegardenMainWindow::initView()
         comp.setEndMarker(endMarker);
     }
 
-    m_swapView = new RosegardenMainWidget(findAction("show_tracklabels")->isChecked(),
+    m_swapView = new RosegardenMainViewWidget(findAction("show_tracklabels")->isChecked(),
                                        m_segmentParameterBox,
                                        m_instrumentParameterBox,
                                        m_trackParameterBox,
@@ -991,7 +991,7 @@ void RosegardenMainWindow::initView()
 
     // make sure we show
     //
-    RosegardenMainWidget *oldView = m_view;
+    RosegardenMainViewWidget *oldView = m_view;
     m_view = m_swapView;
 
     connect(m_view, SIGNAL(stateChange(QString, bool)),

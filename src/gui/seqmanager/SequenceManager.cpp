@@ -39,7 +39,7 @@
 #include "document/CommandHistory.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/application/RosegardenMainWidget.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/TransportDialog.h"
@@ -1398,9 +1398,9 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 void
 SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
-    RosegardenMainWidget *v;
-// 	QList<RosegardenMainWidget>& viewList = m_doc->getViewList();
-	QList<RosegardenMainWidget*> viewList = m_doc->getViewList();
+    RosegardenMainViewWidget *v;
+// 	QList<RosegardenMainViewWidget>& viewList = m_doc->getViewList();
+	QList<RosegardenMainViewWidget*> viewList = m_doc->getViewList();
 
 //     for (v = viewList.first(); v != 0; v = viewList.next()) {
 	for( int i=0; i< viewList.count(); i++ ){

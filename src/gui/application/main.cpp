@@ -184,7 +184,7 @@ The base directory also contains various music-related helper classes:
 The GUI directory builds into a KDE/Qt theApplication. Like most KDE
 theApplications, it follows a document/view model. The document (class
 RosegardenDocument, which wraps a Composition) can have several views
-(class RosegardenMainWidget), although at the moment only a single one is
+(class RosegardenMainViewWidget), although at the moment only a single one is
 used.
  
 This view is the TrackEditor, which shows all the Composition's

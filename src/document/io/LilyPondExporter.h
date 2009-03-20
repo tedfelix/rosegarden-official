@@ -49,7 +49,7 @@ namespace Rosegarden
 class TimeSignature;
 class Studio;
 class RosegardenMainWindow;
-class RosegardenMainWidget;
+class RosegardenMainViewWidget;
 class RosegardenDocument;
 class NotationView;
 class Key;
@@ -87,7 +87,7 @@ public:
     bool write();
 
 protected:
-    RosegardenMainWidget *m_view;
+    RosegardenMainViewWidget *m_view;
     NotationView *m_notationView;
     RosegardenDocument *m_doc;
     Composition *m_composition;

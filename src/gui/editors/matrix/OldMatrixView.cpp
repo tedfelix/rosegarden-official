@@ -378,7 +378,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
             SIGNAL(showPluginGUI(InstrumentId, int)),
             app,
             SLOT(slotShowPluginGUI(InstrumentId, int)));
-    connect(parent,  // RosegardenMainWidget
+    connect(parent,  // RosegardenMainViewWidget
             SIGNAL(checkTrackAssignments()),
             this,
             SLOT(slotCheckTrackAssignments()));

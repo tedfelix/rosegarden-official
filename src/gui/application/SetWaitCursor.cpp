@@ -22,7 +22,7 @@
 #include "gui/editors/segment/compositionview/CompositionView.h"
 #include "misc/Debug.h"
 #include "RosegardenMainWindow.h"
-#include "RosegardenMainWidget.h"
+#include "RosegardenMainViewWidget.h"
 #include <QCursor>
 #include <QWidget>
 #include <QApplication>
