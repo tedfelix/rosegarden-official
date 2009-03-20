@@ -96,6 +96,9 @@ clean:
 test:
 	echo $(QSOURCES)
 
+dependencies:
+	sh ./make-dependencies
+
 .PHONY: instrument-ts menu-ts ts ts-noobsolete locale
 
 include dependencies
