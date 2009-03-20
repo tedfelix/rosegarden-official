@@ -78,7 +78,7 @@ TmpStatusMsg::TmpStatusMsg(const QString& msg, QMainWindow* window, int id)
 {
 //    m_mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), m_id);
     m_mainWindow->statusBar()->showMessage( QString("  %1").arg(msg) );
-    Rosegarden::rgapp->refreshGUI(50);
+    Rosegarden::rosegardenApplication->refreshGUI(50);
 }
 
 TmpStatusMsg::~TmpStatusMsg()
@@ -87,7 +87,7 @@ TmpStatusMsg::~TmpStatusMsg()
 //    m_mainWindow->statusBar()->changeItem(m_defaultMsg, m_id);
     m_mainWindow->statusBar()->showMessage( m_defaultMsg );
     
-    Rosegarden::rgapp->refreshGUI(50);
+    Rosegarden::rosegardenApplication->refreshGUI(50);
 }
 
 

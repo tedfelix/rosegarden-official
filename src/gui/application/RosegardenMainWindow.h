@@ -18,8 +18,6 @@
 #ifndef _RG_ROSEGARDENGUIAPP_H_
 #define _RG_ROSEGARDENGUIAPP_H_
 
-#include <map>
-#include <set>
 #include "base/MidiProgram.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
@@ -39,6 +37,9 @@
 #include <QAction>
 #include <QToolBar>
 
+#include <map>
+#include <set>
+
 class QWidget;
 class QTimer;
 class QTextCodec;
@@ -49,10 +50,7 @@ class QCursor;
 class QShortcut;
 class QTemporaryFile;
 class QProcess;
-
 class QAction;
-//class /* was toggle */ QAction;
-//class KRecentFilesAction;
 
 
 namespace Rosegarden
@@ -121,11 +119,11 @@ public:
      */
     static RosegardenMainWindow *self() { return m_myself; }
     
-	/**
-	 * Return current Main Toolbar
-	 */
-	QToolBar* toolBar( const char* name="\0" );
-	
+    /**
+     * Return current Main Toolbar
+     */
+    QToolBar* toolBar( const char* name="\0" );
+    
     /**
      * returns a pointer to the current document connected to the
      * KTMainWindow instance and is used by * the View class to access
@@ -319,9 +317,9 @@ public:
 
     bool testAudioPath(QString op); // and open the dialog to set it if unset
     bool haveAudioImporter() const { return m_haveAudioImporter; }
-	
-	
-	
+    
+    
+    
 
 protected:
 
@@ -333,9 +331,9 @@ protected:
      * Create document from a file
      */
     RosegardenDocument* createDocument(QString filePath, ImportType type = ImportRG4);
-	
-	
-	
+    
+    
+    
     /**
      * Create a document from RG file
      */
@@ -1200,8 +1198,8 @@ public slots:
     /**
      * The parameters box was docked back
      */
-//    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);	//&&& restore DockPosition
-    void slotParametersDockedBack(QDockWidget*, int );	
+//    void slotParametersDockedBack(QDockWidget*, QDockWidget::DockPosition);    //&&& restore DockPosition
+    void slotParametersDockedBack(QDockWidget*, int );    
 
     /**
      * Display tip-of-day dialog on demand
@@ -1365,8 +1363,8 @@ public slots:
 
     void slotRepeatingSegments();
     void slotRelabelSegments();
-	void slotTransposeSegments();
-	
+    void slotTransposeSegments();
+    
     /// Panic button pressed
     void slotPanic();
 
@@ -1533,8 +1531,8 @@ public slots:
     
     void slotJumpToQuickMarker();    
 
-	
-	void slotOpenDeviceManagerNew();
+    
+    void slotOpenDeviceManagerNew();
 private:
 
 
@@ -1551,10 +1549,9 @@ private:
     RosegardenMainWidget* m_view;
     RosegardenMainWidget* m_swapView;
 
-    //QDockWidget* m_mainDockWidget;
-	QDockWidget *m_mainDockWidget;
+    QDockWidget *m_mainDockWidget;
     QDockWidget* m_dockLeft;
-	
+    
 
     /**
      * doc represents your actual document and is created only
@@ -1562,10 +1559,10 @@ private:
      * serialization of your files.
      */
     RosegardenDocument* m_doc;
-	
-	
+    
+    
     /**
-     *	Menus
+     *    Menus
      */
     RecentFiles m_recentFiles;
     
@@ -1580,9 +1577,9 @@ private:
     QLabel             *m_zoomLabel;
 
     ProgressBar *m_progressBar;
-	
-	
-	QLabel* m_statusBarLabel1;
+    
+    
+    QLabel* m_statusBarLabel1;
     // SequenceManager
     //
     SequenceManager *m_seqManager;
@@ -1609,9 +1606,9 @@ private:
 
     AudioPluginManager *m_pluginManager;
 
-	DevicesManagerNew * m_devicesManagerNew;
-	
-	QTimer* m_autoSaveTimer;
+    DevicesManagerNew * m_devicesManagerNew;
+    
+    QTimer* m_autoSaveTimer;
 
     Clipboard *m_clipboard;
 

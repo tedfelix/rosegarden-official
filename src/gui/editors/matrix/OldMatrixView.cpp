@@ -353,7 +353,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
 	
     m_dockLeft->setWidget(m_parameterBox);
 
-    RosegardenMainWindow *app = RosegardenMainWindow::self();
+    RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
     connect(app,
             SIGNAL(pluginSelected(InstrumentId, int, int)),
             m_parameterBox,

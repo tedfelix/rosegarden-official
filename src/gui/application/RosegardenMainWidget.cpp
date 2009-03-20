@@ -1530,7 +1530,7 @@ RosegardenMainWidget::slotDroppedNewAudio(QString audioDesc)
 
     std::cerr << "RosegardenMainWidget::slotDroppedNewAudio: url " << url << ", trackId " << trackId << ", time " << time << std::endl;
 
-    RosegardenMainWindow *app = RosegardenMainWindow::self();
+    RosegardenMainWindow *mainWindow = RosegardenMainWindow::self();
     AudioFileManager &aFM = getDocument()->getAudioFileManager();
 
     AudioFileId audioFileId = 0;

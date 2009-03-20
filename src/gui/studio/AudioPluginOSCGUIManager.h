@@ -21,13 +21,15 @@
 
 #ifdef HAVE_LIBLO
 
-#include <lo/lo.h>
 #include "base/MidiProgram.h"
-#include <map>
 #include "sound/RingBuffer.h"
-#include <QString>
+#include "gui/application/RosegardenMainWindow.h"
 
+#include <QString>
 #include <QCoreApplication>
+
+#include <lo/lo.h>
+#include <map>
 
 
 namespace Rosegarden
@@ -45,7 +47,7 @@ class AudioPluginOSCGUIManager
     Q_DECLARE_TR_FUNCTIONS(AudioPluginOSCGUIManager)
 
 public:
-    AudioPluginOSCGUIManager(RosegardenMainWindow *app);
+    AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);
     virtual ~AudioPluginOSCGUIManager();
 
     void setStudio(Studio *studio) { m_studio = studio; }
@@ -75,7 +77,7 @@ public:
     static void guiExitedCallback(void *data);
 
 protected:
-    RosegardenMainWindow *m_app;
+    RosegardenMainWindow *m_mainWindow;
     Studio *m_studio;
 
     bool m_haveOSCThread;

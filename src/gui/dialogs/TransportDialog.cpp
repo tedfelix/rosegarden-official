@@ -130,7 +130,7 @@ TransportDialog::TransportDialog(QWidget *parent):
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
 // #1240039 - DMM
-//    QSettings settings ; // was: rgapp->config()
+//    QSettings settings ; // was: mainWindow->config()
 //    settings.beginGroup(SequencerOptionsConfigGroup);
 //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
 //    {

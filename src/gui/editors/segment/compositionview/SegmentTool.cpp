@@ -80,12 +80,12 @@ SegmentTool::createMenu()
 {
     RG_DEBUG << "SegmentTool::createMenu()\n";
 
-    RosegardenMainWindow *app =
+    RosegardenMainWindow *mainWindow =
         dynamic_cast<RosegardenMainWindow*>(m_doc->parent());
 
-    if (app) {
+    if (mainWindow) {
 
-        m_menu = app->findChild<QMenu*>( "segment_tool_menu" );
+        m_menu = mainWindow->findChild<QMenu*>( "segment_tool_menu" );
 
         if (!m_menu) {
             RG_DEBUG << "SegmentTool::createMenu() failed\n";

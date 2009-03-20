@@ -28,12 +28,13 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
-#include <QSettings>
-#include <misc/Strings.h>
-#include <QString>
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "gui/application/RosegardenApplication.h"
+
 #include <QApplication>
+#include <QSettings>
+#include <QString>
 
 
 namespace Rosegarden
@@ -148,10 +149,10 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit incrementProgress(m_progressTotal / 2);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         } else {
             emit incrementProgress(m_progressTotal);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         }
     }
 
@@ -186,7 +187,7 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit incrementProgress(m_progressTotal / 2);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         }
     }
 }

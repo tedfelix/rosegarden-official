@@ -90,7 +90,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
     //QWidget *buttWidget = new QWidget( this );
     //dlgLay->addWidget( buttWidget );
     
-    //QPushButton *applyButt = new QPushButton("Apply");
+    //QPushButton *mainWindowlyButt = new QPushButton("Apply");
     //QPushButton *okButt = new QPushButton("Ok");
     //QPushButton *cancelButt = new QPushButton("Cancel");
     

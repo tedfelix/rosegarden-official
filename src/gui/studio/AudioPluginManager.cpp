@@ -26,6 +26,7 @@
 #include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
+
 #include <QByteArray>
 #include <QDataStream>
 #include <QMutex>
@@ -70,7 +71,7 @@ AudioPluginManager::Enumerator::run()
 
     RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n" << endl;
 
-    if (!rgapp->noSequencerMode()) {
+    if (!rosegardenApplication->noSequencerMode()) {
         // We only waste the time looking for plugins here if we
         // know we're actually going to be able to use them.
         PluginFactory::enumerateAllPlugins(rawPlugins);

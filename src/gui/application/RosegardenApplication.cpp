@@ -23,18 +23,16 @@
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "RosegardenMainWindow.h"
-//#include <kcmdlineargs.h>
+
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QProcess>
-//#include <kuniqueapplication.h>
 #include <QByteArray>
 #include <QEventLoop>
 #include <QSessionManager>
 #include <QString>
 #include <QSettings>
-//#include <kstatusbar.h>
 
 
 namespace Rosegarden
@@ -74,12 +72,12 @@ void RosegardenApplication::sfxLoadExited(QProcess *proc)
 
 void RosegardenApplication::slotSetStatusMessage(QString msg)
 {
-    QMainWindow* mainWindow = dynamic_cast<QMainWindow*>(mainWidget());
-    if (mainWindow) {
+    QMainWindow* window = dynamic_cast<QMainWindow*>(mainWidget());
+    if (window) {
         if (msg.isEmpty())
             msg = TmpStatusMsg::getDefaultMsg();
 //@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), TmpStatusMsg::getDefaultId());
-        mainWindow->statusBar()->showMessage(QString("  %1").arg(msg));
+        window->statusBar()->showMessage(QString("  %1").arg(msg)); 
     }
 
 }
@@ -98,9 +96,8 @@ void RosegardenApplication::saveState(QSessionManager& sm)
 //&&&    KUniqueApplication::saveState(sm);
 }
 
-RosegardenApplication* RosegardenApplication::rgApp()
+RosegardenApplication* RosegardenApplication::ApplicationObject()
 {
-//&&&    return dynamic_cast<RosegardenApplication*>(kApplication());
     return dynamic_cast<RosegardenApplication*>(qApp);
 }
 

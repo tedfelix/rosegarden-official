@@ -79,13 +79,13 @@ disastrous side-effects.
     generalization of the MIDI event.  Each note or rest, each key
     change or tempo change, is an event: there's no "note class" or
     "rest class" as such, they are simply represented by events whose
-    type happens to be "note" or "rest".
+    type htheAppens to be "note" or "rest".
     Each Event has a type code, absolute time (the moment at which the
     Event starts, relative only to the start of the Composition) and
     duration (usually non-zero only for notes and rests), together
     with an arbitrary set of named and typed properties that can be
     assigned and queried dynamically by other parts of the
-    application.  So, for example, a note event is likely to have an
+    theApplication.  So, for example, a note event is likely to have an
     integer property called "pitch", and probably a "velocity", as
     well as potentially many others -- but this is not fixed anywhere,
     and there's no definition of what exactly a note is: client code
@@ -113,7 +113,7 @@ disastrous side-effects.
     which there may be any number.
  
  - \link Instrument Instrument \endlink corresponds broadly to a MIDI or Audio channel, and is
-    the destination for a performed Event.  Each Track is mapped to a
+    the destination for a performed Event.  Each Track is mtheApped to a
     single Instrument (although many Tracks may have the same
     Instrument), and the Instrument is indicated in the header at the
     left of the Track's row in the GUI.
@@ -181,8 +181,8 @@ The base directory also contains various music-related helper classes:
  
 \section gui GUI
  
-The GUI directory builds into a KDE/Qt application. Like most KDE
-applications, it follows a document/view model. The document (class
+The GUI directory builds into a KDE/Qt theApplication. Like most KDE
+theApplications, it follows a document/view model. The document (class
 RosegardenDocument, which wraps a Composition) can have several views
 (class RosegardenMainWidget), although at the moment only a single one is
 used.
@@ -201,7 +201,7 @@ components:
     are derived from the LayoutEngine base-class in the base library.
  
  - Tools, which implement each editing function at the GUI (such as
-    insert, erase, cut and paste). These are the tools which appear on
+    insert, erase, cut and paste). These are the tools which theAppear on
     the EditView's toolbar.
  
  - Toolbox, which is a simple string => tool map.
@@ -242,7 +242,7 @@ and Events (our basic music element).  To help lift the ambiguity,
     example).  It locates where the event occured in terms of musical
     element: which note or staff line the user clicked on, which pitch
     and time this corresponds to, that kind of stuff.  (In the
-    Notation and Matrix views, the LinedStaff calculates mappings
+    Notation and Matrix views, the LinedStaff calculates mtheAppings
     between coordinates and staff lines: the former is especially
     complicated because of its support for page layout.)\n
  -# The canvas view transmits this kind of info as a signal, which is
@@ -257,12 +257,12 @@ through a SegmentHelper (for instance, base/SegmentNotationHelper)
 which "wraps" the complexity into simple calls and performs all the
 hidden tasks.
  
-The EditView also maintains (obviously) its visual appearance with the
-layout classes, applying them when appropriate.
+The EditView also maintains (obviously) its visual theAppearance with the
+layout classes, theApplying them when theAppropriate.
  
 \section sequencer Sequencer
  
-The sequencer directory also builds into a KDE/Qt application, but one
+The sequencer directory also builds into a KDE/Qt theApplication, but one
 which doesn't have a gui.  The Sequencer can be started automatically
 by the main Rosegarden GUI or manually if testing - it's sometimes
 more convenient to do the latter as the Sequencer needs to be connected
@@ -289,7 +289,7 @@ The main operations invoked from the GUI involve starting and
 stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
 that does most of the hard work.  Events are read from (or written to,
-when recording) a set of mmapped files shared between the threads.
+when recording) a set of mmtheApped files shared between the threads.
  
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
@@ -300,7 +300,7 @@ and libRosegardenSound:
    Rosegarden Sequencer.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
-   MIDI files) and the MappedEvent and MappedComposition classes (the
+   MIDI files) and the MtheAppedEvent and MtheAppedComposition classes (the
    communication class for transferring events back and forth between
    sequencer and GUI).  This library is needed by the GUI as well as
    the Sequencer.
@@ -360,20 +360,20 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
-    RosegardenApplication app(argc, argv);
+    RosegardenApplication theApp(argc, argv);
 
     RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
-    RG_DEBUG << "QT translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
+    RG_DEBUG << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
 
     QTranslator qtTranslator;
     bool qtTranslationsLoaded = 
       qtTranslator.load("qt_" + QLocale::system().name(),
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     if (qtTranslationsLoaded) {
-        app.installTranslator(&qtTranslator);
-        RG_DEBUG << "QT translations loaded successfully." << endl;
+        theApp.installTranslator(&qtTranslator);
+        RG_DEBUG << "Qt translations loaded successfully." << endl;
     } else {
-        RG_DEBUG << "QT translations not loaded." << endl;
+        RG_DEBUG << "Qt translations not loaded." << endl;
     }
 
     QTranslator rgTranslator;
@@ -388,16 +388,16 @@ int main(int argc, char *argv[])
       rgTranslator.load(QLocale::system().name(), "locale/");
     if (rgTranslationsLoaded) {
         RG_DEBUG << "RG translations loaded successfully." << endl;
-        app.installTranslator(&rgTranslator);
+        theApp.installTranslator(&rgTranslator);
     } else {
         RG_DEBUG << "RG translations not loaded." << endl;
     }
 
-    app.setOrganizationName("rosegardenmusic");
-    app.setOrganizationDomain("rosegardenmusic.com");
-    app.setApplicationName(RosegardenApplication::tr("Rosegarden"));
+    theApp.setOrganizationName("rosegardenmusic");
+    theApp.setOrganizationDomain("rosegardenmusic.com");
+    theApp.setApplicationName(RosegardenApplication::tr("Rosegarden"));
 
-    QStringList args = app.arguments();
+    QStringList args = theApp.arguments();
 
     bool nosplash = false;
     bool nosequencer = false;
@@ -420,28 +420,28 @@ int main(int argc, char *argv[])
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {
-            cerr << "Loaded application icon \"" << name << "\"" << endl;
+            cerr << "Loaded theApplication icon \"" << name << "\"" << endl;
             icon.addPixmap(pixmap);
         }
     }
-    app.setWindowIcon(icon);
+    theApp.setWindowIcon(icon);
 
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
-        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << endl;
+        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", theApplying it" << endl;
         QFile file(stylepath);
         if (!file.open(QFile::ReadOnly)) {
             cerr << "(Failed to open file)" << endl;
         } else {
             QString styleSheet = QLatin1String(file.readAll());
-            app.setStyleSheet(styleSheet);
+            theApp.setStyleSheet(styleSheet);
         }
     }
 
     // Ensure quit on last window close
     //@@@ ???
     //
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    QObject::connect(&theApp, SIGNAL(lastWindowClosed()), &theApp, SLOT(quit()));
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -454,7 +454,7 @@ int main(int argc, char *argv[])
     }
 
     // If there is no config setting for the startup window size, set
-    // one now.  But base the default on the appropriate desktop size
+    // one now.  But base the default on the theAppropriate desktop size
     // (i.e. not the entire desktop, if Xinerama is in use).  This is
     // obtained from KGlobalSettings::desktopGeometry(), but we can't
     // give it a meaningful point to measure from at this stage so we
@@ -469,7 +469,7 @@ int main(int argc, char *argv[])
 
     int windowWidth = 0, windowHeight = 0;
 
-    QDesktopWidget *desktop = app.desktop();
+    QDesktopWidget *desktop = theApp.desktop();
     if (desktop) {
     QRect totalRect(desktop->screenGeometry());
     QRect desktopRect = desktop->availableGeometry();
@@ -498,26 +498,26 @@ int main(int argc, char *argv[])
         startLogo = StartupLogo::getInstance();
         startLogo->setShowTip(!newVersion);
         startLogo->show();
-        app.processEvents();    
+        theApp.processEvents();    
     }
 
     struct timeval logoShowTime;
     gettimeofday(&logoShowTime, 0);
 
     //
-    // Start application
+    // Start theApplication
     //
     RosegardenMainWindow *rosegardengui = 0;
 
 /*&&& worry about this later
-    if (app.isSessionRestored()) {
+    if (theApp.isSessionRestored()) {
         RG_DEBUG << "Restoring from session\n";
 
         // RESTORE(RosegardenMainWindow);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
             // memory leak if more than one can be restored?
-            RG_DEBUG << "Restoring from session - restoring app #" << n << endl;
+            RG_DEBUG << "Restoring from session - restoring theApp #" << n << endl;
             (rosegardengui = new RosegardenMainWindow)->restore(n);
             n++;
         }
@@ -526,16 +526,16 @@ int main(int argc, char *argv[])
 */
 
 #ifndef NO_SOUND
-        app.setNoSequencerMode(nosequencer);
+        theApp.setNoSequencerMode(nosequencer);
 #else
-        app.setNoSequencerMode(true);
+        theApp.setNoSequencerMode(true);
 #endif // NO_SOUND
 
-        rosegardengui = new RosegardenMainWindow(!app.noSequencerMode(), startLogo);
+        rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
 
     rosegardengui->setIsFirstRun(newVersion);
 
-        app.setMainWidget(rosegardengui);
+        theApp.setMainWidget(rosegardengui);
 
     if (windowWidth != 0 && windowHeight != 0) {
         rosegardengui->resize(windowWidth, windowHeight);
@@ -548,7 +548,7 @@ int main(int argc, char *argv[])
         if (startLogo) {
             startLogo->raise();
             startLogo->setHideEnabled(true);
-            app.flushX();
+            theApp.flushX();
         }
 
     for (int i = 1; i < args.size(); ++i) {
@@ -558,7 +558,7 @@ int main(int argc, char *argv[])
         }
 
     //@@@???
-    QObject::connect(&app, SIGNAL(aboutToSaveState()),
+    QObject::connect(&theApp, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 
     // Now that we've started up, raise start logo
@@ -566,7 +566,7 @@ int main(int argc, char *argv[])
     if (startLogo) {
         startLogo->raise();
         startLogo->setHideEnabled(true);
-        app.flushX();
+        theApp.flushX();
     }
 
     // Check for sequencer and launch if needed
@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
             QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
-                             &app, SLOT(sfxLoadExited(QProcess*)));
+                             &theApp, SLOT(sfxLoadExited(QProcess*)));
 
             sfxLoadProcess->start(sfxLoadPath, (QStringList()) << soundFontPath);
         } else {
@@ -684,6 +684,6 @@ int main(int argc, char *argv[])
     }
     settings.endGroup();
 
-    return app.exec();
+    return theApp.exec();
 }
 

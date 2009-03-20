@@ -19,7 +19,9 @@
 #include "BasicCommand.h"
 
 #include "base/Segment.h"
+
 #include <QString>
+
 
 namespace Rosegarden
 {

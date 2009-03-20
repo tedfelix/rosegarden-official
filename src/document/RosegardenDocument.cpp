@@ -2958,8 +2958,8 @@ RosegardenDocument::clearAllPlugins()
 Clipboard*
 RosegardenDocument::getClipboard()
 {
-    RosegardenMainWindow *app = (RosegardenMainWindow*)parent();
-    return app->getClipboard();
+    RosegardenMainWindow *mainWindow = (RosegardenMainWindow*)parent();
+    return mainWindow->getClipboard();
 }
 
 void RosegardenDocument::slotDocColoursChanged()

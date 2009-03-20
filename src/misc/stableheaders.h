@@ -145,7 +145,7 @@
 #include <kshortcut.h>
 #include <kactioncollection.h>
 #include <QAction>
-#include <kapp.h>
+#include <kmainWindow.h>
 #include <QApplication>
 #include <karrowbutton.h>
 #include <kcmdlineargs.h>

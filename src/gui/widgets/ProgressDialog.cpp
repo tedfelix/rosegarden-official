@@ -15,11 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ProgressDialog.h"
+
 #include "CurrentProgressDialog.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenApplication.h"
+
 #include <QCursor>
 #include <QProgressDialog>
 #include <QProgressBar>
@@ -37,38 +38,38 @@ bool ProgressDialog::m_modalVisible = false;
 ProgressDialog::ProgressDialog(QWidget *creator,
                                const char *name,
                                bool modal
-		):
-// 		QProgressDialog(creator, name,
-// 						tr("Processing..."), QString::null, modal),
-		
-// 		QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),	//modal),
-		QProgressDialog( creator, Qt::Dialog ),		// creator = parent ??
+        ):
+//         QProgressDialog(creator, name,
+//                         tr("Processing..."), QString::null, modal),
+        
+//         QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),    //modal),
+        QProgressDialog( creator, Qt::Dialog ),        // creator = parent ??
         m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
-	this->setObjectName( name );
-	if (modal){
-		setWindowModality( Qt::WindowModal );
-	}else{
-		setWindowModality( Qt::NonModal );
-	}
-// 	setMinimum();
-// 	setMaximum();
-// 	setValue();
-// 	setLabelText( tr("Processing...") );
-	setWindowTitle( tr("Processing...") );
-	setCancelButtonText( QString("Cancel") );
-	
-	// qt4 note: progressBar() doesn't exist anymore. 
-	// one can call setBar(QProgressBar*) but not retrieve it 
-	m_progressBar = new QProgressBar();
-	setBar( m_progressBar );
-	
-// 	progressBar()->setTotalSteps(totalSteps);
-//	progressBar()->setMaximum(totalSteps);
-	
-	
+    this->setObjectName( name );
+    if (modal){
+        setWindowModality( Qt::WindowModal );
+    }else{
+        setWindowModality( Qt::NonModal );
+    }
+//     setMinimum();
+//     setMaximum();
+//     setValue();
+//     setLabelText( tr("Processing...") );
+    setWindowTitle( tr("Processing...") );
+    setCancelButtonText( QString("Cancel") );
+    
+    // qt4 note: progressBar() doesn't exist anymore. 
+    // one can call setBar(QProgressBar*) but not retrieve it 
+    m_progressBar = new QProgressBar();
+    setBar( m_progressBar );
+    
+//     progressBar()->setTotalSteps(totalSteps);
+//    progressBar()->setMaximum(totalSteps);
+    
+    
     setWindowTitle(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
 //    << labelText() << " - modal : " << modal << endl;
@@ -88,8 +89,8 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 
 
 QProgressBar* ProgressDialog::progressBar()
-{	/* return the progress bar created in constructor */
-	return m_progressBar;
+{    /* return the progress bar created in constructor */
+    return m_progressBar;
 }
 
 
@@ -105,37 +106,37 @@ ProgressDialog::ProgressDialog(
 //                         tr("Processing..."),
 //                         labelText,
 //                         modal),
-		
-// 		QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),	//modal),
-		QProgressDialog( creator, Qt::Dialog ),	//modal),
-		
-		m_wasVisible(false),
+        
+//         QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),    //modal),
+        QProgressDialog( creator, Qt::Dialog ),    //modal),
+        
+        m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
-	
-	this->setObjectName( name );
-	if (modal){
-		setWindowModality( Qt::WindowModal );
-	}else{
-		setWindowModality( Qt::NonModal );
-	}
-// 	setMinimum();
-// 	setMaximum();
-// 	setValue();
-// 	setLabelText( tr("Processing...") );
-	setWindowTitle( tr("Processing...") );
-	setCancelButtonText( QString("Cancel") );
-	
-	
-	// qt4 note: progressBar() doesn't exist anymore. 
-	// one can call setBar(QProgressBar*) but not retrieve it 
-	m_progressBar = new QProgressBar();
-	setBar( m_progressBar );
-	
-// 	progressBar()->setTotalSteps(totalSteps);
-	progressBar()->setMaximum(totalSteps);
-	
+    
+    this->setObjectName( name );
+    if (modal){
+        setWindowModality( Qt::WindowModal );
+    }else{
+        setWindowModality( Qt::NonModal );
+    }
+//     setMinimum();
+//     setMaximum();
+//     setValue();
+//     setLabelText( tr("Processing...") );
+    setWindowTitle( tr("Processing...") );
+    setCancelButtonText( QString("Cancel") );
+    
+    
+    // qt4 note: progressBar() doesn't exist anymore. 
+    // one can call setBar(QProgressBar*) but not retrieve it 
+    m_progressBar = new QProgressBar();
+    setBar( m_progressBar );
+    
+//     progressBar()->setTotalSteps(totalSteps);
+    progressBar()->setMaximum(totalSteps);
+    
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
@@ -260,11 +261,11 @@ void ProgressDialog::slotThaw()
 void ProgressDialog::processEvents()
 {
     //    RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
-    //	     << m_modalVisible << endl;
+    //         << m_modalVisible << endl;
     if (m_modalVisible) {
         qApp->processEvents(QEventLoop::AllEvents, 50); //@@@ JAS added AllEvents
     } else {
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
     }
 }
 

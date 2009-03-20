@@ -35,7 +35,7 @@ namespace Rosegarden
 /**
  * RosegardenApplication
  *
- * Handles RosegardenMainWindows perceived uniqueness for us.
+ * Handles RosegardenMainWindow's perceived uniqueness for us.
  *
  */
 class RosegardenApplication : public QApplication
@@ -54,7 +54,7 @@ public:
 
     void refreshGUI(int maxTime);
 
-    static RosegardenApplication* rgApp();
+    static RosegardenApplication* ApplicationObject();
 
     static QByteArray Empty;
 
@@ -80,7 +80,7 @@ protected:
     bool m_noSequencerMode;
 };
 
-#define rgapp RosegardenApplication::rgApp()
+#define rosegardenApplication RosegardenApplication::ApplicationObject()
 
 
 }

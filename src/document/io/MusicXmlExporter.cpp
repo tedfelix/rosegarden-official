@@ -344,7 +344,7 @@ MusicXmlExporter::write()
         str << "\t\t</score-part>" << std::endl;
 
         emit setValue(int(double(trackNo++) / double(tracks.size()) * 20.0));
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
 
     } // end track iterator
     str << "\t</part-list>" << std::endl;
@@ -537,7 +537,7 @@ MusicXmlExporter::write()
 
         emit setValue(20 +
                          int(double(trackNo++) / double(tracks.size()) * 80.0));
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
     }
 
     str << "</score-partwise>" << std::endl;

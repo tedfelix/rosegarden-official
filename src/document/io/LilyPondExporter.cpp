@@ -988,7 +988,7 @@ LilyPondExporter::write()
 
             emit setValue(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
             
             bool currentSegmentSelected = false;
             if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 

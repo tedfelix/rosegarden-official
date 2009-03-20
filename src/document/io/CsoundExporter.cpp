@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "CsoundExporter.h"
 
 #include "base/Event.h"
@@ -25,9 +24,11 @@
 #include "base/Segment.h"
 #include "base/Track.h"
 #include "gui/general/ProgressReporter.h"
-#include <QObject>
-#include <fstream>
 #include "gui/application/RosegardenApplication.h"
+
+#include <QObject>
+
+#include <fstream>
 
 
 namespace Rosegarden
@@ -75,7 +76,7 @@ CsoundExporter::write()
             i != m_composition->end(); ++i) {
 
         emit setValue(int(double(trackNo++) / double(m_composition->getNbTracks()) * 100.0));
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
 
         str << "\n;; Segment: \"" << (*i)->getLabel() << "\"\n";
         str << ";; on Track: \""

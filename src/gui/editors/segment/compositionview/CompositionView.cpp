@@ -1600,7 +1600,7 @@ void CompositionView::setTextFloat(int x, int y, const QString &text)
     //     slotUpdateSegmentsDrawBuffer(r);
 
 
-    //    rgapp->slotSetStatusMessage(text);
+    //    mainWindow->slotSetStatusMessage(text);
 }
 
 void CompositionView::slotSetFineGrain(bool value)
@@ -1618,7 +1618,7 @@ CompositionView::slotTextFloatTimeout()
 {
     hideTextFloat();
     slotArtifactsDrawBufferNeedsRefresh();
-    //    rgapp->slotSetStatusMessage(QString::null);
+    //    mainWindow->slotSetStatusMessage(QString::null);
 }
 
 }

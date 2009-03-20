@@ -19,11 +19,10 @@
 #define _RG_EVENTQUANTIZECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <QObject>
-#include <QString>
 #include "base/Event.h"
 
-
+#include <QObject>
+#include <QString>
 
 
 namespace Rosegarden

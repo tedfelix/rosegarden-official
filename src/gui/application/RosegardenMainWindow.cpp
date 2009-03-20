@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
 
 #include "RosegardenMainWindow.h"
 
@@ -173,7 +174,6 @@
 #include "gui/ui/DevicesManagerNew.h"
 #include "gui/widgets/InputDialog.h"
 
-#include <Q3Canvas>
 #include <QApplication>
 #include <QSettings>
 #include <QShortcut>
@@ -293,7 +293,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 #ifdef HAVE_LIBJACK
 #define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
-        // First we check if jackd is running allready
+        // First we check if jackd is running already
 
         std::string jackClientName = "rosegarden";
 
