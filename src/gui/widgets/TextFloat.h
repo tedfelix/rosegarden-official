@@ -42,7 +42,8 @@ namespace Rosegarden
 
   To use a TextFloat :
 
-    1 - Get the TextFloat instance address using getTextFloat()
+    1 - Always get the TextFloat instance address using getTextFloat()
+        and never store it in a member variable.
 
     2 - Call attach() to pass its current parent widget to TextFloat
         (Typically this should be done in parent enterEvent() method)
@@ -58,6 +59,20 @@ namespace Rosegarden
 
   There should be no need to call reparent() explicitly as attach() does it to
   be called when necessary.
+
+
+  Note : If some parent of the widget using a text float is destroyed, Qt4 will
+         try to destroy all its childs among which is the text float.
+         In a first implementation, as TextFloat is a singleton, its dtor was
+         protected and the destroy attempt lead to a RG crash.
+         In current implementation TextFloat dtor is public and Qt4 may destroy
+         the singleton. But there should be no harm provided the widgets using
+         TextFloat never store (then use) a pointer to it among their members.
+         A new instance should be recreated as soon as TextFloat::getTextFloat()
+         will be called again.
+
+  Warning : To call TextFloat::getTextFloat() is now mandatory in all methods
+            needing a pointer to the TextFloat instance.
 
 */
 
@@ -89,9 +104,10 @@ public :
      */
     virtual void display(QPoint offset);
 
+    virtual ~TextFloat();
+
 protected :
     TextFloat(QWidget *parent);
-    virtual ~TextFloat() {}
 
     // Used to remember a parent widget change. 
     bool m_newlyAttached;

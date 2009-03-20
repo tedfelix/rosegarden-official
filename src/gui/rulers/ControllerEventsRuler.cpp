@@ -37,7 +37,6 @@
 #include "ControlRulerEventInsertCommand.h"
 #include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/widgets/TextFloat.h"
 #include "document/CommandHistory.h"
 
 #include <QMouseEvent>

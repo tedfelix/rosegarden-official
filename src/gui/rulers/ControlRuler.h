@@ -46,7 +46,6 @@ namespace Rosegarden
 class ControlTool;
 class ControlSelector;
 class ControlItem;
-class TextFloat;
 class Segment;
 class RulerScale;
 class EventSelection;
@@ -87,11 +86,11 @@ public:
 
     /// EventSelectionObserver
     virtual void eventSelected(EventSelection *,Event *);
-    virtual void eventDeselected(EventSelection *,Event *);    
+    virtual void eventDeselected(EventSelection *,Event *);
     virtual void eventSelectionDestroyed(EventSelection *);
-    
+
     void assignEventSelection(EventSelection *);
-    
+
     // SegmentObserver interface
     virtual void segmentDeleted(const Segment *);
 
@@ -112,7 +111,7 @@ public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();
     virtual void slotUpdateElementsHPos();
-    
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
@@ -174,10 +173,8 @@ protected:
     QString m_menuName;
     QMenu* 	m_menu;
 
-    TextFloat  *m_numberFloat;
-
     bool m_hposUpdatePending;
-    
+
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
 };

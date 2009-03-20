@@ -42,7 +42,6 @@ class QMainWindow;
 namespace Rosegarden
 {
 
-class TextFloat;
 class RulerScale;
 class RosegardenDocument;
 class Composition;
@@ -159,7 +158,6 @@ private:
 
     Composition *m_composition;
     RulerScale  *m_rulerScale;
-    TextFloat   *m_textFloat;
     QMenu       *m_menu;
     QMainWindow *m_parentMainWindow;
 

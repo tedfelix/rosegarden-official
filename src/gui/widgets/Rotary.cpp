@@ -22,7 +22,6 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QApplication>
 #include <QBrush>
@@ -80,8 +79,7 @@ Rotary::Rotary(QWidget *parent,
         m_buttonPressed(false),
         m_lastY(0),
         m_lastX(0),
-        m_knobColour(0, 0, 0),
-        m_textFloat(TextFloat::getTextFloat())
+        m_knobColour(0, 0, 0)
 {
     setObjectName("RotaryWidget");
 
@@ -388,21 +386,24 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     }
 
+    TextFloat *textFloat = TextFloat::getTextFloat();
+
+
     if (m_logarithmic) {
-        m_textFloat->setText(QString("%1").arg(powf(10, m_position)));
+        textFloat->setText(QString("%1").arg(powf(10, m_position)));
     } else {
-        m_textFloat->setText(QString("%1").arg(m_position));
+        textFloat->setText(QString("%1").arg(m_position));
     }
 
     QPoint offset = QPoint(width() + width() / 5, height() / 5);
-    m_textFloat->display(offset);
+    textFloat->display(offset);
 
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
 //              << ", position = " << m_position << std::endl;
 
     if (e->button() == Qt::RightButton || e->button() == Qt::MidButton) {
         // wait 500ms then hide text float
-        m_textFloat->hideAfterDelay(500);
+        textFloat->hideAfterDelay(500);
     }
 }
 
@@ -472,7 +473,7 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
 
         // Hide the float text
         //
-        m_textFloat->hideAfterDelay(500);
+        TextFloat::getTextFloat()->hideAfterDelay(500);
     }
 }
 
@@ -506,10 +507,11 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
+        TextFloat *textFloat = TextFloat::getTextFloat();
         if (m_logarithmic) {
-            m_textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
+            textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
         } else {
-            m_textFloat->setText(QString("%1").arg(m_snapPosition));
+            textFloat->setText(QString("%1").arg(m_snapPosition));
         }
     }
 }
@@ -531,19 +533,21 @@ Rotary::wheelEvent(QWheelEvent *e)
     snapPosition();
     update();
 
+    TextFloat *textFloat = TextFloat::getTextFloat();
+
     // draw on the float text
     if (m_logarithmic) {
-        m_textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
+        textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
     } else {
-        m_textFloat->setText(QString("%1").arg(m_snapPosition));
+        textFloat->setText(QString("%1").arg(m_snapPosition));
     }
 
     // Move just top/right of the rotary
     QPoint offset = QPoint(width() + width() / 5, height() / 5);
-    m_textFloat->display(offset);
+    textFloat->display(offset);
 
     // Keep text float visible for 500ms
-    m_textFloat->hideAfterDelay(500);
+    textFloat->hideAfterDelay(500);
 
     emit valueChanged(m_snapPosition);
 }
@@ -551,16 +555,7 @@ Rotary::wheelEvent(QWheelEvent *e)
 void
 Rotary::enterEvent(QEvent *)
 {
-    m_textFloat->attach(this);
-}
-
-
-void
-Rotary::leaveEvent(QEvent *)
-{
-    // To avoid a crash when matrix editor is closed
-    // if one of the matrix IPB has just been used
-    m_textFloat->setParent(RosegardenMainWindow::self());
+    TextFloat::getTextFloat()->attach(this);
 }
 
 

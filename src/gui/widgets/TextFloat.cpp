@@ -24,7 +24,7 @@
 #include <QString>
 #include <QWidget>
 
-#include <QTimer>
+#include <iostream>
 
 
 namespace Rosegarden
@@ -37,6 +37,12 @@ TextFloat::TextFloat(QWidget *parent):
     BaseTextFloat(parent),
     m_newlyAttached(false)
 {
+}
+
+TextFloat::~TextFloat()
+{
+    // m_textFloat is static
+    m_textFloat = 0;
 }
 
 TextFloat *

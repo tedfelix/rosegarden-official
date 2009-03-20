@@ -106,8 +106,6 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    m_textFloat = TextFloat::getTextFloat();
-
     QPalette p(palette());
     p.setColor(QPalette::Background,
                GUIPalette::getColour(GUIPalette::TextRulerBackground));
@@ -491,7 +489,7 @@ TempoRuler::wheelEvent(QWheelEvent *e)
 void
 TempoRuler::enterEvent(QEvent *)
 {
-    m_textFloat->attach(this);
+    TextFloat::getTextFloat()->attach(this);
     setMouseTracking(true);
 }
 
@@ -503,11 +501,7 @@ TempoRuler::leaveEvent(QEvent *)
         m_illuminate = -1;
         m_illuminatePoint = false;
         //!!!	m_refreshLinesOnly = true;
-        m_textFloat->hide();
-
-        // To avoid a crash when matrix editor is closed
-        // if mouse has just pass on the tempo ruler
-        m_textFloat->setParent(RosegardenMainWindow::self());
+        TextFloat::getTextFloat()->hide();
 
         update();
     }
@@ -586,17 +580,19 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
                      .arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
     }
 
+    TextFloat *textFloat = TextFloat::getTextFloat();
+
     if (showTime && time >= 0) {
-        m_textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));
+        textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));
     } else {
-        m_textFloat->setText(tempoText);
+        textFloat->setText(tempoText);
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
       //  std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
 
-    QPoint offset = cp + QPoint(10, 25 - cp.y() - m_textFloat->height());
-    m_textFloat->display(offset);
+    QPoint offset = cp + QPoint(10, 25 - cp.y() - textFloat->height());
+    textFloat->display(offset);
 
 }
 

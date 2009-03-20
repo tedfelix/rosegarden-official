@@ -95,9 +95,6 @@ ControlRuler::ControlRuler(Segment *segment,
     connect(this, SIGNAL(stateChange(const QString&, bool)),
             m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
 
-    m_numberFloat = TextFloat::getTextFloat();
-    m_numberFloat->hide();
-
     m_segment->addObserver(this);
 
     emit stateChange("have_controller_item_selected", false);
@@ -107,7 +104,7 @@ ControlRuler::~ControlRuler()
 {
     if(m_assignedEventSelection)
 	    m_assignedEventSelection->removeObserver(this);
-    
+
     if (m_segment) {
         m_segment->removeObserver(this);
     }
@@ -201,17 +198,17 @@ void ControlRuler::eventSelectionDestroyed(EventSelection *es) {
 	if(es==m_assignedEventSelection)
 		m_assignedEventSelection=NULL;
 }
-    
 
-void ControlRuler::assignEventSelection(EventSelection *es) 
+
+void ControlRuler::assignEventSelection(EventSelection *es)
 {
     // Clear all selected ControllItem
     Q3CanvasItemList list = canvas()->allItems();
     Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) 
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
 	    item->setHighlighted(false);
-    }		
+    }
 
     if(es) {
 	// Dont observe the old selection anymore
@@ -229,14 +226,14 @@ void ControlRuler::assignEventSelection(EventSelection *es)
 	    	    }
 	        }
             }
-        } 
-	
+        }
+
         es->addObserver(this);
 
     } else {
 	m_assignedEventSelection=NULL;
     }
-    
+
     slotUpdate();
 }
 
@@ -249,7 +246,7 @@ ControlRuler::segmentDeleted(const Segment *)
 void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
-        m_numberFloat->hide();
+        TextFloat::getTextFloat()->hide();
         m_selecting = false;
         return ;
     }
@@ -331,7 +328,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
-        m_numberFloat->hide();
+        TextFloat::getTextFloat()->hide();
         m_selecting = false;
         return ;
     }
@@ -371,7 +368,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
         m_itemMoved = false;
     }
 
-    m_numberFloat->hide();
+    TextFloat::getTextFloat()->hide();
 }
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
@@ -391,28 +388,12 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     m_itemMoved = true;
 
-    // Borrowed from Rotary - compute total position within window
-    //
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
-
-/*!!! EditView is no longer used -- need another way to do this
-
-    int scrollX = dynamic_cast<EditView*>(m_parentEditView)->getRawCanvasView()->
-                  horizontalScrollBar()->value();
-*/
-    int scrollX = 0; //!!!
-
-    /*
-    RG_DEBUG << "ControlRuler::contentsMouseMoveEvent - total pos = " << totalPos.x()
-             << ",e pos = " << e->pos().x()
-             << ", scroll bar = " << scrollX
-             << endl;
-             */
-
-    // Allow for scrollbar
-    //
-    m_numberFloat->move(totalPos.x() + e->pos().x() - scrollX + 20,
-                        totalPos.y() + e->pos().y() - 10);
+    TextFloat *numberFloat = TextFloat::getTextFloat();
+    numberFloat->reparent(this);
+    // A better way should be not to call reparent() here, but to
+    // call attach() in enterEvent().
+    // Nevertheless it doesn't work because, for some reason,  enterEvent()
+    // (when defined) is never called when mouse enters the ruler.
 
     int value = 0;
 
@@ -424,14 +405,16 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
             // set value to highest in selection
             if (item->getValue() >= value) {
                 value = item->getValue();
-                m_numberFloat->setText(QString("%1").arg(value));
+                numberFloat->setText(QString("%1").arg(value));
             }
         }
     }
     canvas()->update();
 
-    m_numberFloat->show();
-
+    // Display text float near mouse cursor
+    QPoint offset = mapFromGlobal(QPoint(QCursor::pos()))
+                    + QPoint(20, + numberFloat->height() / 2);
+    numberFloat->display(offset);
 }
 
 void

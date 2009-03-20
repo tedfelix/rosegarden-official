@@ -35,8 +35,6 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class TextFloat;
-
 
 class Fader : public QWidget
 {
@@ -104,8 +102,6 @@ protected:
 
     int m_clickMousePos;
     int m_clickButtonPos;
-
-    TextFloat *m_float;
 
     QPixmap *groovePixmap();
     QPixmap *buttonPixmap();

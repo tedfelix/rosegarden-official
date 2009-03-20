@@ -49,8 +49,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_min(0),
         m_max(0),
         m_type(type),
-        m_clickMousePos( -1),
-        m_float(TextFloat::getTextFloat())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -82,8 +81,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(h > w),
         m_min(min),
         m_max(max),
-        m_clickMousePos( -1),
-        m_float(TextFloat::getTextFloat())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -115,8 +113,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(vertical),
         m_min(min),
         m_max(max),
-        m_clickMousePos( -1),
-        m_float(TextFloat::getTextFloat())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
@@ -404,7 +401,7 @@ Fader::wheelEvent(QWheelEvent *e)
 void
 Fader::enterEvent(QEvent *)
 {
-    m_float->attach(this);
+    TextFloat::getTextFloat()->attach(this);
 }
 
 void
@@ -428,14 +425,16 @@ Fader::showFloatText()
                .arg(int(v * 1000) % 10);
     }
 
-    m_float->setText(text);
+    TextFloat *textFloat = TextFloat::getTextFloat();
+
+    textFloat->setText(text);
 
     // Reposition : Move just top/right
     QPoint offset = QPoint(width() + width() / 5, + height() / 5);
-    m_float->display(offset);
+    textFloat->display(offset);
 
     // Keep text float visible for 500ms
-    m_float->hideAfterDelay(500);
+    textFloat->hideAfterDelay(500);
 }
 
 void
