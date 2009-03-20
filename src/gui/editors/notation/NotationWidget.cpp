@@ -43,6 +43,7 @@ NotationWidget::NotationWidget() :
     setLayout(layout);
 
     m_view = new QGraphicsView;
+    m_view->setBackgroundBrush(Qt::white);
     layout->addWidget(m_view, 0, 0);
 
     m_hpanner = new QGraphicsView;
@@ -50,6 +51,7 @@ NotationWidget::NotationWidget() :
     m_hpanner->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_hpanner->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_hpanner->setInteractive(false);
+    m_hpanner->setBackgroundBrush(Qt::white);
 //    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
 //                              QPainter::SmoothPixmapTransform);
     layout->addWidget(m_hpanner, 1, 0);
