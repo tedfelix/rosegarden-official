@@ -19,12 +19,12 @@
 #ifndef _RG_MARKERMODIFYDIALOG_H_
 #define _RG_MARKERMODIFYDIALOG_H_
 
-#include <QDialog>
-#include <QString>
-#include <QLineEdit>
-
 #include "base/Marker.h"
 #include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+#include <QString>
 
 
 namespace Rosegarden
@@ -60,13 +60,13 @@ protected:
                     const QString &name,
                     const QString &des);
 
-    RosegardenDocument             *m_doc;
+    RosegardenDocument *m_doc;
 
     TimeWidget         *m_timeEdit;
-    QLineEdit                    *m_nameEdit;
-    QLineEdit                    *m_desEdit;
+    LineEdit           *m_nameEdit;
+    LineEdit           *m_desEdit;
 
-    int                           m_originalTime;
+    int                m_originalTime;
 };
 
 

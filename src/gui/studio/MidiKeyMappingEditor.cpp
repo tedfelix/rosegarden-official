@@ -17,17 +17,17 @@
 
 
 #include "MidiKeyMappingEditor.h"
+#include "NameSetEditor.h"
+#include "BankEditorDialog.h"
+#include "MidiKeyMapListViewItem.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "BankEditorDialog.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "MidiKeyMapListViewItem.h"
-#include "NameSetEditor.h"
+#include "gui/widgets/LineEdit.h"
 
-#include <QLineEdit>
 #include <QFrame>
 #include <QLayout>
 #include <QLabel>
@@ -149,9 +149,9 @@ MidiKeyMappingEditor::reset()
 void
 MidiKeyMappingEditor::slotNameChanged(const QString& name)
 {
-    const QLineEdit* lineEdit = dynamic_cast<const QLineEdit*>(sender());
+    const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
         return ;
     }
 
@@ -176,7 +176,7 @@ MidiKeyMappingEditor::slotEntryButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
     QObjectList::iterator it;
     QObject *obj;
 

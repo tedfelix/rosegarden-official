@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3DragObject>
+#include <Q3UriDrag>
 
 #include "AudioManagerDialog.h"
 
@@ -41,12 +43,14 @@
 #include "gui/widgets/AudioListView.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressDialog.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/WAVAudioFile.h"
 #include "UnusedAudioSelectionDialog.h"
 #include "document/Command.h"
-#include "gui/widgets/TmpStatusMsg.h"
 
 #include <QApplication>
 #include <QMainWindow>
@@ -73,10 +77,6 @@
 #include <QUrl>
 #include <QShortcut>
 #include <QKeySequence>
-#include <Q3DragObject>
-#include <Q3UriDrag>
-#include <QLineEdit>
-#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -951,10 +951,10 @@ AudioManagerDialog::slotRename()
 
     bool ok = false;
 
-    QString newText = QInputDialog::getText(this, 
+    QString newText = InputDialog::getText(this, 
                           tr("Change Audio File label"),
                           tr("Enter new label"), 
-                          QLineEdit::Normal, 
+                          LineEdit::Normal, 
                           QString(audioFile->getName().c_str()),
                           &ok );
 

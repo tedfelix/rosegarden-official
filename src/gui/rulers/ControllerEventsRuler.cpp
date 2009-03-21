@@ -18,8 +18,13 @@
 #include <Q3Canvas>
 #include <Q3CanvasItemList>
 #include <Q3CanvasLine>
-#include "ControllerEventsRuler.h"
 
+#include "ControllerEventsRuler.h"
+#include "ControlRuler.h"
+#include "ControlItem.h"
+#include "ControllerEventAdapter.h"
+#include "ControlRulerEventInsertCommand.h"
+#include "ControlRulerEventEraseCommand.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -31,12 +36,9 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
-#include "ControlRuler.h"
-#include "ControlItem.h"
-#include "ControllerEventAdapter.h"
-#include "ControlRulerEventInsertCommand.h"
-#include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 #include "document/CommandHistory.h"
 
 #include <QMouseEvent>
@@ -45,7 +47,6 @@
 #include <QString>
 #include <QValidator>
 #include <QWidget>
-#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -276,8 +277,8 @@ void ControllerEventsRuler::insertControllerEvent()
         QIntValidator intValidator(0, 128, this);
 //         QString res = KLineEditDlg::getText(tr("Controller Event Number"), "0",
 //                                             &ok, this, &intValidator);
-        QString res = QInputDialog::getText(this, "", tr("Controller Event Number"),
-                                           QLineEdit::Normal, "0", &ok);
+        QString res = InputDialog::getText(this, "", tr("Controller Event Number"),
+                                           LineEdit::Normal, "0", &ok);
         
         if (ok)
             number = res.toULong();

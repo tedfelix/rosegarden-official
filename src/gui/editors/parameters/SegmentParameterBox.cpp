@@ -74,8 +74,6 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QStackedWidget>
-//#include <QLineEdit>
-//#include <QInputDialog>
 
 
 namespace Rosegarden

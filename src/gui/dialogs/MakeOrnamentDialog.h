@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,12 +18,13 @@
 #ifndef _RG_MAKEORNAMENTDIALOG_H_
 #define _RG_MAKEORNAMENTDIALOG_H_
 
+#include "gui/widgets/LineEdit.h"
+
 #include <QDialog>
 #include <QString>
 
 
 class QWidget;
-class QLineEdit;
 
 
 namespace Rosegarden
@@ -44,10 +44,9 @@ public:
     int getBasePitch() const;
 
 protected:
-    QLineEdit *m_name;
+    LineEdit     *m_name;
     PitchChooser *m_pitch;
 };
-
 
 
 }

@@ -19,8 +19,11 @@
 #ifndef _RG_NAMESETEDITOR_H_
 #define _RG_NAMESETEDITOR_H_
 
+#include "gui/widgets/LineEdit.h"
+
 #include <QString>
 #include <QGroupBox>
+
 #include <vector>
 
 
@@ -30,7 +33,6 @@ class QTreeWidgetItem;
 class QLabel;
 class QGridLayout;
 class QFrame;
-class QLineEdit;
 
 
 namespace Rosegarden
@@ -69,7 +71,7 @@ protected:
     QStringList              m_completions;
     QPushButton             *m_initialLabel;
     std::vector<QLabel*>     m_labels;
-    std::vector<QLineEdit*>  m_names;
+    std::vector<LineEdit*>   m_names;
     QFrame                  *m_mainFrame;
     QLabel                  *m_librarian;
     QLabel                  *m_librarianEmail;

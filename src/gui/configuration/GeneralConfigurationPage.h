@@ -25,7 +25,6 @@
 #include <QCheckBox>
 #include <QSpinBox>
 #include <QComboBox>
-#include <QLineEdit>
 
 
 class QWidget;

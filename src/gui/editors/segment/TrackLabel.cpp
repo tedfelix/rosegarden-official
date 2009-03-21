@@ -19,6 +19,8 @@
 #include "TrackLabel.h"
 
 #include "base/Track.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
 #include <QFont>
 #include <QFrame>
@@ -34,8 +36,6 @@
 #include <QHBoxLayout>
 #include <QMouseEvent>
 #include <QHeaderView>
-#include <QLineEdit>
-#include <QInputDialog>
 
 namespace Rosegarden
 {
@@ -217,14 +217,18 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
     
-    QString newText = QInputDialog::getText(this,
+    QString newText = InputDialog::getText(this,
                                            tr("Change track name"),
                                            tr("Enter new track name"),
-                                           QLineEdit::Normal,
+                                           LineEdit::Normal,
                                            m_trackLabel->text(),
                                            &ok
                                            );
 //                                             &validator);
+//
+//&&& what to do with these validators that aren't part of Q/InputDialog?  We
+//could do something with them in InputDialog I suppose, but I'm not quite sure
+//how that would work.
 
     if ( ok )
         emit renameTrack(newText, m_id);

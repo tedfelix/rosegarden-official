@@ -73,7 +73,7 @@ protected:
 
 #ifdef HAVE_LIBJACK
     QCheckBox *m_startJack;
-    QLineEdit *m_jackPath;
+    LineEdit  *m_jackPath;
 #endif // HAVE_LIBJACK
 
 

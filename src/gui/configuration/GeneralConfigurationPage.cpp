@@ -17,11 +17,12 @@
 
 
 #include "GeneralConfigurationPage.h"
+#include "TabbedConfigurationPage.h"
+#include "ConfigurationPage.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
-#include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/eventlist/EventView.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
@@ -29,7 +30,7 @@
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/SoundDriver.h"
-#include "TabbedConfigurationPage.h"
+
 #include <QComboBox>
 #include <QSettings>
 #include <QFileDialog>
@@ -39,7 +40,6 @@
 #include <QFileInfo>
 #include <QFrame>
 #include <QLabel>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QString>

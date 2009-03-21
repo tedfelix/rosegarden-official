@@ -20,9 +20,10 @@
 #include "SelectionManager.h"
 
 #include "document/CommandHistory.h"
+#include "gui/widgets/InputDialog.h"
+#include "gui/widgets/LineEdit.h"
 
 #include <QMessageBox>
-#include <QInputDialog>
 #include <QFile>
 #include <QMenu>
 #include <QWidget>
@@ -58,9 +59,9 @@ public:
     ActionCommandArgumentQuerier(QWidget *widget) : m_widget(widget) { }
     QString getText(QString message, bool *ok) {
         if (!m_widget) return "";
-        return QInputDialog::getText(m_widget,
-                                     tr("Rosegarden - Query"),
-                                     message, QLineEdit::Normal, "", ok);
+        return InputDialog::getText(m_widget,
+                                    tr("Rosegarden - Query"),
+                                    message, LineEdit::Normal, "", ok);
     }
 
 protected:

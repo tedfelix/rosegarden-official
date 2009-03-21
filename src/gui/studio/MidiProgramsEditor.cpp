@@ -20,15 +20,16 @@
 #include "MidiProgramsEditor.h"
 #include "MidiBankListViewItem.h"
 #include "NameSetEditor.h"
+#include "BankEditorDialog.h"
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "BankEditorDialog.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
+#include "gui/widgets/LineEdit.h"
 #include "gui/general/IconLoader.h"
-#include <algorithm>
 
 #include <QCheckBox>
 #include <QCursor>
@@ -46,12 +47,12 @@
 #include <QSpinBox>
 #include <QString>
 #include <QToolTip>
-//#include <qvgroupbox.h>
-#include <QLineEdit>
 #include <QWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QFile>
+
+#include <algorithm>
 
 
 namespace Rosegarden
@@ -375,9 +376,9 @@ struct ProgramCmp
 void
 MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
-    const QLineEdit* lineEdit = dynamic_cast<const QLineEdit*>(sender());
+    const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a QLineEdit\n";
+        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
         return ;
     }
 
@@ -619,7 +620,7 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    QObjectList allChildren = queryList("QLineEdit", "[0-9]+");
+    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
     QObjectList::iterator it;
     QObject *obj;
 

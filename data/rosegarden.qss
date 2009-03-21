@@ -1698,3 +1698,11 @@ styled using the ::branch subcontrol. The ::branch Sub-control supports the
 :open, :closed, :has-sibling and :has-children pseudo states.  See
 QAbsractScrollArea to style scrollable backgrounds. */
 
+QTreeView
+{
+    background-color: #FFFFFF;
+    alternate-background-color: #EEEEFF;
+    color: #000000;
+    selection-background-color: #80AFFF;
+    selection-color: #FFFFFF;
+}

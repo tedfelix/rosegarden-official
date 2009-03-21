@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
+#include <Q3CanvasPixmap>
 
 #include "EventView.h"
 #include "EventViewItem.h"
@@ -52,11 +54,11 @@
 #include "gui/general/IconLoader.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
-#include <Q3Canvas>
-#include <Q3CanvasPixmap>
 #include <QAction>
 #include <QCheckBox>
 #include <QDialog>
@@ -78,7 +80,6 @@
 #include <QTreeWidgetItem>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <QInputDialog>
 
 #include <algorithm>
 
@@ -753,13 +754,12 @@ void
 EventView::slotEditTriggerName()
 {
     bool ok = false;
-    QString newLabel = QInputDialog::getText(this, 
-                        tr("Segment label"),
-                        tr("Label:"),
-                        QLineEdit::Normal,
-                        strtoqstr(m_segments[0]->getLabel()),
-                        &ok
-                    );
+    QString newLabel = InputDialog::getText(this, 
+                                            tr("Segment label"),
+                                            tr("Label:"),
+                                            LineEdit::Normal,
+                                            strtoqstr(m_segments[0]->getLabel()),
+                                            &ok);
 
     if (ok) {
         SegmentSelection selection;
