@@ -24,7 +24,7 @@
  */
 QWidget
 {
-    background: #000000;
+    background: #000000; 
     color: #FFFFFF; /* undocumented, but it works, and it's necessary */
 }
 
@@ -234,27 +234,15 @@ toolbar) is styled using the ::handle subcontrol. */
  * with black icons.  Top/bottom and left/right require different gradients to
  * get the proper look.
  */
-QToolBar::top,
-QToolBar::bottom,
-#App QToolBar::top,
-#App QToolBar::bottom,
-#matrixview QToolBar::top,
-#matrixview QToolBar::bottom,
-#tempoview QToolBar::top,
-#tempoview QToolBar::bottom
+QToolBar:top,
+QToolBar:bottom
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
 }
 
-QToolBar::left,
-QToolBar::right,
-#App QToolBar::left,
-#App QToolBar::right,
-#matrixview QToolBar::left,
-#matrixview QToolBar::right,
-#tempoview QToolBar::left,
-#tempoview QToolBar::right
+QToolBar:left,
+QToolBar:right 
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);
     color: #000000;
@@ -263,36 +251,23 @@ QToolBar::right,
 /* Toolbars must be light enough for black icons, therefore black text on their
  * QLabels, rather than white, is more appropriate.
  */
-QToolBar::top QLabel,
-QToolBar::bottom QLabel,
-#App QToolBar::top QLabel,
-#App QToolBar::bottom QLabel,
-#matrixview QToolBar::top QLabel,
-#matrixview QToolBar::bottom QLabel,
-#tempoview QToolBar::top QLabel,
-#tempoview QToolBar::bottom QLabel,
-QToolBar::left QLabel,
-QToolBar::right QLabel,
-#App QToolBar::left QLabel,
-#App QToolBar::right QLabel,
-#matrixview QToolBar::left QLabel,
-#matrixview QToolBar::right QLabel,
-#tempoview QToolBar::left QLabel,
-#tempoview QToolBar::right QLabel
+QToolBar:top QLabel,
+QToolBar:bottom QLabel 
 {
     background-color: transparent;
     color: #000000;
 }
 
-QToolBar::handle,
-#tempoview QToolBar::handle,
-#matrixview QToolBar::handle,
-#App QToolBar::handle
+QToolBar::handle:top,
+QToolBar::handle:bottom
 {
     image: url(:/pixmaps/style/htoolbar-separator.png);
-    
-/*    background-color: #404040;
-    width: 5px; */
+}
+
+QToolBar::handle:left,
+QToolBar::handle:right
+{
+    image: url(:pixmaps/style/vtoolbar-separator.png);
 }
 
 
@@ -701,12 +676,6 @@ QListView,
     selection-color: #FFFFFF;
 }
 
-QList QWidget
-{
-    background-color: orange;
-}
-
-
 /*  QMenuBar
   
 Supports the box model. The spacing property specifies the spacing between menu
@@ -1036,33 +1005,6 @@ QTextEdit
 }
 
 
-/*  QTreeView (affects QTreeWidget)
-
-Supports the box model. When alternating row colors is enabled, the alternating
-colors can be styled using the alternate-background-color property.  The color
-and background of the selected item is styled using selection-color and
-selection-background-color respectively.  The branches of the tree view can be
-styled using the ::branch subcontrol. The ::branch Sub-control supports the
-:open, :closed, :has-sibling and :has-children pseudo states.  See
-QAbsractScrollArea to style scrollable backgrounds. */
-
-QTreeView,
-#View QTreeView
-{
-    background-color: #FFFFFF;
-    alternate-background-color: #EEEEFF;
-    color: #000000;
-}
-
-#View QTreeView QLabel
-{
-    color: #FFFFFF;
-}
-
-QWidget#RotaryWidget
-{
-    background-color: transparent;
-}
 
 QWidget#LED
 {
@@ -1745,9 +1687,14 @@ QDoubleSpinBox::down-arrow:off
    image: url(:pixmaps/style/arrow-down-small-inverted.png);
 }
 
-#Splash QWidget
-{
-    border-image: url(:pixmaps/splash.png);
-}
 
+/*  QTreeView (affects QTreeWidget)
+
+Supports the box model. When alternating row colors is enabled, the alternating
+colors can be styled using the alternate-background-color property.  The color
+and background of the selected item is styled using selection-color and
+selection-background-color respectively.  The branches of the tree view can be
+styled using the ::branch subcontrol. The ::branch Sub-control supports the
+:open, :closed, :has-sibling and :has-children pseudo states.  See
+QAbsractScrollArea to style scrollable backgrounds. */
 

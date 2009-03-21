@@ -2,6 +2,7 @@
 <RCC version="1.0">
 <qresource>
 <file>autoload/autoload.rg</file>
+<file>rosegarden.qss</file>
 <!-- file>ui/DevicesManagerNewRc.qrc</file -->
 <file>ui/audiomanager.rc</file>
 <file>ui/bankeditor.rc</file>
