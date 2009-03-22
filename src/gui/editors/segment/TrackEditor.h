@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,12 +19,14 @@
 #define _RG_TRACKEDITOR_H_
 
 #include "base/MidiProgram.h"
-#include <map>
+#include "base/Event.h"
+#include "gui/editors/segment/TrackButtons.h"
+
 #include <QString>
 #include <QWidget>
 #include <QScrollArea>
-#include "base/Event.h"
-#include "gui/editors/segment/TrackButtons.h"
+
+#include <map>
 
 
 class QPaintEvent;
@@ -48,24 +49,6 @@ class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
 class StandardRuler;
-
-/**
- * Temporary (?) home for tghis class
- */
-class TrackButtonScroll : public QScrollArea
-{
-    Q_OBJECT
-public:
-    TrackButtonScroll(QWidget* parent=0);
-	~TrackButtonScroll();
-
-	void wheelEvent(QWheelEvent*);
-public slots:
-signals:
-	void gotWheelEvent(QWheelEvent*);
-
-protected:
-};
 
 /**
  * Global widget for segment edition.

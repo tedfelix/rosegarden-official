@@ -17,22 +17,12 @@
 
 #include "MatrixView.h"
 
-#include "document/RosegardenDocument.h"
 #include "MatrixWidget.h"
-#include "base/SnapGrid.h"
-#include "base/Clipboard.h"
-
-#include <QWidget>
-#include <QAction>
-#include <QActionGroup>
-#include <QMenu>
-#include <QLabel>
-#include <QToolBar>
-#include <QSettings>
-#include <QComboBox>
 
 #include "misc/Debug.h"
+
 #include "document/ConfigGroups.h"
+#include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 
 #include "gui/dialogs/QuantizeDialog.h"
@@ -59,6 +49,20 @@
 #include "base/BasicQuantizer.h"
 #include "base/LegatoQuantizer.h"
 #include "base/BaseProperties.h"
+#include "base/SnapGrid.h"
+#include "base/Clipboard.h"
+
+#include "gui/widgets/DeferScrollArea.h"
+
+#include <QWidget>
+#include <QAction>
+#include <QActionGroup>
+#include <QMenu>
+#include <QLabel>
+#include <QToolBar>
+#include <QSettings>
+#include <QComboBox>
+
 
 namespace Rosegarden
 {
@@ -74,6 +78,8 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     m_matrixWidget = new MatrixWidget(drumMode);
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
+
+    //m_pianoView = new DeferScrollArea(getCentralWidget);
 
     setupActions();
 

@@ -18,15 +18,16 @@
 #ifndef _RG_NEW_MATRIX_VIEW_H_
 #define _RG_NEW_MATRIX_VIEW_H_
 
-#include <vector>
-#include <QMainWindow>
-
 #include "base/Event.h"
 
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ZoomSlider.h"
+
+#include <QMainWindow>
+
+#include <vector>
 
 class QWidget;
 class QLabel;

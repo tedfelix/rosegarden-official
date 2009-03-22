@@ -15,8 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3DragObject>
+#include <Q3UriDrag>
+#include <Q3TextDrag>
+#include <Q3StrList>
 
 #include "TrackEditor.h"
+#include "TrackButtons.h"
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
@@ -45,9 +50,8 @@
 #include "gui/rulers/LoopRuler.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "gui/widgets/QDeferScrollView.h"
+#include "gui/widgets/DeferScrollArea.h"
 #include "sound/AudioFile.h"
-#include "TrackButtons.h"
 #include "document/Command.h"
 
 #include <QSettings>
@@ -59,7 +63,6 @@
 #include <QFont>
 #include <QPixmap>
 #include <QPoint>
-#include <QScrollArea>
 #include <QScrollBar>
 #include <QString>
 #include <QStringList>
@@ -73,29 +76,9 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 
-#include <Q3DragObject>
-#include <Q3UriDrag>
-#include <Q3TextDrag>
-#include <Q3StrList>
-
 
 namespace Rosegarden
 {
-/********TrackButtonScroll*********/
-TrackButtonScroll::TrackButtonScroll(QWidget* parent) : QScrollArea(parent)
-{
-}
-
-TrackButtonScroll::~TrackButtonScroll()
-{
-}
-
-void TrackButtonScroll::wheelEvent(QWheelEvent* e)
-{
-    emit gotWheelEvent(e);
-}
-/********TrackButtonScroll*********/
-
 
 TrackEditor::TrackEditor(RosegardenDocument* doc,
                          QWidget* rosegardenguiview,
@@ -239,7 +222,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     //
 //    m_trackButtonScroll = new QDeferScrollView(this);
 //    m_trackButtonScroll = new QScrollArea(this);
-    m_trackButtonScroll = new TrackButtonScroll(this);
+    m_trackButtonScroll = new DeferScrollArea(this);
     // Scroll bars always off
     m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
