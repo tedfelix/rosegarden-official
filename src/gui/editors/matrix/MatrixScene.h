@@ -39,6 +39,13 @@ class MatrixViewSegment;
 class RulerScale;
 class SnapGrid;
 
+/**
+ * Specialised graphics scene for matrix elements.  The note blocks
+ * and horizontal and vertical grid lines are all represented by
+ * graphics items owned by this scene.  This scene also owns the
+ * MatrixViewSegment classes which track segment contents in view
+ * objects.
+ */
 class MatrixScene : public QGraphicsScene, 
                     public CompositionObserver,
                     public SelectionManager

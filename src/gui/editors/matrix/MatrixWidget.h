@@ -42,6 +42,11 @@ class Panner;
 class Panned;
 class EventSelection;
 
+/**
+ * Container widget for the matrix editor (which is a QGraphicsView)
+ * and any associated rulers and panner widgets.  This class also owns
+ * the editing tools.
+ */
 class MatrixWidget : public QWidget,
                      public SelectionManager
 {

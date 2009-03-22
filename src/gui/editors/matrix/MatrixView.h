@@ -42,7 +42,14 @@ class Segment;
 class CommandRegistry;
 class EventSelection;
 class SnapGrid;
-	
+
+/**
+ * NewMatrixView is the top-level window containing the matrix editor.
+ * This class manages menus and toolbars, and provides implementations
+ * of any functions carried out from menu and toolbar actions.  It
+ * does not manage the editing tools (MatrixWidget does this) or the
+ * selection state (MatrixScene does that).
+ */
 class NewMatrixView : public EditViewBase,
                       public SelectionManager
 {
