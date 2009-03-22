@@ -376,14 +376,14 @@ MidiMixerWindow::slotControllerChanged(float value)
         int tabIndex = m_tabWidget->currentPageIndex();
         if (tabIndex < 0)
             tabIndex = 0;
-        int i = 0;
+        int k = 0;
         for (DeviceList::const_iterator dit = m_studio->begin();
                 dit != m_studio->end(); ++dit) {
-            RG_DEBUG << "slotControllerChanged: i = " << i << ", tabIndex " << tabIndex << endl;
+            RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex << endl;
             if (!dynamic_cast<MidiDevice*>(*dit))
                 continue;
-            if (i != tabIndex) {
-                ++i;
+            if (k != tabIndex) {
+                ++k;
                 continue;
             }
             RG_DEBUG << "slotControllerChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
