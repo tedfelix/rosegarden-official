@@ -18,6 +18,7 @@
 #include "MatrixView.h"
 
 #include "MatrixWidget.h"
+#include "PianoKeyboard.h"
 
 #include "misc/Debug.h"
 
@@ -62,6 +63,7 @@
 #include <QToolBar>
 #include <QSettings>
 #include <QComboBox>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -79,7 +81,14 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
 
-    //m_pianoView = new DeferScrollArea(getCentralWidget);
+    // just piddling so far:
+    /*m_pianoView = new DeferScrollArea;
+    QWidget *vport = m_pianoView->viewport();
+    QHBoxLayout *vportLayout = new QHBoxLayout;
+    vportLayout->addWidget(vport);
+
+    PianoKeyboard keyboard = new PianoKeyboard(vport);
+    vportLayout->addWidget(keyboard);*/
 
     setupActions();
 

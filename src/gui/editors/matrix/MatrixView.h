@@ -24,6 +24,7 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ZoomSlider.h"
+#include "gui/widgets/DeferScrollArea.h"
 
 #include <QMainWindow>
 
@@ -147,6 +148,8 @@ private:
     void setupActions();
     void initZoomToolbar();
     void initActionsToolbar();
+
+    DeferScrollArea *m_pianoView;
 };
 
 }

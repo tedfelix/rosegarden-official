@@ -37,29 +37,48 @@ class QXmlAttributes;
 namespace Rosegarden
 {
 
-/*
- * Read presets.xml from disk and store a collection of PresetElement objects
+/**
+ * Read \c presets.xml from disk and store a collection of PresetElement objects
  * which can then be used to populate and run the chooser GUI
+ *
+ * The file \c data/presets.xml is generated from \c
+ * data/presets/presets-editable.conf using the \c regenerate-presets script.
+ * \c presets-editable.conf is a human-editable plain text file whose format
+ * should be evident upon reading it.  This extensive database was supplied
+ * almost entirely by E. Magnus Johannson
+ *
+ * The file is loaded and parsed into a \c CategoriesContainer full of
+ * categories (eg. Strings, Brass, Single Reeds, Double Reeds) and the
+ * individual PresetElements therein contained.
  */
 class PresetGroup : public QXmlDefaultHandler
 {
     Q_DECLARE_TR_FUNCTIONS(PresetGroup)
 
 public:
+    /** A typedef used to indicate that reading the file failed */
     typedef Exception PresetFileReadFailed;
 
-    PresetGroup(); // load and parse the XML mapping file
+    /** Load and parse the XML file into a PresetGroup object */
+    PresetGroup();
+
+    /** Destroy the PresetGroup object */
     ~PresetGroup();
 
+    /** Return a \c CategoriesContainer that comprises a list of the categories
+     * discovered in the XML file */
     CategoriesContainer  getCategories() { return m_categories; }
     //CategoryElement getCategoryByIndex(int index) { return m_categories [index]; }
 
     // Xml handler methods:
-
+    /** Handle XML starting elements */
     virtual bool startElement (const QString& namespaceURI, const QString& localName,
                                const QString& qName, const QXmlAttributes& atts);
 
+    /** Handle non-fatal parsing errors */
     bool error(const QXmlParseException& exception);
+
+    /** Handle fatal parsing errors */
     bool fatalError(const QXmlParseException& exception);
 
     // I don't think I have anything to do with this, but it must return true?
