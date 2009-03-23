@@ -25,7 +25,7 @@
     <normaloff>:/pixmaps/DevicesManagerNew/icon-midi-connect.png</normaloff>:/pixmaps/DevicesManagerNew/icon-midi-connect.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget" >
-   <widget class="QWidget" name="" >
+   <widget class="QWidget" name="layoutWidget" >
     <property name="geometry" >
      <rect>
       <x>0</x>
@@ -83,6 +83,16 @@ p, li { white-space: pre-wrap; }
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
 }
+
+QLineEdit
+{
+    border: 1px solid #AAAAAA;
+    background-color: #FFFFFF;
+    selection-background-color: #80AFFF;
+    color: #000000;
+    selection-color: #FFFFFF;
+}
+
 </string>
           </property>
           <property name="frameShape" >
@@ -684,6 +694,16 @@ p, li { white-space: pre-wrap; }
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
 }
+
+QLineEdit
+{
+    border: 1px solid #AAAAAA;
+    background-color: #FFFFFF;
+    selection-background-color: #80AFFF;
+    color: #000000;
+    selection-color: #FFFFFF;
+}
+
 </string>
           </property>
           <property name="frameShape" >
