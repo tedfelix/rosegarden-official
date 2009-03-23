@@ -548,17 +548,17 @@ void
 MidiDevice::addInstrument(Instrument *instrument)
 {
     // Check / add controls to this instrument
-    ControlList controlList = getIPBControlParameters();
-    ControlList::const_iterator it;
-    
-    for (it = controlList.begin(); it != controlList.end(); it++) {
+    for (ControlList::const_iterator it = m_controlList.begin();
+         it != m_controlList.end(); ++it)
+    {
         int controller = (*it).getControllerValue();
         try {
             instrument->getControllerValue(controller);
         } catch(...) {
-            instrument->setControllerValue(controller, 0);
+            instrument->setControllerValue(controller, it->getDefault());
         }
     }
+    
     m_instruments.push_back(instrument);
     generatePresentationList();
 }
