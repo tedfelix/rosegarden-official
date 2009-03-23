@@ -100,8 +100,12 @@ DevicesManagerNew::DevicesManagerNew(QWidget * parent,
     m_treeWidget_playbackDevices->setColumnWidth(0, 200);   // column, width
     m_treeWidget_recordDevices->setColumnWidth(0, 200);     // column, width
     m_treeWidget_recordDevices->setColumnWidth(1, 60);      // column, width
-    move(60, 40);
-    resize(780, 420);
+
+// Let's try to avoid ever having to do anything with hard coded size
+// constraints, if possible, and it works fine for me without these lines (and
+// of course the size has changed now too):
+//    move(60, 40);
+//    resize(780, 420);
 
 
     connectSignalsToSlots();
