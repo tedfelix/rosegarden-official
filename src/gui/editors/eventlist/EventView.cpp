@@ -1804,6 +1804,8 @@ EventView::updateViewCaption()
                        .arg(m_segments.size()));
     }
 
+    setIcon(IconLoader().loadPixmap("window-eventlist"));
+
 }
 
 }

@@ -61,6 +61,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     setupActions();
 
     createGUI("notation.rc");
+
+
 }
 
 NewNotationView::~NewNotationView()

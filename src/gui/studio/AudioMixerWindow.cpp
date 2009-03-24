@@ -228,6 +228,7 @@ AudioMixerWindow::populate()
                               (m_mainBox, (instruments.size() + busses.size()) * 3, 7);
 
     setWindowTitle(tr("Audio Mixer"));
+    setIcon(IconLoader().loadPixmap("window-audiomixer"));
 
     int count = 1;
     int col = 0;

@@ -18,9 +18,6 @@
 
 #include "MidiMixerWindow.h"
 
-// #include <kmainwindow.h>
-// #include <kstandardaction.h>
-
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -109,6 +106,8 @@ MidiMixerWindow::setupTabs()
             this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
     setWindowTitle(tr("MIDI Mixer"));
+    setIcon(IconLoader().loadPixmap("window-midimixer"));
+
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
         dev = dynamic_cast<MidiDevice*>(*it);

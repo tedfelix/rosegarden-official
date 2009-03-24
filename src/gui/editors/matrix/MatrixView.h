@@ -145,11 +145,11 @@ private:
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;
 
+    void updateWindowTitle();
     void setupActions();
     void initZoomToolbar();
     void initActionsToolbar();
 
-    DeferScrollArea *m_pianoView;
 };
 
 }

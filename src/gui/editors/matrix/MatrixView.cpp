@@ -53,7 +53,7 @@
 #include "base/SnapGrid.h"
 #include "base/Clipboard.h"
 
-#include "gui/widgets/DeferScrollArea.h"
+#include "gui/general/IconLoader.h"
 
 #include <QWidget>
 #include <QAction>
@@ -81,15 +81,6 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
 
-    // just piddling so far:
-    /*m_pianoView = new DeferScrollArea;
-    QWidget *vport = m_pianoView->viewport();
-    QHBoxLayout *vportLayout = new QHBoxLayout;
-    vportLayout->addWidget(vport);
-
-    PianoKeyboard keyboard = new PianoKeyboard(vport);
-    vportLayout->addWidget(keyboard);*/
-
     setupActions();
 
     createGUI("matrix.rc");
@@ -105,10 +96,54 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     } else {
         findAction("select")->trigger();
     }
+
+    updateWindowTitle();
 }
 
 NewMatrixView::~NewMatrixView()
 {
+}
+
+
+void
+NewMatrixView::updateWindowTitle()
+{
+    // Set client label
+    //
+    QString view = tr("Matrix");
+    //&&&if (isDrumMode())
+    //    view = tr("Percussion");
+
+    if (m_segments.size() == 1) {
+
+        TrackId trackId = m_segments[0]->getTrack();
+        Track *track =
+            m_segments[0]->getComposition()->getTrackById(trackId);
+
+        int trackPosition = -1;
+        if (track)
+            trackPosition = track->getPosition();
+
+        setWindowTitle(tr("%1 - Segment Track #%2 - %3")
+                    .arg(getDocument()->getTitle())
+                    .arg(trackPosition + 1)
+                    .arg(view));
+
+    } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
+
+        setWindowTitle(tr("%1 - All Segments - %2")
+                    .arg(getDocument()->getTitle())
+                    .arg(view));
+
+    } else {
+
+        setWindowTitle(tr("%1 - %n Segment(s) - %2", "",
+                        m_segments.size())
+                    .arg(getDocument()->getTitle())
+                    .arg(view));
+    }
+
+    setIcon(IconLoader().loadPixmap("window-matrix"));
 }
 
 void
