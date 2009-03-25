@@ -645,51 +645,57 @@ AlsaDriver::generateInstruments()
     m_devicePortMap.clear();
     m_suspendedPortMap.clear();
 
-// Do NOT scan all the ports and create new devices for all of them.  This makes
-// it impossible for a user to delete any devices they don't want to use for
-// anything, and it's time for that irritation to end once and for all.
-/*    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); it++) {
-        if ((*it)->m_client == m_client) {
-            std::cerr << "(Ignoring own port " << (*it)->m_client
-            << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        } else if ((*it)->m_client == 0) {
-            std::cerr << "(Ignoring system port " << (*it)->m_client
-            << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        }
-
-        if ((*it)->isWriteable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create play device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                addInstrumentsForDevice(device);
-                m_devices.push_back(device);
-            }
-        }
-        if ((*it)->isReadable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create record device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                m_devices.push_back(device);
-            }
-        }
-    } */
+    // Do NOT scan all the ports and create new devices for all of them.  This makes
+    // it impossible for a user to delete any devices they don't want to use for
+    // anything, and it's time for that irritation to end once and for all.
+    // Absolutely.  Now that I've worked with the results, there is no question
+    // that this needs to go away now.
+    //
+    // The automatic scanning that takes place and finds a newly-started
+    // instance of Hydrogen or whatever seems fine though.
+     
+//    AlsaPortList::iterator it = m_alsaPorts.begin();
+//    for (; it != m_alsaPorts.end(); it++) {
+//        if ((*it)->m_client == m_client) {
+//            std::cerr << "(Ignoring own port " << (*it)->m_client
+//            << ":" << (*it)->m_port << ")" << std::endl;
+//            continue;
+//        } else if ((*it)->m_client == 0) {
+//            std::cerr << "(Ignoring system port " << (*it)->m_client
+//            << ":" << (*it)->m_port << ")" << std::endl;
+//            continue;
+//        }
+//
+//        if ((*it)->isWriteable()) {
+//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
+//            if (!device) {
+//#ifdef DEBUG_ALSA
+//                std::cerr << "WARNING: Failed to create play device" << std::endl;
+//#else
+//
+//                ;
+//#endif
+//
+//            } else {
+//                addInstrumentsForDevice(device);
+//                m_devices.push_back(device);
+//            }
+//        }
+//        if ((*it)->isReadable()) {
+//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
+//            if (!device) {
+//#ifdef DEBUG_ALSA
+//                std::cerr << "WARNING: Failed to create record device" << std::endl;
+//#else
+//
+//                ;
+//#endif
+//
+//            } else {
+//                m_devices.push_back(device);
+//            }
+//        }
+//    } 
 
 #ifdef HAVE_DSSI
     // Create a number of soft synth Instruments
