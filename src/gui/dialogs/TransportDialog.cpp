@@ -48,9 +48,6 @@
 #include <QDesktopWidget>
 
 
-using std::cerr;
-using std::endl;
-
 
 namespace Rosegarden
 {
@@ -303,7 +300,7 @@ TransportDialog::getCurrentModeAsString()
 
     // we shouldn't get here unless the map is not well-configured
     RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode " 
-        << m_currentMode << " to string." << endl;
+             << m_currentMode << " to string." << endl;
     throw Exception("could not map current mode to string.");
 }
 
@@ -1073,7 +1070,7 @@ TransportDialog::slotPanelOpenButtonClicked()
 //        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 //        adjustSize();
         setFixedSize(416, 87);
-        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;
@@ -1083,7 +1080,7 @@ TransportDialog::slotPanelOpenButtonClicked()
         m_transport->RecordingFrame->show();
 //        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
 //        adjustSize();
-        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = true;
@@ -1101,7 +1098,7 @@ TransportDialog::slotPanelCloseButtonClicked()
 //        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
         setFixedSize(416, 87);
 //        adjustSize();
-        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;
