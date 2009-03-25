@@ -26,6 +26,7 @@
 #include "misc/Debug.h"
 #include "gui/general/PixmapFunctions.h"
 
+#include <iostream>
 
 
 namespace Rosegarden {

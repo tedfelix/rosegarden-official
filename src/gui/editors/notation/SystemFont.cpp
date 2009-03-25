@@ -34,6 +34,8 @@
 #include <QPixmap>
 #include <QString>
 
+#include <iostream>
+
 
 namespace Rosegarden
 {

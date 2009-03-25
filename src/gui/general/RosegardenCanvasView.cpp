@@ -38,6 +38,8 @@
 #include <QEvent>
 #include <QWheelEvent>
 
+#include <iostream>
+
 
 namespace Rosegarden
 {
