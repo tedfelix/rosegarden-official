@@ -812,8 +812,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 #endif
 
-    SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
-
     jack_position_t position;
     jack_transport_state_t state = JackTransportRolling;
     bool doneRecord = false;
@@ -1028,15 +1026,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
             }
         }
 
-        if (sdb) {
-            LevelInfo info;
-            info.level = AudioLevel::multiplier_to_fader
-                         (peak[0], 127, AudioLevel::LongFader);
-            info.levelRight = AudioLevel::multiplier_to_fader
-                              (peak[1], 127, AudioLevel::LongFader);
+	LevelInfo info;
+	info.level = AudioLevel::multiplier_to_fader
+		(peak[0], 127, AudioLevel::LongFader);
+	info.levelRight = AudioLevel::multiplier_to_fader
+		(peak[1], 127, AudioLevel::LongFader);
 
-            sdb->setSubmasterLevel(buss, info);
-        }
+	SequencerDataBlock::getInstance()->setSubmasterLevel(buss, info);
 
         for (InstrumentId id = audioInstrumentBase;
                 id < audioInstrumentBase + audioInstruments; ++id) {
@@ -1157,15 +1153,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
             }
         }
 
-        if (sdb) {
-            LevelInfo info;
-            info.level = AudioLevel::multiplier_to_fader
-                         (peak[0], 127, AudioLevel::LongFader);
-            info.levelRight = AudioLevel::multiplier_to_fader
-                              (peak[1], 127, AudioLevel::LongFader);
+	LevelInfo info;
+	info.level = AudioLevel::multiplier_to_fader
+		(peak[0], 127, AudioLevel::LongFader);
+	info.levelRight = AudioLevel::multiplier_to_fader
+		(peak[1], 127, AudioLevel::LongFader);
 
-            sdb->setInstrumentLevel(id, info);
-        }
+	SequencerDataBlock::getInstance()->setInstrumentLevel(id, info);
     }
 
     if (asyncAudio) {
@@ -1194,15 +1188,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         }
     }
 
-    if (sdb) {
-        LevelInfo info;
-        info.level = AudioLevel::multiplier_to_fader
-                     (masterPeak[0], 127, AudioLevel::LongFader);
-        info.levelRight = AudioLevel::multiplier_to_fader
-                          (masterPeak[1], 127, AudioLevel::LongFader);
+    LevelInfo info;
+    info.level = AudioLevel::multiplier_to_fader
+	    (masterPeak[0], 127, AudioLevel::LongFader);
+    info.levelRight = AudioLevel::multiplier_to_fader
+	    (masterPeak[1], 127, AudioLevel::LongFader);
 
-        sdb->setMasterLevel(info);
-    }
+    SequencerDataBlock::getInstance()->setMasterLevel(info);
 
     for (InstrumentId id = audioInstrumentBase;
             id < audioInstrumentBase + audioInstruments; ++id) {
@@ -1313,7 +1305,6 @@ JackDriver::jackProcessRecord(InstrumentId id,
 #endif
 #endif
 
-    SequencerDataBlock *sdb = m_alsaDriver->getSequencerDataBlock();
     bool wroteSomething = false;
     sample_t peakLeft = 0.0, peakRight = 0.0;
 
@@ -1481,14 +1472,12 @@ JackDriver::jackProcessRecord(InstrumentId id,
     if (channels < 2)
         peakRight = peakLeft;
 
-    if (sdb) {
-        LevelInfo info;
-        info.level = AudioLevel::multiplier_to_fader
-                     (peakLeft, 127, AudioLevel::LongFader);
-        info.levelRight = AudioLevel::multiplier_to_fader
-                          (peakRight, 127, AudioLevel::LongFader);
-        sdb->setInstrumentRecordLevel(id, info);
-    }
+    LevelInfo info;
+    info.level = AudioLevel::multiplier_to_fader
+	    (peakLeft, 127, AudioLevel::LongFader);
+    info.levelRight = AudioLevel::multiplier_to_fader
+	    (peakRight, 127, AudioLevel::LongFader);
+    SequencerDataBlock::getInstance()->setInstrumentRecordLevel(id, info);
 
     if (wroteSomething) {
         m_fileWriter->signal();

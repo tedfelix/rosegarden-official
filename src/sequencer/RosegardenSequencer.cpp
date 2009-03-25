@@ -36,7 +36,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "MmappedControlBlock.h"
 #include "MmappedSegment.h"
 #include "sound/ControlBlock.h"
 #include "sound/SoundDriver.h"
@@ -79,7 +78,6 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
     m_metaIterator(0),
-    m_controlBlockMmapper(0),
     m_transportToken(1),
     m_isEndOfCompReached(false),
     m_mutex(true) // recursive
@@ -107,7 +105,6 @@ RosegardenSequencer::RosegardenSequencer() :
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-    m_driver->setSequencerDataBlock(m_sequencerMapper.getSequencerDataBlock());
     m_driver->setExternalTransportControl(this);
 }
 
@@ -117,7 +114,6 @@ RosegardenSequencer::~RosegardenSequencer()
     m_driver->shutdown();
     delete m_studio;
     delete m_driver;
-    delete m_controlBlockMmapper;
 }
 
 RosegardenSequencer *
@@ -189,10 +185,7 @@ RosegardenSequencer::play(const RealTime &time,
     //
     m_songPosition = time;
 
-    if (m_sequencerMapper.getSequencerDataBlock()) {
-        m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
-        (m_songPosition);
-    }
+    SequencerDataBlock::getInstance()->setPositionPointer(m_songPosition);
 
     if (m_transportStatus != RECORDING &&
         m_transportStatus != STARTING_TO_RECORD) {
@@ -252,13 +245,6 @@ RosegardenSequencer::play(const RealTime &time,
         mmapSegment(timeSigSegmentFileName);
     else
         SEQUENCER_DEBUG << "RosegardenSequencer::play() - no time sig segment found\n";
-
-    // Map control block if necessary
-    //
-    if (!m_controlBlockMmapper) {
-        m_controlBlockMmapper = new MmappedControlBlock(tmpDir + "/rosegarden_control_block");
-        m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
-    }
 
     initMetaIterator();
 
@@ -446,10 +432,7 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 
     m_songPosition = m_lastFetchSongPosition = pos;
 
-    if (m_sequencerMapper.getSequencerDataBlock()) {
-        m_sequencerMapper.getSequencerDataBlock()->setPositionPointer
-        (m_songPosition);
-    }
+    SequencerDataBlock::getInstance()->setPositionPointer(m_songPosition);
 
     m_driver->resetPlayback(oldPosition, m_songPosition);
 
@@ -1025,7 +1008,7 @@ RosegardenSequencer::clearStudio()
 
     SEQUENCER_DEBUG << "clearStudio()" << endl;
     m_studio->clear();
-    m_sequencerMapper.getSequencerDataBlock()->clearTemporaries();
+    SequencerDataBlock::getInstance()->clearTemporaries();
 
 }
 
@@ -1147,10 +1130,6 @@ void RosegardenSequencer::closeAllSegments()
     }
 
     m_mmappedSegments.clear();
-
-    m_sequencerMapper.setControlBlock(0);
-    delete m_controlBlockMmapper;
-    m_controlBlockMmapper = 0;
 }
 
 void RosegardenSequencer::remapTracks()
@@ -1379,7 +1358,7 @@ RosegardenSequencer::updateClocks()
 
     // Remap the position pointer
     //
-    m_sequencerMapper.updatePositionPointer(newPosition);
+    SequencerDataBlock::getInstance()->setPositionPointer(newPosition);
 }
 
 void
@@ -1397,14 +1376,13 @@ RosegardenSequencer::processRecordedMidi()
     MappedComposition mC;
     m_driver->getMappedComposition(mC);
 
-    if (mC.empty() || !m_controlBlockMmapper)
-        return ;
+    if (mC.empty()) return;
 
-    applyFiltering(&mC, m_controlBlockMmapper->getRecordFilter(), false);
-    m_sequencerMapper.updateRecordingBuffer(&mC);
+    applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
+    SequencerDataBlock::getInstance()->addRecordedEvents(&mC);
 
-    if (m_controlBlockMmapper->isMidiRoutingEnabled()) {
-        applyFiltering(&mC, m_controlBlockMmapper->getThruFilter(), true);
+    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
+        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
         routeEvents(&mC, false);
     }
 }
@@ -1415,8 +1393,8 @@ RosegardenSequencer::routeEvents(MappedComposition *mC, bool useSelectedTrack)
     InstrumentId instrumentId;
 
     if (useSelectedTrack) {
-        instrumentId = m_controlBlockMmapper->getInstrumentForTrack
-                       (m_controlBlockMmapper->getSelectedTrack());
+        instrumentId = ControlBlock::getInstance()->getInstrumentForTrack
+            (ControlBlock::getInstance()->getSelectedTrack());
         for (MappedComposition::iterator i = mC->begin();
                 i != mC->end(); ++i) {
             (*i)->setInstrument(instrumentId);
@@ -1424,8 +1402,8 @@ RosegardenSequencer::routeEvents(MappedComposition *mC, bool useSelectedTrack)
     } else {
         for (MappedComposition::iterator i = mC->begin();
                 i != mC->end(); ++i) {
-            instrumentId = m_controlBlockMmapper->getInstrumentForEvent
-                           ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
+            instrumentId = ControlBlock::getInstance()->getInstrumentForEvent
+                ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
             (*i)->setInstrument(instrumentId);
         }
     }
@@ -1449,41 +1427,6 @@ RosegardenSequencer::processRecordedAudio()
 void
 RosegardenSequencer::processAsynchronousEvents()
 {
-    if (!m_controlBlockMmapper) {
-
-        // If the control block mmapper doesn't exist, we'll just
-        // return here.  But we want to ensure we don't check again
-        // immediately, because we're probably waiting for the GUI to
-        // start up.
-
-        static bool lastChecked = false;
-        static struct timeval lastCheckedAt;
-
-        struct timeval tv;
-        (void)gettimeofday(&tv, 0);
-
-        if (lastChecked &&
-                tv.tv_sec == lastCheckedAt.tv_sec) {
-            lastCheckedAt = tv;
-            return ;
-        }
-
-        lastChecked = true;
-        lastCheckedAt = tv;
-
-        try {
-            m_controlBlockMmapper = new MmappedControlBlock(QDir::tempPath()
-                                    + "/rosegarden_control_block");
-        } catch (Exception e) {
-            // Assume that the control block simply hasn't been
-            // created yet because the GUI's still starting up.
-            // If there's a real problem with the mmapper, it
-            // will show up in play() instead.
-            return ;
-        }
-        m_sequencerMapper.setControlBlock(m_controlBlockMmapper->getControlBlock());
-    }
-
     MappedComposition mC;
     m_driver->getMappedComposition(mC);
     
@@ -1496,8 +1439,8 @@ RosegardenSequencer::processAsynchronousEvents()
     
     m_asyncQueue.merge(mC);
 
-    if (m_controlBlockMmapper->isMidiRoutingEnabled()) {
-        applyFiltering(&mC, m_controlBlockMmapper->getThruFilter(), true);
+    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
+        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
         routeEvents(&mC, true);
     }
 
@@ -1547,14 +1490,15 @@ MmappedSegment* RosegardenSequencer::mmapSegment(const QString& file)
 void RosegardenSequencer::initMetaIterator()
 {
     delete m_metaIterator;
-    m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments, m_controlBlockMmapper);
+    m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
 }
 
 void RosegardenSequencer::cleanupMmapData()
 {
     for (MmappedSegmentsMetaIterator::mmappedsegments::iterator i =
-                m_mmappedSegments.begin(); i != m_mmappedSegments.end(); ++i)
+             m_mmappedSegments.begin(); i != m_mmappedSegments.end(); ++i) {
         delete i->second;
+    }
 
     m_mmappedSegments.clear();
 

@@ -39,7 +39,6 @@ class QFrame;
 namespace Rosegarden
 {
 
-class SequencerMapper;
 class Rotary;
 class RosegardenDocument;
 class MappedEvent;
@@ -57,8 +56,8 @@ public:
     AudioMixerWindow(QWidget *parent, RosegardenDocument *document);
     ~AudioMixerWindow();
 
-    void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeters(SequencerMapper *mapper);
+    void updateMeters();
+    void updateMonitorMeters();
 
 public slots:
     void slotControllerDeviceEventReceived(MappedEvent *,

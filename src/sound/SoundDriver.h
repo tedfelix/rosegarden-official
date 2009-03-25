@@ -404,14 +404,6 @@ public:
     virtual void setMIDIClockInterval(RealTime interval) 
         { m_midiClockInterval = interval; }
 
-    // Get and set the mapper which may optionally be used to
-    // store recording levels etc for communication back to the GUI.
-    // (If a subclass wants this and finds it's not there, it should
-    // simply continue without.)
-    //
-    SequencerDataBlock *getSequencerDataBlock() { return m_sequencerDataBlock; }
-    void setSequencerDataBlock(SequencerDataBlock *d) { m_sequencerDataBlock = d; }
-
     ExternalTransport *getExternalTransportControl() const {
         return m_externalTransport;
     }
@@ -489,10 +481,6 @@ protected:
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
-
-    // Sequencer data block for communication back to GUI
-    //
-    SequencerDataBlock          *m_sequencerDataBlock;
     
     // Controller to make externally originated transport requests on
     //

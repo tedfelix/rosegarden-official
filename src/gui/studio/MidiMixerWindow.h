@@ -34,7 +34,6 @@ class QFrame;
 namespace Rosegarden
 {
 
-class SequencerMapper;
 class Rotary;
 class RosegardenDocument;
 class MidiMixerVUMeter;
@@ -57,8 +56,8 @@ public:
     /* 
      * Update the VU meters
      */
-    void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeter(SequencerMapper *mapper);
+    void updateMeters();
+    void updateMonitorMeter();
 
 public slots:
     void slotSynchronise(); // synchronise with updated studio

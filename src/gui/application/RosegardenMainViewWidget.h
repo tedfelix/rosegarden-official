@@ -41,7 +41,6 @@ namespace Rosegarden
 class TrackParameterBox;
 class TrackEditor;
 class SimpleRulerScale;
-class SequencerMapper;
 class SegmentParameterBox;
 class Segment;
 class RosegardenDocument;
@@ -115,8 +114,8 @@ public:
      */
     void showVisuals(const MappedEvent *mE);
 
-    void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeters(SequencerMapper *mapper);
+    void updateMeters();
+    void updateMonitorMeters();
 
     /**
      * Change zoom size -- set the RulerScale's units-per-pixel to size

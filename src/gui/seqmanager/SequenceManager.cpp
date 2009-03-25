@@ -21,6 +21,7 @@
 #include "SequenceManager.h"
 
 #include "sound/Midi.h"
+#include "sound/ControlBlock.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
@@ -49,8 +50,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapperFactory.h"
-#include "SequencerMapper.h"
-#include "ControlBlockMmapper.h"
 #include "sound/AudioFile.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
@@ -78,30 +77,28 @@ namespace Rosegarden
 {
 
 SequenceManager::SequenceManager(RosegardenDocument *doc,
-                                 TransportDialog *transport):
-            m_doc(doc),
-            m_compositionMmapper(new CompositionMmapper(m_doc)),
-            m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
-            m_metronomeMmapper(SegmentMmapperFactory::makeMetronome(m_doc)),
-            m_tempoSegmentMmapper(SegmentMmapperFactory::makeTempo(m_doc)),
-            m_timeSigSegmentMmapper(SegmentMmapperFactory::makeTimeSig(m_doc)),
-            m_transportStatus(STOPPED),
-            m_soundDriverStatus(NO_DRIVER),
-            m_transport(transport),
-            m_lastRewoundAt(clock()),
-            m_countdownDialog(0),
-            m_countdownTimer(new QTimer(m_doc)),
-            m_shownOverrunWarning(false),
-            m_recordTime(new QTime()),
-            m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
-            m_updateRequested(true),
-            m_compositionMmapperResetTimer(new QTimer(m_doc)),
-            m_sequencerMapper(0),
-            m_reportTimer(new QTimer(m_doc)),
-            m_canReport(true),
-            m_lastLowLatencySwitchSent(false),
-            m_lastTransportStartPosition(0),
-            m_sampleRate(0)
+                                 TransportDialog *transport) :
+    m_doc(doc),
+    m_compositionMmapper(new CompositionMmapper(m_doc)),
+    m_metronomeMmapper(SegmentMmapperFactory::makeMetronome(m_doc)),
+    m_tempoSegmentMmapper(SegmentMmapperFactory::makeTempo(m_doc)),
+    m_timeSigSegmentMmapper(SegmentMmapperFactory::makeTimeSig(m_doc)),
+    m_transportStatus(STOPPED),
+    m_soundDriverStatus(NO_DRIVER),
+    m_transport(transport),
+    m_lastRewoundAt(clock()),
+    m_countdownDialog(0),
+    m_countdownTimer(new QTimer(m_doc)),
+    m_shownOverrunWarning(false),
+    m_recordTime(new QTime()),
+    m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
+    m_updateRequested(true),
+    m_compositionMmapperResetTimer(new QTimer(m_doc)),
+    m_reportTimer(new QTimer(m_doc)),
+    m_canReport(true),
+    m_lastLowLatencySwitchSent(false),
+    m_lastTransportStartPosition(0),
+    m_sampleRate(0)
 {
     // Replaced this with a call to cleanup() from composition mmapper ctor:
     // if done here, this removes the mmapped versions of any segments stored
@@ -133,10 +130,6 @@ SequenceManager::SequenceManager(RosegardenDocument *doc,
     // we're not well placed to handle reporting to the user if it
     // throws an exception (and we don't want to leave the object half
     // constructed).
-
-    // Try to map the sequencer file
-    //
-    mapSequencer();
 }
 
 SequenceManager::~SequenceManager()
@@ -145,11 +138,9 @@ SequenceManager::~SequenceManager()
 
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";
     delete m_compositionMmapper;
-    delete m_controlBlockMmapper;
     delete m_metronomeMmapper;
     delete m_tempoSegmentMmapper;
     delete m_timeSigSegmentMmapper;
-    delete m_sequencerMapper;
 }
 
 void SequenceManager::setDocument(RosegardenDocument* doc)
@@ -216,10 +207,6 @@ void SequenceManager::setDocument(RosegardenDocument* doc)
             this, SLOT(slotScheduledCompositionMmapperReset()));
 
     resetCompositionMmapper();
-
-    // Try to map the sequencer file
-    //
-    mapSequencer();
 }
 
 void
@@ -228,31 +215,15 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
     m_transportStatus = status;
 }
 
-void
-SequenceManager::mapSequencer()
-{
-    if (m_sequencerMapper)
-        return ;
-
-    try {
-        m_sequencerMapper = new SequencerMapper(
-                                QDir::tempPath() + "/rosegarden_sequencer_timing_block");
-    } catch (Exception) {
-        m_sequencerMapper = 0;
-    }
-}
-
 bool
 SequenceManager::play()
 {
-    mapSequencer();
-
     Composition &comp = m_doc->getComposition();
 
     // If already playing or recording then stop
     //
     if (m_transportStatus == PLAYING ||
-            m_transportStatus == RECORDING ) {
+        m_transportStatus == RECORDING) {
         stopping();
         return true;
     }
@@ -268,9 +239,9 @@ SequenceManager::play()
 
     // Update play metronome status
     //
-    m_controlBlockMmapper->updateMetronomeData
-    (m_metronomeMmapper->getMetronomeInstrument());
-    m_controlBlockMmapper->updateMetronomeForPlayback();
+    ControlBlock::getInstance()->setInstrumentForMetronome
+        (m_metronomeMmapper->getMetronomeInstrument());
+    ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
 
     // make sure we toggle the play button
     //
@@ -538,8 +509,6 @@ SequenceManager::sendSequencerJump(const RealTime &time)
 void
 SequenceManager::record(bool toggled)
 {
-    mapSequencer();
-
     SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")" << endl;
 
     Composition &comp = m_doc->getComposition();
@@ -674,13 +643,11 @@ punchin:
 
         // Update record metronome status
         //
-        m_controlBlockMmapper->updateMetronomeData
-        (m_metronomeMmapper->getMetronomeInstrument());
-        m_controlBlockMmapper->updateMetronomeForRecord();
+        ControlBlock::getInstance()->setInstrumentForMetronome
+            (m_metronomeMmapper->getMetronomeInstrument());
+        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
 		
-		
-		
-		QSettings settings;
+        QSettings settings;
 		
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start
@@ -1619,7 +1586,7 @@ void SequenceManager::resetCompositionMmapper()
     resetMetronomeMmapper();
     resetTempoSegmentMmapper();
     resetTimeSigSegmentMmapper();
-    resetControlBlockMmapper();
+    resetControlBlock();
 }
 
 void SequenceManager::resetMetronomeMmapper()
@@ -1646,11 +1613,11 @@ void SequenceManager::resetTimeSigSegmentMmapper()
     m_timeSigSegmentMmapper = SegmentMmapperFactory::makeTimeSig(m_doc);
 }
 
-void SequenceManager::resetControlBlockMmapper()
+void SequenceManager::resetControlBlock()
 {
     SEQMAN_DEBUG << "SequenceManager::resetControlBlockMmapper()\n";
 
-    m_controlBlockMmapper->setDocument(m_doc);
+    ControlBlock::getInstance()->setDocument(m_doc);
 }
 
 bool SequenceManager::event(QEvent *e)
@@ -1689,8 +1656,8 @@ void SequenceManager::checkRefreshStatus()
     SegmentRefreshMap newTriggerMap;
 
     for (Composition::triggersegmentcontaineriterator i =
-                comp.getTriggerSegments().begin();
-            i != comp.getTriggerSegments().end(); ++i) {
+             comp.getTriggerSegments().begin();
+         i != comp.getTriggerSegments().end(); ++i) {
 
         Segment *s = (*i)->getSegment();
 
@@ -1864,7 +1831,7 @@ void SequenceManager::timeSignatureChanged(const Composition *)
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
     SEQMAN_DEBUG << "SequenceManager::trackChanged(" << t << ", " << (t ? t->getPosition() : -1) << ")\n";
-    m_controlBlockMmapper->updateTrackData(t);
+    ControlBlock::getInstance()->updateTrackData(t);
 
     if (m_transportStatus == PLAYING) {
         RosegardenSequencer::getInstance()->remapTracks();
@@ -1873,7 +1840,7 @@ void SequenceManager::trackChanged(const Composition *, Track* t)
 
 void SequenceManager::trackDeleted(const Composition *, TrackId t)
 {
-    m_controlBlockMmapper->setTrackDeleted(t);
+    ControlBlock::getInstance()->setTrackDeleted(t, true);
 }
 
 void SequenceManager::metronomeChanged(InstrumentId id,
@@ -1887,14 +1854,15 @@ void SequenceManager::metronomeChanged(InstrumentId id,
                  << id
                  << endl;
 
-    if (regenerateTicks)
-        resetMetronomeMmapper();
+    if (regenerateTicks) resetMetronomeMmapper();
 
-    m_controlBlockMmapper->updateMetronomeData(id);
+    Composition &comp = m_doc->getComposition();
+    ControlBlock::getInstance()->setInstrumentForMetronome(id);
+
     if (m_transportStatus == PLAYING) {
-        m_controlBlockMmapper->updateMetronomeForPlayback();
+        ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
     } else {
-        m_controlBlockMmapper->updateMetronomeForRecord();
+        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
     }
 
     m_metronomeMmapper->refresh();
@@ -1902,7 +1870,7 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     m_tempoSegmentMmapper->refresh();
 }
 
-void SequenceManager::metronomeChanged(const Composition *)
+void SequenceManager::metronomeChanged(const Composition *comp)
 {
     // This method is called when the muting status in the composition
     // has changed -- the metronome itself has not actually changed
@@ -1912,28 +1880,36 @@ void SequenceManager::metronomeChanged(const Composition *)
                  << m_metronomeMmapper->getMetronomeInstrument()
                  << endl;
 
-    m_controlBlockMmapper->updateMetronomeData
-    (m_metronomeMmapper->getMetronomeInstrument());
+    if (!comp) comp = &m_doc->getComposition();
+    ControlBlock::getInstance()->setInstrumentForMetronome
+        (m_metronomeMmapper->getMetronomeInstrument());
 
     if (m_transportStatus == PLAYING) {
-        m_controlBlockMmapper->updateMetronomeForPlayback();
+        ControlBlock::getInstance()->setMetronomeMuted(comp->usePlayMetronome());
     } else {
-        m_controlBlockMmapper->updateMetronomeForRecord();
+        ControlBlock::getInstance()->setMetronomeMuted(comp->useRecordMetronome());
     }
 }
 
 void SequenceManager::filtersChanged(MidiFilter thruFilter,
                                      MidiFilter recordFilter)
 {
-    m_controlBlockMmapper->updateMidiFilters(thruFilter, recordFilter);
+    ControlBlock::getInstance()->setThruFilter(thruFilter);
+    ControlBlock::getInstance()->setRecordFilter(recordFilter);
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
 {
-    if (m_controlBlockMmapper->updateSoloData(solo, selectedTrack)) {
-        if (m_transportStatus == PLAYING) {
-            RosegardenSequencer::getInstance()->remapTracks();
-        }
+    bool changed = false;
+    ControlBlock *cb = ControlBlock::getInstance();
+    if (solo != cb->isSolo() ||
+        (solo && selectedTrack != cb->getSelectedTrack())) {
+        changed = true;
+    }
+    cb->setSolo(solo);
+    cb->setSelectedTrack(selectedTrack);
+    if (changed && m_transportStatus == PLAYING) {
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1944,7 +1920,7 @@ void SequenceManager::tempoChanged(const Composition *c)
     // Refresh all segments
     //
     for (SegmentRefreshMap::iterator i = m_segments.begin();
-            i != m_segments.end(); ++i) {
+         i != m_segments.end(); ++i) {
         segmentModified(i->first);
     }
 
@@ -2067,7 +2043,7 @@ SequenceManager::slotFoundMountPoint(const QString&,
 void
 SequenceManager::enableMIDIThruRouting(bool state)
 {
-    m_controlBlockMmapper->enableMIDIThruRouting(state);
+    ControlBlock::getInstance()->setMidiRoutingEnabled(state);
 }
 
 int

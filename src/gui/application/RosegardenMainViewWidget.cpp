@@ -60,7 +60,6 @@
 #include "gui/editors/segment/compositionview/SegmentSelector.h"
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "gui/seqmanager/SequencerMapper.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
 #include "gui/rulers/TempoRuler.h"
@@ -72,6 +71,7 @@
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedEvent.h"
+#include "sound/SequencerDataBlock.h"
 #include "document/Command.h"
 #include <QSettings>
 #include <QMessageBox>
@@ -1148,7 +1148,7 @@ void RosegardenMainViewWidget::showVisuals(const MappedEvent *mE)
 }
 
 void
-RosegardenMainViewWidget::updateMeters(SequencerMapper *mapper)
+RosegardenMainViewWidget::updateMeters()
 {
     const int unknownState = 0, oldState = 1, newState = 2;
 
@@ -1178,14 +1178,16 @@ RosegardenMainViewWidget::updateMeters(SequencerMapper *mapper)
         InstrumentId instrumentId = track->getInstrument();
 
         if (states[instrumentId] == unknownState) {
-            bool isNew = mapper->getInstrumentLevel(instrumentId,
-                                                    levels[instrumentId]);
+            bool isNew =
+                SequencerDataBlock::getInstance()->getInstrumentLevel
+                (instrumentId, levels[instrumentId]);
             states[instrumentId] = (isNew ? newState : oldState);
         }
 
         if (recStates[instrumentId] == unknownState) {
-            bool isNew = mapper->getInstrumentRecordLevel(instrumentId,
-                         recLevels[instrumentId]);
+            bool isNew =
+                SequencerDataBlock::getInstance()->getInstrumentRecordLevel
+                (instrumentId, recLevels[instrumentId]);
             recStates[instrumentId] = (isNew ? newState : oldState);
         }
 
@@ -1277,17 +1279,20 @@ RosegardenMainViewWidget::updateMeters(SequencerMapper *mapper)
 }
 
 void
-RosegardenMainViewWidget::updateMonitorMeters(SequencerMapper *mapper)
+RosegardenMainViewWidget::updateMonitorMeters()
 {
     Instrument *instrument =
         m_instrumentParameterBox->getSelectedInstrument();
     if (!instrument ||
-            (instrument->getType() != Instrument::Audio))
-        return ;
+        (instrument->getType() != Instrument::Audio)) {
+        return;
+    }
 
     LevelInfo level;
-    if (!mapper->getInstrumentRecordLevel(instrument->getId(), level))
-        return ;
+    if (!SequencerDataBlock::getInstance()->
+        getInstrumentRecordLevel(instrument->getId(), level)) {
+        return;
+    }
 
     float dBleft = AudioLevel::fader_to_dB
                    (level.level, 127, AudioLevel::LongFader);

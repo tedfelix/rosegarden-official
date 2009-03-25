@@ -3412,8 +3412,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     //
     snd_seq_ev_clear(&event);
 
-    if ((mC.begin() != mC.end()) && getSequencerDataBlock()) {
-        getSequencerDataBlock()->setVisual(*mC.begin());
+    if ((mC.begin() != mC.end())) {
+        SequencerDataBlock::getInstance()->setVisual(*mC.begin());
     }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -3574,11 +3574,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 				  (*i)->getVelocity());
 	    needNoteOff = true;
 	    
-	    if (!isSoftSynth && getSequencerDataBlock()) {
+	    if (!isSoftSynth) {
 		LevelInfo info;
 		info.level = (*i)->getVelocity();
 		info.levelRight = 0;
-		getSequencerDataBlock()->setInstrumentLevel
+		SequencerDataBlock::getInstance()->setInstrumentLevel
                     ((*i)->getInstrument(), info);
 	    }
 
@@ -3599,12 +3599,12 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                       (*i)->getPitch(),
                                       (*i)->getVelocity());
 
-                if (!isSoftSynth && getSequencerDataBlock()) {
+                if (!isSoftSynth) {
                     LevelInfo info;
                     info.level = (*i)->getVelocity();
                     info.levelRight = 0;
-                    getSequencerDataBlock()->setInstrumentLevel
-                    ((*i)->getInstrument(), info);
+                    SequencerDataBlock::getInstance()->setInstrumentLevel
+                        ((*i)->getInstrument(), info);
                 }
 
 		weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());

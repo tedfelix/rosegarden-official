@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -40,13 +40,17 @@ class MappedComposition;
 #define SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS   64 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
 
+/**
+ * This class contains data that is being passed from sequencer
+ * threads to GUI threads.  It used to be mapped into a shared memory
+ * backed file, which had to be of fixed size and layout.  The design
+ * reflects that history, though nowadays it is a simple singleton
+ * class.
+ */
 class SequencerDataBlock
 {
 public:
-    /**
-     * Constructor only initialises memory if initialise is true
-     */
-    SequencerDataBlock(bool initialise);
+    static SequencerDataBlock *getInstance();
 
     RealTime getPositionPointer() const {
         return RealTime(m_positionSec, m_positionNsec);
@@ -85,17 +89,15 @@ public:
     bool getMasterLevel(LevelInfo &) const;
     void setMasterLevel(const LevelInfo &);
 
-    void setControlBlock(ControlBlock *cb) { m_controlBlock = cb; }
-    ControlBlock *getControlBlock() { return m_controlBlock; }
-
     // Reset the temporaries on (for example) GUI restart
     //
     void clearTemporaries();
     
 protected:
+    SequencerDataBlock();
+
     int instrumentToIndex(InstrumentId id) const;
     int instrumentToIndexCreating(InstrumentId id);
-    ControlBlock *m_controlBlock;
 
     // Two ints rather than a RealTime, as the RealTime default ctor
     // initialises the space & so can't be used from the GUI's

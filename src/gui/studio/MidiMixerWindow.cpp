@@ -29,7 +29,6 @@
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/seqmanager/SequencerMapper.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
@@ -38,6 +37,7 @@
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
+#include "sound/SequencerDataBlock.h"
 #include "StudioControl.h"
 
 #include <QAction>
@@ -494,20 +494,21 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 }
 
 void
-MidiMixerWindow::updateMeters(SequencerMapper *mapper)
+MidiMixerWindow::updateMeters()
 {
     for (unsigned int i = 0; i != m_faders.size(); ++i) {
         LevelInfo info;
-        if (!mapper->
-                getInstrumentLevelForMixer(m_faders[i]->m_id, info))
+        if (!SequencerDataBlock::getInstance()->
+            getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {
             continue;
+        }
         m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
         RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
 }
 
 void
-MidiMixerWindow::updateMonitorMeter(SequencerMapper *)
+MidiMixerWindow::updateMonitorMeter()
 {
     // none here
 }

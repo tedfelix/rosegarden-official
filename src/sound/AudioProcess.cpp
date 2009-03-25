@@ -1542,24 +1542,19 @@ AudioInstrumentMixer::setInstrumentLevels(InstrumentId id, float dB, float pan)
 void
 AudioInstrumentMixer::updateInstrumentMuteStates()
 {
-    SequencerDataBlock *sdb = m_driver->getSequencerDataBlock();
-    if (sdb) {
-        ControlBlock *cb = sdb->getControlBlock();
-        if (cb) {
+    ControlBlock *cb = ControlBlock::getInstance();
 
-            for (BufferMap::iterator i = m_bufferMap.begin();
-                    i != m_bufferMap.end(); ++i) {
+    for (BufferMap::iterator i = m_bufferMap.begin();
+	 i != m_bufferMap.end(); ++i) {
 
-                InstrumentId id = i->first;
-                BufferRec &rec = i->second;
-
-                if (id >= SoftSynthInstrumentBase) {
-                    rec.muted = cb->isInstrumentMuted(id);
-                } else {
-                    rec.muted = cb->isInstrumentUnused(id);
-                }
-            }
-        }
+	InstrumentId id = i->first;
+	BufferRec &rec = i->second;
+	
+	if (id >= SoftSynthInstrumentBase) {
+	    rec.muted = cb->isInstrumentMuted(id);
+	} else {
+	    rec.muted = cb->isInstrumentUnused(id);
+	}
     }
 }
 

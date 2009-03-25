@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -22,6 +22,8 @@
 namespace Rosegarden 
 {
 
+class RosegardenDocument;
+
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  */
@@ -38,16 +40,19 @@ struct TrackInfo
 #define CONTROLBLOCK_MAX_NB_TRACKS 1024 // can't be a symbol
 
 /**
- * Sequencer control block, mmapped by the GUI
+ * This class contains data that is being passed from GUI threads to
+ * sequencer threads.  It used to be mapped into a shared memory
+ * backed file, which had to be of fixed size and layout (with no
+ * internal pointers).  The design reflects that history to an extent,
+ * though nowadays it is a simple singleton class with no such
+ * constraint.
  */
 class ControlBlock
 {
 public:
-    /// ctor for GUI
-    ControlBlock(unsigned int maxTrackId);
+    static ControlBlock *getInstance();
 
-    /// ctor for sequencer - all data is read from mmapped file
-    ControlBlock();
+    void setDocument(RosegardenDocument *doc);
 
     unsigned int getMaxTrackId() const { return m_maxTrackId; }
     void updateTrackData(Track*);
@@ -105,8 +110,9 @@ public:
                                        unsigned int chan);
 
 protected:
-    //--------------- Data members ---------------------------------
-    // PUT ONLY PLAIN DATA HERE - NO POINTERS EVER
+    ControlBlock();
+
+    RosegardenDocument *m_doc;
     unsigned int m_maxTrackId;
     bool m_solo;
     bool m_routing;

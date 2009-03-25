@@ -23,6 +23,7 @@
 #include "MixerWindow.h"
 #include "StudioControl.h"
 #include "sound/Midi.h"
+#include "sound/SequencerDataBlock.h"
 #include "misc/Debug.h"
 #include "gui/application/TransportStatus.h"
 #include "base/AudioLevel.h"
@@ -37,7 +38,6 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
-#include "gui/seqmanager/SequencerMapper.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
@@ -1214,7 +1214,7 @@ AudioMixerWindow::slotRecordChanged()
 }
 
 void
-AudioMixerWindow::updateMeters(SequencerMapper *mapper)
+AudioMixerWindow::updateMeters()
 {
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
@@ -1225,7 +1225,8 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 
         LevelInfo info;
 
-        if (mapper->getInstrumentLevelForMixer(id, info)) {
+        if (SequencerDataBlock::getInstance()->
+            getInstrumentLevelForMixer(id, info)) {
 
             // The values passed through are long-fader values
             float dBleft = AudioLevel::fader_to_dB
@@ -1248,8 +1249,9 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
         FaderRec &rec = m_submasters[i];
 
         LevelInfo info;
-        if (!mapper->getSubmasterLevel(i, info))
+        if (!SequencerDataBlock::getInstance()->getSubmasterLevel(i, info)) {
             continue;
+        }
 
         // The values passed through are long-fader values
         float dBleft = AudioLevel::fader_to_dB
@@ -1260,10 +1262,10 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
         rec.m_meter->setLevel(dBleft, dBright);
     }
 
-    updateMonitorMeters(mapper);
+    updateMonitorMeters();
 
     LevelInfo masterInfo;
-    if (mapper->getMasterLevel(masterInfo)) {
+    if (SequencerDataBlock::getInstance()->getMasterLevel(masterInfo)) {
 
         float dBleft = AudioLevel::fader_to_dB
                        (masterInfo.level, 127, AudioLevel::LongFader);
@@ -1275,7 +1277,7 @@ AudioMixerWindow::updateMeters(SequencerMapper *mapper)
 }
 
 void
-AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
+AudioMixerWindow::updateMonitorMeters()
 {
     // only show monitor levels when quiescent or when recording (as
     // record levels)
@@ -1296,7 +1298,8 @@ AudioMixerWindow::updateMonitorMeters(SequencerMapper *mapper)
 
         LevelInfo info;
 
-        if (mapper->getInstrumentRecordLevelForMixer(id, info)) {
+        if (SequencerDataBlock::getInstance()->
+            getInstrumentRecordLevelForMixer(id, info)) {
 
             bool armed = false;
 

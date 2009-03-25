@@ -140,7 +140,6 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "gui/seqmanager/SequencerMapper.h"
 #include "gui/studio/AudioMixerWindow.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
@@ -3969,8 +3968,8 @@ RosegardenMainWindow::slotCheckTransportStatus()
             
             m_seqManager->processAsynchronousMidi(asynchronousQueue, 0);
 
-            if (m_view && m_seqManager->getSequencerMapper()) {
-                m_view->updateMeters(m_seqManager->getSequencerMapper());
+            if (m_view) {
+                m_view->updateMeters();
             }
         }
     }
@@ -3986,17 +3985,13 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     // Either sequencer mappper or the sequence manager could be missing at
     // this point.
     //
-    if (!m_seqManager || !m_seqManager->getSequencerMapper())
-        return ;
-
-    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
+    if (!m_seqManager) return;
 
     MappedEvent ev;
-    bool haveEvent = mapper->getVisual(ev);
-    if (haveEvent)
-        getTransport()->setMidiOutLabel(&ev);
+    bool haveEvent = SequencerDataBlock::getInstance()->getVisual(ev);
+    if (haveEvent) getTransport()->setMidiOutLabel(&ev);
 
-    RealTime position = mapper->getPositionPointer();
+    RealTime position = SequencerDataBlock::getInstance()->getPositionPointer();
 
     //    std::cerr << "RosegardenMainWindow::slotUpdatePlaybackPosition: mapper pos = " << position << std::endl;
 
@@ -4008,7 +4003,7 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     if (m_seqManager->getTransportStatus() == RECORDING) {
 
         MappedComposition mC;
-        if (mapper->getRecordedEvents(mC) > 0) {
+        if (SequencerDataBlock::getInstance()->getRecordedEvents(mC) > 0) {
             m_seqManager->processAsynchronousMidi(mC, 0);
             m_doc->insertRecordedMidi(mC);
         }
@@ -4021,13 +4016,9 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
     m_doc->slotSetPointerPosition(elapsedTime);
     m_originatingJump = false;
 
-    if (m_audioMixer && m_audioMixer->isVisible())
-        m_audioMixer->updateMeters(mapper);
-
-    if (m_midiMixer && m_midiMixer->isVisible())
-        m_midiMixer->updateMeters(mapper);
-
-    m_view->updateMeters(mapper);
+    if (m_audioMixer && m_audioMixer->isVisible()) m_audioMixer->updateMeters();
+    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
+    m_view->updateMeters();
 
     if (++callbackCount == 60) {
         slotUpdateCPUMeter(true);
@@ -4103,21 +4094,13 @@ RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
 void
 RosegardenMainWindow::slotUpdateMonitoring()
 {
-    // Either sequencer mappper or the sequence manager could be missing at
-    // this point.
-    //
-    if (!m_seqManager || !m_seqManager->getSequencerMapper())
-        return ;
-
-    SequencerMapper *mapper = m_seqManager->getSequencerMapper();
-
     if (m_audioMixer && m_audioMixer->isVisible())
-        m_audioMixer->updateMonitorMeters(mapper);
+        m_audioMixer->updateMonitorMeters();
 
     if (m_midiMixer && m_midiMixer->isVisible())
-        m_midiMixer->updateMonitorMeter(mapper);
+        m_midiMixer->updateMonitorMeter();
 
-    m_view->updateMonitorMeters(mapper);
+    m_view->updateMonitorMeters();
 
     slotUpdateCPUMeter(false);
 }

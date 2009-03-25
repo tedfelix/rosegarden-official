@@ -45,12 +45,10 @@ class TransportDialog;
 class Track;
 class TimeSigSegmentMmapper;
 class TempoSegmentMmapper;
-class SequencerMapper;
 class Segment;
 class RosegardenDocument;
 class MetronomeMmapper;
 class CountdownDialog;
-class ControlBlockMmapper;
 class CompositionMmapper;
 class Composition;
 class AudioManagerDialog;
@@ -192,12 +190,6 @@ public:
     void filtersChanged(MidiFilter thruFilter,
                         MidiFilter recordFilter);
 
-    /// Return the current sequencer memory mapped file
-    SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
-
-    /// Ensure that the sequencer file is mapped
-    void mapSequencer();
-
     void setTransport(TransportDialog* t) { m_transport = t; }
     
     void enableMIDIThruRouting(bool state);
@@ -236,7 +228,7 @@ protected slots:
 protected:
 
     void resetCompositionMmapper();
-    void resetControlBlockMmapper();
+    void resetControlBlock();
     void resetMetronomeMmapper();
     void resetTempoSegmentMmapper();
     void resetTimeSigSegmentMmapper();
@@ -250,7 +242,6 @@ protected:
     MappedComposition  m_mC;
     RosegardenDocument              *m_doc;
     CompositionMmapper            *m_compositionMmapper;
-    ControlBlockMmapper           *m_controlBlockMmapper;
     MetronomeMmapper              *m_metronomeMmapper;
     TempoSegmentMmapper           *m_tempoSegmentMmapper;
     TimeSigSegmentMmapper         *m_timeSigSegmentMmapper;
@@ -287,11 +278,6 @@ protected:
     // this can be caused by a window resize, and since the reset is potentially expensive we want to collapse
     // several following requests into one.
     QTimer                    *m_compositionMmapperResetTimer;
-
-    // Information that the sequencer is providing to us - for the moment
-    // it's only the position pointer.
-    //
-    SequencerMapper          *m_sequencerMapper;
 
     // Just to make sure we don't bother the user too often
     //

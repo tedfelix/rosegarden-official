@@ -39,7 +39,6 @@
 #include "sound/ExternalTransport.h"
 
 #include "MmappedSegment.h"
-#include "SequencerMmapper.h"
 
 #include <deque>
 
@@ -48,7 +47,6 @@ namespace Rosegarden {
 // forward declaration of the RosegardenGUI classes
 class RosegardenDocument;
 class RosegardenMainViewWidget;
-class MmappedControlBlock;
 
 class MappedInstrument;
 class SoundDriver;
@@ -403,8 +401,6 @@ protected:
     RealTime m_lastStartTime;
 
     MappedComposition m_asyncQueue;
-    MmappedControlBlock *m_controlBlockMmapper;
-    SequencerMmapper m_sequencerMapper;
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;
