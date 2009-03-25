@@ -50,8 +50,6 @@
 
 using namespace Rosegarden;
 
-using std::cerr;
-using std::endl;
 
 /*! \mainpage Rosegarden global design
  
@@ -337,20 +335,21 @@ static int _x_errhandler(Display *dpy, XErrorEvent *err)
 {
     char errstr[256];
     XGetErrorText(dpy, err->error_code, errstr, 256);
-    if (err->error_code != BadWindow)
-    cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
-         << "\n  Major opcode:  " << err->request_code << endl;
+    if (err->error_code != BadWindow) {
+        std::cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
+                  << "\n  Major opcode:  " << err->request_code << std::endl;
+    }
     return 0;
 }
 #endif
 
 void usage()
 {
-    cerr << "Rosegarden: A sequencer and musical notation editor" << endl;
-    cerr << "Version " << VERSION << endl;
-    cerr << endl;
-    cerr << "Usage: rosegarden [--nosplash] [--nosequencer] [file.rg]" << endl;
-    cerr << endl;
+    std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
+    std::cerr << "Version " << VERSION << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "Usage: rosegarden [--nosplash] [--nosequencer] [file.rg]" << std::endl;
+    std::cerr << std::endl;
     exit(2);
 }
 
@@ -420,7 +419,7 @@ int main(int argc, char *argv[])
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {
-            cerr << "Loaded application icon \"" << name << "\"" << endl;
+            std::cerr << "Loaded application icon \"" << name << "\"" << std::endl;
             icon.addPixmap(pixmap);
         }
     }
@@ -428,10 +427,10 @@ int main(int argc, char *argv[])
 
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
-        cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << endl;
+        std::cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << std::endl;
         QFile file(stylepath);
         if (!file.open(QFile::ReadOnly)) {
-            cerr << "(Failed to open file)" << endl;
+            std::cerr << "(Failed to open file)" << std::endl;
         } else {
             QString styleSheet = QLatin1String(file.readAll());
             theApp.setStyleSheet(styleSheet);
@@ -449,8 +448,8 @@ int main(int argc, char *argv[])
     QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
-    cerr << "*** This is the first time running this Rosegarden version" << endl;
-    settings.setValue("lastversion", VERSION);
+        std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
+        settings.setValue("lastversion", VERSION);
     }
 
     // If there is no config setting for the startup window size, set
@@ -602,7 +601,7 @@ int main(int argc, char *argv[])
             sfxLoadProcess->start(sfxLoadPath, (QStringList()) << soundFontPath);
         } else {
             RG_DEBUG << "sfxload not executable or soundfont not readable : "
-            << sfxLoadPath << " " << soundFontPath << endl;
+                     << sfxLoadPath << " " << soundFontPath << endl;
         }
 
     } else {
