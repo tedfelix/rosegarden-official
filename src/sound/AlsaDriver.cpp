@@ -645,7 +645,10 @@ AlsaDriver::generateInstruments()
     m_devicePortMap.clear();
     m_suspendedPortMap.clear();
 
-    AlsaPortList::iterator it = m_alsaPorts.begin();
+// Do NOT scan all the ports and create new devices for all of them.  This makes
+// it impossible for a user to delete any devices they don't want to use for
+// anything, and it's time for that irritation to end once and for all.
+/*    AlsaPortList::iterator it = m_alsaPorts.begin();
     for (; it != m_alsaPorts.end(); it++) {
         if ((*it)->m_client == m_client) {
             std::cerr << "(Ignoring own port " << (*it)->m_client
@@ -686,7 +689,7 @@ AlsaDriver::generateInstruments()
                 m_devices.push_back(device);
             }
         }
-    }
+    } */
 
 #ifdef HAVE_DSSI
     // Create a number of soft synth Instruments

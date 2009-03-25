@@ -3,7 +3,6 @@
 <qresource>
 <file>autoload/autoload.rg</file>
 <file>rosegarden.qss</file>
-<!-- file>ui/DevicesManagerNewRc.qrc</file -->
 <file>ui/audiomanager.rc</file>
 <file>ui/bankeditor.rc</file>
 <file>ui/clefinserter.rc</file>
@@ -1197,7 +1196,6 @@
 
 <file>pixmaps/DevicesManagerNew/icon-plugged-in.png</file>
 <file>pixmaps/DevicesManagerNew/icon-plugged-out.png</file>
-<file>pixmaps/DevicesManagerNew/icon-midi-connect.png</file>
 <file>pixmaps/DevicesManagerNew/image-connect.png</file>
 
 <file>pixmaps/icons/window-audiomixer.png</file>
@@ -1206,6 +1204,7 @@
 <file>pixmaps/icons/window-midimixer.png</file>
 <file>pixmaps/icons/window-notation.png</file>
 <file>pixmaps/icons/window-transport.png</file>
+<file>pixmaps/icons/window-midi-manager.png</file>
 
 
 <file>pixmaps/tooltip/repeats.png</file>

@@ -378,7 +378,7 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
     const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
+        RG_DEBUG << "MidiProgramsEditor::slotNameChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
         return ;
     }
 
@@ -388,11 +388,12 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
     //
     unsigned int id = senderName.toUInt() - 1;
 
-    RG_DEBUG << "MidiProgramsEditor::slotNameChanged("
-    << programName << ") : id = " << id << endl;
+    RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
     
     MidiBank* currBank;
+    std::cout << "GLEE" << std::endl;
     currBank = getCurrentBank();
+    std::cout << "BUBBLES" << std::endl;
     if( ! currBank ){
         RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
         return;
