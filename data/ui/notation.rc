@@ -78,8 +78,8 @@
     <Menu name="layout">
       <text>&amp;Layout Mode</text>
       <Action name="linear_mode" text="&amp;Linear Layout" icon="linear-layout" checked="true" group="score_layout" />
-      <Action name="continuous_page_mode" icon="continuous-page-mode" checked="false" group="score_layout" />
-      <Action name="multi_page_mode" icon="multi-page-mode" checked="false" group="score_layout" />
+      <Action name="continuous_page_mode" text="&amp;Continuous Page Layout" icon="continuous-page-mode" checked="false" group="score_layout" />
+      <Action name="multi_page_mode" text="&amp;Multiple Page Layout" icon="multi-page-mode" checked="false" group="score_layout" />
     </Menu>
   <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
@@ -431,8 +431,8 @@
 	<Action name="copy_selection_right"/>
 	-->
     <Separator/>
-      <Action name="cursor_to_playback_pointer" />
-      <Action name="playback_pointer_to_cursor" />
+      <Action name="cursor_to_playback_pointer" text="Cursor to &amp;Playback Pointer" icon="transport-cursor-to-pointer" />
+      <Action name="playback_pointer_to_cursor" text="Playback Pointer to &amp;Cursor" icon="transport-pointer-to-cursor" />
     <Separator/>
       <Action name="cursor_up_staff" text="Cursor &amp;Up Staff" shortcut="Shift+Up" />
       <Action name="cursor_down_staff" text="Cursor &amp;Down Staff" shortcut="Shift+Down" />
@@ -516,7 +516,7 @@
       </Menu>
       <!-- JAS invented "insert_note_lower_octave" name -->
       <Menu name="insert_note_lower_octave">
-        <text>&amp;Upper Octave</text>
+        <text>&amp;Lower Octave</text>
         <Action name="insert_0_low" text="&amp;I" shortcut="Z" />
         <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z" />
       <Separator/>
