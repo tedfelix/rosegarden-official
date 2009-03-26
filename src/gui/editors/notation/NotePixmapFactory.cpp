@@ -2432,13 +2432,13 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
-    int y = yoffset + ((8 - h) * lw) / 2 - noteItem->offset().y();
+    int y = yoffset + ((8 - h) * lw) / 2 + noteItem->offset().y();
     m_p->drawPixmap(x, y, noteItem->pixmap());
 
     h = clef.getAxisHeight();
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
+    m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
@@ -2447,6 +2447,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     delete noteItem;
     delete clefItem;
+
+    //### Is that right ?
+    m_p->painter().end();
 
     //### Force the mask generation (following arg. true) to have
     //### a staff and a clef displayed in the pitch chooser widget
@@ -2506,13 +2509,13 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     int x =
         getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
-    int y = yoffset + ((8 - h) * lw) / 2 - noteItem->offset().y();
+    int y = yoffset + ((8 - h) * lw) / 2 + noteItem->offset().y();
     m_p->drawPixmap(x, y, noteItem->pixmap());
 
     h = clef.getAxisHeight();
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
+    m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
@@ -2521,6 +2524,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     delete noteItem;
     delete clefItem;
+
+    //### Is that right ?
+    m_p->painter().end();
     
     //### Force the mask generation (following arg. true) to have
     //### a staff and a clef displayed in the pitch chooser widget
