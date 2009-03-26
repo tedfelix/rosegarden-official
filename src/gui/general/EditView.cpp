@@ -756,6 +756,7 @@ void EditView::slotExtendSelectionForward(bool bar)
     setCurrentSelection(es);
 }
 
+//### JAS setupActions() not needed now
 void
 EditView::setupActions()
 {
@@ -1272,6 +1273,7 @@ void EditView::slotRemoveControlRuler( int index )
     getDocument()->slotDocumentModified();
 }
 
+//### JAS createInsertPitchActionMenu() not needed now
 void
 EditView::createInsertPitchActionMenu()
 {

@@ -181,15 +181,90 @@ NewNotationView::setupActions()
     createAction("add_dot", SLOT(slotAddDot()));
     createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
 
-    
+    //JAS actions copied from EditView::setupActions()
+    createAction("add_tempo", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
+// was disabled in kde3 version:
+// createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
+// was disabled in kde3 version:
+// createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
+    createAction("insert_control_ruler_item", SLOT(slotInsertControlRulerItem()));
+    createAction("erase_control_ruler_item", SLOT(slotEraseControlRulerItem()));
+    createAction("clear_control_ruler_item", SLOT(slotClearControlRulerItem()));
+    createAction("start_control_line_item", SLOT(slotStartControlLineItem()));
+    createAction("flip_control_events_forward", SLOT(slotFlipForwards()));
+    createAction("flip_control_events_back", SLOT(slotFlipBackwards()));
+    createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
+    createAction("select_all_properties", SLOT(slotSelectAllProperties()));
+
+    //JAS insert note section is a rewrite
+    //JAS from EditView::createInsertPitchActionMenu()
+    for (int octave = 0; octave <= 2; ++octave) {
+        QString octaveSuffix;
+        if (octave == 1) octaveSuffix = "_high";
+        else if (octave == 2) octaveSuffix = "_low";
+
+        createAction(QString("insert_0%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_0_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_1_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_2_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_2%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_3%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_3_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_4_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_5_sharp%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_6_flat%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+        createAction(QString("insert_6%1").arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
+    }
+
     std::set<QString> fs(NoteFontFactory::getFontNames());
     std::vector<QString> f(fs.begin(), fs.end());
     std::sort(f.begin(), f.end());
 
+    // Custom Note Font Menu creator
     QMenu *fontActionMenu = new QMenu(tr("Note &Font"), this); 
     fontActionMenu->setObjectName("note_font_actionmenu");
 
     QActionGroup *ag = new QActionGroup(this);
+    QString defaultFontName = NoteFontFactory::getDefaultFontName();
 
     for (std::vector<QString>::iterator i = f.begin(); i != f.end(); ++i) {
 
@@ -202,17 +277,37 @@ NewNotationView::setupActions()
 
         a->setText(fontQName);
         a->setCheckable(true);
-//!!!        a->setChecked(*i == m_fontName);
+        a->setChecked(*i == defaultFontName);
 
-        fontActionMenu->addAction(a);
+        fontActionMenu->addAction(a);        
     }
 
     //&&& add fontActionMenu to the appropriate super-menu
 
-//!!!    QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
-//    fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
+      QMenu *fontSizeActionMenu = new QMenu(tr("Si&ze"), this);
+      fontSizeActionMenu->setObjectName("note_font_size_actionmenu");
+      ag = new QActionGroup(this);
+      int defaultFontSize = NoteFontFactory::getDefaultSize(defaultFontName);
 
-//    setupFontSizeMenu();
+    //setupFontSizeMenu();
+
+    //JAS from OldNotationView::setupFontSizeMenu()
+    std::vector<int> sizes = NoteFontFactory::getScreenSizes(defaultFontName);
+
+    for (unsigned int i = 0; i < sizes.size(); ++i) {
+
+        QString actionName = QString("note_font_size_%1").arg(sizes[i]);
+
+        QAction *sizeAction = createAction(actionName,
+                                SLOT(slotChangeFontSizeFromStringValue()));
+        sizeAction->setText(tr("%n pixel(s)", "", sizes[i]));
+        sizeAction->setCheckable(true);
+        ag->addAction(sizeAction);
+
+        sizeAction->setChecked(sizes[i] == defaultFontSize);
+        fontSizeActionMenu->addAction(sizeAction);
+    }
+
 
     //&&& add m_fontSizeActionMenu to the appropriate super-menu
 
