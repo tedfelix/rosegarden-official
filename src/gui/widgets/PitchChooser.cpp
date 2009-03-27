@@ -17,9 +17,10 @@
 
 
 #include "PitchChooser.h"
+#include "PitchDragLabel.h"
 
 #include "gui/general/MidiPitchLabel.h"
-#include "PitchDragLabel.h"
+
 #include <QGroupBox>
 #include <QLabel>
 #include <QSpinBox>

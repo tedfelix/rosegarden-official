@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
+#include <Q3CanvasPixmap>
 
 #include "PitchDragLabel.h"
 
@@ -22,10 +24,8 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
-#include <Q3Canvas>
 #include <QWheelEvent>
 #include <QMouseEvent>
-#include <Q3CanvasPixmap>
 #include <QPainter>
 #include <QPixmap>
 #include <QSize>
@@ -183,7 +183,9 @@ void
 PitchDragLabel::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
-    paint.fillRect(0, 0, width(), height(), paint.backgroundColor());
+    // Just fill the background with Qt::white instead of pulling in something
+    // from GUIPalette (saving that for another day)
+    paint.fillRect(0, 0, width(), height(), Qt::white);
 
     int x = width() / 2 - m_pixmap.width() / 2;
     if (x < 0)
