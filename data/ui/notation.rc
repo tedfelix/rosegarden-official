@@ -48,14 +48,14 @@
 -->
     <!-- JAS original <Action name="note_font_actionmenu" /> -->
     <Menu name="note_font_actionmenu">
-      <text>Note &amp;Font</text>
+      <!-- <text>Note &amp;Font</text> -->
       <!-- JAS Custom coded menu actions created based on available fonts -->
       <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
       <!-- JAS action name="note_font_" + (font_filename.tolower() - ".xml") -->
     </Menu>
     <!-- JAS original <Action name="note_font_size_actionmenu" /> -->
     <Menu name="note_font_size_actionmenu">
-      <text>Si&amp;ze</text>
+      <!-- <text>Si&amp;ze</text> -->
       <!-- JAS Custom coded menu actions created based on available font sizes -->
       <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
       <!-- JAS action name="note_font_size_" + sizes[i} (1, 2, etc. ) -->
@@ -216,7 +216,7 @@
   <Menu name="Phrase">
     <text>&amp;Phrase</text>
     <!-- JAS need icon name for action 'make_chord' -->
-    <Action name="make_chord" text="&amp;Make Chord" />
+    <Action name="make_chord" text="&amp;Make Chord" icon="chord" />
   <Separator/>
     <Action name="beam" text="&amp;Beam Group" icon="group-beam" shortcut="Ctrl+B" />
     <Action name="auto_beam" text="&amp;Auto-Beam" />
@@ -474,7 +474,7 @@
       <Action name="insert_2" text="III" shortcut="D" />
     <Separator/>
       <Action name="insert_3" text="IV" shortcut="F" />
-      <Action name="insert_3_shap" text="IV sha&amp;rp" shortcut="Shift+F" />
+      <Action name="insert_3_sharp" text="IV sha&amp;rp" shortcut="Shift+F" />
     <Separator/>
       <Action name="insert_4_flat" text="&amp;V flat" shortcut="Ctrl+Shift+J" />
       <Action name="insert_4" text="V" shortcut="J" />

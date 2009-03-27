@@ -74,11 +74,164 @@ NewNotationView::setupActions()
 {
     EditViewBase::setupActions(true);
 
+    //Actions first appear in "file" MenuBar menu
     createAction("file_print", SLOT(slotFilePrint()));
     createAction("file_print_preview", SLOT(slotFilePrintPreview()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
     createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
+
+    //Actions first appear in "edit" MenuBar menu
+    //Where is "edit_undo" & "edit_redo" created?
+    createAction("cut_and_close", SLOT(slotEditCutAndClose()));
+    createAction("general_paste", SLOT(slotEditGeneralPaste()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("move_events_up_staff", SLOT(slotMoveEventsUpStaff()));
+    createAction("move_events_down_staff", SLOT(slotMoveEventsDownStaff()));
+    createAction("select_from_start", SLOT(slotEditSelectFromStart()));
+    createAction("select_to_end", SLOT(slotEditSelectToEnd()));
+    createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
+    createAction("filter_selection", SLOT(slotFilterSelection()));
+    
+    //Actions first appear in "view" MenuBar menu
+    // "note _font_actionmenu" created below.
+    // "note _font_size_actionmenu" created below.
+    // NEED to create "stretch_actionmenu" subMenu
+    // NEED to create "proportion_actionmenu" subMenu
+
+    //"layout" submenu 
+    createAction("linear_mode", SLOT(slotLinearMode()));
+    createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
+    createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+
+    createAction("lyric_editor", SLOT(slotEditLyrics()));
+    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
+
+    // NEED to create "add_control_ruler" subMenu
+
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
+
+    //Actions first appear in "document" Menubar menu
+    createAction("add_tempo", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+
+    //Actions first appear in "segment" Menubar menu
+    //"open-with" subMenu created in EditViewBase
+
+    createAction("add_clef", SLOT(slotEditAddClef()));
+    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
+    createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
+    createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
+    createAction("transpose_segment", SLOT(slotEditTranspose()));
+    createAction("switch_preset", SLOT(slotEditSwitchPreset()));
+
+    //Actions first appear in "Notes" Menubar menu
+
+    //Where is "Marks" subMenu created?  AddMarkCommand.cpp?
+    //Grep for action names give no results
+    //NEED slots to go with action in this menu.
+
+    //"ornaments" subMenu
+    createAction("use_ornament", SLOT(slotUseOrnament()));
+    createAction("make_ornament", SLOT(slotMakeOrnament()));
+    createAction("remove_ornament", SLOT(slotRemoveOrnament()));
+
+    //Where is "Fingering" subMenu created? AddFingeringMArkCommand.cpp
+
+    //Where is "Slashes" subMenu created?
+
+    // NEED to create "note_style_actionmenu" subMenu
+
+    //Where is "Respell" subMenu created?
+
+    //Where are "stem_up", "stem_down", & "restore_stems" created?
+
+    //Actions first appear in "Phrase" Menubar menu
+    //Where are "make_chord", "beam", "auto_beam", "break_group" &
+    //"remove_indentations" created?
+    createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
+    createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
+    //Where are "break_tuplet", "slur", & "phrasing_slur" created?
+    
+    //"Slurs" subMenu
+    //where are "restore_slurs", "slurs_above", "slurs_below" created?
+
+    //Where are "tie_notes", "untie_notes", created?
+
+    //"Ties" subMenu
+    //"restore_ties", "ties_above", & "ties_below" created?
+    
+    //Where are "crescendo" & "decrescendo" created?
+
+    //"octaves" subMenu
+    //Where are "octave_2up", "octave_up", "octave_down",
+    //"octave_down", & "octave_2down" created?
+
+    //Actions first appear in "Adjust" Menubar menu
+
+    //"rests" subMenu
+    createAction("normalize_rests", SLOT(slotTransformsNormalizeRests()));
+    //Where is "collapse_rests_aggresively" created?
+
+    //"transform_notes" subMenu
+    createAction("collapse_notes", SLOT(slotTransformsCollapseNotes()));
+    //Where are "make_notes_viable" & "de_counterpoint" created?
+
+    //Quantitize subMenu
+    createAction("quantize", SLOT(slotTransformsQuantize()));
+    //Where are "fix_quantization" & "remove_quantization" created?
+
+    createAction("interpret", SLOT(slotTransformsInterpret()));
+
+    //"Rescale" subMenu
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+
+    //"Transpose" subMenu
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+
+    //"Convert" subMenu
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
+
+    //"velocities" subMenu
+    createAction("velocity_up", SLOT(slotVelocityUp()));
+    createAction("velocity_down", SLOT(slotVelocityDown()));
+    createAction("set_velocities", SLOT(slotSetVelocities()));
+
+    //"fine_positioning" subMenu
+    //Where are "fine_position_restore", "fine_position_left",
+    //"fine_position_right", "fine_position_up" & 
+    //"fine_position_down" created?
+
+    //"fine_timing" subMenu
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
+
+    //"visibility" subMenu
+    //Where are "make_invisible" & "make_visible" created?
+
+    //Actions first appear in "Tools" Menubar menu
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+
+    //"NoteTools" subMenu
+    //NEED to create actions
+    // Example: createAction("crotchet", SLOT(slotNoteAction()));
+    createAction("toggle_dot", SLOT(slotToggleDot()));
+    //Where is "switch_from_rest_to_note" created?
+
+    //"RestTool" subMenu
+    //NEED to create actions as in "NoteTools"
+
+    //"Accidentals" submenu
     createAction("no_accidental", SLOT(slotNoAccidental()));
     createAction("follow_accidental", SLOT(slotFollowAccidental()));
     createAction("sharp_accidental", SLOT(slotSharp()));
@@ -86,52 +239,56 @@ NewNotationView::setupActions()
     createAction("natural_accidental", SLOT(slotNatural()));
     createAction("double_sharp_accidental", SLOT(slotDoubleSharp()));
     createAction("double_flat_accidental", SLOT(slotDoubleFlat()));
+
+    //JAS "Clefs" subMenu
     createAction("treble_clef", SLOT(slotTrebleClef()));
     createAction("alto_clef", SLOT(slotAltoClef()));
     createAction("tenor_clef", SLOT(slotTenorClef()));
     createAction("bass_clef", SLOT(slotBassClef()));
+
     createAction("text", SLOT(slotText()));
     createAction("guitarchord", SLOT(slotGuitarChord()));
-    createAction("lilypond_directive", SLOT(slotLilyPondDirective()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
-    createAction("select_from_start", SLOT(slotEditSelectFromStart()));
-    createAction("select_to_end", SLOT(slotEditSelectToEnd()));
-    createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
-    createAction("cut_and_close", SLOT(slotEditCutAndClose()));
-    createAction("general_paste", SLOT(slotEditGeneralPaste()));
-    createAction("delete", SLOT(slotEditDelete()));
-    createAction("move_events_up_staff", SLOT(slotMoveEventsUpStaff()));
-    createAction("move_events_down_staff", SLOT(slotMoveEventsDownStaff()));
-    createAction("linear_mode", SLOT(slotLinearMode()));
-    createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
-    createAction("multi_page_mode", SLOT(slotMultiPageMode()));
-    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
-    createAction("show_raw_note_ruler", SLOT(slotToggleRawNoteRuler()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    createAction("show_annotations", SLOT(slotToggleAnnotations()));
-    createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
-    createAction("lyric_editor", SLOT(slotEditLyrics()));
-    createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
-    createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
-    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatus()));
+
+    //JAS "Move" subMenu
+    createAction("cursor_back", SLOT(slotStepBackward()));
+    createAction("cursor_forward", SLOT(slotStepForward()));
+    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
+    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
+    createAction("cursor_start", SLOT(slotJumpToStart()));
+    createAction("cursor_end", SLOT(slotJumpToEnd()));
+    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
+    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
+    createAction("preview_selection", SLOT(slotPreviewSelection()));
+    createAction("clear_loop", SLOT(slotClearLoop()));
+
+    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
+    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
+    createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
+    createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
+    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
+    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
+
+    //"Transport" subMenu
+    createAction("play", SIGNAL(play()));
+    createAction("stop", SIGNAL(stop()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("toggle_solo", SLOT(slotToggleSolo()));
+    createAction("toggle_tracking", SLOT(slotToggleTracking()));
+    createAction("panic", SIGNAL(panic()));
+
+    //"insert_note_actionmenu" coded below. 
+
     createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
+    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
-    createAction("normalize_rests", SLOT(slotTransformsNormalizeRests()));
-    createAction("collapse_notes", SLOT(slotTransformsCollapseNotes()));
-    createAction("quantize", SLOT(slotTransformsQuantize()));
-    createAction("interpret", SLOT(slotTransformsInterpret()));
-    createAction("debug_dump", SLOT(slotDebugDump()));
-    createAction("make_ornament", SLOT(slotMakeOrnament()));
-    createAction("use_ornament", SLOT(slotUseOrnament()));
-    createAction("remove_ornament", SLOT(slotRemoveOrnament()));
-    createAction("add_clef", SLOT(slotEditAddClef()));
-    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
-    createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
-    createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
-    createAction("transpose_segment", SLOT(slotEditTranspose()));
-    createAction("switch_preset", SLOT(slotEditSwitchPreset()));
+    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
+
+    //Actions first appear in "settings" Menubar menu
+    //"toolbars" subMenu
+    //Where is "options_show_toolbar" created?
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_notes_toolbar", SLOT(slotToggleNotesToolBar()));
     createAction("show_rests_toolbar", SLOT(slotToggleRestsToolBar()));
@@ -139,66 +296,31 @@ NewNotationView::setupActions()
     createAction("show_clefs_toolbar", SLOT(slotToggleClefsToolBar()));
     createAction("show_marks_toolbar", SLOT(slotToggleMarksToolBar()));
     createAction("show_group_toolbar", SLOT(slotToggleGroupToolBar()));
-    createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
+    createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
     createAction("show_meta_toolbar", SLOT(slotToggleMetaToolBar()));
-    createAction("cursor_back", SLOT(slotStepBackward()));
-    createAction("cursor_forward", SLOT(slotStepForward()));
-    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
-    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
-    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
-    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
+
+    //"rulers" subMenu
+    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
+    createAction("show_raw_note_ruler", SLOT(slotToggleRawNoteRuler()));
+    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+
+    createAction("show_annotations", SLOT(slotToggleAnnotations()));
+    createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
+
+//### JAS Stop here for now!
+
+    createAction("lilypond_directive", SLOT(slotLilyPondDirective()));
+    createAction("debug_dump", SLOT(slotDebugDump()));
     createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
     createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
     //!!! not here yet createAction("move_selection_left", SLOT(slotMoveSelectionLeft()));
-    createAction("cursor_start", SLOT(slotJumpToStart()));
-    createAction("cursor_end", SLOT(slotJumpToEnd()));
-    createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
-    createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
-    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
-    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
-    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
     //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
     // ensure both get carried across somehow
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
-    createAction("toggle_solo", SLOT(slotToggleSolo()));
-    createAction("toggle_tracking", SLOT(slotToggleTracking()));
-    createAction("panic", SIGNAL(panic()));
-    createAction("preview_selection", SLOT(slotPreviewSelection()));
-    createAction("clear_loop", SLOT(slotClearLoop()));
-    createAction("clear_selection", SLOT(slotClearSelection()));
-    createAction("filter_selection", SLOT(slotFilterSelection()));
-    createAction("velocity_up", SLOT(slotVelocityUp()));
-    createAction("velocity_down", SLOT(slotVelocityDown()));
-    createAction("set_velocities", SLOT(slotSetVelocities()));
-    createAction("toggle_dot", SLOT(slotToggleDot()));
     createAction("add_dot", SLOT(slotAddDot()));
     createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
 
     //JAS actions copied from EditView::setupActions()
-    createAction("add_tempo", SLOT(slotAddTempo()));
-    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
-    createAction("halve_durations", SLOT(slotHalveDurations()));
-    createAction("double_durations", SLOT(slotDoubleDurations()));
-    createAction("rescale", SLOT(slotRescale()));
-    createAction("transpose_up", SLOT(slotTransposeUp()));
-    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
-    createAction("transpose_down", SLOT(slotTransposeDown()));
-    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
-    createAction("general_transpose", SLOT(slotTranspose()));
-    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
-    createAction("invert", SLOT(slotInvert()));
-    createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
-    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
 // was disabled in kde3 version:
 // createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
 // was disabled in kde3 version:
@@ -307,7 +429,6 @@ NewNotationView::setupActions()
         sizeAction->setChecked(sizes[i] == defaultFontSize);
         fontSizeActionMenu->addAction(sizeAction);
     }
-
 
     //&&& add m_fontSizeActionMenu to the appropriate super-menu
 
