@@ -64,7 +64,8 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     QGroupBox *groupBox = new QGroupBox(tr("Librarian"), m_mainFrame);
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
 
-    m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
+    //m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
+    m_mainLayout->addWidget(groupBox, 0, 3, 3, 3);
 
     groupBoxLayout->addWidget(new QLabel(tr("Name")));
     m_librarian = new QLabel(groupBox);
@@ -81,9 +82,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
     layout->addWidget(tabw);
 
     setLayout(layout);
-    m_mainLayout->setSpacing(layout->spacing());
+//    m_mainLayout->setSpacing(layout->spacing());
 
-    tabw->setMargin(10);
+    tabw->setMargin(5);
 
     QWidget *h;
     QHBoxLayout *hLayout;
@@ -111,6 +112,9 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 numBox = new QWidget(v);
                 numBoxLayout = new QHBoxLayout;
                 vLayout->addWidget(numBox);
+                // take out the excess vertical space that was making this
+                // dialog two screens tall
+                numBoxLayout->setMargin(2);
                 QString numberText = QString("%1").arg(labelId + 1);
 
                 if (tab == 0 && col == 0 && row == 0) {
@@ -130,14 +134,15 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 }
 
 
-
+                // What the hell is an EntryButton anyway?  Oh.  The buttons
+                // that somehow or other get the little green/white pixmaps for
+                // associating a key map with a program entry.
                 if (showEntryButtons) {
-//                     QPushButton *button = new QPushButton("", numBox, numberText);
-                    QPushButton *button = new QPushButton(numberText, numBox);
+                    QPushButton *button = new QPushButton("", numBox, numberText);
                     numBoxLayout->addWidget(button);
-                    button->setMaximumWidth(40);
-                    button->setMaximumHeight(20);
-                    button->setFlat(true);
+//                  button->setMaximumWidth(40);
+//                  button->setMaximumHeight(20);
+//                  button->setFlat(true);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotEntryButtonPressed()));
                     m_entryButtons.push_back(button);
@@ -166,6 +171,7 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                 ++labelId;
             }
             v->setLayout(vLayout);
+            vLayout->setSpacing(0);
         }
         h->setLayout(hLayout);
 
