@@ -19,9 +19,7 @@
  */
 
 
-//#include "gui/ui/DevicesManagerNewUi.h"
 #include "gui/ui/DevicesManagerNew.h"
-
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -35,42 +33,24 @@
 #include "commands/studio/ModifyDeviceCommand.h"
 #include "commands/studio/ReconnectDeviceCommand.h"
 #include "commands/studio/RenameDeviceCommand.h"
-
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-//#include "document/ConfigGroups.h"
 #include "sequencer/RosegardenSequencer.h"
-
-//#include "gui/dialogs/ExportDeviceDialog.h"
-//#include "gui/dialogs/ImportDeviceDialog.h"
-
 #include "gui/general/IconLoader.h"
-//#include "gui/general/ResourceFinder.h"
-//#include "gui/widgets/TmpStatusMsg.h"
-
 
 #include <QWidget>
-// #include <QDialog>
 #include <QMainWindow>
 #include <QObject>
 #include <QFont>
 #include <QMessageBox>
-//#include <QThread>
-
-// #include <QString>
-// #include <QLocale>
-// #include <QTranslator>
-// #include <QCoreApplication>
 
 
-
-namespace Rosegarden {
-
-
+namespace Rosegarden
+{
 
 
-
-DevicesManagerNew::~DevicesManagerNew() {
+DevicesManagerNew::~DevicesManagerNew()
+{
     // destructor
 }
 
@@ -78,56 +58,51 @@ DevicesManagerNew::~DevicesManagerNew() {
 DevicesManagerNew::DevicesManagerNew(QWidget * parent,
                                      RosegardenDocument *
                                      doc) : QMainWindow(parent),
-    Ui::DevicesManagerNewUi(), m_doc(doc) {
+    Ui::DevicesManagerNewUi(), m_doc(doc)
+{
+    RG_DEBUG << "DevicesManagerNew::ctor" << endl;
+
     // start constructor
-    //setAttribute( Qt::WA_DeleteOnClose, true );
     setObjectName("DeviceManager");
     setWindowModality(Qt::NonModal);
-    //setWindowFlags( Qt::Dialog );    //| Qt::WindowStaysOnTopHint );
 
     m_UserRole_DeviceId = Qt::UserRole + 1;
-    m_noPortName = tr("[ No port ]");        // do not translate ?
+    m_noPortName = tr("[ No port ]");
 
     //m_doc = 0;    // RG document
     m_studio = &m_doc->getStudio();
 
-    //setupUi ( dynamic_cast<QMainWindow*> ( this ) );
     setupUi(this);
 
     // gui adjustments
     //
     // adjust some column widths for better visibility
     m_treeWidget_playbackDevices->setColumnWidth(0, 200);   // column, width
-    m_treeWidget_recordDevices->setColumnWidth(0, 200);     // column, width
-    m_treeWidget_recordDevices->setColumnWidth(1, 60);      // column, width
-
-// Let's try to avoid ever having to do anything with hard coded size
-// constraints, if possible, and it works fine for me without these lines (and
-// of course the size has changed now too):
-//    move(60, 40);
-//    resize(780, 420);
-
+    m_treeWidget_recordDevices->setColumnWidth(0, 150);
+    m_treeWidget_recordDevices->setColumnWidth(1, 50);
+    m_treeWidget_recordDevices->setColumnWidth(3, 150);
 
     connectSignalsToSlots();
 
     clearAllPortsLists();
 }
-// end constructor */
 
+void
+DevicesManagerNew::show()
+{
+    RG_DEBUG << "DevicesManagerNew::show()" << endl;
 
-
-//slot
-void DevicesManagerNew::show() {
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
 
-//         QDialog:: show();
     QMainWindow::show();
 }
 
 
-
-void DevicesManagerNew::slotClose() {
+void
+DevicesManagerNew::slotClose()
+{
+    RG_DEBUG << "DevicesManagerNew::slotClose()" << endl;
     /*
        if (m_doc) {
        //CommandHistory::getInstance()->detachView(actionCollection());    //&&&
@@ -138,9 +113,10 @@ void DevicesManagerNew::slotClose() {
 }
 
 
-
-// slot
-void DevicesManagerNew::slotRefreshOutputPorts() {
+void
+DevicesManagerNew::slotRefreshOutputPorts()
+{
+    RG_DEBUG << "DevicesManagerNew::slotRefreshOutputPorts()" << endl;
 
     updatePortsList(m_treeWidget_outputPorts, MidiDevice::Play);
 
@@ -151,8 +127,11 @@ void DevicesManagerNew::slotRefreshOutputPorts() {
                                  m_treeWidget_playbackDevices);
 }
 
-// slot
-void DevicesManagerNew::slotRefreshInputPorts() {
+
+void
+DevicesManagerNew::slotRefreshInputPorts()
+{
+    RG_DEBUG << "DevicesManagerNew::slotRefreshInputPorts()" << endl;
 
     updatePortsList(m_treeWidget_inputPorts, MidiDevice::Record);
 
@@ -165,8 +144,11 @@ void DevicesManagerNew::slotRefreshInputPorts() {
 
 
 
-// slot
-void DevicesManagerNew::slotPlaybackDeviceSelected() {
+
+void
+DevicesManagerNew::slotPlaybackDeviceSelected()
+{
+    RG_DEBUG << "DevicesManagerNew::slotPlaybackDeviceSelected()" << endl;
     //
     updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
                                  m_treeWidget_playbackDevices);
@@ -188,8 +170,11 @@ void DevicesManagerNew::slotPlaybackDeviceSelected() {
     }
 }
 
-// slot
-void DevicesManagerNew::slotRecordDeviceSelected() {
+
+void
+DevicesManagerNew::slotRecordDeviceSelected()
+{
+    RG_DEBUG << "DevicesManagerNew::slotRecordDevicesSelected()" << endl;
     //
     updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
                                  m_treeWidget_recordDevices);
@@ -212,71 +197,41 @@ void DevicesManagerNew::slotRecordDeviceSelected() {
 }
 
 
-// slot
-void DevicesManagerNew::slotOutputPortClicked(QTreeWidgetItem * twItem,
-                                              int column) {
-    //
-    //### updating the devices should not happen here
-    //### this is a bad fix, that makes it work 50% of time
-    updateDevicesList(0, m_treeWidget_playbackDevices,
-                      MidiDevice::Play);
 
-    // prevents checking with single click
-    updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
-                                 m_treeWidget_playbackDevices);
-}
-
-// slot
-void DevicesManagerNew::slotInputPortClicked(QTreeWidgetItem * twItem,
-                                             int column) {
-    //
-    //### updating the devices should not happen here
-    //### this is a bad fix, that makes it work 50% of time
-    updateDevicesList(0, m_treeWidget_recordDevices,
-                      MidiDevice::Record);
-
-    // prevents checking with single click
-    updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
-                                 m_treeWidget_recordDevices);
-}
-
-
-
-// slot
-void DevicesManagerNew::slotOutputPortDoubleClicked(QTreeWidgetItem *
-                                                    twItem, int column)
+void
+DevicesManagerNew::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
 {
+    RG_DEBUG << "DevicesManagerNew::slotOutputPortClicked(...)" << endl;
+
     MidiDevice *mdev;
     QString portName;
     int OutputPortListColumn_Name = 0;
 
     portName = twItem->text(OutputPortListColumn_Name);
+
+    RG_DEBUG << "DevicesManagerNew: portName: " << portName << endl;
+
     mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
     if (!mdev) {
         return;
     }
     connectMidiDeviceToPort(mdev, portName);
 
-    // center selected item
-    QTreeWidgetItem *twItemS;
-    twItemS = searchItemWithPort(m_treeWidget_outputPorts, portName);
-    if (twItemS) {
-        m_treeWidget_outputPorts->scrollToItem(twItemS,
-                                               QAbstractItemView::
-                                               PositionAtCenter);
-    }
-    //### updating the playback-devices-list should happen here, but doesn't really work
+    // update the playback-devices-list 
     updateDevicesList(0, m_treeWidget_playbackDevices,
                       MidiDevice::Play);
+
     updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
                                  m_treeWidget_playbackDevices);
-
 }
 
-// slot
-void DevicesManagerNew::slotInputPortDoubleClicked(QTreeWidgetItem *
+
+void
+DevicesManagerNew::slotInputPortClicked(QTreeWidgetItem *
                                                    twItem, int column)
 {
+    RG_DEBUG << "DevicesManagerNew::slotInputPortClicked(...)" << endl;
+
     MidiDevice *mdev;
     QString portName;
     int InputPortListColumn_Name = 0;
@@ -296,7 +251,8 @@ void DevicesManagerNew::slotInputPortDoubleClicked(QTreeWidgetItem *
                                               QAbstractItemView::
                                               PositionAtCenter);
     }
-    //### updating the record-devices-list should happen here, but doesn't really work
+
+    // update the record-devices-list
     updateDevicesList(0, m_treeWidget_recordDevices,
                       MidiDevice::Record);
     updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
@@ -304,10 +260,13 @@ void DevicesManagerNew::slotInputPortDoubleClicked(QTreeWidgetItem *
 }
 
 
-QTreeWidgetItem *DevicesManagerNew::searchItemWithPort(QTreeWidget *
-                                                       treeWid,
-                                                       QString
-                                                       portName) {
+QTreeWidgetItem
+*DevicesManagerNew::searchItemWithPort(QTreeWidget *treeWid,
+                                                    QString
+                                                    portName)
+{
+    RG_DEBUG << "DevicesManagerNew::searchItemWithPort(...)" << endl;
+
     // find the TreeWidgetItem, that is associated with the port with portName
     // searches Items of treeWid
     int i, cnt;
@@ -330,10 +289,14 @@ QTreeWidgetItem *DevicesManagerNew::searchItemWithPort(QTreeWidget *
     return 0;               //twItem;
 }
 
-QTreeWidgetItem *DevicesManagerNew::searchItemWithDeviceId(QTreeWidget
-                                                           * treeWid,
-                                                           DeviceId
-                                                           devId) {
+
+QTreeWidgetItem
+*DevicesManagerNew::searchItemWithDeviceId(QTreeWidget *treeWid,
+                                           DeviceId devId)
+{
+    RG_DEBUG << "DevicesManagerNew::searchItemWithDeviceId(..., devId = "
+             << devId << ")" << endl;
+
     // find the TreeWidgetItem, that is associated with the device with devId
     // searches Items of treeWid
     int i, cnt;
@@ -353,14 +316,13 @@ QTreeWidgetItem *DevicesManagerNew::searchItemWithDeviceId(QTreeWidget
 }
 
 
+void
+DevicesManagerNew::updateDevicesList(DeviceList * devices,
+                                     QTreeWidget * treeWid,
+                                     MidiDevice::DeviceDirection in_out_direction)
+{
+    RG_DEBUG << "DevicesManagerNew::updateDevicesList(...)" << endl;
 
-
-
-void DevicesManagerNew::updateDevicesList(DeviceList * devices,
-                                          QTreeWidget * treeWid,
-                                          MidiDevice::
-                                          DeviceDirection
-                                          in_out_direction) {
     /**
      * This method:
      * 1. removes deleted devices from list
@@ -384,7 +346,7 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
     devices = m_studio->getDevices();
 
 //         QStringList listEntries;
-    QList < DeviceId > listEntries;
+    QList <DeviceId> listEntries;
 
 
 //         cnt = m_treeWidget_playbackDevices->topLevelItemCount();
@@ -436,7 +398,11 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
 
         mdev = midiDevices.at(i);
 
+        RG_DEBUG << "DevicesManagerNew: mdev = midiDevices.at(" << i << ") == id: " << mdev->getId() << endl;
+
         if (mdev->getDirection() == in_out_direction) {
+
+            RG_DEBUG << "DevicesManagerNew: direction matches in_out_direction" << endl;
 
             //m_playDevices.push_back ( mdev );
             devId = mdev->getId();
@@ -445,6 +411,8 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
             if (!listEntries.contains(devId)) {
                 // device is not listed
                 // create new entry
+                RG_DEBUG << "DevicesManagerNew: listEntries does not contain devId " 
+                         << devId << endl;
                 twItem =
                         new QTreeWidgetItem(treeWid,
                                             QStringList() <<
@@ -468,13 +436,21 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
                 twItem->setSizeHint(0, QSize(24, 24));
                 treeWid->addTopLevelItem(twItem);
 
-            } else  // list contains mdev (midi-device)
-            {
+            } else {  // list contains mdev (midi-device)
+                RG_DEBUG << "DevicesManagerNew: device is already listed" << endl;
+
                 // device is already listed
                 twItem = searchItemWithDeviceId(treeWid, devId);
                 if (twItem) {
+                    RG_DEBUG << "DevicesManagerNew: twItem is non-zero" << endl;
+
                     devName = strtoqstr(mdev->getName());
+
+                    RG_DEBUG << "DevicesManagerNew: devName: " << devName << endl;
+
                     if (devName != twItem->text(0)) {
+                        RG_DEBUG << "DevicesManagerNew: devName != twItem->text(0)" << endl;
+
                         twItem->setText(0, devName);
                     }
                     // update connection-name (port)
@@ -484,6 +460,9 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
                                 : tr("No"));
                         twItem->setText(2, outPort);
                     } else {
+                        RG_DEBUG << "DevicesManagerNew: twItem->setText(1, "
+                                 << outPort << ")" << endl;
+
                         twItem->setText(1, outPort);
                     }
                 } else {
@@ -504,11 +483,11 @@ void DevicesManagerNew::updateDevicesList(DeviceList * devices,
 }                               // end funciton updateDevicesList()
 
 
+MidiDevice
+*DevicesManagerNew::getDeviceById(DeviceId devId)
+{
+    RG_DEBUG << "DevicesManagerNew::getDeviceById(...)" << endl;
 
-
-
-
-MidiDevice *DevicesManagerNew::getDeviceById(DeviceId devId) {
     MidiDevice *mdev;
     Device *dev;
     dev = m_studio->getDevice(devId);
@@ -516,7 +495,11 @@ MidiDevice *DevicesManagerNew::getDeviceById(DeviceId devId) {
     return mdev;
 }
 
-MidiDevice *DevicesManagerNew::getDeviceByName(QString deviceName) {
+MidiDevice
+*DevicesManagerNew::getDeviceByName(QString deviceName)
+{
+    RG_DEBUG << "DevicesManagerNew::getDeviceByName(...)" << endl;
+
     Device *dev;
     MidiDevice *mdev;
     int i, cnt;
@@ -542,14 +525,17 @@ MidiDevice *DevicesManagerNew::getDeviceByName(QString deviceName) {
     return 0;
 }
 
-MidiDevice *DevicesManagerNew::getCurrentlySelectedDevice(QTreeWidget *
-                                                          treeWid) {
+MidiDevice
+*DevicesManagerNew::getCurrentlySelectedDevice(QTreeWidget *treeWid)
+{
+    RG_DEBUG << "DevicesManagerNew::getCurrentlySelectedDevice(...)" << endl;
+
     // return the device user-selected in the m_treeWidget_playbackDevices
     //
     QTreeWidgetItem *twItem;
     MidiDevice *mdev;
     DeviceId devId;
-    QList < QTreeWidgetItem * >twItemsSelected;
+    QList <QTreeWidgetItem *> twItemsSelected;
 
     //twItem = m_treeWidget_playbackDevices->currentItem();
 
@@ -564,12 +550,16 @@ MidiDevice *DevicesManagerNew::getCurrentlySelectedDevice(QTreeWidget *
     devId = twItem->data(0, m_UserRole_DeviceId).toInt();
     mdev = getDeviceById(devId);
 //        mdev = getDeviceByName( twItem->text( 0 ) );    // item->text(column)
+    RG_DEBUG << "DevicesManagerNew: returning non-zero mdev" << endl;
     return mdev;
 }
 
 
-MidiDevice *DevicesManagerNew::getMidiDeviceOfItem(QTreeWidgetItem *
-                                                   twItem) {
+MidiDevice
+*DevicesManagerNew::getMidiDeviceOfItem(QTreeWidgetItem *twItem)
+{
+    RG_DEBUG << "DevicesManagerNew::getMidiDeviceOfItem(...)" << endl;
+
     // return the device represented by twItem
     //
     MidiDevice *mdev;
@@ -584,90 +574,75 @@ MidiDevice *DevicesManagerNew::getMidiDeviceOfItem(QTreeWidgetItem *
 }
 
 
+void
+DevicesManagerNew::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
+                                                QTreeWidget *treeWid_devices)
+{
+    RG_DEBUG << "DevicesManagerNew::updateCheckStatesOfPortsList(...)" << endl;
 
-
-void DevicesManagerNew::updateCheckStatesOfPortsList(QTreeWidget *
-                                                     treeWid_ports,
-                                                     QTreeWidget *
-                                                     treeWid_devices) {
-    int i, cnt;
     QTreeWidgetItem *twItem;
-//         QTreeWidgetItem* twItemSelected = 0;
-    MidiDevice *mdev;
     QFont font;
-    QString outPort;
 
-    mdev = getCurrentlySelectedDevice(treeWid_devices);
-    //if( !mdev ) return;
+    MidiDevice *mdev = getCurrentlySelectedDevice(treeWid_devices);
+    if (!mdev) return;
 
     IconLoader il;
-    //:/pixmaps/DevicesManagerNew/
 
-    cnt = treeWid_ports->topLevelItemCount();
-    //
-    for (i = 0; i < cnt; i++) {
+    QString outPort = strtoqstr(mdev->getConnection());
+
+    if (outPort.isEmpty()) {
+        outPort = m_noPortName; // nullPort
+    }
+
+    RG_DEBUG << "DevicesManagerNew: outPort: " << outPort
+             << " id: " << mdev->getId() << endl;
+
+    int cnt = treeWid_ports->topLevelItemCount();
+
+    for (int i = 0; i < cnt; i++) {
         twItem = treeWid_ports->topLevelItem(i);
 
-        twItem->setIcon(0,
-                        il.load
-                                      ("DevicesManagerNew/icon-plugged-out.png"));
+        twItem->setIcon(0, il.load("DevicesManagerNew/icon-plugged-out.png"));
         twItem->setSizeHint(0, QSize(24, 24));
-//             twItem->setIconSize( 0, QSize(32,32) );
-        //twItem->setCheckState( 0, Qt::Unchecked );
         font = twItem->font(0);
         font.setWeight(QFont::Normal);
         twItem->setFont(0, font); // 0=column
-//             setStretch( QFont::SemiExpanded );
-
-        // RG_DEBUG << mdev->getConnection() << " ==> " << qstrtostr(twItem->text(0)) << endl;
-
-        outPort = "";
-        if (mdev) {
-            outPort = strtoqstr(mdev->getConnection());
-        }
-
-        if (outPort.isEmpty()) {
-            outPort = m_noPortName; // nullPort
-        }
-
 
         if (outPort == twItem->text(0)) {
             font.setWeight(QFont::Bold);
             twItem->setFont(0, font); // 0=column
-            twItem->setIcon(0,
-                            il.load
-                                      ("DevicesManagerNew/icon-plugged-in.png"));
-//                 twItem->setCheckState( 0, Qt::Checked );
-//                 twItemSelected = twItem;
+            twItem->setIcon(0, il.load("DevicesManagerNew/icon-plugged-in.png"));
         }
 
 
-    }                       // end for i
+    } // end for i
 
     treeWid_ports->update();        // update view
 
-}                               // end updateCheckStatesOfPortsList()
+}  // end updateCheckStatesOfPortsList()
 
 
-void DevicesManagerNew::connectMidiDeviceToPort(MidiDevice * mdev,
-                                                QString portName) {
+void
+DevicesManagerNew::connectMidiDeviceToPort(MidiDevice * mdev,
+                                           QString portName)
+{
+    RG_DEBUG << "DevicesManagerNew::connectMidiDeviceToPort(" << mdev->getId()
+             << ", " << portName << ")" << endl;
+
     if (!mdev) {
-        RG_DEBUG <<
-        "Warning: mdev is NULL in DevicesManagerNew::connectPlaybackDeviceToOutputPort() "
+        RG_DEBUG << "Warning: mdev is NULL in DevicesManagerNew::connectPlaybackDeviceToOutputPort() "
                  << endl;
         return;
     }
     if (mdev->getType() != Device::Midi) {
-        RG_DEBUG <<
-        "Warning: Type of mdev is not Device::Midi in DevicesManagerNew::connectMidiDeviceToPort() "
+        RG_DEBUG << "Warning: Type of mdev is not Device::Midi in DevicesManagerNew::connectMidiDeviceToPort() "
                  << endl;
         //return;
     }
     QString outPort;
     outPort = strtoqstr(mdev->getConnection());
 
-    DeviceId devId;
-    devId = mdev->getId();
+    DeviceId devId = mdev->getId();
 
     if (outPort != portName) {
         if ((portName == "") || (portName == m_noPortName)) {
@@ -679,17 +654,27 @@ void DevicesManagerNew::connectMidiDeviceToPort(MidiDevice * mdev,
             //### FIXME!!!: This does not really disconnect the port !
             
         } else {
-            CommandHistory::getInstance()->addCommand(new
-                                                      ReconnectDeviceCommand
-                                                                (m_studio, devId,
-                                                                qstrtostr
-                                                                 (portName)));
+            RG_DEBUG << "DevicesManagerNew: portName: " << portName 
+                     << " devId " << devId << endl;
+
+            CommandHistory::getInstance()->addCommand(
+                                                   new ReconnectDeviceCommand (
+                                                           m_studio, devId,
+                                                           qstrtostr (portName)));
+
+            // ah HAH!  here was the culprit preventing the various intended
+            // updates from working correctly                                                           
+            mdev->setConnection(qstrtostr(portName));
         }
     }
 }
 
 
-void DevicesManagerNew::clearAllPortsLists() {
+void
+DevicesManagerNew::clearAllPortsLists()
+{
+    RG_DEBUG << "DevicesManagerNew::clearAllPortsLists()" << endl;
+
 //         m_playDevices.clear();
 //         m_recordDevices.clear();
 
@@ -700,9 +685,12 @@ void DevicesManagerNew::clearAllPortsLists() {
 }
 
 
-void DevicesManagerNew::updatePortsList(QTreeWidget * treeWid,
-                                        MidiDevice::
-                                        DeviceDirection PlayRecDir) {
+void
+DevicesManagerNew::updatePortsList(QTreeWidget * treeWid,
+                                   MidiDevice::DeviceDirection PlayRecDir)
+{
+    RG_DEBUG << "DevicesManagerNew::updatePortsList(...)" << endl;
+
     /**
      *    updates (adds/removes) the ports listed in the TreeWidget
      *    this does not update/set the checkStates !
@@ -770,11 +758,11 @@ void DevicesManagerNew::updatePortsList(QTreeWidget * treeWid,
 }                               // end updatePortsList()
 
 
+void
+DevicesManagerNew::slotAddPlaybackDevice()
+{
+    RG_DEBUG << "DevicesManagerNew::slotAddPlaybackDevice()" << endl;
 
-
-
-// slot
-void DevicesManagerNew::slotAddPlaybackDevice() {
     QString connection = "";
     //         if ( m_playConnections.size() > 0 )
     //             connection = m_playConnections[m_playConnections.size() - 1];
@@ -787,14 +775,15 @@ void DevicesManagerNew::slotAddPlaybackDevice() {
                                             qstrtostr(connection));
     CommandHistory::getInstance()->addCommand(command);
 
-    //sleep( 1,5 );
     //     updatePlaybackDevicesList();
     slotRefreshOutputPorts();
 }
 
+void
+DevicesManagerNew::slotAddRecordDevice()
+{
+    RG_DEBUG << "DevicesManagerNew::slotAddRecordDevice()" << endl;
 
-// slot
-void DevicesManagerNew::slotAddRecordDevice() {
     QString connection = "";
     //     if ( m_recordConnections.size() > 0 )
     //         connection = m_recordConnections[m_recordConnections.size() - 1];
@@ -811,13 +800,18 @@ void DevicesManagerNew::slotAddRecordDevice() {
     slotRefreshInputPorts();
 }
 
-void DevicesManagerNew::slotDeletePlaybackDevice() {
+
+void
+DevicesManagerNew::slotDeletePlaybackDevice()
+{
+    RG_DEBUG << "DevicesManagerNew::slotDeletePlaybackDevice()" << endl;
+
     MidiDevice *mdev;
     mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
     if (!mdev)
         return;
     DeviceId id = mdev->getId();
-    //
+    
     if (id == Device::NO_DEVICE)
         return;
     CreateOrDeleteDeviceCommand *command =
@@ -829,13 +823,18 @@ void DevicesManagerNew::slotDeletePlaybackDevice() {
     slotRefreshOutputPorts();
 }
 
-void DevicesManagerNew::slotDeleteRecordDevice() {
+
+void
+DevicesManagerNew::slotDeleteRecordDevice()
+{
+    RG_DEBUG << "DevicesManagerNew::slotDeleteRecordDevice()" << endl;
+
     MidiDevice *mdev;
     mdev = getCurrentlySelectedDevice(m_treeWidget_recordDevices);
     if (!mdev)
         return;
     DeviceId id = mdev->getId();
-    //
+    
     if (id == Device::NO_DEVICE)
         return;
     CreateOrDeleteDeviceCommand *command =
@@ -846,7 +845,11 @@ void DevicesManagerNew::slotDeleteRecordDevice() {
 }
 
 
-void DevicesManagerNew::slotManageBanksOfPlaybackDevice() {
+void
+DevicesManagerNew::slotManageBanksOfPlaybackDevice()
+{
+    RG_DEBUG << "DevicesManagerNew::slotManageBanksOfPlaybackDevice()" << endl;
+
     MidiDevice *mdev;
     mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
     if (!mdev)
@@ -854,11 +857,16 @@ void DevicesManagerNew::slotManageBanksOfPlaybackDevice() {
     DeviceId devId = mdev->getId();
     if (devId == Device::NO_DEVICE)
         return;
-    //
+    
     emit editBanks(devId);
 }
 
-void DevicesManagerNew::slotEditControllerDefinitions() {
+
+void
+DevicesManagerNew::slotEditControllerDefinitions()
+{
+    RG_DEBUG << "DevicesManagerNew::slotEditControllerDefinitions()" << endl;
+
     MidiDevice *mdev;
     mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
     if (!mdev)
@@ -866,24 +874,14 @@ void DevicesManagerNew::slotEditControllerDefinitions() {
     DeviceId devId = mdev->getId();
     if (devId == Device::NO_DEVICE)
         return;
-    //
+    
     emit editControllers(devId);
 }
 
 
-void DevicesManagerNew::slotAddLV2Device() {
-    /*
-       QMessageBox:: information(
-       this, "Add LV2 Plugin Device",
-       "Just an idea at the moment. \nNot implemented. ",
-       QMessageBox::Ok,
-       QMessageBox::Ok
-       );
-     */
-}
-
-
-void DevicesManagerNew::slotHelpRequested() {
+void
+DevicesManagerNew::slotHelpRequested()
+{
     QMessageBox::information(this,
                              tr
                                                ("Help for the Midi Devices-Manager Dialog"),
@@ -893,8 +891,12 @@ void DevicesManagerNew::slotHelpRequested() {
 }
 
 
-void DevicesManagerNew::slotDeviceItemChanged(QTreeWidgetItem * twItem,
-                                              int column) {
+void
+DevicesManagerNew::slotDeviceItemChanged(QTreeWidgetItem * twItem,
+                                         int column)
+{
+    RG_DEBUG << "DevicesManagerNew::slotDeviceItemChanged(...)" << endl;
+
     /** called, if an item of the playback or record devices list (treeWidgetItem) changed
         if the device-name column has been changed, the device will be renamed.
      **/
@@ -911,21 +913,22 @@ void DevicesManagerNew::slotDeviceItemChanged(QTreeWidgetItem * twItem,
     devName = twItem->text(0);
 
     if (devName != strtoqstr(mdev->getName())) {
-        CommandHistory::getInstance()->addCommand(new
-                                                  RenameDeviceCommand
-                                                                (m_studio,
-                                                                mdev->getId(),
-                                                                qstrtostr
-                                                                 (devName)));
+        CommandHistory::getInstance()->addCommand(new RenameDeviceCommand(m_studio,
+                                                                          mdev->getId(),
+                                                                          qstrtostr
+                                                                          (devName)));
         emit sigDeviceNameChanged(mdev->getId());
     }
 
 }
 
-void DevicesManagerNew::
-slotRecordDevicesListItemDoubleClicked(QTreeWidgetItem * twItem,
-                                       int col) {
 
+void
+DevicesManagerNew::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
+                                                    int col)
+{
+    RG_DEBUG << "DevicesManagerNew::slotRecordDevicesListItemClicked(...)" << endl;
+    
     MidiDevice *mdev;
     mdev = getMidiDeviceOfItem(twItem);
     if (!mdev)
@@ -936,14 +939,9 @@ slotRecordDevicesListItemDoubleClicked(QTreeWidgetItem * twItem,
         if (mdev->isRecording()) {
 
             mdev->setRecording(false);
-//                 CommandHistory::getInstance()
-//                         ->addCommand( new ChangeRecordDeviceCommand(mdev->getId(), false) );
         } else {
             mdev->setRecording(true);
-//                 CommandHistory::getInstance()
-//                         ->addCommand( new ChangeRecordDeviceCommand(mdev->getId(), true) );
         }
-
 
         // update list entry
         twItem->setText(1, mdev->isRecording() ? tr("Yes") : tr("No"));
@@ -951,13 +949,12 @@ slotRecordDevicesListItemDoubleClicked(QTreeWidgetItem * twItem,
 }
 
 
-void DevicesManagerNew::connectSignalsToSlots() {
-    //
+void
+DevicesManagerNew::connectSignalsToSlots()
+{
+    RG_DEBUG << "DevicesManagerNew::connectSignalsToSlots()" << endl;
 
     // playback devices
-    connect(m_treeWidget_outputPorts,
-            SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this,
-            SLOT(slotOutputPortDoubleClicked(QTreeWidgetItem *, int)));
     connect(m_treeWidget_outputPorts,
             SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
             SLOT(slotOutputPortClicked(QTreeWidgetItem *, int)));
@@ -965,8 +962,6 @@ void DevicesManagerNew::connectSignalsToSlots() {
             SIGNAL(itemSelectionChanged()), this,
             SLOT(slotPlaybackDeviceSelected()));
 
-//         connect( m_treeWidget_playbackDevices, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)),
-//                 this, SLOT(slotPlaybackDevicesListItemDoubleClicked( QTreeWidgetItem *, int )) );
     connect(m_treeWidget_playbackDevices,
             SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
             SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
@@ -974,17 +969,14 @@ void DevicesManagerNew::connectSignalsToSlots() {
 
     // record devices
     connect(m_treeWidget_inputPorts,
-            SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this,
-            SLOT(slotInputPortDoubleClicked(QTreeWidgetItem *, int)));
-    connect(m_treeWidget_inputPorts,
             SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
             SLOT(slotInputPortClicked(QTreeWidgetItem *, int)));
     connect(m_treeWidget_recordDevices, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotRecordDeviceSelected()));
 
     connect(m_treeWidget_recordDevices,
-            SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this,
-            SLOT(slotRecordDevicesListItemDoubleClicked
+            SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
+            SLOT(slotRecordDevicesListItemClicked
                                    (QTreeWidgetItem *, int)));
     connect(m_treeWidget_recordDevices,
             SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
@@ -1028,40 +1020,9 @@ void DevicesManagerNew::connectSignalsToSlots() {
             this, SLOT(slotEditControllerDefinitions()));
 
 
-}                               // end connectSignalsToSlots()
+} 
 
 
-
-
-
-
-
-/*
-   void
-   makeConnectionList ( MidiDevice::DeviceDirection direction,
-   QStringList &list )
-   {
-   list.clear();
-
-   unsigned int connections = RosegardenSequencer::getInstance()->
-   getConnections ( Device::Midi, direction );
-
-   for ( unsigned int i = 0; i < connections; ++i )
-   {
-
-   list.append ( RosegardenSequencer::getInstance()->
-   getConnection ( Device::Midi, direction, i ) );
-   }
-
-   list.append ( QObject::tr( "No connection" ) );
-   }
- */
-
-
-
-
-}                               // end namespace Rosegarden
-
-
+} // namespace Rosegarden
 
 #include "DevicesManagerNew.moc"

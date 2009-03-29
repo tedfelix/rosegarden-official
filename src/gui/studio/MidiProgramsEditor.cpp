@@ -605,7 +605,9 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
     ProgramList::iterator it = m_programList.begin();
 
+    int c = 0;
     for (; it != m_programList.end(); it++) {
+        std::cout << "C = " << c++ << std::endl;
         if (it->getBank() == bank && it->getProgram() == programNo)
             return &(*it);
     }

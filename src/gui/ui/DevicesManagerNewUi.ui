@@ -149,34 +149,6 @@ QLineEdit
             <number>0</number>
            </property>
            <item>
-            <widget class="QPushButton" name="pushButton_editControllerDefinitions" >
-             <property name="minimumSize" >
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="maximumSize" >
-              <size>
-               <width>16777215</width>
-               <height>22</height>
-              </size>
-             </property>
-             <property name="toolTip" >
-              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
-&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p>
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" text-decoration: underline;">New controllers add a knob&lt;/span> to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p>
-&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
-             </property>
-             <property name="text" >
-              <string>Edit controllers ...</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="pushButton_manageBanksOfPlaybackDevice" >
              <property name="minimumSize" >
               <size>
@@ -201,6 +173,34 @@ p, li { white-space: pre-wrap; }
              </property>
              <property name="text" >
               <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Manage banks ...</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_editControllerDefinitions" >
+             <property name="minimumSize" >
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize" >
+              <size>
+               <width>16777215</width>
+               <height>22</height>
+              </size>
+             </property>
+             <property name="toolTip" >
+              <string>&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+p, li { white-space: pre-wrap; }
+&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p>
+&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" text-decoration: underline;">New controllers add a knob&lt;/span> to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p>
+&lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
+             </property>
+             <property name="text" >
+              <string>Edit controllers ...</string>
              </property>
             </widget>
            </item>
@@ -326,48 +326,41 @@ p, li { white-space: pre-wrap; }
            <string notr="true" >/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
 
 QTreeView {
-     show-decoration-selected: 1;
+     show-decoration-selected: 1; 
      background-color: #404040;
      selection-background-color: #404040;
 }
 
 QTreeView::item {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-right: 1px solid #AAAAAA;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
     padding: 0 5px 0 5px;
     margin: 1px 0 1px 0; /* force some space to better resemble buttons */
 }
 
-QTreeView::item:hover {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+QTreeView::item:hover,
+QTreeView::branch:hover {
     background-color: #CCDFFF;
     color: #000000;
 }
 
-QTreeView::item:selected {
-
-/* styling them as "pushed" doesn't work, because these buttons don't really push.  Whatever "sends data through" selected on the left, the button here turns bold. That might be the place to use the "pushed" look, but I don't see where that is happening right off.  Maybe in the code.  Skipping this for now.
-*/
-/*    border: 1px solid #E0E0E0;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);*/
-
-}
-
-QTreeView::item:selected:active{
-/* do nothing different */
-}
-
-QTreeView::item:selected:!active {
-/* do nothing different */
+QTreeView::item:selected,
+QTreeView::branch:selected {
+    border-color: #E0E0E0;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
 QTreeView::branch {
-/*    background: #404040; */
-    border-image: url(:pixmaps/style/connect-button-arrow.png) 1;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-left: 1px solid #AAAAAA;
+     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
+    padding: 0 5px 0 5px;
+    margin: 1px 0 1px 0;
 }</string>
           </property>
           <column>
@@ -806,48 +799,41 @@ p, li { white-space: pre-wrap; }
            <string notr="true" >/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
 
 QTreeView {
-     show-decoration-selected: 1;
+     show-decoration-selected: 1; 
      background-color: #404040;
      selection-background-color: #404040;
 }
 
 QTreeView::item {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-right: 1px solid #AAAAAA;
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
     color: #000000;
     padding: 0 5px 0 5px;
     margin: 1px 0 1px 0; /* force some space to better resemble buttons */
 }
 
-QTreeView::item:hover {
-    border: 1px solid #AAAAAA;
-    border-radius: 3px;
+QTreeView::item:hover,
+QTreeView::branch:hover {
     background-color: #CCDFFF;
     color: #000000;
 }
 
-QTreeView::item:selected {
-
-/* styling them as "pushed" doesn't work, because these buttons don't really push.  Whatever "sends data through" selected on the left, the button here turns bold. That might be the place to use the "pushed" look, but I don't see where that is happening right off.  Maybe in the code.  Skipping this for now.
-*/
-/*    border: 1px solid #E0E0E0;
-    border-radius: 3px;
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);*/
-
-}
-
-QTreeView::item:selected:active{
-/* do nothing different */
-}
-
-QTreeView::item:selected:!active {
-/* do nothing different */
+QTreeView::item:selected,
+QTreeView::branch:selected {
+    border-color: #E0E0E0;
+    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE);
 }
 
 QTreeView::branch {
-/*    background: #404040; */
-    border-image: url(:pixmaps/style/connect-button-arrow.png) 1;
+    border-top: 1px solid #AAAAAA;
+    border-bottom: 1px solid #AAAAAA;
+    border-left: 1px solid #AAAAAA;
+     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    color: #000000;
+    padding: 0 5px 0 5px;
+    margin: 1px 0 1px 0;
 }</string>
           </property>
           <column>
