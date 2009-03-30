@@ -378,6 +378,8 @@ BankEditorDialog::initDialog()
             << itemName << endl;
 
             QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
+
+            //m_treeWidget->addTopLevelItem(deviceItem);  no difference
             
             deviceItem->setExpanded(true);
 
@@ -480,7 +482,7 @@ BankEditorDialog::updateDialog()
         QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem
                                     (midiDevice->getId(), m_treeWidget, itemName);
         
-//         deviceItem->setOpen(true);    //&&&
+        deviceItem->setExpanded(true);
 
         populateDeviceItem(deviceItem, midiDevice);
     }

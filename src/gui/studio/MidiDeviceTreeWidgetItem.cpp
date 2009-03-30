@@ -29,46 +29,40 @@ namespace Rosegarden
 
 MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidget* parent, QString name)
-        : QTreeWidgetItem(parent),	//, name
+        : QTreeWidgetItem(parent),
         m_deviceId(deviceId)
 {
-// 	this->setObjectName( name );	//@@@ not supported for QTreeWidgetItem
 }
 
 MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidgetItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
-        : QTreeWidgetItem(parent, //name,
-							new QTreeWidgetItem( 
-							QStringList()
-                        	<< QString(percussion ? tr("Percussion Bank") : tr("Bank"))
-                        	<< QString().setNum(msb)
-							<< QString().setNum(lsb)
-							)
-						),
+        : QTreeWidgetItem(parent, new QTreeWidgetItem(QStringList()
+                                 << QString(percussion ? tr("Percussion Bank") : tr("Bank"))
+                                 << QString().setNum(msb)
+                                 << QString().setNum(lsb))
+                         ),
         m_deviceId(deviceId)
 {
-// 	this->setObjectName( name );
 }
 
 MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidgetItem* parent, QString name)
-	: QTreeWidgetItem(parent, //name, 
-						new QTreeWidgetItem( QStringList() << tr("Key Mapping") << "" << "")    
-					 ),
+    : QTreeWidgetItem(parent, //name, 
+                        new QTreeWidgetItem( QStringList() << tr("Key Mapping") << "" << "")    
+                     ),
 m_deviceId(deviceId)
 {
-// 	this->setObjectName( name );
 }
 
 int MidiDeviceTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
     MidiDeviceTreeWidgetItem* item = dynamic_cast<MidiDeviceTreeWidgetItem*>(i);
     if (!item){
-			return 1;
-//         return QTreeWidgetItem::compare(i, col, ascending);		//### //@@@ FIX : compare function
-	}
+            return 1;
+//         return QTreeWidgetItem::compare(i, col, ascending);        //### //@@@ FIX : compare function
+    }
     if (col == 0)
         return
             getDeviceId() > item->getDeviceId() ? 1 :
