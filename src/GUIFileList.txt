@@ -828,8 +828,8 @@ SET(gui_SRCS
 	gui/seqmanager/AudioSegmentMmapper.h
 	gui/seqmanager/CompositionMmapper.cpp
 	gui/seqmanager/CompositionMmapper.h
-	gui/seqmanager/ControlBlockMmapper.cpp
-	gui/seqmanager/ControlBlockMmapper.h
+#	gui/seqmanager/ControlBlockMmapper.cpp
+#	gui/seqmanager/ControlBlockMmapper.h
 	gui/seqmanager/MetronomeMmapper.cpp
 	gui/seqmanager/MetronomeMmapper.h
 	gui/seqmanager/MidiFilterDialog.cpp

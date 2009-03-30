@@ -359,11 +359,17 @@ BankEditorDialog::initDialog()
     //
     DeviceList *devices = m_studio->getDevices();
     DeviceListIterator it;
+    Device *devx;
+    unsigned int i = 0;
 
     for (it = devices->begin(); it != devices->end(); ++it) {
-        if ((*it)->getType() == Device::Midi) {
+        devx = *it;
+//     for ( i=0; i < devices->size(); i++ ){
+//         devx = devices->at( i );
+        
+        if (devx->getType() == Device::Midi) {
             MidiDevice* midiDevice =
-                dynamic_cast<MidiDevice*>(*it);
+                dynamic_cast<MidiDevice*>(devx);
             if (!midiDevice)
                 continue;
 
@@ -378,18 +384,22 @@ BankEditorDialog::initDialog()
             << itemName << endl;
 
             QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
-
-            //m_treeWidget->addTopLevelItem(deviceItem);  no difference
+            
+            m_treeWidget->addTopLevelItem(deviceItem);  //
             
             deviceItem->setExpanded(true);
-
+//             deviceItem->setForeground(  0, QBrush( Qt::cyan, Qt::SolidPattern ) );  // column, brush(color, pat)
+            
+            //### note: maybe the name(item-text) should better be assigned in the constructor of deviceItem: done !
+//             deviceItem->setText( 0, itemName );
+            
             populateDeviceItem(deviceItem, midiDevice);
         }
     }
 
     // Select the first Device
     //
-    populateDevice(m_treeWidget->topLevelItem(0));
+//     populateDevice(m_treeWidget->topLevelItem(0));
     
     m_treeWidget->topLevelItem(0)->setSelected(true);
 }
@@ -685,7 +695,7 @@ BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int ba
 void
 BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
 {
-    QTreeWidgetItem* child = 0;
+//     QTreeWidgetItem* child = 0;
 
 //     while ((child = item->child(0)))
 //         delete child;
