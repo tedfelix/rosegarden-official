@@ -15,7 +15,7 @@
     <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
-    <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
+    <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
   </Menu>
 
   <Menu name="help" append="about_merge">

@@ -190,7 +190,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank"));
 
-    connect(m_treeWidget, SIGNAL(currentChanged(QTreeWidgetItem*)),
+    connect(m_treeWidget, SIGNAL(itemChanged(QTreeWidgetItem*)),
             this, SLOT(slotPopulateDevice(QTreeWidgetItem*)));
 
     QFrame *vbox = new QFrame(splitter);
@@ -229,8 +229,10 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox->setLayout(optionBoxLayout);
 
     // device/bank modification
-    connect(m_treeWidget, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
-            this, SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&, int)));
+//&&& There is no itemRenamed() signal, and no apparent analog.  I'm not even
+// sure how to make these click-to-editable at this stage.  What a mess.
+//    connect(m_treeWidget, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
+//            this, SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&, int)));
 
     connect(m_addBank, SIGNAL(clicked()),
             this, SLOT(slotAddBank()));
@@ -1750,7 +1752,6 @@ BankEditorDialog::slotExport()
     MidiDeviceTreeWidgetItem* deviceItem =
             dynamic_cast<MidiDeviceTreeWidgetItem*>
                 (m_treeWidget->currentItem());
-//                 (m_treeWidget->selectedItem());
 
     std::vector<DeviceId> devices;
     MidiDevice *md = getMidiDevice(deviceItem);

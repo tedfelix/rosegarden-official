@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,14 +19,13 @@
 #define _RG_MIDIDEVICELISTVIEWITEM_H_
 
 #include "base/Device.h"
+
 #include <QTreeWidget>
 #include <QString>
-
 #include <QCoreApplication>
 
 namespace Rosegarden
 {
-
 
 
 class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
