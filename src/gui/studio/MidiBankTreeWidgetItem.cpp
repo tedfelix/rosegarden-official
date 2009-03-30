@@ -16,55 +16,55 @@
 */
 
 
-#include "MidiBankListViewItem.h"
+#include "MidiBankTreeWidgetItem.h"
 
 #include "base/Device.h"
-#include "MidiDeviceListViewItem.h"
-#include "MidiKeyMapListViewItem.h"
+#include "MidiDeviceTreeWidgetItem.h"
+#include "MidiKeyMapTreeWidgetItem.h"
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-MidiBankListViewItem::MidiBankListViewItem(DeviceId deviceId,
+MidiBankTreeWidgetItem::MidiBankTreeWidgetItem(DeviceId deviceId,
         int bankNb,
         QTreeWidgetItem* parent,
         QString name,
         bool percussion, int msb, int lsb)
-        : MidiDeviceListViewItem(deviceId, parent, name, percussion, msb, lsb),
+        : MidiDeviceTreeWidgetItem(deviceId, parent, name, percussion, msb, lsb),
         m_percussion(percussion),
         m_bankNb(bankNb)
 {}
 
-void MidiBankListViewItem::setPercussion(bool percussion)
+void MidiBankTreeWidgetItem::setPercussion(bool percussion)
 {
     m_percussion = percussion;
     setText(1, QString(percussion ? tr("Percussion Bank") : tr("Bank")));
 }
 
-void MidiBankListViewItem::setMSB(int msb)
+void MidiBankTreeWidgetItem::setMSB(int msb)
 {
     setText(2, QString().setNum(msb));
 }
 
-void MidiBankListViewItem::setLSB(int lsb)
+void MidiBankTreeWidgetItem::setLSB(int lsb)
 {
     setText(3, QString().setNum(lsb));
 }
 
-int MidiBankListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
+int MidiBankTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(i);
+    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(i);
 
     if (!bankItem) {
-        MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem *>(i);
+        MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem *>(i);
         if (keyItem)
             return -1; // banks before key maps
     }
 
     if (!bankItem || (col != 2 && col != 3)) {
-        return MidiDeviceListViewItem::compare(i, col, ascending);
+        return MidiDeviceTreeWidgetItem::compare(i, col, ascending);
     }
 
     int thisVal = text(col).toInt(),

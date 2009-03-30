@@ -33,9 +33,9 @@
 #include "gui/dialogs/ImportDeviceDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/general/ResourceFinder.h"
-#include "MidiBankListViewItem.h"
-#include "MidiDeviceListViewItem.h"
-#include "MidiKeyMapListViewItem.h"
+#include "MidiBankTreeWidgetItem.h"
+#include "MidiDeviceTreeWidgetItem.h"
+#include "MidiKeyMapTreeWidgetItem.h"
 #include "MidiKeyMappingEditor.h"
 #include "MidiProgramsEditor.h"
 #include "document/Command.h"
@@ -81,16 +81,16 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
         m_lastDevice(Device::NO_DEVICE),
         m_updateDeviceList(false)
 {
-    QWidget* mainFrame = new QWidget( this );
+    QWidget* mainFrame = new QWidget(this);
     setCentralWidget(mainFrame);
-    mainFrame->setLayout( new QVBoxLayout(this) );
+    mainFrame->setLayout(new QVBoxLayout(this));
 
     setWindowTitle(tr("Manage MIDI Banks and Programs"));
 
-    QSplitter *splitter = new QSplitter( mainFrame );
+    QSplitter *splitter = new QSplitter(mainFrame);
     mainFrame->layout()->addWidget(splitter);
 
-    QFrame *btnBox = new QFrame( mainFrame );
+    QFrame *btnBox = new QFrame(mainFrame);
     mainFrame->layout()->addWidget(btnBox);
 
     btnBox->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
@@ -123,32 +123,25 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QWidget *leftPart = new QWidget(splitter);
     QVBoxLayout *leftPartLayout = new QVBoxLayout;
     
-    m_listView = new QTreeWidget( leftPart );
-    leftPartLayout->addWidget(m_listView);
+    m_treeWidget = new QTreeWidget(leftPart);
+    leftPartLayout->addWidget(m_treeWidget);
     
-    m_listView->setColumnCount( 4 );
+    m_treeWidget->setColumnCount(4);
     QStringList sl;
     sl        << tr("MIDI Device")
             << tr("Type")
             << tr("MSB")
             << tr("LSB");
-    m_listView->setHeaderLabels( sl );
-    /*
-    m_listView->addColumn(tr("MIDI Device"));
-    m_listView->addColumn(tr("Type"));
-    m_listView->addColumn(tr("MSB"));
-    m_listView->addColumn(tr("LSB"));
-    */
-    
-    m_listView->setRootIsDecorated(true);
+    m_treeWidget->setHeaderLabels(sl);
+    m_treeWidget->setRootIsDecorated(true);
     
     /*    
-    m_listView->setShowSortIndicator(true);        //&&&
-    m_listView->setItemsRenameable(true);
-    m_listView->restoreLayout(BankEditorConfigGroup);
+    m_treeWidget->setShowSortIndicator(true);        //&&&
+    m_treeWidget->setItemsRenameable(true);
+    m_treeWidget->restoreLayout(BankEditorConfigGroup);
     */
     
-    QFrame *bankBox = new QFrame( leftPart );
+    QFrame *bankBox = new QFrame(leftPart);
     leftPartLayout->addWidget(bankBox);
     leftPart->setLayout(leftPartLayout);
     bankBox->setContentsMargins(6, 6, 6, 6);
@@ -197,7 +190,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     m_pastePrograms->setToolTip(tr("Paste Program names from clipboard to current Bank"));
 
-    connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
+    connect(m_treeWidget, SIGNAL(currentChanged(QTreeWidgetItem*)),
             this, SLOT(slotPopulateDevice(QTreeWidgetItem*)));
 
     QFrame *vbox = new QFrame(splitter);
@@ -225,9 +218,9 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     QHBoxLayout *variationBoxLayout = new QHBoxLayout;
     optionBoxLayout->addWidget(variationBox);
 
-    m_variationToggle = new QCheckBox(tr("Show Variation list based on "), variationBox );
+    m_variationToggle = new QCheckBox(tr("Show Variation list based on "), variationBox);
     variationBoxLayout->addWidget(m_variationToggle);
-    m_variationCombo = new QComboBox( variationBox );
+    m_variationCombo = new QComboBox(variationBox);
     variationBoxLayout->addWidget(m_variationCombo);
     variationBox->setLayout(variationBoxLayout);
     m_variationCombo->addItem(tr("LSB"));
@@ -236,7 +229,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox->setLayout(optionBoxLayout);
 
     // device/bank modification
-    connect(m_listView, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
+    connect(m_treeWidget, SIGNAL(itemRenamed (QTreeWidgetItem*, const QString&, int)),
             this, SLOT(slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&, int)));
 
     connect(m_addBank, SIGNAL(clicked()),
@@ -312,7 +305,7 @@ BankEditorDialog::~BankEditorDialog()
 {
     RG_DEBUG << "~BankEditorDialog()\n";
 
-//     m_listView->saveLayout(BankEditorConfigGroup);    //&&&
+//     m_treeWidget->saveLayout(BankEditorConfigGroup);    //&&&
 
 //     if (m_doc) // see slotFileClose() for an explanation on why we need to test m_doc
 //         CommandHistory::getInstance()->detachView(actionCollection());
@@ -323,16 +316,15 @@ BankEditorDialog::setupActions()
 {
 //     KAction* close = KStandardAction::close (this, SLOT(slotFileClose()), actionCollection());
     
-    createAction( "file_close", SLOT(slotFileClose()) );
+    createAction("file_close", SLOT(slotFileClose()));
 
-    m_closeButton->setText( findAction("file_close")->text() );
-    connect( m_closeButton, SIGNAL(clicked()),
-            this, SLOT(slotFileClose()) );
+//&&&    m_closeButton->setText(findAction("file_close")->text());
+    m_closeButton->setText(tr("Close"));
+    connect(m_closeButton, SIGNAL(clicked()),
+            this, SLOT(slotFileClose()));
 
-//     KStandardAction::copy (this, SLOT(slotEditCopy()), actionCollection());
-//     KStandardAction::paste (this, SLOT(slotEditPaste()), actionCollection());
-    createAction( "edit_copy", SLOT(slotEditCopy()) );
-    createAction( "edit_paste", SLOT(slotEditPaste()) );
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     // some adjustments
 
@@ -350,7 +342,7 @@ BankEditorDialog::setupActions()
                             KStandardAction::stdName(KStandardAction::Redo));
     */
     
-        createGUI("bankeditor.rc"); //@@@ JAS orig. 0
+    createGUI("bankeditor.rc"); //@@@ JAS orig. 0
 }
 
 void
@@ -359,7 +351,7 @@ BankEditorDialog::initDialog()
     // Clear down
     //
     m_deviceNameMap.clear();
-    m_listView->clear();
+    m_treeWidget->clear();
 
     // Fill list view
     //
@@ -383,9 +375,9 @@ BankEditorDialog::initDialog()
             RG_DEBUG << "BankEditorDialog::initDialog - adding "
             << itemName << endl;
 
-            QTreeWidgetItem* deviceItem = new MidiDeviceListViewItem(midiDevice->getId(), m_listView, itemName);
+            QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem(midiDevice->getId(), m_treeWidget, itemName);
             
-//             deviceItem->setOpen(true);    //&&&
+            deviceItem->setExpanded(true);
 
             populateDeviceItem(deviceItem, midiDevice);
         }
@@ -393,11 +385,9 @@ BankEditorDialog::initDialog()
 
     // Select the first Device
     //
-//     populateDevice(m_listView->firstChild());
-    populateDevice( m_listView->topLevelItem(0) );
+    populateDevice(m_treeWidget->topLevelItem(0));
     
-//     m_listView->setSelected(m_listView->firstChild(), true);
-    m_listView->topLevelItem(0)->setSelected( true );
+    m_treeWidget->topLevelItem(0)->setSelected(true);
 }
 
 void
@@ -426,10 +416,10 @@ BankEditorDialog::updateDialog()
         if (m_deviceNameMap.find(midiDevice->getId()) != m_deviceNameMap.end()) {
             // Device already displayed but make sure the label is up to date
             //
-            QTreeWidgetItem* currentIndex = m_listView->currentItem();
+            QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
 
             if (currentIndex) {
-                MidiDeviceListViewItem* deviceItem =
+                MidiDeviceTreeWidgetItem* deviceItem =
                     getParentDeviceItem(currentIndex);
 
                 if (deviceItem &&
@@ -454,8 +444,8 @@ BankEditorDialog::updateDialog()
 
                     while (child) {
 
-                        MidiBankListViewItem *bankItem =
-                            dynamic_cast<MidiBankListViewItem *>(child);
+                        MidiBankTreeWidgetItem *bankItem =
+                            dynamic_cast<MidiBankTreeWidgetItem *>(child);
 
                         if (bankItem) {
                             bool percussion = bankItem->isPercussion();
@@ -471,7 +461,7 @@ BankEditorDialog::updateDialog()
                         }
 
 //                         child = child->nextSibling();
-                        child = m_listView->itemBelow(child);
+                        child = m_treeWidget->itemBelow(child);
                     }
                 }
             }
@@ -485,8 +475,8 @@ BankEditorDialog::updateDialog()
         RG_DEBUG << "BankEditorDialog::updateDialog - adding "
         << itemName << endl;
 
-        QTreeWidgetItem* deviceItem = new MidiDeviceListViewItem
-                                    (midiDevice->getId(), m_listView, itemName);
+        QTreeWidgetItem* deviceItem = new MidiDeviceTreeWidgetItem
+                                    (midiDevice->getId(), m_treeWidget, itemName);
         
 //         deviceItem->setOpen(true);    //&&&
 
@@ -496,10 +486,10 @@ BankEditorDialog::updateDialog()
     // delete items whose corresponding devices are no longer present,
     // and update the other ones
     //
-    std::vector<MidiDeviceListViewItem*> itemsToDelete;
+    std::vector<MidiDeviceTreeWidgetItem*> itemsToDelete;
 
-    MidiDeviceListViewItem* sibling = dynamic_cast<MidiDeviceListViewItem*>
-                                      (m_listView->topLevelItem(0));
+    MidiDeviceTreeWidgetItem* sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>
+                                      (m_treeWidget->topLevelItem(0));
 
     while (sibling) {
 
@@ -508,15 +498,15 @@ BankEditorDialog::updateDialog()
         else
             updateDeviceItem(sibling);
 
-//         sibling = dynamic_cast<MidiDeviceListViewItem*>(sibling->nextSibling());
-        sibling = dynamic_cast<MidiDeviceListViewItem*>( m_listView->itemBelow(sibling) );
+//         sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>(sibling->nextSibling());
+        sibling = dynamic_cast<MidiDeviceTreeWidgetItem*>(m_treeWidget->itemBelow(sibling));
     }
 
     for (unsigned int i = 0; i < itemsToDelete.size(); ++i)
         delete itemsToDelete[i];
 
-    m_listView->sortItems( 0, Qt::AscendingOrder );    // column, order  // sort by device (column 0)
-//     m_listView->sortChildren();
+    m_treeWidget->sortItems(0, Qt::AscendingOrder);    // column, order  // sort by device (column 0)
+//     m_treeWidget->sortChildren();
 
     if (deviceLabelUpdate)
         emit deviceNamesChanged();
@@ -525,14 +515,14 @@ BankEditorDialog::updateDialog()
 void
 BankEditorDialog::setCurrentDevice(DeviceId device)
 {
-//     for (QTreeWidgetItem *item = m_listView->firstChild(); item;
+//     for (QTreeWidgetItem *item = m_treeWidget->firstChild(); item;
 //                     item = item->nextSibling()) {
-    for (QTreeWidgetItem *item = m_listView->topLevelItem(0); item;
-                     item = m_listView->itemBelow(item) ){
-        MidiDeviceListViewItem * deviceItem =
-            dynamic_cast<MidiDeviceListViewItem *>(item);
+    for (QTreeWidgetItem *item = m_treeWidget->topLevelItem(0); item;
+                     item = m_treeWidget->itemBelow(item)){
+        MidiDeviceTreeWidgetItem * deviceItem =
+            dynamic_cast<MidiDeviceTreeWidgetItem *>(item);
         if (deviceItem && deviceItem->getDeviceId() == device) {
-//             m_listView->setSelected(item, true);
+//             m_treeWidget->setSelected(item, true);
             item->setSelected(true);
             break;
         }
@@ -552,7 +542,7 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding "
         << itemName << " - " << strtoqstr(banks[i].getName())
         << endl;
-        new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
+        new MidiBankTreeWidgetItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].getName()),
                                  banks[i].isPercussion(),
                                  banks[i].getMSB(), banks[i].getLSB());
@@ -563,13 +553,13 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding key mapping "
         << itemName << " - " << strtoqstr(mappings[i].getName())
         << endl;
-        new MidiKeyMapListViewItem(midiDevice->getId(), deviceItem,
+        new MidiKeyMapTreeWidgetItem(midiDevice->getId(), deviceItem,
                                    strtoqstr(mappings[i].getName()));
     }
 }
 
 void
-BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
+BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
 {
     MidiDevice* midiDevice = getMidiDevice(deviceItem->getDeviceId());
     if (!midiDevice) {
@@ -591,7 +581,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
         RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
         << itemName << " - " << strtoqstr(banks[i].getName())
         << endl;
-        new MidiBankListViewItem(midiDevice->getId(), i, deviceItem,
+        new MidiBankTreeWidgetItem(midiDevice->getId(), i, deviceItem,
                                  strtoqstr(banks[i].getName()),
                                  banks[i].isPercussion(),
                                  banks[i].getMSB(), banks[i].getLSB());
@@ -605,11 +595,11 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
         bool have = false;
         
         n = 0;
-        while ( n < deviceItem->childCount() ) {
-            QTreeWidgetItem *child = deviceItem->child( n );
+        while (n < deviceItem->childCount()) {
+            QTreeWidgetItem *child = deviceItem->child(n);
             
-            MidiKeyMapListViewItem *keyItem =
-                dynamic_cast<MidiKeyMapListViewItem*>(child);
+            MidiKeyMapTreeWidgetItem *keyItem =
+                dynamic_cast<MidiKeyMapTreeWidgetItem*>(child);
             if (keyItem) {
                 if (keyItem->getName() == strtoqstr(keymaps[i].getName())) {
                     have = true;
@@ -625,7 +615,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
         RG_DEBUG << "BankEditorDialog::updateDeviceItem - adding "
         << itemName << " - " << strtoqstr(keymaps[i].getName())
         << endl;
-        new MidiKeyMapListViewItem(midiDevice->getId(), deviceItem,
+        new MidiKeyMapTreeWidgetItem(midiDevice->getId(), deviceItem,
                                    strtoqstr(keymaps[i].getName()));
     }
 
@@ -635,12 +625,12 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
 
 
     n = 0;
-    while ( n < deviceItem->childCount() ) {
+    while (n < deviceItem->childCount()) {
         
-        QTreeWidgetItem* child = deviceItem->child( n );
+        QTreeWidgetItem* child = deviceItem->child(n);
         
-        MidiBankListViewItem *bankItem =
-            dynamic_cast<MidiBankListViewItem *>(child);
+        MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem *>(child);
         if (bankItem) {
             if (bankItem->getBank() >= int(banks.size()))
                 childrenToDelete.push_back(child);
@@ -651,8 +641,8 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
             }
         }
 
-        MidiKeyMapListViewItem *keyItem =
-            dynamic_cast<MidiKeyMapListViewItem *>(child);
+        MidiKeyMapTreeWidgetItem *keyItem =
+            dynamic_cast<MidiKeyMapTreeWidgetItem *>(child);
         if (keyItem) {
             if (!midiDevice->getKeyMappingByName(qstrtostr(keyItem->getName()))) {
                 childrenToDelete.push_back(child);
@@ -668,15 +658,15 @@ BankEditorDialog::updateDeviceItem(MidiDeviceListViewItem* deviceItem)
 }
 
 bool
-BankEditorDialog::deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb)
+BankEditorDialog::deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb)
 {
 //     QTreeWidgetItem *child = deviceItem->firstChild();
     int n = 0;
-    while ( n < deviceItem->childCount() ) {
-        QTreeWidgetItem *child = deviceItem->child( n );
+    while (n < deviceItem->childCount()) {
+        QTreeWidgetItem *child = deviceItem->child(n);
         
-        MidiBankListViewItem *bankItem =
-            dynamic_cast<MidiBankListViewItem*>(child);
+        MidiBankTreeWidgetItem *bankItem =
+            dynamic_cast<MidiBankTreeWidgetItem*>(child);
         if (bankItem) {
             if (bankItem->getBank() == bankNb)
                 return true;
@@ -693,16 +683,16 @@ BankEditorDialog::clearItemChildren(QTreeWidgetItem* item)
 {
     QTreeWidgetItem* child = 0;
 
-//     while ( (child = item->child(0)) )
+//     while ((child = item->child(0)))
 //         delete child;
-    while ( (item->childCount() > 0 ) )
+    while ((item->childCount() > 0))
         delete item->child(0);
 }
 
 MidiDevice*
 BankEditorDialog::getCurrentMidiDevice()
 {
-    return getMidiDevice(m_listView->currentItem());
+    return getMidiDevice(m_treeWidget->currentItem());
 }
 
 void
@@ -783,7 +773,7 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
     if (!item)
         return ;
 
-    MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem *>(item);
+    MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
 
     if (keyItem) {
 
@@ -809,7 +799,7 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
         return ;
     }
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(item);
 
     if (bankItem) {
 
@@ -855,7 +845,7 @@ BankEditorDialog::populateDevice(QTreeWidgetItem* item)
     // Device, not bank or key mapping
     // Ensure we fill these lists for the new device
     //
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(item);
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(item);
 
     m_lastDevice = deviceItem->getDeviceId();
 
@@ -930,8 +920,8 @@ BankEditorDialog::slotApply()
                                           device->getLibrarianName(),
                                           device->getLibrarianEmail());
 
-        MidiKeyMapListViewItem *keyItem = dynamic_cast<MidiKeyMapListViewItem*>
-                                          (m_listView->currentItem());
+        MidiKeyMapTreeWidgetItem *keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem*>
+                                          (m_treeWidget->currentItem());
         if (keyItem) {
             KeyMappingList kml(device->getKeyMappings());
             for (int i = 0; i < kml.size(); ++i) {
@@ -966,12 +956,12 @@ BankEditorDialog::slotReset()
     resetProgramList();
 
     m_programEditor->reset();
-    m_programEditor->populate(m_listView->currentItem());
+    m_programEditor->populate(m_treeWidget->currentItem());
     m_keyMappingEditor->reset();
-    m_keyMappingEditor->populate(m_listView->currentItem());
+    m_keyMappingEditor->populate(m_treeWidget->currentItem());
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem
-                                         (m_listView->currentItem());
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem
+                                         (m_treeWidget->currentItem());
 
     if (deviceItem) {
         MidiDevice *device = getMidiDevice(deviceItem);
@@ -1007,17 +997,17 @@ BankEditorDialog::slotUpdate()
     updateDialog();
 }
 
-MidiDeviceListViewItem*
+MidiDeviceTreeWidgetItem*
 BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
 {
     if (!item)
         return 0;
 
-    if (dynamic_cast<MidiBankListViewItem*>(item))
+    if (dynamic_cast<MidiBankTreeWidgetItem*>(item))
         // go up to the parent device item
         item = item->parent();
 
-    if (dynamic_cast<MidiKeyMapListViewItem*>(item))
+    if (dynamic_cast<MidiKeyMapTreeWidgetItem*>(item))
         // go up to the parent device item
         item = item->parent();
 
@@ -1026,18 +1016,18 @@ BankEditorDialog::getParentDeviceItem(QTreeWidgetItem* item)
         return 0;
     }
 
-    return dynamic_cast<MidiDeviceListViewItem*>(item);
+    return dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
 }
 
 void
 BankEditorDialog::slotAddBank()
 {
-    if (!m_listView->currentItem())
+    if (!m_treeWidget->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentItem();
+    QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device) {
@@ -1049,7 +1039,7 @@ BankEditorDialog::slotAddBank()
             setProgramList(device);
         }
 
-        std::pair<int, int> bank = getFirstFreeBank(m_listView->currentItem());
+        std::pair<int, int> bank = getFirstFreeBank(m_treeWidget->currentItem());
 
         MidiBank newBank(false,
                          bank.first, bank.second,
@@ -1057,14 +1047,14 @@ BankEditorDialog::slotAddBank()
         m_bankList.push_back(newBank);
 
         QTreeWidgetItem* newBankItem =
-            new MidiBankListViewItem(deviceItem->getDeviceId(),
+            new MidiBankTreeWidgetItem(deviceItem->getDeviceId(),
                                      m_bankList.size() - 1,
                                      deviceItem,
                                      strtoqstr(newBank.getName()),
                                      newBank.isPercussion(),
                                      newBank.getMSB(), newBank.getLSB());
         keepBankListForNextPopulate();
-        m_listView->setCurrentItem(newBankItem);
+        m_treeWidget->setCurrentItem(newBankItem);
 
         slotApply();
         selectDeviceItem(device);
@@ -1074,12 +1064,12 @@ BankEditorDialog::slotAddBank()
 void
 BankEditorDialog::slotAddKeyMapping()
 {
-    if (!m_listView->currentItem())
+    if (!m_treeWidget->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentItem();
+    QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
 
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(currentIndex);
 
     if (device) {
@@ -1119,12 +1109,12 @@ BankEditorDialog::slotAddKeyMapping()
 void
 BankEditorDialog::slotDelete()
 {
-    if (!m_listView->currentItem())
+    if (!m_treeWidget->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentItem();
+    QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(currentIndex);
+    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(currentIndex);
 
     MidiDevice *device = getMidiDevice(currentIndex);
 
@@ -1160,9 +1150,9 @@ BankEditorDialog::slotDelete()
             keepBankListForNextPopulate();
 
             // the listview automatically selects a new current item
-            m_listView->blockSignals(true);
+            m_treeWidget->blockSignals(true);
             delete currentIndex;
-            m_listView->blockSignals(false);
+            m_treeWidget->blockSignals(false);
 
             // Don't allow pasting from this defunct device
             //
@@ -1180,7 +1170,7 @@ BankEditorDialog::slotDelete()
         return ;
     }
 
-    MidiKeyMapListViewItem* keyItem = dynamic_cast<MidiKeyMapListViewItem*>(currentIndex);
+    MidiKeyMapTreeWidgetItem* keyItem = dynamic_cast<MidiKeyMapTreeWidgetItem*>(currentIndex);
 
     if (keyItem && device) {
 
@@ -1233,11 +1223,11 @@ BankEditorDialog::slotDelete()
 void
 BankEditorDialog::slotDeleteAll()
 {
-    if (!m_listView->currentItem())
+    if (!m_treeWidget->currentItem())
         return ;
 
-    QTreeWidgetItem* currentIndex = m_listView->currentItem();
-    MidiDeviceListViewItem* deviceItem = getParentDeviceItem(currentIndex);
+    QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
+    MidiDeviceTreeWidgetItem* deviceItem = getParentDeviceItem(currentIndex);
     MidiDevice *device = getMidiDevice(deviceItem);
 
     QString question = tr("Really delete all banks for ") +
@@ -1254,7 +1244,7 @@ BankEditorDialog::slotDeleteAll()
 
         // erase all bank items
         QTreeWidgetItem* child = 0;
-        while ( (child = deviceItem->child(0)) )
+        while ((child = deviceItem->child(0)))
             delete child;
 
         m_bankList.clear();
@@ -1307,8 +1297,8 @@ BankEditorDialog::getMidiDevice(DeviceId id)
 MidiDevice*
 BankEditorDialog::getMidiDevice(QTreeWidgetItem* item)
 {
-    MidiDeviceListViewItem* deviceItem =
-        dynamic_cast<MidiDeviceListViewItem*>(item);
+    MidiDeviceTreeWidgetItem* deviceItem =
+        dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
     if (!deviceItem)
         return 0;
 
@@ -1324,7 +1314,7 @@ BankEditorDialog::getFirstFreeBank(QTreeWidgetItem* item)
     for (int msb = 0; msb < 128; ++msb) {
         for (int lsb = 0; lsb < 128; ++lsb) {
             BankList::iterator i = m_bankList.begin();
-            for ( ; i != m_bankList.end(); ++i) {
+            for (; i != m_bankList.end(); ++i) {
                 if (i->getLSB() == lsb && i->getMSB() == msb) {
                     break;
                 }
@@ -1342,12 +1332,12 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 {
     RG_DEBUG << "BankEditorDialog::slotModifyDeviceOrBankName" << endl;
 
-    MidiDeviceListViewItem* deviceItem =
-        dynamic_cast<MidiDeviceListViewItem*>(item);
-    MidiBankListViewItem* bankItem =
-        dynamic_cast<MidiBankListViewItem*>(item);
-    MidiKeyMapListViewItem *keyItem =
-        dynamic_cast<MidiKeyMapListViewItem*>(item);
+    MidiDeviceTreeWidgetItem* deviceItem =
+        dynamic_cast<MidiDeviceTreeWidgetItem*>(item);
+    MidiBankTreeWidgetItem* bankItem =
+        dynamic_cast<MidiBankTreeWidgetItem*>(item);
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem*>(item);
 
     if (bankItem) {
 
@@ -1368,7 +1358,7 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 
         QString oldName = keyItem->getName();
 
-        QTreeWidgetItem* currentIndex = m_listView->currentItem();
+        QTreeWidgetItem* currentIndex = m_treeWidget->currentItem();
         MidiDevice *device = getMidiDevice(currentIndex);
 
         if (device) {
@@ -1419,24 +1409,24 @@ BankEditorDialog::slotModifyDeviceOrBankName(QTreeWidgetItem* item, const QStrin
 void
 BankEditorDialog::selectDeviceItem(MidiDevice *device)
 {
-    QTreeWidgetItem *child = m_listView->topLevelItem(0);    //firstChild();
-    MidiDeviceListViewItem *midiDeviceItem;
+    QTreeWidgetItem *child = m_treeWidget->topLevelItem(0);    //firstChild();
+    MidiDeviceTreeWidgetItem *midiDeviceItem;
     MidiDevice *midiDevice;
 
     do {
-        midiDeviceItem = dynamic_cast<MidiDeviceListViewItem*>(child);
+        midiDeviceItem = dynamic_cast<MidiDeviceTreeWidgetItem*>(child);
 
         if (midiDeviceItem) {
             midiDevice = getMidiDevice(midiDeviceItem);
 
             if (midiDevice == device) {
-//                 m_listView->setSelected(child, true);
-                child->setSelected( true );
+//                 m_treeWidget->setSelected(child, true);
+                child->setSelected(true);
                 return ;
             }
         }
 
-    } while ( (child = m_listView->itemBelow(child)) );
+    } while ((child = m_treeWidget->itemBelow(child)));
 //     } while ((child = child->nextSibling()));
 }
 
@@ -1444,29 +1434,29 @@ void
 BankEditorDialog::selectDeviceBankItem(DeviceId deviceId,
                                        int bank)
 {
-//     QTreeWidgetItem *deviceChild = m_listView->topLevelItem(0);
+//     QTreeWidgetItem *deviceChild = m_treeWidget->topLevelItem(0);
     QTreeWidgetItem *bankChild;
     int deviceCount = 0, bankCount = 0;
 
     int k;
     int n = 0;
-//     while( n < m_listView->childCount() ){
-    while( n < m_listView->topLevelItemCount() ){
+//     while(n < m_treeWidget->childCount()){
+    while(n < m_treeWidget->topLevelItemCount()){
 //         bankChild = deviceChild->firstChild();
-        QTreeWidgetItem *deviceChild = m_listView->topLevelItem( n );
+        QTreeWidgetItem *deviceChild = m_treeWidget->topLevelItem(n);
 
-        MidiDeviceListViewItem *midiDeviceItem =
-            dynamic_cast<MidiDeviceListViewItem*>(deviceChild);
+        MidiDeviceTreeWidgetItem *midiDeviceItem =
+            dynamic_cast<MidiDeviceTreeWidgetItem*>(deviceChild);
 
         if (midiDeviceItem){    // && bankChild) {
             
             k = 0;
-            while( k < deviceChild->childCount() ){
-                bankChild = deviceChild->child( k );
+            while(k < deviceChild->childCount()){
+                bankChild = deviceChild->child(k);
                 
                 if (deviceId == midiDeviceItem->getDeviceId() &
                         bank == bankCount) {
-//                     m_listView->setSelected(bankChild, true);
+//                     m_treeWidget->setSelected(bankChild, true);
                     bankChild->setSelected(true);
                     return ;
                 }
@@ -1508,14 +1498,14 @@ BankEditorDialog::setModified(bool modified)
         m_applyButton->setEnabled(true);
         m_resetButton->setEnabled(true);
         m_closeButton->setEnabled(false);
-        m_listView->setEnabled(false);
+        m_treeWidget->setEnabled(false);
 
     } else {
 
         m_applyButton->setEnabled(false);
         m_resetButton->setEnabled(false);
         m_closeButton->setEnabled(true);
-        m_listView->setEnabled(true);
+        m_treeWidget->setEnabled(true);
 
     }
 
@@ -1543,13 +1533,13 @@ BankEditorDialog::slotImport()
     }
 */
 
-    QString url_str = QFileDialog::getOpenFileName( this, tr("Import Banks from Device in File"), deviceDir,
+    QString url_str = QFileDialog::getOpenFileName(this, tr("Import Banks from Device in File"), deviceDir,
                       tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
                       tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                       tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
-                      tr("All files") + " (*)", 0, 0 );
+                      tr("All files") + " (*)", 0, 0);
 
-    QUrl url( url_str );
+    QUrl url(url_str);
     
     if (url.isEmpty())
         return ;
@@ -1557,9 +1547,9 @@ BankEditorDialog::slotImport()
     ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
     if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
 
-        MidiDeviceListViewItem* deviceItem =
-            dynamic_cast<MidiDeviceListViewItem*>
-            (m_listView->currentItem());    //### was ->selectedItem()
+        MidiDeviceTreeWidgetItem* deviceItem =
+            dynamic_cast<MidiDeviceTreeWidgetItem*>
+            (m_treeWidget->currentItem());    //### was ->selectedItem()
 
         if (!deviceItem) {
             QMessageBox::critical(
@@ -1627,8 +1617,8 @@ BankEditorDialog::slotImport()
 void
 BankEditorDialog::slotEditCopy()
 {
-    MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>( m_listView->currentItem() );
+    MidiBankTreeWidgetItem* bankItem
+    = dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
 
     if (bankItem) {
         m_copyBank = std::pair<DeviceId, int>(bankItem->getDeviceId(),
@@ -1640,8 +1630,8 @@ BankEditorDialog::slotEditCopy()
 void
 BankEditorDialog::slotEditPaste()
 {
-    MidiBankListViewItem* bankItem
-    = dynamic_cast<MidiBankListViewItem*>( m_listView->currentItem() );
+    MidiBankTreeWidgetItem* bankItem
+    = dynamic_cast<MidiBankTreeWidgetItem*>(m_treeWidget->currentItem());
 
     if (bankItem) {
         // Get the full program and bank list for the source device
@@ -1699,17 +1689,17 @@ BankEditorDialog::slotExport()
 
 /*
  * Qt4:
- * QString getSaveFileName ( QWidget * parent = 0, const QString & caption =
+ * QString getSaveFileName (QWidget * parent = 0, const QString & caption =
  * QString(), const QString & dir = QString(), const QString & filter =
- * QString(), QString * selectedFilter = 0, Options options = 0 )
+ * QString(), QString * selectedFilter = 0, Options options = 0)
  *
  * KDE3:
- * QString KFileDialog::getSaveFileName   (  const QString &   startDir =
+ * QString KFileDialog::getSaveFileName   ( const QString &   startDir =
  * QString::null, 
  *   const QString &   filter = QString::null, 
  *     QWidget *   parent = 0, 
  *       const QString &   caption = QString::null   
- *         )   [static]
+ *        )   [static]
  *
  */
 
@@ -1757,10 +1747,10 @@ BankEditorDialog::slotExport()
             return ;
     }
 
-    MidiDeviceListViewItem* deviceItem =
-            dynamic_cast<MidiDeviceListViewItem*>
-                (m_listView->currentItem());
-//                 (m_listView->selectedItem());
+    MidiDeviceTreeWidgetItem* deviceItem =
+            dynamic_cast<MidiDeviceTreeWidgetItem*>
+                (m_treeWidget->currentItem());
+//                 (m_treeWidget->selectedItem());
 
     std::vector<DeviceId> devices;
     MidiDevice *md = getMidiDevice(deviceItem);

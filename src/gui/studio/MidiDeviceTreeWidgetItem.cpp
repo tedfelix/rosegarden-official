@@ -16,7 +16,7 @@
 */
 
 
-#include "MidiDeviceListViewItem.h"
+#include "MidiDeviceTreeWidgetItem.h"
 
 #include "base/Device.h"
 #include <QTreeWidget>
@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidget* parent, QString name)
         : QTreeWidgetItem(parent),	//, name
         m_deviceId(deviceId)
@@ -35,7 +35,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
 // 	this->setObjectName( name );	//@@@ not supported for QTreeWidgetItem
 }
 
-MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidgetItem* parent, QString name,
         bool percussion,
         int msb, int lsb)
@@ -52,7 +52,7 @@ MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
 // 	this->setObjectName( name );
 }
 
-MidiDeviceListViewItem::MidiDeviceListViewItem(DeviceId deviceId,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
         QTreeWidgetItem* parent, QString name)
 	: QTreeWidgetItem(parent, //name, 
 						new QTreeWidgetItem( QStringList() << tr("Key Mapping") << "" << "")    
@@ -62,9 +62,9 @@ m_deviceId(deviceId)
 // 	this->setObjectName( name );
 }
 
-int MidiDeviceListViewItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
+int MidiDeviceTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
 {
-    MidiDeviceListViewItem* item = dynamic_cast<MidiDeviceListViewItem*>(i);
+    MidiDeviceTreeWidgetItem* item = dynamic_cast<MidiDeviceTreeWidgetItem*>(i);
     if (!item){
 			return 1;
 //         return QTreeWidgetItem::compare(i, col, ascending);		//### //@@@ FIX : compare function

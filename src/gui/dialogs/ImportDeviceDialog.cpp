@@ -169,7 +169,7 @@ ImportDeviceDialog::doImport()
     mainFrameLayout->addWidget(optionsBox);
 
     QGroupBox *gb = new QGroupBox(tr("Options"));
-    QHBoxLayout *gbLayout = new QHBoxLayout;
+    QVBoxLayout *gbLayout = new QVBoxLayout;
     optionsBoxLayout->addWidget(gb);
 
     m_importBanks = new QCheckBox(tr("Import banks"), gb);
@@ -187,7 +187,7 @@ ImportDeviceDialog::doImport()
     }
 
     QGroupBox *buttonGroupBox = new QGroupBox(tr("Bank import behavior"));
-    QHBoxLayout *buttonGroupBoxLayout = new QHBoxLayout;
+    QVBoxLayout *buttonGroupBoxLayout = new QVBoxLayout;
     optionsBoxLayout->addWidget(buttonGroupBox);
     m_buttonGroup = new QButtonGroup(buttonGroupBox);
 

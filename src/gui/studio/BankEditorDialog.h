@@ -48,7 +48,7 @@ class Studio;
 class RosegardenDocument;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
-class MidiDeviceListViewItem;
+class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 
 
@@ -138,13 +138,13 @@ protected:
     void populateDeviceItem(QTreeWidgetItem* deviceItem,
                             MidiDevice* midiDevice);
 
-    void updateDeviceItem(MidiDeviceListViewItem* deviceItem);
+    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
 
-    bool deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb);
+    bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
 
     void clearItemChildren(QTreeWidgetItem* deviceItem);
 
-    MidiDeviceListViewItem* getParentDeviceItem(QTreeWidgetItem*);
+    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
     void populateDevice(QTreeWidgetItem*);
@@ -157,7 +157,7 @@ protected:
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;
-    QTreeWidget               *m_listView;
+    QTreeWidget               *m_treeWidget;
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;

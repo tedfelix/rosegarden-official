@@ -16,47 +16,48 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_MIDIDEVICELISTVIEWITEM_H_
-#define _RG_MIDIDEVICELISTVIEWITEM_H_
+#ifndef _RG_MIDIBANKLISTVIEWITEM_H_
+#define _RG_MIDIBANKLISTVIEWITEM_H_
 
 #include "base/Device.h"
-#include <QTreeWidget>
+#include "MidiDeviceTreeWidgetItem.h"
 #include <QString>
 
 #include <QCoreApplication>
+
+//class QListWidgetItem;
+class QTreeWidgetItem;
 
 namespace Rosegarden
 {
 
 
 
-class MidiDeviceListViewItem : public QTreeWidgetItem
+class MidiBankTreeWidgetItem : public MidiDeviceTreeWidgetItem
 {
-    Q_DECLARE_TR_FUNCTIONS(MidiDeviceListViewItem)
+    Q_DECLARE_TR_FUNCTIONS(MidiBankTreeWidgetItem)
 
 public:
-    // Device
-    MidiDeviceListViewItem(DeviceId id,
-                           QTreeWidget* parent, QString name);
+    MidiBankTreeWidgetItem(DeviceId deviceId,
+                         int bankNb,
+						 QTreeWidgetItem* parent, QString name,
+						bool percussion,
+                         int msb, int lsb);
 
-    // Bank
-    MidiDeviceListViewItem(DeviceId id,
-                           QTreeWidgetItem* parent, QString name,
-                           bool percussion,
-                           int msb, int lsb);
+    int getBank()     { return m_bankNb; }
 
-    // Key Mapping
-    MidiDeviceListViewItem(DeviceId id,
-                           QTreeWidgetItem* parent, QString name);
-
-    DeviceId getDeviceId() const { return m_deviceId; }
+    void setPercussion(bool percussion);
+    bool isPercussion() const { return m_percussion; }
+    void setMSB(int msb);
+    void setLSB(int msb);
 
     virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
-
+    
 protected:
 
     //--------------- Data members ---------------------------------
-    DeviceId m_deviceId;
+    bool   m_percussion;
+    int    m_bankNb;
 };
 
 

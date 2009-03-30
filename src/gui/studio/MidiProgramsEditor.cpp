@@ -18,7 +18,7 @@
 
 
 #include "MidiProgramsEditor.h"
-#include "MidiBankListViewItem.h"
+#include "MidiBankTreeWidgetItem.h"
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
 
@@ -177,7 +177,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiProgramsEditor::populate\n";
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(item);
     if (!bankItem) {
         RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning\n";
         return ;

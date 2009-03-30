@@ -95,6 +95,15 @@ DevicesManagerNew::show()
     slotRefreshOutputPorts();
     slotRefreshInputPorts();
 
+    // select the top level item by default, if one exists, just as the bank
+    // editor does
+    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
+        m_treeWidget_playbackDevices->topLevelItem(0)->setSelected(true);
+    }
+    if (m_treeWidget_recordDevices->topLevelItem(0)) {
+        m_treeWidget_recordDevices->topLevelItem(0)->setSelected(true);
+    }
+
     QMainWindow::show();
 }
 

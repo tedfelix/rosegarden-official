@@ -19,7 +19,7 @@
 #include "MidiKeyMappingEditor.h"
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
-#include "MidiKeyMapListViewItem.h"
+#include "MidiKeyMapTreeWidgetItem.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -83,8 +83,8 @@ MidiKeyMappingEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiKeyMappingEditor::populate\n";
 
-    MidiKeyMapListViewItem *keyItem =
-        dynamic_cast<MidiKeyMapListViewItem *>(item);
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
     if (!keyItem) {
         RG_DEBUG << "MidiKeyMappingEditor::populate : not a key item - returning\n";
         return ;
