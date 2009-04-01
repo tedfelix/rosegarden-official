@@ -18,6 +18,7 @@
 
 #include "MatrixVelocity.h"
 
+#include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -156,6 +157,10 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 	    }
 	}
 	*/
+    long velocity;
+    m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
+
+    m_currentElement->reconfigure(velocity+m_velocityDelta);
 
     return NoFollow;
 }

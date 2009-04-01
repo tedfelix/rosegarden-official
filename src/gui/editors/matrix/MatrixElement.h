@@ -46,6 +46,9 @@ public:
 
     /// Adjust the item to reflect the values of our event
     void reconfigure();
+    
+    /// Adjust the item to reflect the given values, not those of our event
+    void reconfigure(int velocity);
 
     /// Adjust the item to reflect the given values, not those of our event
     void reconfigure(timeT time, timeT duration);

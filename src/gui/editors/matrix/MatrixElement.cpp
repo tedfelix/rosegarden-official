@@ -51,12 +51,23 @@ MatrixElement::~MatrixElement()
 {
     delete m_item;
 }
+
 void
 MatrixElement::reconfigure()
 {
     timeT time = event()->getAbsoluteTime();
     timeT duration = event()->getDuration();
     reconfigure(time, duration);
+}
+
+void
+MatrixElement::reconfigure(int velocity)
+{
+    timeT time = event()->getAbsoluteTime();
+    timeT duration = event()->getDuration();
+    long pitch = 60;
+    event()->get<Int>(BaseProperties::PITCH, pitch);
+    reconfigure(time, duration, pitch, velocity);
 }
 
 void
@@ -155,22 +166,30 @@ MatrixElement::setSelected(bool selected)
 
     if (selected) {
 
-        colour = GUIPalette::getColour(GUIPalette::SelectedElement);
-
-    } else if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
-
-        colour = Qt::gray;
+        //colour = GUIPalette::getColour(GUIPalette::SelectedElement);
+        item->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectedElement),2));
 
     } else {
-
-        long velocity = 100;
-        event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+        
+        item->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+        
     }
+    
 
-    colour.setAlpha(160);
+    //} else if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
 
-    item->setBrush(colour);
+        //colour = Qt::gray;
+
+    //} else {
+
+        //long velocity = 100;
+        //event()->get<Int>(BaseProperties::VELOCITY, velocity);
+        //colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+    //}
+
+    //colour.setAlpha(160);
+
+    //item->setBrush(colour);
 }
 
 MatrixElement *
