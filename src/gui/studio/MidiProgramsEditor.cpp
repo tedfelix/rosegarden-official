@@ -434,6 +434,11 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         }
     }
 
+    if( ! program ){
+        RG_DEBUG << "Error:: program is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        return;
+    }
+    
     if (qstrtostr(programName) != program->getName()) {
         program->setName(qstrtostr(programName));
         m_bankEditor->setModified(true);
@@ -476,7 +481,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
     QAction *a = menu->addAction(tr("<no key mapping>"));
     a->setObjectName("0");
 
-    for (int i = 0; i < kml.size(); ++i) {
+    for (unsigned int i = 0; i < kml.size(); ++i) {
         a = menu->addAction(strtoqstr(kml[i].getName()));
         a->setObjectName(QString("%1").arg(i+1));
         if (currentMapping && (kml[i] == *currentMapping)) currentEntry = i + 1;

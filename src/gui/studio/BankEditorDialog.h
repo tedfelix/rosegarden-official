@@ -98,7 +98,7 @@ public:
     void selectDeviceBankItem(DeviceId device, int bank);
 
 public slots:
-    void slotPopulateDevice(QTreeWidgetItem*);
+    void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
     void slotApply();
     void slotReset();
@@ -147,7 +147,7 @@ protected:
     MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
-    void populateDevice(QTreeWidgetItem*);
+    void populateDeviceEditors(QTreeWidgetItem*);
 
     void setupActions();
 

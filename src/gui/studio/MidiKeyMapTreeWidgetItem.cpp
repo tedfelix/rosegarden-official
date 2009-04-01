@@ -38,8 +38,8 @@ MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(DeviceId deviceId,
         : MidiDeviceTreeWidgetItem(deviceId, parent, name),
         m_name(name)
 {
-    setText( 1, tr("Key Mapping") );		// which column ? assumed 0 
-    //note (emrum): column 1 seems t.w. better in the bank editor dlg
+    setText( 0, name );
+    setText( 1, tr("Key Mapping") );
 }
 
 int MidiKeyMapTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascending) const
