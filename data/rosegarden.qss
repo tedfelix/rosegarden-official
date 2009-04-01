@@ -234,6 +234,8 @@ toolbar) is styled using the ::handle subcontrol. */
  * with black icons.  Top/bottom and left/right require different gradients to
  * get the proper look.
  */
+#tempoview QToolBar:top,
+#tempoview QToolBar:bottom,
 QToolBar:top,
 QToolBar:bottom
 {
@@ -1698,6 +1700,7 @@ styled using the ::branch subcontrol. The ::branch Sub-control supports the
 :open, :closed, :has-sibling and :has-children pseudo states.  See
 QAbsractScrollArea to style scrollable backgrounds. */
 
+#tempoview QTreeView,
 QTreeView
 {
     background-color: #FFFFFF;

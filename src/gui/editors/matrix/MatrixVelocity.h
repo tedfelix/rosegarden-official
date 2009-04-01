@@ -19,8 +19,10 @@
 #define _RG_MATRIXVELOCITY_H_
 
 #include "MatrixTool.h"
-#include <qstring.h>
+
 #include "base/Event.h"
+
+#include <QString>
 
 namespace Rosegarden
 {
@@ -65,7 +67,6 @@ protected:
     MatrixElement *m_currentElement;
     MatrixViewSegment *m_currentViewSegment;
 };
-
 
 
 }

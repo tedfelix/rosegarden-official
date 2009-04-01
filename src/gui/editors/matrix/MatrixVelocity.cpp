@@ -87,7 +87,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
-	    
+        
         newSelection->addEvent(m_currentElement->event());
         m_scene->setSelection(newSelection, true);
 
@@ -124,39 +124,39 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
             (double)(m_mouseStartY - e->sceneY) /
             (double)(m_screenPixelsScale * 2);
     }
-	
+    
     m_velocityDelta = 128 * m_velocityScale;
-	
-	/*m_velocityDelta=(m_mouseStartY-(e->pos()).y());
+    
+    /*m_velocityDelta=(m_mouseStartY-(e->pos()).y());
      
         if (m_velocityDelta > m_screenPixelsScale) 
-		m_velocityDelta=m_screenPixelsScale;
-	else if (m_velocityDelta < -m_screenPixelsScale) 
-		m_velocityDelta=-m_screenPixelsScale;
-	
-	m_velocityScale=1.0+(double)m_velocityDelta/(double)m_screenPixelsScale;
-	
-	m_velocityDelta*=2.0;
-	*/
-	
+        m_velocityDelta=m_screenPixelsScale;
+    else if (m_velocityDelta < -m_screenPixelsScale) 
+        m_velocityDelta=-m_screenPixelsScale;
+    
+    m_velocityScale=1.0+(double)m_velocityDelta/(double)m_screenPixelsScale;
+    
+    m_velocityDelta*=2.0;
+    */
+    
     // Preview velocity delta in contexthelp
     setContextHelp(tr("Velocity change: %1").arg(m_velocityDelta));
-	
-	// Preview calculated velocity info on element
-	/** Might be something for the feature
-	EventSelection* selection = m_mParentView->getCurrentSelection();
-	EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
-	MatrixElement *element = 0;
-	for (; it != selection->getSegmentEvents().end(); it++) {
-	    element = m_currentViewSegment->getElement(*it);
-	    if (element) {
-		// Somehow show the calculated velocity for each selected element
-		// char label[16];
-		// sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
-		// element->label(label) /// DOES NOT EXISTS
-	    }
-	}
-	*/
+    
+    // Preview calculated velocity info on element
+    /** Might be something for the feature
+    EventSelection* selection = m_mParentView->getCurrentSelection();
+    EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
+    MatrixElement *element = 0;
+    for (; it != selection->getSegmentEvents().end(); it++) {
+        element = m_currentViewSegment->getElement(*it);
+        if (element) {
+        // Somehow show the calculated velocity for each selected element
+        // char label[16];
+        // sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
+        // element->label(label) /// DOES NOT EXISTS
+        }
+    }
+    */
     long velocity;
     m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
 
