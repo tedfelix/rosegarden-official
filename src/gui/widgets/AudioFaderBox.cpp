@@ -157,6 +157,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         m_audioOutput = new AudioRouteMenu(this,
                                            AudioRouteMenu::Out,
                                            AudioRouteMenu::Regular);
+
     } else {
         m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelOrange));
 
@@ -177,12 +178,14 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     grid->setMargin(0);
     grid->setSpacing(4);
 
-    grid->addWidget(m_synthButton, 0, 0, 0- 0+1, 2-0+ 1);
+    grid->addWidget(m_synthButton, 0, 0, 1, 3);
 
     if (haveInOut) {
         m_inputLabel = new QLabel(tr("In:"), this);
         grid->addWidget(m_inputLabel, 0, 0, Qt::AlignRight);
         grid->addWidget(m_audioInput->getWidget(), 0, 1, 1, 2);
+        // force "In 1 L" to show full width:
+        grid->setColumnStretch(1, 40);
         m_outputLabel = new QLabel(tr("Out:"), this);
         grid->addWidget(m_outputLabel, 0, 3, Qt::AlignRight);
         grid->addWidget(m_audioOutput->getWidget(), 0, 4, 1, 2);
