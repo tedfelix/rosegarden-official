@@ -226,13 +226,9 @@ const QString& RosegardenDocument::getTitle() const
 
 void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
-    RosegardenMainViewWidget *w;
-    
-    //for ((*w) = m_viewList.first(); w != 0; (*w) = *m_viewList.next()) {
     for (int i=0; i < m_viewList.size(); ++i ){
-        
-        if ( (m_viewList.at(i)) != sender){    //@@@ valid comparision ??
-            w->repaint();
+        if (m_viewList.at(i) != sender) {
+            m_viewList.at(i)->update();
         }
     }
 }
