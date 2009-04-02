@@ -141,26 +141,61 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     
     // Preview velocity delta in contexthelp
     setContextHelp(tr("Velocity change: %1").arg(m_velocityDelta));
-    
-    // Preview calculated velocity info on element
-    /** Might be something for the feature
-    EventSelection* selection = m_mParentView->getCurrentSelection();
-    EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
-    MatrixElement *element = 0;
-    for (; it != selection->getSegmentEvents().end(); it++) {
-        element = m_currentViewSegment->getElement(*it);
-        if (element) {
-        // Somehow show the calculated velocity for each selected element
-        // char label[16];
-        // sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
-        // element->label(label) /// DOES NOT EXISTS
-        }
-    }
-    */
-    long velocity;
-    m_currentElement->event()->get<Int>(BaseProperties::VELOCITY, velocity);
+	
+	// Preview calculated velocity info on element
+	// Dupe from MatrixMover
+    EventSelection* selection = m_scene->getSelection();
 
-    m_currentElement->reconfigure(velocity+m_velocityDelta);
+//    MatrixElement *element = 0;
+//    int maxY = m_currentViewSegment->getCanvasYForHeight(0);
+
+    for (EventSelection::eventcontainer::iterator it =
+             selection->getSegmentEvents().begin();
+         it != selection->getSegmentEvents().end(); ++it) {
+
+//        MatrixElement *element = m_currentViewSegment->getElement(*it);
+//        if (!element) continue;
+
+        MatrixElement *element = 0;
+        ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
+        if (vi != m_currentViewSegment->getViewElementList()->end()) {
+            element = static_cast<MatrixElement *>(*vi);
+        }
+        if (!element) continue;
+
+//        timeT diffTime = element->getViewAbsoluteTime() -
+//            m_currentElement->getViewAbsoluteTime();
+
+//        int epitch = 0;
+//        if (element->event()->has(PITCH)) {
+//            epitch = element->event()->get<Int>(PITCH);
+//        }
+        
+        int velocity = 64;
+        if (element->event()->has(BaseProperties::VELOCITY)) {
+            velocity = element->event()->get<Int>(BaseProperties::VELOCITY);
+        }
+
+//        element->reconfigure(newTime + diffTime,
+//                             element->getViewDuration(),
+//                             epitch + diffPitch);
+        element->reconfigure(velocity+m_velocityDelta);
+        element->setSelected(true);
+    }
+	/** Might be something for the feature
+	EventSelection* selection = m_mParentView->getCurrentSelection();
+	EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
+	MatrixElement *element = 0;
+	for (; it != selection->getSegmentEvents().end(); it++) {
+	    element = m_currentViewSegment->getElement(*it);
+	    if (element) {
+		// Somehow show the calculated velocity for each selected element
+		// char label[16];
+		// sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
+		// element->label(label) /// DOES NOT EXISTS
+	    }
+	}
+	*/
 
     return NoFollow;
 }

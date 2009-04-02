@@ -210,7 +210,8 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
                              element->getViewDuration(),
                              epitch + diffPitch);
                              
-        
+        element->setSelected(true);
+            
 //        int newX = getSnapGrid().getRulerScale()->
 //            getXForTime(newTime + diffTime);
 
