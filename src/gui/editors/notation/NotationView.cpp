@@ -67,6 +67,7 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
 NewNotationView::~NewNotationView()
 {
+    delete m_commandRegistry;
 }
 
 void

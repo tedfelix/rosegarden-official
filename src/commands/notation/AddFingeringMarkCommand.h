@@ -39,7 +39,7 @@ class AddFingeringMarkCommand : public BasicSelectionCommand
 public:
     AddFingeringMarkCommand(std::string fingering,
                             EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
+        BasicSelectionCommand(getGlobalName(fingering), selection, true),
         m_selection(&selection), m_fingering(fingering) { }
 
     static QString getGlobalName(std::string fingering = "");

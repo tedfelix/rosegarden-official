@@ -70,6 +70,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
+    m_clickSnappedLeftTime = e->snappedLeftTime;
 
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
@@ -162,7 +163,8 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
         clearContextHelp();
     }
 
-    timeT newTime = e->snappedLeftTime;
+    timeT newTime = m_currentElement->getViewAbsoluteTime() +
+        (e->snappedLeftTime - m_clickSnappedLeftTime);
     int newPitch = e->pitch;
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
@@ -251,7 +253,8 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     if (!m_currentElement || !m_currentViewSegment) return;
 
-    timeT newTime = e->snappedLeftTime;
+    timeT newTime = m_currentElement->getViewAbsoluteTime() +
+        (e->snappedLeftTime - m_clickSnappedLeftTime);
     int newPitch = e->pitch;
 
     if (newPitch > 127) newPitch = 127;
