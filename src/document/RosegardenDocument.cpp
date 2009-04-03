@@ -228,7 +228,11 @@ void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
     for (int i=0; i < m_viewList.size(); ++i ){
         if (m_viewList.at(i) != sender) {
-            m_viewList.at(i)->update();
+            // try to fix another crash, though I don't really understand
+            // exactly what m_viewList is, etc.
+            if (m_viewList.at(i)) {
+                m_viewList.at(i)->update();
+            }
         }
     }
 }

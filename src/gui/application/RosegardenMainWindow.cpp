@@ -1936,7 +1936,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     // ".rg" from "Rosegarden files (*.rg)", or ".mid" from "MIDI Files (*.mid *.midi)"
     //
     int left = descriptiveExtension.indexOf("*.");
-    int right = descriptiveExtension.indexOf(QRegExp("[)]"),left);
+    int right = descriptiveExtension.indexOf(QRegExp("[ ]"),left);
     QString extension = descriptiveExtension.mid(left+1,right-left-1);
 
     RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension = " << extension << endl;
