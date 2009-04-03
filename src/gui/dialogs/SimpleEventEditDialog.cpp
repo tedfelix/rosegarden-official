@@ -284,7 +284,17 @@ SimpleEventEditDialog::setupForEvent()
     m_durationSpinBox->setValue(m_event.getDuration());
 
     m_notationGroupBox->hide();
-    m_lockNotationValues->setChecked(true);
+
+    // satisfy an ancient feature request:  if the performance and absolute
+    // durations differ or the performance and absolute start times differ, then
+    // this is a notation quantized note, and we set this checkbox off by
+    // default, because "This is ok for ordinary notes but for a
+    // notation-quantised note the note will likely already
+    // have different performance and notation durations (and
+    // probably different start times too) which makes the
+    // lock inappropriate."
+    m_lockNotationValues->setChecked(m_event.getDuration() == m_event.getNotationDuration() &&
+                                     m_event.getAbsoluteTime() == m_event.getNotationAbsoluteTime());
 
     if (m_typeLabel)
         m_typeLabel->setText(strtoqstr(m_event.getType()));
