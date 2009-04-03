@@ -15,15 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cmath>
-#include <algorithm>
 #include "CompositionModelImpl.h"
+#include "SegmentOrderer.h"
+#include "AudioPreviewThread.h"
+#include "AudioPreviewUpdater.h"
+#include "AudioPreviewPainter.h"
+#include "CompositionItemHelper.h"
+#include "CompositionItemImpl.h"
+#include "CompositionModel.h"
+#include "CompositionRect.h"
+#include "CompositionColourCache.h"
 
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "AudioPreviewThread.h"
-#include "AudioPreviewUpdater.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
@@ -35,14 +40,8 @@
 #include "base/SnapGrid.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "CompositionItemHelper.h"
-#include "CompositionItemImpl.h"
-#include "CompositionModel.h"
-#include "CompositionRect.h"
-#include "CompositionColourCache.h"
-#include "AudioPreviewPainter.h"
 #include "gui/general/GUIPalette.h"
-#include "SegmentOrderer.h"
+
 #include <QBrush>
 #include <QColor>
 #include <QPen>
@@ -52,6 +51,8 @@
 #include <QSize>
 #include <QString>
 
+#include <cmath>
+#include <algorithm>
 
 
 namespace Rosegarden
