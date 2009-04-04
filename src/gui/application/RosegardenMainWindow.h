@@ -560,9 +560,12 @@ public slots:
     void slotFileSave();
 
     /**
-     * save a document by a new filename
+     * save a document by a new filename; if asTemplate is true, the file will
+     * be saved read-only, to make it harder to overwrite by accident in the
+     * future
      */
-    bool slotFileSaveAs();
+    bool slotFileSaveAs(bool asTemplate = false);
+    void slotFileSaveAsTemplate() { slotFileSaveAs(true); }
 
     /**
      * asks for saving if the file is modified, then closes the actual

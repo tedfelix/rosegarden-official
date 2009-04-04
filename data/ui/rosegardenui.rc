@@ -46,6 +46,7 @@
   <Separator/>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_save_as" text="Save &amp;As..." icon="filesaveas" shortcut="Ctrl+Shift+S" />
+    <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
   <Separator/>
     <Action name="file_print" text="&amp;Print..." icon="fileprint" />

@@ -584,6 +584,7 @@ void RosegardenMainWindow::setupActions()
     createAction("file_open", SLOT(slotFileOpen()));
     createAction("file_save", SLOT(slotFileSave()));
     createAction("file_save_as", SLOT(slotFileSaveAs()));
+    createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
     createAction("file_revert", SLOT(slotRevertToSaved()));
     createAction("file_close", SLOT(slotFileClose()));
     createAction("file_print", SLOT(slotFilePrint()));
@@ -1989,17 +1990,22 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     return name;
 }
 
-bool RosegardenMainWindow::slotFileSaveAs()
+bool RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 {
     if (!m_doc)
         return false;
 
-    TmpStatusMsg msg(tr("Saving file with a new filename..."), this);
+    TmpStatusMsg msg(tr("Saving file%1with a new filename...").
+                        arg(asTemplate ? " as a template " : " "), this);
+
+    QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
+    QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");
+    QString dialogMessage(asTemplate ? tr("Save as template...") : tr("Save as..."));
 
     QString newName = getValidWriteFileName
-                      (tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                      (fileType + fileExtension + ";;" +
                        tr("All files") + " (*)",
-                       tr("Save as..."));
+                       dialogMessage);
     if (newName.isEmpty())
         return false;
 
@@ -2009,6 +2015,29 @@ bool RosegardenMainWindow::slotFileSaveAs()
     m_doc->setAbsFilePath(saveAsInfo.absFilePath());
     QString errMsg;
     bool res = m_doc->saveDocument(newName, errMsg);
+
+    // I can't figure out any way to do this using the STL or Qt.  This will
+    // only work on Linux, which isn't currently a problem.  Template files
+    // should be made read only so that if you load one and change it, you'll
+    // have to save it by some other name unless you go to some extraordinary
+    // lengths.  (Doing the chmod might actually be pointless, and in fact seems
+    // to be, since we save by writing to some new file, then delete the
+    // original one after the new one is ready.  Hrm.  Interesting conundrum
+    // actually.  In practice, it works OK, because unless you explicitly choose
+    // Save As Template you will be prompted to save an .rg file, and you won't
+    // overwrite the original file without some intent behind your action.  I
+    // just feel safer going ahead and chmod -w'ing the file anyway though.
+    // Plus I already wrote the code.
+    // 
+    RG_DEBUG << "Running chmod a-w " << saveAsInfo.absFilePath() << endl;
+
+    QProcess *proc = new QProcess;
+    QStringList procArgs;
+    procArgs << "a-w";
+    procArgs << saveAsInfo.absFilePath();
+
+    proc->execute("chmod", procArgs);
+
     if (!res) {
         if (!errMsg.isEmpty())
             QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2")
