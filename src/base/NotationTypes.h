@@ -481,7 +481,7 @@ public:
     }
 
     /**
-     * Return the name of the key, in the form used by RG2.1.
+     * Return the name of the key, in the form used by X11 RG2.1.
      */
     std::string getRosegarden2Name() const {
         return m_keyDetailMap[m_name].m_rg2name;
