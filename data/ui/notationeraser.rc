@@ -1,0 +1,12 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::NotationTool" version="1230">
+
+<Menu name="NotationEraser">
+  <Action name="select" text="Switch to Select Tool" icon="select" />
+  <Action name="insert" text="Switch to Inserting Tool" icon="menu-crotchet" />
+<Separator/>
+  <Action name="toggle_rest_collapse" text="Collapse Rests After Erase" checked="false" />
+</Menu>
+
+</kpartgui>

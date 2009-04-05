@@ -1,8 +1,0 @@
-
-Rosegarden Translation mini-HOWTO
-===================================
-
-This has been moved to Rosegarden Wiki, see
-
-<URL:http://rosegarden.wiki.sourceforge.net/Add+or+update+translation>
-<URL:http://rosegarden.wiki.sourceforge.net/Making+strings+translatable>

@@ -1,0 +1,441 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::Matrix" version="1500">
+  
+<MenuBar>
+  <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
+    <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
+
+  <Menu name="edit">
+    <text>&amp;Edit</text>
+    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
+    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+  <Separator/>
+    <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
+    <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
+    <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
+    <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Insert" />
+  <Separator/>
+    <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
+    <Action name="clear_selection" text="Clear &amp;Selection" shortcut="Escape" />
+    <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+  </Menu>
+
+  <Menu name="View">
+    <text>&amp;View</text>
+    <Menu name="Grid">
+      <text>&amp;Grid</text>
+      <Action name="snap_none" text="&amp;No Snap" />
+      <!-- JAS don't see any text associated with "snap_unit" action -->
+      <Action name="snap_unit" />
+      <!-- JAS "&amp;" in text for snap menu need reworked.  Some of the underlinings are conflicting with shortcut keys. -->
+      <!-- JAS "Snap to 1/48" and "Snap to Beat" share keys and so does "Snap to 1/32" and "Snap to 3/126" -->
+      <Action name="snap_64" text="&amp;Snap to 1/64" icon="menu-hemidemisemi" shortcut="0" />
+      <Action name="snap_48" text="Snap to &amp;1/48" icon="menu-3-demisemi"/>
+      <Action name="snap_32" text="Sn&amp;ap to 1/32" icon="menu-demisemi" shortcut="3" />
+      <Action name="snap_24" text="Snap to 1/&amp;24" icon="menu-3-semiquaver" />
+      <Action name="snap_16" text="Sna&amp;p to 1/16" icon="menu-semiquaver" shortcut="6" />
+      <Action name="snap_12" text="Snap t&amp;o 1/12" icon="menu-3-quaver" />
+      <Action name="snap_8" text="Snap to 1/&amp;8" icon="menu-quaver" shortcut="8" />
+      <!-- JAS action "snap_dotted_8" should be moved to before "snap_12" to keep fractions in sequence -->
+      <Action name="snap_dotted_8" text="Snap to &amp;3/16" icon="menu-dotted-quaver" />
+      <Action name="snap_4" text="Snap to 1/4" icon="menu-crotchet" shortcut="4" />
+      <!-- JAS action "snap_dotted_4" needs "&amp;" accelerator key -->
+      <Action name="snap_dotted_4" text="Snap to 3/8" icon="menu-dotted-crotchet" />
+      <!-- JAS action "snap-2" needs "&amp;" accelerator key -->
+      <Action name="snap_2" text="Snap to 1/2" icon="menu-minim" shortcut="2" />
+      <Action name="snap_beat" text="Snap to Bea&amp;t" shortcut="1" />
+      <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
+    </Menu>
+  <Separator/>
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" />
+    <!-- JAS don't see any text associated with "show_controller_evnents_ruler" action -->
+    <Action name="show_controller_events_ruler" />
+<!--    <Action name="add_control_ruler"/> -->
+    <Menu name="add_control_ruler">
+      <text>&amp;Add Event Ruler</text>
+      <!-- JAS custom coded menu -->
+    </Menu>
+  </Menu> 
+
+  <Menu name="document">
+    <text>&amp;Composition</text>
+    <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
+    <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
+  </Menu>
+
+  <!-- JAS name="Segments" in rosegardenui.rc -->
+  <Menu name="segments">
+    <text>&amp;Segment</text>
+    <!-- JAS name="edit_with" in rosaegardenui.rc -->
+    <Menu name="open-with">
+      <text>Edit &amp;With</text>
+      <Action name="open_in_event_list" text="Open in &amp;Event List Editor" icon="eventlist" />
+      <Action name="open_in_notation" text="Open in &amp;Notation Editor" icon="notation" />
+    </Menu>
+  <Separator/>	
+    <!-- JAS word "Segment" in text tag does not appear in rosegardenui.rc -->
+    <Action name="set_segment_start" text="Set Segment Start &amp;Time..." />
+    <!-- JAS word "Segment" in text tag does not appear in rosegardenui.rc -->
+    <Action name="set_segment_duration" text="Set Segment &amp;Duration..." />
+  </Menu>
+
+  <Menu name="Transforms">
+    <text>Ad&amp;just</text>
+    <Menu name="quantize_notes">
+      <text>&amp;Quantize</text>
+      <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
+      <Action name="repeat_quantize" text="&amp;Repeat Last Quantize" shortcut="+" />
+      <Action name="legatoize" text="&amp;Legato" shortcut="-" />
+    </Menu>
+    <Action name="collapse_notes" text="Collapse &amp;Equal-Pitch Notes" shoprtcut="Ctrl+=" />
+  <Separator/>
+    <Action name="jog_left" text="Jog &amp;Left" shortcut="Alt+Left" />
+    <Action name="jog_right" text="&amp;Jog Right" shortcut="Alt+Right" />
+  <Separator/>
+    <Action name="velocity_up" text="&amp;Increase Velocity" shortcut="Shift+Up" />
+    <Action name="velocity_down" text="&amp;Reduce Velocity" shortcut="Shift+Down" />
+    <Action name="set_to_current_velocity" text="&amp;Set to Current Velocity" />
+    <Action name="set_velocities" text="Set Event &amp;Velocities..." />
+  <Separator/>
+    <Menu name="Rescale">
+      <text>Resc&amp;ale</text>
+      <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
+      <Action name="double_durations" text="&amp;Double Durations" shortcut="Ctrl+Shift+H" />
+    <Separator/>
+      <!-- JAS '&amp;' before the 'o' in rosegardenui.rc -->
+      <Action name="rescale" text="Stretch or S&amp;quash..." />
+    </Menu>
+    <Menu name="Transpose">
+      <text>Trans&amp;pose</text>
+      <Action name="transpose_up" text="&amp;Up a Semitone" shortcut="Up" />
+      <Action name="transpose_down" text="&amp;Down a Semitone" shortcut="Down" />
+    <Separator/>
+      <Action name="transpose_up_octave" text="Up an &amp;Octave" shortcut="Ctrl+Up" />
+      <Action name="transpose_down_octave" text="Down an Octa&amp;ve" shortcut="Ctrl+Down" />
+    <Separator/>
+      <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
+      <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
+    </Menu>
+    <Menu name="Convert">
+      <text>&amp;Convert</text>
+      <Action name="invert" text="&amp;Invert" />
+      <Action name="retrograde" text="&amp;Retrograde" />
+      <Action name="retrograde_invert" text="Re&amp;trograde Invert" />
+    </Menu>
+  <Separator/>
+    <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
+    <Action name="remove_trigger" text="Remove &amp;Triggers..." />
+  </Menu>
+  <Menu name="Tools">
+    <text>&amp;Tools</text>
+    <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
+    <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
+    <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+    <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
+    <!-- JAS '&amp;' before the 'R' in rosegardenui.rc -->
+    <Action name="resize" text="Resi&amp;ze" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
+<!--    <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" /> -->
+    <Action name="velocity" text="&amp;Velocity" icon="velocity" shortcut="F7" group="tools_segment" checked="false" />
+  <Separator/>
+    <Menu name="Move">
+      <text>Local &amp;Cursor</text>
+      <Action name="cursor_back" text="Cursor &amp;Back" shortcut="Left" />
+      <Action name="cursor_forward" text="Cursor &amp;Forward" shortcut="Right" />
+      <Action name="cursor_back_bar" text="C&amp;ursor Back Bar" shortcut="Ctrl+Left" />
+      <Action name="cursor_forward_bar" text="Cursor For&amp;ward Bar" shortcut="Ctrl+Right" />
+      <Action name="cursor_start" text="Cursor to St&amp;art" />
+      <Action name="cursor_end" text="Cursor to &amp;End" shortcut="Ctrl+E" />
+    <Separator/>
+      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" shortcut="ShiftLeft" />
+      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" shortcut="Shift+Right" />
+      <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
+      <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
+    <Separator/>
+      <!-- JAS next two actions reversed on other menu / toolbars in this file -->
+      <Action name="cursor_to_playback_pointer" text="Cursor to &amp;Playback Pointer" icon="transport-cursor-to-pointer" />
+      <Action name="playback_pointer_to_cursor" text="Playback Pointer to &amp;Cursor" icon="transport-pointer-to-cursor" />
+    </Menu>
+    <Menu name="Transport">
+      <text>T&amp;ransport</text>
+      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
+      <Action name="play" text="&amp;Play" icon="transport-play" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
+      <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" />
+      <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" /> 
+      <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
+      <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="playback_pointer_to_cursor" />
+      <Action name="cursor_to_playback_pointer" />
+      <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" />
+      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
+    </Menu>
+  <Separator/>
+    <!-- JAS action names for "insert_note_actionmenu" derived from src/gui/general/EditView.cpp -->
+    <!-- JAS original line <Action name="insert_note_actionmenu" /> -->
+    <Menu name="insert_note_actionmenu">
+      <text>I&amp;nsert Note</text>
+      <Action name="insert_0" text="&amp;I" shortcut="A" />
+      <Action name="insert_0_sharp" text="I &amp;sharp" shortcut="Shift+A" />
+    <Separator/>
+      <Action name="insert_1_flat" text="II &amp;flat" shortcut="Ctrl+Shift+S" />
+      <Action name="insert_1" text="II" shortcut="S" />
+      <Action name="insert_1_sharp" text="II sh&amp;arp" shortcut="Shift+S" />
+    <Separator/>
+      <Action name="insert_2_flat" text="III flat" shortcut="Ctrl+Shift+D" />
+      <Action name="insert_2" text="III" shortcut="D" />
+    <Separator/>
+      <Action name="insert_3" text="IV" shortcut="F" />
+      <Action name="insert_3_shap" text="IV sha&amp;rp" shortcut="Shift+F" />
+    <Separator/>
+      <Action name="insert_4_flat" text="&amp;V flat" shortcut="Ctrl+Shift+J" />
+      <Action name="insert_4" text="V" shortcut="J" />
+      <Action name="insert_4_sharp" text="V s&amp;harp" shortcut="Shift+J" />
+    <Separator/>
+      <Action name="insert_5_flat" text="VI fla&amp;t" shortcut="Ctrl+Shift+K" />
+      <Action name="insert_5" text="VI" shortcut="K" />
+      <Action name="insert_5_sharp" text="VI shar&amp;p" shortcut="Shift+K" />
+    <Separator/>
+      <Action name="insert_6_flat" text="VII flat" shortcut="Ctrl+Shift+L" />
+      <Action name="insert_6" text="VII" shortcut="L" />
+    <Separator/>
+      <!-- JAS invented "insert_note_upper_octave" name -->
+      <Menu name="insert_note_upper_octave">
+        <text>&amp;Upper Octave</text>
+        <Action name="insert_0_high" text="&amp;I" shortcut="Q" />
+        <Action name="insert_0_sharp_high" text="I &amp;sharp" shortcut="Shift+Q" />
+      <Separator/>
+        <Action name="insert_1_flat_high" text="II &amp;flat" shortcut="Ctrl+Shift+W" />
+        <Action name="insert_1_high" text="II" shortcut="W" />
+        <Action name="insert_1_sharp_high" text="II sh&amp;arp" shortcut="Shift+W" />
+      <Separator/>
+        <Action name="insert_2_flat_high" text="III flat" shortcut="Ctrl+Shift+E" />
+        <Action name="insert_2_high" text="III" shortcut="E" />
+      <Seperator/>
+        <Action name="insert_3_high" text="IV" shortcut="R" />
+        <Action name="insert_3_sharp_high" text="IV sha&amp;rp" shortcut="Shift+R" />
+      <Separator/>
+        <Action name="insert_4_flat_high" text="&amp;V flat" shortcut="Ctrl+Shift+U" />
+        <Action name="insert_4_high" text="V" shortcut="U" />
+        <Action name="insert_4_sharp_high" text="V s&amp;harp" shortcut="Shift+U" />
+      <Separator/>
+        <Action name="insert_5_flat_high" text="VI fla&amp;t" shortcut="Ctrl+Shift+I" />
+        <Action name="insert_5_high" text="VI" shortcut="I" />
+        <Action name="insert_5_sharp_high" text="VI shar&amp;p" shortcut="Shift+I" />
+      <Separator/>
+        <Action name="insert_6_flat_high" text="VII flat" shortcut="Ctrl+Shift+O" />
+        <Action name="insert_6_high" text="VII" shortcut="O" />
+      </Menu>
+      <!-- JAS invented "insert_note_lower_octave" name -->
+      <Menu name="insert_note_lower_octave">
+        <text>&amp;Upper Octave</text>
+        <Action name="insert_0_low" text="&amp;I" shortcut="Z" />
+        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z" />
+      <Separator/>
+        <Action name="insert_1_flat_low" text="II &amp;flat" shortcut="Ctrl+Shift+X" />
+        <Action name="insert_1_low" text="II" shortcut="X" />
+        <Action name="insert_1_sharp_low" text="II sh&amp;arp" shortcut="Shift+X" />
+      <Separator/>
+        <Action name="insert_2_flat_low" text="III flat" shortcut="Ctrl+Shift+C" />
+        <Action name="insert_2_low" text="III" shortcut="C" />
+      <Separator/>
+        <Action name="insert_3_low" text="IV" shortcut="V" />
+        <Action name="insert_3_sharp_low" text="IV sha&amp;rp" shortcut="Shift+V" />
+      <Separator/>
+        <Action name="insert_4_flat_low" text="&amp;V flat" shortcut="Ctrl+Shift+B" />
+        <Action name="insert_4_low" text="V" shortcut="B" />
+        <Action name="insert_4_sharp_low" text="V s&amp;harp" shortcut="Shift+B" />
+      <Separator/>
+        <Action name="insert_5_flat_low" text="VI fla&amp;t" shortcut="Ctrl+Shift+N" />
+        <Action name="insert_5_low" text="VI" shortcut="N" />
+        <Action name="insert_5_sharp_low" text="VI shar&amp;p" shortcut="Shift+N" />
+      <Separator/>
+        <Action name="insert_6_flat_low" text="VII flat" shortcut="Ctrl+Shift+M" />
+        <Action name="insert_6_low" text="VII" shortcut="M" />
+      </Menu>
+    </Menu>
+    <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="group-chord" shortcut="H" checked="false" />
+  <Separator/>
+    <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
+  </Menu>
+
+  <Menu name="settings" append="show_merge">
+    <text>Sett&amp;ings</text>
+    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
+    <Menu name="toolbars" append="show_merge">
+      <text>&amp;Toolbars</text>
+      <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
+      <!-- JAS "show_tools_toolbar" not showing up in pulldown menu but should -->
+      <Action name="show_tools_toolbar" append="show_merge" />
+      <!-- JAS 'options_show_statusbar' determined by state -->
+      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
+    </Menu>
+    <Menu name="rulers" append="show_merge">
+      <text>&amp;Rulers</text>
+      <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" append="show_merge" />
+      <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
+    </Menu>
+  <Separator append="show_merge" />
+    <!-- JAS "show_inst_parameters" is state dependent but not checkable -->
+    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" checked="true" append="show_merge" />
+   <Seperator/>
+    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
+    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
+    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
+  </Menu>
+
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
+    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+  <Separator/>
+    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
+    <Action name="help_show_tip" text="Tip of the &amp;Day" icon="idea" />
+  <Separator/>
+    <!-- JAS invented "language_switch" action name -->
+    <Action name="language_switch" text="Switch application &amp;language..." />
+  <Separator/>
+    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
+    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
+    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
+  <Separator/> 
+    <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+  </Menu>
+
+</MenuBar>
+
+<ToolBar name="Tools Toolbar">
+  <text>Tools Toolbar</text>
+  <Action name="select" />
+  <Action name="draw" />
+  <Action name="erase" />
+  <Action name="move" />
+  <Action name="resize" />
+  <Action name="velocity" />
+  <Separator/>
+  <Action name="toggle_step_by_step" />
+  <Action name="filter_selection" />
+  <Action name="quantize" />
+</ToolBar>
+
+<ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="playback_pointer_to_cursor" />
+  <Action name="cursor_to_playback_pointer" />
+  <Action name="toggle_solo" />
+  <Action name="toggle_tracking" />
+  <Action name="panic" />
+</ToolBar>
+
+<ToolBar name="Actions Toolbar" newline="true">
+  <text>Actions Toolbar</text>
+  <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
+</ToolBar>
+
+<ToolBar name="Zoom Toolbar">
+  <text>Zoom Toolbar</text>
+</ToolBar>
+
+<Menu noMerge="1" name="controller_events_ruler_menu">
+  <text>Control Ruler Actions</text>
+  <Action name="insert_control_ruler_item" text="Insert Item" />
+  <Action name="erase_control_ruler_item" text="Erase Selected Items" />
+  <Action name="clear_control_ruler_item" text="Clear Ruler" />
+<Separator/>
+  <Action name="start_control_line_item" text="Insert Line of Controllers" />
+<Separator/>
+  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" />
+  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" />
+</Menu>
+
+<Menu noMerge="1" name="property_ruler_menu">
+  <text>Property Ruler Actions</text>
+  <Action name="draw_property_line" text="Draw Property Line" />
+  <Action name="select_all_properties" text="Select All Property Values" />
+<Separator/>
+  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="[" />
+  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="]" />
+</Menu>
+
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="quantize"/>
+    <Action name="collapse_notes"/>
+    <Action name="legatoize"/>
+    <Action name="rescale"/>
+    <Action name="double_durations"/>
+    <Action name="halve_durations"/>
+    <Action name="velocity_up"/>
+    <Action name="velocity_down"/>
+    <Action name="jog_left"/>
+    <Action name="jog_right"/>
+    <Action name="set_to_current_velocity"/>
+    <Action name="set_velocities"/>
+    <Action name="trigger_segment"/>
+    <Action name="remove_trigger"/>
+    <Action name="transpose_up"/>
+    <Action name="transpose_down"/>
+    <Action name="transpose_up_octave"/>
+    <Action name="transpose_down_octave"/>
+    <Action name="general_transpose"/>
+    <Action name="general_diatonic_transpose"/>
+    <Action name="invert"/>
+    <Action name="retrograde"/>
+    <Action name="retrograde_invert"/>
+    <Action name="preview_selection"/>
+    <Action name="clear_selection"/>
+    <Action name="filter_selection"/>
+  </enable>
+</State>
+
+<State name="have_clipboard_single_segment">
+  <enable>
+    <Action name="edit_paste"/>
+  </enable>
+</State>
+
+<State name="have_note_events_in_segment">
+  <enable>
+   <Action name="draw_property_line"/>
+  </enable>
+</State>
+
+<State name="have_control_ruler">
+  <enable>
+    <Action name="show_control_rulers"/>
+  </enable>
+</State>
+
+<State name="have_controller_item_selected">
+  <enable>
+    <Action name="erase_control_ruler_item"/>
+  </enable>
+  <disable>
+   <Action name="insert_control_ruler_item"/>
+  </disable>
+</State>
+
+</kpartgui>
+ 

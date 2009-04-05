@@ -1,0 +1,60 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MidiMixer" version="1230">
+  
+<MenuBar>
+  <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
+    <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
+
+  <Menu name="Transport">
+    <text>T&amp;ransport</text>
+      <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
+      <Action name="play" text="&amp;Play" icon="transport-play" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
+      <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" />
+      <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" /> 
+      <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
+      <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="record" text="&amp;Record" icon="transport-record" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
+  </Menu>
+
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
+    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+  <Separator/>
+    <!-- JAS invented "language_switch" action name -->
+    <Action name="language_switch" text="Switch application &amp;language..." />
+  <Separator/>
+    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
+    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
+    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
+  <Separator/> 
+    <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+  </Menu>
+</MenuBar>
+
+<ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="record" />
+  <Action name="panic" />
+</ToolBar>
+
+</kpartgui>
+ 

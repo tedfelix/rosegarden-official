@@ -1,0 +1,74 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+
+#ifndef _RG_BIGARROWBUTTON_H_
+#define _RG_BIGARROWBUTTON_H_
+
+#include <QWidget>
+#include <QPushButton>
+
+namespace Rosegarden {
+
+
+class BigArrowButton : public QPushButton
+{
+public:
+    BigArrowButton( QWidget *parent = 0,
+                    Qt::ArrowType arrow = Qt::RightArrow,
+                    const char* name=0 ) :
+                        QPushButton( "", parent )
+    { 
+        QIcon icon;
+        const char *fileName;
+
+        switch(arrow) {
+            case Qt::RightArrow :
+                fileName = ":/pixmaps/misc/arrow-right.png";
+                break;
+            case Qt::LeftArrow :
+                fileName = ":/pixmaps/misc/arrow-left.png";
+                break;
+            case Qt::UpArrow :
+                fileName = ":/pixmaps/misc/arrow-up.png";
+                break;
+            case Qt::DownArrow :
+                fileName = ":/pixmaps/misc/arrow-down.png";
+                break;
+            default :
+                fileName = 0;
+        }
+
+        if(fileName){
+            icon.addPixmap(QPixmap(QString::fromUtf8(fileName)),
+                                          QIcon::Normal, QIcon::Off);
+            setIcon(icon);
+        } else {
+            setText("???");
+        }
+    }
+
+    virtual ~BigArrowButton() { } 
+
+    virtual QSize sizeHint() const {
+        return QSize(20, 20);
+    }
+};
+
+	
+}
+
+#endif /*BIGARROWBUTTON_H_*/

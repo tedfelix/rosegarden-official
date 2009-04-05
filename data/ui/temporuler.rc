@@ -1,0 +1,19 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::TempoRuler" version="1230">
+
+<Menu name="tempo_ruler_menu">
+  <Action name="insert_tempo_here" text="Insert Tempo Change" icon="event-insert-tempo" />
+  <Action name="insert_tempo_at_pointer" text="Insert Tempo Change at Playback Position" />
+<Separator/>
+  <Action name="delete_tempo" text="Delete Tempo Change" icon="event-delete" />
+<Separator/>
+  <Action name="ramp_to_next" text="Ramp Tempo to Next Tempo" />
+  <Action name="unramp" text="Un-Ramp Tempo" />
+<Separator/>
+  <Action name="edit_tempo" text="Edit Tempo..." icon="event-edit" />
+  <Action name="edit_time_signature" text="Edit Time Signature..." />
+  <Action name="edit_tempos" text="Open Tempo and Time Signature Editor"" />	
+</Menu>
+
+</kpartgui>

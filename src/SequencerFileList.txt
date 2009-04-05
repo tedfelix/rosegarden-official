@@ -1,0 +1,14 @@
+
+SET(sequencer_SRCS
+	sequencer/MmappedControlBlock.cpp
+	sequencer/MmappedControlBlock.h
+	sequencer/MmappedSegment.cpp
+	sequencer/MmappedSegment.h
+	sequencer/RosegardenSequencer.cpp
+	sequencer/RosegardenSequencer.h
+	sequencer/RosegardenSequencerIface.h
+	sequencer/SequencerMmapper.cpp
+	sequencer/SequencerMmapper.h
+	sequencer/SequencerThread.cpp
+	sequencer/SequencerThread.h
+)

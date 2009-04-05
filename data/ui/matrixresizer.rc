@@ -1,0 +1,15 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::MatrixTool" version="1230">
+
+<Menu name="MatrixResizer">
+  <Action name="select" text="Switch to Select Tool" icon="select" shortcut="F2" />
+  <Action name="move" text="Switch to Move Tool" icon="move" shortcut="F5" />
+  <Action name="draw" text="Switch to Draw Tool" icon="pencil" shortcut="F3" />
+  <Action name="erase" text="Switch to Erase Tool" icon="eraser" shortcut="F4" />
+<!-- <Separator/> -->
+<!-- Defunct: <Action name="halve_durations"/> -->
+<!-- Defunct: <Action name="double_durations"/> -->
+</Menu>
+
+</kpartgui>

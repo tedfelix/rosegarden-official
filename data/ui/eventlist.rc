@@ -1,0 +1,150 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::EventList" version="1230">
+
+<MenuBar>
+
+  <Menu name="file" append="new_merge">
+    <text>&amp;File</text>
+    <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+  </Menu>
+
+  <Menu name="edit" append="new_merge">
+    <text>&amp;Edit</text>
+    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
+    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+  <Separator/>
+    <Action name="insert" text="&amp;Insert Event" icon="event-insert" shortcut="I" />
+    <Action name="delete" text="&amp;Delete Event" icon="event-delete" shortcut="Delete" />
+    <Action name="edit_simple" text="&amp;Edit Event" icon="event-edit" shortcut="E" />
+    <Action name="edit_advanced" text="&amp;Advanced Event Editor" icon="event-edit-advanced" />
+  <Separator/>
+    <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
+    <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
+    <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
+    <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
+  <Separator/>
+    <Action name="select_all" text="&amp;Select All" shortcut="Ctrl+A" />
+    <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
+    <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+  <Separator/>
+    <Action name="set_segment_start" text="Set Se&amp;gment Start Time..." />
+    <Action name="set_segment_duration" text="Set Seg&amp;ment Duration..." />
+  </Menu>
+
+  <Menu name="view">
+    <text>&amp;View</text>
+    <Action name="time_musical" text="&amp;Musical Times" icon="time-musical"  />
+    <Action name="time_real" text="&amp;Real Times" icon="time-real" />
+    <Action name="time_raw" text="Ra&amp;w Times" icon="time-raw" />
+  </Menu>
+
+  <Menu name="segment">
+    <text>Se&amp;gment</text>
+    <Menu name="open-with">
+      <text>Edit &amp;With</text>
+      <Action name="open_in_matrix" />
+      <Action name="open_in_matrix" text="Open in Matri&amp;x Editor" icon="matrix" />
+      <Action name="open_in_notation" text="Open in &amp;Notation Editor" icon="notation" />
+    </Menu>
+  </Menu>
+
+  <Menu name="settings">
+    <text>Sett&amp;ings</text>
+    <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
+    <!-- JAS 'options_show_statusbar' determined by state -->
+    <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
+  <Seperator/>
+    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
+    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
+    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
+  </Menu>
+
+  <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
+    <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
+    <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
+  <Separator/>
+    <!-- JAS invented "language_switch" action name -->
+    <Action name="language_switch" text="Switch application &amp;language..." />
+  <Separator/>
+    <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
+    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
+    <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
+  <Separator/> 
+    <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
+    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+  </Menu>
+</MenuBar>
+
+<ToolBar name="Actions Toolbar">
+  <text>Actions Toolbar</text>
+  <Action name="insert"/>
+  <Action name="delete"/>
+  <Action name="edit_simple"/>
+  <Action name="edit_advanced"/>
+  <Action name="filter_selection"/>
+</ToolBar>
+
+<ToolBar name="Time Toolbar">
+  <text>Time Toolbar</text>
+  <Action name="time_musical"/>
+  <Action name="time_real"/>
+  <Action name="time_raw"/>
+</ToolBar>
+
+</kpartgui>
+
+<!-- JAS did not convert after this point since it is after the </kpartgui> and -->
+<!-- JAS not available in the event-list viewer. -->
+<ToolBar name="Transport Toolbar">
+  <text>Transport Toolbar</text>
+
+  <Action name="playback_pointer_start" />
+  <Action name="playback_pointer_back_bar" />
+  <Action name="play" />
+  <Action name="playback_pointer_forward_bar" />
+  <Action name="playback_pointer_end" />
+  <Action name="stop" />
+  <Action name="playback_pointer_to_cursor" />
+  <Action name="cursor_to_playback_pointer" />
+  <Action name="toggle_solo"/>
+</ToolBar>
+
+<ToolBar name="Actions Toolbar">
+  <text>Actions Toolbar</text>
+</ToolBar>
+
+<ToolBar name="Zoom Toolbar">
+  <text>Zoom Toolbar</text>
+</ToolBar>
+
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
+    <Action name="edit_simple"/>
+    <Action name="edit_advanced"/>
+    <Action name="clear_selection"/>
+    <Action name="filter_selection"/>
+  </enable>
+</State>
+
+<State name="have_clipboard_single_segment">
+  <enable>
+    <Action name="edit_paste"/>
+  </enable>
+</State>
+
+<State name="have_control_ruler">
+  <enable>
+    <Action name="show_control_rulers"/>
+  </enable>
+</State>
+
+</kpartgui>
+ 
