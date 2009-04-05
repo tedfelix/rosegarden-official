@@ -53,6 +53,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_toolBox(0),
     m_currentTool(0),
     m_drumMode(drumMode),
+    m_playTracking(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_currentVelocity(100),
@@ -345,6 +346,15 @@ void
 MatrixWidget::slotSetVelocityTool()
 {
     slotSetTool(MatrixVelocity::ToolName);
+}
+
+void
+MatrixWidget::slotSetPlayTracking(bool tracking)
+{
+    m_playTracking = tracking;
+    if (m_playTracking) {
+        if (m_scene) m_scene->ensurePointerVisible();
+    }
 }
 
 }

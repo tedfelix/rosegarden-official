@@ -89,6 +89,8 @@ public:
     bool constrainToSegmentArea(QPointF &scenePos);
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
+
+    void ensurePointerVisible();
     
     // SegmentObserver method forwarded from MatrixViewSegment
     void segmentEndMarkerTimeChanged(const Segment *s, bool shorten);
@@ -130,6 +132,8 @@ private:
     int m_resolution;
     EventSelection *m_selection; // I own this
 
+    // These are the background items -- the grid lines and the shadings
+    // used to highlight the first, third and fifth in the current key
     std::vector<QGraphicsLineItem *> m_horizontals;
     std::vector<QGraphicsLineItem *> m_verticals;
     std::vector<QGraphicsRectItem *> m_highlights;

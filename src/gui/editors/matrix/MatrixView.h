@@ -123,6 +123,8 @@ protected slots:
     void slotSetCurrentVelocity(int);
     void slotSetCurrentVelocityFromSelection();
 
+    void slotToggleTracking();
+
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -142,6 +144,8 @@ private:
     QComboBox *m_velocityCombo;
     QComboBox *m_quantizeCombo;
     QComboBox *m_snapGridCombo;
+
+    bool m_tracking;
 
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;

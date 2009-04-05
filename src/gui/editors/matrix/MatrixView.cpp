@@ -74,6 +74,7 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 			     bool drumMode,
 			     QWidget *parent) :
     EditViewBase(doc, segments, parent),
+    m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations())
 {
     m_document = doc;
@@ -97,6 +98,7 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
         findAction("select")->trigger();
     }
 
+    m_matrixWidget->slotSetPlayTracking(m_tracking);
     updateWindowTitle();
 }
 
@@ -801,7 +803,6 @@ NewMatrixView::slotSetCurrentVelocity(int value)
     m_velocityCombo->setCurrentIndex(value);
 }
 
-
 void
 NewMatrixView::slotSetCurrentVelocityFromSelection()
 {
@@ -825,6 +826,12 @@ NewMatrixView::slotSetCurrentVelocityFromSelection()
     }
 }
 
+void
+NewMatrixView::slotToggleTracking()
+{
+    m_tracking = !m_tracking;
+    m_matrixWidget->slotSetPlayTracking(m_tracking);
+}
 
 }
 

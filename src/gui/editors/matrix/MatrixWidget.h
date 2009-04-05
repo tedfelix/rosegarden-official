@@ -68,6 +68,8 @@ public:
 
     bool isDrumMode() const { return m_drumMode; }
 
+    bool getPlayTracking() const { return m_playTracking; }
+
     MatrixToolBox *getToolBox() { return m_toolBox; }
 
     void setCanvasCursor(QCursor cursor);
@@ -97,6 +99,8 @@ public slots:
     void slotSetResizeTool();
     void slotSetVelocityTool();
 
+    void slotSetPlayTracking(bool);
+
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
     void slotSetSnap(timeT);
 
@@ -119,6 +123,7 @@ private:
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
     bool m_drumMode;
+    bool m_playTracking;
     double m_hZoomFactor;
     double m_vZoomFactor;
     int m_currentVelocity;

@@ -330,6 +330,7 @@ MatrixScene::repositionPointer()
     timeT t = m_document->getComposition().getPosition();
     double x = m_scale->getXForTime(t);
     m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
+    if (m_widget && m_widget->getPlayTracking()) ensurePointerVisible();
 }
 
 void
@@ -517,6 +518,12 @@ MatrixScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
     MatrixMouseEvent nme;
     setupMouseEvent(e, nme);
     emit mouseDoubleClicked(&nme);
+}
+
+void
+MatrixScene::ensurePointerVisible()
+{
+    if (m_pointer) m_pointer->ensureVisible();
 }
 
 void
