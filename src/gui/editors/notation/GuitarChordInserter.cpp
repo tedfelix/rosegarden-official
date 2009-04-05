@@ -15,10 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
-
+#ifdef NOT_JUST_NOW //!!!
 #include "GuitarChordInserter.h"
 
-#include <klocale.h>
+
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/Staff.h"
@@ -33,11 +33,12 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qstring.h>
 
+#include <QAction>
+#include <QDialog>
+#include <QIcon>
+#include <QString>
+#include <QMouseEvent>
 
 namespace Rosegarden
 {
@@ -46,28 +47,18 @@ GuitarChordInserter::GuitarChordInserter(NotationView* view)
         : NotationTool("GuitarChordInserter", view),
         m_guitarChordSelector(0)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                             makeToolbarPixmap("select")));
-
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
-
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("crotchet")));
-
-    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
-                SLOT(slotNoteSelected()), actionCollection(),
-                "notes");
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     m_guitarChordSelector = new GuitarChordSelectorDialog(m_nParentView);
     m_guitarChordSelector->init();
     createMenu("guitarchordinserter.rc");
+}
+
+void GuitarChordInserter::slotNotesSelected()
+{
+    m_nParentView->slotLastNoteAction();
 }
 
 void GuitarChordInserter::slotGuitarChordSelected()
@@ -78,12 +69,12 @@ void GuitarChordInserter::slotGuitarChordSelected()
 
 void GuitarChordInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+    invokeInParentView("erase");
 }
 
 void GuitarChordInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+    invokeInParentView("select");
 }
 
 void GuitarChordInserter::handleLeftButtonPress(timeT,
@@ -176,3 +167,4 @@ const QString GuitarChordInserter::ToolName = "guitarchordinserter";
 
 }
 #include "GuitarChordInserter.moc"
+#endif

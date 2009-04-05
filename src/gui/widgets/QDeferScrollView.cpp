@@ -18,22 +18,27 @@
 
 #include "QDeferScrollView.h"
 
-#include <qscrollview.h>
-#include <qwidget.h>
+//#include <QScrollArea>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name, WFlags f)
-        : QScrollView(parent, name, f)
+QDeferScrollView::QDeferScrollView(QWidget* parent, const char *name) //, WFlags f)
+        : Q3ScrollView(parent) //, f)
 {
-    setFocusPolicy(QWidget::WheelFocus);
+	setObjectName( name );
+    setFocusPolicy(Qt::WheelFocus);
 }
 
 void QDeferScrollView::setBottomMargin(int m)
 {
-    setMargins(leftMargin(), topMargin(), rightMargin(), m);
+	int leftMargin, topMargin, rightMargin, bottomMargin;
+	getContentsMargins( &leftMargin, &topMargin, &rightMargin, &bottomMargin );
+	
+	setContentsMargins(leftMargin, topMargin, rightMargin, m);
+// 	setContentsMargins(leftMargin(), topMargin(), rightMargin(), m);
 }
 
 void QDeferScrollView::contentsWheelEvent(QWheelEvent* e)

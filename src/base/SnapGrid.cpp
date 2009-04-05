@@ -29,7 +29,7 @@ const timeT SnapGrid::SnapToBar  = -2;
 const timeT SnapGrid::SnapToBeat = -3;
 const timeT SnapGrid::SnapToUnit = -4;
 
-SnapGrid::SnapGrid(RulerScale *rulerScale, int ysnap) :
+SnapGrid::SnapGrid(const RulerScale *rulerScale, int ysnap) :
     m_rulerScale(rulerScale),
     m_snapTime(SnapToBeat),
     m_ysnap(ysnap)

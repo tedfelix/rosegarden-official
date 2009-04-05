@@ -18,7 +18,6 @@
 
 #include "SegmentResizeFromStartCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
@@ -29,7 +28,7 @@ namespace Rosegarden
 
 SegmentResizeFromStartCommand::SegmentResizeFromStartCommand(Segment *s,
         timeT time) :
-        BasicCommand(i18n("Resize Segment"), *s,
+        BasicCommand(tr("Resize Segment"), *s,
                      std::min(time, s->getStartTime()),
                      std::max(time, s->getStartTime())),
         m_segment(s),

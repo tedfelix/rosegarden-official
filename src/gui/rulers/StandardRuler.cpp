@@ -18,58 +18,72 @@
 
 #include "StandardRuler.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "MarkerRuler.h"
 #include "base/RulerScale.h"
-#include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/LoopRuler.h"
-#include "document/RosegardenGUIDoc.h"
-#include <qobject.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "document/RosegardenDocument.h"
+
+#include <QObject>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
-StandardRuler::StandardRuler(RosegardenGUIDoc *doc,
+StandardRuler::StandardRuler(RosegardenDocument *doc,
                              RulerScale *rulerScale,
                              double xorigin,
                              int barHeight,
                              bool invert,
                              QWidget* parent,
-                             const char* name,
-                             WFlags f):
-        QVBox(parent, name, f),
+                             const char* name
+//                              WFlags f):
+		):
+        QWidget(parent, name),
         m_invert(invert),
         m_loopRulerHeight(10),
         m_currentXOffset(0),
         m_doc(doc),
         m_rulerScale(rulerScale),
-        m_hButtonBar(0)
+        m_markerRuler(0)
 {
-    setSpacing(0);
+//    QString localStyle("QWidget { background-color: #EEEEEE; color: #000000; }");
 
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    setLayout(layout);
+	
     if (!m_invert) {
-        m_hButtonBar = new MarkerRuler
+        m_markerRuler = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+        layout->addWidget(m_markerRuler);
     }
 
     m_loopRuler = new LoopRuler
                   (m_doc, m_rulerScale, m_loopRulerHeight, xorigin, m_invert, this, name);
+    layout->addWidget(m_loopRuler);
 
     if (m_invert) {
-        m_hButtonBar = new MarkerRuler
+        m_markerRuler = new MarkerRuler
                        (m_doc, m_rulerScale, barHeight - m_loopRulerHeight, xorigin, this);
+        layout->addWidget(m_markerRuler);
     }
 
+//    m_markerRuler->setStyleSheet(localStyle);
+//    m_loopRuler->setStyleSheet(localStyle);
+//    m_markerRuler->setToolTip(QString("I am m_markerRuler. My style is: %1").arg(localStyle));
+
+
     QObject::connect
-        (doc->getCommandHistory(), SIGNAL(commandExecuted()),
+        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
          this, SLOT(update()));
 
 }
@@ -79,7 +93,7 @@ void StandardRuler::setSnapGrid(SnapGrid *grid)
     m_loopRuler->setSnapGrid(grid);
 }
 
-void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
+void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
 {
 
     RG_DEBUG << "StandardRuler::connectRulerToDocPointer" << endl;
@@ -93,20 +107,20 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
      doc, SLOT(slotSetPointerPosition(timeT)));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(setPointerPosition(timeT)),
+    (m_markerRuler, SIGNAL(setPointerPosition(timeT)),
      doc, SLOT(slotSetPointerPosition(timeT)));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(editMarkers()),
-     RosegardenGUIApp::self(), SLOT(slotEditMarkers()));
+    (m_markerRuler, SIGNAL(editMarkers()),
+     RosegardenMainWindow::self(), SLOT(slotEditMarkers()));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(addMarker(timeT)),
-     RosegardenGUIApp::self(), SLOT(slotAddMarker(timeT)));
+    (m_markerRuler, SIGNAL(addMarker(timeT)),
+     RosegardenMainWindow::self(), SLOT(slotAddMarker(timeT)));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(deleteMarker(int, timeT, QString, QString)),
-     RosegardenGUIApp::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
+    (m_markerRuler, SIGNAL(deleteMarker(int, timeT, QString, QString)),
+     RosegardenMainWindow::self(), SLOT(slotDeleteMarker(int, timeT, QString, QString)));
 
     QObject::connect
     (m_loopRuler, SIGNAL(dragPointerToPosition(timeT)),
@@ -118,10 +132,10 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 
     QObject::connect
     (m_loopRuler, SIGNAL(setPlayPosition(timeT)),
-     RosegardenGUIApp::self(), SLOT(slotSetPlayPosition(timeT)));
+     RosegardenMainWindow::self(), SLOT(slotSetPlayPosition(timeT)));
 
     QObject::connect
-    (m_hButtonBar, SIGNAL(setLoop(timeT, timeT)),
+    (m_markerRuler, SIGNAL(setLoop(timeT, timeT)),
      doc, SLOT(slotSetLoop(timeT, timeT)));
 
     QObject::connect
@@ -139,27 +153,27 @@ void StandardRuler::connectRulerToDocPointer(RosegardenGUIDoc *doc)
 void StandardRuler::slotScrollHoriz(int x)
 {
     m_loopRuler->scrollHoriz(x);
-    m_hButtonBar->scrollHoriz(x);
+    m_markerRuler->scrollHoriz(x);
 }
 
 void StandardRuler::setMinimumWidth(int width)
 {
-    m_hButtonBar->setMinimumWidth(width);
+    m_markerRuler->setMinimumWidth(width);
     m_loopRuler->setMinimumWidth(width);
 }
 
 void StandardRuler::setHScaleFactor(double dy)
 {
-    m_hButtonBar->setHScaleFactor(dy);
+    m_markerRuler->setHScaleFactor(dy);
     m_loopRuler->setHScaleFactor(dy);
 }
-
+/*
 void StandardRuler::paintEvent(QPaintEvent *e)
 {
-    m_hButtonBar->update();
+    m_markerRuler->update();
     m_loopRuler->update();
     QWidget::paintEvent(e);
 }
-
+*/
 }
 #include "StandardRuler.moc"

@@ -18,7 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#ifdef NOT_JUST_NOW //!!!
 
 #include "TrackHeader.h"
 #include "HeadersGroup.h"
@@ -30,7 +30,7 @@
 #include "base/Track.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 #include "NotePixmapFactory.h"
 #include "NotationView.h"
@@ -41,17 +41,16 @@
 #include <string>
 #include <utility>
 
-#include <kapplication.h>
-#include <klocale.h>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qhbox.h>
-#include <qvbox.h>
-#include <qpushbutton.h>
-#include <qlabel.h>
-#include <qframe.h>
-#include <qstring.h>
-#include <qtooltip.h>
+#include <QApplication>
+#include <QSize>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QFrame>
+#include <QString>
+#include <QToolTip>
 
 
 namespace Rosegarden
@@ -103,25 +102,25 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(i18n("Track %1 : \"%2\"")
-                            .arg(trackPos + 1)
-                            .arg(strtoqstr(track->getLabel())));
+    QString toolTipText = QString(tr("Track %1 : \"%2\"")
+                             .arg(trackPos + 1)
+                             .arg(strtoqstr(track->getLabel())));
 
     QString preset = strtoqstr(track->getPresetLabel());
     if (preset != QString(""))
-        toolTipText += QString(i18n("\nNotate for: %1").arg(preset));
+        toolTipText += QString(tr("\nNotate for: %1").arg(preset));
 
-    QString notationSize = i18n("normal");
+    QString notationSize = tr("normal");
     switch (track->getStaffSize()) {
         case StaffTypes::Small:
-            notationSize = i18n("small");
+            notationSize = tr("small");
             break;
         case StaffTypes::Tiny:
-            notationSize = i18n("tiny");
+            notationSize = tr("tiny");
             break;
     }
 
-    QString bracketText = i18n("--");
+    QString bracketText = tr("--");
     switch (track->getStaffBracket()) {
         case Brackets::SquareOn:
             bracketText = "[-";
@@ -146,7 +145,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
             break;
     }
 
-    toolTipText += QString(i18n("\nSize: %1,  Bracket: %2 "))
+    toolTipText += QString(tr("\nSize: %1,  Bracket: %2 "))
                             .arg(notationSize)
                             .arg(bracketText);
 
@@ -173,14 +172,14 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         if (transpose) {
             QString transposeName;
             transposeValueToName(transpose, transposeName);
-            toolTipText += QString(i18n("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
+            toolTipText += QString(tr("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transposeName)
                                     .arg(transpose)
                                     .arg(strtoqstr((*i)->getLabel()));
         } else {
-            toolTipText += QString(i18n("\nbars [%1-%2] (tr=%3) : \"%4\""))
+            toolTipText += QString(tr("\nbars [%1-%2] (tr=%3) : \"%4\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transpose)
@@ -188,7 +187,7 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         }
     }
 
-    QToolTip::add(this, toolTipText);
+    this->setToolTip(toolTipText);
 
     m_firstSeg = *segments.begin();
     m_firstSegStartTime = m_firstSeg->getStartTime();
@@ -229,18 +228,18 @@ TrackHeader::transposeValueToName(int transpose, QString &transposeName)
     if (noteIndex < 0) noteIndex += 12;
 
     switch(noteIndex) {
-        case  0 : transposeName = i18n("C");  break;
-        case  1 : transposeName = i18n("C#"); break;
-        case  2 : transposeName = i18n("D");  break;
-        case  3 : transposeName = i18n("Eb"); break;
-        case  4 : transposeName = i18n("E");  break;
-        case  5 : transposeName = i18n("F");  break;
-        case  6 : transposeName = i18n("F#"); break;
-        case  7 : transposeName = i18n("G");  break;
-        case  8 : transposeName = i18n("G#"); break;
-        case  9 : transposeName = i18n("A");  break;
-        case 10 : transposeName = i18n("Bb"); break;
-        case 11 : transposeName = i18n("B");  break;
+        case  0 : transposeName = tr("C");  break;
+        case  1 : transposeName = tr("C#"); break;
+        case  2 : transposeName = tr("D");  break;
+        case  3 : transposeName = tr("Eb"); break;
+        case  4 : transposeName = tr("E");  break;
+        case  5 : transposeName = tr("F");  break;
+        case  6 : transposeName = tr("F#"); break;
+        case  7 : transposeName = tr("G");  break;
+        case  8 : transposeName = tr("G#"); break;
+        case  9 : transposeName = tr("A");  break;
+        case 10 : transposeName = tr("Bb"); break;
+        case 11 : transposeName = tr("B");  break;
     }
 }
 
@@ -319,7 +318,7 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
 
                 // If current value is visible, remember it
                 if (key.getAccidentalCount()) key1 = key;
-                if (label.stripWhiteSpace().length()) label1 = label;
+                if (label.trimmed().length()) label1 = label;
                 if (transpose) transpose1 = transpose;
 
                 // Current values become last values
@@ -342,10 +341,10 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     QString noteName;
     transposeValueToName(m_transpose, noteName);
 
-    m_upperText = QString(i18n("%1: %2")
-                                .arg(trackPos + 1)
-                                .arg(strtoqstr(track->getLabel())));
-    if (m_transpose) m_transposeText = i18n(" in %1").arg(noteName);
+    m_upperText = QString(tr("%1: %2")
+                                 .arg(trackPos + 1)
+                                 .arg(strtoqstr(track->getLabel())));
+    if (m_transpose) m_transposeText = tr(" in %1").arg(noteName);
     else             m_transposeText = QString("");
 
     NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
@@ -407,9 +406,9 @@ TrackHeader::updateHeader(int width)
         QColor clefColour;
         if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
             if (m_status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
-                clefColour = Qt::red;
+                clefColour = QColor(Qt::red);
             else
-                clefColour = Qt::black;
+                clefColour = QColor(Qt::black);
         } else {
             drawClef = false;
         }
@@ -441,3 +440,5 @@ TrackHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 
 }
 #include "TrackHeader.moc"
+
+#endif

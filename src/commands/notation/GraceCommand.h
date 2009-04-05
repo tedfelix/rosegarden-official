@@ -16,13 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUGRACECOMMAND_H_
-#define _RG_ADJUSTMENUGRACECOMMAND_H_
+#ifndef _RG_GRACECOMMAND_H_
+#define _RG_GRACECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 class Make;
@@ -32,14 +32,19 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 /*!!!
 class GraceCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(GraceCommand)
+
 public:
     GraceCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return i18n("Make &Grace Notes"); }
+    static QString getGlobalName() { return tr("Make &Grace Notes"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

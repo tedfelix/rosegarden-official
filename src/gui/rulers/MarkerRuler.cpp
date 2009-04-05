@@ -18,47 +18,46 @@
 
 #include "MarkerRuler.h"
 
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RulerScale.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "commands/edit/ModifyMarkerCommand.h"
-#include "document/MultiViewCommandHistory.h"
-#include <kxmlguifactory.h>
-#include <qbrush.h>
-#include <qcursor.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpen.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <kstddirs.h>
-#include <kmainwindow.h>
-#include <qtooltip.h>
+#include "document/CommandHistory.h"
 
+#include <QMouseEvent>
+#include <QBrush>
+#include <QCursor>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPen>
+#include <QPoint>
+#include <QMenu>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QWidget>
+#include <QAction>
+#include <QToolTip>
+#include <QMainWindow>
 
 namespace Rosegarden
 {
 
-MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
+MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
                          int barHeight,
                          double xorigin,
                          QWidget* parent,
-                         const char* name,
-                         WFlags f)
-        : QWidget(parent, name, f),
+                         const char* name)
+                         //WFlags f)
+        : QWidget(parent), //, f),
         m_barHeight(barHeight),
         m_xorigin(xorigin),
         m_currentXOffset(0),
@@ -67,78 +66,57 @@ MarkerRuler::MarkerRuler(RosegardenGUIDoc *doc,
         m_menu(0),
         m_doc(doc),
         m_rulerScale(rulerScale),
-        m_parentMainWindow(dynamic_cast<KMainWindow*>(doc->parent()))
+        m_parentMainWindow( dynamic_cast<QMainWindow*>(doc->parent()) )
 {
     // If the parent window has a main window above it, we need to use
     // that as the parent main window, not the document's parent.
     // Otherwise we'll end up adding all actions to the same
     // (document-level) action collection regardless of which window
     // we're in.
+    
+    this->setObjectName(name);
     QObject *probe = parent;
-    while (probe && !dynamic_cast<KMainWindow *>(probe)) probe = probe->parent();
-    if (probe) m_parentMainWindow = dynamic_cast<KMainWindow *>(probe);
+    while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
+    if (probe) m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
 
     //    m_barFont = new QFont("helvetica", 12);
     //    m_barFont->setPixelSize(12);
     m_barFont = new QFont();
     m_barFont->setPointSize(10);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon;
+    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
+    createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
+    createAction("delete_marker", SLOT(slotDeleteMarker()));
+    createAction("edit_marker", SLOT(slotEditMarker()));
 
-    // Use the event insert, delete, edit icons because they are
-    // actually generic enough to serve for anything.  Let's hope they
-    // don't become more event-specific in future...
-
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert.png"));
-    new KAction(i18n("Insert Marker"), icon, 0, this,
-             SLOT(slotInsertMarkerHere()), actionCollection(),
-             "insert_marker_here");
-    
-    new KAction(i18n("Insert Marker at Playback Position"), 0, this,
-             SLOT(slotInsertMarkerAtPointer()), actionCollection(),
-             "insert_marker_at_pointer");
-
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    new KAction(i18n("Delete Marker"), icon, 0, this,
-             SLOT(slotDeleteMarker()), actionCollection(),
-             "delete_marker");
-    
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    new KAction(i18n("Edit Marker..."), icon, 0, this,
-                 SLOT(slotEditMarker()), actionCollection(),
-                 "edit_marker");
-
-    QToolTip::add
-        (this, i18n("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
+    this->setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
 MarkerRuler::~MarkerRuler()
 {
     delete m_barFont;
+
+/*!!! comment retained for reference, in case of problems later.  I think this should no longer be necessary, but I am only a simple carbon-based life form
+
     // we have to do this so that the menu is re-created properly
     // when the main window is itself recreated (on a File->New for instance)
     KXMLGUIFactory* factory = m_parentMainWindow->factory();
     if (factory)
         factory->removeClient(this);
+*/
 }
 
 void
 MarkerRuler::createMenu()
 {             
-    setXMLFile("markerruler.rc");
+    createGUI("markerruler.rc");
     
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    factory->addClient(this);
-
-    QWidget* tmp = factory->container("marker_ruler_menu", this);
+    m_menu = findChild<QMenu *>("marker_ruler_menu");
 
 //    if (!tmp) {
 //        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
 //                 << domDocument().toString(4) << endl;
 //    }
-    
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
     
     if (!m_menu) {
         RG_DEBUG << "MarkerRuler::createMenu() failed\n";
@@ -222,7 +200,7 @@ MarkerRuler::slotEditMarker()
                                     dialog.getTime(),
                                     qstrtostr(dialog.getName()),
                                     qstrtostr(dialog.getDescription()));
-        m_doc->getCommandHistory()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command);
     }
 }
 
@@ -303,6 +281,15 @@ MarkerRuler::paintEvent(QPaintEvent*)
 
     QRect clipRect = visibleRect();
 
+    // In a stylesheet world, we have to paint our our own background to rescue
+    // it from the muddle of QWidget background style hacks
+    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::RulerBackground));
+    painter.fillRect(clipRect, bg);
+
+    // Now we set the pen dungle flungy to the newly defined foreground color in
+    // GUIPalette to make the text all pretty like again.  (Whew.)
+    painter.setPen(GUIPalette::getColour(GUIPalette::RulerForeground));
+
     int firstBar = m_rulerScale->getBarForX(clipRect.x() -
                                             m_currentXOffset -
                                             m_xorigin);
@@ -366,7 +353,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
         } else {
             const QPen normalPen = painter.pen();
             ;
-            QPen endPen(black, 2);
+            QPen endPen(Qt::black, 2);
             painter.setPen(endPen);
             painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), m_barHeight);
             painter.setPen(normalPen);
@@ -404,7 +391,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
                 // disable worldXForm for text
                 bool enableXForm = painter.hasWorldXForm();
                 painter.setWorldXForm(false);
-
+                
                 painter.drawText(textDrawPoint, name);
 
                 painter.setWorldXForm(enableXForm);
@@ -426,18 +413,21 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     
     // if right-click, show popup menu
     //
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         if (!m_menu)
             createMenu();
         if (m_menu) {
-            actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
-            actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
+//             actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
+//             actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
+            findAction("delete_marker")->setEnabled(clickedMarker != 0);
+            findAction("edit_marker")->setEnabled(clickedMarker != 0);
+            
             m_menu->exec(QCursor::pos());
         }
         return;       
     }
             
-    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
 
     Composition &comp = m_doc->getComposition();
     Composition::markercontainer markers = comp.getMarkers();

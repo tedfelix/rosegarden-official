@@ -19,8 +19,8 @@
 #ifndef _RG_FILELOCATEDIALOG_H_
 #define _RG_FILELOCATEDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 
 
 class QWidget;
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 
 
-class FileLocateDialog : public KDialogBase
+class FileLocateDialog : public QDialog
 {
     Q_OBJECT
 

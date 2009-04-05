@@ -889,9 +889,9 @@ protected:
         timeT getDuration() const;
         
         /// Inserts a single event, removing any existing one at that time
-        iterator insert(Event *e); // may throw Event::BadType
+        iterator insertEvent(Event *e); // may throw Event::BadType
 
-        void erase(Event *e);
+        void eraseEvent(Event *e);
 
         iterator findTime(timeT time);
         iterator findNearestTime(timeT time);

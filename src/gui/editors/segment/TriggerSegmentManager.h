@@ -19,48 +19,49 @@
 #ifndef _RG_TRIGGERSEGMENTMANAGER_H_
 #define _RG_TRIGGERSEGMENTMANAGER_H_
 
-#include <kmainwindow.h>
-#include <qstring.h>
 #include "base/Event.h"
+#include "gui/general/ActionFileClient.h"
+
+#include <QMainWindow>
+#include <QString>
+// #include <QTreeWidget>
+// #include <QTreeWidgetItem>
 
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QCloseEvent;
-class QAccel;
-class KListView;
-class KCommand;
+class QShortcut;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class Command;
+class RosegardenDocument;
 
-
-class TriggerSegmentManager : public KMainWindow
+class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     TriggerSegmentManager(QWidget *parent,
-                          RosegardenGUIDoc *doc);
+                          RosegardenDocument *doc);
     ~TriggerSegmentManager();
 
     void initDialog();
 
-    void addCommandToHistory(KCommand *command);
-    MultiViewCommandHistory* getCommandHistory();
+    void addCommandToHistory(Command *command);
 
     void setModified(bool value);
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 public slots:
     void slotUpdate();
@@ -69,8 +70,8 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QListViewItem *);
-    void slotItemClicked(QListViewItem *);
+    void slotEdit(QTreeWidgetItem *);
+    void slotItemClicked(QTreeWidgetItem *);
     void slotPasteAsNew();
 
     void slotMusicalTime();
@@ -89,18 +90,18 @@ protected:
                                timeT duration, int timeMode);
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     QPushButton             *m_closeButton;
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    KListView               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 
-    QAccel *m_accelerators;
+    QShortcut *m_shortcuts;
 };
 
 

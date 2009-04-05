@@ -37,8 +37,6 @@ SET(common_sound_SRCS
 	sound/MappedEvent.h
 	sound/MappedInstrument.cpp
 	sound/MappedInstrument.h
-	sound/MappedRealTime.cpp
-	sound/MappedRealTime.h
 	sound/MappedStudio.cpp
 	sound/MappedStudio.h
 	sound/MidiEvent.cpp

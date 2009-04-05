@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -20,6 +20,8 @@
 #include "DSSIPluginInstance.h"
 #include "PluginIdentifier.h"
 #include "LADSPAPluginFactory.h"
+
+#include <misc/Strings.h>
 
 #ifdef HAVE_DSSI
 
@@ -616,7 +618,7 @@ DSSIPluginInstance::activate()
         }
     }
 
-    if (m_program) {
+    if (!m_program.isEmpty()) {
 #ifdef DEBUG_DSSI
         std::cerr << "DSSIPluginInstance::activate: restoring program " << m_program << std::endl;
 #endif
@@ -781,7 +783,8 @@ DSSIPluginInstance::configure(QString key,
     std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
 #endif
 
-    char *message = m_descriptor->configure(m_instanceHandle, key.data(), value.data());
+    char *message = m_descriptor->configure
+	(m_instanceHandle, key.toLocal8Bit().data(), value.toLocal8Bit().data());
 
     m_programCacheValid = false;
 
@@ -800,8 +803,9 @@ DSSIPluginInstance::configure(QString key,
         if (m_descriptor->LADSPA_Plugin && m_descriptor->LADSPA_Plugin->Label) {
             qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
         }
-        qm = qm + message;
-        free(message);
+        qm = qm + QString(message);
+        
+	free(message);
     }
 
     return qm;

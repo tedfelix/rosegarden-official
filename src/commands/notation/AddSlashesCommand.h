@@ -16,28 +16,30 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDSLASHESCOMMAND_H_
-#define _RG_NOTESMENUADDSLASHESCOMMAND_H_
+#ifndef _RG_ADDSLASHESCOMMAND_H_
+#define _RG_ADDSLASHESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <klocale.h>
-
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddSlashesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddSlashesCommand)
+
 public:
-    AddSlashesCommand(int number,
-                               EventSelection &selection) :
-        BasicSelectionCommand(i18n("Slashes"), selection, true),
+    AddSlashesCommand(int number, EventSelection &selection) :
+        BasicSelectionCommand(tr("Slashes"), selection, true),
         m_selection(&selection), m_number(number) { }
+
+    static int getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

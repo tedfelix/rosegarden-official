@@ -19,7 +19,7 @@
 #ifndef _RG_SETWAITCURSOR_H_
 #define _RG_SETWAITCURSOR_H_
 
-#include <qcursor.h>
+#include <QCursor>
 
 
 
@@ -27,7 +27,7 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIApp;
+class RosegardenMainWindow;
 
 
 /**
@@ -40,9 +40,9 @@ public:
     ~SetWaitCursor();
 
 protected:
-    RosegardenGUIApp* m_guiApp;
+    RosegardenMainWindow* m_guiApp;
     QCursor m_saveCursor;
-    QCursor m_saveSegmentCanvasCursor;
+    QCursor m_saveCompositionViewCursor;
 };
  
 

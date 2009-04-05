@@ -16,10 +16,14 @@
 */
 
 
+// #include <QDir>
+
 #include "SequenceManager.h"
 
 #include "sound/Midi.h"
+#include "sound/ControlBlock.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
@@ -32,21 +36,20 @@
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
 #include "CompositionMmapper.h"
-#include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenGUIApp.h"
-#include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/TransportDialog.h"
-#include "gui/kdeext/KStartupLogo.h"
+#include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/CurrentProgressDialog.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapperFactory.h"
-#include "SequencerMapper.h"
-#include "ControlBlockMmapper.h"
 #include "sound/AudioFile.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
@@ -54,52 +57,48 @@
 #include "sound/SoundDriver.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
-#include <klocale.h>
-#include <kstddirs.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <kmessagebox.h>
-#include <qapplication.h>
-#include <qcstring.h>
-#include <qcursor.h>
-#include <qdatastream.h>
-#include <qevent.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtimer.h>
 #include <algorithm>
+
+#include <QSettings>
+#include <QMessageBox>
+#include <QApplication>
+#include <QByteArray>
+#include <QCursor>
+#include <QDataStream>
+#include <QEvent>
+#include <QObject>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QTimer>
 
 
 namespace Rosegarden
 {
 
-SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
-                                 TransportDialog *transport):
-            m_doc(doc),
-            m_compositionMmapper(new CompositionMmapper(m_doc)),
-            m_controlBlockMmapper(new ControlBlockMmapper(m_doc)),
-            m_metronomeMmapper(SegmentMmapperFactory::makeMetronome(m_doc)),
-            m_tempoSegmentMmapper(SegmentMmapperFactory::makeTempo(m_doc)),
-            m_timeSigSegmentMmapper(SegmentMmapperFactory::makeTimeSig(m_doc)),
-            m_transportStatus(STOPPED),
-            m_soundDriverStatus(NO_DRIVER),
-            m_transport(transport),
-            m_lastRewoundAt(clock()),
-            m_countdownDialog(0),
-            m_countdownTimer(new QTimer(m_doc)),
-            m_shownOverrunWarning(false),
-            m_recordTime(new QTime()),
-            m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
-            m_updateRequested(true),
-            m_compositionMmapperResetTimer(new QTimer(m_doc)),
-            m_sequencerMapper(0),
-            m_reportTimer(new QTimer(m_doc)),
-            m_canReport(true),
-            m_lastLowLatencySwitchSent(false),
-            m_lastTransportStartPosition(0),
-            m_sampleRate(0)
+SequenceManager::SequenceManager(RosegardenDocument *doc,
+                                 TransportDialog *transport) :
+    m_doc(doc),
+    m_compositionMmapper(new CompositionMmapper(m_doc)),
+    m_metronomeMmapper(SegmentMmapperFactory::makeMetronome(m_doc)),
+    m_tempoSegmentMmapper(SegmentMmapperFactory::makeTempo(m_doc)),
+    m_timeSigSegmentMmapper(SegmentMmapperFactory::makeTimeSig(m_doc)),
+    m_transportStatus(STOPPED),
+    m_soundDriverStatus(NO_DRIVER),
+    m_transport(transport),
+    m_lastRewoundAt(clock()),
+    m_countdownDialog(0),
+    m_countdownTimer(new QTimer(m_doc)),
+    m_shownOverrunWarning(false),
+    m_recordTime(new QTime()),
+    m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
+    m_updateRequested(true),
+    m_compositionMmapperResetTimer(new QTimer(m_doc)),
+    m_reportTimer(new QTimer(m_doc)),
+    m_canReport(true),
+    m_lastLowLatencySwitchSent(false),
+    m_lastTransportStartPosition(0),
+    m_sampleRate(0)
 {
     // Replaced this with a call to cleanup() from composition mmapper ctor:
     // if done here, this removes the mmapped versions of any segments stored
@@ -120,7 +119,7 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
             this, SLOT(slotScheduledCompositionMmapperReset()));
 
 
-    connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     m_doc->getComposition().addObserver(this);
@@ -131,10 +130,6 @@ SequenceManager::SequenceManager(RosegardenGUIDoc *doc,
     // we're not well placed to handle reporting to the user if it
     // throws an exception (and we don't want to leave the object half
     // constructed).
-
-    // Try to map the sequencer file
-    //
-    mapSequencer();
 }
 
 SequenceManager::~SequenceManager()
@@ -143,21 +138,19 @@ SequenceManager::~SequenceManager()
 
     SEQMAN_DEBUG << "SequenceManager::~SequenceManager()\n";
     delete m_compositionMmapper;
-    delete m_controlBlockMmapper;
     delete m_metronomeMmapper;
     delete m_tempoSegmentMmapper;
     delete m_timeSigSegmentMmapper;
-    delete m_sequencerMapper;
 }
 
-void SequenceManager::setDocument(RosegardenGUIDoc* doc)
+void SequenceManager::setDocument(RosegardenDocument* doc)
 {
     SEQMAN_DEBUG << "SequenceManager::setDocument(" << doc << ")\n";
 
     DataBlockRepository::clear();
 
     m_doc->getComposition().removeObserver(this);
-    disconnect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()));
+    disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
 
     m_segments.clear();
     m_triggerSegments.clear();
@@ -176,7 +169,7 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
                                             (m_doc->parent())->parentWidget());
 
     // Bug 933041: no longer connect the CountdownDialog from
-    // SequenceManager; instead let the RosegardenGUIApp connect it to
+    // SequenceManager; instead let the RosegardenMainWindow connect it to
     // its own slotStop to ensure the right housekeeping is done
 
     m_countdownTimer = new QTimer(m_doc);
@@ -189,7 +182,7 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
     m_compositionRefreshStatusId = comp.getNewRefreshStatusId();
     comp.addObserver(this);
 
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
@@ -214,10 +207,6 @@ void SequenceManager::setDocument(RosegardenGUIDoc* doc)
             this, SLOT(slotScheduledCompositionMmapperReset()));
 
     resetCompositionMmapper();
-
-    // Try to map the sequencer file
-    //
-    mapSequencer();
 }
 
 void
@@ -226,31 +215,15 @@ SequenceManager::setTransportStatus(const TransportStatus &status)
     m_transportStatus = status;
 }
 
-void
-SequenceManager::mapSequencer()
-{
-    if (m_sequencerMapper)
-        return ;
-
-    try {
-        m_sequencerMapper = new SequencerMapper(
-                                KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_sequencer_timing_block");
-    } catch (Exception) {
-        m_sequencerMapper = 0;
-    }
-}
-
 bool
 SequenceManager::play()
 {
-    mapSequencer();
-
     Composition &comp = m_doc->getComposition();
 
     // If already playing or recording then stop
     //
     if (m_transportStatus == PLAYING ||
-            m_transportStatus == RECORDING ) {
+        m_transportStatus == RECORDING) {
         stopping();
         return true;
     }
@@ -266,9 +239,9 @@ SequenceManager::play()
 
     // Update play metronome status
     //
-    m_controlBlockMmapper->updateMetronomeData
-    (m_metronomeMmapper->getMetronomeInstrument());
-    m_controlBlockMmapper->updateMetronomeForPlayback();
+    ControlBlock::getInstance()->setInstrumentForMetronome
+        (m_metronomeMmapper->getMetronomeInstrument());
+    ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
 
     // make sure we toggle the play button
     //
@@ -306,29 +279,18 @@ SequenceManager::play()
     if (comp.isLooping())
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
+    bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
 
     if (lowLat != m_lastLowLatencySwitchSent) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-        streamOut << lowLat;
-
-        rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+        RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
         m_lastLowLatencySwitchSent = lowLat;
     }
 
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    // playback start position
-    streamOut << (long)startPos.sec;
-    streamOut << (long)startPos.nsec;
+    RealTime readAhead, audioMix, audioRead, audioWrite;
+    long smallFileSize;
 
     // Apart from perhaps the small file size, I think with hindsight
     // that these options are more easily set to reasonable defaults
@@ -338,38 +300,22 @@ SequenceManager::play()
     //is larger than the JACK period size
 
     if (lowLat) {
-        streamOut << 0L; // read-ahead sec
-        streamOut << 160000000L; // read-ahead nsec
-        streamOut << 0L; // audio mix sec
-        streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
-        streamOut << 2L; // audio read sec
-        streamOut << 500000000L; // audio read nsec
-        streamOut << 4L; // audio write sec
-        streamOut << 0L; // audio write nsec
-        streamOut << 256L; // cacheable small file size in K
+        readAhead  = RealTime(0, 160000000);
+        audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
+        audioRead  = RealTime(2, 500000000); // audio read nsec
+        audioWrite = RealTime(4, 0);
+        smallFileSize = 256; // K
     } else {
-        streamOut << 0L; // read-ahead sec
-        streamOut << 500000000L; // read-ahead nsec
-        streamOut << 0L; // audio mix sec
-        streamOut << 400000000L; // audio mix nsec
-        streamOut << 2L; // audio read sec
-        streamOut << 500000000L; // audio read nsec
-        streamOut << 4L; // audio write sec
-        streamOut << 0L; // audio write nsec
-        streamOut << 256L; // cacheable small file size in K
+        readAhead  = RealTime(0, 500000000);
+        audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
+        audioRead  = RealTime(2, 500000000); // audio read nsec
+        audioWrite = RealTime(4, 0);
+        smallFileSize = 256; // K
     }
 
-    // Send Play to the Sequencer
-    if (!rgapp->sequencerCall("play(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-                              replyType, replyData, data)) {
-        m_transportStatus = STOPPED;
-        return false;
-    }
-
-    // ensure the return type is ok
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    int result;
-    streamIn >> result;
+    int result = 
+        RosegardenSequencer::getInstance()->
+        play(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize);
 
     if (result) {
         // completed successfully
@@ -378,6 +324,7 @@ SequenceManager::play()
         m_transportStatus = STOPPED;
         std::cerr << "ERROR: SequenceManager::play(): Failed to start playback!" << std::endl;
     }
+    settings.endGroup();
 
     return false;
 }
@@ -459,13 +406,7 @@ SequenceManager::stop()
     //
     QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 
-    QCString replyType;
-    QByteArray replyData;
-
-    bool failed = false;
-    if (!rgapp->sequencerCall("stop()", replyType, replyData)) {
-        failed = true;
-    }
+    RosegardenSequencer::getInstance()->stop();
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -493,10 +434,6 @@ SequenceManager::stop()
     // We don't reset controllers at this point - what happens with static
     // controllers the next time we play otherwise?  [rwb]
     //resetControllers();
-
-    if (failed) {
-        throw(Exception("Failed to contact Rosegarden sequencer with stop command.   Please save your composition and restart Rosegarden to continue."));
-    }
 }
 
 void
@@ -566,25 +503,16 @@ SequenceManager::notifySequencerStatus(TransportStatus status)
 void
 SequenceManager::sendSequencerJump(const RealTime &time)
 {
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
-    streamOut << (long)time.sec;
-    streamOut << (long)time.nsec;
-
-    rgapp->sequencerSend("jumpTo(long int, long int)", data);
+    RosegardenSequencer::getInstance()->jumpTo(time);
 }
 
 void
 SequenceManager::record(bool toggled)
 {
-    mapSequencer();
-
     SEQMAN_DEBUG << "SequenceManager::record(" << toggled << ")" << endl;
 
     Composition &comp = m_doc->getComposition();
     Studio &studio = m_doc->getStudio();
-    KConfig* config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
 
     bool punchIn = false; // are we punching in?
 
@@ -641,13 +569,8 @@ SequenceManager::record(bool toggled)
         if (m_transportStatus == RECORDING) {
             SEQMAN_DEBUG << "SequenceManager::record - stop recording and keep playing\n";
 
-            QByteArray data;
-            QCString replyType;
-            QByteArray replyData;
+            if (!RosegardenSequencer::getInstance()->punchOut()) {
 
-            // Send Record to the Sequencer to signal it to drop out of record mode
-            if (!rgapp->sequencerCall("punchOut()", replyType, replyData, data)) {
-                SEQMAN_DEBUG << "SequenceManager::record - the \"not very plausible\" code executed\n";
                 // #1797873 - set new transport status first, so that
                 // if we're stopping recording we don't risk the
                 // record segment being restored by a timer while the
@@ -720,10 +643,12 @@ punchin:
 
         // Update record metronome status
         //
-        m_controlBlockMmapper->updateMetronomeData
-        (m_metronomeMmapper->getMetronomeInstrument());
-        m_controlBlockMmapper->updateMetronomeForRecord();
-
+        ControlBlock::getInstance()->setInstrumentForMetronome
+            (m_metronomeMmapper->getMetronomeInstrument());
+        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
+		
+        QSettings settings;
+		
         // If we are looping then jump to start of loop and start recording,
         // if we're not take off the number of count-in bars and start
         // recording.
@@ -733,7 +658,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber(comp.getPosition());
-                startBar -= config->readUnsignedNumEntry("countinbars", 0);
+                startBar -= settings.value("countinbars", 0).toUInt() ;
                 m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
             }
         }
@@ -787,26 +712,19 @@ punchin:
         RealTime startPos =
             comp.getElapsedRealTime(comp.getPosition());
 
-        bool lowLat = config->readBoolEntry("audiolowlatencymonitoring", true);
+//         QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        bool lowLat = qStrToBool( settings.value("audiolowlatencymonitoring", "true" ) ) ;
+        settings.endGroup();
 
         if (lowLat != m_lastLowLatencySwitchSent) {
-
-            QByteArray data;
-            QDataStream streamOut(data, IO_WriteOnly);
-            streamOut << lowLat;
-
-            rgapp->sequencerSend("setLowLatencyMode(bool)", data);
+            RosegardenSequencer::getInstance()->setLowLatencyMode(lowLat);
             m_lastLowLatencySwitchSent = lowLat;
         }
 
-        QByteArray data;
-        QCString replyType;
-        QByteArray replyData;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        // playback start position
-        streamOut << (long)startPos.sec;
-        streamOut << (long)startPos.nsec;
+        RealTime readAhead, audioMix, audioRead, audioWrite;
+        long smallFileSize;
 
         // Apart from perhaps the small file size, I think with hindsight
         // that these options are more easily set to reasonable defaults
@@ -818,42 +736,23 @@ punchin:
         //is larger than the JACK period size
 
         if (lowLat) {
-            streamOut << 0L; // read-ahead sec
-            streamOut << 160000000L; // read-ahead nsec
-            streamOut << 0L; // audio mix sec
-            streamOut << 60000000L; // audio mix nsec: ignored in lowlat mode
-            streamOut << 2L; // audio read sec
-            streamOut << 500000000L; // audio read nsec
-            streamOut << 4L; // audio write sec
-            streamOut << 0L; // audio write nsec
-            streamOut << 256L; // cacheable small file size in K
+            readAhead  = RealTime(0, 160000000);
+            audioMix   = RealTime(0, 60000000); // ignored in lowlat mode
+            audioRead  = RealTime(2, 500000000); // audio read nsec
+            audioWrite = RealTime(4, 0);
+            smallFileSize = 256; // K
         } else {
-            streamOut << 0L; // read-ahead sec
-            streamOut << 500000000L; // read-ahead nsec
-            streamOut << 0L; // audio mix sec
-            streamOut << 400000000L; // audio mix nsec
-            streamOut << 2L; // audio read sec
-            streamOut << 500000000L; // audio read nsec
-            streamOut << 4L; // audio write sec
-            streamOut << 0L; // audio write nsec
-            streamOut << 256L; // cacheable small file size in K
+            readAhead  = RealTime(0, 500000000);
+            audioMix   = RealTime(0, 400000000); // ignored in lowlat mode
+            audioRead  = RealTime(2, 500000000); // audio read nsec
+            audioWrite = RealTime(4, 0);
+            smallFileSize = 256; // K
         }
 
-        // record type
-        streamOut << (long)STARTING_TO_RECORD;
-
-        // Send Play to the Sequencer
-        if (!rgapp->sequencerCall("record(long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int, long int)",
-                                  replyType, replyData, data)) {
-            // failed
-            m_transportStatus = STOPPED;
-            return ;
-        }
-
-        // ensure the return type is ok
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        int result;
-        streamIn >> result;
+        int result = 
+            RosegardenSequencer::getInstance()->
+            record(startPos, readAhead, audioMix, audioRead, audioWrite, smallFileSize,
+                   STARTING_TO_RECORD);
 
         if (result) {
 
@@ -917,35 +816,35 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
     // before applying through-filter, catch program-change-messages
     int prg;
-	int bnk_msb;
-	int bnk_lsb;
-	bnk_lsb = -1;
-	bnk_lsb = -1;
-	for (i = mC.begin(); i != mC.end(); ++i ) {
+    int bnk_msb;
+    int bnk_lsb;
+    bnk_msb = -1;
+    bnk_lsb = -1;
+
+    for (i = mC.begin(); i != mC.end(); ++i ) {
 		
-		// catch bank selects (lsb)
-		if ((*i)->getType() == MappedEvent::MidiController){
-				prg = (*i)->getData1();
-				if (prg == 32 ) {
-					// then it's a Bank Select (fine, LSB)
-					// get bank nr: 
-					bnk_lsb = (*i)->getData2();
-				}else 
-					if (prg == 0 ) {
-					// then it's a Bank Select (coarse, MSB)
-					// get msb value: 
-					bnk_msb = (*i)->getData2();
-				}
-		}
-		// catch program changes
-		if ((*i)->getType() == MappedEvent::MidiProgramChange) {
-				// this selects the program-list entry on prog-change-messages 
-				// as well as the previously received bank select (lsb)
-				prg = (*i)->getData1();
-				emit signalSelectProgramNoSend( prg, bnk_lsb, bnk_msb );
-		}
+        // catch bank selects (lsb)
+        if ((*i)->getType() == MappedEvent::MidiController){
+            prg = (*i)->getData1();
+            if (prg == 32 ) {
+                // then it's a Bank Select (fine, LSB)
+                // get bank nr: 
+                bnk_lsb = (*i)->getData2();
+            }else 
+                if (prg == 0 ) {
+                    // then it's a Bank Select (coarse, MSB)
+                    // get msb value: 
+                    bnk_msb = (*i)->getData2();
+                }
+        }
+        // catch program changes
+        if ((*i)->getType() == MappedEvent::MidiProgramChange) {
+            // this selects the program-list entry on prog-change-messages 
+            // as well as the previously received bank select (lsb)
+            prg = (*i)->getData1();
+            emit signalSelectProgramNoSend( prg, bnk_lsb, bnk_msb );
+        }
     }
-    
 	
     // Thru filtering is done at the sequencer for the actual sound
     // output, but here we need both filtered (for OUT display) and
@@ -1008,10 +907,12 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 //
                 m_doc->syncDevices();
 
-                /*KConfig* config = kapp->config();
-                  		config->setGroup(SequencerOptionsConfigGroup);
-                QString recordDeviceStr = config->readEntry("midirecorddevice");
-                sendMIDIRecordingDevice(recordDeviceStr);*/
+                /*QSettings settings;
+                settings.beginGroup( SequencerOptionsConfigGroup );
+
+                QString recordDeviceStr = settings.value("midirecorddevice").toString() ;
+                sendMIDIRecordingDevice(recordDeviceStr);
+                settings.endGroup();*/
                 restoreRecordSubscriptions();
             }
 
@@ -1034,15 +935,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                            i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+                        QMessageBox::critical(
+                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
+                            tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                            i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
+                        QMessageBox::critical(
+                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
+                            tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureCPUOverload) {
 
@@ -1051,9 +952,9 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         stopping();
 
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(),
-                            i18n("Run out of processor power for real-time audio processing.  Cannot continue."));
+                        QMessageBox::critical(
+                            dynamic_cast<QWidget*>(m_doc->parent())->parentWidget(), "",
+                            tr("Run out of processor power for real-time audio processing.  Cannot continue."));
 
 #endif
 
@@ -1079,10 +980,15 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         if (tv.tv_sec - warningShownAt >= 5 &&
                                 !boolShowingALSAWarning) {
 
-                            QString message = i18n("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
+                            QString message = tr("A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.");
                             boolShowingALSAWarning = true;
 
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(
+                              0,
+                              "", /* no title */
+                              message,
+                              QMessageBox::Ok,
+                              QMessageBox::Ok);
                             boolShowingALSAWarning = false;
 
                             (void)gettimeofday(&tv, 0);
@@ -1100,10 +1006,10 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         if (tv.tv_sec - warningShownAt >= 5 &&
                                 !boolShowingWarning) {
 
-                            QString message = i18n("JACK Audio subsystem is losing sample frames.");
+                            QString message = tr("JACK Audio subsystem is losing sample frames.");
                             boolShowingWarning = true;
 
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(0, message);
                             boolShowingWarning = false;
 
                             (void)gettimeofday(&tv, 0);
@@ -1118,23 +1024,23 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                         switch ((*i)->getData1()) {
 
                         case MappedEvent::FailureDiscUnderrun:
-                            message = i18n("Failed to read audio data from disc in time to service the audio subsystem.");
+                            message = tr("Failed to read audio data from disc in time to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureDiscOverrun:
-                            message = i18n("Failed to write audio data to disc fast enough to service the audio subsystem.");
+                            message = tr("Failed to write audio data to disc fast enough to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureBussMixUnderrun:
-                            message = i18n("The audio mixing subsystem is failing to keep up.");
+                            message = tr("The audio mixing subsystem is failing to keep up.");
                             break;
 
                         case MappedEvent::FailureMixUnderrun:
-                            message = i18n("The audio subsystem is failing to keep up.");
+                            message = tr("The audio subsystem is failing to keep up.");
                             break;
 
                         default:
-                            message = i18n("Unknown sequencer failure mode!");
+                            message = tr("Unknown sequencer failure mode!");
                             break;
                         }
 
@@ -1142,12 +1048,17 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
 #ifdef REPORT_XRUNS
 
-                        KMessageBox::information(0, message);
+                        QMessageBox::information(0, message);
 #else
 
                         if ((*i)->getData1() == MappedEvent::FailureDiscOverrun) {
                             // the error you can't hear
-                            KMessageBox::information(0, message);
+                            QMessageBox::information(
+                              0,
+                              "", /* no title */
+                              message,
+                              QMessageBox::Ok,
+                              QMessageBox::Ok);
                         } else {
                             std::cerr << message << std::endl;
                         }
@@ -1164,37 +1075,39 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                     }
                 }
             } else {
-                KStartupLogo::hideIfStillThere();
+                StartupLogo::hideIfStillThere();
 
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
 
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
+                        QMessageBox::critical(
+                            RosegardenMainWindow::self(), "",
+                            tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
 
-                        KMessageBox::error(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
+                        QMessageBox::critical(
+                            RosegardenMainWindow::self(), "",
+                            tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
                                shouldWarnForImpreciseTimer()) {
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
-                        KStartupLogo::hideIfStillThere();
+                        StartupLogo::hideIfStillThere();
                         CurrentProgressDialog::freeze();
 
-                        RosegardenGUIApp::self()->awaitDialogClearance();
+                        RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        KMessageBox::information(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for instructions.</p>"), 
-			    NULL, NULL, 
-			    KMessageBox::Notify + KMessageBox::AllowLink);
+                        QMessageBox::information(
+                            
+                          RosegardenMainWindow::self(),
+                          "", /* no title  */
+                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 
+                          QMessageBox::Ok,
+                          QMessageBox::Ok);
                         
                         CurrentProgressDialog::thaw();
 
@@ -1203,16 +1116,17 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
-                        KStartupLogo::hideIfStillThere();
+                        StartupLogo::hideIfStillThere();
                         CurrentProgressDialog::freeze();
 
-                        RosegardenGUIApp::self()->awaitDialogClearance();
+                        RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        KMessageBox::information(
-                            dynamic_cast<QWidget*>(m_doc->parent()),
-                            i18n("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://rosegarden.wiki.sourceforge.net/Low+latency+kernels\">http://rosegarden.wiki.sourceforge.net/Low+latency+kernels</a> for notes about this.</p>"), 
-			    NULL, NULL, 
-			    KMessageBox::Notify + KMessageBox::AllowLink);
+                        QMessageBox::information(
+                          RosegardenMainWindow::self(),
+                          "", /* no title */
+                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"),
+                          QMessageBox::Ok,
+                          QMessageBox::Ok);
                         
                         CurrentProgressDialog::thaw();
                     }
@@ -1265,56 +1179,32 @@ SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
-    //    KConfig* config = kapp->config();
-    //    config->setGroup(SequencerOptionsConfigGroup);
-    //    if (config->readBoolEntry("jacktransport", false))
+    //    QSettings settings;
+    //    settings.beginGroup( SequencerOptionsConfigGroup );
+    // 
+
+    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
     //	//!!! message box should go here to inform user of why the loop was
     //	// not set, but I can't add it at the moment due to to the pre-release
     //	// freeze - DMM
+    //    settings.endGroup();
     //	return;
     //    }
-
-    // Let the sequencer know about the loop markers
-    //
-    QByteArray data;
-    QDataStream streamOut(data, IO_WriteOnly);
 
     RealTime loopStart =
         m_doc->getComposition().getElapsedRealTime(lhs);
     RealTime loopEnd =
         m_doc->getComposition().getElapsedRealTime(rhs);
 
-    streamOut << (long)loopStart.sec;
-    streamOut << (long)loopStart.nsec;
-    streamOut << (long)loopEnd.sec;
-    streamOut << (long)loopEnd.nsec;
-
-    rgapp->sequencerSend("setLoop(long int, long int, long int, long int)", data);
+    RosegardenSequencer::getInstance()->setLoop(loopStart, loopEnd);
 }
 
 void
 SequenceManager::checkSoundDriverStatus(bool warnUser)
 {
-    QByteArray data;
-    QCString replyType;
-    QByteArray replyData;
-    QDataStream streamOut(data, IO_WriteOnly);
-
-    streamOut << QString(VERSION);
-
-    if (! rgapp->sequencerCall("getSoundDriverStatus(QString)",
-                               replyType, replyData, data)) {
-
-        m_soundDriverStatus = NO_DRIVER;
-
-    } else {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_soundDriverStatus = result;
-    }
+    m_soundDriverStatus = RosegardenSequencer::getInstance()->
+        getSoundDriverStatus(VERSION);
 
     SEQMAN_DEBUG << "Sound driver status is: " << m_soundDriverStatus << endl;
 
@@ -1328,34 +1218,64 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         (MIDI_OK | VERSION_OK)) return;
 #endif
 
-    KStartupLogo::hideIfStillThere();
+    StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
     QString text = "";
 
     if (m_soundDriverStatus == NO_DRIVER) {
-        text = i18n("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        text = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
     } else if (!(m_soundDriverStatus & MIDI_OK)) {
-        text = i18n("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        text = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
     } else if (!(m_soundDriverStatus & VERSION_OK)) {
-        text = i18n("<p>The Rosegarden sequencer module version does not match the GUI module version.</p><p>You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.</p>");
+        text = tr("<p>The Rosegarden sequencer module version does not match the GUI module version.</p><p>You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.</p>");
     }
 
     if (text != "") {
-        RosegardenGUIApp::self()->awaitDialogClearance();
-        KMessageBox::error(RosegardenGUIApp::self(),
-                           i18n("<h3>Sequencer startup failed</h3>%1").arg(text));
+        RosegardenMainWindow::self()->awaitDialogClearance();
+        QMessageBox::critical(RosegardenMainWindow::self(), "",
+                           tr("<h3>Sequencer startup failed</h3>%1").arg(text));
         CurrentProgressDialog::thaw();
         return;
     }
 
 #ifdef HAVE_LIBJACK
-    if (!(m_soundDriverStatus & AUDIO_OK)) {
-        RosegardenGUIApp::self()->awaitDialogClearance();
-        KMessageBox::information(RosegardenGUIApp::self(), i18n("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"),
-                                 i18n("Failed to connect to JACK"),
-                                 "startup-jack-failed");
-    }
+
+/*
+ * KMessageBox::information:
+ *
+ * static void   information (QWidget *parent, const QString &text, const
+ * QString &caption=QString(), const QString &dontShowAgainName=QString(),
+ * Options options=Notify)
+ *
+ * QMessageBox:
+ *
+ * QMessageBox ( Icon icon, const QString & title, const QString & text,
+ * StandardButtons buttons = NoButton, QWidget * parent = 0, Qt::WindowFlags f =
+ * Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint )
+ */
+
+//###
+//@@@
+//
+// This dialog is really getting on my nerves, and I don't have time to rewrite
+// it so it can have a don't show this again button
+//
+// TODO!!!
+/*    if (!(m_soundDriverStatus & AUDIO_OK)) {
+        RosegardenMainWindow::self()->awaitDialogClearance();
+        QMessageBox::information(RosegardenMainWindow::self(),
+                                 tr("Failed to connect to JACK"),
+                                 tr("<h3>Failed to connect to JACK audio server.</h3><p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
+
+                                 //&&& ,"startup-jack-failed");
+                                 //
+                                 // We will need to write our own "don't show
+                                 // this again" functionality.  Temporarily
+                                 // removed from the dialog above.  It used to
+                                 // use the "startup-jack-failed" key for this
+                                 // purpose.
+    }*/
 #endif
     CurrentProgressDialog::thaw();
 }
@@ -1445,10 +1365,12 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 void
 SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
-    RosegardenGUIView *v;
-    QList<RosegardenGUIView>& viewList = m_doc->getViewList();
+    RosegardenMainViewWidget *v;
+// 	QList<RosegardenMainViewWidget>& viewList = m_doc->getViewList();
+	QList<RosegardenMainViewWidget*> viewList = m_doc->getViewList();
 
-    for (v = viewList.first(); v != 0; v = viewList.next()) {
+//     for (v = viewList.first(); v != 0; v = viewList.next()) {
+	for( int i=0; i< viewList.count(); i++ ){
         v->showVisuals(mE);
     }
 
@@ -1507,7 +1429,7 @@ void
 SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 {
 
-    if (recordDeviceStr) {
+    if (!recordDeviceStr.isEmpty()) {
         int recordDevice = recordDeviceStr.toInt();
 
         if (recordDevice >= 0) {
@@ -1526,33 +1448,35 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 void
 SequenceManager::restoreRecordSubscriptions()
 {
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    //QString recordDeviceStr = config->readEntry("midirecorddevice");
-    QStringList devList = config->readListEntry("midirecorddevice");
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
+    QStringList devList = settings.value("midirecorddevice").toStringList();
 
     for ( QStringList::ConstIterator it = devList.begin();
             it != devList.end(); ++it) {
         sendMIDIRecordingDevice(*it);
     }
-
+    settings.endGroup();
 }
 
 void
 SequenceManager::reinitialiseSequencerStudio()
 {
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    //QString recordDeviceStr = config->readEntry("midirecorddevice");
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
 
     //sendMIDIRecordingDevice(recordDeviceStr);
     restoreRecordSubscriptions();
 
     // Toggle JACK audio ports appropriately
     //
-    bool submasterOuts = config->readBoolEntry("audiosubmasterouts", false);
-    bool faderOuts = config->readBoolEntry("audiofaderouts", false);
-    unsigned int audioFileFormat = config->readUnsignedNumEntry("audiorecordfileformat", 1);
+    bool submasterOuts = qStrToBool( settings.value("audiosubmasterouts", "false" ) ) ;
+    bool faderOuts = qStrToBool( settings.value("audiofaderouts", "false" ) ) ;
+    unsigned int audioFileFormat = settings.value("audiorecordfileformat", 1).toUInt() ;
 
     MidiByte ports = 0;
     if (faderOuts) {
@@ -1578,6 +1502,8 @@ SequenceManager::reinitialiseSequencerStudio()
     // Set the studio from the current document
     //
     m_doc->initialiseStudio();
+
+    settings.endGroup();
 }
 
 void
@@ -1588,9 +1514,9 @@ SequenceManager::panic()
     stopping();
 
     MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
-    emit setProgress(40);
+    emit setValue(40);
     StudioControl::sendMappedEvent(mE);
-    emit setProgress(100);
+    emit setValue(100);
 
     //    Studio &studio = m_doc->getStudio();
     //
@@ -1602,7 +1528,7 @@ SequenceManager::panic()
     //        if ((*it)->getType() == Instrument::Midi)
     //            maxDevices++;
     //
-    //    emit setProgress(40);
+    //    emit setValue(40);
     //
     //    for (it = list.begin(); it != list.end(); it++)
     //    {
@@ -1622,7 +1548,7 @@ SequenceManager::panic()
     //            device++;
     //        }
     //
-    //        emit setProgress(int(90.0 * (double(device) / double(maxDevices))));
+    //        emit setValue(int(90.0 * (double(device) / double(maxDevices))));
     //    }
     //
     //    resetControllers();
@@ -1660,7 +1586,7 @@ void SequenceManager::resetCompositionMmapper()
     resetMetronomeMmapper();
     resetTempoSegmentMmapper();
     resetTimeSigSegmentMmapper();
-    resetControlBlockMmapper();
+    resetControlBlock();
 }
 
 void SequenceManager::resetMetronomeMmapper()
@@ -1687,11 +1613,11 @@ void SequenceManager::resetTimeSigSegmentMmapper()
     m_timeSigSegmentMmapper = SegmentMmapperFactory::makeTimeSig(m_doc);
 }
 
-void SequenceManager::resetControlBlockMmapper()
+void SequenceManager::resetControlBlock()
 {
     SEQMAN_DEBUG << "SequenceManager::resetControlBlockMmapper()\n";
 
-    m_controlBlockMmapper->setDocument(m_doc);
+    ControlBlock::getInstance()->setDocument(m_doc);
 }
 
 bool SequenceManager::event(QEvent *e)
@@ -1730,8 +1656,8 @@ void SequenceManager::checkRefreshStatus()
     SegmentRefreshMap newTriggerMap;
 
     for (Composition::triggersegmentcontaineriterator i =
-                comp.getTriggerSegments().begin();
-            i != comp.getTriggerSegments().end(); ++i) {
+             comp.getTriggerSegments().begin();
+         i != comp.getTriggerSegments().end(); ++i) {
 
         Segment *s = (*i)->getSegment();
 
@@ -1796,16 +1722,9 @@ void SequenceManager::segmentModified(Segment* s)
     << sizeChanged << endl;
 
     if ((m_transportStatus == PLAYING) && sizeChanged) {
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << (QString)m_compositionMmapper->getSegmentFileName(s);
-        streamOut << (size_t)m_compositionMmapper->getSegmentFileSize(s);
-
-        SEQMAN_DEBUG << "SequenceManager::segmentModified() : DCOP-call sequencer remapSegment"
-        << m_compositionMmapper->getSegmentFileName(s) << endl;
-
-        rgapp->sequencerSend("remapSegment(QString, size_t)", data);
+        RosegardenSequencer::getInstance()->
+            remapSegment((QString)m_compositionMmapper->getSegmentFileName(s),
+                         (size_t)m_compositionMmapper->getSegmentFileSize(s));
     }
 }
 
@@ -1841,8 +1760,7 @@ void SequenceManager::segmentEventsTimingChanged(const Composition*, Segment * s
     SEQMAN_DEBUG << "SequenceManager::segmentEventsTimingChanged(" << s << ", " << t << ")\n";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1857,8 +1775,7 @@ void SequenceManager::segmentTrackChanged(const Composition*, Segment *s, TrackI
     SEQMAN_DEBUG << "SequenceManager::segmentTrackChanged(" << s << ", " << id << ")\n";
     segmentModified(s);
     if (s && s->getType() == Segment::Audio && m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -1875,15 +1792,8 @@ void SequenceManager::processAddedSegment(Segment* s)
     m_compositionMmapper->segmentAdded(s);
 
     if (m_transportStatus == PLAYING) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << m_compositionMmapper->getSegmentFileName(s);
-
-        if (!rgapp->sequencerSend("addSegment(QString)", data)) {
-            m_transportStatus = STOPPED;
-        }
+        RosegardenSequencer::getInstance()->addSegment
+            (m_compositionMmapper->getSegmentFileName(s));
     }
 
     // Add to segments map
@@ -1900,16 +1810,7 @@ void SequenceManager::processRemovedSegment(Segment* s)
     m_compositionMmapper->segmentDeleted(s);
 
     if (m_transportStatus == PLAYING) {
-
-        QByteArray data;
-        QDataStream streamOut(data, IO_WriteOnly);
-
-        streamOut << filename;
-
-        if (!rgapp->sequencerSend("deleteSegment(QString)", data)) {
-            // failed
-            m_transportStatus = STOPPED;
-        }
+        RosegardenSequencer::getInstance()->deleteSegment(filename);
     }
 
     // Remove from segments map
@@ -1930,17 +1831,16 @@ void SequenceManager::timeSignatureChanged(const Composition *)
 void SequenceManager::trackChanged(const Composition *, Track* t)
 {
     SEQMAN_DEBUG << "SequenceManager::trackChanged(" << t << ", " << (t ? t->getPosition() : -1) << ")\n";
-    m_controlBlockMmapper->updateTrackData(t);
+    ControlBlock::getInstance()->updateTrackData(t);
 
     if (m_transportStatus == PLAYING) {
-        QByteArray data;
-        rgapp->sequencerSend("remapTracks()", data);
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
 void SequenceManager::trackDeleted(const Composition *, TrackId t)
 {
-    m_controlBlockMmapper->setTrackDeleted(t);
+    ControlBlock::getInstance()->setTrackDeleted(t, true);
 }
 
 void SequenceManager::metronomeChanged(InstrumentId id,
@@ -1950,18 +1850,19 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     // metronome instrument, pitch etc
 
     SEQMAN_DEBUG << "SequenceManager::metronomeChanged (simple)"
-    << ", instrument = "
-    << id
-    << endl;
+                 << ", instrument = "
+                 << id
+                 << endl;
 
-    if (regenerateTicks)
-        resetMetronomeMmapper();
+    if (regenerateTicks) resetMetronomeMmapper();
 
-    m_controlBlockMmapper->updateMetronomeData(id);
+    Composition &comp = m_doc->getComposition();
+    ControlBlock::getInstance()->setInstrumentForMetronome(id);
+
     if (m_transportStatus == PLAYING) {
-        m_controlBlockMmapper->updateMetronomeForPlayback();
+        ControlBlock::getInstance()->setMetronomeMuted(comp.usePlayMetronome());
     } else {
-        m_controlBlockMmapper->updateMetronomeForRecord();
+        ControlBlock::getInstance()->setMetronomeMuted(comp.useRecordMetronome());
     }
 
     m_metronomeMmapper->refresh();
@@ -1969,39 +1870,46 @@ void SequenceManager::metronomeChanged(InstrumentId id,
     m_tempoSegmentMmapper->refresh();
 }
 
-void SequenceManager::metronomeChanged(const Composition *)
+void SequenceManager::metronomeChanged(const Composition *comp)
 {
     // This method is called when the muting status in the composition
     // has changed -- the metronome itself has not actually changed
 
     SEQMAN_DEBUG << "SequenceManager::metronomeChanged "
-    << ", instrument = "
-    << m_metronomeMmapper->getMetronomeInstrument()
-    << endl;
+                 << ", instrument = "
+                 << m_metronomeMmapper->getMetronomeInstrument()
+                 << endl;
 
-    m_controlBlockMmapper->updateMetronomeData
-    (m_metronomeMmapper->getMetronomeInstrument());
+    if (!comp) comp = &m_doc->getComposition();
+    ControlBlock::getInstance()->setInstrumentForMetronome
+        (m_metronomeMmapper->getMetronomeInstrument());
 
     if (m_transportStatus == PLAYING) {
-        m_controlBlockMmapper->updateMetronomeForPlayback();
+        ControlBlock::getInstance()->setMetronomeMuted(comp->usePlayMetronome());
     } else {
-        m_controlBlockMmapper->updateMetronomeForRecord();
+        ControlBlock::getInstance()->setMetronomeMuted(comp->useRecordMetronome());
     }
 }
 
 void SequenceManager::filtersChanged(MidiFilter thruFilter,
                                      MidiFilter recordFilter)
 {
-    m_controlBlockMmapper->updateMidiFilters(thruFilter, recordFilter);
+    ControlBlock::getInstance()->setThruFilter(thruFilter);
+    ControlBlock::getInstance()->setRecordFilter(recordFilter);
 }
 
 void SequenceManager::soloChanged(const Composition *, bool solo, TrackId selectedTrack)
 {
-    if (m_controlBlockMmapper->updateSoloData(solo, selectedTrack)) {
-        if (m_transportStatus == PLAYING) {
-            QByteArray data;
-            rgapp->sequencerSend("remapTracks()", data);
-        }
+    bool changed = false;
+    ControlBlock *cb = ControlBlock::getInstance();
+    if (solo != cb->isSolo() ||
+        (solo && selectedTrack != cb->getSelectedTrack())) {
+        changed = true;
+    }
+    cb->setSolo(solo);
+    cb->setSelectedTrack(selectedTrack);
+    if (changed && m_transportStatus == PLAYING) {
+        RosegardenSequencer::getInstance()->remapTracks();
     }
 }
 
@@ -2012,7 +1920,7 @@ void SequenceManager::tempoChanged(const Composition *c)
     // Refresh all segments
     //
     for (SegmentRefreshMap::iterator i = m_segments.begin();
-            i != m_segments.end(); ++i) {
+         i != m_segments.end(); ++i) {
         segmentModified(i->first);
     }
 
@@ -2032,31 +1940,31 @@ void SequenceManager::tempoChanged(const Composition *c)
         // so that we don't jump about in the main window while the
         // user's trying to drag the tempo in it.  (That doesn't help
         // for matrix or notation though, sadly)
-        bool tracking = RosegardenGUIApp::self()->isTrackEditorPlayTracking();
+        bool tracking = RosegardenMainWindow::self()->isTrackEditorPlayTracking();
         if (tracking)
-            RosegardenGUIApp::self()->slotToggleTracking();
+            RosegardenMainWindow::self()->slotToggleTracking();
         m_doc->slotSetPointerPosition(c->getPosition());
         if (tracking)
-            RosegardenGUIApp::self()->slotToggleTracking();
+            RosegardenMainWindow::self()->slotToggleTracking();
     }
 }
 
 void
 SequenceManager::sendTransportControlStatuses()
 {
-    KConfig* config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    // Get the config values
+    // Get the settings values
     //
-    bool jackTransport = config->readBoolEntry("jacktransport", false);
-    bool jackMaster = config->readBoolEntry("jackmaster", false);
+    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
+    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
 
-    int mmcMode = config->readNumEntry("mmcmode", 0);
-    int mtcMode = config->readNumEntry("mtcmode", 0);
+    int mmcMode = settings.value("mmcmode", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
-    int midiClock = config->readNumEntry("midiclock", 0);
-    bool midiSyncAuto = config->readBoolEntry("midisyncautoconnect", false);
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    bool midiSyncAuto = qStrToBool( settings.value("midisyncautoconnect", "false" ) ) ;
 
     // Send JACK transport
     //
@@ -2111,6 +2019,7 @@ SequenceManager::sendTransportControlStatuses()
 
     StudioControl::sendMappedEvent(mEmidiSyncAuto);
 
+    settings.endGroup();
 }
 
 void
@@ -2134,7 +2043,7 @@ SequenceManager::slotFoundMountPoint(const QString&,
 void
 SequenceManager::enableMIDIThruRouting(bool state)
 {
-    m_controlBlockMmapper->enableMIDIThruRouting(state);
+    ControlBlock::getInstance()->setMidiRoutingEnabled(state);
 }
 
 int
@@ -2142,13 +2051,7 @@ SequenceManager::getSampleRate()
 {
     if (m_sampleRate != 0) return m_sampleRate;
 
-    QCString replyType;
-    QByteArray replyData;
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> m_sampleRate;
-    }
+    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     return m_sampleRate;
 }
@@ -2156,8 +2059,12 @@ SequenceManager::getSampleRate()
 bool
 SequenceManager::shouldWarnForImpreciseTimer()
 {
-    kapp->config()->setGroup(SequencerOptionsConfigGroup);
-    QString timer = kapp->config()->readEntry("timer");
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    QString timer = settings.value("timer").toString();
+    settings.endGroup();
+
     if (timer == "(auto)" || timer == "") return true;
     else return false; // if the user has chosen the timer, leave them alone
 }

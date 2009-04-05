@@ -18,8 +18,8 @@
 
 #include "WheelyButton.h"
 
-#include <qpushbutton.h>
-#include <qwidget.h>
+#include <QPushButton>
+#include <QWidget>
 
 
 namespace Rosegarden

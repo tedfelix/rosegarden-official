@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,8 +18,8 @@
 #ifndef _RG_BASETOOLBOX_H_
 #define _RG_BASETOOLBOX_H_
 
-#include <qdict.h>
-#include <qobject.h>
+#include <QHash>
+#include <QObject>
 
 
 class QWidget;
@@ -34,9 +33,8 @@ class BaseTool;
 
 
 /**
- * BaseToolBox : maintains a single instance of each registered tool
- *
- * Tools are fetched from a name
+ * BaseToolBox : maintains a single instance of each registered tool.
+ * Tools are fetched by name.
  */
 class BaseToolBox : public QObject
 {
@@ -45,17 +43,16 @@ class BaseToolBox : public QObject
 public:
     BaseToolBox(QWidget* parent);
 
-    virtual BaseTool* getTool(const QString& toolName);
+    virtual BaseTool* getTool(QString toolName);
 
 signals:
     void showContextHelp(const QString &);
 
 protected:
-    virtual BaseTool* createTool(const QString& toolName) = 0;
+    virtual BaseTool* createTool(QString toolName) = 0;
 
-    QDict<BaseTool> m_tools;
+    QHash<QString, BaseTool*> m_tools;
 };
-
 
 }
 

@@ -24,20 +24,20 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/AudioFileTimeStretcher.h"
 #include "sound/AudioFileManager.h"
 #include "gui/widgets/ProgressDialog.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                                        Segment *s,
 						       float ratio) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_afm(&doc->getAudioFileManager()),
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),
@@ -52,12 +52,12 @@ AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
     // nothing
 }
 
-AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                                        Segment *s,
 						       float ratio,
                                                        timeT st,
                                                        timeT emt) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_afm(&doc->getAudioFileManager()),
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),
@@ -86,18 +86,20 @@ AudioSegmentRescaleCommand::~AudioSegmentRescaleCommand()
 void
 AudioSegmentRescaleCommand::connectProgressDialog(ProgressDialog *dlg)
 {
-    QObject::connect(m_stretcher, SIGNAL(setProgress(int)),
-                     dlg->progressBar(), SLOT(setValue(int)));
-    QObject::connect(dlg, SIGNAL(cancelClicked()),
+    QObject::connect(m_stretcher, SIGNAL(setValue(int)),
+					 dlg, SLOT(setValue(int)));
+					//dlg->progressBar(), SLOT(setValue(int)));
+	QObject::connect(dlg, SIGNAL(cancelClicked()),
                      m_stretcher, SLOT(slotStopTimestretch()));
 }
  
 void
 AudioSegmentRescaleCommand::disconnectProgressDialog(ProgressDialog *dlg)
 {
-    QObject::disconnect(m_stretcher, SIGNAL(setProgress(int)),
-                        dlg->progressBar(), SLOT(setValue(int)));
-    QObject::disconnect(dlg, SIGNAL(cancelClicked()),
+    QObject::disconnect(m_stretcher, SIGNAL(setValue(int)),
+						dlg, SLOT(setValue(int)));
+						//dlg->progressBar(), SLOT(setValue(int)));
+	QObject::disconnect(dlg, SIGNAL(cancelClicked()),
                         m_stretcher, SLOT(slotStopTimestretch()));
 }
 
@@ -117,7 +119,7 @@ AudioSegmentRescaleCommand::execute()
         m_newSegment = new Segment(*m_segment);
 
         std::string label = m_newSegment->getLabel();
-        m_newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(rescaled)"))));
+        m_newSegment->setLabel(appendLabel(label, qstrtostr(tr("(rescaled)"))));
 
         AudioFileId sourceFileId = m_segment->getAudioFileId();
         float absoluteRatio = m_ratio;

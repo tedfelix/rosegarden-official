@@ -18,7 +18,6 @@
 
 #include "CreateTempoMapFromSegmentCommand.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -30,7 +29,7 @@ namespace Rosegarden
 {
 
 CreateTempoMapFromSegmentCommand::CreateTempoMapFromSegmentCommand(Segment *groove) :
-        KNamedCommand(i18n("Set Tempos from Beat Segment")),
+        NamedCommand(tr("Set Tempos from Beat Segment")),
         m_composition(groove->getComposition())
 {
     initialise(groove);

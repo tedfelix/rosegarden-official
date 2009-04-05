@@ -19,7 +19,7 @@
 #ifndef _RG_INTERPRETDIALOG_H_
 #define _RG_INTERPRETDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 
 
-class InterpretDialog : public KDialogBase
+class InterpretDialog : public QDialog
 {
     Q_OBJECT
 public:

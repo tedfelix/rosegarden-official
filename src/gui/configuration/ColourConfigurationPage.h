@@ -22,8 +22,7 @@
 #include "base/ColourMap.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
 
 
 class QWidget;
@@ -32,7 +31,7 @@ class QWidget;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -43,15 +42,16 @@ class RosegardenGUIDoc;
 class ColourConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
+
 public:
-    ColourConfigurationPage(RosegardenGUIDoc *doc,
+    ColourConfigurationPage(RosegardenDocument *doc,
                             QWidget *parent=0, const char *name=0);
     virtual void apply();
 
     void populate_table();
 
-    static QString iconLabel() { return i18n("Color"); }
-    static QString title()     { return i18n("Color Settings"); }
+    static QString iconLabel() { return tr("Color"); }
+    static QString title()     { return tr("Color Settings"); }
     static QString iconName()  { return "colorize"; }
 
 signals:

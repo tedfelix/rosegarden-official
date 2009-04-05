@@ -24,7 +24,7 @@
 namespace Rosegarden 
 {
 
-enum PropertyType { Int, String, Bool, RealTimeT, UInt };
+enum PropertyType { Int, String, Bool, RealTimeT };
 
 template <PropertyType P>
 class PropertyDefn
@@ -96,17 +96,6 @@ class PropertyDefn<RealTimeT>
 {
 public:
     typedef RealTime basic_type;
-
-    static std::string typeName();
-    static basic_type parse(std::string s);
-    static std::string unparse(basic_type i);
-};
-
-template <>
-class PropertyDefn<UInt>
-{
-public:
-    typedef unsigned int basic_type;
 
     static std::string typeName();
     static basic_type parse(std::string s);

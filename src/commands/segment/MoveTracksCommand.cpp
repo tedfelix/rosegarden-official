@@ -20,7 +20,7 @@
 
 #include "base/Composition.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 MoveTracksCommand::MoveTracksCommand(Composition *composition,
                                      TrackId srcTrack,
                                      TrackId destTrack):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_srcTrack(srcTrack),
         m_destTrack(destTrack)

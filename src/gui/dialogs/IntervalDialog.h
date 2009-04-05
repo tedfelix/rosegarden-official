@@ -19,14 +19,13 @@
 #ifndef _RG_INTERVALDIALOG_H_
 #define _RG_INTERVALDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 #include <vector>
-#include "gui/application/RosegardenDCOP.h"
 #include "gui/widgets/DiatonicPitchChooser.h"
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 class QRadioButton;
 class QCheckBox;
 
@@ -34,10 +33,10 @@ class QCheckBox;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class IntervalDialog : public KDialogBase
+class IntervalDialog : public QDialog
 {
     Q_OBJECT
 public:

@@ -21,13 +21,22 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+ResetDisplacementsCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("fine_position_restore",
+         new SelectionCommandBuilder<ResetDisplacementsCommand>());
+}
 
 void
 ResetDisplacementsCommand::modifySegment()

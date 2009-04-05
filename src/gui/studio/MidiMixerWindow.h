@@ -20,6 +20,7 @@
 #define _RG_MIDIMIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
+#include "gui/general/ActionFileClient.h"
 #include "MixerWindow.h"
 #include <vector>
 
@@ -33,20 +34,19 @@ class QFrame;
 namespace Rosegarden
 {
 
-class SequencerMapper;
 class Rotary;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiMixerVUMeter;
 class MappedEvent;
 class Fader;
 
 
-class MidiMixerWindow : public MixerWindow
+class MidiMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
-    MidiMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    MidiMixerWindow(QWidget *parent, RosegardenDocument *document);
 
     /**
      * Setup the tabs on the Mixer according to the Studio
@@ -56,8 +56,8 @@ public:
     /* 
      * Update the VU meters
      */
-    void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeter(SequencerMapper *mapper);
+    void updateMeters();
+    void updateMonitorMeter();
 
 public slots:
     void slotSynchronise(); // synchronise with updated studio

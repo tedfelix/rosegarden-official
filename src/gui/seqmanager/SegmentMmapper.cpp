@@ -29,10 +29,10 @@
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/MappedEvent.h"
-#include <qfile.h>
-#include <qstring.h>
+#include <QFile>
+#include <QString>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -43,7 +43,7 @@
 namespace Rosegarden
 {
 
-SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
+SegmentMmapper::SegmentMmapper(RosegardenDocument* doc,
                                Segment* segment, const QString& fileName)
         : m_doc(doc),
         m_segment(segment),
@@ -57,7 +57,7 @@ SegmentMmapper::SegmentMmapper(RosegardenGUIDoc* doc,
     << " trying to mmap " << m_fileName
     << endl;
 
-    m_fd = ::open(m_fileName.latin1(), O_RDWR | O_CREAT | O_TRUNC,
+    m_fd = ::open(m_fileName.toLatin1().data(), O_RDWR | O_CREAT | O_TRUNC,
                   S_IRUSR | S_IWUSR);
     if (m_fd < 0) {
         perror("SegmentMmapper::SegmentMmapper: Failed to open mmap file for writing");

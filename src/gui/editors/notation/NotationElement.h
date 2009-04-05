@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -25,7 +24,7 @@
 #include "base/Event.h"
 
 
-class QCanvasItem;
+class QGraphicsItem;
 class ItemList;
 
 
@@ -38,7 +37,8 @@ class Event;
 /**
  * The Notation H and V layout is performed on a
  * NotationElementList. Once this is done, each NotationElement is
- * affected a QCanvasItem which is set at these coords.
+ * given a QGraphicsItem to take care of and place at its own proper
+ * coordinates.
  *
  * @see NotationView#showElements()
  */
@@ -46,7 +46,7 @@ class Event;
 class NotationElement : public ViewElement
 {
 public:
-    typedef Exception NoCanvasItem;
+    typedef Exception NoGraphicsItem;
     
     NotationElement(Event *event);
 
@@ -60,16 +60,16 @@ public:
         width = m_airWidth;
     }
 
-    void getCanvasAirspace(double &x, double &width) {
-        x = m_airX - getLayoutX() + getCanvasX();
+    void getSceneAirspace(double &x, double &width) {
+        x = m_airX - getLayoutX() + getSceneX();
         width = m_airWidth;
     }
 
-    /// returns the x pos of the associated canvas item
-    double getCanvasX();
+    /// returns the x pos of the associated scene item
+    double getSceneX();
 
-    /// returns the y pos of the associated canvas item
-    double getCanvasY();
+    /// returns the y pos of the associated scene item
+    double getSceneY();
 
     /**
      * Sets the X coordinate and width of the space "underneath"
@@ -94,37 +94,37 @@ public:
     bool isGrace() const;
 
     /**
-     * Sets the canvas item representing this notation element on screen.
+     * Sets the scene item representing this notation element on screen.
      *
-     * NOTE: The object takes ownership of its canvas item.
+     * NOTE: The object takes ownership of its scene item.
      */
-    void setCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
+    void setItem(QGraphicsItem *e, double sceneX, double sceneY);
 
     /**
-     * Add an extra canvas item associated with this element, for
+     * Add an extra scene item associated with this element, for
      * example where an element has been split across two or more
      * staff rows.
      * 
-     * The element will take ownership of these canvas items and
-     * delete them when it deletes the main canvas item.
+     * The element will take ownership of these scene items and
+     * delete them when it deletes the main scene item.
      */
-    void addCanvasItem(QCanvasItem *e, double canvasX, double canvasY);
+    void addItem(QGraphicsItem *e, double sceneX, double sceneY);
 
     /**
-     * Remove the main canvas item and any additional ones.
+     * Remove the main scene item and any additional ones.
      */
-    void removeCanvasItem();
+    void removeItem();
 
     /**
-     * Reset the position of the canvas item (which is assumed to
+     * Reset the position of the scene item (which is assumed to
      * exist already).
      */
-    void reposition(double canvasX, double canvasY);
+    void reposition(double sceneX, double sceneY);
 
     /**
-     * Return true if setCanvasItem has been called more recently
+     * Return true if setItem has been called more recently
      * than reposition.  If true, any code that positions this
-     * element will probably not need to regenerate its sprite as
+     * element will probably not need to regenerate its item as
      * well, even if other indications suggest otherwise.
      */
     bool isRecentlyRegenerated() { return m_recentlyRegenerated; }
@@ -133,8 +133,8 @@ public:
     void setSelected(bool selected);
 
     /**
-     * Return true if the element is a note which lies at the exactly
-     * same place than another note.
+     * Return true if the element is a note which lies at exactly the
+     * same place as another note.
      * Only valid after NotationVLayout::scanStaff() call.
      * Only a returned true is meaningful (when 2 notes are colliding, the
      * first element returns false and the second one returns true).
@@ -143,8 +143,10 @@ public:
 
     void setIsColliding(bool value) { m_isColliding = value; }
 
-    /// Returns the associated canvas item
-    QCanvasItem* getCanvasItem() { return m_canvasItem; }
+    /// Returns the associated scene item
+    QGraphicsItem *getItem() { return m_item; }
+
+    static NotationElement *getNotationElement(QGraphicsItem *);
 
 protected:
     //--------------- Data members ---------------------------------
@@ -154,9 +156,9 @@ protected:
     bool m_recentlyRegenerated;
     bool m_isColliding;
 
-    QCanvasItem *m_canvasItem;
+    QGraphicsItem *m_item;
 
-    typedef std::vector<QCanvasItem *> ItemList;
+    typedef std::vector<QGraphicsItem *> ItemList;
     ItemList *m_extraItems;
 };
 

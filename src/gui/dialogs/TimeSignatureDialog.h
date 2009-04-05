@@ -20,8 +20,8 @@
 #define _RG_TIMESIGNATUREDIALOG_H_
 
 #include "base/NotationTypes.h"
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -38,7 +38,7 @@ class TimeWidget;
 class Composition;
 
 
-class TimeSignatureDialog : public KDialogBase
+class TimeSignatureDialog : public QDialog
 {
     Q_OBJECT
 

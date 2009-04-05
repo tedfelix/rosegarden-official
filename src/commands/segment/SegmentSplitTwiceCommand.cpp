@@ -27,13 +27,12 @@
 #include "SegmentSplitCommand.h"
 #include "DeleteRangeCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -42,7 +41,7 @@ namespace Rosegarden
 SegmentSplitTwiceCommand::SegmentSplitTwiceCommand(Segment *segment,
             timeT splitTime1, timeT splitTime2,
             DeleteRangeCommand::RejoinCommand *rejoins) :
-        KNamedCommand(i18n("Split Twice Segment")),
+        NamedCommand(tr("Split Twice Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),

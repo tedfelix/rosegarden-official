@@ -1,9 +1,12 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
-    A sequencer and musical notation editor.
+    A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
-    See the AUTHORS file for more details.
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -152,7 +155,6 @@ RulerScale::getTotalWidth() const
 
 
 
-
 //////////////////////////////////////////////////////////////////////
 //                 SimpleRulerScale
 //////////////////////////////////////////////////////////////////////
@@ -233,5 +235,133 @@ SimpleRulerScale::getXForTime(timeT time) const
     return m_origin + (double)time / m_ratio;
 }
 
+
+//////////////////////////////////////////////////////////////////////
+//                 SegmentsRulerScale
+//////////////////////////////////////////////////////////////////////
+
+SegmentsRulerScale::SegmentsRulerScale(Composition *composition,
+                                       SegmentSelection segments,
+                                       double origin, double ratio) :
+    RulerScale(composition),
+    m_origin(origin),
+    m_ratio(ratio),
+    m_segments(segments)
+{
+    for (SegmentSelection::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        (*i)->addObserver(this);
+    }
+}
+
+SegmentsRulerScale::~SegmentsRulerScale()
+{
+    for (SegmentSelection::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        (*i)->removeObserver(this);
+    }
+}
+
+void
+SegmentsRulerScale::segmentDeleted(const Segment *s)
+{
+    m_segments.erase((Segment *)s);
+}
+
+int
+SegmentsRulerScale::getFirstVisibleBar() const
+{
+    timeT earliest = 0;
+    bool have = false;
+    for (SegmentSelection::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        if (!have || (*i)->getStartTime() < earliest) {
+            earliest = (*i)->getStartTime();
+            have = true;
+        }
+    }
+    return m_composition->getBarNumber(earliest);
+}
+
+int
+SegmentsRulerScale::getLastVisibleBar() const
+{
+    timeT latest = 0;
+    bool have = false;
+    for (SegmentSelection::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        if (!have || (*i)->getEndMarkerTime() > latest) {
+            latest = (*i)->getEndMarkerTime();
+            have = true;
+        }
+    }
+    return m_composition->getBarNumber(latest - 1) + 1;
+}
+
+double
+SegmentsRulerScale::getBarPosition(int n) const
+{
+    timeT t = m_composition->getBarRange(n).first;
+
+    int firstBar = getFirstVisibleBar();
+    if (firstBar != 0) {
+	t -= m_composition->getBarRange(firstBar).first;
+    }
+
+    return m_origin + (double)t / m_ratio;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+//                 ZoomableRulerScale
+//////////////////////////////////////////////////////////////////////
+
+ZoomableRulerScale::ZoomableRulerScale(const RulerScale *reference) :
+    RulerScale(0),
+    m_reference(reference),
+    m_xfactor(1),
+    m_yfactor(1)
+{
+}
+
+ZoomableRulerScale::~ZoomableRulerScale()
+{
+}
+
+double
+ZoomableRulerScale::getBarPosition(int n) const
+{
+    return m_reference->getBarPosition(n) * m_xfactor;
+}
+
+double
+ZoomableRulerScale::getBarWidth(int n) const
+{
+    return m_reference->getBarWidth(n) * m_xfactor;
+}
+
+double
+ZoomableRulerScale::getBeatWidth(int n) const
+{
+    return m_reference->getBeatWidth(n) * m_xfactor;
+}
+
+int
+ZoomableRulerScale::getBarForX(double x) const
+{
+    return m_reference->getBarForX(x / m_xfactor);
+}
+
+timeT
+ZoomableRulerScale::getTimeForX(double x) const
+{
+    return m_reference->getTimeForX(x / m_xfactor);
+}
+
+double
+ZoomableRulerScale::getXForTime(timeT time) const
+{
+    return m_reference->getXForTime(time) * m_xfactor;
+}
 
 }

@@ -25,27 +25,29 @@
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include "gui/widgets/ColourTable.h"
-#include <map>
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
-#include <qcheckbox.h> // #include <QCheckBox> in QT4, thinking ahead
+#include <map>
 #include <vector>
 #include "Composition.h"
+
+#include <QString>
+#include <QCheckBox> // #include <QCheckBox> in QT4, thinking ahead
+
 
 
 class QWidget;
 class QPushButton;
 class QLabel;
 class QFrame;
-class KComboBox;
+class QComboBox;
 class QCheckBox;
-
+//class SqueezedLabel;
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class TrackParameterBox : public RosegardenParameterBox,
@@ -54,11 +56,11 @@ class TrackParameterBox : public RosegardenParameterBox,
 Q_OBJECT
         
 public:
-    TrackParameterBox( RosegardenGUIDoc *doc,
+    TrackParameterBox( RosegardenDocument *doc,
                        QWidget *parent=0);
     ~TrackParameterBox();
     
-    void setDocument( RosegardenGUIDoc *doc );
+    void setDocument( RosegardenDocument *doc );
     void populateDeviceLists();
     virtual void showAdditionalControls(bool showThem);
 
@@ -100,22 +102,22 @@ protected:
     void updateHighLow();
 
 private:
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
 
-    KComboBox           *m_playDevice;
-    KComboBox           *m_instrument;
-    KComboBox           *m_recDevice;
-    KComboBox           *m_recChannel;
+    QComboBox           *m_playDevice;
+    QComboBox           *m_instrument;
+    QComboBox           *m_recDevice;
+    QComboBox           *m_recChannel;
 
     QPushButton         *m_presetButton;
     QPushButton         *m_highButton;
     QPushButton         *m_lowButton;
 
-    KComboBox           *m_defClef;
-    KComboBox           *m_defColor;
-    KComboBox           *m_defTranspose;
-    KComboBox           *m_staffSizeCombo;
-    KComboBox           *m_staffBracketCombo;
+    QComboBox           *m_defClef;
+    QComboBox           *m_defColor;
+    QComboBox           *m_defTranspose;
+    QComboBox           *m_staffSizeCombo;
+    QComboBox           *m_staffBracketCombo;
 
 
     int                 m_addColourPos;

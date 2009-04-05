@@ -20,10 +20,10 @@
 #define _RG_REMOVEMARKERCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -35,8 +35,10 @@ class Marker;
 class Composition;
 
 
-class RemoveMarkerCommand : public KNamedCommand
+class RemoveMarkerCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveMarkerCommand)
+
 public:
     RemoveMarkerCommand(Composition *comp,
                         int id,
@@ -45,7 +47,7 @@ public:
                         const std::string &description);
     ~RemoveMarkerCommand();
 
-    static QString getGlobalName() { return i18n("&Remove Marker"); }
+    static QString getGlobalName() { return tr("&Remove Marker"); }
 
     virtual void execute();
     virtual void unexecute();

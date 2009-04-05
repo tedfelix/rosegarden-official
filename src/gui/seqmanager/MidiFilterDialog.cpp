@@ -18,45 +18,64 @@
 
 #include "MidiFilterDialog.h"
 
-#include <klocale.h>
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/MappedEvent.h"
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qhbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 MidiFilterDialog::MidiFilterDialog(QWidget *parent,
-                                   RosegardenGUIDoc *doc):
-        KDialogBase(parent, 0, true, i18n("Modify MIDI filters..."),
-                    Ok | Apply | Close | Help),
+                                   RosegardenDocument *doc):
+        QDialog(parent),
         m_doc(doc),
-        m_modified(true)
+        m_modified(true),
+        m_buttonBox(0)
 {
-    setHelp("studio-midi-filters");
+    //setHelp("studio-midi-filters");
 
-    QHBox *hBox = makeHBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Modify MIDI filters..."));
 
-    m_thruBox =
-        new QButtonGroup(1,
-                         Qt::Horizontal,
-                         i18n("THRU events to ignore"), hBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *hBox = new QWidget(this);
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
+    metagrid->addWidget(hBox, 0, 0);
 
-    QCheckBox *noteThru = new QCheckBox(i18n("Note"), m_thruBox);
-    QCheckBox *progThru = new QCheckBox(i18n("Program Change"), m_thruBox);
-    QCheckBox *keyThru = new QCheckBox(i18n("Key Pressure"), m_thruBox);
-    QCheckBox *chanThru = new QCheckBox(i18n("Channel Pressure"), m_thruBox);
-    QCheckBox *pitchThru = new QCheckBox(i18n("Pitch Bend"), m_thruBox);
-    QCheckBox *contThru = new QCheckBox(i18n("Controller"), m_thruBox);
-    QCheckBox *sysThru = new QCheckBox(i18n("System Exclusive"), m_thruBox);
+
+    m_thruBox = new QGroupBox( 
+                         tr("THRU events to ignore"), hBox );
+    QVBoxLayout *thruBoxLayout = new QVBoxLayout;
+    hBoxLayout->addWidget(m_thruBox);
+
+    QCheckBox *noteThru = new QCheckBox(tr("Note"), m_thruBox);
+    QCheckBox *progThru = new QCheckBox(tr("Program Change"), m_thruBox);
+    QCheckBox *keyThru = new QCheckBox(tr("Key Pressure"), m_thruBox);
+    QCheckBox *chanThru = new QCheckBox(tr("Channel Pressure"), m_thruBox);
+    QCheckBox *pitchThru = new QCheckBox(tr("Pitch Bend"), m_thruBox);
+    QCheckBox *contThru = new QCheckBox(tr("Controller"), m_thruBox);
+    QCheckBox *sysThru = new QCheckBox(tr("System Exclusive"), m_thruBox);
+
+    thruBoxLayout->addWidget(noteThru);
+    thruBoxLayout->addWidget(progThru);
+    thruBoxLayout->addWidget(keyThru);
+    thruBoxLayout->addWidget(chanThru);
+    thruBoxLayout->addWidget(pitchThru);
+    thruBoxLayout->addWidget(contThru);
+    thruBoxLayout->addWidget(sysThru);
+    m_thruBox->setLayout(thruBoxLayout);
 
     MidiFilter thruFilter = m_doc->getStudio().getMIDIThruFilter();
 
@@ -81,18 +100,27 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (thruFilter & MappedEvent::MidiSystemMessage)
         sysThru->setChecked(true);
 
-    m_recordBox =
-        new QButtonGroup(1,
-                         Qt::Horizontal,
-                         i18n("RECORD events to ignore"), hBox);
+    m_recordBox = new QGroupBox(
+                         tr("RECORD events to ignore"), hBox );
+    QVBoxLayout *recordBoxLayout = new QVBoxLayout;
+    hBoxLayout->addWidget(m_recordBox);
 
-    QCheckBox *noteRecord = new QCheckBox(i18n("Note"), m_recordBox);
-    QCheckBox *progRecord = new QCheckBox(i18n("Program Change"), m_recordBox);
-    QCheckBox *keyRecord = new QCheckBox(i18n("Key Pressure"), m_recordBox);
-    QCheckBox *chanRecord = new QCheckBox(i18n("Channel Pressure"), m_recordBox);
-    QCheckBox *pitchRecord = new QCheckBox(i18n("Pitch Bend"), m_recordBox);
-    QCheckBox *contRecord = new QCheckBox(i18n("Controller"), m_recordBox);
-    QCheckBox *sysRecord = new QCheckBox(i18n("System Exclusive"), m_recordBox);
+    QCheckBox *noteRecord = new QCheckBox(tr("Note"), m_recordBox);
+    QCheckBox *progRecord = new QCheckBox(tr("Program Change"), m_recordBox);
+    QCheckBox *keyRecord = new QCheckBox(tr("Key Pressure"), m_recordBox);
+    QCheckBox *chanRecord = new QCheckBox(tr("Channel Pressure"), m_recordBox);
+    QCheckBox *pitchRecord = new QCheckBox(tr("Pitch Bend"), m_recordBox);
+    QCheckBox *contRecord = new QCheckBox(tr("Controller"), m_recordBox);
+    QCheckBox *sysRecord = new QCheckBox(tr("System Exclusive"), m_recordBox);
+
+    recordBoxLayout->addWidget(noteRecord);
+    recordBoxLayout->addWidget(progRecord);
+    recordBoxLayout->addWidget(keyRecord);
+    recordBoxLayout->addWidget(chanRecord);
+    recordBoxLayout->addWidget(pitchRecord);
+    recordBoxLayout->addWidget(contRecord);
+    recordBoxLayout->addWidget(sysRecord);
+    m_recordBox->setLayout(recordBoxLayout);
 
     MidiFilter recordFilter =
         m_doc->getStudio().getMIDIRecordFilter();
@@ -118,6 +146,7 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     if (recordFilter & MappedEvent::MidiSystemMessage)
         sysRecord->setChecked(true);
 
+    hBox->setLayout(hBoxLayout);
 
     connect(m_thruBox, SIGNAL(released(int)),
             this, SLOT(slotSetModified()));
@@ -125,7 +154,16 @@ MidiFilterDialog::MidiFilterDialog(QWidget *parent,
     connect(m_recordBox, SIGNAL(released(int)),
             this, SLOT(slotSetModified()));
 
-    setModified(false);
+    m_buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok    |
+                                       QDialogButtonBox::Apply |
+                                       QDialogButtonBox::Close |
+                                       QDialogButtonBox::Help);
+    metagrid->addWidget(m_buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(m_buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    
+    setModified(false); // to call after the creation of buttonBox
 }
 
 void
@@ -207,11 +245,18 @@ MidiFilterDialog::setModified(bool value)
 {
     if (m_modified == value)
         return ;
-
+    
+    QPushButton* pbApply;
+    pbApply = m_buttonBox->button(QDialogButtonBox::Apply);
+    
+    if( ! pbApply ){
+//         RG_DEBUG << "Warning: PushButton-Apply is Null in MidiFilterDialog::setModified() " << endl;
+//         return;
+    }
     if (value) {
-        enableButtonApply(true);
+        pbApply->setEnabled(true);
     } else {
-        enableButtonApply(false);
+        pbApply->setEnabled(false);
     }
 
     m_modified = value;

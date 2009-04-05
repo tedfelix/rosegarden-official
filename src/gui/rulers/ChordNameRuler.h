@@ -21,10 +21,10 @@
 
 #include "base/PropertyName.h"
 #include <map>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QSize>
+#include <QWidget>
 #include <vector>
 #include "base/Event.h"
 
@@ -38,7 +38,7 @@ namespace Rosegarden
 class Studio;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -59,7 +59,7 @@ public:
      * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(RulerScale *rulerScale,
-                   RosegardenGUIDoc *doc,
+                   RosegardenDocument *doc,
                    double xorigin = 0.0,
                    int height = 0,
                    QWidget* parent = 0,
@@ -72,7 +72,7 @@ public:
      * setReady is called (because the first refresh is expensive).
      */
     ChordNameRuler(RulerScale *rulerScale,
-                   RosegardenGUIDoc *doc,
+                   RosegardenDocument *doc,
                    std::vector<Segment *> &segments,
                    double xorigin = 0.0,
                    int height = 0,

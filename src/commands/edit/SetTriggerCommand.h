@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,8 +21,8 @@
 #include "base/TriggerSegment.h"
 #include "document/BasicSelectionCommand.h"
 #include <string>
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -36,6 +35,8 @@ class EventSelection;
 
 class SetTriggerCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerCommand)
+
 public:
     SetTriggerCommand(EventSelection &selection,
                       TriggerSegmentId triggerSegmentId,
@@ -44,7 +45,7 @@ public:
                       std::string timeAdjust,
                       Mark mark,
                       QString name = 0) :
-        BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+        BasicSelectionCommand(!name.isEmpty() ? name : getGlobalName(), selection, true),
         m_selection(&selection),
         m_triggerSegmentId(triggerSegmentId),
         m_notesOnly(notesOnly),
@@ -54,7 +55,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("Tri&gger Segment");
+        return tr("Tri&gger Segment");
     }
 
 protected:

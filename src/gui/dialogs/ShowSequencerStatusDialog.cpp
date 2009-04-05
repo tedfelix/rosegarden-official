@@ -18,54 +18,52 @@
 
 #include "ShowSequencerStatusDialog.h"
 
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtextedit.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include "gui/application/RosegardenApplication.h"
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QByteArray>
+#include <QDataStream>
+#include <QLabel>
+#include <QString>
+#include <QTextEdit>
+#include <QWidget>
+#include <QVBoxLayout>
+#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden
 {
 
 ShowSequencerStatusDialog::ShowSequencerStatusDialog(QWidget *parent) :
-        KDialogBase(parent, 0, true, i18n("Sequencer status"), Close)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Sequencer status"));
 
-    new QLabel(i18n("Sequencer status:"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QString status(i18n("Status not available."));
 
-    QCString replyType;
-    QByteArray replyData;
-    QByteArray data;
+    new QLabel(tr("Sequencer status:"), vbox);
 
-    if (!rgapp->sequencerCall("getStatusLog()", replyType, replyData)) {
-        status = i18n("Sequencer is not running or is not responding.");
-    }
+    QString status = RosegardenSequencer::getInstance()->getStatusLog();
 
-    QDataStream streamIn(replyData, IO_ReadOnly);
-    QString result;
-    streamIn >> result;
-    if (!result) {
-        status = i18n("Sequencer is not returning a valid status report.");
-    } else {
-        status = result;
-    }
-
-    QTextEdit *text = new QTextEdit(vbox);
+    QTextEdit *text = new QTextEdit( vbox );
+    vboxLayout->addWidget(text);
+    vbox->setLayout(vboxLayout);
     text->setTextFormat(Qt::PlainText);
     text->setReadOnly(true);
     text->setMinimumWidth(500);
     text->setMinimumHeight(200);
 
     text->setText(status);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }

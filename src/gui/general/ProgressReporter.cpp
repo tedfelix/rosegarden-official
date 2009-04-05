@@ -18,7 +18,7 @@
 
 #include "ProgressReporter.h"
 
-#include <qobject.h>
+#include <QObject>
 
 
 namespace Rosegarden

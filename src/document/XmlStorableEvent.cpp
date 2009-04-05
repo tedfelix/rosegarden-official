@@ -23,7 +23,7 @@
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -104,7 +104,7 @@ XmlStorableEvent::XmlStorableEvent(const QXmlAttributes &attributes,
             QString val(attrVal);
 
             // Check if boolean val
-            QString valLowerCase(val.lower());
+            QString valLowerCase(val.toLower());
             bool isNumeric;
             int numVal;
 
@@ -148,36 +148,30 @@ XmlStorableEvent::setPropertyFromAttributes(const QXmlAttributes &attributes,
     }
 
     for (int i = 0; i < attributes.length(); ++i) {
-        QString attrName(attributes.qName(i));
-        QString attrLcName(attrName.lower());
-        QString attrVal(attributes.value(i));
+        QString attrName(attributes.qName(i)),
+        attrVal(attributes.value(i));
 
-        if (attrLcName == "name") {
+        if (attrName == "name") {
             continue;
         } else if (have) {
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first" << endl;
             continue;
-        } else if (attrLcName == "bool") {
-            set
-                <Bool>(qstrtostr(name), attrVal.lower() == "true",
-                       persistent);
+        } else if (attrName == "bool") {
+            set<Bool>(qstrtostr(name), attrVal.toLower() == "true", persistent);
             have = true;
-        } else if (attrLcName == "int") {
-            set
-                <Int>(qstrtostr(name), attrVal.toInt(), persistent);
+        } else if (attrName == "int") {
+            set<Int>(qstrtostr(name), attrVal.toInt(), persistent);
             have = true;
-        } else if (attrLcName == "string") {
-            set
-                <String>(qstrtostr(name), qstrtostr(attrVal), persistent);
+        } else if (attrName == "string") {
+            set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
             have = true;
         } else {
-            std::cerr << "XmlStorableEvent::setProperty: unknown attribute type \"" << attrName << "\" (lc name \"" << attrLcName << "\"), ignoring" << std::endl;
+            RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring" << endl;
         }
     }
 
-    if (!have) {
-        std::cerr << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << std::endl;
-    }
+    if (!have)
+        RG_DEBUG << "XmlStorableEvent::setProperty: Warning: no property value found for property " << name << endl;
 }
 
 }

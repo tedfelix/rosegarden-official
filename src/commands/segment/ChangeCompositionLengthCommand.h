@@ -19,10 +19,10 @@
 #ifndef _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
 #define _RG_CHANGECOMPOSITIONLENGTHCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 class Change;
@@ -34,8 +34,10 @@ namespace Rosegarden
 class Composition;
 
 
-class ChangeCompositionLengthCommand : public KNamedCommand
+class ChangeCompositionLengthCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeCompositionLengthCommand)
+
 public:
     ChangeCompositionLengthCommand(Composition *composition,
                                    timeT startTime,
@@ -43,7 +45,7 @@ public:
     virtual ~ChangeCompositionLengthCommand();
 
     static QString getGlobalName()
-        { return i18n("Change &Composition Start and End..."); }
+        { return tr("Change &Composition Start and End..."); }
 
     virtual void execute();
     virtual void unexecute();

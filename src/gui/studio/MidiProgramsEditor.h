@@ -26,7 +26,7 @@
 class QWidget;
 class QString;
 class QSpinBox;
-class QListViewItem;
+class QTreeWidgetItem;
 class QCheckBox;
 class BankList;
 
@@ -48,7 +48,7 @@ public:
                        const char *name = 0);
 
     void clearAll();
-    void populate(QListViewItem*);
+    void populate(QTreeWidgetItem*);
     void reset();
 
 public slots:
@@ -61,6 +61,7 @@ public slots:
 
     virtual void slotNameChanged(const QString &);
     virtual void slotEntryButtonPressed();
+    void slotEntryMenuItemSelected(QAction *);
     void slotEntryMenuItemSelected(int);
 
 protected:

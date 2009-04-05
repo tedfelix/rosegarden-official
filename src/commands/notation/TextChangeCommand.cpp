@@ -18,7 +18,6 @@
 
 #include "TextChangeCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -31,7 +30,7 @@ namespace Rosegarden
 TextChangeCommand::TextChangeCommand(Segment &segment,
                                      Event *event,
                                      Text text) :
-        BasicCommand(i18n("Edit Text"), segment,
+        BasicCommand(tr("Edit Text"), segment,
                      event->getAbsoluteTime(), event->getAbsoluteTime() + 1,
                      true),  // bruteForceRedo
         m_event(event),

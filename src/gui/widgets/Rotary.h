@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,8 +19,8 @@
 #define _RG_ROSEGARDENROTARY_H_
 
 #include <map>
-#include <qcolor.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QWidget>
 
 
 class QWheelEvent;
@@ -32,7 +31,6 @@ class QMouseEvent;
 
 namespace Rosegarden
 {
-
 
 
 class Rotary : public QWidget
@@ -49,8 +47,8 @@ public:
     };
 
     Rotary(QWidget *parent,
-           float minValue = 0.0,
-           float maxValue = 100.0,
+           float minimum = 0.0,
+           float maximum = 100.0,
            float step = 1.0,
            float pageStep = 10.0,
            float initialPosition = 50.0,
@@ -61,11 +59,11 @@ public:
            bool logarithmic = false); // extents are logs, exp for display
     ~Rotary();
 
-    void setMinValue(float min) { m_minValue = min; }
-    float getMinValue() const { return m_minValue; }
+    void setMinimum(float min) { m_minimum = min; }
+    float getMinValue() const { return m_minimum; }
 
-    void setMaxValue(float max) { m_maxValue = max; }
-    float getMaxValue() const { return m_maxValue; }
+    void setMaximum(float max) { m_maximum = max; }
+    float getMaxValue() const { return m_maximum; }
 
     void setStep(float step) { m_step = step; }
     float getStep() const { return m_step; }
@@ -88,9 +86,6 @@ public:
 signals:
     void valueChanged(float);
 
-protected slots:
-    void slotFloatTimeout();
-
 protected:
     virtual void paintEvent(QPaintEvent *e);
     virtual void mousePressEvent(QMouseEvent *e);
@@ -98,13 +93,14 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
     virtual void wheelEvent(QWheelEvent *e);
+    virtual void enterEvent(QEvent *e);
 
     void snapPosition();
     void drawPosition();
     void drawTick(QPainter &paint, double angle, int size, bool internal);
 
-    float                m_minValue;
-    float                m_maxValue;
+    float                m_minimum;
+    float                m_maximum;
     float                m_step;
     float                m_pageStep;
     int                  m_size;
@@ -152,7 +148,6 @@ protected:
     typedef std::map<CacheIndex, QPixmap> PixmapCache;
     static PixmapCache m_pixmaps;
 };
-
 
 
 }

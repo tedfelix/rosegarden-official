@@ -15,83 +15,61 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MatrixSelector.h"
 
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kstddirs.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "base/ViewElement.h"
+#include "base/SnapGrid.h"
 #include "commands/edit/EventEditCommand.h"
+#include "document/CommandHistory.h"
+#include "document/ConfigGroups.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/EditToolBox.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/RosegardenCanvasView.h"
 #include "MatrixElement.h"
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
 #include "MatrixResizer.h"
-#include "MatrixVelocity.h"
-#include "MatrixStaff.h"
+#include "MatrixViewSegment.h"
 #include "MatrixTool.h"
-#include "MatrixView.h"
-#include <kaction.h>
-#include <kglobal.h>
-#include <kapplication.h>
-#include <kconfig.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include "MatrixToolBox.h"
+#include "MatrixWidget.h"
+#include "MatrixScene.h"
+#include "MatrixMouseEvent.h"
 #include "misc/Debug.h"
+
+#include <QSettings>
 
 
 namespace Rosegarden
 {
 
-MatrixSelector::MatrixSelector(MatrixView* view)
-        : MatrixTool("MatrixSelector", view),
-        m_selectionRect(0),
-        m_updateRect(false),
-        m_currentStaff(0),
-        m_clickedElement(0),
-        m_dispatchTool(0),
-        m_justSelectedBar(false),
-        m_matrixView(view),
-        m_selectionToMerge(0)
+MatrixSelector::MatrixSelector(MatrixWidget *widget) :
+    MatrixTool("matrixselector.rc", "MatrixSelector", widget),
+    m_selectionRect(0),
+    m_updateRect(false),
+    m_clickedElement(0),
+    m_dispatchTool(0),
+    m_justSelectedBar(false),
+    m_selectionToMerge(0)
 {
-    connect(m_parentView, SIGNAL(usedSelection()),
+    connect(m_widget, SIGNAL(usedSelection()),
             this, SLOT(slotHideSelection()));
 
-    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
-                SLOT(slotDrawSelected()), actionCollection(),
-                "draw");
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", Key_F4, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
-
-    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
-                SLOT(slotMoveSelected()), actionCollection(),
-                "move");
-
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/resize.xpm");
-    QIconSet icon = QIconSet(pixmap);
-
-    new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
-                SLOT(slotResizeSelected()), actionCollection(),
-                "resize");
-
-    createMenu("matrixselector.rc");
+    createMenu();
 }
 
-void MatrixSelector::handleEventRemoved(Event *event)
+void
+MatrixSelector::handleEventRemoved(Event *event)
 {
     if (m_dispatchTool)
         m_dispatchTool->handleEventRemoved(event);
@@ -100,80 +78,103 @@ void MatrixSelector::handleEventRemoved(Event *event)
     }
 }
 
-void MatrixSelector::slotClickTimeout()
+void 
+MatrixSelector::slotClickTimeout()
 {
     m_justSelectedBar = false;
 }
 
-void MatrixSelector::handleLeftButtonPress(timeT time,
-        int height,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixSelector::handleMousePress" << endl;
+    MATRIX_DEBUG << "MatrixSelector::handleLeftButtonPress" << endl;
+
+    m_previousCollisions.clear();
 
     if (m_justSelectedBar) {
-        handleMouseTripleClick(time, height, staffNo, e, element);
+        handleMouseTripleClick(e);
         m_justSelectedBar = false;
         return ;
     }
 
-    QPoint p = m_mParentView->inverseMapPoint(e->pos());
-
-    m_currentStaff = m_mParentView->getStaff(staffNo);
+    m_currentViewSegment = e->viewSegment;
 
     // Do the merge selection thing
     //
     delete m_selectionToMerge; // you can safely delete 0, you know?
     const EventSelection *selectionToMerge = 0;
-    if (e->state() & Qt::ShiftButton)
-        selectionToMerge = m_mParentView->getCurrentSelection();
+    if (e->modifiers & Qt::ShiftModifier) {
+        selectionToMerge = m_scene->getSelection();
+    }
 
     m_selectionToMerge =
         (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
 
     // Now the rest of the element stuff
     //
-    m_clickedElement = dynamic_cast<MatrixElement*>(element);
+    m_clickedElement = e->element;
 
     if (m_clickedElement) {
-        int x = int(m_clickedElement->getLayoutX());
-        int width = m_clickedElement->getWidth();
-        int resizeStart = int(double(width) * 0.85) + x;
+
+        float x = m_clickedElement->getLayoutX();
+        float width = m_clickedElement->getWidth();
+        float resizeStart = int(double(width) * 0.85) + x;
 
         // max size of 10
-        if ((x + width ) - resizeStart > 10)
-            resizeStart = x + width - 10;
+        if ((x + width) - resizeStart > 10) resizeStart = x + width - 10;
 
-        if (p.x() > resizeStart) {
-            m_dispatchTool = m_parentView->
-                             getToolBox()->getTool(MatrixResizer::ToolName);
+        m_dispatchTool = 0;
+        
+        if (e->sceneX > resizeStart) {
+            m_dispatchTool =
+                dynamic_cast<MatrixTool *>
+                (m_widget->getToolBox()->getTool(MatrixResizer::ToolName));
         } else {
-            m_dispatchTool = m_parentView->
-                             getToolBox()->getTool(MatrixMover::ToolName);
+            m_dispatchTool =
+                dynamic_cast<MatrixTool *>
+                (m_widget->getToolBox()->getTool(MatrixMover::ToolName));
         }
 
+        if (!m_dispatchTool) return;
+
         m_dispatchTool->ready();
+        m_dispatchTool->handleLeftButtonPress(e);
+        return;
 
-        m_dispatchTool->handleLeftButtonPress(time,
-                                              height,
-                                              staffNo,
-                                              e,
-                                              element);
-        return ;
+    } else if (e->modifiers & Qt::ControlModifier) {
 
-    } else if (e->state() & Qt::ControlButton) {
-
-        handleMidButtonPress(time, height, staffNo, e, element);
+        handleMidButtonPress(e);
         return;
 
     } else {
 
+        if (!m_selectionRect) {
+            m_selectionRect = new QGraphicsRectItem;
+            m_scene->addItem(m_selectionRect);
+            QColor c = GUIPalette::getColour(GUIPalette::SelectionRectangle);
+            m_selectionRect->setPen(QPen(c, 2));
+            c.setAlpha(50);
+            m_selectionRect->setBrush(c);
+        }
+
+        m_selectionOrigin = QPointF(e->sceneX, e->sceneY);
+        m_selectionRect->setRect(QRectF(m_selectionOrigin, QSize()));
+        m_selectionRect->hide();
+        m_updateRect = true;
+
+        // Clear existing selection if we're not merging
+        //
+        if (!m_selectionToMerge) {
+            m_scene->setSelection(0, false);
+//            m_widget->canvas()->update();
+        }
+
+/*!!!
+
         // Workaround for #930420 Positional error in sweep-selection box
         // boundary
         int zoomValue = (int)m_matrixView->m_hZoomSlider->getCurrentSize();
-        MatrixStaff *staff = m_mParentView->getStaff(staffNo);
+        MatrixStaff *staff = m_widget->getStaff(staffNo);
         int pitch = m_currentStaff->getHeightAtCanvasCoords(p.x(), p.y());
         int pitchCentreHeight = staff->getTotalHeight() -
                                 pitch * staff->getLineSpacing() - 2; // 2 or ?
@@ -187,12 +188,12 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
                 drawHeight += 2 * (drawHeight - pitchLineHeight);
         }
         MATRIX_DEBUG << "#### MatrixSelector::handleLeftButtonPress() : zoom "
-        << zoomValue
-        << " pitch " << pitch
-        << " pitchCentreHeight " << pitchCentreHeight
-        << " pitchLineHeight " << pitchLineHeight
-        << " lineSpacing " << staff->getLineSpacing()
-        << " drawHeight " << drawHeight << endl;
+                     << zoomValue
+                     << " pitch " << pitch
+                     << " pitchCentreHeight " << pitchCentreHeight
+                     << " pitchLineHeight " << pitchLineHeight
+                     << " lineSpacing " << staff->getLineSpacing()
+                     << " drawHeight " << drawHeight << endl;
         m_selectionRect->setX(int(p.x() / 4)*4); // more workaround for #930420
         m_selectionRect->setY(drawHeight);
         m_selectionRect->setSize(0, 0);
@@ -203,93 +204,83 @@ void MatrixSelector::handleLeftButtonPress(timeT time,
         // Clear existing selection if we're not merging
         //
         if (!m_selectionToMerge) {
-            m_mParentView->setCurrentSelection(0, false, true);
-            m_mParentView->canvas()->update();
+            m_widget->setSelection(0, false, true);
+            m_widget->canvas()->update();
         }
+*/
     }
 
-    //m_parentView->setCursorPosition(p.x());
+    //m_widget->setCursorPosition(p.x());
 }
 
-void MatrixSelector::handleMidButtonPress(timeT time,
-        int height,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
 {
     m_clickedElement = 0; // should be used for left-button clicks only
 
     // Don't allow overlapping elements on the same channel
-    if (dynamic_cast<MatrixElement*>(element))
-        return ;
+    if (e->element) return;
 
-    m_dispatchTool = m_parentView->
-                     getToolBox()->getTool(MatrixPainter::ToolName);
+    m_dispatchTool =
+        dynamic_cast<MatrixTool *>
+        (m_widget->getToolBox()->getTool(MatrixPainter::ToolName));
+
+    if (!m_dispatchTool) return;
 
     m_dispatchTool->ready();
-
-    m_dispatchTool->handleLeftButtonPress(time, height, staffNo, e, element);
+    m_dispatchTool->handleLeftButtonPress(e);
 }
 
-void MatrixSelector::handleMouseDoubleClick(timeT ,
-        int ,
-        int staffNo,
-        QMouseEvent *ev,
-        ViewElement *element)
+void
+MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
 {
-    /*
-        if (m_dispatchTool)
-        {
-            m_dispatchTool->handleMouseDoubleClick(time, height, staffNo, e, element);
-        }
-    */
+    m_clickedElement = e->element;
 
-    m_clickedElement = dynamic_cast<MatrixElement*>(element);
-
-    MatrixStaff *staff = m_mParentView->getStaff(staffNo);
-    if (!staff)
-        return ;
+    MatrixViewSegment *vs = e->viewSegment;
+    if (!vs) return;
 
     if (m_clickedElement) {
 
         if (m_clickedElement->event()->isa(Note::EventType) &&
-                m_clickedElement->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+            m_clickedElement->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
 
-            int id = m_clickedElement->event()->get
-                     <Int>
-                     (BaseProperties::TRIGGER_SEGMENT_ID);
+            int id = m_clickedElement->event()->get<Int>
+                (BaseProperties::TRIGGER_SEGMENT_ID);
             emit editTriggerSegment(id);
-            return ;
+            return;
         }
 
-        if (ev->state() & ShiftButton) { // advanced edit
+        if (e->buttons & Qt::ShiftButton) { // advanced edit
 
-            EventEditDialog dialog(m_mParentView, *m_clickedElement->event(), true);
+            EventEditDialog dialog
+                (m_widget, *m_clickedElement->event(), true);
 
             if (dialog.exec() == QDialog::Accepted &&
-                    dialog.isModified()) {
+                dialog.isModified()) {
 
                 EventEditCommand *command = new EventEditCommand
-                                            (staff->getSegment(),
-                                             m_clickedElement->event(),
-                                             dialog.getEvent());
+                    (vs->getSegment(),
+                     m_clickedElement->event(),
+                     dialog.getEvent());
 
-                m_mParentView->addCommandToHistory(command);
+                CommandHistory::getInstance()->addCommand(command);
             }
+
         } else {
 
-            SimpleEventEditDialog dialog(m_mParentView, m_mParentView->getDocument(),
-                                         *m_clickedElement->event(), false);
+            SimpleEventEditDialog dialog
+                (m_widget, m_scene->getDocument(),
+                 *m_clickedElement->event(), false);
 
             if (dialog.exec() == QDialog::Accepted &&
-                    dialog.isModified()) {
+                dialog.isModified()) {
 
                 EventEditCommand *command = new EventEditCommand
-                                            (staff->getSegment(),
-                                             m_clickedElement->event(),
-                                             dialog.getEvent());
+                    (vs->getSegment(),
+                     m_clickedElement->event(),
+                     dialog.getEvent());
 
-                m_mParentView->addCommandToHistory(command);
+                CommandHistory::getInstance()->addCommand(command);
             }
         }
 
@@ -316,26 +307,22 @@ void MatrixSelector::handleMouseDoubleClick(timeT ,
         } */
 }
 
-void MatrixSelector::handleMouseTripleClick(timeT t,
-        int height,
-        int staffNo,
-        QMouseEvent *ev,
-        ViewElement *element)
+void
+MatrixSelector::handleMouseTripleClick(const MatrixMouseEvent *e)
 {
-    if (!m_justSelectedBar)
-        return ;
+    if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
-    MatrixStaff *staff = m_mParentView->getStaff(staffNo);
-    if (!staff)
-        return ;
+    MatrixViewSegment *vs = e->viewSegment;
+    if (!vs) return;
 
     if (m_clickedElement) {
 
         // should be safe, as we've already set m_justSelectedBar false
-        handleLeftButtonPress(t, height, staffNo, ev, element);
-        return ;
+        handleLeftButtonPress(e);
+        return;
 
+/*!!! see note above
     } else {
 
         m_selectionRect->setX(staff->getX());
@@ -345,27 +332,37 @@ void MatrixSelector::handleMouseTripleClick(timeT t,
 
         m_selectionRect->show();
         m_updateRect = false;
+*/
     }
 }
 
-int MatrixSelector::handleMouseMove(timeT time, int height,
-                                    QMouseEvent *e)
+MatrixSelector::FollowMode
+MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
 {
-    QPoint p = m_mParentView->inverseMapPoint(e->pos());
-
     if (m_dispatchTool) {
-        return m_dispatchTool->handleMouseMove(time, height, e);
+        return m_dispatchTool->handleMouseMove(e);
     }
 
-
     if (!m_updateRect) {
-        setContextHelpFor(e->pos(), 
-                          getSnapGrid().getSnapSetting() == SnapGrid::NoSnap);
-        return RosegardenCanvasView::NoFollow;
+        setContextHelpFor
+            (e, getSnapGrid()->getSnapSetting() == SnapGrid::NoSnap);
+        return NoFollow;
     } else {
         clearContextHelp();
     }
 
+    QPointF p0(m_selectionOrigin);
+    QPointF p1(e->sceneX, e->sceneY);
+    QRectF r = QRectF(p0, p1).normalized();
+
+    m_selectionRect->setRect(r.x() + 0.5, r.y() + 0.5, r.width(), r.height());
+    m_selectionRect->show();
+
+    setViewCurrentSelection(false);
+
+    
+
+/*
     int w = int(p.x() - m_selectionRect->x());
     int h = int(p.y() - m_selectionRect->y());
 
@@ -388,17 +385,18 @@ int MatrixSelector::handleMouseMove(timeT time, int height,
     setViewCurrentSelection();
     m_selectionRect->setSize(w, h);
     m_selectionRect->setX(m_selectionRect->x() - xFix);
-    m_mParentView->canvas()->update();
-
-    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    m_widget->canvas()->update();
+*/
+    return FollowMode(FollowHorizontal | FollowVertical);
 }
 
-void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
+void
+MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixSelector::handleMouseRelease" << endl;
 
     if (m_dispatchTool) {
-        m_dispatchTool->handleMouseRelease(time, height, e);
+        m_dispatchTool->handleMouseRelease(e);
 
         m_dispatchTool->stow();
         ready();
@@ -406,74 +404,77 @@ void MatrixSelector::handleMouseRelease(timeT time, int height, QMouseEvent *e)
         // don't delete the tool as it's still part of the toolbox
         m_dispatchTool = 0;
 
-        return ;
+        return;
     }
 
     m_updateRect = false;
 
     if (m_clickedElement) {
-        m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                              m_clickedElement->event(),
-                                              false, true);
-        m_mParentView->canvas()->update();
+        m_scene->setSingleSelectedEvent(m_currentViewSegment,
+                                        m_clickedElement,
+                                        false);
+//        m_widget->canvas()->update();
         m_clickedElement = 0;
 
     } else if (m_selectionRect) {
-        setViewCurrentSelection();
+        setViewCurrentSelection(true);
+        m_previousCollisions.clear();
         m_selectionRect->hide();
-        m_mParentView->canvas()->update();
+//        m_widget->canvas()->update();
     }
 
     // Tell anyone who's interested that the selection has changed
     emit gotSelection();
 
-    setContextHelpFor(e->pos());
+    setContextHelpFor(e);
 }
 
-void MatrixSelector::ready()
+void
+MatrixSelector::ready()
 {
-    if (m_mParentView) {
-        m_selectionRect = new QCanvasRectangle(m_mParentView->canvas());
-        m_selectionRect->hide();
-        m_selectionRect->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectionRectangle), 2));
+    if (m_widget) m_widget->setCanvasCursor(Qt::arrowCursor);
 
-        m_mParentView->setCanvasCursor(Qt::arrowCursor);
-        //m_mParentView->setPositionTracking(false);
-    }
 
-    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+/*!!!
+    connect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
             this, SLOT(slotMatrixScrolled(int, int)));
-
-    setContextHelp(i18n("Click and drag to select; middle-click and drag to draw new note"));
+*/
+    setContextHelp
+        (tr("Click and drag to select; middle-click and drag to draw new note"));
 }
 
-void MatrixSelector::stow()
+void
+MatrixSelector::stow()
 {
     if (m_selectionRect) {
         delete m_selectionRect;
         m_selectionRect = 0;
-        m_mParentView->canvas()->update();
+//        m_widget->canvas()->update();
     }
-
-    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+/*!!!
+    disconnect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
                this, SLOT(slotMatrixScrolled(int, int)));
+*/
 
 }
 
-void MatrixSelector::slotHideSelection()
+void
+MatrixSelector::slotHideSelection()
 {
-    if (!m_selectionRect)
-        return ;
+    if (!m_selectionRect) return;
     m_selectionRect->hide();
-    m_selectionRect->setSize(0, 0);
-    m_mParentView->canvas()->update();
+//!!!    m_selectionRect->setSize(0, 0);
+//!!!    m_widget->canvas()->update();
 }
 
-void MatrixSelector::slotMatrixScrolled(int newX, int newY)
+void
+MatrixSelector::slotMatrixScrolled(int newX, int newY)
 {
+/*!!!
     if (m_updateRect) {
-        int offsetX = newX - m_parentView->getCanvasView()->contentsX();
-        int offsetY = newY - m_parentView->getCanvasView()->contentsY();
+
+        int offsetX = newX - m_widget->getCanvasView()->contentsX();
+        int offsetY = newY - m_widget->getCanvasView()->contentsY();
 
         int w = int(m_selectionRect->width() + offsetX);
         int h = int(m_selectionRect->height() + offsetY);
@@ -490,127 +491,132 @@ void MatrixSelector::slotMatrixScrolled(int newX, int newY)
 
         m_selectionRect->setSize(w, h);
         setViewCurrentSelection();
-        m_mParentView->canvas()->update();
+        m_widget->canvas()->update();
     }
+*/
 }
 
-void MatrixSelector::setViewCurrentSelection()
+void
+MatrixSelector::setViewCurrentSelection(bool always)
 {
-    EventSelection* selection = getSelection();
+    if (always) m_previousCollisions.clear();
+
+    EventSelection* selection = 0;
+    bool changed = getSelection(selection);
+    if (!changed) {
+        delete selection;
+        return;
+    }
 
     if (m_selectionToMerge && selection &&
         m_selectionToMerge->getSegment() == selection->getSegment()) {
         
         selection->addFromSelection(m_selectionToMerge);
-        m_mParentView->setCurrentSelection(selection, true, true);
+        m_scene->setSelection(selection, true);
 
     } else if (!m_selectionToMerge) {
 
-        m_mParentView->setCurrentSelection(selection, true, true);
-
+        m_scene->setSelection(selection, true);
     }
-
 }
 
-EventSelection* MatrixSelector::getSelection()
+bool
+MatrixSelector::getSelection(EventSelection *&selection)
 {
-    if (!m_selectionRect->visible()) return 0;
+    if (!m_selectionRect || !m_selectionRect->isVisible()) return 0;
 
-    Segment& originalSegment = m_currentStaff->getSegment();
-    EventSelection* selection = new EventSelection(originalSegment);
+    Segment& originalSegment = m_currentViewSegment->getSegment();
+    selection = new EventSelection(originalSegment);
 
     // get the selections
     //
-    QCanvasItemList l = m_selectionRect->collisions(true);
+    QList<QGraphicsItem *> l = m_selectionRect->collidingItems
+        (Qt::IntersectsItemShape);
 
-    if (l.count())
-    {
-        for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
-        {
-            QCanvasItem *item = *it;
-            QCanvasMatrixRectangle *matrixRect = 0;
+    // This is a nasty optimisation, just to avoid re-creating the
+    // selection if the items we span are unchanged.  It's not very
+    // effective, either, because the colliding items returned
+    // includes things like the horizontal and vertical background
+    // lines -- and so it changes often: every time we cross a line.
+    // More thought needed.  It might be better to use the event
+    // properties (i.e. time and pitch) to calculate this "from first
+    // principles" rather than doing it graphically.  That might also
+    // be helpful to avoid us dragging off the logical edges of the
+    // scene.
+    if (l == m_previousCollisions) return false;
+    m_previousCollisions = l;
 
-            if ((matrixRect = dynamic_cast<QCanvasMatrixRectangle*>(item)))
-            {
-                MatrixElement *mE = &matrixRect->getMatrixElement();
-                selection->addEvent(mE->event());
+    if (!l.empty()) {
+        for (int i = 0; i < l.size(); ++i) {
+            QGraphicsItem *item = l[i];
+            MatrixElement *element = MatrixElement::getMatrixElement(item);
+            if (element) {
+                //!!! NB. In principle, this element might not come
+                //!!! from the right segment (in practice we only have
+                //!!! one segment, but that may change)
+                selection->addEvent(element->event());
             }
         }
     }
 
-    if (selection->getAddedEvents() > 0) {
-        return selection;
-    } else {
+    if (selection->getAddedEvents() == 0) {
         delete selection;
-        return 0;
+        selection = 0;
     }
+
+    return true;
 }
 
-void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
+void
+MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 {
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (!kapp->config()->readBoolEntry("toolcontexthelp", true)) return;
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    p = m_mParentView->inverseMapPoint(p);
-
-    // same logic as in MatrixCanvasView::contentsMousePressEvent
-
-    QCanvasItemList itemList = m_mParentView->canvas()->collisions(p);
-    QCanvasItemList::Iterator it;
-    MatrixElement* mel = 0;
-    QCanvasItem* activeItem = 0;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-
-        QCanvasItem *item = *it;
-        QCanvasMatrixRectangle *mRect = 0;
-
-        if (item->active()) {
-            break;
-        }
-
-        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(item))) {
-            if (! mRect->rect().contains(p, true)) continue;
-            mel = &(mRect->getMatrixElement());
-            break;
-        }
+    if (! qStrToBool( settings.value("toolcontexthelp", "true" ) ) ) {
+        settings.endGroup();
+        return;
     }
+    settings.endGroup();
 
-    if (!mel) {
-        setContextHelp(i18n("Click and drag to select; middle-click and drag to draw new note"));
+    MatrixElement *element = e->element;
+
+    if (!element) {
+        
+        setContextHelp
+            (tr("Click and drag to select; middle-click and drag to draw new note"));
 
     } else {
         
-        // same logic as in handleMouseButtonPress
+        // same logic as in handleLeftButtonPress
         
-        int x = int(mel->getLayoutX());
-        int width = mel->getWidth();
-        int resizeStart = int(double(width) * 0.85) + x;
+        float x = element->getLayoutX();
+        float width = element->getWidth();
+        float resizeStart = int(double(width) * 0.85) + x;
 
         // max size of 10
-        if ((x + width ) - resizeStart > 10)
-            resizeStart = x + width - 10;
+        if ((x + width) - resizeStart > 10) resizeStart = x + width - 10;
 
-        EventSelection *s = m_mParentView->getCurrentSelection();
+        EventSelection *s = m_scene->getSelection();
 
-        if (p.x() > resizeStart) {
+        if (e->sceneX > resizeStart) {
             if (s && s->getAddedEvents() > 1) {
-                setContextHelp(i18n("Click and drag to resize selected notes"));
+                setContextHelp(tr("Click and drag to resize selected notes"));
             } else {
-                setContextHelp(i18n("Click and drag to resize note"));
+                setContextHelp(tr("Click and drag to resize note"));
             }
         } else {
             if (s && s->getAddedEvents() > 1) {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move selected notes; hold Ctrl as well to copy"));
+                    setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
                 } else {
-                    setContextHelp(i18n("Click and drag to copy selected notes"));
+                    setContextHelp(tr("Click and drag to copy selected notes"));
                 }
             } else {
                 if (!ctrlPressed) {
-                    setContextHelp(i18n("Click and drag to move note; hold Ctrl as well to copy"));
+                    setContextHelp(tr("Click and drag to move note; hold Ctrl as well to copy"));
                 } else {
-                    setContextHelp(i18n("Click and drag to copy note"));
+                    setContextHelp(tr("Click and drag to copy note"));
                 }
             }                
         }
@@ -620,4 +626,6 @@ void MatrixSelector::setContextHelpFor(QPoint p, bool ctrlPressed)
 const QString MatrixSelector::ToolName  = "selector";
 
 }
+
 #include "MatrixSelector.moc"
+

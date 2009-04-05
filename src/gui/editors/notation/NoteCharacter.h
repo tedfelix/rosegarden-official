@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,21 +18,21 @@
 #ifndef _RG_NOTECHARACTER_H_
 #define _RG_NOTECHARACTER_H_
 
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qpointarray.h>
+#include <QGraphicsPixmapItem>
+#include <QPixmap>
+#include <QPoint>
+#include <QPolygon>
 
 
 class QPainter;
-class QCanvasPixmap;
 
 namespace Rosegarden
 {
 
-class NoteCharacterDrawRep : public QPointArray
+class NoteCharacterDrawRep : public QPolygon
 {
 public:
-    NoteCharacterDrawRep(int size = 0) : QPointArray(size) { }
+    NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
 };
 
 
@@ -60,25 +59,21 @@ public:
     int getWidth() const;
     int getHeight() const;
     
+    QPixmap getPixmap() const;
     QPoint getHotspot() const;
-
-    QPixmap *getPixmap() const;
-    QCanvasPixmap *getCanvasPixmap() const;
+    QGraphicsPixmapItem *makeItem() const;
 
     void draw(QPainter *painter, int x, int y) const;
-    void drawMask(QPainter *painter, int x, int y) const;
 
 private:
     friend class NoteFont;
     NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
 
     QPoint m_hotspot;
-    QPixmap *m_pixmap; // I own this
+    QPixmap m_pixmap; 
     NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
 };
     
-
-// Encapsulates NoteFontMap, and loads pixmaps etc on demand
 
 
 }

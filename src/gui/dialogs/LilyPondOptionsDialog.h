@@ -18,30 +18,28 @@
 #ifndef _RG_LILYPONDOPTIONSDIALOG_H_
 #define _RG_LILYPONDOPTIONSDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 
 #include "gui/configuration/HeadersConfigurationPage.h"
 
 class QWidget;
 class QCheckBox;
 class QComboBox;
-class QLineEdit;
-class QLineEdit;
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class HeadersConfigurationPage;
 
-class LilyPondOptionsDialog : public KDialogBase
+class LilyPondOptionsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     LilyPondOptionsDialog(QWidget *parent,
-			  RosegardenGUIDoc *doc,
+			  RosegardenDocument *doc,
                           QString windowCaption = "",
                           QString heading = "");
 
@@ -52,25 +50,22 @@ public slots:
     void slotOk();
 
 protected:
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     QComboBox *m_lilyLanguage;
     QComboBox *m_lilyPaperSize;
     QComboBox *m_lilyFontSize;
     QComboBox *m_lilyTempoMarks;
     QComboBox *m_lilyExportSelection;
-    QComboBox *m_lilyLyricsHAlignment;
+    QComboBox *m_lilyExportLyrics;
     QCheckBox *m_lilyPaperLandscape;
     QCheckBox *m_lilyRaggedBottom;
     QCheckBox *m_lilyChordNamesMode;
-    QCheckBox *m_lilyExportLyrics;
-    QCheckBox *m_lilyExportMidi;
-    QCheckBox *m_lilyExportPointAndClick;
     QCheckBox *m_lilyExportBeams;
-    QCheckBox *m_lilyExportStaffMerge;
     QCheckBox *m_lilyExportStaffGroup;
     QComboBox *m_lilyMarkerMode;
     HeadersConfigurationPage *m_headersPage;
 
+    void populateDefaultValues();
 };
 
 

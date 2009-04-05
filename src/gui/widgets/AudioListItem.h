@@ -19,45 +19,58 @@
 #define _RG_AUDIOLISTITEM_H_
 
 #include <sound/AudioFile.h>
-#include <klistview.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 namespace Rosegarden
 {
 
 class Segment;
 
-// Add an Id to a QListViewItem
+// Add an Id to a QTreeWidgetItem
 //
-class AudioListItem : public KListViewItem
+class AudioListItem : public QTreeWidgetItem
 {
 
 public:
-
-    AudioListItem(KListView *parent):KListViewItem(parent),
-                                     m_segment(0) {;}
-
-    AudioListItem(KListViewItem *parent):KListViewItem(parent),
-                                         m_segment(0) {;}
-
-    AudioListItem(KListView *parent,
+	
+	//    AudioListItem(QTreeWidget *parent):QTreeWidgetItem(), m_segment(0) {;}
+	AudioListItem( const QStringList &strings, int type = Type ) :QTreeWidgetItem(strings, type), m_segment(0) {;}
+	
+	// without m_id
+	AudioListItem( QTreeWidget *parent, const QStringList &strings, int type=Type ) :QTreeWidgetItem(parent, strings, type), m_segment(0) {;}
+	
+	AudioListItem( AudioListItem *parent, const QStringList &strings, int type=Type ) :QTreeWidgetItem(parent, strings, type), m_segment(0) {;}
+	
+	
+	// with m_id
+	AudioListItem( QTreeWidget *parent, const QStringList &strings, AudioFileId id, int type=Type ) :QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(0) {;}
+	
+	AudioListItem( AudioListItem *parent, const QStringList &strings, AudioFileId id, int type=Type ) :QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(0) {;}
+	
+	
+	
+	
+/*
+    AudioListItem(QTreeWidget *parent,
                   QString label,
                   AudioFileId id):
-                      KListViewItem(parent,
+                      QTreeWidgetItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
                                     m_segment(0) {;}
 
-    AudioListItem(KListViewItem *parent, 
+    AudioListItem(QTreeWidgetItem *parent, 
                   QString label,
                   AudioFileId id):
-                      KListViewItem(parent,
+                      QTreeWidgetItem(parent,
                                     label,
                                     "", "", "", "", "", "", ""),
                                     m_id(id),
                                     m_segment(0) {;}
 
-
+*/
     AudioFileId getId() { return m_id; }
 
     void setStartTime(const RealTime &time)

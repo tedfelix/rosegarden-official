@@ -22,12 +22,12 @@
 #include "base/AudioLevel.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/VelocityColour.h"
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qlabel.h>
-#include <qpainter.h>
-#include <qtimer.h>
-#include <qwidget.h>
+#include <QBrush>
+#include <QColor>
+#include <QLabel>
+#include <QPainter>
+#include <QTimer>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -126,27 +126,27 @@ VUMeter::VUMeter(QWidget *parent,
         red = AudioLevel::dB_to_fader( 0.0, max, AudioLevel::ShortFader);
         orange = AudioLevel::dB_to_fader( -2.0, max, AudioLevel::ShortFader);
         green = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::ShortFader);
-        m_background = QColor(50, 50, 50);
+        m_background = QColor(32, 32, 32);
     } else if (m_type == AudioPeakHoldLong) {
         red = AudioLevel::dB_to_fader( 0.0, max, AudioLevel::LongFader);
         orange = AudioLevel::dB_to_fader( -2.0, max, AudioLevel::LongFader);
         green = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::LongFader);
-        m_background = QColor(50, 50, 50);
+        m_background = QColor(32, 32, 32);
     } else if (m_type == AudioPeakHoldIEC) {
         red = AudioLevel::dB_to_fader( -0.1, max, AudioLevel::IEC268Meter);
         orange = AudioLevel::dB_to_fader( -6.0, max, AudioLevel::IEC268Meter);
         green = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::IEC268Meter);
-        m_background = QColor(50, 50, 50);
+        m_background = QColor(32, 32, 32);
     } else if (m_type == AudioPeakHoldIECLong) {
         red = AudioLevel::dB_to_fader( 0.0, max, AudioLevel::IEC268LongMeter);
         orange = AudioLevel::dB_to_fader( -6.0, max, AudioLevel::IEC268LongMeter);
         green = AudioLevel::dB_to_fader( -10.0, max, AudioLevel::IEC268LongMeter);
-        m_background = QColor(50, 50, 50);
+        m_background = QColor(32, 32, 32);
     } else {
         red = max * 92 / 100;
         orange = max * 60 / 100;
         green = max * 10 / 100;
-        m_background = Qt::black;
+        m_background = QColor(Qt::black);
     }
 
     if (m_type == AudioPeakHoldLong ||
@@ -308,10 +308,22 @@ VUMeter::setLevel(double leftLevel, double rightLevel, bool record)
     }
 
     if (m_active) {
-        QPainter paint(this);
-        drawMeterLevel(&paint);
+        repaint();
     }
 }
+
+//###
+// There's some problem here, and in the faders too, where width() and height()
+// seem to return something one pixel larger than what's actually visible.  It
+// seems to be the case that the actual object we're drawing on is the correct
+// size, and its viewport is undersized by one, but I haven't worked out a way
+// to make its viewport full-sized, so instead we just try to compress
+// everything by one pixel to bring it into view.  This causes some random minor
+// artifacts, like the fader button bottom shadow not appearing, but I figure
+// this will be good enough for a first release anyway.  Here in VUMeter, I'm
+// working on the outside border being one pixel too short, and working on the
+// rounded blank zero state meter being cut off so it's only rounded on one
+// side.
 
 void
 VUMeter::paintEvent(QPaintEvent *e)
@@ -319,44 +331,47 @@ VUMeter::paintEvent(QPaintEvent *e)
     //    RG_DEBUG << "VUMeter::paintEvent - height = " << height() << endl;
     QPainter paint(this);
 
+    int w = width() - 1;
+    int h = height() - 1;
+
     if (m_type == VUMeter::AudioPeakHoldShort ||
             m_type == VUMeter::AudioPeakHoldLong ||
             m_type == VUMeter::AudioPeakHoldIEC ||
             m_type == VUMeter::AudioPeakHoldIECLong) {
         paint.setPen(m_background);
         paint.setBrush(m_background);
-        paint.drawRect(0, 0, width(), height());
+        paint.drawRect(0, 0, w, h);
 
         drawMeterLevel(&paint);
 
-        paint.setPen(colorGroup().background());
+        paint.setPen(palette().background());
         paint.drawPoint(0, 0);
-        paint.drawPoint(width() - 1, 0);
-        paint.drawPoint(0, height() - 1);
-        paint.drawPoint(width() - 1, height() - 1);
+        paint.drawPoint(w, 0);
+        paint.drawPoint(0, h - 1);
+        paint.drawPoint(w, h - 1);
     } else if (m_type == VUMeter::FixedHeightVisiblePeakHold) {
         paint.setPen(m_background);
         paint.setBrush(m_background);
-        paint.drawRect(0, 0, width(), height());
+        paint.drawRect(0, 0, w, h);
 
         if (m_fallTimerLeft->isActive())
             drawMeterLevel(&paint);
         else {
             meterStop();
             drawFrame(&paint);
-            drawContents(&paint);
+            QLabel::paintEvent(e);
         }
     } else {
         if (m_fallTimerLeft->isActive()) {
             paint.setPen(m_background);
             paint.setBrush(m_background);
-            paint.drawRect(0, 0, width(), height());
+            paint.drawRect(0, 0, w, h);
             drawMeterLevel(&paint);
         } else {
             meterStop();
             drawFrame(&paint);
-            drawContents(&paint);
-        }
+            QLabel::paintEvent(e);			
+	}
     }
 }
 
@@ -485,12 +500,12 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(Qt::red); // brighter than the red meter bar
+                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
                     paint->drawLine(0, y - 1, hW - midWidth - 1, y - 1);
                     paint->drawLine(0, y + 1, hW - midWidth - 1, y + 1);
                 }
 
-                paint->setPen(Qt::white);
+                paint->setPen(QColor(Qt::white));
                 paint->drawLine(0, y, hW - midWidth - 1, y);
             }
 
@@ -517,13 +532,13 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 y = height() - h;
 
                 if (h > loud) {
-                    paint->setPen(Qt::red); // brighter than the red meter bar
+                    paint->setPen(QColor(Qt::red)); // brighter than the red meter bar
                     paint->drawLine(hW + midWidth, y - 1, width(), y - 1);
                     paint->drawLine(hW + midWidth, y + 1, width(), y + 1);
                 }
 
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 paint->drawLine(hW + midWidth, y, width(), y);
             }
@@ -538,8 +553,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
                 paint->drawRect(0, 0, x, height());
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 // show peak level
                 x = m_peakLevelLeft * width() / m_maxLevel;
@@ -568,8 +583,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
                      */
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 y = height() - (m_peakLevelLeft * height()) / m_maxLevel;
 
@@ -585,8 +600,8 @@ VUMeter::drawMeterLevel(QPainter* paint)
             paint->drawRect(x, 0, width() - x, height());
 
             if (m_showPeakLevel) {
-                paint->setPen(Qt::white);
-                paint->setBrush(Qt::white);
+                paint->setPen(QColor(Qt::white));
+                paint->setBrush(QColor(Qt::white));
 
                 // show peak level
                 x = (m_peakLevelLeft * width()) / m_maxLevel;
@@ -632,8 +647,7 @@ VUMeter::slotReduceLevelRight()
         meterStop();
     }
 
-    QPainter paint(this);
-    drawMeterLevel(&paint);
+    repaint();
 }
 
 void
@@ -667,8 +681,7 @@ VUMeter::slotReduceLevelLeft()
         meterStop();
     }
 
-    QPainter paint(this);
-    drawMeterLevel(&paint);
+    repaint();
 }
 
 void

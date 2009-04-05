@@ -18,22 +18,25 @@
 
 #include "NameSetEditor.h"
 #include "BankEditorDialog.h"
-#include <kcompletion.h>
-#include <kglobalsettings.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qvgroupbox.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+
+
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QVBoxLayout>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
+#include <QCompleter>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
 #include <iostream>
 
 namespace Rosegarden
@@ -44,86 +47,120 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
                              QWidget* parent,
                              const char* name,
                              QString headingPrefix,
-                             bool showEntryButtons)
-        : QVGroupBox(title, parent, name),
-        m_bankEditor(bankEditor),
-        m_mainFrame(new QFrame(this))
+                             bool showEntryButtons) :
+    QGroupBox(title, parent),
+    m_bankEditor(bankEditor),
+    m_mainFrame(new QFrame(this))
 {
-    m_mainLayout = new QGridLayout(m_mainFrame,
-                                   4,   // rows
-                                   6,   // cols
-                                   2); // margin
+    QVBoxLayout *layout = new QVBoxLayout;
+
+    m_mainFrame->setContentsMargins(2, 2, 2, 2);
+    m_mainLayout = new QGridLayout(m_mainFrame);
+    m_mainFrame->setLayout(m_mainLayout);
+    layout->addWidget(m_mainFrame);
 
     // Librarian
     //
-    QGroupBox *groupBox = new QGroupBox(2,
-                                        Qt::Horizontal,
-                                        i18n("Librarian"),
-                                        m_mainFrame);
-    m_mainLayout->addMultiCellWidget(groupBox, 0, 2, 3, 5);
+    QGroupBox *groupBox = new QGroupBox(tr("Librarian"), m_mainFrame);
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
 
-    new QLabel(i18n("Name"), groupBox);
+    //m_mainLayout->addWidget(groupBox, 0, 3, 2- 0+1, 5- 3+1);
+    m_mainLayout->addWidget(groupBox, 0, 3, 3, 3);
+
+    groupBoxLayout->addWidget(new QLabel(tr("Name")));
     m_librarian = new QLabel(groupBox);
+    groupBoxLayout->addWidget(m_librarian);
 
-    new QLabel(i18n("Email"), groupBox);
+    groupBoxLayout->addWidget(new QLabel(tr("Email")));
     m_librarianEmail = new QLabel(groupBox);
+    groupBoxLayout->addWidget(m_librarianEmail);
 
-    QToolTip::add
-        (groupBox,
-                i18n("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
+    groupBox->setLayout(groupBoxLayout);
+    groupBox->setToolTip(tr("The librarian maintains the Rosegarden device data for this device.\nIf you've made modifications to suit your own device, it might be worth\nliaising with the librarian in order to publish your information for the benefit\nof others."));
 
     QTabWidget* tabw = new QTabWidget(this);
+    layout->addWidget(tabw);
 
-    tabw->setMargin(10);
+    setLayout(layout);
+//    m_mainLayout->setSpacing(layout->spacing());
 
-    QHBox *h;
-    QVBox *v;
-    QHBox *numBox;
+    tabw->setMargin(5);
+
+    QWidget *h;
+    QHBoxLayout *hLayout;
+
+    QWidget *v;
+    QVBoxLayout *vLayout;
+
+    QWidget *numBox;
+    QHBoxLayout *numBoxLayout;
 
     unsigned int tabs = 4;
     unsigned int cols = 2;
     unsigned int labelId = 0;
 
     for (unsigned int tab = 0; tab < tabs; ++tab) {
-        h = new QHBox(tabw);
+        h = new QWidget(tabw);
+        hLayout = new QHBoxLayout;
 
         for (unsigned int col = 0; col < cols; ++col) {
-            v = new QVBox(h);
+            v = new QWidget(h);
+            vLayout = new QVBoxLayout;
+            hLayout->addWidget(v);
 
             for (unsigned int row = 0; row < 128 / (tabs*cols); ++row) {
-                numBox = new QHBox(v);
+                numBox = new QWidget(v);
+                numBoxLayout = new QHBoxLayout;
+                vLayout->addWidget(numBox);
+                // take out the excess vertical space that was making this
+                // dialog two screens tall
+                numBoxLayout->setMargin(2);
                 QString numberText = QString("%1").arg(labelId + 1);
 
                 if (tab == 0 && col == 0 && row == 0) {
                     // Initial label; button to adjust whether labels start at 0 or 1
                     m_initialLabel = new QPushButton(numberText, numBox);
+                    numBoxLayout->addWidget(m_initialLabel);
                     connect(m_initialLabel,
                             SIGNAL(clicked()),
                             this,
                             SLOT(slotToggleInitialLabel()));
                 } else {
                     QLabel *label = new QLabel(numberText, numBox);
+                    numBoxLayout->addWidget(label);
                     label->setFixedWidth(40);
-                    label->setAlignment(AlignCenter);
+                    label->setAlignment(Qt::AlignCenter);
                     m_labels.push_back(label);
                 }
 
 
-
+                // What the hell is an EntryButton anyway?  Oh.  The buttons
+                // that somehow or other get the little green/white pixmaps for
+                // associating a key map with a program entry.
                 if (showEntryButtons) {
                     QPushButton *button = new QPushButton("", numBox, numberText);
-                    button->setMaximumWidth(40);
-                    button->setMaximumHeight(20);
-                    button->setFlat(true);
+                    numBoxLayout->addWidget(button);
+//                  button->setMaximumWidth(40);
+//                  button->setMaximumHeight(20);
+//                  button->setFlat(true);
                     connect(button, SIGNAL(clicked()),
                             this, SLOT(slotEntryButtonPressed()));
                     m_entryButtons.push_back(button);
                 }
 
-                KLineEdit* lineEdit = new KLineEdit(numBox, numberText);
+                LineEdit* lineEdit = new LineEdit(numberText, numBox);
+                numBoxLayout->addWidget(lineEdit);
+                numBox->setLayout(numBoxLayout);
                 lineEdit->setMinimumWidth(110);
-                lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);
-                lineEdit->setCompletionObject(&m_completion);
+                
+//            lineEdit->setCompletionMode(KGlobalSettings::CompletionAuto);//&&& FIX: use setCompleter(..)    
+//                 QCompleter completer;
+//                 completer->setCompletitionMode( QCompleter::InlineCompletion );
+                
+//                 lineEdit->setCompletionObject(&m_completion);
+
+                lineEdit->setCompleter(new QCompleter(m_completions));
+                
                 m_names.push_back(lineEdit);
 
                 connect(m_names[labelId],
@@ -133,7 +170,10 @@ NameSetEditor::NameSetEditor(BankEditorDialog* bankEditor,
 
                 ++labelId;
             }
+            v->setLayout(vLayout);
+            vLayout->setSpacing(0);
         }
+        h->setLayout(hLayout);
 
         tabw->addTab(h,
                      (tab == 0 ? headingPrefix + QString(" %1 - %2") :

@@ -20,10 +20,10 @@
 #define _RG_ADDTIMESIGNATURECOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -34,15 +34,17 @@ namespace Rosegarden
 class Composition;
 
 
-class AddTimeSignatureCommand : public KNamedCommand
+class AddTimeSignatureCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTimeSignatureCommand)
+
 public:
     AddTimeSignatureCommand(Composition *composition,
                             timeT time,
                             TimeSignature timeSig);
     virtual ~AddTimeSignatureCommand();
 
-    static QString getGlobalName() { return i18n("Add Time Si&gnature Change..."); }
+    static QString getGlobalName() { return tr("Add Time Si&gnature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

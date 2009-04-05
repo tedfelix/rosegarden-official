@@ -22,6 +22,7 @@
 #include "document/BasicCommand.h"
 #include "base/Event.h"
 
+#include <QCoreApplication>
 
 
 
@@ -34,6 +35,8 @@ class Event;
 
 class MatrixEraseCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MatrixEraseCommand)
+
 public:
     MatrixEraseCommand(Segment &segment,
                        Event *event);

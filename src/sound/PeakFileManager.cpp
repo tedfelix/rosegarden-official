@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include <qobject.h>
+#include <QObject>
 
 #include "PeakFileManager.h"
 #include "AudioFile.h"
@@ -172,8 +172,8 @@ PeakFileManager::generatePeaks(AudioFile *audioFile,
     if (audioFile->getType() == WAV) {
         m_currentPeakFile = getPeakFile(audioFile);
 
-        QObject::connect(m_currentPeakFile, SIGNAL(setProgress(int)),
-                         this, SIGNAL(setProgress(int)));
+        QObject::connect(m_currentPeakFile, SIGNAL(setValue(int)),
+                         this, SIGNAL(setValue(int)));
 
         // Just write out a peak file
         //

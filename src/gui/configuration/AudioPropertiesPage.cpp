@@ -17,34 +17,42 @@
 
 
 #include "AudioPropertiesPage.h"
-
 #include "misc/Strings.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenApplication.h"
+#include "document/RosegardenDocument.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/studio/AudioPluginManager.h"
+#include "gui/general/FileSource.h"
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
-#include <kdiskfreesp.h>
-#include <kfiledialog.h>
-#include <kfile.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+
+//#include <kdiskfreesp.h>
+//#include <kdiskfreespace.h>	// note: a kde4 include
+
+#include <QSettings>
+#include <QFileDialog>
+#include <QFile>
+#include <QByteArray>
+#include <QDataStream>
+#include <QDialog>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
+
+#ifndef WIN32
+#include <sys/statvfs.h>
+#endif
+
 
 
 namespace Rosegarden
 {
 
-AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
+AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, parent, name)
@@ -52,49 +60,71 @@ AudioPropertiesPage::AudioPropertiesPage(RosegardenGUIDoc *doc,
     AudioFileManager &afm = doc->getAudioFileManager();
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
-    layout->addWidget(new QLabel(i18n("Audio file path:"), frame), 0, 0);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+    layout->addWidget(new QLabel(tr("Audio file path:"), frame), 0, 0);
     m_path = new QLabel(QString(afm.getAudioPath().c_str()), frame);
     layout->addWidget(m_path, 0, 1);
 
     m_changePathButton =
-        new QPushButton(i18n("Choose..."), frame);
+        new QPushButton(tr("Choose..."), frame);
 
     layout->addWidget(m_changePathButton, 0, 2);
 
     m_diskSpace = new QLabel(frame);
-    layout->addWidget(new QLabel(i18n("Disk space remaining:"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("Disk space remaining:"), frame), 1, 0);
     layout->addWidget(m_diskSpace, 1, 1);
 
     m_minutesAtStereo = new QLabel(frame);
     layout->addWidget(
-        new QLabel(i18n("Equivalent minutes of 16-bit stereo:"),
+        new QLabel(tr("Equivalent minutes of 16-bit stereo:"),
                    frame), 2, 0);
 
-    layout->addWidget(m_minutesAtStereo, 2, 1, AlignCenter);
+    layout->addWidget(m_minutesAtStereo, 2, 1, Qt::AlignCenter);
 
     layout->setRowStretch(3, 2);
+    frame->setLayout(layout);
 
     calculateStats();
 
     connect(m_changePathButton, SIGNAL(released()),
             SLOT(slotFileDialog()));
 
-    addTab(frame, i18n("Modify audio path"));
+    addTab(frame, tr("Modify audio path"));
 }
 
 void
 AudioPropertiesPage::calculateStats()
 {
-    // This stolen from KDE libs kfile/kpropertiesdialog.cpp
-    //
-    QString mountPoint = KIO::findPathMountPoint(m_path->text());
-    KDiskFreeSp * job = new KDiskFreeSp;
-    connect(job, SIGNAL(foundMountPoint(const QString&, unsigned long, unsigned long,
-                                        unsigned long)),
-            this, SLOT(slotFoundMountPoint(const QString&, unsigned long, unsigned long,
-                                           unsigned long)));
-    job->readDF(mountPoint);
+#ifdef WIN32
+    ULARGE_INTEGER available, total, totalFree;
+    if (GetDiskFreeSpaceExA(m_path->text().toLocal8Bit().data(),
+                            &available, &total, &totalFree)) {
+        __int64 a = available.QuadPart;
+        __int64 t = total.QuadPart;
+        __int64 u = 0;
+        if (t > a) u = t - a;
+        slotFoundMountPoint(m_path->text(), t / 1024, u / 1024, a / 1024);
+    } else {
+        std::cerr << "WARNING: GetDiskFreeSpaceEx failed: error code "
+                  << GetLastError() << std::endl;
+    }
+#else
+    struct statvfs buf;
+    if (!statvfs(m_path->text().toLocal8Bit().data(), &buf)) {
+        // do the multiplies and divides in this order to reduce the
+        // likelihood of arithmetic overflow
+        std::cerr << "statvfs(" << m_path->text().toLocal8Bit().data() << ") says available: " << buf.f_bavail << ", total: " << buf.f_blocks << ", block size: " << buf.f_bsize << std::endl;
+        uint64_t available = ((buf.f_bavail / 1024) * buf.f_bsize);
+        uint64_t total = ((buf.f_blocks / 1024) * buf.f_bsize);
+        uint64_t used = 0;
+        if (total > available) used = total - available;
+        slotFoundMountPoint(m_path->text(), total, used, available);
+    } else {
+        perror("statvfs failed");
+    }
+#endif
 }
 
 void
@@ -103,25 +133,17 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
         unsigned long /*kBUsed*/,
         unsigned long kBAvail )
 {
-    m_diskSpace->setText(i18n("%1 out of %2 (%3% used)")
-                         .arg(KIO::convertSizeFromKB(kBAvail))
-                         .arg(KIO::convertSizeFromKB(kBSize))
-                         .arg( 100 - (int)(100.0 * kBAvail / kBSize) ));
+    m_diskSpace->setText(tr("%1 kB out of %2 kB (%3% kB used)")
+                          //KIO::convertSizeFromKB
+			  .arg(kBAvail)
+                          //KIO::convertSizeFromKB
+			  .arg(kBSize)
+                          .arg(100 - (int)(100.0 * kBAvail / kBSize) ));
 
 
     AudioPluginManager *apm = m_doc->getPluginManager();
 
-    int sampleRate = 48000;
-    QCString replyType;
-    QByteArray replyData;
-
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        sampleRate = result;
-    }
+    int sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 
     // Work out total bytes and divide this by the sample rate times the
     // number of channels (2) times the number of bytes per sample (2)
@@ -134,7 +156,7 @@ AudioPropertiesPage::slotFoundMountPoint(const QString&,
 
     m_minutesAtStereo->
     setText(QString("%1 %2 %3Hz").arg(minsStr)
-            .arg(i18n("minutes at"))
+            .arg(tr("minutes at"))
             .arg(sampleRate));
 }
 
@@ -143,11 +165,10 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    KFileDialog *fileDialog = new KFileDialog(QString(afm.getAudioPath().c_str()),
-                              QString::null,
-                              this, "file dialog", true);
-    fileDialog->setMode(KFile::Directory);
-
+    QFileDialog *fileDialog = new QFileDialog(this, QString(afm.getAudioPath().c_str()),
+                              "file dialog");
+	fileDialog->setFileMode( QFileDialog::Directory );
+	
     connect(fileDialog, SIGNAL(fileSelected(const QString&)),
             SLOT(slotFileSelected(const QString&)));
 

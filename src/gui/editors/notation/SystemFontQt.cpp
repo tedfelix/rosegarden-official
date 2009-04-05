@@ -20,10 +20,10 @@
 #include "misc/Debug.h"
 #include "gui/general/PixmapFunctions.h"
 
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpixmap.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QPixmap>
 
 namespace Rosegarden {
 
@@ -34,12 +34,12 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     success = false;
 
     if (strategy == OnlyGlyphs) {
-	NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character " << charName.getName() << " (glyph " << glyph << ")" << endl;
+	NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character " << charName << " (glyph " << glyph << ")" << endl;
 	return QPixmap();
     }
 
     if (code < 0) {
-	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character " << charName.getName() << ", need a code point" << endl;
+	NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character " << charName << ", need a code point" << endl;
 	return QPixmap();
     }
 
@@ -48,21 +48,20 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
 
     QPixmap map;
     map = QPixmap(metrics.width(qc), metrics.height());
-    
-    map.fill();
+    map.fill(Qt::transparent);
+
     QPainter painter;
     painter.begin(&map);
     painter.setFont(m_font);
-    painter.setPen(Qt::black);
+    painter.setPen(QColor(Qt::black));
     
     NOTATION_DEBUG << "NoteFont: Drawing character code "
-		   << code << " for " << charName.getName()
+		   << code << " for " << charName
 		   << " using QFont" << endl;
 
     painter.drawText(0, metrics.ascent(), qc);
     
     painter.end();
-    map.setMask(PixmapFunctions::generateMask(map, Qt::white.rgb()));
 
     success = true;
     return map;

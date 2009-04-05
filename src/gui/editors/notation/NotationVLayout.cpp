@@ -18,15 +18,15 @@
 #include <cmath>
 #include "NotationVLayout.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
-#include "base/Staff.h"
+#include "base/ViewSegment.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/editors/guitar/Chord.h"
 #include "NotationChord.h"
@@ -34,10 +34,10 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
-#include <kmessagebox.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QMessageBox>
+#include <QObject>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -65,7 +65,7 @@ NotationVLayout::~NotationVLayout()
 
 NotationVLayout::SlurList &
 
-NotationVLayout::getSlurList(Staff &staff)
+NotationVLayout::getSlurList(ViewSegment &staff)
 {
     SlurListMap::iterator i = m_slurs.find(&staff);
     if (i == m_slurs.end()) {
@@ -82,13 +82,13 @@ NotationVLayout::reset()
 }
 
 void
-NotationVLayout::resetStaff(Staff &staff, timeT, timeT)
+NotationVLayout::resetViewSegment(ViewSegment &staff, timeT, timeT)
 {
     getSlurList(staff).clear();
 }
 
 void
-NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
+NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
 {
     START_TIMING;
 
@@ -408,7 +408,7 @@ NotationVLayout::scanStaff(Staff &staffBase, timeT, timeT)
         }
     }
 
-    PRINT_ELAPSED("NotationVLayout::scanStaff");
+    PRINT_ELAPSED("NotationVLayout::scanViewSegment");
 }
 
 void
@@ -480,10 +480,12 @@ NotationVLayout::positionSlur(NotationStaff &staff,
         if (event->isa(Note::EventType)) {
 
             long h = 0;
-            if (!event->get
-                    <Int>(m_properties.HEIGHT_ON_STAFF, h)) {
-                KMessageBox::sorry
-                ((QWidget *)parent(), i18n("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime()));
+            if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
+				QMessageBox::warning
+					( dynamic_cast<QWidget *>(parent()), 
+					"", 
+	 				tr("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())
+					);
                 event->dump(std::cerr);
             }
 

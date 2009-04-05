@@ -21,7 +21,7 @@
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

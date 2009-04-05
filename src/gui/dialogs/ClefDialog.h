@@ -20,7 +20,7 @@
 #define _RG_CLEFDIALOG_H_
 
 #include "base/NotationTypes.h"
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
@@ -35,7 +35,7 @@ class BigArrowButton;
 class NotePixmapFactory;
 
 
-class ClefDialog : public KDialogBase
+class ClefDialog : public QDialog
 {
     Q_OBJECT
 

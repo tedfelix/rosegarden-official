@@ -13,16 +13,16 @@
 
 #include <cmath>
 #include <cstdlib>
-#include <kapplication.h>
 
-#include <qdatetime.h>
-#include <qstringlist.h>
-#include <qpalette.h>
-#include <kapp.h>
+#include <QDateTime>
+#include <QStringList>
+#include <QPalette>
+#include <QApplication>
 
 #include "PeakFile.h"
 #include "AudioFile.h"
 #include "Profiler.h"
+#include <misc/Strings.h>
 
 using std::cout;
 using std::cerr;
@@ -143,7 +143,7 @@ PeakFile::parseHeader()
     //
     QString dateString = QString(header.substr(40, 28).c_str());
 
-    QStringList dateTime = QStringList::split(":", dateString);
+    QStringList dateTime = dateString.split(":", QString::SkipEmptyParts);
 
     m_modificationTime.setDate(QDate(dateTime[0].toInt(),
                                      dateTime[1].toInt(),
@@ -291,7 +291,7 @@ PeakFile::close()
                   m_modificationTime.time().second(),
                   m_modificationTime.time().msec());
 
-    std::string dateString(fDate.data());
+    std::string dateString( qStrToStrLocal8( fDate )  );
 
     // Pad with spaces to make up to 28 bytes long and output
     //
@@ -534,9 +534,12 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
 
         byteCount += samples.length();
 
-        emit setProgress((int)(double(byteCount) /
+        emit setValue((int)(double(byteCount) /
                                double(apprxTotalBytes) * 100.0));
-        kapp->processEvents();
+        
+		//qApp->processEvents();
+		qApp->processEvents(QEventLoop::AllEvents);
+		
 
         samplePtr = (unsigned char *)samples.c_str();
 

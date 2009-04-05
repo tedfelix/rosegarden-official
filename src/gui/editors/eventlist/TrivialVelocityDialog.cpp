@@ -17,18 +17,32 @@
 
 #include "TrivialVelocityDialog.h"
 
-#include <qspinbox.h>
-#include <qlabel.h>
-#include <qhbox.h>
+#include <QSpinBox>
+#include <QLabel>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QDialogButtonBox>
 
 namespace Rosegarden {
  
 TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int deft) :
-        KDialogBase(parent, 0, true, label, Ok | Cancel)
+        QDialog(parent)
     {
-        QHBox *hbox = makeHBoxMainWidget();
-        new QLabel(label, hbox);
-        m_spin = new QSpinBox(0, 127, 1, hbox);
+        setModal(true);
+    setWindowTitle(label);
+
+    //QGridLayout *
+	m_metagrid = new QGridLayout;
+    setLayout(m_metagrid);
+    QWidget *hbox = new QWidget(this);
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    m_metagrid->addWidget(hbox, 0, 0);
+
+        QLabel *child_3 = new QLabel(label, hbox );
+        hboxLayout->addWidget(child_3);
+        m_spin = new QSpinBox( hbox );
+        hboxLayout->addWidget(m_spin);
+        hbox->setLayout(hboxLayout);
         m_spin->setValue(deft);
     } 
 
@@ -36,6 +50,11 @@ int
 TrivialVelocityDialog::getVelocity()
 {
     return m_spin->value();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    m_metagrid->addWidget(buttonBox, 1, 0);
+    m_metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
        
 }

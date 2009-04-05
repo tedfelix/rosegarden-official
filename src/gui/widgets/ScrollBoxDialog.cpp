@@ -16,16 +16,16 @@
 */
 
 
+#include <QCloseEvent>
 #include "ScrollBoxDialog.h"
 
 #include "ScrollBox.h"
-#include <kdialog.h>
-#include <qframe.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -33,11 +33,14 @@ namespace Rosegarden
 
 ScrollBoxDialog::ScrollBoxDialog(QWidget *parent,
                                  ScrollBox::SizeMode sizeMode,
-                                 const char *name,
-                                 WFlags flags) :
-        KDialog(parent, name, flags),
+                                 const char *name
+//                                  WFlags flags
+								) :
+        QDialog(parent),	//, name, flags),
         m_scrollbox(new ScrollBox(this, sizeMode))
-{ }
+{
+	setObjectName( name ); 
+}
 
 
 ScrollBoxDialog::~ScrollBoxDialog()

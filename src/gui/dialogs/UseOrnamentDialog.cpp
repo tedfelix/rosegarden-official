@@ -17,28 +17,29 @@
 
 
 #include "UseOrnamentDialog.h"
-#include <qlayout.h>
-#include <kapplication.h>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/TriggerSegment.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QComboBox>
+#include <QSettings>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
+#include <QApplication>
 
 
 namespace Rosegarden
@@ -46,22 +47,31 @@ namespace Rosegarden
 
 UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
                                      Composition *composition) :
-        KDialogBase(parent, "useornamentdialog", true, i18n("Use Ornament"),
-                    Ok | Cancel, Ok),
+        QDialog(parent),
         m_composition(composition)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Use Ornament"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+
     QLabel *label;
 
-    QGroupBox *notationBox = new QGroupBox(1, Horizontal, i18n("Notation"), vbox);
+    QGroupBox *notationBox = new QGroupBox(tr("Notation"));
+    vboxLayout->addWidget(notationBox);
 
-    QFrame *frame = new QFrame(notationBox);
-    QGridLayout *layout = new QGridLayout(frame, 4, 1, 5, 5);
+    notationBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
 
-    label = new QLabel(i18n("Display as:  "), frame);
+    label = new QLabel(tr("Display as:  "));
     layout->addWidget(label, 0, 0);
 
-    m_mark = new KComboBox(frame);
+    m_mark = new QComboBox;
     layout->addWidget(m_mark, 0, 1);
 
     m_marks.push_back(Marks::Trill);
@@ -74,112 +84,123 @@ UseOrnamentDialog::UseOrnamentDialog(QWidget *parent,
     m_marks.push_back(Marks::MordentLongInverted);
 
     const QString markLabels[] = {
-                                     i18n("Trill"), i18n("Trill with line"), i18n("Trill line only"),
-                                     i18n("Turn"), i18n("Mordent"), i18n("Inverted mordent"),
-                                     i18n("Long mordent"), i18n("Long inverted mordent"),
+                                     tr("Trill"), tr("Trill with line"), tr("Trill line only"),
+                                     tr("Turn"), tr("Mordent"), tr("Inverted mordent"),
+                                     tr("Long mordent"), tr("Long inverted mordent"),
                                  };
 
     for (size_t i = 0; i < m_marks.size(); ++i) {
-        m_mark->insertItem(NotePixmapFactory::toQPixmap
-                           (NotePixmapFactory::makeMarkMenuPixmap(m_marks[i])),
-                           markLabels[i]);
+        m_mark->addItem(NotePixmapFactory::makeMarkMenuPixmap(m_marks[i]),
+                        markLabels[i]);
     }
-    m_mark->insertItem(i18n("Text mark"));
+    m_mark->addItem(tr("Text mark"));
 
     connect(m_mark, SIGNAL(activated(int)), this, SLOT(slotMarkChanged(int)));
 
-    m_textLabel = new QLabel(i18n("   Text:  "), frame);
+    m_textLabel = new QLabel(tr("   Text:  "));
     layout->addWidget(m_textLabel, 0, 2);
 
-    m_text = new QLineEdit(frame);
+    m_text = new LineEdit;
     layout->addWidget(m_text, 0, 3);
+    notationBox->setLayout(layout);
 
-    QGroupBox *performBox = new QGroupBox(1, Horizontal, i18n("Performance"), vbox);
+    QGroupBox *performBox = new QGroupBox(tr("Performance"));
+    vboxLayout->addWidget(performBox);
+    vbox->setLayout(vboxLayout);
 
-    frame = new QFrame(performBox);
-    layout = new QGridLayout(frame, 3, 2, 5, 5);
+    performBox->setContentsMargins(5, 5, 5, 5);
+    layout = new QGridLayout;
+    layout->setSpacing(5);
 
-    label = new QLabel(i18n("Perform using triggered segment: "), frame);
+    label = new QLabel(tr("Perform using triggered segment: "));
     layout->addWidget(label, 0, 0);
 
-    m_ornament = new KComboBox(frame);
+    m_ornament = new QComboBox;
     layout->addWidget(m_ornament, 0, 1);
 
     int n = 1;
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
-        m_ornament->insertItem
+        m_ornament->addItem
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(i18n("Perform with timing: "), frame);
+    label = new QLabel(tr("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new KComboBox(frame);
+    m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->insertItem(i18n("As stored"));
-    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
-    m_adjustTime->insertItem(i18n("End at same time as note"));
-    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(tr("As stored"));
+    m_adjustTime->addItem(tr("Truncate if longer than note"));
+    m_adjustTime->addItem(tr("End at same time as note"));
+    m_adjustTime->addItem(tr("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune = new QCheckBox(tr("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);
+    performBox->setLayout(layout);
 
     setupFromConfig();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
 UseOrnamentDialog::setupFromConfig()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    Mark mark = qstrtostr(config->readEntry("useornamentmark", "trill"));
-    int seg = config->readNumEntry("useornamentlastornament", 0);
-    std::string timing = qstrtostr
-                         (config->readEntry
-                          ("useornamenttiming",
-                           strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = config->readBoolEntry("useornamentretune", true);
+    Mark mark = qstrtostr(settings.value("useornamentmark", "trill").toString());
+    int seg = settings.value("useornamentlastornament", 0).toInt() ;
+    std::string timing = qstrtostr(settings.value("useornamenttiming",
+            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)).toString());
+    bool retune = qStrToBool( settings.value("useornamentretune", "true" ) ) ;
 
     size_t i = 0;
     for (i = 0; i < m_marks.size(); ++i) {
         if (mark == m_marks[i]) {
-            m_mark->setCurrentItem(i);
+            m_mark->setCurrentIndex(i);
             m_text->setEnabled(false);
             break;
         }
     }
     if (i >= m_marks.size()) {
-        m_mark->setCurrentItem(m_marks.size());
+        m_mark->setCurrentIndex(m_marks.size());
         m_text->setEnabled(true);
         m_text->setText(strtoqstr(Marks::getTextFromMark(mark)));
     }
 
     if (seg >= 0 && seg < m_ornament->count())
-        m_ornament->setCurrentItem(seg);
+        m_ornament->setCurrentIndex(seg);
 
     if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
-        m_adjustTime->setCurrentItem(0);
+        m_adjustTime->setCurrentIndex(0);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-        m_adjustTime->setCurrentItem(3);
+        m_adjustTime->setCurrentIndex(3);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-        m_adjustTime->setCurrentItem(1);
+        m_adjustTime->setCurrentIndex(1);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-        m_adjustTime->setCurrentItem(2);
+        m_adjustTime->setCurrentIndex(2);
     }
 
     m_retune->setChecked(retune);
+
+    settings.endGroup();
 }
 
 TriggerSegmentId
 UseOrnamentDialog::getId() const
 {
-    int ix = m_ornament->currentItem();
+    int ix = m_ornament->currentIndex();
 
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
@@ -196,8 +217,8 @@ UseOrnamentDialog::getId() const
 Mark
 UseOrnamentDialog::getMark() const
 {
-    if (int(m_marks.size()) > m_mark->currentItem())
-        return m_marks[m_mark->currentItem()];
+    if (int(m_marks.size()) > m_mark->currentIndex())
+        return m_marks[m_mark->currentIndex()];
     else
         return Marks::getTextMark(qstrtostr(m_text->text()));
 }
@@ -211,7 +232,7 @@ UseOrnamentDialog::getRetune() const
 std::string
 UseOrnamentDialog::getTimeAdjust() const
 {
-    int option = m_adjustTime->currentItem();
+    int option = m_adjustTime->currentIndex();
 
     switch (option) {
 
@@ -240,17 +261,19 @@ UseOrnamentDialog::slotMarkChanged(int i)
 }
 
 void
-UseOrnamentDialog::slotOk()
+UseOrnamentDialog::accept()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    config->writeEntry("useornamentmark", strtoqstr(getMark()));
-    config->writeEntry("useornamenttiming", strtoqstr(getTimeAdjust()));
-    config->writeEntry("useornamentretune", m_retune->isChecked());
-    config->writeEntry("useornamentlastornament", m_ornament->currentItem());
+    settings.setValue("useornamentmark", strtoqstr(getMark()));
+    settings.setValue("useornamenttiming", strtoqstr(getTimeAdjust()));
+    settings.setValue("useornamentretune", m_retune->isChecked());
+    settings.setValue("useornamentlastornament", m_ornament->currentIndex());
 
-    accept();
+    settings.endGroup();
+
+    QDialog::accept();
 }
 
 }

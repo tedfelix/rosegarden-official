@@ -17,16 +17,17 @@
 
 
 #include "PitchChooser.h"
-
-#include <klocale.h>
-#include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+
+#include "gui/general/MidiPitchLabel.h"
+
+#include <QGroupBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -35,24 +36,35 @@ namespace Rosegarden
 PitchChooser::PitchChooser(QString title,
                            QWidget *parent,
                            int defaultPitch) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_defaultPitch(defaultPitch)
 {
+    m_layout = new QVBoxLayout;
+
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
+    m_layout->addWidget(m_pitchDragLabel);
 
-    QHBox *hbox = new QHBox(this);
-    hbox->setSpacing(6);
+    QWidget *hbox = new QWidget(this);
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    hboxLayout->setSpacing(6);
+    m_layout->addWidget(hbox);
 
-    new QLabel(i18n("Pitch:"), hbox);
+    QLabel *child_4 = new QLabel(tr("Pitch:"), hbox );
+    hboxLayout->addWidget(child_4);
 
-    m_pitch = new QSpinBox(hbox);
-    m_pitch->setMinValue(0);
-    m_pitch->setMaxValue(127);
+    m_pitch = new QSpinBox( hbox );
+    hboxLayout->addWidget(m_pitch);
+    m_pitch->setMinimum(0);
+    m_pitch->setMaximum(127);
     m_pitch->setValue(defaultPitch);
 
     MidiPitchLabel pl(defaultPitch);
-    m_pitchLabel = new QLabel(pl.getQString(), hbox);
+    m_pitchLabel = new QLabel(pl.getQString(), hbox );
+    hboxLayout->addWidget(m_pitchLabel);
+    hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
+
+    setLayout(m_layout);
 
     connect(m_pitch, SIGNAL(valueChanged(int)),
             this, SLOT(slotSetPitch(int)));
@@ -75,6 +87,12 @@ PitchChooser::PitchChooser(QString title,
     connect(m_pitchDragLabel, SIGNAL(preview(int)),
             this, SIGNAL(preview(int)));
 
+}
+
+void
+PitchChooser::addWidgetToLayout(QWidget *widget)
+{
+    m_layout->addWidget(widget);
 }
 
 int

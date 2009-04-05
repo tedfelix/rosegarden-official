@@ -21,46 +21,48 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include <kmainwindow.h>
+#include "gui/general/ActionFileClient.h"
+
+#include <QMainWindow>
 
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
 class QCloseEvent;
-class KListView;
-class KCommand;
+class QTreeWidget;
+class QTreeWidgetItem;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class Studio;
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class RosegardenDocument;
+class CommandHistory;
 
 
-class ControlEditorDialog : public KMainWindow
+class ControlEditorDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     ControlEditorDialog(QWidget *parent,
-                        RosegardenGUIDoc *doc,
+                        RosegardenDocument *doc,
                         DeviceId device);
 
     ~ControlEditorDialog();
 
     void initDialog();
 
-    void addCommandToHistory(KCommand *command);
-    MultiViewCommandHistory* getCommandHistory();
+    void addCommandToHistory(Command *command);
+    CommandHistory* getCommandHistory();
 
     void setModified(bool value);
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
     DeviceId getDevice() { return m_device; }
 
@@ -77,7 +79,7 @@ public slots:
     void slotClose();
 
     void slotEdit();
-    void slotEdit(QListViewItem *);
+    void slotEdit(QTreeWidgetItem *);
 
 signals:
     void closing();
@@ -90,7 +92,7 @@ protected:
 
     //--------------- Data members ---------------------------------
     Studio      *m_studio;
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
     DeviceId     m_device;
 
     QPushButton             *m_closeButton;
@@ -101,7 +103,7 @@ protected:
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
 
-    KListView               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 

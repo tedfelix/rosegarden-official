@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGESTEMSCOMMAND_H_
-#define _RG_ADJUSTMENUCHANGESTEMSCOMMAND_H_
+#ifndef _RG_CHANGESTEMSCOMMAND_H_
+#define _RG_CHANGESTEMSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 class Stems;
@@ -31,18 +31,24 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ChangeStemsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeStemsCommand)
+
 public:
     ChangeStemsCommand(bool up, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(up), selection, true),
         m_selection(&selection), m_up(up) { }
 
     static QString getGlobalName(bool up) {
-        return up ? i18n("Stems &Up") : i18n("Stems &Down");
+        return up ? tr("Stems &Up") : tr("Stems &Down");
     }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

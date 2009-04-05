@@ -28,7 +28,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ namespace Rosegarden
 SegmentSplitByPitchCommand::SegmentSplitByPitchCommand(Segment *segment,
         int p, bool r, bool d,
         ClefHandling c) :
-        KNamedCommand(i18n("Split by Pitch")),
+        NamedCommand(tr("Split by Pitch")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_newSegmentA(0),
@@ -161,8 +161,8 @@ SegmentSplitByPitchCommand::execute()
                      BaseProperties::GROUP_TYPE_BEAMED);
 
     std::string label = m_segment->getLabel();
-    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(upper)"))));
-    m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(lower)"))));
+    m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(upper)"))));
+    m_newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(lower)"))));
     m_newSegmentA->setColourIndex(m_segment->getColourIndex());
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());
 

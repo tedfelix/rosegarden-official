@@ -18,18 +18,20 @@
 
 #include "RescaleDialog.h"
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <kapplication.h>
+#include "misc/Strings.h"
+
+#include <QSettings>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QApplication>
 
 
 namespace Rosegarden
@@ -41,30 +43,48 @@ RescaleDialog::RescaleDialog(QWidget *parent,
                              timeT originalDuration,
                              bool showCloseGapOption,
                              bool constrainToCompositionDuration) :
-        KDialogBase(parent, 0, true, i18n("Rescale"), User1 | Ok | Cancel)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Stretch or Squash"));
 
-    m_newDuration = new TimeWidget
-                    (i18n("Duration of selection"), vbox, composition,
-                     startTime, originalDuration, true,
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    setLayout(vboxLayout);
+
+
+    m_newDuration = new TimeWidget(tr("Duration of selection"), vbox,
+                     composition, startTime, originalDuration, true,
                      constrainToCompositionDuration);
+    vboxLayout->addWidget(m_newDuration);
 
     if (showCloseGapOption) {
-        QGroupBox *optionBox = new QGroupBox(1, Horizontal, i18n("Options"), vbox);
-        m_closeGap = new QCheckBox(i18n("Adjust times of following events accordingly"),
+        QGroupBox *optionBox = new QGroupBox( tr("Options"), vbox );
+        QVBoxLayout *optionBoxLayout = new QVBoxLayout;
+        optionBox->setLayout(optionBoxLayout);
+        vboxLayout->addWidget(optionBox);
+        m_closeGap = new QCheckBox(tr("Adjust times of following events accordingly"),
                                    optionBox);
-        KConfig *config = kapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
-        m_closeGap->setChecked
-        (config->readBoolEntry("rescaledialogadjusttimes", true));
+        optionBoxLayout->addWidget(m_closeGap);
+
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        m_closeGap->setChecked(qStrToBool(settings.value("rescaledialogadjusttimes", "true")));
+
+        settings.endGroup();
     } else {
         m_closeGap = 0;
     }
 
-    setButtonText(User1, i18n("Reset"));
-    connect(this, SIGNAL(user1Clicked()),
+    connect(this, SIGNAL(ResetClicked()),
             m_newDuration, SLOT(slotResetToDefault()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vboxLayout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    updateGeometry();
 }
 
 timeT
@@ -77,9 +97,12 @@ bool
 RescaleDialog::shouldCloseGap()
 {
     if (m_closeGap) {
-        KConfig *config = kapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
-        config->writeEntry("rescaledialogadjusttimes", m_closeGap->isChecked());
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        settings.setValue("rescaledialogadjusttimes", m_closeGap->isChecked());
+        settings.endGroup();
+
         return m_closeGap->isChecked();
     } else {
         return true;

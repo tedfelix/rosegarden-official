@@ -20,17 +20,17 @@
 #define _RG_BASICCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include "misc/Debug.h"
 
 class QString;
 
-
 namespace Rosegarden
 {
 
-
+class EventSelection;
+class CommandArgumentQuerier; // forward declaration useful for some subclasses
 
 /**
  * BasicCommand is an abstract subclass of Command that manages undo,
@@ -40,7 +40,7 @@ namespace Rosegarden
  * modified by the command, ready to be restored verbatim on undo.
  */
 
-class BasicCommand : public KNamedCommand
+class BasicCommand : public NamedCommand
 {
 public:
     virtual ~BasicCommand();
@@ -53,6 +53,9 @@ public:
     timeT getStartTime() { return m_startTime; }
     timeT getEndTime() { return m_endTime; }
     virtual timeT getRelayoutEndTime();
+
+    /// events selected after command; 0 if no change / no meaningful selection
+    virtual EventSelection *getSubsequentSelection() { return 0; }
 
 protected:
     /**
@@ -78,8 +81,6 @@ protected:
     virtual void beginExecute();
 
 private:
-    //--------------- Data members ---------------------------------
-
     void copyTo(Segment *);
     void copyFrom(Segment *);
 

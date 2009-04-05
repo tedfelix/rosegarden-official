@@ -20,7 +20,7 @@
 #define _RG_TUPLETDIALOG_H_
 
 #include "base/NotationTypes.h"
-#include <kdialogbase.h>
+#include <QDialog>
 #include "base/Event.h"
 
 
@@ -29,7 +29,7 @@ class QString;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -37,7 +37,7 @@ namespace Rosegarden
 
 
 
-class TupletDialog : public KDialogBase
+class TupletDialog : public QDialog
 {
     Q_OBJECT
 
@@ -65,13 +65,13 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    KComboBox *m_unitCombo;
-    KComboBox *m_untupledCombo;
-    KComboBox *m_tupledCombo;
+    QComboBox *m_unitCombo;
+    QComboBox *m_untupledCombo;
+    QComboBox *m_tupledCombo;
 
     QCheckBox *m_hasTimingAlready;
 
-    QGroupBox *m_timingDisplayBox;
+    QGroupBox *m_timingDisplayGrid;
     QLabel *m_selectionDurationDisplay;
     QLabel *m_untupledDurationCalculationDisplay;
     QLabel *m_untupledDurationDisplay;

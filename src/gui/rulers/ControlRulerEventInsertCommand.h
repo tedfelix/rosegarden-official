@@ -21,11 +21,15 @@
 #include "document/BasicCommand.h"
 #include <string>
 
+#include <QCoreApplication>
+
 namespace Rosegarden
 {
 
 class ControlRulerEventInsertCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventInsertCommand)
+
 public:
     ControlRulerEventInsertCommand(const std::string &type, 
                                    timeT insertTime, 

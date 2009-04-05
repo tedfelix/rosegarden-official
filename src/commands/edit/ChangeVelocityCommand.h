@@ -20,8 +20,8 @@
 #define _RG_CHANGEVELOCITYCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -37,14 +37,16 @@ class EventSelection;
     creative. */
 class ChangeVelocityCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeVelocityCommand)
+
 public:
     ChangeVelocityCommand(int delta, EventSelection &selection,bool rounddelta=true) :
         BasicSelectionCommand(getGlobalName(delta), selection, true),
         m_selection(&selection), m_delta(delta),m_rounddelta(rounddelta) { }
 
     static QString getGlobalName(int delta = 0) {
-        if (delta > 0) return i18n("&Increase Velocity");
-        else return i18n("&Reduce Velocity");
+        if (delta > 0) return tr("&Increase Velocity");
+        else return tr("&Reduce Velocity");
     }
 
 protected:

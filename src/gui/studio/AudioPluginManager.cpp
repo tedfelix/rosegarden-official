@@ -22,14 +22,16 @@
 #include "AudioPluginClipboard.h"
 #include "AudioPlugin.h"
 #include "base/AudioPluginInstance.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "gui/application/RosegardenApplication.h"
 #include "sound/PluginFactory.h"
 #include "sound/PluginIdentifier.h"
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qmutex.h>
-#include <qstring.h>
-#include <qthread.h>
+
+#include <QByteArray>
+#include <QDataStream>
+#include <QMutex>
+#include <QString>
+#include <QThread>
 
 
 namespace Rosegarden
@@ -69,7 +71,7 @@ AudioPluginManager::Enumerator::run()
 
     RG_DEBUG << "\n\nAudioPluginManager::Enumerator::run()\n\n" << endl;
 
-    if (!rgapp->noSequencerMode()) {
+    if (!rosegardenApplication->noSequencerMode()) {
         // We only waste the time looking for plugins here if we
         // know we're actually going to be able to use them.
         PluginFactory::enumerateAllPlugins(rawPlugins);
@@ -85,8 +87,8 @@ AudioPluginManager::Enumerator::run()
         QString label = rawPlugins[i++];
         QString author = rawPlugins[i++];
         QString copyright = rawPlugins[i++];
-        bool isSynth = ((rawPlugins[i++]).lower() == "true");
-        bool isGrouped = ((rawPlugins[i++]).lower() == "true");
+        bool isSynth = ((rawPlugins[i++]).toLower() == "true");
+        bool isGrouped = ((rawPlugins[i++]).toLower() == "true");
         QString category = rawPlugins[i++];
         unsigned int portCount = rawPlugins[i++].toInt();
 
@@ -285,16 +287,7 @@ AudioPluginManager::awaitEnumeration()
 void
 AudioPluginManager::fetchSampleRate()
 {
-    QCString replyType;
-    QByteArray replyData;
-
-    if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-
-        QDataStream streamIn(replyData, IO_ReadOnly);
-        unsigned int result;
-        streamIn >> result;
-        m_sampleRate = result;
-    }
+    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
 }
 
 }

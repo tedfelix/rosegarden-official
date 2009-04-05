@@ -19,13 +19,14 @@
 #ifndef _RG_ROSEGARDENPITCHCHOOSER_H_
 #define _RG_ROSEGARDENPITCHCHOOSER_H_
 
-#include <qgroupbox.h>
-#include <qstring.h>
+#include <QGroupBox>
 
 
+class QString;
 class QWidget;
 class QSpinBox;
 class QLabel;
+class QVBoxLayout;
 
 
 namespace Rosegarden
@@ -39,8 +40,8 @@ class PitchChooser : public QGroupBox
     Q_OBJECT
 public:
     PitchChooser(QString title,
-                           QWidget *parent,
-                           int defaultPitch = 60);
+                 QWidget *parent,
+                 int defaultPitch = 60);
     
     int getPitch() const;
 
@@ -51,12 +52,14 @@ signals:
 public slots:
     void slotSetPitch(int);
     void slotResetToDefault();
+    void addWidgetToLayout(QWidget *widget);
 
 protected:
     int m_defaultPitch;
     PitchDragLabel *m_pitchDragLabel;
     QSpinBox *m_pitch;
     QLabel *m_pitchLabel;
+    QVBoxLayout *m_layout;
 };
 
     

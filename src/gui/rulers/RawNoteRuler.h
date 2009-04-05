@@ -20,8 +20,8 @@
 #define _RG_RAWNOTERULER_H_
 
 #include "base/Segment.h"
-#include <qsize.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QWidget>
 #include <utility>
 #include <vector>
 #include "base/Event.h"

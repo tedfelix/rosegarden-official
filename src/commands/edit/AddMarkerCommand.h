@@ -20,10 +20,10 @@
 #define _RG_ADDMARKERCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -35,8 +35,10 @@ class Marker;
 class Composition;
 
 
-class AddMarkerCommand : public KNamedCommand
+class AddMarkerCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddMarkerCommand)
+
 public:
     AddMarkerCommand(Composition *comp,
                      timeT time,
@@ -44,7 +46,7 @@ public:
                      const std::string &description);
     ~AddMarkerCommand();
 
-    static QString getGlobalName() { return i18n("&Add Marker"); }
+    static QString getGlobalName() { return tr("&Add Marker"); }
 
     virtual void execute();
     virtual void unexecute();

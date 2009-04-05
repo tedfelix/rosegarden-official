@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -13,41 +13,43 @@
     COPYING included with this distribution for more information.
 */
 
-#include <qtimer.h>
-#include <kapplication.h>
-#include <sys/time.h>
-#include "base/RealTime.h"
-
-#include <kcmdlineargs.h>
-#include <kaboutdata.h>
-#include <klocale.h>
-#include <dcopclient.h>
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <kstddirs.h>
-#include <ktip.h>
-#include <kprocess.h>
-#include <kglobalsettings.h>
-
-#include <qstringlist.h>
-#include <qregexp.h>
-#include <qvbox.h>
-#include <qlabel.h>
+#include <Q3Canvas>
 
 #include "document/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/widgets/CurrentProgressDialog.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/kdeext/KStartupLogo.h"
-
+#include "document/RosegardenDocument.h"
+#include "gui/widgets/StartupLogo.h"
+#include "gui/general/ResourceFinder.h"
+#include "gui/general/IconLoader.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "base/RealTime.h"
 
-#include "gui/kdeext/klearlook.h"
+#include <QSettings>
+#include <QDesktopWidget>
+#include <QMessageBox>
+#include <QDir>
+#include <QFile>
+#include <QProcess>
+#include <QTranslator>
+#include <QLocale>
+#include <QLibraryInfo>
+#include <QStringList>
+#include <QRegExp>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QTimer>
+#include <QApplication>
+
+#include <sys/time.h>
 
 using namespace Rosegarden;
+
 
 /*! \mainpage Rosegarden global design
  
@@ -179,8 +181,8 @@ The base directory also contains various music-related helper classes:
  
 The GUI directory builds into a KDE/Qt application. Like most KDE
 applications, it follows a document/view model. The document (class
-RosegardenGUIDoc, which wraps a Composition) can have several views
-(class RosegardenGUIView), although at the moment only a single one is
+RosegardenDocument, which wraps a Composition) can have several views
+(class RosegardenMainViewWidget), although at the moment only a single one is
 used.
  
 This view is the TrackEditor, which shows all the Composition's
@@ -208,7 +210,7 @@ components:
  
  - a canvas view.  Although this isn't a part of the EditView's
     definition, both of the existing edit views (notation and matrix)
-    use one, because they both use a QCanvas to represent data.
+    use one, because they both use a Q3Canvas to represent data.
  
  - LinedStaff, a staff with lines.  Like the canvas view, this isn't
     part of the EditView definition, but both views use one.
@@ -270,51 +272,56 @@ other MIDI clients (MIDI IN and OUT hardware ports or ALSA synth devices)
 using any ALSA MIDI Connection Manager.  The Sequencer also supports 
 playing and recording of Audio sample files using \link JackDriver Jack\endlink 
  
-The GUI and Sequencer communicate using the KDE DCOP communication framework.
-Look in:
- - \link rosegardenguiiface.h gui/rosegardenguiiface.h\endlink
- - \link rosegardensequenceriface.h sequencer/rosegardensequenceriface.h\endlink
- 
-for definitions of the DCOP interfaces pertinent to the Sequencer
-and GUI.  The main DCOP operations from the GUI involve starting and
+The GUI and Sequencer were originally implemented as separate processes
+communicating using the KDE DCOP communication framework, but they have
+now been restructured into separate threads of a single process.  The
+original design still explains some of the structure of these classes,
+however.  Generally, the DCOP functions that the GUI used to call in
+the sequencer are now simple public functions of RosegardenSequencer
+that are described in the RosegardenSequencerIface parent class (this
+class is retained purely for descriptive purposes); calls that the
+sequencer used to make back to the GUI have mostly been replaced by
+polling from the GUI to sequencer.
+
+The main operations invoked from the GUI involve starting and
 stopping the Sequencer, playing and recording, fast forwarding and
 rewinding.  Once a play or record cycle is enabled it's the Sequencer
-that does most of the hard work.  Events are read from (or written to, when recording)
-a set of mmapped files. 
+that does most of the hard work.  Events are read from (or written to,
+when recording) a set of mmapped files shared between the threads.
  
 The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
  
  - libRosegardenSequencer holds everything pertinent to sequencing
-    for Rosegarden including the
-    Sequencer class itself.  This library is only linked into the
-    Rosegarden Sequencer.
+   for Rosegarden including the
+   Sequencer class itself.  This library is only linked into the
+   Rosegarden Sequencer.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
-    MIDI files) and the MappedEvent and MappedComposition classes (the
-    communication class for transferring events back and forth across
-    DCOP).  This library is needed by the GUI as well as the Sequencer.
+   MIDI files) and the MappedEvent and MappedComposition classes (the
+   communication class for transferring events back and forth between
+   sequencer and GUI).  This library is needed by the GUI as well as
+   the Sequencer.
  
 The main Sequencer state machine is a good starting point and clearly
 visible at the bottom of rosegarden/sequencer/main.cpp.
- 
- 
 */
 
-static const char *description =
-    I18N_NOOP("Rosegarden - A sequencer and musical notation editor");
+static QString description =
+       RosegardenApplication::tr("Rosegarden - A sequencer and musical notation editor");
+
+/*&&& removed options -- we'll want a different set anyway 
 
 static KCmdLineOptions options[] =
     {
         { "nosequencer", I18N_NOOP("Don't use the sequencer (support editing only)"), 0 },
         { "nosplash", I18N_NOOP("Don't show the splash screen"), 0 },
         { "nofork", I18N_NOOP("Don't automatically run in the background"), 0 },
-        { "existingsequencer", I18N_NOOP("Attach to a running sequencer process, if found"), 0 },
         { "ignoreversion", I18N_NOOP("Ignore installed version - for devs only"), 0 },
         { "+[File]", I18N_NOOP("file to open"), 0 },
         { 0, 0, 0 }
     };
-
+*/
 
 // -----------------------------------------------------------------
 
@@ -324,80 +331,27 @@ static KCmdLineOptions options[] =
 #include <X11/Xatom.h>
 #include <X11/SM/SMlib.h>
 
-static int _x_errhandler( Display *dpy, XErrorEvent *err )
+static int _x_errhandler(Display *dpy, XErrorEvent *err)
 {
     char errstr[256];
-    XGetErrorText( dpy, err->error_code, errstr, 256 );
-    if ( err->error_code != BadWindow )
-        kdWarning() << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
-        << "\n  Major opcode:  " << err->request_code << endl;
+    XGetErrorText(dpy, err->error_code, errstr, 256);
+    if (err->error_code != BadWindow) {
+        std::cerr << "Rosegarden: detected X Error: " << errstr << " " << err->error_code
+                  << "\n  Major opcode:  " << err->request_code << std::endl;
+    }
     return 0;
 }
 #endif
 
-// NOTE: to get a dump of the stack trace from KDE during program execution:
-// std::cerr << kdBacktrace() << std::endl
-// (see kdebug.h)
-
-void testInstalledVersion()
+void usage()
 {
-    QString versionLocation = locate("appdata", "version.txt");
-    QString installedVersion;
-
-    if (versionLocation) {
-        QFile versionFile(versionLocation);
-        if (versionFile.open(IO_ReadOnly)) {
-            QTextStream text(&versionFile);
-            QString s = text.readLine().stripWhiteSpace();
-            versionFile.close();
-            if (s) {
-                if (s == VERSION) return;
-                installedVersion = s;
-            }
-        }
-    }
-
-    if (installedVersion) {
-
-        KMessageBox::detailedError
-        (0,
-         i18n("Installation contains the wrong version of Rosegarden."),
-         i18n(" The wrong versions of Rosegarden's data files were\n"
-              " found in the standard KDE installation directories.\n"
-              " (I am %1, but the installed files are for version %2.)\n\n"
-              " This may mean one of the following:\n\n"
-              " 1. This is a new upgrade of Rosegarden, and it has not yet been\n"
-              "     installed.  If you compiled it yourself, check that you have\n"
-              "     run \"make install\" and that the procedure completed\n"
-              "     successfully.\n\n"
-              " 2. The upgrade was installed in a non-standard directory,\n"
-              "     and an old version was found in a standard directory.  If so,\n"
-              "     you will need to add the correct directory to your KDEDIRS\n"
-              "     environment variable before you can run it.").arg(VERSION).arg(installedVersion),
-         i18n("Installation problem"));
-
-    } else {
-
-        KMessageBox::detailedError
-        (0,
-         i18n("Rosegarden does not appear to have been installed."),
-         i18n(" One or more of Rosegarden's data files could not be\n"
-              " found in the standard KDE installation directories.\n\n"
-              " This may mean one of the following:\n\n"
-              " 1. Rosegarden has not been correctly installed.  If you compiled\n"
-              "     it yourself, check that you have run \"make install\" and that\n"
-              "     the procedure completed successfully.\n\n"
-              " 2. Rosegarden has been installed in a non-standard directory,\n"
-              "     and you need to add this directory to your KDEDIRS environment\n"
-              "     variable before you can run it.  This may be the case if you\n"
-              "     installed into $HOME or a local third-party package directory\n"
-              "     like /usr/local or /opt."),
-         i18n("Installation problem"));
-    }
-
-    exit(1);
+    std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
+    std::cerr << "Version " << VERSION << std::endl;
+    std::cerr << std::endl;
+    std::cerr << "Usage: rosegarden [--nosplash] [--nosequencer] [file.rg]" << std::endl;
+    std::cerr << std::endl;
+    exit(2);
 }
-
 
 int main(int argc, char *argv[])
 {
@@ -405,98 +359,97 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
-    KAboutData aboutData( "rosegarden", I18N_NOOP("Rosegarden"),
-                          VERSION, description, KAboutData::License_GPL,
-                          I18N_NOOP("Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown\nParts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent\nLilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen"),
-                          0,
-                          "http://www.rosegardenmusic.com/",
-                          "rosegarden-devel@lists.sourceforge.net");
+    RosegardenApplication theApp(argc, argv);
 
-    aboutData.addAuthor("Guillaume Laurent (lead)", 0, "glaurent@telegraph-road.org", "http://telegraph-road.org");
-    aboutData.addAuthor("Chris Cannam (lead)", 0, "cannam@all-day-breakfast.com", "http://all-day-breakfast.com");
-    aboutData.addAuthor("Richard Bown (lead)", 0, "richard.bown@ferventsoftware.com");
-    aboutData.addAuthor("D. Michael McIntyre", 0, "dmmcintyr@users.sourceforge.net");
-    aboutData.addAuthor("Pedro Lopez-Cabanillas", 0, "plcl@users.sourceforge.net");
-    aboutData.addAuthor("Heikki Johannes Junes", 0, "hjunes@users.sourceforge.net");
+    RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
+    RG_DEBUG << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
 
-    aboutData.addCredit("Randall Farmer", I18N_NOOP("Chord labelling code"), " rfarme@simons-rock.edu");
-    aboutData.addCredit("Hans  Kieserman", I18N_NOOP("LilyPond output\nassorted other patches\ni18n-ization"), "hkieserman@mail.com");
-    aboutData.addCredit("Levi Burton", I18N_NOOP("UI improvements\nbug fixes"), "donburton@sbcglobal.net");
-    aboutData.addCredit("Mark Hymers", I18N_NOOP("Segment colours\nOther UI and bug fixes"), "<markh@linuxfromscratch.org>");
-    aboutData.addCredit("Alexandre Prokoudine", I18N_NOOP("Russian translation\ni18n-ization"), "avp@altlinux.ru");
-    aboutData.addCredit("Jörg Schumann", I18N_NOOP("German translation"), "jrschumann@gmx.de");
-    aboutData.addCredit("Eckhard Jokisch", I18N_NOOP("German translation"), "e.jokisch@u-code.de");
-    aboutData.addCredit("Kevin Donnelly", I18N_NOOP("Welsh translation"));
-    aboutData.addCredit("Didier Burli", I18N_NOOP("French translation"), "didierburli@bluewin.ch");
-    aboutData.addCredit("Yves Guillemot", I18N_NOOP("French translation\nBug fixes"), "yc.guillemot@wanadoo.fr");
-    aboutData.addCredit("Daniele Medri", I18N_NOOP("Italian translation"), "madrid@linuxmeeting.net");
-    aboutData.addCredit("Alessandro Musesti", I18N_NOOP("Italian translation"), "a.musesti@dmf.unicatt.it");
-    aboutData.addCredit("Stefan Asserhäll", I18N_NOOP("Swedish translation"), "stefan.asserhall@comhem.se");
-    aboutData.addCredit("Erik Magnus Johansson", I18N_NOOP("Swedish translation"), "erik.magnus.johansson@telia.com");
-    aboutData.addCredit("Hasso Tepper", I18N_NOOP("Estonian translation"), "hasso@estpak.ee");
-    aboutData.addCredit("Jelmer Vernooij", I18N_NOOP("Dutch translation"), "jelmer@samba.org");
-    aboutData.addCredit("Jasper Stein", I18N_NOOP("Dutch translation"), "jasper.stein@12move.nl");
-    aboutData.addCredit("Kevin Liang", I18N_NOOP("HSpinBox class"), "xkliang@rhpcs.mcmaster.ca");
-    aboutData.addCredit("Arnout Engelen", I18N_NOOP("Transposition by interval"));
-    aboutData.addCredit("Thorsten Wilms", I18N_NOOP("Original designs for rotary controllers"), "t_w_@freenet.de");
-    aboutData.addCredit("Oota Toshiya", I18N_NOOP("Japanese translation"), "ribbon@users.sourceforge.net");
-    aboutData.addCredit("William", I18N_NOOP("Auto-scroll deceleration\nRests outside staves and other bug fixes"), "rosegarden4p AT orthoset.com");
-    aboutData.addCredit("Liu Songhe", I18N_NOOP("Simplified Chinese translation"), "jackliu9999@msn.com");
-    aboutData.addCredit("Toni Arnold", I18N_NOOP("LIRC infrared remote-controller support"), "<toni__arnold@bluewin.ch>");
-    aboutData.addCredit("Vince Negri", I18N_NOOP("MTC slave timing implementation"), "vince.negri@gmail.com");
-    aboutData.addCredit("Jan Bína", I18N_NOOP("Czech translation"), "jbina@sky.cz");
-    aboutData.addCredit("Thomas Nagy", I18N_NOOP("SCons/bksys building system"), "tnagy256@yahoo.fr");
-    aboutData.addCredit("Vladimir Savic", I18N_NOOP("icons, icons, icons"), "vladimir@vladimirsavic.net");
-    aboutData.addCredit("Marcos Germán Guglielmetti", I18N_NOOP("Spanish translation"), "marcospcmusica@yahoo.com.ar");
-    aboutData.addCredit("Lisandro Damián Nicanor Pérez Meyer", I18N_NOOP("Spanish translation"), "perezmeyer@infovia.com.ar");
-    aboutData.addCredit("Javier Castrillo", I18N_NOOP("Spanish translation"), "riverplatense@gmail.com");
-    aboutData.addCredit("Lucas Godoy", I18N_NOOP("Spanish translation"), "godoy.lucas@gmail.com");
-    aboutData.addCredit("Feliu Ferrer", I18N_NOOP("Catalan translation"), "mverge2@pie.xtec.es");
-    aboutData.addCredit("Quim Perez i Noguer", I18N_NOOP("Catalan translation"), "noguer@osona.com");
-    aboutData.addCredit("Carolyn McIntyre", I18N_NOOP("1.2.3 splash screen photo\nGave birth to D. Michael McIntyre, bought him a good flute once\nupon a time, and always humored him when he came over to play her\nsome new instrument, even though she really hated his playing.\nBorn October 19, 1951, died September 21, 2007, R. I. P."), "DECEASED");
-    aboutData.addCredit("Stephen Torri", I18N_NOOP("Initial guitar chord editing code"), "storri@torri.org");
-    aboutData.addCredit("Piotr Sawicki", I18N_NOOP("Polish translation"), "pelle@plusnet.pl");
-    aboutData.addCredit("David García-Abad", I18N_NOOP("Basque translation"), "davidgarciabad@telefonica.net");
-    aboutData.addCredit("Joerg C. Koenig, Craig Drummond, Bernhard Rosenkränzer, Preston Brown, Than Ngo", I18N_NOOP("Klearlook theme"), "jck@gmx.org");
-
-    aboutData.setTranslator(I18N_NOOP("_: NAME OF TRANSLATORS\nYour names") , I18N_NOOP("_: EMAIL OF TRANSLATORS\nYour emails"));
-
-    KCmdLineArgs::init( argc, argv, &aboutData );
-    KCmdLineArgs::addCmdLineOptions( options ); // Add our own options.
-    KUniqueApplication::addCmdLineOptions(); // Add KUniqueApplication options.
-
-    if (!RosegardenApplication::start())
-        return 0;
-
-    RosegardenApplication app;
-
-    //
-    // Ensure quit on last window close
-    // Register main DCOP interface
-    //
-    QObject::connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-    app.dcopClient()->registerAs(app.name(), false);
-    app.dcopClient()->setDefaultObject(ROSEGARDEN_GUI_IFACE_NAME);
-
-    // Parse cmd line args
-    //
-    KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
-
-    if (!args->isSet("ignoreversion")) {
-        // Give up immediately if we haven't been installed or if the
-        // installation is out of date
-        //
-        testInstalledVersion();
+    QTranslator qtTranslator;
+    bool qtTranslationsLoaded = 
+      qtTranslator.load("qt_" + QLocale::system().name(),
+            QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    if (qtTranslationsLoaded) {
+        theApp.installTranslator(&qtTranslator);
+        RG_DEBUG << "Qt translations loaded successfully." << endl;
+    } else {
+        RG_DEBUG << "Qt translations not loaded." << endl;
     }
 
-    KConfig *config = kapp->config();
+    QTranslator rgTranslator;
+    //
+    //@@@ RG is now run from the build directory. Translations are at locale/.
+    //@@@ When "make install" works, relative directory locale/ should be
+    //@@@ replaced with the install directory, which is(?) one of the following:
+    //@@@   /usr/share/rosegarden/locale or 
+    //@@@   /usr/local/share/rosegarden/locale
+    //
+    bool rgTranslationsLoaded = 
+      rgTranslator.load(QLocale::system().name(), "locale/");
+    if (rgTranslationsLoaded) {
+        RG_DEBUG << "RG translations loaded successfully." << endl;
+        theApp.installTranslator(&rgTranslator);
+    } else {
+        RG_DEBUG << "RG translations not loaded." << endl;
+    }
 
-    config->setGroup(GeneralOptionsConfigGroup);
-    QString lastVersion = config->readEntry("lastversion", "");
+    theApp.setOrganizationName("rosegardenmusic");
+    theApp.setOrganizationDomain("rosegardenmusic.com");
+    theApp.setApplicationName(RosegardenApplication::tr("Rosegarden"));
+
+    QStringList args = theApp.arguments();
+
+    bool nosplash = false;
+    bool nosequencer = false;
+    int nonOptArgs = 0;
+
+    for (int i = 1; i < args.size(); ++i) {
+        if (args[i].startsWith("-")) {
+            if (args[i] == "--nosplash") nosplash = true;
+            else if (args[i] == "--nosequencer") nosequencer = true;
+            else usage();
+        } else {
+            ++nonOptArgs;
+        }
+    }
+    if (nonOptArgs > 1) usage();
+
+    QIcon icon;
+    int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
+    for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+        QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
+        QPixmap pixmap = IconLoader().loadPixmap(name);
+        if (!pixmap.isNull()) {
+            std::cerr << "Loaded application icon \"" << name << "\"" << std::endl;
+            icon.addPixmap(pixmap);
+        }
+    }
+    theApp.setWindowIcon(icon);
+
+    QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
+    if (stylepath != "") {
+        std::cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << std::endl;
+        QFile file(stylepath);
+        if (!file.open(QFile::ReadOnly)) {
+            std::cerr << "(Failed to open file)" << std::endl;
+        } else {
+            QString styleSheet = QLatin1String(file.readAll());
+            theApp.setStyleSheet(styleSheet);
+        }
+    }
+
+    // Ensure quit on last window close
+    //@@@ ???
+    //
+    QObject::connect(&theApp, SIGNAL(lastWindowClosed()), &theApp, SLOT(quit()));
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    QString lastVersion = settings.value("lastversion", "").toString();
     bool newVersion = (lastVersion != VERSION);
     if (newVersion) {
-	std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
-	config->writeEntry("lastversion", VERSION);
+        std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
+        settings.setValue("lastversion", VERSION);
     }
 
     // If there is no config setting for the startup window size, set
@@ -510,52 +463,41 @@ int main(int argc, char *argv[])
     // the sizes of the available desktop (i.e. the whole shebang if
     // under Xinerama).  These are obtained from QDesktopWidget.
 
-    config->setGroup("MainView");
+    settings.endGroup();
+    settings.beginGroup("MainView");
+
     int windowWidth = 0, windowHeight = 0;
 
-    QDesktopWidget *desktop = KApplication::desktop();
+    QDesktopWidget *desktop = theApp.desktop();
     if (desktop) {
-	QRect totalRect(desktop->screenGeometry());
-	QRect desktopRect = KGlobalSettings::desktopGeometry(QPoint(0, 0));
-	QSize startupSize;
-	if (desktopRect.height() <= 800) {
-	    startupSize = QSize((desktopRect.width() * 6) / 7,
-				(desktopRect.height() * 6) / 7);
-	} else {
-	    startupSize = QSize((desktopRect.width() * 4) / 5,
-				(desktopRect.height() * 4) / 5);
-	}
-	QString widthKey = QString("Width %1").arg(totalRect.width());
-	QString heightKey = QString("Height %1").arg(totalRect.height());
-	windowWidth = config->readUnsignedNumEntry
-	    (widthKey, startupSize.width());
-	windowHeight = config->readUnsignedNumEntry
-	    (heightKey, startupSize.height());
+    QRect totalRect(desktop->screenGeometry());
+    QRect desktopRect = desktop->availableGeometry();
+    QSize startupSize;
+    if (desktopRect.height() <= 800) {
+        startupSize = QSize((desktopRect.width() * 6) / 7,
+                (desktopRect.height() * 6) / 7);
+    } else {
+        startupSize = QSize((desktopRect.width() * 4) / 5,
+                (desktopRect.height() * 4) / 5);
+    }
+    QString widthKey = QString("Width %1").arg(totalRect.width());
+    QString heightKey = QString("Height %1").arg(totalRect.height());
+    windowWidth = settings.value
+        (widthKey, startupSize.width()).toInt();
+    windowHeight = settings.value
+        (heightKey, startupSize.height()).toInt();
     }
 
-    config->setGroup("KDE Action Restrictions");
-    config->writeEntry("action/help_report_bug", false);
+    settings.endGroup();
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
-    config->setGroup(GeneralOptionsConfigGroup);
-    int install = config->readNumEntry("Install Own Theme", 1);
-    if (install == 2 || (install == 1 && !getenv("KDE_FULL_SESSION"))) {
-	kapp->setStyle(new KlearlookStyle);
-    }
+    StartupLogo* startLogo = 0L;
 
-    // Show Startup logo
-    // (this code borrowed from KDevelop 2.0,
-    // (c) The KDevelop Development Team
-    //
-    config->setGroup(GeneralOptionsConfigGroup);
-    KStartupLogo* startLogo = 0L;
-
-    // See if the config wants us to control JACK
-    //
-    if (config->readBoolEntry("Logo", true) && (!kapp->isRestored() && args->isSet("splash")) ) {
-        RG_DEBUG << k_funcinfo << "Showing startup logo\n";
-        startLogo = KStartupLogo::getInstance();
-	startLogo->setShowTip(!newVersion);
+    if (qStrToBool(settings.value("Logo", "true")) && !nosplash) {
+        startLogo = StartupLogo::getInstance();
+        startLogo->setShowTip(!newVersion);
         startLogo->show();
+        theApp.processEvents();    
     }
 
     struct timeval logoShowTime;
@@ -564,40 +506,39 @@ int main(int argc, char *argv[])
     //
     // Start application
     //
-    RosegardenGUIApp *rosegardengui = 0;
+    RosegardenMainWindow *rosegardengui = 0;
 
-    if (app.isRestored()) {
+/*&&& worry about this later
+    if (theApp.isSessionRestored()) {
         RG_DEBUG << "Restoring from session\n";
 
-        // RESTORE(RosegardenGUIApp);
+        // RESTORE(RosegardenMainWindow);
         int n = 1;
         while (KMainWindow::canBeRestored(n)) {
             // memory leak if more than one can be restored?
-            RG_DEBUG << "Restoring from session - restoring app #" << n << endl;
-            (rosegardengui = new RosegardenGUIApp)->restore(n);
+            RG_DEBUG << "Restoring from session - restoring theApp #" << n << endl;
+            (rosegardengui = new RosegardenMainWindow)->restore(n);
             n++;
         }
 
     } else {
+*/
 
 #ifndef NO_SOUND
-        app.setNoSequencerMode(!args->isSet("sequencer"));
+        theApp.setNoSequencerMode(nosequencer);
 #else
-
-        app.setNoSequencerMode(true);
+        theApp.setNoSequencerMode(true);
 #endif // NO_SOUND
 
-        rosegardengui = new RosegardenGUIApp(!app.noSequencerMode(),
-                                             args->isSet("existingsequencer"),
-                                             startLogo);
+        rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
 
-	rosegardengui->setIsFirstRun(newVersion);
+    rosegardengui->setIsFirstRun(newVersion);
 
-        app.setMainWidget(rosegardengui);
+        theApp.setMainWidget(rosegardengui);
 
-	if (windowWidth != 0 && windowHeight != 0) {
-	    rosegardengui->resize(windowWidth, windowHeight);
-	}
+    if (windowWidth != 0 && windowHeight != 0) {
+        rosegardengui->resize(windowWidth, windowHeight);
+    }
 
         rosegardengui->show();
 
@@ -606,20 +547,17 @@ int main(int argc, char *argv[])
         if (startLogo) {
             startLogo->raise();
             startLogo->setHideEnabled(true);
-            QApplication::flushX();
+            theApp.flushX();
         }
 
-        if (args->count()) {
-            rosegardengui->openFile(QFile::decodeName(args->arg(0)), RosegardenGUIApp::ImportCheckType);
-        } else {
-            // rosegardengui->openDocumentFile();
+    for (int i = 1; i < args.size(); ++i) {
+        if (args[i].startsWith("-")) continue;
+        rosegardengui->openFile(args[i], RosegardenMainWindow::ImportCheckType);
+        break;
         }
 
-        args->clear();
-
-    }
-
-    QObject::connect(&app, SIGNAL(aboutToSaveState()),
+    //@@@???
+    QObject::connect(&theApp, SIGNAL(aboutToSaveState()),
                      rosegardengui, SLOT(slotDeleteTransport()));
 
     // Now that we've started up, raise start logo
@@ -627,13 +565,13 @@ int main(int argc, char *argv[])
     if (startLogo) {
         startLogo->raise();
         startLogo->setHideEnabled(true);
-        QApplication::flushX();
+        theApp.flushX();
     }
 
     // Check for sequencer and launch if needed
     //
     try {
-        rosegardengui->launchSequencer(args->isSet("existingsequencer"));
+        rosegardengui->launchSequencer();
     } catch (std::string e) {
         RG_DEBUG << "RosegardenGUI - " << e << endl;
     } catch (QString e) {
@@ -642,27 +580,28 @@ int main(int argc, char *argv[])
         RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
     }
 
+    settings.endGroup();
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    config->setGroup(SequencerOptionsConfigGroup);
-
-    // See if the config wants us to load a soundfont
+    // See if the settings wants us to load a soundfont
     //
-    if (config->readBoolEntry("sfxloadenabled", false)) {
-        QString sfxLoadPath = config->readEntry("sfxloadpath", "/bin/sfxload");
-        QString soundFontPath = config->readEntry("soundfontpath", "");
+    if (qStrToBool(settings.value("sfxloadenabled", "false"))) {
+        QString sfxLoadPath = settings.value("sfxloadpath", "/bin/sfxload").toString();
+        QString soundFontPath = settings.value("soundfontpath", "").toString();
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {
-            KProcess* sfxLoadProcess = new KProcess;
-            (*sfxLoadProcess) << sfxLoadPath << soundFontPath;
+            // setup sfxload Process
+            QProcess* sfxLoadProcess = new QProcess;
+
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
-            QObject::connect(sfxLoadProcess, SIGNAL(processExited(KProcess*)),
-                             &app, SLOT(sfxLoadExited(KProcess*)));
+            QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
+                             &theApp, SLOT(sfxLoadExited(QProcess*)));
 
-            sfxLoadProcess->start();
+            sfxLoadProcess->start(sfxLoadPath, (QStringList()) << soundFontPath);
         } else {
             RG_DEBUG << "sfxload not executable or soundfont not readable : "
-            << sfxLoadPath << " " << soundFontPath << endl;
+                     << sfxLoadPath << " " << soundFontPath << endl;
         }
 
     } else {
@@ -671,7 +610,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_WS_X11
-    XSetErrorHandler( _x_errhandler );
+    XSetErrorHandler(_x_errhandler);
 #endif
 
     if (startLogo) {
@@ -699,37 +638,51 @@ int main(int argc, char *argv[])
         // if the start logo is there, it's responsible for showing this;
         // otherwise we have to
 
-	if (!newVersion) {
-	    RosegardenGUIApp::self()->awaitDialogClearance();
-	    KTipDialog::showTip(locate("data", "rosegarden/tips"));
-	}
+        if (!newVersion) {
+            RosegardenMainWindow::self()->awaitDialogClearance();
+        }
     }
 
     if (newVersion) {
-	KStartupLogo::hideIfStillThere();
-	CurrentProgressDialog::freeze();
+        StartupLogo::hideIfStillThere();
+        CurrentProgressDialog::freeze();
 
-	KDialogBase *dialog = new KDialogBase(rosegardengui, "welcome",
-					      true, i18n("Welcome!"),
-					      KDialogBase::Ok,
-					      KDialogBase::Ok, false);
-	QVBox *mw = dialog->makeVBoxMainWidget();
-	QHBox *hb = new QHBox(mw);
-	QLabel *image = new QLabel(hb);
-	image->setAlignment(Qt::AlignTop);
-	QString iconFile = locate("appdata", "pixmaps/misc/welcome-icon.png");
-	if (iconFile) {
-	    image->setPixmap(QPixmap(iconFile));
-	}
-	QLabel *label = new QLabel(hb);
-	label->setText(i18n("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><br><br><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><br><br><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
-	dialog->showButtonOK(true);
-	rosegardengui->awaitDialogClearance();
-	dialog->exec();
+        QDialog *dialog = new QDialog;
+        dialog->setModal(true);
+        dialog->setWindowTitle(RosegardenApplication::tr("Welcome!"));
+        QGridLayout *metagrid = new QGridLayout;
+        dialog->setLayout(metagrid);
 
-	CurrentProgressDialog::thaw();
+        QWidget *hb = new QWidget;
+        QHBoxLayout *hbLayout = new QHBoxLayout;
+        metagrid->addWidget(hb, 0, 0);
+
+        QLabel *image = new QLabel;
+        hbLayout->addWidget(image);
+        image->setAlignment(Qt::AlignTop);
+
+        image->setPixmap(IconLoader().loadPixmap("welcome-icon"));
+
+        QLabel *label = new QLabel;
+        hbLayout->addWidget(label);
+        label->setText(RosegardenApplication::tr("<h2>Welcome to Rosegarden!</h2><p>Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.</p><ul><li>If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.</li><li>Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.</li><li>Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!</li></ul><p>Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to <a href=\"http://www.rosegardenmusic.com/\">http://www.rosegardenmusic.com/</a>.</p>"));
+        label->setWordWrap(true);
+
+        hb->setLayout(hbLayout);
+
+        QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+        metagrid->addWidget(buttonBox, 1, 0);
+        metagrid->setRowStretch(0, 10);
+        QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
+        QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+
+        rosegardengui->awaitDialogClearance();
+        dialog->exec();
+
+        CurrentProgressDialog::thaw();
     }
+    settings.endGroup();
 
-    return kapp->exec();
+    return theApp.exec();
 }
 

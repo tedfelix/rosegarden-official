@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,26 +21,26 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "gui/dialogs/TempoDialog.h"
-#include "gui/general/EditViewBase.h"
-#include <qsize.h>
-#include <qstring.h>
+#include "gui/general/ListEditView.h"
+#include <QSize>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
 
 class QWidget;
-class QListViewItem;
+class QTreeWidgetItem;
 class QCloseEvent;
 class QCheckBox;
-class QButtonGroup;
-class KListView;
+class QGroupBox;
+class QTreeWidget;
 
 
 namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -52,7 +51,7 @@ class Composition;
  * should prove considerably simpler, anyway.
  */
 
-class TempoView : public EditViewBase, public CompositionObserver
+class TempoView : public ListEditView, public CompositionObserver
 {
     Q_OBJECT
 
@@ -64,7 +63,7 @@ class TempoView : public EditViewBase, public CompositionObserver
     };
 
 public:
-    TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT);
+    TempoView(RosegardenDocument *doc, QWidget *parent, timeT);
     virtual ~TempoView();
 
     virtual bool applyLayout(int staffNo = -1);
@@ -123,7 +122,7 @@ public slots:
 
     // on double click on the event list
     //
-    void slotPopupEditor(QListViewItem*);
+    void slotPopupEditor(QTreeWidgetItem*);
 
     // Change filter parameters
     //
@@ -144,12 +143,12 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
-    KListView   *m_list;
+    QTreeWidget   *m_list;
     int          m_filter;
 
     static int   m_lastSetFilter;
 
-    QButtonGroup   *m_filterGroup;
+    QGroupBox   *m_filterGroup;
     QCheckBox      *m_tempoCheckBox;
     QCheckBox      *m_timeSigCheckBox;
 

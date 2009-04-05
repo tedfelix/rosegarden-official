@@ -1,4 +1,5 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -13,14 +14,14 @@
 */
 
 #include "Strings.h"
-#include "Strings.h"
 
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Event.h"
 
-#include <qtextcodec.h>
-
+#include <QTextCodec>
+#include <QVariant>
+#include <QString>
 
 
 QString strtoqstr(const std::string &str)
@@ -35,8 +36,32 @@ QString strtoqstr(const Rosegarden::PropertyName &p)
 
 std::string qstrtostr(const QString &qstr)
 {
-    return std::string(qstr.utf8().data());
+    return std::string(qstr.toUtf8().data());
 }
+
+
+std::string qStrToStrUtf8(const QString &qstr)
+{
+	return qstrtostr( qstr );
+	//return std::string( qstr.toUtf8().data() );
+}
+
+std::string qStrToStrLocal8(const QString &qstr)
+{
+	return std::string( qstr.toLocal8Bit().data() );
+}
+
+
+const char* qStrToCharPtrUtf8(const QString &qstr)
+{
+	return qstr.toUtf8().data();
+}
+
+const char* qStrToCharPtrLocal8(const QString &qstr)
+{
+	return qstr.toLocal8Bit().data();
+}
+
 
 /**
  * Unlike strtod(3) or QString::toDouble(), this is locale-independent
@@ -48,7 +73,7 @@ double strtodouble(const std::string &s)
 {
     int dp = 0;
     int sign = 1;
-    int i = 0;
+    unsigned int i = 0;  //@@@
     double result = 0.0;
     size_t len = s.length();
 
@@ -93,6 +118,25 @@ double qstrtodouble(const QString &s)
     return strtodouble(qstrtostr(s));
 }
 
+
+bool qStrToBool(const QString &s)
+{
+    QString tt = s.toLower();
+    tt = tt.trimmed();
+    if ( (tt == "1") || (tt == "true") || (tt == "yes") || (tt == "on") ){
+        return true;
+    }
+    return false;
+}
+
+bool qStrToBool(const QVariant &v)
+{
+    return qStrToBool( v.toString() );
+}
+
+
+
+
 std::string
 convertFromCodec(std::string text, QTextCodec *codec)
 {
@@ -101,4 +145,17 @@ convertFromCodec(std::string text, QTextCodec *codec)
     else
         return text;
 }
+
+std::ostream &
+operator<<(std::ostream &target, const QString &str)
+{
+    return target << str.toLocal8Bit().data();
+}
+
+QTextStream &
+operator<<(QTextStream &target, const std::string &str)
+{
+    return target << QString(str.c_str());
+}
+
 

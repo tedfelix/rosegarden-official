@@ -19,14 +19,14 @@
 #include "SegmentCommand.h"
 
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentCommand::SegmentCommand(QString name, const std::vector<Segment*>& segments)
-        : KNamedCommand(name)
+        : NamedCommand(name)
 {
     m_segments.resize(segments.size());
     std::copy(segments.begin(), segments.end(), m_segments.begin());

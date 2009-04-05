@@ -18,10 +18,11 @@
 
 #include "TrackHeader.h"
 
-#include <qheader.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qwidget.h>
+#include <Q3Header>
+#include <QHeaderView>		// replaces Q3Header
+#include <QPainter>
+#include <QRect>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -34,8 +35,8 @@ void
 TrackHeader::paintEvent(QPaintEvent *e)
 {
     QPainter p( this );
-    p.setPen( colorGroup().buttonText() );
-    int pos = (orientation() == Horizontal)
+    p.setPen( palette().buttonText() );
+    int pos = (orientation() == Qt::Horizontal)
               ? e->rect().left()
               : e->rect().top();
     int id = mapToIndex( sectionAt( pos + offset() ) );
@@ -47,8 +48,8 @@ TrackHeader::paintEvent(QPaintEvent *e)
     for ( int i = id; i < count(); i++ ) {
         QRect r = sRect( i );
         paintSection( &p, i, r );
-        if ( orientation() == Horizontal && r. right() >= e->rect().right() ||
-                orientation() == Vertical && r. bottom() >= e->rect().bottom() )
+        if ( orientation() == Qt::Horizontal && r. right() >= e->rect().right() ||
+			 orientation() == Qt::Vertical && r. bottom() >= e->rect().bottom() )
             return ;
     }
 

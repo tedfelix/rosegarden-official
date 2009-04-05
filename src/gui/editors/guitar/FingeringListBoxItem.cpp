@@ -18,11 +18,21 @@
 
 #include "FingeringListBoxItem.h"
 
+#include <QIcon>
+#include <QListWidget>
+#include <QListWidgetItem>
+
 namespace Rosegarden {
     
-FingeringListBoxItem::FingeringListBoxItem(const Guitar::Chord& chord, QListBox* parent, QPixmap pixmap, QString fingeringString)
-    : QListBoxPixmap(parent, pixmap, fingeringString),
-      m_chord(chord)
+FingeringListBoxItem::FingeringListBoxItem(
+			const Guitar::Chord& chord, 
+			QListWidget* parent, QIcon &icon, 
+			//QPixmap pixmap, 
+			QString &fingeringString
+			)
+	: QListWidgetItem(icon, fingeringString, parent),
+//     : QListWidgetPixmap(parent, pixmap, fingeringString),
+       m_chord(chord)
 {
 }
 

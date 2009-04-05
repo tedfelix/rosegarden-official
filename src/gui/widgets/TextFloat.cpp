@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -17,89 +17,78 @@
 
 
 #include "TextFloat.h"
-#include <kapplication.h>
-
 #include "gui/general/GUIPalette.h"
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qwidget.h>
+
+#include <QPaintEvent>
+#include <QPoint>
+#include <QString>
+#include <QWidget>
+
+#include <iostream>
 
 
 namespace Rosegarden
 {
 
+
+TextFloat *TextFloat::m_textFloat = 0;
+
 TextFloat::TextFloat(QWidget *parent):
-        QWidget(parent, "TextFloat",
-                WStyle_Customize | WStyle_NoBorder | WStyle_StaysOnTop),
-        m_text("")
+    BaseTextFloat(parent),
+    m_newlyAttached(false)
 {
-    reparent(parentWidget());
-    resize(20, 20);
 }
 
-void
-TextFloat::reparent(QWidget *newParent)
+TextFloat::~TextFloat()
 {
-    QPoint position = newParent->pos();
+    // m_textFloat is static
+    m_textFloat = 0;
+}
 
-    // Get position and reparent to either top level or dialog
-    //
-    while (newParent->parentWidget() && !newParent->isTopLevel()
-            && !newParent->isDialog()) {
-        newParent = newParent->parentWidget();
-        position += newParent->pos();
+TextFloat *
+TextFloat::getTextFloat()
+{
+    if (!m_textFloat) {
+        m_textFloat = new TextFloat(0);
     }
 
-    // Position this widget to the right of the parent
-    //
-    //move(pos + QPoint(parent->width() + 5, 5));
-
-    QWidget::reparent(newParent,
-                      WStyle_Customize | WStyle_NoBorder | WStyle_StaysOnTop,
-                      position + QPoint(20, 5));
+    return m_textFloat;
 }
 
 void
-TextFloat::paintEvent(QPaintEvent *e)
+TextFloat::attach(QWidget *widget)
 {
-    QPainter paint(this);
-
-    paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalize());
-
-    paint.setPen(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
-
-    paint.setPen(GUIPalette::getColour(GUIPalette::RotaryFloatForeground));
-    paint.setBrush(GUIPalette::getColour(GUIPalette::RotaryFloatBackground));
-
-    QFontMetrics metrics(paint.fontMetrics());
-
-    QRect r = metrics.boundingRect(0, 0, 400, 400, Qt::AlignAuto, m_text);
-    resize(r.width() + 7, r.height() + 7);
-    paint.drawRect(0, 0, r.width() + 6, r.height() + 6);
-    paint.setPen(Qt::black);
-    paint.drawText(QRect(3, 3, r.width(), r.height()), Qt::AlignAuto, m_text);
-
-    /*
-        QRect textBound = metrics.boundingRect(m_text);
-     
-        resize(textBound.width() + 7, textBound.height() + 7);
-        paint.drawRect(0, 0, textBound.width() + 6, textBound.height() + 6);
-     
-        paint.setPen(Qt::black);
-        paint.drawText(3, textBound.height() + 3, m_text);
-    */
+    m_widget = widget;
+    m_newlyAttached = true;
 }
 
 void
 TextFloat::setText(const QString &text)
 {
-    m_text = text;
-    repaint();
+    // Call reparent() only if we are going to use text float from a
+    // newly entered widget
+    if (m_newlyAttached) {
+        reparent(m_widget);
+        m_newlyAttached = false;
+    }
+
+    // then wrap to BaseTextFloat
+    BaseTextFloat::setText(text);
+}
+
+void
+TextFloat::display(QPoint offset)
+{
+    // Call reparent() only if we are going to use text float from a
+    // newly entered widget
+    if (m_newlyAttached) {
+        reparent(m_widget);
+        m_newlyAttached = false;
+    }
+
+    // then wrap to BaseTextFloat
+    BaseTextFloat::display(offset);
 }
 
 }
+

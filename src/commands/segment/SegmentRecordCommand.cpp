@@ -18,16 +18,16 @@
 
 #include "SegmentRecordCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
+#include <QObject>
 
 
 namespace Rosegarden
 {
 
 SegmentRecordCommand::SegmentRecordCommand(Segment *s) :
-        KNamedCommand(i18n("Record")),
+        NamedCommand(tr("Record")),
         m_composition(s->getComposition()),
         m_segment(s),
         m_detached(false)

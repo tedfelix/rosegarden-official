@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,25 +19,33 @@
 #define _RG_CATEGORYELEMENT_H_
 
 #include "PresetElement.h"
-#include <qstring.h>
 
-
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 
-/*
+/**
  * A container class for storing a collection of PresetElement objects grouped
  * into the same musical category (eg. Flutes, Clarinets, Strings)
+ *
+ * \author D. Michael McIntyre
  */
 class CategoryElement
 {
 public:
+    /** Create a category of \c name */
     CategoryElement(QString name);
+
+    /** Destroy the category */
     ~CategoryElement();
 
+    /** Add a PresetElement to the CategoryElement 
+     *
+     * \sa { PresetElement, PresetGroup }
+     */
     void addPreset(QString name,
                   int clef,
                   int transpose,
@@ -47,9 +54,16 @@ public:
                   int highPro,
                   int lowPro);
 
+    /** Return the category name */
     QString getName() { return m_name; }
 
+    /** Return all the instrument presets for this category
+     *
+     * \sa { PresetElement, PresetGroup, ElementContainer }
+     */
     ElementContainer getPresets() { return m_categoryPresets; }
+
+    /** Return the instrument preset at index \c index */
     PresetElement getPresetByIndex(int index) { return m_categoryPresets [index]; }
 
 private:
@@ -57,6 +71,7 @@ private:
     ElementContainer m_categoryPresets;
 }; // CategoryElement
 
+/** A container for storing a collection of CategoryElement objects */
 typedef std::vector<CategoryElement> CategoriesContainer;
 
 }

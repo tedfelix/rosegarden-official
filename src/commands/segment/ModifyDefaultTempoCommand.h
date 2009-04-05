@@ -19,9 +19,9 @@
 #ifndef _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
 #define _RG_MODIFYDEFAULTTEMPOCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 #include "base/Composition.h" // for tempoT
 
 
@@ -30,18 +30,20 @@ namespace Rosegarden
 {
 
 
-class ModifyDefaultTempoCommand : public KNamedCommand
+class ModifyDefaultTempoCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyDefaultTempoCommand)
+
 public:
     ModifyDefaultTempoCommand(Composition *composition,
                               tempoT tempo):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_tempo(tempo) {}
 
     virtual ~ModifyDefaultTempoCommand() {}
 
-    static QString getGlobalName() { return i18n("Modify &Default Tempo..."); }
+    static QString getGlobalName() { return tr("Modify &Default Tempo..."); }
 
     virtual void execute();
     virtual void unexecute();

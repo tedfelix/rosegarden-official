@@ -18,17 +18,23 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include <limits>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qvbox.h>
-#include <qlabel.h>
 
 #include "HeadersGroup.h"
 #include "TrackHeader.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
+
+#include <QSize>
+#include <QWidget>
+#include <QLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QEvent>
+#include <QResizeEvent>
 
 
 namespace Rosegarden
@@ -37,14 +43,16 @@ namespace Rosegarden
 
 HeadersGroup::
 HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
-        QVBox(parent),
+        QWidget(parent),
         m_notationView(nv),
         m_composition(comp),
         m_usedHeight(0),
         m_filler(0),
         m_lastX(INT_MIN),
-        m_lastWidth(-1)
+        m_lastWidth(-1),
+        m_layout( new QVBoxLayout(this) )
 {
+    setLayout(m_layout);
 }
 
 void
@@ -68,6 +76,7 @@ void
 HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 {
     TrackHeader * sh = new TrackHeader(this, trackId, height, ypos);
+    m_layout->addWidget(sh);
     m_headers.push_back(sh);
     m_usedHeight += height;
 }
@@ -76,9 +85,13 @@ void
 HeadersGroup::completeToHeight(int height)
 {
     if (height > m_usedHeight) {
-        if (!m_filler) m_filler = new QLabel(this);
+        if (!m_filler) {
+            m_filler = new QLabel(this);
+            m_layout->addWidget(m_filler);
+        }
         m_filler->setFixedHeight(height - m_usedHeight);
     }
+//    setLayout(m_layout);  // May it harm to call setLayout more than once ?
 }
 
 void
@@ -146,8 +159,11 @@ HeadersGroup::resizeEvent(QResizeEvent * ev)
 {
     // Needed to avoid gray zone at the right of headers
     // when width is decreasing
-    emit headersResized(ev->size().width());
+    emit headersResized( ev->size().width() );
 }
 
 }
 #include "HeadersGroup.moc"
+
+#endif
+

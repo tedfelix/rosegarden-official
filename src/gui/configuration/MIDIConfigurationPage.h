@@ -19,10 +19,11 @@
 #define _RG_MIDICONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
-#include <qlineedit.h>
-#include <qcheckbox.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QString>
+#include <QSlider>
+#include <QCheckBox>
 
 
 class QWidget;
@@ -31,29 +32,28 @@ class QSlider;
 class QPushButton;
 class QLabel;
 class QComboBox;
-class KConfig;
-class KComboBox;
+class QComboBox;
+class LineEdit;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class MIDIConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    MIDIConfigurationPage(RosegardenGUIDoc *doc,
-                               KConfig *cfg,
+    MIDIConfigurationPage(RosegardenDocument *doc,
                                QWidget *parent=0,
                                const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("MIDI"); }
-    static QString title()     { return i18n("MIDI Settings"); }
+    static QString iconLabel() { return tr("MIDI"); }
+    static QString title()     { return tr("MIDI Settings"); }
     static QString iconName()  { return "configure-midi"; }
 
 protected slots:
@@ -70,9 +70,9 @@ protected:
     QCheckBox *m_sendControllersAtPlay;
 
     QCheckBox   *m_sfxLoadEnabled;
-    QLineEdit   *m_sfxLoadPath;
+    LineEdit    *m_sfxLoadPath;
     QPushButton *m_sfxLoadChoose;
-    QLineEdit   *m_soundFontPath;
+    LineEdit    *m_soundFontPath;
     QPushButton *m_soundFontChoose;
 
     // Sync and timing

@@ -19,19 +19,20 @@
 #ifndef _RG_NAMESETEDITOR_H_
 #define _RG_NAMESETEDITOR_H_
 
-#include <kcompletion.h>
-#include <qstring.h>
-#include <qvgroupbox.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QString>
+#include <QGroupBox>
+
 #include <vector>
 
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QTreeWidgetItem;
 class QLabel;
 class QGridLayout;
 class QFrame;
-class KLineEdit;
 
 
 namespace Rosegarden
@@ -40,13 +41,13 @@ namespace Rosegarden
 class BankEditorDialog;
 
 
-class NameSetEditor : public QVGroupBox
+class NameSetEditor : public QGroupBox
 {
     Q_OBJECT
 public:
     virtual void clearAll() = 0;
 
-    virtual void populate(QListViewItem *) = 0;
+    virtual void populate(QTreeWidgetItem *) = 0;
     virtual void reset() = 0;
 
 public slots:
@@ -67,10 +68,10 @@ protected:
 
     QGridLayout             *m_mainLayout;
     BankEditorDialog*        m_bankEditor;
-    KCompletion              m_completion;
+    QStringList              m_completions;
     QPushButton             *m_initialLabel;
     std::vector<QLabel*>     m_labels;
-    std::vector<KLineEdit*>  m_names;
+    std::vector<LineEdit*>   m_names;
     QFrame                  *m_mainFrame;
     QLabel                  *m_librarian;
     QLabel                  *m_librarianEmail;

@@ -19,8 +19,8 @@
 #ifndef _RG_PIXMAPFUNCTIONS_H_
 #define _RG_PIXMAPFUNCTIONS_H_
 
-#include <qbitmap.h>
-#include <qpixmap.h>
+#include <QBitmap>
+#include <QPixmap>
 #include <utility>
 
 
@@ -61,10 +61,10 @@ public:
 
     /**
      * Colour a greyscale pixmap with the given hue.
-     * minValue specifies the minimum value (in the HSV sense) that
+     * minimum specifies the minimum value (in the HSV sense) that
      * will be used for any recoloured pixel.
      */
-    static QPixmap colourPixmap(const QPixmap &map, int hue, int minValue);
+    static QPixmap colourPixmap(const QPixmap &map, int hue, int minimum);
 
     /**
      * Make a pixmap grey, or otherwise reduce its intensity.

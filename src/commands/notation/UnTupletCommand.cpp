@@ -21,13 +21,21 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+UnTupletCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand("break_tuplets",
+                       new SelectionCommandBuilder<UnTupletCommand>());
+}
 
 void
 UnTupletCommand::modifySegment()

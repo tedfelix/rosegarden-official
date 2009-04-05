@@ -20,94 +20,64 @@
 
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenDCOP.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
-#include "RosegardenGUIApp.h"
-#include <kcmdlineargs.h>
-#include <klocale.h>
-#include <kmainwindow.h>
-#include <kmessagebox.h>
-#include <kprocess.h>
-#include <kuniqueapplication.h>
-#include <qcstring.h>
-#include <qeventloop.h>
-#include <qsessionmanager.h>
-#include <qstring.h>
-#include <dcopclient.h>
-#include <kconfig.h>
-#include <kstatusbar.h>
+#include "document/RosegardenDocument.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "RosegardenMainWindow.h"
+
+#include <QMainWindow>
+#include <QStatusBar>
+#include <QMessageBox>
+#include <QProcess>
+#include <QByteArray>
+#include <QEventLoop>
+#include <QSessionManager>
+#include <QString>
+#include <QSettings>
 
 
 namespace Rosegarden
 {
-
+/*&&&
 int RosegardenApplication::newInstance()
 {
     KCmdLineArgs *args = KCmdLineArgs::parsedArgs();
 
-    if (RosegardenGUIApp::self() && args->count() &&
-            RosegardenGUIApp::self()->getDocument() &&
-            RosegardenGUIApp::self()->getDocument()->saveIfModified()) {
+    if (RosegardenMainWindow::self() && args->count() &&
+        RosegardenMainWindow::self()->getDocument() &&
+        RosegardenMainWindow::self()->getDocument()->saveIfModified()) {
         // Check for modifications and save if necessary - if cancelled
         // then don't load the new file.
         //
-        RosegardenGUIApp::self()->openFile(args->arg(0));
+        RosegardenMainWindow::self()->openFile(args->arg(0));
     }
 
     return KUniqueApplication::newInstance();
 }
-
-bool RosegardenApplication::isSequencerRegistered()
+*/
+void RosegardenApplication::sfxLoadExited(QProcess *proc)
 {
-    if (noSequencerMode())
-        return false;
-    return dcopClient()->isApplicationRegistered(ROSEGARDEN_SEQUENCER_APP_NAME);
-}
+	if (proc->exitStatus() != QProcess::NormalExit ) {
+            QSettings settings;
+            settings.beginGroup( SequencerOptionsConfigGroup );
 
-bool RosegardenApplication::sequencerSend(QCString dcopCall, QByteArray params)
-{
-    if (noSequencerMode())
-        return false;
+            QString soundFontPath = settings.value("soundfontpath", "").toString() ;
+            settings.endGroup();		// corresponding to: settings().beginGroup( SequencerOptionsConfigGroup );
 
-    return dcopClient()->send(ROSEGARDEN_SEQUENCER_APP_NAME,
-                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                              dcopCall, params);
-}
-
-bool RosegardenApplication::sequencerCall(QCString dcopCall, QCString& replyType, QByteArray& replyData,
-        QByteArray params, bool useEventLoop)
-{
-    if (noSequencerMode())
-        return false;
-    return dcopClient()->call(ROSEGARDEN_SEQUENCER_APP_NAME,
-                              ROSEGARDEN_SEQUENCER_IFACE_NAME,
-                              dcopCall, params, replyType, replyData, useEventLoop);
-}
-
-void RosegardenApplication::sfxLoadExited(KProcess *proc)
-{
-    if (!proc->normalExit()) {
-        QString configGroup = config()->group();
-        config()->setGroup(SequencerOptionsConfigGroup);
-        QString soundFontPath = config()->readEntry("soundfontpath", "");
-        config()->setGroup(configGroup);
-
-        KMessageBox::error(mainWidget(),
-                           i18n("Failed to load soundfont %1").arg(soundFontPath));
+            QMessageBox::critical( mainWidget(), "",  
+                    tr("Failed to load soundfont %1").arg(soundFontPath ));
     } else {
         RG_DEBUG << "RosegardenApplication::sfxLoadExited() : sfxload exited normally\n";
     }
-
 }
 
 void RosegardenApplication::slotSetStatusMessage(QString msg)
 {
-    KMainWindow* mainWindow = dynamic_cast<KMainWindow*>(mainWidget());
-    if (mainWindow) {
+    QMainWindow* window = dynamic_cast<QMainWindow*>(mainWidget());
+    if (window) {
         if (msg.isEmpty())
-            msg = KTmpStatusMsg::getDefaultMsg();
-        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), KTmpStatusMsg::getDefaultId());
+            msg = TmpStatusMsg::getDefaultMsg();
+//@@@        mainWindow->statusBar()->changeItem(QString("  %1").arg(msg), TmpStatusMsg::getDefaultId());
+        window->statusBar()->showMessage(QString("  %1").arg(msg)); 
     }
 
 }
@@ -115,20 +85,20 @@ void RosegardenApplication::slotSetStatusMessage(QString msg)
 void
 RosegardenApplication::refreshGUI(int maxTime)
 {
-    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |
-                               QEventLoop::ExcludeSocketNotifiers,
-                               maxTime);
+//    eventLoop()->processEvents(QEventLoop::ExcludeUserInput |			//&&& eventLoop()->processEvents()
+//                               QEventLoop::ExcludeSocketNotifiers,
+   //                            maxTime);
 }
 
 void RosegardenApplication::saveState(QSessionManager& sm)
 {
     emit aboutToSaveState();
-    KUniqueApplication::saveState(sm);
+//&&&    KUniqueApplication::saveState(sm);
 }
 
-RosegardenApplication* RosegardenApplication::rgApp()
+RosegardenApplication* RosegardenApplication::ApplicationObject()
 {
-    return dynamic_cast<RosegardenApplication*>(kApplication());
+    return dynamic_cast<RosegardenApplication*>(qApp);
 }
 
 QByteArray RosegardenApplication::Empty;

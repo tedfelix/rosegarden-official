@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,8 +20,8 @@
 
 #include "base/AudioLevel.h"
 #include <map>
-#include <qcolor.h>
-#include <qwidget.h>
+#include <QColor>
+#include <QWidget>
 #include <utility>
 
 
@@ -35,8 +34,6 @@ class QMouseEvent;
 
 namespace Rosegarden
 {
-
-class TextFloat;
 
 
 class Fader : public QWidget
@@ -66,14 +63,13 @@ public:
                     bool vertical, QWidget *parent);
 
     virtual ~Fader();
-    
+
     void setOutlineColour(QColor);
 
     float getFaderLevel() const;
 
 public slots:
     void setFader(float value);
-    void slotFloatTimeout();
 
 signals:
     void faderChanged(float);
@@ -84,6 +80,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void wheelEvent(QWheelEvent *);
+    virtual void enterEvent(QEvent *e);
 
     float position_to_value(int);
     int value_to_position(float);
@@ -105,9 +102,6 @@ protected:
 
     int m_clickMousePos;
     int m_clickButtonPos;
-
-    TextFloat *m_float;
-    QTimer              *m_floatTimer;
 
     QPixmap *groovePixmap();
     QPixmap *buttonPixmap();

@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -47,7 +48,6 @@ SoundDriver::SoundDriver(MappedStudio *studio, const std::string &name):
         m_lowLatencyMode(true),
         m_audioRecFileFormat(RIFFAudioFile::FLOAT),
         m_studio(studio),
-        m_sequencerDataBlock(0),
         m_externalTransport(0),
         m_mmcStatus(TRANSPORT_OFF),
         m_mtcStatus(TRANSPORT_OFF),

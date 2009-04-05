@@ -18,36 +18,40 @@
 #include "NoteStyleFileReader.h"
 
 #include <string>
-#include "NoteStyle.h"
-#include <qfileinfo.h>
-#include <qdir.h>
-
-#include <kglobal.h>
-#include <kstddirs.h>
-#include <klocale.h>
-
 #include "misc/Strings.h"
 #include "NotationStrings.h"
 #include "misc/Debug.h"
+#include "gui/general/ResourceFinder.h"
+#include "NoteStyle.h"
+
+#include <QFileInfo>
+#include <QDir>
+
+
 
 namespace Rosegarden {
 
 
-NoteStyleFileReader::NoteStyleFileReader(std::string name) :
+NoteStyleFileReader::NoteStyleFileReader(QString name) :
     m_style(new NoteStyle(name)),
     m_haveNote(false)
 {
-    QString styleDirectory =
-	KGlobal::dirs()->findResource("appdata", "styles/");
-
+/*!!!
+	IconLoader il;
+//     QString styleDirectory =
+//	KGlobal::dirs()->findResource("appdata", "styles/");
+	QString styleDirectory = il.getResourcePath( "styles" );
+	
     QString styleFileName =
-	QString("%1/%2.xml").arg(styleDirectory).arg(strtoqstr(name));
+	QString("%1/%2.xml").arg(styleDirectory).arg(name);
+*/
+    QString styleFileName = ResourceFinder().getResourcePath
+        ("styles", QString("%1.xml").arg(name));
 
     QFileInfo fileInfo(styleFileName);
 
-    if (!fileInfo.isReadable()) {
-        throw StyleFileReadFailed
-	    (qstrtostr(i18n("Can't open style file %1").arg(styleFileName)));
+    if (styleFileName == "" || !fileInfo.isReadable()) {
+        throw StyleFileReadFailed(tr("Can't open style file %1").arg(styleFileName));
     }
 
     QFile styleFile(styleFileName);
@@ -60,7 +64,7 @@ NoteStyleFileReader::NoteStyleFileReader(std::string name) :
     styleFile.close();
 
     if (!ok) {
-	throw StyleFileReadFailed(qstrtostr(m_errorString));
+	throw StyleFileReadFailed(m_errorString);
     }
 }
 
@@ -69,20 +73,20 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 				  const QString &qName,
 				  const QXmlAttributes &attributes)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "rosegarden-note-style") {
 
 	QString s = attributes.value("base-style");
-	if (s) m_style->setBaseStyle(qstrtostr(s));
+	if ( !s.isEmpty() ) m_style->setBaseStyle(s);
 
     } else if (lcName == "note") {
 
 	m_haveNote = true;
 	
 	QString s = attributes.value("type");
-	if (!s) {
-	    m_errorString = i18n("type is a required attribute of note");
+	if (s.isEmpty() ) {
+	    m_errorString = tr("type is a required attribute of note");
 	    return false;
 	}
 	
@@ -91,14 +95,14 @@ NoteStyleFileReader::startElement(const QString &, const QString &,
 	    if (!setFromAttributes(type, attributes)) return false;
 
 	} catch (NotationStrings::MalformedNoteName n) {
-	    m_errorString = i18n("Unrecognised note name %1").arg(s);
+	    m_errorString = tr("Unrecognised note name %1").arg(s);
 	    return false;
 	}
 
     } else if (lcName == "global") {
 
 	if (m_haveNote) {
-	    m_errorString = i18n("global element must precede note elements");
+	    m_errorString = tr("global element must precede note elements");
 	    return false;
 	}
 	    
@@ -119,33 +123,33 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveShape = false;
 
     s = attributes.value("shape");
-    if (s) {
-	m_style->setShape(type, qstrtostr(s.lower()));
+	if (!s.isEmpty() ) {
+	m_style->setShape(type, s.toLower());
 	haveShape = true;
     }
     
     s = attributes.value("charname");
-    if (s) {
+	if (!s.isEmpty() ) {
 	if (haveShape) {
-	    m_errorString = i18n("global and note elements may have shape "
+	    m_errorString = tr("global and note elements may have shape "
 				 "or charname attribute, but not both");
 	    return false;
 	}
 	m_style->setShape(type, NoteStyle::CustomCharName);
-	m_style->setCharName(type, qstrtostr(s));
+	m_style->setCharName(type, s);
     }
 
     s = attributes.value("filled");
-    if (s) m_style->setFilled(type, s.lower() == "true");
+	if (!s.isEmpty() ) m_style->setFilled(type, s.toLower() == "true");
     
     s = attributes.value("stem");
-    if (s) m_style->setStem(type, s.lower() == "true");
+	if (!s.isEmpty() ) m_style->setStem(type, s.toLower() == "true");
     
     s = attributes.value("flags");
-    if (s) m_style->setFlagCount(type, s.toInt());
+	if (!s.isEmpty() ) m_style->setFlagCount(type, s.toInt());
     
     s = attributes.value("slashes");
-    if (s) m_style->setSlashCount(type, s.toInt());
+	if (!s.isEmpty() ) m_style->setSlashCount(type, s.toInt());
 
     NoteStyle::HFixPoint hfix;
     NoteStyle::VFixPoint vfix;
@@ -154,8 +158,8 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     bool haveVFix = false;
 
     s = attributes.value("hfixpoint");
-    if (s) {
-	s = s.lower();
+	if (!s.isEmpty() ) {
+	s = s.toLower();
 	haveHFix = true;
 	if (s == "normal") hfix = NoteStyle::Normal;
 	else if (s == "central") hfix = NoteStyle::Central;
@@ -164,8 +168,8 @@ NoteStyleFileReader::setFromAttributes(Note::Type type,
     }
 
     s = attributes.value("vfixpoint");
-    if (s) {
-	s = s.lower();
+	if (!s.isEmpty() ) {
+	s = s.toLower();
 	haveVFix = true;
 	if (s == "near") vfix = NoteStyle::Near;
 	else if (s == "middle") vfix = NoteStyle::Middle;

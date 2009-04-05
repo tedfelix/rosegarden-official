@@ -22,11 +22,30 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+ChangeSlurPositionCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("slurs_above",
+         new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
+    r->registerCommand
+        ("slurs_below",
+         new ArgumentAndSelectionCommandBuilder<ChangeSlurPositionCommand>());
+}
+
+bool
+ChangeSlurPositionCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "slurs_above") return true;
+    else return false;
+}
 
 void
 ChangeSlurPositionCommand::modifySegment()

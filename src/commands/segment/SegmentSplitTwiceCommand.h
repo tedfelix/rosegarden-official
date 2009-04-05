@@ -26,12 +26,12 @@
 #define _RG_SEGMENTSPLITTWICECOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
 #include "DeleteRangeCommand.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -44,8 +44,10 @@ class Composition;
 // when cutting a range to fix bug #1961378 (crash when cutting a range))
 
 
-class SegmentSplitTwiceCommand : public KNamedCommand
+class SegmentSplitTwiceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitTwiceCommand)
+
 public:
     SegmentSplitTwiceCommand(Segment *segment,
                         timeT splitTime1, timeT splitTime2,

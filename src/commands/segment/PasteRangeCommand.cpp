@@ -18,7 +18,6 @@
 
 #include "PasteRangeCommand.h"
 
-#include <klocale.h>
 #include "AudioSegmentSplitCommand.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
@@ -35,7 +34,7 @@ namespace Rosegarden
 PasteRangeCommand::PasteRangeCommand(Composition *composition,
                                      Clipboard *clipboard,
                                      timeT t0) :
-        KMacroCommand(i18n("Paste Range"))
+        MacroCommand(tr("Paste Range"))
 {
     timeT clipBeginTime = clipboard->getBaseTime();
 

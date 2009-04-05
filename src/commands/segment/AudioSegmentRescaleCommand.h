@@ -18,10 +18,10 @@
 #ifndef _RG_AUDIOSEGMENTRESCALECOMMAND_H_
 #define _RG_AUDIOSEGMENTRESCALECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -29,15 +29,17 @@ namespace Rosegarden
 class Segment;
 class AudioFileManager;
 class AudioFileTimeStretcher;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class ProgressDialog;
 
-class AudioSegmentRescaleCommand : public KNamedCommand
+class AudioSegmentRescaleCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentRescaleCommand)
+
 public:
-    AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+    AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                Segment *segment, float ratio);
-    AudioSegmentRescaleCommand(RosegardenGUIDoc *doc,
+    AudioSegmentRescaleCommand(RosegardenDocument *doc,
                                Segment *segment, float ratio,
                                timeT newStartTime,
                                timeT newEndMarkerTime);
@@ -52,7 +54,7 @@ public:
     void connectProgressDialog(ProgressDialog *dlg);
     void disconnectProgressDialog(ProgressDialog *dlg);
     
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
     AudioFileManager *m_afm;

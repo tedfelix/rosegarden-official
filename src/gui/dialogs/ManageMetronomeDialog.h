@@ -20,29 +20,30 @@
 #define _RG_MANAGEMETRONOMEDIALOG_H_
 
 #include "base/MidiMetronome.h"
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QSpinBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class PitchChooser;
 class InstrumentParameterBox;
 class Device;
 
 
-class ManageMetronomeDialog : public KDialogBase
+class ManageMetronomeDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ManageMetronomeDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    ManageMetronomeDialog(QWidget *parent, RosegardenDocument *doc);
 
     void setModified(bool value);
 
@@ -61,20 +62,21 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc       *m_doc;
+    RosegardenDocument       *m_doc;
 
-    KComboBox              *m_metronomeDevice;
-    KComboBox              *m_metronomeInstrument;
-    KComboBox              *m_metronomeResolution;
-    KComboBox              *m_metronomePitchSelector;
-    PitchChooser *m_metronomePitch;
+    QDialogButtonBox       *m_buttonBox;
+    QComboBox              *m_metronomeDevice;
+    QComboBox              *m_metronomeInstrument;
+    QComboBox              *m_metronomeResolution;
+    QComboBox              *m_metronomePitchSelector;
+    PitchChooser           *m_metronomePitch;
     QSpinBox               *m_metronomeBarVely;
     QSpinBox               *m_metronomeBeatVely;
     QSpinBox               *m_metronomeSubBeatVely;
     InstrumentParameterBox *m_instrumentParameterBox;
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
-        
+
     bool                   m_modified;
     MidiByte   m_barPitch;
     MidiByte   m_beatPitch;

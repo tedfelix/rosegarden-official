@@ -1,3 +1,4 @@
+
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -18,8 +19,8 @@
 #ifndef _RG_ROSEGARDENSPINBOX_H_
 #define _RG_ROSEGARDENSPINBOX_H_
 
-#include <qspinbox.h>
-#include <qstring.h>
+#include <QSpinBox>
+#include <QString>
 
 
 class QWidget;

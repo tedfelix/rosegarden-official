@@ -20,6 +20,7 @@
 #include "PropertyName.h"
 #include "Exception.h"
 
+#include <cassert>
 
 namespace Rosegarden 
 {
@@ -69,6 +70,7 @@ string PropertyName::getName() const
     }
     std::cerr << std::endl;
 
+    assert(0); // exit if debug is on
     throw Exception
 	("Serious problem in PropertyName::getName(): property "
 	 "name's internal value is corrupted -- see stderr for details");

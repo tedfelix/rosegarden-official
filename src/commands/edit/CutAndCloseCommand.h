@@ -19,10 +19,10 @@
 #ifndef _RG_CUTANDCLOSECOMMAND_H_
 #define _RG_CUTANDCLOSECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -37,22 +37,24 @@ class Clipboard;
 
 /// Cut a selection and close the gap
 
-class CutAndCloseCommand : public KMacroCommand
+class CutAndCloseCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CutAndCloseCommand)
+
 public:
     CutAndCloseCommand(EventSelection &selection,
                        Clipboard *clipboard);
 
-    static QString getGlobalName() { return i18n("C&ut and Close"); }
+    static QString getGlobalName() { return tr("C&ut and Close"); }
 
 protected:
-    class CloseCommand : public KNamedCommand
+    class CloseCommand : public NamedCommand
     {
     public:
         CloseCommand(Segment *segment,
                      timeT fromTime,
                      timeT toTime) :
-            KNamedCommand("Close"),
+            NamedCommand("Close"),
             m_segment(segment),
             m_gapEnd(fromTime),
             m_gapStart(toTime) { }

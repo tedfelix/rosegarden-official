@@ -20,9 +20,9 @@
 #define _RG_SETTRIGGERSEGMENTBASEPITCHCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -31,8 +31,10 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentBasePitchCommand : public KNamedCommand
+class SetTriggerSegmentBasePitchCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentBasePitchCommand)
+
 public:
     SetTriggerSegmentBasePitchCommand(Composition *composition,
                                       TriggerSegmentId id,

@@ -24,141 +24,158 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kfiledialog.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qobject.h>
-#include <qpushbutton.h>
-#include <qlayout.h>
-#include <qslider.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <kmessagebox.h>
+#include "misc/Strings.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QComboBox>
+#include <QSettings>
+#include <QFileDialog>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QByteArray>
+#include <QDataStream>
+#include <QFrame>
+#include <QLabel>
+#include <QObject>
+#include <QPushButton>
+#include <QLayout>
+#include <QSlider>
+#include <QSpinBox>
+#include <QString>
+#include <QStringList>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
+#include <QMessageBox>
 
 
 namespace Rosegarden
 {
 
 AudioConfigurationPage::AudioConfigurationPage(
-    RosegardenGUIDoc *doc,
-    KConfig *cfg,
+    RosegardenDocument *doc,
     QWidget *parent,
     const char *name):
-    TabbedConfigurationPage(cfg, parent, name),
+    TabbedConfigurationPage(parent, name),
     m_externalAudioEditorPath(0)
 {
     // set the document in the super class
     m_doc = doc;
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings settings;
+    //@@@ next line not needed. Commented out.
+    //@@@ settings.beginGroup( SequencerOptionsConfigGroup );
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 7, 2, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     QLabel *label = 0;
 
     int row = 0;
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Audio preview scale"),
+    layout->addWidget(new QLabel(tr("Audio preview scale"),
                                  frame), row, 0);
 
-    m_previewStyle = new KComboBox(frame);
-    m_previewStyle->insertItem(i18n("Linear - easier to see loud peaks"));
-    m_previewStyle->insertItem(i18n("Meter scaling - easier to see quiet activity"));
-    m_previewStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("audiopreviewstyle", 1));
-    layout->addMultiCellWidget(m_previewStyle, row, row, 1, 2);
+    m_previewStyle = new QComboBox(frame);
+    connect(m_previewStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_previewStyle->addItem(tr("Linear - easier to see loud peaks"));
+    m_previewStyle->addItem(tr("Meter scaling - easier to see quiet activity"));
+    m_previewStyle->setCurrentIndex( settings.value("audiopreviewstyle", 1).toUInt() );
+    layout->addWidget(m_previewStyle, row, 1, row- row+1, 2);
     ++row;
+
+    settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    label = new QLabel(i18n("Record audio files as"), frame);
-    m_audioRecFormat = new KComboBox(frame);
-    m_audioRecFormat->insertItem(i18n("16-bit PCM WAV format (smaller files)"));
-    m_audioRecFormat->insertItem(i18n("32-bit float WAV format (higher quality)"));
-    m_audioRecFormat->setCurrentItem(m_cfg->readUnsignedNumEntry("audiorecordfileformat", 1));
+    label = new QLabel(tr("Record audio files as"), frame);
+    m_audioRecFormat = new QComboBox(frame);
+    connect(m_audioRecFormat, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_audioRecFormat->addItem(tr("16-bit PCM WAV format (smaller files)"));
+    m_audioRecFormat->addItem(tr("32-bit float WAV format (higher quality)"));
+    m_audioRecFormat->setCurrentIndex( settings.value("audiorecordfileformat", 1).toUInt() );
     layout->addWidget(label, row, 0);
-    layout->addMultiCellWidget(m_audioRecFormat, row, row, 1, 2);
+    layout->addWidget(m_audioRecFormat, row, 1, row- row+1, 2);
     ++row;
+
+    settings.endGroup();
+
 #endif
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
-
-    layout->addWidget(new QLabel(i18n("External audio editor"), frame),
+    layout->addWidget(new QLabel(tr("External audio editor"), frame),
                       row, 0);
 
     QString defaultAudioEditor = getBestAvailableAudioEditor();
 
     std::cerr << "defaultAudioEditor = " << defaultAudioEditor << std::endl;
 
-    QString externalAudioEditor = m_cfg->readEntry("externalaudioeditor",
-                                  defaultAudioEditor);
+    QString externalAudioEditor = settings.value("externalaudioeditor",
+                                  defaultAudioEditor).toString() ;
 
     if (externalAudioEditor == "") {
         externalAudioEditor = defaultAudioEditor;
-        m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+        settings.setValue("externalaudioeditor", externalAudioEditor);
     }
 
-    m_externalAudioEditorPath = new QLineEdit(externalAudioEditor, frame);
+    m_externalAudioEditorPath = new LineEdit(externalAudioEditor, frame);
+    connect(m_externalAudioEditorPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 //    m_externalAudioEditorPath->setMinimumWidth(150);
     layout->addWidget(m_externalAudioEditorPath, row, 1);
     
     QPushButton *changePathButton =
-        new QPushButton(i18n("Choose..."), frame);
+        new QPushButton(tr("Choose..."), frame);
 
     layout->addWidget(changePathButton, row, 2);
     connect(changePathButton, SIGNAL(clicked()), SLOT(slotFileDialog()));
     ++row;
 
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    settings.endGroup();
 
-    layout->addWidget(new QLabel(i18n("Create JACK outputs"), frame),
+    layout->addWidget(new QLabel(tr("Create JACK outputs"), frame),
                       row, 0);
 //    ++row;
 
 #ifdef HAVE_LIBJACK
-    m_createFaderOuts = new QCheckBox(i18n("for individual audio instruments"), frame);
-    m_createFaderOuts->setChecked(m_cfg->readBoolEntry("audiofaderouts", false));
+    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    m_createFaderOuts = new QCheckBox(tr("for individual audio instruments"), frame);
+    connect(m_createFaderOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_createFaderOuts->setChecked( qStrToBool( settings.value("audiofaderouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createFaderOuts, row, 1);
     ++row;
 
-    m_createSubmasterOuts = new QCheckBox(i18n("for submasters"), frame);
-    m_createSubmasterOuts->setChecked(m_cfg->readBoolEntry("audiosubmasterouts",
-                                      false));
+    m_createSubmasterOuts = new QCheckBox(tr("for submasters"), frame);
+    connect(m_createSubmasterOuts, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "                                      false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
     layout->addWidget(m_createSubmasterOuts, row, 1);
     ++row;
+
+    settings.endGroup();
 #endif
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, i18n("General"));
+    addTab(frame, tr("General"));
 
     // --------------------- Startup control ----------------------
     //
@@ -167,44 +184,52 @@ AudioConfigurationPage::AudioConfigurationPage(
 #ifdef OFFER_JACK_START_OPTION
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 8, 4, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    label = new QLabel(i18n("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
-    label->setAlignment(Qt::WordBreak);
+    label = new QLabel(tr("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
+    label->setWordWrap(true);
 
-    layout->addMultiCellWidget(label, row, row, 0, 3);
+    layout->addWidget(label, row, 0, row- row+1, 3- 0+1);
     ++row;
+
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
     // JACK control things
     //
-    bool startJack = m_cfg->readBoolEntry("jackstart", false);
+    bool startJack = qStrToBool( settings.value("jackstart", "false" ) ) ;
     m_startJack = new QCheckBox(frame);
+    connect(m_startJack, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     m_startJack->setChecked(startJack);
 
-    layout->addWidget(new QLabel(i18n("Start JACK when Rosegarden starts"), frame), 2, 0);
+    layout->addWidget(new QLabel(tr("Start JACK when Rosegarden starts"), frame), 2, 0);
 
     layout->addWidget(m_startJack, row, 1);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("JACK command"), frame),
+    layout->addWidget(new QLabel(tr("JACK command"), frame),
                       row, 0);
 
-    QString jackPath = m_cfg->readEntry("jackcommand",
-                                        // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2");
-                                        "/usr/bin/qjackctl -s");
-    m_jackPath = new QLineEdit(jackPath, frame);
+    QString jackPath = settings.value("jackcommand",
+                                        // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
+                                        "/usr/bin/qjackctl -s").toString();
+    m_jackPath = new LineEdit(jackPath, frame);
+    connect(m_jackPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
 
-    layout->addMultiCellWidget(m_jackPath, row, row, 1, 3);
+    layout->addWidget(m_jackPath, row, 1, row- row+1, 3);
     ++row;
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, i18n("JACK Startup"));
+    addTab(frame, tr("JACK Startup"));
+
+    settings.endGroup();
 
 #endif // OFFER_JACK_START_OPTION
 #endif // HAVE_LIBJACK
@@ -214,52 +239,56 @@ AudioConfigurationPage::AudioConfigurationPage(
 void
 AudioConfigurationPage::slotFileDialog()
 {
-    QString path = KFileDialog::getOpenFileName(QString::null, QString::null, this, i18n("External audio editor path"));
+    QString path = QFileDialog::getOpenFileName(this, tr("External audio editor path"), QDir::currentPath() );
+
     m_externalAudioEditorPath->setText(path);
 }
 
 void
 AudioConfigurationPage::apply()
 {
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
 #ifdef HAVE_LIBJACK
 #ifdef OFFER_JACK_START_OPTION
     // Jack control
     //
-    m_cfg->writeEntry("jackstart", m_startJack->isChecked());
-    m_cfg->writeEntry("jackcommand", m_jackPath->text());
+    settings.setValue("jackstart", m_startJack->isChecked());
+    settings.setValue("jackcommand", m_jackPath->text());
 #endif // OFFER_JACK_START_OPTION
 
     // Jack audio inputs
     //
-    m_cfg->writeEntry("audiofaderouts", m_createFaderOuts->isChecked());
-    m_cfg->writeEntry("audiosubmasterouts", m_createSubmasterOuts->isChecked());
-    m_cfg->writeEntry("audiorecordfileformat", m_audioRecFormat->currentItem());
+    settings.setValue("audiofaderouts", m_createFaderOuts->isChecked());
+    settings.setValue("audiosubmasterouts", m_createSubmasterOuts->isChecked());
+    settings.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
 #endif
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    settings.endGroup();
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    int previewstyle = m_previewStyle->currentItem();
-    m_cfg->writeEntry("audiopreviewstyle", previewstyle);
+    int previewstyle = m_previewStyle->currentIndex();
+    settings.setValue("audiopreviewstyle", previewstyle);
 
     QString externalAudioEditor = getExternalAudioEditor();
 
-    QStringList extlist = QStringList::split(" ", externalAudioEditor);
+    QStringList extlist = externalAudioEditor.split(" ", QString::SkipEmptyParts);
     QString extpath = "";
     if (extlist.size() > 0) extpath = extlist[0];
 
     if (extpath != "") {
         QFileInfo info(extpath);
         if (!info.exists() || !info.isExecutable()) {
-            KMessageBox::error(0, i18n("External audio editor \"%1\" not found or not executable").arg(extpath));
-            m_cfg->writeEntry("externalaudioeditor", "");
+            QMessageBox::critical(0, "", tr("External audio editor \"%1\" not found or not executable").arg(extpath));
+            settings.setValue("externalaudioeditor", "");
         } else {
-            m_cfg->writeEntry("externalaudioeditor", externalAudioEditor);
+            settings.setValue("externalaudioeditor", externalAudioEditor);
         }
     } else {
-        m_cfg->writeEntry("externalaudioeditor", "");
+        settings.setValue("externalaudioeditor", "");
     }
+    settings.endGroup();
 }
 
 QString
@@ -275,7 +304,7 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
     if (cpath) path = cpath;
     else path = "/usr/bin:/bin";
 
-    QStringList pathList = QStringList::split(":", path);
+    QStringList pathList = path.split(":", QString::SkipEmptyParts);
 
     const char *candidates[] = {
         "mhwaveedit",
@@ -283,7 +312,7 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
         "audacity"
     };
 
-    for (int i = 0;
+    for (unsigned int i = 0;
          i < sizeof(candidates)/sizeof(candidates[0]) && result == "";
          i++) {
 

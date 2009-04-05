@@ -31,7 +31,7 @@ class TimeSigSegmentMmapper;
 class TempoSegmentMmapper;
 class SegmentMmapper;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MetronomeMmapper;
 
 
@@ -39,12 +39,12 @@ class SegmentMmapperFactory
 {
 public:
 
-    static SegmentMmapper* makeMmapperForSegment(RosegardenGUIDoc*, Segment*,
+    static SegmentMmapper* makeMmapperForSegment(RosegardenDocument*, Segment*,
                                                  const QString& fileName);
 
-    static MetronomeMmapper*      makeMetronome(RosegardenGUIDoc*);
-    static TimeSigSegmentMmapper* makeTimeSig(RosegardenGUIDoc*);
-    static TempoSegmentMmapper*   makeTempo(RosegardenGUIDoc*);
+    static MetronomeMmapper*      makeMetronome(RosegardenDocument*);
+    static TimeSigSegmentMmapper* makeTimeSig(RosegardenDocument*);
+    static TempoSegmentMmapper*   makeTempo(RosegardenDocument*);
 };
 
 //----------------------------------------

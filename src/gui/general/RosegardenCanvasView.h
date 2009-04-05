@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,35 +18,37 @@
 #ifndef _RG_ROSEGARDENCANVASVIEW_H_
 #define _RG_ROSEGARDENCANVASVIEW_H_
 
-#include <qpoint.h>
-#include <qtimer.h>
-#include <qcanvas.h>
-#include <qdatetime.h>
-#include <qwmatrix.h>
+#include <Q3Canvas>
+#include <Q3CanvasView>
+#include <QPoint>
+#include <QTimer>
+#include <Q3Canvas>
+#include <QDateTime>
+#include <QMatrix>
 
 class QWidget;
 class QWheelEvent;
 class QScrollBar;
 class QResizeEvent;
-
+class QToolBar;
 
 namespace Rosegarden
 {
 
 /**
- * A QCanvasView with an auxiliary horiz. scrollbar
+ * A Q3CanvasView with an auxiliary horiz. scrollbar
  * That scrollbar should be provided by the parent widget
  * (typically an EditView). The RosegardenCanvasView keeps
  * the auxilliary horiz. scrollbar range in sync with the
  * one of its own scrollbar with slotUpdate().
  */
 
-class RosegardenCanvasView : public QCanvasView
+class RosegardenCanvasView : public Q3CanvasView
 {
     Q_OBJECT
 public:
-    RosegardenCanvasView(QCanvas*,
-                         QWidget* parent=0, const char* name=0, WFlags f=0);
+    RosegardenCanvasView(Q3Canvas*,
+						 QWidget* parent=0, const char* name="view" );
 
     /**
      * EditTool::handleMouseMove() returns a OR-ed combination of these
@@ -155,17 +156,19 @@ protected:
     QWidget* m_bottomWidget;
     int m_currentBottomWidgetHeight;
 
-    QWidget* m_leftWidget;
+    QWidget*	m_leftWidget;
+	
+	QToolBar*	m_mainToolBar;
 
     bool m_smoothScroll;
     int m_smoothScrollTimeInterval;
     float m_minDeltaScroll;
     QTime m_scrollTimer;
-    QTime m_scrollAccelerationTimer;
+    QTime m_scrollShortcuterationTimer;
 
     QTimer m_autoScrollTimer;
     int m_autoScrollTime;
-    int m_autoScrollAccel;
+    int m_autoScrollShortcut;
     QPoint m_previousP;
     int m_autoScrollXMargin;
     int m_autoScrollYMargin;
@@ -178,9 +181,9 @@ protected:
 
     static const int AutoscrollMargin;
     static const int InitialScrollTime;
-    static const int InitialScrollAccel;
+    static const int InitialScrollShortcut;
     static const int MaxScrollDelta;
-    static const double ScrollAccelValue;
+    static const double ScrollShortcutValue;
 
 };
 

@@ -17,45 +17,46 @@
 
 
 #include "MidiPitchLabel.h"
-#include <kapplication.h>
-
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
-#include <klocale.h>
-#include <qstring.h>
+
+#include <QApplication>
+#include <QSettings>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-static QString notes[] = {
-    i18n("C%1"),  i18n("C#%1"), i18n("D%1"),  i18n("D#%1"),
-    i18n("E%1"),  i18n("F%1"),  i18n("F#%1"), i18n("G%1"),
-    i18n("G#%1"), i18n("A%1"),  i18n("A#%1"), i18n("B%1")
-};
-
-
 MidiPitchLabel::MidiPitchLabel(int pitch)
 {
+    static QString notes[] = {
+        tr("C%1"),  tr("C#%1"), tr("D%1"),  tr("D#%1"),
+        tr("E%1"),  tr("F%1"),  tr("F#%1"), tr("G%1"),
+        tr("G#%1"), tr("A%1"),  tr("A#%1"), tr("B%1")
+    };
+
     if (pitch < 0 || pitch > 127) {
 
         m_midiNote = "";
 
     } else {
 
-        KConfig *config = kapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
-        int baseOctave = config->readNumEntry("midipitchoctave", -2);
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
 
         int octave = (int)(((float)pitch) / 12.0) + baseOctave;
         m_midiNote = notes[pitch % 12].arg(octave);
+
+        settings.endGroup();
     }
 }
 
 std::string
 MidiPitchLabel::getString() const
 {
-    return std::string(m_midiNote.utf8().data());
+    return std::string(m_midiNote.toUtf8().data());
 }
 
 QString

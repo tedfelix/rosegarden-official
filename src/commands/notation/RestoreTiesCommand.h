@@ -20,8 +20,8 @@
 #define _RG_ADJUSTMENURESTORETIESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,16 +30,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RestoreTiesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RestoreTiesCommand)
+
 public:
     RestoreTiesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Restore Tie Positions"); }
+    static QString getGlobalName() { return tr("&Restore Tie Positions"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

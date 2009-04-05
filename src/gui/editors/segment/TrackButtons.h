@@ -1,5 +1,5 @@
 
-/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+/* -*- c-basic-offset: QMenu indent-tabs-mode: nil -*- vi:set ts=8 sts=QMenu sw=QMenu: */
 
 /*
     Rosegarden
@@ -21,10 +21,10 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "TrackLabel.h"
-#include <qframe.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 #include <vector>
 
 
@@ -39,24 +39,30 @@ namespace Rosegarden
 {
 
 class TrackVUMeter;
-class RosegardenGUIDoc;
-class KLedButton;
+class RosegardenDocument;
+class LedButton;
 class Instrument;
 
+
+
+// This class creates a list of mute and record buttons
+// based on the rosegarden document and a specialisation
+// of the Vertical Box widget.
+//
 
 class TrackButtons : public QFrame
 {
     Q_OBJECT
 public:
 
-    TrackButtons(RosegardenGUIDoc* doc,
+    TrackButtons(RosegardenDocument* doc,
                  unsigned int trackCellHeight,
                  unsigned int trackLabelWidth,
                  bool showTrackLabels,
                  int overallHeight,
                  QWidget* parent = 0,
-                 const char* name = 0,
-                 WFlags f=0);
+                 const char* name = 0);
+//                 WFlags f=0);
 
     ~TrackButtons();
 
@@ -94,11 +100,11 @@ public:
     /**
      * Precalculate the Instrument popup so we don't have to every
      * time it appears
-     * not protected because also used by the RosegardenGUIApp
+     * not protected because also used by the RosegardenMainWindow
      *
-     * @see RosegardenGUIApp#slotPopulateTrackInstrumentPopup()
+     * @see RosegardenMainWindow#slotPopulateTrackInstrumentPopup()
      */
-    void populateInstrumentPopup(Instrument *thisTrackInstr, QPopupMenu* instrumentPopup);
+    void populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrumentPopup);
 
 signals:
     // to emit what Track has been selected
@@ -136,7 +142,9 @@ public slots:
     void slotSetMetersByInstrument(float value, InstrumentId id);
 
     void slotInstrumentSelection(int);
-    void slotInstrumentPopupActivated(int);
+    void slotInstrumentPopupActivated(int);		// old kde3
+    void slotInstrumentPopupActivated(QAction*);		// old kde3
+    
     void slotTrackInstrumentSelection(TrackId, int);
     
     // ensure track buttons match the Composition
@@ -176,12 +184,12 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc                 *m_doc;
+    RosegardenDocument                 *m_doc;
 
     QVBoxLayout                      *m_layout;
 
-    std::vector<KLedButton *>         m_muteLeds;
-    std::vector<KLedButton *>         m_recordLeds;
+    std::vector<LedButton *>          m_muteLeds;
+    std::vector<LedButton *>          m_recordLeds;
     std::vector<TrackLabel *>         m_trackLabels;
     std::vector<TrackVUMeter *>       m_trackMeters;
     std::vector<QFrame *>             m_trackHBoxes;

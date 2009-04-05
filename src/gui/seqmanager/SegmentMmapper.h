@@ -19,7 +19,7 @@
 #ifndef _RG_SEGMENTMMAPPER_H_
 #define _RG_SEGMENTMMAPPER_H_
 
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -30,7 +30,7 @@ namespace Rosegarden
 
 class TriggerSegmentRec;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MappedEvent;
 class Event;
 
@@ -54,7 +54,7 @@ public:
     virtual unsigned int getSegmentRepeatCount();
 
 protected:
-    SegmentMmapper(RosegardenGUIDoc*, Segment*,
+    SegmentMmapper(RosegardenDocument*, Segment*,
                    const QString& fileName);
 
     virtual size_t computeMmappedSize();
@@ -82,7 +82,7 @@ protected:
                              TriggerSegmentRec *rec);
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     Segment* m_segment;
     QString m_fileName;
 

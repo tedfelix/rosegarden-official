@@ -22,12 +22,12 @@
 #include "Chord.h"
 #include "ChordMap.h"
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include <vector>
 
-class QListBox;
-class QListBoxItem;
+class QListWidget;
+class QListWidgetItem;
 class QComboBox;
 class QPushButton;
 
@@ -36,14 +36,14 @@ namespace Rosegarden
 
 class FingeringBox;
 
-class GuitarChordSelectorDialog : public KDialogBase
+class GuitarChordSelectorDialog : public QDialog
 {
      Q_OBJECT
     
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
     
 public:
-	GuitarChordSelectorDialog(QWidget *parent=0);
+    GuitarChordSelectorDialog(QWidget *parent=0);
 
     void init();
 
@@ -54,7 +54,7 @@ public:
 protected slots:
     void slotRootHighlighted(int);
     void slotChordExtHighlighted(int);
-    void slotFingeringHighlighted(QListBoxItem*);
+    void slotFingeringHighlighted(QListWidgetItem*);
     void slotComplexityChanged(int);
     
     void slotNewFingering();
@@ -91,9 +91,9 @@ protected:
     Guitar::Chord m_chord;
     
     // Chord data
-    QListBox* m_rootNotesList;
-    QListBox* m_chordExtList;
-    QListBox* m_fingeringsList;
+    QListWidget* m_rootNotesList;
+    QListWidget* m_chordExtList;
+    QListWidget* m_fingeringsList;
     FingeringBox* m_fingeringBox;
 
     QComboBox*   m_chordComplexityCombo;

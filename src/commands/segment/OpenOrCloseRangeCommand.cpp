@@ -18,7 +18,6 @@
 
 #include "OpenOrCloseRangeCommand.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -33,7 +32,7 @@ OpenOrCloseRangeCommand::OpenOrCloseRangeCommand(Composition *composition,
         timeT rangeBegin,
         timeT rangeEnd,
         bool open) :
-        KNamedCommand(i18n("Open or Close Range")),
+        NamedCommand(tr("Open or Close Range")),
         m_composition(composition),
         m_beginTime(rangeBegin),
         m_endTime(rangeEnd),

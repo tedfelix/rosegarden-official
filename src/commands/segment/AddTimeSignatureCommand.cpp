@@ -20,7 +20,7 @@
 
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 AddTimeSignatureCommand::AddTimeSignatureCommand(Composition *composition,
         timeT time,
         TimeSignature timeSig) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_timeSignature(timeSig),

@@ -19,7 +19,7 @@
 #ifndef _RG_QUANTIZEDIALOG_H_
 #define _RG_QUANTIZEDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
@@ -32,7 +32,7 @@ class Quantizer;
 class QuantizeParameters;
 
 
-class QuantizeDialog : public KDialogBase
+class QuantizeDialog : public QDialog
 {
     Q_OBJECT
 
@@ -41,9 +41,15 @@ public:
     
     /// Returned quantizer object is on heap -- caller must delete
     Quantizer *getQuantizer() const;
+	
+	void setDetailsWidget( QWidget* wid );
+	
+public slots:
+	void slotShowDetails( bool checked );
 
 protected:
     QuantizeParameters *m_quantizeFrame;
+	QWidget *m_detailsWidget;
 };
 
 

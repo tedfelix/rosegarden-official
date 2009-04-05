@@ -20,14 +20,14 @@
 
 #include "base/Segment.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentChangePlayableRangeCommand::SegmentChangePlayableRangeCommand(int low, int high, Segment *segment) :
-        KNamedCommand(getGlobalName(low, high)),
+        NamedCommand(getGlobalName(low, high)),
         m_lowestPlayableNote(low),
         m_highestPlayableNote(high),
         m_segment(segment)

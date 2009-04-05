@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -18,48 +18,51 @@
 
 #include "TempoRuler.h"
 
-#include <klocale.h>
-#include <kstddirs.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
-#include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
 #include "TempoColour.h"
-#include <kaction.h>
-#include <kglobal.h>
-#include <kxmlguiclient.h>
-#include <kxmlguifactory.h>
-#include <qcolor.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qiconset.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+
+#include <QMainWindow>
+#include <QColor>
+#include <QCursor>
+#include <QEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QIcon>
+#include <QObject>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QMenu>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QWidget>
+#include <QAction>
+#include <QEvent>
+#include <QPaintEvent>
+#include <QMouseEvent>
+
+
+
 
 
 namespace Rosegarden
 {
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
-                       RosegardenGUIDoc *doc,
-                       KMainWindow *parentMainWindow,
+                       RosegardenDocument *doc,
+                       QMainWindow *parentMainWindow,
                        double xorigin,
                        int height,
                        bool small,
@@ -103,64 +106,39 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
     m_boldFont.setBold(true);
     m_fontMetrics = QFontMetrics(m_boldFont);
 
-    m_textFloat = new TextFloat(this);
-    m_textFloat->hide();
-
-    //    setBackgroundColor(GUIPalette::getColour(GUIPalette::TextRulerBackground));
+    QPalette p(palette());
+    p.setColor(QPalette::Background,
+               GUIPalette::getColour(GUIPalette::TextRulerBackground));
+    setPalette(p);
     setBackgroundMode(Qt::NoBackground);
 
     QObject::connect
-    (doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
      this, SLOT(update()));
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon;
-
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
-    new KAction(i18n("Insert Tempo Change"), icon, 0, this,
-                 SLOT(slotInsertTempoHere()), actionCollection(),
-                 "insert_tempo_here");
-
-    new KAction(i18n("Insert Tempo Change at Playback Position"), 0, 0, this,
-                 SLOT(slotInsertTempoAtPointer()), actionCollection(),
-                 "insert_tempo_at_pointer");
-
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-delete.png"));
-    new KAction(i18n("Delete Tempo Change"), icon, 0, this,
-                 SLOT(slotDeleteTempoChange()), actionCollection(),
-                 "delete_tempo");
-
-    new KAction(i18n("Ramp Tempo to Next Tempo"), 0, 0, this,
-                 SLOT(slotRampToNext()), actionCollection(),
-                 "ramp_to_next");
-
-    new KAction(i18n("Un-Ramp Tempo"), 0, 0, this,
-                 SLOT(slotUnramp()), actionCollection(),
-                 "unramp");
-
-    icon = QIconSet(QPixmap(pixmapDir + "/toolbar/event-edit.png"));
-    new KAction(i18n("Edit Tempo..."), icon, 0, this,
-                 SLOT(slotEditTempo()), actionCollection(),
-                 "edit_tempo");
-
-    new KAction(i18n("Edit Time Signature..."), 0, 0, this,
-                 SLOT(slotEditTimeSignature()), actionCollection(),
-                 "edit_time_signature");
-
-    new KAction(i18n("Open Tempo and Time Signature Editor"), 0, 0, this,
-                 SLOT(slotEditTempos()), actionCollection(),
-                 "edit_tempos");
+    createAction("insert_tempo_here", SLOT(slotInsertTempoHere()));
+    createAction("insert_tempo_at_pointer", SLOT(slotInsertTempoAtPointer()));
+    createAction("delete_tempo", SLOT(slotDeleteTempoChange()));
+    createAction("ramp_to_next", SLOT(slotRampToNext()));
+    createAction("unramp", SLOT(slotUnramp()));
+    createAction("edit_tempo", SLOT(slotEditTempo()));
+    createAction("edit_time_signature", SLOT(slotEditTimeSignature()));
+    createAction("edit_tempos", SLOT(slotEditTempos()));
 
     setMouseTracking(false);
 }
 
 TempoRuler::~TempoRuler()
 {
+/*!!! comment retained for reference, in case of problems later.  I think this should no longer be necessary, but I am only a simple carbon-based life form
+
     // we have to do this so that the menu is re-created properly
     // when the main window is itself recreated (on a File->New for instance)
+
     KXMLGUIFactory* factory = m_parentMainWindow->factory();
     if (factory)
         factory->removeClient(this);
+*/
 }
 
 void
@@ -168,7 +146,7 @@ TempoRuler::connectSignals()
 {
     connect(this,
             SIGNAL(doubleClicked(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempos(timeT)));
 
     connect(this,
@@ -176,7 +154,7 @@ TempoRuler::connectSignals()
                                tempoT,
                                tempoT,
                                TempoDialog::TempoDialogAction)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotChangeTempo(timeT,
                                  tempoT,
                                  tempoT,
@@ -185,28 +163,28 @@ TempoRuler::connectSignals()
     connect(this,
             SIGNAL(moveTempo(timeT,
                              timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotMoveTempo(timeT,
                                timeT)));
 
     connect(this,
             SIGNAL(deleteTempo(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotDeleteTempo(timeT)));
 
     connect(this,
             SIGNAL(editTempo(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempo(timeT)));
 
     connect(this,
             SIGNAL(editTimeSignature(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTimeSignature(timeT)));
 
     connect(this,
             SIGNAL(editTempos(timeT)),
-            RosegardenGUIApp::self(),
+            RosegardenMainWindow::self(),
             SLOT(slotEditTempos(timeT)));
 }
 
@@ -234,7 +212,7 @@ TempoRuler::slotScrollHoriz(int x)
 void
 TempoRuler::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             timeT t = m_rulerScale->getTimeForX
@@ -262,7 +240,7 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
         m_dragStartTarget = tr.first ? tr.second : -1;
         m_dragOriginalTempo = m_dragStartTempo;
         m_dragOriginalTarget = m_dragStartTarget;
-        m_dragFine = ((e->state() & Qt::ShiftButton) != 0);
+        m_dragFine = ((e->state() & Qt::ShiftModifier) != 0);
 
         int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset + m_xorigin;
         if (x >= px && x < px + 5) {
@@ -286,15 +264,17 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             m_dragHoriz = false;
         }
 
-    } else if (e->button() == RightButton) {
+    } else if (e->button() == Qt::RightButton) {
 
         m_clickX = e->x();
         if (!m_menu)
             createMenu();
         if (m_menu) {
-            // enable 'delete' action only if cursor is actually over a tempo change            
-            actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
-            m_menu->exec(QCursor::pos());
+            // enable 'delete' action only if cursor is actually over a tempo change
+// 			actionCollection()->action("delete_tempo")->setEnabled(m_illuminatePoint);
+			findAction("delete_tempo")->setEnabled(m_illuminatePoint);
+
+			m_menu->exec(QCursor::pos());
         }
 
     }
@@ -364,7 +344,7 @@ TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 void
 TempoRuler::mouseMoveEvent(QMouseEvent *e)
 {
-    bool shiftPressed = ((e->state() & Qt::ShiftButton) != 0);
+    bool shiftPressed = ((e->state() & Qt::ShiftModifier) != 0);
 
     if (m_dragVert) {
 
@@ -509,6 +489,7 @@ TempoRuler::wheelEvent(QWheelEvent *e)
 void
 TempoRuler::enterEvent(QEvent *)
 {
+    TextFloat::getTextFloat()->attach(this);
     setMouseTracking(true);
 }
 
@@ -520,7 +501,8 @@ TempoRuler::leaveEvent(QEvent *)
         m_illuminate = -1;
         m_illuminatePoint = false;
         //!!!	m_refreshLinesOnly = true;
-        m_textFloat->hide();
+        TextFloat::getTextFloat()->hide();
+
         update();
     }
 }
@@ -578,15 +560,15 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
             int b0 = int(bpm * 10 + 0.0001) % 10;
             int b00 = int(bpm * 100 + 0.0001) % 10;
 
-            tempoText = i18n("%1.%2%3 (%4.%5%6 bpm)")
-                        .arg(qi).arg(q0).arg(q00)
-                        .arg(bi).arg(b0).arg(b00);
+            tempoText = tr("%1.%2%3 (%4.%5%6 bpm)")
+                         .arg(qi).arg(q0).arg(q00)
+                         .arg(bi).arg(b0).arg(b00);
             haveSet = true;
         }
     }
 
     if (!haveSet) {
-        tempoText = i18n("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
+        tempoText = tr("%1.%2%3 bpm").arg(qi).arg(q0).arg(q00);
     }
 
     if (target > 0 && target != tempo) {
@@ -594,32 +576,24 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
         int tqi = int(tq + 0.0001);
         int tq0 = int(tq * 10 + 0.0001) % 10;
         int tq00 = int(tq * 100 + 0.0001) % 10;
-        tempoText = i18n("%1 - %2.%3%4").arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
+        tempoText = tr("%1 - %2.%3%4")
+                     .arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
     }
 
+    TextFloat *textFloat = TextFloat::getTextFloat();
+
     if (showTime && time >= 0) {
-        m_textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));
+        textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));
     } else {
-        m_textFloat->setText(tempoText);
+        textFloat->setText(tempoText);
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-    //    std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
-    QPoint mp = cp + pos();
+      //  std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
 
-    QWidget *parent = parentWidget();
-    while (parent->parentWidget() &&
-            !parent->isTopLevel() &&
-            !parent->isDialog()) {
-        mp += parent->pos();
-        parent = parent->parentWidget();
-    }
+    QPoint offset = cp + QPoint(10, 25 - cp.y() - textFloat->height());
+    textFloat->display(offset);
 
-    int yoff = cp.y() + m_textFloat->height() + 3;
-    mp = QPoint(mp.x() + 10, mp.y() > yoff ? mp.y() - yoff : 0);
-
-    m_textFloat->move(mp);
-    m_textFloat->show();
 }
 
 QSize
@@ -807,7 +781,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
         	int drawh = height() - 4;
         	int y = drawh / 2;
         	if (maxTempo > minTempo) {
-        	    y = drawh - 
+        	    y = drawh -
         		int((double(tempo - minTempo) / double(maxTempo - minTempo))
         		    * drawh + 0.5);
         	}
@@ -822,13 +796,13 @@ TempoRuler::paintEvent(QPaintEvent* e)
             bool illuminateLine = (illuminate &&
                                    !m_illuminatePoint && !m_illuminateTarget);
 
-            paint.setPen(illuminateLine ? Qt::white : Qt::black);
+            paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
 
             if (ramping.first) {
                 ry = getYForTempo(ramping.second);
                 ry += 2;
                 /*!!!
-                		ry = drawh - 
+                		ry = drawh -
                 		    int((double(ramping.second - minTempo) /
                 			 double(maxTempo - minTempo))
                 			* drawh + 0.5);
@@ -839,7 +813,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
             if (!illuminateLine && illuminate && m_illuminateTarget) {
                 if (x > lastx) {
-                    paint.setPen(Qt::white);
+                    paint.setPen(QColor(Qt::white));
                     paint.drawLine(x - 6, ry - ((ry - lasty) * 6) / (x - lastx),
                                    x - 2, ry);
                 }
@@ -851,10 +825,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
             bool illuminatePoint = (illuminate && m_illuminatePoint);
 
-            paint.setPen(illuminatePoint ? Qt::white : Qt::black);
+            paint.setPen(illuminatePoint ? QColor(Qt::white) : QColor(Qt::black));
             paint.drawRect(x - 1, y - 1, 3, 3);
 
-            paint.setPen(illuminatePoint ? Qt::black : Qt::white);
+            paint.setPen(illuminatePoint ? QColor(Qt::black) : QColor(Qt::white));
             paint.drawPoint(x, y);
         }
 
@@ -876,7 +850,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     if (haveSome) {
         bool illuminateLine = (illuminate && !m_illuminatePoint);
-        paint.setPen(illuminateLine ? Qt::white : Qt::black);
+        paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
         paint.drawLine(lastx + 1, lasty, width(), lasty);
     } else if (!m_refreshLinesOnly) {
         tempoT tempo = m_composition->getTempoAtTime(from);
@@ -886,8 +860,8 @@ TempoRuler::paintEvent(QPaintEvent* e)
         paint.drawRect(e->rect());
     }
 
-    paint.setPen(Qt::black);
-    paint.setBrush(Qt::black);
+    paint.setPen(QColor(Qt::black));
+    paint.setBrush(QColor(Qt::black));
     paint.drawLine(0, 0, width(), 0);
 
     for (TimePoints::iterator i = timePoints.begin();
@@ -1065,17 +1039,17 @@ TempoRuler::slotEditTempos()
 void
 TempoRuler::createMenu()
 {
-    setXMLFile("temporuler.rc");
-    
-    KXMLGUIFactory* factory = m_parentMainWindow->factory();
-    factory->addClient(this);
+    createGUI("temporuler.rc");
 
-    QWidget* tmp = factory->container("tempo_ruler_menu", this);
+    m_menu = findChild<QMenu *>("tempo_ruler_menu");
 
-    m_menu = dynamic_cast<QPopupMenu*>(tmp);
-        
+//    if (!tmp) {
+//        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
+//                 << domDocument().toString(4) << endl;
+//    }
+
     if (!m_menu) {
-        RG_DEBUG << "MarkerRuler::createMenu() failed\n";
+        RG_DEBUG << "TempoRuler::createMenu() failed\n";
     }
 }
 

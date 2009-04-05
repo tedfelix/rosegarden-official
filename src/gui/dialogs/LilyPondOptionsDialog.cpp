@@ -16,306 +16,286 @@
 */
 
 
-#include "LilyPondOptionsDialog.h"
-#include "document/io/LilyPondExporter.h"
-#include "gui/configuration/HeadersConfigurationPage.h"
-
-#include <qlayout.h>
-#include <kapplication.h>
-
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/io/LilyPondExporter.h"
+#include "document/RosegardenDocument.h"
+#include "gui/configuration/HeadersConfigurationPage.h"
+#include "LilyPondOptionsDialog.h"
 #include "misc/Strings.h"
-#include <kcombobox.h>
-#include <klineedit.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <kglobal.h>
-#include <klocale.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "misc/Debug.h"
+
+#include <QApplication>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGridLayout>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QSettings>
+#include <QString>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QVBoxLayout>
+#include <QWidget>
+#include <QLocale>
+
 #include <iostream>
+
 
 namespace Rosegarden
 {
 
 LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
-	RosegardenGUIDoc *doc,
+	RosegardenDocument *doc,
         QString windowCaption,
         QString heading) :
-        KDialogBase(parent, 0, true,
-                    (windowCaption = "" ? i18n("LilyPond Export/Preview") : windowCaption),
-                    Apply | Ok | Cancel),
+        QDialog(parent),
 	m_doc(doc)
 {
-    setHelp("file-printing");
+    //setHelp("file-printing");
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    setModal(true);
+    setWindowTitle((windowCaption = "" ? tr("LilyPond Export/Preview") : windowCaption));
 
-    QVBox * mainbox = makeVBoxMainWidget();
+    QGridLayout *metaGridLayout = new QGridLayout;
+
+    QWidget *mainbox = new QWidget(this);
+    QVBoxLayout *mainboxLayout = new QVBoxLayout;
+    metaGridLayout->addWidget(mainbox, 0, 0);
 
     //
-    // Arrange options in "General" and "Advanced" tabs.
+    // Arrange options in "Layout" and "Headers" tabs.
     //
 
-    QTabWidget * tabWidget = new QTabWidget(mainbox);
+    QTabWidget *tabWidget = new QTabWidget( mainbox );
+    mainboxLayout->addWidget(tabWidget);
 
-    QFrame *generalFrame;
-    QFrame *advancedFrame;
-    QGridLayout *generalGrid;
-    QGridLayout *advancedGrid;
+    QFrame *layoutFrame = new QFrame();
+    tabWidget->addTab(layoutFrame, tr("Layout"));
 
-    generalFrame = new QFrame();
-    tabWidget->addTab(generalFrame, i18n("General options"));
-
-    generalGrid = new QGridLayout(generalFrame, 1, 1, 5, 5);
-
-    advancedFrame = new QFrame();
-    tabWidget->addTab(advancedFrame, i18n("Advanced options"));
-
-    advancedGrid = new QGridLayout(advancedFrame, 1, 1, 5, 5);
+    layoutFrame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layoutGrid = new QGridLayout;
+    layoutGrid->setSpacing(5);
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
-    tabWidget->addTab(m_headersPage, i18n("Headers"));
-
-    m_headersPage->setSpacing(5);
-    m_headersPage->setMargin(5);
-
+    tabWidget->addTab(m_headersPage, tr("Headers"));
+//     m_headersPage->setSpacing(5);
+//     m_headersPage->setMargin(5);
+	
+	
     //
     // LilyPond export: Basic options
     //
 
-    QGroupBox *basicOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Basic options"), generalFrame);
-    generalGrid->addWidget(basicOptionsBox, 0, 0);
+    QGroupBox *basicOptionsBox = new QGroupBox(tr("Basic options"), layoutFrame);
+    QVBoxLayout *basicOptionsBoxLayout = new QVBoxLayout;
+
+    layoutGrid->addWidget(basicOptionsBox, 0, 0);
 
     QFrame *frameBasic = new QFrame(basicOptionsBox);
-    QGridLayout *layoutBasic = new QGridLayout(frameBasic, 3, 2, 10, 5);
+    frameBasic->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutBasic = new QGridLayout;
+    layoutBasic->setSpacing(5);
+    basicOptionsBoxLayout->addWidget(frameBasic);
 
     layoutBasic->addWidget(new QLabel(
-                          i18n("Compatibility level"), frameBasic), 0, 0);
+                          tr("Export content"), frameBasic), 0, 0);
 
-    m_lilyLanguage = new KComboBox(frameBasic);
-    // See also setDefaultLilyPondVersion below
-    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.6"));
-    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.8"));
-    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.10"));
-    m_lilyLanguage->insertItem(i18n("LilyPond %1").arg("2.12"));
-    m_lilyLanguage->setCurrentItem(config->readUnsignedNumEntry("lilylanguage", 0));
-    layoutBasic->addWidget(m_lilyLanguage, 0, 1);
+    m_lilyExportSelection = new QComboBox(frameBasic);
+    m_lilyExportSelection->addItem(tr("All tracks"));
+    m_lilyExportSelection->addItem(tr("Non-muted tracks"));
+    m_lilyExportSelection->addItem(tr("Selected track"));
+    m_lilyExportSelection->addItem(tr("Selected segments"));
+
+    layoutBasic->addWidget(m_lilyExportSelection, 0, 1);
 
     layoutBasic->addWidget(new QLabel(
-                          i18n("Paper size"), frameBasic), 1, 0);
+                          tr("Compatibility level"), frameBasic), 1, 0);
 
-    QHBoxLayout *hboxPaper = new QHBoxLayout( frameBasic );
-    m_lilyPaperSize = new KComboBox(frameBasic);
-    m_lilyPaperSize->insertItem(i18n("A3"));
-    m_lilyPaperSize->insertItem(i18n("A4"));
-    m_lilyPaperSize->insertItem(i18n("A5"));
-    m_lilyPaperSize->insertItem(i18n("A6"));
-    m_lilyPaperSize->insertItem(i18n("Legal"));
-    m_lilyPaperSize->insertItem(i18n("US Letter"));
-    m_lilyPaperSize->insertItem(i18n("Tabloid"));
-    m_lilyPaperSize->insertItem(i18n("do not specify"));
-    int defaultPaperSize = 1; // A4
-    if (KGlobal::locale()->country() == "us" || 
-        KGlobal::locale()->country() == "US") defaultPaperSize = 5; // Letter
-    m_lilyPaperSize->setCurrentItem(config->readUnsignedNumEntry
-                                    ("lilypapersize", defaultPaperSize));
+    m_lilyLanguage = new QComboBox(frameBasic);
 
-    m_lilyPaperLandscape = new QCheckBox(i18n("Landscape"), frameBasic);
-    m_lilyPaperLandscape->setChecked(config->readBoolEntry("lilypaperlandscape", false));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.6")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.10")));
+    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
+    layoutBasic->addWidget(m_lilyLanguage, 1, 1);
+
+    layoutBasic->addWidget(new QLabel(
+                          tr("Paper size"), frameBasic), 2, 0);
+
+    QHBoxLayout *hboxPaper = new QHBoxLayout;
+    m_lilyPaperSize = new QComboBox(frameBasic);
+    m_lilyPaperSize->addItem(tr("A3"));
+    m_lilyPaperSize->addItem(tr("A4"));
+    m_lilyPaperSize->addItem(tr("A5"));
+    m_lilyPaperSize->addItem(tr("A6"));
+    m_lilyPaperSize->addItem(tr("Legal"));
+    m_lilyPaperSize->addItem(tr("US Letter"));
+    m_lilyPaperSize->addItem(tr("Tabloid"));
+    m_lilyPaperSize->addItem(tr("do not specify"));
+
+    m_lilyPaperLandscape = new QCheckBox(tr("Landscape"), frameBasic);
 
     hboxPaper->addWidget( m_lilyPaperSize );
     hboxPaper->addWidget( new QLabel( " ", frameBasic ) ); // fixed-size spacer
     hboxPaper->addWidget( m_lilyPaperLandscape );
-    layoutBasic->addLayout(hboxPaper, 1, 1);
+    layoutBasic->addLayout(hboxPaper, 2, 1);
 
     layoutBasic->addWidget(new QLabel(
-                          i18n("Font size"), frameBasic), 2, 0);
+                          tr("Font size"), frameBasic), 3, 0);
 
-    m_lilyFontSize = new KComboBox(frameBasic);
+    m_lilyFontSize = new QComboBox(frameBasic);
     int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
-    for (int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
-        m_lilyFontSize->insertItem(i18n("%1 pt").arg(sizes[i]));
+    for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+        m_lilyFontSize->addItem(tr("%1 pt").arg(sizes[i]));
     }
-    m_lilyFontSize->setCurrentItem(config->readUnsignedNumEntry
-                                   ("lilyfontsize", 4));
-    layoutBasic->addWidget(m_lilyFontSize, 2, 1);
-
-    //
-    // LilyPond export: Staff level options
-    //
-
-    QGroupBox *staffOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Staff level options"), generalFrame);
-    generalGrid->addWidget(staffOptionsBox, 1, 0);
-
-    QFrame *frameStaff = new QFrame(staffOptionsBox);
-    QGridLayout *layoutStaff = new QGridLayout(frameStaff, 2, 2, 10, 5);
-
-    layoutStaff->addWidget(new QLabel(
-                          i18n("Export content"), frameStaff), 0, 0);
-
-    m_lilyExportSelection = new KComboBox(frameStaff);
-    m_lilyExportSelection->insertItem(i18n("All tracks"));
-    m_lilyExportSelection->insertItem(i18n("Non-muted tracks"));
-    m_lilyExportSelection->insertItem(i18n("Selected track"));
-    m_lilyExportSelection->insertItem(i18n("Selected segments"));
-    m_lilyExportSelection->setCurrentItem(config->readUnsignedNumEntry("lilyexportselection", 1));
-
-    layoutStaff->addWidget(m_lilyExportSelection, 0, 1);
-
-    m_lilyExportStaffMerge = new QCheckBox(
-                                 i18n("Merge tracks that have the same name"), frameStaff);
-    m_lilyExportStaffMerge->setChecked(config->readBoolEntry("lilyexportstaffmerge", false));
-    layoutStaff->addMultiCellWidget(m_lilyExportStaffMerge, 1, 1, 0, 1);
+    layoutBasic->addWidget(m_lilyFontSize, 3, 1);
 
     //
     // LilyPond export: Notation options
     //
 
-    QGroupBox *notationOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Notation options"), generalFrame);
-    generalGrid->addWidget(notationOptionsBox, 2, 0);
+    QGroupBox *specificOptionsBox = new QGroupBox(tr("Specific options"), layoutFrame);
+    QVBoxLayout *specificOptionsBoxLayout = new QVBoxLayout;
+    layoutGrid->addWidget(specificOptionsBox, 2, 0);
 
-    QFrame *frameNotation = new QFrame(notationOptionsBox);
-    QGridLayout *layoutNotation = new QGridLayout(frameNotation, 4, 2, 10, 5);
+    QFrame *frameNotation = new QFrame(specificOptionsBox);
+    frameNotation->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutNotation = new QGridLayout;
+    layoutNotation->setSpacing(5);
+    specificOptionsBoxLayout->addWidget(frameNotation);
 
-    m_lilyTempoMarks = new KComboBox( frameNotation );
-    m_lilyTempoMarks->insertItem(i18n("None"));
-    m_lilyTempoMarks->insertItem(i18n("First"));
-    m_lilyTempoMarks->insertItem(i18n("All"));
-    m_lilyTempoMarks->setCurrentItem(config->readUnsignedNumEntry("lilyexporttempomarks", 0));
+    m_lilyTempoMarks = new QComboBox( frameNotation );
+    m_lilyTempoMarks->addItem(tr("None"));
+    m_lilyTempoMarks->addItem(tr("First"));
+    m_lilyTempoMarks->addItem(tr("All"));
 
     layoutNotation->addWidget( new QLabel( 
-			 i18n("Export tempo marks "), frameNotation), 0, 0 );
+			 tr("Export tempo marks "), frameNotation), 0, 0 );
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
  
-    m_lilyExportLyrics = new QCheckBox(
-                             i18n("Export lyrics"), frameNotation);
+    layoutNotation->addWidget( new QLabel( 
+			 tr("Export lyrics"), frameNotation), 1, 0 );
+    m_lilyExportLyrics = new QComboBox( frameNotation );
+    m_lilyExportLyrics->addItem(tr("None"));
+    m_lilyExportLyrics->addItem(tr("Left"));
+    m_lilyExportLyrics->addItem(tr("Center"));
+    m_lilyExportLyrics->addItem(tr("Right"));
+    layoutNotation->addWidget(m_lilyExportLyrics, 1, 1);
+
+
+    m_lilyExportBeams = new QCheckBox(
+                            tr("Export beamings"), frameNotation);
+    layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 0+1, 1- 0+1);
+
+    // recycle this for a new option to ignore the track brackets (so it is less
+    // obnoxious to print single parts where brackets are in place)
+    m_lilyExportStaffGroup = new QCheckBox(
+                                 tr("Export track staff brackets"), frameNotation);
+    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1); 
+
+    layoutGrid->setRowStretch(4, 10);
+
+    m_lilyChordNamesMode = new QCheckBox(
+                           tr("Interpret chord texts as lead sheet chord names"), frameNotation);
+    layoutNotation->addWidget(m_lilyChordNamesMode, 4, 0, 0+1, 1- 0+1);
+
+    m_lilyRaggedBottom = new QCheckBox(
+                           tr("Ragged bottom (systems will not be spread vertically across the page)"), frameNotation);
+    layoutNotation->addWidget(m_lilyRaggedBottom, 5, 0, 0+1, 1- 0+1);
+
+    m_lilyMarkerMode = new QComboBox(frameNotation);
+    m_lilyMarkerMode->addItem(tr("No markers"));
+    m_lilyMarkerMode->addItem(tr("Rehearsal marks"));
+    m_lilyMarkerMode->addItem(tr("Marker text"));
+
+    layoutNotation->addWidget( new QLabel( 
+                                   tr("Export markers"), frameNotation),6, 0 );
+    layoutNotation->addWidget(m_lilyMarkerMode, 6, 1);
+
+
+    basicOptionsBox->setLayout(basicOptionsBoxLayout);
+    specificOptionsBox->setLayout(specificOptionsBoxLayout);
+
+    layoutFrame->setLayout(layoutGrid);
+
+    frameNotation->setLayout(layoutNotation);
+    frameBasic->setLayout(layoutBasic);
+
+    mainbox->setLayout(mainboxLayout);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metaGridLayout->addWidget(buttonBox, 1, 0);
+    metaGridLayout->setRowStretch(0, 10);
+
+    setLayout(metaGridLayout);
+
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    populateDefaultValues();
+
+    resize(minimumSizeHint());
+}
+
+void
+LilyPondOptionsDialog::populateDefaultValues()
+{
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
+
+    m_lilyLanguage->setCurrentIndex( settings.value("lilylanguage", 0).toUInt() );
+    // See also setDefaultLilyPondVersion below
+    int defaultPaperSize = 1; // A4
+    if (QLocale::system().country() == QLocale::UnitedStates) {
+        defaultPaperSize = 5; // Letter
+    }
+    m_lilyPaperSize->setCurrentIndex(settings.value("lilypapersize", defaultPaperSize).toUInt());
+    m_lilyPaperLandscape->setChecked( qStrToBool( settings.value("lilypaperlandscape", "false" ) ) );
+    m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", 4).toUInt());
+    m_lilyRaggedBottom->setChecked( qStrToBool( settings.value("lilyraggedbottom", "false" ) ) );
+    m_lilyChordNamesMode->setChecked( qStrToBool( settings.value("lilychordnamesmode", "false" ) ) );
+    m_lilyExportLyrics->setCurrentIndex( settings.value("lilyexportlyrics", 1).toUInt() );
+    m_lilyTempoMarks->setCurrentIndex( settings.value("lilyexporttempomarks", 0).toUInt() );
+    m_lilyExportSelection->setCurrentIndex( settings.value("lilyexportselection", 1).toUInt() );
+    m_lilyExportBeams->setChecked( qStrToBool( settings.value("lilyexportbeamings", "false" ) ) );
+    m_lilyExportStaffGroup->setChecked( qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) );
+    m_lilyMarkerMode->setCurrentIndex( settings.value("lilyexportmarkermode", 0).toUInt() );
+
+    settings.endGroup();
+}
+
+
+void
+LilyPondOptionsDialog::slotApply()
+{
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
+
+    settings.setValue("lilylanguage", m_lilyLanguage->currentIndex());
+    settings.setValue("lilypapersize", m_lilyPaperSize->currentIndex());
+    settings.setValue("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
+    settings.setValue("lilyfontsize", m_lilyFontSize->currentIndex());
+    settings.setValue("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
+    settings.setValue("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
     // default to lyric export == false because if you export the default
     // empty "- - -" lyrics, crap results ensue, and people will know if they
     // do need to export the lyrics - DMM
     // fixed, no "- - -" lyrics are generated for an empty lyrics
     // default again into lyrics - HJJ
-    m_lilyExportLyrics->setChecked(config->readBoolEntry("lilyexportlyrics", true));
-    layoutNotation->addMultiCellWidget(m_lilyExportLyrics, 1, 1, 0, 1);
-
-    m_lilyExportBeams = new QCheckBox(
-                            i18n("Export beamings"), frameNotation);
-    m_lilyExportBeams->setChecked(config->readBoolEntry("lilyexportbeamings", false));
-    layoutNotation->addMultiCellWidget(m_lilyExportBeams, 2, 2, 0, 1);
-
-    // recycle this for a new option to ignore the track brackets (so it is less
-    // obnoxious to print single parts where brackets are in place)
-    m_lilyExportStaffGroup = new QCheckBox(
-                                 i18n("Export track staff brackets"), frameNotation);
-    m_lilyExportStaffGroup->setChecked(config->readBoolEntry("lilyexportstaffbrackets", true));
-    layoutNotation->addMultiCellWidget(m_lilyExportStaffGroup, 3, 3, 0, 1); 
-
-    generalGrid->setRowStretch(4, 10);
-
-    //
-    // LilyPond export: Advanced options
-    //
-
-    QGroupBox *advancedLayoutOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Layout options"), advancedFrame);
-    advancedGrid->addWidget(advancedLayoutOptionsBox, 0, 0);
-
-    QFrame *frameAdvancedLayout = new QFrame(advancedLayoutOptionsBox);
-    QGridLayout *layoutAdvancedLayout = new QGridLayout(frameAdvancedLayout, 3, 2, 10, 5);
-
-    m_lilyLyricsHAlignment = new KComboBox( frameAdvancedLayout );
-    m_lilyLyricsHAlignment->insertItem(i18n("Left"));
-    m_lilyLyricsHAlignment->insertItem(i18n("Center"));
-    m_lilyLyricsHAlignment->insertItem(i18n("Right"));
-    m_lilyLyricsHAlignment->setCurrentItem(config->readUnsignedNumEntry("lilylyricshalignment", 0));
-
-    layoutAdvancedLayout->addWidget(new QLabel(
-                          i18n("Lyrics alignment"), frameAdvancedLayout), 0, 0);
-    layoutAdvancedLayout->addWidget(m_lilyLyricsHAlignment, 0, 1);
-
-    m_lilyRaggedBottom = new QCheckBox(
-                           i18n("Ragged bottom (systems will not be spread vertically across the page)"), frameAdvancedLayout);
-    m_lilyRaggedBottom->setChecked(config->readBoolEntry("lilyraggedbottom", false));
-    layoutAdvancedLayout->addMultiCellWidget(m_lilyRaggedBottom, 1, 1, 0, 1);
-
-    m_lilyChordNamesMode = new QCheckBox(
-                           i18n("Interpret chord texts as lead sheet chord names"), frameAdvancedLayout);
-    m_lilyChordNamesMode->setChecked(config->readBoolEntry("lilychordnamesmode", false));
-    layoutAdvancedLayout->addMultiCellWidget(m_lilyChordNamesMode, 2, 2, 0, 1);
-
-    QGroupBox *miscOptionsBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Miscellaneous options"), advancedFrame);
-    advancedGrid->addWidget(miscOptionsBox, 1, 0);
-
-    QFrame *frameMisc = new QFrame(miscOptionsBox);
-    QGridLayout *layoutMisc = new QGridLayout(frameMisc, 2, 2, 10, 5);
-
-    m_lilyExportPointAndClick = new QCheckBox(
-                                    i18n("Enable \"point and click\" debugging"), frameMisc);
-    m_lilyExportPointAndClick->setChecked(config->readBoolEntry("lilyexportpointandclick", false));
-    layoutMisc->addMultiCellWidget(m_lilyExportPointAndClick, 0, 0, 0, 1);
-
-    m_lilyExportMidi = new QCheckBox(
-                           i18n("Export \\midi block"), frameMisc);
-    m_lilyExportMidi->setChecked(config->readBoolEntry("lilyexportmidi", false));
-    layoutMisc->addMultiCellWidget(m_lilyExportMidi, 1, 1, 0, 1);
-
-    m_lilyMarkerMode = new KComboBox(frameMisc);
-    m_lilyMarkerMode->insertItem(i18n("No markers"));
-    m_lilyMarkerMode->insertItem(i18n("Rehearsal marks"));
-    m_lilyMarkerMode->insertItem(i18n("Marker text"));
-    m_lilyMarkerMode->setCurrentItem(config->readUnsignedNumEntry("lilyexportmarkermode", 0));
-
-    layoutMisc->addWidget( new QLabel( 
-                             i18n("Export markers"), frameMisc),2, 0 );
-    layoutMisc->addWidget(m_lilyMarkerMode, 2, 1);
-    
-    advancedGrid->setRowStretch(2, 10);
-
-    resize(minimumSize());
-}
-
-void
-LilyPondOptionsDialog::slotApply()
-{
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-
-    config->writeEntry("lilylanguage", m_lilyLanguage->currentItem());
-    config->writeEntry("lilypapersize", m_lilyPaperSize->currentItem());
-    config->writeEntry("lilypaperlandscape", m_lilyPaperLandscape->isChecked());
-    config->writeEntry("lilyfontsize", m_lilyFontSize->currentItem());
-    config->writeEntry("lilyraggedbottom", m_lilyRaggedBottom->isChecked());
-    config->writeEntry("lilychordnamesmode", m_lilyChordNamesMode->isChecked());
-    config->writeEntry("lilyexportlyrics", m_lilyExportLyrics->isChecked());
-    config->writeEntry("lilyexportmidi", m_lilyExportMidi->isChecked());
-    config->writeEntry("lilyexporttempomarks", m_lilyTempoMarks->currentItem());
-    config->writeEntry("lilyexportselection", m_lilyExportSelection->currentItem());
-    config->writeEntry("lilyexportpointandclick", m_lilyExportPointAndClick->isChecked());
-    config->writeEntry("lilyexportbeamings", m_lilyExportBeams->isChecked());
-    config->writeEntry("lilyexportstaffmerge", m_lilyExportStaffMerge->isChecked());
-    config->writeEntry("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
-    config->writeEntry("lilylyricshalignment", m_lilyLyricsHAlignment->currentItem());
-    config->writeEntry("lilyexportmarkermode", m_lilyMarkerMode->currentItem());
+    settings.setValue("lilyexportlyrics", m_lilyExportLyrics->currentIndex());
+    settings.setValue("lilyexporttempomarks", m_lilyTempoMarks->currentIndex());
+    settings.setValue("lilyexportselection", m_lilyExportSelection->currentIndex());
+    settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
+    settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
+    settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
     m_headersPage->apply();
+
+    settings.endGroup();
 }
  
 void
@@ -328,8 +308,9 @@ LilyPondOptionsDialog::slotOk()
 void
 LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
+
     int index = -1;
     bool unstable = false;
     if (version == "2.6" || version.startsWith("2.6.")) {
@@ -354,8 +335,10 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
         std::cerr << "\nWARNING: Unstable LilyPond version detected, selecting next language version up\n" << std::endl;
     }
     if (index >= 0) {
-        config->writeEntry("lilylanguage", index);
+        settings.setValue("lilylanguage", index);
     }
+
+    settings.endGroup();
 }
 
 }

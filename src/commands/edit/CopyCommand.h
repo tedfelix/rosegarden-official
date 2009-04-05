@@ -19,10 +19,10 @@
 #ifndef _RG_COPYCOMMAND_H_
 #define _RG_COPYCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -38,8 +38,10 @@ class Clipboard;
 
 /// Copy a selection
 
-class CopyCommand : public KNamedCommand
+class CopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CopyCommand)
+
 public:
     /// Make a CopyCommand that copies events from within a Segment
     CopyCommand(EventSelection &selection,
@@ -57,7 +59,7 @@ public:
 
     virtual ~CopyCommand();
 
-    static QString getGlobalName() { return i18n("&Copy"); }
+    static QString getGlobalName() { return tr("&Copy"); }
 
     virtual void execute();
     virtual void unexecute();

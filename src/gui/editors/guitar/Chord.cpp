@@ -19,7 +19,7 @@
 #include "base/Event.h"
 #include "misc/Strings.h"
 
-#include <qstring.h>
+#include <QString>
 
 namespace Rosegarden
 {

@@ -18,16 +18,16 @@
 #ifndef _RG_PLAYLISTVIEW_H_
 #define _RG_PLAYLISTVIEW_H_
 
-#include <klistview.h>
+#include <QTreeWidget>
 
 namespace Rosegarden {
 
-class PlayListView : public KListView
+class PlayListView : public QTreeWidget
 {
 public:
     PlayListView(QWidget *parent=0, const char *name=0);
 
-    QListViewItem* previousSibling(QListViewItem*);
+    QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 
 protected:
 //     virtual void dragEnterEvent(QDragEnterEvent *event);

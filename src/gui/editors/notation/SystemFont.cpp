@@ -16,18 +16,25 @@
 */
 
 
+//#include <QDir>
+
+//include  this first:
+#include <QTextStream>
+
 #include "SystemFont.h"
 #include "SystemFontQt.h"
 #include "SystemFontXft.h"
 
 #include "misc/Debug.h"
-
-#include <kstddirs.h>
+#include "gui/general/ResourceFinder.h"
 #include "NoteFontMap.h"
-#include <qfont.h>
-#include <qfontinfo.h>
-#include <qpixmap.h>
-#include <qstring.h>
+
+#include <QFont>
+#include <QFontInfo>
+#include <QPixmap>
+#include <QString>
+
+#include <iostream>
 
 
 namespace Rosegarden
@@ -61,18 +68,21 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
         goto qfont;
     }
-
+	
     if (!haveFcDirectory) {
-        QString fontDir = KGlobal::dirs()->findResource("appdata", "fonts/");
+        //!!! We will need to be able to "unpack" fonts from Qt4 resources
+        QString fontDir = ResourceFinder().getResourceDir("fonts");
+		
         if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
-                                   (const FcChar8 *)fontDir.latin1())) {
+                                   (const FcChar8 *)fontDir.toLatin1().data())) {
             NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
         }
         haveFcDirectory = true;
+        NOTATION_DEBUG << "Added font dir \"" << fontDir << "\" to font config path" << endl;
     }
 
     pattern = FcPatternCreate();
-    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.latin1());
+    FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.toLatin1().data());
     FcPatternAddInteger(pattern, FC_PIXEL_SIZE, size);
     FcConfigSubstitute(FcConfigGetCurrent(), pattern, FcMatchPattern);
 
@@ -93,7 +103,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: match family is "
     << (char *)matchFamily << endl;
 
-    if (QString((char *)matchFamily).lower() != name.lower()) {
+    if (QString((char *)matchFamily).toLower() != name.toLower()) {
         NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Wrong family returned, falling back on QFont" << endl;
         FcPatternDestroy(match);
         goto qfont;
@@ -108,7 +118,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: successfully loaded font "
-    << name << " through Xft" << endl;
+                   << name << " through Xft" << endl;
 
     return new SystemFontXft(dpy, xfont);
 
@@ -139,15 +149,15 @@ qfont:
     // "Fughetta [macromedia]", and exactMatch returns false.  Just as
     // useless, but in a different way.
 
-    QString family = info.family().lower();
+    QString family = info.family().toLower();
 
-    if (family == name.lower())
+    if (family == name.toLower())
         return new SystemFontQt(qfont);
     else {
         int bracket = family.find(" [");
         if (bracket > 1)
             family = family.left(bracket);
-        if (family == name.lower())
+        if (family == name.toLower())
             return new SystemFontQt(qfont);
     }
 

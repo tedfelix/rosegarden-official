@@ -19,9 +19,9 @@
 #include "SegmentRepeatToCopyCommand.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
+#include <QObject>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 
 SegmentRepeatToCopyCommand::SegmentRepeatToCopyCommand(
     Segment *segment):
-        KNamedCommand(i18n("Turn Repeats into Copies")),
+        NamedCommand(tr("Turn Repeats into Copies")),
         m_composition(segment->getComposition()),
         m_segment(segment),
         m_detached(false)

@@ -25,10 +25,10 @@
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "sound/PeakFileManager.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -45,10 +45,10 @@ struct AutoSplitPoint
 };
 
 AudioSegmentAutoSplitCommand::AudioSegmentAutoSplitCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     Segment *segment,
     int threshold) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_segment(segment),
         m_composition(segment->getComposition()),
         m_audioFileManager(&(doc->getAudioFileManager())),
@@ -139,7 +139,7 @@ AudioSegmentAutoSplitCommand::execute()
             sprintf(splitNumber, "%d", splitCount++);
             std::string label = m_segment->getLabel();
             newSegment->setLabel(appendLabel(label, qstrtostr(
-                    i18n("(part %1)").arg(splitCount))));
+                    tr("(part %1)").arg(splitCount))));
 
             newSegment->setColourIndex(m_segment->getColourIndex());
 

@@ -20,24 +20,26 @@
 #define _RG_ADDTRIGGERSEGMENTCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
-class AddTriggerSegmentCommand : public KNamedCommand
+class AddTriggerSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTriggerSegmentCommand)
+
 public:
-    AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
+    AddTriggerSegmentCommand(RosegardenDocument *doc,
                              timeT duration, // start time always 0
                              int basePitch = -1,
                              int baseVelocity = -1);

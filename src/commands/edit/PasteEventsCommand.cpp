@@ -25,7 +25,7 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/BaseProperties.h"
 
 
@@ -88,15 +88,15 @@ PasteEventsCommand::getPasteTypes()
     static bool haveTypes = false;
     if (!haveTypes) {
         types[Restricted] =
-            i18n("Paste into an existing gap [\"restricted\"]");
+            tr("Paste into an existing gap [\"restricted\"]");
         types[Simple] =
-            i18n("Erase existing events to make room [\"simple\"]");
+            tr("Erase existing events to make room [\"simple\"]");
         types[OpenAndPaste] =
-            i18n("Move existing events out of the way [\"open-n-paste\"]");
+            tr("Move existing events out of the way [\"open-n-paste\"]");
         types[NoteOverlay] =
-            i18n("Overlay notes, tying against present notes [\"note-overlay\"]");
+            tr("Overlay notes, tying against present notes [\"note-overlay\"]");
         types[MatrixOverlay] =
-            i18n("Overlay notes, ignoring present notes [\"matrix-overlay\"]");
+            tr("Overlay notes, ignoring present notes [\"matrix-overlay\"]");
     }
     return types;
 }

@@ -17,17 +17,20 @@
 
 
 #include "CollapsingFrame.h"
-#include <kapplication.h>
-#include <kstddirs.h>
-#include <kconfig.h>
-#include <kglobal.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qpixmap.h>
-#include <qstring.h>
-#include <qtoolbutton.h>
-#include <qwidget.h>
+#include "misc/Strings.h"
+#include "gui/general/IconLoader.h"
+
+#include <QApplication>
+#include <QDir>
+#include <QSettings>
+#include <QFont>
+#include <QFrame>
+#include <QLayout>
+#include <QPixmap>
+#include <QString>
+#include <QToolButton>
+#include <QWidget>
+
 #include <cassert>
 
 
@@ -35,31 +38,35 @@ namespace Rosegarden
 {
 
 CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) :
-        QFrame(parent, n),
+        QFrame(parent),
         m_widget(0),
         m_fill(false),
         m_collapsed(false)
 {
-    m_layout = new QGridLayout(this, 3, 3, 0, 0);
+    setObjectName(n);
+
+    setContentsMargins(0, 0, 0, 0);
+    m_layout = new QGridLayout(this);
+    m_layout->setMargin(0);
+    m_layout->setSpacing(0);
 
     m_toggleButton = new QToolButton(this);
-    m_toggleButton->setTextLabel(label);
-    m_toggleButton->setUsesTextLabel(true);
-    m_toggleButton->setUsesBigPixmap(false);
-    m_toggleButton->setTextPosition(QToolButton::BesideIcon);
+    m_toggleButton->setText(label);
+    m_toggleButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    // m_toggleButton->setUsesTextLabel(true);
+    // m_toggleButton->setUsesBigPixmap(false);
+          // m_toggleButton->setIconSize(???);
     m_toggleButton->setAutoRaise(true);
 
     QFont font(m_toggleButton->font());
     font.setBold(true);
     m_toggleButton->setFont(font);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QPixmap pixmap(pixmapDir + "/misc/arrow-expanded.png");
-    m_toggleButton->setIconSet(pixmap);
+    m_toggleButton->setIcon(IconLoader().load("style/arrow-down-small-inverted"));
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
-    m_layout->addMultiCellWidget(m_toggleButton, 0, 0, 0, 2);
+    m_layout->addWidget(m_toggleButton, 0, 0, 0- 0+1, 2-0+ 1);
 }
 
 CollapsingFrame::~CollapsingFrame()
@@ -89,18 +96,18 @@ CollapsingFrame::setWidget(QWidget *widget)
     assert(!m_widget);
     m_widget = widget;
     if (m_fill) {
-        m_layout->addMultiCellWidget(widget, 1, 1, 0, 2);
+        m_layout->addWidget(widget, 1, 0, 0+1, 2- 0+1);
     } else {
         m_layout->addWidget(widget, 1, 1);
     }
 
     bool expanded = true;
-    if (name(0)) {
-        KConfig *config = kapp->config();
-        QString groupTemp = config->group();
-        config->setGroup("CollapsingFrame");
-        expanded = config->readBoolEntry(name(), true);
-        config->setGroup(groupTemp);
+    if (objectName().isEmpty()) {                   // name(0)
+        QSettings settings;
+        settings.beginGroup( "CollapsingFrame" );
+
+        expanded = qStrToBool( settings.value(objectName(), true));
+        settings.endGroup();
     }
     if (expanded != !m_collapsed)
         toggle();
@@ -115,24 +122,23 @@ CollapsingFrame::toggle()
 
     m_widget->setShown(!m_collapsed);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
     QPixmap pixmap;
 
     if (m_collapsed) {
-        pixmap = QPixmap(pixmapDir + "/misc/arrow-contracted.png");
+        pixmap = IconLoader().loadPixmap("style/arrow-right-small-inverted");
     } else {
-        pixmap = QPixmap(pixmapDir + "/misc/arrow-expanded.png");
+        pixmap = IconLoader().loadPixmap("style/arrow-down-small-inverted");
     }
 
-    if (name(0)) {
-        KConfig *config = kapp->config();
-        QString groupTemp = config->group();
-        config->setGroup("CollapsingFrame");
-        config->writeEntry(name(), !m_collapsed);
-        config->setGroup(groupTemp);
+    if (objectName().isEmpty()) {               // name(0)
+        QSettings settings;
+        settings.beginGroup( "CollapsingFrame" );
+
+        settings.setValue(objectName(), !m_collapsed);
+        settings.endGroup();
     }
 
-    m_toggleButton->setIconSet(pixmap);
+    m_toggleButton->setIcon(pixmap);
 
     m_toggleButton->setMaximumHeight(h);
 }

@@ -18,8 +18,8 @@
 
 #include "TimerCallbackAssistant.h"
 
-#include <qobject.h>
-#include <qtimer.h>
+#include <QObject>
+#include <QTimer>
 
 
 namespace Rosegarden

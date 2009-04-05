@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,7 +19,9 @@
 #define _RG_PIANOKEYBOARD_H_
 
 #include "gui/rulers/PitchRuler.h"
-#include <qsize.h>
+
+#include <QSize>
+
 #include <vector>
 
 
@@ -32,7 +33,6 @@ class QEvent;
 
 namespace Rosegarden
 {
-
 
 
 class PianoKeyboard : public PitchRuler

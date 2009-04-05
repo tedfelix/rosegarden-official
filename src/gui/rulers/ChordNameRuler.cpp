@@ -17,9 +17,8 @@
 
 
 #include "ChordNameRuler.h"
-#include "misc/Debug.h"
 
-#include <klocale.h>
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"
@@ -35,24 +34,26 @@
 #include "base/Selection.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qobject.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+
+#include <QPaintEvent>
+#include <QFont>
+#include <QFontMetrics>
+#include <QObject>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
-                               RosegardenGUIDoc *doc,
+                               RosegardenDocument *doc,
                                double xorigin,
                                int height,
                                QWidget *parent,
@@ -83,16 +84,17 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
                      this, SLOT(update()));
 
-    QToolTip::add
-        (this, i18n("Chord name ruler.\nTurn it on and off from the Settings->Rulers menu."));
-
+    this->setToolTip(tr("<qt><p>Chord name ruler.  This ruler analyzes your harmonies and attempts to guess"
+                        " what chords your composition contains.  These chords cannot be printed or        "
+                        "manipulated, and this is only a reference for your information.</p><p>Turn it on "
+                        "and off from the Settings->Rulers menu.</p></qt>"));
 }
 
 ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
-                               RosegardenGUIDoc *doc,
+                               RosegardenDocument *doc,
                                std::vector<Segment *> &segments,
                                double xorigin,
                                int height,
@@ -124,7 +126,7 @@ ChordNameRuler::ChordNameRuler(RulerScale *rulerScale,
 
     m_compositionRefreshStatusId = m_composition->getNewRefreshStatusId();
 
-    QObject::connect(doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    QObject::connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
                      this, SLOT(update()));
 
     for (std::vector<Segment *>::iterator i = segments.begin();
@@ -173,13 +175,21 @@ ChordNameRuler::slotScrollHoriz(int x)
         return ;
     }
 
-    if (dx > 0) { // moving right, so the existing stuff moves left
-        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-        repaint(w - dx, 0, dx, h);
-    } else {      // moving left, so the existing stuff moves right
-        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-        repaint(0, 0, -dx, h);
-    }
+    //@@@ These are probably not working like the bitBlts that were commented
+    // out in one of the other rulers.  That (the marks ruler, I think, or the
+    // loops ruler) works fine without them, and this one is mangled, so what
+    // happens if we comment these out?
+    //
+    // On the surface of it, it apparently fixes the grotesque drawing problem.
+//    
+//    if (dx > 0) { // moving right, so the existing stuff moves left
+//        bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
+//        repaint(w - dx, 0, dx, h);
+//    } else {      // moving left, so the existing stuff moves right
+//        bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
+//        repaint(0, 0, -dx, h);
+//    }
+    update();
 }
 
 QSize
@@ -410,6 +420,13 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     Profiler profiler1("ChordNameRuler::paintEvent (whole)");
 
     QPainter paint(this);
+
+    // In a stylesheet world...  Yadda yadda.  Fix the stupid background to
+    // rescue it from QWidget Hack Black. (Ahhh.  Yes, after being thwarted for
+    // a month or something, I'm really enjoying getting this solved.)
+    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::ChordNameRulerBackground));
+    paint.fillRect(e->rect(), bg);
+
     paint.setPen(GUIPalette::getColour(GUIPalette::ChordNameRulerForeground));
 
     paint.setClipRegion(e->region());
@@ -507,6 +524,8 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
         } else {
             paint.setFont(m_font);
         }
+
+        NOTATION_DEBUG << "ChordNameRuler drawing text " << text << endl;
 
         paint.drawText(actualX, textY, strtoqstr(text));
     }

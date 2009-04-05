@@ -18,18 +18,20 @@
 
 #include "ColourTable.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/ColourMap.h"
 #include "ColourTableItem.h"
 #include "gui/general/GUIPalette.h"
-#include <kcolordialog.h>
-#include <klineeditdlg.h>
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qtable.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
+
+#include <QColorDialog>
+#include <QColor>
+#include <QPoint>
+#include <QString>
+#include <QTableWidget>
+#include <QWidget>
+#include <QHeaderView>
 
 
 namespace Rosegarden
@@ -37,12 +39,24 @@ namespace Rosegarden
 
 ColourTable::ColourTable
 (QWidget *parent, ColourMap &input, ColourList &list)
-        : QTable(1, 2, parent, "RColourTable")
+    : QTableWidget(1, 2, parent )    //, "RColourTable")
 {
-    setSorting(FALSE);
-    setSelectionMode(QTable::SingleRow);
-    horizontalHeader()->setLabel(0, i18n("Name"));
-    horizontalHeader()->setLabel(1, i18n("Color"));
+    this->setObjectName( "RColourTable" );
+    
+    //### JAS Deactivated next line 
+    //&&& setSorting(FALSE);
+
+    //@@@ JAS in Qt4 use QTableWidget()::sortItems(), but only options are ascending
+    //@@@ JAS or descendings.  There is no "unsorted" option.
+
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+    /*
+    horizontalHeader()->setLabel(0, tr("Name"));
+    horizontalHeader()->setLabel(1, tr("Color"));
+    */
+    setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
+    
     populate_table(input, list);
     connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
             SLOT(slotEditEntry(int, int)));
@@ -58,8 +72,11 @@ ColourTable::slotEditEntry(int row, int col)
             if (row == 0)
                 return ;
             bool ok = false;
-            QString newName = KLineEditDlg::getText(i18n("Modify Color Name"), i18n("Enter new name"),
-                                                    item(row, col)->text(), &ok);
+            QString newName = InputDialog::getText(this,
+                                                   tr("Modify Color Name"),
+                                                   tr("Enter new name"),
+                                                   LineEdit::Normal,
+                                                   item(row, col)->text(), &ok);
 
             if ((ok == true) && (!newName.isEmpty())) {
                 emit entryTextChanged(row, newName);
@@ -69,11 +86,10 @@ ColourTable::slotEditEntry(int row, int col)
         break;
     case 1: {
             QColor temp = m_colours[row];
-            KColorDialog box(this, "", true);
 
-            int result = box.getColor(temp);
+            QColor result = QColorDialog::getColor(temp);
 
-            if (result == KColorDialog::Accepted) {
+            if (result.isValid()) {
                 emit entryColourChanged(row, temp);
                 return ;
             }
@@ -89,21 +105,23 @@ void
 ColourTable::populate_table(ColourMap &input, ColourList &list)
 {
     m_colours.reserve(input.size());
-    setNumRows(input.size());
+    setRowCount(input.size());
 
     QString name;
 
     unsigned int i = 0;
+    QStringList vHeaderLabels;
 
     for (RCMap::const_iterator it = input.begin(); it != input.end(); ++it) {
         if (it->second.second == std::string(""))
-            name = i18n("Default Color");
+            name = tr("Default Color");
         else
             name = strtoqstr(it->second.second);
 
-        QTableItem *text = new QTableItem(
-                               dynamic_cast<QTable*>(this),
-                               QTableItem::Never, name);
+//         QTableWidgetItem *text = new QTableWidgetItem(
+//                 dynamic_cast<QTableWidget *>(this),
+//                                              QTableWidgetItem::Never, name);
+        QTableWidgetItem *text = new QTableWidgetItem( );
 
         setItem(i, 0, text);
 
@@ -113,10 +131,12 @@ ColourTable::populate_table(ColourMap &input, ColourList &list)
         ColourTableItem *temp = new ColourTableItem(this, m_colours[i]);
         setItem(i, 1, temp);
 
-        verticalHeader()->setLabel(i, QString::number(it->first));
+//         verticalHeader()->setLabel(i, QString::number(it->first));
+        vHeaderLabels << QString::number(it->first);
 
         ++i;
     }
+    setVerticalHeaderLabels( vHeaderLabels );
 
 }
 

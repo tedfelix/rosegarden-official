@@ -19,7 +19,7 @@
 #ifndef _RG_TEMPOCOLOUR_H_
 #define _RG_TEMPOCOLOUR_H_
 
-#include <qcolor.h>
+#include <QColor>
 
 
 

@@ -19,8 +19,8 @@
 #ifndef _RG_LYRICEDITDIALOG_H_
 #define _RG_LYRICEDITDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include <vector>
 
 
@@ -36,7 +36,7 @@ namespace Rosegarden
 class Segment;
 
 
-class LyricEditDialog : public KDialogBase
+class LyricEditDialog : public QDialog
 {
     Q_OBJECT
 

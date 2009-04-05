@@ -18,55 +18,72 @@
 
 #include "SplitByPitchDialog.h"
 
-#include <klocale.h>
 #include "commands/segment/SegmentSplitByPitchCommand.h"
 #include "gui/general/ClefIndex.h"
 #include "gui/widgets/PitchChooser.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QLabel>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
 SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
-        KDialogBase(parent, 0, true, i18n("Split by Pitch"), Ok | Cancel)
+        QDialog(parent)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Split by Pitch"));
 
-    QFrame *frame = new QFrame(vBox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
 
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 10, 5);
 
-    m_pitch = new PitchChooser(i18n("Starting split pitch"), frame, 60);
-    layout->addMultiCellWidget(m_pitch, 0, 0, 0, 2, Qt::AlignHCenter);
+    QFrame *frame = new QFrame( vBox );
+    vBoxLayout->addWidget(frame);
+    vBox->setLayout(vBoxLayout);
 
-    m_range = new QCheckBox(i18n("Range up and down to follow music"), frame);
-    layout->addMultiCellWidget(m_range,
-                               1, 1,  // fromRow, toRow
-                               0, 2  // fromCol, toCol
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+
+    m_pitch = new PitchChooser(tr("Starting split pitch"), frame, 60);
+    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
+
+    m_range = new QCheckBox(tr("Range up and down to follow music"), frame);
+    layout->addWidget(m_range,
+                               1, 0,  // fromRow, fromCol
+                               1, 3   // rowSpan, colSpan
                               );
 
-    m_duplicate = new QCheckBox(i18n("Duplicate non-note events"), frame);
-    layout->addMultiCellWidget(m_duplicate, 2, 2, 0, 2);
+    m_duplicate = new QCheckBox(tr("Duplicate non-note events"), frame);
+    layout->addWidget(m_duplicate, 2, 0, 0+1, 2- 0+1);
 
-    layout->addWidget(new QLabel(i18n("Clef handling:"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("Clef handling:"), frame), 3, 0);
 
-    m_clefs = new KComboBox(frame);
-    m_clefs->insertItem(i18n("Leave clefs alone"));
-    m_clefs->insertItem(i18n("Guess new clefs"));
-    m_clefs->insertItem(i18n("Use treble and bass clefs"));
-    layout->addMultiCellWidget(m_clefs, 3, 3, 1, 2);
+    m_clefs = new QComboBox(frame);
+    m_clefs->addItem(tr("Leave clefs alone"));
+    m_clefs->addItem(tr("Guess new clefs"));
+    m_clefs->addItem(tr("Use treble and bass clefs"));
+    layout->addWidget(m_clefs, 3, 1, 1, 2);
 
     m_range->setChecked(true);
     m_duplicate->setChecked(true);
-    m_clefs->setCurrentItem(2);
+    m_clefs->setCurrentIndex(2);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 int
@@ -90,7 +107,7 @@ SplitByPitchDialog::getShouldDuplicateNonNoteEvents()
 int
 SplitByPitchDialog::getClefHandling()
 {
-    switch (m_clefs->currentItem()) {
+    switch (m_clefs->currentIndex()) {
     case 0:
         return (int)SegmentSplitByPitchCommand::LeaveClefs;
     case 1:

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -6,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
 
-    This file is Copyright 2006
+    This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
@@ -22,7 +21,7 @@
 #ifndef _RG_PRESETELEMENT_H_
 #define _RG_PRESETELEMENT_H_
 
-#include <qstring.h>
+#include <QString>
 
 #include <vector>
 
@@ -32,13 +31,21 @@ namespace Rosegarden
 {
 
 /*
- * A container class for storing a set of data describing a real world
- * instrument for which one is writing musical notation
+ * A container class for storing a concise description of the physical
+ * capabilities of a real-world instrument.  This data serves as an aid to
+ * composers, facilitating the writing of sensible parts for unfamiliar
+ * instruments.
+ *
+ * \author D. Michael McIntyre
  */
 class PresetElement
 {
 public:
 
+    /** Create a PresetElement describing real-world instrument \c name,
+     * containing its \c clef (index), \c transpose value (eg. -2 for Bb), and
+     * highest and lowest playable notes for amateur and professional players.
+     */
     PresetElement(QString name,
                   int clef,
                   int transpose,
@@ -49,13 +56,29 @@ public:
 
     ~PresetElement();
 
-    // accessors
+    /** Return the real world instrument \c name */
     QString getName()    { return m_name;      }
+
+    /** Return the preferred \c clef for this instrument */
     int getClef()        { return m_clef;      }
+
+    /** Return the appropriate \c transpose value for this instrument */
     int getTranspose()   { return m_transpose; }
-    int getHighAm()      { return m_highAm;    }     
+
+    /** Return the highest note an amateur player can be expected to reach on
+     * this instrument, expressed as a MIDI pitch */ 
+    int getHighAm()      { return m_highAm;    }    
+
+    /** Return the lowest note an amateur player can be expected to reach on
+     * this instrument, expressed as a MIDI pitch */
     int getLowAm()       { return m_lowAm;     }
+
+    /** Return the highest note a professional player can be expected to reach on
+     * this instrument, expressed as a MIDI pitch */ 
     int getHighPro()     { return m_highPro;   }
+
+    /** Return the lowest note a professional player can be expected to reach on
+     * this instrument, expressed as a MIDI pitch */
     int getLowPro()      { return m_lowPro;    }
 
 private:
@@ -68,6 +91,7 @@ private:
     int m_lowPro;
 }; // PresetElement
 
+/** A container for storing a collection of PresetElement objects */
 typedef std::vector<PresetElement> ElementContainer;
 
 }

@@ -18,15 +18,18 @@
 
 #include "UnusedAudioSelectionDialog.h"
 
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <klistview.h>
-#include <qfileinfo.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QTableWidget>
+#include <QFileInfo>
+#include <QLabel>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QDateTime>
 
 
 namespace Rosegarden
@@ -35,51 +38,86 @@ namespace Rosegarden
 UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
         QString introductoryText,
         std::vector<QString> fileNames,
-        bool offerCancel) :
-        KDialogBase(parent, 0, true, i18n("Select Unused Audio Files"), (offerCancel ? (Ok | Cancel) : Ok))
+        bool offerCancel 
+		) :
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Select Unused Audio Files"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
     new QLabel(introductoryText, vbox);
 
-    m_listView = new KListView(vbox);
-
-    m_listView->addColumn(i18n("File name"));
-    m_listView->addColumn(i18n("File size"));
-    m_listView->addColumn(i18n("Last modified date"));
-
-    for (unsigned int i = 0; i < fileNames.size(); ++i) {
+    m_listView = new QTableWidget( vbox );
+    vboxLayout->addWidget(m_listView);
+    vbox->setLayout(vboxLayout);
+	
+	m_listView->setColumnCount( 3 );
+	QStringList sl;
+	sl << tr("File name") << tr("File size") << tr("Last modified date");
+	m_listView->setHorizontalHeaderLabels( sl );
+	
+//     m_listView->addColumn(tr("File name"));
+//     m_listView->addColumn(tr("File size"));
+//     m_listView->addColumn(tr("Last modified date"));
+	QTableWidgetItem *item = 0;
+	unsigned int i;
+	unsigned int rc;
+	for (i=0; i < fileNames.size(); ++i ) {
         QString fileName = fileNames[i];
         QFileInfo info(fileName);
-        QString fileSize = i18n(" (not found) ");
+        QString fileSize = tr(" (not found) ");
         QString fileDate;
         if (info.exists()) {
             fileSize = QString(" %1 ").arg(info.size());
-            fileDate = QString(" %1 ").arg(info.lastModified().toString());
+			fileDate = QString(" %1 ").arg( (info.lastModified()).toString(Qt::ISODate) );
         }
-        QListViewItem *item = new KListViewItem
-                              (m_listView, fileName, fileSize, fileDate);
-    }
+		//QTableWidgetItem *item = new QTableWidgetItem(m_listView, fileName, fileSize, fileDate);
+		rc = m_listView->rowCount();
+		m_listView->insertRow( rc );
+		
+		item = new QTableWidgetItem(fileName);
+		m_listView->setItem( rc, i+0, item );
+		item = new QTableWidgetItem(fileSize);
+		m_listView->setItem( rc, i+1, item );
+		item = new QTableWidgetItem(fileDate);
+		m_listView->setItem( rc, i+2, item );
+		
+	}
 
-    m_listView->setSelectionMode(QListView::Multi);
-}
+	m_listView->setSelectionMode( QAbstractItemView::MultiSelection );
+	m_listView->setSelectionBehavior( QAbstractItemView::SelectItems ); // or QAbstractItemView::SelectRows
+	
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+};
 
 std::vector<QString>
 UnusedAudioSelectionDialog::getSelectedAudioFileNames() const
 {
     std::vector<QString> selectedNames;
 
-    QListViewItem *item = m_listView->firstChild();
+	QList<QTableWidgetItem *> sItems = m_listView->selectedItems();
+	QTableWidgetItem *item;
+	
+	for( int i=0; i < sItems.size(); i++ ){
+        //if (m_listView->isSelected(item)) {
+			item = sItems.at(i);
+            selectedNames.push_back( item->text() );
+        //}
 
-    while (item) {
-
-        if (m_listView->isSelected(item)) {
-            selectedNames.push_back(item->text(0));
-        }
-
-        item = item->nextSibling();
+		//item = m_listView->next();
     }
 
     return selectedNames;
-}
+};
 
 }

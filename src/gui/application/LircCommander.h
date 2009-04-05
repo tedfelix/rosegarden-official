@@ -23,15 +23,15 @@
 
 #ifdef HAVE_LIRC
 
-#include <qobject.h>
+#include <QObject>
 #include "base/Track.h"
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIApp;
-class RosegardenGUIDoc;
+class RosegardenMainWindow;
+class RosegardenDocument;
 class TrackButtons;
 class LircClient;
 
@@ -40,10 +40,10 @@ class LircCommander : public QObject
 {
     Q_OBJECT
 public:
-    LircCommander(LircClient *lirc, RosegardenGUIApp *rgGUIApp);
+    LircCommander(LircClient *lirc, RosegardenMainWindow *rgGUIApp);
 
 signals:
-    //for RosegardenGUIApp
+    //for RosegardenMainWindow
     void play();
     void stop();
     void record();
@@ -59,11 +59,11 @@ signals:
     
 private slots:
     void slotExecute(char *);
-    //void slotDocumentChanged(RosegardenGUIDoc *);
+    //void slotDocumentChanged(RosegardenDocument *);
         
 private:
     LircClient          *m_lirc;
-    RosegardenGUIApp    *m_rgGUIApp;
+    RosegardenMainWindow    *m_rgGUIApp;
     //TrackButtons        *m_trackButtons;
      
     // commands invoked by lirc

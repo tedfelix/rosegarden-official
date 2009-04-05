@@ -21,7 +21,7 @@
 
 #include "document/BasicCommand.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,6 +33,8 @@ class Event;
 
 class MatrixModifyCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MatrixModifyCommand)
+
 public:
     MatrixModifyCommand(Segment &segment,
                         Event *oldEvent,

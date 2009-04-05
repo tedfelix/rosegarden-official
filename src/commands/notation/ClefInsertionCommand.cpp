@@ -18,7 +18,6 @@
 
 #include "ClefInsertionCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -26,7 +25,8 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/BaseProperties.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include "base/Selection.h"
+#include <QString>
 
 
 namespace Rosegarden
@@ -54,17 +54,25 @@ ClefInsertionCommand::~ClefInsertionCommand()
     // nothing
 }
 
+EventSelection *
+ClefInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
+}
+
 QString
 ClefInsertionCommand::getGlobalName(Clef *)
 {
     /* doesn't handle octave offset -- leave it for now
         if (clef) {
     	QString name(strtoqstr(clef->getClefType()));
-    	name = name.left(1).upper() + name.right(name.length()-1);
-    	return i18n("Change to %1 Cle&f...").arg(name);
+    	name = name.left(1).toUpper() + name.right(name.length()-1);
+    	return tr("Change to %1 Cle&f...").arg(name);
         } else {
     */ 
-    return i18n("Add Cle&f Change...");
+    return tr("Add Cle&f Change...");
     /*
         }
     */

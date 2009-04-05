@@ -18,32 +18,46 @@
 
 #include "ExportDeviceDialog.h"
 
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 ExportDeviceDialog::ExportDeviceDialog(QWidget *parent, QString deviceName) :
-        KDialogBase(parent, "exportdevicedialog", true, i18n("Export Devices..."),
-                    Ok | Cancel, Ok)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    QButtonGroup *bg = new QButtonGroup(1, Qt::Horizontal,
-                                        i18n("Export devices"),
-                                        vbox);
-    m_exportAll = new QRadioButton(i18n("Export all devices"), bg);
-    m_exportOne = new QRadioButton(i18n("Export selected device only"), bg);
-    new QLabel(i18n("         (\"%1\")").arg(deviceName), bg);
+    setModal(true);
+    setWindowTitle(tr("Export Devices..."));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+
+    QGroupBox *bg = new QGroupBox("Export devices");
+    QVBoxLayout *bgLayout = new QVBoxLayout;
+    m_exportAll = new QRadioButton(tr("Export all devices"));
+    bgLayout->addWidget(m_exportAll);
+    m_exportOne = new QRadioButton(tr("Export selected device only"));
+    bgLayout->addWidget(m_exportOne);
+    bgLayout->addWidget(new QLabel(tr("         (\"%1\")").arg(deviceName)));
+    bg->setLayout(bgLayout);
 
     m_exportOne->setChecked(true);
+
+    metagrid->addWidget(bg, 0, 0);
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok
+                                                     | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 ExportDeviceDialog::ExportType

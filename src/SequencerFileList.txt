@@ -1,17 +1,14 @@
 
 SET(sequencer_SRCS
-	sequencer/ControlBlockMmapper.cpp
-	sequencer/ControlBlockMmapper.h
-	sequencer/main.cpp
+	sequencer/MmappedControlBlock.cpp
+	sequencer/MmappedControlBlock.h
 	sequencer/MmappedSegment.cpp
 	sequencer/MmappedSegment.h
-	sequencer/RosegardenSequencerApp.cpp
-	sequencer/RosegardenSequencerApp.h
+	sequencer/RosegardenSequencer.cpp
+	sequencer/RosegardenSequencer.h
 	sequencer/RosegardenSequencerIface.h
 	sequencer/SequencerMmapper.cpp
 	sequencer/SequencerMmapper.h
-)
-
-SET(seq_dcop_SRCS
-	sequencer/RosegardenSequencerIface.h
+	sequencer/SequencerThread.cpp
+	sequencer/SequencerThread.h
 )

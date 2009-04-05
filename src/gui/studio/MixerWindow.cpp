@@ -21,23 +21,24 @@
 #include "misc/Debug.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
-#include <kmainwindow.h>
-#include <qaccel.h>
-#include <qwidget.h>
+#include "document/RosegardenDocument.h"
+
+#include <QMainWindow>
+#include <QShortcut>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
 MixerWindow::MixerWindow(QWidget *parent,
-                         RosegardenGUIDoc *document) :
-        KMainWindow(parent, "mixerwindow"),
+                         RosegardenDocument *document) :
+        QMainWindow(parent, "mixerwindow"),
         m_document(document),
         m_studio(&document->getStudio()),
         m_currentId(0)
 {
-    m_accelerators = new QAccel(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 void
@@ -45,7 +46,7 @@ MixerWindow::closeEvent(QCloseEvent *e)
 {
     RG_DEBUG << "MixerWindow::closeEvent()\n";
     emit closing();
-    KMainWindow::closeEvent(e);
+    QMainWindow::closeEvent(e);
 }
 
 void

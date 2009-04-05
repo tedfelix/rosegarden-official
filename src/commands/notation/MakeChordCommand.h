@@ -16,41 +16,38 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
-#define _RG_ADJUSTMENUMAKECHORDCOMMAND_H_
+#ifndef _RG_MAKECHORDCOMMAND_H_
+#define _RG_MAKECHORDCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
-
-
-class Make;
-
+#include <QString>
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class MakeChordCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeChordCommand)
+
 public:
     MakeChordCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("Make &Chord"); }
-    
+    static QString getGlobalName() { return tr("Make &Chord"); }
+
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
 };    
-
-
-// Transforms menu commands
 
 
 

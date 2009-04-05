@@ -19,8 +19,7 @@
 #ifndef _RG_AUDIOPLAYINGDIALOG_H_
 #define _RG_AUDIOPLAYINGDIALOG_H_
 
-#include <kdialogbase.h>
-#include "gui/application/RosegardenDCOP.h"
+#include <QDialog>
 
 
 class QWidget;
@@ -32,7 +31,7 @@ namespace Rosegarden
 
 
 
-class AudioPlayingDialog : public KDialogBase
+class AudioPlayingDialog : public QDialog
 {
     Q_OBJECT
 

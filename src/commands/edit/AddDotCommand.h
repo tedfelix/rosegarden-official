@@ -20,8 +20,8 @@
 #define _RG_ADDDOTCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,6 +34,8 @@ class EventSelection;
 
 class AddDotCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddDotCommand)
+
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -42,7 +44,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("&Add Dot");
+        return tr("&Add Dot");
     }
 
 protected:

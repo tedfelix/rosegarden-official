@@ -18,111 +18,150 @@
 
 #include "IdentifyTextCodecDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qfont.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFont>
+#include <QLabel>
+#include <QString>
+#include <QTextCodec>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
+// This dialog used to use QTextCodec::codecForContent() to guess an
+// appropriate codec for the string, and then call
+// QTextCodec::heuristicContentMatch() to test each listed codec to
+// determine whether to include it in the dialog (if it has a non-zero
+// probability).
+
+// Unfortunately, both of those functions have been removed from Qt4.
+// Not that either was all that effective in the first place.
+
+// QTextCodec::canEncode is not a replacement; it tests whether a
+// given QString can be encoded using a certain codec, and our problem
+// is that we haven't got a QString to start with.
+
+// Let's try this:
+
+static bool
+codecPreserves(QTextCodec &codec, std::string encoded)
+{
+    QString u = codec.toUnicode(encoded.c_str(), encoded.length());
+    QByteArray d = codec.fromUnicode(u);
+    if (encoded == d.data()) return true;
+    else return false; // not at all authoritative
+}
+
 IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         std::string text) :
-        KDialogBase(parent, 0, true, i18n("Choose Text Encoding"), Ok),
+        QDialog(parent),
         m_text(text)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    new QLabel(i18n("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
+    setModal(true);
+    setWindowTitle(tr("Choose Text Encoding"));
 
-    KComboBox *codecs = new KComboBox(vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
+
+    new QLabel(tr("\nThis file contains text in an unknown language encoding.\n\nPlease select one of the following estimated text encodings\nfor use with the text in this file:\n"), vbox);
+
+    QComboBox *codecs = new QComboBox( vbox );
+    vboxLayout->addWidget(codecs);
 
     std::string defaultCodec;
-    QTextCodec *cc = QTextCodec::codecForContent(text.c_str(), text.length());
+    QTextCodec *cc = 0;
     QTextCodec *codec = 0;
 
-    std::cerr << "cc is " << (cc ? cc->name() : "null") << std::endl;
-
     std::map<std::string, QString> codecDescriptions;
-    codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
-    codecDescriptions["UTF-8"] = i18n("Unicode variable-width");
-    codecDescriptions["ISO 8859-1"] = i18n("Western Europe");
-    codecDescriptions["ISO 8859-15"] = i18n("Western Europe + Euro");
-    codecDescriptions["ISO 8859-2"] = i18n("Eastern Europe");
-    codecDescriptions["ISO 8859-3"] = i18n("Southern Europe");
-    codecDescriptions["ISO 8859-4"] = i18n("Northern Europe");
-    codecDescriptions["ISO 8859-5"] = i18n("Cyrillic");
-    codecDescriptions["ISO 8859-6"] = i18n("Arabic");
-    codecDescriptions["ISO 8859-7"] = i18n("Greek");
-    codecDescriptions["ISO 8859-8"] = i18n("Hebrew");
-    codecDescriptions["ISO 8859-9"] = i18n("Turkish");
-    codecDescriptions["ISO 8859-10"] = i18n("Nordic");
-    codecDescriptions["ISO 8859-11"] = i18n("Thai");
-    codecDescriptions["ISO 8859-13"] = i18n("Baltic");
-    codecDescriptions["ISO 8859-14"] = i18n("Celtic");
-    codecDescriptions["SJIS"] = i18n("Japanese Shift-JIS");
-    codecDescriptions["Big5"] = i18n("Traditional Chinese");
-    codecDescriptions["GB18030"] = i18n("Simplified Chinese");
-    codecDescriptions["KOI8-R"] = i18n("Russian");
-    codecDescriptions["KOI8-U"] = i18n("Ukrainian");
-    codecDescriptions["TSCII"] = i18n("Tamil");
+    codecDescriptions["SJIS"] = tr("Japanese Shift-JIS");
+    codecDescriptions["UTF-8"] = tr("Unicode variable-width");
+    codecDescriptions["ISO 8859-1"] = tr("Western Europe");
+    codecDescriptions["ISO 8859-15"] = tr("Western Europe + Euro");
+    codecDescriptions["ISO 8859-2"] = tr("Eastern Europe");
+    codecDescriptions["ISO 8859-3"] = tr("Southern Europe");
+    codecDescriptions["ISO 8859-4"] = tr("Northern Europe");
+    codecDescriptions["ISO 8859-5"] = tr("Cyrillic");
+    codecDescriptions["ISO 8859-6"] = tr("Arabic");
+    codecDescriptions["ISO 8859-7"] = tr("Greek");
+    codecDescriptions["ISO 8859-8"] = tr("Hebrew");
+    codecDescriptions["ISO 8859-9"] = tr("Turkish");
+    codecDescriptions["ISO 8859-10"] = tr("Nordic");
+    codecDescriptions["ISO 8859-11"] = tr("Thai");
+    codecDescriptions["ISO 8859-13"] = tr("Baltic");
+    codecDescriptions["ISO 8859-14"] = tr("Celtic");
+    codecDescriptions["SJIS"] = tr("Japanese Shift-JIS");
+    codecDescriptions["Big5"] = tr("Traditional Chinese");
+    codecDescriptions["GB18030"] = tr("Simplified Chinese");
+    codecDescriptions["KOI8-R"] = tr("Russian");
+    codecDescriptions["KOI8-U"] = tr("Ukrainian");
+    codecDescriptions["TSCII"] = tr("Tamil");
 
     int i = 0;
     int current = -1;
 
     int selectedProbability = 0;
-    if (cc) {
-        selectedProbability = cc->heuristicContentMatch
-            (m_text.c_str(), m_text.length());
-    }
 
     while ((codec = QTextCodec::codecForIndex(i)) != 0) {
 
-        int probability = codec->heuristicContentMatch
-            (m_text.c_str(), m_text.length());
+        if (!codec) {
+            ++i;
+            continue;
+        }
+
+        bool preserves = codecPreserves(*codec, m_text);
+
+        if (preserves && !cc) {
+            // prefer the first codec that seems OK with what we've got
+            cc = codec;
+        }
+
+/*
+  we're no longer confident enough to actually eliminate codecs on the
+  basis of our crappy test, though
 
         if (probability <= 0) {
             ++i;
             continue;
         }
+*/
 
-        std::string name = codec->name();
+        std::string name = qstrtostr(codec->name().data());
 
-        std::cerr << "codec " << name << " probability " << probability << std::endl;
+        std::cerr << "codec " << name << " preserves " << preserves << std::endl;
 
-        if (name == "UTF-8" && 
-            (!cc || (cc->name() != name)) &&
-            probability > selectedProbability/2) {
-            std::cerr << "UTF-8 has a decent probability, selecting it instead to promote global harmony" << std::endl;
+        if (name == "UTF-8" && cc && preserves) {
+            std::cerr << "UTF-8 is a possibility, selecting it instead of our first choice to promote global harmony" << std::endl;
             cc = codec;
         }
 
         QString description = codecDescriptions[name];
         if (description == "") {
             if (strtoqstr(name).left(3) == "CP ") {
-                description = i18n("Microsoft Code Page %1").
-                              arg(strtoqstr(name).right(name.length() - 3));
+                description = tr("Microsoft Code Page %1")
+                              .arg(strtoqstr(name).right(name.length() - 3));
             }
         }
 
         if (description != "") {
-            description = i18n("%1 (%2)").arg(strtoqstr(name)).arg(description);
+            description = tr("%1 (%2)").arg(strtoqstr(name)).arg(description);
         } else {
             description = strtoqstr(name);
         }
 
-        codecs->insertItem(description, 0);
+        codecs->addItem(description, 0);
         m_codecs.push_front(name);
         if (current >= 0) ++current;
 
-        if (cc && (name == cc->name())) {
+        if (cc && (name == qstrtostr(cc->name().data())) ) {
             current = 0;
         }
 
@@ -132,16 +171,23 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     connect(codecs, SIGNAL(activated(int)),
             this, SLOT(slotCodecSelected(int)));
 
-    new QLabel(i18n("\nExample text from file:"), vbox);
-    m_example = new QLabel("", vbox);
+    new QLabel(tr("\nExample text from file:"), vbox);
+    m_example = new QLabel("", vbox );
+    vboxLayout->addWidget(m_example);
+    vbox->setLayout(vboxLayout);
     QFont font;
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
-    m_example->setPaletteForegroundColor(Qt::blue);
-    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
+    m_example->setPaletteForegroundColor(QColor(Qt::blue));
+//    std::cerr << "calling slotCodecSelected(" << current << ")" << std::endl;
     if (current < 0) current = 0;
-    codecs->setCurrentItem(current);
+    codecs->setCurrentIndex(current);
     slotCodecSelected(current);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -153,10 +199,10 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 //    std::cerr << "codecs: ";
 //    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";
 //    std::cerr << std::endl;
-    QTextCodec *codec = QTextCodec::codecForName(strtoqstr(name));
+    QTextCodec *codec = QTextCodec::codecForName( qStrToCharPtrUtf8(strtoqstr(name)) );
     if (!codec) return;
-    m_codec = qstrtostr(codec->name());
-    std::cerr << "Applying codec " << m_codec << std::endl;
+    m_codec = qstrtostr( codec->name() );
+//    std::cerr << "Applying codec " << m_codec << std::endl;
     QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
     if (outText.length() > 80) outText = outText.left(80);
     m_example->setText("\"" + outText + "\"");

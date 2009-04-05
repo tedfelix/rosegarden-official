@@ -20,7 +20,8 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
+#include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
 
 
@@ -28,6 +29,14 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+RemoveMarksCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("remove_marks",
+         new SelectionCommandBuilder<RemoveMarksCommand>());
+}
 
 void
 RemoveMarksCommand::modifySegment()

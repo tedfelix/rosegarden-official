@@ -19,41 +19,46 @@
 #ifndef _RG_ROSEGARDENFLOATEDIT_H_
 #define _RG_ROSEGARDENFLOATEDIT_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QString;
 class QLabel;
+class QDoubleSpinBox;
 
 
 namespace Rosegarden
 {
 
-class HSpinBox;
 
-
-class FloatEdit : public KDialogBase
+/** A simple input dialog for requesting a float value
+ */
+class FloatEdit : public QDialog
 {
     Q_OBJECT
 
 public:
     FloatEdit(QWidget *parent,
-                        const QString &title,
-                        const QString &text,
-                        float min,
-                        float max,
-                        float value,
-                        float step);
+              const QString &title,
+              const QString &text,
+              float min,
+              float max,
+              float value,
+              float step);
 
+    /// Get a float value from the dialog
     float getValue() const;
+
+    /// Reparent the float edit dialog correctly by context, so it can be made
+    /// to appear in a sensible place
+    void reparent(QWidget *newParent);
 
 protected:
 
     QLabel            *m_text;
-    HSpinBox          *m_spin;
+    QDoubleSpinBox    *m_spin;
 };
-
 
 
 }

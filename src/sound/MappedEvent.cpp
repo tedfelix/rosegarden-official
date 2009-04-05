@@ -1,22 +1,22 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2009 the Rosegarden development team.
- 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
-#include <qdir.h>
-#include <qfile.h>
-#include <qfileinfo.h>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
 
-#include <kstddirs.h>
+#include <QDir>
 
 #include "MappedEvent.h"
 #include "BaseProperties.h"
@@ -45,7 +45,6 @@ MappedEvent::MappedEvent(InstrumentId id,
         m_duration(duration),
         m_audioStartMarker(0, 0),
         m_dataBlockId(0),
-        m_isPersistent(false),
         m_runtimeSegmentId( -1),
         m_autoFade(false),
         m_fadeInTime(RealTime::zeroTime),
@@ -174,170 +173,6 @@ MappedEvent::operator=(const MappedEvent &mE)
     return *this;
 }
 
-// Do we use this?  It looks dangerous so just commenting it out - rwb
-//
-//const size_t MappedEvent::streamedSize = 12 * sizeof(unsigned int);
-
-QDataStream&
-operator<<(QDataStream &dS, MappedEvent *mE)
-{
-    dS << (unsigned int)mE->getTrackId();
-    dS << (unsigned int)mE->getInstrument();
-    dS << (unsigned int)mE->getType();
-    dS << (unsigned int)mE->getData1();
-    dS << (unsigned int)mE->getData2();
-    dS << (unsigned int)mE->getEventTime().sec;
-    dS << (unsigned int)mE->getEventTime().nsec;
-    dS << (unsigned int)mE->getDuration().sec;
-    dS << (unsigned int)mE->getDuration().nsec;
-    dS << (unsigned int)mE->getAudioStartMarker().sec;
-    dS << (unsigned int)mE->getAudioStartMarker().nsec;
-    dS << (unsigned long)mE->getDataBlockId();
-    dS << mE->getRuntimeSegmentId();
-    dS << (unsigned int)mE->isAutoFading();
-    dS << (unsigned int)mE->getFadeInTime().sec;
-    dS << (unsigned int)mE->getFadeInTime().nsec;
-    dS << (unsigned int)mE->getFadeOutTime().sec;
-    dS << (unsigned int)mE->getFadeOutTime().nsec;
-    dS << (unsigned int)mE->getRecordedChannel();
-    dS << (unsigned int)mE->getRecordedDevice();
-
-    return dS;
-}
-
-QDataStream&
-operator<<(QDataStream &dS, const MappedEvent &mE)
-{
-    dS << (unsigned int)mE.getTrackId();
-    dS << (unsigned int)mE.getInstrument();
-    dS << (unsigned int)mE.getType();
-    dS << (unsigned int)mE.getData1();
-    dS << (unsigned int)mE.getData2();
-    dS << (unsigned int)mE.getEventTime().sec;
-    dS << (unsigned int)mE.getEventTime().nsec;
-    dS << (unsigned int)mE.getDuration().sec;
-    dS << (unsigned int)mE.getDuration().nsec;
-    dS << (unsigned int)mE.getAudioStartMarker().sec;
-    dS << (unsigned int)mE.getAudioStartMarker().nsec;
-    dS << (unsigned long)mE.getDataBlockId();
-    dS << mE.getRuntimeSegmentId();
-    dS << (unsigned int)mE.isAutoFading();
-    dS << (unsigned int)mE.getFadeInTime().sec;
-    dS << (unsigned int)mE.getFadeInTime().nsec;
-    dS << (unsigned int)mE.getFadeOutTime().sec;
-    dS << (unsigned int)mE.getFadeOutTime().nsec;
-    dS << (unsigned int)mE.getRecordedChannel();
-    dS << (unsigned int)mE.getRecordedDevice();
-
-    return dS;
-}
-
-QDataStream&
-operator>>(QDataStream &dS, MappedEvent *mE)
-{
-    unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
-    long eventTimeSec = 0, eventTimeNsec = 0, durationSec = 0, durationNsec = 0,
-                                           audioSec = 0, audioNsec = 0;
-    std::string dataBlock;
-    unsigned long dataBlockId = 0;
-    int runtimeSegmentId = -1;
-    unsigned int autoFade = 0,
-                            fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0,
-                                                        recordedChannel = 0, recordedDevice = 0;
-
-    dS >> trackId;
-    dS >> instrument;
-    dS >> type;
-    dS >> data1;
-    dS >> data2;
-    dS >> eventTimeSec;
-    dS >> eventTimeNsec;
-    dS >> durationSec;
-    dS >> durationNsec;
-    dS >> audioSec;
-    dS >> audioNsec;
-    dS >> dataBlockId;
-    dS >> runtimeSegmentId;
-    dS >> autoFade;
-    dS >> fadeInSec;
-    dS >> fadeInNsec;
-    dS >> fadeOutSec;
-    dS >> fadeOutNsec;
-    dS >> recordedChannel;
-    dS >> recordedDevice;
-
-    mE->setTrackId((TrackId)trackId);
-    mE->setInstrument((InstrumentId)instrument);
-    mE->setType((MappedEvent::MappedEventType)type);
-    mE->setData1((MidiByte)data1);
-    mE->setData2((MidiByte)data2);
-    mE->setEventTime(RealTime(eventTimeSec, eventTimeNsec));
-    mE->setDuration(RealTime(durationSec, durationNsec));
-    mE->setAudioStartMarker(RealTime(audioSec, audioNsec));
-    mE->setDataBlockId(dataBlockId);
-    mE->setRuntimeSegmentId(runtimeSegmentId);
-    mE->setAutoFade(autoFade);
-    mE->setFadeInTime(RealTime(fadeInSec, fadeInNsec));
-    mE->setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
-    mE->setRecordedChannel(recordedChannel);
-    mE->setRecordedDevice(recordedDevice);
-
-    return dS;
-}
-
-QDataStream&
-operator>>(QDataStream &dS, MappedEvent &mE)
-{
-    unsigned int trackId = 0, instrument = 0, type = 0, data1 = 0, data2 = 0;
-    long eventTimeSec = 0, eventTimeNsec = 0, durationSec = 0, durationNsec = 0,
-                                           audioSec = 0, audioNsec = 0;
-    std::string dataBlock;
-    unsigned long dataBlockId = 0;
-    int runtimeSegmentId = -1;
-    unsigned int autoFade = 0,
-                            fadeInSec = 0, fadeInNsec = 0, fadeOutSec = 0, fadeOutNsec = 0,
-                                                        recordedChannel = 0, recordedDevice = 0;
-
-    dS >> trackId;
-    dS >> instrument;
-    dS >> type;
-    dS >> data1;
-    dS >> data2;
-    dS >> eventTimeSec;
-    dS >> eventTimeNsec;
-    dS >> durationSec;
-    dS >> durationNsec;
-    dS >> audioSec;
-    dS >> audioNsec;
-    dS >> dataBlockId;
-    dS >> runtimeSegmentId;
-    dS >> autoFade;
-    dS >> fadeInSec;
-    dS >> fadeInNsec;
-    dS >> fadeOutSec;
-    dS >> fadeOutNsec;
-    dS >> recordedChannel;
-    dS >> recordedDevice;
-
-    mE.setTrackId((TrackId)trackId);
-    mE.setInstrument((InstrumentId)instrument);
-    mE.setType((MappedEvent::MappedEventType)type);
-    mE.setData1((MidiByte)data1);
-    mE.setData2((MidiByte)data2);
-    mE.setEventTime(RealTime(eventTimeSec, eventTimeNsec));
-    mE.setDuration(RealTime(durationSec, durationNsec));
-    mE.setAudioStartMarker(RealTime(audioSec, audioNsec));
-    mE.setDataBlockId(dataBlockId);
-    mE.setRuntimeSegmentId(runtimeSegmentId);
-    mE.setAutoFade(autoFade);
-    mE.setFadeInTime(RealTime(fadeInSec, fadeInNsec));
-    mE.setFadeOutTime(RealTime(fadeOutSec, fadeOutNsec));
-    mE.setRecordedChannel(recordedChannel);
-    mE.setRecordedDevice(recordedDevice);
-
-    return dS;
-}
-
 void
 MappedEvent::addDataByte(MidiByte byte)
 {
@@ -387,17 +222,17 @@ protected:
 };
 
 DataBlockFile::DataBlockFile(DataBlockRepository::blockid id)
-        : m_fileName(KGlobal::dirs()->resourceDirs("tmp").first() + QString("/rosegarden_datablock_%1").arg(id)),
-        m_file(m_fileName),
-        m_cleared(false)
+    : m_fileName(QDir::tempPath() + QString("/rosegarden_datablock_%1").arg(id)),
+      m_file(m_fileName),
+      m_cleared(false)
 {
-    //     std::cerr << "DataBlockFile " << m_fileName.latin1() << std::endl;
+    //     std::cerr << "DataBlockFile " << m_fileName.toLatin1().data() << std::endl;
 }
 
 DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
-//        std::cerr << "~DataBlockFile : removing " << m_fileName.latin1() << std::endl;
+//        std::cerr << "~DataBlockFile : removing " << m_fileName.toLatin1().data() << std::endl;
         QFile::remove
             (m_fileName);
     }
@@ -415,7 +250,7 @@ void DataBlockFile::setData(const std::string& s)
     prepareToWrite();
 
     QDataStream stream(&m_file);
-    stream.writeRawBytes(s.data(), s.length());
+    stream.writeRawData(s.data(), s.length());
 }
 
 std::string DataBlockFile::getData()
@@ -428,7 +263,7 @@ std::string DataBlockFile::getData()
     QDataStream stream(&m_file);
  //   std::cerr << "DataBlockFile::getData() : file size = " << m_file.size() << std::endl;
     char* tmp = new char[m_file.size()];
-    stream.readRawBytes(tmp, m_file.size());
+    stream.readRawData(tmp, m_file.size());
     std::string res(tmp, m_file.size());
     delete[] tmp;
 
@@ -445,7 +280,7 @@ void DataBlockFile::addDataString(const std::string& s)
 {
     prepareToWrite();
     QDataStream stream(&m_file);
-    stream.writeRawBytes(s.data(), s.length());
+    stream.writeRawData(s.data(), s.length());
 }
 
 void DataBlockFile::prepareToWrite()
@@ -453,7 +288,7 @@ void DataBlockFile::prepareToWrite()
  //   std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
-        m_file.open(IO_WriteOnly | IO_Append);
+        m_file.open(QIODevice::WriteOnly | QIODevice::Append);
         assert(m_file.isWritable());
     }
 }
@@ -463,7 +298,7 @@ void DataBlockFile::prepareToRead()
 //    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
-        m_file.open(IO_ReadOnly);
+        m_file.open(QIODevice::ReadOnly);
         assert(m_file.isReadable());
     }
 }
@@ -561,7 +396,7 @@ void DataBlockRepository::clear()
 
     // Erase all 'datablock_*' files
     //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").first();
+    QString tmpPath = QDir::tempPath();
 
     QDir segmentsDir(tmpPath, "rosegarden_datablock_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {

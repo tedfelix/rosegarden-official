@@ -1,25 +1,30 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2009 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
  
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 
 #include <iostream>
-#include <kapplication.h>
+#include <QApplication>
 #include <fstream>
 #include <string>
 #include <dirent.h> // for new recording file
 #include <cstdio>   // sprintf
 #include <cstdlib>
 #include <pthread.h>
+#include <signal.h>
 
 #if (__GNUC__ < 3)
 #include <strstream>
@@ -28,16 +33,16 @@
 #include <sstream>
 #endif
 
-#include <kapp.h>
-#include <klocale.h>
-#include <kprocess.h>
-#include <kio/netaccess.h>
-#include <kmessagebox.h>
+#include <QApplication>
+#include <QMessageBox>
 
-#include <qpixmap.h>
-#include <qpainter.h>
-#include <qdatetime.h>
-#include <qfile.h>
+#include <QProcess>
+#include <QPixmap>
+#include <QPainter>
+#include <QDateTime>
+#include <QFile>
+
+#include "gui/general/FileSource.h"
 
 #include "AudioFile.h"
 #include "AudioFileManager.h"
@@ -92,10 +97,10 @@ AudioFileManager::AudioFileManager() :
     //
     setAudioPath("~/rosegarden");
 
-    // Retransmit progress
+    // Retransmit value()
     //
-    connect(&m_peakManager, SIGNAL(setProgress(int)),
-            this, SIGNAL(setProgress(int)));
+    connect(&m_peakManager, SIGNAL(setValue(int)),
+            this, SIGNAL(setValue(int)));
 }
 
 AudioFileManager::~AudioFileManager()
@@ -114,7 +119,7 @@ AudioFileManager::addFile(const std::string &filePath)
     QString ext;
 
     if (filePath.length() > 3) {
-	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).lower();
+	ext = QString(filePath.substr(filePath.length() - 3, 3).c_str()).toLower();
     }
 
     // Check for file existing already in manager by path
@@ -444,7 +449,7 @@ AudioFileManager::getFileInPath(const std::string &file)
     QFileInfo searchInfo(searchFile);
 
     if (searchInfo.exists())
-        return searchFile.latin1();
+        return searchFile.toLatin1().data();
 
     std::cout << "AudioFileManager::getFileInPath - "
     << "searchInfo = " << searchFile << std::endl;
@@ -542,9 +547,13 @@ AudioFileManager::createRecordingAudioFile()
     // insert file into vector
     WAVAudioFile *aF = 0;
 
+	QString aup( strtoqstr(m_audioPath) );
+	QString fnm(fileName);
+	const std::string fpath = m_audioPath + qstrtostr(fileName);
     try {
-        aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + fileName.data());
-        m_audioFiles.push_back(aF);
+		aF = new WAVAudioFile( static_cast<const unsigned int>(newId), qstrtostr(fileName), fpath );
+		//aF = new WAVAudioFile(newId, fileName.data(), m_audioPath + qstrtostr(fileName) );
+		m_audioFiles.push_back(aF);
         m_recordedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
         delete aF;
@@ -616,7 +625,7 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
         fileName = QString("%1-%2-%3-%4.wav")
 	    .arg(prefix)
-	    .arg(strtoqstr(sourceBase))
+	    .arg( strtoqstr(sourceBase) )
 	    .arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"))
 	    .arg(newId + 1);
 
@@ -631,8 +640,8 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 
     try {
         aF = new WAVAudioFile(newId,
-			      fileName.data(),
-			      m_audioPath + fileName.data());
+			      qstrtostr(fileName),
+			      m_audioPath + qstrtostr(fileName) );
         m_audioFiles.push_back(aF);
 	m_derivedAudioFiles.insert(aF);
     } catch (SoundFile::BadSoundFileException e) {
@@ -644,54 +653,41 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
 }
 
 AudioFileId
-AudioFileManager::importURL(const KURL &url, int sampleRate)
+AudioFileManager::importURL(const QUrl &url, int sampleRate)
 {
-    if (url.isLocalFile()) return importFile(qstrtostr(url.path()), sampleRate);
-
-    std::cerr << "AudioFileManager::importURL("<< url.prettyURL() << ", " << sampleRate << ")" << std::endl;
-
-    emit setOperationName(i18n("Downloading file %1").arg(url.prettyURL()));
-
-    QString localPath = "";
-    if (!KIO::NetAccess::download(url, localPath)) {
-	KMessageBox::error(0, i18n("Cannot download file %1").arg(url.prettyURL()));
-	throw SoundFile::BadSoundFileException(qstrtostr(url.prettyURL()));
+    FileSource source(url);
+    if (!source.isAvailable()) {
+	QMessageBox::critical(0, "", tr("Cannot download file %1").arg(url.toString()));
+	throw SoundFile::BadSoundFileException(qstrtostr(url.toString()));
     }
-    
-    AudioFileId id = 0;
 
-    try {
-	id = importFile(localPath.data(), sampleRate);
-    } catch (BadAudioPathException ape) {
-	KIO::NetAccess::removeTempFile(localPath);
-	throw ape;
-    } catch (SoundFile::BadSoundFileException bse) {
-	KIO::NetAccess::removeTempFile(localPath);
-	throw bse;
-    }
-    
-    return id;
+    source.waitForData();
+
+    return importFile(qStrToCharPtrLocal8(source.getLocalFilename()),
+                      sampleRate);
 }
 
 bool
 AudioFileManager::fileNeedsConversion(const std::string &fileName,
                                       int sampleRate)
 {
-    KProcess *proc = new KProcess();
-    *proc << "rosegarden-audiofile-importer";
+    //setup "rosegarden-audiofile-importer" process
+    QProcess *proc = new QProcess();
+    QStringList procArgs;
+
     if (sampleRate > 0) {
-        *proc << "-r";
-        *proc << QString("%1").arg(sampleRate);
+        procArgs << "-r";
+        procArgs << QString("%1").arg(sampleRate);
     }
-    *proc << "-w";
-    *proc << fileName.c_str();
+    procArgs << "-w";
+    procArgs << fileName.c_str();
 
-    proc->start(KProcess::Block, KProcess::NoCommunication);
+    proc->execute("rosegarden-audiofile-importer", procArgs);
 
-    int es = proc->exitStatus();
+    int ec = proc->exitCode();
     delete proc;
 
-    if (es == 0 || es == 1) { // 1 == "other error" -- wouldn't be able to convert
+    if (ec == 0 || ec == 1) { // 1 == "other error" -- wouldn't be able to convert
         return false;
     }
     return true;
@@ -704,34 +700,36 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
 
     std::cerr << "AudioFileManager::importFile("<< fileName << ", " << sampleRate << ")" << std::endl;
 
-    KProcess *proc = new KProcess();
-    *proc << "rosegarden-audiofile-importer";
+    //setup "rosegarden-audiofile-importer" process
+    QProcess *proc = new QProcess();
+    QStringList procArgs;
+
     if (sampleRate > 0) {
-	*proc << "-r";
-	*proc << QString("%1").arg(sampleRate);
+	procArgs << "-r";
+	procArgs << QString("%1").arg(sampleRate);
     }
-    *proc << "-w";
-    *proc << fileName.c_str();
+    procArgs << "-w";
+    procArgs << fileName.c_str();
 
-    proc->start(KProcess::Block, KProcess::NoCommunication);
+    proc->execute("rosegarden-audiofile-importer", procArgs);
 
-    int es = proc->exitStatus();
+    int ec = proc->exitCode();
     delete proc;
 
-    if (es == 0) {
+    if (ec == 0) {
 	AudioFileId id = addFile(fileName);
 	m_expectedSampleRate = sampleRate;
 	return id;
     }
 
-    if (es == 2) {
-	emit setOperationName(i18n("Converting audio file..."));
-    } else if (es == 3) {
-	emit setOperationName(i18n("Resampling audio file..."));
-    } else if (es == 4) {
-	emit setOperationName(i18n("Converting and resampling audio file..."));
+    if (ec == 2) {
+	emit setOperationName(tr("Converting audio file..."));
+    } else if (ec == 3) {
+	emit setOperationName(tr("Resampling audio file..."));
+    } else if (ec == 4) {
+	emit setOperationName(tr("Converting and resampling audio file..."));
     } else {
-	emit setOperationName(i18n("Importing audio file..."));
+	emit setOperationName(tr("Importing audio file..."));
     }
 
     AudioFileId newId = getFirstUnusedID();
@@ -756,35 +754,42 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
         }
     }
 
-    m_importProcess = new KProcess;
+    //setup "rosegarden-audiofile-importer" process
+    m_importProcess = new QProcess;
+    QStringList importProcessArgs;
+	//@@@ FIX: free *m_importProcessArgs !!!
+	//@@@ Fixed:  Created importProcess on the Stack
+        //@@@ FIX: free *m_importProcess when execption thrown
 
-    *m_importProcess << "rosegarden-audiofile-importer";
+    importProcessArgs << "rosegarden-audiofile-importer";
     if (sampleRate > 0) {
-	*m_importProcess << "-r";
-	*m_importProcess << QString("%1").arg(sampleRate);
+	importProcessArgs << "-r";
+	importProcessArgs << QString("%1").arg(sampleRate);
     }
-    *m_importProcess << "-c";
-    *m_importProcess << fileName.c_str();
-    *m_importProcess << (m_audioPath.c_str() + targetName);
+    importProcessArgs << "-c";
+    importProcessArgs << fileName.c_str();
+    importProcessArgs << (m_audioPath.c_str() + targetName);
     
-    m_importProcess->start(KProcess::NotifyOnExit, KProcess::NoCommunication);
+    m_importProcess->start("rosegarden-audiofile-importer", importProcessArgs);
 
-    while (m_importProcess->isRunning()) {
-	kapp->processEvents(100);
+    while ((m_importProcess->state() == QProcess::Running) || (m_importProcess->state() == QProcess::Starting)) { //@@@JAS If problems, check here first
+		//@@@ what to do with kapp ????
+//        qApp->processEvents(100); //!!! not safe to do from seq thread
     }
 
-    if (!m_importProcess->normalExit()) {
+    if (m_importProcess->exitStatus() != QProcess::NormalExit) {
 	// interrupted
 	throw SoundFile::BadSoundFileException(fileName, "Import cancelled");
     }
 
-    es = m_importProcess->exitStatus();
+    ec = m_importProcess->exitCode();
+
     delete m_importProcess;
     m_importProcess = 0;
 
-    if (es) {
+    if (ec) {
 	std::cerr << "audio file importer failed" << std::endl;
-	throw SoundFile::BadSoundFileException(fileName, qstrtostr(i18n("Failed to convert or resample audio file on import")));
+	throw SoundFile::BadSoundFileException(fileName, qstrtostr( tr("Failed to convert or resample audio file on import")) );
     } else {
 	std::cerr << "audio file importer succeeded" << std::endl;
     }
@@ -793,8 +798,8 @@ AudioFileManager::importFile(const std::string &fileName, int sampleRate)
     WAVAudioFile *aF = 0;
 
     aF = new WAVAudioFile(newId,
-			  targetName.data(),
-			  m_audioPath + targetName.data());
+			  qstrtostr( targetName ),
+			  m_audioPath + qstrtostr(targetName) );
     m_audioFiles.push_back(aF);
     m_derivedAudioFiles.insert(aF);
     // Don't catch SoundFile::BadSoundFileException
@@ -808,9 +813,9 @@ void
 AudioFileManager::slotStopImport()
 {
     if (m_importProcess) {
-	m_importProcess->kill(SIGTERM);
+	m_importProcess->terminate(); //    SIGTERM
 	sleep(1);
-	m_importProcess->kill(SIGKILL);
+	m_importProcess->kill(); // SIGKILL
     }
 }
 
@@ -1064,9 +1069,9 @@ AudioFileManager::drawPreview(AudioFileId id,
                                  false);
 
     QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
+    pixmap->fill(qApp->palette().color(QPalette::Active,
                                        QColorGroup::Base));
-    painter.setPen(kapp->palette().color(QPalette::Active,
+    painter.setPen(qApp->palette().color(QPalette::Active,
                                          QColorGroup::Dark));
 
     if (values.size() == 0) {
@@ -1145,7 +1150,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
                          (endTime - startTime)));
 
     QPainter painter(pixmap);
-    pixmap->fill(kapp->palette().color(QPalette::Active,
+    pixmap->fill(qApp->palette().color(QPalette::Active,
                                        QColorGroup::Base));
 
     float yStep = pixmap->height() / 2;
@@ -1170,10 +1175,10 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         }
 
         if (i < startWidth || i > endWidth)
-            painter.setPen(kapp->palette().color(QPalette::Active,
+            painter.setPen(qApp->palette().color(QPalette::Active,
                                                  QColorGroup::Mid));
         else
-            painter.setPen(kapp->palette().color(QPalette::Active,
+            painter.setPen(qApp->palette().color(QPalette::Active,
                                                  QColorGroup::Dark));
 
         painter.drawLine(i, static_cast<int>(yStep - ch1Value * yStep),

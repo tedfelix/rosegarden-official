@@ -17,72 +17,92 @@
 
 
 #include "TempoDialog.h"
-#include <qlayout.h>
-
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/TimeWidget.h"
-#include "gui/widgets/HSpinBox.h"
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QDoubleSpinBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QLabel>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLayout>
+
 
 
 namespace Rosegarden
 {
 
-TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                          bool timeEditable):
-        KDialogBase(parent, 0, true, i18n("Insert Tempo Change"), Ok | Cancel | Help),
+        QDialog(parent),
         m_doc(doc),
         m_tempoTime(0)
 {
-    setHelp("tempo");
+    //setHelp("tempo");
 
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, i18n("Tempo"), vbox);
+    setModal(true);
+    setWindowTitle(tr("Insert Tempo Change"));
+    setObjectName("MinorDialog");
 
-    QFrame *frame = new QFrame(groupBox);
-    QGridLayout *layout = new QGridLayout(frame, 4, 3, 5, 5);
+	QWidget* vbox = dynamic_cast<QWidget*>( this );
+	QVBoxLayout *vboxLayout = new QVBoxLayout;
+	vbox->setLayout(vboxLayout);
+    //metagrid->addWidget(vbox, 0, 0);
+
+    // group box for tempo
+    QGroupBox *frame = new QGroupBox( tr("Tempo"), vbox );
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
+    vboxLayout->addWidget(frame);
 
     // Set tempo
-    layout->addWidget(new QLabel(i18n("New tempo:"), frame), 0, 1);
-    m_tempoValueSpinBox = new HSpinBox(frame, 0, 100000, 0.0, 1000.0, 5);
+    layout->addWidget(new QLabel(tr("New tempo:"), frame), 0, 1);
+    m_tempoValueSpinBox = new QDoubleSpinBox(frame);
+    m_tempoValueSpinBox->setDecimals(3);
+    m_tempoValueSpinBox->setMaximum(1000);
+    m_tempoValueSpinBox->setMinimum(1);
+    m_tempoValueSpinBox->setSingleStep(1);
+    m_tempoValueSpinBox->setValue(120); // will set properly below
     layout->addWidget(m_tempoValueSpinBox, 0, 2);
 
-    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(const QString &)),
-            SLOT(slotTempoChanged(const QString &)));
+    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
+            SLOT(slotTempoChanged(double)));
 
-    m_tempoTap= new QPushButton(i18n("Tap"), frame);
+    m_tempoTap= new QPushButton(tr("Tap"), frame);
     layout->addWidget(m_tempoTap, 0, 3);
     connect(m_tempoTap, SIGNAL(clicked()), SLOT(slotTapClicked()));
 
 
-    m_tempoConstant = new QRadioButton(i18n("Tempo is fixed until the following tempo change"), frame);
-    m_tempoRampToNext = new QRadioButton(i18n("Tempo ramps to the following tempo"), frame);
-    m_tempoRampToTarget = new QRadioButton(i18n("Tempo ramps to:"), frame);
+    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), frame);
+    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), frame);
+    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), frame);
 
-    //    m_tempoTargetCheckBox = new QCheckBox(i18n("Ramping to:"), frame);
-    m_tempoTargetSpinBox = new HSpinBox(frame, 0, 100000, 0.0, 1000.0, 5);
+    //    m_tempoTargetCheckBox = new QCheckBox(tr("Ramping to:"), frame);
+    m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
+    m_tempoValueSpinBox->setDecimals(3);
+    m_tempoValueSpinBox->setMaximum(1000);
+    m_tempoValueSpinBox->setMinimum(1);
+    m_tempoValueSpinBox->setSingleStep(1);
+    m_tempoValueSpinBox->setValue(120);
 
-    //    layout->addMultiCellWidget(m_tempoTargetCheckBox, 1, 1, 0, 1, AlignRight);
+    //    layout->addWidget(m_tempoTargetCheckBox, 1, 0, 0+1, 1- 1, AlignRight);
     //    layout->addWidget(m_tempoTargetSpinBox, 1, 2);
 
-    layout->addMultiCellWidget(m_tempoConstant, 1, 1, 1, 2);
-    layout->addMultiCellWidget(m_tempoRampToNext, 2, 2, 1, 2);
+    layout->addWidget(m_tempoConstant, 1, 1, 1, 2);
+    layout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
     layout->addWidget(m_tempoRampToTarget, 3, 1);
     layout->addWidget(m_tempoTargetSpinBox, 3, 2);
 
@@ -94,8 +114,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
             SLOT(slotTempoRampToNextClicked()));
     connect(m_tempoRampToTarget, SIGNAL(clicked()),
             SLOT(slotTempoRampToTargetClicked()));
-    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(const QString &)),
-            SLOT(slotTargetChanged(const QString &)));
+    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
+            SLOT(slotTargetChanged(double)));
 
     m_tempoBeatLabel = new QLabel(frame);
     layout->addWidget(m_tempoBeatLabel, 0, 4);
@@ -106,65 +126,100 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     m_tempoBeatsPerMinute = new QLabel(frame);
     layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
 
+    frame->setLayout(layout);
+
     m_timeEditor = 0;
 
     if (timeEditable) {
-        m_timeEditor = new TimeWidget
-                       (i18n("Time of tempo change"),
-                        vbox, &m_doc->getComposition(), 0, true);
+		
+		/* declaration of:
+		TimeWidget( QString title,
+		QWidget *parent,
+		Composition *composition, // for bar/beat/msec
+		timeT initialTime,
+		bool editable = true,
+		bool constrainToCompositionDuration = true );
+		*/
+        m_timeEditor = new TimeWidget(tr("Time of tempo change"), vbox, 0, true);	//@@@ FIX !!! 3. param, 
+        vboxLayout->addWidget(m_timeEditor);
         populateTempo();
         return ;
     }
 
-    // Scope Box
-    QButtonGroup *scopeGroup = new QButtonGroup(1, Horizontal,
-                                                i18n("Scope"), vbox);
+	
+	
+	// group box for scope (area)
+	QGroupBox *scopeGroup = new QGroupBox( tr("Scope"), vbox );
+	vboxLayout->addWidget(scopeGroup);
+    //vbox->setLayout(vboxLayout);	// already done
 
 //    new QLabel(scopeBox);
 
-    QVBox *scopeBox = new QVBox(scopeGroup);
+ 	QVBoxLayout * scopeBoxLayout = new QVBoxLayout( scopeGroup );
+	scopeBoxLayout->setSpacing(5);
+	scopeBoxLayout->setMargin(5);
+// 	vboxLayout->setSpacing(5);
+// 	vboxLayout->setMargin(5);
 
-    scopeBox->setSpacing(5);
-    scopeBox->setMargin(5);
+	QVBoxLayout * currentBoxLayout = scopeBoxLayout;
+	QWidget * currentBox = scopeGroup;
+	
+    QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox );
+    currentBoxLayout->addWidget(child_15);
+    m_tempoTimeLabel = new QLabel( currentBox );
+    currentBoxLayout->addWidget(m_tempoTimeLabel);
+    m_tempoBarLabel = new QLabel( currentBox );
+    currentBoxLayout->addWidget(m_tempoBarLabel);
+    QLabel *spare = new QLabel( currentBox );
+    currentBoxLayout->addWidget(spare);
+    currentBox->setLayout(currentBoxLayout);
+    currentBoxLayout->setStretchFactor(spare, 20);
 
-    QHBox *currentBox = new QHBox(scopeBox);
-    new QLabel(i18n("The pointer is currently at "), currentBox);
-    m_tempoTimeLabel = new QLabel(currentBox);
-    m_tempoBarLabel = new QLabel(currentBox);
-    QLabel *spare = new QLabel(currentBox);
-    currentBox->setStretchFactor(spare, 20);
-
-    m_tempoStatusLabel = new QLabel(scopeBox);
+	m_tempoStatusLabel = new QLabel( scopeGroup );
+    scopeBoxLayout->addWidget(m_tempoStatusLabel);
+	scopeGroup->setLayout(scopeBoxLayout);
 
 //    new QLabel(scopeBox);
+	
+	QWidget * changeWhereBox = scopeGroup;
+	QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
+	
+    spare = new QLabel("      ", changeWhereBox );
+    changeWhereBoxLayout->addWidget(spare);
+	
+    QWidget *changeWhereVBox = new QWidget(changeWhereBox);
+    QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
+    changeWhereBoxLayout->addWidget(changeWhereVBox);
+    changeWhereBox->setLayout(changeWhereBoxLayout);
+    changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
 
-    QHBox *changeWhereBox = new QHBox(scopeBox);
-    spare = new QLabel("      ", changeWhereBox);
-    QVBox *changeWhereVBox = new QVBox(changeWhereBox);
-    changeWhereBox->setStretchFactor(changeWhereVBox, 20);
+    m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
 
-    m_tempoChangeHere = new QRadioButton
-                        (i18n("Apply this tempo from here onwards"),
-                         changeWhereVBox);
-
-    m_tempoChangeBefore = new QRadioButton
-                          (i18n("Replace the last tempo change"),
-                           changeWhereVBox);
-    m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
+    m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
+    m_tempoChangeBeforeAt = new QLabel( changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
     m_tempoChangeBeforeAt->hide();
 
-    m_tempoChangeStartOfBar = new QRadioButton
-                              (i18n("Apply this tempo from the start of this bar"), changeWhereVBox);
+    m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
 
-    m_tempoChangeGlobal = new QRadioButton
-                          (i18n("Apply this tempo to the whole composition"), changeWhereVBox);
+    m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
 
-    QHBox *optionHBox = new QHBox(changeWhereVBox);
-    new QLabel("         ", optionHBox);
-    m_defaultBox = new QCheckBox
-                   (i18n("Also make this the default tempo"), optionHBox);
-    spare = new QLabel(optionHBox);
-    optionHBox->setStretchFactor(spare, 20);
+    QWidget *optionHBox = new QWidget( changeWhereVBox );
+    changeWhereVBoxLayout->addWidget(optionHBox);
+    changeWhereVBox->setLayout(changeWhereVBoxLayout);
+    QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
+    QLabel *child_6 = new QLabel("         ", optionHBox );
+    optionHBoxLayout->addWidget(child_6);
+    m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox );
+    optionHBoxLayout->addWidget(m_defaultBox);
+    spare = new QLabel( optionHBox );
+    optionHBoxLayout->addWidget(spare);
+    optionHBox->setLayout(optionHBoxLayout);
+    optionHBoxLayout->setStretchFactor(spare, 20);
 
 //    new QLabel(scopeBox);
 
@@ -183,6 +238,13 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
     m_defaultBox->setEnabled(false);
 
     populateTempo();
+	
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+	vboxLayout->addWidget(buttonBox, 1, 0);
+//	vboxLayout->setRowStretch(0, 10);
+	
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 TempoDialog::~TempoDialog()
@@ -208,26 +270,26 @@ TempoDialog::populateTempo()
         ramping = comp.getTempoRamping(tempoChangeNo, false);
     }
 
-    m_tempoValueSpinBox->setValue(tempo);
+    m_tempoValueSpinBox->setValue(comp.getTempoQpm(tempo));
 
     if (ramping.first) {
         if (ramping.second) {
             m_tempoTargetSpinBox->setEnabled(true);
-            m_tempoTargetSpinBox->setValue(ramping.second);
+            m_tempoTargetSpinBox->setValue(comp.getTempoQpm(ramping.second));
             m_tempoConstant->setChecked(false);
             m_tempoRampToNext->setChecked(false);
             m_tempoRampToTarget->setChecked(true);
         } else {
             ramping = comp.getTempoRamping(tempoChangeNo, true);
             m_tempoTargetSpinBox->setEnabled(false);
-            m_tempoTargetSpinBox->setValue(ramping.second);
+            m_tempoTargetSpinBox->setValue(comp.getTempoQpm(ramping.second));
             m_tempoConstant->setChecked(false);
             m_tempoRampToNext->setChecked(true);
             m_tempoRampToTarget->setChecked(false);
         }
     } else {
         m_tempoTargetSpinBox->setEnabled(false);
-        m_tempoTargetSpinBox->setValue(tempo);
+        m_tempoTargetSpinBox->setValue(comp.getTempoQpm(tempo));
         m_tempoConstant->setChecked(true);
         m_tempoRampToNext->setChecked(false);
         m_tempoRampToTarget->setChecked(false);
@@ -246,17 +308,17 @@ TempoDialog::populateTempo()
     RealTime tempoTime = comp.getElapsedRealTime(m_tempoTime);
     QString milliSeconds;
     milliSeconds.sprintf("%03d", tempoTime.msec());
-    m_tempoTimeLabel->setText(i18n("%1.%2 s,").arg(tempoTime.sec)
-                              .arg(milliSeconds));
+    m_tempoTimeLabel->setText(tr("%1.%2 s,").arg(tempoTime.sec)
+                               .arg(milliSeconds));
 
     int barNo = comp.getBarNumber(m_tempoTime);
     if (comp.getBarStart(barNo) == m_tempoTime) {
         m_tempoBarLabel->setText
-        (i18n("at the start of measure %1.").arg(barNo + 1));
+        (tr("at the start of measure %1.").arg(barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(false);
     } else {
         m_tempoBarLabel->setText(
-            i18n("in the middle of measure %1.").arg(barNo + 1));
+            tr("in the middle of measure %1.").arg(barNo + 1));
         m_tempoChangeStartOfBar->setEnabled(true);
     }
 
@@ -275,8 +337,8 @@ TempoDialog::populateTempo()
             lastms.sprintf("%03d", lastRT.msec());
             int lastBar = comp.getBarNumber(lastTempoTime);
             m_tempoChangeBeforeAt->setText
-            (i18n("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
-             .arg(lastms).arg(lastBar + 1));
+            (tr("        (at %1.%2 s, in measure %3)").arg(lastRT.sec)
+              .arg(lastms).arg(lastBar + 1));
             m_tempoChangeBeforeAt->show();
 
             m_tempoChangeBefore->setEnabled(true);
@@ -292,7 +354,7 @@ TempoDialog::populateTempo()
             m_tempoStatusLabel->hide();
         } else {
             m_tempoStatusLabel->setText
-            (i18n("There are no preceding tempo changes."));
+            (tr("There are no preceding tempo changes."));
         }
 
         m_tempoChangeGlobal->setEnabled(true);
@@ -300,7 +362,7 @@ TempoDialog::populateTempo()
     } else {
 
         m_tempoStatusLabel->setText
-        (i18n("There are no other tempo changes."));
+        (tr("There are no other tempo changes."));
 
         m_tempoChangeGlobal->setEnabled(false);
     }
@@ -318,27 +380,24 @@ TempoDialog::updateBeatLabels(double qpm)
 
     timeT beat = comp.getTimeSignatureAt(m_tempoTime).getBeatDuration();
     if (beat == Note(Note::Crotchet).getDuration()) {
-        m_tempoBeatLabel->setText(i18n(" bpm"));
+        m_tempoBeatLabel->setText(tr(" bpm"));
         m_tempoBeatLabel->show();
         m_tempoBeat->hide();
         m_tempoBeatsPerMinute->hide();
     } else {
-        //	m_tempoBeatLabel->setText(" (");
         m_tempoBeatLabel->setText("  ");
 
         timeT error = 0;
-        m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
-                               (NotePixmapFactory::makeNoteMenuPixmap(beat, error)));
+        m_tempoBeat->setPixmap(NotePixmapFactory::makeNoteMenuPixmap(beat, error));
         m_tempoBeat->setMaximumWidth(25);
-        if (error)
-            m_tempoBeat->setPixmap(NotePixmapFactory::toQPixmap
-                                   (NotePixmapFactory::makeToolbarPixmap
-                                    ("menu-no-note")));
+        if (error) {
+            m_tempoBeat->setPixmap
+                (NotePixmapFactory::makeToolbarPixmap("menu-no-note"));
+        }
 
         m_tempoBeatsPerMinute->setText
-        //	    (QString("= %1 )").arg
-        (QString("= %1 ").arg
-         (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
+            (QString("= %1 ").arg
+             (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
         m_tempoBeatLabel->show();
         m_tempoBeat->show();
         m_tempoBeatsPerMinute->show();
@@ -346,13 +405,13 @@ TempoDialog::updateBeatLabels(double qpm)
 }
 
 void
-TempoDialog::slotTempoChanged(const QString &)
+TempoDialog::slotTempoChanged(double val)
 {
-    updateBeatLabels(double(m_tempoValueSpinBox->valuef()));
+    updateBeatLabels(val);
 }
 
 void
-TempoDialog::slotTargetChanged(const QString &)
+TempoDialog::slotTargetChanged(double)
 {
     //...
 }
@@ -390,14 +449,14 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::slotOk()
 {
-    tempoT tempo = m_tempoValueSpinBox->value();
+    tempoT tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
     RG_DEBUG << "Tempo is " << tempo << endl;
 
     tempoT target = -1;
     if (m_tempoRampToNext->isChecked()) {
         target = 0;
     } else if (m_tempoRampToTarget->isChecked()) {
-        target = m_tempoTargetSpinBox->value();
+        target = Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
     }
 
     RG_DEBUG << "Target is " << target << endl;
@@ -430,7 +489,7 @@ TempoDialog::slotOk()
                          action);
     }
 
-    KDialogBase::slotOk();
+//    KDialogBase::slotOk();	//&&& FIX
 }
 
 void
@@ -454,7 +513,7 @@ TempoDialog::slotTapClicked()
             }
 
             int bpm = 60000 / msec;
-            m_tempoValueSpinBox->setValue(bpm * 100000);
+            m_tempoValueSpinBox->setValue(bpm);
         }
     }
 

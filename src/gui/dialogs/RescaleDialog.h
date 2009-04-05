@@ -19,7 +19,7 @@
 #ifndef _RG_RESCALEDIALOG_H_
 #define _RG_RESCALEDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 #include "base/Event.h"
 
 
@@ -34,7 +34,7 @@ class TimeWidget;
 class Composition;
 
 
-class RescaleDialog : public KDialogBase
+class RescaleDialog : public QDialog
 {
     Q_OBJECT
 

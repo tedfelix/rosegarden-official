@@ -19,10 +19,12 @@
 #ifndef _RG_ROSEGARDENPROGRESSDIALOG_H_
 #define _RG_ROSEGARDENPROGRESSDIALOG_H_
 
-#define private protected // fugly
-#include <kprogress.h>
-#undef private
-#include <qdatetime.h>
+
+#include <QDateTime>
+
+#include <QProgressBar>
+#include <QProgressDialog>
+
 
 class QWidget;
 class QString;
@@ -34,7 +36,7 @@ namespace Rosegarden
 
 
 
-class ProgressDialog : public KProgressDialog
+class ProgressDialog : public QProgressDialog
 {
     Q_OBJECT
 public:
@@ -49,10 +51,13 @@ public:
                              bool modal = true);
 
     ~ProgressDialog();
-
+	
+	/** return the QProgressBar created in constructor */
+	QProgressBar* progressBar();
+	
     /**
      * A "safe" way to process events without worrying about user
-     * input during the process.  If there is a modal progress dialog
+     * input during the process.  If there is a modal value() dialog
      * visible, then this will permit user input so as to allow the
      * user to hit Cancel; otherwise it will prevent all user input
      */
@@ -64,7 +69,7 @@ public slots:
     void slotSetOperationName(QString);
     void slotCancel();
 
-    /// Stop and hide (if it's shown) the progress dialog
+    /// Stop and hide (if it's shown) the value() dialog
     void slotFreeze();
 
     /// Restore the dialog to its normal state
@@ -77,7 +82,10 @@ protected:
     virtual void hideEvent(QHideEvent*);
 
     //--------------- Data members ---------------------------------
-
+	
+	
+	QProgressBar* m_progressBar;
+	
     QTime m_chrono;
     bool m_wasVisible;
     bool m_frozen;

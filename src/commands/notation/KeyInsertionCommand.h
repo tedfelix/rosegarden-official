@@ -21,9 +21,9 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 #include "misc/Strings.h"
 
 
@@ -41,8 +41,15 @@ class Event;
 // made up my mind yet for sure, and I already changed all the calls to this
 // constructor, so I'm leaving this in until after the new code is field
 // tested, and I can determine it really never will be wanted (DMM)
+/*
+ * Inserts a key change into a single segment, taking segment transpose into
+ * account (fixes #1520716) if desired.
+ */
+
 class KeyInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(KeyInsertionCommand)
+
 public:
     KeyInsertionCommand(Segment &segment,
                         timeT time,
@@ -55,12 +62,13 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return i18n("Change to &Key %1...").arg(strtoqstr(key->getName()));
+            return tr("Change to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
-            return i18n("Add &Key Change...");
+            return tr("Add &Key Change...");
         }
     }
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

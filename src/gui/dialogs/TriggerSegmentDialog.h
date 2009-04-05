@@ -21,12 +21,12 @@
 
 #include "base/TriggerSegment.h"
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -35,7 +35,7 @@ namespace Rosegarden
 class Composition;
 
 
-class TriggerSegmentDialog : public KDialogBase
+class TriggerSegmentDialog : public QDialog
 {
     Q_OBJECT
 
@@ -53,9 +53,9 @@ protected:
     void setupFromConfig();
 
     Composition  *m_composition;
-    KComboBox                *m_segment;
+    QComboBox                *m_segment;
     QCheckBox                *m_retune;
-    KComboBox                *m_adjustTime;
+    QComboBox                *m_adjustTime;
 };
 
 

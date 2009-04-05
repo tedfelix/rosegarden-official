@@ -21,7 +21,7 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
-#include <qstring.h>
+#include <QString>
 #include <iostream>
 
 
@@ -34,7 +34,7 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     const std::string &name,
     const std::string &librarianName,
     const std::string &librarianEmail):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
         m_name(name),

@@ -16,15 +16,15 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUINTERPRETCOMMAND_H_
-#define _RG_ADJUSTMENUINTERPRETCOMMAND_H_
+#ifndef _RG_INTERPRETCOMMAND_H_
+#define _RG_INTERPRETCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <map>
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -40,6 +40,8 @@ class Event;
 
 class InterpretCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(InterpretCommand)
+
 public:
     // bit masks: pass an OR of these to the constructor
     static const int NoInterpretation;
@@ -60,7 +62,7 @@ public:
 
     virtual ~InterpretCommand();
 
-    static QString getGlobalName() { return i18n("&Interpret..."); }
+    static QString getGlobalName() { return tr("&Interpret..."); }
     
 protected:
     virtual void modifySegment();

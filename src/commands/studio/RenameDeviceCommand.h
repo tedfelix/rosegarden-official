@@ -21,9 +21,9 @@
 
 #include "base/Device.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,18 +34,20 @@ namespace Rosegarden
 class Studio;
 
 
-class RenameDeviceCommand : public KNamedCommand
+class RenameDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RenameDeviceCommand)
+
 public:
     RenameDeviceCommand(Studio *studio,
                         DeviceId deviceId,
                         std::string name) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),
         m_name(name) { }
 
-    static QString getGlobalName() { return i18n("Rename Device"); }
+    static QString getGlobalName() { return tr("Rename Device"); }
 
     virtual void execute();
     virtual void unexecute();

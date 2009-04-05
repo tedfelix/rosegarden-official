@@ -19,11 +19,11 @@
 #ifndef _RG_ROSEGARDENQUANTIZEPARAMETERS_H_
 #define _RG_ROSEGARDENQUANTIZEPARAMETERS_H_
 
-#include <qframe.h>
-#include <qstring.h>
+#include <QFrame>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
-#include <qgroupbox.h>
+#include <QGroupBox>
 
 
 class QWidget;
@@ -31,7 +31,7 @@ class QPushButton;
 class QLabel;
 class QGridLayout;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -78,21 +78,21 @@ protected:
 
     QGridLayout *m_mainLayout;
 
-    KComboBox *m_typeCombo;
+    QComboBox *m_typeCombo;
 
     QGroupBox *m_gridBox;
     QCheckBox *m_durationCheckBox;
-    KComboBox *m_gridUnitCombo;
+    QComboBox *m_gridUnitCombo;
     QLabel    *m_swingLabel;
-    KComboBox *m_swingCombo;
+    QComboBox *m_swingCombo;
     QLabel    *m_iterativeLabel;
-    KComboBox *m_iterativeCombo;
+    QComboBox *m_iterativeCombo;
 
     QGroupBox *m_notationBox;
     QCheckBox *m_notationTarget;
-    KComboBox *m_notationUnitCombo;
-    KComboBox *m_simplicityCombo;
-    KComboBox *m_maxTuplet;
+    QComboBox *m_notationUnitCombo;
+    QComboBox *m_simplicityCombo;
+    QComboBox *m_maxTuplet;
     QCheckBox *m_counterpoint;
 
     QPushButton *m_advancedButton;

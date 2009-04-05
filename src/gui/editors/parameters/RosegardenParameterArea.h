@@ -21,15 +21,18 @@
 #ifndef _RG_ROSEGARDENPARAMETERAREA_H_
 #define _RG_ROSEGARDENPARAMETERAREA_H_
 
-#include <qwidgetstack.h>
+#include <QStackedWidget>
 #include <vector>
 
 
 class QWidget;
-class QVGroupBox;
-class QVBox;
-class QScrollView;
-class KTabWidget;
+//class QVGroupBox;
+class QGroupBox;
+class QHBoxLayout;
+class QVBoxLayout;
+// class Q3ScrollView;
+class QScrollArea;
+class QTabWidget;
 
 
 namespace Rosegarden
@@ -42,19 +45,19 @@ class RosegardenParameterBox;
  * A widget that arranges a set of Rosegarden parameter-box widgets
  * within a frame, in a dynamically configurable manner.
  */
-class RosegardenParameterArea : public QWidgetStack
+class RosegardenParameterArea : public QStackedWidget
 {
     Q_OBJECT
 public:
 
     // Create the parameter display area.
 
-    RosegardenParameterArea(QWidget *parent=0, const char *name=0, WFlags f=0);
+    RosegardenParameterArea(QWidget *parent=0, const char *name=0 ); //, WFlags f=0);
 
     // Add a rosegarden parameter box to the list that are to be displayed.
 
     void addRosegardenParameterBox(RosegardenParameterBox *b);
-
+	void setScrollAreaWidget();
 
     // List the supported methods of arranging the various parameter-box
     // widgets within the parameter area.
@@ -81,16 +84,20 @@ private:
     // corresponding parameter box widget needs to be enclosed by a
     // titled outline.
 
-    std::vector<QVGroupBox *> m_groupBoxes;
+    std::vector<QGroupBox *> m_groupBoxes;
 
     // Move a RosegardenParameterBox widget from one container to another.
 
     void moveWidget(QWidget *old_container, QWidget *new_container,
                     RosegardenParameterBox *box);
 
-    QScrollView *m_scrollView; // Holds the m_classic container
-    QVBox *m_classic;          // The container widget for m_style==CLASSIC_STYLE.
-    KTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
+//     Q3ScrollView *m_scrollArea; // Holds the m_classic container
+	QScrollArea *m_scrollArea;	
+	
+	QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
+	QVBoxLayout *m_classicLayout;
+	
+    QTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.
     QWidget *m_spacing;
 };

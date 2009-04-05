@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCOLLAPSENOTESCOMMAND_H_
-#define _RG_ADJUSTMENUCOLLAPSENOTESCOMMAND_H_
+#ifndef _RG_COLLAPSENOTESCOMMAND_H_
+#define _RG_COLLAPSENOTESCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 class Collapse;
@@ -35,12 +35,14 @@ class EventSelection;
 
 class CollapseNotesCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CollapseNotesCommand)
+
 public:
     CollapseNotesCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("Collapse &Equal-Pitch Notes"); }
+    static QString getGlobalName() { return tr("Collapse &Equal-Pitch Notes"); }
 
 protected:
     virtual void modifySegment();

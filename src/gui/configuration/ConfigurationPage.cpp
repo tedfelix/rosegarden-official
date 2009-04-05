@@ -18,13 +18,21 @@
 
 #include "ConfigurationPage.h"
 
-#include "document/RosegardenGUIDoc.h"
-#include <kconfig.h>
-#include <qwidget.h>
+#include "document/RosegardenDocument.h"
+
+#include <QSettings>
+#include <QWidget>
+
 #include <algorithm>
 
 
 namespace Rosegarden
 {
+void
+ConfigurationPage::slotModified()
+{
+    emit modified();
+}
+
 }
 #include "ConfigurationPage.moc"

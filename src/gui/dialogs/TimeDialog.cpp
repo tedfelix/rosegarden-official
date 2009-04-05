@@ -18,13 +18,14 @@
 
 #include "TimeDialog.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
@@ -34,16 +35,26 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
                        Composition *composition,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :
-        KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    m_timeWidget = new TimeWidget
-        (title, vbox, composition, defaultTime, true,
-         constrainToCompositionDuration);
+    setModal(true);
+    setWindowTitle(title);
+    setObjectName("MinorDialog");
 
-    setButtonText(User1, i18n("Reset"));
-    connect(this, SIGNAL(user1Clicked()),
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    setLayout(vboxLayout);
+
+    m_timeWidget = new TimeWidget(title, vbox, composition,
+                defaultTime, true, constrainToCompositionDuration);
+    vboxLayout->addWidget(m_timeWidget);
+
+    connect(this, SIGNAL(ResetClicked()),
             m_timeWidget, SLOT(slotResetToDefault()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vboxLayout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,
@@ -51,16 +62,26 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
                        timeT startTime,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :
-        KDialogBase(parent, 0, true, title, User1 | Ok | Cancel)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    m_timeWidget = new TimeWidget
-        (title, vbox, composition, startTime, defaultTime, true,
-         constrainToCompositionDuration);
+    setModal(true);
+    setWindowTitle(title);
+    setObjectName("MinorDialog");
 
-    setButtonText(User1, i18n("Reset"));
-    connect(this, SIGNAL(user1Clicked()),
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    setLayout(vboxLayout);
+
+    m_timeWidget = new TimeWidget(title, vbox, composition, startTime,
+                defaultTime, true, constrainToCompositionDuration);
+    vboxLayout->addWidget(m_timeWidget);
+
+    connect(this, SIGNAL(ResetClicked()),
             m_timeWidget, SLOT(slotResetToDefault()));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vboxLayout->addWidget(buttonBox);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 timeT

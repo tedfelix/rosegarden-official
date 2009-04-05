@@ -21,8 +21,8 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class EventSelection;
 
 class SetNoteTypeCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetNoteTypeCommand)
+
 public:
     SetNoteTypeCommand(EventSelection &selection,
                        Note::Type type,
@@ -46,7 +48,7 @@ public:
     { }
 
     static QString getGlobalName() {
-        return i18n("&Set Note Type");
+        return tr("&Set Note Type");
     }
 
 protected:

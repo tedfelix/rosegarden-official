@@ -21,11 +21,11 @@
 
 #include "base/MidiProgram.h"
 #include "base/Composition.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include <map>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -36,8 +36,10 @@ class Track;
 class Composition;
 
 
-class AddTracksCommand : public KNamedCommand
+class AddTracksCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTracksCommand)
+
 public:
     AddTracksCommand(Composition *composition,
                      unsigned int nbTracks,
@@ -45,7 +47,7 @@ public:
                      int position); // -1 -> at end
     virtual ~AddTracksCommand();
 
-    static QString getGlobalName() { return i18n("Add Tracks..."); }
+    static QString getGlobalName() { return tr("Add Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

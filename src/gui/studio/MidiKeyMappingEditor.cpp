@@ -17,27 +17,27 @@
 
 
 #include "MidiKeyMappingEditor.h"
+#include "NameSetEditor.h"
+#include "BankEditorDialog.h"
+#include "MidiKeyMapTreeWidgetItem.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "BankEditorDialog.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
-#include "MidiKeyMapListViewItem.h"
-#include "NameSetEditor.h"
-#include <kcompletion.h>
-#include <klineedit.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qobjectlist.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qvgroupbox.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QFrame>
+#include <QLayout>
+#include <QLabel>
+#include <QObject>
+#include <QObjectList>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 
 namespace Rosegarden
@@ -47,13 +47,13 @@ MidiKeyMappingEditor::MidiKeyMappingEditor(BankEditorDialog* bankEditor,
         QWidget* parent,
         const char* name)
         : NameSetEditor(bankEditor,
-                        i18n("Key Mapping details"),
-                        parent, name, i18n("Pitches"), false),
+                        tr("Key Mapping details"),
+                        parent, name, tr("Pitches"), false),
         m_device(0)
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2- 0+1);
     }
 }
 
@@ -71,7 +71,7 @@ MidiKeyMappingEditor::clearAll()
     for (unsigned int i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
-    setTitle(i18n("Key Mapping details"));
+    setTitle(tr("Key Mapping details"));
 
     setEnabled(false);
 
@@ -79,12 +79,12 @@ MidiKeyMappingEditor::clearAll()
 }
 
 void
-MidiKeyMappingEditor::populate(QListViewItem* item)
+MidiKeyMappingEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiKeyMappingEditor::populate\n";
 
-    MidiKeyMapListViewItem *keyItem =
-        dynamic_cast<MidiKeyMapListViewItem *>(item);
+    MidiKeyMapTreeWidgetItem *keyItem =
+        dynamic_cast<MidiKeyMapTreeWidgetItem *>(item);
     if (!keyItem) {
         RG_DEBUG << "MidiKeyMappingEditor::populate : not a key item - returning\n";
         return ;
@@ -138,7 +138,7 @@ MidiKeyMappingEditor::reset()
         }
 
         QString name = strtoqstr(it->second);
-        m_completion.addItem(name);
+        m_completions << name;
         m_names[i]->setText(name);
         m_names[i]->setCursorPosition(0);
     }
@@ -149,13 +149,13 @@ MidiKeyMappingEditor::reset()
 void
 MidiKeyMappingEditor::slotNameChanged(const QString& name)
 {
-    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        RG_DEBUG << "MidiKeyMappingEditor::slotNameChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
         return ;
     }
 
-    QString senderName = sender()->name();
+    QString senderName = sender()->objectName();
 
     // Adjust value back to zero rated
     //
@@ -176,13 +176,13 @@ MidiKeyMappingEditor::slotEntryButtonPressed()
 
 void MidiKeyMappingEditor::blockAllSignals(bool block)
 {
-    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
-    QObjectListIt it(*allChildren);
+    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
+    QObjectList::iterator it;
     QObject *obj;
 
-    while ( (obj = it.current()) != 0 ) {
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
+        obj = *it;
         obj->blockSignals(block);
-        ++it;
     }
 }
 

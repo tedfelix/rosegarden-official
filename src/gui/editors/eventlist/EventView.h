@@ -22,33 +22,36 @@
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include "gui/general/EditViewBase.h"
-#include <set>
-#include <qsize.h>
-#include <qstring.h>
-#include <vector>
+#include "gui/general/ListEditView.h"
 #include "base/Event.h"
+
+#include <set>
+#include <vector>
+
+#include <QSize>
+#include <QString>
 
 
 class QWidget;
-class QPopupMenu;
+class QMenu;
 class QPoint;
-class QListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QLabel;
 class QCheckBox;
-class QButtonGroup;
-class KListView;
+class QGroupBox;
+class QTreeWidget;
 
 
 namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Event;
 
 
-class EventView : public EditViewBase, public SegmentObserver
+class EventView : public ListEditView, public SegmentObserver
 {
     Q_OBJECT
 
@@ -71,7 +74,7 @@ class EventView : public EditViewBase, public SegmentObserver
     };
 
 public:
-    EventView(RosegardenGUIDoc *doc,
+    EventView(RosegardenDocument *doc,
               std::vector<Segment *> segments,
               QWidget *parent);
 
@@ -121,12 +124,12 @@ public slots:
 
     // Show RMB menu
     //
-    void slotPopupMenu(QListViewItem*, const QPoint&, int);
+    void slotPopupMenu(QTreeWidgetItem*, const QPoint&, int);
     void slotMenuActivated(int);
 
     // on double click on the event list
     //
-    void slotPopupEventEditor(QListViewItem*);
+    void slotPopupEventEditor(QTreeWidgetItem*);
 
     // Change filter parameters
     //
@@ -167,12 +170,12 @@ protected:
     QLabel      *m_triggerPitch;
     QLabel      *m_triggerVelocity;
 
-    KListView   *m_eventList;
+    QTreeWidget   *m_eventList;
     int          m_eventFilter;
 
     static int   m_lastSetEventFilter;
 
-    QButtonGroup   *m_filterGroup;
+    QGroupBox   *m_filterGroup;
     QCheckBox      *m_noteCheckBox;
     QCheckBox      *m_textCheckBox;
     QCheckBox      *m_sysExCheckBox;
@@ -188,7 +191,7 @@ protected:
     std::vector<int> m_listSelection;
     std::set<Event *> m_deletedEvents; // deleted since last refresh
 
-    QPopupMenu     *m_menu;
+    QMenu          *m_menu;
 
 };
 

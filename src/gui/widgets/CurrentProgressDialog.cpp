@@ -19,7 +19,7 @@
 #include "CurrentProgressDialog.h"
 
 #include "ProgressDialog.h"
-#include <qobject.h>
+#include <QObject>
 
 
 namespace Rosegarden

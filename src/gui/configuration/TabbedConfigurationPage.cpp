@@ -19,19 +19,18 @@
 #include "TabbedConfigurationPage.h"
 
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
-#include <kconfig.h>
-#include <kdialog.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include "document/RosegardenDocument.h"
+#include <QSettings>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
+TabbedConfigurationPage::TabbedConfigurationPage(RosegardenDocument *doc,
                                                  QWidget *parent,
                                                  const char *name)
     : ConfigurationPage(doc, parent, name)
@@ -39,26 +38,17 @@ TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
     init();
 }
 
-TabbedConfigurationPage::TabbedConfigurationPage(KConfig *cfg,
-                                                 QWidget *parent,
+TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent,
                                                  const char *name)
-    : ConfigurationPage(cfg, parent, name)
-{
-    init();
-}
-
-TabbedConfigurationPage::TabbedConfigurationPage(RosegardenGUIDoc *doc,
-                                                 KConfig *cfg,
-                                                 QWidget *parent,
-                                                 const char *name)
-    : ConfigurationPage(doc, cfg, parent, name)
+    : ConfigurationPage(parent, name)
 {
     init();
 }
 
 void TabbedConfigurationPage::init()
 {
-    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+//@@@    QVBoxLayout *vlay = new QVBoxLayout(this, 0, KDialog::spacingHint());
+    QVBoxLayout *vlay = new QVBoxLayout(this);
     m_tabWidget = new QTabWidget(this);
     vlay->addWidget(m_tabWidget);
 }

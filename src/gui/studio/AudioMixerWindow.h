@@ -20,41 +20,44 @@
 #define _RG_AUDIOMIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
-#include <map>
 #include "MixerWindow.h"
-#include <qpixmap.h>
+#include "gui/general/ActionFileClient.h"
+#include "gui/widgets/PluginPushButton.h"
+
+#include <QPixmap>
+
 #include <vector>
+#include <map>
 
 
 class QWidget;
-class QVBox;
 class QPushButton;
-class QHBox;
+class QHBoxLayout;
 class QFrame;
 
 
 namespace Rosegarden
 {
 
-class SequencerMapper;
 class Rotary;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MappedEvent;
 class Fader;
 class AudioVUMeter;
 class AudioRouteMenu;
+class PluginPushButton;
 
 
-class AudioMixerWindow : public MixerWindow
+class AudioMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
-    AudioMixerWindow(QWidget *parent, RosegardenGUIDoc *document);
+    AudioMixerWindow(QWidget *parent, RosegardenDocument *document);
     ~AudioMixerWindow();
 
-    void updateMeters(SequencerMapper *mapper);
-    void updateMonitorMeters(SequencerMapper *mapper);
+    void updateMeters();
+    void updateMonitorMeters();
 
 public slots:
     void slotControllerDeviceEventReceived(MappedEvent *,
@@ -147,11 +150,12 @@ private:
         QPushButton *m_stereoButton;
         bool m_stereoness;
 
-        QVBox *m_pluginBox;
-        std::vector<QPushButton *> m_plugins;
+        QWidget *m_pluginBox;
+        std::vector<PluginPushButton *> m_plugins;
     };
 
-    QHBox *m_surroundBox;
+    QWidget *m_surroundBox;
+    QHBoxLayout *m_surroundBoxLayout;
     QFrame *m_mainBox;
 
     typedef std::map<InstrumentId, FaderRec> FaderMap;

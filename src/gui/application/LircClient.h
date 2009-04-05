@@ -24,7 +24,7 @@
 
 #ifdef HAVE_LIRC
 
-#include <qobject.h>
+#include <QObject>
 #include <lirc/lirc_client.h>
 
 class QSocketNotifier;

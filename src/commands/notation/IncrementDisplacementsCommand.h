@@ -20,21 +20,30 @@
 #define _RG_INCREMENTDISPLACEMENTSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
-
-
+#include <QString>
+#include <QCoreApplication>
+#include <QPoint>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class IncrementDisplacementsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(IncrementDisplacementsCommand)
+
 public:
+    IncrementDisplacementsCommand(QPoint relative,
+                                  EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(), selection, true),
+        m_selection(&selection),
+        m_dx(relative.x()),
+        m_dy(relative.y()) { }
+
     IncrementDisplacementsCommand(EventSelection &selection,
                                   long dx, long dy) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -42,7 +51,10 @@ public:
         m_dx(dx),
         m_dy(dy) { }
 
-    static QString getGlobalName() { return i18n("Fine Reposition"); }
+    static QString getGlobalName() { return tr("Fine Reposition"); }
+
+    static void registerCommand(CommandRegistry *r);
+    static QPoint getArgument(QString actionName, CommandArgumentQuerier &);
 
 protected:
     virtual void modifySegment();

@@ -17,10 +17,8 @@
 
 
 #include "MidiMixerWindow.h"
-#include <qlayout.h>
 
 #include "sound/Midi.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Colour.h"
@@ -29,35 +27,37 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/seqmanager/SequencerMapper.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
+#include "gui/general/IconLoader.h"
+#include "gui/widgets/TmpStatusMsg.h"
 #include "MidiMixerVUMeter.h"
 #include "MixerWindow.h"
 #include "sound/MappedEvent.h"
+#include "sound/SequencerDataBlock.h"
 #include "StudioControl.h"
-#include <kaction.h>
-#include <kmainwindow.h>
-#include <kstdaction.h>
-#include <qaccel.h>
-#include <qcolor.h>
-#include <qframe.h>
-#include <qiconset.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
+
+#include <QAction>
+#include <QColor>
+#include <QFrame>
+#include <QIcon>
+#include <QLabel>
+#include <QObject>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
+#include <QShortcut>
 
 
 namespace Rosegarden
 {
 
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
-                                 RosegardenGUIDoc *document):
+                                 RosegardenDocument *document):
         MixerWindow(parent, document),
         m_tabFrame(0)
 {
@@ -65,62 +65,18 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     //
     setupTabs();
 
-    KStdAction::close(this,
-                      SLOT(slotClose()),
-                      actionCollection());
+    createAction( "file_close", SLOT(slotClose()) );
 
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                             ("transport-play")));
-    KAction *play = new KAction(i18n("&Play"), icon, Key_Enter, this,
-                SIGNAL(play()), actionCollection(), "play");
-    // Alternative shortcut for Play
-    KShortcut playShortcut = play->shortcut();
-    playShortcut.append( KKey(Key_Return + CTRL) );
-    play->setShortcut(playShortcut);
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-stop")));
-    new KAction(i18n("&Stop"), icon, Key_Insert, this,
-                SIGNAL(stop()), actionCollection(), "stop");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind")));
-    new KAction(i18n("Re&wind"), icon, Key_End, this,
-                SIGNAL(rewindPlayback()), actionCollection(),
-                "playback_pointer_back_bar");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd")));
-    new KAction(i18n("&Fast Forward"), icon, Key_PageDown, this,
-                SIGNAL(fastForwardPlayback()), actionCollection(),
-                "playback_pointer_forward_bar");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-rewind-end")));
-    new KAction(i18n("Rewind to &Beginning"), icon, 0, this,
-                SIGNAL(rewindPlaybackToBeginning()), actionCollection(),
-                "playback_pointer_start");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-ffwd-end")));
-    new KAction(i18n("Fast Forward to &End"), icon, 0, this,
-                SIGNAL(fastForwardPlaybackToEnd()), actionCollection(),
-                "playback_pointer_end");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-record")));
-    new KAction(i18n("&Record"), icon, 0, this,
-                SIGNAL(record()), actionCollection(),
-                "record");
-
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap
-                    ("transport-panic")));
-    new KAction(i18n("Panic"), icon, Key_P + CTRL + ALT, this,
-                SIGNAL(panic()), actionCollection(),
-                "panic");
+    createAction("play", SIGNAL(play()));
+    createAction("stop", SIGNAL(stop()));
+    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
+    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("record", SIGNAL(record()));
+    createAction("panic", SIGNAL(panic()));
 
     createGUI("midimixer.rc");
-
 }
 
 void
@@ -137,12 +93,21 @@ MidiMixerWindow::setupTabs()
 
     // Setup m_tabFrame
     //
-    m_tabWidget = new QTabWidget(this);
-    setCentralWidget(m_tabWidget);
+
+    QWidget *blackWidget = new QWidget(this);
+    setCentralWidget(blackWidget);
+    QVBoxLayout *centralLayout = new QVBoxLayout;
+    blackWidget->setLayout(centralLayout);
+
+    m_tabWidget = new QTabWidget;
+    centralLayout->addWidget(m_tabWidget);
+
     connect(m_tabWidget, SIGNAL(currentChanged(QWidget *)),
             this, SLOT(slotCurrentTabChanged(QWidget *)));
     m_tabWidget->setTabPosition(QTabWidget::Bottom);
-    setCaption(i18n("MIDI Mixer"));
+    setWindowTitle(tr("MIDI Mixer"));
+    setIcon(IconLoader().loadPixmap("window-midimixer"));
+
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
         dev = dynamic_cast<MidiDevice*>(*it);
@@ -161,20 +126,14 @@ MidiMixerWindow::setupTabs()
                 continue;
 
             m_tabFrame = new QFrame(m_tabWidget);
-            m_tabFrame->setFrameStyle(QFrame::TabWidgetPanel);
-            m_tabFrame->setMargin(10);
+            m_tabFrame->setContentsMargins(10, 10, 10, 10);
 
-            QGridLayout *mainLayout = new QGridLayout
-                                      (m_tabFrame, instruments.size() + 4, controls.size() + 4, 5);
+            // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
+            QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
 
             // MIDI Mixer label
-            //
-            //QLabel *label = new QLabel(QString("%1 %2").
-            //arg(strtoqstr(dev->getName()))
-            //.arg(i18n("MIDI Mixer")), m_tabFrame);
-
             QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addMultiCellWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
+            mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
             // control labels
             for (unsigned int i = 0; i < controls.size(); ++i) {
@@ -183,20 +142,18 @@ MidiMixerWindow::setupTabs()
             }
 
             // meter label
-            //
-            //label = new QLabel(i18n("Meter"), m_tabFrame);
-            //mainLayout->addWidget(label,
-            //controls.size() + 1, 0, Qt::AlignCenter);
+            // (obsolete abandoned code deleted here)
 
             // volume label
-            label = new QLabel(i18n("Volume"), m_tabFrame);
+            label = new QLabel(tr("Volume"), m_tabFrame);
             mainLayout->addWidget(label, controls.size() + 2, 0,
                                   Qt::AlignCenter);
 
             // instrument label
-            label = new QLabel(i18n("Instrument"), m_tabFrame);
+            label = new QLabel(tr("Instrument"), m_tabFrame);
+            label->setFixedWidth(80); //!!! this should come from metrics
             mainLayout->addWidget(label, controls.size() + 3, 0,
-                                  Qt::AlignCenter);
+                                  Qt::AlignLeft);
 
             int posCount = 1;
             int firstInstrument = -1;
@@ -216,7 +173,7 @@ MidiMixerWindow::setupTabs()
                 // Add the controls
                 //
                 for (unsigned int i = 0; i < controls.size(); ++i) {
-                    QColor knobColour = Qt::white;
+                    QColor knobColour = QColor(Qt::white);
 
                     if (controls[i].getColourIndex() > 0) {
                         Colour c =
@@ -270,13 +227,13 @@ MidiMixerWindow::setupTabs()
                 mainLayout->addWidget(fader, controls.size() + 2,
                                       posCount, Qt::AlignCenter);
                 m_faders[faderCount]->m_volumeFader = fader;
-                //fader->setFader(float((*iIt)->getVolume()));
 
                 // Label
                 //
                 QLabel *idLabel = new QLabel(QString("%1").
                                              arg((*iIt)->getId() - firstInstrument + 1),
-                                             m_tabFrame, "idLabel");
+                                             m_tabFrame);
+                idLabel->setObjectName("idLabel");
 
                 mainLayout->addWidget(idLabel, controls.size() + 3,
                                       posCount, Qt::AlignCenter);
@@ -418,14 +375,14 @@ MidiMixerWindow::slotControllerChanged(float value)
         int tabIndex = m_tabWidget->currentPageIndex();
         if (tabIndex < 0)
             tabIndex = 0;
-        int i = 0;
+        int k = 0;
         for (DeviceList::const_iterator dit = m_studio->begin();
                 dit != m_studio->end(); ++dit) {
-            RG_DEBUG << "slotControllerChanged: i = " << i << ", tabIndex " << tabIndex << endl;
+            RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex << endl;
             if (!dynamic_cast<MidiDevice*>(*dit))
                 continue;
-            if (i != tabIndex) {
-                ++i;
+            if (k != tabIndex) {
+                ++k;
                 continue;
             }
             RG_DEBUG << "slotControllerChanged: device id = " << instr->getDevice()->getId() << ", visible device id " << (*dit)->getId() << endl;
@@ -537,20 +494,21 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 }
 
 void
-MidiMixerWindow::updateMeters(SequencerMapper *mapper)
+MidiMixerWindow::updateMeters()
 {
     for (unsigned int i = 0; i != m_faders.size(); ++i) {
         LevelInfo info;
-        if (!mapper->
-                getInstrumentLevelForMixer(m_faders[i]->m_id, info))
+        if (!SequencerDataBlock::getInstance()->
+            getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {
             continue;
+        }
         m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
         RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level << endl;
     }
 }
 
 void
-MidiMixerWindow::updateMonitorMeter(SequencerMapper *)
+MidiMixerWindow::updateMonitorMeter()
 {
     // none here
 }

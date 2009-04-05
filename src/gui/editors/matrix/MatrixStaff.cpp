@@ -15,7 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_DEFINED
 
+#include <Q3Canvas>
 #include "MatrixStaff.h"
 #include "misc/Debug.h"
 
@@ -32,20 +34,20 @@
 #include "base/Track.h"
 #include "base/ViewElement.h"
 #include "base/SegmentMatrixHelper.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/rulers/DefaultVelocityColour.h"
 #include "MatrixElement.h"
 #include "MatrixView.h"
 #include "MatrixVLayout.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
 
 
 namespace Rosegarden
 {
 
-MatrixStaff::MatrixStaff(QCanvas *canvas,
+MatrixStaff::MatrixStaff(Q3Canvas *canvas,
                          Segment *segment,
                          SnapGrid *snapGrid,
                          int id,
@@ -162,7 +164,7 @@ void MatrixStaff::positionElement(ViewElement* vel)
     if (selection && selection->contains(el->event()))
         el->setColour(GUIPalette::getColour(GUIPalette::SelectedElement));
     else if (el->event()->has(BaseProperties::TRIGGER_SEGMENT_ID))
-        el->setColour(Qt::gray);
+        el->setColour(QColor(Qt::gray));
     else
         el->setColour(DefaultVelocityColour::getInstance()->getColour(velocity));
 
@@ -223,3 +225,4 @@ MatrixStaff::getKeyMapping() const
 
 
 }
+#endif

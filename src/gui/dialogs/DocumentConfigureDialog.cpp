@@ -17,83 +17,84 @@
 
 
 #include "DocumentConfigureDialog.h"
-#include <qlayout.h>
-
-#include <klocale.h>
 #include "ConfigureDialogBase.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/configuration/AudioPropertiesPage.h"
 #include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qwidget.h>
-#include <kstddirs.h>
+#include "gui/general/IconLoader.h"
+
+#include <QLayout>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
-static QPixmap loadIcon(const char *name)
-{
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QString fileBase = pixmapDir + "/misc/";
-    fileBase += name;
-    if (QFile(fileBase + ".png").exists()) {
-        return QPixmap(fileBase + ".png");
-    } else if (QFile(fileBase + ".xpm").exists()) {
-        return QPixmap(fileBase + ".xpm");
-    }
 
-    QPixmap pmap = KGlobal::instance()->iconLoader()
-        ->loadIcon(QString::fromLatin1(name), KIcon::NoGroup, KIcon::SizeMedium);
-    return pmap;
-}
-
-
-DocumentConfigureDialog::DocumentConfigureDialog(RosegardenGUIDoc *doc,
+DocumentConfigureDialog::DocumentConfigureDialog(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
-        : ConfigureDialogBase(parent, i18n("Document Properties"), name)
+    : ConfigureDialogBase(parent, tr("Document Properties"), name )//, QMessageBox::StandardButtons buttons )
 {
-    QWidget *pageWidget = 0;
-    QVBoxLayout *vlay = 0;
-    ConfigurationPage* page = 0;
-
+//    QWidget *pageWidget = 0;
+//    QVBoxLayout *vlay = 0;
+//    ConfigurationPage* page = 0;
+    QWidget *page = 0;
     // Document Meta Page
     //
-    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
-                         DocumentMetaConfigurationPage::title(),
-                         loadIcon(DocumentMetaConfigurationPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new DocumentMetaConfigurationPage(doc, pageWidget);
-    vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+    IconLoader il;
+//    pageWidget = addPage(DocumentMetaConfigurationPage::iconLabel(),
+//                         DocumentMetaConfigurationPage::title(),
+//                         il.load( DocumentMetaConfigurationPage::iconName()) );
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new DocumentMetaConfigurationPage(doc, this);
+    addPage(DocumentMetaConfigurationPage::iconLabel(),DocumentMetaConfigurationPage::title(),il.loadPixmap( DocumentMetaConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
+//    page->setPageIndex(pageIndex(pageWidget));
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page);
 
     // Audio Page
     //
-    pageWidget = addPage(AudioPropertiesPage::iconLabel(),
-                         AudioPropertiesPage::title(),
-                         loadIcon(AudioPropertiesPage::iconName()));
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new AudioPropertiesPage(doc, pageWidget);
-    vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+//    pageWidget = addPage(AudioPropertiesPage::iconLabel(),
+//                         AudioPropertiesPage::title(),
+//                         il.load(AudioPropertiesPage::iconName()));
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new AudioPropertiesPage(doc, this);
+    addPage(AudioPropertiesPage::iconLabel(),AudioPropertiesPage::title(),il.loadPixmap(AudioPropertiesPage::iconName()),page);
+//    vlay->addWidget(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page);
 
+//&&&
+//
+// I've been looking into the color configuration bits, and beyond mere style
+// issues, these are quite thoroughly busted.  I don't want to take the approach
+// of just tossing something aside merely because it is challenging to fix, but
+// in this case I think we may well be justified in removing the color table
+// editor.  It was rarely, if ever used, and it is very likely that anybody who
+// actually cares about segment colors already has all the colors they could
+// ever want pre-defined since I added the gigantic (400+) list of named colors
+// to the default studio some time back.  This isn't a drawing application, and
+// people won't likely care if they can't have the exact shade of red they want.
+/*
     // Colour Page
-    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
-                         ColourConfigurationPage::title(),
-                         loadIcon(ColourConfigurationPage::iconName()));
+//    pageWidget = addPage(ColourConfigurationPage::iconLabel(),
+//                         ColourConfigurationPage::title(),
+//                         il.load(ColourConfigurationPage::iconName()));
 
-    vlay = new QVBoxLayout(pageWidget, 0, spacingHint());
-    page = new ColourConfigurationPage(doc, pageWidget);
-    vlay->addWidget(page);
-    page->setPageIndex(pageIndex(pageWidget));
-    m_configurationPages.push_back(page);
+//    vlay = new QVBoxLayout(pageWidget); //, 0, spacingHint());
+    page = new ColourConfigurationPage(doc, this);
+    addPage(ColourConfigurationPage::iconLabel(),ColourConfigurationPage::title(),il.loadPixmap(ColourConfigurationPage::iconName()),page);
+//    vlay->addWidget(page);
+    //page->setPageIndex(pageIndex(pageWidget));
+//    m_tabWidget->setCurrentIndex( m_tabWidget->indexOf(pageWidget) );
+    m_configurationPages.push_back((ConfigurationPage *)page); */
 
-    resize(minimumSize());
+    // resize(minimumSizeHint());
 }
 
 void
@@ -112,7 +113,8 @@ DocumentConfigureDialog::showAudioPage()
             continue;
         }
 
-        showPage(index);
+        //showPage(index);
+//        m_tabWidget->setCurrentIndex( index );
         return ;
     }
 }

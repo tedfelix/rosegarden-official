@@ -29,11 +29,6 @@ PROJECT(ROSEGARDEN)
 # CMake supports KDE checks since this version number
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.2)
 
-# remove warning: more info with: cmake --help-policy CMP0003
-if(COMMAND cmake_policy)
-	cmake_policy(SET CMP0003 NEW)
-endif(COMMAND cmake_policy)
-
 # Show full commands and messages. It generates a lot of console output.
 # It is necessary for Eclipse warning/error parser, 
 # but it can be enabled anyway with "make VERBOSE=1"
@@ -52,7 +47,10 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
 
 # Additional CMake modules for 3rd party library checks reside here
-SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
+# SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_admin")
+set(CMAKE_MODULE_PATH "${ROSEGARDEN_SOURCE_DIR}/cmake_admin")
+
+
 
 # Mark as advanced
 MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH 
@@ -60,16 +58,63 @@ MARK_AS_ADVANCED(EXECUTABLE_OUTPUT_PATH
 		 CMAKE_BACKWARDS_COMPATIBILITY)
 
 # Rosegarden version string
-SET (VERSION_MAJOR "1")
-SET (VERSION_MINOR "7")
-SET (VERSION_PATCH "3")
+SET (VERSION_MAJOR "2")
+SET (VERSION_MINOR "0")
+SET (VERSION_PATCH "0")
 # comment out the next line for a public release
-SET (VERSION_SUFFIX "svn")
+SET (VERSION_SUFFIX "qt4")
 SET (VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 IF(VERSION_SUFFIX)
    SET (VERSION "${VERSION}-${VERSION_SUFFIX}")
 ENDIF(VERSION_SUFFIX)
 ADD_DEFINITIONS(-D'VERSION="${VERSION}"')
+
+
+
+
+
+
+
+
+FIND_PACKAGE(Qt4)
+
+# note: QtCore and QtGui included by default
+set(QT_USE_QT3SUPPORT 1)
+set(QT_USE_QTASSISTANT 1)
+set(QT_USE_QTDESIGNER 1)
+#set(QT_USE_QTMOTIF 1)
+set(QT_USE_QTMAIN 1)
+set(QT_USE_QTNETWORK 1)
+#set(QT_USE_QTNSPLUGIN 1)
+set(QT_USE_QTOPENGL 1)
+set(QT_USE_QTSQL 1)
+set(QT_USE_QTXML 1)
+set(QT_USE_QTSVG 1)
+set(QT_USE_QTTEST 1)
+set(QT_USE_QTUITOOLS 1)
+set(QT_USE_QTDBUS 1)
+set(QT_USE_QTSCRIPT 1)
+#set(QT_USE_QTASSISTANTCLIENT 1)
+set(QT_USE_QTHELP 1)
+#set(QT_USE_QTWEBKIT 1)
+set(QT_USE_QTXMLPATTERNS 1)
+set(QT_USE_PHONON 1)
+
+
+# IF FOUND: 
+# add include paths
+INCLUDE(${QT_USE_FILE})
+
+#ADD_EXECUTABLE(rosegarden main.cpp)
+
+# add link library paths
+#TARGET_LINK_LIBRARIES(myexe ${QT_LIBRARIES})
+
+
+
+
+
+
 
 # User options
 OPTION(WANT_DEBUG   "Include debug support" OFF)
@@ -91,40 +136,63 @@ IF(NOT WANT_SOUND)
     ADD_DEFINITIONS(-DNO_SOUND)
 ENDIF(NOT WANT_SOUND)
 
-# Save the flags before FindKDE3 
+
+# Save the flags before FindKDE4 
 SET(SAVED_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-# Check for KDE3
-FIND_PACKAGE(KDE3 REQUIRED QUIET)
-IF(QT_FOUND)
+
+# Check for KDE4
+FIND_PACKAGE(KDE4 REQUIRED QUIET)
+
+IF(QT4_FOUND)
     ADD_DEFINITIONS(${QT_DEFINITIONS})
-    MESSAGE(STATUS "Found Qt3 (version ${qt_version_str})")
-    #MESSAGE("QT_LIBRARIES: ${QT_LIBRARIES}")
-ELSE(QT_FOUND)
-    MESSAGE(FATAL_ERROR "Qt3 package not found")
-ENDIF(QT_FOUND)
-IF(KDE3_FOUND)
-    ADD_DEFINITIONS(${KDE3_DEFINITIONS})
-    #MESSAGE("KDE3PREFIX: ${KDE3PREFIX}")
-    KDE3_PRINT_RESULTS()
-    #MESSAGE("QT_AND_KDECORE_LIBS: ${QT_AND_KDECORE_LIBS}")
-ELSE(KDE3_FOUND)    
-    MESSAGE(FATAL_ERROR "KDE3 Not found")
-ENDIF(KDE3_FOUND)
+    INCLUDE(${QT_USE_FILE})
+    set(qt_version_str "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}")
+    MESSAGE(STATUS "Found Qt4 (version ${qt_version_str})")
+    MESSAGE("QT_LIBRARIES: ${QT_LIBRARIES}")
+    MESSAGE("QT_INCLUDE_DIR : ${QT_INCLUDE_DIR}")
+ELSE(QT4_FOUND)
+    MESSAGE(FATAL_ERROR "Qt4 package not found")
+ENDIF(QT4_FOUND)
 
-# Restore the flags saved before FindKDE3 
+
+IF(KDE4_FOUND)
+    ADD_DEFINITIONS(${KDE4_DEFINITIONS})
+    KDE4_PRINT_RESULTS()
+    MESSAGE("QT_AND_KDECORE_LIBS: ${QT_AND_KDECORE_LIBS}")
+ELSE(KDE4_FOUND)
+    MESSAGE(FATAL_ERROR "KDE4 Not found")
+ENDIF(KDE4_FOUND)
+
+
+# set kde4-config-dir, htmldir, datadir, etc...
+FIND_PACKAGE(KDE4Config)
+#IF(KDE4_KDECONFIG_EXECUTABLE)
+#    MESSAGE(STATUS "Program kde4-config found (${KDE4_KDECONFIG_EXECUTABLE})")
+#    #MESSAGE("KDE4PREFIX: ${KDE4PREFIX}")
+#ELSE(KDE4_KDECONFIG_EXECUTABLE)
+#    MESSAGE(STATUS "Program kde4-config NOT found (${KDE4_KDECONFIG_EXECUTABLE})")
+#ENDIF(KDE4_KDECONFIG_EXECUTABLE)
+
+
+
+
+
+
+
+
+
+# Restore the flags saved before FindKDE4 
 SET(CMAKE_CXX_FLAGS ${SAVED_CXX_FLAGS})
-MARK_AS_ADVANCED(KDE3_BUILD_TESTS
-                 KDE3_ENABLE_FINAL
-		 KDE3_DCOPIDL_EXECUTABLE
-		 KDE3_DCOPIDL2CPP_EXECUTABLE
-		 KDE3_INCLUDE_DIR
-		 KDE3_KCFGC_EXECUTABLE
-		 KDE3_KDECORE_LIBRARY
-		 KDECONFIG_EXECUTABLE )
+MARK_AS_ADVANCED(KDE4_BUILD_TESTS
+                 KDE4_ENABLE_FINAL
+		 KDE4_INCLUDE_DIR
+		 KDE4_KCFGC_EXECUTABLE
+		 KDE4_KDECORE_LIBRARY
+		 KDE4_KDECONFIG_EXECUTABLE )
 
-# Provide the KDE3 prefix as a default prefix (if the user has CMake 2.4.4)
+# Provide the KDE4 prefix as a default prefix (if the user has CMake 2.4.4)
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    SET(CMAKE_INSTALL_PREFIX ${KDE3PREFIX} CACHE PATH
+    SET(CMAKE_INSTALL_PREFIX ${KDE4PREFIX} CACHE PATH
         "Install path prefix, prepended onto install directories." FORCE)
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) 
 
@@ -269,11 +337,6 @@ IF(MSGFMT_FOUND)
     MESSAGE(STATUS "Program msgfmt found (${MSGFMT_EXECUTABLE})")
 ENDIF(MSGFMT_FOUND)
 
-FIND_PACKAGE(KDECONFIG)
-IF(KDECONFIG_EXECUTABLE)
-    MESSAGE(STATUS "Program kde-config found (${KDECONFIG_EXECUTABLE})")
-    #MESSAGE("KDE3PREFIX: ${KDE3PREFIX}")
-ENDIF(KDECONFIG_EXECUTABLE)
 
 FIND_PACKAGE(MEINPROC REQUIRED)
 IF(MEINPROC_FOUND)
@@ -353,7 +416,7 @@ ADD_SUBDIRECTORY(data RGbuild/data)
 # create and install the version file
 FILE(WRITE version.txt "${VERSION}\n")
 INSTALL( FILES version.txt
-         DESTINATION ${KDE3DATADIR}/rosegarden )
+         DESTINATION ${KDE4DATADIR}/rosegarden )
 
 # uninstall custom target
 CONFIGURE_FILE(

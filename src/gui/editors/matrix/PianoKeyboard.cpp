@@ -23,14 +23,16 @@
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/rulers/PitchRuler.h"
 #include "MatrixStaff.h"
-#include "MatrixView.h"
-#include <qcolor.h>
-#include <qcursor.h>
-#include <qevent.h>
-#include <qfont.h>
-#include <qpainter.h>
-#include <qsize.h>
-#include <qwidget.h>
+//!!!#include "MatrixView.h"
+
+#include <QColor>
+#include <QCursor>
+#include <QEvent>
+#include <QFont>
+#include <QPainter>
+#include <QSize>
+#include <QWidget>
+#include <QMouseEvent>
 
 
 namespace Rosegarden
@@ -147,7 +149,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
                        label.getQString());
     }
 
-    paint.setBrush(colorGroup().foreground());
+    paint.setBrush(palette().foreground());
 
     for (unsigned int i = 0; i < m_blackKeyPos.size(); ++i)
         paint.drawRect(0, m_blackKeyPos[i],
@@ -242,6 +244,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
     //
     // RWB (20040220)
     //
+/*!!!
     MatrixView *matrixView = dynamic_cast<MatrixView*>(topLevelWidget());
     if (matrixView) {
         MatrixStaff *staff = matrixView->getStaff(0);
@@ -250,7 +253,7 @@ void PianoKeyboard::mouseMoveEvent(QMouseEvent* e)
             drawHoverNote(staff->getHeightAtCanvasCoords(e->x(), e->y()));
         }
     }
-
+*/
     if (e->state() & Qt::LeftButton) {
         if (m_selecting)
             emit keySelected(e->y(), true);
@@ -267,9 +270,9 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 {
     Qt::ButtonState bs = e->state();
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_mouseDown = true;
-        m_selecting = (bs & Qt::ShiftButton);
+        m_selecting = (bs & Qt::ShiftModifier);
         m_lastKeyPressed = e->y();
 
         if (m_selecting)
@@ -281,7 +284,7 @@ void PianoKeyboard::mousePressEvent(QMouseEvent *e)
 
 void PianoKeyboard::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_mouseDown = false;
         m_selecting = false;
         emit keyReleased(e->y(), false);

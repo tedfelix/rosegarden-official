@@ -23,7 +23,7 @@
 #include "document/BasicCommand.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -35,12 +35,15 @@ class Event;
 
 class TextInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TextInsertionCommand)
+
 public:
     TextInsertionCommand(Segment &segment,
                          timeT time,
                          Text text);
     virtual ~TextInsertionCommand();
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

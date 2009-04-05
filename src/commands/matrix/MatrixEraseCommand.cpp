@@ -18,7 +18,6 @@
 
 #include "MatrixEraseCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -31,7 +30,7 @@ namespace Rosegarden
 
 MatrixEraseCommand::MatrixEraseCommand(Segment &segment,
                                        Event *event) :
-        BasicCommand(i18n("Erase Note"),
+        BasicCommand(tr("Erase Note"),
                      segment,
                      event->getAbsoluteTime(),
                      event->getAbsoluteTime() + event->getDuration(),

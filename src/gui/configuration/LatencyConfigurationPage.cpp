@@ -17,48 +17,46 @@
 
 
 #include "LatencyConfigurationPage.h"
-#include <qlayout.h>
+#include <QLayout>
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qslider.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
+#include <QSettings>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QSlider>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
-        KConfig *cfg,
+LatencyConfigurationPage::LatencyConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
-        : TabbedConfigurationPage(doc, cfg, parent, name)
+        : TabbedConfigurationPage(doc, parent, name)
 {
-    //     Configuration &config = doc->getConfiguration();
-    m_cfg->setGroup(LatencyOptionsConfigGroup);
-
 #ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK
+    QSettings settings;
+    settings.beginGroup( LatencyOptionsConfigGroup );
 
-    frame = new QFrame(m_tabWidget, i18n("JACK latency"));
+    frame = new QFrame(m_tabWidget, tr("JACK latency"));
     layout = new QGridLayout(frame, 6, 5, 10, 10);
 
-    layout->addMultiCellWidget(new QLabel(i18n("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
+    layout->addWidget(new QLabel(tr("Use the \"Fetch JACK latencies\" button to discover the latency values set at\nthe sequencer.  It's recommended that you use the returned values but it's also\npossible to override them manually using the sliders.  Note that if you change\nyour JACK server parameters you should always fetch the latency values again.\nThe latency values will be stored by Rosegarden for use next time."), frame),
                                0, 0,
                                0, 3);
 
-    layout->addWidget(new QLabel(i18n("JACK playback latency (in ms)"), frame), 1, 0);
-    layout->addWidget(new QLabel(i18n("JACK record latency (in ms)"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("JACK playback latency (in ms)"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("JACK record latency (in ms)"), frame), 3, 0);
 
-    m_fetchLatencyValues = new QPushButton(i18n("Fetch JACK latencies"),
+    m_fetchLatencyValues = new QPushButton(tr("Fetch JACK latencies"),
                                            frame);
 
     layout->addWidget(m_fetchLatencyValues, 1, 3);
@@ -66,14 +64,14 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_fetchLatencyValues, SIGNAL(released()),
             SLOT(slotFetchLatencyValues()));
 
-    int jackPlaybackValue = (m_cfg->readLongNumEntry(
-                                 "jackplaybacklatencyusec", 0) / 1000) +
-                            (m_cfg->readLongNumEntry(
-                                 "jackplaybacklatencysec", 0) * 1000);
+    int jackPlaybackValue = (settings.value(
+                                 "jackplaybacklatencyusec", 0) / 1000).toInt() +
+                            (settings.value(
+                                 "jackplaybacklatencysec", 0) * 1000).toInt();
 
     m_jackPlayback = new QSlider(Horizontal, frame);
-    m_jackPlayback->setTickmarks(QSlider::Below);
-    layout->addMultiCellWidget(m_jackPlayback, 3, 3, 2, 3);
+    m_jackPlayback->setTickPosition(QSlider::TicksBelow);
+    layout->addWidget(m_jackPlayback, 3, 2, 1, 3- 2+1);
 
     QLabel *jackPlaybackLabel = new QLabel(QString("%1").arg(jackPlaybackValue),
                                            frame);
@@ -81,22 +79,22 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_jackPlayback, SIGNAL(valueChanged(int)),
             jackPlaybackLabel, SLOT(setNum(int)));
 
-    m_jackPlayback->setMinValue(0);
+    m_jackPlayback->setMinimum(0);
     layout->addWidget(new QLabel("0", frame), 3, 1, Qt::AlignRight);
 
-    m_jackPlayback->setMaxValue(500);
+    m_jackPlayback->setMaximum(500);
     layout->addWidget(new QLabel("500", frame), 3, 4, Qt::AlignLeft);
 
     m_jackPlayback->setValue(jackPlaybackValue);
 
-    int jackRecordValue = (m_cfg->readLongNumEntry(
-                               "jackrecordlatencyusec", 0) / 1000) +
-                          (m_cfg->readLongNumEntry(
-                               "jackrecordlatencysec", 0) * 1000);
+    int jackRecordValue = (settings.value(
+                               "jackrecordlatencyusec", 0) / 1000).toInt() +
+                          (settings.value(
+                               "jackrecordlatencysec", 0) * 1000).toInt();
 
     m_jackRecord = new QSlider(Horizontal, frame);
-    m_jackRecord->setTickmarks(QSlider::Below);
-    layout->addMultiCellWidget(m_jackRecord, 5, 5, 2, 3);
+    m_jackRecord->setTickPosition(QSlider::TicksBelow);
+    layout->addWidget(m_jackRecord, 5, 2, 1, 3- 2+1);
 
     QLabel *jackRecordLabel = new QLabel(QString("%1").arg(jackRecordValue),
                                          frame);
@@ -104,33 +102,35 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_jackRecord, SIGNAL(valueChanged(int)),
             jackRecordLabel, SLOT(setNum(int)));
 
-    m_jackRecord->setMinValue(0);
+    m_jackRecord->setMinimum(0);
     layout->addWidget(new QLabel("0", frame), 5, 1, Qt::AlignRight);
 
-    m_jackRecord->setMaxValue(500);
+    m_jackRecord->setMaximum(500);
     m_jackRecord->setValue(jackRecordValue);
     layout->addWidget(new QLabel("500", frame), 5, 4, Qt::AlignLeft);
 
-    addTab(frame, i18n("JACK Latency"));
+    addTab(frame, tr("JACK Latency"));
+
+    settings.endGroup();
 #endif  // HAVE_LIBJACK
 #endif // NOT_DEFINED
-
 }
 
 void LatencyConfigurationPage::apply()
 {
-    m_cfg->setGroup(LatencyOptionsConfigGroup);
-
 #ifdef HAVE_LIBJACK
+    QSettings settings;
+    settings.beginGroup( LatencyOptionsConfigGroup );
 
     int jackPlayback = getJACKPlaybackValue();
-    m_cfg->writeEntry("jackplaybacklatencysec", jackPlayback / 1000);
-    m_cfg->writeEntry("jackplaybacklatencyusec", jackPlayback * 1000);
+    settings.setValue("jackplaybacklatencysec", jackPlayback / 1000);
+    settings.setValue("jackplaybacklatencyusec", jackPlayback * 1000);
 
     int jackRecord = getJACKRecordValue();
-    m_cfg->writeEntry("jackrecordlatencysec", jackRecord / 1000);
-    m_cfg->writeEntry("jackrecordlatencyusec", jackRecord * 1000);
+    settings.setValue("jackrecordlatencysec", jackRecord / 1000);
+    settings.setValue("jackrecordlatencyusec", jackRecord * 1000);
 
+    settings.endGroup();
 #endif  // HAVE_LIBJACK
 }
 

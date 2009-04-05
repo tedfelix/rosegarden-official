@@ -20,30 +20,32 @@
 #define _RG_CONTROLPARAMETEREDITDIALOG_H_
 
 #include "base/ControlParameter.h"
-#include <kdialogbase.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
 
 
 class QWidget;
 class QString;
 class QSpinBox;
-class QLineEdit;
+class LineEdit;
 class QLabel;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class ControlParameterEditDialog : public KDialogBase
+class ControlParameterEditDialog : public QDialog
 {
     Q_OBJECT
 public:
     ControlParameterEditDialog(QWidget *parent,
                                ControlParameter *control,
-                               RosegardenGUIDoc *doc);
+                               RosegardenDocument *doc);
 
     ControlParameter& getControl() { return m_dialogControl; }
 
@@ -62,20 +64,20 @@ public slots:
 protected:
     void populate(); // populate the dialog
 
-    RosegardenGUIDoc             *m_doc;
+    RosegardenDocument             *m_doc;
     ControlParameter *m_control;
     ControlParameter  m_dialogControl;
 
-    QLineEdit                    *m_nameEdit;
-    KComboBox                    *m_typeCombo;
-    QLineEdit                    *m_description;
-    QSpinBox                     *m_controllerBox;
-    QSpinBox                     *m_minBox;
-    QSpinBox                     *m_maxBox;
-    QSpinBox                     *m_defaultBox;
-    KComboBox                    *m_colourCombo;
-    KComboBox                    *m_ipbPosition;
-    QLabel                       *m_hexValue;
+    LineEdit                    *m_nameEdit;
+    QComboBox                   *m_typeCombo;
+    LineEdit                    *m_description;
+    QSpinBox                    *m_controllerBox;
+    QSpinBox                    *m_minBox;
+    QSpinBox                    *m_maxBox;
+    QSpinBox                    *m_defaultBox;
+    QComboBox                   *m_colourCombo;
+    QComboBox                   *m_ipbPosition;
+    QLabel                      *m_hexValue;
 };
 
 

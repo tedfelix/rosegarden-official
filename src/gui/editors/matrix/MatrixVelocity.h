@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2008 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,19 +19,16 @@
 #define _RG_MATRIXVELOCITY_H_
 
 #include "MatrixTool.h"
-#include <qstring.h>
+
 #include "base/Event.h"
 
-
-class QMouseEvent;
-
+#include <QString>
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class MatrixView;
-class MatrixStaff;
+class MatrixViewSegment;
 class MatrixElement;
 class Event;
 
@@ -44,25 +40,9 @@ class MatrixVelocity : public MatrixTool
     friend class MatrixToolBox;
 
 public:
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent *event,
-                                       ViewElement*);
-
-    /**
-     * Set the velocity of the element
-     */
-    virtual int handleMouseMove(timeT,
-                                int height,
-                                QMouseEvent*);
-
-    /**
-     * Actually update the velocity of the element
-     */
-    virtual void handleMouseRelease(timeT,
-                                    int height,
-                                    QMouseEvent*);
+    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
+    virtual void handleMouseRelease(const MatrixMouseEvent *);
 
     static const QString ToolName;
 
@@ -75,23 +55,18 @@ public:
     virtual void ready();
     virtual void stow();
 
-protected slots:
-
-    void slotMatrixScrolled(int x, int y);
-
 protected:
-    int m_velocityDelta;
-    int m_screenPixelsScale;						// Amount of screen pixels  used for scale +-127 1:1 scale ratio
     int m_mouseStartY;
+    int m_velocityDelta;
+    int m_screenPixelsScale; // Amount of screen pixels used for scale +-127 1:1 scale ratio
     double m_velocityScale;
-    MatrixVelocity(MatrixView*);
+    MatrixVelocity(MatrixWidget *);
 
     void setBasicContextHelp();
 
-    MatrixElement* m_currentElement;
-    MatrixStaff* m_currentStaff;
+    MatrixElement *m_currentElement;
+    MatrixViewSegment *m_currentViewSegment;
 };
-
 
 
 }

@@ -16,12 +16,13 @@
 */
 
 
+#include <QPaintEvent>
 #include "CountdownBar.h"
 
 #include "gui/general/GUIPalette.h"
-#include <qframe.h>
-#include <qpainter.h>
-#include <qwidget.h>
+#include <QFrame>
+#include <QPainter>
+#include <QWidget>
 
 
 namespace Rosegarden

@@ -23,16 +23,16 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-AudioSegmentMmapper::AudioSegmentMmapper(RosegardenGUIDoc* doc, Segment* s,
+AudioSegmentMmapper::AudioSegmentMmapper(RosegardenDocument* doc, Segment* s,
         const QString& fileName)
         : SegmentMmapper(doc, s, fileName)
 {}

@@ -20,8 +20,7 @@
 #define _RG_AUDIOPROPERTIESPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
 
 
 class QWidget;
@@ -32,7 +31,7 @@ class QLabel;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -44,12 +43,12 @@ class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioPropertiesPage(RosegardenGUIDoc *doc,
+    AudioPropertiesPage(RosegardenDocument *doc,
                            QWidget *parent=0, const char *name=0);
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Audio"); }
-    static QString title()     { return i18n("Audio Settings"); }
+    static QString iconLabel() { return tr("Audio"); }
+    static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
 protected slots:

@@ -21,7 +21,7 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

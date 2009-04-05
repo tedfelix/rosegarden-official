@@ -21,13 +21,32 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include "misc/Strings.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+AddTextMarkCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("add_text_mark",
+         new ArgumentAndSelectionCommandBuilder<AddTextMarkCommand>());
+}
+
+std::string
+AddTextMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &querier)
+{
+    bool ok = false;
+    QString str = querier.getText(tr("Text:"), &ok);
+    if (ok) return qstrtostr(str);
+    else throw CommandCancelled();
+}
 
 void
 AddTextMarkCommand::modifySegment()
@@ -38,13 +57,9 @@ AddTextMarkCommand::modifySegment()
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         long n = 0;
-        (*i)->get
-        <Int>(MARK_COUNT, n);
-        (*i)->set
-        <Int>(MARK_COUNT, n + 1);
-        (*i)->set
-        <String>(getMarkPropertyName(n),
-                 Marks::getTextMark(m_text));
+        (*i)->get<Int>(MARK_COUNT, n);
+        (*i)->set<Int>(MARK_COUNT, n + 1);
+        (*i)->set<String>(getMarkPropertyName(n), Marks::getTextMark(m_text));
     }
 }
 

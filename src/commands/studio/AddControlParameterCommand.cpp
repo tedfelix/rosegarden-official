@@ -22,7 +22,7 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
-#include <qstring.h>
+#include <QString>
 #include <iostream>
 
 

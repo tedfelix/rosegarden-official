@@ -21,11 +21,11 @@
 #include "AudioVUMeter.h"
 #include "Fader.h"
 #include "Rotary.h"
-#include <kcombobox.h>
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QFrame>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

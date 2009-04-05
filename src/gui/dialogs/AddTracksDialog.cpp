@@ -18,50 +18,77 @@
 
 #include "AddTracksDialog.h"
 
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <kcombobox.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <kapp.h>
-#include <kconfig.h>
-
 #include "document/ConfigGroups.h"
+
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QComboBox>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QSettings>
+#include <QGroupBox>
 
 
 namespace Rosegarden
 {
 
 AddTracksDialog::AddTracksDialog(QWidget *parent, int currentTrack) :
-    KDialogBase(parent, 0, true, i18n("Add Tracks"),
-                Ok | Cancel),
+    QDialog(parent),
     m_currentTrack(currentTrack)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Add Tracks"));
 
-    QHBox *countBox = new QHBox(vBox);
-    countBox->setSpacing(4);
-    new QLabel(i18n("How many tracks do you want to add?"), countBox);
-    m_count = new QSpinBox(countBox);
-    m_count->setMinValue(1);
-    m_count->setMaxValue(32);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
+    setLayout(vBoxLayout);
+
+   // vBoxLayout->addWidget(new QLabel(tr("How many tracks do you want to add?")));
+
+    QGroupBox *gbox = new QGroupBox(tr("How many tracks do you want to add?"), vBox);
+    vBoxLayout->addWidget(gbox);
+
+    QVBoxLayout *gboxLayout = new QVBoxLayout;
+    gbox->setLayout(gboxLayout);
+    
+    m_count = new QSpinBox();
+    gboxLayout->addWidget(m_count);
+    m_count->setMinimum(1);
+    m_count->setMaximum(256); // why not 256?  32 seemed like a silly upper bound
     m_count->setValue(1);
 
-    QHBox *posBox = new QHBox(vBox);
-    posBox->setSpacing(4);
-    new QLabel(i18n("Add tracks"), posBox);
-    m_position = new KComboBox(posBox);
-    m_position->insertItem(i18n("At the top"));
-    m_position->insertItem(i18n("Above the current selected track"));
-    m_position->insertItem(i18n("Below the current selected track"));
-    m_position->insertItem(i18n("At the bottom"));
+    QWidget *posBox = new QWidget(vBox);
+    gboxLayout->addWidget(posBox);
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    m_position->setCurrentItem(config->readUnsignedNumEntry("lastaddtracksposition", 2));
+    QHBoxLayout *posBoxLayout = new QHBoxLayout;
+    posBox->setLayout(posBoxLayout);
+
+    posBoxLayout->addWidget(new QLabel(tr("Add tracks")));
+
+    m_position = new QComboBox(posBox);
+    posBoxLayout->addWidget(m_position);
+    m_position->addItem(tr("At the top"));
+    m_position->addItem(tr("Above the current selected track"));
+    m_position->addItem(tr("Below the current selected track"));
+    m_position->addItem(tr("At the bottom"));
+
+    QString metric(tr("Above the current selected track"));
+    m_position->setMinimumContentsLength(metric.size());
+
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+
+    m_position->setCurrentIndex(settings.value("lastaddtracksposition", 2).toUInt());
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vBoxLayout->addWidget(buttonBox);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    settings.endGroup();
 }
 
 int
@@ -73,11 +100,12 @@ AddTracksDialog::getTracks()
 int
 AddTracksDialog::getInsertPosition()
 {
-    int opt = m_position->currentItem();
+    int opt = m_position->currentIndex();
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    config->writeEntry("lastaddtracksposition", opt);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    settings.setValue("lastaddtracksposition", opt);
 
     int pos = 0;
 
@@ -95,6 +123,8 @@ AddTracksDialog::getInsertPosition()
         pos = -1;
         break;
     }
+
+    settings.endGroup();
 
     return pos;
 }

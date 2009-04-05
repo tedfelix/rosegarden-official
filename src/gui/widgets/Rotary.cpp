@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,21 +22,23 @@
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
-#include <kapplication.h>
-#include <klocale.h>
-#include <qbrush.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpalette.h>
-#include <qpen.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+
+#include <QApplication>
+#include <QBrush>
+#include <QColor>
+#include <QDialog>
+#include <QImage>
+#include <QPainter>
+#include <QPalette>
+#include <QPen>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
+#include <QTimer>
+#include <QToolTip>
+#include <QWidget>
+#include <QMouseEvent>
+
 #include <cmath>
 
 
@@ -47,15 +49,12 @@ namespace Rosegarden
 #define ROTARY_MAX (1.75 * M_PI)
 #define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
 
-static TextFloat* _float = 0;
-static QTimer *_floatTimer = 0;
-
 Rotary::PixmapCache Rotary::m_pixmaps;
 
 
 Rotary::Rotary(QWidget *parent,
-               float minValue,
-               float maxValue,
+               float minimum,
+               float maximum,
                float step,
                float pageStep,
                float initialPosition,
@@ -65,40 +64,28 @@ Rotary::Rotary(QWidget *parent,
                bool centred,
                bool logarithmic) :
         QWidget(parent),
-        m_minValue(minValue),
-        m_maxValue(maxValue),
+        m_minimum(minimum),
+        m_maximum(maximum),
         m_step(step),
         m_pageStep(pageStep),
         m_size(size),
         m_tickMode(ticks),
         m_snapToTicks(snapToTicks),
         m_centred(centred),
+        m_logarithmic(logarithmic),
         m_position(initialPosition),
         m_snapPosition(m_position),
         m_initialPosition(initialPosition),
         m_buttonPressed(false),
         m_lastY(0),
         m_lastX(0),
-        m_knobColour(0, 0, 0),
-        m_logarithmic(logarithmic)
+        m_knobColour(0, 0, 0)
 {
+    setObjectName("RotaryWidget");
+
     setBackgroundMode(Qt::NoBackground);
 
-    if (!_float)
-        _float = new TextFloat(this);
-
-    if (!_floatTimer) {
-        _floatTimer = new QTimer();
-    }
-
-    // connect timer
-    connect(_floatTimer, SIGNAL(timeout()), this,
-            SLOT(slotFloatTimeout()));
-    _float->hide();
-
-    QToolTip::add
-        (this,
-                i18n("Click and drag up and down or left and right to modify.\nDouble click to edit value directly."));
+    this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
     setFixedSize(size, size);
 
     emit valueChanged(m_snapPosition);
@@ -106,20 +93,6 @@ Rotary::Rotary(QWidget *parent,
 
 Rotary::~Rotary()
 {
-    // Remove this connection
-    //
-    disconnect(_floatTimer, SIGNAL(timeout()), this,
-               SLOT(slotFloatTimeout()));
-
-    delete _float;
-    _float = 0;
-}
-
-void
-Rotary::slotFloatTimeout()
-{
-    if (_float)
-        _float->hide();
 }
 
 void
@@ -132,12 +105,37 @@ Rotary::setKnobColour(const QColor &colour)
 void
 Rotary::paintEvent(QPaintEvent *)
 {
+    //!!! This should be pulled from GUIPalette eventually.  We're no longer
+    // relying on Qt to come up with dark and mid and highlight and whatnot
+    // colors, because they're getting inverted to a far lighter color than is
+    // appropriate, even against my stock lightish slate blue default KDE
+    // background, let alone the new darker scheme we're imposing through the
+    // stylesheet.
+
+    // same color as slider grooves and VU meter backgrounds
+//    const QColor Dark = QColor(0x20, 0x20, 0x20);
+    const QColor Dark = QColor(0x10, 0x10, 0x10);
+
+    // this is the undefined color state for a knob, which probably indicates
+    // some issue with our internal color hanlding.  It looks like this was a
+    // hack to try to get around black knobs related to a bug setting up the
+    // color index when making new knobs in the studio controller editor.  We'll
+    // just make these a really obvious ah hah color then:
+    const QColor Base = Qt::white;
+
+    // the knob pointer should be a sharp, high contrast color
+    const QColor Pointer = Qt::black;
+
+    // tick marks should contrast against Dark and Base
+    const QColor Ticks = QColor(0xAA, 0xAA, 0xAA);
+
+
     QPainter paint;
 
     double angle = ROTARY_MIN // offset
                    + (ROTARY_RANGE *
-                      (double(m_snapPosition - m_minValue) /
-                       (double(m_maxValue) - double(m_minValue))));
+                      (double(m_snapPosition - m_minimum) /
+                       (double(m_maximum) - double(m_minimum))));
     int degrees = int(angle * 180.0 / M_PI);
 
     //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel() << endl;
@@ -151,10 +149,10 @@ Rotary::paintEvent(QPaintEvent *)
         numTicks = 5;
         break;
     case PageStepTicks:
-        numTicks = 1 + (m_maxValue + 0.0001 - m_minValue) / m_pageStep;
+        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
         break;
     case StepTicks:
-        numTicks = 1 + (m_maxValue + 0.0001 - m_minValue) / m_step;
+        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
         break;
     default:
         break;
@@ -176,15 +174,14 @@ Rotary::paintEvent(QPaintEvent *)
     paint.begin(&map);
 
     QPen pen;
-    pen.setColor(kapp->palette().color(QPalette::Active, QColorGroup::Dark));
+    pen.setColor(Dark);
     pen.setWidth(scale);
     paint.setPen(pen);
 
-    if (m_knobColour != Qt::black) {
+    if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
     } else {
-        paint.setBrush(
-            kapp->palette().color(QPalette::Active, QColorGroup::Base));
+        paint.setBrush(Base);
     }
 
     QColor c(m_knobColour);
@@ -193,12 +190,13 @@ Rotary::paintEvent(QPaintEvent *)
 
     int indent = width * 0.15 + 1;
 
+    // draw a base knob color circle
     paint.drawEllipse(indent, indent, width - 2*indent, width - 2*indent);
 
+    // draw a highlight computed from the knob color
     pen.setWidth(2 * scale);
     int pos = indent + (width - 2 * indent) / 8;
     int darkWidth = (width - 2 * indent) * 2 / 3;
-    int darkQuote = (130 * 2 / (darkWidth ? darkWidth : 1)) + 100;
     while (darkWidth) {
         c = c.light(101);
         pen.setColor(c);
@@ -214,9 +212,10 @@ Rotary::paintEvent(QPaintEvent *)
         --darkWidth;
     }
 
-    paint.setBrush(QBrush::NoBrush);
+    paint.setBrush(Qt::NoBrush);
 
-    pen.setColor(colorGroup().dark());
+    // draw the tick marks on larger sized knobs
+    pen.setColor(Ticks);
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -228,8 +227,8 @@ Rotary::paintEvent(QPaintEvent *)
                  width, i != 0 && i != numTicks - 1);
     }
 
-    // now the bright metering bit
 
+    // draw the bright metering bit
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
     pen.setWidth(indent);
     paint.setPen(pen);
@@ -245,32 +244,35 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setWidth(scale);
     paint.setPen(pen);
 
+    // draw a dark circle to outline the knob
     int shadowAngle = -720;
-    c = colorGroup().dark();
+    c = Dark;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
         paint.drawArc(indent, indent, width - 2*indent, width - 2*indent, shadowAngle + arc, 240);
         paint.drawArc(indent, indent, width - 2*indent, width - 2*indent, shadowAngle - arc, 240);
-        c = c.light( 110 );
+        c = c.lighter(110);
     }
 
+    // draw a computed trough thingie all the way around the knob
     shadowAngle = 2160;
-    c = colorGroup().dark();
+    c = Dark;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
         paint.drawArc(scale / 2, scale / 2, width - scale, width - scale, shadowAngle + arc, 240);
         paint.drawArc(scale / 2, scale / 2, width - scale, width - scale, shadowAngle - arc, 240);
-        c = c.light( 109 );
+        c = c.lighter(109);
     }
 
-    // and un-draw the bottom part
+    // and un-draw the bottom part of the arc
     pen.setColor(paletteBackgroundColor());
     paint.setPen(pen);
     paint.drawArc(scale / 2, scale / 2, width - scale, width - scale,
                   -45 * 16, -90 * 16);
 
+    // calculate and draw the pointer
     double hyp = double(width) / 2.0;
     double len = hyp - indent;
     --len;
@@ -282,7 +284,7 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-    pen.setColor(colorGroup().dark());
+    pen.setColor(Pointer);
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));
@@ -334,30 +336,30 @@ Rotary::snapPosition()
             break; // meaningless
 
         case LimitTicks:
-            if (m_position < (m_minValue + m_maxValue) / 2.0) {
-                m_snapPosition = m_minValue;
+            if (m_position < (m_minimum + m_maximum) / 2.0) {
+                m_snapPosition = m_minimum;
             } else {
-                m_snapPosition = m_maxValue;
+                m_snapPosition = m_maximum;
             }
             break;
 
         case IntervalTicks:
-            m_snapPosition = m_minValue +
-                             (m_maxValue - m_minValue) / 4.0 *
-                             int((m_snapPosition - m_minValue) /
-                                 ((m_maxValue - m_minValue) / 4.0));
+            m_snapPosition = m_minimum +
+                             (m_maximum - m_minimum) / 4.0 *
+                             int((m_snapPosition - m_minimum) /
+                                 ((m_maximum - m_minimum) / 4.0));
             break;
 
         case PageStepTicks:
-            m_snapPosition = m_minValue +
+            m_snapPosition = m_minimum +
                              m_pageStep *
-                             int((m_snapPosition - m_minValue) / m_pageStep);
+                             int((m_snapPosition - m_minimum) / m_pageStep);
             break;
 
         case StepTicks:
-            m_snapPosition = m_minValue +
+            m_snapPosition = m_minimum +
                              m_step *
-                             int((m_snapPosition - m_minValue) / m_step);
+                             int((m_snapPosition - m_minimum) / m_step);
             break;
         }
     }
@@ -366,51 +368,50 @@ Rotary::snapPosition()
 void
 Rotary::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_buttonPressed = true;
         m_lastY = e->y();
         m_lastX = e->x();
-    } else if (e->button() == MidButton) // reset to default
+    } else if (e->button() == Qt::MidButton) // reset to default
     {
         m_position = m_initialPosition;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
-    } else if (e->button() == RightButton) // reset to centre position
+    } else if (e->button() == Qt::RightButton) // reset to centre position
     {
-        m_position = (m_maxValue + m_minValue) / 2.0;
+        m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
     }
 
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
+    TextFloat *textFloat = TextFloat::getTextFloat();
 
-    if (!_float)
-        _float = new TextFloat(this);
-    _float->reparent(this);
-    _float->move(totalPos + QPoint(width() + 2, -height() / 2));
+
     if (m_logarithmic) {
-        _float->setText(QString("%1").arg(powf(10, m_position)));
+        textFloat->setText(QString("%1").arg(powf(10, m_position)));
     } else {
-        _float->setText(QString("%1").arg(m_position));
-    }        
-    _float->show();
+        textFloat->setText(QString("%1").arg(m_position));
+    }
+
+    QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    textFloat->display(offset);
 
 //    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
 //              << ", position = " << m_position << std::endl;
 
-    if (e->button() == RightButton || e->button() == MidButton) {
-        // one shot, 500ms
-        _floatTimer->start(500, true);
+    if (e->button() == Qt::RightButton || e->button() == Qt::MidButton) {
+        // wait 500ms then hide text float
+        textFloat->hideAfterDelay(500);
     }
 }
 
 void
 Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 {
-    float minv = m_minValue;
-    float maxv = m_maxValue;
+    float minv = m_minimum;
+    float maxv = m_maximum;
     float val = m_position;
     float step = m_step;
 
@@ -423,12 +424,29 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
     }
 
     FloatEdit dialog(this,
-                     i18n("Select a new value"),
-                     i18n("Enter a new value"),
+                     tr("Select a new value"),
+                     tr("Enter a new value"),
                      minv,
                      maxv,
                      val,
                      step);
+
+    // Reposition - we need to sum the relative positions up to the
+    // topLevel or dialog to please move(). Move just top/right of the rotary
+    //
+    // (Copied from the text float moving code Yves fixed up.)
+    //
+    dialog.reparent(this);
+
+    QWidget *par = parentWidget();
+    QPoint totalPos = this->pos();
+    while (par->parentWidget() && !par->isWindow()) {
+        par = par->parentWidget();
+        totalPos += par->pos();
+    }
+
+    dialog.move(totalPos + QPoint(width() + 2, -height() / 2));
+    dialog.show();
 
     if (dialog.exec() == QDialog::Accepted) {
         float newval = dialog.getValue();
@@ -448,15 +466,14 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 void
 Rotary::mouseReleaseEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_buttonPressed = false;
         m_lastY = 0;
         m_lastX = 0;
 
         // Hide the float text
         //
-        if (_float)
-            _float->hide();
+        TextFloat::getTextFloat()->hideAfterDelay(500);
     }
 }
 
@@ -469,11 +486,11 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         float newValue = m_position +
                          (m_lastY - float(e->y()) + float(e->x()) - m_lastX) * m_step;
 
-        if (newValue > m_maxValue)
-            m_position = m_maxValue;
+        if (newValue > m_maximum)
+            m_position = m_maximum;
         else
-            if (newValue < m_minValue)
-                m_position = m_minValue;
+            if (newValue < m_minimum)
+                m_position = m_minimum;
             else
                 m_position = newValue;
 
@@ -490,10 +507,11 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
+        TextFloat *textFloat = TextFloat::getTextFloat();
         if (m_logarithmic) {
-            _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+            textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
         } else {
-            _float->setText(QString("%1").arg(m_snapPosition));
+            textFloat->setText(QString("%1").arg(m_snapPosition));
         }
     }
 }
@@ -506,39 +524,40 @@ Rotary::wheelEvent(QWheelEvent *e)
     else
         m_position += m_pageStep;
 
-    if (m_position > m_maxValue)
-        m_position = m_maxValue;
+    if (m_position > m_maximum)
+        m_position = m_maximum;
 
-    if (m_position < m_minValue)
-        m_position = m_minValue;
+    if (m_position < m_minimum)
+        m_position = m_minimum;
 
     snapPosition();
     update();
 
-    if (!_float)
-        _float = new TextFloat(this);
+    TextFloat *textFloat = TextFloat::getTextFloat();
 
     // draw on the float text
     if (m_logarithmic) {
-        _float->setText(QString("%1").arg(powf(10, m_snapPosition)));
+        textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
     } else {
-        _float->setText(QString("%1").arg(m_snapPosition));
+        textFloat->setText(QString("%1").arg(m_snapPosition));
     }
 
-    // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move(). Move just top/right of the rotary
-    //
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
-    _float->reparent(this);
-    _float->move(totalPos + QPoint(width() + 2, -height() / 2));
-    _float->show();
+    // Move just top/right of the rotary
+    QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    textFloat->display(offset);
 
-    // one shot, 500ms
-    _floatTimer->start(500, true);
+    // Keep text float visible for 500ms
+    textFloat->hideAfterDelay(500);
 
-    // set it to show for a timeout value
     emit valueChanged(m_snapPosition);
 }
+
+void
+Rotary::enterEvent(QEvent *)
+{
+    TextFloat::getTextFloat()->attach(this);
+}
+
 
 void
 Rotary::setPosition(float position)

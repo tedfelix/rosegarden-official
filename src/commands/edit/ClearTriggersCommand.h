@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,8 +19,8 @@
 #define _RG_CLEARTRIGGERSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,15 +33,17 @@ class EventSelection;
 
 class ClearTriggersCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ClearTriggersCommand)
+
 public:
     ClearTriggersCommand(EventSelection &selection,
                          QString name = 0) :
-        BasicSelectionCommand(name ? name : getGlobalName(), selection, true),
+        BasicSelectionCommand(!name.isEmpty() ? name : getGlobalName(), selection, true),
         m_selection(&selection)
     { }
 
     static QString getGlobalName() {
-        return i18n("&Clear Triggers");
+        return tr("&Clear Triggers");
     }
 
 protected:

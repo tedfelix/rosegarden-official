@@ -22,14 +22,23 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+AutoBeamCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("auto_beam",
+         new SelectionCommandBuilder<AutoBeamCommand>());
+}
 
 void
 AutoBeamCommand::modifySegment()

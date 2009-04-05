@@ -18,8 +18,8 @@
 
 #include "TempoView.h"
 
-#include <klocale.h>
-#include <kstddirs.h>
+#include "TempoListItem.h"
+
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -30,30 +30,29 @@
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "commands/segment/RemoveTimeSignatureCommand.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
-#include "gui/general/EditViewBase.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
-#include "TempoListItem.h"
-#include <kaction.h>
-#include <kglobal.h>
-#include <kconfig.h>
-#include <klistview.h>
-#include <kxmlguiclient.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <qptrlist.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qlayout.h>
-#include <qcanvas.h>
-#include <kstatusbar.h>
+#include "gui/general/ListEditView.h"
+#include "gui/general/IconLoader.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "misc/Strings.h"
+
+#include <QAction>
+#include <QSettings>
+#include <QTreeWidget>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QDialog>
+#include <QIcon>
+#include <QPixmap>
+#include <QSize>
+#include <QString>
+#include <QLayout>
+#include <QVBoxLayout>
+#include <QStatusBar>
+#include <QList>
 
 
 namespace Rosegarden
@@ -63,8 +62,8 @@ int
 TempoView::m_lastSetFilter = -1;
 
 
-TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
-        EditViewBase(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
+TempoView::TempoView(RosegardenDocument *doc, QWidget *parent, timeT openTime):
+        ListEditView(doc, std::vector<Segment *>(), 2, parent, "tempoview"),
         m_filter(Tempo | TimeSignature),
         m_ignoreUpdates(true)
 {
@@ -78,11 +77,20 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // define some note filtering buttons in a group
     //
-    m_filterGroup =
-        new QButtonGroup(1, Horizontal, i18n("Filter"), getCentralWidget());
+    m_filterGroup = new QGroupBox(tr("Filter"), getCentralWidget());
+    QVBoxLayout *filterGroupLayout = new QVBoxLayout;
+    m_filterGroup->setLayout(filterGroupLayout);
 
-    m_tempoCheckBox = new QCheckBox(i18n("Tempo"), m_filterGroup);
-    m_timeSigCheckBox = new QCheckBox(i18n("Time Signature"), m_filterGroup);
+    m_tempoCheckBox = new QCheckBox(tr("Tempo"), m_filterGroup);
+    filterGroupLayout->addWidget(m_tempoCheckBox, 50, Qt::AlignTop);
+
+    m_timeSigCheckBox = new QCheckBox(tr("Time Signature"), m_filterGroup);
+    filterGroupLayout->addWidget(m_timeSigCheckBox, 50, Qt::AlignTop);
+
+    // hard coded spacers are evil, but I can't find any other way to fix this
+    filterGroupLayout->addSpacing(200);
+
+    m_filterGroup->setLayout(filterGroupLayout);
     m_grid->addWidget(m_filterGroup, 2, 0);
 
     // Connect up
@@ -90,8 +98,9 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     connect(m_filterGroup, SIGNAL(released(int)),
             SLOT(slotModifyFilter(int)));
 
-    m_list = new KListView(getCentralWidget());
-    m_list->setItemsRenameable(true);
+    m_list = new QTreeWidget(getCentralWidget());
+    
+//     m_list->setItemsRenameable(true);    //&&&
 
     m_grid->addWidget(m_list, 2, 1);
 
@@ -101,20 +110,35 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
 
     // Connect double clicker
     //
-    connect(m_list, SIGNAL(doubleClicked(QListViewItem*)),
-            SLOT(slotPopupEditor(QListViewItem*)));
+    connect(m_list, SIGNAL(doubleClicked(QTreeWidgetItem*)),
+            SLOT(slotPopupEditor(QTreeWidgetItem*)));
 
     m_list->setAllColumnsShowFocus(true);
-    m_list->setSelectionMode(QListView::Extended);
+//     m_list->setSelectionMode(QTreeWidget::Extended);
+    m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
+//     m_list->setSelectionBehavior(QAbstractItemView::SelectRows);
+    
+    /*
+    m_list->addColumn(tr("Time  "));
+    m_list->addColumn(tr("Type  "));
+    m_list->addColumn(tr("Value  "));
+    m_list->addColumn(tr("Properties  "));
+    */
+    
+    
+    QStringList sl;
+    sl << tr("Time  ")
+       << tr("Type  ")
+       << tr("Value  ")
+       << tr("Properties  ");
+    
+    m_list->setColumnCount(4);
+    m_list->setHeaderLabels(sl);
+    
 
-    m_list->addColumn(i18n("Time  "));
-    m_list->addColumn(i18n("Type  "));
-    m_list->addColumn(i18n("Value  "));
-    m_list->addColumn(i18n("Properties  "));
-
-    for (int col = 0; col < m_list->columns(); ++col)
-        m_list->setRenameable(col, true);
-
+//     for (int col = 0; col < m_list->columnCount(); ++col)
+//         m_list->setRenameable(col, true);    //&&&
+    
     readOptions();
     setButtonsToFilter();
     applyLayout();
@@ -122,7 +146,6 @@ TempoView::TempoView(RosegardenGUIDoc *doc, QWidget *parent, timeT openTime):
     makeInitialSelection(openTime);
 
     m_ignoreUpdates = false;
-    setOutOfCtor();
 }
 
 TempoView::~TempoView()
@@ -167,16 +190,29 @@ TempoView::applyLayout(int /*staffNo*/)
     // of the view.  This code borrowed from EventView.
     //
     if (m_listSelection.size() == 0) {
-        QPtrList<QListViewItem> selection = m_list->selectedItems();
+        QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
-        if (selection.count()) {
-            QPtrListIterator<QListViewItem> it(selection);
-            QListViewItem *listItem;
-
+        if(selection.count()){
+//             QPtrListIterator<QTreeWidgetItem> it(selection);
+            QTreeWidgetItem *listItem;
+            QTreeWidgetItem *it;
+            
+            it = m_list->topLevelItem(0);
+            if(it != 0){
+                do {
+                    m_listSelection.push_back(m_list->indexOfTopLevelItem(it));
+                    ++it;
+                } while ((it = m_list->itemBelow(it)) != 0);
+            }
+            
+        
+            
+            /*
             while ((listItem = it.current()) != 0) {
                 m_listSelection.push_back(m_list->itemIndex(*it));
                 ++it;
             }
+            */
         }
     }
 
@@ -186,8 +222,11 @@ TempoView::applyLayout(int /*staffNo*/)
 
     Composition *comp = &getDocument()->getComposition();
 
-    m_config->setGroup(TempoViewConfigGroup);
-    int timeMode = m_config->readNumEntry("timemode", 0);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
 
     if (m_filter & TimeSignature) {
         for (int i = 0; i < comp->getTimeSignatureCount(); ++i) {
@@ -198,22 +237,24 @@ TempoView::applyLayout(int /*staffNo*/)
             QString properties;
             if (sig.second.isHidden()) {
                 if (sig.second.isCommon())
-                    properties = i18n("Common, hidden");
+                    properties = tr("Common, hidden");
                 else
-                    properties = i18n("Hidden");
+                    properties = tr("Hidden");
             } else {
                 if (sig.second.isCommon())
-                    properties = i18n("Common");
+                    properties = tr("Common");
             }
 
             QString timeString = makeTimeString(sig.first, timeMode);
 
             new TempoListItem(comp, TempoListItem::TimeSignature,
-                              sig.first, i, m_list, timeString,
-                              i18n("Time Signature   "),
-                              QString("%1/%2   ").arg(sig.second.getNumerator()).
-                              arg(sig.second.getDenominator()),
-                              properties);
+                              sig.first, i, m_list, 
+                            QStringList()
+                            << timeString
+                              << tr("Time Signature   ")
+                              << QString("%1/%2   ").arg(sig.second.getNumerator()).
+                                              arg(sig.second.getDenominator())
+                              << properties);
         }
     }
 
@@ -235,8 +276,8 @@ TempoView::applyLayout(int /*staffNo*/)
             Rosegarden::TimeSignature sig = comp->getTimeSignatureAt(tempo.first);
             if (sig.getBeatDuration() ==
                     Note(Note::Crotchet).getDuration()) {
-                desc = i18n("%1.%2%3").
-                       arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
+                desc = tr("%1.%2%3")
+                       .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths);
             } else {
                 float bpm = (qpm *
                              Note(Note::Crotchet).getDuration()) /
@@ -245,32 +286,31 @@ TempoView::applyLayout(int /*staffNo*/)
                 int bpmTenths = int((bpm - bpmUnits) * 10 + 0.001);
                 int bpmHundredths = int((bpm - bpmUnits - bpmTenths / 10.0) * 100 + 0.001);
 
-                desc = i18n("%1.%2%3 qpm (%4.%5%6 bpm)   ").
-                       arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths).
-                       arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
+                desc = tr("%1.%2%3 qpm (%4.%5%6 bpm)   ")
+                       .arg(qpmUnits).arg(qpmTenths).arg(qpmHundredths)
+                       .arg(bpmUnits).arg(bpmTenths).arg(bpmHundredths);
             }
 
             QString timeString = makeTimeString(tempo.first, timeMode);
 
             new TempoListItem(comp, TempoListItem::Tempo,
-                              tempo.first, i, m_list, timeString,
-                              i18n("Tempo   "),
-                              desc);
+                              tempo.first, i, m_list, QStringList() << timeString
+                              << tr("Tempo   ")
+                              << desc);
         }
     }
 
-    if (m_list->childCount() == 0) {
-        new QListViewItem(m_list,
-                          i18n("<nothing at this filter level>"));
-        m_list->setSelectionMode(QListView::NoSelection);
-        stateChanged("have_selection", KXMLGUIClient::StateReverse);
+    if (m_list->topLevelItemCount() == 0) {
+        new QTreeWidgetItem(m_list, QStringList() << tr("<nothing at this filter level>"));
+        m_list->setSelectionMode(QTreeWidget::NoSelection);
+        leaveActionState("have_selection");
     } else {
-        m_list->setSelectionMode(QListView::Extended);
+        m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
         // If no selection then select the first event
         if (m_listSelection.size() == 0)
             m_listSelection.push_back(0);
-        stateChanged("have_selection", KXMLGUIClient::StateNoReverse);
+        enterActionState("have_selection");
     }
 
     // Set a selection from a range of indexes
@@ -281,14 +321,17 @@ TempoView::applyLayout(int /*staffNo*/)
     for (; sIt != m_listSelection.end(); ++sIt) {
         index = *sIt;
 
-        while (index > 0 && !m_list->itemAtIndex(index))
+        while (index > 0 && !m_list->topLevelItem(index))
             index--;
 
-        m_list->setSelected(m_list->itemAtIndex(index), true);
-        m_list->setCurrentItem(m_list->itemAtIndex(index));
+//         m_list->setSelected(m_list->topLevelItem(index), true);
+        m_list->topLevelItem(index)->setSelected(true);
+//         m_list->setCurrentIndex(m_list->topLevelItem(index));
+        m_list->setCurrentItem( m_list->topLevelItem(index) );
 
         // ensure visible
-        m_list->ensureItemVisible(m_list->itemAtIndex(index));
+//         m_list->ensureItemVisible(m_list->topLevelItem(index));
+        m_list->scrollToItem(m_list->topLevelItem(index));
     }
 
     m_listSelection.clear();
@@ -304,12 +347,13 @@ TempoView::makeInitialSelection(timeT time)
     TempoListItem *goodItem = 0;
     int goodItemNo = 0;
 
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
+    for (int i = 0; m_list->topLevelItem(i); ++i) {
 
         TempoListItem *item = dynamic_cast<TempoListItem *>
-                              (m_list->itemAtIndex(i));
+                                (m_list->topLevelItem(i));
 
-        m_list->setSelected(item, false);
+//         m_list->setSelected(item, false);
+        item->setSelected(false);
 
         if (item) {
             if (item->getTime() > time)
@@ -321,8 +365,10 @@ TempoView::makeInitialSelection(timeT time)
 
     if (goodItem) {
         m_listSelection.push_back(goodItemNo);
-        m_list->setSelected(goodItem, true);
-        m_list->ensureItemVisible(goodItem);
+//         m_list->setSelected(goodItem, true);
+        goodItem->setSelected(true);
+//         m_list->ensureItemVisible(goodItem);
+        m_list->scrollToItem(goodItem);
     }
 }
 
@@ -362,7 +408,7 @@ TempoView::makeTimeString(timeT time, int timeMode)
         {
             RealTime rt =
                 getDocument()->getComposition().getElapsedRealTime(time);
-            //	return QString("%1   ").arg(rt.toString().c_str());
+            //    return QString("%1   ").arg(rt.toString().c_str());
             return QString("%1   ").arg(rt.toText().c_str());
         }
 
@@ -408,15 +454,19 @@ TempoView::slotEditPaste()
 void
 TempoView::slotEditDelete()
 {
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
+    
     if (selection.count() == 0)
         return ;
 
     RG_DEBUG << "TempoView::slotEditDelete - deleting "
     << selection.count() << " items" << endl;
 
-    QPtrListIterator<QListViewItem> it(selection);
-    QListViewItem *listItem;
+//     QPtrListIterator<QTreeWidgetItem> it(selection);
+    
+    QTreeWidgetItem *listItem;
+    QTreeWidgetItem *it;
+    
     TempoListItem *item;
     int itemIndex = -1;
 
@@ -427,13 +477,16 @@ TempoView::slotEditDelete()
     // removing one item by index will affect the indices of
     // subsequent items.  So we'll stack them onto here and then pull
     // them off again.
-    std::vector<KCommand *> commands;
+    std::vector<Command *> commands;
 
-    while ((listItem = it.current()) != 0) {
-        item = dynamic_cast<TempoListItem*>((*it));
+//     while ((listItem = it.current()) != 0) 
+    it = m_list->topLevelItem(0);
+    do {
+        //item = dynamic_cast<TempoListItem*>((*it));
+        item = dynamic_cast<TempoListItem*>(it);
 
         if (itemIndex == -1)
-            itemIndex = m_list->itemIndex(*it);
+            itemIndex = m_list->indexOfTopLevelItem(it);
 
         if (item) {
             if (item->getType() == TempoListItem::TimeSignature) {
@@ -448,13 +501,15 @@ TempoView::slotEditDelete()
                 haveSomething = true;
             }
         }
-        ++it;
-    }
+       //++it;
+    }while ( (it = m_list->itemBelow(it)) );
 
+    
+    
     if (haveSomething) {
-        KMacroCommand *command = new KMacroCommand
-                                 (i18n("Delete Tempo or Time Signature"));
-        for (std::vector<KCommand *>::iterator i = commands.end();
+        MacroCommand *command = new MacroCommand
+                                 (tr("Delete Tempo or Time Signature"));
+        for (std::vector<Command *>::iterator i = commands.end();
                 i != commands.begin();) {
             command->addCommand(*--i);
         }
@@ -469,11 +524,11 @@ void
 TempoView::slotEditInsertTempo()
 {
     timeT insertTime = 0;
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
@@ -499,11 +554,11 @@ void
 TempoView::slotEditInsertTimeSignature()
 {
     timeT insertTime = 0;
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             insertTime = item->getTime();
     }
@@ -534,11 +589,11 @@ TempoView::slotEdit()
 {
     RG_DEBUG << "TempoView::slotEdit" << endl;
 
-    QPtrList<QListViewItem> selection = m_list->selectedItems();
+    QList<QTreeWidgetItem*> selection = m_list->selectedItems();
 
     if (selection.count() > 0) {
         TempoListItem *item =
-            dynamic_cast<TempoListItem*>(selection.getFirst());
+            dynamic_cast<TempoListItem*>(selection.first());
         if (item)
             slotPopupEditor(item);
     }
@@ -548,9 +603,10 @@ void
 TempoView::slotSelectAll()
 {
     m_listSelection.clear();
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
+    for (int i = 0; m_list->topLevelItem(i); ++i) {
         m_listSelection.push_back(i);
-        m_list->setSelected(m_list->itemAtIndex(i), true);
+//         m_list->setSelected(m_list->topLevelItem(i), true);
+        m_list->topLevelItem(i)->setSelected(true);
     }
 }
 
@@ -558,86 +614,38 @@ void
 TempoView::slotClearSelection()
 {
     m_listSelection.clear();
-    for (int i = 0; m_list->itemAtIndex(i); ++i) {
-        m_list->setSelected(m_list->itemAtIndex(i), false);
+    for (int i = 0; m_list->topLevelItem(i); ++i) {
+//         m_list->setSelected(m_list->topLevelItem(i), false);
+        m_list->topLevelItem(i)->setSelected(false);
     }
 }
 
 void
 TempoView::setupActions()
 {
-    EditViewBase::setupActions("tempoview.rc", false);
+    ListEditView::setupActions("tempoview.rc", false);
 
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QIconSet icon(QPixmap(pixmapDir + "/toolbar/event-insert-tempo.png"));
+    createAction("insert_tempo", SLOT(slotEditInsertTempo()));
+    createAction("insert_timesig", SLOT(slotEditInsertTimeSignature()));
+    createAction("delete", SLOT(slotEditDelete()));
+    createAction("edit", SLOT(slotEdit()));
+    createAction("select_all", SLOT(slotSelectAll()));
+    createAction("clear_selection", SLOT(slotClearSelection()));
 
-    new KAction(AddTempoChangeCommand::getGlobalName(), icon, Key_I, this,
-                SLOT(slotEditInsertTempo()), actionCollection(),
-                "insert_tempo");
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.endGroup();
 
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIconSet(pixmap);
+    QAction *a;
+    a = createAction("time_musical", SLOT(slotMusicalTime()));
+    if (timeMode == 0) { a->setCheckable(true); a->setChecked(true); }
 
-    new KAction(AddTimeSignatureCommand::getGlobalName(), icon, Key_G, this,
-                SLOT(slotEditInsertTimeSignature()), actionCollection(),
-                "insert_timesig");
+    a = createAction("time_real", SLOT(slotRealTime()));
+    if (timeMode == 1) { a->setCheckable(true); a->setChecked(true); }
 
-    pixmap.load(pixmapDir + "/toolbar/event-delete.png");
-    icon = QIconSet(pixmap);
-
-    new KAction(i18n("&Delete"), icon, Key_Delete, this,
-                SLOT(slotEditDelete()), actionCollection(),
-                "delete");
-
-    pixmap.load(pixmapDir + "/toolbar/event-edit.png");
-    icon = QIconSet(pixmap);
-
-    new KAction(i18n("&Edit Item"), icon, Key_E, this,
-                SLOT(slotEdit()), actionCollection(),
-                "edit");
-
-    new KAction(i18n("Select &All"), 0, this,
-                SLOT(slotSelectAll()), actionCollection(),
-                "select_all");
-
-    new KAction(i18n("Clear Selection"), Key_Escape, this,
-                SLOT(slotClearSelection()), actionCollection(),
-                "clear_selection");
-
-    m_config->setGroup(TempoViewConfigGroup);
-    int timeMode = m_config->readNumEntry("timemode", 0);
-
-    KRadioAction *action;
-
-    pixmap.load(pixmapDir + "/toolbar/time-musical.png");
-    icon = QIconSet(pixmap);
-
-    action = new KRadioAction(i18n("&Musical Times"), icon, 0, this,
-                              SLOT(slotMusicalTime()),
-                              actionCollection(), "time_musical");
-    action->setExclusiveGroup("timeMode");
-    if (timeMode == 0)
-        action->setChecked(true);
-
-    pixmap.load(pixmapDir + "/toolbar/time-real.png");
-    icon = QIconSet(pixmap);
-
-    action = new KRadioAction(i18n("&Real Times"), icon, 0, this,
-                              SLOT(slotRealTime()),
-                              actionCollection(), "time_real");
-    action->setExclusiveGroup("timeMode");
-    if (timeMode == 1)
-        action->setChecked(true);
-
-    pixmap.load(pixmapDir + "/toolbar/time-raw.png");
-    icon = QIconSet(pixmap);
-
-    action = new KRadioAction(i18n("Ra&w Times"), icon, 0, this,
-                              SLOT(slotRawTime()),
-                              actionCollection(), "time_raw");
-    action->setExclusiveGroup("timeMode");
-    if (timeMode == 2)
-        action->setChecked(true);
+    a = createAction("time_raw", SLOT(slotRawTime()));
+    if (timeMode == 2) { a->setCheckable(true); a->setChecked(true); }
 
     createGUI(getRCFileName());
 }
@@ -645,12 +653,14 @@ TempoView::setupActions()
 void
 TempoView::initStatusBar()
 {
-    KStatusBar* sb = statusBar();
+    QStatusBar* sb = statusBar();
 
-    sb->insertItem(KTmpStatusMsg::getDefaultMsg(),
-                   KTmpStatusMsg::getDefaultId(), 1);
-    sb->setItemAlignment(KTmpStatusMsg::getDefaultId(),
-                         AlignLeft | AlignVCenter);
+    sb->showMessage(TmpStatusMsg::getDefaultMsg());
+    
+//     sb->addItem(TmpStatusMsg::getDefaultMsg(),
+//                    TmpStatusMsg::getDefaultId(), 1);
+//     sb->setItemAlignment(TmpStatusMsg::getDefaultId(),
+//                          AlignLeft | AlignVCenter);
 }
 
 QSize
@@ -668,18 +678,28 @@ TempoView::setViewSize(QSize s)
 void
 TempoView::readOptions()
 {
-    m_config->setGroup(TempoViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
     EditViewBase::readOptions();
-    m_filter = m_config->readNumEntry("filter", m_filter);
-    m_list->restoreLayout(m_config, TempoViewLayoutConfigGroupName);
+    m_filter = settings.value("filter", m_filter).toInt() ;
+    
+//     m_list->restoreLayout(TempoViewLayoutConfigGroupName);    //&&&
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotSaveOptions()
 {
-    m_config->setGroup(TempoViewConfigGroup);
-    m_config->writeEntry("filter", m_filter);
-    m_list->saveLayout(m_config, TempoViewLayoutConfigGroupName);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
+    settings.setValue("filter", m_filter);
+    
+//     m_list->saveLayout(TempoViewLayoutConfigGroupName);    //&&&
+
+    settings.endGroup();
 }
 
 void
@@ -741,29 +761,41 @@ TempoView::setButtonsToFilter()
 void
 TempoView::slotMusicalTime()
 {
-    m_config->setGroup(TempoViewConfigGroup);
-    m_config->writeEntry("timemode", 0);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
+    settings.setValue("timemode", 0);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotRealTime()
 {
-    m_config->setGroup(TempoViewConfigGroup);
-    m_config->writeEntry("timemode", 1);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
+    settings.setValue("timemode", 1);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
 TempoView::slotRawTime()
 {
-    m_config->setGroup(TempoViewConfigGroup);
-    m_config->writeEntry("timemode", 2);
+    QSettings settings;
+    settings.beginGroup(TempoViewConfigGroup);
+
+    settings.setValue("timemode", 2);
     applyLayout();
+
+    settings.endGroup();
 }
 
 void
-TempoView::slotPopupEditor(QListViewItem *qitem)
+TempoView::slotPopupEditor(QTreeWidgetItem *qitem)
 {
     TempoListItem *item = dynamic_cast<TempoListItem *>(qitem);
     if (!item)
@@ -824,8 +856,8 @@ TempoView::slotPopupEditor(QListViewItem *qitem)
 void
 TempoView::updateViewCaption()
 {
-    setCaption(i18n("%1 - Tempo and Time Signature Editor")
-               .arg(getDocument()->getTitle()));
+    setWindowTitle(tr("%1 - Tempo and Time Signature Editor")
+                .arg(getDocument()->getTitle()));
 }
 
 }

@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUREMOVENOTATIONQUANTIZECOMMAND_H_
-#define _RG_ADJUSTMENUREMOVENOTATIONQUANTIZECOMMAND_H_
+#ifndef _RG_REMOVENOTATIONQUANTIZECOMMAND_H_
+#define _RG_REMOVENOTATIONQUANTIZECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,17 +30,22 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RemoveNotationQuantizeCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveNotationQuantizeCommand)
+
 public:
     RemoveNotationQuantizeCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
     
-    static QString getGlobalName() { return i18n("Remo&ve Notation Quantization"); }
+    static QString getGlobalName() { return tr("Remo&ve Notation Quantization"); }
     
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 

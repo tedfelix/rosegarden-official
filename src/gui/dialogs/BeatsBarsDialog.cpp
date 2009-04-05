@@ -17,42 +17,59 @@
 
 
 #include "BeatsBarsDialog.h"
-#include <qlayout.h>
 
-#include <klocale.h>
 #include "base/Segment.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qspinbox.h>
-#include <qwidget.h>
+
+#include <QLayout>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QSpinBox>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
 BeatsBarsDialog::BeatsBarsDialog(QWidget* parent) :
-        KDialogBase(parent, 0, true, i18n("Audio Segment Duration"),
-                    Ok | Cancel, Ok)
+        QDialog(parent)
 {
-    QHBox *hbox = makeHBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Audio Segment Duration"));
+    setObjectName("MinorDialog");
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
 
-    QGroupBox *gbox = new QGroupBox(1, Horizontal,
-                                    i18n("The selected audio segment contains:"), hbox);
+    QGroupBox *gbox = new QGroupBox(tr("The selected audio segment contains:"));
+    gbox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
 
-    QFrame *frame = new QFrame(gbox);
-    QGridLayout *layout = new QGridLayout(frame, 1, 2, 5, 5);
+    metagrid->addWidget(gbox, 0, 0);
 
-    m_spinBox = new QSpinBox(1, INT_MAX, 1, frame, "glee");
+    m_spinBox = new QSpinBox;
+    m_spinBox->setMinimum(1);
+    m_spinBox->setMaximum(INT_MAX);
+    m_spinBox->setSingleStep(1);
     layout->addWidget(m_spinBox, 0, 0);
 
-    m_comboBox = new KComboBox(false, frame);
-    m_comboBox->insertItem(i18n("beat(s)"));
-    m_comboBox->insertItem(i18n("bar(s)"));
-    m_comboBox->setCurrentItem(0);
+    m_comboBox = new QComboBox;
+    m_comboBox->setEditable(false);
+    m_comboBox->addItem(tr("beat(s)"));
+    m_comboBox->addItem(tr("bar(s)"));
+    m_comboBox->setCurrentIndex(0);
     layout->addWidget(m_comboBox, 0, 1);
+
+    gbox->setLayout(layout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 }

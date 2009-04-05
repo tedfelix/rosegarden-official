@@ -15,17 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3DragObject>
+#include <Q3UriDrag>
+#include <Q3TextDrag>
+#include <Q3StrList>
 
 #include "TrackEditor.h"
-#include <qlayout.h>
-#include <kapplication.h>
+#include "TrackButtons.h"
 
-#include <klocale.h>
-#include <kconfig.h>
-#include <kstddirs.h>
+#include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "document/ConfigGroups.h"
-#include "gui/application/RosegardenDCOP.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/rulers/StandardRuler.h"
 #include "base/Composition.h"
@@ -39,64 +39,69 @@
 #include "commands/segment/SegmentEraseCommand.h"
 #include "commands/segment/SegmentInsertCommand.h"
 #include "commands/segment/SegmentRepeatToCopyCommand.h"
-#include "segmentcanvas/CompositionModel.h"
-#include "segmentcanvas/CompositionModelImpl.h"
-#include "segmentcanvas/CompositionView.h"
-#include "document/MultiViewCommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "compositionview/CompositionModel.h"
+#include "compositionview/CompositionModelImpl.h"
+#include "compositionview/CompositionView.h"
+#include "document/CommandHistory.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/general/IconLoader.h"
 #include "gui/widgets/ProgressDialog.h"
-#include "gui/widgets/QDeferScrollView.h"
+#include "gui/widgets/DeferScrollArea.h"
 #include "sound/AudioFile.h"
-#include "TrackButtons.h"
-#include "TrackEditorIface.h"
-#include <dcopobject.h>
-#include <kcommand.h>
-#include <kglobal.h>
-#include <kmessagebox.h>
-#include <qapplication.h>
-#include <qcursor.h>
-#include <qfont.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qscrollview.h>
-#include <qstring.h>
-#include <qstringlist.h>
-#include <qstrlist.h>
-#include <qwidget.h>
-#include <qvalidator.h>
-#include <qdragobject.h>
-#include <qtextstream.h>
+#include "document/Command.h"
+
+#include <QSettings>
+#include <QLayout>
+#include <QApplication>
+#include <QMessageBox>
+#include <QApplication>
+#include <QCursor>
+#include <QFont>
+#include <QPixmap>
+#include <QPoint>
+#include <QScrollBar>
+#include <QString>
+#include <QStringList>
+#include <QStringList>
+#include <QWidget>
+#include <QValidator>
+#include <QTextStream>
+#include <QEvent>
+#include <QDragEnterEvent>
+#include <QDragLeaveEvent>
+#include <QDragMoveEvent>
+#include <QDropEvent>
 
 
 namespace Rosegarden
 {
 
-TrackEditor::TrackEditor(RosegardenGUIDoc* doc,
+TrackEditor::TrackEditor(RosegardenDocument* doc,
                          QWidget* rosegardenguiview,
                          RulerScale *rulerScale,
                          bool showTrackLabels,
                          double initialUnitsPerPixel,
-                         QWidget* parent, const char* name,
-                         WFlags) :
-        DCOPObject("TrackEditorIface"),
-        QWidget(parent, name),
-        m_doc(doc),
-        m_rulerScale(rulerScale),
-        m_topStandardRuler(0),
-        m_bottomStandardRuler(0),
-        m_trackButtons(0),
-        m_segmentCanvas(0),
-        m_trackButtonScroll(0),
-        m_showTrackLabels(showTrackLabels),
-        m_canvasWidth(0),
-        m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
-        m_playTracking(true),
-        m_initialUnitsPerPixel(initialUnitsPerPixel)
+                         QWidget* parent, const char* name) :
+    QWidget(parent),
+    m_doc(doc),
+    m_rulerScale(rulerScale),
+    m_topStandardRuler(0),
+    m_bottomStandardRuler(0),
+    m_trackButtons(0),
+    m_compositionView(0),
+    m_trackButtonScroll(0),
+    m_showTrackLabels(showTrackLabels),
+    m_canvasWidth(0),
+    m_compositionRefreshStatusId(doc->getComposition().getNewRefreshStatusId()),
+    m_playTracking(true),
+    m_initialUnitsPerPixel(initialUnitsPerPixel)
 {
+    setObjectName(name);
+
     // accept dnd
     setAcceptDrops(true);
 
@@ -113,11 +118,13 @@ TrackEditor::~TrackEditor()
 void
 TrackEditor::init(QWidget* rosegardenguiview)
 {
-    QGridLayout *grid = new QGridLayout(this, 4, 2);
+    QGridLayout *grid = new QGridLayout(this);
+    grid->setMargin(0);
+    grid->setSpacing(0);
 
     int trackLabelWidth = 230;
     int barButtonsHeight = 25;
-
+    
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
                                           m_doc,
                                           0.0,
@@ -125,9 +132,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                           this);
     grid->addWidget(m_chordNameRuler, 0, 1);
 
+//    m_chordNameRuler->hide();
+
     m_tempoRuler = new TempoRuler(m_rulerScale,
                                   m_doc,
-                                  RosegardenGUIApp::self(),
+                                  RosegardenMainWindow::self(),
                                   0.0,
                                   24,
                                   true,
@@ -136,6 +145,8 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->addWidget(m_tempoRuler, 1, 1);
 
     m_tempoRuler->connectSignals();
+
+//    m_tempoRuler->hide();
 
     //
     // Top Bar Buttons
@@ -147,8 +158,11 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                      false,
                                      this, "topbarbuttons");
     m_topStandardRuler->connectRulerToDocPointer(m_doc);
+    m_topStandardRuler->setContentsMargins(2,0,0,0);
 
     grid->addWidget(m_topStandardRuler, 2, 1);
+
+//    m_topStandardRuler->hide();
 
     //
     // Segment Canvas
@@ -162,16 +176,20 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(rosegardenguiview->parent(), SIGNAL(instrumentParametersChanged(InstrumentId)),
             m_compositionModel, SLOT(slotInstrumentParametersChanged(InstrumentId)));
 
-    m_segmentCanvas = new CompositionView(m_doc, m_compositionModel, this);
+    m_compositionView = new CompositionView(m_doc, m_compositionModel, this);
 
-    kapp->config()->setGroup(GeneralOptionsConfigGroup);
-    if (kapp->config()->readBoolEntry("backgroundtextures", true)) {
-        QPixmap background;
-        QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-        if (background.load(QString("%1/misc/bg-segmentcanvas.xpm").
-                            arg(pixmapDir))) {
-            m_segmentCanvas->setBackgroundPixmap(background);
-            m_segmentCanvas->viewport()->setBackgroundPixmap(background);
+    IconLoader il;
+    
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    if ( qStrToBool( settings.value("backgroundtextures", "true" ) ) ) {
+
+        QPixmap background = il.loadPixmap("bg-segmentcanvas");
+
+        if (!background.isNull()) {
+            m_compositionView->setBackgroundPixmap(background);
+            m_compositionView->viewport()->setBackgroundPixmap(background);
         }
     }
 
@@ -183,22 +201,33 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                         0,
                                         barButtonsHeight,
                                         true,
-                                        m_segmentCanvas, "bottombarbuttons");
+                                        m_compositionView, "bottombarbuttons");
     m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
+    m_bottomStandardRuler->setContentsMargins(2,0,0,0);
 
-    m_segmentCanvas->setBottomFixedWidget(m_bottomStandardRuler);
+//    m_bottomStandardRuler->hide();
 
-    grid->addWidget(m_segmentCanvas, 3, 1);
+    m_compositionView->setBottomFixedWidget(m_bottomStandardRuler);
 
-    grid->setColStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
+//    grid->addWidget(m_compositionView, 3, 1);
+    grid->addWidget(m_compositionView, 3, 1, 2, 1); // Multi-cell widget FromRow, FromCol, RowSpan, ColSpan
+
+    QSize hsbSize = m_compositionView->horizontalScrollBar()->sizeHint();
+    grid->setRowMinimumHeight(4,hsbSize.height() + m_bottomStandardRuler->height());
+
+    grid->setColumnStretch(1, 10); // to make sure the seg canvas doesn't leave a "blank" grey space when
     // loading a file which has a low zoom factor
 
     // Track Buttons
     //
-    // (must be put in a QScrollView)
-    //
-    m_trackButtonScroll = new QDeferScrollView(this);
+//    m_trackButtonScroll = new QDeferScrollView(this);
+//    m_trackButtonScroll = new QScrollArea(this);
+    m_trackButtonScroll = new DeferScrollArea(this);
+    // Scroll bars always off
+    m_trackButtonScroll->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_trackButtonScroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     grid->addWidget(m_trackButtonScroll, 3, 0);
+
 
     int canvasHeight = getTrackCellHeight() *
                        std::max(40u, m_doc->getComposition().getNbTracks());
@@ -208,13 +237,31 @@ TrackEditor::init(QWidget* rosegardenguiview)
                                       trackLabelWidth,
                                       m_showTrackLabels,
                                       canvasHeight,
-                                      m_trackButtonScroll->viewport());
-    m_trackButtonScroll->addChild(m_trackButtons);
-    m_trackButtonScroll->setHScrollBarMode(QScrollView::AlwaysOff);
-    m_trackButtonScroll->setVScrollBarMode(QScrollView::AlwaysOff);
-    m_trackButtonScroll->setResizePolicy(QScrollView::AutoOneFit);
-    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
-                                         m_segmentCanvas->horizontalScrollBar()->height());
+//                                      m_trackButtonScroll->viewport(),
+                                      m_trackButtonScroll,
+                                      "TRACK_BUTTONS"); // permit styling; internal string; no tr()
+//    m_trackButtons->hide();
+//    m_trackButtonScroll->addChild(m_trackButtons);
+    m_trackButtonScroll->setWidget(m_trackButtons);
+
+//    m_trackButtonScroll->setLayout( new QVBoxLayout(m_trackButtonScroll) );
+
+//    m_trackButtonScroll->layout()->setMargin(0);
+//    m_trackButtonScroll->layout()->addWidget(m_trackButtons);
+    
+//         m_trackButtonScroll->setHScrollBarMode(Q3ScrollView::AlwaysOff);
+//    m_trackButtonScroll->setVScrollBarMode(Q3ScrollView::AlwaysOff);
+//    m_trackButtonScroll->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+//    m_trackButtonScroll->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    
+//     m_trackButtonScroll->setResizePolicy(Q3ScrollView::AutoOneFit);
+//    QSizePolicy poli;
+//    poli.setVerticalPolicy( QSizePolicy::MinimumExpanding );
+//    poli.setHorizontalPolicy( QSizePolicy::MinimumExpanding );
+//    m_trackButtonScroll->setSizePolicy( poli );
+    
+//    m_trackButtonScroll->setBottomMargin(m_bottomStandardRuler->height() +
+//                                        m_compositionView->horizontalScrollBar()->height());
 
     connect(m_trackButtons, SIGNAL(widthChanged()),
             this, SLOT(slotTrackButtonsWidthChanged()));
@@ -235,65 +282,68 @@ TrackEditor::init(QWidget* rosegardenguiview)
             rosegardenguiview, SLOT(slotSetMuteButton(TrackId, bool)));
 
     // connect loop rulers' follow-scroll signals
+    // connect loop rulers' follow-scroll signals
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_segmentCanvas, SLOT(startAutoScroll(int)));
+            m_compositionView, SLOT(startAutoScroll(int)));
     connect(m_topStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_segmentCanvas, SLOT(stopAutoScroll()));
+            m_compositionView, SLOT(stopAutoScroll()));
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(startMouseMove(int)),
-            m_segmentCanvas, SLOT(startAutoScroll(int)));
+            m_compositionView, SLOT(startAutoScroll(int)));
     connect(m_bottomStandardRuler->getLoopRuler(), SIGNAL(stopMouseMove()),
-            m_segmentCanvas, SLOT(stopAutoScroll()));
+            m_compositionView, SLOT(stopAutoScroll()));
 
-    connect(m_segmentCanvas, SIGNAL(contentsMoving(int, int)),
+    connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
             this, SLOT(slotCanvasScrolled(int, int)));
 
     // Synchronize bar buttons' scrollview with segment canvas' scrollbar
     //
-    connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->verticalScrollBar(), SIGNAL(valueChanged(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
+//    connect(m_vertScrollBar, SIGNAL(valueChanged(int)),
+//        this, SLOT(slotVerticalScrollTrackButtons(int)));
 
-    connect(m_segmentCanvas->verticalScrollBar(), SIGNAL(sliderMoved(int)),
+    connect(m_compositionView->verticalScrollBar(), SIGNAL(sliderMoved(int)),
             this, SLOT(slotVerticalScrollTrackButtons(int)));
 
     // scrolling with mouse wheel
     connect(m_trackButtonScroll, SIGNAL(gotWheelEvent(QWheelEvent*)),
-            m_segmentCanvas, SLOT(slotExternalWheelEvent(QWheelEvent*)));
+            m_compositionView, SLOT(slotExternalWheelEvent(QWheelEvent*)));
 
     // Connect horizontal scrollbar
     //
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_topStandardRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_topStandardRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_bottomStandardRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_tempoRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_tempoRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(valueChanged(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
-    connect(m_segmentCanvas->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
+    connect(m_compositionView->horizontalScrollBar(), SIGNAL(sliderMoved(int)),
             m_chordNameRuler, SLOT(slotScrollHoriz(int)));
 
-    connect(this, SIGNAL(needUpdate()), m_segmentCanvas, SLOT(slotUpdateSegmentsDrawBuffer()));
+    connect(this, SIGNAL(needUpdate()), m_compositionView, SLOT(slotUpdateSegmentsDrawBuffer()));
 
-    connect(m_segmentCanvas->getModel(),
+    connect(m_compositionView->getModel(),
             SIGNAL(selectedSegments(const SegmentSelection &)),
             rosegardenguiview,
             SLOT(slotSelectedSegments(const SegmentSelection &)));
 
-    connect(m_segmentCanvas, SIGNAL(zoomIn()),
-            RosegardenGUIApp::self(), SLOT(slotZoomIn()));
-    connect(m_segmentCanvas, SIGNAL(zoomOut()),
-            RosegardenGUIApp::self(), SLOT(slotZoomOut()));
+    connect(m_compositionView, SIGNAL(zoomIn()),
+            RosegardenMainWindow::self(), SLOT(slotZoomIn()));
+    connect(m_compositionView, SIGNAL(zoomOut()),
+            RosegardenMainWindow::self(), SLOT(slotZoomOut()));
 
-    connect(getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(update()));
 
     connect(m_doc, SIGNAL(pointerPositionChanged(timeT)),
@@ -315,11 +365,13 @@ TrackEditor::init(QWidget* rosegardenguiview)
     connect(m_doc, SIGNAL(loopChanged(timeT,
                                       timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
+
+    settings.endGroup();
 }
 
 void TrackEditor::slotReadjustCanvasSize()
 {
-    m_segmentCanvas->slotUpdateSize();
+    m_compositionView->slotUpdateSize();
 }
 
 void TrackEditor::slotTrackButtonsWidthChanged()
@@ -377,12 +429,20 @@ void TrackEditor::updateRulers()
 
 void TrackEditor::paintEvent(QPaintEvent* e)
 {
+    RG_DEBUG << "TrackEditor::paintEvent" << endl;
+
     if (isCompositionModified()) {
 
+        RG_DEBUG << "TrackEditor::paintEvent: Composition modified" << endl;
+
+        //!!! These calls from within a paintEvent look ugly
         slotReadjustCanvasSize();
-        m_trackButtons->slotUpdateTracks();
-        m_segmentCanvas->clearSegmentRectsCache(true);
-        m_segmentCanvas->updateContents();
+        m_trackButtons->slotUpdateTracks(); 
+        m_compositionView->clearSegmentRectsCache(true);
+        
+        m_compositionView->updateContents();
+         
+//        m_compositionView->update();
 
         Composition &composition = m_doc->getComposition();
 
@@ -391,7 +451,7 @@ void TrackEditor::paintEvent(QPaintEvent* e)
             emit stateChange("have_selection", false); // no segments : reverse state
         } else {
             emit stateChange("have_segments", true);
-            if (m_segmentCanvas->haveSelection())
+            if (m_compositionView->haveSelection())
                 emit stateChange("have_selection", true);
             else
                 emit stateChange("have_selection", false); // no selection : reverse state
@@ -454,12 +514,12 @@ TrackEditor::slotCanvasScrolled(int x, int y)
          m_bottomStandardRuler->getLoopRuler()->hasActiveMousePress() &&
          !m_bottomStandardRuler->getLoopRuler()->getLoopingMode())) {
 
-        int mx = m_segmentCanvas->viewport()->mapFromGlobal(QCursor::pos()).x();
-        m_segmentCanvas->setPointerPos(x + mx);
+        int mx = m_compositionView->viewport()->mapFromGlobal(QCursor::pos()).x();
+        m_compositionView->setPointerPos(x + mx);
 
         // bad idea, creates a feedback loop
-        // 	timeT t = m_segmentCanvas->grid().getRulerScale()->getTimeForX(x + mx);
-        // 	slotSetPointerPosition(t);
+        //     timeT t = m_compositionView->grid().getRulerScale()->getTimeForX(x + mx);
+        //     slotSetPointerPosition(t);
     }
 }
 
@@ -472,9 +532,9 @@ TrackEditor::slotSetPointerPosition(timeT position)
     if (!ruler)
         return ;
 
-    double pos = m_segmentCanvas->grid().getRulerScale()->getXForTime(position);
+    double pos = m_compositionView->grid().getRulerScale()->getXForTime(position);
 
-    int currentPointerPos = m_segmentCanvas->getPointerPos();
+    int currentPointerPos = m_compositionView->getPointerPos();
 
     double distance = pos - currentPointerPos;
     if (distance < 0.0)
@@ -486,18 +546,18 @@ TrackEditor::slotSetPointerPosition(timeT position)
             (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
             
             if (m_playTracking) {
-                getSegmentCanvas()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
+                getCompositionView()->slotScrollHoriz(int(double(position) / ruler->getUnitsPerPixel()));
             }
-        } else if (!getSegmentCanvas()->isAutoScrolling()) {
+        } else if (!getCompositionView()->isAutoScrolling()) {
             int newpos = int(double(position) / ruler->getUnitsPerPixel());
             //             RG_DEBUG << "TrackEditor::slotSetPointerPosition("
             //                      << position
             //                      << ") : calling canvas->slotScrollHoriz() "
             //                      << newpos << endl;
-            getSegmentCanvas()->slotScrollHoriz(newpos);
+            getCompositionView()->slotScrollHoriz(newpos);
         }
 
-        m_segmentCanvas->setPointerPos(pos);
+        m_compositionView->setPointerPos(pos);
     }
 
 }
@@ -505,12 +565,12 @@ TrackEditor::slotSetPointerPosition(timeT position)
 void
 TrackEditor::slotPointerDraggedToPosition(timeT position)
 {
-    int currentPointerPos = m_segmentCanvas->getPointerPos();
+    int currentPointerPos = m_compositionView->getPointerPos();
 
     double newPosition;
 
     if (handleAutoScroll(currentPointerPos, position, newPosition))
-        m_segmentCanvas->setPointerPos(int(newPosition));
+        m_compositionView->setPointerPos(int(newPosition));
 }
 
 void
@@ -531,7 +591,7 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
     if (!ruler)
         return false;
 
-    newPosition = m_segmentCanvas->grid().getRulerScale()->getXForTime(newTimePosition);
+    newPosition = m_compositionView->grid().getRulerScale()->getXForTime(newTimePosition);
 
     double distance = fabs(newPosition - currentPosition);
 
@@ -543,12 +603,12 @@ bool TrackEditor::handleAutoScroll(int currentPosition, timeT newTimePosition, d
                 (m_doc->getSequenceManager()->getTransportStatus() != STOPPED)) {
 
             if (m_playTracking) {
-                getSegmentCanvas()->slotScrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
+                getCompositionView()->slotScrollHoriz(int(double(newTimePosition) / ruler->getUnitsPerPixel()));
             }
         } else {
             int newpos = int(double(newTimePosition) / ruler->getUnitsPerPixel());
-            getSegmentCanvas()->slotScrollHorizSmallSteps(newpos);
-            getSegmentCanvas()->doAutoScroll();
+            getCompositionView()->slotScrollHorizSmallSteps(newpos);
+            getCompositionView()->doAutoScroll();
         }
 
     }
@@ -569,21 +629,16 @@ TrackEditor::slotSetLoop(timeT start, timeT end)
     getBottomStandardRuler()->getLoopRuler()->slotSetLoopMarker(start, end);
 }
 
-MultiViewCommandHistory*
-TrackEditor::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
-}
-
 void
-TrackEditor::addCommandToHistory(KCommand *command)
+TrackEditor::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
 TrackEditor::slotScrollToTrack(int track)
 {
+    ///!!! Reconfigure to use m_compositionmodel to return y value for track number
     // Find the vertical track pos
     int newY = track * getTrackCellHeight();
 
@@ -592,16 +647,21 @@ TrackEditor::slotScrollToTrack(int track)
 
     // Scroll the segment view; it will scroll tracks by connected signals
     //    slotVerticalScrollTrackButtons(newY);
-    m_segmentCanvas->slotScrollVertSmallSteps(newY);
+
+    // This is currently a bit broke
+    m_compositionView->slotScrollVertSmallSteps(newY);
+
+    // This works but is basic McBasic
+    //m_compositionView->setContentsPos(m_compositionView->contentsX(),newY);
 }
 
 void
 TrackEditor::slotDeleteSelectedSegments()
 {
-    KMacroCommand *macro = new KMacroCommand("Delete Segments");
+    MacroCommand *macro = new MacroCommand("Delete Segments");
 
     SegmentSelection segments =
-        m_segmentCanvas->getSelectedSegments();
+        m_compositionView->getSelectedSegments();
 
     if (segments.size() == 0)
         return ;
@@ -611,7 +671,7 @@ TrackEditor::slotDeleteSelectedSegments()
     // Clear the selection before erasing the Segments
     // the selection points to
     //
-    m_segmentCanvas->getModel()->clearSelected();
+    m_compositionView->getModel()->clearSelected();
 
     // Create the compound command
     //
@@ -630,7 +690,7 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     RG_DEBUG << "TrackEditor::slotTurnRepeatingSegmentToRealCopies" << endl;
 
     SegmentSelection segments =
-        m_segmentCanvas->getSelectedSegments();
+        m_compositionView->getSelectedSegments();
 
     if (segments.size() == 0)
         return ;
@@ -638,11 +698,11 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
     QString text;
 
     if (segments.size() == 1)
-        text = i18n("Turn Repeating Segment into Real Copies");
+        text = tr("Turn Repeating Segment into Real Copies");
     else
-        text = i18n("Turn Repeating Segments into Real Copies");
+        text = tr("Turn Repeating Segments into Real Copies");
 
-    KMacroCommand *macro = new KMacroCommand(text);
+    MacroCommand *macro = new MacroCommand(text);
 
     SegmentSelection::iterator it = segments.begin();
     for (; it != segments.end(); it++) {
@@ -658,19 +718,54 @@ TrackEditor::slotTurnRepeatingSegmentToRealCopies()
 void
 TrackEditor::slotVerticalScrollTrackButtons(int y)
 {
-    m_trackButtonScroll->setContentsPos(0, y);
+//     m_trackButtonScroll->setContentsPos(0, y);
+m_trackButtonScroll->verticalScrollBar()->setValue(y);
+    
+//     ensureVisible ( int x, int y, int xmargin = 50, int ymargin = 50 )
+//    m_trackButtonScroll->ensureVisible ( 0, y, 50, 20 );
 }
 
-void TrackEditor::dragEnterEvent(QDragEnterEvent *event)
+void TrackEditor::dragEnterEvent(QDragEnterEvent *e)
 {
-    event->accept(QUriDrag::canDecode(event) ||
-                  QTextDrag::canDecode(event));
+    QStringList formats(e->mimeData()->formats());
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+    }
 }
 
-void TrackEditor::dropEvent(QDropEvent* event)
+void TrackEditor::dropEvent(QDropEvent* e)
 {
-    QStrList uri;
+    QStringList uriList;
     QString text;
+
+    if (e->provides("text/uri-list") || e->provides("text/plain")) {
+
+        if (e->proposedAction() & Qt::CopyAction) {
+            e->acceptProposedAction();
+        } else {
+            e->setDropAction(Qt::CopyAction);
+            e->accept();
+        }
+
+        if (e->provides("text/uri-list")) {
+            uriList =
+                QString::fromLocal8Bit(e->encodedData("text/uri-list").data())
+                .split(QRegExp("[\\r\\n]+"), QString::SkipEmptyParts);
+        } else {
+            text = QString::fromLocal8Bit(e->encodedData("text/plain").data());
+        }
+    }
+
+    if (uriList.empty() && text == "") {
+        RG_DEBUG << "TrackEditor::dropEvent: Nothing dropped" << endl;
+    }
 
     int heightAdjust = 0;
     //int widthAdjust = 0;
@@ -686,33 +781,36 @@ void TrackEditor::dropEvent(QDropEvent* event)
     if (m_chordNameRuler && m_chordNameRuler->isVisible())
         heightAdjust += m_chordNameRuler->height();
 
-    QPoint posInSegmentCanvas =
-        m_segmentCanvas->viewportToContents
-        (m_segmentCanvas->
-         viewport()->mapFrom(this, event->pos()));
+//     QPoint posInCompositionView =
+//         m_compositionView->viewportToContents(m_compositionView->
+//                                          viewport()->mapFrom(this, event->pos()));    
+    // 
+    QPoint posInCompositionView;
+    QPoint pt;
+    
+    pt = this->mapToGlobal( e->pos() );            //@@@
+    pt = m_compositionView->mapFromGlobal( pt );
+    posInCompositionView = pt;
+    // note: Base of m_compositionView is CompositionView, RosegardenScrollView, [[QScrollArea]]
+    
+    
 
-    int trackPos = m_segmentCanvas->grid().getYBin(posInSegmentCanvas.y());
+    int trackPos = m_compositionView->grid().getYBin(posInCompositionView.y());
 
     timeT time =
-//        m_segmentCanvas->grid().getRulerScale()->
-//        getTimeForX(posInSegmentCanvas.x());
-        m_segmentCanvas->grid().snapX(posInSegmentCanvas.x());
+//        m_compositionView->grid().getRulerScale()->
+//        getTimeForX(posInCompositionView.x());
+        m_compositionView->grid().snapX(posInCompositionView.x());
 
 
-    if (QUriDrag::decode(event, uri)) {
-        RG_DEBUG << "TrackEditor::dropEvent() : got URI :"
-        << uri.first() << endl;
-        QString uriPath = uri.first();
+    if (!uriList.empty()) {
 
-        if (uriPath.endsWith(".rg")) {
-            emit droppedDocument(uriPath);
+        RG_DEBUG << "TrackEditor::dropEvent() : got URI :" << uriList.first() << endl;
+        QString uri = uriList.first();
+
+        if (uri.endsWith(".rg")) {
+            emit droppedDocument(uri);
         } else {
-
-            QStrList uris;
-            QString uri;
-            if (QUriDrag::decode(event, uris)) uri = uris.first();
-//            QUriDrag::decodeLocalFiles(event, files);
-//            QString filePath = files.first();
 
             RG_DEBUG << "TrackEditor::dropEvent() : got URI: "
             << uri << endl;
@@ -722,9 +820,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
             << ", time = "
             << time
             << ", x = "
-            << event->pos().x()
+            << e->pos().x()
             << ", mapped x = "
-            << posInSegmentCanvas.x()
+            << posInCompositionView.x()
             << endl;
 
             Track* track = m_doc->getComposition().getTrackByPosition(trackPos);
@@ -741,7 +839,8 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
         }
 
-    } else if (QTextDrag::decode(event, text)) {
+    } else if (text != "") {
+
         RG_DEBUG << "TrackEditor::dropEvent() : got text info " << endl;
         //<< text << endl;
 
@@ -784,9 +883,9 @@ void TrackEditor::dropEvent(QDropEvent* event)
                     << ", time = "
                     << time
                     << ", x = "
-                    << event->pos().x()
+                    << e->pos().x()
                     << ", map = "
-                    << posInSegmentCanvas.x()
+                    << posInCompositionView.x()
                     << endl;
 
                     QString audioText;
@@ -804,7 +903,7 @@ void TrackEditor::dropEvent(QDropEvent* event)
 
             } else {
 
-                KMessageBox::sorry(this, i18n("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
+                /* was sorry */ QMessageBox::warning(this, "", tr("You can't drop files into Rosegarden from this client.  Try using Konqueror instead."));
 
             }
 

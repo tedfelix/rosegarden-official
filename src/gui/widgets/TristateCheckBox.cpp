@@ -18,8 +18,8 @@
 
 #include "TristateCheckBox.h"
 
-#include <qcheckbox.h>
-#include <qwidget.h>
+#include <QCheckBox>
+#include <QWidget>
 
 
 namespace Rosegarden

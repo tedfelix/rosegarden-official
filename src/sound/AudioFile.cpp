@@ -13,6 +13,7 @@
 
 
 #include "AudioFile.h"
+#include "QDateTime"
 
 namespace Rosegarden
 

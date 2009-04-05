@@ -18,10 +18,10 @@
 
 #include "MetronomeMmapper.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "sound/Midi.h"
-#include <kstddirs.h>
+#include <QDir>
 #include "document/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
@@ -30,19 +30,18 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "SegmentMmapper.h"
 #include "sound/MappedEvent.h"
-#include <kconfig.h>
-#include <kglobal.h>
-#include <qstring.h>
+#include <QSettings>
+#include <QString>
 #include <algorithm>
 
 
 namespace Rosegarden
 {
 
-MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
+MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
         : SegmentMmapper(doc, 0, createFileName()),
         m_metronome(0),  // no metronome to begin with
         m_tickDuration(0, 100000000)
@@ -97,10 +96,11 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
         }
     }
 
-    KConfig *config = kapp->config();
-    config->setGroup(SequencerOptionsConfigGroup);
-    int midiClock = config->readNumEntry("midiclock", 0);
-    int mtcMode = config->readNumEntry("mtcmode", 0);
+    QSettings settings;
+    settings.beginGroup( SequencerOptionsConfigGroup );
+
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
     if (midiClock == 1) {
         timeT quarterNote = Note(Note::Crotchet).getDuration();
@@ -133,6 +133,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenGUIDoc* doc)
     //         doMmap();
     //         dump();
     //     }
+    settings.endGroup();
 }
 
 MetronomeMmapper::~MetronomeMmapper()
@@ -148,7 +149,7 @@ InstrumentId MetronomeMmapper::getMetronomeInstrument()
 
 QString MetronomeMmapper::createFileName()
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() + "/rosegarden_metronome";
+    return QDir::tempPath() + "/rosegarden_metronome";
 }
 
 void MetronomeMmapper::dump()
@@ -219,10 +220,11 @@ void MetronomeMmapper::sortTicks()
 
 size_t MetronomeMmapper::computeMmappedSize()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-    int midiClock = config->readNumEntry("midiclock", 0);
-    int mtcMode = config->readNumEntry("mtcmode", 0);
+    QSettings settings;
+    settings.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+
+    int midiClock = settings.value("midiclock", 0).toInt() ;
+    int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
     // base size for Metronome ticks
     size_t size = m_ticks.size() * sizeof(MappedEvent);
@@ -249,6 +251,7 @@ size_t MetronomeMmapper::computeMmappedSize()
     {
         // Allow room for MTC timing messages (how?)
     }
+    settings.endGroup();
 
     return size;
 }

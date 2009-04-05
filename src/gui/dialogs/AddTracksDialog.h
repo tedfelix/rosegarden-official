@@ -18,7 +18,7 @@
 #ifndef _RG_ADDTRACKSDIALOG_H_
 #define _RG_ADDTRACKSDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 class QWidget;
 class QSpinBox;
@@ -27,7 +27,7 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class AddTracksDialog : public KDialogBase
+class AddTracksDialog : public QDialog
 {
     Q_OBJECT
 

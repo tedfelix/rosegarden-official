@@ -49,7 +49,7 @@ const Rosegarden::Clef clefIndexToClef(int index)
 const int clefNameToClefIndex(QString s)
 {
     int m_elClef = 0;
-	if (s) {
+	if (!s.isEmpty()) {
         if (s == "treble")
             m_elClef = TrebleClef;
         else if (s == "bass")

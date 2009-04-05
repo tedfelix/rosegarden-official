@@ -19,12 +19,13 @@
 #ifndef _RG_PLAYLIST_H_
 #define _RG_PLAYLIST_H_
 
-#include <qvbox.h>
+#include <QWidget>
 
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QHBoxLayout;
 class QFrame;
 class QDropEvent;
@@ -36,7 +37,7 @@ namespace Rosegarden
 class PlayListView;
 
 
-class PlayList : public QVBox
+class PlayList : public QWidget
 {
     Q_OBJECT
 
@@ -46,7 +47,7 @@ public:
 
     PlayListView* getListView() { return m_listView; }
 
-    void enableButtons(QListViewItem*);
+    void enableButtons(QTreeWidgetItem*);
 
 
 signals:
@@ -59,8 +60,8 @@ protected slots:
     void slotMoveDown();
     void slotDeleteCurrent();
     void slotClear();
-    void slotCurrentItemChanged(QListViewItem*);
-    void slotDropped(QDropEvent*, QListViewItem*);
+    void slotCurrentItemChanged(QTreeWidgetItem*);
+    void slotDropped(QDropEvent*, QTreeWidgetItem*);
 
 protected:
     void save();

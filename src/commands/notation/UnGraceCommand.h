@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUUNGRACECOMMAND_H_
-#define _RG_ADJUSTMENUUNGRACECOMMAND_H_
+#ifndef _RG_UNGRACECOMMAND_H_
+#define _RG_UNGRACECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,11 +34,13 @@ class EventSelection;
 
 class UnGraceCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(UnGraceCommand)
+
 public:
     UnGraceCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection) { }
 
-    static QString getGlobalName() { return i18n("Ung&race"); }
+    static QString getGlobalName() { return tr("Ung&race"); }
 
 protected:
     virtual void modifySegment();

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,13 +18,13 @@
 #ifndef _RG_ROSEGARDENAPPLICATION_H_
 #define _RG_ROSEGARDENAPPLICATION_H_
 
-#include <kuniqueapplication.h>
-#include <qcstring.h>
-#include <qstring.h>
+#include <QApplication>
+#include <QByteArray>
+#include <QString>
 
 
 class QSessionManager;
-class KProcess;
+class QProcess;
 
 
 namespace Rosegarden
@@ -36,30 +35,26 @@ namespace Rosegarden
 /**
  * RosegardenApplication
  *
- * Handles RosegardenGUIApps perceived uniqueness for us.
+ * Handles RosegardenMainWindow's perceived uniqueness for us.
  *
  */
-class RosegardenApplication : public KUniqueApplication
+class RosegardenApplication : public QApplication
 {
     Q_OBJECT
 public:
-    RosegardenApplication(): KUniqueApplication(), m_noSequencerMode(false) {}
+    RosegardenApplication(int &argc, char **argv) :
+        QApplication(argc, argv), m_noSequencerMode(false) {}
 
     /**
      * Handle the attempt at creation of a new instance - 
      * only accept new file names which we attempt to load
      * into the existing instance (if it exists)
      */
-    virtual int newInstance();
+//&&&    virtual int newInstance();
 
     void refreshGUI(int maxTime);
 
-    bool isSequencerRegistered();
-    bool sequencerSend(QCString dcopCall, QByteArray params = Empty);
-    bool sequencerCall(QCString dcopCall, QCString& replyType,
-                       QByteArray& replyData, QByteArray params = Empty, bool useEventLoop = false);
-
-    static RosegardenApplication* rgApp();
+    static RosegardenApplication* ApplicationObject();
 
     static QByteArray Empty;
 
@@ -68,12 +63,15 @@ public:
 
     virtual void saveState(QSessionManager&);
     
+    //!!!
+    //@@@ Need session manager commitData() call
+
 signals:
-    // connect this to RosegardenGUIApp
+    // connect this to RosegardenMainWindow
     void aboutToSaveState();
     
 public slots:
-    void sfxLoadExited(KProcess *proc);
+    void sfxLoadExited(QProcess *proc);
     void slotSetStatusMessage(QString txt);
 
 protected:
@@ -82,7 +80,7 @@ protected:
     bool m_noSequencerMode;
 };
 
-#define rgapp RosegardenApplication::rgApp()
+#define rosegardenApplication RosegardenApplication::ApplicationObject()
 
 
 }

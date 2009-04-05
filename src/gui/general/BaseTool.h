@@ -19,18 +19,15 @@
 #ifndef _RG_BASETOOL_H_
 #define _RG_BASETOOL_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 
-class QPopupMenu;
-class KXMLGUIFactory;
+class QMenu;
 
 
 namespace Rosegarden
 {
-
-
 
 /**
  * BaseTool : base tool class, just handles RMB menu creation and
@@ -72,7 +69,7 @@ public:
     virtual QString getCurrentContextHelp() const;
 
 signals:
-    void showContextHelp(const QString &);
+    void showContextHelp(QString);
 
 protected:
     /**
@@ -80,7 +77,7 @@ protected:
      *
      * \a menuName : the name of the menu defined in the XML rc file
      */
-    BaseTool(const QString& menuName, KXMLGUIFactory*, QObject* parent);
+    BaseTool(const QString &menuName, QObject *parent);
 
     virtual void createMenu() = 0;
     virtual bool hasMenu() { return false; }
@@ -91,9 +88,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QString m_menuName;
-    QPopupMenu* m_menu;
-
-    KXMLGUIFactory* m_parentFactory;
+    QMenu *m_menu;
 
     QString m_contextHelp;
 };

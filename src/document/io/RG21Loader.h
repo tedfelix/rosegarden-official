@@ -24,8 +24,8 @@
 #include "gui/general/ProgressReporter.h"
 #include <map>
 #include <string>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <vector>
 #include "base/Event.h"
 

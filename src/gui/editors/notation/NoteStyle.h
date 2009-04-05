@@ -22,9 +22,8 @@
 #include "base/NotationTypes.h"
 #include <map>
 #include "NoteCharacterNames.h"
-#include <string>
+#include <QString>
 #include <utility>
-#include "gui/editors/notation/NoteCharacterNames.h"
 
 
 class Mark;
@@ -36,7 +35,7 @@ namespace Rosegarden
 
 class Clef;
 
-typedef std::string NoteStyleName;
+typedef QString NoteStyleName;
 
 
 class NoteStyle
@@ -44,7 +43,7 @@ class NoteStyle
 public:
     virtual ~NoteStyle();
 
-    typedef std::string NoteHeadShape;
+    typedef QString NoteHeadShape;
 
     static const NoteHeadShape AngledOval;
     static const NoteHeadShape LevelOval;
@@ -78,6 +77,7 @@ public:
     CharName getMarkCharName(const Mark &);
     CharName getClefCharName(const Clef &);
     CharName getTimeSignatureDigitName(int digit);
+    CharName getSomeCharName(QString thing);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Note::Type, NoteHeadShape);

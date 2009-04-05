@@ -20,7 +20,7 @@
 
 #include "Chord.h"
 
-#include <qstringlist.h>
+#include <QStringList>
 #include <set>
 
 namespace Rosegarden

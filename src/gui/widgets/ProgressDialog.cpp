@@ -15,17 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ProgressDialog.h"
+
 #include "CurrentProgressDialog.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenApplication.h"
-#include <klocale.h>
-#include <qcursor.h>
-#include <qprogressdialog.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+
+#include <QCursor>
+#include <QProgressDialog>
+#include <QProgressBar>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -36,18 +37,46 @@ bool ProgressDialog::m_modalVisible = false;
 
 ProgressDialog::ProgressDialog(QWidget *creator,
                                const char *name,
-                               bool modal):
-        KProgressDialog(creator, name,
-                        i18n("Processing..."), QString::null, modal),
+                               bool modal
+        ):
+//         QProgressDialog(creator, name,
+//                         tr("Processing..."), QString::null, modal),
+        
+//         QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),    //modal),
+        QProgressDialog( creator, Qt::Dialog ),        // creator = parent ??
         m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
-    setCaption(i18n("Processing..."));
+    this->setObjectName( name );
+    if (modal){
+        setWindowModality( Qt::WindowModal );
+    }else{
+        setWindowModality( Qt::NonModal );
+    }
+//     setMinimum();
+//     setMaximum();
+//     setValue();
+//     setLabelText( tr("Processing...") );
+    setWindowTitle( tr("Processing...") );
+    setCancelButtonText( QString("Cancel") );
+    
+    // qt4 note: progressBar() doesn't exist anymore. 
+    // one can call setBar(QProgressBar*) but not retrieve it 
+    m_progressBar = new QProgressBar();
+    setBar( m_progressBar );
+    
+//     progressBar()->setTotalSteps(totalSteps);
+//    progressBar()->setMaximum(totalSteps);
+    
+    
+    setWindowTitle(tr("Processing..."));
     RG_DEBUG << "ProgressDialog::ProgressDialog type 1 - "
-    << labelText() << " - modal : " << modal << endl;
+//    << labelText() << " - modal : " << modal << endl;
+    << name << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+//    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(valueChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -58,27 +87,62 @@ ProgressDialog::ProgressDialog(QWidget *creator,
     setMinimumDuration(500); // set a default value for this
 }
 
+
+QProgressBar* ProgressDialog::progressBar()
+{    /* return the progress bar created in constructor */
+    return m_progressBar;
+}
+
+
+
 ProgressDialog::ProgressDialog(
     const QString &labelText,
     int totalSteps,
     QWidget *creator,
     const char *name,
     bool modal) :
-        KProgressDialog(creator,
-                        name,
-                        i18n("Processing..."),
-                        labelText,
-                        modal),
+//         QProgressDialog(creator,
+//                         name,
+//                         tr("Processing..."),
+//                         labelText,
+//                         modal),
+        
+//         QProgressDialog( tr("Processing..."), QString("Cancel"), creator ),    //modal),
+        QProgressDialog( creator, Qt::Dialog ),    //modal),
+        
         m_wasVisible(false),
         m_frozen(false),
         m_modal(modal)
 {
-    progressBar()->setTotalSteps(totalSteps);
+    
+    this->setObjectName( name );
+    if (modal){
+        setWindowModality( Qt::WindowModal );
+    }else{
+        setWindowModality( Qt::NonModal );
+    }
+//     setMinimum();
+//     setMaximum();
+//     setValue();
+//     setLabelText( tr("Processing...") );
+    setWindowTitle( tr("Processing...") );
+    setCancelButtonText( QString("Cancel") );
+    
+    
+    // qt4 note: progressBar() doesn't exist anymore. 
+    // one can call setBar(QProgressBar*) but not retrieve it 
+    m_progressBar = new QProgressBar();
+    setBar( m_progressBar );
+    
+//     progressBar()->setTotalSteps(totalSteps);
+    progressBar()->setMaximum(totalSteps);
+    
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
     << labelText << " - modal : " << modal << endl;
 
-    connect(progressBar(), SIGNAL(percentageChanged (int)),
+//    connect(progressBar(), SIGNAL(percentageChanged (int)),
+    connect(progressBar(), SIGNAL(valueChanged (int)),
             this, SLOT(slotCheckShow(int)));
 
     m_chrono.start();
@@ -97,20 +161,23 @@ ProgressDialog::~ProgressDialog()
 void
 ProgressDialog::polish()
 {
-    KProgressDialog::polish();
+    QProgressDialog::polish();
 
-    if (allowCancel())
-        setCursor(Qt::ArrowCursor);
-    else
-        QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
+//@@@ JAS I don't think this is necassary now deactivating
+//@@@ might want to remove ProgressDialog::polish(), later.
+//&&&    if (allowCancel())
+//&&&        setCursor(Qt::ArrowCursor);
+//&&&    else
+//&&&        QApplication::setOverrideCursor(QCursor(Qt::waitCursor));
 }
 
 void ProgressDialog::hideEvent(QHideEvent* e)
 {
-    if (!allowCancel())
-        QApplication::restoreOverrideCursor();
+//@@@ JAS I don't think this is necassary now deactivating
+//&&&    if (!allowCancel())
+//&&&        QApplication::restoreOverrideCursor();
 
-    KProgressDialog::hideEvent(e);
+    QProgressDialog::hideEvent(e);
     m_modalVisible = false;
 }
 
@@ -120,7 +187,7 @@ ProgressDialog::slotSetOperationName(QString name)
     //     RG_DEBUG << "ProgressDialog::slotSetOperationName("
     //              << name << ") visible : " << isVisible() << endl;
 
-    setLabel(name);
+    setLabelText(name);
     // Little trick stolen from QProgressDialog
     // increase resize only, never shrink
     int w = QMAX( isVisible() ? width() : 0, sizeHint().width() );
@@ -131,7 +198,7 @@ ProgressDialog::slotSetOperationName(QString name)
 void ProgressDialog::slotCancel()
 {
     RG_DEBUG << "ProgressDialog::slotCancel()\n";
-    KProgressDialog::slotCancel();
+    QProgressDialog::cancel();
     slotFreeze();
 }
 
@@ -167,7 +234,9 @@ void ProgressDialog::slotFreeze()
     // the user can respond to whatever's freezing the progress dialog
     QApplication::restoreOverrideCursor();
 
-    mShowTimer->stop();
+    //### JAS Is mShowTimer a KDE thing.  I can't find this member.
+    //### JAS Disabling this code, probably not needed.
+    //&&&    mShowTimer->stop();
     m_frozen = true;
 }
 
@@ -182,7 +251,9 @@ void ProgressDialog::slotThaw()
     }
 
     // Restart timer
-    mShowTimer->start(minimumDuration());
+    //### JAS Is mShowTimer a KDE thing.  I can't find this member.
+    //### JAS Disabling this code, probably not needed.
+    //&&& mShowTimer->start(minimumDuration());
     m_frozen = false;
     m_chrono.restart();
 }
@@ -190,11 +261,11 @@ void ProgressDialog::slotThaw()
 void ProgressDialog::processEvents()
 {
     //    RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
-    //	     << m_modalVisible << endl;
+    //         << m_modalVisible << endl;
     if (m_modalVisible) {
-        kapp->processEvents(50);
+        qApp->processEvents(QEventLoop::AllEvents, 50); //@@@ JAS added AllEvents
     } else {
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
     }
 }
 

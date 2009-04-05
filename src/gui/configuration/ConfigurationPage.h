@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -22,16 +21,13 @@
 #ifndef _RG_CONFIGURATIONPAGE_H_
 #define _RG_CONFIGURATIONPAGE_H_
 
-#include <qwidget.h>
-
-
-class KConfig;
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -43,17 +39,12 @@ class ConfigurationPage : public QWidget
     Q_OBJECT
 
 public:
-    ConfigurationPage(RosegardenGUIDoc *doc,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_cfg(0), m_pageIndex(0) {}
+    ConfigurationPage(QWidget *parent=0, const char *name=0)
+        : QWidget(parent), m_doc(0), m_pageIndex(0) {}
 
-    ConfigurationPage(KConfig *cfg,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(0), m_cfg(cfg), m_pageIndex(0) {}
-
-    ConfigurationPage(RosegardenGUIDoc *doc, KConfig *cfg,
-                      QWidget *parent=0, const char *name=0)
-        : QWidget(parent, name), m_doc(doc), m_cfg(cfg), m_pageIndex(0) {}
+    ConfigurationPage(RosegardenDocument *doc, QWidget *parent=0,
+                      const char *name=0)
+        : QWidget(parent), m_doc(doc), m_pageIndex(0) {}
 
     virtual ~ConfigurationPage() {};
 
@@ -81,12 +72,17 @@ public:
     void setPageIndex( int aPageIndex ) { m_pageIndex = aPageIndex; }
     int pageIndex() const { return m_pageIndex; }
 
+signals:
+    void modified();
+
+protected slots:
+    virtual void slotModified();
+
 protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc* m_doc;
-    KConfig* m_cfg;
+    RosegardenDocument* m_doc;
 
     int m_pageIndex;
 };

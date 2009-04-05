@@ -20,7 +20,7 @@
 #define _RG_PERCUSSIONPITCHRULER_H_
 
 #include "PitchRuler.h"
-#include <qsize.h>
+#include <QSize>
 
 
 class QWidget;

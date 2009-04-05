@@ -25,7 +25,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -42,7 +42,7 @@ struct AutoSplitPoint
 };
 
 SegmentAutoSplitCommand::SegmentAutoSplitCommand(Segment *segment) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_segment(segment),
         m_composition(segment->getComposition()),
         m_detached(false)
@@ -140,7 +140,7 @@ SegmentAutoSplitCommand::execute()
             Segment *newSegment = new Segment();
             newSegment->setTrack(m_segment->getTrack());
             std::string label = m_segment->getLabel();
-            newSegment->setLabel(appendLabel(label, qstrtostr(i18n("(part %1)").arg(split + 1))));
+            newSegment->setLabel(appendLabel(label, qstrtostr(tr("(part %1)").arg(split + 1))));
             newSegment->setColourIndex(m_segment->getColourIndex());
 
             timeT startTime = segmentStart;

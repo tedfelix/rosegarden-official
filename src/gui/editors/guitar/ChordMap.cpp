@@ -16,11 +16,11 @@
 */
 
 #include "misc/Debug.h"
-#include "ChordMap.h"
 #include "misc/Strings.h"
+#include "ChordMap.h"
 
-#include <qfile.h>
-#include <qtextstream.h>
+#include <QFile>
+#include <QTextStream>
 
 namespace Rosegarden
 {
@@ -71,7 +71,8 @@ ChordMap::getRootList() const
     static QStringList rootNotes;
     
     if (rootNotes.count() == 0) {
-        rootNotes = QStringList::split(QString(","), "A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab");
+        rootNotes = QString("A,A#/Bb,B,C,C#/Db,D,D#/Eb,E,F,F#/Gb,G,G#/Ab")
+            .split(",", QString::SkipEmptyParts);
     }
     
     // extract roots from map itself - not a very good idea
@@ -131,7 +132,7 @@ ChordMap::remove(const Chord& c)
 bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QString& errMsg)
 {
     QFile file(filename);
-    file.open(IO_WriteOnly);
+    file.open(QIODevice::WriteOnly);
    
     QTextStream outStream(&file);
     
@@ -186,7 +187,7 @@ bool ChordMap::saveDocument(const QString& filename, bool userChordsOnly, QStrin
             outStream << ">\n";
         }
         
-        outStream << "<fingering>" << strtoqstr(chord.getFingering().toString()) << "</fingering>\n";
+        outStream << "<fingering>" << chord.getFingering().toString() << "</fingering>\n";
     }
 
     if (!m_map.empty())

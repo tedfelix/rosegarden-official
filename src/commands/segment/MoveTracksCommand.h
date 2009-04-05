@@ -20,9 +20,9 @@
 #define _RG_MOVETRACKSCOMMAND_H_
 
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -33,15 +33,17 @@ namespace Rosegarden
 class Composition;
 
 
-class MoveTracksCommand : public KNamedCommand
+class MoveTracksCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MoveTracksCommand)
+
 public:
     MoveTracksCommand(Composition *composition,
                       TrackId srcTrack,
                       TrackId destTrack);
     virtual ~MoveTracksCommand();
 
-    static QString getGlobalName() { return i18n("Move Tracks..."); }
+    static QString getGlobalName() { return tr("Move Tracks..."); }
 
     virtual void execute();
     virtual void unexecute();

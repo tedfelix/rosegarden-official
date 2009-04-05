@@ -23,9 +23,11 @@
 #include "base/MidiProgram.h"
 #include "base/Track.h"
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include <vector>
 #include <qxml.h>
+
+#include <QCoreApplication>
 
 
 class QXmlAttributes;
@@ -40,6 +42,8 @@ class Composition;
 
 class HydrogenXMLHandler : public QXmlDefaultHandler
 {
+    Q_DECLARE_TR_FUNCTIONS(HydrogenXMLHandler)
+
 public:
     HydrogenXMLHandler(Composition *comp,
             InstrumentId drumInstrument = MidiInstrumentBase + 9);

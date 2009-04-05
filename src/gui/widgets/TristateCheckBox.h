@@ -19,7 +19,7 @@
 #ifndef _RG_ROSEGARDENTRISTATECHECKBOX_H_
 #define _RG_ROSEGARDENTRISTATECHECKBOX_H_
 
-#include <qcheckbox.h>
+#include <QCheckBox>
 
 
 class QWidget;

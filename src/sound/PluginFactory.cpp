@@ -15,6 +15,7 @@
 
 #include "PluginFactory.h"
 #include "PluginIdentifier.h"
+#include "misc/Strings.h"
 
 #ifdef HAVE_LADSPA
 #include "LADSPAPluginFactory.h"

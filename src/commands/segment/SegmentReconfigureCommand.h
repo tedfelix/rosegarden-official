@@ -20,8 +20,8 @@
 #define _RG_SEGMENTRECONFIGURECOMMAND_H_
 
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -38,7 +38,7 @@ class Segment;
  * SegmentReconfigureCommand is a general-purpose command for
  * moving, resizing or changing the track of one or more segments
  */
-class SegmentReconfigureCommand : public KNamedCommand
+class SegmentReconfigureCommand : public NamedCommand
 {
 public:
     SegmentReconfigureCommand(QString name);

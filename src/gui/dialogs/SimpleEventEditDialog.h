@@ -20,33 +20,36 @@
 #define _RG_SIMPLEEVENTEDITDIALOG_H_
 
 #include "base/Event.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+
 #include <string>
-#include <kdialogbase.h>
 
 
 class QWidget;
 class QString;
 class QSpinBox;
 class QPushButton;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QGroupBox;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class SimpleEventEditDialog : public KDialogBase
+class SimpleEventEditDialog : public QDialog
 {
     Q_OBJECT
 public:
     SimpleEventEditDialog(QWidget *parent,
-                          RosegardenGUIDoc *doc,
+                          RosegardenDocument *doc,
                           const Event &event,
                           bool inserting = false); // inserting or editing
 
@@ -76,7 +79,7 @@ public slots:
 
 protected:
     Event        m_event;
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     std::string              m_type;
     timeT        m_absoluteTime;
@@ -84,7 +87,7 @@ protected:
     timeT        m_duration;
     timeT        m_notationDuration;
 
-    KComboBox               *m_typeCombo;
+    QComboBox               *m_typeCombo;
     QLabel                  *m_typeLabel;
 
     QLabel                  *m_timeLabel;
@@ -115,7 +118,7 @@ protected:
     QPushButton             *m_notationDurationEditButton;
     QCheckBox               *m_lockNotationValues;
 
-    QLineEdit               *m_metaEdit;
+    LineEdit                *m_metaEdit;
 
     bool                     m_modified;
 };

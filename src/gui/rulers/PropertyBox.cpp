@@ -16,13 +16,14 @@
 */
 
 
+#include <QPaintEvent>
 #include "PropertyBox.h"
 
 #include "gui/general/GUIPalette.h"
-#include <qpainter.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QPainter>
+#include <QSize>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

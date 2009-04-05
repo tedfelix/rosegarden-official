@@ -23,11 +23,20 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+FixNotationQuantizeCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("fix_quantization",
+         new SelectionCommandBuilder<FixNotationQuantizeCommand>());
+}
 
 void
 FixNotationQuantizeCommand::modifySegment()

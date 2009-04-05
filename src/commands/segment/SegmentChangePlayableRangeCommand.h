@@ -19,8 +19,8 @@
 #ifndef _RG_SEGMENTCHANGEPLAYABLERANGECOMMAND_H_
 #define _RG_SEGMENTCHANGEPLAYABLERANGECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentChangePlayableRangeCommand : public KNamedCommand
+class SegmentChangePlayableRangeCommand : public NamedCommand
 {
 public:
     /// Set transpose on segments.

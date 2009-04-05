@@ -18,11 +18,11 @@
 
 #include "PasteConductorDataCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
+#include <QObject>
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ namespace Rosegarden
 PasteConductorDataCommand::PasteConductorDataCommand(Composition *composition,
         Clipboard *clipboard,
         timeT t) :
-        KNamedCommand(i18n("Paste Tempos and Time Signatures")),
+        NamedCommand(tr("Paste Tempos and Time Signatures")),
         m_composition(composition),
         m_clipboard(new Clipboard(*clipboard)),
         m_t0(t)

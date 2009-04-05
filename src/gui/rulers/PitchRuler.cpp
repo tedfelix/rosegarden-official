@@ -18,8 +18,8 @@
 
 #include "PitchRuler.h"
 
-#include <qsize.h>
-#include <qwidget.h>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden

@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTAUTOSPLITCOMMAND_H_
 #define _RG_SEGMENTAUTOSPLITCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -34,8 +34,10 @@ class Segment;
 class Composition;
 
 
-class SegmentAutoSplitCommand : public KNamedCommand
+class SegmentAutoSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentAutoSplitCommand)
+
 public:
     SegmentAutoSplitCommand(Segment *segment);
     virtual ~SegmentAutoSplitCommand();
@@ -43,7 +45,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return i18n("&Split on Silence"); }
+    static QString getGlobalName() { return tr("&Split on Silence"); }
 
 private:
     Segment *m_segment;

@@ -21,8 +21,8 @@
 
 #include "base/MidiProgram.h"
 #include "InstrumentParameterPanel.h"
-#include <qpixmap.h>
-#include <qstring.h>
+#include <QPixmap>
+#include <QString>
 
 
 class QWidget;
@@ -32,7 +32,7 @@ class QColor;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Instrument;
 class AudioFaderBox;
 
@@ -41,7 +41,7 @@ class AudioInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
 public:
-    AudioInstrumentParameterPanel(RosegardenGUIDoc* doc, QWidget* parent);
+    AudioInstrumentParameterPanel(RosegardenDocument* doc, QWidget* parent);
 
     virtual void setupForInstrument(Instrument*);
 

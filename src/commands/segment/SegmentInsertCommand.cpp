@@ -18,22 +18,21 @@
 
 #include "SegmentInsertCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
+SegmentInsertCommand::SegmentInsertCommand(RosegardenDocument *doc,
         TrackId track,
         timeT startTime,
         timeT endTime):
-        KNamedCommand(i18n("Create Segment")),
+        NamedCommand(tr("Create Segment")),
         m_composition(&(doc->getComposition())),
         m_studio(&(doc->getStudio())),
         m_segment(0),
@@ -46,7 +45,7 @@ SegmentInsertCommand::SegmentInsertCommand(RosegardenGUIDoc *doc,
 SegmentInsertCommand::SegmentInsertCommand(Composition *composition,
         Segment *segment,
         TrackId track):
-        KNamedCommand(i18n("Create Segment")),
+        NamedCommand(tr("Create Segment")),
         m_composition(composition),
         m_studio(0),
         m_segment(segment),

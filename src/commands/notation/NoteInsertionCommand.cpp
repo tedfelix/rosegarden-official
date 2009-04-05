@@ -19,7 +19,6 @@
 #include "NoteInsertionCommand.h"
 
 #include <cmath>
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
@@ -29,6 +28,8 @@
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NoteStyleFactory.h"
 #include "base/BaseProperties.h"
+#include "base/Selection.h"
+#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -44,7 +45,7 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            GraceMode grace,
                                            float targetSubordering,
                                            NoteStyleName noteStyle) :
-        BasicCommand(i18n("Insert Note"), segment,
+        BasicCommand(tr("Insert Note"), segment,
                      getModificationStartTime(segment, time),
                      (autoBeam ? segment.getBarEndForTime(endTime) : endTime)),
         m_insertionTime(time),
@@ -64,6 +65,14 @@ NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
 NoteInsertionCommand::~NoteInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+NoteInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 timeT
@@ -141,7 +150,8 @@ NoteInsertionCommand::modifySegment()
     }
 
     if (m_noteStyle != NoteStyleFactory::DefaultStyle) {
-        e->set<String>(NotationProperties::NOTE_STYLE, m_noteStyle);
+        e->set<String>(NotationProperties::NOTE_STYLE,
+                       qstrtostr(m_noteStyle));
     }
 
     if (m_grace != GraceModeOff) {

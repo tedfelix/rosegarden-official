@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
   Rosegarden
@@ -15,8 +15,8 @@
 #include <map>
 #include <string>
 #include <vector>
-#include <qdatastream.h>
-#include <qstring.h>
+#include <QDataStream>
+#include <QString>
 
 #include "MappedCommon.h"
 #include "Instrument.h"

@@ -22,11 +22,13 @@
 #include "base/MidiProgram.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
+#include <QString>
 #include <vector>
 
+#include <QStackedWidget>
 
-class QWidgetStack;
+
+//class QWidgetStack;
 class QWidget;
 class QFrame;
 
@@ -34,7 +36,7 @@ class QFrame;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MIDIInstrumentParameterPanel;
 class Instrument;
 class AudioInstrumentParameterPanel;
@@ -48,7 +50,7 @@ class InstrumentParameterBox : public RosegardenParameterBox
 Q_OBJECT
 
 public:
-    InstrumentParameterBox(RosegardenGUIDoc *doc,
+    InstrumentParameterBox(RosegardenDocument *doc,
                            QWidget *parent = 0);
     ~InstrumentParameterBox();
 
@@ -59,7 +61,7 @@ public:
     void setAudioMeter(float dBleft, float dBright,
                        float recDBleft, float recDBright);
 
-    void setDocument(RosegardenGUIDoc* doc);
+    void setDocument(RosegardenDocument* doc);
     
     MIDIInstrumentParameterPanel * getMIDIInstrumentParameterPanel();
     
@@ -98,7 +100,7 @@ signals:
 protected:
 
     //--------------- Data members ---------------------------------
-    QWidgetStack                    *m_widgetStack;
+	QStackedWidget                  *m_widgetStack;
     QFrame                          *m_noInstrumentParameters;
     MIDIInstrumentParameterPanel    *m_midiInstrumentParameters;
     AudioInstrumentParameterPanel   *m_audioInstrumentParameters;
@@ -108,7 +110,7 @@ protected:
 
     // So we can setModified()
     //
-    RosegardenGUIDoc                *m_doc;
+    RosegardenDocument                *m_doc;
     bool                            m_lastShowAdditionalControlsArg;
 };
 

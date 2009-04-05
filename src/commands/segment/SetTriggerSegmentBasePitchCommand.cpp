@@ -18,7 +18,6 @@
 
 #include "SetTriggerSegmentBasePitchCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
 
@@ -29,7 +28,7 @@ namespace Rosegarden
 SetTriggerSegmentBasePitchCommand::SetTriggerSegmentBasePitchCommand(Composition *composition,
         TriggerSegmentId id,
         int newPitch) :
-        KNamedCommand(i18n("Set Base Pitch")),
+        NamedCommand(tr("Set Base Pitch")),
         m_composition(composition),
         m_id(id),
         m_newPitch(newPitch),

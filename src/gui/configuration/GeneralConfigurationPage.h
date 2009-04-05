@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,22 +20,20 @@
 
 #include "TabbedConfigurationPage.h"
 #include "gui/editors/eventlist/EventView.h"
-#include <qstring.h>
-#include <qcheckbox.h>
-#include <qspinbox.h>
-#include <qcombobox.h>
-#include <qlineedit.h>
-#include <klocale.h>
-#include <kiconloader.h>
+
+#include <QString>
+#include <QCheckBox>
+#include <QSpinBox>
+#include <QComboBox>
+
 
 class QWidget;
-class KConfig;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -62,14 +59,13 @@ public:
         Local
     };
 
-    GeneralConfigurationPage(RosegardenGUIDoc *doc,
-                             KConfig *cfg,
+    GeneralConfigurationPage(RosegardenDocument *doc,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("General"); }
-    static QString title()     { return i18n("General Configuration"); }
+    static QString iconLabel() { return tr("General"); }
+    static QString title()     { return tr("General Configuration"); }
     static QString iconName()  { return "configure-general"; }
 
 signals:
@@ -81,12 +77,12 @@ protected slots:
 
 protected:
     int getCountInSpin()            { return m_countIn->value(); }
-    int getDblClickClient()         { return m_client->currentItem(); }
-    int getNoteNameStyle()          { return m_nameStyle->currentItem(); }
+    int getDblClickClient()         { return m_client->currentIndex(); }
+    int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
     
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
 
     QComboBox* m_client;
     QSpinBox*  m_countIn;
@@ -102,9 +98,6 @@ protected:
     QCheckBox *m_jackTransport;
 
 };
-
-
-
 
 }
 

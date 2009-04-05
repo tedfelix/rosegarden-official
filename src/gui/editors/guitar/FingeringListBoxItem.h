@@ -19,15 +19,20 @@
 #ifndef _RG_FINGERINGLISTBOXITEM_H_
 #define _RG_FINGERINGLISTBOXITEM_H_
 
-#include <qlistbox.h>
 #include "Chord.h"
+
+#include <QListWidgetItem>
+
+class QIcon;
+class QListWidget;
+//class QListWidgetItem;
 
 namespace Rosegarden {
 
-class FingeringListBoxItem : public QListBoxPixmap
+class FingeringListBoxItem : public QListWidgetItem //QListWidgetPixmap
 {
 public:
-    FingeringListBoxItem(const Guitar::Chord& chord, QListBox* parent, QPixmap pixmap, QString fingeringString);
+    FingeringListBoxItem(const Guitar::Chord &chord, QListWidget *parent, QIcon &icon, QString &fingeringString);
     
     const Guitar::Chord& getChord() { return m_chord; }
 protected:

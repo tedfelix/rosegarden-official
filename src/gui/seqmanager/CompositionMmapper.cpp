@@ -19,25 +19,24 @@
 #include "CompositionMmapper.h"
 #include "misc/Debug.h"
 
-#include <kstddirs.h>
+#include <QDir>
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenApplication.h"
+#include "document/RosegardenDocument.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "SegmentMmapperFactory.h"
 #include "SegmentMmapper.h"
-#include <kglobal.h>
-#include <qdir.h>
-#include <qfile.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QDir>
+#include <QFile>
+#include <QString>
+#include <QStringList>
 #include <stdint.h>
 
 
 namespace Rosegarden
 {
 
-CompositionMmapper::CompositionMmapper(RosegardenGUIDoc *doc)
+CompositionMmapper::CompositionMmapper(RosegardenDocument *doc)
         : m_doc(doc)
 {
     cleanup();
@@ -76,20 +75,18 @@ void CompositionMmapper::cleanup()
 {
     // In case the sequencer is still running, mapping some segments
     //
-    rgapp->sequencerSend("closeAllSegments()");
+    RosegardenSequencer::getInstance()->closeAllSegments();
 
     // Erase all 'segment_*' files
     //
-    QString tmpPath = KGlobal::dirs()->resourceDirs("tmp").last();
+    QString tmpPath = QDir::tempPath();
 
     QDir segmentsDir(tmpPath, "segment_*");
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         QString segmentName = tmpPath + '/' + segmentsDir[i];
         SEQMAN_DEBUG << "CompositionMmapper : cleaning up " << segmentName << endl;
-        QFile::remove
-            (segmentName);
+        QFile::remove(segmentName);
     }
-
 }
 
 bool CompositionMmapper::segmentModified(Segment* segment)
@@ -137,11 +134,11 @@ void CompositionMmapper::mmapSegment(Segment* segment)
 
 QString CompositionMmapper::makeFileName(Segment* segment)
 {
-    QStringList tmpDirs = KGlobal::dirs()->resourceDirs("tmp");
+    QString tmp = QDir::tempPath();
 
     return QString("%1/segment_%2")
-           .arg(tmpDirs.last())
-           .arg((uintptr_t)segment, 0, 16);
+        .arg(tmp)
+        .arg((uintptr_t)segment, 0, 16);
 }
 
 QString CompositionMmapper::getSegmentFileName(Segment* s)

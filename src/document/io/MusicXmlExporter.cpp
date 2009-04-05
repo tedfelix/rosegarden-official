@@ -29,10 +29,10 @@
 #include "base/Instrument.h"
 #include "base/NotationTypes.h"
 #include "base/XmlExportable.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/ProgressReporter.h"
-#include <qobject.h>
+#include <QObject>
 
 namespace Rosegarden
 {
@@ -40,7 +40,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 MusicXmlExporter::MusicXmlExporter(QObject *parent,
-                                   RosegardenGUIDoc *doc,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter(parent, "musicXmlExporter"),
         m_doc(doc),
@@ -343,8 +343,8 @@ MusicXmlExporter::write()
         }
         str << "\t\t</score-part>" << std::endl;
 
-        emit setProgress(int(double(trackNo++) / double(tracks.size()) * 20.0));
-        rgapp->refreshGUI(50);
+        emit setValue(int(double(trackNo++) / double(tracks.size()) * 20.0));
+        rosegardenApplication->refreshGUI(50);
 
     } // end track iterator
     str << "\t</part-list>" << std::endl;
@@ -535,9 +535,9 @@ MusicXmlExporter::write()
             str << "\t</part>" << std::endl;
         }
 
-        emit setProgress(20 +
+        emit setValue(20 +
                          int(double(trackNo++) / double(tracks.size()) * 80.0));
-        rgapp->refreshGUI(50);
+        rosegardenApplication->refreshGUI(50);
     }
 
     str << "</score-partwise>" << std::endl;

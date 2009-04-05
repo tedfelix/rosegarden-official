@@ -20,19 +20,22 @@
 #define _RG_MAKEACCIDENTALSCAUTIONARYCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeAccidentalsCautionaryCommand)
+
 public:
     MakeAccidentalsCautionaryCommand(bool cautionary,
                                      EventSelection &selection) :
@@ -41,7 +44,10 @@ public:
         m_cautionary(cautionary) { }
     
     static QString getGlobalName(bool cautionary);
-    
+        
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
+
 protected:
     virtual void modifySegment();
 

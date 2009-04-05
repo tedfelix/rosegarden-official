@@ -19,9 +19,11 @@
 #define _RG_AUDIOCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
-#include <qlineedit.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QString>
+#include <QSettings>
+
 
 class QWidget;
 class QSpinBox;
@@ -30,29 +32,28 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QCheckBox;
-class KConfig;
-class KComboBox;
+class QComboBox;
+class LineEdit;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 class AudioConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioConfigurationPage(RosegardenGUIDoc *doc,
-                               KConfig *cfg,
+    AudioConfigurationPage(RosegardenDocument *doc,
                                QWidget *parent=0,
                                const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Audio"); }
-    static QString title()     { return i18n("Audio Settings"); }
+    static QString iconLabel() { return tr("Audio"); }
+    static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
 #ifdef HAVE_LIBJACK
@@ -72,7 +73,7 @@ protected:
 
 #ifdef HAVE_LIBJACK
     QCheckBox *m_startJack;
-    QLineEdit *m_jackPath;
+    LineEdit  *m_jackPath;
 #endif // HAVE_LIBJACK
 
 
@@ -88,7 +89,7 @@ protected:
 
 #endif // HAVE_LIBJACK
 
-    QLineEdit* m_externalAudioEditorPath;
+    LineEdit*  m_externalAudioEditorPath;
     QComboBox* m_previewStyle;
 
 };

@@ -35,7 +35,7 @@ class QObject;
 namespace Rosegarden
 {
 
-class Staff;
+class ViewSegment;
 class Quantizer;
 class Composition;
 class NotePixmapFactory;
@@ -72,14 +72,14 @@ public:
     /**
      * Resets internal data stores for a specific staff
      */
-    virtual void resetStaff(Staff &,
+    virtual void resetViewSegment(ViewSegment &,
                             timeT = 0,
                             timeT = 0);
 
     /**
      * Lay out a single staff.
      */
-    virtual void scanStaff(Staff &,
+    virtual void scanViewSegment(ViewSegment &,
                            timeT = 0,
                            timeT = 0);
 
@@ -96,12 +96,12 @@ private:
     void positionSlur(NotationStaff &staff, NotationElementList::iterator i);
 
     typedef FastVector<NotationElementList::iterator> SlurList;
-    typedef std::map<Staff *, SlurList> SlurListMap;
+    typedef std::map<ViewSegment *, SlurList> SlurListMap;
 
     //--------------- Data members ---------------------------------
 
     SlurListMap m_slurs;
-    SlurList &getSlurList(Staff &);
+    SlurList &getSlurList(ViewSegment &);
 
     Composition *m_composition;
     NotePixmapFactory *m_npf;

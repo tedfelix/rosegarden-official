@@ -18,13 +18,15 @@
 
 #include "FloatEdit.h"
 
-#include "gui/widgets/HSpinBox.h"
-#include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDoubleSpinBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+
 #include <cmath>
 
 namespace Rosegarden
@@ -37,11 +39,17 @@ FloatEdit::FloatEdit(QWidget *parent,
                      float max,
                      float value,
                      float step):
-        KDialogBase(parent, "rosegardenFloatEdit", true, title, Ok | Cancel, Ok)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox(1, Horizontal, text, vbox);
-    QVBox *inVbox = new QVBox(groupBox);
+    setModal(true);
+    setWindowTitle(title);
+    setObjectName("MinorDialog");
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QGroupBox *groupBox = new QGroupBox();
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(groupBox, 0, 0);
 
     // Calculate decimal points according to the step size
     //
@@ -51,15 +59,48 @@ FloatEdit::FloatEdit(QWidget *parent,
         dps = int( -calDP);
     //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
 
-    m_spin = new HSpinBox(inVbox, value, 1, min, max, dps);
-    new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max), inVbox);
+    m_spin = new QDoubleSpinBox(groupBox);
+    m_spin->setDecimals(dps);
+    m_spin->setMinimum(min);
+    m_spin->setMaximum(max);
+    m_spin->setSingleStep(step);
+    m_spin->setValue(value);
+    groupBoxLayout->addWidget(m_spin);
+
+    groupBoxLayout->addWidget(
+        new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max)));
+    groupBox->setLayout(groupBoxLayout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 float
 FloatEdit::getValue() const
 {
-    return m_spin->valuef();
+    return m_spin->value();
 }
+
+
+void
+FloatEdit::reparent(QWidget *newParent)
+{
+
+    // Reparent to either top level or dialog
+    //
+    while (newParent->parentWidget() && !newParent->isWindow()) {
+        newParent = newParent->parentWidget();
+    }
+
+    setParent(newParent, Qt::Dialog);
+
+    // FloatEdit widget is now at top left corner of newParent (Qt4)
+}
+
 
 }
 #include "FloatEdit.moc"

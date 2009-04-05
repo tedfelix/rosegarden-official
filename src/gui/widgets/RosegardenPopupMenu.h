@@ -18,16 +18,16 @@
 #ifndef _RG_ROSEGARDENPOPUPMENU_H_
 #define _RG_ROSEGARDENPOPUPMENU_H_
 
-#include <qpopupmenu.h>
+#include <QMenu>
 
 namespace Rosegarden {
 
-class RosegardenPopupMenu : public QPopupMenu
+class RosegardenPopupMenu : public QMenu
 {
     // just to make itemHeight public
 public:
-    RosegardenPopupMenu(QWidget *parent) : QPopupMenu(parent) { }
-    using QPopupMenu::itemHeight;
+	RosegardenPopupMenu(QWidget *parent) : QMenu(parent) { setStyleSheet("background-color: #EEEEEE;"); }
+	using QMenu::itemHeight;
 };
 
 

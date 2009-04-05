@@ -20,15 +20,19 @@
 #define _RG_INSERTRANGECOMMAND_H_
 
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
+
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
 
 class Composition;
 
-class InsertRangeCommand : public KMacroCommand
+class InsertRangeCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(InsertRangeCommand)
+
 public:
     InsertRangeCommand(Composition *composition,
 		       timeT startTime, timeT duration);

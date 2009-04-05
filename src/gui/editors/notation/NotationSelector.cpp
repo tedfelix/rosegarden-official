@@ -15,11 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "NotationSelector.h"
 #include "misc/Debug.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/PropertyName.h"
@@ -34,19 +36,19 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/LinedStaff.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include "gui/kdeext/QCanvasSimpleSprite.h"
+#include "gui/widgets/CanvasSimpleSprite.h"
 #include "NotationElement.h"
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
-#include <qapplication.h>
-#include <qiconset.h>
-#include <qrect.h>
-#include <qstring.h>
-#include <qtimer.h>
+#include <QAction>
+#include <QApplication>
+#include <QIcon>
+#include <QRect>
+#include <QString>
+#include <QTimer>
 
 
 namespace Rosegarden
@@ -70,63 +72,26 @@ NotationSelector::NotationSelector(NotationView* view)
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
             m_parentView, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
 
-    QIconSet icon
-    (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                  makeToolbarPixmap("crotchet")));
-    new KToggleAction(i18n("Switch to Insert Tool"), icon, 0, this,
-                      SLOT(slotInsertSelected()), actionCollection(),
-                      "insert");
+    createAction("insert", SLOT(slotInsertSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("collapse_rests_aggressively", SLOT(slotCollapseRestsHard()));
+    createAction("respell_flat", SLOT(slotRespellFlat()));
+    createAction("respell_sharp", SLOT(slotRespellSharp()));
+    createAction("respell_natural", SLOT(slotRespellNatural()));
+    createAction("collapse_notes", SLOT(slotCollapseNotes()));
+    createAction("interpret", SLOT(slotInterpret()));
+    createAction("move_events_up_staff", SLOT(slotStaffAbove()));
+    createAction("move_events_down_staff", SLOT(slotStaffBelow()));
+    createAction("make_invisible", SLOT(slotMakeInvisible()));
+    createAction("make_visible", SLOT(slotMakeVisible()));
 
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
 
     // (this crashed, and it might be superfluous with ^N anyway, so I'm
     // commenting it out, but leaving it here in case I change my mind about
     // fooling with it.)  (DMM)
-    //    new KAction(i18n("Normalize Rests"), 0, 0, this,
+    //    new KAction(tr("Normalize Rests"), 0, 0, this,
     //                SLOT(slotCollapseRests()), actionCollection(),
     //                "collapse_rests");
-
-    new KAction(i18n("Collapse Rests"), 0, 0, this,
-                SLOT(slotCollapseRestsHard()), actionCollection(),
-                "collapse_rests_aggressively");
-
-    new KAction(i18n("Respell as Flat"), 0, 0, this,
-                SLOT(slotRespellFlat()), actionCollection(),
-                "respell_flat");
-
-    new KAction(i18n("Respell as Sharp"), 0, 0, this,
-                SLOT(slotRespellSharp()), actionCollection(),
-                "respell_sharp");
-
-    new KAction(i18n("Respell as Natural"), 0, 0, this,
-                SLOT(slotRespellNatural()), actionCollection(),
-                "respell_natural");
-
-    new KAction(i18n("Collapse Notes"), 0, 0, this,
-                SLOT(slotCollapseNotes()), actionCollection(),
-                "collapse_notes");
-
-    new KAction(i18n("Interpret"), 0, 0, this,
-                SLOT(slotInterpret()), actionCollection(),
-                "interpret");
-
-    new KAction(i18n("Move to Staff Above"), 0, 0, this,
-                SLOT(slotStaffAbove()), actionCollection(),
-                "move_events_up_staff");
-
-    new KAction(i18n("Move to Staff Below"), 0, 0, this,
-                SLOT(slotStaffBelow()), actionCollection(),
-                "move_events_down_staff");
-
-    new KAction(i18n("Make Invisible"), 0, 0, this,
-                SLOT(slotMakeInvisible()), actionCollection(),
-                "make_invisible");
-
-    new KAction(i18n("Make Visible"), 0, 0, this,
-                SLOT(slotMakeVisible()), actionCollection(),
-                "make_visible");
 
     createMenu("notationselector.rc");
 }
@@ -155,7 +120,7 @@ void NotationSelector::handleLeftButtonPress(timeT t,
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
-    if (e->state() & ShiftButton) {
+    if (e->state() & Qt::ShiftButton) {
         m_clickedShift = true;
         selectionToMerge = m_nParentView->getCurrentSelection();
     } else {
@@ -232,7 +197,7 @@ void NotationSelector::handleMouseDoubleClick(timeT,
         return ;
     m_selectedStaff = staff;
 
-    bool advanced = (e->state() & ShiftButton);
+    bool advanced = (e->state() & Qt::ShiftButton);
 
     if (m_clickedElement) {
 
@@ -536,7 +501,7 @@ void NotationSelector::drag(int x, int y, bool final)
 
         m_nParentView->clearPreviewNote();
 
-        KMacroCommand *command = new KMacroCommand(MoveCommand::getGlobalName());
+        MacroCommand *command = new MacroCommand(MoveCommand::getGlobalName());
         bool haveSomething = false;
 
         MoveCommand *mc = 0;
@@ -699,7 +664,7 @@ void NotationSelector::dragFine(int x, int y, bool final)
 
 void NotationSelector::ready()
 {
-    m_selectionRect = new QCanvasRectangle(m_nParentView->canvas());
+    m_selectionRect = new Q3CanvasRectangle(m_nParentView->canvas());
 
     m_selectionRect->hide();
     m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
@@ -731,57 +696,57 @@ void NotationSelector::slotInsertSelected()
 
 void NotationSelector::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+    invokeInParentView("erase");
 }
 
 void NotationSelector::slotCollapseRestsHard()
 {
-    m_parentView->actionCollection()->action("collapse_rests_aggressively")->activate();
+    invokeInParentView("collapse_rests_aggressively");
 }
 
 void NotationSelector::slotRespellFlat()
 {
-    m_parentView->actionCollection()->action("respell_flat")->activate();
+    invokeInParentView("respell_flat");
 }
 
 void NotationSelector::slotRespellSharp()
 {
-    m_parentView->actionCollection()->action("respell_sharp")->activate();
+    invokeInParentView("respell_sharp");
 }
 
 void NotationSelector::slotRespellNatural()
 {
-    m_parentView->actionCollection()->action("respell_natural")->activate();
+    invokeInParentView("respell_natural");
 }
 
 void NotationSelector::slotCollapseNotes()
 {
-    m_parentView->actionCollection()->action("collapse_notes")->activate();
+    invokeInParentView("collapse_notes");
 }
 
 void NotationSelector::slotInterpret()
 {
-    m_parentView->actionCollection()->action("interpret")->activate();
+    invokeInParentView("interpret");
 }
 
 void NotationSelector::slotStaffAbove()
 {
-    m_parentView->actionCollection()->action("move_events_up_staff")->activate();
+    invokeInParentView("move_events_up_staff");
 }
 
 void NotationSelector::slotStaffBelow()
 {
-    m_parentView->actionCollection()->action("move_events_down_staff")->activate();
+    invokeInParentView("move_events_down_staff");
 }
 
 void NotationSelector::slotMakeInvisible()
 {
-    m_parentView->actionCollection()->action("make_invisible")->activate();
+    invokeInParentView("make_invisible");
 }
 
 void NotationSelector::slotMakeVisible()
 {
-    m_parentView->actionCollection()->action("make_visible")->activate();
+    invokeInParentView("make_visible");
 }
 
 void NotationSelector::setViewCurrentSelection(bool preview)
@@ -827,8 +792,8 @@ EventSelection* NotationSelector::getSelection()
         m_selectionRect->height() > -3 &&
         m_selectionRect->height() <  3) return 0;
 
-    QCanvasItemList itemList = m_selectionRect->collisions(false);
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList itemList = m_selectionRect->collisions(false);
+    Q3CanvasItemList::Iterator it;
 
     QRect rect = m_selectionRect->rect().normalize();
     QCanvasNotationSprite *sprite = 0;
@@ -948,3 +913,5 @@ const QString NotationSelector::ToolName = "notationselector";
 
 }
 #include "NotationSelector.moc"
+
+#endif

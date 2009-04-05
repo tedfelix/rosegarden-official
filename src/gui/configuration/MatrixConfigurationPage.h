@@ -20,12 +20,10 @@
 #define _RG_MATRIXCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
 
 
 class QWidget;
-class KConfig;
 
 
 namespace Rosegarden
@@ -41,13 +39,12 @@ class MatrixConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MatrixConfigurationPage(KConfig *cfg,
-                            QWidget *parent = 0, const char *name=0);
+    MatrixConfigurationPage(QWidget *parent = 0, const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Matrix"); }
-    static QString title()     { return i18n("Matrix"); }
+    static QString iconLabel() { return tr("Matrix"); }
+    static QString title()     { return tr("Matrix"); }
 
 protected slots:
 

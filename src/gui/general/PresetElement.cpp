@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
  
-    This file is Copyright 2006
+    This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
@@ -20,10 +20,11 @@
 
 
 #include "PresetElement.h"
-
 #include "misc/Debug.h"
-#include <qstring.h>
 
+#include <QString>
+
+//#define DEBUG_CATEGORIES
 
 namespace Rosegarden
 {
@@ -43,6 +44,7 @@ PresetElement::PresetElement(QString name,
         m_highPro (highPro),
         m_lowPro (lowPro)
 {
+#ifdef DEBUG_CATEGORIES
     RG_DEBUG << "PresetElement::PresetElement(" << endl
     << "    name = " << name << endl
     << "    clef = " << clef << endl
@@ -51,6 +53,7 @@ PresetElement::PresetElement(QString name,
     << "    lowA = " << lowAm << endl
     << "    higP = " << highPro << endl
     << "    lowP = " << lowPro << ")" << endl;
+#endif
 }
 
 PresetElement::~PresetElement()

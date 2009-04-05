@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,11 +19,10 @@
 #define _RG_EVENTQUANTIZECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qobject.h>
-#include <qstring.h>
 #include "base/Event.h"
 
-
+#include <QObject>
+#include <QString>
 
 
 namespace Rosegarden
@@ -50,16 +48,16 @@ public:
     EventQuantizeCommand(EventSelection &selection,
                          Quantizer *);
 
-    /// Constructs own quantizer based on KConfig data in given group
+    /// Constructs own quantizer based on QSettings data in given group
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         QString configGroup,
+                         QString settingsGroup,
                          bool notationDefault);
     
-    /// Constructs own quantizer based on KConfig data in given group
+    /// Constructs own quantizer based on QSettings data in given group
     EventQuantizeCommand(EventSelection &selection,
-                         QString configGroup,
+                         QString settingsGroup,
                          bool notationDefault);
 
     ~EventQuantizeCommand();
@@ -76,7 +74,7 @@ protected:
 private:
     Quantizer *m_quantizer; // I own this
     EventSelection *m_selection;
-    QString m_configGroup;
+    QString m_settingsGroup;
     int m_progressTotal;
 
     /// Sets to m_quantizer as well as returning value

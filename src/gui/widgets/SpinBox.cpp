@@ -19,9 +19,9 @@
 #include "SpinBox.h"
 #include "misc/Strings.h"
 
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
 
 
 namespace Rosegarden

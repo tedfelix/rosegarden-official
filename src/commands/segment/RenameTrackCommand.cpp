@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ namespace Rosegarden
 RenameTrackCommand::RenameTrackCommand(Composition *composition,
                                        TrackId trackId,
                                        std::string name) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_track(trackId),
         m_newName(name)

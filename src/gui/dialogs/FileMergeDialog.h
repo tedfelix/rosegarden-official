@@ -19,13 +19,13 @@
 #ifndef _RG_FILEMERGEDIALOG_H_
 #define _RG_FILEMERGEDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 
 
 class QWidget;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 
 
 
-class FileMergeDialog : public KDialogBase
+class FileMergeDialog : public QDialog
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ public:
     int getMergeOptions();
     
 private:
-    KComboBox *m_choice;
+    QComboBox *m_choice;
     QCheckBox *m_useTimings;
 };
 

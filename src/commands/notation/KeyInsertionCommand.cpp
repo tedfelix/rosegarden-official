@@ -26,7 +26,8 @@
 #include "base/Studio.h"
 #include "document/BasicCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "base/Selection.h"
+#include <QString>
 
 
 namespace Rosegarden
@@ -56,6 +57,14 @@ KeyInsertionCommand::KeyInsertionCommand(Segment &segment, timeT time,
 KeyInsertionCommand::~KeyInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+KeyInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 void

@@ -18,21 +18,26 @@
 #ifndef _RG_PLAYLISTVIEWITEM_H_
 #define _RG_PLAYLISTVIEWITEM_H_
 
-#include <klistview.h>
-#include <kurl.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QUrl>
+// #include <kurl.h>
 
 namespace Rosegarden {
 
-class PlayListViewItem : public KListViewItem
+class PlayListViewItem : public QTreeWidgetItem
 {
 public:
-    PlayListViewItem(KListView* parent, KURL);
-    PlayListViewItem(KListView* parent, QListViewItem*, KURL);
-
-    const KURL& getURL() { return m_kurl; }
+    PlayListViewItem(QTreeWidget* parent, QUrl );
+    PlayListViewItem(QTreeWidget* parent, QTreeWidgetItem*, QUrl );
+	
+// 	const KURL& getURL() { return m_kurl; }
+	const QUrl& getURL() { return m_kurl; }
 
 protected:
-    KURL m_kurl;
+// 	KURL m_kurl;
+	QUrl m_kurl;
+	
 };
 
 }

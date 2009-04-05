@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,28 +19,29 @@
 #define _RG_MIXERWINDOW_H_
 
 #include "base/MidiProgram.h"
-#include <kmainwindow.h>
+
+#include <QMainWindow>
 
 
 class QWidget;
 class QCloseEvent;
-class QAccel;
+class QShortcut;
 
 
 namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class MixerWindow: public KMainWindow
+class MixerWindow: public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MixerWindow(QWidget *parent, RosegardenGUIDoc *document);
-    QAccel* getAccelerators() { return m_accelerators; }
+    MixerWindow(QWidget *parent, RosegardenDocument *document);
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void closing();
@@ -56,11 +56,11 @@ protected:
 
     virtual void sendControllerRefresh() = 0;
 
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
     InstrumentId m_currentId;
 
-    QAccel *m_accelerators;
+    QShortcut *m_shortcuts;
 
 };
 

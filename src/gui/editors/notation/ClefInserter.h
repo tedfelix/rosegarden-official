@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -15,13 +14,14 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_CLEFINSERTER_H_
 #define _RG_CLEFINSERTER_H_
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -73,4 +73,5 @@ protected:
 
 }
 
+#endif
 #endif

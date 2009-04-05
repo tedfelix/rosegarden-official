@@ -1,0 +1,115 @@
+
+# These paths set up for Ubuntu 8.04 with kdelibs5-dev and qt4-dev.
+
+#KDEDIR		= /usr
+QTDIR		= /usr
+
+#KDEINC		= $(KDEDIR)/lib/kde4/include
+#KDELIB		= $(KDEDIR)/lib/kde4/lib
+
+QTINC		= $(QTDIR)/include/qt4
+QTLIB		= $(QTDIR)/lib
+
+CCDIR		= /usr
+
+CCACHE		= 
+CC		= $(CCACHE) $(CCDIR)/bin/cc
+CXX		= $(CCACHE) $(CCDIR)/bin/c++
+LD		= $(CXX)
+MOC		= $(QTDIR)/bin/moc-qt4
+UIC		= $(QTDIR)/bin/uic-qt4
+RCC		= $(QTDIR)/bin/rcc
+LUPDATE		= $(QTDIR)/bin/lupdate
+LRELEASE	= $(QTDIR)/bin/lrelease
+
+CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -D'VERSION="2.0-yeah-whatever-innit"'
+CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
+LDFLAGS		= 
+
+INCLUDES	= \
+		-I$(QTINC)/Qt3Support \
+		-I$(QTINC)/QtCore \
+		-I$(QTINC)/QtGui \
+		-I$(QTINC)/QtXml \
+		-I$(QTINC)/QtNetwork \
+		-I$(QTINC) \
+		-I$(CCDIR)/include \
+		-I/usr/local/include \
+		-I/usr/include/freetype2 \
+                -Isrc/base \
+		-Isrc
+#		-I$(KDEINC)
+
+
+LDLIBS		= \
+		-L$(CCDIR)/lib \
+		-L$(QTLIB) \
+		-lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
+		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
+#		-L$(KDELIB) \
+#		-lkdeui -lkdecore \
+
+#
+RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
+QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
+HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
+SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
+QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
+OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
+QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
+UI		= $(wildcard src/*/*/*.ui)
+UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
+RCS		= $(wildcard data/ui/*.rc)
+TRANSLATIONS	= $(wildcard ts/rosegarden_*.ts)
+
+
+all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
+
+rosegarden:	$(OBJECTS)
+		$(CXX) -o $@ $^ $(LDLIBS)
+
+%.h: %.ui
+	$(UIC) $< > $@
+
+%.cpp: %.ui %.h
+	$(UIC) -pch $(patsubst %.cpp,%.moc,$@) -impl $(patsubst %.cpp,%.h,$@) $(patsubst %.cpp,%.ui,$@) > $@
+
+%.moc: %.h
+	$(MOC) $< -o $@
+
+%.cpp: %.qrc
+	$(RCC) $< -o $@
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $< -o $@
+
+instrument-ts:
+	perl scripts/extract_instrument_tr_strings.pl `ls -1 data/presets/*.xml` > data/InstrumentStrings.cpp
+
+menu-ts:
+	perl scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
+
+ts:	menu-ts instrument-ts
+	mkdir -p locale
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
+ts-noobsolete:	menu-ts
+	mkdir -p locale
+	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
+locale:
+	$(LRELEASE) $(TRANSLATIONS)
+
+clean:
+	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+test:
+	echo $(QSOURCES)
+
+dependencies:
+	sh ./make-dependencies
+
+.PHONY: instrument-ts menu-ts ts ts-noobsolete locale
+
+include dependencies
+

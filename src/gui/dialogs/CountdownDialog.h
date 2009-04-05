@@ -19,15 +19,14 @@
 #ifndef _RG_COUNTDOWNDIALOG_H_
 #define _RG_COUNTDOWNDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qdialog.h>
+#include <QDialog>
 
 
 class QWidget;
 class QString;
 class QPushButton;
 class QLabel;
-class QAccel;
+class QShortcut;
 
 
 namespace Rosegarden
@@ -36,7 +35,7 @@ namespace Rosegarden
 class CountdownBar;
 
 
-class CountdownDialog : public QDialog // KDialogBase
+class CountdownDialog : public QDialog
 {
     Q_OBJECT
 
@@ -49,7 +48,7 @@ public:
     int getTotalTime() const { return m_totalTime; }
     void setTotalTime(int seconds);
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void completed(); // m_totalTime has elapsed
@@ -71,7 +70,7 @@ protected:
     int           m_progressBarWidth;
     int           m_progressBarHeight;
 
-    QAccel       *m_accelerators;
+    QShortcut       *m_shortcuts;
 };
 
 

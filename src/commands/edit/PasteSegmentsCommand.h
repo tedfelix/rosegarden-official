@@ -20,11 +20,11 @@
 #define _RG_PASTESEGMENTSCOMMAND_H_
 
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 #include <vector>
 #include "base/Event.h"
-#include <klocale.h>
 
 
 
@@ -39,8 +39,10 @@ class Clipboard;
 
 /// Paste one or more segments from the clipboard into the composition
 
-class PasteSegmentsCommand : public KNamedCommand
+class PasteSegmentsCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteSegmentsCommand)
+
 public:
     PasteSegmentsCommand(Composition *composition,
                          Clipboard *clipboard,
@@ -50,7 +52,7 @@ public:
 
     virtual ~PasteSegmentsCommand();
 
-    static QString getGlobalName() { return i18n("&Paste"); }
+    static QString getGlobalName() { return tr("&Paste"); }
 
     virtual void execute();
     virtual void unexecute();

@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTJOINCOMMAND_H_
 #define _RG_SEGMENTJOINCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -34,8 +34,10 @@ class SegmentSelection;
 class Segment;
 
 
-class SegmentJoinCommand : public KNamedCommand
+class SegmentJoinCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentJoinCommand)
+
 public:
     SegmentJoinCommand(SegmentSelection &segments);
     virtual ~SegmentJoinCommand();
@@ -43,7 +45,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return i18n("&Join"); }
+    static QString getGlobalName() { return tr("&Join"); }
     
 private:
     std::vector<Segment *> m_oldSegments;

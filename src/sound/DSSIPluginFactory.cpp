@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -16,7 +16,7 @@
 #include "DSSIPluginFactory.h"
 #include <iostream>
 #include <cstdlib>
-
+#include "misc/Strings.h"
 #ifdef HAVE_DSSI
 
 #include <dlfcn.h>
@@ -290,7 +290,7 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
 void
 DSSIPluginFactory::discoverPlugins(QString soName)
 {
-    void *libraryHandle = dlopen(soName.data(), RTLD_LAZY);
+    void *libraryHandle = dlopen( qstrtostr(soName).c_str(), RTLD_LAZY);
 
     if (!libraryHandle) {
         std::cerr << "WARNING: DSSIPluginFactory::discoverPlugins: couldn't dlopen "

@@ -15,7 +15,7 @@
 
 #include <vector>
 #include <set>
-#include <qstring.h>
+#include <QString>
 #include "Instrument.h"
 
 #ifndef _LADSPAPLUGININSTANCE_H_

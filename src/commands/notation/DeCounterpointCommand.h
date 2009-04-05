@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUDECOUNTERPOINTCOMMAND_H_
-#define _RG_ADJUSTMENUDECOUNTERPOINTCOMMAND_H_
+#ifndef _RG_DECOUNTERPOINTCOMMAND_H_
+#define _RG_DECOUNTERPOINTCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 class Overlapping;
@@ -32,10 +32,13 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 class DeCounterpointCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeCounterpointCommand)
+
 public:
     DeCounterpointCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -45,7 +48,9 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return i18n("Split-and-Tie Overlapping &Chords"); }
+    static QString getGlobalName() { return tr("Split-and-Tie Overlapping &Chords"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

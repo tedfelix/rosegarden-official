@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTRESCALECOMMAND_H_
 #define _RG_SEGMENTRESCALECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -33,8 +33,10 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentRescaleCommand : public KNamedCommand
+class SegmentRescaleCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRescaleCommand)
+
 public:
     SegmentRescaleCommand(Segment *segment,
                           int multiplier,
@@ -48,7 +50,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
     Segment *m_segment;

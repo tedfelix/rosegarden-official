@@ -19,8 +19,8 @@
 #ifndef _RG_EXPORTDEVICEDIALOG_H_
 #define _RG_EXPORTDEVICEDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 
 
 class QWidget;
@@ -32,7 +32,7 @@ namespace Rosegarden
 
 
 
-class ExportDeviceDialog : public KDialogBase
+class ExportDeviceDialog : public QDialog
 {
 public:
     enum ExportType { ExportOne, ExportAll };

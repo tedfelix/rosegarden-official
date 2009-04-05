@@ -21,9 +21,9 @@
 
 #include "base/ControlParameter.h"
 #include "base/Device.h"
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,13 +34,15 @@ namespace Rosegarden
 class Studio;
 
 
-class RemoveControlParameterCommand : public KNamedCommand
+class RemoveControlParameterCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveControlParameterCommand)
+
 public:
     RemoveControlParameterCommand(Studio *studio,
                                   DeviceId device,
                                   int id):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
         m_id(id) { }
@@ -50,7 +52,7 @@ public:
     virtual void execute();
     virtual void unexecute();
 
-    static QString getGlobalName() { return i18n("&Remove Control Parameter"); }
+    static QString getGlobalName() { return tr("&Remove Control Parameter"); }
 
 protected:
     Studio              *m_studio;

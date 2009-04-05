@@ -25,18 +25,18 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
-#include <qstring.h>
+#include "document/RosegardenDocument.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 ModifyDeviceMappingCommand::ModifyDeviceMappingCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     DeviceId fromDevice,
     DeviceId toDevice):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(&doc->getComposition()),
         m_studio(&doc->getStudio()),
         m_fromDevice(fromDevice),

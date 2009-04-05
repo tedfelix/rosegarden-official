@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,8 +18,8 @@
 #ifndef _RG_VUMETER_H_
 #define _RG_VUMETER_H_
 
-#include <qcolor.h>
-#include <qlabel.h>
+#include <QColor>
+#include <QLabel>
 
 
 class QWidget;

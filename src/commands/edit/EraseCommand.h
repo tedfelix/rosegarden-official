@@ -20,9 +20,9 @@
 #define _RG_ERASECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -37,10 +37,12 @@ class EventSelection;
 
 class EraseCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EraseCommand)
+
 public:
     EraseCommand(EventSelection &selection);
 
-    static QString getGlobalName() { return i18n("&Erase"); }
+    static QString getGlobalName() { return tr("&Erase"); }
 
     virtual timeT getRelayoutEndTime();
 

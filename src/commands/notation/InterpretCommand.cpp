@@ -28,7 +28,7 @@
 #include "base/BaseProperties.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -109,7 +109,7 @@ InterpretCommand::modifySegment()
     //!!! Finally, in future we should extend this to allow
     // indications on one segment (e.g. top line of piano staff) to
     // affect another (e.g. bottom line).  All together now: "Even
-    // Rosegarden 2.1 could do that!"
+    // X11 Rosegarden could do that!"
 }
 
 void

@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
 #define _RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,8 +32,10 @@ class Segment;
 class Composition;
 
 
-class SegmentSingleRepeatToCopyCommand : public KNamedCommand
+class SegmentSingleRepeatToCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSingleRepeatToCopyCommand)
+
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,
                                      timeT time);

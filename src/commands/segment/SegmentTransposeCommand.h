@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTTRANSPOSECOMMAND_H_
 #define _RG_SEGMENTTRANSPOSECOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
-#include "document/MultiViewCommandHistory.h"
-#include <klocale.h>
+#include "document/CommandHistory.h"
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -31,8 +31,10 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentTransposeCommand : public KMacroCommand
+class SegmentTransposeCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentTransposeCommand)
+
 public:
     SegmentTransposeCommand(Segment &segment,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
@@ -44,7 +46,7 @@ public:
 
     static QString getGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval...");
+        default:  return tr("Transpose by &Interval...");
         }
     }
 

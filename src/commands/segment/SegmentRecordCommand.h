@@ -19,9 +19,9 @@
 #ifndef _RG_SEGMENTRECORDCOMMAND_H_
 #define _RG_SEGMENTRECORDCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -38,8 +38,10 @@ class Composition;
  * correctly, and it provides the ability to undo recording.  (The
  * unexecute does remove the segment, it doesn't just pretend to.)
  */
-class SegmentRecordCommand : public KNamedCommand
+class SegmentRecordCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRecordCommand)
+
 public:
     SegmentRecordCommand(Segment *segment);
     virtual ~SegmentRecordCommand();

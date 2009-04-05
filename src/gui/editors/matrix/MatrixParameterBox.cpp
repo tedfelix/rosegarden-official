@@ -21,25 +21,26 @@
 #include "base/Instrument.h"
 #include "base/BasicQuantizer.h"
 #include "base/Selection.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
-#include <kcombobox.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qframe.h>
-#include <qlayout.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QFont>
+#include <QFontMetrics>
+#include <QFrame>
+#include <QLayout>
+#include <QWidget>
 
 
 namespace Rosegarden
 {
 
-MatrixParameterBox::MatrixParameterBox(RosegardenGUIDoc *doc,
+MatrixParameterBox::MatrixParameterBox(RosegardenDocument *doc,
                                        QWidget *parent, const char* name):
-        QFrame(parent, name),
+        QFrame(parent),
         m_quantizations(BasicQuantizer::getStandardQuantizations()),
         m_doc(doc)
 {
+    setObjectName(name);
     setFrameStyle(NoFrame);
     initBox();
 }
@@ -62,11 +63,14 @@ MatrixParameterBox::initBox()
     // magic numbers: 13 is the height of the menu pixmaps, 10 is just 10
     //int comboHeight = std::max(fontMetrics.height(), 13) + 10;
 
-    QGridLayout *gridLayout = new QGridLayout(this, 20, 3, 8, 1);
+    setContentsMargins(8, 8, 8, 8);
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setSpacing(1);
 
     m_instrumentParameterBox = new InstrumentParameterBox(m_doc, this);
-    gridLayout->addMultiCellWidget(m_instrumentParameterBox, 0, 7, 0, 2);
+    gridLayout->addWidget(m_instrumentParameterBox, 0, 0, 7- 0+1, 2- 0+1);
 
+    setLayout(gridLayout);
 }
 
 void

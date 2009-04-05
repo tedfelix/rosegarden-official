@@ -28,16 +28,13 @@
 
 #include <iostream>
 
-#include <klocale.h>
-#include <kstandarddirs.h>
 
-#include <dcopclient.h>
-#include <qdatetime.h>
-#include <qstring.h>
-#include <qdir.h>
-#include <qbuffer.h>
+#include <QDateTime>
+#include <QString>
+#include <QDir>
+#include <QBuffer>
 
-#include "ControlBlockMmapper.h"
+#include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 
 namespace Rosegarden {
@@ -118,8 +115,7 @@ public:
 
     typedef std::map<QString, MmappedSegment*> mmappedsegments;
 
-    MmappedSegmentsMetaIterator(mmappedsegments&,
-                                ControlBlockMmapper*);
+    MmappedSegmentsMetaIterator(mmappedsegments&);
     ~MmappedSegmentsMetaIterator();
 
     /// reset all iterators to beginning
@@ -161,8 +157,6 @@ protected:
                             const RealTime&);
 
     //--------------- Data members ---------------------------------
-
-    ControlBlockMmapper* m_controlBlockMmapper;
 
     RealTime m_currentTime;
     mmappedsegments& m_segments;

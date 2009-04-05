@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -25,9 +24,9 @@
 #include <map>
 #include <set>
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <qxml.h>
+#include <QXmlDefaultHandler>
 
 
 class QXmlParseException;
@@ -41,7 +40,7 @@ class XmlStorableEvent;
 class XmlSubHandler;
 class Studio;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Instrument;
 class Device;
 class Composition;
@@ -76,7 +75,7 @@ public:
      * Construct a new RoseXmlHandler which will put the data extracted
      * from the XML file into the specified composition
      */
-    RoseXmlHandler(RosegardenGUIDoc *doc,
+    RoseXmlHandler(RosegardenDocument *doc,
                    unsigned int elementCount,
                    bool createNewDevicesWhenNeeded);
 
@@ -129,7 +128,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
 

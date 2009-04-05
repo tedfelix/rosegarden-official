@@ -21,10 +21,10 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,9 +33,10 @@ namespace Rosegarden
 class Segment;
 class Event;
 
-
 class ClefInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ClefInsertionCommand)
+
 public:
     ClefInsertionCommand(Segment &segment,
                          timeT time,
@@ -47,6 +48,7 @@ public:
     static QString getGlobalName(Clef *clef = 0);
     virtual timeT getRelayoutEndTime();
 
+    virtual EventSelection *getSubsequentSelection();
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
 
 protected:

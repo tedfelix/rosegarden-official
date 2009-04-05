@@ -20,21 +20,23 @@
 #define _RG_AUDIOMANAGERDIALOG_H_
 
 #include "sound/AudioFile.h"
-#include <kmainwindow.h>
+#include <QMainWindow>
 #include "document/ConfigGroups.h"
+#include "gui/general/ActionFileClient.h"
 
 
 class QWidget;
 class QTimer;
 class QString;
-class QListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
-class QAccel;
-class KURL;
-class KListView;
-class KCommand;
+class QShortcut;
+class QUrl;
+
+//class KURL;
 
 
 namespace Rosegarden
@@ -42,20 +44,20 @@ namespace Rosegarden
 
 class SegmentSelection;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class RealTime;
-class MultiViewCommandHistory;
 class AudioPlayingDialog;
 class AudioFile;
+class Command;
 
 
-class AudioManagerDialog : public KMainWindow
+class AudioManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     AudioManagerDialog(QWidget *parent,
-                       RosegardenGUIDoc *doc);
+                       RosegardenDocument *doc);
     ~AudioManagerDialog();
 
     // Populate the file list from the AudioFileManager
@@ -72,8 +74,6 @@ public:
                      const Segment *segment,
                      bool propagate); // if true then we tell the segmentcanvas
 
-    MultiViewCommandHistory *getCommandHistory();
-
     // Pop down playing dialog if it's currently up
     //
     void closePlayingDialog(AudioFileId id);
@@ -82,9 +82,9 @@ public:
     //
     void setAudioSubsystemStatus(bool ok);
 
-    // Return the accelerator object
+    // Return the shortcut object
     //
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     // Add a new file to the audio file manager
     //
@@ -101,9 +101,12 @@ public slots:
     void slotRemoveAllUnused();
     void slotDeleteUnused();
     void slotExportAudio();
-
+	
+	//void slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+	
     // get selection
-    void slotSelectionChanged(QListViewItem *);
+	void slotSelectionChanged();
+//	void slotSelectionChanged(QTreeWidgetItem *);
 
     // Repopulate
     //
@@ -111,7 +114,7 @@ public slots:
 
     // Commands
     //
-    void slotCommandExecuted(KCommand *);
+    void slotCommandExecuted(Command *);
 
     /**
      * Accept a list of Segments and highlight accordingly
@@ -161,24 +164,24 @@ signals:
 
     void closing();
 protected slots:
-    void slotDropped(QDropEvent*, QListViewItem*);
+    void slotDropped(QDropEvent*, QTreeWidgetItem*);
     void slotCancelPlayingAudio();
 
 protected:
-    bool addFile(const KURL& kurl);
+    bool addFile(const QUrl& kurl);
     bool isSelectedTrackAudio();
-    void selectFileListItemNoSignal(QListViewItem*);
+    void selectFileListItemNoSignal(QTreeWidgetItem*);
     void updateActionState(bool haveSelection);
 
     virtual void closeEvent(QCloseEvent *);
 
     //--------------- Data members ---------------------------------
 
-    KListView        *m_fileList;
+    QTreeWidget        *m_fileList;
     QLabel           *m_wrongSampleRates;
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
 
-    QAccel           *m_accelerators;
+    QShortcut           *m_shortcuts;
 
     AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

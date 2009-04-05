@@ -16,13 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGESTYLECOMMAND_H_
-#define _RG_ADJUSTMENUCHANGESTYLECOMMAND_H_
+#ifndef _RG_CHANGESTYLECOMMAND_H_
+#define _RG_CHANGESTYLECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 class Change;
@@ -32,10 +32,13 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ChangeStyleCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeStyleCommand)
+
 public:
     ChangeStyleCommand(NoteStyleName style,
                        EventSelection &selection) :
@@ -43,10 +46,13 @@ public:
         m_selection(&selection), m_style(style) { }
 
     static QString getGlobalName() {
-        return i18n("Change &Note Style");
+        return tr("Change &Note Style");
     }
 
     static QString getGlobalName(NoteStyleName style);
+
+    static NoteStyleName getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

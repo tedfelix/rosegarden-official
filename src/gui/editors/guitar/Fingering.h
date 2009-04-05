@@ -19,8 +19,10 @@
 #define _RG_FINGERING_H_
 
 #include <vector>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
+
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -30,6 +32,8 @@ namespace Guitar
 
 class Fingering
 {
+    Q_DECLARE_TR_FUNCTIONS(Fingering)
+
 public:
     friend bool operator<(const Fingering&, const Fingering&);    
 

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -17,18 +17,22 @@
 
 
 #include "Fader.h"
-#include "TextFloat.h"
 
+#include "TextFloat.h"
 #include "misc/Debug.h"
 #include "base/AudioLevel.h"
-#include <qcolor.h>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+
+#include <QColor>
+#include <QEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
+#include <QWheelEvent>
+#include <QMouseEvent>
+
 #include <cmath>
 
 namespace Rosegarden
@@ -45,9 +49,7 @@ Fader::Fader(AudioLevel::FaderType type,
         m_min(0),
         m_max(0),
         m_type(type),
-        m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -66,13 +68,10 @@ Fader::Fader(AudioLevel::FaderType type,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(0.0);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -82,9 +81,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(h > w),
         m_min(min),
         m_max(max),
-        m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     setFixedSize(w, h); // provisional
@@ -103,13 +100,10 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(deflt);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::Fader(int min, int max, int deflt,
@@ -119,9 +113,7 @@ Fader::Fader(int min, int max, int deflt,
         m_vertical(vertical),
         m_min(min),
         m_max(max),
-        m_clickMousePos( -1),
-        m_float(new TextFloat(this)),
-        m_floatTimer(new QTimer())
+        m_clickMousePos( -1)
 {
     setBackgroundMode(Qt::NoBackground);
     calculateButtonPixmap();
@@ -134,13 +126,10 @@ Fader::Fader(int min, int max, int deflt,
         m_sliderMax = width() - m_sliderMin;
     }
 
-    m_outlineColour = colorGroup().mid();
+    m_outlineColour = palette().mid();
 
     calculateGroovePixmap();
     setFader(deflt);
-
-    connect(m_floatTimer, SIGNAL(timeout()), this, SLOT(slotFloatTimeout()));
-    m_float->hide();
 }
 
 Fader::~Fader()
@@ -187,7 +176,7 @@ Fader::setFader(float value)
 {
     m_value = value;
     emit faderChanged(value);
-    paintEvent(0);
+    update();
 }
 
 float
@@ -210,15 +199,15 @@ Fader::position_to_value(int position)
     /*
         RG_DEBUG << "Fader::position_to_value - position = " << position
                  << ", new value = " << value << endl;
-     
+
         if (m_min != m_max) // works for integral case
         {
             if (value > m_max) value = float(m_max);
             if (value < m_min) value = float(m_min);
         }
-     
+
         RG_DEBUG << "Fader::position_to_value - limited value = " << value << endl;
-    */ 
+    */
     return value;
 }
 
@@ -230,7 +219,7 @@ Fader::value_to_position(float value)
     if (m_integral) {
         float sliderLength = float(m_sliderMax) - float(m_sliderMin);
         position =
-            int(sliderLength * (value - float(m_min)) / float(m_max - m_min) + 0.1);
+            int(nearbyintf(sliderLength * (value - float(m_min)) / float(m_max - m_min) + 0.1));
     } else {
         position =
             AudioLevel::dB_to_fader
@@ -244,6 +233,33 @@ void
 Fader::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
+
+    // sanity check
+    //
+    //!!!
+    //@@@
+    //
+    // I really can't figure out why this suddenly became necessary, and I don't
+    // understand why faders in the MIDI mixer that weren't on the very first
+    // tab didn't have these pixmaps calculated.  When I just had the return,
+    // all but the first page had blank faders, and they'd still crash if you
+    // clicked on their undrawn blank areas.  So I thought what the hell, what
+    // happens if we try to re-create the pixmaps here if they're not already
+    // present?  And it seems to work.  The volume fader on page 2 controls the
+    // volume in the IPB for device 2.  The whole thing has an air of fragility
+    // about it though, and I wish I truly understood what was going on here.
+    if (!buttonPixmap()) {
+        calculateButtonPixmap();
+    }
+
+    if (!buttonPixmap()) return;
+
+    if (!groovePixmap()) {
+        calculateGroovePixmap();
+    }
+
+    if (!groovePixmap()) return;
+
     int position = value_to_position(m_value);
 
     if (m_vertical) {
@@ -313,7 +329,7 @@ Fader::mousePressEvent(QMouseEvent *e)
 {
     m_clickMousePos = -1;
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
 
         if (e->type() == QEvent::MouseButtonDblClick) {
             setFader(0);
@@ -364,7 +380,7 @@ void
 Fader::wheelEvent(QWheelEvent *e)
 {
     int buttonPosition = value_to_position(m_value);
-    if (e->state() & ShiftButton) {
+    if (e->state() & Qt::SHIFT ) {
         if (e->delta() > 0)
             buttonPosition += 10;
         else
@@ -380,6 +396,12 @@ Fader::wheelEvent(QWheelEvent *e)
     RG_DEBUG << "Fader::wheelEvent - value = " << m_value << endl;
 
     showFloatText();
+}
+
+void
+Fader::enterEvent(QEvent *)
+{
+    TextFloat::getTextFloat()->attach(this);
 }
 
 void
@@ -403,34 +425,16 @@ Fader::showFloatText()
                .arg(int(v * 1000) % 10);
     }
 
-    m_float->setText(text);
+    TextFloat *textFloat = TextFloat::getTextFloat();
 
-    // Reposition - we need to sum the relative positions up to the
-    // topLevel or dialog to please move().
-    //
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
+    textFloat->setText(text);
 
-    while (par->parentWidget() && !par->isTopLevel() && !par->isDialog()) {
-        totalPos += par->pos();
-        par = par->parentWidget();
-    }
+    // Reposition : Move just top/right
+    QPoint offset = QPoint(width() + width() / 5, + height() / 5);
+    textFloat->display(offset);
 
-    // Move just top/right
-    //
-    m_float->move(totalPos + QPoint(width() + 2, 0));
-
-    // Show
-    m_float->show();
-
-    // one shot, 500ms
-    m_floatTimer->start(500, true);
-}
-
-void
-Fader::slotFloatTimeout()
-{
-    m_float->hide();
+    // Keep text float visible for 500ms
+    textFloat->hideAfterDelay(500);
 }
 
 void
@@ -440,14 +444,27 @@ Fader::calculateGroovePixmap()
 
     delete map;
     map = new QPixmap(width(), height());
-    map->fill(colorGroup().background());
+
+    // The area between the groove and the border takes a very translucent tint
+    // of border color
+    QColor bg = m_outlineColour;
+    int H = 0;
+    int S = 0;
+    int V = 0;
+    int A = 0;
+    bg.getHsv(&H, &S, &V, &A);
+    A = 40;
+    bg = QColor::fromHsv(H, S, V, A);
+
+    map->fill(bg);
+
     QPainter paint(map);
-    paint.setBrush(colorGroup().background());
+    paint.setBrush(bg);
 
     if (m_vertical) {
 
         paint.setPen(m_outlineColour);
-        paint.drawRect(0, 0, width(), height());
+        paint.drawRect(0, 0, width() - 1, height() - 1);
 
         if (m_integral) {
             //...
@@ -457,9 +474,9 @@ Fader::calculateGroovePixmap()
                 if (position >= 0 &&
                         position < m_sliderMax - m_sliderMin) {
                     if (dB == 0)
-                        paint.setPen(colorGroup().dark());
+                        paint.setPen(palette().dark());
                     else
-                        paint.setPen(colorGroup().midlight());
+                        paint.setPen(palette().midlight());
                     paint.drawLine(1, (m_sliderMax - position),
                                    width() - 2, (m_sliderMax - position));
                 }
@@ -470,8 +487,10 @@ Fader::calculateGroovePixmap()
             }
         }
 
-        paint.setPen(colorGroup().dark());
-        paint.setBrush(colorGroup().mid());
+        // the "groove" is a dark rounded rectangle like the ones on my real
+        // mixer
+        paint.setPen(QColor(0x20, 0x20, 0x20));
+        paint.setBrush(QColor(0x20, 0x20, 0x20));
         paint.drawRect(width() / 2 - 3, height() - m_sliderMax,
                        6, m_sliderMax - m_sliderMin);
         paint.end();
@@ -489,66 +508,80 @@ Fader::calculateButtonPixmap()
 
     QPixmap *& map = m_pixmapCache[SizeRec(width(), height())].second;
 
+    int h = height() - 1;
+    int w = width() - 1;
+
     if (m_vertical) {
 
-        int buttonHeight = height() / 7;
+        int buttonHeight = h / 7;
         buttonHeight /= 10;
         ++buttonHeight;
         buttonHeight *= 10;
         ++buttonHeight;
-        int buttonWidth = width() * 2 / 3;
+        int buttonWidth = w * 2 / 3;
         buttonWidth /= 5;
         ++buttonWidth;
         buttonWidth *= 5;
-        if (buttonWidth > width() - 2)
-            buttonWidth = width() - 2;
+        buttonWidth -= 2;
+        if (buttonWidth > w - 2)
+            buttonWidth = w - 2;
 
         map = new QPixmap(buttonWidth, buttonHeight);
-        map->fill(colorGroup().background());
+
+        // we have to draw something with our own stylesheet-compatible colors
+        // instead of pulling button colors from the palette, and presumably
+        // the active system style.  I tried to use a QLinearGradient for this
+        // to match the stylesheet, but it didn't work, or I made a mistake in
+        // the code.  We'll just use a solid color and be done with it then.
+        // This should come out of GUIPalette, I suppose, but I don't feel like
+        // rebuilding half the application every time I tweak the following
+        // number:
+        QBrush bg(QColor(0xBB, 0xBB, 0xBB));
+        map->fill(bg);
 
         int x = 0;
         int y = 0;
 
         QPainter paint(map);
 
-        paint.setPen(colorGroup().light());
+        paint.setPen(palette().light());
         paint.drawLine(x + 1, y, x + buttonWidth - 2, y);
         paint.drawLine(x, y + 1, x, y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().midlight());
+        paint.setPen(palette().midlight());
         paint.drawLine(x + 1, y + 1, x + buttonWidth - 2, y + 1);
         paint.drawLine(x + 1, y + 1, x + 1, y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().mid());
+        paint.setPen(palette().mid());
         paint.drawLine(x + 2, y + buttonHeight - 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
         paint.drawLine(x + buttonWidth - 2, y + 2, x + buttonWidth - 2,
                        y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().dark());
+        paint.setPen(palette().dark());
         paint.drawLine(x + 1, y + buttonHeight - 1, x + buttonWidth - 2,
                        y + buttonHeight - 1);
         paint.drawLine(x + buttonWidth - 1, y + 1, x + buttonWidth - 1,
                        y + buttonHeight - 2);
 
-        paint.setPen(colorGroup().shadow());
+        paint.setPen(palette().shadow());
         paint.drawLine(x + 1, y + buttonHeight / 2, x + buttonWidth - 2,
                        y + buttonHeight / 2);
 
-        paint.setPen(colorGroup().mid());
+        paint.setPen(palette().mid());
         paint.drawLine(x + 1, y + buttonHeight / 2 - 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 - 1);
         paint.drawPoint(x, y + buttonHeight / 2);
 
-        paint.setPen(colorGroup().light());
+        paint.setPen(palette().light());
         paint.drawLine(x + 1, y + buttonHeight / 2 + 1, x + buttonWidth - 2,
                        y + buttonHeight / 2 + 1);
 
-        paint.setPen(colorGroup().button());
-        paint.setBrush(colorGroup().button());
-        paint.drawRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4);
-        paint.drawRect(x + 2, y + buttonHeight / 2 + 2,
-                       buttonWidth - 4, buttonHeight / 2 - 4);
+        paint.setPen(bg);
+        paint.setBrush(bg);
+        paint.drawRoundedRect(x + 2, y + 2, buttonWidth - 4, buttonHeight / 2 - 4, 4.0, 4.0);
+        paint.drawRoundedRect(x + 2, y + buttonHeight / 2 + 2,
+                       buttonWidth - 4, buttonHeight / 2 - 4, 4.0, 4.0);
 
         paint.end();
     } else {

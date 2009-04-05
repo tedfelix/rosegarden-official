@@ -19,7 +19,7 @@
 #ifndef _RG_PROGRESSREPORTER_H_
 #define _RG_PROGRESSREPORTER_H_
 
-#include <qobject.h>
+#include <QObject>
 
 
 
@@ -56,8 +56,8 @@ protected slots:
      virtual void slotCancel();
 
 signals:
-    /// Report progress
-    void setProgress(int);
+    /// Report value()
+    void setValue(int);
     void incrementProgress(int);
     void setOperationName(QString);
 

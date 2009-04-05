@@ -20,10 +20,10 @@
 #define _RG_SEGMENTCOLOURCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -34,15 +34,17 @@ namespace Rosegarden
 class SegmentSelection;
 
 
-class SegmentColourCommand : public KNamedCommand
+class SegmentColourCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentColourCommand)
+
 public:
     SegmentColourCommand(SegmentSelection &segments,
                          const unsigned int index);
     virtual ~SegmentColourCommand();
 
     static QString getGlobalName()
-        { return i18n("Change Segment Color..."); }
+        { return tr("Change Segment Color..."); }
 
     virtual void execute();
     virtual void unexecute();

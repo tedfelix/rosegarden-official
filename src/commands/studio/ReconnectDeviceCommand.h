@@ -21,9 +21,9 @@
 
 #include "base/Device.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,18 +34,20 @@ namespace Rosegarden
 class Studio;
 
 
-class ReconnectDeviceCommand : public KNamedCommand
+class ReconnectDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ReconnectDeviceCommand)
+
 public:
     ReconnectDeviceCommand(Studio *studio,
                            DeviceId deviceId,
                            std::string newConnection) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),
         m_newConnection(newConnection) { }
 
-    static QString getGlobalName() { return i18n("Reconnect Device"); }
+    static QString getGlobalName() { return tr("Reconnect Device"); }
 
     virtual void execute();
     virtual void unexecute();

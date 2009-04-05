@@ -22,6 +22,7 @@
 #include "base/PropertyName.h"
 #include "NoteCharacterNames.h"
 #include "NoteStyleFactory.h"
+#include "misc/Strings.h"
 
 
 namespace Rosegarden
@@ -393,6 +394,31 @@ NoteStyle::getTimeSignatureDigitName(int digit)
     }
 }
 
+CharName
+NoteStyle::getSomeCharName(QString qthing)
+{
+    CharName name;
+    std::string thing = qstrtostr(qthing);
+
+    try {
+        name = getAccidentalCharName(Accidental(thing));
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    try {
+        name = getMarkCharName(Mark(thing));
+        std::cerr << thing << " -> " << name << std::endl;
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    try {
+        name = getClefCharName(Clef(thing));
+        if (!(name == NoteCharacterNames::UNKNOWN)) return name;
+    } catch (Exception) { }
+
+    return NoteCharacterNames::UNKNOWN;
+}
+
 void
 NoteStyle::setBaseStyle(NoteStyleName name)
 {
@@ -403,14 +429,14 @@ NoteStyle::setBaseStyle(NoteStyleName name)
     } catch (NoteStyleFactory::StyleUnavailable u) {
         if (name != NoteStyleFactory::DefaultStyle) {
             std::cerr
-            << "NoteStyle::setBaseStyle: Base style "
-            << name << " not available, defaulting to "
-            << NoteStyleFactory::DefaultStyle << std::endl;
+                << "NoteStyle::setBaseStyle: Base style "
+                << name << " not available, defaulting to "
+                << NoteStyleFactory::DefaultStyle << std::endl;
             setBaseStyle(NoteStyleFactory::DefaultStyle);
         } else {
             std::cerr
-            << "NoteStyle::setBaseStyle: Base style "
-            << name << " not available" << std::endl;
+                << "NoteStyle::setBaseStyle: Base style "
+                << name << " not available" << std::endl;
             m_baseStyle = 0;
         }
     }

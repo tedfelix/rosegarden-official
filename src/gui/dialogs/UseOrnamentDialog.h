@@ -21,16 +21,19 @@
 
 #include "base/TriggerSegment.h"
 #include "base/NotationTypes.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+
 #include <string>
-#include <kdialogbase.h>
 #include <vector>
 
 
 class QWidget;
-class QLineEdit;
+class LineEdit;
 class QLabel;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -39,7 +42,7 @@ namespace Rosegarden
 class Composition;
 
 
-class UseOrnamentDialog : public KDialogBase
+class UseOrnamentDialog : public QDialog
 {
     Q_OBJECT
 
@@ -52,7 +55,7 @@ public:
     std::string getTimeAdjust() const;
 
 public slots:
-    void slotOk();
+    void accept();
     void slotMarkChanged(int);
 
 protected:
@@ -60,13 +63,13 @@ protected:
 
     std::vector<Mark> m_marks;
 
-    Composition  *m_composition;
-    KComboBox                *m_ornament;
-    KComboBox                *m_mark;
-    QLabel                   *m_textLabel;
-    QLineEdit                *m_text;
-    QCheckBox                *m_retune;
-    KComboBox                *m_adjustTime;
+    Composition   *m_composition;
+    QComboBox     *m_ornament;
+    QComboBox     *m_mark;
+    QLabel        *m_textLabel;
+    LineEdit      *m_text;
+    QCheckBox     *m_retune;
+    QComboBox     *m_adjustTime;
 };
 
 

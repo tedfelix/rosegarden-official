@@ -17,50 +17,52 @@
 
 
 #include "GeneralConfigurationPage.h"
-
-#include "document/ConfigGroups.h"
+#include "TabbedConfigurationPage.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+#include "document/ConfigGroups.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/eventlist/EventView.h"
 #include "gui/editors/parameters/RosegardenParameterArea.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/SoundDriver.h"
-#include "TabbedConfigurationPage.h"
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kfiledialog.h>
-#include <kmessagebox.h>
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qfileinfo.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qlayout.h>
+
+#include <QComboBox>
+#include <QSettings>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QFileInfo>
+#include <QFrame>
+#include <QLabel>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
-        KConfig *cfg,
+GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         QWidget *parent, const char *name)
-        : TabbedConfigurationPage(cfg, parent, name),
+        : TabbedConfigurationPage(parent, name),
         m_doc(doc),
         m_client(0),
         m_countIn(0),
         m_nameStyle(0),
         m_appendLabel(0)
 {
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     QFrame *frame;
     QGridLayout *layout;
@@ -71,130 +73,137 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
     // "Behavior" tab
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame,
-                             6, 2,  // nbrow, nbcol
-                             10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Double-click opens segment in"),
+    layout->addWidget(new QLabel(tr("Double-click opens segment in"),
                                  frame), row, 0);
 
-    m_client = new KComboBox(frame);
-    m_client->insertItem(i18n("Notation editor"));
-    m_client->insertItem(i18n("Matrix editor"));
-    m_client->insertItem(i18n("Event List editor"));
-    m_client->setCurrentItem(m_cfg->readUnsignedNumEntry("doubleclickclient", NotationView));
+    m_client = new QComboBox(frame);
+    connect(m_client, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_client->addItem(tr("Notation editor"));
+    m_client->addItem(tr("Matrix editor"));
+    m_client->addItem(tr("Event List editor"));
+    m_client->setCurrentIndex( settings.value("doubleclickclient", NotationView).toUInt() );
 
-    layout->addMultiCellWidget(m_client, row, row, 1, 2);
+    layout->addWidget(m_client, row, 1, row- row+1, 2);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Number of count-in measures when recording"),
+    layout->addWidget(new QLabel(tr("Number of count-in measures when recording"),
                                  frame), row, 0);
 
     m_countIn = new QSpinBox(frame);
-    m_countIn->setValue(m_cfg->readUnsignedNumEntry("countinbars", 0));
-    m_countIn->setMaxValue(10);
-    m_countIn->setMinValue(0);
-    layout->addMultiCellWidget(m_countIn, row, row, 1, 2);
+    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
+    m_countIn->setValue( settings.value("countinbars", 0).toUInt() );
+    m_countIn->setMaximum(10);
+    m_countIn->setMinimum(0);
+    layout->addWidget(m_countIn, row, 1, row- row+1, 2);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Auto-save interval"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Auto-save interval"), frame), row, 0);
     
-    m_autoSave = new KComboBox(frame);
-    m_autoSave->insertItem(i18n("Every 30 seconds"));
-    m_autoSave->insertItem(i18n("Every minute"));
-    m_autoSave->insertItem(i18n("Every five minutes"));
-    m_autoSave->insertItem(i18n("Every half an hour"));
-    m_autoSave->insertItem(i18n("Never"));
+    m_autoSave = new QComboBox(frame);
+    connect(m_autoSave, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_autoSave->addItem(tr("Every 30 seconds"));
+    m_autoSave->addItem(tr("Every minute"));
+    m_autoSave->addItem(tr("Every five minutes"));
+    m_autoSave->addItem(tr("Every half an hour"));
+    m_autoSave->addItem(tr("Never"));
 
-    bool doAutoSave = m_cfg->readBoolEntry("autosave", true);
-    int autoSaveInterval = m_cfg->readUnsignedNumEntry("autosaveinterval", 300);
+    bool doAutoSave = qStrToBool( settings.value("autosave", "true" ) ) ;
+    int autoSaveInterval = settings.value("autosaveinterval", 300).toUInt() ;
     if (!doAutoSave || autoSaveInterval == 0) {
-        m_autoSave->setCurrentItem(4); // off
+        m_autoSave->setCurrentIndex(4); // off
     } else if (autoSaveInterval < 45) {
-        m_autoSave->setCurrentItem(0);
+        m_autoSave->setCurrentIndex(0);
     } else if (autoSaveInterval < 150) {
-        m_autoSave->setCurrentItem(1);
+        m_autoSave->setCurrentIndex(1);
     } else if (autoSaveInterval < 900) {
-        m_autoSave->setCurrentItem(2);
+        m_autoSave->setCurrentIndex(2);
     } else {
-        m_autoSave->setCurrentItem(3);
+        m_autoSave->setCurrentIndex(3);
     }
 
-    layout->addMultiCellWidget(m_autoSave, row, row, 1, 2);
+    layout->addWidget(m_autoSave, row, 1, row- row+1, 2);
     ++row;
 
-    label = new QLabel(i18n("Append suffixes to segment labels"), frame);
+    label = new QLabel(tr("Append suffixes to segment labels"), frame);
     layout->addWidget(label, row, 0);
 
     m_appendLabel = new QCheckBox(frame);
-    m_appendLabel->setChecked(m_cfg->readBoolEntry("appendlabel", true));
-    layout->addMultiCellWidget(m_appendLabel, row, row, 1, 2);
+    connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    m_appendLabel->setChecked( qStrToBool( settings.value("appendlabel", "true" ) ) );
+    layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
+    settings.endGroup();
 
     // JACK Transport
     //
 #ifdef HAVE_LIBJACK
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
-    label = new QLabel(i18n("Use JACK transport"), frame);
+    label = new QLabel(tr("Use JACK transport"), frame);
     layout->addWidget(label, row, 0);
 
     m_jackTransport = new QCheckBox(frame);
-    layout->addMultiCellWidget(m_jackTransport, row, row, 1, 2);
+    connect(m_jackTransport, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
+    layout->addWidget(m_jackTransport, row, 1, row- row+1, 2);
 
-//    m_jackTransport->insertItem(i18n("Ignore JACK transport"));
-//    m_jackTransport->insertItem(i18n("Sync"));
+//    m_jackTransport->addItem(tr("Ignore JACK transport"));
+//    m_jackTransport->addItem(tr("Sync"));
 
     /*!!! Removed as not yet implemented
-        m_jackTransport->insertItem(i18n("Sync, and offer timebase master"));
+        m_jackTransport->addItem(tr("Sync, and offer timebase master"));
     */
 
-    bool jackMaster = m_cfg->readBoolEntry("jackmaster", false);
-    bool jackTransport = m_cfg->readBoolEntry("jacktransport", false);
+    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
+    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
 /*
     if (jackTransport)
-        m_jackTransport->setCurrentItem(1);
+        m_jackTransport->setCurrentIndex(1);
     else
-        m_jackTransport->setCurrentItem(0);
+        m_jackTransport->setCurrentIndex(0);
 */
     m_jackTransport->setChecked(jackTransport);
 
     ++row;
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    settings.endGroup();
 #endif
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    layout->setRowSpacing(row, 20);
+    layout->setRowMinimumHeight(row, 20);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Sequencer status"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Sequencer status"), frame), row, 0);
 
-    QString status(i18n("Unknown"));
+    QString status(tr("Unknown"));
     SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
         int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);
         switch (driverStatus) {
         case AUDIO_OK:
-            status = i18n("No MIDI, audio OK");
+            status = tr("No MIDI, audio OK");
             break;
         case MIDI_OK:
-            status = i18n("MIDI OK, no audio");
+            status = tr("MIDI OK, no audio");
             break;
         case AUDIO_OK | MIDI_OK:
-            status = i18n("MIDI OK, audio OK");
+            status = tr("MIDI OK, audio OK");
             break;
         default:
-            status = i18n("No driver");
+            status = tr("No driver");
             break;
         }
     }
 
     layout->addWidget(new QLabel(status, frame), row, 1);
 
-    QPushButton *showStatusButton = new QPushButton(i18n("Details..."),
+    QPushButton *showStatusButton = new QPushButton(tr("Details..."),
                                     frame);
     QObject::connect(showStatusButton, SIGNAL(clicked()),
                      this, SLOT(slotShowStatus()));
@@ -203,91 +212,103 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenGUIDoc *doc,
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, i18n("Behavior"));
+    addTab(frame, tr("Behavior"));
 
     //
     // "Appearance" tab
     //
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame,
-                                          7, 4,  // nbrow, nbcol -- one extra row improves layout
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     row = 0;
 
-    layout->setRowSpacing(row, 15);
+    layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Side-bar parameter box layout"),
+    layout->addWidget(new QLabel(tr("Side-bar parameter box layout"),
                                  frame), row, 0);
 
-    m_sidebarStyle = new KComboBox(frame);
-    m_sidebarStyle->insertItem(i18n("Vertically stacked"),
+    m_sidebarStyle = new QComboBox(frame);
+    connect(m_sidebarStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_sidebarStyle->addItem(tr("Vertically stacked"),
                                RosegardenParameterArea::CLASSIC_STYLE);
-    m_sidebarStyle->insertItem(i18n("Tabbed"),
+    m_sidebarStyle->addItem(tr("Tabbed"),
                                RosegardenParameterArea::TAB_BOX_STYLE);
 
-    m_sidebarStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("sidebarstyle",
-                                   0));
-    layout->addMultiCellWidget(m_sidebarStyle, row, row, 1, 3);
+    m_sidebarStyle->setCurrentIndex( settings.value("sidebarstyle",
+                                   0).toUInt() );
+    layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Note name style"),
+    layout->addWidget(new QLabel(tr("Note name style"),
                                  frame), row, 0);
 
-    m_nameStyle = new KComboBox(frame);
-    m_nameStyle->insertItem(i18n("Always use US names (e.g. quarter, 8th)"));
-    m_nameStyle->insertItem(i18n("Localized (where available)"));
-    m_nameStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("notenamestyle", Local));
-    layout->addMultiCellWidget(m_nameStyle, row, row, 1, 3);
+    m_nameStyle = new QComboBox(frame);
+    connect(m_nameStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_nameStyle->addItem(tr("Always use US names (e.g. quarter, 8th)"));
+    m_nameStyle->addItem(tr("Localized (where available)"));
+    m_nameStyle->setCurrentIndex( settings.value("notenamestyle", Local).toUInt() );
+    layout->addWidget(m_nameStyle, row, 1, row- row+1, 3);
     ++row;
 /*
-    layout->addWidget(new QLabel(i18n("Show tool context help in status bar"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Show tool context help in status bar"), frame), row, 0);
 
     m_toolContextHelp = new QCheckBox(frame);
     layout->addWidget(m_toolContextHelp, row, 1);
-    m_toolContextHelp->setChecked(m_cfg->readBoolEntry
+    m_toolContextHelp->setChecked(settings->readBoolEntry
                                   ("toolcontexthelp", true));
     ++row;
 */
 
-    layout->addWidget(new QLabel(i18n("Show textured background on"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Show textured background on"), frame), row, 0);
 
-    m_backgroundTextures = new QCheckBox(i18n("Main window"), frame);
+    m_backgroundTextures = new QCheckBox(tr("Main window"), frame);
+    connect(m_backgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_backgroundTextures, row, 1);
 
-    m_matrixBackgroundTextures = new QCheckBox(i18n("Matrix"), frame);
+    m_matrixBackgroundTextures = new QCheckBox(tr("Matrix"), frame);
+    connect(m_matrixBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_matrixBackgroundTextures, row, 2);
 
-    m_notationBackgroundTextures = new QCheckBox(i18n("Notation"), frame);
+    m_notationBackgroundTextures = new QCheckBox(tr("Notation"), frame);
+    connect(m_notationBackgroundTextures, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
     layout->addWidget(m_notationBackgroundTextures, row, 3);
 
-    m_backgroundTextures->setChecked(m_cfg->readBoolEntry
-                                     ("backgroundtextures", true));
+    m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
 
-    m_cfg->setGroup(MatrixViewConfigGroup);
-    m_matrixBackgroundTextures->setChecked(m_cfg->readBoolEntry
-                                           ("backgroundtextures-1.6-plus", true));
-    m_cfg->setGroup(NotationViewConfigGroup);
-    m_notationBackgroundTextures->setChecked(m_cfg->readBoolEntry
-                                             ("backgroundtextures", true));
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    settings.endGroup();
+    settings.beginGroup( MatrixViewConfigGroup );
+
+    m_matrixBackgroundTextures->setChecked(qStrToBool(settings.value(
+            "backgroundtextures-1.6-plus", true)));
+    settings.endGroup();
+
+    settings.beginGroup( NotationViewConfigGroup );
+    m_notationBackgroundTextures->setChecked(qStrToBool(settings.value(
+            "backgroundtextures", true)));
+    settings.endGroup();
+
+    settings.beginGroup( GeneralOptionsConfigGroup );
     ++row;
 
-    layout->addWidget(new QLabel(i18n("Use bundled Klearlook theme"), frame), row, 0);
-    m_globalStyle = new KComboBox(frame);
-    m_globalStyle->insertItem(i18n("Never"));
-    m_globalStyle->insertItem(i18n("When not running under KDE"));
-    m_globalStyle->insertItem(i18n("Always"));
-    m_globalStyle->setCurrentItem(m_cfg->readUnsignedNumEntry("Install Own Theme", 1));
-    layout->addMultiCellWidget(m_globalStyle, row, row, 1, 3);
+    layout->addWidget(new QLabel(tr("Use bundled Klearlook theme"), frame), row, 0);
+    m_globalStyle = new QComboBox(frame);
+    connect(m_globalStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_globalStyle->addItem(tr("Never"));
+    m_globalStyle->addItem(tr("When not running under KDE"));
+    m_globalStyle->addItem(tr("Always"));
+    m_globalStyle->setCurrentIndex( settings.value("Install Own Theme", 1).toUInt() );
+    layout->addWidget(m_globalStyle, row, 1, row- row+1, 3);
 
     ++row;
 
     layout->setRowStretch(row, 10);
 
-    addTab(frame, i18n("Presentation"));
+    addTab(frame, tr("Presentation"));
 
+    settings.endGroup();
 }
 
 void
@@ -299,88 +320,101 @@ GeneralConfigurationPage::slotShowStatus()
 
 void GeneralConfigurationPage::apply()
 {
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
     int countIn = getCountInSpin();
-    m_cfg->writeEntry("countinbars", countIn);
+    settings.setValue("countinbars", countIn);
 
     int client = getDblClickClient();
-    m_cfg->writeEntry("doubleclickclient", client);
+    settings.setValue("doubleclickclient", client);
 
-    int globalstyle = m_globalStyle->currentItem();
-    m_cfg->writeEntry("Install Own Theme", globalstyle);
+    int globalstyle = m_globalStyle->currentIndex();
+    settings.setValue("Install Own Theme", globalstyle);
 
     int namestyle = getNoteNameStyle();
-    m_cfg->writeEntry("notenamestyle", namestyle);
+    settings.setValue("notenamestyle", namestyle);
 /*
-    m_cfg->writeEntry("toolcontexthelp", m_toolContextHelp->isChecked());
+    settings.setValue("toolcontexthelp", m_toolContextHelp->isChecked());
 */
     bool texturesChanged = false;
     bool mainTextureChanged = false;
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    //### settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (m_cfg->readBoolEntry("backgroundtextures", true) !=
+    if ( qStrToBool( settings.value("backgroundtextures", "true" ) )  !=
         m_backgroundTextures->isChecked()) {
         texturesChanged = true;
         mainTextureChanged = true;
+        settings.endGroup();
     } else {
-        m_cfg->setGroup(MatrixViewConfigGroup);
-        if (m_cfg->readBoolEntry("backgroundtextures-1.6-plus", false) !=
+        settings.endGroup();
+        settings.beginGroup( MatrixViewConfigGroup );
+        if ( qStrToBool( settings.value("backgroundtextures-1.6-plus", "false" ) )  !=
             m_matrixBackgroundTextures->isChecked()) {
             texturesChanged = true;
+            settings.endGroup();
         } else {
-            m_cfg->setGroup(NotationViewConfigGroup);
-            if (m_cfg->readBoolEntry("backgroundtextures", true) !=
+            settings.endGroup();
+            settings.beginGroup( NotationViewConfigGroup );
+            if ( qStrToBool( settings.value("backgroundtextures", "true" ) )  !=
                 m_notationBackgroundTextures->isChecked()) {
                 texturesChanged = true;
             }
+            settings.endGroup();
         }
     }
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
-    m_cfg->writeEntry("backgroundtextures", m_backgroundTextures->isChecked());
+    settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
+    settings.endGroup();
 
-    m_cfg->setGroup(MatrixViewConfigGroup);
-    m_cfg->writeEntry("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
+    settings.beginGroup( MatrixViewConfigGroup );
 
-    m_cfg->setGroup(NotationViewConfigGroup);
-    m_cfg->writeEntry("backgroundtextures", m_notationBackgroundTextures->isChecked());
+    settings.setValue("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
+    settings.endGroup();
 
-    m_cfg->setGroup(GeneralOptionsConfigGroup);
+    settings.beginGroup( NotationViewConfigGroup );
 
-    int sidebarStyle = m_sidebarStyle->currentItem();
-    m_cfg->writeEntry("sidebarstyle", sidebarStyle);
+    settings.setValue("backgroundtextures", m_notationBackgroundTextures->isChecked());
+    settings.endGroup();
+
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    int sidebarStyle = m_sidebarStyle->currentIndex();
+    settings.setValue("sidebarstyle", sidebarStyle);
     emit updateSidebarStyle(sidebarStyle);
 
     unsigned int interval = 0;
 
-    if (m_autoSave->currentItem() == 4) {
-        m_cfg->writeEntry("autosave", false);
+    if (m_autoSave->currentIndex() == 4) {
+        settings.setValue("autosave", false);
     } else {
-        m_cfg->writeEntry("autosave", true);
-        if (m_autoSave->currentItem() == 0) {
+        settings.setValue("autosave", true);
+        if (m_autoSave->currentIndex() == 0) {
             interval = 30;
-        } else if (m_autoSave->currentItem() == 1) {
+        } else if (m_autoSave->currentIndex() == 1) {
             interval = 60;
-        } else if (m_autoSave->currentItem() == 2) {
+        } else if (m_autoSave->currentIndex() == 2) {
             interval = 300;
         } else {
             interval = 1800;
         }
-        m_cfg->writeEntry("autosaveinterval", interval);
+        settings.setValue("autosaveinterval", interval);
         emit updateAutoSaveInterval(interval);
     }
 
     bool appendLabel = getAppendLabel();
-    m_cfg->writeEntry("appendlabel", appendLabel);
+    settings.setValue("appendlabel", appendLabel);
+
+    settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    m_cfg->setGroup(SequencerOptionsConfigGroup);
+    settings.beginGroup( SequencerOptionsConfigGroup );
 
     // Write the JACK entry
     //
 /*
-    int jackValue = m_jackTransport->currentItem();
+    int jackValue = m_jackTransport->currentIndex();
     bool jackTransport, jackMaster;
 
     switch (jackValue) {
@@ -412,8 +446,8 @@ void GeneralConfigurationPage::apply()
 
     // Write the items
     //
-    m_cfg->writeEntry("jacktransport", jackTransport);
-    m_cfg->writeEntry("jackmaster", jackMaster);
+    settings.setValue("jacktransport", jackTransport);
+    settings.setValue("jackmaster", jackMaster);
 
     // Now send it
     //
@@ -422,10 +456,12 @@ void GeneralConfigurationPage::apply()
                             MidiByte(jackValue));
 
     StudioControl::sendMappedEvent(mEjackValue);
+
+    settings.endGroup();
 #endif // HAVE_LIBJACK
 
     if (mainTextureChanged) {
-        KMessageBox::information(this, i18n("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
+        QMessageBox::information(this, "", tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
 }

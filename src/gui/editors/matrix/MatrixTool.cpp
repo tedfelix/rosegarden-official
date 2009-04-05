@@ -17,62 +17,157 @@
 
 
 #include "MatrixTool.h"
+#include "misc/Debug.h"
+#include "misc/Strings.h"
 
-#include "gui/general/EditTool.h"
-#include "MatrixView.h"
-#include <kaction.h>
-#include <qstring.h>
+#include "MatrixWidget.h"
+#include "MatrixScene.h"
+
+#include <QAction>
+#include <QString>
+#include <QMenu>
 
 
 namespace Rosegarden
 {
 
-MatrixTool::MatrixTool(const QString& menuName, MatrixView* parent)
-        : EditTool(menuName, parent),
-        m_mParentView(parent)
+MatrixTool::MatrixTool(QString rcFileName, QString menuName,
+                           MatrixWidget *widget) :
+    BaseTool(menuName, widget),
+    m_widget(widget),
+    m_scene(0),
+    m_rcFileName(rcFileName)
+{
+}
+
+MatrixTool::~MatrixTool()
+{
+    // We don't need (or want) to delete the menu; it's owned by the
+    // ActionFileMenuWrapper parented to our QObject base class
+    MATRIX_DEBUG << "MatrixTool::~MatrixTool()" << endl;
+}
+
+void
+MatrixTool::handleLeftButtonPress(const MatrixMouseEvent *) { }
+
+void
+MatrixTool::handleMidButtonPress(const MatrixMouseEvent *) { }
+
+void
+MatrixTool::handleRightButtonPress(const MatrixMouseEvent *) 
+{
+    showMenu();
+}
+
+void
+MatrixTool::handleMouseRelease(const MatrixMouseEvent *) { }
+
+void
+MatrixTool::handleMouseDoubleClick(const MatrixMouseEvent *) { }
+
+MatrixTool::FollowMode
+MatrixTool::handleMouseMove(const MatrixMouseEvent *)
+{
+    return NoFollow;
+}
+
+void
+MatrixTool::handleEventRemoved(Event *)
 {}
 
 void
 MatrixTool::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+    invokeInParentView("select");
 }
 
 void
 MatrixTool::slotMoveSelected()
 {
-    m_parentView->actionCollection()->action("move")->activate();
+    invokeInParentView("move");
 }
 
 void
 MatrixTool::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+    invokeInParentView("erase");
 }
 
 void
 MatrixTool::slotResizeSelected()
 {
-    m_parentView->actionCollection()->action("resize")->activate();
+    invokeInParentView("resize");
 }
 
 void
 MatrixTool::slotDrawSelected()
 {
-    m_parentView->actionCollection()->action("draw")->activate();
+    invokeInParentView("draw");
 }
 
 void 
 MatrixTool::slotVelocityChangeSelected()
 {
-    m_parentView->actionCollection()->action("velocity")->activate();
+    invokeInParentView("velocity");
 }
 
-const SnapGrid &
+const SnapGrid *
 MatrixTool::getSnapGrid() const
 {
-    return m_mParentView->getSnapGrid();
+    if (!m_scene) return 0;
+    return m_scene->getSnapGrid();
 }
+
+void
+MatrixTool::invokeInParentView(QString actionName)
+{
+    QAction *a = findActionInParentView(actionName);
+    if (!a) {
+        std::cerr << "MatrixTool::invokeInParentView: No action \"" << actionName
+                  << "\" found in parent view" << std::endl;
+    } else {
+        a->trigger();
+    }
+}
+
+QAction *
+MatrixTool::findActionInParentView(QString actionName)
+{
+    if (!m_widget) return 0;
+    QWidget *w = m_widget;
+    ActionFileClient *c = 0;
+    while (w->parentWidget() && !(c = dynamic_cast<ActionFileClient *>(w))) {
+        w = w->parentWidget();
+    }
+    if (!c) {
+        std::cerr << "MatrixTool::findActionInParentView: Can't find ActionFileClient in parent widget hierarchy" << std::endl;
+        return 0;
+    }
+    QAction *a = c->findAction(actionName);
+    return a;
+}
+
+void
+MatrixTool::createMenu()
+{
+    MATRIX_DEBUG << "MatrixTool::createMenu() " << m_rcFileName << " - " << m_menuName << endl;
+
+    if (!createGUI(m_rcFileName)) {
+        std::cerr << "MatrixTool::createMenu(" << m_rcFileName << "): menu creation failed" << std::endl;
+        m_menu = 0;
+        return;
+    }
+
+    QMenu *menu = findMenu(m_menuName);
+    if (!menu) {
+        std::cerr << "MatrixTool::createMenu(" << m_rcFileName
+                  << "): menu name "
+                  << m_menuName << " not created by RC file\n";
+        return;
+    }
+
+    m_menu = menu;
+}    
 
 }
 #include "MatrixTool.moc"

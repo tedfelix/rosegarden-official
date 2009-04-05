@@ -16,7 +16,11 @@
 #define _ROSE_STRINGS_H_
 
 #include <string>
-#include <qstring.h>
+#include <QString>
+#include <iostream>
+#include <QVariant>
+#include <QTextStream>
+
 #include "PropertyName.h"
 #include "Exception.h"
 
@@ -25,8 +29,20 @@ extern QString strtoqstr(const Rosegarden::PropertyName &);
 extern std::string qstrtostr(const QString &);
 extern double strtodouble(const std::string &);
 extern double qstrtodouble(const QString &);
+extern bool qStrToBool(const QString &s);
+extern bool qStrToBool(const QVariant &v);
+extern std::string qStrToStrLocal8(const QString &qstr);
+extern std::string qStrToStrUtf8(const QString &qstr);
+extern const char* qStrToCharPtrUtf8(const QString &qstr);
+extern const char* qStrToCharPtrLocal8(const QString &qstr);
 
 class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);
+
+std::ostream &
+operator<<(std::ostream &, const QString &);
+
+QTextStream &
+operator<<(QTextStream &, const std::string &);
 
 #endif

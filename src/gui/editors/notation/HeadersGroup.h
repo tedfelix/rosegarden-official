@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_HEADERSGROUP_H_
 #define _RG_HEADERSGROUP_H_
@@ -26,10 +26,9 @@
 #include "base/Track.h"
 
 #include <vector>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qvbox.h>
-
+#include <QSize>
+#include <QWidget>
+#include <QVBoxLayout>
 
 class QLabel;
 class QResizeEvent;
@@ -42,9 +41,10 @@ namespace Rosegarden
 class NotationView;
 class Composition;
 class TrackHeader;
+//class QVBoxLayout;
 
 
-class HeadersGroup : public QVBox
+class HeadersGroup : public QWidget
 {
     Q_OBJECT
 public:
@@ -129,9 +129,11 @@ private:
     int m_lastX;
     int m_lastWidth;
 
+    QVBoxLayout *m_layout;
 };
 
 
 }
 
+#endif
 #endif

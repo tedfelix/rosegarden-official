@@ -22,7 +22,7 @@
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Event;
 
 class TextChangeCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TextChangeCommand)
+
 public:
     TextChangeCommand(Segment &segment,
                       Event *event,
@@ -45,11 +47,6 @@ protected:
     Event *m_event; // only used first time through
     Text m_text;
 };
-
-/*
- * Inserts a key change into a single segment, taking segment transpose into
- * account (fixes #1520716) if desired.
- */
 
 }
 

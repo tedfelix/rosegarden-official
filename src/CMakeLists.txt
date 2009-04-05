@@ -7,7 +7,7 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 LINK_DIRECTORIES(
-    ${KDE3_LIB_DIR} 
+    ${KDE4_LIB_DIR} 
     ${ALSA_LIB_DIR}
     ${JACK_LIB_DIR}
     ${XFT_LIB_DIR}
@@ -19,7 +19,7 @@ LINK_DIRECTORIES(
 
 INCLUDE_DIRECTORIES(AFTER
     ${QT_INCLUDE_DIR} 
-    ${KDE3_INCLUDE_DIR} 
+    ${KDE4_INCLUDE_DIR} 
     ${ALSA_INC_DIR}
     ${JACK_INC_DIR}
     ${XFT_INC_DIR}
@@ -41,7 +41,7 @@ INCLUDE(MiscFileList.txt)
 # Sound sources
 INCLUDE(SoundFileList.txt)
 
-KDE3_AUTOMOC(${common_sound_SRCS})
+QT4_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
     ${base_SRCS}
@@ -62,44 +62,53 @@ ELSE(WANT_SOUND)
     SET(snd_SRCS ${nosnd_SRCS})
 ENDIF(WANT_SOUND)
 
-KDE3_ADD_DCOP_SKELS(sequencer_SRCS ${seq_dcop_SRCS})
-KDE3_ADD_DCOP_STUBS(sequencer_SRCS ${seq_dcop_SRCS}) 
-KDE3_AUTOMOC(${sequencer_SRCS})
-
-KDE3_ADD_EXECUTABLE(rosegardensequencer 
-    ${snd_SRCS}
-    ${sequencer_SRCS}
-)
-
-IF(USE_PCH)
-    ADD_DEPENDENCIES(rosegardensequencer precompiled_headers)
-ENDIF(USE_PCH)
-
-TARGET_LINK_LIBRARIES(rosegardensequencer 
-    ${QT_AND_KDECORE_LIBS} 
-    ${ALSA_LIBS} 
-    ${JACK_LIBS}
-    ${LIBLO_LIBS}
-    ${LRDF_LIBS}
-    ${FFTW3F_LIBS}
-    kdeui
-    RosegardenCommon
-)
-
 # gui executable
 INCLUDE(GUIFileList.txt)
 
-KDE3_ADD_DCOP_SKELS(gui_SRCS ${gui_dcop_SRCS})
-KDE3_ADD_DCOP_STUBS(gui_SRCS ${gui_dcop_SRCS}) 
-KDE3_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
-KDE3_AUTOMOC(${gui_SRCS})
-KDE3_AUTOMOC(${segmentcanvas_SRCS})
-KDE3_AUTOMOC(${commands_SRCS})
-KDE3_AUTOMOC(${document_SRCS})
+# KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
+QT4_AUTOMOC(${ui_SRCS})
+QT4_AUTOMOC(${gui_SRCS})
+QT4_AUTOMOC(${segmentcanvas_SRCS})
+QT4_AUTOMOC(${commands_SRCS})
+QT4_AUTOMOC(${document_SRCS})
+QT4_AUTOMOC(${sequencer_SRCS})
 
 ADD_LIBRARY(RosegardenExtended STATIC
     ${document_SRCS}
     ${gui_SRCS}
+)
+
+
+MACRO(RG_GEN_DATA_RC) #
+  #  SET(_customName "${ARGV1}")
+ #   GET_FILENAME_COMPONENT(_in_file ${_header} ABSOLUTE)
+#    GET_FILENAME_COMPONENT(_basename ${_header} NAME_WE)
+    
+    SET(_rcc_out "./_rcc_out.txt")
+    ADD_CUSTOM_COMMAND(OUTPUT ${_rcc_out}
+        COMMAND "rcc ../data/data.qrc > ../data/data.cpp" > ${_rcc_out}
+        #DEPENDS ${_in_file}
+    )
+ENDMACRO(RG_GEN_DATA_RC)
+
+RG_GEN_DATA_RC()
+
+ADD_LIBRARY(Rosegarden_rc_data STATIC
+    ../data/data.cpp
+)
+#ADD_LIBRARY(ResourceFinder STATIC
+#    gui/general/ResourceFinder.h
+#    gui/general/ResourceFinder.cpp
+#)
+#ADD_LIBRARY(IconLoader STATIC
+#    gui/general/IconLoader.h
+#    gui/general/IconLoader.cpp
+#)
+
+
+ADD_LIBRARY(RosegardenSequencer STATIC
+    ${snd_SRCS}
+    ${sequencer_SRCS}
 )
 
 ADD_LIBRARY(RosegardenCommands STATIC
@@ -124,10 +133,11 @@ ENDIF(USE_PCH)
 
 
 
-KDE3_ADD_EXECUTABLE(rosegarden 
+KDE4_ADD_EXECUTABLE(rosegarden 
     #${commands_SRCS}
     #${document_SRCS}
     #${gui_SRCS}
+    #${sequencer_SRCS}
     #${segmentcanvas_SRCS}
     gui/application/main.cpp
 )
@@ -137,37 +147,49 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegarden
-    ${QT_AND_KDECORE_LIBS} 
+	#${QT_AND_KDECORE_LIBS} 
+	${KDECORE_LIBS}
+#    ${QT4_LIBS}
+    ${QT_LIBRARIES}
+	${QT_QT3SUPPORT_LIBRARY}
+    
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
     ${FFTW3F_LIBS}
     ${XFT_LIBS}
     ${LIRC_LIBS}
+    ${ALSA_LIBS} 
     ${JACK_LIBS}
+    ${FFTW3F_LIBS}
     kio
     kdeui
-    kdeprint
+#    kdeprint
     RosegardenExtended
+    RosegardenSequencer
     RosegardenSegmentCanvas
     RosegardenCommands
     RosegardenCommon
+    
+	Rosegarden_rc_data
+#    ResourceFinder
+#    IconLoader
 )
 
 # Install targets
-INSTALL(TARGETS rosegarden rosegardensequencer
-        RUNTIME DESTINATION ${KDE3EXECDIR} )
+INSTALL(TARGETS rosegarden 
+        RUNTIME DESTINATION ${BIN_INSTALL_DIR} )
 
 # Install helper scripts
 INSTALL(PROGRAMS
             helpers/rosegarden-lilypondview
             helpers/rosegarden-project-package
             helpers/rosegarden-audiofile-importer
-        DESTINATION ${KDE3EXECDIR} )
+        DESTINATION ${BIN_INSTALL_DIR} )
 
 # Install GUI resource files
 FILE(GLOB RC_FILES gui/ui/*.rc)
 INSTALL(FILES ${RC_FILES}
-        DESTINATION ${KDE3DATADIR}/rosegarden )
+        DESTINATION ${DATA_INSTALL_DIR}/rosegarden )
 
 IF(WANT_TEST)
     INCLUDE(TestFileList.txt)
@@ -179,7 +201,7 @@ IF(WANT_TEST)
 #        base/test/segmenttransposecommand.cpp
     )
 
-    KDE3_ADD_EXECUTABLE(RosegardenTestDriver
+    KDE4_ADD_EXECUTABLE(RosegardenTestDriver
         RosegardenTestDriver.cpp
         ${tests_SRCS}
     )
@@ -196,6 +218,7 @@ IF(WANT_TEST)
         kdeui
         kdeprint
         RosegardenExtended
+        RosegardenSequencer
         RosegardenSegmentCanvas
         RosegardenCommands
         RosegardenCommon
@@ -205,4 +228,13 @@ IF(WANT_TEST)
         ADD_TEST(test/${TestName} RosegardenTestDriver test/${TestName})
     ENDFOREACH(currenttest ${tests_SRCS})
 ENDIF(WANT_TEST)
+
+
+
+# set(CMAKE_CXX_COMPILE_OBJECT "${CMAKE_CXX_COMPILER} <SOURCE> -o <OBJECT> <FLAGS>")
+#
+# from man-page: CMAKE_<LANG>_COMPILE_OBJECT
+# Rule variable to compile a single object file.
+# This is a rule variable that tells CMake how to compile a single object file
+
 

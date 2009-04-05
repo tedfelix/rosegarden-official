@@ -18,7 +18,6 @@
 
 #include "EraseSegmentsStartingInRangeCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 
@@ -29,7 +28,7 @@ namespace Rosegarden
 EraseSegmentsStartingInRangeCommand::EraseSegmentsStartingInRangeCommand(
     Composition *composition,
     timeT t0, timeT t1) :
-        KNamedCommand(i18n("Delete Range")),
+        NamedCommand(tr("Delete Range")),
         m_composition(composition),
         m_beginTime(t0),
         m_endTime(t1),

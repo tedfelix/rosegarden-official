@@ -19,10 +19,10 @@
 #ifndef _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
 #define _RG_AUDIOSEGMENTAUTOSPLITCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -31,15 +31,17 @@ namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 class AudioFileManager;
 
 
-class AudioSegmentAutoSplitCommand : public KNamedCommand
+class AudioSegmentAutoSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentAutoSplitCommand)
+
 public:
-    AudioSegmentAutoSplitCommand(RosegardenGUIDoc *doc,
+    AudioSegmentAutoSplitCommand(RosegardenDocument *doc,
                                  Segment *segment,
                                  int threshold);
     virtual ~AudioSegmentAutoSplitCommand();
@@ -47,7 +49,7 @@ public:
     virtual void execute();
     virtual void unexecute();
     
-    static QString getGlobalName() { return i18n("&Split on Silence"); }
+    static QString getGlobalName() { return tr("&Split on Silence"); }
 
 private:
     Segment                *m_segment;

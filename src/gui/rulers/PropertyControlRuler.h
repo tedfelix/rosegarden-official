@@ -19,25 +19,26 @@
 #ifndef _RG_PROPERTYCONTROLRULER_H_
 #define _RG_PROPERTYCONTROLRULER_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasLine>
 #include "base/PropertyName.h"
-#include "base/Staff.h"
 #include "ControlRuler.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
+#include "base/ViewSegment.h"
 
 
 class QWidget;
 class QMouseEvent;
 class QContextMenuEvent;
-class QCanvasLine;
-class QCanvas;
+class Q3CanvasLine;
+class Q3Canvas;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class Staff;
 class Segment;
 class RulerScale;
 class EditViewBase;
@@ -47,15 +48,16 @@ class EditViewBase;
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler : public ControlRuler, public StaffObserver
+class PropertyControlRuler : public ControlRuler,
+			     public ViewSegmentObserver
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
-                         Staff*,
+                         ViewSegment*,
                          RulerScale*,
                          EditViewBase* parentView,
-                         QCanvas*,
-                         QWidget* parent=0, const char* name=0, WFlags f=0);
+                         Q3Canvas*,
+                         QWidget* parent=0, const char* name=0);//, WFlags f=0);
 
     virtual ~PropertyControlRuler();
 
@@ -66,12 +68,13 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    void setStaff(Staff *);
+    void setViewSegment(ViewSegment *);
 
-    // StaffObserver interface
-    virtual void elementAdded(const Staff *, ViewElement*);
-    virtual void elementRemoved(const Staff *, ViewElement*);
-    virtual void staffDeleted(const Staff *);
+    // ViewSegmentObserver interface
+    virtual void elementAdded(const ViewSegment *, ViewElement*);
+    virtual void elementRemoved(const ViewSegment *, ViewElement*);
+    virtual void viewSegmentDeleted(const ViewSegment *);
+
     virtual void startPropertyLine();
     virtual void selectAllProperties();
 
@@ -92,18 +95,18 @@ protected:
 
     virtual void init();
     virtual void drawBackground();
-    virtual void computeStaffOffset();
+    virtual void computeViewSegmentOffset();
 
     //--------------- Data members ---------------------------------
 
-    PropertyName       m_propertyName;
-    Staff*             m_staff;
+    PropertyName m_propertyName;
+    ViewSegment *m_viewSegment;
 
-    QCanvasLine                   *m_propertyLine;
+    Q3CanvasLine *m_propertyLine;
     
-    bool                           m_propertyLineShowing;
-    int                            m_propertyLineX;
-    int                            m_propertyLineY;
+    bool m_propertyLineShowing;
+    int m_propertyLineX;
+    int m_propertyLineY;
 };
 
 

@@ -18,7 +18,6 @@
 
 #include "AudioSegmentInsertCommand.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
@@ -27,7 +26,7 @@
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/Track.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -36,13 +35,13 @@
 namespace Rosegarden
 {
 
-AudioSegmentInsertCommand::AudioSegmentInsertCommand(RosegardenGUIDoc *doc,
+AudioSegmentInsertCommand::AudioSegmentInsertCommand(RosegardenDocument *doc,
                                                      TrackId track,
                                                      timeT startTime,
                                                      AudioFileId audioFileId,
                                                      const RealTime &audioStartTime,
                                                      const RealTime &audioEndTime):
-    KNamedCommand(i18n("Create Segment")),
+    NamedCommand(tr("Create Segment")),
     m_composition(&(doc->getComposition())),
     m_audioFileManager(&(doc->getAudioFileManager())),
     m_segment(0),
@@ -104,9 +103,9 @@ AudioSegmentInsertCommand::execute()
 
         if (aF) {
             std::string label = aF->getName();
-            m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(inserted)"))));
+            m_segment->setLabel(appendLabel(label, qstrtostr(tr("(inserted)"))));
         } else {
-            m_segment->setLabel(qstrtostr(i18n("unknown audio file")));
+            m_segment->setLabel(qstrtostr( tr("unknown audio file")) );
         }
         m_composition->addSegment(m_segment);
     } else {

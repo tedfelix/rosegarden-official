@@ -18,13 +18,12 @@
 
 #include "MoveAcrossSegmentsCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "CutCommand.h"
 #include "PasteEventsCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -35,7 +34,7 @@ MoveAcrossSegmentsCommand::MoveAcrossSegmentsCommand(Segment &,
         timeT newStartTime,
         bool notation,
         EventSelection &selection) :
-        KMacroCommand(getGlobalName()),
+        MacroCommand(getGlobalName()),
         m_clipboard(new Clipboard())
 {
     addCommand(new CutCommand(selection, m_clipboard));
@@ -63,7 +62,7 @@ MoveAcrossSegmentsCommand::~MoveAcrossSegmentsCommand()
 QString
 MoveAcrossSegmentsCommand::getGlobalName()
 {
-    return i18n("&Move Events to Other Segment");
+    return tr("&Move Events to Other Segment");
 }
 
 }

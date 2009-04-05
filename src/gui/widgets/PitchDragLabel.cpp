@@ -15,17 +15,21 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
+#include <Q3CanvasPixmap>
 
 #include "PitchDragLabel.h"
 
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <qcanvas.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qsize.h>
-#include <qwidget.h>
+
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPixmap>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -36,9 +40,9 @@ PitchDragLabel::PitchDragLabel(QWidget *parent,
                                bool defaultSharps) :
         QWidget(parent),
         m_pitch(defaultPitch),
-        m_usingSharps(defaultSharps),
         m_clickedY(0),
         m_clicked(false),
+        m_usingSharps(defaultSharps),
         m_npf(new NotePixmapFactory())
 {
     calculatePixmap();
@@ -59,7 +63,7 @@ PitchDragLabel::slotSetPitch(int p)
     m_pitch = p;
     calculatePixmap();
     emitPitchChange();
-    paintEvent(0);
+    update();
 }
 
 void
@@ -71,13 +75,13 @@ PitchDragLabel::slotSetPitch(int pitch, int octave, int step)
     calculatePixmap(pitch, octave, step);
     emit pitchChanged(pitch);
     emit pitchChanged(pitch, octave, step);
-    paintEvent(0);
+    update();
 }
 
 void
 PitchDragLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         m_clickedY = e->y();
         m_clickedPitch = m_pitch;
         m_clicked = true;
@@ -119,7 +123,7 @@ PitchDragLabel::mouseMoveEvent(QMouseEvent *e)
                                   steps_Cmajor_with_flats[m_pitch % 12]);
 	    }
             emit preview(m_pitch);
-            paintEvent(0);
+            update();
         }
     }
 }
@@ -161,7 +165,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             calculatePixmap();
 			emitPitchChange();
             emit preview(m_pitch);
-            paintEvent(0);
+            update();
         }
     } else {
         if (m_pitch > 0) {
@@ -170,7 +174,7 @@ PitchDragLabel::wheelEvent(QWheelEvent *e)
             calculatePixmap();
             emitPitchChange();
             emit preview(m_pitch);
-            paintEvent(0);
+            update();
         }
     }
 }
@@ -179,7 +183,9 @@ void
 PitchDragLabel::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
-    paint.fillRect(0, 0, width(), height(), paint.backgroundColor());
+    // Just fill the background with Qt::white instead of pulling in something
+    // from GUIPalette (saving that for another day)
+    paint.fillRect(0, 0, width(), height(), Qt::white);
 
     int x = width() / 2 - m_pixmap.width() / 2;
     if (x < 0)
@@ -219,14 +225,8 @@ PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
         }
     }
 
-    QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
-                          (m_pitch,
-                           Clef(clefType, octaveOffset),
-                           octave, step);
-
-    m_pixmap = *pmap;
-
-    delete pmap;
+    m_pixmap = m_npf->makePitchDisplayPixmap
+        (m_pitch, Clef(clefType, octaveOffset), octave, step);
 }
 
 void
@@ -248,14 +248,8 @@ PitchDragLabel::calculatePixmap() const
         }
     }
 
-    QCanvasPixmap *pmap = m_npf->makePitchDisplayPixmap
-                          (m_pitch,
-                           Clef(clefType, octaveOffset),
-                           m_usingSharps);
-
-    m_pixmap = *pmap;
-
-    delete pmap;
+    m_pixmap = m_npf->makePitchDisplayPixmap
+        (m_pitch, Clef(clefType, octaveOffset), m_usingSharps);
 }
 
 }

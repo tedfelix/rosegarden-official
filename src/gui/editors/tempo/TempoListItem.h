@@ -18,7 +18,8 @@
 #ifndef _RG_TEMPOLISTITEM_H_
 #define _RG_TEMPOLISTITEM_H_
 
-#include <klistview.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 #include "base/Event.h"
 
@@ -26,7 +27,7 @@ namespace Rosegarden {
 
 class Composition;
 
-class TempoListItem : public KListViewItem
+class TempoListItem : public QTreeWidgetItem
 {
 public:
     enum Type { TimeSignature, Tempo };
@@ -35,12 +36,14 @@ public:
 		  Type type,
 		  timeT time,
 		  int index,
-		  KListView *parent,
-		  QString label1,
-		  QString label2,
-		  QString label3,
-		  QString label4 = QString::null) :
-	KListViewItem(parent, label1, label2, label3, label4),
+		  QTreeWidget *parent,
+		QStringList labels
+// 		  QString label1,
+// 		  QString label2,
+// 		  QString label3,
+// 		  QString label4 = QString::null
+		) :
+	QTreeWidgetItem( parent, labels ), //label1, label2, label3, label4),
 	m_composition(composition),
 	m_type(type),
 	m_time(time),
@@ -51,7 +54,7 @@ public:
     Rosegarden::timeT getTime() const { return m_time; }
     int getIndex() const { return m_index; }
 
-    virtual int compare(QListViewItem *i, int col, bool ascending) const;
+    virtual int compare(QTreeWidgetItem *i, int col, bool ascending) const;
 
 protected:
     Rosegarden::Composition *m_composition;

@@ -18,12 +18,12 @@
 
 #include "TextInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "document/BasicCommand.h"
+#include "base/Selection.h"
 
 
 namespace Rosegarden
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
         Text text) :
-        BasicCommand(i18n("Insert Text"), segment, time, time + 1),
+        BasicCommand(tr("Insert Text"), segment, time, time + 1),
         m_text(text),
         m_lastInsertedEvent(0)
 {
@@ -41,6 +41,14 @@ TextInsertionCommand::TextInsertionCommand(Segment &segment, timeT time,
 TextInsertionCommand::~TextInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+TextInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 void

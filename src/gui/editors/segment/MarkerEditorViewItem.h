@@ -18,30 +18,27 @@
 #ifndef _RG_MARKEREDITORVIEWITEM_H_
 #define _RG_MARKEREDITORVIEWITEM_H_
 
-#include <klistview.h>
-
 #include "base/Event.h"
+
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QStringList>
+
+
 
 namespace Rosegarden {
 
 
-class MarkerEditorViewItem : public KListViewItem
+class MarkerEditorViewItem : public QTreeWidgetItem
 {
 public:
-    MarkerEditorViewItem(QListView * parent, int id,
-                         QString label1, 
-                         QString label2 = QString::null, 
-                         QString label3 = QString::null,
-                         QString label4 = QString::null, 
-                         QString label5 = QString::null, 
-                         QString label6 = QString::null, 
-                         QString label7 = QString::null, 
-                         QString label8 = QString::null):
-        KListViewItem(parent, label1, label2, label3, label4,
-                      label5, label6, label7, label8),
+	MarkerEditorViewItem(QTreeWidget * parent, int id,
+						 QStringList strlist
+						):
+        QTreeWidgetItem(parent, strlist),
 	m_rawTime(0), m_fake(false), m_id(id) { ; }
 
-    virtual int compare(QListViewItem * i, int col, bool ascending) const;
+    virtual int compare(QTreeWidgetItem * i, int col, bool ascending) const;
 
     void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
     Rosegarden::timeT getRawTime() const { return m_rawTime; }

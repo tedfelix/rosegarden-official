@@ -19,52 +19,54 @@
 #ifndef _RG_MARKEREDITOR_H_
 #define _RG_MARKEREDITOR_H_
 
-#include <kmainwindow.h>
-#include <qstring.h>
+#include "gui/general/ActionFileClient.h"
+
+#include <QMainWindow>
+#include <QString>
+#include <QModelIndex>
+
 #include "base/Event.h"
 
 
 class QWidget;
 class QPushButton;
-class QListViewItem;
+class QTreeWidget;
+class QTreeWidgetItem;
 class QLabel;
 class QCloseEvent;
-class QAccel;
-class KListView;
-class KCommand;
+class QShortcut;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class Command;
+class RosegardenDocument;
 
 
-class MarkerEditor : public KMainWindow
+class MarkerEditor : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     MarkerEditor(QWidget *parent,
-                       RosegardenGUIDoc *doc);
+                       RosegardenDocument *doc);
     ~MarkerEditor();
 
     void initDialog();
 
-    void addCommandToHistory(KCommand *command);
-    MultiViewCommandHistory* getCommandHistory();
+    void addCommandToHistory(Command *command);
 
     void setModified(bool value);
     void checkModified();
 
     // reset the document
-    void setDocument(RosegardenGUIDoc *doc);
+    void setDocument(RosegardenDocument *doc);
 
     // update pointer position
     void updatePosition();
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
 public slots:
     void slotUpdate();
@@ -73,8 +75,21 @@ public slots:
     void slotDelete();
     void slotDeleteAll();
     void slotClose();
-    void slotEdit(QListViewItem *);
-    void slotItemClicked(QListViewItem *);
+    void slotEdit(QTreeWidgetItem *, int);
+    //@@@ The following generates:
+    //
+    // Object::connect: No such signal QTreeWidget::pressed(QTreeWidgetItem*)
+    //
+    // There is no pressed(QTreeWidgetItem *) signal under QTreeWidget.  Near as
+    // I can tell, it inherits 
+    //
+    // void pressed ( const QModelIndex & index )
+    //
+    // from QAbstractViewItem at least.  I'm not sure how to adapt this, or even
+    // what this particular bit of code is for.  I took a quick stab at it, and
+    // didn't make any progress, so I'm leaving it broken for now, with this
+    // bigass comment to draw somebody's attention to the broken signal
+    void slotItemClicked(QTreeWidgetItem *);
 
     void slotMusicalTime();
     void slotRealTime();
@@ -91,7 +106,7 @@ protected:
     QString makeTimeString(timeT time, int timeMode);
 
     //--------------- Data members ---------------------------------
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     QLabel                  *m_absoluteTime;
     QLabel                  *m_realTime;
@@ -104,11 +119,11 @@ protected:
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
 
-    KListView               *m_listView;
+    QTreeWidget               *m_listView;
 
     bool                     m_modified;
 
-    QAccel *m_accelerators;
+    QShortcut *m_shortcuts;
 };
 
 

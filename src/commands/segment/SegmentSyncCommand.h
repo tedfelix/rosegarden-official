@@ -19,12 +19,13 @@
 #ifndef _RG_SEGMENTSYNCCOMMAND_H_
 #define _RG_SEGMENTSYNCCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "document/MultiViewCommandHistory.h"
-#include <klocale.h>
+#include "document/CommandHistory.h"
+
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -33,8 +34,10 @@ class Segment;
 class SegmentSelection;
 
 
-class SegmentSyncCommand : public KMacroCommand
+class SegmentSyncCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSyncCommand)
+
 public:
     SegmentSyncCommand(Segment &segment,
         int newTranspose, int lowRange, int highRange, const Clef& clef);

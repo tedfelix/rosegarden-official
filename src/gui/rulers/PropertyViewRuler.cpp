@@ -16,10 +16,10 @@
 */
 
 
+#include <QPaintEvent>
 #include "PropertyViewRuler.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/PropertyName.h"
 #include "base/RulerScale.h"
@@ -27,14 +27,14 @@
 #include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -62,9 +62,8 @@ PropertyViewRuler::PropertyViewRuler(RulerScale *rulerScale,
 
     setBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
-    QString tip = i18n("%1 controller").arg(strtoqstr(property));
-    QToolTip::add
-        (this, tip);
+    QString tip = tr("%1 controller").arg(strtoqstr(property));
+    this->setToolTip(tip);
 }
 
 PropertyViewRuler::~PropertyViewRuler()

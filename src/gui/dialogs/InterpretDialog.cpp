@@ -17,60 +17,80 @@
 
 
 #include "InterpretDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 
-#include <klocale.h>
 #include "document/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "misc/Strings.h"
+#include <QSettings>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QGroupBox>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 InterpretDialog::InterpretDialog(QWidget *parent) :
-        KDialogBase(parent, 0, true, i18n("Interpret"), Ok | Cancel | Help)
+        QDialog(parent)
 {
-    setHelp("nv-interpret");
+    //setHelp("nv-interpret");
 
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *groupBox = new QGroupBox
-                          (1, Horizontal, i18n("Interpretations to apply"), vbox);
+    setModal(true);
+    setWindowTitle(tr("Interpret"));
+
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QGroupBox *vbox = new QGroupBox(tr("Interpretations to apply"), this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
     m_applyTextDynamics = new QCheckBox
-                          (i18n("Apply text dynamics (p, mf, ff etc)"), groupBox);
+                          (tr("Apply text dynamics (p, mf, ff etc)"));
+    vboxLayout->addWidget(m_applyTextDynamics);
     m_applyHairpins = new QCheckBox
-                      (i18n("Apply hairpin dynamics"), groupBox);
+                      (tr("Apply hairpin dynamics"));
+    vboxLayout->addWidget(m_applyHairpins);
     m_stressBeats = new QCheckBox
-                    (i18n("Stress beats"), groupBox);
+                    (tr("Stress beats"));
+    vboxLayout->addWidget(m_stressBeats);
     m_articulate = new QCheckBox
-                   (i18n("Articulate slurs, staccato, tenuto etc"), groupBox);
+                   (tr("Articulate slurs, staccato, tenuto etc"));
+    vboxLayout->addWidget(m_articulate);
     m_allInterpretations = new QCheckBox
-                           (i18n("All available interpretations"), groupBox);
+                           (tr("All available interpretations"));
+    vboxLayout->addWidget(m_allInterpretations);
 
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    vbox->setLayout(vboxLayout);
+
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
     m_allInterpretations->setChecked
-    (config->readBoolEntry("interpretall", true));
+    ( qStrToBool( settings.value("interpretall", "true" ) ) );
     m_applyTextDynamics->setChecked
-    (config->readBoolEntry("interprettextdynamics", true));
+    ( qStrToBool( settings.value("interprettextdynamics", "true" ) ) );
     m_applyHairpins->setChecked
-    (config->readBoolEntry("interprethairpins", true));
+    ( qStrToBool( settings.value("interprethairpins", "true" ) ) );
     m_stressBeats->setChecked
-    (config->readBoolEntry("interpretstressbeats", true));
+    ( qStrToBool( settings.value("interpretstressbeats", "true" ) ) );
     m_articulate->setChecked
-    (config->readBoolEntry("interpretarticulate", true));
+    ( qStrToBool( settings.value("interpretarticulate", "true" ) ) );
 
     connect(m_allInterpretations,
             SIGNAL(clicked()), this, SLOT(slotAllBoxChanged()));
 
     slotAllBoxChanged();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+
+    settings.endGroup();
 }
 
 void
@@ -86,14 +106,16 @@ InterpretDialog::slotAllBoxChanged()
 int
 InterpretDialog::getInterpretations()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    config->writeEntry("interpretall", m_allInterpretations->isChecked());
-    config->writeEntry("interprettextdynamics", m_applyTextDynamics->isChecked());
-    config->writeEntry("interprethairpins", m_applyHairpins->isChecked());
-    config->writeEntry("interpretstressbeats", m_stressBeats->isChecked());
-    config->writeEntry("interpretarticulate", m_articulate->isChecked());
+    settings.setValue("interpretall", m_allInterpretations->isChecked());
+    settings.setValue("interprettextdynamics", m_applyTextDynamics->isChecked());
+    settings.setValue("interprethairpins", m_applyHairpins->isChecked());
+    settings.setValue("interpretstressbeats", m_stressBeats->isChecked());
+    settings.setValue("interpretarticulate", m_articulate->isChecked());
+
+    settings.endGroup();
 
     if (m_allInterpretations->isChecked()) {
         return InterpretCommand::AllInterpretations;

@@ -20,9 +20,9 @@
 #define _RG_SEGMENTERASECOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -35,8 +35,10 @@ class AudioFileManager;
 
 ////////////////////////////////////////////////////////////
 
-class SegmentEraseCommand : public KNamedCommand
+class SegmentEraseCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentEraseCommand)
+
 public:
     /// for removing segment normally
     SegmentEraseCommand(Segment *segment);

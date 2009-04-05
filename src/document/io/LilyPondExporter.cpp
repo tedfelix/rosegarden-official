@@ -30,7 +30,6 @@
 
 #include "LilyPondExporter.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
@@ -45,28 +44,27 @@
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"
-#include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "base/NotationQuantizer.h"
 #include "base/Marker.h"
 #include "base/StaffExportTypes.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/application/RosegardenGUIView.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
 #include "gui/widgets/CurrentProgressDialog.h"
-#include <kconfig.h>
-#include <kmessagebox.h>
-#include <qfileinfo.h>
-#include <qobject.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qtextcodec.h>
-#include <kapplication.h>
+#include <QSettings>
+#include <QMessageBox>
+#include <QFileInfo>
+#include <QObject>
+#include <QRegExp>
+#include <QString>
+#include <QTextCodec>
+#include <QApplication>
 #include <sstream>
 #include <algorithm>
 
@@ -78,8 +76,8 @@ using namespace BaseProperties;
 const PropertyName LilyPondExporter::SKIP_PROPERTY
     = "LilyPondExportSkipThisEvent";
 
-LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
-                                   RosegardenGUIDoc *doc,
+LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
@@ -88,14 +86,14 @@ LilyPondExporter::LilyPondExporter(RosegardenGUIApp *parent,
 {
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
-    m_view = ((RosegardenGUIApp *)parent)->getView();
+    m_view = ((RosegardenMainWindow *)parent)->getView();
     m_notationView = NULL;
 
     readConfigVariables();
 }
 
 LilyPondExporter::LilyPondExporter(NotationView *parent,
-                                   RosegardenGUIDoc *doc,
+                                   RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter((QObject *)parent, "lilypondExporter"),
         m_doc(doc),
@@ -114,27 +112,24 @@ LilyPondExporter::LilyPondExporter(NotationView *parent,
 void
 LilyPondExporter::readConfigVariables(void)
 {
-    // grab config info
-    KConfig *cfg = kapp->config();
-    cfg->setGroup(NotationViewConfigGroup);
+    // grab settings info
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    m_paperSize = cfg->readUnsignedNumEntry("lilypapersize", PAPER_A4);
-    m_paperLandscape = cfg->readBoolEntry("lilypaperlandscape", false);
-    m_fontSize = cfg->readUnsignedNumEntry("lilyfontsize", FONT_20);
-    m_raggedBottom = cfg->readBoolEntry("lilyraggedbottom", false);
-    m_exportSelection = cfg->readUnsignedNumEntry("lilyexportselection", EXPORT_NONMUTED_TRACKS);
-    m_exportLyrics = cfg->readBoolEntry("lilyexportlyrics", true);
-    m_exportMidi = cfg->readBoolEntry("lilyexportmidi", false);
-    m_exportTempoMarks = cfg->readUnsignedNumEntry("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS);
-    m_exportPointAndClick = cfg->readBoolEntry("lilyexportpointandclick", false);
-    m_exportBeams = cfg->readBoolEntry("lilyexportbeamings", false);
-    m_exportStaffMerge = cfg->readBoolEntry("lilyexportstaffmerge", false);
-    m_exportStaffGroup = cfg->readBoolEntry("lilyexportstaffbrackets", true);
-    m_lyricsHAlignment = cfg->readBoolEntry("lilylyricshalignment", LEFT_ALIGN);
+    m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
+    m_paperLandscape = qStrToBool( settings.value("lilypaperlandscape", "false" ) ) ;
+    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
+    m_raggedBottom = qStrToBool( settings.value("lilyraggedbottom", "false" ) ) ;
+    m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
+    m_exportLyrics = qStrToBool( settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT ) ) ;
+    m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
+    m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
+    m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
 
-    m_languageLevel = cfg->readUnsignedNumEntry("lilylanguage", LILYPOND_VERSION_2_6);
-    m_exportMarkerMode = cfg->readUnsignedNumEntry("lilyexportmarkermode", EXPORT_NO_MARKERS );
-    m_chordNamesMode = cfg->readBoolEntry("lilychordnamesmode", false);
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
+    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS ).toUInt() ;
+    m_chordNamesMode = qStrToBool( settings.value("lilychordnamesmode", "false" ) ) ;
+    settings.endGroup();
 }
 
 LilyPondExporter::~LilyPondExporter()
@@ -279,7 +274,7 @@ LilyPondExporter::handleEndingPreEvents(eventendlist &preEventsInProgress,
         eventendlist::iterator l(k);
         ++l;
 
-        // Handle and remove all the relevant events in progress
+        // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
@@ -331,7 +326,7 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
         eventendlist::iterator l(k);
         ++l;
 
-        // Handle and remove all the relevant events in progress
+        // Handle and remove all the relevant events in value()
         // This assumes all deferred events are indications
 
         try {
@@ -526,7 +521,7 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
     //
     // LilyPond uses utf8 encoding.
     //
-    return tmpStr.utf8().data();
+    return tmpStr.toUtf8().data();
 }
 
 struct MarkerComp {
@@ -562,10 +557,14 @@ LilyPondExporter::write()
 
     if (illegalFilename) {
         CurrentProgressDialog::freeze();
-        int reply = KMessageBox::warningContinueCancel(
-                        0, i18n("LilyPond does not allow spaces or backslashes in filenames.\n\n"
-                                "Would you like to use\n\n %1\n\n instead?").arg(baseName));
-        if (reply != KMessageBox::Continue)
+		int reply = QMessageBox::question(
+                        dynamic_cast<QWidget*>(qApp),
+						baseName, 
+						tr("LilyPond does not allow spaces or backslashes in filenames.\n\n"
+                                "Would you like to use\n\n %1\n\n instead?"),
+								QMessageBox::Yes |QMessageBox::Cancel,
+								QMessageBox::Cancel);
+        if (reply != QMessageBox::Yes)
             return false;
     }
 
@@ -605,12 +604,8 @@ LilyPondExporter::write()
 
     // enable "point and click" debugging via pdf to make finding the
     // unfortunately inevitable errors easier
-    if (m_exportPointAndClick) {
-        str << "% point and click debugging is enabled" << std::endl;
-    } else {
-        str << "% point and click debugging is disabled" << std::endl;
-        str << "#(ly:set-option 'point-and-click #f)" << std::endl;
-    }
+    str << "% uncomment to enable point and click debugging" << std::endl;
+    str << "% #(ly:set-option 'point-and-click #f)" << std::endl;
 
     // LilyPond \header block
 
@@ -698,7 +693,7 @@ LilyPondExporter::write()
         font = 26;
         break;
     default :
-	font = 20; // if config problem
+	font = 20; // if settings problem
     }
 
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
@@ -991,9 +986,9 @@ LilyPondExporter::write()
 		    << std::endl;
 	    }
 
-            emit setProgress(int(double(trackPos) /
+            emit setValue(int(double(trackPos) /
                                  double(m_composition->getNbTracks()) * 100.0));
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
             
             bool currentSegmentSelected = false;
             if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && 
@@ -1005,8 +1000,10 @@ LilyPondExporter::write()
                 for (SegmentSelection::iterator it = selection.begin(); it != selection.end(); it++) {
                     if ((*it) == (*i)) currentSegmentSelected = true;
                 }
+#ifdef NOT_JUST_NOW //!!!
             } else if ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (m_notationView != NULL)) {
 		currentSegmentSelected = m_notationView->hasSegment(*i);
+#endif
 	    }
 
 	    // Check whether the track is a non-midi track.
@@ -1018,8 +1015,10 @@ LilyPondExporter::write()
                 ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
                 ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
 		 (track->getId() == m_composition->getSelectedTrack())) ||
+#ifdef NOT_JUST_NOW //!!!
                 ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_notationView != NULL) &&
 		 (track->getId() == m_notationView->getCurrentSegment()->getTrack())) ||
+#endif
                 ((m_exportSelection == EXPORT_SELECTED_SEGMENTS) && (currentSegmentSelected)))) {
                 if ((int) (*i)->getTrack() != lastTrackIndex) {
                     if (lastTrackIndex != -1) {
@@ -1088,7 +1087,7 @@ LilyPondExporter::write()
 		            chord.replace(QRegExp("\\s+"), "");
 		            chord.replace(QRegExp("h"), "b");
 
-		            // DEBUG: str << " %{ '" << chord.utf8() << "' %} ";
+		            // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
                             QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
 		            if ( rx.search( chord ) != -1 ) {
 				// The chord duration is zero, but the chord
@@ -1097,7 +1096,7 @@ LilyPondExporter::write()
 		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
                             } else {
 				// Skip improper chords.
-				str << " %{ improper chord: '" << chord.utf8() << "' %} ";
+				str << (" %{ improper chord: '") << qStrToStrUtf8(chord) << ("' %} ");
 				continue;
                             }
 
@@ -1110,7 +1109,7 @@ LilyPondExporter::write()
                             if (numberOfChords >= 0) {
 				// The chord intervals are specified with skips.
                                 writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
-                                str << chord.utf8() << " ";
+                                str << qStrToStrUtf8(chord) << " ";
 		                numberOfChords++;
                             }
                             lastTime = myTime;
@@ -1164,15 +1163,13 @@ LilyPondExporter::write()
                     staffName << protectIllegalChars(m_composition->
                                                      getTrackById(lastTrackIndex)->getLabel());
 
-                    if (!m_exportStaffMerge || staffName.str() == "") {
-                        str << std::endl << indent(col)
+                    /*
+                     * The context name is unique to a single track.
+                     */
+                    str << std::endl << indent(col)
                         << "\\context Staff = \"track "
-                        << (trackPos + 1) << "\" ";
-                    } else {
-                        str << std::endl << indent(col)
-                        << "\\context Staff = \"" << staffName.str()
-                        << "\" ";
-                    }
+                        << (trackPos + 1) << (staffName.str() == "" ? "" : ", " )
+                        << staffName.str() << "\" ";
 
                     str << "<< " << std::endl;
 
@@ -1207,16 +1204,14 @@ LilyPondExporter::write()
 			    << staffNameWithTranspose.str() << std::endl;
 		    }
 
-                    if (m_exportMidi) {
-                        // Set midi instrument for the Staff
-                        std::ostringstream staffMidiName;
-                        Instrument *instr = m_studio->getInstrumentById(
+                    // Set always midi instrument for the Staff
+                    std::ostringstream staffMidiName;
+                    Instrument *instr = m_studio->getInstrumentById(
 			        m_composition->getTrackById(lastTrackIndex)->getInstrument());
-                        staffMidiName << instr->getProgramName();
+                    staffMidiName << instr->getProgramName();
 
-                        str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
-			    << "\"" << std::endl;
-                    }
+                    str << indent(col) << "\\set Staff.midiInstrument = \"" << staffMidiName.str()
+		        << "\"" << std::endl;
 
 		    // multi measure rests are used by default
                     str << indent(col) << "\\set Score.skipBars = ##t" << std::endl;
@@ -1322,13 +1317,11 @@ LilyPondExporter::write()
                     // Check for a partial measure beginning in the middle of a
                     // theoretical bar
                     if (barStart < currentSegmentStartTime) {
-                        str << " \% invoking the partial start check \n";
                         barStart = currentSegmentStartTime;
                     }
                     // Check for a partial measure ending in the middle of a
                     // theoretical bar
                     if (barEnd > currentSegmentEndTime) {
-                        str << " \% invoking the partial end check \n";
                         barEnd = currentSegmentEndTime;
                     }
 
@@ -1405,7 +1398,7 @@ LilyPondExporter::write()
                 //
 		// Sync the code below with LyricEditDialog::unparse() !!
 		//
-                if (m_exportLyrics) {
+                if (m_exportLyrics != EXPORT_NO_LYRICS) {
 		    for (long currentVerse = 0, lastVerse = 0; 
                          currentVerse <= lastVerse; 
 			 currentVerse++) {
@@ -1483,20 +1476,20 @@ LilyPondExporter::write()
 			            << "\\new Lyrics \\with {alignBelowContext=\"track " << (trackPos + 1) << "\"} "
                                     << "\\lyricsto \"" << voiceNumber.str() << "\"" << " \\lyricmode {" << std::endl;
                             }
-			    if (m_lyricsHAlignment == RIGHT_ALIGN) {
+			    if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #RIGHT"
 				    << std::endl;
-			    } else if (m_lyricsHAlignment == CENTER_ALIGN) {
+			    } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #CENTER"
 				    << std::endl;
 			    } else {
 				str << indent(++col) << "\\override LyricText #'self-alignment-X = #LEFT"
 				    << std::endl;
 			    }
-			    str << indent(col) << "\\set ignoreMelismata = ##t" << std::endl;
-			    str << indent(col) << text.utf8() << " " << std::endl;
-			    str << indent(col) << "\\unset ignoreMelismata" << std::endl;
-			    str << indent(--col) << "} % Lyrics " << (currentVerse+1) << std::endl;
+				str << indent(col) << qStrToStrUtf8("\\set ignoreMelismata = ##t") << std::endl;
+				str << indent(col) << qStrToStrUtf8(text) << " " << std::endl;
+				str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
+				str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
 		        } // if ( rx.search( text....
 		    } // for (long currentVerse = 0....
@@ -1540,24 +1533,23 @@ LilyPondExporter::write()
     if (m_chordNamesMode) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"ChordNames\" }" << std::endl;
     }
-    if (m_exportLyrics) {
+    if (m_exportLyrics != EXPORT_NO_LYRICS) {
         str << indent(col) << "\\context { \\GrandStaff \\accepts \"Lyrics\" }" << std::endl;
     }
     str << indent(--col) << "}" << std::endl;
 
-    // write initial tempo in Midi block, if user wishes (added per user request...
+    // write initial tempo in Midi block, always, but commented out
     // makes debugging the .ly file easier because fewer "noisy" errors are
     // produced during the process of rendering MIDI...)
-    if (m_exportMidi) {
-        int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
-        // Incomplete?  Can I get away without converting tempo relative to the time
-        // signature for this purpose?  we'll see...
-        str << indent(col++) << "\\midi {" << std::endl;
-        if (m_languageLevel < LILYPOND_VERSION_2_10) {
-            str << indent(col) << "\\tempo 4 = " << tempo << std::endl;
-        }
-        str << indent(--col) << "} " << std::endl;
+    int tempo = int(Composition::getTempoQpm(m_composition->getTempoAtTime(m_composition->getStartMarker())));
+    // Incomplete?  Can I get away without converting tempo relative to the time
+    // signature for this purpose?  we'll see...
+    str << "% " << indent(col++) << "uncomment to enable generating midi file from the lilypond source" << std::endl;
+    str << "% " << indent(col++) << "\\midi {" << std::endl;
+    if (m_languageLevel < LILYPOND_VERSION_2_10) {
+        str << "% " << indent(col) << "\\tempo 4 = " << tempo << std::endl;
     }
+    str << "% " << indent(--col) << "} " << std::endl;
 
     // close \score section and close out the file
     str << "} % score" << std::endl;
@@ -1729,13 +1721,12 @@ LilyPondExporter::writeBar(Segment *s,
     std::pair<int,int> durationRatioSum(0,1);
     static std::pair<int,int> durationRatio(0,1);
 
-    str << "\n\% absTime = " << absTime << " barStart = " << barStart << "\n";
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(timeSignature, (barEnd - barStart) - writtenDuration, note.getDuration(), false, str);
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
 	durationRatioSum = fractionSum(durationRatioSum,durationRatio);
-        str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
+        // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
 
     timeT prevDuration = -1;
@@ -1847,7 +1838,7 @@ LilyPondExporter::writeBar(Segment *s,
 
 	// Test whether the next note is grace note or not.
 	// The start or end of beamed grouping should be put in proper places.
-	str << endGroupBeamingsStr.utf8();
+	str << qStrToStrUtf8( endGroupBeamingsStr );
 	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
 	    if (isGrace == 0) { 
 	        isGrace = 1;
@@ -1859,7 +1850,7 @@ LilyPondExporter::writeBar(Segment *s,
 	    // str << "%{ grace ends %} "; // DEBUG
             str << "} ";
 	}
-	str << startGroupBeamingsStr.utf8();
+	str << qStrToStrUtf8(startGroupBeamingsStr);
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration
@@ -2225,9 +2216,9 @@ LilyPondExporter::writeBar(Segment *s,
                 // Transpose the clef one or two octaves up or down, if specified.
                 int octaveOffset = clef.getOctaveOffset();
                 if (octaveOffset > 0) {
-                    str << "^" << 8*octaveOffset;
+                    str << "^" << 1 + 7*octaveOffset;
                 } else if (octaveOffset < 0) {
-                    str << "_" << -8*octaveOffset;
+                    str << "_" << 1 + 7*(-octaveOffset);
                 }
 
                 str << "\"" << std::endl << indent(col);
@@ -2369,7 +2360,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (overlong) {
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1").
-                  arg(i18n("warning: overlong bar truncated here")));
+                  arg(tr("warning: overlong bar truncated here")));
     }
 
     //
@@ -2380,7 +2371,7 @@ LilyPondExporter::writeBar(Segment *s,
         fractionSmaller(durationRatioSum, barDurationRatio)) {
         str << std::endl << indent(col) <<
 	    qstrtostr(QString("% %1").
-                arg(i18n("warning: bar too short, padding with rests")));
+                arg(tr("warning: bar too short, padding with rests")));
         str << std::endl << indent(col) <<
         qstrtostr(QString("% %1 + %2 < %3  &&  %4/%5 < %6/%7").
                   arg(barStart).

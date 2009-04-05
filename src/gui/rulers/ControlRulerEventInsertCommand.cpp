@@ -17,7 +17,6 @@
 
 #include "ControlRulerEventInsertCommand.h"
 #include "base/MidiTypes.h"
-#include <klocale.h>
 
 namespace Rosegarden
 {
@@ -26,7 +25,7 @@ ControlRulerEventInsertCommand::ControlRulerEventInsertCommand(const std::string
                                                                timeT insertTime,
                                                                long number, long initialValue,
                                                                Segment &segment,timeT duration)
-    : BasicCommand(i18n("Insert Controller Event"),
+    : BasicCommand(tr("Insert Controller Event"),
                    segment,
                    insertTime, 
                    (duration!=0)?(insertTime+duration):(insertTime + Rosegarden::Note(Rosegarden::Note::Quaver).getDuration())), // must have a duration other undo doesn't work

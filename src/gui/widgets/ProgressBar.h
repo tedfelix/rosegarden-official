@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,9 @@
 #ifndef _RG_ROSEGARDENPROGRESSBAR_H_
 #define _RG_ROSEGARDENPROGRESSBAR_H_
 
-#include <kprogress.h>
+#include <QProgressBar>
+#include <QProgressDialog>
+
 
 
 class QWidget;
@@ -30,16 +31,16 @@ namespace Rosegarden
 
 
 
-class ProgressBar : public KProgress
+class ProgressBar : public QProgressBar
 {
     Q_OBJECT
 
 public:
     ProgressBar(int totalSteps,
-                          bool useDelay,
-                          QWidget *creator = 0,
-                          const char *name = 0,
-                          WFlags f = 0);
+                bool useDelay,
+                QWidget *creator = 0,
+                const char *name = 0);
+//                WFlags f = 0);
 
 };
 

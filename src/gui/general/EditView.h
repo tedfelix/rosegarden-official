@@ -16,26 +16,29 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NO_LONGER_USED
+
 #ifndef _RG_EDITVIEW_H_
 #define _RG_EDITVIEW_H_
 
+#include <Q3CanvasItem>
 #include "base/PropertyName.h"
 #include "EditViewBase.h"
 #include "gui/dialogs/TempoDialog.h"
-#include <qsize.h>
-#include <qstring.h>
-#include <qwmatrix.h>
+#include <QSize>
+#include <QString>
+#include <QMatrix>
 #include <vector>
 #include "base/Event.h"
 
 
+class Q3CanvasItem;
+
 class QWidget;
 class QVBoxLayout;
-class QVBox;
 class QPaintEvent;
 class QMouseEvent;
-class QCanvasItem;
-class KTabWidget;
+class QTabWidget;
 class Accidental;
 
 
@@ -45,7 +48,7 @@ namespace Rosegarden
 class Staff;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class RosegardenCanvasView;
 class PropertyControlRuler;
 class Key;
@@ -57,6 +60,7 @@ class ControllerEventsRuler;
 class Clef;
 class StandardRuler;
 class ActiveItem;
+class CommandRegistry;
 
 
 class EditView : public EditViewBase
@@ -71,7 +75,7 @@ public:
      * \arg cols : number of columns, main column is always rightmost
      *
      */
-    EditView(RosegardenGUIDoc *doc,
+    EditView(RosegardenDocument *doc,
              std::vector<Segment *> segments,
              unsigned int cols,
              QWidget *parent,
@@ -92,12 +96,12 @@ public:
     /**
      * Return the active item
      */
-    ActiveItem* activeItem() { return m_activeItem; }
+//!!!    ActiveItem* activeItem() { return m_activeItem; }
 
     /**
      * Set the active item
      */
-    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
+//!!!    void setActiveItem(ActiveItem* i) { m_activeItem = i; }
 
     /**
      * Set the current event selection.
@@ -133,9 +137,9 @@ public slots:
      * Called when a mouse press occurred on an active canvas item
      *
      * @see ActiveItem
-     * @see QCanvasItem#setActive
+     * @see Q3CanvasItem#setActive
      */
-    virtual void slotActiveItemPressed(QMouseEvent*, QCanvasItem*);
+//!!!    virtual void slotActiveItemPressed(QMouseEvent*, Q3CanvasItem*);
 
     virtual void slotSetInsertCursorPosition(timeT position) = 0;
     
@@ -198,12 +202,13 @@ public slots:
 
     // add control ruler
     void slotAddControlRuler(int);
-    void slotRemoveControlRuler(QWidget*);
+// 	void slotRemoveControlRuler(QWidget*);
+	void slotRemoveControlRuler(int index);
 
 protected:
     virtual RulerScale* getHLayout() = 0;
 
-    QVBox* getBottomWidget() { return m_bottomBox; }
+    QWidget* getBottomWidget() { return m_bottomBox; }
 
     virtual void updateBottomWidgetGeometry();
     
@@ -262,7 +267,7 @@ protected:
     /**
      * Set zoom factor of control rulers
      */
-    void setControlRulersZoom(QWMatrix);
+    void setControlRulersZoom(QMatrix);
 
     /**
      * Set current segment for control rulers
@@ -371,19 +376,21 @@ protected:
     /// The current selection of Events (for cut/copy/paste)
     EventSelection* m_currentEventSelection;
 
-    ActiveItem* m_activeItem;
+//!!!    ActiveItem* m_activeItem;
 
     RosegardenCanvasView *m_canvasView;
 
     QVBoxLayout  *m_rulerBox;
     QLabel       *m_rulerBoxFiller;
     QVBoxLayout  *m_controlBox;
-    QVBox        *m_bottomBox;
+    QWidget      *m_bottomBox;
     StandardRuler   *m_topStandardRuler;
     StandardRuler   *m_bottomStandardRuler;
     ControlRuler *m_controlRuler;
-    KTabWidget   *m_controlRulers;
-    QWMatrix      m_currentRulerZoomMatrix;
+    QTabWidget   *m_controlRulers;
+    QMatrix      m_currentRulerZoomMatrix;
+
+    CommandRegistry *m_commandRegistry;
 
     static const unsigned int RULERS_ROW;
     static const unsigned int CONTROLS_ROW;
@@ -394,5 +401,7 @@ protected:
 
 
 }
+
+#endif
 
 #endif

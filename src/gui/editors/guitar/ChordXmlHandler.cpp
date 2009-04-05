@@ -40,21 +40,21 @@ bool ChordXmlHandler::startElement(const QString& namespaceURI,
                                    const QString& qName,
                                    const QXmlAttributes& atts)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "chordset") {
         // start new chord set
-        m_currentRoot = atts.value("root").stripWhiteSpace();
+        m_currentRoot = atts.value("root").trimmed();
 
     } else if (lcName == "chord") {
         
         m_currentChord = Guitar::Chord(m_currentRoot);
         
         if (atts.index("ext") >= 0)
-            m_currentChord.setExt(atts.value("ext").stripWhiteSpace());
+            m_currentChord.setExt(atts.value("ext").trimmed());
 
         if (atts.index("user") >= 0) {
-            QString userVal = atts.value("user").stripWhiteSpace().lower();
+            QString userVal = atts.value("user").trimmed().toLower();
             bool res = (userVal == "yes" || userVal == "1" || userVal == "true");
             m_currentChord.setUserChord(res);
         } else {
@@ -72,7 +72,7 @@ bool ChordXmlHandler::endElement(const QString& namespaceURI,
                                  const QString& localName,
                                  const QString& qName)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "fingering") {
 
@@ -93,7 +93,7 @@ bool ChordXmlHandler::endElement(const QString& namespaceURI,
 
 bool ChordXmlHandler::characters(const QString& ch)
 {
-    QString ch2 = ch.simplifyWhiteSpace();
+    QString ch2 = ch.simplified();
     
     if (!ch2.isEmpty() && m_inFingering) {
         if (!parseFingering(ch2))

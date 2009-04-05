@@ -15,10 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasLine>
 
 #include "ControllerEventsRuler.h"
+#include "ControlRuler.h"
+#include "ControlItem.h"
+#include "ControllerEventAdapter.h"
+#include "ControlRulerEventInsertCommand.h"
+#include "ControlRulerEventEraseCommand.h"
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/ControlParameter.h"
@@ -29,20 +36,17 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
-#include "ControlRuler.h"
-#include "ControlItem.h"
-#include "ControllerEventAdapter.h"
-#include "ControlRulerEventInsertCommand.h"
-#include "ControlRulerEventEraseCommand.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/widgets/TextFloat.h"
-#include <klineeditdlg.h>
-#include <qcanvas.h>
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qvalidator.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
+#include "document/CommandHistory.h"
+
+#include <QMouseEvent>
+#include <QColor>
+#include <QPoint>
+#include <QString>
+#include <QValidator>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -51,13 +55,13 @@ namespace Rosegarden
 ControllerEventsRuler::ControllerEventsRuler(Segment *segment,
         RulerScale* rulerScale,
         EditViewBase* parentView,
-        QCanvas* c,
+        Q3Canvas* c,
         QWidget* parent,
         const ControlParameter *controller,
-        const char* name, WFlags f)
-        : ControlRuler(segment, rulerScale, parentView, c, parent, name, f),
+        const char* name) //, WFlags f)
+        : ControlRuler(segment, rulerScale, parentView, c, parent), // name, f),
         m_defaultItemWidth(20),
-        m_controlLine(new QCanvasLine(canvas())),
+        m_controlLine(new Q3CanvasLine(canvas())),
         m_controlLineShowing(false),
         m_controlLineX(0),
         m_controlLineY(0)
@@ -127,7 +131,7 @@ ControllerEventsRuler::init()
 
         double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
         new ControlItem(this, new ControllerEventAdapter(*i),
-                        int(x + m_staffOffset), width);
+                        int(x + m_viewSegmentOffset), width);
     }
 }
 
@@ -136,11 +140,11 @@ ControllerEventsRuler::drawBackground()
 {
     // Draw some minimum and maximum controller value guide lines
     //
-    QCanvasLine *topLine = new QCanvasLine(canvas());
-    QCanvasLine *topQLine = new QCanvasLine(canvas());
-    QCanvasLine *midLine = new QCanvasLine(canvas());
-    QCanvasLine *botQLine = new QCanvasLine(canvas());
-    QCanvasLine *bottomLine = new QCanvasLine(canvas());
+    Q3CanvasLine *topLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *topQLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *midLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *botQLine = new Q3CanvasLine(canvas());
+    Q3CanvasLine *bottomLine = new Q3CanvasLine(canvas());
     //m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
     int cHeight = canvas()->height();
     int cWidth = canvas()->width();
@@ -179,7 +183,7 @@ ControllerEventsRuler::~ControllerEventsRuler()
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
-        QString name = i18n("Unsupported Event Type");
+        QString name = tr("Unsupported Event Type");
 
         if (m_controller->getType() == Controller::EventType) {
             QString hexValue;
@@ -189,12 +193,12 @@ QString ControllerEventsRuler::getName()
                    .arg(int(m_controller->getControllerValue()))
                    .arg(hexValue);
         } else if (m_controller->getType() == PitchBend::EventType) {
-            name = i18n("Pitch Bend");
+            name = tr("Pitch Bend");
         }
 
         return name;
     } else
-        return i18n("Controller Events");
+        return tr("Controller Events");
 }
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
@@ -226,7 +230,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
     if (m_controller->getType() == PitchBend::EventType)
         width /= 4;
 
-    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_staffOffset), width);
+    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_viewSegmentOffset), width);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
@@ -236,9 +240,9 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
 
     clearSelectedItems();
 
-    QCanvasItemList allItems = canvas()->allItems();
+    Q3CanvasItemList allItems = canvas()->allItems();
 
-    for (QCanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             ControllerEventAdapter * adapter = dynamic_cast<ControllerEventAdapter*>(item->getElementAdapter());
             if (adapter->getEvent() == e) {
@@ -271,8 +275,11 @@ void ControllerEventsRuler::insertControllerEvent()
     } else {
         bool ok = false;
         QIntValidator intValidator(0, 128, this);
-        QString res = KLineEditDlg::getText(i18n("Controller Event Number"), "0",
-                                            &ok, this, &intValidator);
+//         QString res = KLineEditDlg::getText(tr("Controller Event Number"), "0",
+//                                             &ok, this, &intValidator);
+        QString res = InputDialog::getText(this, "", tr("Controller Event Number"),
+                                           LineEdit::Normal, "0", &ok);
+        
         if (ok)
             number = res.toULong();
     }
@@ -282,7 +289,7 @@ void ControllerEventsRuler::insertControllerEvent()
                                            insertTime, number,
                                            initialValue, *m_segment);
 
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void ControllerEventsRuler::eraseControllerEvent()
@@ -294,7 +301,7 @@ void ControllerEventsRuler::eraseControllerEvent()
                                         *m_segment,
                                         m_eventSelection->getStartTime(),
                                         m_eventSelection->getEndTime());
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
     updateSelection();
 }
 
@@ -325,7 +332,7 @@ void ControllerEventsRuler::clearControllerEvents()
     }
 
     EraseCommand *command = new EraseCommand(*es);
-    m_parentEditView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
 }
 
@@ -338,7 +345,7 @@ void ControllerEventsRuler::startControlLine()
 void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing) {
-        if (e->button() == MidButton)
+        if (e->button() == Qt::MidButton)
             m_lastEventPos = inverseMapPoint(e->pos());
 
         ControlRuler::contentsMousePressEvent(e); // send super
@@ -347,7 +354,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
     }
 
     // cancel control line mode
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
         m_controlLineShowing = false;
         m_controlLine->hide();
 
@@ -355,7 +362,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
         return ;
     }
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         QPoint p = inverseMapPoint(e->pos());
 
         m_controlLine->show();
@@ -369,7 +376,7 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_controlLineShowing) {
-        if (e->button() == MidButton)
+        if (e->button() == Qt::MidButton)
             insertControllerEvent();
 
         ControlRuler::contentsMouseReleaseEvent(e); // send super
@@ -405,7 +412,7 @@ void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
     if (!m_controlLineShowing) {
         // Don't send super if we're using the middle button
         //
-        if (e->button() == MidButton) {
+        if (e->button() == Qt::MidButton) {
             m_lastEventPos = inverseMapPoint(e->pos());
             return ;
         }
@@ -425,7 +432,7 @@ void ControllerEventsRuler::layoutItem(ControlItem* item)
 {
     timeT itemTime = item->getElementAdapter()->getTime();
 
-    double x = m_rulerScale->getXForTime(itemTime) + m_staffOffset;
+    double x = m_rulerScale->getXForTime(itemTime) + m_viewSegmentOffset;
 
     item->setX(x);
 
@@ -464,7 +471,7 @@ ControllerEventsRuler::drawControlLine(timeT startTime,
     timeT time = startTime, newTime = 0;
     double step = double(endValue - startValue) / double(endTime - startTime);
 
-    KMacroCommand *macro = new KMacroCommand(i18n("Add line of controllers"));
+    MacroCommand *macro = new MacroCommand(tr("Add line of controllers"));
 
     while (time < endTime) {
         int value = startValue + int(step * double(time - startTime));
@@ -489,7 +496,7 @@ ControllerEventsRuler::drawControlLine(timeT startTime,
             time += quantDur;
     }
 
-    m_parentEditView->addCommandToHistory(macro);
+    CommandHistory::getInstance()->addCommand(macro);
 }
 
 }

@@ -25,7 +25,7 @@
 #include "Instrument.h"
 #include "RealTime.h"
 #include "ExternalTransport.h"
-#include <qstringlist.h>
+#include <QStringList>
 
 namespace Rosegarden
 {

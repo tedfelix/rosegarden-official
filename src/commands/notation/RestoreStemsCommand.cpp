@@ -22,11 +22,19 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+RestoreStemsCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand("restore_stems",
+                       new SelectionCommandBuilder<RestoreStemsCommand>());
+}
 
 void
 RestoreStemsCommand::modifySegment()

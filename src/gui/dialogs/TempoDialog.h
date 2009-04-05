@@ -19,11 +19,11 @@
 #ifndef _RG_TEMPODIALOG_H_
 #define _RG_TEMPODIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 #include "base/Event.h"
 #include "base/Composition.h"
-#include <qpushbutton.h>
-#include <qdatetime.h>
+#include <QPushButton>
+#include <QDateTime>
 
 
 class QWidget;
@@ -31,17 +31,17 @@ class QString;
 class QRadioButton;
 class QLabel;
 class QCheckBox;
+class QDoubleSpinBox;
 
 
 namespace Rosegarden
 {
 
 class TimeWidget;
-class RosegardenGUIDoc;
-class HSpinBox;
+class RosegardenDocument;
 
 
-class TempoDialog : public KDialogBase
+class TempoDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -53,7 +53,7 @@ public:
         GlobalTempoWithDefault
     };
 
-    TempoDialog(QWidget *parent, RosegardenGUIDoc *doc,
+    TempoDialog(QWidget *parent, RosegardenDocument *doc,
                 bool timeEditable = false);
     ~TempoDialog();
 
@@ -64,11 +64,11 @@ public:
 public slots:
     virtual void slotOk();
     void slotActionChanged();
-    void slotTempoChanged(const QString &);
+    void slotTempoChanged(double);
     void slotTempoConstantClicked();
     void slotTempoRampToNextClicked();
     void slotTempoRampToTargetClicked();
-    void slotTargetChanged(const QString &);
+    void slotTargetChanged(double);
     void slotTapClicked();
 
 signals:
@@ -85,9 +85,9 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc     *m_doc;
+    RosegardenDocument     *m_doc;
     timeT                 m_tempoTime;
-    HSpinBox             *m_tempoValueSpinBox;
+    QDoubleSpinBox       *m_tempoValueSpinBox;
     QPushButton          *m_tempoTap;
     QTime                 m_tapMinusTwo;
     QTime                 m_tapMinusOne;
@@ -95,7 +95,7 @@ protected:
     QRadioButton         *m_tempoConstant;
     QRadioButton         *m_tempoRampToNext;
     QRadioButton         *m_tempoRampToTarget;
-    HSpinBox             *m_tempoTargetSpinBox; 
+    QDoubleSpinBox       *m_tempoTargetSpinBox; 
 
     QLabel               *m_tempoBeatLabel;
     QLabel               *m_tempoBeat;

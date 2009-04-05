@@ -19,12 +19,13 @@
 #ifndef _RG_AUDIOROUTEMENU_H_
 #define _RG_AUDIOROUTEMENU_H_
 
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
+class QAction;
 
 
 namespace Rosegarden
@@ -59,6 +60,7 @@ protected slots:
     void slotWheel(bool up);
     void slotShowMenu();
     void slotEntrySelected(int);
+    void slotEntrySelected(QAction *);
 
 signals:
     // The menu writes changes directly to the instrument, but it
@@ -72,7 +74,7 @@ private:
     Format m_format;
 
     WheelyButton *m_button;
-    KComboBox *m_combo;
+    QComboBox *m_combo;
 
     int getNumEntries();
     int getCurrentEntry(); // for instrument

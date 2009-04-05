@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,17 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
+
 #ifndef _RG_NOTATIONSELECTOR_H_
 #define _RG_NOTATIONSELECTOR_H_
 
+#include <Q3CanvasRectangle>
 #include "NotationTool.h"
 #include "NotationElement.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
 class QMouseEvent;
-class QCanvasRectangle;
+class Q3CanvasRectangle;
 class m_clickedElement;
 
 
@@ -166,7 +168,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QCanvasRectangle* m_selectionRect;
+    Q3CanvasRectangle* m_selectionRect;
     bool m_updateRect;
 
     NotationStaff *m_selectedStaff;
@@ -187,4 +189,5 @@ protected:
 
 }
 
+#endif
 #endif

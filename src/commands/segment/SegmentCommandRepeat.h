@@ -22,7 +22,7 @@
 #include "SegmentCommand.h"
 #include <vector>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,6 +36,8 @@ class Segment;
  */
 class SegmentCommandRepeat : public SegmentCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentCommandRepeat)
+
 public:
     SegmentCommandRepeat(const std::vector<Segment*>&,
                          bool repeat);

@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#include <Q3PointArray>
 
 #include "LoopRuler.h"
 
@@ -24,22 +25,24 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/HZoomable.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qwidget.h>
-#include <qtooltip.h>
-#include <klocale.h>
-#include <kaction.h>
-#include <qpainter.h>
-#include <qpointarray.h>
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
+
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QWidget>
+#include <QToolTip>
+#include <QAction>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QMouseEvent>
+#include <QBrush>
 
 
 namespace Rosegarden
 {
 
-LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
+LoopRuler::LoopRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
                      int height,
                      double xorigin,
@@ -47,20 +50,20 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
                      QWidget *parent,
                      const char *name) : 
     QWidget(parent, name),
-    m_doc(doc),
     m_height(height),
     m_xorigin(xorigin),
     m_invert(invert),
     m_currentXOffset(0),
     m_width( -1),
     m_activeMousePress(false),
+    m_doc(doc),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
     m_loopGrid(rulerScale),
     m_grid(&m_defaultGrid),
+    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_loopingMode(false),
-    m_startLoop(0), m_endLoop(0),
-    m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4))
+    m_startLoop(0), m_endLoop(0)
 {
     /*
      * I need to understand if this ruler is being built for the main
@@ -70,7 +73,10 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
      */
     m_mainWindow = (name != 0 && std::string(name).length() != 0);
     
-    setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+    //setAutoFillBackground(true);
+    //setBackgroundColor(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+//    QString localStyle=("background: #787878; color: #FFFFFF;");
+//    this->setStyleSheet(localStyle);
 
     // Always snap loop extents to beats; by default apply no snap to
     // pointer position
@@ -78,8 +84,9 @@ LoopRuler::LoopRuler(RosegardenGUIDoc *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid.setSnapTime(SnapGrid::SnapToBeat);
 
-    QToolTip::add
-        (this, i18n("Click and drag to move the playback pointer.\nShift-click and drag to set a range for looping or editing.\nShift-click to clear the loop or range.\nDouble-click to start playback."));
+    this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range"
+                        "for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to  "
+                        "start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()
@@ -100,7 +107,7 @@ void LoopRuler::scrollHoriz(int x)
         return;
     }
 
-    int w = width(), h = height();
+    int w = width(); //, h = height();
     int dx = x - ( -m_currentXOffset);
     m_currentXOffset = -x;
 
@@ -109,6 +116,8 @@ void LoopRuler::scrollHoriz(int x)
         return ;
     }
 
+/*### These bitBlts are not working
+	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?" << endl;
     if (dx > 0) { // moving right, so the existing stuff moves left
         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
         repaint(w - dx, 0, dx, h);
@@ -116,6 +125,9 @@ void LoopRuler::scrollHoriz(int x)
         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
         repaint(0, 0, -dx, h);
     }
+	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?" << endl;
+*/
+	update();
 }
 
 QSize LoopRuler::sizeHint() const
@@ -149,7 +161,13 @@ void LoopRuler::paintEvent(QPaintEvent* e)
     paint.setClipRegion(e->region());
     paint.setClipRect(e->rect().normalize());
 
-    paint.setBrush(colorGroup().foreground());
+    // In a stylesheet world, we have to draw the ruler backgrounds.  Hopefully
+    // this won't be too flickery.  (Seems OK, and best of all it actually
+    // worked!)
+    QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::LoopRulerBackground));
+    paint.fillRect(e->rect(), bg);
+
+    paint.setBrush(palette().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
     
@@ -249,9 +267,9 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     RG_DEBUG << "LoopRuler::mousePressEvent: x = " << mE->x() << endl;
 
     Qt::ButtonState bs = mE->state();
-    setLoopingMode((bs & Qt::ShiftButton) != 0);
+    setLoopingMode((bs & Qt::ShiftModifier) != 0);
 
-    if (mE->button() == LeftButton) {
+    if (mE->button() == Qt::LeftButton) {
         double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
 
         if (m_loopingMode) {
@@ -273,7 +291,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 {
-    if (mE->button() == LeftButton) {
+	if (mE->button() == Qt::LeftButton) {
         if (m_loopingMode) {
             // Cancel the loop if there was no drag
             //
@@ -314,7 +332,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 
     RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopingMode << endl;
 
-    if (mE->button() == LeftButton && !m_loopingMode)
+	if (mE->button() == Qt::LeftButton && !m_loopingMode)
         emit setPlayPosition(m_grid->snapX(x));
 }
 
@@ -345,7 +363,7 @@ void LoopRuler::slotSetLoopMarker(timeT startLoop,
     m_endLoop = endLoop;
 
     QPainter paint(this);
-    paint.setBrush(colorGroup().foreground());
+    paint.setBrush(palette().foreground());
     drawBarSections(&paint);
     drawLoopMarker(&paint);
 

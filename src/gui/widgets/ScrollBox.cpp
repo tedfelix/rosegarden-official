@@ -20,17 +20,19 @@
 */
 
 
+#include <QMouseEvent>
+#include <QDesktopWidget>
 #include "ScrollBox.h"
 
-#include <qapplication.h>
-#include <qframe.h>
-#include <qimage.h>
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QApplication>
+#include <QFrame>
+#include <QImage>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QRect>
+#include <QSize>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -46,15 +48,15 @@ ScrollBox::ScrollBox(QWidget* parent, SizeMode sizeMode, const char* name) :
 void ScrollBox::mousePressEvent(QMouseEvent* e)
 {
     m_mouse = e->pos();
-    if (e->button() == RightButton)
+    if (e->button() == Qt::RightButton)
         emit button3Pressed();
-    if (e->button() == MidButton)
+    if (e->button() == Qt::MidButton)
         emit button2Pressed();
 }
 
 void ScrollBox::mouseMoveEvent(QMouseEvent* e)
 {
-    if (e->state() != LeftButton)
+    if (e->state() != Qt::LeftButton)
         return ;
 
     int dx = (e->pos().x() - m_mouse.x()) * m_pagesize.width() / width();
@@ -73,7 +75,7 @@ void ScrollBox::drawContents(QPainter* paint)
 
     QRect c(contentsRect());
 
-    paint->setPen(Qt::red);
+    paint->setPen(QColor(Qt::red));
 
     int len = m_pagesize.width();
     int x = c.x() + c.width() * m_viewpos.x() / len;
@@ -145,7 +147,7 @@ void ScrollBox::setViewY(int y)
 
 void ScrollBox::setThumbnail(QPixmap img)
 {
-    setPaletteBackgroundPixmap(img.convertToImage().smoothScale(size()));
+    setPaletteBackgroundPixmap(img.fromImage(img.toImage().smoothScale(size())));
 }
 
 }

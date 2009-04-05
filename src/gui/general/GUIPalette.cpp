@@ -17,12 +17,12 @@
 
 
 #include "GUIPalette.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/Colour.h"
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
-#include <qcolor.h>
+#include <QSettings>
+#include <QColor>
 
 
 namespace Rosegarden
@@ -30,12 +30,41 @@ namespace Rosegarden
 
 QColor GUIPalette::getColour(const char* const colourName)
 {
-    KConfig* config = kapp->config();
-    config->setGroup(ColoursConfigGroup);
+    QSettings config;
+    config.beginGroup(ColoursConfigGroup);
 
+    //@@@ I'm not really sure what this used to do.  It doesn't make sense. 
+    //
+    // First we getInstance() (of what?  I'm a linguist, not a programmer)
+    // m_defaultsMap[colourName] and then we use this QColor as a key in
+    // KConfig::readColorEntry() which used to be (3.5 API)
+    //
+    // QColor KConfigBase::readColorEntry (const QString &pKey, 
+    //                                     const QColor *pDefault = 0L)
+    //
+    // where pKey   The key to search for. 
+    //   pDefault   A default value (null QColor by default) returned if the key
+    //              was not found or if the value cannot be interpreted.
+    //
+    // So how did that old code work?  It doesn't make sense.  I don't
+    // understand what res being set to getInstance()->m_defaultsMap[colourName]
+    // was supposed to accomplish at all.
+    //
+    // Anyway, I grabbed an example of how to use QSettings to retrieve a
+    // color, and since colourName is already coming in here as a const char*,
+    // which we need to pass to QSettings as a search key, I'm hoping this
+    // modified pasted example code will do the same job as the old,
+    // incomprehensible code did.  If not, that's what this honking huge comment
+    // is for!
+//    QColor res = getInstance()->m_defaultsMap[colourName];
+//    config.readColorEntry(colourName, &res);
+
+    // cc -- try half of the old and half of the new:
     QColor res = getInstance()->m_defaultsMap[colourName];
-    config->readColorEntry(colourName, &res);
-    return res;
+    QColor color = config.value(colourName, res).value<QColor>();
+    config.endGroup();
+
+    return color;
 }
 
 Colour GUIPalette::convertColour(const QColor &input)
@@ -52,10 +81,10 @@ QColor GUIPalette::convertColour(const Colour& input)
 
 GUIPalette::GUIPalette()
 {
-    m_defaultsMap[ActiveRecordTrack] = Qt::red;
+    m_defaultsMap[ActiveRecordTrack] = QColor(Qt::red);
 
     m_defaultsMap[SegmentCanvas] = QColor(230, 230, 230);
-    m_defaultsMap[SegmentBorder] = Qt::black;
+    m_defaultsMap[SegmentBorder] = QColor(Qt::black);
 
     // 1.0 colors
     //    m_defaultsMap[RecordingInternalSegmentBlock] = QColor(255, 182, 193);
@@ -67,22 +96,28 @@ GUIPalette::GUIPalette()
     // audio recording preview (pale red)
     m_defaultsMap[RecordingAudioSegmentBlock] = QColor(255, 182, 193);
 
-    m_defaultsMap[RecordingSegmentBorder] = Qt::black;
+    m_defaultsMap[RecordingSegmentBorder] = QColor(Qt::black);
 
     m_defaultsMap[RepeatSegmentBorder] = QColor(130, 133, 170);
 
     m_defaultsMap[SegmentAudioPreview] = QColor(39, 71, 22);
-    m_defaultsMap[SegmentInternalPreview] = Qt::white;
-    m_defaultsMap[SegmentLabel] = Qt::black;
-    m_defaultsMap[SegmentSplitLine] = Qt::black;
+    m_defaultsMap[SegmentInternalPreview] = QColor(Qt::white);
+    m_defaultsMap[SegmentLabel] = QColor(Qt::black);
+    m_defaultsMap[SegmentSplitLine] = QColor(Qt::black);
 
-    m_defaultsMap[MatrixElementBorder] = Qt::black;
+    m_defaultsMap[MatrixElementBorder] = QColor(Qt::black);
     m_defaultsMap[MatrixElementBlock] = QColor(98, 128, 232);
-    m_defaultsMap[MatrixOverlapBlock] = Qt::black;
+    m_defaultsMap[MatrixOverlapBlock] = QColor(Qt::black);
+    m_defaultsMap[MatrixHorizontalLine] = QColor(Qt::black);
+    m_defaultsMap[MatrixPitchHighlight] = QColor(128, 128, 128, 100);
+    m_defaultsMap[MatrixTonicHighlight] = QColor(128, 128, 128, 180);
 
     m_defaultsMap[LoopRulerBackground] = QColor(120, 120, 120);
-    m_defaultsMap[LoopRulerForeground] = Qt::white;
-    m_defaultsMap[LoopHighlight] = Qt::white;
+    m_defaultsMap[LoopRulerForeground] = QColor(Qt::white);
+    m_defaultsMap[LoopHighlight] = QColor(Qt::white);
+
+    m_defaultsMap[RulerForeground] = Qt::black;
+    m_defaultsMap[RulerBackground] = QColor(0xEE, 0xEE, 0xEE);
 
     m_defaultsMap[TempoBase] = QColor(197, 211, 125);
 
@@ -90,13 +125,13 @@ GUIPalette::GUIPalette()
     //    m_defaultsMap[TextRulerBackground] = QColor(120, 90, 238, QColor::Hsv);
     //    m_defaultsMap[TextRulerBackground] = QColor(210, 220, 140);
     m_defaultsMap[TextRulerBackground] = QColor(226, 232, 187);
-    m_defaultsMap[TextRulerForeground] = Qt::white;
+    m_defaultsMap[TextRulerForeground] = QColor(Qt::white);
 
-    m_defaultsMap[ChordNameRulerBackground] = QColor(230, 230, 230);
-    m_defaultsMap[ChordNameRulerForeground] = Qt::black;
+    m_defaultsMap[ChordNameRulerBackground] = QColor(0xEE, 0xEE, 0xEE);
+    m_defaultsMap[ChordNameRulerForeground] = QColor(Qt::black);
 
     m_defaultsMap[RawNoteRulerBackground] = QColor(240, 240, 240);
-    m_defaultsMap[RawNoteRulerForeground] = Qt::black;
+    m_defaultsMap[RawNoteRulerForeground] = QColor(Qt::black);
 
     m_defaultsMap[LevelMeterGreen] = QColor(0, 200, 0);
     m_defaultsMap[LevelMeterOrange] = QColor(255, 165, 0);
@@ -109,14 +144,14 @@ GUIPalette::GUIPalette()
     //    m_defaultsMap[LevelMeterSolidRed] = QColor(255, 50, 50);
     m_defaultsMap[LevelMeterSolidRed] = QColor(255, 0, 0);
 
-    m_defaultsMap[BarLine] = Qt::black;
+    m_defaultsMap[BarLine] = QColor(Qt::black);
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
     m_defaultsMap[BeatLine] = QColor(100, 100, 100);
     m_defaultsMap[SubBeatLine] = QColor(212, 212, 212);
     m_defaultsMap[StaffConnectingLine] = QColor(192, 192, 192);
     m_defaultsMap[StaffConnectingTerminatingLine] = QColor(128, 128, 128);
 
-    m_defaultsMap[Pointer] = Qt::darkBlue;
+    m_defaultsMap[Pointer] = QColor(Qt::darkBlue);
     m_defaultsMap[PointerRuler] = QColor(100, 100, 100);
 
     m_defaultsMap[InsertCursor] = QColor(160, 104, 186);
@@ -129,27 +164,30 @@ GUIPalette::GUIPalette()
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
     m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
 
-    const int SelectedElementHue = 225;
-    const int SelectedElementMinValue = 220;
-    const int HighlightedElementHue = 25;
-    const int HighlightedElementMinValue = 220;
-    const int QuantizedNoteHue = 69;
-    const int QuantizedNoteMinValue = 140;
-    const int TriggerNoteHue = 4;
-    const int TriggerNoteMinValue = 140;
-    const int OutRangeNoteHue = 0;
-    const int OutRangeNoteMinValue = 200;
+    //@@@  I decided to shut up these compiler warnings about unused variables.
+    // They look like simple cruft to me.
+
+//    const int SelectedElementHue = 225;
+//    const int SelectedElementMinValue = 220;
+//    const int HighlightedElementHue = 25;
+//    const int HighlightedElementMinValue = 220;
+//    const int QuantizedNoteHue = 69;
+//    const int QuantizedNoteMinValue = 140;
+//    const int TriggerNoteHue = 4;
+//    const int TriggerNoteMinValue = 140;
+//    const int OutRangeNoteHue = 0;
+//    const int OutRangeNoteMinValue = 200;
 
     m_defaultsMap[TextAnnotationBackground] = QColor(255, 255, 180);
 
     m_defaultsMap[TextLilyPondDirectiveBackground] = QColor(95, 157, 87);
 
-    m_defaultsMap[AudioCountdownBackground] = Qt::darkGray;
-    m_defaultsMap[AudioCountdownForeground] = Qt::red;
+    m_defaultsMap[AudioCountdownBackground] = QColor(Qt::darkGray);
+    m_defaultsMap[AudioCountdownForeground] = QColor(Qt::red);
 
-//    m_defaultsMap[RotaryFloatBackground] = Qt::cyan;
+//    m_defaultsMap[RotaryFloatBackground] = QColor(Qt::cyan);
     m_defaultsMap[RotaryFloatBackground] = QColor(182, 222, 255);
-    m_defaultsMap[RotaryFloatForeground] = Qt::black;
+    m_defaultsMap[RotaryFloatForeground] = QColor(Qt::black);
 
     m_defaultsMap[RotaryPastelBlue] = QColor(205, 212, 255);
     m_defaultsMap[RotaryPastelRed] = QColor(255, 168, 169);
@@ -167,7 +205,7 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[MarkerBackground] = QColor(185, 255, 248);
 
-    m_defaultsMap[QuickMarker] = Qt::red;
+    m_defaultsMap[QuickMarker] = QColor(Qt::red);
 
     //    m_defaultsMap[MuteTrackLED] = QColor(218, 190, 230, QColor::Hsv);
     m_defaultsMap[MuteTrackLED] = QColor(211, 194, 238, QColor::Hsv);
@@ -176,6 +214,8 @@ GUIPalette::GUIPalette()
 
     m_defaultsMap[PlaybackFaderOutline] = QColor(211, 194, 238, QColor::Hsv);
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
+
+    m_defaultsMap[PannerOverlay] = QColor(211, 194, 238, QColor::Hsv);
 }
 
 GUIPalette* GUIPalette::getInstance() 
@@ -203,10 +243,16 @@ const char* const GUIPalette::SegmentSplitLine = "segmentsplitline";
 const char* const GUIPalette::MatrixElementBorder = "matrixelementborder";
 const char* const GUIPalette::MatrixElementBlock = "matrixelementblock";
 const char* const GUIPalette::MatrixOverlapBlock = "matrixoverlapblock";
+const char* const GUIPalette::MatrixHorizontalLine = "matrixhorizontalline";
+const char* const GUIPalette::MatrixPitchHighlight = "matrixpitchhighlight";
+const char* const GUIPalette::MatrixTonicHighlight = "matrixtonichighlight";
 
 const char* const GUIPalette::LoopRulerBackground = "looprulerbackground";
 const char* const GUIPalette::LoopRulerForeground = "looprulerforeground";
 const char* const GUIPalette::LoopHighlight = "loophighlight";
+
+const char* const GUIPalette::RulerForeground = "rulerforeground";
+const char* const GUIPalette::RulerBackground = "rulerbackground";
 
 const char* const GUIPalette::TempoBase = "tempobase";
 
@@ -292,6 +338,7 @@ const char* const GUIPalette::RecordAudioTrackLED = "recordaudiotrackled";
 const char* const GUIPalette::PlaybackFaderOutline = "playbackfaderoutline";
 const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
 
+const char* const GUIPalette::PannerOverlay = "panneroverlay";
  
 GUIPalette* GUIPalette::m_instance = 0;
 

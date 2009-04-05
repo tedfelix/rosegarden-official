@@ -19,41 +19,43 @@
 #include "StudioControl.h"
 #include "document/ConfigGroups.h"
 #include "sound/MappedEvent.h"
-#include <kapplication.h>
-#include <kconfig.h>
+#include <QApplication>
+#include <QSettings>
 
 namespace Rosegarden
 {
 
 void
 ChangeRecordDeviceCommand::swap()
- {
+{
 
-        KConfig *config = kapp->config();
-        config->setGroup(Rosegarden::SequencerOptionsConfigGroup);
-        QStringList devList = config->readListEntry("midirecorddevice");
-        QString sdevice = QString::number(m_deviceId);
-        if (m_action) 
-        {
-            if(!devList.contains(sdevice))
-                devList.append(sdevice);
-        }
-        else
-        {
-            if(devList.contains(sdevice))
-                devList.remove(sdevice);
-        }
-        config->writeEntry("midirecorddevice", devList);
+    QSettings settings;
+    settings.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
 
-        // send the selected device to the sequencer
-        Rosegarden::MappedEvent mEdevice
-            (Rosegarden::MidiInstrumentBase, 
-             Rosegarden::MappedEvent::SystemRecordDevice,
-             Rosegarden::MidiByte(m_deviceId),
-             Rosegarden::MidiByte(m_action));
-        Rosegarden::StudioControl::sendMappedEvent(mEdevice);
+    QStringList devList = settings.value("midirecorddevice").toStringList();
+    QString sdevice = QString::number(m_deviceId);
+    if (m_action) 
+    {
+        if(!devList.contains(sdevice))
+            devList.append(sdevice);
+    }
+    else
+    {
+        if(devList.contains(sdevice))
+            devList.remove(sdevice);
+    }
+    settings.setValue("midirecorddevice", devList);
 
-        m_action = !m_action;
+    // send the selected device to the sequencer
+    Rosegarden::MappedEvent mEdevice
+        (Rosegarden::MidiInstrumentBase, 
+         Rosegarden::MappedEvent::SystemRecordDevice,
+         Rosegarden::MidiByte(m_deviceId),
+         Rosegarden::MidiByte(m_action));
+    Rosegarden::StudioControl::sendMappedEvent(mEdevice);
+
+    m_action = !m_action;
+    settings.endGroup();
 }
 
 }

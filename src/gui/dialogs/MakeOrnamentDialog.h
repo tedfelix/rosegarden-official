@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,12 +18,13 @@
 #ifndef _RG_MAKEORNAMENTDIALOG_H_
 #define _RG_MAKEORNAMENTDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+#include <QString>
 
 
 class QWidget;
-class QLineEdit;
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 class PitchChooser;
 
 
-class MakeOrnamentDialog : public KDialogBase
+class MakeOrnamentDialog : public QDialog
 {
     Q_OBJECT
 
@@ -44,10 +44,9 @@ public:
     int getBasePitch() const;
 
 protected:
-    QLineEdit *m_name;
+    LineEdit     *m_name;
     PitchChooser *m_pitch;
 };
-
 
 
 }

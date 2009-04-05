@@ -15,45 +15,45 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "TransportDialog.h"
-
-#include <klocale.h>
-#include <kstddirs.h>
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
+#include "sequencer/RosegardenSequencer.h"
+#include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/general/MidiPitchLabel.h"
+#include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
 #include "document/ConfigGroups.h"
-#include <kconfig.h>
-#include <kglobal.h>
-#include <qaccel.h>
-#include <qcolor.h>
-#include <qcstring.h>
-#include <qdatastream.h>
-#include <qfont.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qpalette.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qwidget.h>
+
+#include <QSettings>
+#include <QShortcut>
+#include <QColor>
+#include <QByteArray>
+#include <QDataStream>
+#include <QFont>
+#include <QLabel>
+#include <QPalette>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QTimer>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QDesktopWidget>
+
 
 
 namespace Rosegarden
 {
 
-TransportDialog::TransportDialog(QWidget *parent,
-                                 const char *name,
-                                 WFlags flags):
-    QWidget(parent, name, WType_TopLevel | WStyle_DialogBorder | WStyle_Minimize | WStyle_SysMenu | WDestructiveClose),
+TransportDialog::TransportDialog(QWidget *parent):
+    QDialog(parent, 0),
     m_transport(0),
     m_lastTenHours(0),
     m_lastUnitHours(0),
@@ -78,9 +78,21 @@ TransportDialog::TransportDialog(QWidget *parent,
     m_isBackgroundSet(false),
     m_sampleRate(0)
 {
-    m_transport = new RosegardenTransport(this);
+    // So we can identify it in RosegardenMainWindow::awaitDialogClearance().
+    // Do not change this string:
+    setObjectName("Rosegarden Transport");
 
-    setCaption(i18n("Rosegarden Transport"));
+    QVBoxLayout *vboxLay = new QVBoxLayout();
+    setLayout( vboxLay );
+    vboxLay->setMargin(0);
+
+    QFrame *frame = new QFrame;
+    vboxLay->addWidget(frame);
+    m_transport = new Ui_RosegardenTransport();
+    m_transport->setupUi(frame);
+	
+    setWindowTitle(tr("Rosegarden Transport"));
+    setIcon(IconLoader().loadPixmap("window-transport"));
 
     resetFonts();
 
@@ -88,22 +100,22 @@ TransportDialog::TransportDialog(QWidget *parent,
 
     // set the LCD frame background to black
     //
-    m_transport->LCDBoxFrame->setBackgroundColor(Qt::black);
+    m_transport->LCDBoxFrame->setBackgroundColor(QColor(Qt::black));
 
     // set all the pixmap backgrounds to black to avoid
     // flickering when we update
     //
-    m_transport->TenThousandthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->ThousandthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->HundredthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenthsPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitSecondsPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenSecondsPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitMinutesPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenMinutesPixmap->setBackgroundColor(Qt::black);
-    m_transport->UnitHoursPixmap->setBackgroundColor(Qt::black);
-    m_transport->TenHoursPixmap->setBackgroundColor(Qt::black);
-    m_transport->NegativePixmap->setBackgroundColor(Qt::black);
+    m_transport->TenThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->ThousandthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->HundredthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenthsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitSecondsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenSecondsPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitMinutesPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenMinutesPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->UnitHoursPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->TenHoursPixmap->setBackgroundColor(QColor(Qt::black));
+    m_transport->NegativePixmap->setBackgroundColor(QColor(Qt::black));
 
     // unset the negative sign to begin with
     m_transport->NegativePixmap->clear();
@@ -116,17 +128,19 @@ TransportDialog::TransportDialog(QWidget *parent,
 // Disable the loop button if JACK transport enabled, because this
 // causes a nasty race condition, and it just seems our loops are not JACK compatible
 // #1240039 - DMM
-//    KConfig* config = rgapp->config();
-//    config->setGroup(SequencerOptionsConfigGroup);
-//    if (config->readBoolEntry("jacktransport", false))
+//    QSettings settings ; // was: mainWindow->config()
+//    settings.beginGroup(SequencerOptionsConfigGroup);
+//    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
 //    {
 //        m_transport->LoopButton->setEnabled(false);
 //    }
+//      settings.endGroup();
 
     // fix and hold the size of the dialog
     //
-    setMinimumSize(m_transport->width(), m_transport->height());
-    setMaximumSize(m_transport->width(), m_transport->height());
+//!!! this probably won't work -- need sizeHint() after widget is realised
+//    setMinimumSize(width(), height());
+//    setMaximumSize(width(), height());
 
     loadPixmaps();
 
@@ -163,11 +177,12 @@ TransportDialog::TransportDialog(QWidget *parent,
             SLOT(slotPanelCloseButtonClicked()));
 
     connect(m_transport->PanicButton, SIGNAL(clicked()), SIGNAL(panic()));
-
-    m_panelOpen = *m_transport->PanelOpenButton->pixmap();
-    m_panelClosed = *m_transport->PanelCloseButton->pixmap();
-
-
+/*
+    const QPixmap *p = m_transport->PanelOpenButton->pixmap();
+    if (p) m_panelOpen = *p;
+    p = m_transport->PanelCloseButton->pixmap();
+    if (p) m_panelClosed = *p;
+*/
     connect(m_transport->SetStartLPButton, SIGNAL(clicked()), SLOT(slotSetStartLoopingPointAtMarkerPos()));
     connect(m_transport->SetStopLPButton, SIGNAL(clicked()), SLOT(slotSetStopLoopingPointAtMarkerPos()));
 
@@ -178,10 +193,10 @@ TransportDialog::TransportDialog(QWidget *parent,
 
     // and by default we close the lower panel
     //
-    int rfh = m_transport->RecordingFrame->height();
+//    int rfh = m_transport->RecordingFrame->height();
     m_transport->RecordingFrame->hide();
-    setFixedSize(width(), height() - rfh);
-    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//    setFixedSize(width(), height() - rfh);
+//    m_transport->PanelOpenButton->setPixmap(m_panelClosed);
 
     // and since by default we show real time (not SMPTE), by default
     // we hide the small colon pixmaps
@@ -199,10 +214,10 @@ TransportDialog::TransportDialog(QWidget *parent,
     pal.setColor(QColorGroup::Foreground, QColor(192, 216, 255));
 
     m_transport->TempoDisplay->setPalette(pal);
-    m_transport->TempoDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TempoDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     m_transport->TimeSigDisplay->setPalette(pal);
-    m_transport->TimeSigDisplay->setAlignment(int(QLabel::AlignVCenter | QLabel::AlignRight));
+    m_transport->TimeSigDisplay->setAlignment( Qt::AlignVCenter | Qt::AlignRight );
 
     QFont localFont(m_transport->OutDisplay->font() );
     localFont.setFamily( "lucida" );
@@ -252,18 +267,21 @@ TransportDialog::TransportDialog(QWidget *parent,
     connect(m_transport->ThousandthsPixmap, SIGNAL(doubleClicked()),
             this, SLOT(slotEditTime()));
 
-    // accelerator object
+    // shortcut object
     //
-    m_accelerators = new QAccel(this);
+    m_shortcuts = new QShortcut(this);
 }
 
 TransportDialog::~TransportDialog()
 {
     if (isVisible()) {
-        KConfig* config = rgapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
-        config->writeEntry("transportx", x());
-        config->writeEntry("transporty", y());
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+
+        settings.setValue("transportx", x());
+        settings.setValue("transporty", y());
+
+        settings.endGroup();
     }
 }
 
@@ -282,7 +300,7 @@ TransportDialog::getCurrentModeAsString()
 
     // we shouldn't get here unless the map is not well-configured
     RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode " 
-        << m_currentMode << " to string." << endl;
+             << m_currentMode << " to string." << endl;
     throw Exception("could not map current mode to string.");
 }
 
@@ -299,15 +317,16 @@ TransportDialog::initModeMap()
 void
 TransportDialog::show()
 {
-    KConfig* config = rgapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    int x = config->readNumEntry("transportx", -1);
-    int y = config->readNumEntry("transporty", -1);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    int x = settings.value("transportx", -1).toInt() ;
+    int y = settings.value("transporty", -1).toInt() ;
     if (x >= 0 && y >= 0) {
         int dw = QApplication::desktop()->availableGeometry(QPoint(x, y)).width();
         int dh = QApplication::desktop()->availableGeometry(QPoint(x, y)).height();
-        if (x + m_transport->width() > dw) x = dw - m_transport->width();
-        if (y + m_transport->height() > dh) y = dh - m_transport->height();
+        if (x + width() > dw) x = dw - width();
+        if (y + height() > dh) y = dh - height();
         move(x, y);
 //        std::cerr << "TransportDialog::show(): moved to " << x << "," << y << std::endl;
         QWidget::show();
@@ -315,16 +334,20 @@ TransportDialog::show()
     } else {
         QWidget::show();
     }
+
+    settings.endGroup();
 }
 
 void
 TransportDialog::hide()
 {
     if (isVisible()) {
-        KConfig* config = rgapp->config();
-        config->setGroup(GeneralOptionsConfigGroup);
-        config->writeEntry("transportx", x());
-        config->writeEntry("transporty", y());
+        QSettings settings;
+        settings.beginGroup( GeneralOptionsConfigGroup );
+        settings.setValue("transportx", x());
+        settings.setValue("transporty", y());
+
+        settings.endGroup();
     }
     QWidget::hide();
 }
@@ -333,22 +356,14 @@ void
 TransportDialog::loadPixmaps()
 {
     m_lcdList.clear();
-    QString fileName;
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
 
     for (int i = 0; i < 10; i++) {
-        fileName = QString("%1/transport/led-%2.xpm").arg(pixmapDir).arg(i);
-        if (!m_lcdList[i].load(fileName)) {
-            std::cerr << "TransportDialog - failed to load pixmap \""
-                      << fileName << "\"" << std::endl;
-        }
+        m_lcdList[i] = IconLoader().loadPixmap(QString("led-%1").arg(i));
     }
 
     // Load the "negative" sign pixmap
     //
-    fileName = QString("%1/transport/led--.xpm").arg(pixmapDir);
-    m_lcdNegative.load(fileName);
-
+    m_lcdNegative = IconLoader().loadPixmap("led--");
 }
 
 void
@@ -396,21 +411,8 @@ void
 TransportDialog::computeSampleRate()
 {
     if (m_sampleRate == 0) {
-
-        QCString replyType;
-        QByteArray replyData;
-        m_sampleRate = 0;
-
-        if (rgapp->sequencerCall("getSampleRate()", replyType, replyData)) {
-            QDataStream streamIn(replyData, IO_ReadOnly);
-            unsigned int result;
-            streamIn >> result;
-            m_sampleRate = result;
-        } else {
-            m_sampleRate = -1;
-        }
+        m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
     }
-
 }
 
 void
@@ -720,9 +722,9 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 
     if (m_currentMode == BarMetronomeMode && unit < 2) {
         if (beat == 1) {
-            slotSetBackground(Qt::red);
+            slotSetBackground("red");
         } else {
-            slotSetBackground(Qt::cyan);
+            slotSetBackground("cyan");
         }
     } else {
         slotResetBackground();
@@ -915,24 +917,24 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->InDisplay->setText(i18n("PITCH WHEEL"));
+        m_transport->InDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->InDisplay->setText(i18n("CONTROLLER"));
+        m_transport->InDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->InDisplay->setText(i18n("PROG CHNGE"));
+        m_transport->InDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->InDisplay->setText(i18n("PRESSURE"));
+        m_transport->InDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->InDisplay->setText(i18n("SYS MESSAGE"));
+        m_transport->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
     default:   // do nothing
@@ -952,7 +954,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiInLabel()
 {
-    m_transport->InDisplay->setText(i18n(QString("NO EVENTS")));
+    m_transport->InDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS"))  );
 
     // also, just to be sure:
     slotResetBackground();
@@ -975,24 +977,24 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
     break;
 
     case MappedEvent::MidiPitchBend:
-        m_transport->OutDisplay->setText(i18n("PITCH WHEEL"));
+        m_transport->OutDisplay->setText(tr("PITCH WHEEL"));
         break;
 
     case MappedEvent::MidiController:
-        m_transport->OutDisplay->setText(i18n("CONTROLLER"));
+        m_transport->OutDisplay->setText(tr("CONTROLLER"));
         break;
 
     case MappedEvent::MidiProgramChange:
-        m_transport->OutDisplay->setText(i18n("PROG CHNGE"));
+        m_transport->OutDisplay->setText(tr("PROG CHNGE"));
         break;
 
     case MappedEvent::MidiKeyPressure:
     case MappedEvent::MidiChannelPressure:
-        m_transport->OutDisplay->setText(i18n("PRESSURE"));
+        m_transport->OutDisplay->setText(tr("PRESSURE"));
         break;
 
     case MappedEvent::MidiSystemMessage:
-        m_transport->OutDisplay->setText(i18n("SYS MESSAGE"));
+        m_transport->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
     default:   // do nothing
@@ -1012,7 +1014,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiOutLabel()
 {
-    m_transport->OutDisplay->setText(i18n(QString("NO EVENTS")));
+	m_transport->OutDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS")) ); 
 }
 
 void
@@ -1026,15 +1028,17 @@ void
 TransportDialog::slotLoopButtonClicked()
 {
     // disable if JACK transport has been set #1240039 - DMM
-    //    KConfig* config = rgapp->config();
-    //    config->setGroup(SequencerOptionsConfigGroup);
-    //    if (config->readBoolEntry("jacktransport", false))
+    //    QSettings settings;
+    //    settings.beginGroup( SequencerOptionsConfigGroup );
+    // 
+    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
     //    {
     //    //!!! - this will fail silently
     //    m_transport->LoopButton->setEnabled(false);
     //    m_transport->LoopButton->setOn(false);
     //        return;
     //    }
+    //    settings.endGroup();
 
     if (m_transport->LoopButton->isOn()) {
         emit setLoop();
@@ -1062,13 +1066,23 @@ TransportDialog::slotPanelOpenButtonClicked()
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
-        setFixedSize(width(), height() - rfh);
-        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        setFixedSize(width(), height() - rfh);
+//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        adjustSize();
+        setFixedSize(416, 87);
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = false;
     } else {
-        setFixedSize(width(), height() + rfh);
+//        setFixedSize(width(), height() + rfh);
+        setFixedSize(416, 132);
         m_transport->RecordingFrame->show();
-        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+//        m_transport->PanelOpenButton->setPixmap(m_panelOpen);
+//        adjustSize();
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = true;
     }
 }
@@ -1080,8 +1094,13 @@ TransportDialog::slotPanelCloseButtonClicked()
 
     if (m_transport->RecordingFrame->isVisible()) {
         m_transport->RecordingFrame->hide();
-        setFixedSize(width(), height() - rfh);
-        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+//        setFixedSize(width(), height() - rfh);
+//        m_transport->PanelOpenButton->setPixmap(m_panelClosed);
+        setFixedSize(416, 87);
+//        adjustSize();
+//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+//        setFixedSize(sizeHint());
+//        setMinimumSize(sizeHint());
         m_isExpanded = false;
     }
 }
@@ -1111,35 +1130,24 @@ TransportDialog::slotEditTime()
 }
 
 void
-TransportDialog::slotSetBackground(QColor c)
+TransportDialog::slotSetBackground(QString c)
 {
     if (!m_haveOriginalBackground) {
-        m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+        //m_originalBackground = m_transport->LCDBoxFrame->paletteBackgroundColor();
+        m_originalBackground = "black";
         m_haveOriginalBackground = true;
     }
 
-    m_transport->LCDBoxFrame->setPaletteBackgroundColor(c);
-    m_transport->NegativePixmap->setPaletteBackgroundColor(c);
-    m_transport->TenHoursPixmap->setPaletteBackgroundColor(c);
-    m_transport->UnitHoursPixmap->setPaletteBackgroundColor(c);
-    m_transport->TimeDisplayLabel->setPaletteBackgroundColor(c);
+    QString localStyle = "QWidget { background-color: " + c + "; }";
 
-    /* this is a bit more thorough, but too slow and flickery:
-     
-    const QObjectList *children = m_transport->LCDBoxFrame->children();
-    QObjectListIt it(*children);
-    QObject *obj;
-     
-    while ((obj = it.current()) != 0) {
-     
-    QWidget *w = dynamic_cast<QWidget *>(obj);
-    if (w) {
-    w->setPaletteBackgroundColor(c);
-    }
-    ++it;
-    }
-     
-    */
+    // The upshot of stylesheets is we only have to set the style on this one
+    // widget now.  It hits the area behind the SIG, DIV and TEMPO panels, which
+    // didn't flash before.  My read of the code is that they weren't flashing
+    // because there was too much overhead hunting them down and setting all
+    // their palettes individually.  I redid the LCD pixmaps (actually these are
+    // LEDs aren't they?) with transparent backgrounds, and now the whole thing
+    // flashes evenly.  I like it. (dmm)
+    m_transport->LCDBoxFrame->setStyleSheet(localStyle);
 
     m_isBackgroundSet = true;
 }

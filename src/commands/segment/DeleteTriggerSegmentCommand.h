@@ -20,23 +20,25 @@
 #define _RG_DELETETRIGGERSEGMENTCOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
-class DeleteTriggerSegmentCommand : public KNamedCommand
+class DeleteTriggerSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(DeleteTriggerSegmentCommand)
+
 public:
-    DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+    DeleteTriggerSegmentCommand(RosegardenDocument *doc,
                                 TriggerSegmentId);
     virtual ~DeleteTriggerSegmentCommand();
 

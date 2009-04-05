@@ -19,20 +19,20 @@
 #include "SegmentMmapperFactory.h"
 
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
 #include "MetronomeMmapper.h"
 #include "SegmentMmapper.h"
 #include "AudioSegmentMmapper.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
     
-SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* doc,
+SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenDocument* doc,
                                                              Rosegarden::Segment* segment,
                                                              const QString& fileName)
 {
@@ -62,7 +62,7 @@ SegmentMmapper* SegmentMmapperFactory::makeMmapperForSegment(RosegardenGUIDoc* d
     return mmapper;
 }
 
-MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
+MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenDocument* doc)
 {
     MetronomeMmapper* mmapper = new MetronomeMmapper(doc);
     mmapper->init();
@@ -70,7 +70,7 @@ MetronomeMmapper* SegmentMmapperFactory::makeMetronome(RosegardenGUIDoc* doc)
     return mmapper;
 }
 
-TimeSigSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
+TimeSigSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenDocument* doc)
 {
     TimeSigSegmentMmapper* mmapper = new TimeSigSegmentMmapper(doc, "rosegarden_timesig");
     
@@ -78,7 +78,7 @@ TimeSigSegmentMmapper* SegmentMmapperFactory::makeTimeSig(RosegardenGUIDoc* doc)
     return mmapper;
 }
 
-TempoSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenGUIDoc* doc)
+TempoSegmentMmapper* SegmentMmapperFactory::makeTempo(RosegardenDocument* doc)
 {
     TempoSegmentMmapper* mmapper = new TempoSegmentMmapper(doc, "rosegarden_tempo");
     

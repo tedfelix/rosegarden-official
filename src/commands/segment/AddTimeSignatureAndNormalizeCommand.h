@@ -21,7 +21,7 @@
 
 #include "base/NotationTypes.h"
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
 
 namespace Rosegarden
@@ -30,7 +30,7 @@ namespace Rosegarden
 class Composition;
 
 
-class AddTimeSignatureAndNormalizeCommand : public KMacroCommand
+class AddTimeSignatureAndNormalizeCommand : public MacroCommand
 {
 public:
     AddTimeSignatureAndNormalizeCommand(Composition *composition,

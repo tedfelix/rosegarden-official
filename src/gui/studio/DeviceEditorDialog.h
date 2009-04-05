@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,28 +18,28 @@
 #ifndef _RG_DEVICEEDITORDIALOG_H_
 #define _RG_DEVICEEDITORDIALOG_H_
 
-#include <base/Studio.h>
-#include <kdialogbase.h>
-#include <qstringlist.h>
+#include "base/Studio.h"
+#include "base/MidiDevice.h"
+#include <QDialog>
+#include <QStringList>
 #include <set>
 
-
 class QWidget;
-class QTable;
-
+class QTableWidget;
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class DeviceEditorDialog : public KDialogBase
+class DeviceEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    DeviceEditorDialog(QWidget *parent, RosegardenGUIDoc *document);
+    DeviceEditorDialog(QWidget *parent, RosegardenDocument *document);
     ~DeviceEditorDialog();
 
     void setModified(bool value);
@@ -56,14 +55,16 @@ protected slots:
     void slotValueChanged(int row, int col);
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
 
     QStringList m_playConnections;
     QStringList m_recordConnections;
-    void makeConnectionList(unsigned int direction, QStringList &list);
+    void makeConnectionList(MidiDevice::DeviceDirection direction, 
+			    QStringList &list);
     
-    QTable *m_table;
+    QTableWidget *m_table;
+	QDialogButtonBox *m_buttonBox;
 
     DeviceList m_devices;
     std::set<DeviceId> m_deletedDevices;

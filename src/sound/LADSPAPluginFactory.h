@@ -24,7 +24,7 @@
 #include <vector>
 #include <map>
 #include <set>
-#include <qstring.h>
+#include <QString>
 
 namespace Rosegarden
 {

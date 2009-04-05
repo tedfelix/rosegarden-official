@@ -22,14 +22,14 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentQuickCopyCommand::SegmentQuickCopyCommand(Segment *segment):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(segment->getComposition()),
         m_segmentToCopy(segment),
         m_segment(0),
@@ -49,7 +49,7 @@ SegmentQuickCopyCommand::execute()
     if (!m_segment) {
         m_segment = new Segment(*m_segmentToCopy);
         std::string label = m_segment->getLabel();
-        m_segment->setLabel(appendLabel(label, qstrtostr(i18n("(copied)"))));
+        m_segment->setLabel(appendLabel(label, qstrtostr(tr("(copied)"))));
     }
     m_composition->addSegment(m_segment);
     m_detached = false;

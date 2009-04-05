@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,6 +18,7 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_TRACKHEADER_H_
 #define _RG_TRACKHEADER_H_
@@ -26,9 +26,9 @@
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 
-#include <qsize.h>
-#include <qwidget.h>
-#include <qlabel.h>
+#include <QSize>
+#include <QWidget>
+#include <QLabel>
 
 #include <set>
 
@@ -209,4 +209,5 @@ private :
 
 }
 
+#endif
 #endif

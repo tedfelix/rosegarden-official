@@ -22,9 +22,9 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -35,8 +35,10 @@ namespace Rosegarden
 class Studio;
 
 
-class CreateOrDeleteDeviceCommand : public KNamedCommand
+class CreateOrDeleteDeviceCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CreateOrDeleteDeviceCommand)
+
 public:
     // Creation constructor
     CreateOrDeleteDeviceCommand(Studio *studio,
@@ -44,7 +46,7 @@ public:
                                 Device::DeviceType type,
                                 MidiDevice::DeviceDirection direction,
                                 std::string connection) :
-        KNamedCommand(getGlobalName(false)),
+        NamedCommand(getGlobalName(false)),
         m_studio(studio),
         m_name(name),
         m_type(type),
@@ -58,7 +60,7 @@ public:
                                 DeviceId deviceId);
     
     static QString getGlobalName(bool deletion) {
-        return (deletion ? i18n("Delete Device") : i18n("Create Device")); 
+        return (deletion ? tr("Delete Device") : tr("Create Device")); 
     }
     
     virtual void execute();

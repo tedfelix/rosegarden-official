@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUCHANGESLURPOSITIONCOMMAND_H_
-#define _RG_ADJUSTMENUCHANGESLURPOSITIONCOMMAND_H_
+#ifndef _RG_CHANGESLURPOSITIONCOMMAND_H_
+#define _RG_CHANGESLURPOSITIONCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 class Slur;
@@ -31,18 +31,24 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ChangeSlurPositionCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeSlurPositionCommand)
+
 public:
     ChangeSlurPositionCommand(bool above, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(above), selection, true),
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? i18n("Slur &Above") : i18n("Slur &Below");
+        return above ? tr("Slur &Above") : tr("Slur &Below");
     }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

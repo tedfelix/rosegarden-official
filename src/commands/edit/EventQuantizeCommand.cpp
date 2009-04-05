@@ -18,7 +18,6 @@
 
 #include "EventQuantizeCommand.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/Quantizer.h"
@@ -29,11 +28,13 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
-#include <kconfig.h>
-#include <qstring.h>
+#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "gui/application/RosegardenApplication.h"
-#include <kapplication.h>
+
+#include <QApplication>
+#include <QSettings>
+#include <QString>
 
 
 namespace Rosegarden
@@ -69,27 +70,27 @@ EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
-        QString configGroup,
+        QString settingsGroup,
         bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
+        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
                      segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_selection(0),
-        m_configGroup(configGroup)
+        m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-        QString configGroup,
+        QString settingsGroup,
         bool notation):
-        BasicCommand(getGlobalName(makeQuantizer(configGroup, notation)),
+        BasicCommand(getGlobalName(makeQuantizer(settingsGroup, notation)),
                      selection.getSegment(),
                      selection.getStartTime(),
                      selection.getEndTime(),
                      true),  // bruteForceRedo
         m_selection(&selection),
-        m_configGroup(configGroup)
+        m_settingsGroup(settingsGroup)
 {
     // nothing else -- m_quantizer set by makeQuantizer
 }
@@ -104,13 +105,13 @@ EventQuantizeCommand::getGlobalName(Quantizer *quantizer)
 {
     if (quantizer) {
         if (dynamic_cast<NotationQuantizer *>(quantizer)) {
-            return i18n("Heuristic Notation &Quantize");
+            return tr("Heuristic Notation &Quantize");
         } else {
-            return i18n("Grid &Quantize");
+            return tr("Grid &Quantize");
         }
     }
 
-    return i18n("&Quantize...");
+    return tr("&Quantize...");
 }
 
 void
@@ -125,14 +126,15 @@ EventQuantizeCommand::modifySegment()
     bool makeviable = false;
     bool decounterpoint = false;
 
-    if (m_configGroup) {
-        //!!! need way to decide whether to do these even if no config group (i.e. through args to the command)
-        KConfig *config = kapp->config();
-        config->setGroup(m_configGroup);
+    if (!m_settingsGroup.isEmpty()) {
+        //!!! need way to decide whether to do these even if no settings group (i.e. through args to the command)
+        QSettings settings;
+        settings.beginGroup( m_settingsGroup );
 
-        rebeam = config->readBoolEntry("quantizerebeam", true);
-        makeviable = config->readBoolEntry("quantizemakeviable", false);
-        decounterpoint = config->readBoolEntry("quantizedecounterpoint", false);
+        rebeam = qStrToBool( settings.value("quantizerebeam", "true" ) ) ;
+        makeviable = qStrToBool( settings.value("quantizemakeviable", "false" ) ) ;
+        decounterpoint = qStrToBool( settings.value("quantizedecounterpoint", "false" ) ) ;
+        settings.endGroup();
     }
 
     if (m_selection) {
@@ -147,10 +149,10 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit incrementProgress(m_progressTotal / 2);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         } else {
             emit incrementProgress(m_progressTotal);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         }
     }
 
@@ -185,34 +187,36 @@ EventQuantizeCommand::modifySegment()
     if (m_progressTotal > 0) {
         if (rebeam || makeviable || decounterpoint) {
             emit incrementProgress(m_progressTotal / 2);
-            rgapp->refreshGUI(50);
+            rosegardenApplication->refreshGUI(50);
         }
     }
 }
 
 Quantizer *
-EventQuantizeCommand::makeQuantizer(QString configGroup,
+EventQuantizeCommand::makeQuantizer(QString settingsGroup,
                                     bool notationDefault)
 {
     //!!! Excessive duplication with
     // QuantizeParameters::getQuantizer in widgets.cpp
 
-    KConfig *config = kapp->config();
-    config->setGroup(configGroup);
+    QSettings settings;
+    settings.beginGroup( settingsGroup );
 
     timeT defaultUnit =
         Note(Note::Demisemiquaver).getDuration();
 
-    int type = config->readNumEntry("quantizetype", notationDefault ? 2 : 0);
-    timeT unit = config->readNumEntry("quantizeunit", defaultUnit);
-    bool notateOnly = config->readBoolEntry("quantizenotationonly", notationDefault);
-    bool durations = config->readBoolEntry("quantizedurations", false);
-    int simplicity = config->readNumEntry("quantizesimplicity", 13);
-    int maxTuplet = config->readNumEntry("quantizemaxtuplet", 3);
-    bool counterpoint = config->readNumEntry("quantizecounterpoint", false);
-    bool articulate = config->readBoolEntry("quantizearticulate", true);
-    int swing = config->readNumEntry("quantizeswing", 0);
-    int iterate = config->readNumEntry("quantizeiterate", 100);
+    int type = settings.value("quantizetype", notationDefault ? 2 : 0).toInt() ;
+	timeT unit = settings.value("quantizeunit",  static_cast<uint>(defaultUnit) ).toInt() ;
+    bool notateOnly = qStrToBool( settings.value("quantizenotationonly", "notationDefault" ) ) ;
+    bool durations = qStrToBool( settings.value("quantizedurations", "false" ) ) ;
+    int simplicity = settings.value("quantizesimplicity", 13).toInt() ;
+    int maxTuplet = settings.value("quantizemaxtuplet", 3).toInt() ;
+    bool counterpoint = settings.value("quantizecounterpoint", false).toInt() ;
+    bool articulate = qStrToBool( settings.value("quantizearticulate", "true" ) ) ;
+    int swing = settings.value("quantizeswing", 0).toInt() ;
+    int iterate = settings.value("quantizeiterate", 100).toInt() ;
+
+    settings.endGroup();
 
     m_quantizer = 0;
 

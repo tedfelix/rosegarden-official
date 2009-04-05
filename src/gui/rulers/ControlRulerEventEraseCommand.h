@@ -18,18 +18,23 @@
 #ifndef _RG_CONTROLLEREVENTERASECOMMAND_H_
 #define _RG_CONTROLLEREVENTERASECOMMAND_H_
 
+#include <Q3CanvasItemList>
 #include "base/Event.h"
 #include "document/BasicCommand.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
+
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
 
 class ControlRulerEventEraseCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventEraseCommand)
+
 public:
 
-    ControlRulerEventEraseCommand(QCanvasItemList selectedItems,
+    ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
                                 Segment &segment,
                                 Rosegarden::timeT start, Rosegarden::timeT end);
     virtual ~ControlRulerEventEraseCommand() {;}
@@ -39,7 +44,7 @@ protected:
 
     virtual void modifySegment();
 
-    QCanvasItemList m_selectedItems;
+    Q3CanvasItemList m_selectedItems;
 };
 
 }

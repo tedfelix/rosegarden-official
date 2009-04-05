@@ -16,10 +16,10 @@
 */
 
 
+#include <QPaintEvent>
 #include "RawNoteRuler.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -28,13 +28,14 @@
 #include "base/Segment.h"
 #include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
-#include <klocale.h>
-#include <qcolor.h>
-#include <qpainter.h>
-#include <qrect.h>
-#include <qsize.h>
-#include <qtooltip.h>
-#include <qwidget.h>
+#include "misc/Strings.h"
+
+#include <QColor>
+#include <QPainter>
+#include <QRect>
+#include <QSize>
+#include <QToolTip>
+#include <QWidget>
 
 
 namespace Rosegarden
@@ -55,12 +56,12 @@ RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
         m_rulerScale(rulerScale)
 {
     setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
-    QToolTip::add(this,"");
+    this->setToolTip("");
 }
 
 RawNoteRuler::~RawNoteRuler()
 {
-    QToolTip::remove(this);
+    // QToolTip::remove(this);
     // nothing else
 }
 
@@ -436,7 +437,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     // Tooltips
     {
-	QToolTip::remove(this);
+	// QToolTip::remove(this);
 	TrackId trackId = m_segment->getTrack();
 	Track *track =
 	    m_segment->getComposition()->getTrackById(trackId);
@@ -444,10 +445,10 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         if (track)
             trackPosition = track->getPosition();
 
-	QToolTip::add(this,i18n("Track #%1, Segment \"%2\" (runtime id %3)")
-		           .arg(trackPosition + 1)
-		           .arg(strtoqstr(m_segment->getLabel()))
-		           .arg(m_segment->getRuntimeId()));
+	this->setToolTip(tr("Track #%1, Segment \"%2\" (runtime id %3)")
+		            .arg(trackPosition + 1)
+		            .arg(strtoqstr(m_segment->getLabel()))
+		            .arg(m_segment->getRuntimeId()));
     }
 
     //    START_TIMING;

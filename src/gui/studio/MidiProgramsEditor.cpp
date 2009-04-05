@@ -16,38 +16,44 @@
 */
 
 
+
 #include "MidiProgramsEditor.h"
-#include "MidiBankListViewItem.h"
+#include "MidiBankTreeWidgetItem.h"
 #include "NameSetEditor.h"
+#include "BankEditorDialog.h"
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "BankEditorDialog.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "gui/widgets/RosegardenPopupMenu.h"
-#include <kcompletion.h>
-#include <kglobal.h>
-#include <klineedit.h>
-#include <klocale.h>
-#include <kstddirs.h>
-#include <qcheckbox.h>
-#include <qcursor.h>
-#include <qfile.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qobjectlist.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qpushbutton.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvgroupbox.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+#include "gui/general/IconLoader.h"
+
+#include <QCheckBox>
+#include <QCursor>
+#include <QFile>
+#include <QFrame>
+#include <QLabel>
+#include <QLayout>
+#include <QVBoxLayout>
+#include <QObjectList>
+#include <QPixmap>
+#include <QIcon>
+#include <QPoint>
+#include <QMenu>
+#include <QPushButton>
+#include <QSpinBox>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QFile>
+
 #include <algorithm>
+
 
 namespace Rosegarden
 {
@@ -56,8 +62,8 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
                                        QWidget* parent,
                                        const char* name)
         : NameSetEditor(bankEditor,
-                        i18n("Bank and Program details"),
-                        parent, name, i18n("Programs"), true),
+                        tr("Bank and Program details"),
+                        parent, name, tr("Programs"), true),
         m_device(0),
         m_bankList(bankEditor->getBankList()),
         m_programList(bankEditor->getProgramList()),
@@ -65,7 +71,7 @@ MidiProgramsEditor::MidiProgramsEditor(BankEditorDialog* bankEditor,
 {
     QWidget *additionalWidget = makeAdditionalWidget(m_mainFrame);
     if (additionalWidget) {
-        m_mainLayout->addMultiCellWidget(additionalWidget, 0, 2, 0, 2);
+        m_mainLayout->addWidget(additionalWidget, 0, 0, 2- 0+1, 2-0+ 1);
     }
 }
 
@@ -78,39 +84,33 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     m_msb = new QSpinBox(frame);
     m_lsb = new QSpinBox(frame);
 
-    QGridLayout *gridLayout = new QGridLayout(frame,
-                              3,   // rows
-                              2,   // cols
-                              2); // margin
+    frame->setContentsMargins(2, 2, 2, 2);
+    QGridLayout *gridLayout = new QGridLayout(frame); // margin
 
-    gridLayout->addWidget(new QLabel(i18n("Percussion"), frame),
-                          0, 0, AlignLeft);
-    gridLayout->addWidget(m_percussion, 0, 1, AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
+                          0, 0, Qt::AlignLeft);
+    gridLayout->addWidget(m_percussion, 0, 1, Qt::AlignLeft);
     connect(m_percussion, SIGNAL(clicked()),
             this, SLOT(slotNewPercussion()));
 
-    gridLayout->addWidget(new QLabel(i18n("MSB Value"), frame),
-                          1, 0, AlignLeft);
-    m_msb->setMinValue(0);
-    m_msb->setMaxValue(127);
-    gridLayout->addWidget(m_msb, 1, 1, AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("MSB Value"), frame),
+                          1, 0, Qt::AlignLeft);
+    m_msb->setMinimum(0);
+    m_msb->setMaximum(127);
+    gridLayout->addWidget(m_msb, 1, 1, Qt::AlignLeft);
 
-    QToolTip::add
-        (m_msb,
-                i18n("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+    m_msb->setToolTip(tr("Selects a MSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
 
-    QToolTip::add
-        (m_lsb,
-                i18n("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
+    m_lsb->setToolTip(tr("Selects a LSB controller Bank number (MSB/LSB pairs are always unique for any Device)"));
 
     connect(m_msb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewMSB(int)));
 
-    gridLayout->addWidget(new QLabel(i18n("LSB Value"), frame),
-                          2, 0, AlignLeft);
-    m_lsb->setMinValue(0);
-    m_lsb->setMaxValue(127);
-    gridLayout->addWidget(m_lsb, 2, 1, AlignLeft);
+    gridLayout->addWidget(new QLabel(tr("LSB Value"), frame),
+                          2, 0, Qt::AlignLeft);
+    m_lsb->setMinimum(0);
+    m_lsb->setMaximum(127);
+    gridLayout->addWidget(m_lsb, 2, 1, Qt::AlignLeft);
 
     connect(m_lsb, SIGNAL(valueChanged(int)),
             this, SLOT(slotNewLSB(int)));
@@ -159,7 +159,7 @@ MidiProgramsEditor::clearAll()
     for (unsigned int i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
-    setTitle(i18n("Bank and Program details"));
+    setTitle(tr("Bank and Program details"));
 
     m_percussion->setChecked(false);
     m_msb->setValue(0);
@@ -173,11 +173,11 @@ MidiProgramsEditor::clearAll()
 }
 
 void
-MidiProgramsEditor::populate(QListViewItem* item)
+MidiProgramsEditor::populate(QTreeWidgetItem* item)
 {
     RG_DEBUG << "MidiProgramsEditor::populate\n";
 
-    MidiBankListViewItem* bankItem = dynamic_cast<MidiBankListViewItem*>(item);
+    MidiBankTreeWidgetItem* bankItem = dynamic_cast<MidiBankTreeWidgetItem*>(item);
     if (!bankItem) {
         RG_DEBUG << "MidiProgramsEditor::populate : not a bank item - returning\n";
         return ;
@@ -215,37 +215,35 @@ MidiProgramsEditor::populate(QListViewItem* item)
     ProgramList::iterator it;
 
     QPixmap noKeyPixmap, keyPixmap;
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QString file = pixmapDir + "/toolbar/key-white.png";
-    if (QFile(file).exists())
-        noKeyPixmap = QPixmap(file);
-    file = pixmapDir + "/toolbar/key-green.png";
-    if (QFile(file).exists())
-        keyPixmap = QPixmap(file);
+
+    IconLoader il;
+    noKeyPixmap = il.loadPixmap("key-white");
+    keyPixmap = il.loadPixmap("key-green");
 
     bool haveKeyMappings = m_currentBank->isPercussion()
                            && (m_device->getKeyMappings().size() > 0);
 
     for (unsigned int i = 0; i < m_names.size(); i++) {
+
         m_names[i]->clear();
         getEntryButton(i)->setEnabled(haveKeyMappings);
-        getEntryButton(i)->setPixmap(noKeyPixmap);
-        QToolTip::remove
-            ( getEntryButton(i) );
+        getEntryButton(i)->setIcon(QIcon(noKeyPixmap));
+        // QToolTip::remove
+        //    ( getEntryButton(i) );
+        getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
 
                 QString programName = strtoqstr(it->getName());
-                m_completion.addItem(programName);
+                m_completions << programName;
                 m_names[i]->setText(programName);
 
                 if (m_device->getKeyMappingForProgram(*it)) {
-                    getEntryButton(i)->setPixmap(keyPixmap);
-                    QToolTip::add
-                        (getEntryButton(i),
-                                i18n("Key Mapping: %1").arg(
-                                    strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
+                    getEntryButton(i)->setIcon(QIcon(keyPixmap));
+                    getEntryButton(i)->setToolTip
+                        (tr("Key Mapping: %1") 
+                              .arg(strtoqstr(m_device->getKeyMappingForProgram(*it)->getName())));
                 }
 
                 break;
@@ -378,22 +376,30 @@ struct ProgramCmp
 void
 MidiProgramsEditor::slotNameChanged(const QString& programName)
 {
-    const KLineEdit* lineEdit = dynamic_cast<const KLineEdit*>(sender());
+    const LineEdit* lineEdit = dynamic_cast<const LineEdit*>(sender());
     if (!lineEdit) {
-        RG_DEBUG << "MidiProgramsEditor::slotProgramChanged() : %%% ERROR - signal sender is not a KLineEdit\n";
+        RG_DEBUG << "MidiProgramsEditor::slotNameChanged() : %%% ERROR - signal sender is not a Rosegarden::LineEdit\n";
         return ;
     }
 
-    QString senderName = sender()->name();
+    QString senderName = sender()->objectName();
 
     // Adjust value back to zero rated
     //
     unsigned int id = senderName.toUInt() - 1;
 
-    RG_DEBUG << "MidiProgramsEditor::slotNameChanged("
-    << programName << ") : id = " << id << endl;
-
-    MidiProgram *program = getProgram(*getCurrentBank(), id);
+    RG_DEBUG << "MidiProgramsEditor::slotNameChanged(" << programName << ") : id = " << id << endl;
+    
+    MidiBank* currBank;
+    std::cout << "GLEE" << std::endl;
+    currBank = getCurrentBank();
+    std::cout << "BUBBLES" << std::endl;
+    if( ! currBank ){
+        RG_DEBUG << "Error: currBank is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        return;
+    }
+    MidiProgram *program = getProgram(*currBank, id);
+//     MidiProgram *program = getProgram(*currBank, id);
 
     if (program == 0) {
         // Do nothing if program name is empty
@@ -428,6 +434,11 @@ MidiProgramsEditor::slotNameChanged(const QString& programName)
         }
     }
 
+    if( ! program ){
+        RG_DEBUG << "Error:: program is NULL in MidiProgramsEditor::slotNameChanged() " << endl;
+        return;
+    }
+    
     if (qstrtostr(programName) != program->getName()) {
         program->setName(qstrtostr(programName));
         m_bankEditor->setModified(true);
@@ -443,7 +454,7 @@ MidiProgramsEditor::slotEntryButtonPressed()
         return ;
     }
 
-    QString senderName = button->name();
+    QString senderName = button->objectName();
 
     if (!m_device)
         return ;
@@ -464,20 +475,20 @@ MidiProgramsEditor::slotEntryButtonPressed()
 
     const MidiKeyMapping *currentMapping =
         m_device->getKeyMappingForProgram(*program);
+
     int currentEntry = 0;
 
-    menu->insertItem(i18n("<no key mapping>"), this,
-                     SLOT(slotEntryMenuItemSelected(int)), 0, 0);
-    menu->setItemParameter(0, 0);
+    QAction *a = menu->addAction(tr("<no key mapping>"));
+    a->setObjectName("0");
 
-    for (int i = 0; i < kml.size(); ++i) {
-        menu->insertItem(strtoqstr(kml[i].getName()),
-                         this, SLOT(slotEntryMenuItemSelected(int)),
-                         0, i + 1);
-        menu->setItemParameter(i + 1, i + 1);
-        if (currentMapping && (kml[i] == *currentMapping))
-            currentEntry = i + 1;
+    for (unsigned int i = 0; i < kml.size(); ++i) {
+        a = menu->addAction(strtoqstr(kml[i].getName()));
+        a->setObjectName(QString("%1").arg(i+1));
+        if (currentMapping && (kml[i] == *currentMapping)) currentEntry = i + 1;
     }
+
+    connect(menu, SIGNAL(triggered(QAction *)),
+            this, SLOT(slotEntryMenuItemSelected(QAction *)));
 
     int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
@@ -486,6 +497,12 @@ MidiProgramsEditor::slotEntryButtonPressed()
     pos.ry() -= (itemHeight / 2 + currentEntry * itemHeight);
 
     menu->popup(pos);
+}
+
+void
+MidiProgramsEditor::slotEntryMenuItemSelected(QAction *a)
+{
+    slotEntryMenuItemSelected(a->objectName().toInt());
 }
 
 void
@@ -514,24 +531,26 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
     }
 
     m_device->setKeyMappingForProgram(*program, newMapping);
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);
+//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
+    IconLoader il;
+    QIcon icon;
+
+    bool haveKeyMappings = (m_device->getKeyMappings().size() > 0);  //@@@ JAS restored from before port/
     QPushButton *btn = getEntryButton(m_currentMenuProgram);
 
     if (newMapping.empty()) {
-        QString file = pixmapDir + "/toolbar/key-white.png";
-        if (QFile(file).exists()) {
-            btn->setPixmap(QPixmap(file));
+        icon = il.load( "key-white" );
+        if( ! icon.isNull() ) {
+            btn->setIcon( icon );
         }
-        QToolTip::remove
-            (btn);
+        // QToolTip::remove(btn);
+        btn->setToolTip(QString(""));       //@@@ Usefull ?
     } else {
-        QString file = pixmapDir + "/toolbar/key-green.png";
-        if (QFile(file).exists()) {
-            btn->setPixmap(QPixmap(file));
+        icon = il.load( "key-green" );
+        if( ! icon.isNull() ){
+            btn->setIcon( icon );
         }
-        QToolTip::add
-            (btn, i18n("Key Mapping: %1").arg(strtoqstr(newMapping)));
+        btn->setToolTip(tr("Key Mapping: %1").arg(strtoqstr(newMapping)));
     }
     btn->setEnabled(haveKeyMappings);
 }
@@ -591,7 +610,9 @@ MidiProgramsEditor::getProgram(const MidiBank &bank, int programNo)
 {
     ProgramList::iterator it = m_programList.begin();
 
+    int c = 0;
     for (; it != m_programList.end(); it++) {
+        std::cout << "C = " << c++ << std::endl;
         if (it->getBank() == bank && it->getProgram() == programNo)
             return &(*it);
     }
@@ -607,13 +628,13 @@ MidiProgramsEditor::setBankName(const QString& s)
 
 void MidiProgramsEditor::blockAllSignals(bool block)
 {
-    const QObjectList* allChildren = queryList("KLineEdit", "[0-9]+");
-    QObjectListIt it(*allChildren);
+    QObjectList allChildren = queryList("LineEdit", "[0-9]+");
+    QObjectList::iterator it;
     QObject *obj;
 
-    while ( (obj = it.current()) != 0 ) {
+    for (it = allChildren.begin(); it != allChildren.end(); ++it) { //### JAS Check for errors
+        obj = *it;
         obj->blockSignals(block);
-        ++it;
     }
 
     m_msb->blockSignals(block);

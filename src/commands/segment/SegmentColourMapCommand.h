@@ -21,9 +21,9 @@
 
 #include "base/ColourMap.h"
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -31,23 +31,25 @@
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class SegmentColourMapCommand : public KNamedCommand
+class SegmentColourMapCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentColourMapCommand)
+
 public:
-    SegmentColourMapCommand(      RosegardenGUIDoc*      doc,
+    SegmentColourMapCommand(      RosegardenDocument*      doc,
                             const ColourMap& map);
     virtual ~SegmentColourMapCommand();
 
     static QString getGlobalName()
-        { return i18n("Change Segment Color Map..."); }
+        { return tr("Change Segment Color Map..."); }
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    RosegardenGUIDoc *                m_doc;
+    RosegardenDocument *                m_doc;
     ColourMap             m_oldMap;
     ColourMap             m_newMap;
 };

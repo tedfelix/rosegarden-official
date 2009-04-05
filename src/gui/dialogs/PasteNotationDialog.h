@@ -20,7 +20,7 @@
 #define _RG_PASTENOTATIONDIALOG_H_
 
 #include "commands/edit/PasteEventsCommand.h"
-#include <kdialogbase.h>
+#include <QDialog>
 #include <vector>
 
 
@@ -34,7 +34,7 @@ namespace Rosegarden
 
 
 
-class PasteNotationDialog : public KDialogBase
+class PasteNotationDialog : public QDialog
 {
     Q_OBJECT
 

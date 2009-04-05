@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,9 +20,8 @@
 
 #include <string>
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <qstringlist.h>
-#include <klocale.h>
+#include <QString>
+#include <QStringList>
 
 
 class QWidget;
@@ -31,14 +29,13 @@ class QPushButton;
 class QLabel;
 class QComboBox;
 class QCheckBox;
-class KFontRequester;
-class KConfig;
 
 
 namespace Rosegarden
 {
 
 class QuantizeParameters;
+class FontRequester;
 
 
 /**
@@ -49,13 +46,12 @@ class NotationConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    NotationConfigurationPage(KConfig *cfg,
-                              QWidget *parent = 0, const char *name=0);
+    NotationConfigurationPage(QWidget *parent = 0, const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Notation"); }
-    static QString title()     { return i18n("Notation"); }
+    static QString iconLabel() { return tr("Notation"); }
+    static QString title()     { return tr("Notation"); }
     static QString iconName()  { return "configure-notation"; }
 
 protected slots:
@@ -71,9 +67,9 @@ protected:
     QComboBox *m_singleStaffSize;
     QComboBox *m_multiStaffSize;
     QComboBox *m_printingSize;
-    KFontRequester* m_textFont;
-    KFontRequester* m_sansFont;
-    KFontRequester* m_timeSigFont;
+    FontRequester* m_textFont;
+    FontRequester* m_sansFont;
+    FontRequester* m_timeSigFont;
     QPushButton *m_viewButton;
     QLabel *m_fontOriginLabel;
     QLabel *m_fontCopyrightLabel;
@@ -101,7 +97,7 @@ protected:
     QStringList m_untranslatedFont;
     QStringList m_untranslatedNoteStyle;
 
-    void populateSizeCombo(QComboBox *combo, std::string font, int dfltSize);
+    void populateSizeCombo(QComboBox *combo, QString font, int dfltSize);
 };
 
 

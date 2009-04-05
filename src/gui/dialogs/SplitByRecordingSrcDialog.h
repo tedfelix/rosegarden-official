@@ -19,34 +19,32 @@
 #ifndef _RG_SPLITBYRECORDINGSRCDIALOG_H_
 #define _RG_SPLITBYRECORDINGSRCDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 #include <vector>
-#include "gui/application/RosegardenDCOP.h"
-
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class SplitByRecordingSrcDialog : public KDialogBase
+class SplitByRecordingSrcDialog : public QDialog
 {
     Q_OBJECT
 public:
-    SplitByRecordingSrcDialog(QWidget *parent, RosegardenGUIDoc *doc);
+    SplitByRecordingSrcDialog(QWidget *parent, RosegardenDocument *doc);
     
     int getChannel();
     int getDevice();
     
 private:
     std::vector<int> m_deviceIds;
-    KComboBox *m_channel;
-    KComboBox *m_device;
+    QComboBox *m_channel;
+    QComboBox *m_device;
 };
 
 

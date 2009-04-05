@@ -18,10 +18,10 @@
 
 #include "AudioSegmentResizeFromStartCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
+#include <QObject>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 
 AudioSegmentResizeFromStartCommand::AudioSegmentResizeFromStartCommand(Segment *segment,
         timeT newStartTime) :
-        KNamedCommand(i18n("Resize Segment")),
+        NamedCommand(tr("Resize Segment")),
         m_segment(segment),
         m_newSegment(0),
         m_detached(false),

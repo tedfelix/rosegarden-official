@@ -21,9 +21,9 @@
 
 #include "base/TriggerSegment.h"
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,8 +32,10 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentDefaultTimeAdjustCommand : public KNamedCommand
+class SetTriggerSegmentDefaultTimeAdjustCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentDefaultTimeAdjustCommand)
+
 public:
     SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,
                                               TriggerSegmentId id,

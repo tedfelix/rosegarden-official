@@ -19,29 +19,30 @@ namespace Rosegarden
 {
 
     //
-    // KConfig group names
+    // QSettings group names
     //
-    const char* const GeneralOptionsConfigGroup = "General Options";
-    const char* const LatencyOptionsConfigGroup = "Latency Options";
-    const char* const SequencerOptionsConfigGroup = "Sequencer Options";
-    const char* const NotationViewConfigGroup = "Notation Options";
+    const char* const GeneralOptionsConfigGroup = "General_Options";
+    const char* const LatencyOptionsConfigGroup = "Latency_Options";
+    const char* const SequencerOptionsConfigGroup = "Sequencer_Options";
+    const char* const NotationViewConfigGroup = "Notation_Options";
     const char* const AudioManagerDialogConfigGroup = "AudioManagerDialog";
-    const char* const SynthPluginManagerConfigGroup = "Synth Plugin Manager";
-    const char* const BankEditorConfigGroup = "Bank Editor";
-    const char* const ColoursConfigGroup = "coloursconfiggroup";
-    const char* const ControlEditorConfigGroup = "Control Editor";
-    const char* const DeviceManagerConfigGroup = "Device Manager";
-    const char* const EventFilterDialogConfigGroup = "EventFilter Dialog";
-    const char* const EventViewLayoutConfigGroupName = "EventList Layout";
-    const char* const EventViewConfigGroup = "EventList Options";
-    const char* const MarkerEditorConfigGroup = "Marker Editor";
-    const char* const MatrixViewConfigGroup = "Matrix Options";
-    const char* const PlayListConfigGroup = "PLAY_LIST";
-    const char* const MainWindowConfigGroup = "MainView";
-    const char* const TransportDialogConfigGroup = "Transport Controls";
-    const char* const TempoViewLayoutConfigGroupName = "TempoView Layout";
-    const char* const TempoViewConfigGroup = "TempoView Options";
-    const char* const TriggerManagerConfigGroup = "Trigger Editor";
-    const char* const EditViewConfigGroup = "Edit View";
+    const char* const SynthPluginManagerConfigGroup = "Synth_Plugin_Manager";
+    const char* const BankEditorConfigGroup = "Bank_Editor";
+    const char* const ColoursConfigGroup = "Colours";
+    const char* const ControlEditorConfigGroup = "Control_Editor";
+    const char* const DeviceManagerConfigGroup = "Device_Manager";
+    const char* const EventFilterDialogConfigGroup = "EventFilter_Dialog";
+    const char* const EventViewLayoutConfigGroupName = "EventList_Layout";
+    const char* const EventViewConfigGroup = "EventList_Options";
+    const char* const MarkerEditorConfigGroup = "Marker_Editor";
+    const char* const MatrixViewConfigGroup = "Matrix_Options";
+    const char* const PlayListConfigGroup = "Playlist";
+    const char* const MainWindowConfigGroup = "Main_Window";
+    const char* const TransportDialogConfigGroup = "Transport_Controls";
+    const char* const TempoViewLayoutConfigGroupName = "TempoView_Layout";
+    const char* const TempoViewConfigGroup = "TempoView_Options";
+    const char* const TriggerManagerConfigGroup = "Trigger_Editor";
+    const char* const EditViewConfigGroup = "Edit_View";
+    const char* const PresetDialogConfigGroup = "Parameter_Presets";
 
 }

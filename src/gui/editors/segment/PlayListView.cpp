@@ -17,42 +17,58 @@
 
 #include "PlayListView.h"
 
-#include <klocale.h>
-#include <qdragobject.h>
+
+//#include <qdragobject.h>
+#include <QMimeData>	// replaces Q3DragObject and Q3UriDrag
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QDropEvent>
 
 namespace Rosegarden {
 
 PlayListView::PlayListView(QWidget *parent, const char *name)
-    : KListView(parent, name)
+    : QTreeWidget(parent)
 {
-    addColumn(i18n("Title"));
-    addColumn(i18n("File name"));
-
+	this->setObjectName( name );
+	
+//     addColumn(tr("Title"));
+//     addColumn(tr("File name"));
+	setColumnCount( 2 );
+	setHeaderLabels( QStringList() << tr("Title") << tr("File name") );
+	
     setDragEnabled(true);
     setAcceptDrops(true);
-    setDropVisualizer(true);
-
-    setShowToolTips(true);
-    setShowSortIndicator(true);
     setAllColumnsShowFocus(true);
-    setItemsMovable(true);
+	
+	/*
+	setDropVisualizer(true);
+	setShowToolTips(true);		//&&& disabled a few property inits
+	setShowSortIndicator(true);
+	setItemsMovable(true);
     setSorting(-1);
+	*/
 }
 
 bool PlayListView::acceptDrag(QDropEvent* e) const
 {
-    return QUriDrag::canDecode(e) || KListView::acceptDrag(e);
+ //   return QUriDrag::canDecode(e) || QTreeWidget::acceptDrag(e);	
+	const QMimeData * qmime = e->mimeData();
+	
+	return qmime->hasUrls(); //|| qmime->hasText();	//@@@
 }
 
 
-QListViewItem* PlayListView::previousSibling(QListViewItem* item)
+QTreeWidgetItem* PlayListView::previousSibling(QTreeWidgetItem* item)
 {
-    QListViewItem* prevSib = firstChild();
+	return this->itemAbove( item );
+	/*
+    QTreeWidgetItem* prevSib = firstChild();
 
     while(prevSib && prevSib->nextSibling() != item)
         prevSib = prevSib->nextSibling();
 
     return prevSib;
+	*/
 }
 
 }

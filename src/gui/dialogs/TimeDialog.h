@@ -19,8 +19,8 @@
 #ifndef _RG_TIMEDIALOG_H_
 #define _RG_TIMEDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -34,7 +34,7 @@ class TimeWidget;
 class Composition;
 
 
-class TimeDialog : public KDialogBase
+class TimeDialog : public QDialog
 {
     Q_OBJECT
 public:

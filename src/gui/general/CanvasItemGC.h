@@ -19,10 +19,13 @@
 #ifndef _RG_CANVASITEMGC_H_
 #define _RG_CANVASITEMGC_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasRectangle>
 #include <vector>
 
 
-class QCanvasItem;
+class Q3CanvasItem;
 
 
 namespace Rosegarden
@@ -40,12 +43,12 @@ namespace Rosegarden
  * The problem this solves is a classic ownership/double deletion
  * case. The SegmentCanvas deletes all its items on destruction. But
  * the SegmentItems have an auxiliary "repeat rectangle" which is a
- * QCanvasRectangle, that needs to be deleted when the SegmentItem is
+ * Q3CanvasRectangle, that needs to be deleted when the SegmentItem is
  * itself deleted.
  *
  * However, if the SegmentItem deletes its repeat rectangle, then when
  * the SegmentCanvas destruction occurs, the SegmentCanvas dtor will
- * get a list of all its children (QCanvas::allItems()), containing
+ * get a list of all its children (Q3Canvas::allItems()), containing
  * both SegmentItems and their repeat rectangles. Deleting a
  * SegmentItem will delete its repeat rectangle, which will still be
  * present in the all children list which the SegmentCanvas dtor is
@@ -59,7 +62,7 @@ class CanvasItemGC
 {
 public:
     /// mark the given item for GC
-    static void mark(QCanvasItem*);
+    static void mark(Q3CanvasItem*);
 
     /// GC all marked items
     static void gc();
@@ -68,7 +71,7 @@ public:
     static void flush();
 
 protected:
-    static std::vector<QCanvasItem*> m_garbage;
+    static std::vector<Q3CanvasItem*> m_garbage;
 };
 
 

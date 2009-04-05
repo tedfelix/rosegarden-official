@@ -20,13 +20,13 @@
 #define _RG_EVENTPARAMETERDIALOG_H_
 
 #include "base/PropertyName.h"
-#include <kdialogbase.h>
+#include <QDialog>
 #include "commands/edit/SelectionPropertyCommand.h"
 
 class QWidget;
 class QString;
 class QLabel;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -34,7 +34,7 @@ namespace Rosegarden
 
 
 
-class EventParameterDialog : public KDialogBase
+class EventParameterDialog : public QDialog
 {
     Q_OBJECT
 
@@ -56,9 +56,9 @@ protected:
     PropertyName    m_property;
     PropertyPattern m_pattern;
 
-    KComboBox         *m_value1Combo;
-    KComboBox         *m_value2Combo;
-    KComboBox         *m_patternCombo;
+    QComboBox         *m_value1Combo;
+    QComboBox         *m_value2Combo;
+    QComboBox         *m_patternCombo;
 
     QLabel                     *m_value1Label;
     QLabel                     *m_value2Label;

@@ -17,12 +17,9 @@
 
 #ifdef HAVE_LIBLO
 
-#include <lo/lo.h>
-
 #include "AudioPluginOSCGUIManager.h"
 
 #include "sound/Midi.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "AudioPluginOSCGUI.h"
@@ -32,13 +29,16 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Studio.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "OSCMessage.h"
 #include "sound/MappedEvent.h"
 #include "sound/PluginIdentifier.h"
 #include "StudioControl.h"
 #include "TimerCallbackAssistant.h"
-#include <qstring.h>
+
+#include <QString>
+
+#include <lo/lo.h>
 
 
 namespace Rosegarden
@@ -78,8 +78,8 @@ static int osc_message_handler(const char *path, const char *types, lo_arg **arg
     return 0;
 }
 
-AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenGUIApp *app) :
-        m_app(app),
+AudioPluginOSCGUIManager::AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow) :
+        m_mainWindow(mainWindow),
         m_studio(0),
         m_haveOSCThread(false),
         m_oscBuffer(1023),
@@ -139,7 +139,7 @@ AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
     try {
         QString filePath = AudioPluginOSCGUI::getGUIFilePath
                            (strtoqstr(pluginInstance->getIdentifier()));
-        return (filePath && filePath != "");
+        return ( !filePath.isEmpty() );
     } catch (Exception e) { // that's OK
         return false;
     }
@@ -382,7 +382,7 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     QString label = path.section('/', 3, -2);
     method = path.section('/', -1, -1);
 
-    if (!instrumentStr || !positionStr) {
+    if (instrumentStr.isEmpty() || positionStr.isEmpty() ) {
         RG_DEBUG << "AudioPluginOSCGUIManager::parseOSCPath: no instrument or position in " << path << endl;
         return false;
     }
@@ -434,13 +434,13 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
 {
     PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container)
-        return i18n("Rosegarden Plugin");
+        return tr("Rosegarden Plugin");
     else {
         if (position == int(Instrument::SYNTH_PLUGIN_POSITION)) {
-            return i18n("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
+            return tr("Rosegarden: %1").arg(strtoqstr(container->getPresentationName()));
         } else {
-            return i18n("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
-                   .arg(i18n("Plugin slot %1").arg(position));
+            return tr("Rosegarden: %1: %2").arg(strtoqstr(container->getPresentationName()))
+                    .arg(tr("Plugin slot %1").arg(position));
         }
     }
 }
@@ -489,7 +489,7 @@ AudioPluginOSCGUIManager::dispatch()
         char type;
         const lo_arg *arg;
 
-        // These generally call back on the RosegardenGUIApp.  We'd
+        // These generally call back on the RosegardenMainWindow.  We'd
         // like to emit signals, but making AudioPluginOSCGUIManager a
         // QObject is problematic if it's only conditionally compiled.
 
@@ -517,7 +517,7 @@ AudioPluginOSCGUIManager::dispatch()
             RG_DEBUG << "AudioPluginOSCGUIManager: setting port " << port
             << " to value " << value << endl;
 
-            m_app->slotChangePluginPort(instrument, position, port, value);
+            m_mainWindow->slotChangePluginPort(instrument, position, port, value);
 
         } else if (method == "program") {
 
@@ -543,7 +543,7 @@ AudioPluginOSCGUIManager::dispatch()
             QString programName = StudioControl::getPluginProgram
                                   (pluginInstance->getMappedId(), bank, program);
 
-            m_app->slotChangePluginProgram(instrument, position, programName);
+            m_mainWindow->slotChangePluginProgram(instrument, position, programName);
 
         } else if (method == "update") {
 
@@ -641,7 +641,7 @@ AudioPluginOSCGUIManager::dispatch()
             RG_DEBUG << "AudioPluginOSCGUIManager: configure(" << key << "," << value
             << ")" << endl;
 
-            m_app->slotChangePluginConfiguration(instrument, position,
+            m_mainWindow->slotChangePluginConfiguration(instrument, position,
 #ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
                                                  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
 #else
@@ -687,7 +687,7 @@ AudioPluginOSCGUIManager::dispatch()
 
             RG_DEBUG << "AudioPluginOSCGUIManager: GUI exiting" << endl;
             stopGUI(instrument, position);
-            m_app->slotPluginGUIExited(instrument, position);
+            m_mainWindow->slotPluginGUIExited(instrument, position);
 
         } else {
 

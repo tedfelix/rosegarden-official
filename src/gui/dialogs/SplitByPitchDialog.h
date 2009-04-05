@@ -19,12 +19,12 @@
 #ifndef _RG_SPLITBYPITCHDIALOG_H_
 #define _RG_SPLITBYPITCHDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 class PitchChooser;
 
 
-class SplitByPitchDialog : public KDialogBase
+class SplitByPitchDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -50,7 +50,7 @@ private:
 
     QCheckBox *m_range;
     QCheckBox *m_duplicate;
-    KComboBox *m_clefs;
+    QComboBox *m_clefs;
 };
 
 

@@ -19,150 +19,176 @@
 #include "HeadersConfigurationPage.h"
 
 #include "document/ConfigGroups.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/io/LilyPondExporter.h"
 #include "gui/widgets/CollapsingFrame.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
+#include "gui/widgets/LineEdit.h"
 
-#include <kapplication.h>
-#include <kconfig.h>
-#include <klistview.h>
-#include <klocale.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qlineedit.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qfont.h>
+#include <QApplication>
+#include <QSettings>
+#include <QListWidget>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QGroupBox>
+#include <QLabel>
+#include <QLayout>
+#include <QPushButton>
+#include <QString>
+#include <QTabWidget>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QFont>
+
 
 namespace Rosegarden
 {
 
 HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
-	RosegardenGUIDoc *doc) :
-	QVBox(parent),
-	m_doc(doc)
+    RosegardenDocument *doc) :
+    QWidget(parent),
+    m_doc(doc)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+
     //
     // LilyPond export: Printable headers
     //
 
-    QGroupBox *headersBox = new QGroupBox
-                           (1, Horizontal,
-                            i18n("Printable headers"), this);
+    QGroupBox *headersBox = new QGroupBox(tr("Printable headers"), this);
+    QHBoxLayout *headersBoxLayout = new QHBoxLayout;
+    layout->addWidget(headersBox);
     QFrame *frameHeaders = new QFrame(headersBox);
-    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders, 10, 6, 10, 5);
+    frameHeaders->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutHeaders = new QGridLayout(frameHeaders);
+    layoutHeaders->setSpacing(5);
+    headersBoxLayout->addWidget(frameHeaders);
+    headersBox->setLayout(headersBoxLayout);
 
     // grab user headers from metadata
     Configuration metadata = (&m_doc->getComposition())->getMetadata();
     std::vector<std::string> propertyNames = metadata.getPropertyNames();
     std::vector<PropertyName> fixedKeys =
-	CompositionMetadataKeys::getFixedKeys();
+    CompositionMetadataKeys::getFixedKeys();
 
     std::set<std::string> shown;
 
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
-	std::string key = fixedKeys[index].getName();
-	std::string header = "";
-	for (unsigned int i = 0; i < propertyNames.size(); ++i) {
-	    std::string property = propertyNames [i];
-	    if (property == key) {
-		header = metadata.get<String>(property);
-	    }
-	}
-
-	unsigned int row = 0, col = 0, width = 1;
-	QLineEdit *editHeader = new QLineEdit(strtoqstr( header ), frameHeaders);
-	QString trName;
-	if (key == headerDedication) {  
-	    m_editDedication = editHeader;
-	    row = 0; col = 2; width = 2;
-	    trName = i18n("Dedication");
-	} else if (key == headerTitle) {       
-	    m_editTitle = editHeader;	
-	    row = 1; col = 1; width = 4;
-	    trName = i18n("Title");
-	} else if (key == headerSubtitle) {
-	    m_editSubtitle = editHeader;
-	    row = 2; col = 1; width = 4;
-	    trName = i18n("Subtitle");
-	} else if (key == headerSubsubtitle) { 
-	    m_editSubsubtitle = editHeader;
-	    row = 3; col = 2; width = 2;
-	    trName = i18n("Subsubtitle");
-	} else if (key == headerPoet) {        
-	    m_editPoet = editHeader;
-	    row = 4; col = 0; width = 2;
-	    trName = i18n("Poet");
-	} else if (key == headerInstrument) {  
-	    m_editInstrument = editHeader;
-	    row = 4; col = 2; width = 2;
-	    trName = i18n("Instrument");
-	} else if (key == headerComposer) {    
-	    m_editComposer = editHeader;
-	    row = 4; col = 4; width = 2; 
-	    trName = i18n("Composer");
-	} else if (key == headerMeter) {       
-	    m_editMeter = editHeader;
-	    row = 5; col = 0; width = 3; 
-	    trName = i18n("Meter");
-	} else if (key == headerArranger) {    
-	    m_editArranger = editHeader;
-	    row = 5; col = 3; width = 3; 
-	    trName = i18n("Arranger");
-	} else if (key == headerPiece) {       
-	    m_editPiece = editHeader;
-	    row = 6; col = 0; width = 3; 
-	    trName = i18n("Piece");
-	} else if (key == headerOpus) {        
-	    m_editOpus = editHeader;
-	    row = 6; col = 3; width = 3; 
-	    trName = i18n("Opus");
-	} else if (key == headerCopyright) {   
-	    m_editCopyright = editHeader;
-	    row = 8; col = 1; width = 4; 
-	    trName = i18n("Copyright");
-	} else if (key == headerTagline) {     
-	    m_editTagline = editHeader;
-	    row = 9; col = 1; width = 4; 
-	    trName = i18n("Tagline");
-	}
-
-	// editHeader->setReadOnly( true );
-	editHeader->setAlignment( (col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter) ));
-
-	layoutHeaders->addMultiCellWidget(editHeader, row, row, col, col+(width-1) );
-
-	//
-	// ToolTips
-	//
-	QToolTip::add( editHeader, trName );
-
-	shown.insert(key);
+    std::string key = fixedKeys[index].getName();
+    std::string header = "";
+    for (unsigned int i = 0; i < propertyNames.size(); ++i) {
+        std::string property = propertyNames [i];
+        if (property == key) {
+        header = metadata.get<String>(property);
+        }
     }
-    QLabel *separator = new QLabel(i18n("The composition comes here."), frameHeaders);
-    separator->setAlignment( Qt::AlignCenter );
-    layoutHeaders->addMultiCellWidget(separator, 7, 7, 1, 4 );
+
+    unsigned int row = 0, col = 0, width = 1;
+    LineEdit *editHeader = new LineEdit(strtoqstr(header), frameHeaders);
+    QString trName;
+    if (key == headerDedication) {  
+        m_editDedication = editHeader;
+        row = 0; col = 2; width = 2;
+        trName = tr("Dedication");
+    } else if (key == headerTitle) {       
+        m_editTitle = editHeader;    
+        row = 1; col = 1; width = 4;
+        trName = tr("Title");
+    } else if (key == headerSubtitle) {
+        m_editSubtitle = editHeader;
+        row = 2; col = 1; width = 4;
+        trName = tr("Subtitle");
+    } else if (key == headerSubsubtitle) { 
+        m_editSubsubtitle = editHeader;
+        row = 3; col = 2; width = 2;
+        trName = tr("Subsubtitle");
+    } else if (key == headerPoet) {        
+        m_editPoet = editHeader;
+        row = 4; col = 0; width = 2;
+        trName = tr("Poet");
+    } else if (key == headerInstrument) {  
+        m_editInstrument = editHeader;
+        row = 4; col = 2; width = 2;
+        trName = tr("Instrument");
+    } else if (key == headerComposer) {    
+        m_editComposer = editHeader;
+        row = 4; col = 4; width = 2; 
+        trName = tr("Composer");
+    } else if (key == headerMeter) {       
+        m_editMeter = editHeader;
+        row = 5; col = 0; width = 3; 
+        trName = tr("Meter");
+    } else if (key == headerArranger) {    
+        m_editArranger = editHeader;
+        row = 5; col = 3; width = 3; 
+        trName = tr("Arranger");
+    } else if (key == headerPiece) {       
+        m_editPiece = editHeader;
+        row = 6; col = 0; width = 3; 
+        trName = tr("Piece");
+    } else if (key == headerOpus) {        
+        m_editOpus = editHeader;
+        row = 6; col = 3; width = 3; 
+        trName = tr("Opus");
+    } else if (key == headerCopyright) {   
+        m_editCopyright = editHeader;
+        row = 8; col = 1; width = 4; 
+        trName = tr("Copyright");
+    } else if (key == headerTagline) {     
+        m_editTagline = editHeader;
+        row = 9; col = 1; width = 4; 
+        trName = tr("Tagline");
+    }
+
+    // editHeader->setReadOnly(true);
+    editHeader->setAlignment((col == 0 ? Qt::AlignLeft : (col >= 3 ? Qt::AlignRight : Qt::AlignCenter)));
+
+    layoutHeaders->addWidget(editHeader, row, col, 1, width);
+
+    //
+    // ToolTips
+    //
+    // (These particular LineEdit objects were still taking a mixture of styles
+    // from the external sheet and the internal hard coded stylesheet in the
+    // subclass LineEdit.  I guess I should have re-implemented QLineEdit
+    // instead of subclassing it.
+    QString localStyle("QToolTip {background-color: #FFFBD4; color: #000000;} QLineEdit {background-color: #FFFFFF; color: #000000;}");
+    editHeader->setStyleSheet(localStyle); 
+    editHeader->setToolTip(trName);
+
+    shown.insert(key);
+    }
+    QLabel *separator = new QLabel(tr("The composition comes here."), frameHeaders);
+    separator->setAlignment(Qt::AlignCenter);
+    layoutHeaders->addWidget(separator, 7, 1, 1, 4 - 1+1);
+
+    frameHeaders->setLayout(layoutHeaders);
+
 
     //
     // LilyPond export: Non-printable headers
     //
 
     // set default expansion to false for this group -- what a faff
-    KConfig *config = kapp->config();
-    QString groupTemp = config->group();
-    config->setGroup("CollapsingFrame");
-    bool expanded = config->readBoolEntry("nonprintableheaders", false);
-    config->writeEntry("nonprintableheaders", expanded);
-    config->setGroup(groupTemp);
+
+    //@@@ JAS next 2 lines not needed. Commented out
+    //@@@ QSettings settings ; // was: confq4
+    //@@@ QString groupTemp = settings.group();
+    QSettings settings;
+    settings.beginGroup("CollapsingFrame");
+
+    bool expanded = qStrToBool(settings.value("nonprintableheaders", "false")) ;
+    settings.setValue("nonprintableheaders", expanded);
+    settings.endGroup();
 
     CollapsingFrame *otherHeadersBox = new CollapsingFrame
-        (i18n("Non-printable headers"), this, "nonprintableheaders");
+        (tr("Additional headers"), this, "nonprintableheaders");
+        
+    layout->addWidget(otherHeadersBox);
+    setLayout(layout);        
+    
     QFrame *frameOtherHeaders = new QFrame(otherHeadersBox);
     otherHeadersBox->setWidgetFill(true);
     QFont font(otherHeadersBox->font());
@@ -170,21 +196,32 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     otherHeadersBox->setFont(font);
     otherHeadersBox->setWidget(frameOtherHeaders);
 
-    QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders, 2, 2, 10, 5);
+    frameOtherHeaders->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layoutOtherHeaders = new QGridLayout(frameOtherHeaders);
+    layoutOtherHeaders->setSpacing(5);
 
-    m_metadata = new KListView(frameOtherHeaders);
-    m_metadata->addColumn(i18n("Name"));
-    m_metadata->addColumn(i18n("Value"));
-    m_metadata->setFullWidth(true);
-    m_metadata->setItemsRenameable(true);
-    m_metadata->setRenameable(0);
-    m_metadata->setRenameable(1);
-    m_metadata->setItemMargin(5);
-    m_metadata->setDefaultRenameAction(QListView::Accept);
-    m_metadata->setShowSortIndicator(true);
+    m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
+    m_metadata->setObjectName("StyledTable");
+    m_metadata->setAlternatingRowColors(true);
+	
+    m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
+    m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item
+//    m_metadata->setFullWidth(true);
+    m_metadata->setMinimumSize(40, 40); // width, height
+//    m_metadata->setItemsRenameable(true);  //&&& disabled item renaming  ||use: openPersistentEditor (QTableWidgetItem * item)
+//    m_metadata->setRenameable(0);
+//    m_metadata->setRenameable(1);
+//    m_metadata->setItemMargin(5);
+//    m_metadata->setDefaultRenameAction(QListWidget::Accept);
+//    m_metadata->setShowSortIndicator(true);
 
     std::vector<std::string> names(metadata.getPropertyNames());
-
+    
+    QTableWidgetItem* tabItem;
+    int row = m_metadata->rowCount();
+    int col = 0;
+    m_metadata->setRowCount(row + 1);
+    
     for (unsigned int i = 0; i < names.size(); ++i) {
 
         if (shown.find(names[i]) != shown.end())
@@ -193,23 +230,27 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
         QString name(strtoqstr(names[i]));
 
         // property names stored in lower case
-        name = name.left(1).upper() + name.right(name.length() - 1);
+        name = name.left(1).toUpper() + name.right(name.length() - 1);
 
-        new KListViewItem(m_metadata, name,
-                          strtoqstr(metadata.get<String>(names[i])));
+//        new QListWidgetItem(m_metadata, name, strtoqstr(metadata.get<String>(names[i])));
+        // qt4: icon, text, type
+        tabItem = new QTableWidgetItem(strtoqstr(metadata.get<String>(names[i])));
+        m_metadata->setItem(row, col, tabItem);
 
         shown.insert(names[i]);
     }
 
-    layoutOtherHeaders->addMultiCellWidget(m_metadata, 0, 0, 0, 1);
+    layoutOtherHeaders->addWidget(m_metadata, 0, 0, 0- 0+1, 1-0+ 1);
 
-    QPushButton* addPropButton = new QPushButton(i18n("Add New Property"),
+    QPushButton* addPropButton = new QPushButton(tr("Add New Property"),
                                  frameOtherHeaders);
     layoutOtherHeaders->addWidget(addPropButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deletePropButton = new QPushButton(i18n("Delete Property"),
+    QPushButton* deletePropButton = new QPushButton(tr("Delete Property"),
                                     frameOtherHeaders);
     layoutOtherHeaders->addWidget(deletePropButton, 1, 1, Qt::AlignHCenter);
+
+    frameOtherHeaders->setLayout(layoutOtherHeaders);
 
     connect(addPropButton, SIGNAL(clicked()),
             this, SLOT(slotAddNewProperty()));
@@ -223,29 +264,40 @@ HeadersConfigurationPage::slotAddNewProperty()
 {
     QString propertyName;
     int i = 0;
-
+    
+    QList<QTableWidgetItem*> foundItems;
     while (1) {
         propertyName =
-            (i > 0 ? i18n("{new property %1}").arg(i) : i18n("{new property}"));
+            (i > 0 ? tr("{new property %1}").arg(i) : tr("{new property}"));
+        //<QTableWidgetItem*>
+        foundItems = m_metadata->findItems(propertyName, Qt::MatchContains | Qt::MatchCaseSensitive);
+    
         if (!m_doc->getComposition().getMetadata().has(qstrtostr(propertyName)) &&
-	    m_metadata->findItem(strtoqstr(qstrtostr(propertyName)),0) == 0)
+                     foundItems.isEmpty()){
             break;
+        }
         ++i;
     }
 
-    new KListViewItem(m_metadata, propertyName, i18n("{undefined}"));
+    //new QTableWidgetItem(m_metadata, propertyName, tr("{undefined}"));
+    int rc = m_metadata->rowCount();
+    int col = 0;
+    m_metadata->setRowCount(rc + 1);
+    m_metadata->setItem(rc, col, new QTableWidgetItem(propertyName));
 }
 
 void
 HeadersConfigurationPage::slotDeleteProperty()
 {
-    delete m_metadata->currentItem();
+    //delete m_metadata->currentIndex();
+    m_metadata->removeRow(m_metadata->currentRow());
 }
 
 void HeadersConfigurationPage::apply()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
+    //@@@ Next two lines not needed in this function.  Commented out
+    //@@@ QSettings settings;
+    //@@@ settings.beginGroup(NotationViewConfigGroup);
 
     // If one of the items still has focus, it won't remember edits.
     // Switch between two fields in order to lose the current focus.
@@ -273,12 +325,29 @@ void HeadersConfigurationPage::apply()
     metadata.set<String>(CompositionMetadataKeys::Copyright, qstrtostr(m_editCopyright->text()));
     metadata.set<String>(CompositionMetadataKeys::Tagline, qstrtostr(m_editTagline->text()));
 
-    for (QListViewItem *item = m_metadata->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        metadata.set<String>(qstrtostr(item->text(0).lower()),
-                             qstrtostr(item->text(1)));
-    }
+//    for (QTableWidgetItem *item = m_metadata->firstChild();
+//            item != 0; item = item->nextSibling()) {
+    
+    QTableWidgetItem* tabItem;
+    QTableWidgetItem* tabItem2;
+    int c = 0;
+    for(int r=0; r < m_metadata->rowCount(); r++){
+        //for(int c=0; c < m_metadata->columnCount(); c++){
+            
+        tabItem = m_metadata->item(r, c);
+        tabItem2 = m_metadata->item(r, c+1);
+        
+        if((!tabItem) || (!tabItem2)){
+            RG_DEBUG << "ERROR: Any TableWidgetItem is NULL in HeadersConfigurationPage::apply() " << endl;
+            continue;
+        }
+            
+        metadata.set<String>(qstrtostr(tabItem->text().toLower()),
+                              qstrtostr(tabItem2->text()));
+//        metadata.set<String>(qstrtostr(item->text(0).toLower()),
+//                             qstrtostr(item->text(1)));
+        //}//end for(c)
+    }//end for(r)
 
     m_doc->slotDocumentModified();
 }

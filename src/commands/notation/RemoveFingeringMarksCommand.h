@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUREMOVEFINGERINGMARKSCOMMAND_H_
-#define _RG_NOTESMENUREMOVEFINGERINGMARKSCOMMAND_H_
+#ifndef _RG_REMOVEFINGERINGMARKSCOMMAND_H_
+#define _RG_REMOVEFINGERINGMARKSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,16 +30,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RemoveFingeringMarksCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveFingeringMarksCommand)
+
 public:
     RemoveFingeringMarksCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Remove Fingerings"); }
+    static QString getGlobalName() { return tr("&Remove Fingerings"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

@@ -18,18 +18,20 @@
 #ifndef _RG_AUDIOLISTVIEW_H_
 #define _RG_AUDIOLISTVIEW_H_
 
-#include <klistview.h>
+#include <QTreeWidget>
+
+#include <Q3DragObject>
 
 namespace Rosegarden {
         
-class AudioListView : public KListView
+class AudioListView : public QTreeWidget
 {
 public:
     AudioListView(QWidget *parent = 0, const char *name = 0);
 
 protected:
     bool acceptDrag(QDropEvent* e) const;
-    virtual QDragObject* dragObject();
+    virtual Q3DragObject* dragObject();
 };
 
 }

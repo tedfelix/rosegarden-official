@@ -16,13 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKEREGIONVIABLECOMMAND_H_
-#define _RG_ADJUSTMENUMAKEREGIONVIABLECOMMAND_H_
+#ifndef _RG_MAKEREGIONVIABLECOMMAND_H_
+#define _RG_MAKEREGIONVIABLECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -36,13 +36,15 @@ class Segment;
 /// MakeRegionViable works on part of a segment
 class MakeRegionViableCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeRegionViableCommand)
+
 public:
     MakeRegionViableCommand(Segment &segment,
-                                          timeT startTime,
-                                          timeT endTime) :
+                            timeT startTime,
+                            timeT endTime) :
         BasicCommand(getGlobalName(), segment, startTime, endTime) { }
 
-    static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
 
 protected:
     virtual void modifySegment();

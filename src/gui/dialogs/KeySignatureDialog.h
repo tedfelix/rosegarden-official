@@ -21,15 +21,15 @@
 
 #include "base/NotationTypes.h"
 #include <string>
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qcheckbox.h>
+#include <QDialog>
+#include <QString>
+#include <QCheckBox>
 
 
 class QWidget;
 class QRadioButton;
 class QLabel;
-class KComboBox;
+class QComboBox;
 class QCheckBox;
 
 
@@ -39,7 +39,7 @@ namespace Rosegarden
 class NotePixmapFactory;
 
 
-class KeySignatureDialog : public KDialogBase
+class KeySignatureDialog : public QDialog
 {
     Q_OBJECT
 
@@ -90,8 +90,8 @@ protected:
     bool m_ignoreComboChanges;
 
     QLabel *m_keyLabel;
-    KComboBox *m_keyCombo;
-    KComboBox *m_majorMinorCombo;
+    QComboBox *m_keyCombo;
+    QComboBox *m_majorMinorCombo;
     QLabel *m_explanatoryLabel;
 
     QRadioButton *m_applyToAllButton;

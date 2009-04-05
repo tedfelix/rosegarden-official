@@ -21,9 +21,9 @@
 
 #include "base/Track.h"
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,15 +34,17 @@ namespace Rosegarden
 class Composition;
 
 
-class RenameTrackCommand : public KNamedCommand
+class RenameTrackCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RenameTrackCommand)
+
 public:
     RenameTrackCommand(Composition *composition,
                        TrackId track, 
                        std::string name);
     virtual ~RenameTrackCommand();
 
-    static QString getGlobalName() { return i18n("Rename Track"); }
+    static QString getGlobalName() { return tr("Rename Track"); }
 
     virtual void execute();
     virtual void unexecute();

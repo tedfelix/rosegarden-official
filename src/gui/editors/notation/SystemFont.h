@@ -19,7 +19,7 @@
 #ifndef _RG_SYSTEMFONT_H_
 #define _RG_SYSTEMFONT_H_
 
-#include <qpixmap.h>
+#include <QPixmap>
 #include "gui/editors/notation/NoteCharacterNames.h"
 
 

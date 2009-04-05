@@ -19,7 +19,7 @@
 #ifndef _RG_AUDIOVUMETER_H_
 #define _RG_AUDIOVUMETER_H_
 
-#include <qwidget.h>
+#include <QWidget>
 #include "VUMeter.h"
 
 

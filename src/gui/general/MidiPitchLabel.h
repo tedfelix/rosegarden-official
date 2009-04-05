@@ -20,9 +20,9 @@
 #define _RG_MIDIPITCHLABEL_H_
 
 #include <string>
-#include <qstring.h>
+#include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,6 +32,8 @@ namespace Rosegarden
 
 class MidiPitchLabel
 {
+    Q_DECLARE_TR_FUNCTIONS(MidiPitchLabel)
+
 public:
     MidiPitchLabel(int pitch);
 
@@ -40,7 +42,6 @@ public:
 
 private:
     QString m_midiNote;
-
 };
 
 

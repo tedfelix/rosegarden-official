@@ -20,49 +20,78 @@
 
 #include "document/ConfigGroups.h"
 #include "PlayList.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qwidget.h>
-
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
+#include <QLayout>
+#include <QSettings>
 
 namespace Rosegarden
 {
 
-PlayListDialog::PlayListDialog(QString caption,
+PlayListDialog::PlayListDialog( QString caption,
                                QWidget* parent, const char* name)
-        : KDialogBase(parent, name, false, caption,
-                      KDialogBase::Close,  // standard buttons
-                      KDialogBase::Close,  // default button
-                      true),
-        m_playList(new PlayList(this))
+            : QDialog(parent),
+   m_playList(new PlayList(this))
 {
-    setWFlags(WDestructiveClose);
-    setMainWidget(m_playList);
+    setObjectName( name );
+    setModal(false);
+    setWindowTitle( caption );
+
+    QGridLayout *metagrid = new QGridLayout;
+    metagrid->addWidget(m_playList, 0, 0);
+
+    QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+
+    setLayout(metagrid);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(buttonBox->button(QDialogButtonBox::Close), SIGNAL(clicked()),
+            this, SLOT(slotClose()));
+
     restore();
 }
 
-void PlayListDialog::save()
+void PlayListDialog::save()	//@@@ new implementation:
 {
-    saveDialogSize(PlayListConfigGroup);
+//     saveDialogSize(PlayListConfigGroup);
+	
+	QSettings settings;
+	settings.beginGroup(PlayListConfigGroup);
+	
+	settings.setValue( "geometry", this->saveGeometry() );
+	settings.endGroup();
 }
 
-void PlayListDialog::restore()
+
+void PlayListDialog::restore()	//@@@ new implementation:
 {
-    setInitialSize(configDialogSize(PlayListConfigGroup));
+//     setInitialSize(configDialogSize(PlayListConfigGroup));
+	
+	QSettings settings;
+	settings.beginGroup(PlayListConfigGroup);
+	this->restoreGeometry( settings.value("geometry").toByteArray() );
+	settings.endGroup();
 }
+
 
 void PlayListDialog::closeEvent(QCloseEvent *e)
 {
     save();
     emit closing();
-    KDialogBase::closeEvent(e);
+    QDialog::closeEvent(e);
 }
 
 void PlayListDialog::slotClose()
 {
     save();
     emit closing();
-    KDialogBase::slotClose();
+    QDialog::close();
 }
 
 }

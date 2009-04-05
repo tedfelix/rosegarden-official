@@ -19,13 +19,10 @@
 #ifndef _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
 #define _RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include <vector>
 #include "base/Event.h"
-#include "gui/application/RosegardenDCOP.h"
-
-
-
+#include <QCoreApplication>
 
 namespace Rosegarden
 {
@@ -34,8 +31,10 @@ class Segment;
 class Composition;
 
 
-class EraseSegmentsStartingInRangeCommand : public KNamedCommand
+class EraseSegmentsStartingInRangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EraseSegmentsStartingInRangeCommand)
+
 public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,
                                         timeT begin,

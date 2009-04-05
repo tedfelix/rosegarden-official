@@ -21,7 +21,7 @@
 #include "WAVAudioFile.h"
 #include "base/RealTime.h"
 
-#include <kapplication.h>
+#include <QApplication>
 
 #include <iostream>
 #include <fstream>
@@ -232,14 +232,14 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         if (++progressCount == 100) {
             int progress = int
                 ((100.f * float(totalIn)) / float(fileTotalIn));
-            emit setProgress(progress);
-            kapp->processEvents();
+            emit setValue(progress);
+            qApp->processEvents();
             progressCount = 0;
         }
     }		
         
-    emit setProgress(100);
-    kapp->processEvents();
+    emit setValue(100);
+    qApp->processEvents();
     writeFile.close();
     
     std::cerr << "AudioFileTimeStretcher::getStretchedAudioFile: success, id is "

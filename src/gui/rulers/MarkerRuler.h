@@ -20,38 +20,38 @@
 #define _RG_MARKERRULER_H_
 
 #include "gui/general/HZoomable.h"
-#include <qsize.h>
-#include <qwidget.h>
-#include <kxmlguiclient.h>
+#include "gui/general/ActionFileClient.h"
+#include <QSize>
+#include <QWidget>
 #include "base/Event.h"
 
 
 class QPaintEvent;
 class QMouseEvent;
 class QFont;
-class QPopupMenu;
-class KMainWindow;
+class QMenu;
+class QMainWindow;
 
 namespace Rosegarden
 {
 
 class Marker;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class MarkerRuler : public QWidget, public HZoomable, public KXMLGUIClient
+class MarkerRuler : public QWidget, public HZoomable, public ActionFileClient
 {
     Q_OBJECT
 
 public:
-    MarkerRuler(RosegardenGUIDoc *doc,
+    MarkerRuler(RosegardenDocument *doc,
                      RulerScale *rulerScale,
                      int buttonHeight,
                      double xorigin = 0.0,
                      QWidget* parent = 0,
-                     const char* name = 0,
-                     WFlags f=0);
+                     const char* name = 0);
+//                      WFlags f=0);
 
     virtual ~MarkerRuler();
     
@@ -99,12 +99,12 @@ protected:
     int m_width;
     int m_clickX;
     
-    QFont *m_barFont;
-    QPopupMenu *m_menu;
+    QFont 	*m_barFont;
+    QMenu 	*m_menu;
     
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     RulerScale *m_rulerScale;
-    KMainWindow* m_parentMainWindow;
+    QMainWindow* m_parentMainWindow;
 
 };
 

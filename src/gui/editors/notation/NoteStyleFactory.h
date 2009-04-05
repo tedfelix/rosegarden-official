@@ -43,7 +43,7 @@ public:
     typedef Exception StyleUnavailable;
 
 private:
-    typedef std::map<std::string, NoteStyle *> StyleMap;
+    typedef std::map<QString, NoteStyle *> StyleMap;
     static StyleMap m_styles;
 };
 

@@ -1,0 +1,26 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::NotationTool" version="1230">
+
+<Menu noMerge="1" name="NotationSelector">
+  <Action name="insert" text="Switch to Insert Tool" icon="menu-crotchet" />
+  <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
+<Separator />
+<!--  <Action name="collapse_rests" /> -->
+  <Action name="collapse_rests_aggressively" text="Collapse Rests" />
+<Separator />
+  <Action name="respell_flat" text="Respell as Flat" />
+  <Action name="respell_sharp" text="Respell as Sharp" />
+  <Action name="respell_natural" text="Respell as Natural" />
+<Separator />
+  <Action name="collapse_notes" text="Collapse Notes" />
+  <Action name="interpret" text="Interpret" />
+<Separator />
+  <Action name="move_events_up_staff" text="Move to Staff Above" />
+  <Action name="move_events_down_staff" text="Move to Staff Below" />
+<Separator />
+  <Action name="make_invisible" text="Make Invisible" />
+  <Action name="make_visible" text="Make Visible" />
+</Menu>
+
+</kpartgui>

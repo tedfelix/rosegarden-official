@@ -17,134 +17,187 @@
 
 
 #include "MatrixElement.h"
+#include "MatrixScene.h"
 #include "misc/Debug.h"
+#include "base/RulerScale.h"
+
+#include <QGraphicsRectItem>
+#include <QGraphicsPolygonItem>
+#include <QBrush>
+#include <QColor>
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/ViewElement.h"
+#include "base/BaseProperties.h"
 #include "gui/general/GUIPalette.h"
-#include "QCanvasMatrixDiamond.h"
-#include "QCanvasMatrixRectangle.h"
-#include <qbrush.h>
-#include <qcanvas.h>
-#include <qcolor.h>
+#include "gui/rulers/DefaultVelocityColour.h"
 
 
 namespace Rosegarden
 {
 
-MatrixElement::MatrixElement(Event *event, bool drum) :
-        ViewElement(event),
-        m_canvasRect(drum ?
-                     new QCanvasMatrixDiamond(*this, 0) :
-                     new QCanvasMatrixRectangle(*this, 0)),
-        m_overlapRectangles(NULL)
+static const int MatrixElementData = 2;
+
+MatrixElement::MatrixElement(MatrixScene *scene, Event *event, bool drum) :
+    ViewElement(event),
+    m_scene(scene),
+    m_drum(drum),
+    m_item(0)
 {
-    //     MATRIX_DEBUG << "new MatrixElement "
-    //                          << this << " wrapping " << event << endl;
+    reconfigure();
 }
 
 MatrixElement::~MatrixElement()
 {
-    //     MATRIX_DEBUG << "MatrixElement " << this << "::~MatrixElement() wrapping "
-    //                          << event() << endl;
-    m_canvasRect->hide();
-    delete m_canvasRect;
-    removeOverlapRectangles();
+    delete m_item;
 }
 
-void MatrixElement::setCanvas(QCanvas* c)
+void
+MatrixElement::reconfigure()
 {
-    if (!m_canvasRect->canvas()) {
-
-        m_canvasRect->setCanvas(c);
-
-        // We set this by velocity now (matrixstaff.cpp)
-        //
-        //m_canvasRect->setBrush(RosegardenGUIColours::MatrixElementBlock);
-
-        m_canvasRect->setPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
-        m_canvasRect->show();
-    }
+    timeT time = event()->getAbsoluteTime();
+    timeT duration = event()->getDuration();
+    reconfigure(time, duration);
 }
 
-bool MatrixElement::isNote() const
+void
+MatrixElement::reconfigure(int velocity)
+{
+    timeT time = event()->getAbsoluteTime();
+    timeT duration = event()->getDuration();
+    long pitch = 60;
+    event()->get<Int>(BaseProperties::PITCH, pitch);
+    reconfigure(time, duration, pitch, velocity);
+}
+
+void
+MatrixElement::reconfigure(timeT time, timeT duration)
+{
+    long pitch = 60;
+    event()->get<Int>(BaseProperties::PITCH, pitch);
+
+    reconfigure(time, duration, pitch);
+}
+
+void
+MatrixElement::reconfigure(timeT time, timeT duration, int pitch)
+{
+    long velocity = 100;
+    event()->get<Int>(BaseProperties::VELOCITY, velocity);
+
+    reconfigure(time, duration, pitch, velocity);
+}
+
+void
+MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
+{
+    const RulerScale *scale = m_scene->getRulerScale();
+    int resolution = m_scene->getYResolution();
+
+    double x0 = scale->getXForTime(time);
+    double x1 = scale->getXForTime(time + duration);
+    m_width = x1 - x0;
+
+    QColor colour;
+    if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+        colour = Qt::gray;
+    } else {
+        colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+    }
+    colour.setAlpha(160);
+
+    double fres(resolution);
+
+    if (m_drum) {
+        QGraphicsPolygonItem *item = dynamic_cast<QGraphicsPolygonItem *>(m_item);
+        if (!item) {
+            delete m_item;
+            item = new QGraphicsPolygonItem;
+            m_item = item;
+            m_scene->addItem(m_item);
+        }
+        QPolygonF polygon;
+        polygon << QPointF(0.5, 0.5)
+                << QPointF(fres/2, fres/2)
+                << QPointF(0.5, fres)
+                << QPointF(-fres/2, fres/2)
+                << QPointF(0.5, 0.5);
+        item->setPolygon(polygon);
+        item->setPen
+            (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+        item->setBrush(colour);
+    } else {
+        QGraphicsRectItem *item = dynamic_cast<QGraphicsRectItem *>(m_item);
+        if (!item) {
+            delete m_item;
+            item = new QGraphicsRectItem;
+            m_item = item;
+            m_scene->addItem(m_item);
+        }
+        float width = m_width;
+        if (width < 1) width = 1;
+        QRectF rect(0.5, 0.5, width, fres + 1);
+        item->setRect(rect);
+        item->setPen
+            (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+        item->setBrush(colour);
+    }
+
+    setLayoutX(x0);
+
+    m_item->setData(MatrixElementData, QVariant::fromValue((void *)this));
+    m_item->setPos(x0, (127 - pitch) * (resolution + 1));
+}
+
+bool
+MatrixElement::isNote() const
 {
     return event()->isa(Note::EventType);
 }
 
-void MatrixElement::drawOverlapRectangles()
+void
+MatrixElement::setSelected(bool selected)
 {
-    if (m_overlapRectangles) removeOverlapRectangles();
+    QAbstractGraphicsShapeItem *item =
+        dynamic_cast<QAbstractGraphicsShapeItem *>(m_item);
+    if (!item) return;
 
-    QRect elRect = m_canvasRect->rect();
-    QCanvasItemList
-          itemList = m_canvasRect->canvas()->collisions(elRect);
-    QCanvasItemList::Iterator it;
-    MatrixElement* mel = 0;
+    QColor colour;
 
+    if (selected) {
 
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
+        //colour = GUIPalette::getColour(GUIPalette::SelectedElement);
+        item->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectedElement),2));
 
-        QCanvasMatrixRectangle *mRect = 0;
-        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(*it))) {
-
-            // Element does'nt collide with itself
-            if (mRect == m_canvasRect) continue;
-
-            QRect rect = mRect->rect() & elRect;
-            if (!rect.isEmpty()) {
-                if (!m_overlapRectangles) {
-                    m_overlapRectangles = new OverlapRectangles();
-                }
-
-                QCanvasRectangle *
-                    overlap = new QCanvasRectangle(rect, m_canvasRect->canvas());
-                overlap->setBrush(GUIPalette::getColour(GUIPalette::MatrixOverlapBlock));
-                overlap->setZ(getCanvasZ() + 1);
-                overlap->show();
-                m_overlapRectangles->push_back(overlap);
-            }
-        }
+    } else {
+        
+        item->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+        
     }
+    
+
+    //} else if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+
+        //colour = Qt::gray;
+
+    //} else {
+
+        //long velocity = 100;
+        //event()->get<Int>(BaseProperties::VELOCITY, velocity);
+        //colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+    //}
+
+    //colour.setAlpha(160);
+
+    //item->setBrush(colour);
 }
 
-void MatrixElement::redrawOverlaps(QRect rect)
+MatrixElement *
+MatrixElement::getMatrixElement(QGraphicsItem *item)
 {
-    QCanvasItemList
-          itemList = m_canvasRect->canvas()->collisions(rect);
-    QCanvasItemList::Iterator it;
-    MatrixElement* mel = 0;
-
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
-        QCanvasMatrixRectangle *mRect = 0;
-        if ((mRect = dynamic_cast<QCanvasMatrixRectangle*>(*it))) {
-            mRect->getMatrixElement().drawOverlapRectangles();
-        }
-    }
-}
-
-void MatrixElement::removeOverlapRectangles()
-{
-    if (!m_overlapRectangles) return;
-
-    OverlapRectangles::iterator it;
-    for (it = m_overlapRectangles->begin(); it != m_overlapRectangles->end(); ++it) {
-        (*it)->hide();
-        delete *it;
-    }
-
-    delete m_overlapRectangles;
-    m_overlapRectangles = NULL;
-}
-
-bool MatrixElement::getVisibleRectangle(QRect &rectangle)
-{
-    if (m_canvasRect && m_canvasRect->isVisible()) {
-        rectangle = m_canvasRect->rect();
-        return true;
-    }
-    return false;
+    QVariant v = item->data(MatrixElementData);
+    if (v.isNull()) return 0;
+    return (MatrixElement *)v.value<void *>();
 }
 
 

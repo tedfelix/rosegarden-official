@@ -18,7 +18,7 @@
 #ifndef _RG_XMLSUBHANDLER_H_
 #define _RG_XMLSUBHANDLER_H_
 
-#include <qstring.h>
+#include <QString>
 #include <qxml.h>
 
 namespace Rosegarden {

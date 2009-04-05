@@ -16,28 +16,38 @@
 */
 
 
-#include "RosegardenCanvasView.h"
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasView>
 
+#include "RosegardenCanvasView.h"
 #include "misc/Debug.h"
 #include "gui/general/CanvasItemGC.h"
-#include <qcanvas.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qrect.h>
-#include <qscrollbar.h>
-#include <qsize.h>
-#include <qsizepolicy.h>
-#include <qtimer.h>
-#include <qwidget.h>
+
+
+#include <QCursor>
+#include <QPoint>
+#include <QRect>
+#include <Q3ScrollView>
+#include <QScrollBar>
+#include <QSize>
+#include <QSizePolicy>
+#include <QTimer>
+#include <QWidget>
+//#include <QAction>
+#include <QEvent>
+#include <QWheelEvent>
+
+#include <iostream>
 
 
 namespace Rosegarden
 {
 
-RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
+RosegardenCanvasView::RosegardenCanvasView(Q3Canvas* canvas,
         QWidget* parent,
-        const char* name, WFlags f)
-        : QCanvasView(canvas, parent, name, f),
+        const char* name) //, WFlags f)
+        : Q3CanvasView(canvas, parent, name),//, f),
         m_bottomWidget(0),
         m_currentBottomWidgetHeight( -1),
         m_leftWidget(0),
@@ -45,7 +55,7 @@ RosegardenCanvasView::RosegardenCanvasView(QCanvas* canvas,
         m_smoothScrollTimeInterval(DefaultSmoothScrollTimeInterval),
         m_minDeltaScroll(DefaultMinDeltaScroll),
         m_autoScrollTime(InitialScrollTime),
-        m_autoScrollAccel(InitialScrollAccel),
+        m_autoScrollShortcut(InitialScrollShortcut),
         m_autoScrollXMargin(0),
         m_autoScrollYMargin(0),
         m_currentScrollDirection(None),
@@ -61,9 +71,9 @@ void RosegardenCanvasView::fitWidthToContents()
 {
     QRect allItemsBoundingRect;
 
-    QCanvasItemList items = canvas()->allItems();
+    Q3CanvasItemList items = canvas()->allItems();
 
-    QCanvasItemList::Iterator it;
+    Q3CanvasItemList::Iterator it;
 
     for (it = items.begin(); it != items.end(); ++it) {
         allItemsBoundingRect |= (*it)->boundingRect();
@@ -86,6 +96,7 @@ void RosegardenCanvasView::setBottomFixedWidget(QWidget* w)
 
 void RosegardenCanvasView::slotUpdate()
 {
+    RG_DEBUG << "RosegardenCanvasView::slotUpdate" << endl;
     CanvasItemGC::gc();
     canvas()->update();
 }
@@ -95,9 +106,9 @@ void RosegardenCanvasView::slotUpdate()
 
 const int RosegardenCanvasView::AutoscrollMargin = 16;
 const int RosegardenCanvasView::InitialScrollTime = 30;
-const int RosegardenCanvasView::InitialScrollAccel = 5;
+const int RosegardenCanvasView::InitialScrollShortcut = 5;
 const int RosegardenCanvasView::MaxScrollDelta = 100;      // max a.scroll speed
-const double RosegardenCanvasView::ScrollAccelValue = 1.04;// acceleration rate
+const double RosegardenCanvasView::ScrollShortcutValue = 1.04;// shortcuteration rate
 
 const int RosegardenCanvasView::DefaultSmoothScrollTimeInterval = 10;
 const double RosegardenCanvasView::DefaultMinDeltaScroll = 1.2;
@@ -108,7 +119,7 @@ void RosegardenCanvasView::startAutoScroll()
 
     if ( !m_autoScrollTimer.isActive() ) {
         m_autoScrollTime = InitialScrollTime;
-        m_autoScrollAccel = InitialScrollAccel;
+        m_autoScrollShortcut = InitialScrollShortcut;
         m_autoScrollTimer.start( m_autoScrollTime );
     }
 
@@ -165,14 +176,14 @@ void RosegardenCanvasView::doAutoScroll()
         if ( p.x() < m_autoScrollXMargin ) {
             if ( dp.x() > 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollAccelValue;
+                m_minDeltaScroll /= ScrollShortcutValue;
             }
             dx = -(int(m_minDeltaScroll));
             scrollDirection = Left;
         } else if ( p.x() > visibleWidth() - m_autoScrollXMargin ) {
             if ( dp.x() < 0 ) {
                 startDecelerating = true;
-                m_minDeltaScroll /= ScrollAccelValue;
+                m_minDeltaScroll /= ScrollShortcutValue;
             }
             dx = + (int(m_minDeltaScroll));
             scrollDirection = Right;
@@ -185,9 +196,9 @@ void RosegardenCanvasView::doAutoScroll()
             ((scrollDirection == m_currentScrollDirection) || (m_currentScrollDirection == None)) ) {
         scrollBy(dx, dy);
         if ( startDecelerating )
-            m_minDeltaScroll /= ScrollAccelValue;
+            m_minDeltaScroll /= ScrollShortcutValue;
         else
-            m_minDeltaScroll *= ScrollAccelValue;
+            m_minDeltaScroll *= ScrollShortcutValue;
         if (m_minDeltaScroll > MaxScrollDelta )
             m_minDeltaScroll = MaxScrollDelta;
         m_currentScrollDirection = scrollDirection;
@@ -204,7 +215,7 @@ void RosegardenCanvasView::doAutoScroll()
 bool RosegardenCanvasView::isTimeForSmoothScroll()
 {
     if (m_smoothScroll) {
-        int ta = m_scrollAccelerationTimer.elapsed();
+        int ta = m_scrollShortcuterationTimer.elapsed();
         int t = m_scrollTimer.elapsed();
 
         //	RG_DEBUG << "t = " << t << ", ta = " << ta << ", int " << m_smoothScrollTimeInterval << ", delta " << m_minDeltaScroll << endl;
@@ -219,11 +230,11 @@ bool RosegardenCanvasView::isTimeForSmoothScroll()
                 // reset smoothScrollTimeInterval
                 m_smoothScrollTimeInterval = DefaultSmoothScrollTimeInterval;
                 m_minDeltaScroll = DefaultMinDeltaScroll;
-                m_scrollAccelerationTimer.restart();
+                m_scrollShortcuterationTimer.restart();
             } else if (ta > 50) {
                 //                 m_smoothScrollTimeInterval /= 2;
                 m_minDeltaScroll *= 1.08;
-                m_scrollAccelerationTimer.restart();
+                m_scrollShortcuterationTimer.restart();
             }
 
             m_scrollTimer.restart();
@@ -375,7 +386,7 @@ void RosegardenCanvasView::slotSetScrollPos(const QPoint &pos)
 
 void RosegardenCanvasView::resizeEvent(QResizeEvent* e)
 {
-    QCanvasView::resizeEvent(e);
+    Q3CanvasView::resizeEvent(e);
     if (!horizontalScrollBar()->isVisible())
         updateBottomWidgetGeometry();
         updateLeftWidgetGeometry();
@@ -383,7 +394,7 @@ void RosegardenCanvasView::resizeEvent(QResizeEvent* e)
 
 void RosegardenCanvasView::setHBarGeometry(QScrollBar &hbar, int x, int y, int w, int h)
 {
-    QCanvasView::setHBarGeometry(hbar, x, y, w, h);
+    Q3CanvasView::setHBarGeometry(hbar, x, y, w, h);
     updateBottomWidgetGeometry();
 }
 
@@ -396,9 +407,19 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
     int leftWidgetWidth = 0;
     if (m_leftWidget && m_leftWidget->isVisible()) {
-        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
-        leftWidgetWidth = qsv->contentsWidth()+2;
-        qsv->setFixedWidth(leftWidgetWidth);
+        Q3ScrollView * qsv = dynamic_cast<Q3ScrollView *>(m_leftWidget);
+        
+        if (!qsv) {
+            std::cerr << "RosegardenCanvasView::updateBottomWidgetGeometry: Left widget is not a Q3ScrollView" << std::endl;
+        } else {
+//            qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
+//		int contWidth = qsv->widget()->width();
+		
+            leftWidgetWidth = qsv->contentsWidth()+2;
+//		leftWidgetWidth = contWidth + 2;
+		
+            qsv->setFixedWidth(leftWidgetWidth);
+        }
     }
 
     setMargins(leftWidgetWidth, 0, 0, bottomWidgetHeight);
@@ -426,14 +447,14 @@ void RosegardenCanvasView::updateBottomWidgetGeometry()
 
 void RosegardenCanvasView::wheelEvent(QWheelEvent *e)
 {
-    if (e->state() & ControlButton) {
+    if (e->modifiers() & Qt::CTRL ){ //@@@	//	was: ControlButton) {
         if (e->delta() > 0)
             emit zoomIn();
         else if (e->delta() < 0)
             emit zoomOut();
         return ;
     }
-    QCanvasView::wheelEvent(e);
+    Q3CanvasView::wheelEvent(e);
 }
 
 void RosegardenCanvasView::setLeftFixedWidget(QWidget* w)
@@ -453,11 +474,22 @@ void RosegardenCanvasView::updateLeftWidgetGeometry()
         return ;
 
     int leftWidgetWidth = 0;
-    if (m_leftWidget->isVisible()) {
-        QScrollView * qsv = dynamic_cast<QScrollView *>(m_leftWidget);
-        leftWidgetWidth = qsv->contentsWidth() + 2;
+    if (m_leftWidget && m_leftWidget->isVisible()) {
+
+        Q3ScrollView * qsv = dynamic_cast<Q3ScrollView *>(m_leftWidget);
+        
+        if (!qsv) {
+            std::cerr << "RosegardenCanvasView::updateBottomWidgetGeometry: Left widget is not a Q3ScrollView" << std::endl;
+        } else {
+//            qsv->getContentsMargins ( int * left, int * top, int * right, int * bottom );
+//		int contWidth = qsv->widget()->width();
+		
+            leftWidgetWidth = qsv->contentsWidth()+2;
+//		leftWidgetWidth = contWidth + 2;
+		
+            qsv->setFixedWidth(leftWidgetWidth);
+        }
     }
-    m_leftWidget->setFixedWidth(leftWidgetWidth);
 
     int bottomWidgetHeight = m_bottomWidget ? 
                                 m_bottomWidget->sizeHint().height() : 0;

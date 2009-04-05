@@ -18,25 +18,24 @@
 
 #include "KeySignatureDialog.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
-#include <kcombobox.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qcheckbox.h>
+#include <QComboBox>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QCheckBox>
 #include <algorithm>
 
 namespace Rosegarden
@@ -49,7 +48,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                                        bool showApplyToAll,
                                        bool showConversionOptions,
                                        QString explanatoryText) :
-        KDialogBase(parent, 0, true, i18n("Key Change"), Ok | Cancel | Help),
+        QDialog(parent),
         m_notePixmapFactory(npf),
         m_key(defaultKey),
         m_clef(clef),
@@ -59,50 +58,75 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_applyToAllButton(0),
         m_noPercussionCheckBox(0)
 {
-    setHelp("nv-signatures-key");
+    //setHelp("nv-signatures-key");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Key Change"));
 
-    QHBox *keyBox = 0;
-    QHBox *nameBox = 0;
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QGroupBox *keyFrame = new QGroupBox
-                          (1, Horizontal, i18n("Key signature"), vbox);
 
-    QGroupBox *transposeFrame = new QButtonGroup
-                                (1, Horizontal, i18n("Key transposition"), vbox);
+    QWidget *keyBox = 0;
+    QWidget *nameBox = 0;
 
-    QGroupBox *buttonFrame = new QButtonGroup
-                             (1, Horizontal, i18n("Scope"), vbox);
+    QGroupBox *keyFrame = new QGroupBox( tr("Key signature"), vbox );
+    QVBoxLayout *keyFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(keyFrame);
 
-    QButtonGroup *conversionFrame = new QButtonGroup
-                                    (1, Horizontal, i18n("Existing notes following key change"), vbox);
+    QGroupBox *transposeFrame = new QGroupBox( tr("Key transposition"), vbox);
+    QVBoxLayout *transposeFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(transposeFrame);
 
-    keyBox = new QHBox(keyFrame);
-    nameBox = new QHBox(keyFrame);
+    QGroupBox *buttonFrame = new QGroupBox(tr("Scope"), vbox);
+    QVBoxLayout *buttonFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(buttonFrame);
+
+    QGroupBox *conversionFrame = new QGroupBox( tr("Existing notes following key change"), vbox );
+    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(conversionFrame);
+    vbox->setLayout(vboxLayout);
+
+    keyBox = new QWidget(keyFrame);
+    QHBoxLayout *keyBoxLayout = new QHBoxLayout;
+    keyFrameLayout->addWidget(keyBox);
+    nameBox = new QWidget(keyFrame);
+    QHBoxLayout *nameBoxLayout = new QHBoxLayout;
+    keyFrameLayout->addWidget(nameBox);
 
     QLabel *explanatoryLabel = 0;
-    if (explanatoryText) {
+    if (!explanatoryText.isEmpty()) {
         explanatoryLabel = new QLabel(explanatoryText, keyFrame);
+        keyFrameLayout->addWidget(explanatoryLabel);
     }
 
-    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
-    QToolTip::add
-        (keyDown, i18n("Flatten"));
+    keyFrame->setLayout(keyFrameLayout);
 
-    m_keyLabel = new QLabel(i18n("Key"), keyBox);
-    m_keyLabel->setAlignment(AlignVCenter | AlignHCenter);
+    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
+    keyBoxLayout->addWidget(keyDown);
+    keyDown->setToolTip(tr("Flatten"));
+
+    m_keyLabel = new QLabel(tr("Key"), keyBox);
+    keyBoxLayout->addWidget(m_keyLabel);
+    m_keyLabel->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
 
     BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
-    QToolTip::add
-        (keyUp, i18n("Sharpen"));
+    keyBoxLayout->addWidget(keyUp);
+    keyBox->setLayout(keyBoxLayout);
+    keyUp->setToolTip(tr("Sharpen"));
 
-    m_keyCombo = new KComboBox(nameBox);
-    m_majorMinorCombo = new KComboBox(nameBox);
-    m_majorMinorCombo->insertItem(i18n("Major"));
-    m_majorMinorCombo->insertItem(i18n("Minor"));
+    m_keyCombo = new QComboBox(nameBox);
+    nameBoxLayout->addWidget(m_keyCombo);
+    m_majorMinorCombo = new QComboBox(nameBox);
+    nameBoxLayout->addWidget(m_majorMinorCombo);
+    nameBox->setLayout(nameBoxLayout);
+    m_majorMinorCombo->addItem(tr("Major"));
+    m_majorMinorCombo->addItem(tr("Minor"));
     if (m_key.isMinor()) {
-        m_majorMinorCombo->setCurrentItem(m_majorMinorCombo->count() - 1);
+        m_majorMinorCombo->setCurrentIndex(m_majorMinorCombo->count() - 1);
     }
 
     regenerateKeyCombo();
@@ -113,42 +137,53 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
 
     m_yesTransposeButton =
-        new QRadioButton(i18n("Transpose key according to segment transposition"),
+        new QRadioButton(tr("Transpose key according to segment transposition"),
                          transposeFrame);
+    transposeFrameLayout->addWidget(m_yesTransposeButton);
     QRadioButton *noTransposeButton =
-        new QRadioButton(i18n("Use specified key.  Do not transpose"), transposeFrame);
+        new QRadioButton(tr("Use specified key.  Do not transpose"), transposeFrame);
+    transposeFrameLayout->addWidget(noTransposeButton);
     m_yesTransposeButton->setChecked(true);
 
     // just to shut up the compiler warning about unused variable:
     noTransposeButton->setChecked(false);
 
+    transposeFrame->setLayout(transposeFrameLayout);
+
     if (showApplyToAll) {
         QRadioButton *applyToOneButton =
-            new QRadioButton(i18n("Apply to current segment only"),
+            new QRadioButton(tr("Apply to current segment only"),
                              buttonFrame);
+        buttonFrameLayout->addWidget(applyToOneButton);
         m_applyToAllButton =
-            new QRadioButton(i18n("Apply to all segments at this time"),
+            new QRadioButton(tr("Apply to all segments at this time"),
                              buttonFrame);
+        buttonFrameLayout->addWidget(m_applyToAllButton);
         applyToOneButton->setChecked(true);
         m_noPercussionCheckBox =
-            new QCheckBox(i18n("Exclude percussion segments"), buttonFrame);
+            new QCheckBox(tr("Exclude percussion segments"), buttonFrame);
+        buttonFrameLayout->addWidget(m_noPercussionCheckBox);
         m_noPercussionCheckBox->setChecked(true);
-        
     } else {
         m_applyToAllButton = 0;
         buttonFrame->hide();
     }
 
+    buttonFrame->setLayout(buttonFrameLayout);
+
     if (showConversionOptions) {
         m_noConversionButton =
             new QRadioButton
-            (i18n("Maintain current pitches"), conversionFrame);
+            (tr("Maintain current pitches"), conversionFrame);
+        conversionFrameLayout->addWidget(m_noConversionButton);
         m_convertButton =
             new QRadioButton
-            (i18n("Maintain current accidentals"), conversionFrame);
+            (tr("Maintain current accidentals"), conversionFrame);
+        conversionFrameLayout->addWidget(m_convertButton);
         m_transposeButton =
             new QRadioButton
-            (i18n("Transpose into this key"), conversionFrame);
+            (tr("Transpose into this key"), conversionFrame);
+        conversionFrameLayout->addWidget(m_transposeButton);
         m_noConversionButton->setChecked(true);
     } else {
         m_noConversionButton = 0;
@@ -156,6 +191,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
         m_transposeButton = 0;
         conversionFrame->hide();
     }
+
+    conversionFrame->setLayout(conversionFrameLayout);
 
     QObject::connect(keyUp, SIGNAL(clicked()), this, SLOT(slotKeyUp()));
     QObject::connect(keyDown, SIGNAL(clicked()), this, SLOT(slotKeyDown()));
@@ -165,6 +202,11 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                      this, SLOT(slotKeyNameChanged(const QString &)));
     QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
                      this, SLOT(slotMajorMinorChanged(const QString &)));
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 KeySignatureDialog::ConversionType
@@ -283,14 +325,14 @@ KeySignatureDialog::regenerateKeyCombo()
             i != keys.end(); ++i) {
 
         QString name(strtoqstr(i->getName()));
-        int space = name.find(' ');
+        int space = name.indexOf(' ');
         if (space > 0)
             name = name.left(space);
 
-        m_keyCombo->insertItem(name);
+        m_keyCombo->addItem(name);
 
         if (m_valid && (*i == m_key)) {
-            m_keyCombo->setCurrentItem(m_keyCombo->count() - 1);
+            m_keyCombo->setCurrentIndex(m_keyCombo->count() - 1);
             textSet = true;
         }
     }
@@ -317,11 +359,10 @@ void
 KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
-        QPixmap pmap =
-            NotePixmapFactory::toQPixmap(m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef));
+        QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
         m_keyLabel->setPixmap(pmap);
     } else {
-        m_keyLabel->setText(i18n("No such key"));
+        m_keyLabel->setText(tr("No such key"));
     }
 }
 
@@ -359,7 +400,7 @@ KeySignatureDialog::slotMajorMinorChanged(const QString &s)
     if (m_ignoreComboChanges)
         return ;
 
-    std::string name(getKeyName(m_keyCombo->currentText(), s == i18n("Minor")));
+    std::string name(getKeyName(m_keyCombo->currentText(), s == tr("Minor")));
 
     try {
         m_key = Rosegarden::Key(name);
@@ -377,13 +418,14 @@ void
 KeySignatureDialog::setValid(bool valid)
 {
     m_valid = valid;
-    enableButton(Ok, m_valid);
+	//enableButton( Ok, m_valid);	//&&& which button to enable here ????
+	//m_valid.setEnabled(true);
 }
 
 std::string
 KeySignatureDialog::getKeyName(const QString &s, bool minor)
 {
-    QString u((s.length() >= 1) ? (s.left(1).upper() + s.right(s.length() - 1))
+    QString u((s.length() >= 1) ? (s.left(1).toUpper() + s.right(s.length() - 1))
               : s);
 
     std::string name(qstrtostr(u));

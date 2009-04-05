@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef _RG_ZOOMSLIDER_H_
 #define _RG_ZOOMSLIDER_H_
 
-#include <qslider.h>
+#include <QSlider>
 #include <vector>
 
 
@@ -53,7 +52,7 @@ public:
      * to the user as a nice continuous range.
      */
     ZoomSlider(const std::vector<T> &sizes, T defaultValue,
-               Orientation, QWidget * parent, const char * name=0);
+               Qt::Orientation, QWidget * parent, const char * name=0);
 
     virtual ~ZoomSlider();
     
@@ -77,7 +76,7 @@ protected:
 
 template<class T>
 ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
-                          T initialSize, Orientation o,
+                          T initialSize, Qt::Orientation o,
                           QWidget *parent, const char *name) :
     QSlider(0, sizes.size()-1, 1,
             getIndex(sizes, initialSize), o, parent, name),
@@ -87,8 +86,8 @@ ZoomSlider<T>::ZoomSlider(const std::vector<T> &sizes,
     setTracking(false);
     setFixedWidth(150);
     setFixedHeight(15);
-    setLineStep(1);
-    setTickmarks(Below);
+    setSingleStep(1);
+    setTickPosition(TicksBelow);
 }
 
 template<class T>
@@ -109,11 +108,11 @@ void
 ZoomSlider<T>::reinitialise(const std::vector<T> &sizes, T size)
 { 
     m_sizes = sizes;
-    setMinValue(0);
-    setMaxValue(sizes.size()-1);
+    setMinimum(0);
+    setMaximum(sizes.size()-1);
     setValue(getIndex(sizes, size));
-    setLineStep(1);
-    setTickmarks(Below);
+    setSingleStep(1);
+    setTickPosition(TicksBelow);
 }
 
 template<class T>
@@ -141,7 +140,7 @@ template <class T>
 void
 ZoomSlider<T>::increment()
 {
-    if (value() + 1 >= m_sizes.size()) return;
+    if (value() + 1 >= int(m_sizes.size())) return;
     setValue(value() + 1);
 }
 

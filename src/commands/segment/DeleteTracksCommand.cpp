@@ -21,7 +21,7 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ namespace Rosegarden
 
 DeleteTracksCommand::DeleteTracksCommand(Composition *composition,
         std::vector<TrackId> tracks):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_tracks(tracks),
         m_detached(false)

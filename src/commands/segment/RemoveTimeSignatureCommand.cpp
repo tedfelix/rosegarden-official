@@ -20,7 +20,7 @@
 
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden

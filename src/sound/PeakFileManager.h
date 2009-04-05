@@ -29,7 +29,7 @@
 #include <fstream>
 #include <vector>
 
-#include <qobject.h>
+#include <QObject>
 
 
 #include "PeakFile.h"
@@ -128,7 +128,7 @@ public:
     void stopPreview();
 
 signals:
-    void setProgress(int);
+    void setValue(int);
 
 protected:
 

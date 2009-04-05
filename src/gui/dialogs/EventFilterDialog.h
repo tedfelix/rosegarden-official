@@ -21,19 +21,17 @@
 #ifndef _RG_EVENTFILTERDIALOG_H_
 #define _RG_EVENTFILTERDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 #include <utility>
 #include <vector>
 #include "base/Event.h"
-#include <qcheckbox.h>
-#include <qcombobox.h>
+#include <QCheckBox>
+#include <QComboBox>
 
 class QWidget;
 class QSpinBox;
 class QPushButton;
 class QGridLayout;
-class KConfig;
-
 
 namespace Rosegarden
 {
@@ -49,7 +47,7 @@ class Event;
  * should continue to be selected.  See matrixview.cpp slotFilterSelection()
  * for an example of how to use this.
  */
-class EventFilterDialog : public KDialogBase
+class EventFilterDialog : public QDialog
 {
     Q_OBJECT
 
@@ -57,8 +55,6 @@ public:
 
     EventFilterDialog(QWidget* parent);
     ~EventFilterDialog();
-
-    KConfig *cfg;
 
     //-------[ accessor functions ]------------------------
 
@@ -103,9 +99,9 @@ protected:
     void invert (filterRange &);
 
     // return inclusive/exclusive toggle states concisely for tidy code
-    bool pitchIsInclusive()    { return (m_notePitchIncludeComboBox->currentItem()    == 0); }
-    bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentItem() == 0); }
-    bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentItem() == 0); }
+    bool pitchIsInclusive()    { return (m_notePitchIncludeComboBox->currentIndex()    == 0); }
+    bool velocityIsInclusive() { return (m_noteVelocityIncludeComboBox->currentIndex() == 0); }
+    bool durationIsInclusive() { return (m_noteDurationIncludeComboBox->currentIndex() == 0); }
 
 protected slots:
 
@@ -115,8 +111,8 @@ protected slots:
     // set widget values to include nothing
     void slotToggleNone();
 
-    // write out settings to kconfig data for next time and call accept()
-    virtual void slotOk();
+    // write out settings to QSettings data for next time
+    virtual void accept();
 
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);

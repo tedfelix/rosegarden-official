@@ -24,12 +24,11 @@
 #include <set>
 #include <string>
 #include "SystemFont.h"
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <utility>
 #include <qxml.h>
 #include "gui/editors/notation/NoteCharacterNames.h"
-
 
 class QXmlParseException;
 class QXmlAttributes;
@@ -45,7 +44,7 @@ class NoteFontMap : public QXmlDefaultHandler
 public:
     typedef Exception MappingFileReadFailed;
 
-    NoteFontMap(std::string name); // load and parse the XML mapping file
+    NoteFontMap(QString name); // load and parse the XML mapping file
     ~NoteFontMap();
 
     /**
@@ -55,11 +54,11 @@ public:
      */
     bool ok() const { return m_ok; }
 
-    std::string getName() const { return m_name; }
-    std::string getOrigin() const { return m_origin; }
-    std::string getCopyright() const { return m_copyright; }
-    std::string getMappedBy() const { return m_mappedBy; }
-    std::string getType() const { return m_type; }
+    QString getName() const { return m_name; }
+    QString getOrigin() const { return m_origin; }
+    QString getCopyright() const { return m_copyright; }
+    QString getMappedBy() const { return m_mappedBy; }
+    QString getType() const { return m_type; }
     bool isSmooth() const { return m_smooth; }
 
     std::set<int> getSizes() const;
@@ -74,8 +73,8 @@ public:
     
     bool hasInversion(int size, CharName charName) const;
 
-    bool getSrc(int size, CharName charName, std::string &src) const;
-    bool getInversionSrc(int size, CharName charName, std::string &src) const;
+    bool getSrc(int size, CharName charName, QString &src) const;
+    bool getInversionSrc(int size, CharName charName, QString &src) const;
 
     SystemFont *getSystemFont(int size, CharName charName, int &charBase) const;
     SystemFont::Strategy getStrategy(int size, CharName charName) const;
@@ -93,7 +92,7 @@ public:
     (const QString& namespaceURI, const QString& localName,
      const QString& qName, const QXmlAttributes& atts);
 
-    virtual bool characters(QString &);
+    virtual bool characters(const QString &);
 
     bool error(const QXmlParseException& exception);
     bool fatalError(const QXmlParseException& exception);
@@ -119,8 +118,8 @@ private:
         void setFontId(int id) { m_fontId = id; }
         int  getFontId() const { return m_fontId; }
 
-        void setSrc(std::string src) { m_src = src; }
-        std::string getSrc() const { return m_src; }
+        void setSrc(QString src) { m_src = src; }
+        QString getSrc() const { return m_src; }
 
         void setCode(int code) { m_code = code; }
         int  getCode() const { return m_code; }
@@ -128,8 +127,8 @@ private:
         void setGlyph(int glyph) { m_glyph = glyph; }
         int  getGlyph() const { return m_glyph; }
 
-        void setInversionSrc(std::string inversion) { m_inversionSrc = inversion; }
-        std::string getInversionSrc() const { return m_inversionSrc; }
+        void setInversionSrc(QString inversion) { m_inversionSrc = inversion; }
+        QString getInversionSrc() const { return m_inversionSrc; }
 
         void setInversionCode(int code) { m_inversionCode = code; }
         int  getInversionCode() const { return m_inversionCode; }
@@ -145,8 +144,8 @@ private:
 
     private:
         int m_fontId;
-        std::string m_src;
-        std::string m_inversionSrc;
+        QString m_src;
+        QString m_inversionSrc;
         int m_code;
         int m_inversionCode;
         int m_glyph;
@@ -275,14 +274,14 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    std::string m_name;
-    std::string m_origin;
-    std::string m_copyright;
-    std::string m_mappedBy;
-    std::string m_type;
+    QString m_name;
+    QString m_origin;
+    QString m_copyright;
+    QString m_mappedBy;
+    QString m_type;
     bool m_smooth;
 
-    std::string m_srcDirectory;
+    QString m_srcDirectory;
 
     typedef std::map<CharName, SymbolData> SymbolDataMap;
     SymbolDataMap m_data;
@@ -307,12 +306,11 @@ private:
 
     // For use when reading the XML file:
     bool m_expectingCharacters;
-    std::string *m_characterDestination;
-    std::string m_hotspotCharName;
+    QString *m_characterDestination;
+    QString m_hotspotCharName;
     QString m_errorString;
 
-    bool checkFile(int size, std::string &src) const;
-    QString m_fontDirectory;
+    bool checkFile(int size, QString &src) const;
 
     bool m_ok;
 };

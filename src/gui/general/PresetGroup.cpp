@@ -5,7 +5,7 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
  
-    This file is Copyright 2006
+    This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
@@ -26,20 +26,22 @@
 #include "gui/general/ClefIndex.h"
 #include "base/Exception.h"
 #include "CategoryElement.h"
-#include <klocale.h>
-#include <kstddirs.h>
-#include <kglobal.h>
-#include <qfile.h>
-#include <qfileinfo.h>
-#include <qregexp.h>
-#include <qstring.h>
+#include "gui/general/ResourceFinder.h"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QRegExp>
+#include <QString>
+#include <QLocale>
+
+//#define DEBUG_CATEGORIES
 
 namespace Rosegarden
 {
 
 PresetGroup::PresetGroup() :
-        m_errorString(i18n("unknown error")),
+        m_errorString(tr("unknown error")),
         m_elCategoryName(""),
         m_elInstrumentName(""),
         m_elClef(0),
@@ -58,35 +60,33 @@ PresetGroup::PresetGroup() :
         m_amateur(false),
         m_pro(false)
 {
-    m_presetDirectory = KGlobal::dirs()->findResource("appdata", "presets/");
+    QString language = QLocale::system().name();
 
-    QString language = KGlobal::locale()->language();
+    ResourceFinder rf;
+    QString presetFileName = rf.getResourcePath
+        ("presets", QString("presets-%2.xml").arg(language));
 
-    QString presetFileName = QString("%1/presets-%2.xml")
-                             .arg(m_presetDirectory).arg(language);
-
-    if (!QFileInfo(presetFileName).isReadable()) {
+    if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
         RG_DEBUG << "Failed to open " << presetFileName << endl;
 
         language.replace(QRegExp("_.*$"), "");
-        presetFileName = QString("%1/presets-%2.xml")
-                         .arg(m_presetDirectory).arg(language);
+        presetFileName = rf.getResourcePath
+            ("presets", QString("presets-%2.xml").arg(language));
 
-        if (!QFileInfo(presetFileName).isReadable()) {
+        if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
             RG_DEBUG << "Failed to open " << presetFileName << endl;
 
-            presetFileName = QString("%1/presets.xml")
-                             .arg(m_presetDirectory);
+            presetFileName = rf.getResourcePath
+                ("presets", QString("presets.xml"));
 
-            if (!QFileInfo(presetFileName).isReadable()) {
+            if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
                 RG_DEBUG << "Failed to open " << presetFileName << endl;
 
                 throw PresetFileReadFailed
-                (qstrtostr(i18n("Can't open preset file %1").
-                           arg(presetFileName)));
+                (qstrtostr(tr("Can't open preset file %1").arg(presetFileName)));
             }
         }
     }
@@ -115,14 +115,14 @@ PresetGroup::startElement(const QString &, const QString &,
                           const QString &qName,
                           const QXmlAttributes &attributes)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     //    RG_DEBUG << "PresetGroup::startElement: processing starting element: " << lcName << endl;
 
     if (lcName == "category") {
 
         QString s = attributes.value("name");
-        if (s) {
+        if (!s.isEmpty()) {
             m_elCategoryName = s;
             // increment the current category number
             m_lastCategory = m_currentCategory;
@@ -132,8 +132,10 @@ PresetGroup::startElement(const QString &, const QString &,
             m_lastInstrument = -1;
             m_currentInstrument = -1;
 
+#ifdef DEBUG_CATEGORIES
             RG_DEBUG << "PresetGroup::startElement: adding category " << m_elCategoryName << " last: "
             << m_lastCategory << " curr: " << m_currentCategory << endl;
+#endif
 
             // add new CategoryElement to m_categories, in order to contain
             // subsequent PresetElements
@@ -144,7 +146,7 @@ PresetGroup::startElement(const QString &, const QString &,
     } else if (lcName == "instrument") {
 
         QString s = attributes.value("name");
-        if (s) {
+        if (!s.isEmpty()) {
             m_elInstrumentName = s;
             m_name = true;
 
@@ -155,13 +157,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
     } else if (lcName == "clef") {
         QString s = attributes.value("type");
-        if (s) {
+        if (!s.isEmpty()) {
         	m_elClef = clefNameToClefIndex(s);
             m_clef = true;
         }
     } else if (lcName == "transpose") {
         QString s = attributes.value("value");
-        if (s) {
+        if (!s.isEmpty()) {
             m_elTranspose = s.toInt();
             m_transpose = true;
         }
@@ -171,13 +173,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
         if (s == "amateur") {
             s = attributes.value("low");
-            if (s) {
+            if (!s.isEmpty()) {
                 m_elLowAm = s.toInt();
                 m_amateur = true;
             }
 
             s = attributes.value("high");
-            if (s && m_amateur) {
+            if (!s.isEmpty() && m_amateur) {
                 m_elHighAm = s.toInt();
             } else {
                 return false;
@@ -185,13 +187,13 @@ PresetGroup::startElement(const QString &, const QString &,
 
         } else if (s == "professional") {
             s = attributes.value("low");
-            if (s) {
+            if (!s.isEmpty()) {
                 m_pro = true;
                 m_elLowPro = s.toInt();
             }
 
             s = attributes.value("high");
-            if (s && m_pro) {
+            if (!s.isEmpty() && m_pro) {
                 m_elHighPro = s.toInt();
             } else {
                 return false;
@@ -200,13 +202,6 @@ PresetGroup::startElement(const QString &, const QString &,
             return false;
         }
     }
-
-    //    RG_DEBUG << "PresetGroup::startElement(): accumulating flags:" << endl
-    //	     << "     name: " << (m_name ? "true" : "false") << endl
-    //             << "     clef: " << (m_clef ? "true" : "false") << endl
-    //	     << "transpose: " << (m_transpose ? "true" : "false") << endl
-    //	     << "  am. rng: " << (m_amateur ? "true" : "false") << endl
-    //	     << "  pro rng: " << (m_pro ? "true" : "false") << endl;
 
     // once we have assembled all the bits, create a new PresetElement
     if (m_name && m_clef && m_transpose && m_amateur && m_pro) {

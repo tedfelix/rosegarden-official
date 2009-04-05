@@ -15,43 +15,40 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "ImportDeviceDialog.h"
-#include <qlayout.h>
-#include <kapplication.h>
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenGUIDoc.h"
-#include "gui/application/RosegardenGUIApp.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "sound/SF2PatchExtractor.h"
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <kmessagebox.h>
-#include <kurl.h>
-#include <kio/netaccess.h>
-#include <qbuttongroup.h>
-#include <qcheckbox.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "gui/general/FileSource.h"
+
+#include <QLayout>
+#include <QApplication>
+#include <QComboBox>
+#include <QSettings>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QMessageBox>
+#include <QGroupBox>
+#include <QCheckBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QButtonGroup>
 
 
 namespace Rosegarden
 {
 
-ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, KURL url) :
-        KDialogBase(parent, "importdevicedialog", true,
-                    i18n("Import from Device..."),
-                    Ok | Cancel, Ok),
+ImportDeviceDialog::ImportDeviceDialog(QWidget *parent, QUrl url) :
+        QDialog(parent),
         m_url(url),
         m_fileDoc(0),
         m_device(0)
@@ -69,7 +66,13 @@ ImportDeviceDialog::~ImportDeviceDialog()
 bool
 ImportDeviceDialog::doImport()
 {
-    QVBox *mainFrame = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Import from Device..."));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
+    metagrid->addWidget(mainFrame, 0, 0);
 
     if (m_url.isEmpty()) {
         reject();
@@ -77,53 +80,73 @@ ImportDeviceDialog::doImport()
     }
 
     QString target;
-    if (KIO::NetAccess::download(m_url, target) == false) {
-        KMessageBox::error(this, i18n("Cannot download file %1").arg(m_url.prettyURL()));
+    FileSource source(m_url);
+    if (!source.isAvailable()) {
+        QMessageBox::critical(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          tr("Cannot download file %1").arg(m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         return false;
     }
 
+    source.waitForData();
+    target = source.getLocalFilename();
+    std::string filename = qStrToCharPtrLocal8(target);
+
     bool fileRead = false;
-    if (SF2PatchExtractor::isSF2File(target.data())) {
+    if (SF2PatchExtractor::isSF2File(filename)) {
         fileRead = importFromSF2(target);
     } else {
         fileRead = importFromRG(target);
     }
     if (!fileRead) {
-        KMessageBox::error
-        (this, i18n("Cannot open file %1").arg(m_url.prettyURL()));
+        QMessageBox::critical(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          tr("Cannot open file %1").arg(m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         reject();
         close();
         return false;
     }
     if (m_devices.size() == 0) {
-        KMessageBox::sorry
-        (this, i18n("No devices found in file %1").arg(m_url.prettyURL()));
+        QMessageBox::warning(
+          dynamic_cast<QWidget*>(this),
+          "", /* no title */
+          tr("No devices found in file %1").arg(m_url.toString()),
+          QMessageBox::Ok,
+          QMessageBox::Ok);
         reject();
         close();
         return false;
     }
 
-    QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
-                                        i18n("Source device"),
-                                        mainFrame);
+    QGroupBox *groupBox = new QGroupBox(tr("Source device"));
+    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
+    mainFrameLayout->addWidget(groupBox);
 
-    QHBox *deviceBox = new QHBox(groupBox);
-    QHBoxLayout *bl = new QHBoxLayout(deviceBox);
-    bl->addWidget(new QLabel(i18n("Import from: "), deviceBox));
+    QWidget *deviceBox = new QWidget(groupBox);
+    QHBoxLayout *deviceBoxLayout = new QHBoxLayout( deviceBox );
+    groupBoxLayout->addWidget(deviceBox);
+
+    deviceBoxLayout->addWidget(new QLabel(tr("Import from: "), deviceBox));
 
     bool showRenameOption = false;
 
     if (m_devices.size() > 1) {
-        m_deviceCombo = new KComboBox(deviceBox);
         m_deviceLabel = 0;
-        bl->addWidget(m_deviceCombo);
+        m_deviceCombo = new QComboBox( deviceBox );
+        deviceBoxLayout->addWidget(m_deviceCombo);
     } else {
         m_deviceCombo = 0;
-        m_deviceLabel = new QLabel(deviceBox);
-        bl->addWidget(m_deviceLabel);
+        m_deviceLabel = new QLabel( deviceBox );
+        deviceBoxLayout->addWidget(m_deviceLabel);
     }
 
-    bl->addStretch(10);
+    deviceBoxLayout->addStretch(10);
 
     int count = 1;
     for (std::vector<MidiDevice *>::iterator i = m_devices.begin();
@@ -131,53 +154,83 @@ ImportDeviceDialog::doImport()
         if ((*i)->getName() != "") {
             showRenameOption = true;
         } else {
-            (*i)->setName(qstrtostr(i18n("Device %1").arg(count)));
+            (*i)->setName(qstrtostr(tr("Device %1").arg(count)));
         }
         if (m_devices.size() > 1) {
-            m_deviceCombo->insertItem(strtoqstr((*i)->getName()));
+            m_deviceCombo->addItem(strtoqstr((*i)->getName()));
         } else {
             m_deviceLabel->setText(strtoqstr((*i)->getName()));
         }
         ++count;
     }
 
-    QHBox *optionsBox = new QHBox(mainFrame);
+    QWidget *optionsBox = new QWidget(mainFrame);
+    QHBoxLayout *optionsBoxLayout = new QHBoxLayout;
+    mainFrameLayout->addWidget(optionsBox);
 
-    QGroupBox *gb = new QGroupBox(1, Horizontal, i18n("Options"),
-                                  optionsBox);
+    QGroupBox *gb = new QGroupBox(tr("Options"));
+    QVBoxLayout *gbLayout = new QVBoxLayout;
+    optionsBoxLayout->addWidget(gb);
 
-    m_importBanks = new QCheckBox(i18n("Import banks"), gb);
-    m_importKeyMappings = new QCheckBox(i18n("Import key mappings"), gb);
-    m_importControllers = new QCheckBox(i18n("Import controllers"), gb);
+    m_importBanks = new QCheckBox(tr("Import banks"), gb);
+    gbLayout->addWidget(m_importBanks);
+    m_importKeyMappings = new QCheckBox(tr("Import key mappings"), gb);
+    gbLayout->addWidget(m_importKeyMappings);
+    m_importControllers = new QCheckBox(tr("Import controllers"), gb);
+    gbLayout->addWidget(m_importControllers);
 
     if (showRenameOption) {
-        m_rename = new QCheckBox(i18n("Import device name"), gb);
+        m_rename = new QCheckBox(tr("Import device name"), gb);
+        gbLayout->addWidget(m_rename);
     } else {
         m_rename = 0;
     }
 
-    m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                     i18n("Bank import behavior"),
-                                     optionsBox);
-    m_mergeBanks = new QRadioButton(i18n("Merge banks"), m_buttonGroup);
-    m_overwriteBanks = new QRadioButton(i18n("Overwrite banks"), m_buttonGroup);
+    QGroupBox *buttonGroupBox = new QGroupBox(tr("Bank import behavior"));
+    QVBoxLayout *buttonGroupBoxLayout = new QVBoxLayout;
+    optionsBoxLayout->addWidget(buttonGroupBox);
+    m_buttonGroup = new QButtonGroup(buttonGroupBox);
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    m_mergeBanks = new QRadioButton(tr("Merge banks"));
+    buttonGroupBoxLayout->addWidget(m_mergeBanks);
+    m_buttonGroup->addButton(m_mergeBanks, 0);
 
-    m_importBanks->setChecked(config->readBoolEntry("importbanks", true));
-    m_importKeyMappings->setChecked(config->readBoolEntry("importkeymappings", true));
-    m_importControllers->setChecked(config->readBoolEntry("importcontrollers", true));
+    m_overwriteBanks = new QRadioButton(tr("Overwrite banks"));
+    buttonGroupBoxLayout->addWidget(m_overwriteBanks);
+    m_buttonGroup->addButton(m_overwriteBanks, 1);
 
-    bool rename = config->readBoolEntry("importbanksrename", true);
+    gb->setLayout(gbLayout);
+    buttonGroupBox->setLayout(buttonGroupBoxLayout);
+    optionsBox->setLayout(optionsBoxLayout);
+    deviceBox->setLayout(deviceBoxLayout);
+    groupBox->setLayout(groupBoxLayout);
+    mainFrame->setLayout(mainFrameLayout);
+
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    m_importBanks->setChecked( qStrToBool( settings.value("importbanks", "true" ) ) );
+    m_importKeyMappings->setChecked( qStrToBool( settings.value("importkeymappings", "true" ) ) );
+    m_importControllers->setChecked( qStrToBool( settings.value("importcontrollers", "true" ) ) );
+
+    bool rename = qStrToBool( settings.value("importbanksrename", "true" ) ) ;
     if (m_rename)
         m_rename->setChecked(rename);
 
-    bool overwrite = config->readBoolEntry("importbanksoverwrite", true);
+    bool overwrite = qStrToBool( settings.value("importbanksoverwrite", "true" ) ) ;
     if (overwrite)
-        m_buttonGroup->setButton(1);
+        m_buttonGroup->button(1)->setChecked(true);
     else
-        m_buttonGroup->setButton(0);
+        m_buttonGroup->button(0)->setChecked(true);
+
+    settings.endGroup();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancel()));
 
     return true;
 }
@@ -187,16 +240,19 @@ ImportDeviceDialog::slotOk()
 {
     int index = 0;
     if (m_deviceCombo)
-        index = m_deviceCombo->currentItem();
+        index = m_deviceCombo->currentIndex();
     m_device = m_devices[index];
 
-    int v = m_buttonGroup->id(m_buttonGroup->selected());
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
-    config->writeEntry("importbanksoverwrite", v == 1);
+    int v = m_buttonGroup->checkedId();
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    settings.setValue("importbanksoverwrite", v == 1);
     if (m_rename)
-        config->writeEntry("importbanksrename", m_rename->isChecked());
+        settings.setValue("importbanksrename", m_rename->isChecked());
     accept();
+
+    settings.endGroup();
 }
 
 void
@@ -267,7 +323,7 @@ ImportDeviceDialog::shouldImportControllers() const
 bool
 ImportDeviceDialog::shouldOverwriteBanks() const
 {
-    return m_buttonGroup->id(m_buttonGroup->selected()) != 0;
+    return m_buttonGroup->checkedId() != 0;
 }
 
 bool
@@ -279,7 +335,7 @@ ImportDeviceDialog::shouldRename() const
 bool
 ImportDeviceDialog::importFromRG(QString fileName)
 {
-    m_fileDoc = new RosegardenGUIDoc(RosegardenGUIApp::self(), 0, true); // skipAutoload
+    m_fileDoc = new RosegardenDocument(RosegardenMainWindow::self(), 0, true); // skipAutoload
 
     // Add some dummy devices for bank population when we open the document.
     // We guess that the file won't have more than 32 devices.
@@ -334,7 +390,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
 {
     SF2PatchExtractor::Device sf2device;
     try {
-        sf2device = SF2PatchExtractor::read(filename.data());
+        sf2device = SF2PatchExtractor::read( qstrtostr(filename) );
 
         // These exceptions shouldn't happen -- the isSF2File call before this
         // one should have weeded them out
@@ -358,7 +414,7 @@ ImportDeviceDialog::importFromSF2(QString filename)
 
         MidiBank bank
         (msb == 1, msb, lsb,
-         qstrtostr(i18n("Bank %1:%2").arg(msb).arg(lsb)));
+         qstrtostr(tr("Bank %1:%2").arg(msb).arg(lsb)));
 
         banks.push_back(bank);
 

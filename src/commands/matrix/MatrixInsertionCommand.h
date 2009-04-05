@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,6 +34,8 @@ class Event;
 
 class MatrixInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MatrixInsertionCommand)
+
 public:
     MatrixInsertionCommand(Segment &segment,
                            timeT time,

@@ -20,14 +20,14 @@
 
 #include "base/Segment.h"
 #include "gui/editors/notation/NotationStrings.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentChangeTransposeCommand::SegmentChangeTransposeCommand(int unit, Segment *segment) :
-        KNamedCommand(getGlobalName(unit)),
+        NamedCommand(getGlobalName(unit)),
         m_unit(unit),
         m_segment(segment)
 {

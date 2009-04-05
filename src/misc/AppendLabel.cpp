@@ -15,8 +15,8 @@
 #include <string>
 
 #include "document/ConfigGroups.h"
-#include "kconfig.h"
-#include "kapp.h"
+#include <QSettings>
+#include "misc/Strings.h"
 
 namespace Rosegarden 
 {
@@ -26,12 +26,15 @@ appendLabel(const std::string &label, const std::string &suffix)
 {
     using std::string;
 
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    if (!config->readBoolEntry("appendlabel", true)) {
+    if (! qStrToBool( settings.value("appendlabel", "true" ) ) ) {
+       settings.endGroup();
        return string(label);
     }
+    settings.endGroup();
+
     if (label.length() >= suffix.length()) {
         string::size_type loc = label.find(suffix, label.length() - suffix.length());
         if (loc != string::npos) {

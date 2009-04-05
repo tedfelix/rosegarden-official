@@ -20,7 +20,7 @@
 #include <list>
 #include <map>
 
-#include <qobject.h>
+#include <QObject>
 
 #include "Midi.h"
 #include "MidiEvent.h"
@@ -108,7 +108,7 @@ public:
     void convertToMidi(Composition &comp);
 
 signals:
-    void setProgress(int);
+    void setValue(int);
     void incrementProgress(int);
     
 private:

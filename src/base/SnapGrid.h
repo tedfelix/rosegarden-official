@@ -38,7 +38,7 @@ public:
      * x-coordinate mappings and the given ysnap for y-coords.
      * If ysnap is zero, y-coords are not snapped at all.
      */
-    SnapGrid(RulerScale *rulerScale, int ysnap = 0);
+    SnapGrid(const RulerScale *rulerScale, int ysnap = 0);
 
     static const timeT NoSnap;
     static const timeT SnapToBar;
@@ -157,16 +157,12 @@ public:
 	return m_ymultiple[bin];
     }
 
-    RulerScale *getRulerScale() {
-        return m_rulerScale;
-    }
-
     const RulerScale *getRulerScale() const {
         return m_rulerScale;
     }
 
 protected:
-    RulerScale *m_rulerScale; // I don't own this
+    const RulerScale *m_rulerScale; // I don't own this
     timeT m_snapTime;
     int m_ysnap;
     std::map<int, int> m_ymultiple;

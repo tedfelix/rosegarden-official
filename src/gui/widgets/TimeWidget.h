@@ -20,15 +20,17 @@
 #define _RG_ROSEGARDENTIMEWIDGET_H_
 
 #include "base/RealTime.h"
-#include <qgroupbox.h>
-#include <qstring.h>
-#include <vector>
 #include "base/Event.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QGroupBox>
+#include <QString>
+
+#include <vector>
 
 
 class QWidget;
 class QSpinBox;
-class QLineEdit;
 class QLabel;
 class QComboBox;
 
@@ -96,14 +98,14 @@ private:
     QSpinBox  *m_bar;
     QSpinBox  *m_beat;
     QSpinBox  *m_fraction;
-    QLineEdit *m_barLabel;
-    QLineEdit *m_beatLabel;
-    QLineEdit *m_fractionLabel;
+    LineEdit  *m_barLabel;
+    LineEdit  *m_beatLabel;
+    LineEdit  *m_fractionLabel;
     QLabel    *m_timeSig;
     QSpinBox  *m_sec;
     QSpinBox  *m_msec;
-    QLineEdit *m_secLabel;
-    QLineEdit *m_msecLabel;
+    LineEdit  *m_secLabel;
+    LineEdit  *m_msecLabel;
     QLabel    *m_tempo;
 
     void init(bool editable);

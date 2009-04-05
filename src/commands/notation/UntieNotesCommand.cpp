@@ -20,14 +20,23 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+
+#include <QString>
 #include "base/BaseProperties.h"
+#include "document/CommandRegistry.h"
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+UntieNotesCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand("untie_notes",
+                       new SelectionCommandBuilder<UntieNotesCommand>());
+}
 
 void
 UntieNotesCommand::modifySegment()

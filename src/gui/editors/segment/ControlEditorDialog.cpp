@@ -17,10 +17,7 @@
 
 
 #include "ControlEditorDialog.h"
-#include <qlayout.h>
-#include <kapplication.h>
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Colour.h"
@@ -36,39 +33,43 @@
 #include "commands/studio/RemoveControlParameterCommand.h"
 #include "ControlParameterEditDialog.h"
 #include "ControlParameterItem.h"
-#include "document/MultiViewCommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
-#include <kaction.h>
-#include <kcommand.h>
-#include <klistview.h>
-#include <kmainwindow.h>
-#include <kstdaccel.h>
-#include <kstdaction.h>
-#include <qcolor.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <qptrlist.h>
-#include <qpushbutton.h>
-#include <qsizepolicy.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "document/Command.h"
+#include "document/CommandHistory.h"
+
+#include <QShortcut>
+#include <QMainWindow>
+#include <QLayout>
+#include <QApplication>
+#include <QAction>
+#include <QTreeWidget>
+#include <QColor>
+#include <QDialog>
+#include <QFrame>
+#include <QLabel>
+#include <QTreeWidget>
+#include <QPixmap>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QList>
 
 
 namespace Rosegarden
 {
 
-const QString notShowing(i18n("<not showing>"));
 
-ControlEditorDialog::ControlEditorDialog(QWidget *parent,
-        RosegardenGUIDoc *doc,
-        DeviceId device):
-        KMainWindow(parent, "controleditordialog"),
+ControlEditorDialog::ControlEditorDialog
+        (
+            QWidget *parent,
+            RosegardenDocument *doc,
+            DeviceId device
+       ):
+        QMainWindow(parent, "controleditordialog"),
         m_studio(&doc->getStudio()),
         m_doc(doc),
         m_device(device),
@@ -76,12 +77,13 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 {
     RG_DEBUG << "ControlEditorDialog::ControlEditorDialog: device is " << m_device << endl;
 
-    QVBox* mainFrame = new QVBox(this);
+    QWidget *mainFrame = new QWidget(this);
+    QVBoxLayout *mainFrameLayout = new QVBoxLayout;
     setCentralWidget(mainFrame);
 
-    setCaption(i18n("Manage Control Events"));
+    setWindowTitle(tr("Manage Controllers"));
 
-    QString deviceName(i18n("<no device>"));
+    QString deviceName(tr("<no device>"));
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
     if (md)
@@ -89,52 +91,59 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     // spacing hack!
     new QLabel("", mainFrame);
-    new QLabel(i18n("  Control Events for %1 (device %2)").arg(deviceName).
-               arg(device), mainFrame);
+    new QLabel(tr("  Controllers for %1 (device %2)")
+           .arg(deviceName)
+               .arg(device), mainFrame);
     new QLabel("", mainFrame);
 
-    m_listView = new KListView(mainFrame);
-    m_listView->addColumn(i18n("Control Event name  "));
-    m_listView->addColumn(i18n("Control Event type  "));
-    m_listView->addColumn(i18n("Control Event value  "));
-    m_listView->addColumn(i18n("Description  "));
-    m_listView->addColumn(i18n("Min  "));
-    m_listView->addColumn(i18n("Max  "));
-    m_listView->addColumn(i18n("Default  "));
-    m_listView->addColumn(i18n("Color  "));
-    m_listView->addColumn(i18n("Position on instrument panel"));
-
-    m_listView->setColumnAlignment(0, Qt::AlignLeft);
-
+    
+    
+    QStringList sl;
+    sl    << tr("Controller name  ")
+        << tr("Controller type  ")
+        << tr("Controller value  ")
+        << tr("Description  ")
+        << tr("Min  ")
+        << tr("Max  ")
+        << tr("Default  ")
+        << tr("Color  ")
+        << tr("Position on instrument panel");
+    
+    m_listView = new QTreeWidget(mainFrame);
+    m_listView->setHeaderLabels(sl);
+    
+//     m_listView->setColumnAlignment(0, Qt::AlignLeft);    //&&& align per item now:
+//     m_listViewItem->setTextAlignment(0, Qt::AlignLeft);    
+    
+        
+    mainFrameLayout->addWidget(m_listView);
+    
     // Align remaining columns centrally
-    for (int i = 1; i < 9; ++i)
-        m_listView->setColumnAlignment(i, Qt::AlignHCenter);
-
-    m_listView->restoreLayout(kapp->config(), ControlEditorConfigGroup);
-
-    QFrame* btnBox = new QFrame(mainFrame);
+//     for (int i = 1; i < 9; ++i)
+//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align per item now
+    
+    
+//     m_listView->restoreLayout(ControlEditorConfigGroup);    //&&&
+    
+    QFrame *btnBox = new QFrame(mainFrame);
+    mainFrameLayout->addWidget(btnBox);
+    mainFrame->setLayout(mainFrameLayout);
 
     btnBox->setSizePolicy(
         QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
     QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
 
-    m_addButton = new QPushButton(i18n("Add"), btnBox);
-    m_deleteButton = new QPushButton(i18n("Delete"), btnBox);
+    m_addButton = new QPushButton(tr("Add"), btnBox);
+    m_deleteButton = new QPushButton(tr("Delete"), btnBox);
 
-    m_closeButton = new QPushButton(i18n("Close"), btnBox);
+    m_closeButton = new QPushButton(tr("Close"), btnBox);
 
-    QToolTip::add
-        (m_addButton,
-                i18n("Add a Control Parameter to the Studio"));
+    m_addButton->setToolTip(tr("Add a Control Parameter to the Studio"));
 
-    QToolTip::add
-        (m_deleteButton,
-                i18n("Delete a Control Parameter from the Studio"));
+    m_deleteButton->setToolTip(tr("Delete a Control Parameter from the Studio"));
 
-    QToolTip::add
-        (m_closeButton,
-                i18n("Close the Control Parameter editor"));
+    m_closeButton->setToolTip(tr("Close the Control Parameter editor"));
 
     layout->addStretch(10);
     layout->addWidget(m_addButton);
@@ -152,31 +161,30 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     setupActions();
 
-    m_doc->getCommandHistory()->attachView(actionCollection());
-    connect(m_doc->getCommandHistory(), SIGNAL(commandExecuted()),
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QListViewItem *)),
-            SLOT(slotEdit(QListViewItem *)));
+    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
+            SLOT(slotEdit(QTreeWidgetItem *)));
 
     // Highlight all columns - enable extended selection mode
     //
     m_listView->setAllColumnsShowFocus(true);
-    m_listView->setSelectionMode(QListView::Extended);
+    
+    m_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+//     m_listView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     initDialog();
 
-    setAutoSaveSettings(ControlEditorConfigGroup, true);
+//     setAutoSaveSettings(ControlEditorConfigGroup, true);    //&&&
 }
 
 ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-    m_listView->saveLayout(kapp->config(), ControlEditorConfigGroup);
-
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
+//     m_listView->saveLayout(ControlEditorConfigGroup);    //&&&
+    
 }
 
 void
@@ -191,7 +199,7 @@ ControlEditorDialog::slotUpdate()
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
 
-    //QPtrList<QListViewItem> selection = m_listView->selectedItems();
+    //QPtrList<QTreeWidgetItem> selection = m_listView->selectedItems();
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -199,52 +207,64 @@ ControlEditorDialog::slotUpdate()
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    QListViewItem *item;
+    QTreeWidgetItem *item;
     int i = 0;
 
     m_listView->clear();
 
     for (; it != md->endControllers(); ++it) {
         Composition &comp = m_doc->getComposition();
+        
+        // TODO: fix following segFault
+//         if(! it){
+//             continue;
+//             RG_DEBUG << "WARNING: it is NULL in ControlEditorDialog::slotUpdate() ";
+//         }
 
         QString colour =
             strtoqstr(comp.getGeneralColourMap().getNameByIndex(it->getColourIndex()));
 
         if (colour == "")
-            colour = i18n("<default>");
+            colour = tr("<default>");
 
         QString position = QString("%1").arg(it->getIPBPosition());
         if (position.toInt() == -1)
-            position = notShowing;
+            position = tr("<not showing>");
 
         QString value;
         value.sprintf("%d (0x%x)", it->getControllerValue(),
                       it->getControllerValue());
 
         if (it->getType() == PitchBend::EventType) {
-            item = new ControlParameterItem(i++,
+            item = new ControlParameterItem(
+                                            i++,
                                             m_listView,
-                                            strtoqstr(it->getName()),
-                                            strtoqstr(it->getType()),
-                                            QString("-"),
-                                            strtoqstr(it->getDescription()),
-                                            QString("%1").arg(it->getMin()),
-                                            QString("%1").arg(it->getMax()),
-                                            QString("%1").arg(it->getDefault()),
-                                            colour,
-                                            position);
+                                            QStringList()
+                                                << strtoqstr(it->getName())
+                                                << strtoqstr(it->getType())
+                                                << QString("-")
+                                                << strtoqstr(it->getDescription())
+                                                << QString("%1").arg(it->getMin())
+                                                << QString("%1").arg(it->getMax())
+                                                << QString("%1").arg(it->getDefault())
+                                                << colour
+                                                << position 
+                                          );
         } else {
-            item = new ControlParameterItem(i++,
-                                            m_listView,
-                                            strtoqstr(it->getName()),
-                                            strtoqstr(it->getType()),
-                                            value,
-                                            strtoqstr(it->getDescription()),
-                                            QString("%1").arg(it->getMin()),
-                                            QString("%1").arg(it->getMax()),
-                                            QString("%1").arg(it->getDefault()),
-                                            colour,
-                                            position);
+            item = new ControlParameterItem(
+                            i++,
+                            m_listView,
+                            QStringList()
+                                << strtoqstr(it->getName())
+                                << strtoqstr(it->getType())
+                                << value
+                                << strtoqstr(it->getDescription())
+                                << QString("%1").arg(it->getMin())
+                                << QString("%1").arg(it->getMax())
+                                << QString("%1").arg(it->getDefault())
+                                << colour
+                                << position
+                           );
         }
 
 
@@ -253,18 +273,20 @@ ControlEditorDialog::slotUpdate()
         QPixmap colourPixmap(16, 16);
         Colour c = comp.getGeneralColourMap().getColourByIndex(it->getColourIndex());
         colourPixmap.fill(QColor(c.getRed(), c.getGreen(), c.getBlue()));
-        item->setPixmap(7, colourPixmap);
+        
+//         item->setPixmap(7, colourPixmap);
+        item->setIcon(7, QIcon(colourPixmap));
 
-        m_listView->insertItem(item);
+        m_listView->addTopLevelItem(item);
     }
 
-    if (m_listView->childCount() == 0) {
-        QListViewItem *item = new QListViewItem(m_listView, i18n("<none>"));
-        m_listView->insertItem(item);
+    if(m_listView->topLevelItemCount() == 0) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_listView, QStringList(tr("<none>")));
+        m_listView->addTopLevelItem(item);
 
-        m_listView->setSelectionMode(QListView::NoSelection);
+        m_listView->setSelectionMode(QAbstractItemView::NoSelection);
     } else {
-        m_listView->setSelectionMode(QListView::Extended);
+        m_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
 
 
@@ -301,7 +323,8 @@ ControlEditorDialog::slotDelete()
 {
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 
-    if (!m_listView->currentItem())
+//     if (!m_listView->currentIndex())
+    if(! m_listView->currentItem())
         return ;
 
     ControlParameterItem *item =
@@ -320,8 +343,6 @@ ControlEditorDialog::slotClose()
 {
     RG_DEBUG << "ControlEditorDialog::slotClose" << endl;
 
-    if (m_doc)
-        m_doc->getCommandHistory()->detachView(actionCollection());
     m_doc = 0;
 
     close();
@@ -330,40 +351,18 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    KAction* close = KStdAction::close(this,
-                                       SLOT(slotClose()),
-                                       actionCollection());
-
-    m_closeButton->setText(close->text());
+    createAction("file_close", SLOT(slotClose()));
+    m_closeButton->setText(tr("Close"));
     connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-
-    // some adjustments
-    new KToolBarPopupAction(i18n("Und&o"),
-                            "undo",
-                            KStdAccel::key(KStdAccel::Undo),
-                            actionCollection(),
-                            KStdAction::stdName(KStdAction::Undo));
-
-    new KToolBarPopupAction(i18n("Re&do"),
-                            "redo",
-                            KStdAccel::key(KStdAccel::Redo),
-                            actionCollection(),
-                            KStdAction::stdName(KStdAction::Redo));
 
     createGUI("controleditor.rc");
 }
 
 void
-ControlEditorDialog::addCommandToHistory(KCommand *command)
+ControlEditorDialog::addCommandToHistory(Command *command)
 {
-    getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
     setModified(false);
-}
-
-MultiViewCommandHistory*
-ControlEditorDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 void
@@ -390,7 +389,7 @@ ControlEditorDialog::slotEdit()
 {}
 
 void
-ControlEditorDialog::slotEdit(QListViewItem *i)
+ControlEditorDialog::slotEdit(QTreeWidgetItem *i)
 {
     RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
 
@@ -421,11 +420,11 @@ void
 ControlEditorDialog::closeEvent(QCloseEvent *e)
 {
     emit closing();
-    KMainWindow::closeEvent(e);
+    close();
 }
 
 void
-ControlEditorDialog::setDocument(RosegardenGUIDoc *doc)
+ControlEditorDialog::setDocument(RosegardenDocument *doc)
 {
     // reset our pointers
     m_doc = doc;

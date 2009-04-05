@@ -20,10 +20,10 @@
 #define _RG_SEGMENTSPLITCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,8 +32,10 @@ namespace Rosegarden
 class Segment;
 
 
-class SegmentSplitCommand : public KNamedCommand
+class SegmentSplitCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitCommand)
+
 public:
 
     // If keepLabel is true, "(split)" is not append to the new segments label

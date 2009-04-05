@@ -15,16 +15,19 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NO_LONGER_USED
+
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasPixmap>
+
 
 #include "EditView.h"
-#include <qlayout.h>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
-#include <kconfig.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "ActiveItem.h"
+#include "document/CommandRegistry.h"
 #include "base/AnalysisTypes.h"
 #include "base/Composition.h"
 #include "base/CompositionTimeSliceAdapter.h"
@@ -46,7 +49,6 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/SoftSynthDevice.h"
-#include "base/Staff.h"
 #include "base/Studio.h"
 #include "base/ViewElement.h"
 #include "commands/edit/InvertCommand.h"
@@ -58,8 +60,8 @@
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
-#include "document/MultiViewCommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/CommandHistory.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "EditViewBase.h"
 #include "gui/dialogs/RescaleDialog.h"
@@ -67,34 +69,34 @@
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/rulers/StandardRuler.h"
-#include "gui/kdeext/KTmpStatusMsg.h"
-#include "gui/kdeext/QCanvasGroupableItem.h"
+#include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/CanvasGroupableItem.h"
 #include "gui/rulers/ControllerEventsRuler.h"
 #include "gui/rulers/ControlRuler.h"
 #include "gui/rulers/PropertyControlRuler.h"
+#include "gui/general/IconLoader.h"
 #include "RosegardenCanvasView.h"
-#include <kaction.h>
-#include <kcommand.h>
-#include <kdockwidget.h>
-#include <kglobal.h>
-#include <kiconloader.h>
-#include <kstddirs.h>
-#include <ktabwidget.h>
-#include <kxmlguiclient.h>
-#include <qaccel.h>
-#include <qbutton.h>
-#include <qdialog.h>
-#include <qframe.h>
-#include <qinputdialog.h>
-#include <qlabel.h>
-#include <qobjectlist.h>
-#include <qpopupmenu.h>
-#include <qsize.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qwmatrix.h>
+#include "document/Command.h"
+
+#include <QSettings>
+#include <QLayout>
+#include <QAction>
+#include <QDockWidget>
+#include <QTabWidget>
+#include <QPushButton>
+#include <QDialog>
+#include <QFrame>
+#include <QLabel>
+#include <QObjectList>
+#include <QMenu>
+#include <QSize>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QToolBar>
+#include <QVBoxLayout>
+#include <QMatrix>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -110,55 +112,90 @@ const unsigned int EditView::CONTROLRULER_ROW     = CANVASVIEW_ROW + 1;
 //
 static int FeatureShowVelocity = 0x00001; // show the velocity ruler
 
-EditView::EditView(RosegardenGUIDoc *doc,
+EditView::EditView(RosegardenDocument *doc,
                    std::vector<Segment *> segments,
                    unsigned int cols,
                    QWidget *parent, const char *name) :
         EditViewBase(doc, segments, cols, parent, name),
         m_currentEventSelection(0),
-        m_activeItem(0),
         m_canvasView(0),
         m_rulerBox(new QVBoxLayout),  // top ruler box - added to grid later on
         m_rulerBoxFiller(0),          // On the left of m_rulerBox
         m_controlBox(new QVBoxLayout),  // top control ruler box - added to grid later on
-        m_bottomBox(new QVBox(this, "bottomframe")),  // bottom box - added to bottom of canvas view by setCanvasView()
+        m_bottomBox(new QWidget(this)),  // bottom box - added to bottom of canvas view by setCanvasView()
         m_topStandardRuler(0),
         m_bottomStandardRuler(0),
         m_controlRuler(0),
-        m_controlRulers(new KTabWidget(getBottomWidget(), "controlrulers"))
+        m_controlRulers(new QTabWidget(getBottomWidget(), "controlrulers"))
 {
+//!!!kiftsgate    m_commandRegistry = new CommandRegistry(this);
+    m_bottomBox->setObjectName("bottomframe");
+    QVBoxLayout *bblayout = new QVBoxLayout;
+    bblayout->setMargin(0);
+    m_bottomBox->setLayout(bblayout);
+    //@@@ Widget should be had to m_bottomBox using something as
+    //@@@         getBottomWidget()->layout()->addWidget(widgetPtr);
+    //@@@ All widgets added or some of them forgotten ?
+
+    //###&&&@@@ (I can never remember which of these symbols is
+    //###&&&@@@ supposed to represent what) -- QTabWidget doesn't
+    // seem to have a close button, so we'll need to invent an
+    // actual replacement for this (whether a KDE class or a
+    // separate button).  That can wait until after the Great Compile
+/*
     m_controlRulers->setHoverCloseButton(true);
     m_controlRulers->setHoverCloseButtonDelayed(false);
-    connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
-            this, SLOT(slotRemoveControlRuler(QWidget*)));
+*/
+	
+	//old qt3:
+//     connect(m_controlRulers, SIGNAL(closeRequest(QWidget*)),
+//             this, SLOT(slotRemoveControlRuler(QWidget*)));
+	
+	
+	connect(m_controlRulers, SIGNAL(tabCloseRequested( int index )),
+			this, SLOT(slotRemoveControlRuler( int index )));		// since Qt 4.5 only !
+	
 
     (dynamic_cast<QBoxLayout*>(m_bottomBox->layout()))->setDirection(QBoxLayout::BottomToTop);
 
     // m_rulerBoxFiller is a white label used to keep m_rulerBox exactly
     // above the scrolling part of the view (and never above the
     // RosegardenCanvasView::m_leftWidget).
-    QGridLayout * gl = new QGridLayout(1, 2); 
-    gl->setColStretch(0, 0);
-    gl->setColStretch(1, 1);
+	
+    QGridLayout * gl = new QGridLayout(); 
+    gl->setColumnStretch(0, 0);
+    gl->setColumnStretch(1, 1);
     gl->addLayout(m_rulerBox, 0, 1);
+	// note: getCentralWidget() returns m_centralFrame
     m_rulerBoxFiller = new QLabel(getCentralWidget());
     gl->addWidget(m_rulerBoxFiller, 0, 0);
     m_rulerBoxFiller->hide();
-
+	
+	// note: this is adds a gridLayout to one cell in the gridLayout m_grid
     m_grid->addLayout(gl, RULERS_ROW, m_mainCol);
-
-    m_grid->addMultiCellLayout(m_controlBox, CONTROLS_ROW, CONTROLS_ROW, 0, 1);
-    m_controlBox->setAlignment(AlignRight);
-    //     m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
-
-    m_controlRulers->hide();
+	
+	// note: m_controlBox is QVBoxLayout*
+    m_grid->addLayout(m_controlBox, CONTROLS_ROW, 0, 1, 2);
+    m_controlBox->setAlignment(Qt::AlignRight);
+	
+	
+	// m_controlRulers is QTabWidget*
+	m_grid->addWidget(m_controlRulers, CONTROLRULER_ROW, 2);
+	
+// 	m_controlRulers->setTabsClosable( true );	// requires Qt 4.5
+	m_controlRulers->hide();
     m_controlRulers->setTabPosition(QTabWidget::Bottom);
 }
+
 
 EditView::~EditView()
 {
     delete m_currentEventSelection;
     m_currentEventSelection = 0;
+
+	
+	//&&&!!! removed: created SeqFault when closing MatrixView
+//     delete m_commandRegistry;
 }
 
 void EditView::updateBottomWidgetGeometry()
@@ -170,6 +207,8 @@ void EditView::updateBottomWidgetGeometry()
 
 void EditView::paintEvent(QPaintEvent* e)
 {
+    EditViewBase::paintEvent(e); return;//&&& //!!! for experimental purposes
+
     RG_DEBUG << "EditView::paintEvent()\n";
     EditViewBase::paintEvent(e);
 
@@ -191,8 +230,8 @@ void EditView::paintEvent(QPaintEvent* e)
 
     } else {
 
-        getCanvasView()->slotUpdate();
-        updateControlRulers();
+//        getCanvasView()->slotUpdate();
+//        updateControlRulers();
 
     }
 
@@ -201,6 +240,7 @@ void EditView::paintEvent(QPaintEvent* e)
 
 void EditView::updateControlRulers(bool updateHPos)
 {
+    RG_DEBUG << "EditView::updateControlRulers" << endl;
     for (int i = 0; i < m_controlRulers->count(); ++i) {
         ControlRuler* ruler = dynamic_cast<ControlRuler*>(m_controlRulers->page(i));
         if (ruler) {
@@ -212,7 +252,7 @@ void EditView::updateControlRulers(bool updateHPos)
     }
 }
 
-void EditView::setControlRulersZoom(QWMatrix zoomMatrix)
+void EditView::setControlRulersZoom(QMatrix zoomMatrix)
 {
     m_currentRulerZoomMatrix = zoomMatrix;
 
@@ -230,7 +270,7 @@ void EditView::setControlRulersCurrentSegment()
     bool visible = m_controlRulers->isVisible();
 
     delete m_controlRulers;
-    m_controlRulers = new KTabWidget(getBottomWidget(), "controlrulers");
+    m_controlRulers = new QTabWidget(getBottomWidget(), "controlrulers");
 
     bool haveTabs = setupControllerTabs();
     setupAddControlRulerMenu();
@@ -265,9 +305,10 @@ void EditView::setTopStandardRuler(StandardRuler* w, QWidget *leftBox)
     delete m_topStandardRuler;
     m_topStandardRuler = w;
 
-    QGridLayout * gl = new QGridLayout(1, 2); 
-    gl->setColStretch(0, 0);
-    gl->setColStretch(1, 1);
+    QGridLayout * gl = new QGridLayout;
+    gl->setMargin(0);
+    gl->setColumnStretch(0, 0);
+    gl->setColumnStretch(1, 1);
 
     gl->addWidget(w, 0, 1);
     if (leftBox) {
@@ -301,21 +342,21 @@ void EditView::setBottomStandardRuler(StandardRuler* w)
 
 void EditView::setRewFFwdToAutoRepeat()
 {
-    QWidget* transportToolbar = factory()->container("Transport Toolbar", this);
-
+    QWidget* transportToolbar = findToolbar("Transport Toolbar");
+	
     if (transportToolbar) {
-        QObjectList *l = transportToolbar->queryList();
-        QObjectListIt it(*l); // iterate over the buttons
+        QObjectList obl = transportToolbar->queryList();
+        QObjectList::iterator it; // iterate over the buttons
         QObject *obj;
 
-        while ( (obj = it.current()) != 0 ) {
+        for (it = obl.begin(); it != obl.end(); ++it) { //### JAS Check for errors
+            obj = *it;
             // for each found object...
-            ++it;
-            //             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->name() << endl;
-            QString objName = obj->name();
+            //             RG_DEBUG << "EditView::setRewFFwdToAutoRepeat() : obj name : " << obj->objectName() << endl;
+            QString objName = obj->objectName();
 
             if (objName.endsWith("playback_pointer_back_bar") || objName.endsWith("playback_pointer_forward_bar")) {
-                QButton* btn = dynamic_cast<QButton*>(obj);
+                QPushButton* btn = dynamic_cast<QPushButton*>(obj);
                 if (!btn) {
                     RG_DEBUG << "Very strange - found widgets in Transport Toolbar which aren't buttons\n";
 
@@ -326,7 +367,6 @@ void EditView::setRewFFwdToAutoRepeat()
 
 
         }
-        delete l;
 
     } else {
         RG_DEBUG << "transportToolbar == 0\n";
@@ -354,8 +394,13 @@ void EditView::addPropertyBox(QWidget *w)
 void EditView::addControlRuler(ControlRuler* ruler)
 {
     ruler->setWorldMatrix(m_currentRulerZoomMatrix);
-    m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
-                            ruler->getName());
+	
+//     m_controlRulers->addTab(ruler, KGlobal::iconLoader()->loadIconSet("fileclose", KIcon::Small),
+//                             ruler->getName());
+	IconLoader il;
+	QIcon icon = il.load( "fileclose" );
+	m_controlRulers->addTab( ruler, icon, ruler->getName() );
+	
     m_controlRulers->showPage(ruler);
 
     if (m_canvasView) {
@@ -367,19 +412,21 @@ void EditView::addControlRuler(ControlRuler* ruler)
 
     connect(ruler, SIGNAL(stateChange(const QString&, bool)),
             this, SLOT(slotStateChanged(const QString&, bool)));
-
-    stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
+    
+    //!!! This looks wrong -- surely we're entering this state?  But
+    // this is definitely what the old code says
+    leaveActionState("have_control_ruler");
+//    stateChanged("have_control_ruler", KXMLGUIClient::StateReverse);
 }
 
 void EditView::readjustViewSize(QSize requestedSize, bool exact)
 {
     Profiler profiler("EditView::readjustViewSize", true);
+    RG_DEBUG << "EditView::readjustViewSize: "
+                 << requestedSize.width() << ", " << requestedSize.height()
+             << ", exact = " << (exact?"true":"false") << endl;
 
     if (exact) {
-        RG_DEBUG << "EditView::readjustViewSize: exact size requested ("
-        << requestedSize.width() << ", " << requestedSize.height()
-        << ")\n";
-
         setViewSize(requestedSize);
         getCanvasView()->slotUpdate();
         return ;
@@ -414,8 +461,8 @@ void EditView::setCanvasView(RosegardenCanvasView *canvasView)
 
     // TODO : connect canvas view's horiz. scrollbar to top/bottom bars and rulers
 
-    //     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minValue(),
-    //                                     m_canvasView->horizontalScrollBar()->maxValue());
+    //     m_horizontalScrollBar->setRange(m_canvasView->horizontalScrollBar()->minimum(),
+    //                                     m_canvasView->horizontalScrollBar()->maximum());
 
     //     m_horizontalScrollBar->setSteps(m_canvasView->horizontalScrollBar()->lineStep(),
     //                                     m_canvasView->horizontalScrollBar()->pageStep());
@@ -462,16 +509,17 @@ EditView::getInsertionTime(Clef &clef,
 
     return t;
 }
+/*!!!
 
 void EditView::slotActiveItemPressed(QMouseEvent* e,
-                                     QCanvasItem* item)
+                                     Q3CanvasItem* item)
 {
     if (!item)
         return ;
 
     // Check if it's a groupable item, if so get its group
     //
-    QCanvasGroupableItem *gitem = dynamic_cast<QCanvasGroupableItem*>(item);
+    CanvasGroupableItem *gitem = dynamic_cast<CanvasGroupableItem*>(item);
     if (gitem)
         item = gitem->group();
 
@@ -487,13 +535,12 @@ void EditView::slotActiveItemPressed(QMouseEvent* e,
 
     }
 }
-
+*/
 void
 EditView::slotStepBackward()
 {
     Staff *staff = getCurrentStaff();
-    if (!staff)
-        return ;
+    if (!staff) return;
     ViewElementList *vel = staff->getViewElementList();
 
     timeT time = getInsertionTime();
@@ -709,146 +756,310 @@ void EditView::slotExtendSelectionForward(bool bar)
     setCurrentSelection(es);
 }
 
+//### JAS setupActions() not needed now
 void
 EditView::setupActions()
 {
     createInsertPitchActionMenu();
 
+    createAction("add_tempo", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
+    createAction("jog_left", SLOT(slotJogLeft()));
+    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
+// was disabled in kde3 version:
+// createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
+// was disabled in kde3 version:
+// createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
+    createAction("insert_control_ruler_item", SLOT(slotInsertControlRulerItem()));
+    createAction("erase_control_ruler_item", SLOT(slotEraseControlRulerItem()));
+    createAction("clear_control_ruler_item", SLOT(slotClearControlRulerItem()));
+    createAction("start_control_line_item", SLOT(slotStartControlLineItem()));
+    createAction("flip_control_events_forward", SLOT(slotFlipForwards()));
+    createAction("flip_control_events_back", SLOT(slotFlipBackwards()));
+    createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
+    createAction("select_all_properties", SLOT(slotSelectAllProperties()));
+
+/*
     //
     // Tempo and time signature changes
     //
     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
-    QIconSet icon = QIconSet(pixmap);
-    new KAction(AddTempoChangeCommand::getGlobalName(),
-		icon, 0,
-		this, SLOT(slotAddTempo()),
-		actionCollection(), "add_tempo");
+    Q3CanvasPixmap pixmap(pixmapDir + "/toolbar/event-insert-tempo.png");
+    QIcon icon = QIcon(pixmap);
+    QAction* qa_add_tempo = new QAction(  AddTempoChangeCommand::getGlobalName(), dynamic_cast<QObject*>(0) );
+			connect( qa_add_tempo, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotAddTempo()) );
+			qa_add_tempo->setObjectName( "add_tempo" );		//
+			//qa_add_tempo->setCheckable( true );		//
+			qa_add_tempo->setAutoRepeat( false );	//
+			//qa_add_tempo->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_tempo->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     pixmap.load(pixmapDir + "/toolbar/event-insert-timesig.png");
-    icon = QIconSet(pixmap);
-    new KAction(AddTimeSignatureCommand::getGlobalName(),
-		icon, 0,
-		this, SLOT(slotAddTimeSignature()),
-		actionCollection(), "add_time_signature");
+    icon = QIcon(pixmap);
+    QAction* qa_add_time_signature = new QAction(  AddTimeSignatureCommand::getGlobalName(), dynamic_cast<QObject*>(0) );
+			connect( qa_add_time_signature, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this, SLOT(slotAddTimeSignature()) );
+			qa_add_time_signature->setObjectName( "add_time_signature" );		//
+			//qa_add_time_signature->setCheckable( true );		//
+			qa_add_time_signature->setAutoRepeat( false );	//
+			//qa_add_time_signature->setActionGroup( 0 );		// QActionGroup*
+			//qa_add_time_signature->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //
     // Transforms
     //
-    new KAction(i18n("&Halve Durations"), Key_H + CTRL, this,
-                SLOT(slotHalveDurations()), actionCollection(),
-                "halve_durations");
+    QAction* qa_halve_durations = new QAction(  tr("&Halve Durations"), dynamic_cast<QObject*>(this) );
+			connect( qa_halve_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotHalveDurations()) );
+			qa_halve_durations->setObjectName( "halve_durations" );		//
+			//qa_halve_durations->setCheckable( true );		//
+			qa_halve_durations->setAutoRepeat( false );	//
+			//qa_halve_durations->setActionGroup( 0 );		// QActionGroup*
+			//qa_halve_durations->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("&Double Durations"), Key_H + CTRL + SHIFT, this,
-                SLOT(slotDoubleDurations()), actionCollection(),
-                "double_durations");
+    QAction* qa_double_durations = new QAction(  tr("&Double Durations"), dynamic_cast<QObject*>(this) );
+			connect( qa_double_durations, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDoubleDurations()) );
+			qa_double_durations->setObjectName( "double_durations" );		//
+			//qa_double_durations->setCheckable( true );		//
+			qa_double_durations->setAutoRepeat( false );	//
+			//qa_double_durations->setActionGroup( 0 );		// QActionGroup*
+			//qa_double_durations->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RescaleCommand::getGlobalName(), 0, this,
-                SLOT(slotRescale()), actionCollection(),
-                "rescale");
+    QAction* qa_rescale = new QAction(  RescaleCommand::getGlobalName(), dynamic_cast<QObject*>(this) );
+			connect( qa_rescale, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRescale()) );
+			qa_rescale->setObjectName( "rescale" );		//
+			//qa_rescale->setCheckable( true );		//
+			qa_rescale->setAutoRepeat( false );	//
+			//qa_rescale->setActionGroup( 0 );		// QActionGroup*
+			//qa_rescale->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(1), 0,
-                Key_Up, this,
-                SLOT(slotTransposeUp()), actionCollection(),
-                "transpose_up");
+    QAction* qa_transpose_up = new QAction(  TransposeCommand::getGlobalName(1), dynamic_cast<QObject*>(Qt::Key_Up) );
+			connect( qa_transpose_up, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up), this );
+			qa_transpose_up->setObjectName( "transpose_up" );		//
+			//qa_transpose_up->setCheckable( true );		//
+			qa_transpose_up->setAutoRepeat( false );	//
+			//qa_transpose_up->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_up->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(12), 0,
-                Key_Up + CTRL, this,
-                SLOT(slotTransposeUpOctave()), actionCollection(),
-                "transpose_up_octave");
+    QAction* qa_transpose_up_octave = new QAction(  TransposeCommand::getGlobalName(12), dynamic_cast<QObject*>(Qt::Key_Up + Qt::CTRL) );
+			connect( qa_transpose_up_octave, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Up + Qt::CTRL), this );
+			qa_transpose_up_octave->setObjectName( "transpose_up_octave" );		//
+			//qa_transpose_up_octave->setCheckable( true );		//
+			qa_transpose_up_octave->setAutoRepeat( false );	//
+			//qa_transpose_up_octave->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_up_octave->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName( -1), 0,
-                Key_Down, this,
-                SLOT(slotTransposeDown()), actionCollection(),
-                "transpose_down");
+    QAction* qa_transpose_down = new QAction(  TransposeCommand::getGlobalName( -1), dynamic_cast<QObject*>(Qt::Key_Down) );
+			connect( qa_transpose_down, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down), this );
+			qa_transpose_down->setObjectName( "transpose_down" );		//
+			//qa_transpose_down->setCheckable( true );		//
+			qa_transpose_down->setAutoRepeat( false );	//
+			//qa_transpose_down->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_down->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName( -12), 0,
-                Key_Down + CTRL, this,
-                SLOT(slotTransposeDownOctave()), actionCollection(),
-                "transpose_down_octave");
+    QAction* qa_transpose_down_octave = new QAction(  TransposeCommand::getGlobalName( -12), dynamic_cast<QObject*>(Qt::Key_Down + Qt::CTRL) );
+			connect( qa_transpose_down_octave, SIGNAL(toggled()), dynamic_cast<QObject*>(Qt::Key_Down + Qt::CTRL), this );
+			qa_transpose_down_octave->setObjectName( "transpose_down_octave" );		//
+			//qa_transpose_down_octave->setCheckable( true );		//
+			qa_transpose_down_octave->setAutoRepeat( false );	//
+			//qa_transpose_down_octave->setActionGroup( 0 );		// QActionGroup*
+			//qa_transpose_down_octave->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getGlobalName(0), 0, this,
-                SLOT(slotTranspose()), actionCollection(),
-                "general_transpose");
+    QAction* qa_general_transpose = new QAction(  TransposeCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_general_transpose, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotTranspose()) );
+			qa_general_transpose->setObjectName( "general_transpose" );		//
+			//qa_general_transpose->setCheckable( true );		//
+			qa_general_transpose->setAutoRepeat( false );	//
+			//qa_general_transpose->setActionGroup( 0 );		// QActionGroup*
+			//qa_general_transpose->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(TransposeCommand::getDiatonicGlobalName(0,0), 0, this,
-                SLOT(slotDiatonicTranspose()), actionCollection(),
-                "general_diatonic_transpose");
+    QAction* qa_general_diatonic_transpose = new QAction(  TransposeCommand::getDiatonicGlobalName(0, dynamic_cast<QObject*>(0) );
+			connect( qa_general_diatonic_transpose, SIGNAL(toggled()), dynamic_cast<QObject*>(0), this );
+			qa_general_diatonic_transpose->setObjectName( "general_diatonic_transpose" );		//
+			//qa_general_diatonic_transpose->setCheckable( true );		//
+			qa_general_diatonic_transpose->setAutoRepeat( false );	//
+			//qa_general_diatonic_transpose->setActionGroup( 0 );		// QActionGroup*
+			//qa_general_diatonic_transpose->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(InvertCommand::getGlobalName(0), 0, this,
-                SLOT(slotInvert()), actionCollection(),
-                "invert");
+    QAction* qa_invert = new QAction(  InvertCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_invert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInvert()) );
+			qa_invert->setObjectName( "invert" );		//
+			//qa_invert->setCheckable( true );		//
+			qa_invert->setAutoRepeat( false );	//
+			//qa_invert->setActionGroup( 0 );		// QActionGroup*
+			//qa_invert->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RetrogradeCommand::getGlobalName(0), 0, this,
-                SLOT(slotRetrograde()), actionCollection(),
-                "retrograde");
+    QAction* qa_retrograde = new QAction(  RetrogradeCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_retrograde, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRetrograde()) );
+			qa_retrograde->setObjectName( "retrograde" );		//
+			//qa_retrograde->setCheckable( true );		//
+			qa_retrograde->setAutoRepeat( false );	//
+			//qa_retrograde->setActionGroup( 0 );		// QActionGroup*
+			//qa_retrograde->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(RetrogradeInvertCommand::getGlobalName(0), 0, this,
-                SLOT(slotRetrogradeInvert()), actionCollection(),
-                "retrograde_invert");
+    QAction* qa_retrograde_invert = new QAction(  RetrogradeInvertCommand::getGlobalName(0), dynamic_cast<QObject*>(this) );
+			connect( qa_retrograde_invert, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotRetrogradeInvert()) );
+			qa_retrograde_invert->setObjectName( "retrograde_invert" );		//
+			//qa_retrograde_invert->setCheckable( true );		//
+			qa_retrograde_invert->setAutoRepeat( false );	//
+			//qa_retrograde_invert->setActionGroup( 0 );		// QActionGroup*
+			//qa_retrograde_invert->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Left"), Key_Left + ALT, this,
-                SLOT(slotJogLeft()), actionCollection(),
-                "jog_left");
+    QAction* qa_jog_left = new QAction(  tr("Jog &Left"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_left, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogLeft()) );
+			qa_jog_left->setObjectName( "jog_left" );		//
+			//qa_jog_left->setCheckable( true );		//
+			qa_jog_left->setAutoRepeat( false );	//
+			//qa_jog_left->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_left->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Jog &Right"), Key_Right + ALT, this,
-                SLOT(slotJogRight()), actionCollection(),
-                "jog_right");
+    QAction* qa_jog_right = new QAction(  tr("Jog &Right"), dynamic_cast<QObject*>(this) );
+			connect( qa_jog_right, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotJogRight()) );
+			qa_jog_right->setObjectName( "jog_right" );		//
+			//qa_jog_right->setCheckable( true );		//
+			qa_jog_right->setAutoRepeat( false );	//
+			//qa_jog_right->setActionGroup( 0 );		// QActionGroup*
+			//qa_jog_right->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     // Control rulers
     //
-    new KAction(i18n("Show Velocity Property Ruler"), 0, this,
-                SLOT(slotShowVelocityControlRuler()), actionCollection(),
-                "show_velocity_control_ruler");
-
-    /*
-    new KAction(i18n("Show Controllers Events Ruler"), 0, this,
-                SLOT(slotShowControllerEventsRuler()), actionCollection(),
-                "show_controller_events_ruler");
-                */
-
-    // Disabled for now
-    //
-    //     new KAction(i18n("Add Control Ruler..."), 0, this,
-    //                 SLOT(slotShowPropertyControlRuler()), actionCollection(),
-    //                 "add_control_ruler");
+    QAction* qa_show_velocity_control_ruler = new QAction(  tr("Show Velocity Property Ruler"), dynamic_cast<QObject*>(this) );
+			connect( qa_show_velocity_control_ruler, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotShowVelocityControlRuler()) );
+			qa_show_velocity_control_ruler->setObjectName( "show_velocity_control_ruler" );		//
+			//qa_show_velocity_control_ruler->setCheckable( true );		//
+			qa_show_velocity_control_ruler->setAutoRepeat( false );	//
+			//qa_show_velocity_control_ruler->setActionGroup( 0 );		// QActionGroup*
+			//qa_show_velocity_control_ruler->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
     //
     // Control Ruler context menu
     //
-    new KAction(i18n("Insert item"), 0, this,
-                SLOT(slotInsertControlRulerItem()), actionCollection(),
-                "insert_control_ruler_item");
+    QAction* qa_insert_control_ruler_item = new QAction(  tr("Insert item"), dynamic_cast<QObject*>(this) );
+			connect( qa_insert_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotInsertControlRulerItem()) );
+			qa_insert_control_ruler_item->setObjectName( "insert_control_ruler_item" );		//
+			//qa_insert_control_ruler_item->setCheckable( true );		//
+			qa_insert_control_ruler_item->setAutoRepeat( false );	//
+			//qa_insert_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_insert_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    // This was on Key_Delete, but that conflicts with existing Delete commands
+    // This was on Qt::Key_Delete, but that conflicts with existing Delete commands
     // on individual edit views
-    new KAction(i18n("Erase selected items"), 0, this,
-                SLOT(slotEraseControlRulerItem()), actionCollection(),
-                "erase_control_ruler_item");
+    QAction* qa_erase_control_ruler_item = new QAction(  tr("Erase selected items"), dynamic_cast<QObject*>(this) );
+			connect( qa_erase_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotEraseControlRulerItem()) );
+			qa_erase_control_ruler_item->setObjectName( "erase_control_ruler_item" );		//
+			//qa_erase_control_ruler_item->setCheckable( true );		//
+			qa_erase_control_ruler_item->setAutoRepeat( false );	//
+			//qa_erase_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_erase_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Clear ruler"), 0, this,
-                SLOT(slotClearControlRulerItem()), actionCollection(),
-                "clear_control_ruler_item");
+    QAction* qa_clear_control_ruler_item = new QAction(  tr("Clear ruler"), dynamic_cast<QObject*>(this) );
+			connect( qa_clear_control_ruler_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotClearControlRulerItem()) );
+			qa_clear_control_ruler_item->setObjectName( "clear_control_ruler_item" );		//
+			//qa_clear_control_ruler_item->setCheckable( true );		//
+			qa_clear_control_ruler_item->setAutoRepeat( false );	//
+			//qa_clear_control_ruler_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_clear_control_ruler_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Insert line of controllers"), 0, this,
-                SLOT(slotStartControlLineItem()), actionCollection(),
-                "start_control_line_item");
+    QAction* qa_start_control_line_item = new QAction(  tr("Insert line of controllers"), dynamic_cast<QObject*>(this) );
+			connect( qa_start_control_line_item, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotStartControlLineItem()) );
+			qa_start_control_line_item->setObjectName( "start_control_line_item" );		//
+			//qa_start_control_line_item->setCheckable( true );		//
+			qa_start_control_line_item->setAutoRepeat( false );	//
+			//qa_start_control_line_item->setActionGroup( 0 );		// QActionGroup*
+			//qa_start_control_line_item->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Flip forward"), Key_BracketRight, this,
-                SLOT(slotFlipForwards()), actionCollection(),
-                "flip_control_events_forward");
+    QAction* qa_flip_control_events_forward = new QAction(  tr("Flip forward"), dynamic_cast<QObject*>(this) );
+			connect( qa_flip_control_events_forward, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipForwards()) );
+			qa_flip_control_events_forward->setObjectName( "flip_control_events_forward" );		//
+			//qa_flip_control_events_forward->setCheckable( true );		//
+			qa_flip_control_events_forward->setAutoRepeat( false );	//
+			//qa_flip_control_events_forward->setActionGroup( 0 );		// QActionGroup*
+			//qa_flip_control_events_forward->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Flip backwards"), Key_BracketLeft, this,
-                SLOT(slotFlipBackwards()), actionCollection(),
-                "flip_control_events_back");
+    QAction* qa_flip_control_events_back = new QAction(  tr("Flip backwards"), dynamic_cast<QObject*>(this) );
+			connect( qa_flip_control_events_back, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotFlipBackwards()) );
+			qa_flip_control_events_back->setObjectName( "flip_control_events_back" );		//
+			//qa_flip_control_events_back->setCheckable( true );		//
+			qa_flip_control_events_back->setAutoRepeat( false );	//
+			//qa_flip_control_events_back->setActionGroup( 0 );		// QActionGroup*
+			//qa_flip_control_events_back->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Draw property line"), 0, this,
-                SLOT(slotDrawPropertyLine()), actionCollection(),
-                "draw_property_line");
+    QAction* qa_draw_property_line = new QAction(  tr("Draw property line"), dynamic_cast<QObject*>(this) );
+			connect( qa_draw_property_line, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotDrawPropertyLine()) );
+			qa_draw_property_line->setObjectName( "draw_property_line" );		//
+			//qa_draw_property_line->setCheckable( true );		//
+			qa_draw_property_line->setAutoRepeat( false );	//
+			//qa_draw_property_line->setActionGroup( 0 );		// QActionGroup*
+			//qa_draw_property_line->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			
 
-    new KAction(i18n("Select all property values"), 0, this,
-                SLOT(slotSelectAllProperties()), actionCollection(),
-                "select_all_properties");
+    QAction* qa_select_all_properties = new QAction(  tr("Select all property values"), dynamic_cast<QObject*>(this) );
+			connect( qa_select_all_properties, SIGNAL(toggled()), dynamic_cast<QObject*>(this), SLOT(slotSelectAllProperties()) );
+			qa_select_all_properties->setObjectName( "select_all_properties" );		//
+			//qa_select_all_properties->setCheckable( true );		//
+			qa_select_all_properties->setAutoRepeat( false );	//
+			//qa_select_all_properties->setActionGroup( 0 );		// QActionGroup*
+			//qa_select_all_properties->setChecked( false );		//
+			//### FIX: deallocate QAction ptr
+			*/
 }
 
 void
@@ -856,8 +1067,7 @@ EditView::setupAddControlRulerMenu()
 {
     RG_DEBUG << "EditView::setupAddControlRulerMenu" << endl;
 
-    QPopupMenu* addControlRulerMenu = dynamic_cast<QPopupMenu*>
-                                      (factory()->container("add_control_ruler", this));
+    QMenu* addControlRulerMenu = findChild<QMenu *>("add_control_ruler");
 
     if (addControlRulerMenu) {
 
@@ -885,17 +1095,19 @@ EditView::setupAddControlRulerMenu()
                 QString hexValue;
                 hexValue.sprintf("(0x%x)", it->getControllerValue());
 
-                itemStr = i18n("%1 Controller %2 %3").arg(strtoqstr(it->getName()))
-                          .arg(it->getControllerValue())
-                          .arg(hexValue);
+                itemStr = tr("%1 Controller %2 %3")
+				.arg(strtoqstr(it->getName()))
+                          	.arg(it->getControllerValue())
+                          	.arg(hexValue);
 
             } else if (it->getType() == PitchBend::EventType)
-                itemStr = i18n("Pitch Bend");
+                itemStr = tr("Pitch Bend");
             else
-                itemStr = i18n("Unsupported Event Type");
+                itemStr = tr("Unsupported Event Type");
 
-            addControlRulerMenu->insertItem(itemStr, i++);
-        }
+// 			addControlRulerMenu->addItem(itemStr, i++);
+			addControlRulerMenu->addAction(itemStr); i++;	//@@@
+		}
 
         connect(addControlRulerMenu, SIGNAL(activated(int)),
                 SLOT(slotAddControlRuler(int)));
@@ -1009,9 +1221,12 @@ EditView::slotAddControlRuler(int controller)
     getDocument()->slotDocumentModified();
 }
 
-void EditView::slotRemoveControlRuler(QWidget* w)
+// void EditView::slotRemoveControlRuler(QWidget* w)
+void EditView::slotRemoveControlRuler( int index )
 {
-    ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
+// 	ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(w);
+	
+	ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>( m_controlRulers->widget( index ));
 
     if (ruler) {
         ControlParameter *controller = ruler->getControlParameter();
@@ -1031,19 +1246,24 @@ void EditView::slotRemoveControlRuler(QWidget* w)
                 << endl;
 
         }
+		delete ruler;
+		
     } else { // else it's probably a velocity ruler
-        PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>(w);
-
+		
+//         PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>(w);
+		PropertyControlRuler *propertyRuler = dynamic_cast<PropertyControlRuler*>( m_controlRulers->widget( index ));
+		
         if (propertyRuler) {
             Segment &seg = getCurrentStaff()->getSegment();
             seg.setViewFeatures(0); // for the moment we only have one view feature so
             // we can just blank it out
-
+			
+			delete propertyRuler;
             RG_DEBUG << "slotRemoveControlRuler : removed velocity ruler" << endl;
         }
     }
 
-    delete w;
+//     delete w;	// 
 
     if (m_controlRulers->count() == 0) {
         m_controlRulers->hide();
@@ -1053,98 +1273,100 @@ void EditView::slotRemoveControlRuler(QWidget* w)
     getDocument()->slotDocumentModified();
 }
 
+//### JAS createInsertPitchActionMenu() not needed now
 void
 EditView::createInsertPitchActionMenu()
 {
     QString notePitchNames[] = {
-                                   i18n("I"), i18n("II"), i18n("III"), i18n("IV"),
-                                   i18n("V"), i18n("VI"), i18n("VII"), i18n("VIII")
-                               };
-    QString flat = i18n("%1 flat");
-    QString sharp = i18n("%1 sharp");
+        tr("I"), tr("II"), tr("III"), tr("IV"),
+        tr("V"), tr("VI"), tr("VII"), tr("VIII")
+    };
+    QString flat = tr("%1 flat");
+    QString sharp = tr("%1 sharp");
 
-    const Key notePitchKeys[3][7] = {
-                                        {
-                                            Key_A, Key_S, Key_D, Key_F, Key_J, Key_K, Key_L,
-                                        },
-                                        {
-                                            Key_Q, Key_W, Key_E, Key_R, Key_U, Key_I, Key_O,
-                                        },
-                                        {
-                                            Key_Z, Key_X, Key_C, Key_V, Key_B, Key_N, Key_M,
-                                        },
-                                    };
+    const Qt::Key notePitchKeys[3][7] = {
+        {
+            Qt::Key_A, Qt::Key_S, Qt::Key_D, Qt::Key_F, Qt::Key_J, Qt::Key_K, Qt::Key_L,
+        },
+        {
+            Qt::Key_Q, Qt::Key_W, Qt::Key_E, Qt::Key_R, Qt::Key_U, Qt::Key_I, Qt::Key_O,
+        },
+        {
+            Qt::Key_Z, Qt::Key_X, Qt::Key_C, Qt::Key_V, Qt::Key_B, Qt::Key_N, Qt::Key_M,
+        },
+    };
 
-    KActionMenu *insertPitchActionMenu =
-        new KActionMenu(i18n("&Insert Note"), this, "insert_note_actionmenu");
+    QMenu *insertPitchActionMenu = new QMenu(tr("&Insert Note"), this);
+    insertPitchActionMenu->setObjectName("insert_note_actionmenu");
 
     for (int octave = 0; octave <= 2; ++octave) {
 
-        KActionMenu *menu = insertPitchActionMenu;
+        QMenu *menu = insertPitchActionMenu;
         if (octave == 1) {
-            menu = new KActionMenu(i18n("&Upper Octave"), this,
-                                   "insert_note_actionmenu_upper_octave");
-            insertPitchActionMenu->insert(new KActionSeparator(this));
-            insertPitchActionMenu->insert(menu);
+            menu = new QMenu(tr("&Upper Octave"), this);
+            menu->setObjectName("insert_note_actionmenu_upper_octave");
+            insertPitchActionMenu->addSeparator();
+            insertPitchActionMenu->addMenu(menu);
         } else if (octave == 2) {
-            menu = new KActionMenu(i18n("&Lower Octave"), this,
-                                   "insert_note_actionmenu_lower_octave");
-            insertPitchActionMenu->insert(menu);
+            menu = new QMenu(tr("&Lower Octave"), this);
+            menu->setObjectName("insert_note_actionmenu_lower_octave");
+            insertPitchActionMenu->addMenu(menu);
         }
 
         for (unsigned int i = 0; i < 7; ++i) {
 
-            KAction *insertPitchAction = 0;
+            QAction *insertPitchAction = 0;
 
             QString octaveSuffix;
-            if (octave == 1)
-                octaveSuffix = "_high";
-            else if (octave == 2)
-                octaveSuffix = "_low";
+            if (octave == 1) octaveSuffix = "_high";
+            else if (octave == 2) octaveSuffix = "_low";
 
             // do and fa lack a flat
 
             if (i != 0 && i != 3) {
 
-                insertPitchAction =
-                    new KAction
-                    (flat.arg(notePitchNames[i]),
-                     CTRL + SHIFT + notePitchKeys[octave][i],
-                     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                     QString("insert_%1_flat%2").arg(i).arg(octaveSuffix));
+                insertPitchAction = createAction
+                    (QString("insert_%1_flat%2").arg(i).arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
 
-                menu->insert(insertPitchAction);
+                insertPitchAction->setText(flat.arg(notePitchNames[i]));
+                insertPitchAction->setShortcut
+                    (Qt::CTRL + Qt::SHIFT + notePitchKeys[octave][i]);
+                     
+                menu->addAction(insertPitchAction);
             }
 
-            insertPitchAction =
-                new KAction
-                (notePitchNames[i],
-                 notePitchKeys[octave][i],
-                 this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                 QString("insert_%1%2").arg(i).arg(octaveSuffix));
+            insertPitchAction = createAction
+                (QString("insert_%1%2").arg(i).arg(octaveSuffix),
+                 SLOT(slotInsertNoteFromAction()));
 
-            menu->insert(insertPitchAction);
+            insertPitchAction->setText(notePitchNames[i]);
+            insertPitchAction->setShortcut(notePitchKeys[octave][i]);
+            
+            menu->addAction(insertPitchAction);
 
             // and mi and ti lack a sharp
 
             if (i != 2 && i != 6) {
 
-                insertPitchAction =
-                    new KAction
-                    (sharp.arg(notePitchNames[i]),
-                     SHIFT + notePitchKeys[octave][i],
-                     this, SLOT(slotInsertNoteFromAction()), actionCollection(),
-                     QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix));
+                insertPitchAction = createAction
+                    (QString("insert_%1_sharp%2").arg(i).arg(octaveSuffix),
+                     SLOT(slotInsertNoteFromAction()));
 
-                menu->insert(insertPitchAction);
+                insertPitchAction->setText(sharp.arg(notePitchNames[i]));
+                insertPitchAction->setShortcut
+                    (Qt::SHIFT + notePitchKeys[octave][i]);
+                     
+                menu->addAction(insertPitchAction);
             }
 
-            if (i < 6)
-                menu->insert(new KActionSeparator(this));
+            if (i < 6) {
+                menu->addSeparator();
+            }
         }
     }
 
-    actionCollection()->insert(insertPitchActionMenu);
+    //&&& Ensure insertPitchActionMenu goes into the proper super-menu
 }
 
 int
@@ -1275,7 +1497,7 @@ void EditView::slotAddTimeSignature()
 
         dialog = new TimeSignatureDialog
                  (this, composition, insertionTime, timeSig, false,
-                  i18n("Estimated time signature shown"));
+                  tr("Estimated time signature shown"));
     }
 
     if (dialog->exec() == QDialog::Accepted) {
@@ -1357,18 +1579,18 @@ void EditView::slotShowControllerEventsRuler()
 void EditView::slotShowPropertyControlRuler()
 {
     /*
-        KDialogBase propChooserDialog(this, "propertychooserdialog", true, i18n("Select event property"),
+        KDialogBase propChooserDialog(this, "propertychooserdialog", true, tr("Select event property"),
                                       KDialogBase::Ok | KDialogBase::Cancel, KDialogBase::Ok);
         
         KListBox* propList = new KListBox(propChooserDialog.makeVBoxMainWidget());
-        new QListBoxRGProperty(propList, BaseProperties::VELOCITY.c_str());
+        new QListWidgetRGProperty(propList, BaseProperties::VELOCITY.c_str());
      
         int rc = propChooserDialog.exec();
         if (rc == QDialog::Accepted) {
             // fix for KDE 3.0
-            //QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>(propList->selectedItem());
-            QListBoxRGProperty* item = dynamic_cast<QListBoxRGProperty*>
-                (propList->item(propList->currentItem()));
+            //QListWidgetRGProperty* item = dynamic_cast<QListWidgetRGProperty*>(propList->selectedItem());
+            QListWidgetRGProperty* item = dynamic_cast<QListWidgetRGProperty*>
+                (propList->item(propList->currentIndex()));
      
             if (item) {
                 PropertyName property = item->getPropertyName();
@@ -1438,7 +1660,7 @@ EditView::slotHalveDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Halving durations..."), this);
+    TmpStatusMsg msg(tr("Halving durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1452,7 +1674,7 @@ EditView::slotDoubleDurations()
     if (!m_currentEventSelection)
         return ;
 
-    KTmpStatusMsg msg(i18n("Doubling durations..."), this);
+    TmpStatusMsg msg(tr("Doubling durations..."), this);
 
     addCommandToHistory(
         new RescaleCommand(*m_currentEventSelection,
@@ -1476,7 +1698,7 @@ EditView::slotRescale()
      true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        KTmpStatusMsg msg(i18n("Rescaling..."), this);
+        TmpStatusMsg msg(tr("Rescaling..."), this);
         addCommandToHistory(new RescaleCommand
                             (*m_currentEventSelection,
                              dialog.getNewDuration(),
@@ -1489,23 +1711,25 @@ void EditView::slotTranspose()
     if (!m_currentEventSelection)
         return ;
 
-    m_config->setGroup(EditViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( EditViewConfigGroup );
 
-    int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
+    int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
 
     bool ok = false;
     int semitones = QInputDialog::getInteger
-                    (i18n("Transpose"),
-                     i18n("By number of semitones: "),
+                    (tr("Transpose"),
+                     tr("By number of semitones: "),
                      dialogDefault, -127, 127, 1, &ok, this);
     if (!ok || semitones == 0) return;
 
-    m_config->setGroup(EditViewConfigGroup);
-    m_config->writeEntry("lasttransposition", semitones);
+    settings.setValue("lasttransposition", semitones);
 
-    KTmpStatusMsg msg(i18n("Transposing..."), this);
+    TmpStatusMsg msg(tr("Transposing..."), this);
     addCommandToHistory(new TransposeCommand
                         (semitones, *m_currentEventSelection));
+
+    settings.endGroup();
 }
 
 void EditView::slotDiatonicTranspose()
@@ -1513,19 +1737,19 @@ void EditView::slotDiatonicTranspose()
     if (!m_currentEventSelection)
         return ;
 
-    m_config->setGroup(EditViewConfigGroup);
+    QSettings settings;
+    settings.beginGroup( EditViewConfigGroup );
 
     IntervalDialog intervalDialog(this);
     int ok = intervalDialog.exec();
-	//int dialogDefault = m_config->readNumEntry("lasttransposition", 0);
+	//int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
+    settings.endGroup();
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
-    m_config->setGroup(EditViewConfigGroup);
-
-    KTmpStatusMsg msg(i18n("Transposing..."), this);
+    TmpStatusMsg msg(tr("Transposing..."), this);
     if (intervalDialog.getChangeKey())
     {
 		std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
@@ -1543,7 +1767,7 @@ void EditView::slotTransposeUp()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Transposing up one semitone..."), this);
+    TmpStatusMsg msg(tr("Transposing up one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand(1, *m_currentEventSelection));
 }
@@ -1552,7 +1776,7 @@ void EditView::slotTransposeUpOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Transposing up one octave..."), this);
+    TmpStatusMsg msg(tr("Transposing up one octave..."), this);
 
     addCommandToHistory(new TransposeCommand(12, *m_currentEventSelection));
 }
@@ -1561,7 +1785,7 @@ void EditView::slotTransposeDown()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Transposing down one semitone..."), this);
+    TmpStatusMsg msg(tr("Transposing down one semitone..."), this);
 
     addCommandToHistory(new TransposeCommand( -1, *m_currentEventSelection));
 }
@@ -1570,7 +1794,7 @@ void EditView::slotTransposeDownOctave()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Transposing down one octave..."), this);
+    TmpStatusMsg msg(tr("Transposing down one octave..."), this);
 
     addCommandToHistory(new TransposeCommand( -12, *m_currentEventSelection));
 }
@@ -1582,7 +1806,7 @@ void EditView::slotInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(i18n("Inverting..."), this);
+    TmpStatusMsg msg(tr("Inverting..."), this);
     addCommandToHistory(new InvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1594,7 +1818,7 @@ void EditView::slotRetrograde()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(i18n("Retrograding..."), this);
+    TmpStatusMsg msg(tr("Retrograding..."), this);
     addCommandToHistory(new RetrogradeCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1606,7 +1830,7 @@ void EditView::slotRetrogradeInvert()
 
     int semitones = 0;
 
-    KTmpStatusMsg msg(i18n("Retrograde inverting..."), this);
+    TmpStatusMsg msg(tr("Retrograde inverting..."), this);
     addCommandToHistory(new RetrogradeInvertCommand
                         (semitones, *m_currentEventSelection));
 }
@@ -1615,7 +1839,7 @@ void EditView::slotJogLeft()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Jogging left..."), this);
+    TmpStatusMsg msg(tr("Jogging left..."), this);
 
     RG_DEBUG << "EditView::slotJogLeft" << endl;
 
@@ -1630,7 +1854,7 @@ void EditView::slotJogRight()
 {
     if (!m_currentEventSelection)
         return ;
-    KTmpStatusMsg msg(i18n("Jogging right..."), this);
+    TmpStatusMsg msg(tr("Jogging right..."), this);
 
     RG_DEBUG << "EditView::slotJogRight" << endl;
 
@@ -1684,11 +1908,11 @@ ControlRuler* EditView::findRuler(const ControlParameter& controller, int &index
 
 PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyName)
 {
-    QCanvas* controlRulerCanvas = new QCanvas(this);
+    Q3Canvas* controlRulerCanvas = new Q3Canvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
 
-//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
+//     Q3Canvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), propertyName,
 //                                                                           getViewSize());
 
     PropertyControlRuler* controlRuler = new PropertyControlRuler
@@ -1702,10 +1926,10 @@ PropertyControlRuler* EditView::makePropertyControlRuler(PropertyName propertyNa
 
 ControllerEventsRuler* EditView::makeControllerEventRuler(const ControlParameter *controller)
 {
-    QCanvas* controlRulerCanvas = new QCanvas(this);
+    Q3Canvas* controlRulerCanvas = new Q3Canvas(this);
     QSize viewSize = getViewSize();
     controlRulerCanvas->resize(viewSize.width(), ControlRuler::DefaultRulerHeight); // TODO - keep it in sync with main canvas size
-//     QCanvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
+//     Q3Canvas* controlRulerCanvas = ControlRulerCanvasRepository::getCanvas(getCurrentSegment(), controller,
 //                                                                           getViewSize());
     
 
@@ -1725,3 +1949,5 @@ RosegardenCanvasView* EditView::getCanvasView()
 
 }
 #include "EditView.moc"
+
+#endif

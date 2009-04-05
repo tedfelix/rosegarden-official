@@ -19,18 +19,18 @@
 #include "DiatonicPitchChooser.h"
 
 #include <iostream>
-#include <klocale.h>
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
-#include <kcombobox.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <QComboBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
 
 namespace Rosegarden
 {
@@ -40,49 +40,60 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                            int defaultNote,
                            int defaultPitch,
                            int defaultOctave) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_defaultPitch(defaultPitch)
 {
+    QVBoxLayout *layout = new QVBoxLayout;
+
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
+    layout->addWidget(m_pitchDragLabel);
 
-    QHBox *hbox = new QHBox(this);
-    hbox->setSpacing(6);
+    QWidget *hbox = new QWidget(this);
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    hboxLayout->setSpacing(6);
+    layout->addWidget(hbox);
 
-    m_step = new KComboBox( hbox );
-    m_step->setSizeLimit( 7 );
-    m_step->insertItem(i18n("C"));
-    m_step->insertItem(i18n("D"));
-    m_step->insertItem(i18n("E"));
-    m_step->insertItem(i18n("F"));
-    m_step->insertItem(i18n("G"));
-    m_step->insertItem(i18n("A"));
-    m_step->insertItem(i18n("B"));
-    m_step->setCurrentItem(defaultNote);
+    m_step = new QComboBox( hbox );
+    hboxLayout->addWidget(m_step);
+    m_step->setMaxVisibleItems( 7 );
+    m_step->addItem(tr("C"));
+    m_step->addItem(tr("D"));
+    m_step->addItem(tr("E"));
+    m_step->addItem(tr("F"));
+    m_step->addItem(tr("G"));
+    m_step->addItem(tr("A"));
+    m_step->addItem(tr("B"));
+    m_step->setCurrentIndex(defaultNote);
 
-    m_octave = new KComboBox( hbox );
-    m_octave->insertItem(i18n("-2"));
-    m_octave->insertItem(i18n("-1"));
-    m_octave->insertItem(i18n("0"));
-    m_octave->insertItem(i18n("1"));
-    m_octave->insertItem(i18n("2"));
-    m_octave->insertItem(i18n("3"));
-    m_octave->insertItem(i18n("4"));
-    m_octave->insertItem(i18n("5"));
-    m_octave->insertItem(i18n("6"));
-    m_octave->insertItem(i18n("7"));
-    m_octave->setCurrentItem(defaultOctave);
+    m_octave = new QComboBox( hbox );
+    hboxLayout->addWidget(m_octave);
+    m_octave->addItem(tr("-2"));
+    m_octave->addItem(tr("-1"));
+    m_octave->addItem(tr("0"));
+    m_octave->addItem(tr("1"));
+    m_octave->addItem(tr("2"));
+    m_octave->addItem(tr("3"));
+    m_octave->addItem(tr("4"));
+    m_octave->addItem(tr("5"));
+    m_octave->addItem(tr("6"));
+    m_octave->addItem(tr("7"));
+    m_octave->setCurrentIndex(defaultOctave);
 
-    m_accidental = new KComboBox( hbox );
-    m_accidental->insertItem(i18n("double flat"));
-    m_accidental->insertItem(i18n("flat"));
-    m_accidental->insertItem(i18n("natural"));
-    m_accidental->insertItem(i18n("sharp"));
-    m_accidental->insertItem(i18n("double sharp"));
-    m_accidental->setCurrentItem(2); // default: natural
+    m_accidental = new QComboBox( hbox );
+    hboxLayout->addWidget(m_accidental);
+    m_accidental->addItem(tr("double flat"));
+    m_accidental->addItem(tr("flat"));
+    m_accidental->addItem(tr("natural"));
+    m_accidental->addItem(tr("sharp"));
+    m_accidental->addItem(tr("double sharp"));
+    m_accidental->setCurrentIndex(2); // default: natural
 
-    m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox);
-    
+    m_pitchLabel = new QLabel(QString("%1").arg(getPitch()), hbox );
+    hboxLayout->addWidget(m_pitchLabel);
     m_pitchLabel->setMinimumWidth(40);
+
+    hbox->setLayout(hboxLayout);
+    setLayout(layout);
 
     connect(m_accidental, SIGNAL(activated(int)),
             this, SLOT(slotSetAccidental(int)));
@@ -125,14 +136,14 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
 int
 DiatonicPitchChooser::getPitch() const
 {
-    return 12 * m_octave->currentItem() + scale_Cmajor[m_step->currentItem()] + 
-    	(m_accidental->currentItem() - 2);
+    return 12 * m_octave->currentIndex() + scale_Cmajor[m_step->currentIndex()] + 
+    	(m_accidental->currentIndex() - 2);
 }
 
 int 
 DiatonicPitchChooser::getAccidental()
 {
-    return m_accidental->currentItem() - 2;
+    return m_accidental->currentIndex() - 2;
 }
 
 void
@@ -141,14 +152,14 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
     if (m_pitchDragLabel->getPitch() != pitch)
         m_pitchDragLabel->slotSetPitch(pitch);
 
-    m_octave->setCurrentItem((int)(((long) pitch) / 12));
+    m_octave->setCurrentIndex((int)(((long) pitch) / 12));
 
     int step = steps_Cmajor[pitch % 12];
-    m_step->setCurrentItem(step);
+    m_step->setCurrentIndex(step);
     
     int pitchChange = (pitch % 12) - scale_Cmajor[step];
     
-    m_accidental->setCurrentItem(pitchChange + 2);
+    m_accidental->setCurrentIndex(pitchChange + 2);
 
     m_pitchLabel->setText(QString("%1").arg(pitch));
     
@@ -158,8 +169,8 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
 void
 DiatonicPitchChooser::slotSetStep(int step)
 {
-    if (m_step->currentItem() != step)
-       m_step->setCurrentItem(step);
+    if (m_step->currentIndex() != step)
+       m_step->setCurrentIndex(step);
     std::cout << "slot_step called" << std::endl;
     setLabelsIfNeeded();
     update();
@@ -168,8 +179,8 @@ DiatonicPitchChooser::slotSetStep(int step)
 void
 DiatonicPitchChooser::slotSetOctave(int octave)
 {
-    if (m_octave->currentItem() != octave)
-       m_octave->setCurrentItem(octave);
+    if (m_octave->currentIndex() != octave)
+       m_octave->setCurrentIndex(octave);
     setLabelsIfNeeded();
     update();
 }
@@ -178,8 +189,8 @@ DiatonicPitchChooser::slotSetOctave(int octave)
 void
 DiatonicPitchChooser::slotSetAccidental(int accidental)
 {
-    if (m_accidental->currentItem() != accidental)
-       m_accidental->setCurrentItem(accidental);
+    if (m_accidental->currentIndex() != accidental)
+       m_accidental->setCurrentIndex(accidental);
     setLabelsIfNeeded();
     update();
 }
@@ -190,7 +201,7 @@ DiatonicPitchChooser::setLabelsIfNeeded()
 {
     //if (m_pitchDragLabel->)
     //{
-       m_pitchDragLabel->slotSetPitch(getPitch(), m_octave->currentItem(), m_step->currentItem());
+       m_pitchDragLabel->slotSetPitch(getPitch(), m_octave->currentIndex(), m_step->currentIndex());
     //}
     m_pitchLabel->setText(QString("%1").arg(getPitch()));
 }
@@ -203,11 +214,11 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
     if (m_pitchDragLabel->getPitch() != pitch)
         m_pitchDragLabel->slotSetPitch(pitch, octave, step);
 
-    m_octave->setCurrentItem(octave);
-    m_step->setCurrentItem(step);
+    m_octave->setCurrentIndex(octave);
+    m_step->setCurrentIndex(step);
     
     int pitchOffset = pitch - (octave * 12 + scale_Cmajor[step]);
-    m_accidental->setCurrentItem(pitchOffset + 2);
+    m_accidental->setCurrentIndex(pitchOffset + 2);
 
     //MidiPitchLabel pl(p);
     m_pitchLabel->setText(QString("%1").arg(pitch));
@@ -223,14 +234,14 @@ DiatonicPitchChooser::slotResetToDefault()
 int
 DiatonicPitchChooser::getOctave() const
 {
-    return m_octave->currentItem();
+    return m_octave->currentIndex();
 }
 
 
 int
 DiatonicPitchChooser::getStep() const
 {
-    return m_step->currentItem();
+    return m_step->currentIndex();
 }
 
 }

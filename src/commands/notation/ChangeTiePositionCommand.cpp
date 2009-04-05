@@ -23,11 +23,30 @@
 #include "base/BaseProperties.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+ChangeTiePositionCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("ties_above",
+         new ArgumentAndSelectionCommandBuilder<ChangeTiePositionCommand>());
+    r->registerCommand
+        ("ties_below",
+         new ArgumentAndSelectionCommandBuilder<ChangeTiePositionCommand>());
+}
+
+bool
+ChangeTiePositionCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "ties_above") return true;
+    else return false;
+}
 
 void
 ChangeTiePositionCommand::modifySegment()

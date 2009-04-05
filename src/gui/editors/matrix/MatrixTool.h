@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,30 +18,55 @@
 #ifndef _RG_MATRIXTOOL_H_
 #define _RG_MATRIXTOOL_H_
 
-#include "gui/general/EditTool.h"
+#include "gui/general/BaseTool.h"
 
+#include "gui/general/ActionFileClient.h"
 
-class QString;
-
+class QAction;
 
 namespace Rosegarden
 {
 
 class MatrixView;
 class SnapGrid;
+class MatrixMouseEvent;
+class MatrixWidget;
+class MatrixScene;
+class Event;
 
-
-//////////////////////////////////////////////////////////////////////
-
-class MatrixTool : public EditTool
+class MatrixTool : public BaseTool, public ActionFileClient
 {
     Q_OBJECT
 
+    friend class MatrixToolBox;
+
 public:
-//     virtual void ready();
+    ~MatrixTool();
+
+    //!!! todo: hoist common bits of this & NotationTool into a new
+    // version of EditTool? (only if there is enough to be worth it)
+
+    enum FollowMode {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
+    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    virtual void handleMidButtonPress(const MatrixMouseEvent *);
+    virtual void handleRightButtonPress(const MatrixMouseEvent *);
+    virtual void handleMouseRelease(const MatrixMouseEvent *);
+    virtual void handleMouseDoubleClick(const MatrixMouseEvent *);
+    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
+
+public slots:
+    /**
+     * Respond to an event being deleted -- it may be one that the
+     * tool is remembering as the current event.
+     */
+    virtual void handleEventRemoved(Event *event);
 
 protected slots:
-
     // For switching between tools on RMB
     //
     void slotSelectSelected();
@@ -52,14 +76,22 @@ protected slots:
     void slotVelocityChangeSelected();
     void slotDrawSelected();
 
-    const SnapGrid &getSnapGrid() const;
-
 protected:
-    MatrixTool(const QString& menuName, MatrixView*);
+    MatrixTool(QString rcFileName, QString menuName, MatrixWidget *);
 
-    //--------------- Data members ---------------------------------
+    const SnapGrid *getSnapGrid() const;
 
-    MatrixView* m_mParentView;
+    virtual void createMenu();
+    virtual bool hasMenu() { return m_menuName != ""; }
+
+    void setScene(MatrixScene *scene) { m_scene = scene; }
+
+    virtual void invokeInParentView(QString actionName);
+    virtual QAction *findActionInParentView(QString actionName);
+
+    MatrixWidget *m_widget;
+    MatrixScene *m_scene;
+    QString m_rcFileName;
 };
 
 

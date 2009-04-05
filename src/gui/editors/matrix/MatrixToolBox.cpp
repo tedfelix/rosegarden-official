@@ -17,68 +17,91 @@
 
 
 #include "MatrixToolBox.h"
-
-#include "gui/general/EditToolBox.h"
-#include "gui/general/EditTool.h"
-#include "MatrixView.h"
+#include "MatrixTool.h"
+#include "MatrixWidget.h"
 #include "MatrixPainter.h"
 #include "MatrixEraser.h"
 #include "MatrixSelector.h"
 #include "MatrixMover.h"
 #include "MatrixResizer.h"
+#include "MatrixScene.h"
 #include "MatrixVelocity.h"
 
-#include <qstring.h>
-#include <kmessagebox.h>
+#include <QString>
+#include <QMessageBox>
 
 namespace Rosegarden
 {
 
-MatrixToolBox::MatrixToolBox(MatrixView* parent)
-        : EditToolBox(parent),
-        m_mParentView(parent)
-{}
-
-EditTool* MatrixToolBox::createTool(const QString& toolName)
+MatrixToolBox::MatrixToolBox(MatrixWidget *parent) :
+    BaseToolBox(parent),
+    m_widget(parent),
+    m_scene(0)
 {
-    MatrixTool* tool = 0;
+}
 
-    QString toolNamelc = toolName.lower();
+BaseTool *
+MatrixToolBox::createTool(QString toolName)
+{
+    MatrixTool *tool = 0;
+
+    QString toolNamelc = toolName.toLower();
 
     if (toolNamelc == MatrixPainter::ToolName)
 
-        tool = new MatrixPainter(m_mParentView);
+        tool = new MatrixPainter(m_widget);
 
     else if (toolNamelc == MatrixEraser::ToolName)
 
-        tool = new MatrixEraser(m_mParentView);
+        tool = new MatrixEraser(m_widget);
 
     else if (toolNamelc == MatrixSelector::ToolName)
 
-        tool = new MatrixSelector(m_mParentView);
+        tool = new MatrixSelector(m_widget);
 
     else if (toolNamelc == MatrixMover::ToolName)
 
-        tool = new MatrixMover(m_mParentView);
+        tool = new MatrixMover(m_widget);
 
     else if (toolNamelc == MatrixResizer::ToolName)
 
-        tool = new MatrixResizer(m_mParentView);
+        tool = new MatrixResizer(m_widget);
 
     else if (toolNamelc == MatrixVelocity::ToolName)
 
-        tool = new MatrixVelocity(m_mParentView);
+        tool = new MatrixVelocity(m_widget);
     
     else {
-        KMessageBox::error(0, QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
+        QMessageBox::critical(0, "", QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;
     }
 
     m_tools.insert(toolName, tool);
 
+    if (m_scene) {
+        tool->setScene(m_scene);
+        connect(m_scene, SIGNAL(eventRemoved(Event *)),
+                tool, SLOT(handleEventRemoved(Event *)));
+    }
+
     return tool;
-    
+}
+
+void
+MatrixToolBox::setScene(MatrixScene *scene)
+{
+    m_scene = scene;
+
+    for (QHash<QString, BaseTool *>::iterator i = m_tools.begin();
+         i != m_tools.end(); ++i) {
+        MatrixTool *nt = dynamic_cast<MatrixTool *>(*i);
+        if (nt) {
+            nt->setScene(scene);
+            connect(scene, SIGNAL(eventRemoved(Event *)),
+                    nt, SLOT(handleEventRemoved(Event *)));
+        }
+    }
 }
 
 }

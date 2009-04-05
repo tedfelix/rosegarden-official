@@ -20,9 +20,9 @@
 #define _RG_SEGMENTSPLITBYPITCHCOMMAND_H_
 
 #include "base/Segment.h"
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 #include "gui/general/ClefIndex.h"
 
 
@@ -34,8 +34,10 @@ namespace Rosegarden
 class Composition;
 
 
-class SegmentSplitByPitchCommand : public KNamedCommand
+class SegmentSplitByPitchCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitByPitchCommand)
+
 public:
     enum ClefHandling {
         LeaveClefs,
@@ -51,7 +53,7 @@ public:
     virtual ~SegmentSplitByPitchCommand();
 
     static QString getGlobalName()
-        { return i18n("Split by &Pitch..."); }
+        { return tr("Split by &Pitch..."); }
 
     virtual void execute();
     virtual void unexecute();

@@ -22,7 +22,7 @@
 #include "document/BasicCommand.h"
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -41,6 +41,8 @@ class Segment;
  */
 class SegmentResizeFromStartCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentResizeFromStartCommand)
+
 public:
     SegmentResizeFromStartCommand(Segment *segment,
                                   timeT newStartTime);

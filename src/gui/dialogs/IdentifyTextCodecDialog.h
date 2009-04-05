@@ -20,7 +20,7 @@
 #define _RG_IDENTIFYTEXTCODECDIALOG_H_
 
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
 #include <deque>
 
 
@@ -33,7 +33,7 @@ namespace Rosegarden
 
 
 
-class IdentifyTextCodecDialog : public KDialogBase
+class IdentifyTextCodecDialog : public QDialog
 {
     Q_OBJECT
     

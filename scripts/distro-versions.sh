@@ -89,7 +89,7 @@ for x in `seq 1 $maxrelease` ; do echo '<tr></tr>'; done
 # Arch Linux
 
 
-arch_package_url='http://www.archlinux.org/packages/extra/i686/rosegarden/'
+arch_package_url='http://www.archlinux.org/packages/6128/'
 
 echo '<tr><td>&nbsp;</td></tr>'
 echo '<tr>'

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,6 +20,7 @@
 
 #include "sound/MappedComposition.h"
 #include "sound/Midi.h"
+#include "sound/ControlBlock.h"
 
 //#define DEBUG_META_ITERATOR 1
 //#define DEBUG_PLAYING_AUDIO_FILES 1
@@ -57,7 +57,7 @@ void MmappedSegment::map()
 
     m_mmappedSize = fInfo.size();
 
-    m_fd = ::open(m_filename.latin1(), O_RDWR);
+    m_fd = ::open(m_filename.toLatin1().data(), O_RDWR);
 
     m_mmappedRegion = ::mmap(0, m_mmappedSize, PROT_READ, MAP_SHARED, m_fd, 0);
 
@@ -244,10 +244,7 @@ bool MmappedSegment::iterator::atEnd() const
 
 //----------------------------------------
 
-MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(
-    mmappedsegments& segments,
-    ControlBlockMmapper* controlBlockMmapper)
-        : m_controlBlockMmapper(controlBlockMmapper),
+MmappedSegmentsMetaIterator::MmappedSegmentsMetaIterator(mmappedsegments& segments) :
         m_segments(segments)
 {
     for (mmappedsegments::iterator i = m_segments.begin();
@@ -344,16 +341,17 @@ bool MmappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt, bool evtIsFromMe
             return true;
         }
 
-        return !m_controlBlockMmapper->isMetronomeMuted();
+        return !ControlBlock::getInstance()->isMetronomeMuted();
     }
 
     // else, evt is not from metronome : first check if we're soloing (i.e. playing only the selected track)
-    if (m_controlBlockMmapper->isSolo())
-        return (evt->getTrackId() == m_controlBlockMmapper->getSelectedTrack());
+    if (ControlBlock::getInstance()->isSolo()) {
+        return (evt->getTrackId() == ControlBlock::getInstance()->getSelectedTrack());
+    }
 
     // finally we're not soloing, so check if track is muted
     TrackId track = evt->getTrackId();
-    bool muted = m_controlBlockMmapper->isTrackMuted(evt->getTrackId());
+    bool muted = ControlBlock::getInstance()->isTrackMuted(evt->getTrackId());
 
 #ifdef DEBUG_META_ITERATOR
 
@@ -432,12 +430,12 @@ MmappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
                 //
                 if (evtIsFromMetronome) {
 
-                    evt->setInstrument(m_controlBlockMmapper->
+                    evt->setInstrument(ControlBlock::getInstance()->
                                        getInstrumentForMetronome());
 
                 } else {
 
-                    evt->setInstrument(m_controlBlockMmapper->
+                    evt->setInstrument(ControlBlock::getInstance()->
                                        getInstrumentForTrack(evt->getTrackId()));
 
                 }
@@ -572,7 +570,7 @@ MmappedSegmentsMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
             MappedEvent evt(*itr);
             ++itr;
 
-            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId())) {
+            if (ControlBlock::getInstance()->isTrackMuted(evt.getTrackId())) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getAudioEvents - "
                 << "track " << evt.getTrackId() << " is muted" << std::endl;
@@ -581,8 +579,8 @@ MmappedSegmentsMetaIterator::getAudioEvents(std::vector<MappedEvent> &v)
                 continue;
             }
 
-            if (m_controlBlockMmapper->isSolo() == true &&
-                    evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
+            if (ControlBlock::getInstance()->isSolo() == true &&
+		evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getAudioEvents - "
                 << "track " << evt.getTrackId() << " is not solo track" << std::endl;
@@ -638,7 +636,7 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const RealTime &
 
             // Check for this track being muted or soloed
             //
-            if (m_controlBlockMmapper->isTrackMuted(evt.getTrackId()) == true) {
+            if (ControlBlock::getInstance()->isTrackMuted(evt.getTrackId()) == true) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getPlayingAudioFiles - "
                 << "track " << evt.getTrackId() << " is muted" << std::endl;
@@ -648,8 +646,8 @@ MmappedSegmentsMetaIterator::getPlayingAudioFiles(const RealTime &
                 continue;
             }
 
-            if (m_controlBlockMmapper->isSolo() == true &&
-                    evt.getTrackId() != m_controlBlockMmapper->getSelectedTrack()) {
+            if (ControlBlock::getInstance()->isSolo() == true &&
+		evt.getTrackId() != ControlBlock::getInstance()->getSelectedTrack()) {
 #ifdef DEBUG_PLAYING_AUDIO_FILES
                 std::cout << "MSMI::getPlayingAudioFiles - "
                 << "track " << evt.getTrackId() << " is not solo track" << std::endl;

@@ -23,13 +23,14 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/widgets/Rotary.h"
-#include <qfont.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlayout.h>
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
+
+#include <QFont>
+#include <QLabel>
+#include <QLayout>
+#include <QObject>
+#include <QString>
+#include <QWidget>
+
 #include <cmath>
 
 
@@ -37,26 +38,26 @@ namespace Rosegarden
 {
 
 PluginControl::PluginControl(QWidget *parent,
-                             QGridLayout *layout,
                              ControlType type,
                              PluginPort *port,
                              AudioPluginManager *aPM,
                              int index,
                              float initialValue,
-                             bool showBounds,
-                             bool hidden):
-        QObject(parent),
-        m_layout(layout),
+                             bool showBounds):
+        QWidget(parent),
         m_type(type),
         m_port(port),
         m_pluginManager(aPM),
         m_index(index)
 {
+    setObjectName("PluginControl");
+    QHBoxLayout *hbox = new QHBoxLayout(this);
+
     QFont plainFont;
     plainFont.setPointSize((plainFont.pointSize() * 9 ) / 10);
 
     QLabel *controlTitle =
-        new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), parent);
+        new QLabel(QString("%1    ").arg(strtoqstr(port->getName())), this);
     controlTitle->setFont(plainFont);
 
     if (type == Rotary) {
@@ -114,9 +115,9 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *low;
         if (port->getDisplayHint() &
             (PluginPort::Integer | PluginPort::Toggled)) {
-            low = new QLabel(QString("%1").arg(int(displayLower)), parent);
+            low = new QLabel(QString("%1").arg(int(displayLower)), this);
         } else {
-            low = new QLabel(QString("%1").arg(displayLower), parent);
+            low = new QLabel(QString("%1").arg(displayLower), this);
         }
         low->setFont(plainFont);
 
@@ -127,7 +128,7 @@ PluginControl::PluginControl(QWidget *parent,
 //                  << ", actual upper " << upperBound << ", step "
 //                  << step << std::endl;
 
-        m_dial = new ::Rosegarden::Rotary(parent,
+        m_dial = new ::Rosegarden::Rotary(this,
                                           lowerBound,    // min
                                           upperBound,    // max
                                           step,          // step
@@ -147,46 +148,28 @@ PluginControl::PluginControl(QWidget *parent,
         QLabel *upp;
         if (port->getDisplayHint() &
             (PluginPort::Integer | PluginPort::Toggled)) {
-            upp = new QLabel(QString("%1").arg(int(displayUpper)), parent);
+            upp = new QLabel(QString("%1").arg(int(displayUpper)), this);
         } else {
-            upp = new QLabel(QString("%1").arg(displayUpper), parent);
+            upp = new QLabel(QString("%1").arg(displayUpper), this);
         }
         upp->setFont(plainFont);
 
-        QWidgetItem *item;
+        hbox->addWidget(controlTitle, Qt::AlignLeft | Qt::AlignBottom);
 
-        if (!hidden) {
-            controlTitle->show();
-            item = new QWidgetItem(controlTitle);
-            item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-            m_layout->addItem(item);
-        } else {
-            controlTitle->hide();
-        }
-
-        if (showBounds && !hidden) {
+        if (showBounds) {
             low->show();
-            item = new QWidgetItem(low);
-            item->setAlignment(Qt::AlignRight | Qt::AlignBottom);
-            m_layout->addItem(item);
+            hbox->addStretch(20);
+            hbox->addWidget(low, Qt::AlignRight | Qt::AlignBottom);
         } else {
             low->hide();
         }
 
-        if (!hidden) {
-            m_dial->show();
-            item = new QWidgetItem(m_dial);
-            item->setAlignment(Qt::AlignCenter);
-            m_layout->addItem(item);
-        } else {
-            m_dial->hide();
-        }
+        hbox->addWidget(m_dial, Qt::AlignCenter | Qt::AlignBottom);
 
-        if (showBounds && !hidden) {
+        if (showBounds) {
             upp->show();
-            item = new QWidgetItem(upp);
-            item->setAlignment(Qt::AlignLeft | Qt::AlignBottom);
-            m_layout->addItem(item);
+            hbox->addWidget(upp, Qt::AlignLeft | Qt::AlignBottom);
+            hbox->addStretch(20);
         } else {
             upp->hide();
         }

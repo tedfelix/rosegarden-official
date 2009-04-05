@@ -20,8 +20,8 @@
 #define _RG_TRANSPOSECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,6 +34,8 @@ class EventSelection;
 
 class TransposeCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TransposeCommand)
+
 public:
     TransposeCommand(int semitones, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(semitones), selection, true),
@@ -45,17 +47,17 @@ public:
 
     static QString getDiatonicGlobalName(int semitones = 0, int step = 0) {
         switch (semitones) {
-        default:  return i18n("Transpose by &Interval...");
+        default:  return tr("Transpose by &Interval...");
         }
     }
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
-        case   1: return i18n("&Up a Semitone");
-        case  -1: return i18n("&Down a Semitone");
-        case  12: return i18n("Up an &Octave");
-        case -12: return i18n("Down an Octa&ve");
-        default:  return i18n("&Transpose by Semitones...");
+        case   1: return tr("&Up a Semitone");
+        case  -1: return tr("&Down a Semitone");
+        case  12: return tr("Up an &Octave");
+        case -12: return tr("Down an Octa&ve");
+        default:  return tr("&Transpose by Semitones...");
         }
     }
 

@@ -16,30 +16,38 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDMARKCOMMAND_H_
-#define _RG_NOTESMENUADDMARKCOMMAND_H_
+#ifndef _RG_ADDMARKCOMMAND_H_
+#define _RG_ADDMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddMarkCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddMarkCommand)
+
 public:
     AddMarkCommand(Mark mark,
-                            EventSelection &selection) :
+                   EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(mark), selection, true),
         m_selection(&selection), m_mark(mark) { }
 
     static QString getGlobalName(Mark mark);
+    static QString getActionName(Mark mark);
+    static QString getShortcut(Mark mark);
+    static QString getIconName(Mark mark);
+
+    static Mark getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

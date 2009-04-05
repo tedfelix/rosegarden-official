@@ -16,8 +16,8 @@
 #ifndef _RUNNABLE_PLUGIN_INSTANCE_H_
 #define _RUNNABLE_PLUGIN_INSTANCE_H_
 
-#include <qstring.h>
-#include <qstringlist.h>
+#include <QString>
+#include <QStringList>
 #include <vector>
 
 #include "RealTime.h"

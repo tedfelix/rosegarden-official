@@ -20,11 +20,11 @@
 #define _RG_OPENORCLOSERANGECOMMAND_H_
 
 #include "base/Selection.h"
-#include <kcommand.h>
+#include "document/Command.h"
 #include <vector>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -41,8 +41,10 @@ class Composition;
  *
  * This does not actually split any segments etc, it just moves them.
  */
-class OpenOrCloseRangeCommand : public KNamedCommand
+class OpenOrCloseRangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(OpenOrCloseRangeCommand)
+
 public:
     OpenOrCloseRangeCommand(Composition *composition,
                             timeT rangeBegin,

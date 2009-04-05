@@ -16,15 +16,15 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDINDICATIONCOMMAND_H_
-#define _RG_NOTESMENUADDINDICATIONCOMMAND_H_
+#ifndef _RG_ADDINDICATIONCOMMAND_H_
+#define _RG_ADDINDICATIONCOMMAND_H_
 
 #include "document/BasicCommand.h"
 #include <string>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,18 +32,23 @@ namespace Rosegarden
 
 class EventSelection;
 class Event;
+class CommandRegistry;
 
 
 class AddIndicationCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddIndicationCommand)
+
 public:
     AddIndicationCommand(std::string indicationType,
-                                  EventSelection &selection);
+                         EventSelection &selection);
     virtual ~AddIndicationCommand();
 
     // tests whether the indication can be added without overlapping
     // another one of the same type
     bool canExecute();
+
+    EventSelection *getSubsequentSelection();
 
     Event *getLastInsertedEvent() {
         return m_lastInsertedEvent;
@@ -53,6 +58,9 @@ public:
     }
 
     static QString getGlobalName(std::string indicationType);
+    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

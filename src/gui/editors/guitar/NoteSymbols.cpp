@@ -136,7 +136,7 @@ NoteSymbols::drawNoteSymbol ( QPainter* p,
                     radius );
                     
 //    p->save();
-//    p->setPen(Qt::red);
+//    p->setPen(QColor(Qt::red));
 //    p->drawRect( x, y, radius, radius );
 //    p->restore();
 }

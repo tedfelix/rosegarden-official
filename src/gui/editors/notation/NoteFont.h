@@ -24,23 +24,24 @@
 #include "NoteCharacter.h"
 #include "NoteFontMap.h"
 #include <set>
-#include <string>
-#include <qpoint.h>
+#include <QString>
+#include <QPoint>
 #include <utility>
 #include "gui/editors/notation/NoteCharacterNames.h"
 
 
 class QPixmap;
-class PixmapMap;
-class NoteCharacterDrawRep;
-class FontPixmapMap;
-class DrawRepMap;
 
 
 namespace Rosegarden
 {
 
+class PixmapMap;
+class NoteCharacterDrawRep;
+class FontPixmapMap;
+class DrawRepMap;
 
+// Encapsulates NoteFontMap, and loads pixmaps etc on demand
 
 class NoteFont
 {
@@ -50,7 +51,7 @@ public:
     typedef Exception BadNoteFont;
     ~NoteFont();
 
-    std::string getName() const { return m_fontMap.getName(); }
+    QString getName() const { return m_fontMap.getName(); }
     int getSize() const { return m_size; }
     bool isSmooth() const { return m_fontMap.isSmooth(); }
     const NoteFontMap &getNoteFontMap() const { return m_fontMap; }
@@ -86,14 +87,14 @@ public:
 
     /// Returns false if not available
     bool getCharacterColoured(CharName charName,
-                              int hue, int minValue,
+                              int hue, int minimum,
                               NoteCharacter &character,
                               CharacterType type = Screen,
                               bool inverted = false);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
-                                       int hue, int minValue,
+                                       int hue, int minimum,
                                        CharacterType type = Screen,
                                        bool inverted = false);
 
@@ -132,7 +133,7 @@ private:
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getColouredPixmap(CharName charName, QPixmap &pixmap,
-                           int hue, int minValue,
+                           int hue, int minimum,
                            bool inverted = false) const;
 
     /// Returns false + blank pixmap if it can't find the right one
@@ -140,7 +141,7 @@ private:
                          bool inverted = false) const;
 
     friend class NoteFontFactory;
-    NoteFont(std::string fontName, int size = 0);
+    NoteFont(QString fontName, int size = 0);
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
@@ -153,7 +154,7 @@ private:
 
     typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
     typedef std::map<CharName, PixmapPair>     PixmapMap;
-    typedef std::map<std::string, PixmapMap *> FontPixmapMap;
+    typedef std::map<QString, PixmapMap *> FontPixmapMap;
 
     typedef std::map<QPixmap *, NoteCharacterDrawRep *> DrawRepMap;
 

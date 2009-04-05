@@ -17,24 +17,24 @@
 
 
 #include "TimeWidget.h"
-#include <qlayout.h>
 
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include <qcombobox.h>
-#include <qframe.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qpixmap.h>
-#include <qspinbox.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QComboBox>
+#include <QFrame>
+#include <QGroupBox>
+#include <QLabel>
+#include <QPixmap>
+#include <QSpinBox>
+#include <QString>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -46,7 +46,7 @@ TimeWidget::TimeWidget(QString title,
                        timeT absTime,
                        bool editable,
                        bool constrainToCompositionDuration) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_composition(composition),
         m_isDuration(false),
         m_constrain(constrainToCompositionDuration),
@@ -64,7 +64,7 @@ TimeWidget::TimeWidget(QString title,
                        timeT duration,
                        bool editable,
                        bool constrainToCompositionDuration) :
-        QGroupBox(1, Horizontal, title, parent),
+        QGroupBox(title, parent),
         m_composition(composition),
         m_isDuration(true),
         m_constrain(constrainToCompositionDuration),
@@ -85,20 +85,21 @@ TimeWidget::init(bool editable)
     bool savedEditable = editable;
     editable = true;
 
-    QFrame *frame = new QFrame(this);
-    QGridLayout *layout = new QGridLayout(frame, 7, 3, 5, 5);
+    setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
     QLabel *label = 0;
 
     if (m_isDuration) {
 
-        label = new QLabel(i18n("Note:"), frame);
+        label = new QLabel(tr("Note:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
         if (editable) {
-            m_note = new QComboBox(frame);
+            m_note = new QComboBox;
             m_noteDurations.push_back(0);
-            m_note->insertItem(i18n("<inexact>"));
+            m_note->addItem(tr("<inexact>"));
             for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
 
                 timeT duration =
@@ -111,22 +112,20 @@ TimeWidget::init(bool editable)
                     timeT error = 0;
                     QString label = NotationStrings::makeNoteMenuLabel
                                     (dottedDuration, false, error);
-                    QPixmap pmap = NotePixmapFactory::toQPixmap
-                                   (NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error));
-                    m_note->insertItem(pmap, label); // ignore error
+                    QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error);
+                    m_note->addItem(pmap, label); // ignore error
                 }
 
                 m_noteDurations.push_back(duration);
                 timeT error = 0;
                 QString label = NotationStrings::makeNoteMenuLabel
                                 (duration, false, error);
-                QPixmap pmap = NotePixmapFactory::toQPixmap
-                               (NotePixmapFactory::makeNoteMenuPixmap(duration, error));
-                m_note->insertItem(pmap, label); // ignore error
+                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
+                m_note->addItem(pmap, label); // ignore error
             }
             connect(m_note, SIGNAL(activated(int)),
                     this, SLOT(slotNoteChanged(int)));
-            layout->addMultiCellWidget(m_note, 0, 0, 1, 3);
+            layout->addWidget(m_note, 0, 1, 0-0+ 1, 3);
 
         } else {
 
@@ -135,26 +134,26 @@ TimeWidget::init(bool editable)
             QString label = NotationStrings::makeNoteMenuLabel
                             (m_time, false, error);
             if (error != 0)
-                label = i18n("<inexact>");
-            QLineEdit *le = new QLineEdit(label, frame);
+                label = tr("<inexact>");
+            LineEdit *le = new LineEdit(label);
             le->setReadOnly(true);
-            layout->addMultiCellWidget(le, 0, 0, 1, 3);
+            layout->addWidget(le, 0, 1, 0- 0+1, 3);
         }
 
-        label = new QLabel(i18n("Units:"), frame);
+        label = new QLabel(tr("Units:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 4);
 
         if (editable) {
-            m_timeT = new QSpinBox(frame);
-            m_timeT->setLineStep
+            m_timeT = new QSpinBox;
+            m_timeT->setSingleStep
             (Note(Note::Shortest).getDuration());
             connect(m_timeT, SIGNAL(valueChanged(int)),
                     this, SLOT(slotTimeTChanged(int)));
             layout->addWidget(m_timeT, 0, 5);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time), frame);
+            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 5);
         }
@@ -163,131 +162,131 @@ TimeWidget::init(bool editable)
 
         m_note = 0;
 
-        label = new QLabel(i18n("Time:"), frame);
+        label = new QLabel(tr("Time:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
         if (editable) {
-            m_timeT = new QSpinBox(frame);
-            m_timeT->setLineStep
+            m_timeT = new QSpinBox;
+            m_timeT->setSingleStep
             (Note(Note::Shortest).getDuration());
             connect(m_timeT, SIGNAL(valueChanged(int)),
                     this, SLOT(slotTimeTChanged(int)));
             layout->addWidget(m_timeT, 0, 1);
-            layout->addWidget(new QLabel(i18n("units"), frame), 0, 2);
+            layout->addWidget(new QLabel(tr("units")), 0, 2);
         } else {
             m_timeT = 0;
-            QLineEdit *le = new QLineEdit(QString("%1").arg(m_time), frame);
+            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
             le->setReadOnly(true);
             layout->addWidget(le, 0, 2);
         }
     }
 
-    label = new QLabel(m_isDuration ? i18n("Measures:") : i18n("Measure:"), frame);
+    label = new QLabel(m_isDuration ? tr("Measures:") : tr("Measure:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 
     if (editable) {
         m_barLabel = 0;
-        m_bar = new QSpinBox(frame);
+        m_bar = new QSpinBox;
         if (m_isDuration)
-            m_bar->setMinValue(0);
+            m_bar->setMinimum(0);
         connect(m_bar, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_bar, 1, 1);
     } else {
         m_bar = 0;
-        m_barLabel = new QLineEdit(frame);
+        m_barLabel = new LineEdit;
         m_barLabel->setReadOnly(true);
         layout->addWidget(m_barLabel, 1, 1);
     }
 
-    label = new QLabel(m_isDuration ? i18n("beats:") : i18n("beat:"), frame);
+    label = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 2);
 
     if (editable) {
         m_beatLabel = 0;
-        m_beat = new QSpinBox(frame);
-        m_beat->setMinValue(1);
+        m_beat = new QSpinBox;
+        m_beat->setMinimum(1);
         connect(m_beat, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_beat, 1, 3);
     } else {
         m_beat = 0;
-        m_beatLabel = new QLineEdit(frame);
+        m_beatLabel = new LineEdit;
         m_beatLabel->setReadOnly(true);
         layout->addWidget(m_beatLabel, 1, 3);
     }
 
-    label = new QLabel(i18n("%1:").arg(NotationStrings::getShortNoteName
-                                       (Note
-                                        (Note::Shortest), true)),
-                       frame);
+    label = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName
+                                            (Note(Note::Shortest), true)));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 4);
 
     if (editable) {
         m_fractionLabel = 0;
-        m_fraction = new QSpinBox(frame);
-        m_fraction->setMinValue(1);
+        m_fraction = new QSpinBox;
+        m_fraction->setMinimum(1);
         connect(m_fraction, SIGNAL(valueChanged(int)),
                 this, SLOT(slotBarBeatOrFractionChanged(int)));
         layout->addWidget(m_fraction, 1, 5);
     } else {
         m_fraction = 0;
-        m_fractionLabel = new QLineEdit(frame);
+        m_fractionLabel = new LineEdit;
         m_fractionLabel->setReadOnly(true);
         layout->addWidget(m_fractionLabel, 1, 5);
     }
 
-    m_timeSig = new QLabel(frame);
+    m_timeSig = new QLabel;
     layout->addWidget(m_timeSig, 1, 6);
 
-    label = new QLabel(i18n("Seconds:"), frame);
+    label = new QLabel(tr("Seconds:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 0);
 
     if (editable) {
         m_secLabel = 0;
-        m_sec = new QSpinBox(frame);
+        m_sec = new QSpinBox;
         if (m_isDuration)
-            m_sec->setMinValue(0);
+            m_sec->setMinimum(0);
         connect(m_sec, SIGNAL(valueChanged(int)),
                 this, SLOT(slotSecOrMSecChanged(int)));
         layout->addWidget(m_sec, 2, 1);
     } else {
         m_sec = 0;
-        m_secLabel = new QLineEdit(frame);
+        m_secLabel = new LineEdit;
         m_secLabel->setReadOnly(true);
         layout->addWidget(m_secLabel, 2, 1);
     }
 
-    label = new QLabel(i18n("msec:"), frame);
+    label = new QLabel(tr("msec:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 2);
 
     if (editable) {
         m_msecLabel = 0;
-        m_msec = new QSpinBox(frame);
-        m_msec->setMinValue(0);
-        m_msec->setLineStep(10);
+        m_msec = new QSpinBox;
+        m_msec->setMinimum(0);
+        m_msec->setSingleStep(10);
         connect(m_msec, SIGNAL(valueChanged(int)),
                 this, SLOT(slotSecOrMSecChanged(int)));
         layout->addWidget(m_msec, 2, 3);
     } else {
         m_msec = 0;
-        m_msecLabel = new QLineEdit(frame);
+        m_msecLabel = new LineEdit;
         m_msecLabel->setReadOnly(true);
         layout->addWidget(m_msecLabel, 2, 3);
     }
 
     if (m_isDuration) {
-        m_tempo = new QLabel(frame);
+        m_tempo = new QLabel;
         layout->addWidget(m_tempo, 2, 6);
     } else {
         m_tempo = 0;
     }
+
+    setLayout(layout);
 
     if (!savedEditable) {
         if (m_note)
@@ -336,20 +335,20 @@ TimeWidget::populate()
         }
 
         if (m_timeT) {
-            m_timeT->setMinValue(0);
+            m_timeT->setMinimum(0);
             if (m_constrain) {
-                m_timeT->setMaxValue(m_composition->getEndMarker() - m_startTime);
+                m_timeT->setMaximum(m_composition->getEndMarker() - m_startTime);
             } else {
-                m_timeT->setMaxValue(INT_MAX);
+                m_timeT->setMaximum(INT_MAX);
             }
             m_timeT->setValue(m_time);
         }
 
         if (m_note) {
-            m_note->setCurrentItem(0);
+            m_note->setCurrentIndex(0);
             for (size_t i = 0; i < m_noteDurations.size(); ++i) {
                 if (m_time == m_noteDurations[i]) {
-                    m_note->setCurrentItem(i);
+                    m_note->setCurrentIndex(i);
                     break;
                 }
             }
@@ -366,13 +365,13 @@ TimeWidget::populate()
             m_composition->getTimeSignatureAt(m_startTime);
 
         if (m_bar) {
-            m_bar->setMinValue(0);
+            m_bar->setMinimum(0);
             if (m_constrain) {
-                m_bar->setMaxValue
+                m_bar->setMaximum
                     (m_composition->getBarNumber(m_composition->getEndMarker()) -
                      m_composition->getBarNumber(m_startTime));
             } else {
-                m_bar->setMaxValue(9999);
+                m_bar->setMaximum(9999);
             }
             m_bar->setValue(bars);
         } else {
@@ -380,16 +379,16 @@ TimeWidget::populate()
         }
 
         if (m_beat) {
-            m_beat->setMinValue(0);
-            m_beat->setMaxValue(timeSig.getBeatsPerBar() - 1);
+            m_beat->setMinimum(0);
+            m_beat->setMaximum(timeSig.getBeatsPerBar() - 1);
             m_beat->setValue(beats);
         } else {
             m_beatLabel->setText(QString("%1").arg(beats));
         }
 
         if (m_fraction) {
-            m_fraction->setMinValue(0);
-            m_fraction->setMaxValue(timeSig.getBeatDuration() /
+            m_fraction->setMinimum(0);
+            m_fraction->setMaximum(timeSig.getBeatDuration() /
                                     Note(Note::Shortest).
                                     getDuration() - 1);
             m_fraction->setValue(hemidemis);
@@ -397,8 +396,9 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
-                           arg(timeSig.getDenominator()));
+        m_timeSig->setText(tr("(%1/%2 time)")
+			   .arg(timeSig.getNumerator())
+                           .arg(timeSig.getDenominator()));
 
         timeT endTime = m_startTime + m_time;
 
@@ -406,12 +406,12 @@ TimeWidget::populate()
                       (m_startTime, endTime);
 
         if (m_sec) {
-            m_sec->setMinValue(0);
+            m_sec->setMinimum(0);
             if (m_constrain) {
-                m_sec->setMaxValue(m_composition->getRealTimeDifference
+                m_sec->setMaximum(m_composition->getRealTimeDifference
                                    (m_startTime, m_composition->getEndMarker()).sec);
             } else {
-                m_sec->setMaxValue(9999);
+                m_sec->setMaximum(9999);
             }
             m_sec->setValue(rt.sec);
         } else {
@@ -419,8 +419,8 @@ TimeWidget::populate()
         }
 
         if (m_msec) {
-            m_msec->setMinValue(0);
-            m_msec->setMaxValue(999);
+            m_msec->setMinimum(0);
+            m_msec->setMaximum(999);
             m_msec->setValue(rt.msec());
         } else {
             m_msecLabel->setText(QString("%1").arg(rt.msec()));
@@ -442,27 +442,27 @@ TimeWidget::populate()
         }
         if (change) {
             if (bpmc != qpmc) {
-                m_tempo->setText(i18n("(starting %1.%2 qpm, %2.%3 bpm)").
-                                 arg(qpmc / 100).
-                                 arg(qpmc % 100).
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(tr("(starting %1.%2 qpm, %3.%4 bpm)")
+                                 .arg(qpmc / 100)
+                                 .arg(qpmc % 100)
+                                 .arg(bpmc / 100)
+                                 .arg(bpmc % 100));
             } else {
-                m_tempo->setText(i18n("(starting %1.%2 bpm)").
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(tr("(starting %1.%2 bpm)") 
+                                 .arg(bpmc / 100)
+                                 .arg(bpmc % 100));
             }
         } else {
             if (bpmc != qpmc) {
-                m_tempo->setText(i18n("(%1.%2 qpm, %2.%3 bpm)").
-                                 arg(qpmc / 100).
-                                 arg(qpmc % 100).
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(tr("(%1.%2 qpm, %3.%4 bpm)")
+                                 .arg(qpmc / 100)
+                                 .arg(qpmc % 100)
+                                 .arg(bpmc / 100)
+                                 .arg(bpmc % 100));
             } else {
-                m_tempo->setText(i18n("(%1.%2 bpm)").
-                                 arg(bpmc / 100).
-                                 arg(bpmc % 100));
+                m_tempo->setText(tr("(%1.%2 bpm)")
+                                 .arg(bpmc / 100)
+                                 .arg(bpmc % 100));
             }
         }
 
@@ -474,11 +474,11 @@ TimeWidget::populate()
 
         if (m_timeT) {
             if (m_constrain) {
-                m_timeT->setMinValue(m_composition->getStartMarker());
-                m_timeT->setMaxValue(m_composition->getEndMarker());
+                m_timeT->setMinimum(m_composition->getStartMarker());
+                m_timeT->setMaximum(m_composition->getEndMarker());
             } else {
-                m_timeT->setMinValue(INT_MIN);
-                m_timeT->setMaxValue(INT_MAX);
+                m_timeT->setMinimum(INT_MIN);
+                m_timeT->setMaximum(INT_MAX);
             }
             m_timeT->setValue(m_time);
         }
@@ -491,12 +491,12 @@ TimeWidget::populate()
             m_composition->getTimeSignatureAt(m_time);
 
         if (m_bar) {
-            m_bar->setMinValue(INT_MIN);
+            m_bar->setMinimum(INT_MIN);
             if (m_constrain) {
-                m_bar->setMaxValue(m_composition->getBarNumber
+                m_bar->setMaximum(m_composition->getBarNumber
                                    (m_composition->getEndMarker()));
             } else {
-                m_bar->setMaxValue(9999);
+                m_bar->setMaximum(9999);
             }
             m_bar->setValue(bar + 1);
         } else {
@@ -504,16 +504,16 @@ TimeWidget::populate()
         }
 
         if (m_beat) {
-            m_beat->setMinValue(1);
-            m_beat->setMaxValue(timeSig.getBeatsPerBar());
+            m_beat->setMinimum(1);
+            m_beat->setMaximum(timeSig.getBeatsPerBar());
             m_beat->setValue(beat);
         } else {
             m_beatLabel->setText(QString("%1").arg(beat));
         }
 
         if (m_fraction) {
-            m_fraction->setMinValue(0);
-            m_fraction->setMaxValue(timeSig.getBeatDuration() /
+            m_fraction->setMinimum(0);
+            m_fraction->setMaximum(timeSig.getBeatDuration() /
                                     Note(Note::Shortest).
                                     getDuration() - 1);
             m_fraction->setValue(hemidemis);
@@ -521,18 +521,19 @@ TimeWidget::populate()
             m_fractionLabel->setText(QString("%1").arg(hemidemis));
         }
 
-        m_timeSig->setText(i18n("(%1/%2 time)").arg(timeSig.getNumerator()).
-                           arg(timeSig.getDenominator()));
+        m_timeSig->setText(tr("(%1/%2 time)")
+	                   .arg(timeSig.getNumerator())
+                           .arg(timeSig.getDenominator()));
 
         RealTime rt = m_composition->getElapsedRealTime(m_time);
 
         if (m_sec) {
-            m_sec->setMinValue(INT_MIN);
+            m_sec->setMinimum(INT_MIN);
             if (m_constrain) {
-                m_sec->setMaxValue(m_composition->getElapsedRealTime
+                m_sec->setMaximum(m_composition->getElapsedRealTime
                                    (m_composition->getEndMarker()).sec);
             } else {
-                m_sec->setMaxValue(9999);
+                m_sec->setMaximum(9999);
             }
             m_sec->setValue(rt.sec);
         } else {
@@ -540,8 +541,8 @@ TimeWidget::populate()
         }
 
         if (m_msec) {
-            m_msec->setMinValue(0);
-            m_msec->setMaxValue(999);
+            m_msec->setMinimum(0);
+            m_msec->setMaximum(999);
             m_msec->setValue(rt.msec());
         } else {
             m_msecLabel->setText(QString("%1").arg(rt.msec()));

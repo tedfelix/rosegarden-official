@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,7 @@
 #ifndef _RG_NOTATIONTOOLBOX_H_
 #define _RG_NOTATIONTOOLBOX_H_
 
-#include "gui/general/EditToolBox.h"
+#include "gui/general/BaseToolBox.h"
 
 
 class QString;
@@ -28,27 +27,27 @@ class QString;
 namespace Rosegarden
 {
 
-class NotationView;
-class EditTool;
+class NotationWidget;
+class NotationScene;
 
 
 /**
  * NotationToolBox : maintains a single instance of each registered tool
  *
- * Tools are fetched from a name
+ * Tools are fetched by name
  */
-class NotationToolBox : public EditToolBox
+class NotationToolBox : public BaseToolBox
 {
     Q_OBJECT
+
 public:
-    NotationToolBox(NotationView* parent);
+    NotationToolBox(NotationWidget *parent);
+
+    void setScene(NotationScene *scene);
 
 protected:
-    virtual EditTool* createTool(const QString& toolName);
-
-    //--------------- Data members ---------------------------------
-
-    NotationView* m_nParentView;
+    virtual BaseTool *createTool(QString toolName);
+    NotationWidget *m_widget;
 };
 
 
@@ -56,3 +55,4 @@ protected:
 }
 
 #endif
+

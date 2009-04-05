@@ -20,10 +20,10 @@
 #define _RG_MODIFYMARKERCOMMAND_H_
 
 #include <string>
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -34,8 +34,10 @@ namespace Rosegarden
 class Composition;
 
 
-class ModifyMarkerCommand : public KNamedCommand
+class ModifyMarkerCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyMarkerCommand)
+
 public:
     ModifyMarkerCommand(Composition *comp,
                         int id,
@@ -45,7 +47,7 @@ public:
                         const std::string &des);
     ~ModifyMarkerCommand();
 
-    static QString getGlobalName() { return i18n("&Modify Marker"); }
+    static QString getGlobalName() { return tr("&Modify Marker"); }
 
     virtual void execute();
     virtual void unexecute();

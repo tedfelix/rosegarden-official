@@ -22,9 +22,9 @@
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
 #include <map>
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -40,6 +40,8 @@ class Clipboard;
 
 class PasteEventsCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(PasteEventsCommand)
+
 public:
     enum PasteType {
         Restricted,             // paste into existing gap
@@ -66,7 +68,7 @@ public:
      * the events to be pasted by the time the Paste command is
      * executed, but might not do so yet.  This is necessary if the
      * Paste command is to follow another clipboard-based command
-     * in a KMacroCommand sequence.  pasteEndTime must supply the
+     * in a MacroCommand sequence.  pasteEndTime must supply the
      * latest time in the destination segment that may be modified
      * by the paste.
      */
@@ -80,7 +82,7 @@ public:
 
     EventSelection getPastedEvents();
 
-    static QString getGlobalName() { return i18n("&Paste"); }
+    static QString getGlobalName() { return tr("&Paste"); }
 
     /// Determine whether this paste will succeed (without executing it yet)
     bool isPossible();

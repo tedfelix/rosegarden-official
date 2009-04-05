@@ -20,15 +20,24 @@
 
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
+#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+BreakCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("break_group",
+         new SelectionCommandBuilder<BreakCommand>());
+}
 
 void
 BreakCommand::modifySegment()

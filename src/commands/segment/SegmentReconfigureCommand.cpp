@@ -20,14 +20,14 @@
 
 #include "base/Segment.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(QString name) :
-        KNamedCommand(name)
+        NamedCommand(name)
 {}
 
 SegmentReconfigureCommand::~SegmentReconfigureCommand()

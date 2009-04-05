@@ -24,11 +24,11 @@
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenDCOP.h"
+#include "gui/application/TransportStatus.h"
 #include "sound/MappedComposition.h"
 #include "sound/MappedEvent.h"
-#include <qobject.h>
-#include <qstring.h>
+#include <QObject>
+#include <QString>
 #include <vector>
 #include <map>
 
@@ -45,12 +45,10 @@ class TransportDialog;
 class Track;
 class TimeSigSegmentMmapper;
 class TempoSegmentMmapper;
-class SequencerMapper;
 class Segment;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MetronomeMmapper;
 class CountdownDialog;
-class ControlBlockMmapper;
 class CompositionMmapper;
 class Composition;
 class AudioManagerDialog;
@@ -60,19 +58,19 @@ class SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    SequenceManager(RosegardenGUIDoc *doc,
+    SequenceManager(RosegardenDocument *doc,
                     TransportDialog *transport);
     ~SequenceManager();
 
     /**
      * Replaces the internal document
      */
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
 
     /**
      * Return the current internal document
      */
-    RosegardenGUIDoc* getDocument();
+    RosegardenDocument* getDocument();
 
     //
     // Transport controls
@@ -192,12 +190,6 @@ public:
     void filtersChanged(MidiFilter thruFilter,
                         MidiFilter recordFilter);
 
-    /// Return the current sequencer memory mapped file
-    SequencerMapper* getSequencerMapper() { return m_sequencerMapper; }
-
-    /// Ensure that the sequencer file is mapped
-    void mapSequencer();
-
     void setTransport(TransportDialog* t) { m_transport = t; }
     
     void enableMIDIThruRouting(bool state);
@@ -210,7 +202,7 @@ public slots:
 
 signals:
     void signalSelectProgramNoSend(int,int,int);
-    void setProgress(int);
+    void setValue(int);
     void incrementProgress(int);
 
     void insertableNoteOnReceived(int pitch, int velocity);
@@ -236,7 +228,7 @@ protected slots:
 protected:
 
     void resetCompositionMmapper();
-    void resetControlBlockMmapper();
+    void resetControlBlock();
     void resetMetronomeMmapper();
     void resetTempoSegmentMmapper();
     void resetTimeSigSegmentMmapper();
@@ -248,9 +240,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     MappedComposition  m_mC;
-    RosegardenGUIDoc              *m_doc;
+    RosegardenDocument              *m_doc;
     CompositionMmapper            *m_compositionMmapper;
-    ControlBlockMmapper           *m_controlBlockMmapper;
     MetronomeMmapper              *m_metronomeMmapper;
     TempoSegmentMmapper           *m_tempoSegmentMmapper;
     TimeSigSegmentMmapper         *m_timeSigSegmentMmapper;
@@ -287,11 +278,6 @@ protected:
     // this can be caused by a window resize, and since the reset is potentially expensive we want to collapse
     // several following requests into one.
     QTimer                    *m_compositionMmapperResetTimer;
-
-    // Information that the sequencer is providing to us - for the moment
-    // it's only the position pointer.
-    //
-    SequencerMapper          *m_sequencerMapper;
 
     // Just to make sure we don't bother the user too often
     //

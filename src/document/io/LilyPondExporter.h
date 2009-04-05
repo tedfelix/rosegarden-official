@@ -48,9 +48,9 @@ namespace Rosegarden
 
 class TimeSignature;
 class Studio;
-class RosegardenGUIApp;
-class RosegardenGUIView;
-class RosegardenGUIDoc;
+class RosegardenMainWindow;
+class RosegardenMainViewWidget;
+class RosegardenDocument;
 class NotationView;
 class Key;
 class Composition;
@@ -80,16 +80,16 @@ public:
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;
 
 public:
-    LilyPondExporter(RosegardenGUIApp *parent, RosegardenGUIDoc *, std::string fileName);
-    LilyPondExporter(NotationView *parent, RosegardenGUIDoc *, std::string fileName);
+    LilyPondExporter(RosegardenMainWindow *parent, RosegardenDocument *, std::string fileName);
+    LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
     ~LilyPondExporter();
 
     bool write();
 
 protected:
-    RosegardenGUIView *m_view;
+    RosegardenMainViewWidget *m_view;
     NotationView *m_notationView;
-    RosegardenGUIDoc *m_doc;
+    RosegardenDocument *m_doc;
     Composition *m_composition;
     Studio *m_studio;
     std::string m_fileName;
@@ -182,14 +182,12 @@ private:
     static const unsigned int FONT_23	= 5;
     static const unsigned int FONT_26	= 6;
 
-    bool m_exportLyrics;
-    bool m_exportMidi;
+    unsigned int m_exportLyrics;
+    static const unsigned int EXPORT_NO_LYRICS = 0;
+    static const unsigned int EXPORT_LYRICS_LEFT = 1;
+    static const unsigned int EXPORT_LYRICS_CENTER = 2;
+    static const unsigned int EXPORT_LYRICS_RIGHT = 3;
 
-    unsigned int m_lyricsHAlignment;
-    static const unsigned int LEFT_ALIGN   = 0;
-    static const unsigned int CENTER_ALIGN = 1;
-    static const unsigned int RIGHT_ALIGN  = 2;
-    
     unsigned int m_exportTempoMarks;
     static const unsigned int EXPORT_NONE_TEMPO_MARKS = 0;
     static const unsigned int EXPORT_FIRST_TEMPO_MARK = 1;
@@ -201,10 +199,9 @@ private:
     static const unsigned int EXPORT_SELECTED_TRACK = 2;
     static const unsigned int EXPORT_SELECTED_SEGMENTS = 3;
 
-    bool m_exportPointAndClick;
     bool m_exportBeams;
     bool m_exportStaffGroup;
-    bool m_exportStaffMerge;
+
     bool m_raggedBottom;
 
     unsigned int m_exportMarkerMode;

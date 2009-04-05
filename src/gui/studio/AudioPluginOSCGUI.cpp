@@ -24,10 +24,10 @@
 #include "base/AudioPluginInstance.h"
 #include "base/Exception.h"
 #include "sound/PluginIdentifier.h"
-#include <kprocess.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstring.h>
+#include <QProcess>
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
 #include <algorithm>
 
 
@@ -44,7 +44,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     QString identifier = strtoqstr(instance->getIdentifier());
 
     QString filePath = getGUIFilePath(identifier);
-    if (!filePath) {
+    if ( filePath.isEmpty() ) {
         throw Exception("No GUI found");
     }
 
@@ -52,12 +52,13 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     PluginIdentifier::parseIdentifier(identifier, type, soName, label);
     QFileInfo soInfo(soName);
 
+    //setup osc process
     // arguments: osc url, dll name, label, instance tag
 
-    m_gui = new KProcess();
-
-    *m_gui << filePath
-    << m_serverUrl
+    m_gui = new QProcess();
+    QStringList guiArgs;
+   
+    guiArgs << m_serverUrl
     << soInfo.fileName()
     << label
     << friendlyName;
@@ -66,7 +67,8 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
     << filePath << " " << m_serverUrl << " "
     << soInfo.fileName() << " " << label << " " << friendlyName << endl;
 
-    if (!m_gui->start(KProcess::NotifyOnExit, KProcess::NoCommunication)) {
+    m_gui->start(filePath, guiArgs);
+    if (!m_gui->waitForStarted()) {  //@@@ JAS Check here first for errors
         RG_DEBUG << "AudioPluginOSCGUI::AudioPluginOSCGUI: Couldn't start process " << filePath << endl;
         delete m_gui;
         m_gui = 0;
@@ -102,7 +104,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
         throw Exception("No GUI subdir available");
     }
 
-    const QFileInfoList *list = dir.entryInfoList();
+    QFileInfoList list = dir.entryInfoList();
 
     // in order of preference:
     const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui"
@@ -113,15 +115,11 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 
         for (int fuzzy = 0; fuzzy <= 1; ++fuzzy) {
 
-            QFileInfoListIterator i(*list);
-            QFileInfo *info;
+            QFileInfoList::iterator info;
 
-            while ((info = i.current()) != 0) {
-
+            for (info = list.begin(); info != list.end(); ++info) { //### JAS Check for errors
                 RG_DEBUG << "Looking at " << info->fileName() << " in path "
                 << info->filePath() << " for suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << ", fuzzy " << fuzzy << endl;
-
-                ++i;
 
                 if (!(info->isFile() || info->isSymLink())
                         || !info->isExecutable()) {
@@ -139,7 +137,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
                     RG_DEBUG << "(is label)" << endl;
                 }
 
-                if (k == nsuffixes || info->fileName().lower().endsWith(suffixes[k])) {
+                if (k == nsuffixes || info->fileName().toLower().endsWith(suffixes[k])) {
                     RG_DEBUG << "(ends with suffix " << (k == nsuffixes ? "(none)" : suffixes[k]) << " or out of suffixes)" << endl;
                     return info->filePath();
                 }
@@ -157,13 +155,13 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
     if (m_address)
         lo_address_free(m_address);
 
-    char *host = lo_url_get_hostname(url);
-    char *port = lo_url_get_port(url);
+    char *host = lo_url_get_hostname( qStrToCharPtrUtf8(url));
+	char *port = lo_url_get_port( qStrToCharPtrUtf8(url));
     m_address = lo_address_new(host, port);
     free(host);
     free(port);
 
-    m_basePath = lo_url_get_path(url);
+	m_basePath = lo_url_get_path( qStrToCharPtrUtf8(url));
 }
 
 void
@@ -174,7 +172,7 @@ AudioPluginOSCGUI::show()
     if (!m_address)
         return ;
     QString path = m_basePath + "/show";
-    lo_send(m_address, path, "");
+	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8(""));
 }
 
 void
@@ -183,7 +181,7 @@ AudioPluginOSCGUI::hide()
     if (!m_address)
         return ;
     QString path = m_basePath + "/hide";
-    lo_send(m_address, path, "");
+	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8(""));
 }
 
 void
@@ -192,7 +190,7 @@ AudioPluginOSCGUI::quit()
     if (!m_address)
         return ;
     QString path = m_basePath + "/quit";
-    lo_send(m_address, path, "");
+	lo_send(m_address, qStrToCharPtrUtf8(path), qStrToCharPtrUtf8(""));
 }
 
 void
@@ -201,7 +199,7 @@ AudioPluginOSCGUI::sendProgram(int bank, int program)
     if (!m_address)
         return ;
     QString path = m_basePath + "/program";
-    lo_send(m_address, path, "ii", bank, program);
+	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("ii"), bank, program);
 }
 
 void
@@ -210,7 +208,7 @@ AudioPluginOSCGUI::sendPortValue(int port, float value)
     if (!m_address)
         return ;
     QString path = m_basePath + "/control";
-    lo_send(m_address, path, "if", port, value);
+	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("if"), port, value);
 }
 
 void
@@ -219,7 +217,7 @@ AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
     if (!m_address)
         return ;
     QString path = m_basePath + "/configure";
-    lo_send(m_address, path, "ss", key.data(), value.data());
+	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("ss"), key.data(), value.data());
 }
 
 }

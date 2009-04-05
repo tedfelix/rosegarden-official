@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -18,6 +18,7 @@
 #include "MappedStudio.h"
 #include "SoundDriver.h"
 #include "PluginFactory.h"
+#include "misc/Strings.h"
 
 #include <pthread.h> // for mutex
 
@@ -53,7 +54,7 @@ static inline void releaseLock(const char *file, int line)
 #define GET_LOCK getLock(__FILE__,__LINE__)
 #define RELEASE_LOCK releaseLock(__FILE__,__LINE__)
 
-// These stream functions are stolen and adapted from Qt3 qvaluevector.h
+// These stream functions are stolen and adapted from Qt3 QVector
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
@@ -1483,7 +1484,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
                     studio->getSoundDriver()->configurePlugin(m_instrument,
                             m_position,
                             key, value);
-                if (rv && rv != "") {
+                if ( rv.isEmpty() ) {
                     throw(rv);
                 }
             }

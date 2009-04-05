@@ -24,7 +24,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +33,7 @@ namespace Rosegarden
 SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
                                              int multiplier,
                                              int divisor) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_segment(s),
     m_newSegment(0),
     m_startTimeGiven(false),
@@ -49,7 +49,7 @@ SegmentRescaleCommand::SegmentRescaleCommand(Segment *s,
                                              int multiplier,
                                              int divisor,
                                              timeT st) :
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_segment(s),
     m_newSegment(0),
     m_startTimeGiven(true),
@@ -94,7 +94,7 @@ SegmentRescaleCommand::execute()
         m_newSegment->setTrack(m_segment->getTrack());
         std::string label = m_segment->getLabel();
         m_newSegment->setLabel(appendLabel(
-                label, qstrtostr(i18n("(rescaled)"))));
+                label, qstrtostr(tr("(rescaled)"))));
         m_newSegment->setColourIndex(m_segment->getColourIndex());
 
         for (Segment::iterator i = m_segment->begin();

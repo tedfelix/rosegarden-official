@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUREMOVEMARKSCOMMAND_H_
-#define _RG_NOTESMENUREMOVEMARKSCOMMAND_H_
+#ifndef _RG_REMOVEMARKSCOMMAND_H_
+#define _RG_REMOVEMARKSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,16 +30,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RemoveMarksCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveMarksCommand)
+
 public:
     RemoveMarksCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Remove All Marks"); }
+    static QString getGlobalName() { return tr("&Remove All Marks"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

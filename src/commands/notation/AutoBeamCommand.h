@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUAUTOBEAMCOMMAND_H_
-#define _RG_NOTESMENUAUTOBEAMCOMMAND_H_
+#ifndef _RG_AUTOBEAMCOMMAND_H_
+#define _RG_AUTOBEAMCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -31,10 +31,13 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 class AutoBeamCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AutoBeamCommand)
+
 public:
     AutoBeamCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection) { }
@@ -42,7 +45,9 @@ public:
     AutoBeamCommand(Segment &segment) :
         BasicSelectionCommand(getGlobalName(), segment) { }
 
-    static QString getGlobalName() { return i18n("&Auto-Beam"); }
+    static QString getGlobalName() { return tr("&Auto-Beam"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

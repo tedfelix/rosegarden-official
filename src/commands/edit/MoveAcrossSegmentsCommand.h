@@ -19,10 +19,11 @@
 #ifndef _RG_MOVEACROSSSEGMENTSCOMMAND_H_
 #define _RG_MOVEACROSSSEGMENTSCOMMAND_H_
 
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -33,8 +34,10 @@ class EventSelection;
 class Clipboard;
 
 
-class MoveAcrossSegmentsCommand : public KMacroCommand
+class MoveAcrossSegmentsCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MoveAcrossSegmentsCommand)
+
 public:
     MoveAcrossSegmentsCommand(Segment &firstSegment,
                               Segment &secondSegment,

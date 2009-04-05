@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,35 +19,36 @@
 #define _RG_TRACKEDITOR_H_
 
 #include "base/MidiProgram.h"
-#include <map>
-#include "TrackEditorIface.h"
-#include <qstring.h>
-#include <qwidget.h>
 #include "base/Event.h"
 #include "gui/editors/segment/TrackButtons.h"
+
+#include <QString>
+#include <QWidget>
+#include <QScrollArea>
+
+#include <map>
 
 
 class QPaintEvent;
 class QDropEvent;
 class QDragEnterEvent;
-class KCommand;
-
+class QScrollBar;
+class QScrollArea;
 
 namespace Rosegarden
 {
 
+class Command;
 class TrackButtons;
 class TempoRuler;
 class Segment;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class QDeferScrollView;
-class MultiViewCommandHistory;
 class CompositionView;
 class CompositionModel;
 class ChordNameRuler;
 class StandardRuler;
-
 
 /**
  * Global widget for segment edition.
@@ -58,24 +58,25 @@ class StandardRuler;
  *
  * @see CompositionView
  */
-class TrackEditor : public QWidget, virtual public TrackEditorIface
+class TrackEditor : public QWidget
 {
     Q_OBJECT
 public:
     /**
      * Create a new TrackEditor representing the document \a doc
      */
-    TrackEditor(RosegardenGUIDoc* doc,
+    TrackEditor(RosegardenDocument* doc,
                 QWidget* rosegardenguiview,
                 RulerScale *rulerScale,
                 bool showTrackLabels,
                 double initialUnitsPerPixel = 0,
-                QWidget* parent = 0, const char* name = 0,
-                WFlags f=0);
+                QWidget* parent = 0, const char* name = 0
+			   );
+                // removed: WFlags f=0);
 
     ~TrackEditor();
 
-    CompositionView* getSegmentCanvas()       { return m_segmentCanvas; }
+    CompositionView* getCompositionView()       { return m_compositionView; }
     TempoRuler*    getTempoRuler()          { return m_tempoRuler; }
     ChordNameRuler*getChordNameRuler()      { return m_chordNameRuler; }
     StandardRuler*    getTopStandardRuler()       { return m_topStandardRuler; }
@@ -93,8 +94,7 @@ public:
     /**
      * Manage command history
      */
-    MultiViewCommandHistory *getCommandHistory();
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
     void updateRulers();
 
@@ -164,10 +164,10 @@ protected slots:
 
 signals:
     /**
-     * Emitted when the represented data changed and the SegmentCanvas
+     * Emitted when the represented data changed and the CompositionView
      * needs to update itself
      *
-     * @see SegmentCanvas::update()
+     * @see CompositionView::update()
      */
     void needUpdate();
 
@@ -212,16 +212,18 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    RosegardenGUIDoc        *m_doc;
-    RulerScale  *m_rulerScale;
+    RosegardenDocument        *m_doc;
+    
+    RulerScale  			*m_rulerScale;
     TempoRuler              *m_tempoRuler;
     ChordNameRuler          *m_chordNameRuler;
-    StandardRuler              *m_topStandardRuler;
-    StandardRuler              *m_bottomStandardRuler;
+    StandardRuler           *m_topStandardRuler;
+    StandardRuler           *m_bottomStandardRuler;
     TrackButtons            *m_trackButtons;
-    CompositionView         *m_segmentCanvas;
+    CompositionView         *m_compositionView;
     CompositionModel        *m_compositionModel;
-    QDeferScrollView        *m_trackButtonScroll;
+//    QDeferScrollView        *m_trackButtonScroll;
+    QScrollArea		        *m_trackButtonScroll;
 
     bool                     m_showTrackLabels;
     unsigned int             m_canvasWidth;
@@ -233,6 +235,8 @@ protected:
     SegmentRefreshStatusIdMap m_segmentsRefreshStatusIds;
 
     double                   m_initialUnitsPerPixel;
+
+private:
 };
 
 

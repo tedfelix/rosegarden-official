@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -40,7 +40,8 @@
 #include "AudioPlayQueue.h"
 #include "ExternalTransport.h"
 
-#include <qregexp.h>
+#include <QRegExp>
+
 #include <pthread.h>
 
 
@@ -644,48 +645,57 @@ AlsaDriver::generateInstruments()
     m_devicePortMap.clear();
     m_suspendedPortMap.clear();
 
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); it++) {
-        if ((*it)->m_client == m_client) {
-            std::cerr << "(Ignoring own port " << (*it)->m_client
-            << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        } else if ((*it)->m_client == 0) {
-            std::cerr << "(Ignoring system port " << (*it)->m_client
-            << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        }
-
-        if ((*it)->isWriteable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create play device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                addInstrumentsForDevice(device);
-                m_devices.push_back(device);
-            }
-        }
-        if ((*it)->isReadable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create record device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                m_devices.push_back(device);
-            }
-        }
-    }
+    // Do NOT scan all the ports and create new devices for all of them.  This makes
+    // it impossible for a user to delete any devices they don't want to use for
+    // anything, and it's time for that irritation to end once and for all.
+    // Absolutely.  Now that I've worked with the results, there is no question
+    // that this needs to go away now.
+    //
+    // The automatic scanning that takes place and finds a newly-started
+    // instance of Hydrogen or whatever seems fine though.
+     
+//    AlsaPortList::iterator it = m_alsaPorts.begin();
+//    for (; it != m_alsaPorts.end(); it++) {
+//        if ((*it)->m_client == m_client) {
+//            std::cerr << "(Ignoring own port " << (*it)->m_client
+//            << ":" << (*it)->m_port << ")" << std::endl;
+//            continue;
+//        } else if ((*it)->m_client == 0) {
+//            std::cerr << "(Ignoring system port " << (*it)->m_client
+//            << ":" << (*it)->m_port << ")" << std::endl;
+//            continue;
+//        }
+//
+//        if ((*it)->isWriteable()) {
+//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
+//            if (!device) {
+//#ifdef DEBUG_ALSA
+//                std::cerr << "WARNING: Failed to create play device" << std::endl;
+//#else
+//
+//                ;
+//#endif
+//
+//            } else {
+//                addInstrumentsForDevice(device);
+//                m_devices.push_back(device);
+//            }
+//        }
+//        if ((*it)->isReadable()) {
+//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
+//            if (!device) {
+//#ifdef DEBUG_ALSA
+//                std::cerr << "WARNING: Failed to create record device" << std::endl;
+//#else
+//
+//                ;
+//#endif
+//
+//            } else {
+//                m_devices.push_back(device);
+//            }
+//        }
+//    } 
 
 #ifdef HAVE_DSSI
     // Create a number of soft synth Instruments
@@ -976,7 +986,7 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
 
         int outputPort = checkAlsaError(snd_seq_create_simple_port
                                         (m_midiHandle,
-                                         portName,
+                                         portName.toLocal8Bit(),
                                          SND_SEQ_PORT_CAP_READ |
                                          SND_SEQ_PORT_CAP_SUBS_READ,
                                          SND_SEQ_PORT_TYPE_APPLICATION),
@@ -1162,13 +1172,13 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
         newName = oldName.left(sep + 3) + name;
     }
 
-    snd_seq_port_info_set_name(pinfo, newName.data());
+    snd_seq_port_info_set_name(pinfo, newName.toLocal8Bit().data());
     checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
                    "renameDevice");
 
     for (unsigned int i = 0; i < m_devices.size(); ++i) {
         if (m_devices[i]->getId() == id) {
-            m_devices[i]->setName(newName.data());
+            m_devices[i]->setName(qstrtostr(newName));
             break;
         }
     }
@@ -1236,7 +1246,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
     }
 
     if (connectionNo < tempList.size()) {
-        return tempList[connectionNo]->m_name.c_str();
+        return strtoqstr(tempList[connectionNo]->m_name);
     }
 
     return "";
@@ -1246,8 +1256,8 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
 {
     ClientPortPair pair( -1, -1);
-    if (connection && connection != "") {
-        pair = getPortByName(connection.data());
+    if (connection != "") {
+        pair = getPortByName(qstrtostr(connection));
     }
     setConnectionToDevice(device, connection, pair);
 }
@@ -1256,8 +1266,8 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                                   const ClientPortPair &pair)
 {
-    QString prevConnection = device.getConnection().c_str();
-    device.setConnection(connection.data());
+    QString prevConnection = strtoqstr(device.getConnection());
+    device.setConnection(qstrtostr(connection));
 
     if (device.getDirection() == MidiDevice::Play) {
 
@@ -1266,7 +1276,7 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
         if (j != m_outputPorts.end()) {
 
             if (prevConnection != "") {
-                ClientPortPair prevPair = getPortByName(prevConnection.data());
+                ClientPortPair prevPair = getPortByName(qstrtostr(prevConnection));
                 if (prevPair.first >= 0 && prevPair.second >= 0) {
 
                     std::cerr << "Disconnecting my port " << j->second << " from " << prevPair.first << ":" << prevPair.second << " on reconnection" << std::endl;
@@ -1280,7 +1290,8 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                         for (MappedDeviceList::iterator k = m_devices.begin();
                                 k != m_devices.end(); ++k) {
                             if ((*k)->getId() != device.getId()) {
-                                if ((*k)->getConnection() == prevConnection.data()) {
+                                if ((*k)->getConnection() ==
+                                    qstrtostr(prevConnection)) {
                                     foundElsewhere = true;
                                     break;
                                 }
@@ -1317,7 +1328,7 @@ void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
     Audit audit;
-    ClientPortPair port(getPortByName(connection.data()));
+    ClientPortPair port(getPortByName(qstrtostr(connection)));
 
     if (port.first != -1 && port.second != -1) {
 
@@ -1343,7 +1354,7 @@ void
 AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 {
     Audit audit;
-    ClientPortPair port(getPortByName(idealConnection.data()));
+    ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
     audit << "AlsaDriver::setPlausibleConnection: connection like "
     << idealConnection << " requested for device " << id << std::endl;
@@ -1442,7 +1453,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     }
 
                     if (testName && text != "" &&
-                            !QString(port->m_name.c_str()).contains(text))
+                        !strtoqstr(port->m_name).contains(text))
                         continue;
 
                     if (testUsed) {
@@ -1471,7 +1482,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
                         if (m_devices[i]->getId() == id) {
                             setConnectionToDevice(*m_devices[i],
-                                                  port->m_name.c_str(),
+                                                  strtoqstr(port->m_name),
                                                   m_devicePortMap[id]);
 
                             // in this case we don't request a device resync,
@@ -1587,13 +1598,13 @@ AlsaDriver::getTimer(unsigned int n)
     if (n == 0)
         return AUTO_TIMER_NAME;
     else
-        return m_timers[n -1].name.c_str();
+        return strtoqstr(m_timers[n -1].name);
 }
 
 QString
 AlsaDriver::getCurrentTimer()
 {
-    return m_currentTimer.c_str();
+    return strtoqstr(m_currentTimer);
 }
 
 void
@@ -1606,7 +1617,7 @@ AlsaDriver::setCurrentTimer(QString timer)
 
     std::cerr << "AlsaDriver::setCurrentTimer(" << timer << ")" << std::endl;
 
-    std::string name(timer.data());
+    std::string name(qstrtostr(timer));
 
     if (name == AUTO_TIMER_NAME) {
         name = getAutoTimer(m_doTimerChecks);
@@ -2440,11 +2451,9 @@ AlsaDriver::getAlsaTime()
 // Get all pending input events and turn them into a MappedComposition.
 //
 //
-MappedComposition*
-AlsaDriver::getMappedComposition()
+bool
+AlsaDriver::getMappedComposition(MappedComposition &composition)
 {
-    m_recordComposition.clear();
-
     while (_failureReportReadIndex != _failureReportWriteIndex) {
         MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
         //	std::cerr << "AlsaDriver::reportFailure(" << code << ")" << std::endl;
@@ -2458,7 +2467,7 @@ AlsaDriver::getMappedComposition()
     if (!m_returnComposition.empty()) {
         for (MappedComposition::iterator i = m_returnComposition.begin();
                 i != m_returnComposition.end(); ++i) {
-            m_recordComposition.insert(new MappedEvent(**i));
+            composition.insert(new MappedEvent(**i));
         }
         m_returnComposition.clear();
     }
@@ -2466,7 +2475,7 @@ AlsaDriver::getMappedComposition()
     // If the input port hasn't connected we shouldn't poll it
     //
     if (m_midiInputPortConnected == false) {
-        return &m_recordComposition;
+        return true;
     }
 
     RealTime eventTime(0, 0);
@@ -2543,7 +2552,7 @@ AlsaDriver::getMappedComposition()
                 // We shake out the two NOTE Ons after we've recorded
                 // them.
                 //
-                m_recordComposition.insert(new MappedEvent(mE));
+                composition.insert(new MappedEvent(mE));
                 m_noteOnMap[deviceId][chanNoteKey] = mE;
 
                 break;
@@ -2576,7 +2585,7 @@ AlsaDriver::getMappedComposition()
                 mE->setDuration(duration);
 
                 // force shut off of note
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
 
                 // reset the reference
                 //
@@ -2598,7 +2607,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(event->data.note.velocity);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2610,7 +2619,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(event->data.control.value);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2621,7 +2630,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData1(event->data.control.value);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
 
             }
             break;
@@ -2642,7 +2651,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData2(d2);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2659,7 +2668,7 @@ AlsaDriver::getMappedComposition()
                 mE->setData1(s);
                 mE->setRecordedChannel(channel);
                 mE->setRecordedDevice(deviceId);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2701,7 +2710,7 @@ AlsaDriver::getMappedComposition()
                 // Fix for 674731 by Pedro Lopez-Cabanillas (20030601)
                 DataBlockRepository::setDataBlockForEvent(mE, data.substr(1, data.length() - 2));
                 mE->setEventTime(eventTime);
-                m_recordComposition.insert(mE);
+                composition.insert(mE);
             }
             break;
 
@@ -2832,7 +2841,7 @@ AlsaDriver::getMappedComposition()
         }
     }
 
-    return &m_recordComposition;
+    return true;
 }
 
 static int lock_count = 0;
@@ -3403,8 +3412,8 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     //
     snd_seq_ev_clear(&event);
 
-    if ((mC.begin() != mC.end()) && getSequencerDataBlock()) {
-        getSequencerDataBlock()->setVisual(*mC.begin());
+    if ((mC.begin() != mC.end())) {
+        SequencerDataBlock::getInstance()->setVisual(*mC.begin());
     }
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -3565,11 +3574,11 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
 				  (*i)->getVelocity());
 	    needNoteOff = true;
 	    
-	    if (!isSoftSynth && getSequencerDataBlock()) {
+	    if (!isSoftSynth) {
 		LevelInfo info;
 		info.level = (*i)->getVelocity();
 		info.levelRight = 0;
-		getSequencerDataBlock()->setInstrumentLevel
+		SequencerDataBlock::getInstance()->setInstrumentLevel
                     ((*i)->getInstrument(), info);
 	    }
 
@@ -3590,12 +3599,12 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
                                       (*i)->getPitch(),
                                       (*i)->getVelocity());
 
-                if (!isSoftSynth && getSequencerDataBlock()) {
+                if (!isSoftSynth) {
                     LevelInfo info;
                     info.level = (*i)->getVelocity();
                     info.levelRight = 0;
-                    getSequencerDataBlock()->setInstrumentLevel
-                    ((*i)->getInstrument(), info);
+                    SequencerDataBlock::getInstance()->setInstrumentLevel
+                        ((*i)->getInstrument(), info);
                 }
 
 		weedRecentNoteOffs((*i)->getPitch(), channel, (*i)->getInstrument());
@@ -4510,7 +4519,7 @@ AlsaDriver::record(RecordStatus recordStatus,
 #ifdef HAVE_LIBJACK
 
                     if (m_jackDriver &&
-                            m_jackDriver->openRecordFile(id, fileName.data())) {
+                        m_jackDriver->openRecordFile(id, qstrtostr(fileName))) {
                         good = true;
                     }
 #endif
@@ -4775,7 +4784,7 @@ AlsaDriver::checkForNewClients()
 
             audit << (*i)->m_name << std::endl;
 
-            QString portName = (*i)->m_name.c_str();
+            QString portName = strtoqstr((*i)->m_name);
             ClientPortPair portPair = ClientPortPair((*i)->m_client,
                                       (*i)->m_port);
 
@@ -4938,7 +4947,7 @@ AlsaDriver::checkForNewClients()
                     if ((*k)->m_client == firstOther.first &&
                             (*k)->m_port == firstOther.second) {
                         m_devicePortMap[(*i)->getId()] = firstOther;
-                        setConnectionToDevice(**i, (*k)->m_name.c_str(),
+                        setConnectionToDevice(**i, strtoqstr((*k)->m_name),
                                               firstOther);
                         madeChange = true;
                         break;
@@ -5251,7 +5260,7 @@ AlsaDriver::scavengePlugins()
 QString
 AlsaDriver::getStatusLog()
 {
-    return QString::fromUtf8(Audit::getAudit().c_str());
+    return strtoqstr(Audit::getAudit());
 }
 
 

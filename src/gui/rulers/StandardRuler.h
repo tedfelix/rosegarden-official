@@ -19,7 +19,7 @@
 #ifndef _RG_STANDARDRULER_H_
 #define _RG_STANDARDRULER_H_
 
-#include <qvbox.h>
+#include <QWidget>
 #include "base/Event.h"
 
 
@@ -31,25 +31,25 @@ namespace Rosegarden
 {
 
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class LoopRuler;
 class MarkerRuler;
 class SnapGrid;
 
 
-class StandardRuler : public QVBox
+class StandardRuler : public QWidget
 {
     Q_OBJECT
 
 public:
-    StandardRuler(RosegardenGUIDoc *doc,
+    StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
                   double xorigin,
                   int buttonHeight,
                   bool invert = false, // draw upside-down
                   QWidget* parent = 0,
-                  const char* name = 0,
-                  WFlags f=0);
+                  const char* name = 0);
+//                  WFlags f=0);
 
     void setSnapGrid(SnapGrid *grid);
 
@@ -61,7 +61,7 @@ public:
      * If you don't call this, you'll have to connect the
      * LoopRuler's signals up to something yourself.
      */
-    void connectRulerToDocPointer(RosegardenGUIDoc *doc);
+    void connectRulerToDocPointer(RosegardenDocument *doc);
     
     void setMinimumWidth(int width);
 
@@ -77,20 +77,20 @@ signals:
     /// reflected from the loop ruler
     void dragLoopToPosition(timeT);
 
-
+/*
 protected:
     virtual void paintEvent(QPaintEvent *);
-
+*/
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;
     int m_loopRulerHeight;
     int m_currentXOffset;
 
-    RosegardenGUIDoc       *m_doc;
+    RosegardenDocument       *m_doc;
     RulerScale *m_rulerScale;
 
-    MarkerRuler *m_hButtonBar;
+    MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
 };
 

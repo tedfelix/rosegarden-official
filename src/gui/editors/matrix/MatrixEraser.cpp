@@ -15,89 +15,57 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MatrixEraser.h"
-#include "misc/Debug.h"
 
-#include <klocale.h>
-#include <kstddirs.h>
+#include "MatrixMouseEvent.h"
+#include "MatrixViewSegment.h"
+#include "MatrixElement.h"
+#include "MatrixWidget.h"
+
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixEraseCommand.h"
-#include "gui/general/EditTool.h"
-#include "MatrixStaff.h"
-#include "MatrixTool.h"
-#include "MatrixView.h"
-#include <kaction.h>
-#include <kglobal.h>
-#include <qiconset.h>
-#include <qstring.h>
-
+#include "document/CommandHistory.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
 
-MatrixEraser::MatrixEraser(MatrixView* parent)
-        : MatrixTool("MatrixEraser", parent),
-        m_currentStaff(0)
+MatrixEraser::MatrixEraser(MatrixWidget *parent) :
+    MatrixTool("matrixeraser.rc", "MatrixEraser", parent)
 {
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
+    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
 
-    new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
-
-    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
-                SLOT(slotDrawSelected()), actionCollection(),
-                "draw");
-
-    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
-                SLOT(slotMoveSelected()), actionCollection(),
-                "move");
-
-    pixmap.load(pixmapDir + "/toolbar/resize.xpm");
-    icon = QIconSet(pixmap);
-    new KAction(i18n("Switch to Resize Tool"), icon, Key_F6, this,
-                SLOT(slotResizeSelected()), actionCollection(),
-                "resize");
-
-    createMenu("matrixeraser.rc");
+    createMenu();
 }
 
-void MatrixEraser::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent*,
-        ViewElement* el)
+void MatrixEraser::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
-    MATRIX_DEBUG << "MatrixEraser::handleLeftButtonPress : el = "
-    << el << endl;
-
-    if (!el)
-        return ; // nothing to erase
-
-    m_currentStaff = m_mParentView->getStaff(staffNo);
+    if (!e->element || !e->viewSegment) return; // nothing to erase
 
     MatrixEraseCommand* command =
-        new MatrixEraseCommand(m_currentStaff->getSegment(), el->event());
+        new MatrixEraseCommand(e->viewSegment->getSegment(),
+                               e->element->event());
 
-    m_mParentView->addCommandToHistory(command);
-
-    m_mParentView->update();
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void MatrixEraser::ready()
 {
-    m_mParentView->setCanvasCursor(Qt::pointingHandCursor);
+    if (m_widget) m_widget->setCanvasCursor(Qt::pointingHandCursor);
     setBasicContextHelp();
 }
 
 void MatrixEraser::setBasicContextHelp()
 {
-    setContextHelp(i18n("Click on a note to delete it"));
+    setContextHelp(tr("Click on a note to delete it"));
 }
 
-const QString MatrixEraser::ToolName    = "eraser";
+const QString MatrixEraser::ToolName = "eraser";
 
 }
+
+#include "MatrixEraser.moc"
+

@@ -20,32 +20,37 @@
 #define _RG_SYNTHPLUGINMANAGERDIALOG_H_
 
 #include "base/MidiProgram.h"
-#include <kmainwindow.h>
+#include "gui/general/ActionFileClient.h"
+#include <QMainWindow>
 #include <vector>
 
 
 class QWidget;
 class QPushButton;
 class QCloseEvent;
-class KComboBox;
-
+class QComboBox;
+class QDialogButtonBox;
+class QVBoxLayout;
+class QGridLayout;
+class QGroupBox;
+class QScrollArea;
 
 namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class AudioPluginOSCGUIManager;
 class AudioPluginManager;
 
 
-class SynthPluginManagerDialog : public KMainWindow
+class SynthPluginManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     SynthPluginManagerDialog(QWidget *parent,
-                             RosegardenGUIDoc *doc
+                             RosegardenDocument *doc
 #ifdef HAVE_LIBLO
                              , AudioPluginOSCGUIManager *guiManager
 #endif
@@ -54,6 +59,9 @@ public:
     virtual ~SynthPluginManagerDialog();
 
     void updatePlugin(InstrumentId id, int plugin);
+    
+    void setupGuiMain();
+    void setupGuiCreatePluginList();
 
 signals:
     void closing();
@@ -66,19 +74,36 @@ protected slots:
     void slotPluginChanged(int index);
     void slotControlsButtonClicked();
     void slotGUIButtonClicked();
+    
+    void slotHelpRequested();
 
 protected:
     virtual void closeEvent(QCloseEvent *);
 
 protected:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
     AudioPluginManager *m_pluginManager;
     std::vector<int> m_synthPlugins;
-    std::vector<KComboBox *> m_synthCombos;
+    std::vector<QComboBox *> m_synthCombos;
     std::vector<QPushButton *> m_controlsButtons;
     std::vector<QPushButton *> m_guiButtons;
-
+    
+    
+    QWidget     *m_centralWidget;
+    QVBoxLayout *m_mainLayout;
+    QGroupBox   *m_groupBoxPluginList;
+    QVBoxLayout *m_verticalLayout_2;
+    QScrollArea *m_scrollArea;
+    QWidget     *m_scrollWidget;
+     
+    QGridLayout *m_scrollWidgetLayout;
+//     QMenuBar    *m_menubar;
+//     QStatusBar  *m_statusbar;
+    
+    QDialogButtonBox* m_dialogButtonBox;
+    
+    
 #ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_guiManager;
 #endif

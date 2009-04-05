@@ -22,10 +22,10 @@
 #include "base/Exception.h"
 #include <map>
 #include <set>
-#include <string>
 #include <vector>
 
-
+#include <QString>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,25 +36,27 @@ class NoteFont;
 
 class NoteFontFactory
 {
+    Q_DECLARE_TR_FUNCTIONS(NoteFontFactory)
+
 public:
     typedef Exception NoFontsAvailable;
 
     // Any method passed a fontName argument may throw BadFont or
     // MappingFileReadFailed; any other method may throw NoFontsAvailable
 
-    static NoteFont *getFont(std::string fontName, int size);
+    static NoteFont *getFont(QString fontName, int size);
 
-    static std::set<std::string> getFontNames(bool forceRescan = false);
-    static std::vector<int> getAllSizes(std::string fontName); // sorted
-    static std::vector<int> getScreenSizes(std::string fontName); // sorted
+    static std::set<QString> getFontNames(bool forceRescan = false);
+    static std::vector<int> getAllSizes(QString fontName); // sorted
+    static std::vector<int> getScreenSizes(QString fontName); // sorted
 
-    static std::string getDefaultFontName();
-    static int getDefaultSize(std::string fontName);
-    static bool isAvailableInSize(std::string fontName, int size);
+    static QString getDefaultFontName();
+    static int getDefaultSize(QString fontName);
+    static bool isAvailableInSize(QString fontName, int size);
 
 private:
-    static std::set<std::string> m_fontNames;
-    static std::map<std::pair<std::string, int>, NoteFont *> m_fonts;
+    static std::set<QString> m_fontNames;
+    static std::map<std::pair<QString, int>, NoteFont *> m_fonts;
 };
 
 

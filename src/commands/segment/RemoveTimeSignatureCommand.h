@@ -20,10 +20,10 @@
 #define _RG_REMOVETIMESIGNATURECOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 class Remove;
@@ -35,12 +35,14 @@ namespace Rosegarden
 class Composition;
 
 
-class RemoveTimeSignatureCommand : public KNamedCommand
+class RemoveTimeSignatureCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RemoveTimeSignatureCommand)
+
 public:
     RemoveTimeSignatureCommand(Composition *composition,
                                int index):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_timeSigIndex(index),
         m_oldTime(0),
@@ -48,7 +50,7 @@ public:
 
     virtual ~RemoveTimeSignatureCommand() {}
 
-    static QString getGlobalName() { return i18n("Remove &Time Signature Change..."); }
+    static QString getGlobalName() { return tr("Remove &Time Signature Change..."); }
 
     virtual void execute();
     virtual void unexecute();

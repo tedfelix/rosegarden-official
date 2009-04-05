@@ -15,10 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "ClefInserter.h"
 
-#include <klocale.h>
+
 #include "base/Event.h"
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
@@ -29,10 +30,11 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
-#include <qiconset.h>
-#include <qstring.h>
 
+#include <QAction>
+#include <QIcon>
+#include <QString>
+#include <QMouseEvent>
 
 namespace Rosegarden
 {
@@ -41,22 +43,9 @@ ClefInserter::ClefInserter(NotationView* view)
         : NotationTool("ClefInserter", view),
         m_clef(Clef::Treble)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                             makeToolbarPixmap("select")));
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
-
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("crotchet")));
-    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
-                SLOT(slotNotesSelected()), actionCollection(),
-                "notes");
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     createMenu("clefinserter.rc");
 }
@@ -68,12 +57,12 @@ void ClefInserter::slotNotesSelected()
 
 void ClefInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+    invokeInParentView("erase");
 }
 
 void ClefInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+    invokeInParentView("select");
 }
 
 void ClefInserter::ready()
@@ -123,3 +112,5 @@ const QString ClefInserter::ToolName     = "clefinserter";
 
 }
 #include "ClefInserter.moc"
+#endif
+

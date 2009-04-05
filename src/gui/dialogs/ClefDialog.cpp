@@ -21,19 +21,18 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
-#include <klocale.h>
-#include <kdialogbase.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qobject.h>
-#include <qpixmap.h>
-#include <qradiobutton.h>
-#include <qstring.h>
-#include <qtooltip.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QObject>
+#include <QPixmap>
+#include <QRadioButton>
+#include <QString>
+#include <QToolTip>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
@@ -43,59 +42,78 @@ ClefDialog::ClefDialog(QWidget *parent,
                        NotePixmapFactory *npf,
                        Clef defaultClef,
                        bool showConversionOptions) :
-        KDialogBase(parent, 0, true, i18n("Clef"), Ok | Cancel | Help),
+        QDialog(parent),
         m_notePixmapFactory(npf),
         m_clef(defaultClef)
 {
-    setHelp("nv-signatures-clef");
+    //setHelp("nv-signatures-clef");
 
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Clef"));
 
-    QGroupBox *clefFrame = new QGroupBox
-                           (1, Horizontal, i18n("Clef"), vbox);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QButtonGroup *conversionFrame = new QButtonGroup
-                                    (1, Horizontal, i18n("Existing notes following clef change"), vbox);
 
-    QHBox *clefBox = new QHBox(clefFrame);
+    QGroupBox *clefFrame = new QGroupBox( tr("Clef"), vbox );
+    QVBoxLayout *clefFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(clefFrame);
 
-    BigArrowButton *clefDown = new BigArrowButton(clefBox, Qt::LeftArrow);
-    QToolTip::add
-        (clefDown, i18n("Lower clef"));
+    QGroupBox *conversionFrame = new QGroupBox( tr("Existing notes following clef change"), vbox );
+    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
+    vboxLayout->addWidget(conversionFrame);
 
-    QHBox *clefLabelBox = new QVBox(clefBox);
+    QWidget *clefBox = new QWidget(clefFrame);
+    QHBoxLayout *clefBoxLayout = new QHBoxLayout;
+    clefFrameLayout->addWidget(clefBox);
+
+    BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
+    clefBoxLayout->addWidget(clefDown);
+    clefDown->setToolTip(tr("Lower clef"));
+
+    QWidget *clefLabelBox = new QWidget(clefBox);
+    QVBoxLayout *clefLabelBoxLayout = new QVBoxLayout;
 
     m_octaveUp = new BigArrowButton(clefLabelBox, Qt::UpArrow);
-    QToolTip::add
-        (m_octaveUp, i18n("Up an Octave"));
+    clefLabelBoxLayout->addWidget(m_octaveUp);
+    m_octaveUp->setToolTip(tr("Up an Octave"));
 
-    m_clefLabel = new QLabel(i18n("Clef"), clefLabelBox);
-    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
+    m_clefLabel = new QLabel(tr("Clef"), clefLabelBox);
+	clefLabelBoxLayout->addWidget(m_clefLabel, Qt::AlignHCenter | Qt::AlignVCenter );
+//    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     m_octaveDown = new BigArrowButton(clefLabelBox, Qt::DownArrow);
-    QToolTip::add
-        (m_octaveDown, i18n("Down an Octave"));
+    clefLabelBoxLayout->addWidget(m_octaveDown);
+    m_octaveDown->setToolTip( tr("Down an Octave") );
 
-    BigArrowButton *clefUp = new BigArrowButton(clefBox, Qt::RightArrow);
-    QToolTip::add
-        (clefUp, i18n("Higher clef"));
+    BigArrowButton *clefUp = new BigArrowButton( clefBox , Qt::RightArrow);
+    clefBoxLayout->addWidget(clefUp);
+    clefBox->setLayout(clefBoxLayout);
+    clefUp->setToolTip( tr("Higher clef") );
 
-    m_clefNameLabel = new QLabel(i18n("Clef"), clefLabelBox);
-    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
+    m_clefNameLabel = new QLabel(tr("Clef"), clefLabelBox);
+	clefLabelBoxLayout->addWidget(m_clefNameLabel, Qt::AlignHCenter | Qt::AlignVCenter );
+	clefLabelBox->setLayout(clefLabelBoxLayout);
+//    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
 
     if (showConversionOptions) {
         m_noConversionButton =
             new QRadioButton
-            (i18n("Maintain current pitches"), conversionFrame);
+            (tr("Maintain current pitches"), conversionFrame);
+        conversionFrameLayout->addWidget(m_noConversionButton);
         m_changeOctaveButton =
             new QRadioButton
-            (i18n("Transpose into appropriate octave"), conversionFrame);
+            (tr("Transpose into appropriate octave"), conversionFrame);
+        conversionFrameLayout->addWidget(m_changeOctaveButton);
         m_transposeButton = 0;
 
         //!!! why aren't we offering this option? does it not work? too difficult to describe?
         //	m_transposeButton =
         //	    new QRadioButton
-        //	    (i18n("Maintain current positions on the staff"), conversionFrame);
+        //	    (tr("Maintain current positions on the staff"), conversionFrame);
         m_changeOctaveButton->setChecked(true);
     } else {
         m_noConversionButton = 0;
@@ -104,12 +122,21 @@ ClefDialog::ClefDialog(QWidget *parent,
         conversionFrame->hide();
     }
 
+    clefFrame->setLayout(clefFrameLayout);
+    conversionFrame->setLayout(conversionFrameLayout);
+    vbox->setLayout(vboxLayout);
+
     QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
     QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
     QObject::connect(m_octaveUp, SIGNAL(clicked()), this, SLOT(slotOctaveUp()));
     QObject::connect(m_octaveDown, SIGNAL(clicked()), this, SLOT(slotOctaveDown()));
 
     redrawClefPixmap();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 Clef
@@ -212,8 +239,7 @@ ClefDialog::slotOctaveDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    QPixmap pmap = NotePixmapFactory::toQPixmap
-                   (m_notePixmapFactory->makeClefDisplayPixmap(m_clef));
+    QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
     m_clefLabel->setPixmap(pmap);
 
     QString name;
@@ -221,16 +247,16 @@ ClefDialog::redrawClefPixmap()
 
     switch (octave) {
     case - 1:
-        name = i18n("%1 down an octave");
+        name = tr("%1 down an octave");
         break;
     case - 2:
-        name = i18n("%1 down two octaves");
+        name = tr("%1 down two octaves");
         break;
     case 1:
-        name = i18n("%1 up an octave");
+        name = tr("%1 up an octave");
         break;
     case 2:
-        name = i18n("%1 up two octaves");
+        name = tr("%1 up two octaves");
         break;
     default:
         name = "%1";
@@ -239,25 +265,25 @@ ClefDialog::redrawClefPixmap()
 
     std::string type = m_clef.getClefType();
     if (type == Clef::Treble)
-        name = name.arg(i18n("Treble"));
+        name = name.arg(tr("Treble"));
     else if (type == Clef::French)
-        name = name.arg(i18n("French violin"));
+        name = name.arg(tr("French violin"));
     else if (type == Clef::Soprano)
-        name = name.arg(i18n("Soprano"));
+        name = name.arg(tr("Soprano"));
     else if (type == Clef::Mezzosoprano)
-        name = name.arg(i18n("Mezzo-soprano"));
+        name = name.arg(tr("Mezzo-soprano"));
     else if (type == Clef::Alto)
-        name = name.arg(i18n("Alto"));
+        name = name.arg(tr("Alto"));
     else if (type == Clef::Tenor)
-        name = name.arg(i18n("Tenor"));
+        name = name.arg(tr("Tenor"));
     else if (type == Clef::Baritone)
-        name = name.arg(i18n("C-baritone"));
+        name = name.arg(tr("C-baritone"));
     else if (type == Clef::Varbaritone)
-        name = name.arg(i18n("F-baritone"));
+        name = name.arg(tr("F-baritone"));
     else if (type == Clef::Bass)
-        name = name.arg(i18n("Bass"));
+        name = name.arg(tr("Bass"));
     else if (type == Clef::Subbass)
-        name = name.arg(i18n("Sub-bass"));
+        name = name.arg(tr("Sub-bass"));
 
     m_clefNameLabel->setText(name);
 }

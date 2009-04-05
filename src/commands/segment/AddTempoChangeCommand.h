@@ -19,11 +19,11 @@
 #ifndef _RG_ADDTEMPOCHANGECOMMAND_H_
 #define _RG_ADDTEMPOCHANGECOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -31,14 +31,16 @@
 namespace Rosegarden
 {
 
-class AddTempoChangeCommand : public KNamedCommand
+class AddTempoChangeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AddTempoChangeCommand)
+
 public:
     AddTempoChangeCommand(Composition *composition,
                           timeT time,
                           tempoT tempo,
                           tempoT target = -1):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
@@ -48,7 +50,7 @@ public:
 
     virtual ~AddTempoChangeCommand();
 
-    static QString getGlobalName() { return i18n("Add Te&mpo Change..."); }
+    static QString getGlobalName() { return tr("Add Te&mpo Change..."); }
 
     virtual void execute();
     virtual void unexecute();

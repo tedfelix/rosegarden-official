@@ -21,10 +21,10 @@
 
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 class Modify;
@@ -34,18 +34,20 @@ namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
-class ModifyInstrumentMappingCommand : public KNamedCommand
+class ModifyInstrumentMappingCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ModifyInstrumentMappingCommand)
+
 public:
-    ModifyInstrumentMappingCommand(RosegardenGUIDoc *doc,
+    ModifyInstrumentMappingCommand(RosegardenDocument *doc,
                                    InstrumentId fromInstrument,
                                    InstrumentId toInstrument);
 
-    static QString getGlobalName() { return i18n("Modify &Instrument Mapping"); }
+    static QString getGlobalName() { return tr("Modify &Instrument Mapping"); }
 
     virtual void execute();
     virtual void unexecute();

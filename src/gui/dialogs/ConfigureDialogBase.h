@@ -19,13 +19,16 @@
 #ifndef _RG_CONFIGUREDIALOGBASE_H_
 #define _RG_CONFIGUREDIALOGBASE_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QMessageBox>
+#include <QDialog>
+#include <QString>
 #include <vector>
 
 
 class QWidget;
-
+class QTabWidget;
+class QDialogButtonBox;
+class IconStackedWidget;
 
 namespace Rosegarden
 {
@@ -33,19 +36,29 @@ namespace Rosegarden
 class ConfigurationPage;
 
 
-class ConfigureDialogBase : public KDialogBase
+class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-    ConfigureDialogBase(QWidget *parent=0,
-                        QString label = 0,
-                        const char *name=0);
-    virtual ~ConfigureDialogBase();
+//	ConfigureDialogBase(QWidget *parent=0,
+//						QString label = 0,
+//	  const char *name=0);
+	ConfigureDialogBase( QWidget *parent=0, QString label = 0, const char *name=0 );
+//	  , QMessageBox::StandardButtons = QMessageBox::Apply|QMessageBox::Ok|QMessageBox::Cancel );
+	
+    //virtual 
+	~ConfigureDialogBase();
 
     typedef std::vector<ConfigurationPage*> configurationpages;
 
+	void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
+	
+	QTabWidget* m_tabWidget;
+	
 protected slots:
-    virtual void slotOk();
+	
+//	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
+	virtual void slotOk();
     virtual void slotApply();
     virtual void slotCancelOrClose();
 
@@ -54,6 +67,10 @@ protected slots:
 protected:
 
     configurationpages m_configurationPages;
+	
+	QPushButton * m_applyButton;
+	QDialogButtonBox *m_dialogButtonBox;
+    IconStackedWidget * m_iconWidget;	
 };
 
 

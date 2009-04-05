@@ -19,7 +19,7 @@
 #include "ChangeCompositionLengthCommand.h"
 
 #include "base/Composition.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +29,7 @@ ChangeCompositionLengthCommand::ChangeCompositionLengthCommand(
     Composition *composition,
     timeT startTime,
     timeT endTime):
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_composition(composition),
         m_startTime(startTime),
         m_endTime(endTime),

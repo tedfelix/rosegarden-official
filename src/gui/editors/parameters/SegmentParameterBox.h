@@ -24,7 +24,7 @@
 #include "gui/widgets/ColourTable.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <qstring.h>
+#include <QString>
 #include <vector>
 #include "base/Event.h"
 
@@ -34,18 +34,17 @@ class QSpinBox;
 class QPushButton;
 class QLabel;
 class QCheckBox;
-class KCommand;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class TristateCheckBox;
 class SegmentSelection;
 class Segment;
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class RosegardenDocument;
 class Composition;
 
 
@@ -64,7 +63,7 @@ public:
         NotApplicable // no applicable segments selected
     } Tristate;
 
-    SegmentParameterBox(RosegardenGUIDoc *doc,
+    SegmentParameterBox(RosegardenDocument *doc,
                         QWidget *parent=0);
     ~SegmentParameterBox();
 
@@ -73,11 +72,9 @@ public:
     void useSegment(Segment *segment);
     void useSegments(const SegmentSelection &segments);
 
-    // Command history stuff
-    MultiViewCommandHistory* getCommandHistory();
-    void addCommandToHistory(KCommand *command);
+    void addCommandToHistory(Command *command);
 
-    void setDocument(RosegardenGUIDoc*);
+    void setDocument(RosegardenDocument*);
 
     // CompositionObserver interface
     //
@@ -128,10 +125,10 @@ protected:
 //    QPushButton                *m_highButton;
 //    QPushButton                *m_lowButton;
     TristateCheckBox *m_repeatValue;
-    KComboBox                  *m_quantizeValue;
-    KComboBox                  *m_transposeValue;
-    KComboBox                  *m_delayValue;
-    KComboBox                  *m_colourValue;
+    QComboBox                  *m_quantizeValue;
+    QComboBox                  *m_transposeValue;
+    QComboBox                  *m_delayValue;
+    QComboBox                  *m_colourValue;
 
     // Audio autofade
     //
@@ -155,7 +152,7 @@ protected:
     std::vector<int> m_realTimeDelays;
     ColourTable::ColourList  m_colourList;
 
-    RosegardenGUIDoc           *m_doc;
+    RosegardenDocument           *m_doc;
 
     MidiByte        m_transposeRange;
 };

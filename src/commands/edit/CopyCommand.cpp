@@ -23,7 +23,7 @@
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Selection.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,19 +31,19 @@ namespace Rosegarden
 
 CopyCommand::CopyCommand(EventSelection &selection,
                          Clipboard *clipboard) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
     m_savedClipboard = 0;
     std::string label = selection.getSegment().getLabel();
     m_sourceClipboard->newSegment(&selection)->setLabel(
-            appendLabel(label, qstrtostr(i18n("(excerpt)"))));
+            appendLabel(label, qstrtostr(tr("(excerpt)"))));
 }
 
 CopyCommand::CopyCommand(SegmentSelection &selection,
                          Clipboard *clipboard) :
-        KNamedCommand(getGlobalName()),
+        NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
@@ -53,7 +53,7 @@ CopyCommand::CopyCommand(SegmentSelection &selection,
             i != selection.end(); ++i) {
         std::string label = (*i)->getLabel();
         m_sourceClipboard->newSegment(*i)->setLabel(
-                appendLabel(label, qstrtostr(i18n("(copied)"))));
+                appendLabel(label, qstrtostr(tr("(copied)"))));
     }
 }
 
@@ -61,7 +61,7 @@ CopyCommand::CopyCommand(Composition *composition,
                          timeT beginTime,
                          timeT endTime,
                          Clipboard *clipboard) :
-        KNamedCommand(i18n("Copy Range")),
+        NamedCommand(tr("Copy Range")),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;

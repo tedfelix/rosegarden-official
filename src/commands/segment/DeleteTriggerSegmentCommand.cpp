@@ -18,19 +18,18 @@
 
 #include "DeleteTriggerSegmentCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenGUIDoc *doc,
+DeleteTriggerSegmentCommand::DeleteTriggerSegmentCommand(RosegardenDocument *doc,
         TriggerSegmentId id) :
-        KNamedCommand(i18n("Delete Triggered Segment")),
+        NamedCommand(tr("Delete Triggered Segment")),
         m_composition(&doc->getComposition()),
         m_id(id),
         m_segment(0),

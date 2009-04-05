@@ -18,18 +18,18 @@
 
 #include "NoteStyleFactory.h"
 
-#include <kstddirs.h>
+#include <QDir>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "NotationProperties.h"
 #include "NoteStyle.h"
 #include "NoteStyleFileReader.h"
-#include <kglobal.h>
-#include <qdir.h>
-#include <qfileinfo.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include "gui/general/ResourceFinder.h"
+#include <QDir>
+#include <QFileInfo>
+#include <QString>
+#include <QStringList>
 
 
 namespace Rosegarden
@@ -41,29 +41,16 @@ std::vector<NoteStyleName>
 NoteStyleFactory::getAvailableStyleNames()
 {
     std::vector<NoteStyleName> names;
+    
+    ResourceFinder rf;
+    QStringList files = rf.getResourceFiles("styles", "xml");
 
-    QString styleDir = KGlobal::dirs()->findResource("appdata", "styles/");
-    QDir dir(styleDir);
-    if (!dir.exists()) {
-        std::cerr << "NoteStyle::getAvailableStyleNames: directory \"" << styleDir
-        << "\" not found" << std::endl;
-        return names;
-    }
-
-    dir.setFilter(QDir::Files | QDir::Readable);
-    QStringList files = dir.entryList();
     bool foundDefault = false;
 
     for (QStringList::Iterator i = files.begin(); i != files.end(); ++i) {
-        if ((*i).length() > 4 && (*i).right(4) == ".xml") {
-            QFileInfo fileInfo(QString("%1/%2").arg(styleDir).arg(*i));
-            if (fileInfo.exists() && fileInfo.isReadable()) {
-                std::string styleName = qstrtostr((*i).left((*i).length() - 4));
-                if (styleName == DefaultStyle)
-                    foundDefault = true;
-                names.push_back(styleName);
-            }
-        }
+        QString styleName = QFileInfo(*i).baseName();
+        if (styleName == DefaultStyle) foundDefault = true;
+        names.push_back(styleName);
     }
 
     if (!foundDefault) {
@@ -101,9 +88,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 NoteStyle *
 NoteStyleFactory::getStyleForEvent(Event *event)
 {
-    NoteStyleName styleName;
-    if (event->get
-            <String>(NotationProperties::NOTE_STYLE, styleName)) {
+    std::string sname;
+    if (event->get<String>(NotationProperties::NOTE_STYLE, sname)) {
+        NoteStyleName styleName = strtoqstr(sname);
         return getStyle(styleName);
     }
     else {

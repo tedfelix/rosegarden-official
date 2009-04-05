@@ -17,8 +17,9 @@
 
 
 #include "NotationHLayout.h"
+#include "misc/Strings.h"
 #include "misc/Debug.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/Composition.h"
 #include "base/LayoutEngine.h"
@@ -28,7 +29,7 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
-#include "base/Staff.h"
+#include "base/ViewSegment.h"
 #include "base/ViewElement.h"
 #include "gui/editors/guitar/Chord.h"
 #include "gui/general/ProgressReporter.h"
@@ -39,8 +40,8 @@
 #include "NotationProperties.h"
 #include "NotationStaff.h"
 #include "NotePixmapFactory.h"
-#include <kconfig.h>
-#include <qobject.h>
+#include <QSettings>
+#include <QObject>
 #include <cmath>
 
 namespace Rosegarden
@@ -68,9 +69,11 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
 {
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    m_keySigCancelMode = config->readNumEntry("keysigcancelmode", 1);
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
+
+    m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
+    settings.endGroup();
 }
 
 NotationHLayout::~NotationHLayout()
@@ -109,7 +112,7 @@ NotationHLayout::getAvailableProportions()
 
 NotationHLayout::BarDataList &
 
-NotationHLayout::getBarData(Staff &staff)
+NotationHLayout::getBarData(ViewSegment &staff)
 {
     BarDataMap::iterator i = m_barData.find(&staff);
     if (i == m_barData.end()) {
@@ -121,7 +124,7 @@ NotationHLayout::getBarData(Staff &staff)
 
 const NotationHLayout::BarDataList &
 
-NotationHLayout::getBarData(Staff &staff) const
+NotationHLayout::getBarData(ViewSegment &staff) const
 {
     return ((NotationHLayout *)this)->getBarData(staff);
 }
@@ -145,7 +148,7 @@ const
 }
 
 NotePixmapFactory *
-NotationHLayout::getNotePixmapFactory(Staff &staff)
+NotationHLayout::getNotePixmapFactory(ViewSegment &staff)
 {
     NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
     if (ns) return &ns->getNotePixmapFactory(false);
@@ -153,7 +156,7 @@ NotationHLayout::getNotePixmapFactory(Staff &staff)
 }
 
 NotePixmapFactory *
-NotationHLayout::getGraceNotePixmapFactory(Staff &staff)
+NotationHLayout::getGraceNotePixmapFactory(ViewSegment &staff)
 {
     NotationStaff *ns = dynamic_cast<NotationStaff *>(&staff);
     if (ns) return &ns->getNotePixmapFactory(true);
@@ -161,14 +164,14 @@ NotationHLayout::getGraceNotePixmapFactory(Staff &staff)
 }
 
 void
-NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
+NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime, timeT endTime)
 {
     throwIfCancelled();
-    Profiler profiler("NotationHLayout::scanStaff");
+    Profiler profiler("NotationHLayout::scanViewSegment");
 
     Segment &segment(staff.getSegment());
     bool isFullScan = (startTime == endTime);
-    int startBarOfStaff = getComposition()->getBarNumber(segment.getStartTime());
+    int startBarOfViewSegment = getComposition()->getBarNumber(segment.getStartTime());
 
     if (isFullScan) {
         clearBarList(staff);
@@ -199,7 +202,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         npf->getNoteBodyWidth() * 2 +
         npf->getTextWidth(Text(name, Text::StaffName));
 
-    NOTATION_DEBUG << "NotationHLayout::scanStaff: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
+    NOTATION_DEBUG << "NotationHLayout::scanViewSegment: full scan " << isFullScan << ", times " << startTime << "->" << endTime << ", bars " << startBarNo << "->" << endBarNo << ", staff name \"" << segment.getLabel() << "\", width " << m_staffNameWidths[&staff] << endl;
 
     SegmentNotationHelper helper(segment);
     if (isFullScan) {
@@ -248,22 +251,23 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
 
-    int accOctaveMode = config->readNumEntry("accidentaloctavemode", 1);
+    int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
     AccidentalTable::OctaveType octaveType =
         (accOctaveMode == 0 ? AccidentalTable::OctavesIndependent :
          accOctaveMode == 1 ? AccidentalTable::OctavesCautionary :
          AccidentalTable::OctavesEquivalent);
 
-    int accBarMode = config->readNumEntry("accidentalbarmode", 0);
+    int accBarMode = settings.value("accidentalbarmode", 0).toInt() ;
     AccidentalTable::BarResetType barResetType =
         (accBarMode == 0 ? AccidentalTable::BarResetNone :
          accBarMode == 1 ? AccidentalTable::BarResetCautionary :
          AccidentalTable::BarResetExplicit);
 
-    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
+    bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+    settings.endGroup();
 
     if (barResetType != AccidentalTable::BarResetNone) {
         //!!! very crude and expensive way of making sure we see the
@@ -306,7 +310,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
         bool newTimeSig = false;
         timeSignature = getComposition()->getTimeSignatureInBar
                         (barNo, newTimeSig);
-        NOTATION_DEBUG << "bar " << barNo << ", startBarOfStaff " << startBarOfStaff
+        NOTATION_DEBUG << "bar " << barNo << ", startBarOfViewSegment " << startBarOfViewSegment
                        << ", newTimeSig " << newTimeSig << endl;
 
         float fixedWidth = 0.0;
@@ -329,7 +333,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
             <long> GroupIdSet;
         GroupIdSet groupIds;
 
-        NOTATION_DEBUG << "NotationHLayout::scanStaff: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
+        NOTATION_DEBUG << "NotationHLayout::scanViewSegment: bar " << barNo << ", from " << barTimes.first << ", to " << barTimes.second << " (end " << segment.getEndMarkerTime() << "); from is at " << (from == notes->end() ? -1 : (*from)->getViewAbsoluteTime()) << ", to is at " << (to == notes->end() ? -1 : (*to)->getViewAbsoluteTime()) << endl;
 
         timeT actualBarEnd = barTimes.first;
 
@@ -455,7 +459,7 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
                        actualBarEnd - barTimes.first);
 
         if ((endTime > startTime) && (barNo % 20 == 0)) {
-            emit setProgress((barTimes.second - startTime) * 95 /
+            emit setValue((barTimes.second - startTime) * 95 /
                              (endTime - startTime));
             ProgressDialog::processEvents();
         }
@@ -472,14 +476,14 @@ NotationHLayout::scanStaff(Staff &staff, timeT startTime, timeT endTime)
 }
 
 void
-NotationHLayout::clearBarList(Staff &staff)
+NotationHLayout::clearBarList(ViewSegment &staff)
 {
     BarDataList &bdl = m_barData[&staff];
     bdl.clear();
 }
 
 void
-NotationHLayout::setBarBasicData(Staff &staff,
+NotationHLayout::setBarBasicData(ViewSegment &staff,
                                  int barNo,
                                  NotationElementList::iterator start,
                                  bool correct,
@@ -505,7 +509,7 @@ NotationHLayout::setBarBasicData(Staff &staff,
 }
 
 void
-NotationHLayout::setBarSizeData(Staff &staff,
+NotationHLayout::setBarSizeData(ViewSegment &staff,
                                 int barNo,
                                 float fixedWidth,
                                 timeT actualDuration)
@@ -845,11 +849,11 @@ NotationHLayout::preSquishBar(int barNo)
     }
 }
 
-Staff *
-NotationHLayout::getStaffWithWidestBar(int barNo)
+ViewSegment *
+NotationHLayout::getViewSegmentWithWidestBar(int barNo)
 {
     float maxWidth = -1;
-    Staff *widest = 0;
+    ViewSegment *widest = 0;
 
     for (BarDataMap::iterator mi = m_barData.begin();
             mi != m_barData.end(); ++mi) {
@@ -858,10 +862,10 @@ NotationHLayout::getStaffWithWidestBar(int barNo)
         BarDataList::iterator li = list.find(barNo);
         if (li != list.end()) {
 
-            NOTATION_DEBUG << "getStaffWithWidestBar: idealWidth is " << li->second.sizeData.idealWidth << endl;
+            NOTATION_DEBUG << "getViewSegmentWithWidestBar: idealWidth is " << li->second.sizeData.idealWidth << endl;
 
             if (li->second.sizeData.idealWidth == 0.0) {
-                NOTATION_DEBUG << "getStaffWithWidestBar(" << barNo << "): found idealWidth of zero, presquishing" << endl;
+                NOTATION_DEBUG << "getViewSegmentWithWidestBar(" << barNo << "): found idealWidth of zero, presquishing" << endl;
                 preSquishBar(barNo);
             }
 
@@ -885,7 +889,7 @@ NotationHLayout::getMaxRepeatedClefAndKeyWidth(int barNo)
     for (BarDataMap::iterator mi = m_barData.begin();
             mi != m_barData.end(); ++mi) {
 
-        Staff *staff = mi->first;
+        ViewSegment *staff = mi->first;
         if (mi == m_barData.begin()) {
             barStart = staff->getSegment().getComposition()->getBarStart(barNo);
         }
@@ -921,14 +925,14 @@ NotationHLayout::reconcileBarsLinear()
 
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
-    // on any staff.  These days getStaffWithWidestBar actually does
+    // on any staff.  These days getViewSegmentWithWidestBar actually does
     // most of the work in its call to preSquishBar, but this function
     // still sets the bar line positions etc.
 
     int barNo = getFirstVisibleBar();
 
     m_totalWidth = 0.0;
-    for (StaffIntMap::iterator i = m_staffNameWidths.begin();
+    for (ViewSegmentIntMap::iterator i = m_staffNameWidths.begin();
             i != m_staffNameWidths.end(); ++i) {
         if (i->second > m_totalWidth)
             m_totalWidth = double(i->second);
@@ -936,7 +940,7 @@ NotationHLayout::reconcileBarsLinear()
 
     for (;;) {
 
-        Staff *widest = getStaffWithWidestBar(barNo);
+        ViewSegment *widest = getViewSegmentWithWidestBar(barNo);
 
         if (!widest) {
             // have we reached the end of the piece?
@@ -1008,23 +1012,23 @@ NotationHLayout::reconcileBarsPage()
     std::vector<std::pair<int, double> > rowData;
 
     double stretchFactor = 10.0;
-    double maxStaffNameWidth = 0.0;
+    double maxViewSegmentNameWidth = 0.0;
 
-    for (StaffIntMap::iterator i = m_staffNameWidths.begin();
+    for (ViewSegmentIntMap::iterator i = m_staffNameWidths.begin();
             i != m_staffNameWidths.end(); ++i) {
-        if (i->second > maxStaffNameWidth) {
-            maxStaffNameWidth = double(i->second);
+        if (i->second > maxViewSegmentNameWidth) {
+            maxViewSegmentNameWidth = double(i->second);
         }
     }
 
-    double pageWidthSoFar = maxStaffNameWidth;
-    m_totalWidth = maxStaffNameWidth + getPreBarMargin();
+    double pageWidthSoFar = maxViewSegmentNameWidth;
+    m_totalWidth = maxViewSegmentNameWidth + getPreBarMargin();
 
     NOTATION_DEBUG << "NotationHLayout::reconcileBarsPage: pageWidthSoFar is " << pageWidthSoFar << endl;
 
     for (;;) {
 
-        Staff *widest = getStaffWithWidestBar(barNo);
+        ViewSegment *widest = getViewSegmentWithWidestBar(barNo);
         double maxWidth = m_spacing / 3;
 
         if (!widest) {
@@ -1129,14 +1133,14 @@ NotationHLayout::reconcileBarsPage()
         barNoThisRow = barNo;
         int finalBarThisRow = barNo + rowData[row].first - 1;
 
-        pageWidthSoFar = (row > 0 ? 0 : maxStaffNameWidth + getPreBarMargin());
+        pageWidthSoFar = (row > 0 ? 0 : maxViewSegmentNameWidth + getPreBarMargin());
         stretchFactor = m_pageWidth / rowData[row].second;
 
         for (; barNoThisRow <= finalBarThisRow; ++barNoThisRow, ++barNo) {
 
             bool finalRow = (row == rowData.size() - 1);
 
-            Staff *widest = getStaffWithWidestBar(barNo);
+            ViewSegment *widest = getViewSegmentWithWidestBar(barNo);
             if (finalRow && (stretchFactor > 1.0))
                 stretchFactor = 1.0;
             double maxWidth = 0.0;
@@ -1204,7 +1208,7 @@ NotationHLayout::finishLayout(timeT startTime, timeT endTime)
     for (BarDataMap::iterator i(m_barData.begin());
             i != m_barData.end(); ++i) {
 
-        emit setProgress(100 * staffNo / m_barData.size());
+        emit setValue(100 * staffNo / m_barData.size());
         ProgressDialog::processEvents();
 
         throwIfCancelled();
@@ -1233,7 +1237,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 {
     Profiler profiler("NotationHLayout::layout");
 
-    Staff &staff = *(i->first);
+    ViewSegment &staff = *(i->first);
     NotationElementList *notes = staff.getViewElementList();
     BarDataList &barList(getBarData(staff));
     NotationStaff &notationStaff = dynamic_cast<NotationStaff &>(staff);
@@ -1259,9 +1263,11 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 
     int startBar = getComposition()->getBarNumber(startTime);
 
-    KConfig *config = kapp->config();
-    config->setGroup("Notation Options");
-    bool showInvisibles = config->readBoolEntry("showinvisibles", true);
+    QSettings settings;
+    settings.beginGroup( "Notation Options" );
+
+    bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
+    settings.endGroup();
 
     for (BarPositionList::iterator bpi = m_barPositions.begin();
             bpi != m_barPositions.end(); ++bpi) {
@@ -1581,7 +1587,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
 }
 
 void
-NotationHLayout::sampleGroupElement(Staff &staff,
+NotationHLayout::sampleGroupElement(ViewSegment &staff,
                                     const Clef &clef,
                                     const ::Rosegarden::Key &key,
                                     const NotationElementList::iterator &itr)
@@ -1613,7 +1619,7 @@ NotationHLayout::sampleGroupElement(Staff &staff,
 }
 
 timeT
-NotationHLayout::getSpacingDuration(Staff &staff,
+NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationElementList::iterator &i)
 {
     SegmentNotationHelper helper(staff.getSegment());
@@ -1635,7 +1641,7 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 }
 
 timeT
-NotationHLayout::getSpacingDuration(Staff &staff,
+NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationChord &chord)
 {
     SegmentNotationHelper helper(staff.getSegment());
@@ -1657,7 +1663,7 @@ NotationHLayout::getSpacingDuration(Staff &staff,
 }
 
 void
-NotationHLayout::positionChord(Staff &staff,
+NotationHLayout::positionChord(ViewSegment &staff,
                                NotationElementList::iterator &itr,
                                const Clef &clef, const ::Rosegarden::Key &key,
                                TieMap &tieMap,
@@ -1884,7 +1890,7 @@ NotationHLayout::reset()
 }
 
 void
-NotationHLayout::resetStaff(Staff &staff, timeT startTime, timeT endTime)
+NotationHLayout::resetViewSegment(ViewSegment &staff, timeT startTime, timeT endTime)
 {
     if (startTime == endTime) {
         getBarData(staff).clear();
@@ -1913,15 +1919,14 @@ NotationHLayout::getFirstVisibleBar() const
 }
 
 int
-NotationHLayout::getFirstVisibleBarOnStaff(Staff &staff)
+NotationHLayout::getFirstVisibleBarOnViewSegment(ViewSegment &staff) const
 {
-    BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarData(staff));
 
     int bar = 0;
-    if (bdl.begin() != bdl.end())
-        bar = bdl.begin()->first;
+    if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
 
-    //    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnStaff: returning " << bar << endl;
+    //    NOTATION_DEBUG << "NotationHLayout::getFirstVisibleBarOnViewSegment: returning " << bar << endl;
 
     return bar;
 }
@@ -1932,10 +1937,10 @@ NotationHLayout::getLastVisibleBar() const
     int bar = 0;
     bool haveBar = false;
     for (BarDataMap::const_iterator i = m_barData.begin();
-            i != m_barData.end(); ++i) {
+         i != m_barData.end(); ++i) {
         if (i->second.begin() == i->second.end())
             continue;
-        int barHere = getLastVisibleBarOnStaff(*i->first);
+        int barHere = getLastVisibleBarOnViewSegment(*i->first);
         if (barHere > bar || !haveBar) {
             bar = barHere;
             haveBar = true;
@@ -1948,7 +1953,7 @@ NotationHLayout::getLastVisibleBar() const
 }
 
 int
-NotationHLayout::getLastVisibleBarOnStaff(Staff &staff) const
+NotationHLayout::getLastVisibleBarOnViewSegment(ViewSegment &staff) const
 {
     const BarDataList &bdl(getBarData(staff));
     int bar = 0;
@@ -1958,7 +1963,7 @@ NotationHLayout::getLastVisibleBarOnStaff(Staff &staff) const
         bar = ((--i)->first) + 1; // last visible bar_line_
     }
 
-    //    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBarOnStaff: returning " << bar << endl;
+    //    NOTATION_DEBUG << "NotationHLayout::getLastVisibleBarOnViewSegment: returning " << bar << endl;
 
     return bar;
 }
@@ -1995,26 +2000,24 @@ NotationHLayout::getBarPosition(int bar) const
 }
 
 bool
-NotationHLayout::isBarCorrectOnStaff(Staff &staff, int i)
+NotationHLayout::isBarCorrectOnViewSegment(ViewSegment &staff, int i) const
 {
-    BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarData(staff));
     ++i;
 
-    BarDataList::iterator bdli(bdl.find(i));
-    if (bdli != bdl.end())
-        return bdli->second.basicData.correct;
-    else
-        return true;
+    BarDataList::const_iterator bdli(bdl.find(i));
+    if (bdli != bdl.end()) return bdli->second.basicData.correct;
+    else return true;
 }
 
-bool NotationHLayout::getTimeSignaturePosition(Staff &staff,
-        int i,
-        TimeSignature &timeSig,
-        double &timeSigX)
+bool NotationHLayout::getTimeSignaturePosition(ViewSegment &staff,
+                                               int i,
+                                               TimeSignature &timeSig,
+                                               double &timeSigX) const
 {
-    BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarData(staff));
 
-    BarDataList::iterator bdli(bdl.find(i));
+    BarDataList::const_iterator bdli(bdl.find(i));
     if (bdli != bdl.end()) {
         timeSig = bdli->second.basicData.timeSignature;
         timeSigX = (double)(bdli->second.layoutData.timeSigX);
@@ -2042,7 +2045,7 @@ NotationHLayout::getXForTimeByEvent(timeT time) const
 
     for (BarDataMap::const_iterator i = m_barData.begin(); i != m_barData.end(); ++i) {
 
-        Staff *staff = i->first;
+        ViewSegment *staff = i->first;
 
         if (staff->getSegment().getStartTime() <= time &&
                 staff->getSegment().getEndMarkerTime() > time) {
@@ -2058,7 +2061,7 @@ NotationHLayout::getXForTimeByEvent(timeT time) const
                 if (vli == staff->getViewElementList()->end())
                     break;
                 NotationElement *element = static_cast<NotationElement *>(*vli);
-                if (element->getCanvasItem()) {
+                if (element->getItem()) {
                     x = element->getLayoutX();
                     double temp;
                     element->getLayoutAirspace(temp, dx);
@@ -2075,7 +2078,7 @@ NotationHLayout::getXForTimeByEvent(timeT time) const
 
                     while (vli != staff->getViewElementList()->end() &&
                             ((*vli)->event()->getNotationAbsoluteTime() < time ||
-                             !((static_cast<NotationElement *>(*vli))->getCanvasItem())))
+                             !((static_cast<NotationElement *>(*vli))->getItem())))
                         ++vli;
 
                     if (vli != staff->getViewElementList()->end()) {

@@ -18,14 +18,14 @@
 #ifndef _RG_TRIVIALVELOCITYDIALOG_H_
 #define _RG_TRIVIALVELOCITYDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
-class QHBox;
 class QSpinBox;
+class QGridLayout;
 
 namespace Rosegarden {
         
-class TrivialVelocityDialog : public KDialogBase
+class TrivialVelocityDialog : public QDialog
 {
 public:
     TrivialVelocityDialog(QWidget *parent, QString label, int deft);
@@ -34,6 +34,7 @@ public:
 
 protected:
     QSpinBox *m_spin;
+	QGridLayout *m_metagrid;
 };
 
 }

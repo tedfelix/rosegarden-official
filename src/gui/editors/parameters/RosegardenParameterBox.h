@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,10 +19,9 @@
 #define _RG_ROSEGARDENPARAMETERBOX_H_
 
 #include "RosegardenParameterArea.h"
-#include <qfont.h>
-#include <qframe.h>
-#include <qstring.h>
-#include <klocale.h>
+#include <QFont>
+#include <QFrame>
+#include <QString>
 
 
 class QWidget;
@@ -44,9 +42,10 @@ namespace Rosegarden
 class RosegardenParameterBox : public QFrame
 {
     Q_OBJECT
+
 public:
-    RosegardenParameterBox(const QString &shortLabel, // e.g. i18n("Track")
-                           const QString &longLabel,  // e.g. i18n("Track Parameters")
+    RosegardenParameterBox(const QString &shortLabel, // e.g. tr("Track")
+                           const QString &longLabel,  // e.g. tr("Track Parameters")
                            QWidget *parent = 0,
                            const char *name = 0);
 

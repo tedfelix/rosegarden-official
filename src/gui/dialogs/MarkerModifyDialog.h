@@ -19,23 +19,23 @@
 #ifndef _RG_MARKERMODIFYDIALOG_H_
 #define _RG_MARKERMODIFYDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qlineedit.h>
-
 #include "base/Marker.h"
 #include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 class TimeWidget;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
-class MarkerModifyDialog : public KDialogBase
+class MarkerModifyDialog : public QDialog
 {
     Q_OBJECT
 public:
@@ -60,13 +60,13 @@ protected:
                     const QString &name,
                     const QString &des);
 
-    RosegardenGUIDoc             *m_doc;
+    RosegardenDocument *m_doc;
 
     TimeWidget         *m_timeEdit;
-    QLineEdit                    *m_nameEdit;
-    QLineEdit                    *m_desEdit;
+    LineEdit           *m_nameEdit;
+    LineEdit           *m_desEdit;
 
-    int                           m_originalTime;
+    int                m_originalTime;
 };
 
 

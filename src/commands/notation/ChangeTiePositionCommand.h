@@ -20,25 +20,32 @@
 #define _RG_ADJUSTMENUCHANGETIEPOSITIONCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
+
 
 class ChangeTiePositionCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ChangeTiePositionCommand)
+
 public:
     ChangeTiePositionCommand(bool above, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(above), selection, true),
         m_selection(&selection), m_above(above) { }
 
     static QString getGlobalName(bool above) {
-        return above ? i18n("Tie &Above") : i18n("Tie &Below");
+        return above ? tr("Tie &Above") : tr("Tie &Below");
     }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

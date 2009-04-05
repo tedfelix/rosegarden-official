@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -15,7 +16,7 @@
 #include <string>
 #include <vector>
 #include <list>
-#include <qstringlist.h>
+#include <QStringList>
 
 #include "Device.h"
 #include "MappedComposition.h"
@@ -153,7 +154,7 @@ public:
     
     virtual RealTime getSequencerTime() = 0;
 
-    virtual MappedComposition *getMappedComposition() = 0;
+    virtual bool getMappedComposition(MappedComposition &) = 0;
 
     virtual void startClocks() { }
     virtual void stopClocks() { }
@@ -403,14 +404,6 @@ public:
     virtual void setMIDIClockInterval(RealTime interval) 
         { m_midiClockInterval = interval; }
 
-    // Get and set the mapper which may optionally be used to
-    // store recording levels etc for communication back to the GUI.
-    // (If a subclass wants this and finds it's not there, it should
-    // simply continue without.)
-    //
-    SequencerDataBlock *getSequencerDataBlock() { return m_sequencerDataBlock; }
-    void setSequencerDataBlock(SequencerDataBlock *d) { m_sequencerDataBlock = d; }
-
     ExternalTransport *getExternalTransportControl() const {
         return m_externalTransport;
     }
@@ -462,7 +455,6 @@ protected:
 
     DeviceId                                    m_midiRecordDevice;
 
-    MappedComposition                           m_recordComposition;
     MappedComposition                           m_returnComposition;
     RecordStatus                                m_recordStatus;
 
@@ -489,10 +481,6 @@ protected:
     // Virtual studio hook
     //
     MappedStudio                *m_studio;
-
-    // Sequencer data block for communication back to GUI
-    //
-    SequencerDataBlock          *m_sequencerDataBlock;
     
     // Controller to make externally originated transport requests on
     //

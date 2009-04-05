@@ -18,10 +18,9 @@
 
 #include "SegmentCommandRepeat.h"
 
-#include <klocale.h>
 #include "base/Segment.h"
 #include "SegmentCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -29,7 +28,7 @@ namespace Rosegarden
 
 SegmentCommandRepeat::SegmentCommandRepeat(const std::vector<Segment*>& segments,
         bool repeat)
-        : SegmentCommand(i18n("Repeat Segments"), segments),
+        : SegmentCommand(tr("Repeat Segments"), segments),
         m_repeatState(repeat)
 {}
 

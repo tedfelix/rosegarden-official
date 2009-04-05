@@ -18,36 +18,67 @@
 
 #include "MakeOrnamentDialog.h"
 
-#include <klocale.h>
 #include "gui/widgets/PitchChooser.h"
-#include <kdialogbase.h>
-#include <qgroupbox.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "gui/widgets/LineEdit.h"
+
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 
 
 namespace Rosegarden
 {
 
-MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent, QString defaultName,
+MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
+                                       QString defaultName,
                                        int defaultBasePitch) :
-        KDialogBase(parent, "makeornamentdialog", true, i18n("Make Ornament"),
-                    Ok | Cancel, Ok)
+        QDialog(parent)
 {
-    QVBox *vbox = makeVBoxMainWidget();
-    QGroupBox *nameBox = new QGroupBox(2, Vertical, i18n("Name"), vbox);
+    setModal(true);
+    setWindowTitle(tr("Make Ornament"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
 
-    new QLabel(i18n("The name is used to identify both the ornament\nand the triggered segment that stores\nthe ornament's notes."), nameBox);
+    QWidget *vbox = new QWidget(this);
+    QVBoxLayout *vboxLayout = new QVBoxLayout;
+    metagrid->addWidget(vbox, 0, 0);
 
-    QHBox *hbox = new QHBox(nameBox);
-    new QLabel(i18n("Name:  "), hbox);
-    m_name = new QLineEdit(defaultName, hbox);
+    QGroupBox *nameBox = new QGroupBox(tr("Name"));
+    QVBoxLayout *nameBoxLayout = new QVBoxLayout;
+    vboxLayout->addWidget(nameBox);
 
-    m_pitch = new PitchChooser(i18n("Base pitch"), vbox, defaultBasePitch);
+    nameBoxLayout->addWidget(
+        new QLabel(tr("The name is used to identify both the ornament\n"
+                        "and the triggered segment that stores\n"
+                        "the ornament's notes."), nameBox));
+
+    QWidget *hbox = new QWidget;
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    nameBoxLayout->addWidget(hbox);
+    nameBox->setLayout(nameBoxLayout);
+
+    QLabel *child_3 = new QLabel(tr("Name:  "));
+    hboxLayout->addWidget(child_3);
+
+    m_name = new LineEdit(defaultName);
+    hboxLayout->addWidget(m_name);
+    hbox->setLayout(hboxLayout);
+
+    m_pitch = new PitchChooser(tr("Base pitch"), vbox, defaultBasePitch);
+    vboxLayout->addWidget(m_pitch);
+    vbox->setLayout(vboxLayout);
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 QString

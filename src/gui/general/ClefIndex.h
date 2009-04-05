@@ -18,7 +18,7 @@
 #define _CLEF_INDEX_H_
 
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 
 // used variously by TPB, SPB, PresetHandler to correlate combo box indices to
 // clef types

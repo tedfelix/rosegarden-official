@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,10 +20,10 @@
 
 #include "base/MidiDevice.h"
 #include <string>
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include <vector>
-#include <kurl.h>
+#include <QUrl>
 
 
 class QWidget;
@@ -34,7 +33,7 @@ class QCheckBox;
 class QButtonGroup;
 class ProgramList;
 class KeyMappingList;
-class KComboBox;
+class QComboBox;
 class ControlList;
 class BankList;
 
@@ -42,15 +41,15 @@ class BankList;
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class ImportDeviceDialog : public KDialogBase
+class ImportDeviceDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    ImportDeviceDialog(QWidget *parent, KURL url);
+    ImportDeviceDialog(QWidget *parent, QUrl url);
     virtual ~ImportDeviceDialog();
 
     bool doImport();
@@ -78,9 +77,9 @@ protected:
     bool importFromRG(QString fileName);
     bool importFromSF2(QString fileName);
 
-    KURL               m_url;
+    QUrl               m_url;
 
-    KComboBox          *m_deviceCombo;
+    QComboBox          *m_deviceCombo;
     QLabel             *m_deviceLabel;
 
     QCheckBox          *m_importBanks;
@@ -92,7 +91,7 @@ protected:
     QRadioButton       *m_mergeBanks;
     QRadioButton       *m_overwriteBanks;
 
-    RosegardenGUIDoc   *m_fileDoc;
+    RosegardenDocument   *m_fileDoc;
     std::vector<MidiDevice *> m_devices;
     MidiDevice *m_device;
 };

@@ -20,120 +20,49 @@
 
 #include <set>
 #include <string>
-#include <kdockwidget.h>
-#include <qstring.h>
 #include <vector>
 #include "base/Event.h"
+#include "ActionFileClient.h"
 
+#include <QMainWindow>
+#include <QString>
 
-class QWidget;
-class QPaintEvent;
-class QGridLayout;
-class QFrame;
+class QShortcut;
 class QCloseEvent;
-class QAccel;
-class KToggleAction;
-class KConfig;
-class KCommand;
-namespace Rosegarden { class EditViewTimeSigNotifier; }
-
 
 namespace Rosegarden
 {
 
+class Command;
 class Segment;
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class RosegardenDocument;
 class Event;
-class EditToolBox;
-class EditTool;
 
-
-class EditViewBase : public KDockMainWindow
+ 
+class EditViewBase : public QMainWindow, public ActionFileClient
 {
-
     Q_OBJECT
 
 public:
-
-    /**
-     * Create an EditViewBase for the segments \a segments from document \a doc.
-     *
-     * \arg cols : number of columns, main column is always rightmost
-     *
-     */
-    EditViewBase(RosegardenGUIDoc *doc,
-             std::vector<Segment *> segments,
-             unsigned int cols,
-             QWidget *parent,
-             const char *name = 0);
+    EditViewBase(RosegardenDocument *doc,
+                 std::vector<Segment *> segments,
+                 QWidget *parent,
+                 const char *name = 0);
 
     virtual ~EditViewBase();
 
-    const RosegardenGUIDoc *getDocument() const { return m_doc; }
-    RosegardenGUIDoc *getDocument() { return m_doc; }
+    const RosegardenDocument *getDocument() const { return m_doc; }
+    RosegardenDocument *getDocument() { return m_doc; }
 
     /**
-     * Refresh part of a Segment following a modification made in this
-     * or another view.  The startTime and endTime give the extents of
-     * the modified region.  This method is called following a
-     * modification to any Segment; no attempt has been made to check
-     * that the given Segment is actually shown in this view, so take
-     * care.
-     *
-     * If segment is null, refresh all segments.
-     * If the startTime and endTime are equal, refresh the whole of
-     * the relevant segments.
+     * Return our local shortcut object
      */
-    virtual void refreshSegment(Segment *segment,
-                                timeT startTime = 0,
-                                timeT endTime = 0) = 0;
-
-    /**
-     * Get the document's global command history
-     */
-    virtual MultiViewCommandHistory *getCommandHistory();
-
-    /**
-     * Add a Command to the history
-     */
-    virtual void addCommandToHistory(KCommand *);
-
-    /**
-     * Update the view
-     */
-    virtual void updateView() = 0;
-
-    /**
-     * Return our local accelerator object
-     */
-    QAccel* getAccelerators() { return m_accelerators; }
-
-    /**
-     * Return a string unique to this view (amongst views currently
-     * extant) that can be used (e.g. as a prefix) to distinguish
-     * view-local properties.  It's up to the subclass or other user
-     * of this string to manage the properties correctly, for example
-     * by deleting them from the events when the view closes.
-     */
-    std::string getViewLocalPropertyPrefix() {
-        return m_viewLocalPropertyPrefix;
-    }
-
-    /*
-     * So that other people can create tools against our view
-     *
-     */
-    EditToolBox* getToolBox() { return m_toolBox; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     /**
      * Let tools know if their current element has gone
      */
     virtual void handleEventRemoved(Event *event);
-
-    static const unsigned int ID_STATUS_MSG;
-    static const unsigned int NbLayoutRows;
-
 
 signals:
     /**
@@ -188,7 +117,7 @@ public slots:
     /**
      * toggles the main toolbar
      */
-    virtual void slotToggleToolBar();
+//    virtual void slotToggleToolBar();
 
     /**
      * toggles the statusbar
@@ -224,8 +153,6 @@ public slots:
      */
     virtual void slotToggleSolo();
 
-    void slotStateChanged(const QString&, bool noReverse);
-
     virtual void slotOpenInMatrix();
     virtual void slotOpenInPercussionMatrix();
     virtual void slotOpenInNotation();
@@ -250,31 +177,11 @@ protected:
 
     virtual void windowActivationChange(bool);
 
-    virtual void paintEvent(QPaintEvent* e);
-
     /**
      * @see #setInCtor
      */
     virtual void closeEvent(QCloseEvent* e);
-
-    /**
-     * ignore close events while we're in ctor
-     */
-    void setOutOfCtor() { m_inCtor = false; }
-
-    /**
-     * Check if we're still in ctor
-     */
-    bool isInCtor() { return m_inCtor; }
     
-    /**
-     * Set the current Notation tool (note inserter, rest inserter, eraser...)
-     *
-     * Called when the user selects a new item on one of the notation toolbars
-     * (notes toolbars, rests toolbars...)
-     */
-    void setTool(EditTool*);
-
     /**
      * read general Options again and initialize all variables like the recent file list
      */
@@ -283,7 +190,7 @@ protected:
     /**
      * create menus and toolbars
      */
-    virtual void setupActions(QString rcFileName, bool haveClipboard = true);
+    virtual void setupActions(bool haveClipboard = true);
 
     /**
      * setup status bar
@@ -313,31 +220,6 @@ protected slots:
     virtual void slotUpdateToolbars();
 
 protected:
-    QWidget* getCentralWidget() { return m_centralFrame; }
-
-    void initSegmentRefreshStatusIds();
-
-    bool isCompositionModified();
-    void setCompositionModified(bool);
-
-    /**
-     * Returns true if all of the segments contain
-     * only rests and clefs events
-     */
-    bool getSegmentsOnlyRestsAndClefs();
-
-    /// Convenience function around actionCollection()->action()
-    KToggleAction* getToggleAction(const QString& actionName);
-
-    /**
-     * Make a widget visible depending on the state of a
-     * KToggleAction
-     */
-    virtual void toggleWidget(QWidget* widget, const QString& toggleActionName);
-
-    void setRCFileName(QString s) { m_rcFileName = s; }
-    QString getRCFileName()       { return m_rcFileName; }
-
     /**
      * Set the page index of the config dialog which corresponds to
      * this editview
@@ -345,42 +227,12 @@ protected:
     void setConfigDialogPageIndex(int p) { m_configDialogPageIndex = p; }
     int getConfigDialogPageIndex()       { return m_configDialogPageIndex; }
 
-    //--------------- Data members ---------------------------------
-    QString m_rcFileName;
-
-    static std::set<int> m_viewNumberPool;
-    std::string makeViewLocalPropertyPrefix();
-    int m_viewNumber;
-    std::string m_viewLocalPropertyPrefix;
-
-    KConfig* m_config;
-
-    RosegardenGUIDoc* m_doc;
+    RosegardenDocument* m_doc;
     std::vector<Segment *> m_segments;
-    std::vector<unsigned int> m_segmentsRefreshStatusIds;
 
-    EditTool*    m_tool;
-    EditToolBox* m_toolBox;
+    int m_configDialogPageIndex;
 
-    KDockWidget *m_mainDockWidget;
-    QFrame      *m_centralFrame;
-    QGridLayout *m_grid;
-
-    unsigned int m_mainCol;
-    unsigned int m_compositionRefreshStatusId;
-    bool         m_needUpdate;
-
-    QPaintEvent *m_pendingPaintEvent;
-    bool         m_havePendingPaintEvent;
-    static bool  m_inPaintEvent; // true if _any_ edit view is in a paint event
-
-    QAccel      *m_accelerators;
-
-    int          m_configDialogPageIndex;
-
-    bool         m_inCtor;
-
-    EditViewTimeSigNotifier *m_timeSigNotifier;
+    QShortcut *m_shortcuts;
 };
 
 

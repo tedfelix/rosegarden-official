@@ -18,8 +18,9 @@
 
 #include "ControlParameterItem.h"
 
-#include <qlistview.h>
-#include <qstring.h>
+#include <QTreeWidget>
+#include <QTreeWidgetItem>
+#include <QString>
 
 
 namespace Rosegarden

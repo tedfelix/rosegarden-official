@@ -11,9 +11,9 @@
 # when module(s) could not be found
 #
 # It sets the following variables:
-#   PKG_CONFIG_FOUND         ... true iff pkg-config works on the system
+#   PKG_CONFIG_FOUND         ... true if pkg-config works on the system
 #   PKG_CONFIG_EXECUTABLE    ... pathname of the pkg-config program
-#   <PREFIX>_FOUND           ... set to 1 iff module(s) exist
+#   <PREFIX>_FOUND           ... set to 1 if module(s) exist
 #
 # For the following variables two sets of values exist; first one is the
 # common one and has the given PREFIX. The second set contains flags
@@ -321,9 +321,7 @@ macro(pkg_check_modules _prefix _module0)
     _pkgconfig_parse_options   (_pkg_modules _pkg_is_required "${_module0}" ${ARGN})
     _pkg_check_modules_internal("${_pkg_is_required}" 0 "${_prefix}" ${_pkg_modules})
 
-    if(${_prefix}_FOUND)
-      _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
-    endif(${_prefix}_FOUND)
+    _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
   endif(NOT DEFINED __pkg_config_checked_${_prefix} OR __pkg_config_checked_${_prefix} LESS ${PKG_CONFIG_VERSION})
 endmacro(pkg_check_modules)
 
@@ -351,32 +349,11 @@ macro(pkg_search_module _prefix _module0)
       if(${_pkg_is_required})
         message(SEND_ERROR "None of the required '${_pkg_modules_alt}' found")
       endif(${_pkg_is_required})
-    else (NOT ${_prefix}_FOUND)
-      _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
     endif(NOT ${_prefix}_FOUND)
-
+    
+    _pkgconfig_set(__pkg_config_checked_${_prefix} ${PKG_CONFIG_VERSION})
   endif(NOT DEFINED __pkg_config_checked_${_prefix} OR __pkg_config_checked_${_prefix} LESS ${PKG_CONFIG_VERSION})  
 endmacro(pkg_search_module)
-
-### 
-macro(PKGCONFIG _package _include_DIR _link_DIR _link_FLAGS _cflags)
-  message(STATUS "WARNING: you are using the obsolete 'PKGCONFIG' macro")
-  _pkg_check_modules_internal(0 0 _PKGCONFIG_TMP "${_package}")
-  if (_PKGCONFIG_TMP_FOUND)
-    set(${_include_DIR} ${_PKGCONFIG_TMP_INCLUDEDIR})
-    set(${_link_DIR}    ${_PKGCONFIG_TMP_LIBDIR})
-    set(${_link_FLAGS}  ${_PKGCONFIG_TMP_LDFLAGS})
-    set(${_cflags}      ${_PKGCONFIG_TMP_CFLAGS})
-    set(_return_VALUE 0)
-  else(_PKGCONFIG_TMP_FOUND)
-    set(${_include_DIR})
-    set(${_link_DIR})
-    set(${_link_FLAGS})
-    set(${_cflags})
-    set(_return_VALUE 1)
-  endif(_PKGCONFIG_TMP_FOUND)
-endmacro(PKGCONFIG)
-    
 
 ### Local Variables:
 ### mode: cmake

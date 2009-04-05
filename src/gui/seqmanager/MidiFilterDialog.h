@@ -19,25 +19,26 @@
 #ifndef _RG_MIDIFILTERDIALOG_H_
 #define _RG_MIDIFILTERDIALOG_H_
 
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
-class QButtonGroup;
+class QGroupBox;
+class QDialogButtonBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class MidiFilterDialog : public KDialogBase
+class MidiFilterDialog : public QDialog
 {
     Q_OBJECT
 public:
     MidiFilterDialog(QWidget *parent,
-                     RosegardenGUIDoc *doc);
+                     RosegardenDocument *doc);
 
     void setModified(bool value);
 
@@ -49,12 +50,13 @@ public slots:
 
 protected:
 
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument *m_doc;
 
-    QButtonGroup        *m_thruBox;
-    QButtonGroup        *m_recordBox;
+    QGroupBox        *m_thruBox;
+    QGroupBox        *m_recordBox;
 
-    bool                 m_modified;
+    bool              m_modified;
+    QDialogButtonBox *m_buttonBox;
 
 };
 

@@ -24,7 +24,7 @@ namespace Rosegarden {
 class EditViewTimeSigNotifier : public Rosegarden::CompositionObserver
 {
 public:
-    EditViewTimeSigNotifier(RosegardenGUIDoc *doc) :
+    EditViewTimeSigNotifier(RosegardenDocument *doc) :
         m_composition(&doc->getComposition()),
         m_timeSigChanged(false) {
         m_composition->addObserver(this);

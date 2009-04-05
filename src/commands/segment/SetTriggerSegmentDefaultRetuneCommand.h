@@ -20,9 +20,9 @@
 #define _RG_SETTRIGGERSEGMENTDEFAULTRETUNECOMMAND_H_
 
 #include "base/TriggerSegment.h"
-#include <kcommand.h>
+#include "document/Command.h"
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -31,8 +31,10 @@ namespace Rosegarden
 class Composition;
 
 
-class SetTriggerSegmentDefaultRetuneCommand : public KNamedCommand
+class SetTriggerSegmentDefaultRetuneCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentDefaultRetuneCommand)
+
 public:
     SetTriggerSegmentDefaultRetuneCommand(Composition *composition,
                                           TriggerSegmentId id,

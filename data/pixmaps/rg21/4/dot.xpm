@@ -1,9 +1,0 @@
-/* XPM */
-static char * dot_xpm[] = {
-"3 4 2 1",
-" 	c None",
-".	c black",
-"   ",
-" ..",
-" ..",
-"   "};

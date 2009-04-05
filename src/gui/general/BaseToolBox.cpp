@@ -19,30 +19,27 @@
 #include "BaseToolBox.h"
 
 #include "BaseTool.h"
-#include <qobject.h>
-#include <qstring.h>
-#include <qwidget.h>
-
+#include <QObject>
+#include <QString>
+#include <QWidget>
 
 namespace Rosegarden
 {
 
-BaseToolBox::BaseToolBox(QWidget* parent)
-        : QObject(parent),
-        m_tools(17,  // default size, from the Qt docs
-                false) // but we want it to be case insensitive
+BaseToolBox::BaseToolBox(QWidget* parent) :
+    QObject(parent)
 {
-    //m_tools.setAutoDelete(true);
 }
 
-BaseTool* BaseToolBox::getTool(const QString& toolName)
+BaseTool *
+BaseToolBox::getTool(QString toolName)
 {
     BaseTool* tool = m_tools[toolName];
 
     if (!tool) tool = createTool(toolName);
 
-    connect(tool, SIGNAL(showContextHelp(const QString &)),
-            this, SIGNAL(showContextHelp(const QString &)));
+    connect(tool, SIGNAL(showContextHelp(QString)),
+            this, SIGNAL(showContextHelp(QString)));
     
     return tool;
 }

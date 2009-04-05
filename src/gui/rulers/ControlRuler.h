@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,23 +18,26 @@
 #ifndef _RG_CONTROLRULER_H_
 #define _RG_CONTROLRULER_H_
 
+#include <Q3Canvas>
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "gui/general/RosegardenCanvasView.h"
-#include <qcolor.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include <QColor>
+#include <QPoint>
+#include <QString>
 #include <utility>
 
 
 class QWidget;
+class QMenu;
 class QWheelEvent;
 class QScrollBar;
-class QPopupMenu;
 class QMouseEvent;
 class QContextMenuEvent;
-class QCanvasRectangle;
-class QCanvas;
+class Q3CanvasRectangle;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -44,7 +46,6 @@ namespace Rosegarden
 class ControlTool;
 class ControlSelector;
 class ControlItem;
-class TextFloat;
 class Segment;
 class RulerScale;
 class EventSelection;
@@ -64,8 +65,8 @@ public:
     ControlRuler(Segment*,
                  RulerScale*,
                  EditViewBase* parentView,
-                 QCanvas*,
-                 QWidget* parent=0, const char* name=0, WFlags f=0);
+                 Q3Canvas*,
+                 QWidget* parent=0); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
     virtual ~ControlRuler();
 
     virtual QString getName() = 0;
@@ -79,17 +80,17 @@ public:
 
     int applyTool(double x, int val);
 
-    QCanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
+    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
 
     RulerScale* getRulerScale() { return m_rulerScale; }
 
     /// EventSelectionObserver
     virtual void eventSelected(EventSelection *,Event *);
-    virtual void eventDeselected(EventSelection *,Event *);    
+    virtual void eventDeselected(EventSelection *,Event *);
     virtual void eventSelectionDestroyed(EventSelection *);
-    
+
     void assignEventSelection(EventSelection *);
-    
+
     // SegmentObserver interface
     virtual void segmentDeleted(const Segment *);
 
@@ -110,7 +111,7 @@ public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();
     virtual void slotUpdateElementsHPos();
-    
+
 protected:
     virtual void contentsMousePressEvent(QMouseEvent*);
     virtual void contentsMouseReleaseEvent(QMouseEvent*);
@@ -120,7 +121,7 @@ protected:
 
     virtual QScrollBar* getMainHorizontalScrollBar();
 
-    virtual void computeStaffOffset() {};
+    virtual void computeViewSegmentOffset() {};
 
     virtual void layoutItem(ControlItem*);
 
@@ -151,14 +152,14 @@ protected:
     EventSelection* m_eventSelection,*m_assignedEventSelection;
     Segment*        m_segment;
 
-    ControlItem* m_currentItem;
-    QCanvasItemList m_selectedItems;
+    ControlItem* m_currentIndex;
+    Q3CanvasItemList m_selectedItems;
 
     ControlTool *m_tool;
 
     int m_maxItemValue;
 
-    double m_staffOffset;
+    double m_viewSegmentOffset;
 
     double m_currentX;
 
@@ -167,16 +168,13 @@ protected:
 
     bool m_selecting;
     ControlSelector* m_selector;
-    QCanvasRectangle* m_selectionRect;
+    Q3CanvasRectangle* m_selectionRect;
 
     QString m_menuName;
-    QPopupMenu* m_menu;
-
-    TextFloat  *m_numberFloat;
+    QMenu* 	m_menu;
 
     bool m_hposUpdatePending;
-    pthread_mutex_t m_mutex;
-    
+
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
 };

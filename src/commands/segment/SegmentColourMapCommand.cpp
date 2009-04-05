@@ -20,17 +20,17 @@
 
 #include "base/ColourMap.h"
 #include "base/Segment.h"
-#include "document/RosegardenGUIDoc.h"
-#include <qstring.h>
+#include "document/RosegardenDocument.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 SegmentColourMapCommand::SegmentColourMapCommand(
-    RosegardenGUIDoc *doc,
+    RosegardenDocument *doc,
     const ColourMap &map):
-        KNamedCommand(i18n("Change Segment Color Map")),
+        NamedCommand(tr("Change Segment Color Map")),
         m_doc(doc),
         m_oldMap(m_doc->getComposition().getSegmentColourMap()),
         m_newMap(map)

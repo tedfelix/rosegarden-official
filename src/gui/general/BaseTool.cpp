@@ -19,21 +19,20 @@
 #include "BaseTool.h"
 
 #include "misc/Debug.h"
-#include <kxmlguifactory.h>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qpopupmenu.h>
-#include <qstring.h>
+#include <QCursor>
+#include <QObject>
+#include <QToolTip>
+#include <QString>
+#include <QMenu>
 
 
 namespace Rosegarden
 {
 
-BaseTool::BaseTool(const QString& menuName, KXMLGUIFactory* factory, QObject* parent)
+BaseTool::BaseTool(const QString& menuName, QObject* parent)
         : QObject(parent),
         m_menuName(menuName),
-        m_menu(0),
-        m_parentFactory(factory)
+        m_menu(0)
 {}
 
 BaseTool::~BaseTool()

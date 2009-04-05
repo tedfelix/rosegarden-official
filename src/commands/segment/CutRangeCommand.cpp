@@ -18,7 +18,6 @@
 
 #include "CutRangeCommand.h"
 
-#include <klocale.h>
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "commands/edit/CopyCommand.h"
@@ -31,7 +30,7 @@ namespace Rosegarden
 CutRangeCommand::CutRangeCommand(Composition *composition,
                                  timeT t0, timeT t1,
                                  Clipboard *clipboard) :
-        KMacroCommand(i18n("Cut Range"))
+        MacroCommand(tr("Cut Range"))
 {
     addCommand(new CopyCommand(composition, t0, t1, clipboard));
     addCommand(new DeleteRangeCommand(composition, t0, t1));

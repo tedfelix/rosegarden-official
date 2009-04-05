@@ -22,11 +22,20 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+DeCounterpointCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("de_counterpoint",
+         new SelectionCommandBuilder<DeCounterpointCommand>());
+}
 
 void
 DeCounterpointCommand::modifySegment()

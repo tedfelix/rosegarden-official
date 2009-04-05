@@ -18,27 +18,26 @@
 
 #include "SpecialSegmentMmapper.h"
 
-#include <kstddirs.h>
+#include <QDir>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "SegmentMmapper.h"
-#include <kglobal.h>
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-SpecialSegmentMmapper::SpecialSegmentMmapper(RosegardenGUIDoc* doc,
+SpecialSegmentMmapper::SpecialSegmentMmapper(RosegardenDocument* doc,
         QString baseFileName)
         : SegmentMmapper(doc, 0, createFileName(baseFileName))
 {}
 
 QString SpecialSegmentMmapper::createFileName(QString baseFileName)
 {
-    return KGlobal::dirs()->resourceDirs("tmp").last() + "/" + baseFileName;
+    return QDir::tempPath() + "/" + baseFileName;
 }
 
 unsigned int SpecialSegmentMmapper::getSegmentRepeatCount()

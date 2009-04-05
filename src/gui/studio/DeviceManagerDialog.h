@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,31 +19,36 @@
 #define _RG_DEVICEMANAGERDIALOG_H_
 
 #include "base/Device.h"
-#include <kmainwindow.h>
-#include <qstring.h>
-#include <qstringlist.h>
+#include "base/MidiDevice.h"
+#include "gui/general/ActionFileClient.h"
+
+#include <QMainWindow>
+#include <QString>
+#include <QStringList>
+
 #include <vector>
 
 
 class QWidget;
-class QTable;
+class QTableWidget;
+class QTableWidgetItem;
 class QPushButton;
 class QCloseEvent;
-
+class QDialogButtonBox;
 
 namespace Rosegarden
 {
 
 class Studio;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiDevice;
 
 
-class DeviceManagerDialog : public KMainWindow
+class DeviceManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 public:
-    DeviceManagerDialog(QWidget *parent, RosegardenGUIDoc *document);
+    DeviceManagerDialog(QWidget *parent, RosegardenDocument *document);
     ~DeviceManagerDialog();
 
     void setModified(bool value);
@@ -81,8 +85,10 @@ protected:
     virtual void closeEvent(QCloseEvent *);
 
 private:
-    RosegardenGUIDoc *m_document;
+    RosegardenDocument *m_document;
     Studio *m_studio;
+	
+	QDialogButtonBox * m_dialogButtonBox;
 
     QPushButton *m_deletePlayButton;
     QPushButton *m_deleteRecordButton;
@@ -93,10 +99,11 @@ private:
 
     QStringList m_playConnections;
     QStringList m_recordConnections;
-    void makeConnectionList(unsigned int direction, QStringList &list);
+    void makeConnectionList(MidiDevice::DeviceDirection direction, 
+			    QStringList &list);
     
-    QTable *m_playTable;
-    QTable *m_recordTable;
+    QTableWidget *m_playTable;
+    QTableWidget *m_recordTable;
 
     typedef std::vector<MidiDevice *> MidiDeviceList;
     MidiDeviceList m_playDevices;

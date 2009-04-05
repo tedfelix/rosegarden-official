@@ -25,13 +25,14 @@
 #include "gui/widgets/RosegardenPopupMenu.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedStudio.h"
-#include <kcombobox.h>
-#include <klocale.h>
-#include <qcursor.h>
-#include <qobject.h>
-#include <qpoint.h>
-#include <qstring.h>
-#include <qwidget.h>
+
+#include <QComboBox>
+#include <QCursor>
+#include <QObject>
+#include <QPoint>
+#include <QString>
+#include <QWidget>
+#include <QAction>
 
 
 namespace Rosegarden
@@ -60,7 +61,7 @@ AudioRouteMenu::AudioRouteMenu(QWidget *par,
 
     case Regular: {
             m_button = 0;
-            m_combo = new KComboBox(par);
+            m_combo = new QComboBox(par);
             connect(m_combo, SIGNAL(activated(int)), this, SLOT(slotEntrySelected(int)));
             break;
         }
@@ -91,9 +92,9 @@ AudioRouteMenu::slotRepopulate()
     case Regular:
         m_combo->clear();
         for (int i = 0; i < getNumEntries(); ++i) {
-            m_combo->insertItem(getEntryText(i));
+            m_combo->addItem(getEntryText(i));
         }
-        m_combo->setCurrentItem(getCurrentEntry());
+        m_combo->setCurrentIndex(getCurrentEntry());
         break;
     }
 }
@@ -130,10 +131,11 @@ AudioRouteMenu::slotShowMenu()
 
     for (int i = 0; i < getNumEntries(); ++i) {
 
-        menu->insertItem(getEntryText(i), this, SLOT(slotEntrySelected(int)),
-                         0, i);
-        menu->setItemParameter(i, i);
+        QAction *a = menu->addAction(getEntryText(i));
+        a->setObjectName(QString("%1").arg(i));
     }
+
+    connect(menu, SIGNAL(triggered(QAction *)), this, SLOT(slotEntrySelected(QAction *)));
 
     int itemHeight = menu->itemHeight(0) + 2;
     QPoint pos = QCursor::pos();
@@ -224,24 +226,24 @@ AudioRouteMenu::getEntryText(int entry)
 
             if (stereo) {
                 if (entry < recordIns) {
-                    return i18n("In %1").arg(entry + 1);
+                    return tr("In %1").arg(entry + 1);
                 } else if (entry == recordIns) {
-                    return i18n("Master");
+                    return tr("Master");
                 } else {
-                    return i18n("Sub %1").arg(entry - recordIns);
+                    return tr("Sub %1").arg(entry - recordIns);
                 }
             } else {
                 int channel = entry % 2;
                 entry /= 2;
                 if (entry < recordIns) {
-                    return (channel ? i18n("In %1 R") :
-                            i18n("In %1 L")).arg(entry + 1);
+                    return (channel ? tr("In %1 R") :
+                            tr("In %1 L")).arg(entry + 1);
                 } else if (entry == recordIns) {
-                    return (channel ? i18n("Master R") :
-                            i18n("Master L"));
+                    return (channel ? tr("Master R") :
+                            tr("Master L"));
                 } else {
-                    return (channel ? i18n("Sub %1 R") :
-                            i18n("Sub %1 L")).arg(entry - recordIns);
+                    return (channel ? tr("Sub %1 R") :
+                            tr("Sub %1 L")).arg(entry - recordIns);
                 }
             }
             break;
@@ -249,12 +251,18 @@ AudioRouteMenu::getEntryText(int entry)
 
     case Out:
         if (entry == 0)
-            return i18n("Master");
+            return tr("Master");
         else
-            return i18n("Sub %1").arg(entry);
+            return tr("Sub %1").arg(entry);
     }
 
     return QString();
+}
+
+void
+AudioRouteMenu::slotEntrySelected(QAction *a)
+{
+    slotEntrySelected(a->objectName().toInt());
 }
 
 void

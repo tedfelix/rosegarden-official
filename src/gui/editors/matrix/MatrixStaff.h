@@ -19,12 +19,15 @@
 #ifndef _RG_MATRIXSTAFF_H_
 #define _RG_MATRIXSTAFF_H_
 
+#ifdef NOT_DEFINED
+
+#include <Q3Canvas>
 #include "base/Staff.h"
 #include "gui/general/LinedStaff.h"
 #include "base/Event.h"
 
 
-class QCanvas;
+class Q3Canvas;
 
 
 namespace Rosegarden
@@ -42,7 +45,7 @@ class Event;
 class MatrixStaff : public LinedStaff
 {
 public:
-    MatrixStaff(QCanvas *canvas,
+    MatrixStaff(Q3Canvas *canvas,
                 Segment *segment, 
                 SnapGrid *snapGrid,
                 int id, 
@@ -101,4 +104,5 @@ private:
 
 }
 
+#endif
 #endif

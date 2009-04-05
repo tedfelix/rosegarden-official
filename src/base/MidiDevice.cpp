@@ -547,6 +547,18 @@ MidiDevice::getPresentationInstruments() const
 void
 MidiDevice::addInstrument(Instrument *instrument)
 {
+    // Check / add controls to this instrument
+    for (ControlList::const_iterator it = m_controlList.begin();
+         it != m_controlList.end(); ++it)
+    {
+        int controller = (*it).getControllerValue();
+        try {
+            instrument->getControllerValue(controller);
+        } catch(...) {
+            instrument->setControllerValue(controller, it->getDefault());
+        }
+    }
+    
     m_instruments.push_back(instrument);
     generatePresentationList();
 }

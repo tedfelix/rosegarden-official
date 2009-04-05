@@ -18,24 +18,42 @@
 
 #include "MakeAccidentalsCautionaryCommand.h"
 
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+void
+MakeAccidentalsCautionaryCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("show_cautionary",
+         new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
+    r->registerCommand
+        ("cancel_cautionary",
+         new ArgumentAndSelectionCommandBuilder<MakeAccidentalsCautionaryCommand>());
+}
+
+bool
+MakeAccidentalsCautionaryCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "show_cautionary") return true;
+    else return false;
+}
+
 QString
 MakeAccidentalsCautionaryCommand::getGlobalName(bool cautionary)
 {
     if (cautionary)
-        return i18n("Use &Cautionary Accidentals");
+        return tr("Use &Cautionary Accidentals");
     else
-        return i18n("Cancel C&autionary Accidentals");
+        return tr("Cancel C&autionary Accidentals");
 }
 
 void

@@ -20,8 +20,8 @@
 #define _RG_INVERTCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -34,6 +34,8 @@ class EventSelection;
 
 class InvertCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(InvertCommand)
+
 public:
     InvertCommand(int semitones, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(semitones), selection, true),
@@ -41,7 +43,7 @@ public:
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
-        default:  return i18n("&Invert");
+        default:  return tr("&Invert");
         }
     }
 

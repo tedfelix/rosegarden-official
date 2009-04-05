@@ -20,18 +20,18 @@
 #define _RG_DOCUMENTMETACONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include "base/Composition.h"
 
 
 class QWidget;
-class KListView;
+class QListWidget;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class HeadersConfigurationPage;
 
 /**
@@ -43,12 +43,12 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+    DocumentMetaConfigurationPage(RosegardenDocument *doc,
                                   QWidget *parent = 0, const char *name = 0);
     virtual void apply();
 
-    static QString iconLabel() { return i18n("About"); }
-    static QString title() { return i18n("About"); }
+    static QString iconLabel() { return tr("About"); }
+    static QString title() { return tr("About"); }
     static QString iconName()  { return "contents"; }
 
 /* hjj: WHAT TO DO WITH THIS ?
@@ -56,6 +56,16 @@ public:
 */
 
 protected:
+    static QString durationToString(Composition &comp,
+                                    timeT absTime,
+                                    timeT duration,
+                                    RealTime rt) {
+        return tr("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
+	 .arg(rt.sec / 60).arg(rt.sec % 60)
+	 .arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
+	 .arg(duration).arg(comp.getBarNumber(absTime + duration) -
+			   comp.getBarNumber(absTime));
+    }
 
     //--------------- Data members ---------------------------------
 

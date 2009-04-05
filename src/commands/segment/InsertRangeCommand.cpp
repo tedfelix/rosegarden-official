@@ -18,13 +18,13 @@
 
 #include "InsertRangeCommand.h"
 
-#include <klocale.h>
 #include "AudioSegmentSplitCommand.h"
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "OpenOrCloseRangeCommand.h"
 #include "SegmentSplitCommand.h"
+#include <QObject>
 
 
 namespace Rosegarden
@@ -32,7 +32,7 @@ namespace Rosegarden
 
 InsertRangeCommand::InsertRangeCommand(Composition *composition,
 				       timeT t0, timeT duration) :
-    KMacroCommand(i18n("Insert Range"))
+    MacroCommand(tr("Insert Range"))
 {
     // Need to split segments before opening, at t0
 

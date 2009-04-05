@@ -23,6 +23,8 @@
 #include "base/Event.h"
 #include "gui/editors/guitar/Chord.h"
 
+#include <QCoreApplication>
+
 
 namespace Rosegarden
 {
@@ -33,6 +35,8 @@ class Event;
 
 class GuitarChordInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(GuitarChordInsertionCommand)
+
 public:
     GuitarChordInsertionCommand(Segment &segment,
                               timeT time,

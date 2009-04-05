@@ -18,7 +18,6 @@
 
 #include "EventInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
@@ -29,7 +28,7 @@ namespace Rosegarden
 
 EventInsertionCommand::EventInsertionCommand(Segment &segment,
         Event *event) :
-        BasicCommand(i18n("Insert Event"), segment, event->getAbsoluteTime(),
+        BasicCommand(tr("Insert Event"), segment, event->getAbsoluteTime(),
                      event->getAbsoluteTime() + event->getDuration()),
         m_event(new Event(*event))
 {

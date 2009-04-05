@@ -100,8 +100,6 @@ public:
 
 /**
  * This class owns the objects its items are pointing at.
- *
- * The template argument T must be a subclass of ViewElement.
  */
 class ViewElementList : public std::multiset<ViewElement *, ViewElementComparator >
 {

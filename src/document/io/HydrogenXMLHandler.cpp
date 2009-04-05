@@ -20,7 +20,6 @@
 
 #include "base/Event.h"
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Composition.h"
@@ -29,7 +28,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -132,7 +131,7 @@ HydrogenXMLHandler::startElement(const QString& /*namespaceURI*/,
                                  const QString& qName,
                                  const QXmlAttributes& /*atts*/)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "note") {
 
@@ -168,7 +167,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
                                const QString& /*localName*/,
                                const QString& qName)
 {
-    QString lcName = qName.lower();
+    QString lcName = qName.toLower();
 
     if (lcName == "note") {
 
@@ -267,7 +266,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
             m_segment->setEndMarkerTime(m_composition->getBarEnd(m_currentBar));
             QString label = QString("%1 - %2 %3 %4").arg(strtoqstr(m_patternName))
                             .arg(strtoqstr(m_sequenceName))
-                            .arg(i18n(" imported from Hydrogen ")).arg(strtoqstr(m_version));
+                            .arg(tr(" imported from Hydrogen ")).arg(strtoqstr(m_version));
             m_segment->setLabel(qstrtostr(label));
 
             m_composition->addTrack(track);
@@ -287,7 +286,7 @@ HydrogenXMLHandler::endElement(const QString& /*namespaceURI*/,
 bool
 HydrogenXMLHandler::characters(const QString& chars)
 {
-    QString ch = chars.stripWhiteSpace();
+    QString ch = chars.trimmed();
     if (ch == "")
         return true;
 
@@ -332,7 +331,7 @@ HydrogenXMLHandler::characters(const QString& chars)
         if (m_currentProperty == "id") {
             m_id = ch.toInt();
         } else if (m_currentProperty == "ismuted") {
-            if (ch.lower() == "true")
+            if (ch.toLower() == "true")
                 m_muted = true;
             else
                 m_muted = false;
@@ -376,7 +375,7 @@ HydrogenXMLHandler::characters(const QString& chars)
         } else if (m_currentProperty == "notes") {
             m_notes = qstrtostr(chars);
         } else if (m_currentProperty == "mode") {
-            if (ch.lower() == "song")
+            if (ch.toLower() == "song")
                 m_songMode = true;
             else
                 m_songMode = false;

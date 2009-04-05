@@ -22,7 +22,7 @@
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -32,7 +32,7 @@ AddTracksCommand::AddTracksCommand(Composition *composition,
                                    unsigned int nbTracks,
                                    InstrumentId id,
                                    int position):
-    KNamedCommand(getGlobalName()),
+    NamedCommand(getGlobalName()),
     m_composition(composition),
     m_nbNewTracks(nbTracks),
     m_instrumentId(id),

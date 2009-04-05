@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2009 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -17,6 +17,15 @@
 
 #ifndef _TEMPLATE_H_
 #define _TEMPLATE_H_
+
+// local includes
+#include <local/LocalInclude.h>
+
+// Qt includes
+#include <QtInclude>
+
+// STL & other includes
+#include <vector>
 
 namespace Rosegarden
 {

@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUMAKENOTESVIABLECOMMAND_H_
-#define _RG_ADJUSTMENUMAKENOTESVIABLECOMMAND_H_
+#ifndef _RG_MAKENOTESVIABLECOMMAND_H_
+#define _RG_MAKENOTESVIABLECOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -31,11 +31,14 @@ namespace Rosegarden
 
 class Segment;
 class EventSelection;
+class CommandRegistry;
 
 
 /// MakeNotesViable works on a selection or entire segment
 class MakeNotesViableCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MakeNotesViableCommand)
+
 public:
     MakeNotesViableCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
@@ -45,7 +48,9 @@ public:
         BasicSelectionCommand(getGlobalName(), segment, true),
         m_selection(0) { }
 
-    static QString getGlobalName() { return i18n("Tie Notes at &Barlines"); }
+    static QString getGlobalName() { return tr("Tie Notes at &Barlines"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

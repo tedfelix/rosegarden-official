@@ -20,41 +20,40 @@
 
 #include "document/ConfigGroups.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "document/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
-#include <kconfig.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QSettings>
+#include <QFrame>
+#include <QLabel>
+#include <QString>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 namespace Rosegarden
 {
 
-MatrixConfigurationPage::MatrixConfigurationPage(KConfig *cfg,
-        QWidget *parent,
+MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent,
         const char *name) :
-        TabbedConfigurationPage(cfg, parent, name)
+        TabbedConfigurationPage(parent, name)
 {
-    m_cfg->setGroup(MatrixViewConfigGroup);
-
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                                          4, 2,  // nbrow, nbcol
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     layout->addWidget(new QLabel("Nothing here yet", frame), 0, 0);
 
-    addTab(frame, i18n("General"));
+    addTab(frame, tr("General"));
 }
 
 void MatrixConfigurationPage::apply()
 {
-    m_cfg->setGroup(MatrixViewConfigGroup);
+    //@@@ Next two lines not need.  Commented out.
+    //@@@ QSettings settings;
+    //@@@ settings.beginGroup( MatrixViewConfigGroup );
 }
 
 }

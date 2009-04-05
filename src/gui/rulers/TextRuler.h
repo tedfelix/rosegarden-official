@@ -19,10 +19,10 @@
 #ifndef _RG_TEXTRULER_H_
 #define _RG_TEXTRULER_H_
 
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include <QFont>
+#include <QFontMetrics>
+#include <QSize>
+#include <QWidget>
 
 
 class QPaintEvent;

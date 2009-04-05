@@ -18,21 +18,20 @@
 
 #include "AddTriggerSegmentCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 
 
 namespace Rosegarden
 {
 
-AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenGUIDoc *doc,
+AddTriggerSegmentCommand::AddTriggerSegmentCommand(RosegardenDocument *doc,
         timeT duration,
         int basePitch,
         int baseVelocity) :
-        KNamedCommand(i18n("Add Triggered Segment")),
+        NamedCommand(tr("Add Triggered Segment")),
         m_composition(&doc->getComposition()),
         m_duration(duration),
         m_basePitch(basePitch),

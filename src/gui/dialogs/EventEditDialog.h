@@ -22,15 +22,16 @@
 #include "base/Event.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include <string>
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QString;
-class QScrollView;
+class QScrollArea;
 class QLabel;
-class QGrid;
-
+class QGridLayout;
+class QFrame;
+class QGroupBox;
 
 namespace Rosegarden
 {
@@ -38,7 +39,7 @@ namespace Rosegarden
 class PropertyName;
 
 
-class EventEditDialog : public KDialogBase
+class EventEditDialog : public QDialog
 {
     Q_OBJECT
 
@@ -80,10 +81,13 @@ protected:
     QLabel *m_durationDisplay;
     QLabel *m_durationDisplayAux;
 
-    QGrid *m_persistentGrid;
-    QGrid *m_nonPersistentGrid;
+    QGroupBox	*m_persistentGrid;
+    QGridLayout *m_persistentGridLay;
+    int          m_persistentGridRow;
 
-    QScrollView *m_nonPersistentView;
+    QFrame      *m_nonPersistentGrid;
+
+    QScrollArea *m_nonPersistentView;
 
     const Event &m_originalEvent;
     Event m_event;

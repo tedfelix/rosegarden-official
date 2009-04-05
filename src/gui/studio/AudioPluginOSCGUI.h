@@ -23,10 +23,10 @@
 
 #include <lo/lo.h>
 
-#include <qstring.h>
+#include <QString>
 
 
-class KProcess;
+class QProcess;
 
 
 namespace Rosegarden
@@ -54,7 +54,7 @@ public:
     static QString getGUIFilePath(QString identifier);
 
 protected:
-    KProcess *m_gui;
+    QProcess *m_gui;
     lo_address m_address;
     QString m_basePath;
     QString m_serverUrl;

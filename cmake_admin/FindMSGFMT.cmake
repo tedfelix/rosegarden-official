@@ -20,6 +20,9 @@
 # published by the Free Software Foundation; either version 2 of the
 # License, or (at your option) any later version.  See the file
 # COPYING included with this distribution for more information.
+#
+### NOTE: KDE4 needs msgfmt of version >= 0.15 (msgfmt --version)
+
 
 # Find the msgfmt program
 #
@@ -66,3 +69,5 @@ MACRO(ADD_TRANSLATIONS _baseName)
     ENDFOREACH(_file)
     ADD_CUSTOM_TARGET(translations ALL DEPENDS ${_outputs})
 ENDMACRO(ADD_TRANSLATIONS)
+
+

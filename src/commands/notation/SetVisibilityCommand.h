@@ -20,8 +20,8 @@
 #define _RG_SETVISIBILITYCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,17 +30,23 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class SetVisibilityCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SetVisibilityCommand)
+
 public:
-    SetVisibilityCommand(EventSelection &selection, bool visible) :
+    SetVisibilityCommand(bool visible, EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection),
         m_visible(visible) { }
 
-    static QString getGlobalName() { return i18n("Set Visibility"); }
+    static QString getGlobalName() { return tr("Set Visibility"); }
+
+    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

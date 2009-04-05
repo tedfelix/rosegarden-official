@@ -21,7 +21,8 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
@@ -31,18 +32,35 @@ using namespace BaseProperties;
 
 
 void
+SetVisibilityCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("make_visible",
+         new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
+    r->registerCommand
+        ("make_invisible",
+         new ArgumentAndSelectionCommandBuilder<SetVisibilityCommand>());
+}
+
+bool
+SetVisibilityCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    if (actionName == "make_visible") return true;
+    else return false;
+}
+
+void
 SetVisibilityCommand::modifySegment()
 {
     EventSelection::eventcontainer::iterator i;
 
     for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+         i != m_selection->getSegmentEvents().end(); ++i) {
 
         if (m_visible) {
             (*i)->unset(INVISIBLE);
         } else {
-            (*i)->set
-            <Bool>(INVISIBLE, true);
+            (*i)->set<Bool>(INVISIBLE, true);
         }
     }
 }

@@ -20,8 +20,8 @@
 #define _RG_RESETDISPLACEMENTSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,16 +30,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class ResetDisplacementsCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ResetDisplacementsCommand)
+
 public:
     ResetDisplacementsCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("Restore Positions"); }
+    static QString getGlobalName() { return tr("&Restore Positions"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

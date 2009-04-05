@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,11 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
+
 #ifndef _RG_RESTINSERTER_H_
 #define _RG_RESTINSERTER_H_
 
 #include "NoteInserter.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
 
 
@@ -70,4 +71,5 @@ protected slots:
 
 }
 
+#endif
 #endif

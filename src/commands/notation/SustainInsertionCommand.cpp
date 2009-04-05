@@ -22,7 +22,8 @@
 #include "base/MidiTypes.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include "base/Selection.h"
+#include <QString>
 
 
 namespace Rosegarden
@@ -42,6 +43,14 @@ SustainInsertionCommand::SustainInsertionCommand(Segment &segment, timeT time,
 SustainInsertionCommand::~SustainInsertionCommand()
 {
     // nothing
+}
+
+EventSelection *
+SustainInsertionCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 void

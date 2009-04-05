@@ -18,7 +18,6 @@
 
 #include "AddIndicationCommand.h"
 
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -26,29 +25,115 @@
 #include "base/SegmentNotationHelper.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "document/CommandRegistry.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include <vector>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-AddIndicationCommand::AddIndicationCommand(std::string indicationType,
-        EventSelection &selection) :
-        BasicCommand(getGlobalName(indicationType),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime()),
-        m_indicationType(indicationType),
-        m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
-        m_lastInsertedEvent(0)
+static std::vector<std::string> getStandardIndications()
 {
-    // nothing else
+    std::vector<std::string> v;
+    v.push_back(Indication::Slur);
+    v.push_back(Indication::PhrasingSlur);
+    v.push_back(Indication::Glissando);
+    v.push_back(Indication::Crescendo);
+    v.push_back(Indication::Decrescendo);
+    v.push_back(Indication::QuindicesimaUp);
+    v.push_back(Indication::OttavaUp);
+    v.push_back(Indication::OttavaDown);
+    v.push_back(Indication::QuindicesimaDown);
+    return v;
+}
+
+static const char *shortcuts[] = {
+    ")",
+    "Ctrl+)",
+    "",
+    "<",
+    ">",
+    "",
+    "",
+    "",
+    ""
+};
+static const char *icons[] = {
+    "group-slur",
+    "",
+    "group-glissando",
+    "group-crescendo",
+    "group-decrescendo",
+    "",
+    "group-ottava",
+    "",
+    ""
+};
+static const char *actionNames[] = {
+    "slur",
+    "phrasing_slur",
+    "glissando",
+    "crescendo",
+    "decrescendo",
+    "octave_2up",
+    "octave_up",
+    "octave_down",
+    "octave_2down"
+};
+
+void
+AddIndicationCommand::registerCommand(CommandRegistry *r)
+{
+    std::vector<std::string> standardIndications = getStandardIndications();
+    
+    for (int i = 0; i < standardIndications.size(); ++i) {
+        r->registerCommand
+            (actionNames[i],
+             new ArgumentAndSelectionCommandBuilder<AddIndicationCommand>());
+    }
+}
+
+std::string
+AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+{
+    std::vector<std::string> standardIndications = getStandardIndications();
+    
+    for (int i = 0; i < standardIndications.size(); ++i) {
+        if (actionName == actionNames[i]) return standardIndications[i];
+    }
+    throw CommandCancelled();
+}
+
+AddIndicationCommand::AddIndicationCommand(std::string indicationType,
+                                           EventSelection &selection) :
+    BasicCommand(getGlobalName(indicationType),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime()),
+    m_indicationType(indicationType),
+    m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
+    m_lastInsertedEvent(0)
+{
+    if (!canExecute()) {
+        throw CommandFailed
+            //!!! need to use text from trunk/src/gui/editors/notation/NotationView.cpp (but this requires an informal human-readable version of the indication name)
+            (qstrtostr(tr("Can't add identical overlapping indications")));
+    }
 }
 
 AddIndicationCommand::~AddIndicationCommand()
 {
     // empty
+}
+
+EventSelection *
+AddIndicationCommand::getSubsequentSelection()
+{
+    EventSelection *selection = new EventSelection(getSegment());
+    selection->addEvent(getLastInsertedEvent());
+    return selection;
 }
 
 bool
@@ -135,29 +220,29 @@ QString
 AddIndicationCommand::getGlobalName(std::string indicationType)
 {
     if (indicationType == Indication::Slur) {
-        return i18n("Add S&lur");
+        return tr("Add S&lur");
     } else if (indicationType == Indication::PhrasingSlur) {
-        return i18n("Add &Phrasing Slur");
+        return tr("Add &Phrasing Slur");
     } else if (indicationType == Indication::QuindicesimaUp) {
-        return i18n("Add Double-Octave Up");
+        return tr("Add Double-Octave Up");
     } else if (indicationType == Indication::OttavaUp) {
-        return i18n("Add Octave &Up");
+        return tr("Add Octave &Up");
     } else if (indicationType == Indication::OttavaDown) {
-        return i18n("Add Octave &Down");
+        return tr("Add Octave &Down");
     } else if (indicationType == Indication::QuindicesimaDown) {
-        return i18n("Add Double Octave Down");
+        return tr("Add Double Octave Down");
 
         // We used to generate these ones from the internal names plus
         // caps, but that makes them untranslateable:
     } else if (indicationType == Indication::Crescendo) {
-        return i18n("Add &Crescendo");
+        return tr("Add &Crescendo");
     } else if (indicationType == Indication::Decrescendo) {
-        return i18n("Add &Decrescendo");
+        return tr("Add &Decrescendo");
     } else if (indicationType == Indication::Glissando) {
-        return i18n("Add &Glissando");
+        return tr("Add &Glissando");
     }
 
-    QString n = i18n("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));
+    QString n = tr("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));
     return n;
 }
 

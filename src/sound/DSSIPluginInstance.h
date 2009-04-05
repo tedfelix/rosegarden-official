@@ -19,7 +19,7 @@
 #include <vector>
 #include <set>
 #include <map>
-#include <qstring.h>
+#include <QString>
 #include "Instrument.h"
 
 #ifdef HAVE_DSSI

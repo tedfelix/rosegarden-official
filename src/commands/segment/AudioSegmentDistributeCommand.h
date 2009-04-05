@@ -20,10 +20,10 @@
 #define _RG_AUDIOSEGMENTDISTRIBUTECOMMAND_H_
 
 #include "base/Selection.h"
-#include <kcommand.h>
-#include <qstring.h>
+#include "document/Command.h"
+#include <QString>
 #include <vector>
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -42,8 +42,10 @@ class AudioFile;
  *
  * (I think this is actually unused --cc)
  */
-class AudioSegmentDistributeCommand : public KNamedCommand
+class AudioSegmentDistributeCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(AudioSegmentDistributeCommand)
+
 public:
     AudioSegmentDistributeCommand(Composition *comp,
                                   SegmentSelection &inputSelection,
@@ -56,7 +58,7 @@ public:
     virtual ~AudioSegmentDistributeCommand();
 
     static QString getGlobalName() 
-        { return i18n("Distribute Audio Segments over MIDI"); }
+        { return tr("Distribute Audio Segments over MIDI"); }
 
 
     virtual void execute();

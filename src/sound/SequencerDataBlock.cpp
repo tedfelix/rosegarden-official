@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -19,10 +19,19 @@
 namespace Rosegarden
 {
 
-SequencerDataBlock::SequencerDataBlock(bool initialise)
+//!!! todo: review mutex requirements
+
+SequencerDataBlock *
+SequencerDataBlock::getInstance()
 {
-    if (initialise)
-        clearTemporaries();
+    static SequencerDataBlock *instance = 0;
+    if (!instance) instance = new SequencerDataBlock();
+    return instance;
+}
+
+SequencerDataBlock::SequencerDataBlock()
+{
+    clearTemporaries();
 }
 
 bool
@@ -249,9 +258,8 @@ SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &i
 void
 SequencerDataBlock::setTrackLevel(TrackId id, const LevelInfo &info)
 {
-    if (m_controlBlock) {
-        setInstrumentLevel(m_controlBlock->getInstrumentForTrack(id), info);
-    }
+    setInstrumentLevel
+	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
 }
 
 bool
@@ -259,10 +267,8 @@ SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
 {
     info.level = info.levelRight = 0;
 
-    if (m_controlBlock) {
-        return getInstrumentLevel(m_controlBlock->getInstrumentForTrack(id),
-                                  info);
-    }
+    return getInstrumentLevel
+	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
 
     return false;
 }
@@ -325,7 +331,6 @@ SequencerDataBlock::setMasterLevel(const LevelInfo &info)
 void
 SequencerDataBlock::clearTemporaries()
 {
-    m_controlBlock = 0;
     m_positionSec = 0;
     m_positionNsec = 0;
     m_visualEventIndex = 0;

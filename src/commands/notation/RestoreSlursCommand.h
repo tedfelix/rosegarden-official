@@ -16,12 +16,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENURESTORESLURSCOMMAND_H_
-#define _RG_ADJUSTMENURESTORESLURSCOMMAND_H_
+#ifndef _RG_RESTORESLURSCOMMAND_H_
+#define _RG_RESTORESLURSCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
-#include <qstring.h>
-#include <klocale.h>
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -30,16 +30,21 @@ namespace Rosegarden
 {
 
 class EventSelection;
+class CommandRegistry;
 
 
 class RestoreSlursCommand : public BasicSelectionCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RestoreSlursCommand)
+
 public:
     RestoreSlursCommand(EventSelection &selection) :
         BasicSelectionCommand(getGlobalName(), selection, true),
         m_selection(&selection) { }
 
-    static QString getGlobalName() { return i18n("&Restore Slur Positions"); }
+    static QString getGlobalName() { return tr("&Restore Slur Positions"); }
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();

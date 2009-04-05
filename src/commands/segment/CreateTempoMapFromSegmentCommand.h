@@ -20,11 +20,11 @@
 #define _RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H_
 
 #include <map>
-#include <kcommand.h>
+#include "document/Command.h"
 #include "base/Event.h"
 #include "base/Composition.h" // for tempoT
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -36,8 +36,10 @@ namespace Rosegarden
  * segment to the composition as a whole via the tempo map.
  */
 
-class CreateTempoMapFromSegmentCommand : public KNamedCommand
+class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(CreateTempoMapFromSegmentCommand)
+
 public:
     CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     virtual ~CreateTempoMapFromSegmentCommand();

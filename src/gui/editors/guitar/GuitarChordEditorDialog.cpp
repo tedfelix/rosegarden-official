@@ -20,63 +20,75 @@
 #include "Chord.h"
 #include "ChordMap.h"
 
-#include <klineedit.h>
-#include <qcombobox.h>
-#include <qspinbox.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-#include <kstddirs.h>
-#include <qlayout.h>
-#include <qlabel.h>
+#include <QComboBox>
+#include <QSpinBox>
+#include <QMessageBox>
+#include <QDir>
+#include <QLayout>
+#include <QLabel>
+#include <QDialogButtonBox>
 
 namespace Rosegarden
 {
 
 GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Guitar::ChordMap& chordMap, QWidget *parent)
-    : KDialogBase(parent, "GuitarChordEditor", true, i18n("Guitar Chord Editor"), Ok|Cancel),
+    : QDialog(parent),
       m_chord(chord),
       m_chordMap(chordMap)
 {
+    setModal(true);
+    setWindowTitle(tr("Guitar Chord Editor"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
     QWidget *page = new QWidget(this);
-    setMainWidget(page);
-    QGridLayout *topLayout = new QGridLayout(page, 7, 2, spacingHint());
+    QGridLayout *topLayout = new QGridLayout(page);
+    metagrid->addWidget(page, 0, 0);
 
-    topLayout->addWidget(new QLabel(i18n("Start fret"), page), 0, 1);
-    m_startFret = new QSpinBox(1, 24, 1, page);
+    topLayout->addWidget(new QLabel(tr("Start fret"), page), 0, 1);
+    m_startFret = new QSpinBox(page);
+    m_startFret->setRange(1, 24);
+    m_startFret->setSingleStep(1);
     topLayout->addWidget(m_startFret, 1, 1);
     
     connect(m_startFret, SIGNAL(valueChanged(int)),
             this, SLOT(slotStartFretChanged(int)));
     
-    topLayout->addWidget(new QLabel(i18n("Root"), page), 2, 1);
+    topLayout->addWidget(new QLabel(tr("Root"), page), 2, 1);
     m_rootNotesList = new QComboBox(page);
     topLayout->addWidget(m_rootNotesList, 3, 1);
     
-    topLayout->addWidget(new QLabel(i18n("Extension"), page), 4, 1);
-    m_ext = new QComboBox(true, page);
+    topLayout->addWidget(new QLabel(tr("Extension"), page), 4, 1);
+    m_ext = new QComboBox(page);
+    m_ext->setEditable(true);
     topLayout->addWidget(m_ext, 5, 1);
 
     topLayout->addItem(new QSpacerItem(1, 1), 6, 1);
 
     m_fingeringBox = new FingeringBox(true, page);
     m_fingeringBox->setFingering(m_chord.getFingering());
-    topLayout->addMultiCellWidget(m_fingeringBox, 0, 7, 0, 0);
+    topLayout->addWidget(m_fingeringBox, 0, 0, 7- 0+1, 0- 0+1);
 
     NOTATION_DEBUG << "GuitarChordEditorDialog : chord = " << m_chord << endl;
 
 
     QStringList rootList = m_chordMap.getRootList();
     if (rootList.count() > 0) {
-        m_rootNotesList->insertStringList(rootList);
-        m_rootNotesList->setCurrentItem(rootList.findIndex(m_chord.getRoot()));
+        m_rootNotesList->addItems(rootList);
+        m_rootNotesList->setCurrentIndex(rootList.indexOf(m_chord.getRoot()));
     }
     
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     if (extList.count() > 0) {
-        m_ext->insertStringList(extList);
-        m_ext->setCurrentItem(extList.findIndex(m_chord.getExt()));
+        m_ext->addItems(extList);
+        m_ext->setCurrentIndex(extList.indexOf(m_chord.getExt()));
     }
-    
+
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                       QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
@@ -92,7 +104,9 @@ GuitarChordEditorDialog::slotOk()
     m_chord.setExt(m_ext->currentText());
     m_chord.setRoot(m_rootNotesList->currentText());
     m_chord.setUserChord(true);            
-    KDialogBase::slotOk();
+	
+//    KDialogBase::slotOk();
+	accept();
 }
 
 

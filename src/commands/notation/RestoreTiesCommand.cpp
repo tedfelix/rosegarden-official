@@ -23,11 +23,20 @@
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
+
+void
+RestoreTiesCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand
+        ("restore_ties",
+         new SelectionCommandBuilder<RestoreTiesCommand>());
+}
 
 void
 RestoreTiesCommand::modifySegment()

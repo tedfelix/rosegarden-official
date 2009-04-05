@@ -23,7 +23,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "CutCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "misc/Debug.h"
 
 
@@ -32,7 +32,7 @@ namespace Rosegarden
 
 CutAndCloseCommand::CutAndCloseCommand(EventSelection &selection,
                                        Clipboard *clipboard) :
-        KMacroCommand(getGlobalName())
+        MacroCommand(getGlobalName())
 {
     addCommand(new CutCommand(selection, clipboard));
     addCommand(new CloseCommand(&selection.getSegment(),

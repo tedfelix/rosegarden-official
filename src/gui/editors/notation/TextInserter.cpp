@@ -15,10 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "TextInserter.h"
 
-#include <klocale.h>
 #include "base/Event.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
@@ -32,10 +32,10 @@
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
 #include "NotationElement.h"
-#include <kaction.h>
-#include <qdialog.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QAction>
+#include <QDialog>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -45,22 +45,9 @@ TextInserter::TextInserter(NotationView* view)
         : NotationTool("TextInserter", view),
         m_text("", Text::Dynamic)
 {
-    QIconSet icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                             makeToolbarPixmap("select")));
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
-
-    new KAction(i18n("Switch to Erase Tool"), "eraser", 0, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
-
-    icon = QIconSet
-           (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                         makeToolbarPixmap("crotchet")));
-    new KAction(i18n("Switch to Inserting Notes"), icon, 0, this,
-                SLOT(slotNotesSelected()), actionCollection(),
-                "notes");
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("notes", SLOT(slotNotesSelected()));
 
     createMenu("textinserter.rc");
 }
@@ -72,12 +59,12 @@ void TextInserter::slotNotesSelected()
 
 void TextInserter::slotEraseSelected()
 {
-    m_parentView->actionCollection()->action("erase")->activate();
+    invokeInParentView("erase");
 }
 
 void TextInserter::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+    invokeInParentView("select");
 }
 
 void TextInserter::ready()
@@ -139,7 +126,7 @@ void TextInserter::handleLeftButtonPress(timeT,
             (staff->getSegment(), insertionTime, m_text);
 
         if (eraseEvent) {
-            KMacroCommand *macroCommand = new KMacroCommand(command->name());
+            MacroCommand *macroCommand = new MacroCommand(command->getName());
             macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
                                      eraseEvent, false));
             macroCommand->addCommand(command);
@@ -160,3 +147,4 @@ const QString TextInserter::ToolName     = "textinserter";
 
 }
 #include "TextInserter.moc"
+#endif

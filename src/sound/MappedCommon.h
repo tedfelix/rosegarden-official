@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
   Rosegarden
@@ -21,8 +21,8 @@
 //
 #include <vector>
 
-#include <qstring.h>
-#include <qdatastream.h>
+#include <QString>
+#include <QDataStream>
 
 namespace Rosegarden
 {
@@ -31,7 +31,7 @@ typedef int          MappedObjectId;
 typedef QString      MappedObjectProperty;
 typedef float        MappedObjectValue;
 
-// typedef QValueVector<MappedObjectProperty> MappedObjectPropertyList;
+// typedef QVector<MappedObjectProperty> MappedObjectPropertyList;
 // replaced with a std::vector<> for Qt2 compatibility
 
 typedef std::vector<MappedObjectId> MappedObjectIdList;

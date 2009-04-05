@@ -20,20 +20,18 @@
 #define _RG_LATENCYCONFIGURATIONPAGE_H_
 
 #include "TabbedConfigurationPage.h"
-#include <qstring.h>
-#include <klocale.h>
-#include <qslider.h>
+#include <QString>
+#include <QSlider>
 
 
 class QWidget;
 class QPushButton;
-class KConfig;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
 /**
@@ -46,14 +44,13 @@ class LatencyConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    LatencyConfigurationPage(RosegardenGUIDoc *doc,
-                             KConfig *cfg,
+    LatencyConfigurationPage(RosegardenDocument *doc,
                              QWidget *parent=0, const char *name=0);
 
     virtual void apply();
 
-    static QString iconLabel() { return i18n("Latency"); }
-    static QString title()     { return i18n("Sequencer Latency"); }
+    static QString iconLabel() { return tr("Latency"); }
+    static QString title()     { return tr("Sequencer Latency"); }
 
     int getJACKPlaybackValue() { return m_jackPlayback->value(); }
     int getJACKRecordValue() { return m_jackRecord->value(); }

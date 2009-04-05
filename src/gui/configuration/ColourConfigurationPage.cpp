@@ -24,47 +24,53 @@
 #include "base/ColourMap.h"
 #include "commands/segment/SegmentColourMapCommand.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
-#include "document/MultiViewCommandHistory.h"
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/ColourTable.h"
 #include "TabbedConfigurationPage.h"
-#include <kcolordialog.h>
-#include <kconfig.h>
-#include <kinputdialog.h>
-#include <qcolor.h>
-#include <qframe.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
+
+#include <QColorDialog>
+#include <QSettings>
+#include <QColor>
+#include <QFrame>
+#include <QPushButton>
+#include <QString>
+#include <QTabBar>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QWidget>
+#include <QLayout>
+#include <QMessageBox>
 
 
 namespace Rosegarden
 {
 
-ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
+ColourConfigurationPage::ColourConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name)
         : TabbedConfigurationPage(doc, parent, name)
 {
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame, 2, 2,
-                                          10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
     m_map = m_doc->getComposition().getSegmentColourMap();
 
     m_colourtable = new ColourTable(frame, m_map, m_listmap);
     m_colourtable->setFixedHeight(280);
 
-    layout->addMultiCellWidget(m_colourtable, 0, 0, 0, 1);
+    layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 0+1);
 
-    QPushButton* addColourButton = new QPushButton(i18n("Add New Color"),
+    QPushButton* addColourButton = new QPushButton(tr("Add New Color"),
                                    frame);
     layout->addWidget(addColourButton, 1, 0, Qt::AlignHCenter);
 
-    QPushButton* deleteColourButton = new QPushButton(i18n("Delete Color"),
+    QPushButton* deleteColourButton = new QPushButton(tr("Delete Color"),
                                       frame);
     layout->addWidget(deleteColourButton, 1, 1, Qt::AlignHCenter);
 
@@ -83,14 +89,14 @@ ColourConfigurationPage::ColourConfigurationPage(RosegardenGUIDoc *doc,
     connect(m_colourtable, SIGNAL(entryColourChanged(unsigned int, QColor)),
             this, SLOT(slotColourChanged(unsigned int, QColor)));
 
-    addTab(frame, i18n("Color Map"));
+    addTab(frame, tr("Color Map"));
 
 }
 
 void
 ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
 {
-    m_map.modifyNameByIndex(m_listmap[index], string.ascii());
+    m_map.modifyNameByIndex(m_listmap[index], std::string(string.toAscii()));
     m_colourtable->populate_table(m_map, m_listmap);
 }
 
@@ -105,7 +111,7 @@ void
 ColourConfigurationPage::apply()
 {
     SegmentColourMapCommand *command = new SegmentColourMapCommand(m_doc, m_map);
-    m_doc->getCommandHistory()->addCommand(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     RG_DEBUG << "ColourConfigurationPage::apply() emitting docColoursChanged()" << endl;
     emit docColoursChanged();
@@ -118,17 +124,21 @@ ColourConfigurationPage::slotAddNew()
 
     bool ok = false;
 
-    QString newName = KInputDialog::getText(i18n("New Color Name"),
-                                            i18n("Enter new name"),
-                                            i18n("New"),
-                                            &ok);
-
+    QString newName = InputDialog::getText(this, tr("New Color Name"),
+                                           tr("Enter new name"), LineEdit::Normal,
+                                           tr("New"),
+                                           &ok, 0);
+    
+    bool c_ok;
+    
     if ((ok == true) && (!newName.isEmpty())) {
-        KColorDialog box(this, "", true);
+        //QColorDialog box(this, "", true);
 
-        int result = box.getColor( temp );
-
-        if (result == KColorDialog::Accepted) {
+        //int result = box.getColor( temp );
+        //QColor col = QColorDialog::getColor();
+        QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
+        
+        if ( c_ok ) {
             Colour temp2 = GUIPalette::convertColour(temp);
             m_map.addItem(temp2, qstrtostr(newName));
             m_colourtable->populate_table(m_map, m_listmap);
@@ -142,12 +152,19 @@ ColourConfigurationPage::slotAddNew()
 void
 ColourConfigurationPage::slotDelete()
 {
-    QTableSelection temp = m_colourtable->selection(0);
+    //old: QTableWidgetSelection temp = m_colourtable->selection(0);
+    QList<QTableWidgetItem *> temp = m_colourtable->selectedItems();
+    
+//    if ((!temp.isActive()) || (temp.topRow() == 0))    //&&& check re-implementation
+//        return ;
+    
+    if( temp.isEmpty() ){
+        QMessageBox::warning
+            (this, "Error: Selection is empty!", tr("Please select an item in the list!"), QMessageBox::Yes );
+        return;
+    }
 
-    if ((!temp.isActive()) || (temp.topRow() == 0))
-        return ;
-
-    unsigned int toDel = temp.topRow();
+    unsigned int toDel = (*temp[0]).row();
 
     m_map.deleteItemByIndex(m_listmap[toDel]);
     m_colourtable->populate_table(m_map, m_listmap);

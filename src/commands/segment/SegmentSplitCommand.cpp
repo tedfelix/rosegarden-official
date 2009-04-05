@@ -18,14 +18,13 @@
 
 #include "SegmentSplitCommand.h"
 
-#include <klocale.h>
 #include "misc/AppendLabel.h"
 #include "misc/Strings.h"
 #include "base/Event.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +32,7 @@ namespace Rosegarden
 
 SegmentSplitCommand::SegmentSplitCommand(Segment *segment,
         timeT splitTime, bool keepLabel) :
-        KNamedCommand(i18n("Split Segment")),
+        NamedCommand(tr("Split Segment")),
         m_segment(segment),
         m_newSegmentA(0),
         m_newSegmentB(0),
@@ -127,8 +126,8 @@ SegmentSplitCommand::execute()
     m_newSegmentA->setLabel(label);
     m_newSegmentB->setLabel(label);
     if (!m_keepLabel) {
-        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
-        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(i18n("(split)"))));
+        m_newSegmentA->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
+        m_newSegmentB->setLabel(appendLabel(label, qstrtostr(tr("(split)"))));
     }
 
     m_newSegmentB->setColourIndex(m_segment->getColourIndex());

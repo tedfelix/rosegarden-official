@@ -23,13 +23,22 @@
 #include "base/Selection.h"
 #include "document/BasicSelectionCommand.h"
 #include "base/BaseProperties.h"
-#include <qstring.h>
+#include "document/CommandRegistry.h"
+#include "base/Selection.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 using namespace BaseProperties;
+
+void
+TieNotesCommand::registerCommand(CommandRegistry *r)
+{
+    r->registerCommand("tie_notes",
+                       new SelectionCommandBuilder<TieNotesCommand>());
+}
 
 void
 TieNotesCommand::modifySegment()

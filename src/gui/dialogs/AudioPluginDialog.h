@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,9 +20,11 @@
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include <kdialogbase.h>
-#include <qstring.h>
-#include <qstringlist.h>
+
+#include <QDialog>
+#include <QString>
+#include <QStringList>
+
 #include <vector>
 
 
@@ -31,11 +32,12 @@ class QWidget;
 class QPushButton;
 class QLabel;
 class QGridLayout;
-class QFrame;
+//class QFrame;
+class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
-class QAccel;
-class KComboBox;
+class QShortcut;
+class QComboBox;
 
 
 namespace Rosegarden
@@ -48,7 +50,7 @@ class AudioPluginManager;
 class AudioPluginInstance;
 
 
-class AudioPluginDialog : public KDialogBase
+class AudioPluginDialog : public QDialog
 {
     Q_OBJECT
 
@@ -63,7 +65,7 @@ public:
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
 
-    QAccel* getAccelerators() { return m_accelerators; }
+    QShortcut* getShortcuts() { return m_shortcuts; }
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
 
@@ -83,9 +85,12 @@ public slots:
     void slotPaste();
     void slotDefault();
     void slotShowGUI();
+    virtual void slotEditor();
 
 #ifdef HAVE_LIBLO
-    virtual void slotDetails();
+//@@@
+// moc can't find this slot when it's inside the ifdef, even though -DHAVE_LIBLO
+//    virtual void slotEditor();
 #endif
 
 signals:
@@ -110,7 +115,7 @@ protected:
     virtual void closeEvent(QCloseEvent *e);
     virtual void windowActivationChange(bool);
 
-    void makePluginParamsBox(QWidget*, int portCount, int tooManyPorts);
+    void makePluginParamsBox(QWidget*);
     QStringList getProgramsForInstance(AudioPluginInstance *inst, int &current);
 
     //--------------- Data members ---------------------------------
@@ -122,11 +127,11 @@ protected:
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 
-    QFrame              *m_pluginParamsBox;
+    QGroupBox           *m_pluginParamsBox;
     QWidget             *m_pluginCategoryBox;
-    KComboBox           *m_pluginCategoryList;
+    QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;
-    KComboBox           *m_pluginList;
+    QComboBox           *m_pluginList;
     std::vector<int>     m_pluginsInList;
     QLabel              *m_insOuts;
     QLabel              *m_pluginId;
@@ -135,18 +140,19 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
+    QPushButton         *m_editorButton;
     
     QLabel              *m_programLabel;
-    KComboBox           *m_programCombo;
+    QComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
-    QGridLayout         *m_gridLayout;
+    QGridLayout         *m_pluginParamsBoxLayout;
 
     int                  m_index;
 
     bool                 m_generating;
     bool                 m_guiShown;
 
-    QAccel              *m_accelerators;
+    QShortcut              *m_shortcuts;
 
     void                 populatePluginCategoryList();
     void                 populatePluginList();

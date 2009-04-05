@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,25 +18,21 @@
 #ifndef _RG_MATRIXSELECTOR_H_
 #define _RG_MATRIXSELECTOR_H_
 
+#include <QGraphicsRectItem>
 #include "MatrixTool.h"
-#include <qstring.h>
+#include <QString>
+#include <QList>
 #include "base/Event.h"
-
-
-class QMouseEvent;
-class QCanvasRectangle;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class MatrixView;
-class MatrixStaff;
+class MatrixViewSegment;
 class MatrixElement;
 class EventSelection;
 class Event;
-class EditTool;
 
 
 class MatrixSelector : public MatrixTool
@@ -47,53 +42,20 @@ class MatrixSelector : public MatrixTool
     friend class MatrixToolBox;
 
 public:
-
-    virtual void handleLeftButtonPress(timeT time,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent *event,
-                                       ViewElement *element);
-
-    virtual void handleMidButtonPress(timeT time,
-                                      int height,
-                                      int staffNo,
-                                      QMouseEvent *event,
-                                      ViewElement *element);
-
-    virtual int handleMouseMove(timeT time,
-                                int height,
-                                QMouseEvent *event);
-
-    virtual void handleMouseRelease(timeT,
-                                    int height,
-                                    QMouseEvent *event);
-
-    /**
-     * Double-click: edit an event or make a whole-bar selection
-     */
-    virtual void handleMouseDoubleClick(timeT time,
-                                        int height,
-                                        int staffNo,
-                                        QMouseEvent* event,
-                                        ViewElement *element);
-
-    /**
-     * Triple-click: maybe make a whole-staff selection
-     */
-    virtual void handleMouseTripleClick(timeT time,
-                                        int height,
-                                        int staffNo,
-                                        QMouseEvent* event,
-                                        ViewElement *element);
-
+    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    virtual void handleMidButtonPress(const MatrixMouseEvent *);
+    virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
+    virtual void handleMouseRelease(const MatrixMouseEvent *);
+    virtual void handleMouseDoubleClick(const MatrixMouseEvent *);
+    virtual void handleMouseTripleClick(const MatrixMouseEvent *);
 
     /**
      * Create the selection rect
      *
-     * We need this because MatrixView deletes all QCanvasItems
-     * along with it. This happens before the MatrixSelector is
-     * deleted, so we can't delete the selection rect in
-     * ~MatrixSelector because that leads to double deletion.
+     * We need this because MatrixScene deletes all scene items along
+     * with it. This happens before the MatrixSelector is deleted, so
+     * we can't delete the selection rect in ~MatrixSelector because
+     * that leads to double deletion.
      */
     virtual void ready();
 
@@ -101,19 +63,6 @@ public:
      * Delete the selection rect.
      */
     virtual void stow();
-
-    /**
-     * Returns the currently selected events
-     *
-     * The returned result is owned by the caller
-     */
-    EventSelection* getSelection();
-
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-    virtual void handleEventRemoved(Event *event);
 
     static const QString ToolName;
 
@@ -128,39 +77,50 @@ public slots:
 
     void slotClickTimeout();
 
-protected slots:
+    /**
+     * Respond to an event being deleted -- it may be the one the tool
+     * is remembering as the current event.
+     */
+    virtual void handleEventRemoved(Event *event);
 
-    void slotMatrixScrolled(int x, int y);
+protected slots:
+    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 signals:
     void gotSelection(); // inform that we've got a new selection
     void editTriggerSegment(int);
     
 protected:
-    MatrixSelector(MatrixView*);
+    MatrixSelector(MatrixWidget *);
 
-    void setContextHelpFor(QPoint p, bool ctrlPressed = false);
+    void setContextHelpFor(const MatrixMouseEvent *, bool ctrlPressed = false);
 
-    void setViewCurrentSelection();
+    void setViewCurrentSelection(bool always);
+
+    /**
+     * Returns the currently selected events in selection.
+     * Return false if unchanged from last time.
+     * The returned result is owned by the caller.
+     */
+    bool getSelection(EventSelection *&selection);
     
     //--------------- Data members ---------------------------------
 
-    QCanvasRectangle* m_selectionRect;
+    QGraphicsRectItem *m_selectionRect;
+    QPointF m_selectionOrigin;
     bool m_updateRect;
 
-    int m_clickedStaff;
-    MatrixStaff* m_currentStaff;
-
-    MatrixElement* m_clickedElement;
+    MatrixViewSegment *m_currentViewSegment;
+    MatrixElement *m_clickedElement;
 
     // tool to delegate to
-    EditTool*    m_dispatchTool;
+    MatrixTool *m_dispatchTool;
 
     bool m_justSelectedBar;
 
-    MatrixView * m_matrixView;
-
     EventSelection *m_selectionToMerge;
+
+    QList<QGraphicsItem *> m_previousCollisions;
 };
 
 
@@ -168,3 +128,4 @@ protected:
 }
 
 #endif
+

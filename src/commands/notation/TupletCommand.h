@@ -16,13 +16,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_ADJUSTMENUTUPLETCOMMAND_H_
-#define _RG_ADJUSTMENUTUPLETCOMMAND_H_
+#ifndef _RG_TUPLETCOMMAND_H_
+#define _RG_TUPLETCOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -35,6 +35,8 @@ class Segment;
 
 class TupletCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(TupletCommand)
+
 public:
     TupletCommand(Segment &segment,
                            timeT startTime,
@@ -43,8 +45,8 @@ public:
                            bool groupHasTimingAlready = false);
 
     static QString getGlobalName(bool simple = true) {
-        if (simple) return i18n("&Triplet");
-        else return i18n("Tu&plet...");
+        if (simple) return tr("&Triplet");
+        else return tr("Tu&plet...");
     }
 
 protected:

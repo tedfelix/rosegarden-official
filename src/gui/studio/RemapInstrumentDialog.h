@@ -20,52 +20,49 @@
 #define _RG_REMAPINSTRUMENTDIALOG_H_
 
 #include "base/Studio.h"
-#include <kdialogbase.h>
+#include <QDialog>
 
 
 class QWidget;
 class QRadioButton;
-class QButtonGroup;
-class KCommand;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class RosegardenDocument;
 
 
-class RemapInstrumentDialog : public KDialogBase
+class RemapInstrumentDialog : public QDialog
 {
     Q_OBJECT
 public:
     RemapInstrumentDialog(QWidget *parent,
-                          RosegardenGUIDoc *doc);
+                          RosegardenDocument *doc);
 
-    void populateCombo(int id);
-
-    void addCommandToHistory(KCommand *command);
-    MultiViewCommandHistory* getCommandHistory();
+    void populateCombo();
 
 public slots:
-    void slotRemapReleased(int id);
+    void slotRemapReleased();
 
     void slotOk();
     void slotApply();
 
+signals:
+    void applyClicked();
+
 protected:
 
-    RosegardenGUIDoc    *m_doc;
+    RosegardenDocument    *m_doc;
 
     QRadioButton        *m_deviceButton;
     QRadioButton        *m_instrumentButton;
 
-    QButtonGroup        *m_buttonGroup;
-    KComboBox           *m_fromCombo;
-    KComboBox           *m_toCombo;
+    QComboBox           *m_fromCombo;
+    QComboBox           *m_toCombo;
 
     DeviceList m_devices;
     InstrumentList m_instruments;

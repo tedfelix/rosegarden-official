@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,12 +18,10 @@
 #ifndef _RG_PLUGINCONTROL_H_
 #define _RG_PLUGINCONTROL_H_
 
-#include <qobject.h>
-#include <vector>
+#include <QWidget>
 
 
 class QWidget;
-class QHBox;
 class QGridLayout;
 
 
@@ -36,7 +33,7 @@ class PluginPort;
 class AudioPluginManager;
 class Studio;
 
-class PluginControl : public QObject
+class PluginControl : public QWidget
 {
     Q_OBJECT
 public:
@@ -49,14 +46,12 @@ public:
     } ControlType;
 
     PluginControl(QWidget *parent,
-                  QGridLayout *layout,
                   ControlType type,
                   PluginPort *port,
                   AudioPluginManager *pluginManager,
                   int index,
                   float initialValue,
-                  bool showBounds,
-                  bool hidden);
+                  bool showBounds);
  
     void setValue(float value, bool emitSignals = true);
     float getValue() const;
@@ -76,8 +71,6 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QGridLayout         *m_layout;
-
     ControlType          m_type;
     PluginPort          *m_port;
 
@@ -87,9 +80,6 @@ protected:
     int                  m_index;
 
 };
-
-typedef std::vector<PluginControl*>::iterator ControlIterator;
-typedef std::vector<QHBox*>::iterator ControlLineIterator;
 
 
 }

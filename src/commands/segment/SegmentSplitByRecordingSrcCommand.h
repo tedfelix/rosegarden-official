@@ -19,12 +19,9 @@
 #ifndef _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
 #define _RG_SEGMENTSPLITBYRECORDINGSRCCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
-#include "gui/application/RosegardenDCOP.h"
-
-
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -34,15 +31,17 @@ class Segment;
 class Composition;
 
 
-class SegmentSplitByRecordingSrcCommand : public KNamedCommand
+class SegmentSplitByRecordingSrcCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentSplitByRecordingSrcCommand)
+
 public:
     SegmentSplitByRecordingSrcCommand(Segment *segment,
                                       int channel, int device);
     virtual ~SegmentSplitByRecordingSrcCommand();
     
     static QString getGlobalName()
-        { return i18n("Split by &Recording Source..."); }
+        { return tr("Split by &Recording Source..."); }
 
     virtual void execute();
     virtual void unexecute();

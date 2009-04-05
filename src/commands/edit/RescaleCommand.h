@@ -20,9 +20,9 @@
 #define _RG_RESCALECOMMAND_H_
 
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 
 
 
@@ -35,12 +35,14 @@ class EventSelection;
 
 class RescaleCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(RescaleCommand)
+
 public:
     RescaleCommand(EventSelection &selection,
                    timeT newDuration,
                    bool closeGap);
 
-    static QString getGlobalName() { return i18n("Stretch or S&quash..."); }
+    static QString getGlobalName() { return tr("Stretch or S&quash..."); }
     
 protected:
     virtual void modifySegment();

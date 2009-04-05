@@ -17,24 +17,24 @@
 
 
 #include "TriggerSegmentDialog.h"
-#include <kapplication.h>
+#include <QApplication>
 
 #include "base/BaseProperties.h"
-#include <klocale.h>
 #include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
-#include <kcombobox.h>
-#include <kconfig.h>
-#include <kdialogbase.h>
-#include <qcheckbox.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qlayout.h>
+#include <QComboBox>
+#include <QSettings>
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QFrame>
+#include <QLabel>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QLayout>
 
 
 namespace Rosegarden
@@ -42,81 +42,96 @@ namespace Rosegarden
 
 TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
         Composition *composition) :
-        KDialogBase(parent, "triggersegmentdialog", true, i18n("Trigger Segment"),
-                    Ok | Cancel, Ok),
+        QDialog(parent),
         m_composition(composition)
 {
-    QVBox *vbox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Trigger Segment"));
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
 
-    QFrame *frame = new QFrame(vbox);
-    QGridLayout *layout = new QGridLayout(frame, 3, 2, 5, 5);
+    QFrame *frame = new QFrame(this);
+    metagrid->addWidget(frame, 0, 0);
 
-    QLabel *label = new QLabel(i18n("Trigger segment: "), frame);
+    frame->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *layout = new QGridLayout;
+    layout->setSpacing(5);
+
+
+    QLabel *label = new QLabel(tr("Trigger segment: "));
     layout->addWidget(label, 0, 0);
 
-    m_segment = new KComboBox(frame);
+    m_segment = new QComboBox(frame);
     layout->addWidget(m_segment, 0, 1);
 
     int n = 1;
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
-        m_segment->insertItem
+        m_segment->addItem
         (QString("%1. %2").arg(n++).arg(strtoqstr((*i)->getSegment()->getLabel())));
     }
 
-    label = new QLabel(i18n("Perform with timing: "), frame);
+    label = new QLabel(tr("Perform with timing: "));
     layout->addWidget(label, 1, 0);
 
-    m_adjustTime = new KComboBox(frame);
+    m_adjustTime = new QComboBox;
     layout->addWidget(m_adjustTime, 1, 1);
 
-    m_adjustTime->insertItem(i18n("As stored"));
-    m_adjustTime->insertItem(i18n("Truncate if longer than note"));
-    m_adjustTime->insertItem(i18n("End at same time as note"));
-    m_adjustTime->insertItem(i18n("Stretch or squash segment to note duration"));
+    m_adjustTime->addItem(tr("As stored"));
+    m_adjustTime->addItem(tr("Truncate if longer than note"));
+    m_adjustTime->addItem(tr("End at same time as note"));
+    m_adjustTime->addItem(tr("Stretch or squash segment to note duration"));
 
-    m_retune = new QCheckBox(i18n("Adjust pitch to note"), frame);
+    m_retune = new QCheckBox(tr("Adjust pitch to note"));
     m_retune->setChecked(true);
 
     layout->addWidget(m_retune, 2, 1);
+    frame->setLayout(layout);
 
     setupFromConfig();
+
+    QDialogButtonBox *buttonBox
+        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
 TriggerSegmentDialog::setupFromConfig()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    int seg = config->readNumEntry("triggersegmentlastornament", 0);
-    std::string timing = qstrtostr
-                         (config->readEntry
-                          ("triggersegmenttiming",
-                           strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)));
-    bool retune = config->readBoolEntry("triggersegmentretune", true);
+    int seg = settings.value("triggersegmentlastornament", 0).toInt() ;
+    std::string timing = qstrtostr(settings.value("triggersegmenttiming",
+            strtoqstr(BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH)).toString());
+    bool retune = qStrToBool( settings.value("triggersegmentretune", "true" ) ) ;
 
     if (seg >= 0 && seg < m_segment->count())
-        m_segment->setCurrentItem(seg);
+        m_segment->setCurrentIndex(seg);
 
     if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE) {
-        m_adjustTime->setCurrentItem(0);
+        m_adjustTime->setCurrentIndex(0);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH) {
-        m_adjustTime->setCurrentItem(3);
+        m_adjustTime->setCurrentIndex(3);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_START) {
-        m_adjustTime->setCurrentItem(1);
+        m_adjustTime->setCurrentIndex(1);
     } else if (timing == BaseProperties::TRIGGER_SEGMENT_ADJUST_SYNC_END) {
-        m_adjustTime->setCurrentItem(2);
+        m_adjustTime->setCurrentIndex(2);
     }
 
     m_retune->setChecked(retune);
+
+    settings.endGroup();
 }
 
 TriggerSegmentId
 TriggerSegmentDialog::getId() const
 {
-    int ix = m_segment->currentItem();
+    int ix = m_segment->currentIndex();
 
     for (Composition::triggersegmentcontaineriterator i =
                 m_composition->getTriggerSegments().begin();
@@ -139,7 +154,7 @@ TriggerSegmentDialog::getRetune() const
 std::string
 TriggerSegmentDialog::getTimeAdjust() const
 {
-    int option = m_adjustTime->currentItem();
+    int option = m_adjustTime->currentIndex();
 
     switch (option) {
 
@@ -160,14 +175,16 @@ TriggerSegmentDialog::getTimeAdjust() const
 void
 TriggerSegmentDialog::slotOk()
 {
-    KConfig *config = kapp->config();
-    config->setGroup(GeneralOptionsConfigGroup);
+    QSettings settings;
+    settings.beginGroup( GeneralOptionsConfigGroup );
 
-    config->writeEntry("triggersegmenttiming", strtoqstr(getTimeAdjust()));
-    config->writeEntry("triggersegmentretune", m_retune->isChecked());
-    config->writeEntry("triggersegmentlastornament", m_segment->currentItem());
+    settings.setValue("triggersegmenttiming", strtoqstr(getTimeAdjust()));
+    settings.setValue("triggersegmentretune", m_retune->isChecked());
+    settings.setValue("triggersegmentlastornament", m_segment->currentIndex());
 
     accept();
+
+    settings.endGroup();
 }
 
 }

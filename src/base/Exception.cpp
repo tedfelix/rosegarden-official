@@ -19,6 +19,24 @@
 
 namespace Rosegarden {
 
+Exception::Exception(const char *message) :
+    m_message(message)
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << message << "\"" << std::endl;
+#endif
+}
+
+Exception::Exception(const char *message, const char *file, int line) :
+    m_message(message)
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << message << "\" at " << file << ":" << line << std::endl;
+#endif
+}
+
 Exception::Exception(std::string message) :
     m_message(message)
 {
@@ -34,6 +52,24 @@ Exception::Exception(std::string message, std::string file, int line) :
 #ifndef NDEBUG
     std::cerr << "WARNING: Rosegarden::Exception: \""
 	      << message << "\" at " << file << ":" << line << std::endl;
+#endif
+}
+
+Exception::Exception(QString message) :
+    m_message(message.toUtf8().data())
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << m_message << "\"" << std::endl;
+#endif
+}
+
+Exception::Exception(QString message, QString file, int line) :
+    m_message(message.toUtf8().data())
+{
+#ifndef NDEBUG
+    std::cerr << "WARNING: Rosegarden::Exception: \""
+	      << m_message << "\" at " << file.toLocal8Bit().data() << ":" << line << std::endl;
 #endif
 }
 

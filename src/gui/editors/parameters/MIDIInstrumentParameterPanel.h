@@ -22,7 +22,7 @@
 #include "base/MidiProgram.h"
 #include "base/MidiDevice.h"
 #include "InstrumentParameterPanel.h"
-#include <qstring.h>
+#include <QString>
 
 
 class QWidget;
@@ -31,13 +31,13 @@ class QLabel;
 class QGridLayout;
 class QFrame;
 class QCheckBox;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class MidiDevice;
 class Instrument;
 
@@ -47,7 +47,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
     Q_OBJECT
 public:
 
-    MIDIInstrumentParameterPanel(RosegardenGUIDoc *doc, QWidget* parent);
+    MIDIInstrumentParameterPanel(RosegardenDocument *doc, QWidget* parent);
 
     void setupControllers(MidiDevice *); // setup ControlParameters on box
 
@@ -55,6 +55,8 @@ public:
 
     void showAdditionalControls(bool showThem);
     
+    //void slotToggleChangeListOnProgChange(bool val);
+
 signals:
     void changeInstrumentLabel(InstrumentId id, QString label);
     void instrumentParametersChanged(InstrumentId);
@@ -73,7 +75,6 @@ public slots:
     void slotToggleProgramChange(bool value);
     void slotToggleBank(bool value);
     void slotToggleVariation(bool value);
-
     void slotToggleChangeListOnProgChange(bool val);
 
 protected:
@@ -100,11 +101,11 @@ protected:
 
     QLabel             *m_connectionLabel;
 
-    KComboBox          *m_bankValue;
-    KComboBox          *m_variationValue;
-    KComboBox          *m_channelValue;
-    KComboBox          *m_programValue;
-    //KComboBox          *m_channelInValue;
+    QComboBox          *m_bankValue;
+    QComboBox          *m_variationValue;
+    QComboBox          *m_channelValue;
+    QComboBox          *m_programValue;
+    //QComboBox          *m_channelInValue;
 
     QCheckBox          *m_percussionCheckBox;
     QCheckBox          *m_bankCheckBox;

@@ -1,16 +1,22 @@
 # to rebuild the list:
 # find commands/ document/ gui/ -iname '*.cpp' -or -iname '*.h' > list.txt
 
-SET(gui_dcop_SRCS
-	gui/application/RosegardenIface.h 
-	gui/editors/segment/TrackEditorIface.h
-)
+SET(ui_SRCS
+	data/ui/RosegardenTransport.ui
 
-SET(ui_SRCS 
-	gui/ui/RosegardenTransport.ui
+	data/ui/DevicesManagerNew.h
+	data/ui/DevicesManagerNew.cpp
+
+	data/ui/DevicesManagerNewUi.h
+	data/ui/DevicesManagerNewUi.ui
 )
 
 SET(commands_SRCS
+	document/Command.h
+	document/Command.cpp
+	document/CommandHistory.h
+	document/CommandHistory.cpp
+
 	commands/edit/AddDotCommand.cpp
 	commands/edit/AddDotCommand.h
 	commands/edit/AddMarkerCommand.cpp
@@ -308,10 +314,15 @@ SET(commands_SRCS
 )
 
 SET(document_SRCS
+	document/GzipFile.h
+	document/GzipFile.cpp
+
 	document/BasicCommand.cpp
 	document/BasicCommand.h
 	document/BasicSelectionCommand.cpp
 	document/BasicSelectionCommand.h
+	document/CommandRegistry.cpp
+	document/CommandRegistry.h
 	document/ConfigGroups.cpp
 	document/ConfigGroups.h
 	document/io/CsoundExporter.cpp
@@ -328,8 +339,8 @@ SET(document_SRCS
 	document/io/MusicXmlExporter.h
 	document/io/RG21Loader.cpp
 	document/io/RG21Loader.h
-	document/MultiViewCommandHistory.cpp
-	document/MultiViewCommandHistory.h
+	document/CommandHistory.cpp
+	document/CommandHistory.h
 	document/RosegardenGUIDoc.cpp
 	document/RosegardenGUIDoc.h
 	document/RoseXmlHandler.cpp
@@ -357,17 +368,15 @@ SET(gui_SRCS
 	gui/application/LircCommander.h
 	gui/application/RosegardenApplication.cpp
 	gui/application/RosegardenApplication.h
-	gui/application/RosegardenDCOP.h
 	gui/application/RosegardenGUIApp.cpp
 	gui/application/RosegardenGUIApp.h
 	gui/application/RosegardenGUIView.cpp
 	gui/application/RosegardenGUIView.h
-	gui/application/RosegardenIface.cpp
-	gui/application/RosegardenIface.h
 	gui/application/SetWaitCursor.cpp
 	gui/application/SetWaitCursor.h
 	gui/application/StartupTester.cpp
 	gui/application/StartupTester.h
+	gui/application/TransportStatus.h
 	gui/configuration/AudioConfigurationPage.cpp
 	gui/configuration/AudioConfigurationPage.h
 	gui/configuration/AudioPropertiesPage.cpp
@@ -556,6 +565,8 @@ SET(gui_SRCS
 	gui/editors/notation/GuitarChordInserter.h
 	gui/editors/notation/NotationCanvasView.cpp
 	gui/editors/notation/NotationCanvasView.h
+	gui/editors/notation/NotationCommandRegistry.h
+	gui/editors/notation/NotationCommandRegistry.cpp
 	gui/editors/notation/NotationChord.cpp
 	gui/editors/notation/NotationChord.h
 	gui/editors/notation/NotationElement.cpp
@@ -661,8 +672,6 @@ SET(gui_SRCS
 	gui/editors/segment/TrackButtons.h
 	gui/editors/segment/TrackEditor.cpp
 	gui/editors/segment/TrackEditor.h
-	gui/editors/segment/TrackEditorIface.cpp
-	gui/editors/segment/TrackEditorIface.h
 	gui/editors/segment/TrackHeader.cpp
 	gui/editors/segment/TrackHeader.h
 	gui/editors/segment/TrackLabel.cpp
@@ -677,7 +686,19 @@ SET(gui_SRCS
 	gui/editors/tempo/TempoListItem.h
 	gui/editors/tempo/TempoView.cpp
 	gui/editors/tempo/TempoView.h
-	gui/general/ActiveItem.cpp
+
+	gui/general/ActionFileParser.cpp
+	gui/general/ActionFileParser.h
+	gui/general/ActionFileClient.cpp
+	gui/general/ActionFileClient.h
+	gui/general/AutoSaveFinder.cpp
+	gui/general/AutoSaveFinder.h
+	gui/general/DecoyAction.cpp
+	gui/general/DecoyAction.h
+    gui/general/ResourceFinder.h
+    gui/general/ResourceFinder.cpp
+
+	gui/general/ActiveItem.h
 	gui/general/ActiveItem.h
 	gui/general/BarLine.cpp
 	gui/general/BarLine.h
@@ -701,11 +722,17 @@ SET(gui_SRCS
 	gui/general/EditViewBase.h
 	gui/general/EditView.cpp
 	gui/general/EditView.h
+	gui/general/EditViewCommandRegistry.cpp
+	gui/general/EditViewCommandRegistry.h
 	gui/general/EditViewTimeSigNotifier.h
+	gui/general/FileSource.cpp
+	gui/general/FileSource.h
 	gui/general/GUIPalette.cpp
 	gui/general/GUIPalette.h
 	gui/general/HZoomable.cpp
 	gui/general/HZoomable.h
+	gui/general/IconLoader.h
+	gui/general/IconLoader.cpp
 	gui/general/LinedStaff.cpp
 	gui/general/LinedStaff.h
 	gui/general/LinedStaffManager.cpp
@@ -722,6 +749,8 @@ SET(gui_SRCS
 	gui/general/PresetHandlerDialog.h
 	gui/general/ProgressReporter.cpp
 	gui/general/ProgressReporter.h
+ 	gui/general/RecentFiles.cpp
+	gui/general/RecentFiles.h
 	gui/general/RosegardenCanvasView.cpp
 	gui/general/RosegardenCanvasView.h
 	gui/general/RosegardenScrollView.cpp
@@ -730,18 +759,21 @@ SET(gui_SRCS
 	gui/general/Spline.h
 	gui/general/StaffLine.cpp
 	gui/general/StaffLine.h
+	gui/general/TempDirectory.cpp
+	gui/general/TempDirectory.h
 	gui/kdeext/KLedButton.cpp
 	gui/kdeext/KLedButton.h
-	gui/kdeext/KStartupLogo.cpp
-	gui/kdeext/KStartupLogo.h
 	gui/kdeext/KTmpStatusMsg.cpp
 	gui/kdeext/KTmpStatusMsg.h
+
+	gui/kdeext/SqueezedLabel.cpp
+	gui/kdeext/SqueezedLabel.h
+
 	gui/kdeext/QCanvasGroupableItem.cpp
 	gui/kdeext/QCanvasGroupableItem.h
 	gui/kdeext/QCanvasSimpleSprite.cpp
 	gui/kdeext/QCanvasSimpleSprite.h
-	gui/kdeext/RGLed.cpp
-	gui/kdeext/klearlook.cpp
+#	gui/kdeext/RGLed.cpp
 	gui/rulers/ChordNameRuler.cpp
 	gui/rulers/ChordNameRuler.h
 	gui/rulers/ControlChangeCommand.cpp
@@ -796,8 +828,8 @@ SET(gui_SRCS
 	gui/seqmanager/AudioSegmentMmapper.h
 	gui/seqmanager/CompositionMmapper.cpp
 	gui/seqmanager/CompositionMmapper.h
-	gui/seqmanager/ControlBlockMmapper.cpp
-	gui/seqmanager/ControlBlockMmapper.h
+#	gui/seqmanager/ControlBlockMmapper.cpp
+#	gui/seqmanager/ControlBlockMmapper.h
 	gui/seqmanager/MetronomeMmapper.cpp
 	gui/seqmanager/MetronomeMmapper.h
 	gui/seqmanager/MidiFilterDialog.cpp
@@ -873,6 +905,8 @@ SET(gui_SRCS
 	gui/widgets/AudioRouteMenu.h
 	gui/widgets/AudioVUMeter.cpp
 	gui/widgets/AudioVUMeter.h
+	gui/widgets/BaseTextFloat.cpp
+	gui/widgets/BaseTextFloat.h
 	gui/widgets/BigArrowButton.h
 	gui/widgets/CollapsingFrame.cpp
 	gui/widgets/CollapsingFrame.h
@@ -886,8 +920,10 @@ SET(gui_SRCS
 	gui/widgets/DiatonicPitchChooser.h
 	gui/widgets/Fader.cpp
 	gui/widgets/Fader.h
-	gui/widgets/HSpinBox.cpp
-	gui/widgets/HSpinBox.h
+	gui/widgets/FontRequester.cpp
+	gui/widgets/FontRequester.h
+	gui/widgets/StartupLogo.cpp
+	gui/widgets/StartupLogo.h
 	gui/widgets/Label.cpp
 	gui/widgets/Label.h
 	gui/widgets/MidiFaderWidget.cpp
@@ -929,51 +965,51 @@ SET(gui_SRCS
 	gui/widgets/ZoomSlider.h
 )
 
-SET(segmentcanvas_SRCS
-	gui/editors/segment/segmentcanvas/AudioPreviewPainter.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewPainter.h
-	gui/editors/segment/segmentcanvas/AudioPreviewThread.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewThread.h
-	gui/editors/segment/segmentcanvas/AudioPreviewUpdater.cpp
-	gui/editors/segment/segmentcanvas/AudioPreviewUpdater.h
-	gui/editors/segment/segmentcanvas/CompositionColourCache.cpp
-	gui/editors/segment/segmentcanvas/CompositionColourCache.h
-	gui/editors/segment/segmentcanvas/CompositionItem.cpp
-	gui/editors/segment/segmentcanvas/CompositionItem.h
-	gui/editors/segment/segmentcanvas/CompositionItemHelper.cpp
-	gui/editors/segment/segmentcanvas/CompositionItemHelper.h
-	gui/editors/segment/segmentcanvas/CompositionItemImpl.cpp
-	gui/editors/segment/segmentcanvas/CompositionItemImpl.h
-	gui/editors/segment/segmentcanvas/CompositionModel.cpp
-	gui/editors/segment/segmentcanvas/CompositionModel.h
-	gui/editors/segment/segmentcanvas/CompositionModelImpl.cpp
-	gui/editors/segment/segmentcanvas/CompositionModelImpl.h
-	gui/editors/segment/segmentcanvas/CompositionRect.cpp
-	gui/editors/segment/segmentcanvas/CompositionRect.h
-	gui/editors/segment/segmentcanvas/CompositionView.cpp
-	gui/editors/segment/segmentcanvas/CompositionView.h
-	gui/editors/segment/segmentcanvas/PreviewRect.cpp
-	gui/editors/segment/segmentcanvas/PreviewRect.h
-	gui/editors/segment/segmentcanvas/SegmentEraser.cpp
-	gui/editors/segment/segmentcanvas/SegmentEraser.h
-	gui/editors/segment/segmentcanvas/SegmentItemPreview.cpp
-	gui/editors/segment/segmentcanvas/SegmentItemPreview.h
-	gui/editors/segment/segmentcanvas/SegmentJoiner.cpp
-	gui/editors/segment/segmentcanvas/SegmentJoiner.h
-	gui/editors/segment/segmentcanvas/SegmentMover.cpp
-	gui/editors/segment/segmentcanvas/SegmentMover.h
-	gui/editors/segment/segmentcanvas/SegmentOrderer.cpp
-	gui/editors/segment/segmentcanvas/SegmentOrderer.h
-	gui/editors/segment/segmentcanvas/SegmentPencil.cpp
-	gui/editors/segment/segmentcanvas/SegmentPencil.h
-	gui/editors/segment/segmentcanvas/SegmentResizer.cpp
-	gui/editors/segment/segmentcanvas/SegmentResizer.h
-	gui/editors/segment/segmentcanvas/SegmentSelector.cpp
-	gui/editors/segment/segmentcanvas/SegmentSelector.h
-	gui/editors/segment/segmentcanvas/SegmentSplitter.cpp
-	gui/editors/segment/segmentcanvas/SegmentSplitter.h
-	gui/editors/segment/segmentcanvas/SegmentToolBox.cpp
-	gui/editors/segment/segmentcanvas/SegmentToolBox.h
-	gui/editors/segment/segmentcanvas/SegmentTool.cpp
-	gui/editors/segment/segmentcanvas/SegmentTool.h
+SET(compositionview_SRCS
+	gui/editors/segment/compositionview/AudioPreviewPainter.cpp
+	gui/editors/segment/compositionview/AudioPreviewPainter.h
+	gui/editors/segment/compositionview/AudioPreviewThread.cpp
+	gui/editors/segment/compositionview/AudioPreviewThread.h
+	gui/editors/segment/compositionview/AudioPreviewUpdater.cpp
+	gui/editors/segment/compositionview/AudioPreviewUpdater.h
+	gui/editors/segment/compositionview/CompositionColourCache.cpp
+	gui/editors/segment/compositionview/CompositionColourCache.h
+	gui/editors/segment/compositionview/CompositionItem.cpp
+	gui/editors/segment/compositionview/CompositionItem.h
+	gui/editors/segment/compositionview/CompositionItemHelper.cpp
+	gui/editors/segment/compositionview/CompositionItemHelper.h
+	gui/editors/segment/compositionview/CompositionItemImpl.cpp
+	gui/editors/segment/compositionview/CompositionItemImpl.h
+	gui/editors/segment/compositionview/CompositionModel.cpp
+	gui/editors/segment/compositionview/CompositionModel.h
+	gui/editors/segment/compositionview/CompositionModelImpl.cpp
+	gui/editors/segment/compositionview/CompositionModelImpl.h
+	gui/editors/segment/compositionview/CompositionRect.cpp
+	gui/editors/segment/compositionview/CompositionRect.h
+	gui/editors/segment/compositionview/CompositionView.cpp
+	gui/editors/segment/compositionview/CompositionView.h
+	gui/editors/segment/compositionview/PreviewRect.cpp
+	gui/editors/segment/compositionview/PreviewRect.h
+	gui/editors/segment/compositionview/SegmentEraser.cpp
+	gui/editors/segment/compositionview/SegmentEraser.h
+	gui/editors/segment/compositionview/SegmentItemPreview.cpp
+	gui/editors/segment/compositionview/SegmentItemPreview.h
+	gui/editors/segment/compositionview/SegmentJoiner.cpp
+	gui/editors/segment/compositionview/SegmentJoiner.h
+	gui/editors/segment/compositionview/SegmentMover.cpp
+	gui/editors/segment/compositionview/SegmentMover.h
+	gui/editors/segment/compositionview/SegmentOrderer.cpp
+	gui/editors/segment/compositionview/SegmentOrderer.h
+	gui/editors/segment/compositionview/SegmentPencil.cpp
+	gui/editors/segment/compositionview/SegmentPencil.h
+	gui/editors/segment/compositionview/SegmentResizer.cpp
+	gui/editors/segment/compositionview/SegmentResizer.h
+	gui/editors/segment/compositionview/SegmentSelector.cpp
+	gui/editors/segment/compositionview/SegmentSelector.h
+	gui/editors/segment/compositionview/SegmentSplitter.cpp
+	gui/editors/segment/compositionview/SegmentSplitter.h
+	gui/editors/segment/compositionview/SegmentToolBox.cpp
+	gui/editors/segment/compositionview/SegmentToolBox.h
+	gui/editors/segment/compositionview/SegmentTool.cpp
+	gui/editors/segment/compositionview/SegmentTool.h
 )

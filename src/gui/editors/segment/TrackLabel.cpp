@@ -18,20 +18,24 @@
 
 #include "TrackLabel.h"
 
-#include <klocale.h>
 #include "base/Track.h"
-#include <klineeditdlg.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qregexp.h>
-#include <qstring.h>
-#include <qtimer.h>
-#include <qtooltip.h>
-#include <qwidget.h>
-#include <qwidgetstack.h>
-#include <qvalidator.h>
+#include "gui/widgets/LineEdit.h"
+#include "gui/widgets/InputDialog.h"
 
+#include <QFont>
+#include <QFrame>
+#include <QLabel>
+#include <QRegExp>
+#include <QString>
+#include <QTimer>
+#include <QToolTip>
+#include <QWidget>
+#include <QStackedWidget>
+#include <QValidator>
+#include <QLayout>
+#include <QHBoxLayout>
+#include <QMouseEvent>
+#include <QHeaderView>
 
 namespace Rosegarden
 {
@@ -40,12 +44,14 @@ TrackLabel::TrackLabel(TrackId id,
                        int position,
                        QWidget *parent,
                        const char *name):
-        QWidgetStack(parent, name),
+        QStackedWidget(parent),
         m_instrumentLabel(new QLabel(this)),
         m_trackLabel(new QLabel(this)),
         m_id(id),
         m_position(position)
 {
+    this->setObjectName(name);
+    
     QFont font;
     font.setPointSize(font.pointSize() * 95 / 100);
     if (font.pixelSize() > 14)
@@ -54,10 +60,23 @@ TrackLabel::TrackLabel(TrackId id,
     m_instrumentLabel->setFont(font);
     m_trackLabel->setFont(font);
 
-    addWidget(m_instrumentLabel, ShowInstrument);
-    addWidget(m_trackLabel, ShowTrack);
-    raiseWidget(ShowTrack);
-
+    m_instrumentLabel->setAutoFillBackground(true);
+    m_trackLabel->setAutoFillBackground(true);
+    
+//    this->setLayout( new QHBoxLayout() );
+//        layout()->setMargin(0);
+    
+    m_instrumentLabel->setObjectName("InstrumentLabel");
+    m_trackLabel->setObjectName("TrackLabel");
+    
+//    layout()->addWidget(m_instrumentLabel);        //, ShowInstrument);
+    addWidget(m_instrumentLabel);        //, ShowInstrument);
+//    layout()->addWidget(m_trackLabel);            //, ShowTrack);
+    addWidget(m_trackLabel);        //, ShowInstrument);
+    
+//     raiseWidget(ShowTrack);
+    setCurrentWidget( m_trackLabel );
+    
     m_instrumentLabel->setFrameShape(QFrame::NoFrame);
     m_trackLabel->setFrameShape(QFrame::NoFrame);
 
@@ -66,8 +85,7 @@ TrackLabel::TrackLabel(TrackId id,
     connect(m_pressTimer, SIGNAL(timeout()),
             this, SIGNAL(changeToInstrumentList()));
 
-    QToolTip::add
-        (this, i18n("Click and hold with left mouse button to assign this Track to an Instrument."));
+    this->setToolTip(tr("Click and hold with left mouse button to assign this Track to an Instrument."));
 
 }
 
@@ -108,41 +126,59 @@ void TrackLabel::clearAlternativeLabel()
 
 void TrackLabel::showLabel(InstrumentTrackLabels l)
 {
-    raiseWidget(l);
+//     raiseWidget(l);
+    if( l == ShowTrack ){
+        setCurrentWidget( m_trackLabel );
+        
+    } else if( l == ShowInstrument ){
+        setCurrentWidget( m_instrumentLabel );
+        
+    }
 }
 
 void
 TrackLabel::setSelected(bool on)
 {
+//###
+// NOTES: Using QPalette works fine if there is no stylesheet.  If there is a
+// stylesheet, the QPalette-based stuff can no longer set the background if the
+// background is controlled in any way by the stylesheet.  (This is apparently
+// what the warnings in the API docs are all about.)
+//
+// We could use setObjectName() to change the name, and thus change how these
+// widgets would be styled, but we'd have to unset and reset the entire
+// stylesheet for that to work, apparently.  I've elected just to resort to hard
+// code instead, and use spot stylesheets.  This is bound to be less complicated
+// and have less overhead, though it comes with some side effects that may have
+// to be revisited.
+//
+    QString localStyle = "";
+
     if (on) {
         m_selected = true;
-
-        m_instrumentLabel->setPaletteBackgroundColor(colorGroup().highlight());
-        m_instrumentLabel->setPaletteForegroundColor(colorGroup().highlightedText());
-        m_trackLabel->setPaletteBackgroundColor(colorGroup().highlight());
-        m_trackLabel->setPaletteForegroundColor(colorGroup().highlightedText());
-
+        localStyle="QLabel { background-color: #AAAAAA; color: #FFFFFF; }";
     } else {
         m_selected = false;
-
-        m_instrumentLabel->setPaletteBackgroundColor(colorGroup().background());
-        m_trackLabel->setPaletteBackgroundColor(colorGroup().background());
-        m_instrumentLabel->setPaletteForegroundColor(colorGroup().text());
-        m_trackLabel->setPaletteForegroundColor(colorGroup().text());
+        localStyle="QLabel { background-color: transparent; color: #000000; }";
     }
-    if (visibleWidget())
-        visibleWidget()->update();
+
+    m_instrumentLabel->setStyleSheet(localStyle);
+    m_trackLabel->setStyleSheet(localStyle);
+
+    if (currentWidget()){
+        currentWidget()->update();
+    }
 }
 
 void
 TrackLabel::mousePressEvent(QMouseEvent *e)
 {
-    if (e->button() == RightButton) {
+    if (e->button() == Qt::RightButton) {
 
         emit clicked();
         emit changeToInstrumentList();
 
-    } else if (e->button() == LeftButton) {
+    } else if (e->button() == Qt::LeftButton) {
 
         // start a timer on this hold
         m_pressTimer->start(200, true); // 200ms, single shot
@@ -156,7 +192,7 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
     if (m_pressTimer->isActive())
         m_pressTimer->stop();
 
-    if (e->button() == LeftButton) {
+    if (e->button() == Qt::LeftButton) {
         emit clicked();
     }
 }
@@ -164,7 +200,7 @@ TrackLabel::mouseReleaseEvent(QMouseEvent *e)
 void
 TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    if (e->button() != LeftButton)
+    if (e->button() != Qt::LeftButton)
         return ;
 
     // Highlight this label alone and cheat using
@@ -180,13 +216,19 @@ TrackLabel::mouseDoubleClickEvent(QMouseEvent *e)
     bool ok = false;
 
     QRegExpValidator validator(QRegExp(".*"), this); // empty is OK
-
-    QString newText = KLineEditDlg::getText(i18n("Change track name"),
-                                            i18n("Enter new track name"),
-                                            m_trackLabel->text(),
-                                            &ok,
-                                            this,
-                                            &validator);
+    
+    QString newText = InputDialog::getText(this,
+                                           tr("Change track name"),
+                                           tr("Enter new track name"),
+                                           LineEdit::Normal,
+                                           m_trackLabel->text(),
+                                           &ok
+                                           );
+//                                             &validator);
+//
+//&&& what to do with these validators that aren't part of Q/InputDialog?  We
+//could do something with them in InputDialog I suppose, but I'm not quite sure
+//how that would work.
 
     if ( ok )
         emit renameTrack(newText, m_id);

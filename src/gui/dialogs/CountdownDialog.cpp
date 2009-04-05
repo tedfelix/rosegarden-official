@@ -17,17 +17,16 @@
 
 
 #include "CountdownDialog.h"
-#include <qlayout.h>
+#include <QLayout>
 
-#include <klocale.h>
 #include "CountdownBar.h"
-#include <qaccel.h>
-#include <qdialog.h>
-#include <qhbox.h>
-#include <qlabel.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qwidget.h>
+#include <qshortcut.h>
+#include <QDialog>
+#include <QLabel>
+#include <QPushButton>
+#include <QString>
+#include <QWidget>
+#include <QHBoxLayout>
 #include "misc/Debug.h"
 
 
@@ -35,22 +34,30 @@ namespace Rosegarden
 {
 
 CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
-        QDialog(parent, "", false, WStyle_StaysOnTop | WStyle_DialogBorder),
+		QDialog(parent, Qt::WindowStaysOnTopHint | Qt::Dialog ),
         m_pastEndMode(false),
         m_totalTime(seconds),
         m_progressBarWidth(150),
         m_progressBarHeight(15)
+
 {
-    QBoxLayout *layout = new QBoxLayout(this, QBoxLayout::TopToBottom, 10, 14);
-    setCaption(i18n("Recording..."));
+    setContentsMargins(10, 10, 10, 10);
+    QBoxLayout *layout = new QBoxLayout(QBoxLayout::TopToBottom, this);
+    layout->setSpacing(14);
 
-    QHBox *hBox = new QHBox(this);
-    m_label = new QLabel(hBox);
-    m_time = new QLabel(hBox);
+    setWindowTitle(tr("Recording..."));
 
-    layout->addWidget(hBox, 0, AlignCenter);
+    QWidget *hBox = new QWidget(this);
+    QHBoxLayout *hBoxLayout = new QHBoxLayout;
+    m_label = new QLabel( hBox );
+    hBoxLayout->addWidget(m_label);
+    m_time = new QLabel( hBox );
+    hBoxLayout->addWidget(m_time);
+    hBox->setLayout(hBoxLayout);
 
-    m_label->setText(i18n("Recording time remaining:  "));
+    layout->addWidget(hBox, 0, Qt::AlignCenter);
+
+    m_label->setText(tr("Recording time remaining:  "));
     m_progressBar =
         new CountdownBar(this, m_progressBarWidth, m_progressBarHeight);
 
@@ -58,11 +65,12 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
 
     // Simply re-emit from Stop button
     //
-    m_stopButton = new QPushButton(i18n("Stop"), this);
+    m_stopButton = new QPushButton(tr("Stop"), this);
     m_stopButton->setFixedWidth(60);
 
-    layout->addWidget(m_progressBar, 0, AlignCenter);
-    layout->addWidget(m_stopButton, 0, AlignRight);
+    layout->addWidget(m_progressBar, 0, Qt::AlignCenter);
+    layout->addWidget(m_stopButton, 0, Qt::AlignRight);
+    setLayout(layout);
 
     connect (m_stopButton, SIGNAL(released()), this, SIGNAL(stopped()));
 
@@ -70,7 +78,7 @@ CountdownDialog::CountdownDialog(QWidget *parent, int seconds):
     //
     setElapsedTime(0);
 
-    m_accelerators = new QAccel(this);
+    m_shortcuts = new QShortcut(this);
 
 }
 
@@ -110,7 +118,7 @@ CountdownDialog::setElapsedTime(int elapsedSeconds)
     {
         m_time->setText(QString("%1:%2:%3").arg(h).arg(m).arg(s));
     } else {
-        m_time->setText(i18n("Just how big is your hard disk?"));
+        m_time->setText(tr("Just how big is your hard disk?"));
     }
 
     // Draw the progress bar
@@ -144,7 +152,7 @@ CountdownDialog::setPastEndMode()
         return ;
 
     m_pastEndMode = true;
-    m_label->setText(i18n("Recording beyond end of composition:  "));
+    m_label->setText(tr("Recording beyond end of composition:  "));
 
 }
 

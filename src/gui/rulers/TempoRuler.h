@@ -20,29 +20,30 @@
 #define _RG_TEMPORULER_H_
 
 #include "gui/dialogs/TempoDialog.h"
-#include <kxmlguiclient.h>
-#include <qfont.h>
-#include <qfontmetrics.h>
-#include <qpixmap.h>
-#include <qsize.h>
-#include <qwidget.h>
+#include "gui/general/ActionFileClient.h"
+
 #include "base/Event.h"
+
+#include <QFont>
+#include <QFontMetrics>
+#include <QPixmap>
+#include <QSize>
+#include <QWidget>
 
 
 class QWheelEvent;
-class QPopupMenu;
+class QMenu;
 class QPaintEvent;
 class QMouseEvent;
 class QEvent;
-class KMainWindow;
+class QMainWindow;
 
 
 namespace Rosegarden
 {
 
-class TextFloat;
 class RulerScale;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class Composition;
 
 
@@ -51,7 +52,7 @@ class Composition;
  * x-coordinates corresponding to tempo changes in a Composition.
  */
 
-class TempoRuler : public QWidget, public KXMLGUIClient
+class TempoRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 
@@ -64,8 +65,8 @@ public:
      * The RulerScale will not be destroyed along with the TempoRuler.
      */
     TempoRuler(RulerScale *rulerScale,
-               RosegardenGUIDoc *doc,
-               KMainWindow *parentMainWindow,
+               RosegardenDocument *doc,
+               QMainWindow *parentMainWindow,
                double xorigin = 0.0,
                int height = 0,
                bool small = false,
@@ -73,7 +74,7 @@ public:
                const char *name = 0);
 
     ~TempoRuler();
-    
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -121,7 +122,7 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 
     void createMenu();
-    
+
 private:
     double m_xorigin;
     int  m_height;
@@ -156,15 +157,14 @@ private:
                        bool showTime = false);
 
     Composition *m_composition;
-    RulerScale *m_rulerScale;
-    TextFloat *m_textFloat;
-    QPopupMenu *m_menu;
-    KMainWindow *m_parentMainWindow;
+    RulerScale  *m_rulerScale;
+    QMenu       *m_menu;
+    QMainWindow *m_parentMainWindow;
 
-    QFont m_font;
-    QFont m_boldFont;
+    QFont        m_font;
+    QFont        m_boldFont;
     QFontMetrics m_fontMetrics;
-    QPixmap m_buffer;
+    QPixmap      m_buffer;
 };
 
 

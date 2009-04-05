@@ -19,7 +19,6 @@
 #include "MatrixModifyCommand.h"
 
 #include "base/Event.h"
-#include <klocale.h>
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "document/BasicCommand.h"
@@ -33,7 +32,7 @@ MatrixModifyCommand::MatrixModifyCommand(Segment &segment,
         Event *newEvent,
         bool isMove,
         bool normalize):
-        BasicCommand((isMove ? i18n("Move Note") : i18n("Modify Note")),
+        BasicCommand((isMove ? tr("Move Note") : tr("Modify Note")),
                      segment,
                      std::min(newEvent->getAbsoluteTime(),
                               oldEvent->getAbsoluteTime()),

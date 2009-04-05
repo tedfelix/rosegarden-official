@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,43 +20,45 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
+#include "gui/general/ActionFileClient.h"
+
+#include <QMainWindow>
+
 #include <map>
 #include <string>
-#include <kmainwindow.h>
 #include <utility>
 
 
 class QWidget;
 class QString;
 class QPushButton;
-class QListViewItem;
+class QTreeWidgetItem;
 class QGroupBox;
 class QCloseEvent;
 class QCheckBox;
-class KListView;
-class KCommand;
-class KComboBox;
+class QTreeWidget;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
+class Command;
 class Studio;
-class RosegardenGUIDoc;
-class MultiViewCommandHistory;
+class RosegardenDocument;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
-class MidiDeviceListViewItem;
+class MidiDeviceTreeWidgetItem;
 class MidiDevice;
 
 
-class BankEditorDialog : public KMainWindow
+class BankEditorDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
     BankEditorDialog(QWidget *parent,
-                     RosegardenGUIDoc *doc,
+                     RosegardenDocument *doc,
                      DeviceId defaultDevice =
                      Device::NO_DEVICE);
 
@@ -67,17 +68,16 @@ public:
     //
     void initDialog();
 
-    std::pair<int, int> getFirstFreeBank(QListViewItem*);
+    std::pair<int, int> getFirstFreeBank(QTreeWidgetItem*);
 
-    void addCommandToHistory(KCommand *command);
-    MultiViewCommandHistory* getCommandHistory();
+    void addCommandToHistory(Command *command);
 
     void setCurrentDevice(DeviceId device);
 
     // Get a MidiDevice from an index number
     //
     MidiDevice* getMidiDevice(DeviceId);
-    MidiDevice* getMidiDevice(QListViewItem*);
+    MidiDevice* getMidiDevice(QTreeWidgetItem*);
     MidiDevice* getCurrentMidiDevice();
     BankList&   getBankList()     { return m_bankList; }
     ProgramList&getProgramList()  { return m_programList; }
@@ -98,7 +98,7 @@ public:
     void selectDeviceBankItem(DeviceId device, int bank);
 
 public slots:
-    void slotPopulateDevice(QListViewItem*);
+    void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
     void slotApply();
     void slotReset();
@@ -113,7 +113,7 @@ public slots:
     void slotImport();
     void slotExport();
 
-    void slotModifyDeviceOrBankName(QListViewItem*, const QString&,int);
+    void slotModifyDeviceOrBankName(QTreeWidgetItem*, const QString&,int);
 
     void slotFileClose();
 
@@ -135,33 +135,33 @@ protected:
 
     void updateDialog();
 
-    void populateDeviceItem(QListViewItem* deviceItem,
+    void populateDeviceItem(QTreeWidgetItem* deviceItem,
                             MidiDevice* midiDevice);
 
-    void updateDeviceItem(MidiDeviceListViewItem* deviceItem);
+    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
 
-    bool deviceItemHasBank(MidiDeviceListViewItem* deviceItem, int bankNb);
+    bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
 
-    void clearItemChildren(QListViewItem* deviceItem);
+    void clearItemChildren(QTreeWidgetItem* deviceItem);
 
-    MidiDeviceListViewItem* getParentDeviceItem(QListViewItem*);
+    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
     void keepBankListForNextPopulate() { m_keepBankList = true; }
 
-    void populateDevice(QListViewItem*);
+    void populateDeviceEditors(QTreeWidgetItem*);
 
     void setupActions();
 
     //--------------- Data members ---------------------------------
     Studio      *m_studio;
-    RosegardenGUIDoc        *m_doc;
+    RosegardenDocument        *m_doc;
 
     MidiProgramsEditor      *m_programEditor;
     MidiKeyMappingEditor    *m_keyMappingEditor;
-    KListView               *m_listView;
+    QTreeWidget               *m_treeWidget;
 
     QGroupBox               *m_optionBox;
     QCheckBox               *m_variationToggle;
-    KComboBox               *m_variationCombo;
+    QComboBox               *m_variationCombo;
 
     QPushButton             *m_closeButton;
     QPushButton             *m_resetButton;

@@ -21,6 +21,8 @@
 
 #include "document/BasicCommand.h"
 
+#include <QCoreApplication>
+
 
 
 
@@ -33,6 +35,8 @@ class Event;
 
 class EventInsertionCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(EventInsertionCommand)
+
 public:
     EventInsertionCommand(Segment &segment,
                           Event *event);

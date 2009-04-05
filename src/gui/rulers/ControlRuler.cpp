@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,11 @@
 */
 
 
+#include <Q3Canvas>
+#include <Q3CanvasItem>
+#include <Q3CanvasItemList>
+#include <Q3CanvasRectangle>
+#include <Q3CanvasView>
 #include "ControlRuler.h"
 
 #include "base/Event.h"
@@ -29,20 +34,24 @@
 #include "ControlTool.h"
 #include "DefaultVelocityColour.h"
 #include "ElementAdapter.h"
-#include "gui/general/EditView.h"
+#include "gui/general/EditViewBase.h"
 #include "gui/general/RosegardenCanvasView.h"
+#include "document/CommandHistory.h"
 #include "gui/widgets/TextFloat.h"
-#include <kmainwindow.h>
-#include <qcanvas.h>
-#include <qcolor.h>
-#include <qcursor.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-#include <qscrollbar.h>
-#include <qscrollview.h>
-#include <qstring.h>
-#include <qwidget.h>
 #include <algorithm>
+
+#include <QMainWindow>
+#include <Q3Canvas>
+#include <QColor>
+#include <QCursor>
+#include <QPoint>
+#include <QMenu>
+#include <QScrollBar>
+#include <QScrollArea>
+#include <QString>
+#include <QWidget>
+#include <QMouseEvent>
+#include <QContextMenuEvent>
 
 
 namespace Rosegarden
@@ -56,39 +65,35 @@ const int ControlRuler::ItemHeightRange = 64;
 ControlRuler::ControlRuler(Segment *segment,
                            RulerScale* rulerScale,
                            EditViewBase* parentView,
-                           QCanvas* c, QWidget* parent,
-                           const char* name, WFlags f) :
-        RosegardenCanvasView(c, parent, name, f),
+                           Q3Canvas* c, QWidget* parent
+						  ) :
+		RosegardenCanvasView(c, parent), // name, f),	// note: base class is Q3CanvasView
         m_parentEditView(parentView),
         m_mainHorizontalScrollBar(0),
         m_rulerScale(rulerScale),
         m_eventSelection(new EventSelection(*segment)),
 	m_assignedEventSelection(0),
         m_segment(segment),
-        m_currentItem(0),
+        m_currentIndex(0),
         m_tool(0),
         m_maxItemValue(127),
-        m_staffOffset(0),
+        m_viewSegmentOffset(0),
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
         m_selector(new ControlSelector(this)),
-        m_selectionRect(new QCanvasRectangle(canvas())),
+        m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_menu(0)
 {
-    pthread_mutex_t m_mutex = PTHREAD_MUTEX_INITIALIZER;
+	setHScrollBarMode(Q3ScrollView::AlwaysOff);	// Q3 compatible mode
+// 	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );	// qt4
 
-    setHScrollBarMode(QScrollView::AlwaysOff);
-
-    m_selectionRect->setPen(Qt::red);
+    m_selectionRect->setPen(QColor(Qt::red));
 
     setFixedHeight(sizeHint().height());
 
     connect(this, SIGNAL(stateChange(const QString&, bool)),
             m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
-
-    m_numberFloat = new TextFloat(this);
-    m_numberFloat->hide();
 
     m_segment->addObserver(this);
 
@@ -97,10 +102,9 @@ ControlRuler::ControlRuler(Segment *segment,
 
 ControlRuler::~ControlRuler()
 {
-    pthread_mutex_destroy( &m_mutex);
     if(m_assignedEventSelection)
 	    m_assignedEventSelection->removeObserver(this);
-    
+
     if (m_segment) {
         m_segment->removeObserver(this);
     }
@@ -113,16 +117,19 @@ void ControlRuler::slotUpdate()
     canvas()->setAllChanged(); // TODO: be a bit more subtle, call setChanged(<time area>)
 
     canvas()->update();
-    repaint();
+//    repaint();
+//   update();
 }
 
 void ControlRuler::slotUpdateElementsHPos()
 {
-    computeStaffOffset();
+    RG_DEBUG << "ControlRuler::slotUpdateElementsHPos()\n";
 
-    QCanvasItemList list = canvas()->allItems();
+    computeViewSegmentOffset();
 
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
         ControlItem* item = dynamic_cast<ControlItem*>(*it);
         if (!item)
@@ -139,7 +146,7 @@ void ControlRuler::layoutItem(ControlItem* item)
 
     double x = m_rulerScale->getXForTime(itemTime);
 
-    item->setX(x + m_staffOffset);
+    item->setX(x + m_viewSegmentOffset);
     int itemElementDuration = item->getElementAdapter()->getDuration();
 
     int width = int(m_rulerScale->getXForTime(itemTime + itemElementDuration) - x);
@@ -158,8 +165,8 @@ void ControlRuler::setControlTool(ControlTool* tool)
 
 void ControlRuler::eventSelected(EventSelection *es,Event *e) {
     if(es==m_assignedEventSelection) {
-        QCanvasItemList list = canvas()->allItems();
-        QCanvasItemList::Iterator it = list.begin();
+        Q3CanvasItemList list = canvas()->allItems();
+        Q3CanvasItemList::Iterator it = list.begin();
         for (; it != list.end(); ++it) {
             if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
     		if(item->getElementAdapter()->getEvent()==e) {
@@ -173,8 +180,8 @@ void ControlRuler::eventSelected(EventSelection *es,Event *e) {
 
 void ControlRuler::eventDeselected(EventSelection *es,Event *e) {
     if(es==m_assignedEventSelection) {
-        QCanvasItemList list = canvas()->allItems();
-        QCanvasItemList::Iterator it = list.begin();
+        Q3CanvasItemList list = canvas()->allItems();
+        Q3CanvasItemList::Iterator it = list.begin();
         for (; it != list.end(); ++it) {
             if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
 	        if(item->getElementAdapter()->getEvent()==e) {
@@ -191,26 +198,26 @@ void ControlRuler::eventSelectionDestroyed(EventSelection *es) {
 	if(es==m_assignedEventSelection)
 		m_assignedEventSelection=NULL;
 }
-    
 
-void ControlRuler::assignEventSelection(EventSelection *es) 
+
+void ControlRuler::assignEventSelection(EventSelection *es)
 {
     // Clear all selected ControllItem
-    QCanvasItemList list = canvas()->allItems();
-    QCanvasItemList::Iterator it = list.begin();
+    Q3CanvasItemList list = canvas()->allItems();
+    Q3CanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) 
+        if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
 	    item->setHighlighted(false);
-    }		
+    }
 
     if(es) {
 	// Dont observe the old selection anymore
 	m_assignedEventSelection=es;
 
-	QCanvasItemList list = canvas()->allItems();
+	Q3CanvasItemList list = canvas()->allItems();
         const EventSelection::eventcontainer ec=es->getSegmentEvents();
         for (EventSelection::eventcontainer::iterator e = ec.begin(); e != ec.end(); ++e) {
-	    QCanvasItemList::Iterator it = list.begin();
+	    Q3CanvasItemList::Iterator it = list.begin();
 	    for (; it != list.end(); ++it) {
                 if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
     		    if(item->getElementAdapter()->getEvent()==*e) {
@@ -219,14 +226,14 @@ void ControlRuler::assignEventSelection(EventSelection *es)
 	    	    }
 	        }
             }
-        } 
-	
+        }
+
         es->addObserver(this);
 
     } else {
 	m_assignedEventSelection=NULL;
     }
-    
+
     slotUpdate();
 }
 
@@ -239,7 +246,7 @@ ControlRuler::segmentDeleted(const Segment *)
 void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
-        m_numberFloat->hide();
+        TextFloat::getTextFloat()->hide();
         m_selecting = false;
         return ;
     }
@@ -248,7 +255,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
     QPoint p = inverseMapPoint(e->pos());
 
-    QCanvasItemList l = canvas()->collisions(p);
+    Q3CanvasItemList l = canvas()->collisions(p);
 
     if (l.count() == 0) { // de-select current item
         clearSelectedItems();
@@ -260,12 +267,13 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
     // clear selection unless control was pressed, in which case
     // add the event to the current selection
-    if (!(e->state() && QMouseEvent::ControlButton)) {
+// 	if (!(e->state() && QMouseEvent::ControlButton)) {
+	if( ! (e->modifiers() & Qt::CTRL) ){
         clearSelectedItems();
     }
 
     ControlItem *topItem = 0;
-    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
 
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
 
@@ -279,7 +287,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
                 item->handleMouseButtonPress(e);
 
-                for (QCanvasItemList::Iterator it = m_selectedItems.begin();
+                for (Q3CanvasItemList::Iterator it = m_selectedItems.begin();
                         it != m_selectedItems.end(); ++it) {
                     if (ControlItem *selectedItem =
                                 dynamic_cast<ControlItem*>(*it)) {
@@ -290,7 +298,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 
             } else { // select it
 
-                if (!(e->state() && QMouseEvent::ControlButton)) {
+                if (!(e->state() && Qt::CTRL) ){		//@@@ QMouseEvent::ControlButton)) {
                     if (item->z() > topItem->z())
                         topItem = item;
 
@@ -320,7 +328,7 @@ void ControlRuler::contentsMousePressEvent(QMouseEvent* e)
 void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
 {
     if (e->button() != Qt::LeftButton) {
-        m_numberFloat->hide();
+        TextFloat::getTextFloat()->hide();
         m_selecting = false;
         return ;
     }
@@ -333,7 +341,7 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
         return ;
     }
 
-    for (QCanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
 
             ElementAdapter * adapter = item->getElementAdapter();
@@ -355,12 +363,12 @@ void ControlRuler::contentsMouseReleaseEvent(QMouseEvent* e)
                                         m_eventSelection->getEndTime());
 
         RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
-        m_parentEditView->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
 
         m_itemMoved = false;
     }
 
-    m_numberFloat->hide();
+    TextFloat::getTextFloat()->hide();
 }
 
 void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
@@ -380,28 +388,16 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
 
     m_itemMoved = true;
 
-    // Borrowed from Rotary - compute total position within window
-    //
-    QPoint totalPos = mapTo(topLevelWidget(), QPoint(0, 0));
-
-    int scrollX = dynamic_cast<EditView*>(m_parentEditView)->getRawCanvasView()->
-                  horizontalScrollBar()->value();
-
-    /*
-    RG_DEBUG << "ControlRuler::contentsMouseMoveEvent - total pos = " << totalPos.x()
-             << ",e pos = " << e->pos().x()
-             << ", scroll bar = " << scrollX
-             << endl;
-             */
-
-    // Allow for scrollbar
-    //
-    m_numberFloat->move(totalPos.x() + e->pos().x() - scrollX + 20,
-                        totalPos.y() + e->pos().y() - 10);
+    TextFloat *numberFloat = TextFloat::getTextFloat();
+    numberFloat->reparent(this);
+    // A better way should be not to call reparent() here, but to
+    // call attach() in enterEvent().
+    // Nevertheless it doesn't work because, for some reason,  enterEvent()
+    // (when defined) is never called when mouse enters the ruler.
 
     int value = 0;
 
-    for (QCanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             item->handleMouseMove(e, deltaX, deltaY);
             //            ElementAdapter* adapter = item->getElementAdapter();
@@ -409,21 +405,23 @@ void ControlRuler::contentsMouseMoveEvent(QMouseEvent* e)
             // set value to highest in selection
             if (item->getValue() >= value) {
                 value = item->getValue();
-                m_numberFloat->setText(QString("%1").arg(value));
+                numberFloat->setText(QString("%1").arg(value));
             }
         }
     }
     canvas()->update();
 
-    m_numberFloat->show();
-
+    // Display text float near mouse cursor
+    QPoint offset = mapFromGlobal(QPoint(QCursor::pos()))
+                    + QPoint(20, + numberFloat->height() / 2);
+    numberFloat->display(offset);
 }
 
 void
 ControlRuler::contentsWheelEvent(QWheelEvent *e)
 {
     // not sure what to do yet
-    QCanvasView::contentsWheelEvent(e);
+    Q3CanvasView::contentsWheelEvent(e);
 }
 
 void ControlRuler::updateSelection()
@@ -432,9 +430,9 @@ void ControlRuler::updateSelection()
 
     bool haveSelectedItems = false;
 
-    QCanvasItemList l = getSelectionRectangle()->collisions(true);
+    Q3CanvasItemList l = getSelectionRectangle()->collisions(true);
 
-    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
 
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             item->setSelected(true);
@@ -467,10 +465,11 @@ void ControlRuler::createMenu()
 {
     RG_DEBUG << "ControlRuler::createMenu()\n";
 
-    KMainWindow* parentMainWindow = dynamic_cast<KMainWindow*>(topLevelWidget());
+    QMainWindow* parentMainWindow = dynamic_cast<QMainWindow*>(topLevelWidget());
 
-    if (parentMainWindow && parentMainWindow->factory()) {
-        m_menu = static_cast<QPopupMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+    if (parentMainWindow ) { 	// parentMainWindow->factory()) {
+// 		m_menu = static_cast<QMenu*>(parentMainWindow->factory()->container(m_menuName, parentMainWindow));
+		m_menu = parentMainWindow->findChild<QMenu*>(m_menuName);
 
         if (!m_menu) {
             RG_DEBUG << "ControlRuler::createMenu() failed\n";
@@ -483,7 +482,7 @@ void ControlRuler::createMenu()
 void
 ControlRuler::clearSelectedItems()
 {
-    for (QCanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         (*it)->setSelected(false);
     }
     m_selectedItems.clear();
@@ -494,9 +493,9 @@ ControlRuler::clearSelectedItems()
 
 void ControlRuler::clear()
 {
-    QCanvasItemList allItems = canvas()->allItems();
+    Q3CanvasItemList allItems = canvas()->allItems();
 
-    for (QCanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
             delete item;
         }
@@ -550,11 +549,11 @@ void ControlRuler::flipForwards()
 {
     std::pair<int, int> minMax = getZMinMax();
 
-    QCanvasItemList l = canvas()->allItems();
-    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+    Q3CanvasItemList l = canvas()->allItems();
+    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
 
         // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle)
+        if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
             continue;
 
         // match min
@@ -571,11 +570,11 @@ void ControlRuler::flipBackwards()
 {
     std::pair<int, int> minMax = getZMinMax();
 
-    QCanvasItemList l = canvas()->allItems();
-    for (QCanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
+    Q3CanvasItemList l = canvas()->allItems();
+    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
 
         // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle)
+        if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
             continue;
 
         // match min
@@ -590,12 +589,12 @@ void ControlRuler::flipBackwards()
 
 std::pair<int, int> ControlRuler::getZMinMax()
 {
-    QCanvasItemList l = canvas()->allItems();
+    Q3CanvasItemList l = canvas()->allItems();
     std::vector<int> zList;
-    for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
+    for (Q3CanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it) {
 
         // skip all but rectangles
-        if ((*it)->rtti() != QCanvasItem::Rtti_Rectangle) continue;
+        if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle) continue;
         zList.push_back(int((*it)->z()));
     }
 

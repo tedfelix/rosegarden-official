@@ -18,11 +18,10 @@
 
 #include "NoteCharacter.h"
 
-#include <qpainter.h>
-#include <qpixmap.h>
-#include <qpoint.h>
-#include <qcanvas.h>
-#include <qbitmap.h>
+#include <QPainter>
+#include <QPixmap>
+#include <QPoint>
+#include <QBitmap>
 
 
 namespace Rosegarden
@@ -30,21 +29,20 @@ namespace Rosegarden
 
 NoteCharacter::NoteCharacter() :
         m_hotspot(0, 0),
-        m_pixmap(new QPixmap()),
         m_rep(0)
 {}
 
 NoteCharacter::NoteCharacter(QPixmap pixmap,
                              QPoint hotspot, NoteCharacterDrawRep *rep) :
-        m_hotspot(hotspot),
-        m_pixmap(new QPixmap(pixmap)),
-        m_rep(rep)
+    m_hotspot(hotspot),
+    m_pixmap(pixmap),
+    m_rep(rep)
 {}
 
 NoteCharacter::NoteCharacter(const NoteCharacter &c) :
-        m_hotspot(c.m_hotspot),
-        m_pixmap(new QPixmap(*c.m_pixmap)),
-        m_rep(c.m_rep)
+    m_hotspot(c.m_hotspot),
+    m_pixmap(c.m_pixmap),
+    m_rep(c.m_rep)
 {
     // nothing else
 }
@@ -52,29 +50,27 @@ NoteCharacter::NoteCharacter(const NoteCharacter &c) :
 NoteCharacter &
 NoteCharacter::operator=(const NoteCharacter &c)
 {
-    if (&c == this)
-        return * this;
+    if (&c == this) return * this;
     m_hotspot = c.m_hotspot;
-    m_pixmap = new QPixmap(*c.m_pixmap);
+    m_pixmap = c.m_pixmap;
     m_rep = c.m_rep;
     return *this;
 }
 
 NoteCharacter::~NoteCharacter()
 {
-    delete m_pixmap;
 }
 
 int
 NoteCharacter::getWidth() const
 {
-    return m_pixmap->width();
+    return m_pixmap.width();
 }
 
 int
 NoteCharacter::getHeight() const
 {
-    return m_pixmap->height();
+    return m_pixmap.height();
 }
 
 QPoint
@@ -83,16 +79,18 @@ NoteCharacter::getHotspot() const
     return m_hotspot;
 }
 
-QPixmap *
+QPixmap
 NoteCharacter::getPixmap() const
 {
     return m_pixmap;
 }
 
-QCanvasPixmap *
-NoteCharacter::getCanvasPixmap() const
+QGraphicsPixmapItem *
+NoteCharacter::makeItem() const
 {
-    return new QCanvasPixmap(*m_pixmap, m_hotspot);
+    QGraphicsPixmapItem *item = new QGraphicsPixmapItem(m_pixmap);
+    item->setOffset(QPointF(-m_hotspot.x(), -m_hotspot.y()));
+    return item;
 }
 
 void
@@ -100,9 +98,11 @@ NoteCharacter::draw(QPainter *painter, int x, int y) const
 {
     if (!m_rep) {
 
-        painter->drawPixmap(x, y, *m_pixmap);
+        painter->drawPixmap(x, y, m_pixmap);
 
     } else {
+
+        abort();
 
         NoteCharacterDrawRep a(m_rep->size());
 
@@ -112,14 +112,6 @@ NoteCharacter::draw(QPainter *painter, int x, int y) const
         }
 
         painter->drawLineSegments(a);
-    }
-}
-
-void
-NoteCharacter::drawMask(QPainter *painter, int x, int y) const
-{
-    if (!m_rep && m_pixmap->mask()) {
-        painter->drawPixmap(x, y, *(m_pixmap->mask()));
     }
 }
 

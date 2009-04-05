@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -20,41 +19,26 @@
 #define _RG_MATRIXERASER_H_
 
 #include "MatrixTool.h"
-#include <qstring.h>
-
-class QMouseEvent;
-
 
 namespace Rosegarden
 {
 
-class ViewElement;
-class MatrixView;
-class MatrixStaff;
-
-
 class MatrixEraser : public MatrixTool
 {
+    Q_OBJECT
     friend class MatrixToolBox;
 
 public:
-
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent *event,
-                                       ViewElement*);
+    virtual void handleLeftButtonPress(const MatrixMouseEvent *);
 
     static const QString ToolName;
 
     virtual void ready();
 
 protected:
-    MatrixEraser(MatrixView*);
+    MatrixEraser(MatrixWidget *);
 
     void setBasicContextHelp();
-
-    MatrixStaff* m_currentStaff;
 };
 
 }

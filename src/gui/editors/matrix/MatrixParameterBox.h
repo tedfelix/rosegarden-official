@@ -19,19 +19,19 @@
 #ifndef _RG_MATRIXPARAMETERBOX_H_
 #define _RG_MATRIXPARAMETERBOX_H_
 
-#include <qframe.h>
+#include <QFrame>
 #include <vector>
 #include "base/Event.h"
 
 
 class QWidget;
-class KComboBox;
+class QComboBox;
 
 
 namespace Rosegarden
 {
 
-class RosegardenGUIDoc;
+class RosegardenDocument;
 class InstrumentParameterBox;
 class Instrument;
 class EventSelection;
@@ -42,7 +42,7 @@ class MatrixParameterBox : public QFrame
     Q_OBJECT
 
 public:
-    MatrixParameterBox(RosegardenGUIDoc *doc=0, QWidget *parent=0, const char* name=0);
+    MatrixParameterBox(RosegardenDocument *doc=0, QWidget *parent=0, const char* name=0);
     ~MatrixParameterBox();
 
     void initBox();
@@ -51,14 +51,14 @@ public:
 
 protected:
 
-    KComboBox                  *m_quantizeCombo;
-    KComboBox                  *m_snapGridCombo;
+    QComboBox                  *m_quantizeCombo;
+    QComboBox                  *m_snapGridCombo;
     InstrumentParameterBox     *m_instrumentParameterBox;
 
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;
 
-    RosegardenGUIDoc           *m_doc;
+    RosegardenDocument           *m_doc;
 
 };
 

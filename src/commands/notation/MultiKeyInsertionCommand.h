@@ -20,12 +20,12 @@
 #define _RG_MULTIKEYINSERTIONCOMMAND_H_
 
 #include "base/NotationTypes.h"
-#include <qstring.h>
+#include <QString>
 #include "base/Event.h"
-#include <klocale.h>
+#include <QCoreApplication>
 #include "misc/Strings.h"
-#include <kcommand.h>
-#include "document/RosegardenGUIDoc.h"
+#include "document/Command.h"
+#include "document/RosegardenDocument.h"
 
 
 class Add;
@@ -35,14 +35,16 @@ namespace Rosegarden
 {
 
 //class Composition;
-class RosegardenGUIDoc;
+class RosegardenDocument;
 
 
-class MultiKeyInsertionCommand : public KMacroCommand
+class MultiKeyInsertionCommand : public MacroCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(MultiKeyInsertionCommand)
+
 public:
     
-    MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
+    MultiKeyInsertionCommand(RosegardenDocument* doc,
                              timeT time,
                              Key key,
                              bool shouldConvert,
@@ -53,9 +55,9 @@ public:
 
     static QString getGlobalName(Key *key = 0) {
         if (key) {
-            return i18n("Change all to &Key %1...").arg(strtoqstr(key->getName()));
+            return tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
         } else {
-            return i18n("Add &Key Change...");
+            return tr("Add &Key Change...");
         }
     }
 };

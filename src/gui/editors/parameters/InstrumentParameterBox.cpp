@@ -17,43 +17,45 @@
 
 
 #include "InstrumentParameterBox.h"
-#include <qlayout.h>
 
-#include <klocale.h>
+
 #include "misc/Debug.h"
 #include "AudioInstrumentParameterPanel.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "MIDIInstrumentParameterPanel.h"
 #include "RosegardenParameterArea.h"
 #include "RosegardenParameterBox.h"
-#include <ktabwidget.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qscrollview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qwidgetstack.h>
+
+#include <QTabWidget>
+#include <QFont>
+#include <QFrame>
+#include <QScrollArea>
+#include <QString>
+#include <QWidget>
+#include <QStackedWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
+InstrumentParameterBox::InstrumentParameterBox(RosegardenDocument *doc,
                                                QWidget *parent)
-    : RosegardenParameterBox(i18n("Instrument"),
-                             i18n("Instrument Parameters"),
+    : RosegardenParameterBox(tr("Instrument"),
+                             tr("Instrument Parameters"),
                              parent),
-      m_widgetStack(new QWidgetStack(this)),
-      m_noInstrumentParameters(new QVBox(this)),
+      m_widgetStack(new QStackedWidget(this)),
+      m_noInstrumentParameters(new QFrame(this)),
       m_midiInstrumentParameters(new MIDIInstrumentParameterPanel(doc, this)),
       m_audioInstrumentParameters(new AudioInstrumentParameterPanel(doc, this)),
       m_selectedInstrument(-1),
       m_doc(doc),
       m_lastShowAdditionalControlsArg(false)
 {
+    setObjectName("Instrument Parameter Box");
+
     m_widgetStack->setFont(m_font);
     m_noInstrumentParameters->setFont(m_font);
     m_midiInstrumentParameters->setFont(m_font);
@@ -75,9 +77,12 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     m_widgetStack->addWidget(m_audioInstrumentParameters);
     m_widgetStack->addWidget(m_noInstrumentParameters);
 
+    /*
+    //### Painter not active on create?? ... come me back to resizing these widgets.
     m_midiInstrumentParameters->adjustSize();
     m_audioInstrumentParameters->adjustSize();
     m_noInstrumentParameters->adjustSize();
+    */
 
     connect(m_audioInstrumentParameters, SIGNAL(updateAllBoxes()),
             this, SLOT(slotUpdateAllBoxes()));
@@ -116,6 +121,8 @@ InstrumentParameterBox::InstrumentParameterBox(RosegardenGUIDoc *doc,
     // Layout the groups left to right.
 
     QBoxLayout* layout = new QVBoxLayout(this);
+    setLayout(layout);
+    layout->setMargin(0);
     layout->addWidget(m_widgetStack);
 
 }
@@ -154,7 +161,7 @@ InstrumentParameterBox::getSelectedInstrument()
 QString
 InstrumentParameterBox::getPreviousBox(RosegardenParameterArea::Arrangement arrangement) const
 {
-    return i18n("Track");
+    return tr("Track");
 }
 
 void
@@ -164,7 +171,7 @@ InstrumentParameterBox::setAudioMeter(float ch1, float ch2, float ch1r, float ch
 }
 
 void
-InstrumentParameterBox::setDocument(RosegardenGUIDoc* doc)
+InstrumentParameterBox::setDocument(RosegardenDocument* doc)
 {
     m_doc = doc;
     m_midiInstrumentParameters->setDocument(m_doc);
@@ -189,7 +196,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
     RG_DEBUG << "useInstrument() - populate Instrument\n";
 
     if (instrument == 0) {
-        m_widgetStack->raiseWidget(m_noInstrumentParameters);
+        m_widgetStack->setCurrentWidget(m_noInstrumentParameters);	// was raiseWidget
         emit instrumentPercussionSetChanged(instrument);
         return ;
     }
@@ -207,13 +214,14 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         instrument->getType() == Instrument::SoftSynth) {
 
         m_audioInstrumentParameters->setupForInstrument(getSelectedInstrument());
-        m_widgetStack->raiseWidget(m_audioInstrumentParameters);
+		m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
+// 		m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi
 
         m_midiInstrumentParameters->setupForInstrument(getSelectedInstrument());
         m_midiInstrumentParameters->showAdditionalControls(m_lastShowAdditionalControlsArg);
-        m_widgetStack->raiseWidget(m_midiInstrumentParameters);
+		m_widgetStack->setCurrentWidget(m_midiInstrumentParameters);
         emit instrumentPercussionSetChanged(instrument);
 
     }

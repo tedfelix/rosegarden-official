@@ -19,13 +19,14 @@
 #ifndef _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
 #define _RG_UNUSEDAUDIOSELECTIONDIALOG_H_
 
-#include <kdialogbase.h>
-#include <qstring.h>
+#include <QDialog>
+#include <QString>
 #include <vector>
 
 
 class QWidget;
-class QListView;
+class QTableWidget;
+class QTableWidgetItem;
 
 
 namespace Rosegarden
@@ -33,7 +34,7 @@ namespace Rosegarden
 
 
 
-class UnusedAudioSelectionDialog : public KDialogBase
+class UnusedAudioSelectionDialog : public QDialog
 {
 public:
     UnusedAudioSelectionDialog(QWidget *,
@@ -44,7 +45,7 @@ public:
     std::vector<QString> getSelectedAudioFileNames() const;
 
 protected:
-    QListView *m_listView;
+    QTableWidget *m_listView;
 };
 
 

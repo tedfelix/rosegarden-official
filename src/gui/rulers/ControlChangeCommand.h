@@ -18,8 +18,11 @@
 #ifndef _RG_CONTROLCHANGECOMMAND_H_
 #define _RG_CONTROLCHANGECOMMAND_H_
 
+#include <Q3CanvasItemList>
 #include "document/BasicCommand.h"
-#include <qcanvas.h>
+#include <Q3Canvas>
+
+#include <QCoreApplication>
 
 namespace Rosegarden {
 
@@ -28,9 +31,11 @@ namespace Rosegarden {
  */
 class ControlChangeCommand : public BasicCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(ControlChangeCommand)
+
 public:
 
-    ControlChangeCommand(QCanvasItemList selectedItems,
+    ControlChangeCommand(Q3CanvasItemList selectedItems,
                          Segment &segment,
                          Rosegarden::timeT start, Rosegarden::timeT end);
     virtual ~ControlChangeCommand() {;}
@@ -40,7 +45,7 @@ protected:
 
     virtual void modifySegment();
 
-    QCanvasItemList m_selectedItems;
+    Q3CanvasItemList m_selectedItems;
 };
 
 }

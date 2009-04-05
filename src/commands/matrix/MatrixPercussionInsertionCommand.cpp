@@ -18,7 +18,6 @@
 
 #include "MatrixPercussionInsertionCommand.h"
 
-#include <klocale.h>
 #include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -37,7 +36,7 @@ using namespace BaseProperties;
 MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Segment &segment,
         timeT time,
         Event *event) :
-        BasicCommand(i18n("Insert Percussion Note"), segment,
+        BasicCommand(tr("Insert Percussion Note"), segment,
                      getEffectiveStartTime(segment, time, *event),
                      getEndTime(segment, time, *event)),
         m_event(0),

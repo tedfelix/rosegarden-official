@@ -17,6 +17,7 @@
 
 
 #include "DocumentMetaConfigurationPage.h"
+#include "TabbedConfigurationPage.h"
 
 #include "base/Event.h"
 #include "base/BaseProperties.h"
@@ -30,79 +31,65 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "ConfigurationPage.h"
-#include "document/RosegardenGUIDoc.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
 #include "gui/general/GUIPalette.h"
-#include "TabbedConfigurationPage.h"
-#include <kconfig.h>
-#include <klistview.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlistview.h>
-#include <qpixmap.h>
-#include <qpushbutton.h>
-#include <qstring.h>
-#include <qtable.h>
-#include <qtabwidget.h>
-#include <qwidget.h>
-#include <qlayout.h>
+
+#include <QSettings>
+#include <QFrame>
+#include <QLabel>
+#include <QPixmap>
+#include <QPushButton>
+#include <QString>
+#include <QTableWidget>
+#include <QTabWidget>
+#include <QWidget>
+#include <QLayout>
 
 
 namespace Rosegarden
 {
 
-static QString durationToString(Rosegarden::Composition &comp,
-				Rosegarden::timeT absTime,
-				Rosegarden::timeT duration,
-				Rosegarden::RealTime rt)
-{
-    return i18n("%1 minutes %2.%3%4 seconds (%5 units, %6 measures)") // TODO - PLURAL
-	.arg(rt.sec / 60).arg(rt.sec % 60)
-	.arg(rt.msec() / 100).arg((rt.msec() / 10) % 10)
-	.arg(duration).arg(comp.getBarNumber(absTime + duration) -
-			   comp.getBarNumber(absTime));
-}
-
-class SegmentDataItem : public QTableItem
+class SegmentDataItem : public QTableWidgetItem
 {
 public:
-    SegmentDataItem(QTable *t, QString s) :
-	QTableItem(t, QTableItem::Never, s) { }
+    SegmentDataItem(QTableWidget *t, QString s) : QTableWidgetItem(s) { }    //### removed t from p-class
+    
     virtual int alignment() const { return Qt::AlignCenter; }
 
     virtual QString key() const {
 
-	// It doesn't seem to be possible to specify a comparator so
-	// as to get the right sorting for numeric items (what am I
-	// missing here?), only to override this function to return a
-	// string for comparison.  So for integer items we'll return a
-	// string that starts with a single digit corresponding to the
-	// number of digits in the integer, which should ensure that
-	// dictionary sorting works correctly.
-	// 
-	// This relies on the assumption that any item whose text
-	// starts with a digit will contain nothing other than a
-	// single non-negative integer of no more than 9 digits.  That
-	// assumption should hold for all current uses of this class,
-	// but may need checking for future uses...
+    // It doesn't seem to be possible to specify a comparator so
+    // as to get the right sorting for numeric items (what am I
+    // missing here?), only to override this function to return a
+    // string for comparison.  So for integer items we'll return a
+    // string that starts with a single digit corresponding to the
+    // number of digits in the integer, which should ensure that
+    // dictionary sorting works correctly.
+    // 
+    // This relies on the assumption that any item whose text
+    // starts with a digit will contain nothing other than a
+    // single non-negative integer of no more than 9 digits.  That
+    // assumption should hold for all current uses of this class,
+    // but may need checking for future uses...
 
-	QString s(text());
-	if (s[0].digitValue() >= 0) {
-	    return QString("%1%2").arg(s.length()).arg(s);
-	} else {
-	    return s;
-	}
+    QString s(text());
+    if (s[0].digitValue() >= 0) {
+        return QString("%1%2").arg(s.length()).arg(s);
+    } else {
+        return s;
+    }
     }
 };
 
-DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *doc,
+DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument *doc,
         QWidget *parent,
         const char *name) :
         TabbedConfigurationPage(doc, parent, name)
 {
     m_headersPage = new HeadersConfigurationPage(this, doc);
-    addTab(m_headersPage, i18n("Headers"));
+    addTab(m_headersPage, tr("Headers"));
 
     Composition &comp = doc->getComposition();
     std::set
@@ -119,58 +106,67 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
     }
 
     QFrame *frame = new QFrame(m_tabWidget);
-    QGridLayout *layout = new QGridLayout(frame,
-                             6, 2,
-                             10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    QGridLayout *layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
-    layout->addWidget(new QLabel(i18n("Filename:"), frame), 0, 0);
+    layout->addWidget(new QLabel(tr("Filename:"), frame), 0, 0);
     layout->addWidget(new QLabel(doc->getTitle(), frame), 0, 1);
 
-    layout->addWidget(new QLabel(i18n("Formal duration (to end marker):"), frame), 1, 0);
+    layout->addWidget(new QLabel(tr("Formal duration (to end marker):"), frame), 1, 0);
     timeT d = comp.getEndMarker();
     RealTime rtd = comp.getElapsedRealTime(d);
     layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 1, 1);
 
-    layout->addWidget(new QLabel(i18n("Playing duration:"), frame), 2, 0);
+    layout->addWidget(new QLabel(tr("Playing duration:"), frame), 2, 0);
     d = comp.getDuration();
     rtd = comp.getElapsedRealTime(d);
     layout->addWidget(new QLabel(durationToString(comp, 0, d, rtd), frame), 2, 1);
 
-    layout->addWidget(new QLabel(i18n("Tracks:"), frame), 3, 0);
-    layout->addWidget(new QLabel(i18n("%1 used, %2 total")
-                                 .arg(usedTracks.size())
-                                 .arg(comp.getNbTracks()),
+    layout->addWidget(new QLabel(tr("Tracks:"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("%1 used, %2 total")
+                                  .arg(usedTracks.size())
+                                  .arg(comp.getNbTracks()),
                                  frame), 3, 1);
 
-    layout->addWidget(new QLabel(i18n("Segments:"), frame), 4, 0);
-    layout->addWidget(new QLabel(i18n("%1 MIDI, %2 audio, %3 total")
-                                 .arg(internalSegments)
-                                 .arg(audioSegments)
-                                 .arg(internalSegments + audioSegments),
+    layout->addWidget(new QLabel(tr("Segments:"), frame), 4, 0);
+    layout->addWidget(new QLabel(tr("%1 MIDI, %2 audio, %3 total")
+                                  .arg(internalSegments)
+                                  .arg(audioSegments)
+                                  .arg(internalSegments + audioSegments),
                                  frame), 4, 1);
 
     layout->setRowStretch(5, 2);
 
-    addTab(frame, i18n("Statistics"));
+    addTab(frame, tr("Statistics"));
 
     frame = new QFrame(m_tabWidget);
-    layout = new QGridLayout(frame, 1, 1, 10, 5);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
 
-    QTable *table = new QTable(1, 11, frame, "Segment Table");
-    table->setSelectionMode(QTable::NoSelection);
-    table->setSorting(true);
-    table->horizontalHeader()->setLabel(0, i18n("Type"));
-    table->horizontalHeader()->setLabel(1, i18n("Track"));
-    table->horizontalHeader()->setLabel(2, i18n("Label"));
-    table->horizontalHeader()->setLabel(3, i18n("Time"));
-    table->horizontalHeader()->setLabel(4, i18n("Duration"));
-    table->horizontalHeader()->setLabel(5, i18n("Events"));
-    table->horizontalHeader()->setLabel(6, i18n("Polyphony"));
-    table->horizontalHeader()->setLabel(7, i18n("Repeat"));
-    table->horizontalHeader()->setLabel(8, i18n("Quantize"));
-    table->horizontalHeader()->setLabel(9, i18n("Transpose"));
-    table->horizontalHeader()->setLabel(10, i18n("Delay"));
-    table->setNumRows(audioSegments + internalSegments);
+    QTableWidget *table = new QTableWidget(1, 11, frame); // , "Segment Table"
+    table->setObjectName("StyledTable");
+    table->setAlternatingRowColors(true);
+    //table->setSelectionMode(QTableWidget::NoSelection);
+    table->setSelectionBehavior( QAbstractItemView::SelectRows );
+    table->setSelectionMode( QAbstractItemView::SingleSelection );
+    table->setSortingEnabled(true);
+    
+    table->setHorizontalHeaderItem( 0, new QTableWidgetItem( tr("Type")));    // p1=column
+    table->setHorizontalHeaderItem( 1, new QTableWidgetItem( tr("Track")));
+    table->setHorizontalHeaderItem( 2, new QTableWidgetItem( tr("Label")));
+    table->setHorizontalHeaderItem( 3, new QTableWidgetItem( tr("Time")));
+    table->setHorizontalHeaderItem( 4, new QTableWidgetItem( tr("Duration")));
+    table->setHorizontalHeaderItem( 5, new QTableWidgetItem( tr("Events")));
+    table->setHorizontalHeaderItem( 6, new QTableWidgetItem( tr("Polyphony")));
+    table->setHorizontalHeaderItem( 7, new QTableWidgetItem( tr("Repeat")));
+    table->setHorizontalHeaderItem( 8, new QTableWidgetItem( tr("Quantize")));
+    table->setHorizontalHeaderItem( 9, new QTableWidgetItem( tr("Transpose")));
+    table->setHorizontalHeaderItem( 10, new QTableWidgetItem( tr("Delay")));
+    
+    //table->setNumRows(audioSegments + internalSegments);
+    table->setRowCount(audioSegments + internalSegments);
 
     table->setColumnWidth(0, 50);
     table->setColumnWidth(1, 50);
@@ -194,7 +190,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         table->setItem(i, 0, new SegmentDataItem
                        (table,
                         s->getType() == Segment::Audio ?
-                        i18n("Audio") : i18n("MIDI")));
+                        tr("Audio") : tr("MIDI")));
 
         table->setItem(i, 1, new SegmentDataItem
                        (table,
@@ -206,9 +202,10 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         colourPixmap.fill(GUIPalette::convertColour(colour));
 
         table->setItem(i, 2,
-                       new QTableItem(table, QTableItem::Never,
-                                      strtoqstr(s->getLabel()),
-                                      colourPixmap));
+                       new QTableWidgetItem( colourPixmap, strtoqstr(s->getLabel())) );
+//        new QTableWidgetItem(table, QTableWidgetItem::Never,
+    //                         strtoqstr(s->getLabel()),
+        //                               colourPixmap));
 
         table->setItem(i, 3, new SegmentDataItem
                        (table,
@@ -255,7 +252,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
         table->setItem(i, 7, new SegmentDataItem
                        (table,
-                        s->isRepeating() ? i18n("Yes") : i18n("No")));
+                        s->isRepeating() ? tr("Yes") : tr("No")));
 
         timeT discard;
 
@@ -268,7 +265,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         } else {
             table->setItem(i, 8, new SegmentDataItem
                            (table,
-                            i18n("Off")));
+                            tr("Off")));
         }
 
         table->setItem(i, 9, new SegmentDataItem
@@ -299,7 +296,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
         } else {
             table->setItem(i, 10, new SegmentDataItem
                            (table,
-                            i18n("None")));
+                            tr("None")));
         }
 
         ++i;
@@ -307,7 +304,7 @@ DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenGUIDoc *d
 
     layout->addWidget(table, 0, 0);
 
-    addTab(frame, i18n("Segment Summary"));
+    addTab(frame, tr("Segment Summary"));
 
 }
 
@@ -318,42 +315,6 @@ DocumentMetaConfigurationPage::apply()
 
     m_doc->slotDocumentModified();
 }
-
-/* hjj: WHAT TO DO WITH THIS ?
-void
-DocumentMetaConfigurationPage::selectMetadata(QString name)
-{
-    std::vector<PropertyName> fixedKeys =
-        CompositionMetadataKeys::getFixedKeys();
-    std::vector<PropertyName>::iterator i = fixedKeys.begin();
-
-    for (QListViewItem *item = m_fixed->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        if (i == fixedKeys.end())
-            break;
-
-        if (name == strtoqstr(i->getName())) {
-            m_fixed->setSelected(item, true);
-            m_fixed->setCurrentItem(item);
-            return ;
-        }
-
-        ++i;
-    }
-
-    for (QListViewItem *item = m_metadata->firstChild();
-            item != 0; item = item->nextSibling()) {
-
-        if (item->text(0).lower() != name)
-            continue;
-
-        m_metadata->setSelected(item, true);
-        m_metadata->setCurrentItem(item);
-        return ;
-    }
-}
-*/
 
 }
 #include "DocumentMetaConfigurationPage.moc"

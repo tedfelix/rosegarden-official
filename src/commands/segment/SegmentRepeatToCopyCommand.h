@@ -19,10 +19,10 @@
 #ifndef _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
 #define _RG_SEGMENTREPEATTOCOPYCOMMAND_H_
 
-#include <kcommand.h>
+#include "document/Command.h"
 #include <vector>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
@@ -32,8 +32,10 @@ class Segment;
 class Composition;
 
 
-class SegmentRepeatToCopyCommand : public KNamedCommand
+class SegmentRepeatToCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentRepeatToCopyCommand)
+
 public:
     SegmentRepeatToCopyCommand(Segment *segment);
     virtual ~SegmentRepeatToCopyCommand();

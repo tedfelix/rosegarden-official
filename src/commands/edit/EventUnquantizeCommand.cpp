@@ -18,12 +18,11 @@
 
 #include "EventUnquantizeCommand.h"
 
-#include <klocale.h>
 #include "base/Quantizer.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
-#include <qstring.h>
+#include <QString>
 
 
 namespace Rosegarden
@@ -33,7 +32,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
         Quantizer *quantizer) :
-        BasicCommand(i18n("Unquantize Events"), segment, startTime, endTime,
+        BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
                      true),  // bruteForceRedo
         m_quantizer(quantizer),
         m_selection(0)
@@ -44,7 +43,7 @@ EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
 EventUnquantizeCommand::EventUnquantizeCommand(
     EventSelection &selection,
     Quantizer *quantizer) :
-        BasicCommand(i18n("Unquantize Events"),
+        BasicCommand(tr("Unquantize Events"),
                      selection.getSegment(),
                      selection.getStartTime(),
                      selection.getEndTime(),
@@ -67,17 +66,17 @@ EventUnquantizeCommand::getGlobalName(Quantizer *)
         if (quantizer) {
     	switch (quantizer->getType()) {
     	case Quantizer::PositionQuantize:
-    	    return i18n("Position &Quantize");
+    	    return tr("Position &Quantize");
     	case Quantizer::UnitQuantize:
-    	    return i18n("Unit &Quantize");
+    	    return tr("Unit &Quantize");
     	case Quantizer::NoteQuantize:
-    	    return i18n("Note &Quantize");
+    	    return tr("Note &Quantize");
     	case Quantizer::LegatoQuantize:
-    	    return i18n("Smoothing &Quantize");
+    	    return tr("Smoothing &Quantize");
     	}
         }
     */ 
-    return i18n("&Quantize...");
+    return tr("&Quantize...");
 }
 
 void

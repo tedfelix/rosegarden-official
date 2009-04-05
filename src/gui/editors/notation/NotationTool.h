@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,17 +18,23 @@
 #ifndef _RG_NOTATIONTOOL_H_
 #define _RG_NOTATIONTOOL_H_
 
-#include "gui/general/EditTool.h"
+#include <QObject>
+#include <QString>
 
+#include "gui/general/BaseTool.h"
+#include "gui/general/ActionFileClient.h"
 
-class QString;
+class QMenu;
+class QAction;
+
 
 
 namespace Rosegarden
 {
 
-class NotationView;
-
+class NotationWidget;
+class NotationMouseEvent;
+class NotationScene;
 
 /**
  * Notation tool base class.
@@ -46,39 +51,76 @@ class NotationView;
  * NotationView window is created. This is because menu creation is
  * slow, and the fact that a tool can trigger the setting of another
  * tool through a menu choice). This is maintained with the
- * NotationToolBox class This means we can't rely on the ctor/dtor to
+ * NotationToolBox class. This means we can't rely on the ctor/dtor to
  * perform setting up, like mouse cursor changes for instance. Use the
  * ready() and stow() method for this.
  *
  * @see NotationView#setTool()
  * @see NotationToolBox
  */
-class NotationTool : public EditTool
+class NotationTool : public BaseTool, public ActionFileClient
 {
+    Q_OBJECT
+
     friend class NotationToolBox;
 
 public:
     virtual ~NotationTool();
 
     /**
-     * Is called by NotationView when the tool is set as current
+     * Is called by the view when the tool is set as current.
      * Add any setup here
      */
     virtual void ready();
+
+    /**
+     * Is called by the view when the tool is put away.
+     * Add any cleanup here
+     */
+    virtual void stow();
+
+    enum FollowMode {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+    virtual void handleMidButtonPress(const NotationMouseEvent *);
+    virtual void handleRightButtonPress(const NotationMouseEvent *);
+    virtual void handleMouseRelease(const NotationMouseEvent *);
+    virtual void handleMouseDoubleClick(const NotationMouseEvent *);
+    virtual FollowMode handleMouseMove(const NotationMouseEvent *);
+
 
 protected:
     /**
      * Create a new NotationTool
      *
-     * \a menuName : the name of the menu defined in the XML rc file
+     * \a rcFileName : the name of the XML rc file
+     * \a menuName : the name of the menu defined in the rc file
      */
-    NotationTool(const QString& menuName, NotationView*);
+    NotationTool(QString rcFileName, QString menuName, NotationWidget *);
+
+    /**
+     * Create a new NotationTool without a menu
+     */
+    NotationTool(NotationWidget *);
+
+    virtual void createMenu();
+    virtual bool hasMenu() { return m_menuName != ""; }
+
+    void setScene(NotationScene *scene) { m_scene = scene; }
+
+    virtual void invokeInParentView(QString actionName);
+    virtual QAction *findActionInParentView(QString actionName);
 
     //--------------- Data members ---------------------------------
 
-    NotationView* m_nParentView;
+    NotationWidget *m_widget;
+    NotationScene *m_scene;
+    QString m_rcFileName;
 };
-
 
 
 }

@@ -15,11 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#ifdef NOT_JUST_NOW //!!!
 
 #include "NotationEraser.h"
-#include <kapplication.h>
+#include <QApplication>
 
-#include <klocale.h>
+#include "misc/Strings.h"
 #include "document/ConfigGroups.h"
 #include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
@@ -27,10 +28,10 @@
 #include "NotationTool.h"
 #include "NotationView.h"
 #include "NotePixmapFactory.h"
-#include <kaction.h>
-#include <kconfig.h>
-#include <qiconset.h>
-#include <qstring.h>
+#include <QAction>
+#include <QSettings>
+#include <QIcon>
+#include <QString>
 
 
 namespace Rosegarden
@@ -40,28 +41,21 @@ NotationEraser::NotationEraser(NotationView* view)
         : NotationTool("NotationEraser", view),
         m_collapseRest(false)
 {
-    KConfig *config = kapp->config();
-    config->setGroup(NotationViewConfigGroup);
-    m_collapseRest = config->readBoolEntry("collapse", false);
+    QSettings settings;
+    settings.beginGroup( NotationViewConfigGroup );
 
-    new KToggleAction(i18n("Collapse rests after erase"), 0, this,
-                      SLOT(slotToggleRestCollapse()), actionCollection(),
-                      "toggle_rest_collapse");
+    m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
 
-    QIconSet icon
-    (NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                                  makeToolbarPixmap("crotchet")));
-    new KAction(i18n("Switch to Insert Tool"), icon, 0, this,
-                SLOT(slotInsertSelected()), actionCollection(),
-                "insert");
+    QAction *a = createAction("toggle_rest_collapse", SLOT(slotToggleRestCollapse()));
+    a->setCheckable(true);
+    a->setChecked(m_collapseRest);
 
-    icon = QIconSet(NotePixmapFactory::toQPixmap(NotePixmapFactory::
-                    makeToolbarPixmap("select")));
-    new KAction(i18n("Switch to Select Tool"), icon, 0, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("insert", SLOT(slotInsertSelected()));
 
     createMenu("notationeraser.rc");
+
+    settings.endGroup();
 }
 
 void NotationEraser::ready()
@@ -99,10 +93,11 @@ void NotationEraser::slotInsertSelected()
 
 void NotationEraser::slotSelectSelected()
 {
-    m_parentView->actionCollection()->action("select")->activate();
+    invokeInParentView("select");
 }
 
 const QString NotationEraser::ToolName   = "notationeraser";
 
 }
 #include "NotationEraser.moc"
+#endif

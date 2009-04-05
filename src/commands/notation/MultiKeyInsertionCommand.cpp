@@ -22,8 +22,8 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "KeyInsertionCommand.h"
-#include <qstring.h>
-#include "document/RosegardenGUIDoc.h"
+#include <QString>
+#include "document/RosegardenDocument.h"
 #include "base/Studio.h"
 #include "misc/Debug.h"
 
@@ -31,14 +31,14 @@
 namespace Rosegarden
 {
 
-MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenGUIDoc* doc,
+MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument* doc,
         timeT time,
         Key key,
         bool convert,
         bool transpose,
         bool transposeKey,
 	bool ignorePercussion) :
-        KMacroCommand(getGlobalName(&key))
+        MacroCommand(getGlobalName(&key))
 {
    Composition &c = doc->getComposition();
    Studio &s = doc->getStudio();

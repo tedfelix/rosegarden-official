@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,38 +15,48 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_NOTESMENUADDFINGERINGMARKCOMMAND_H_
-#define _RG_NOTESMENUADDFINGERINGMARKCOMMAND_H_
+#ifndef _RG_ADDFINGERINGMARKCOMMAND_H_
+#define _RG_ADDFINGERINGMARKCOMMAND_H_
 
 #include "document/BasicSelectionCommand.h"
 #include <string>
-#include <qstring.h>
+#include <vector>
+#include <QString>
 
-
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
 class EventSelection;
-
+class CommandRegistry;
 
 class AddFingeringMarkCommand : public BasicSelectionCommand
 {
-public:
-    AddFingeringMarkCommand(std::string text,
-                                     EventSelection &selection) :
-        BasicSelectionCommand(getGlobalName(), selection, true),
-        m_selection(&selection), m_text(text) { }
+    Q_DECLARE_TR_FUNCTIONS(AddFingeringMarkCommand)
 
-    static QString getGlobalName(QString fingering = "");
+public:
+    AddFingeringMarkCommand(std::string fingering,
+                            EventSelection &selection) :
+        BasicSelectionCommand(getGlobalName(fingering), selection, true),
+        m_selection(&selection), m_fingering(fingering) { }
+
+    static QString getGlobalName(std::string fingering = "");
+    static QString getActionName(std::string fingering = "");
+
+    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+
+    static std::vector<std::string> getStandardFingerings();
+
+    static void registerCommand(CommandRegistry *r);
 
 protected:
     virtual void modifySegment();
 
 private:
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)
-    std::string m_text;
+    std::string m_fingering;
 };
 
 

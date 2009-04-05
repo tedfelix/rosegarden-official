@@ -26,64 +26,88 @@
 #include "base/Studio.h"
 #include "commands/studio/ModifyDeviceMappingCommand.h"
 #include "commands/studio/ModifyInstrumentMappingCommand.h"
-#include "document/MultiViewCommandHistory.h"
-#include "document/RosegardenGUIDoc.h"
-#include <kcombobox.h>
-#include <kcommand.h>
-#include <kdialogbase.h>
-#include <klocale.h>
-#include <qbuttongroup.h>
-#include <qgroupbox.h>
-#include <qlabel.h>
-#include <qradiobutton.h>
-#include <qvbox.h>
-#include <qwidget.h>
+#include "document/CommandHistory.h"
+#include "document/RosegardenDocument.h"
+#include <QComboBox>
+#include "document/Command.h"
+#include <QDialog>
+#include <QDialogButtonBox>
+#include <QGroupBox>
+#include <QLabel>
+#include <QRadioButton>
+#include <QWidget>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
-        RosegardenGUIDoc *doc):
-        KDialogBase(parent, "", true, i18n("Remap Instrument assigments..."),
-                    Ok | Apply | Cancel),
+        RosegardenDocument *doc):
+        QDialog(parent),
         m_doc(doc)
 {
-    QVBox *vBox = makeVBoxMainWidget();
+    setModal(true);
+    setWindowTitle(tr("Remap Instrument assigments..."));
 
-    m_buttonGroup = new QButtonGroup(1, Qt::Horizontal,
-                                     i18n("Device or Instrument"),
-                                     vBox);
-
-    new QLabel(i18n("Remap Tracks by all Instruments on a Device or by single Instrument"), m_buttonGroup);
-    m_deviceButton = new QRadioButton(i18n("Device"), m_buttonGroup);
-    m_instrumentButton = new QRadioButton(i18n("Instrument"), m_buttonGroup);
+    QGridLayout *metagrid = new QGridLayout;
+    setLayout(metagrid);
+    QWidget *vBox = new QWidget(this);
+    QVBoxLayout *vBoxLayout = new QVBoxLayout;
+    metagrid->addWidget(vBox, 0, 0);
 
 
-    connect(m_buttonGroup, SIGNAL(released(int)),
-            this, SLOT(slotRemapReleased(int)));
+    QGroupBox *buttonGroup = new QGroupBox(tr("Device or Instrument"));
+    QVBoxLayout *buttonGroupLayout = new QVBoxLayout;
+    vBoxLayout->addWidget(buttonGroup);
 
-    QGroupBox *groupBox = new QGroupBox(2, Qt::Horizontal,
-                                        i18n("Choose Source and Destination"),
-                                        vBox);
+    buttonGroupLayout->addWidget(new QLabel(tr("Remap Tracks by all "
+                            "Instruments on a Device or by single Instrument")));
+    m_deviceButton = new QRadioButton(tr("Device"));
+    buttonGroupLayout->addWidget(m_deviceButton);
+    m_instrumentButton = new QRadioButton(tr("Instrument"));
+    buttonGroupLayout->addWidget(m_instrumentButton);
+    buttonGroup->setLayout(buttonGroupLayout);
 
-    new QLabel(i18n("From"), groupBox);
-    new QLabel(i18n("To"), groupBox);
-    m_fromCombo = new KComboBox(groupBox);
-    m_toCombo = new KComboBox(groupBox);
+    connect(m_deviceButton, SIGNAL(released()),
+            this, SLOT(slotRemapReleased()));
+    connect(m_instrumentButton, SIGNAL(released()),
+            this, SLOT(slotRemapReleased()));
 
-    m_buttonGroup->setButton(0);
-    populateCombo(0);
+    QGroupBox *groupBox = new QGroupBox(tr("Choose Source and Destination"));
+    QGridLayout *groupBoxLayout = new QGridLayout;
+    vBoxLayout->addWidget(groupBox);
+
+    groupBoxLayout->addWidget(new QLabel(tr("From")), 0, 0);
+    groupBoxLayout->addWidget(new QLabel(tr("To")), 0, 1);
+    m_fromCombo = new QComboBox(groupBox);
+    groupBoxLayout->addWidget(m_fromCombo, 1, 0);
+    m_toCombo = new QComboBox(groupBox);
+    groupBoxLayout->addWidget(m_toCombo, 1, 1);
+    groupBox->setLayout(groupBoxLayout);
+
+    vBox->setLayout(vBoxLayout);
+
+    /// m_buttonGroup->setButton(0);
+    m_deviceButton->setChecked(true);
+    populateCombo();
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
+                                                       QDialogButtonBox::Apply |
+                                                       QDialogButtonBox::Cancel);
+    metagrid->addWidget(buttonBox, 1, 0);
+    metagrid->setRowStretch(0, 10);
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
 void
-RemapInstrumentDialog::populateCombo(int id)
+RemapInstrumentDialog::populateCombo()
 {
     m_fromCombo->clear();
     m_toCombo->clear();
     Studio *studio = &m_doc->getStudio();
 
-    if (id == 0) {
+    if (m_deviceButton->isChecked()) {
         DeviceList *devices = studio->getDevices();
         DeviceListIterator it;
         m_devices.clear();
@@ -95,39 +119,39 @@ RemapInstrumentDialog::populateCombo(int id)
             if (md) {
                 if (md->getDirection() == MidiDevice::Play) {
                     m_devices.push_back(*it);
-                    m_fromCombo->insertItem(strtoqstr((*it)->getName()));
-                    m_toCombo->insertItem(strtoqstr((*it)->getName()));
+                    m_fromCombo->addItem(strtoqstr((*it)->getName()));
+                    m_toCombo->addItem(strtoqstr((*it)->getName()));
                 }
             } else {
                 SoftSynthDevice *sd =
                     dynamic_cast<SoftSynthDevice *>(*it);
                 if (sd) {
                     m_devices.push_back(*it);
-                    m_fromCombo->insertItem(strtoqstr((*it)->getName()));
-                    m_toCombo->insertItem(strtoqstr((*it)->getName()));
+                    m_fromCombo->addItem(strtoqstr((*it)->getName()));
+                    m_toCombo->addItem(strtoqstr((*it)->getName()));
                 }
             }
         }
 
         if (m_devices.size() == 0) {
-            m_fromCombo->insertItem(i18n("<no devices>"));
-            m_toCombo->insertItem(i18n("<no devices>"));
+            m_fromCombo->addItem(tr("<no devices>"));
+            m_toCombo->addItem(tr("<no devices>"));
         }
     } else {
         m_instruments = studio->getPresentationInstruments();
         InstrumentList::iterator it = m_instruments.begin();
 
         for (; it != m_instruments.end(); it++) {
-            m_fromCombo->insertItem(strtoqstr((*it)->getPresentationName()));
-            m_toCombo->insertItem(strtoqstr((*it)->getPresentationName()));
+            m_fromCombo->addItem(strtoqstr((*it)->getPresentationName()));
+            m_toCombo->addItem(strtoqstr((*it)->getPresentationName()));
         }
     }
 }
 
 void
-RemapInstrumentDialog::slotRemapReleased(int id)
+RemapInstrumentDialog::slotRemapReleased()
 {
-    populateCombo(id);
+    populateCombo();
 }
 
 void
@@ -140,37 +164,25 @@ RemapInstrumentDialog::slotOk()
 void
 RemapInstrumentDialog::slotApply()
 {
-    if (m_buttonGroup->id(m_buttonGroup->selected()) == 0) // devices
+    if (m_deviceButton->isChecked()) // devices
     {
         ModifyDeviceMappingCommand *command =
             new ModifyDeviceMappingCommand
             (m_doc,
-             m_devices[m_fromCombo->currentItem()]->getId(),
-             m_devices[m_toCombo->currentItem()]->getId());
-        addCommandToHistory(command);
+             m_devices[m_fromCombo->currentIndex()]->getId(),
+             m_devices[m_toCombo->currentIndex()]->getId());
+        CommandHistory::getInstance()->addCommand(command);
     } else // instruments
     {
         ModifyInstrumentMappingCommand *command =
             new ModifyInstrumentMappingCommand
             (m_doc,
-             m_instruments[m_fromCombo->currentItem()]->getId(),
-             m_instruments[m_toCombo->currentItem()]->getId());
-        addCommandToHistory(command);
+             m_instruments[m_fromCombo->currentIndex()]->getId(),
+             m_instruments[m_toCombo->currentIndex()]->getId());
+        CommandHistory::getInstance()->addCommand(command);
     }
 
     emit applyClicked();
-}
-
-void
-RemapInstrumentDialog::addCommandToHistory(KCommand *command)
-{
-    getCommandHistory()->addCommand(command);
-}
-
-MultiViewCommandHistory*
-RemapInstrumentDialog::getCommandHistory()
-{
-    return m_doc->getCommandHistory();
 }
 
 }

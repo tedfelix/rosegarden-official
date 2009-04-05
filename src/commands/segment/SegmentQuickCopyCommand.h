@@ -19,9 +19,9 @@
 #ifndef _RG_SEGMENTQUICKCOPYCOMMAND_H_
 #define _RG_SEGMENTQUICKCOPYCOMMAND_H_
 
-#include <kcommand.h>
-#include <qstring.h>
-#include <klocale.h>
+#include "document/Command.h"
+#include <QString>
+#include <QCoreApplication>
 
 
 
@@ -33,8 +33,10 @@ class Segment;
 class Composition;
 
 
-class SegmentQuickCopyCommand : public KNamedCommand
+class SegmentQuickCopyCommand : public NamedCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(SegmentQuickCopyCommand)
+
 public:
     SegmentQuickCopyCommand(Segment *segment);
     virtual ~SegmentQuickCopyCommand();
@@ -45,7 +47,7 @@ public:
     // return pointer to new copy
     Segment* getCopy() { return m_segment; }
 
-    static QString getGlobalName() { return i18n("Quick-Copy Segment"); }
+    static QString getGlobalName() { return tr("Quick-Copy Segment"); }
 
 private:
     Composition *m_composition;

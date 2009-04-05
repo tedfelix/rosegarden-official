@@ -19,14 +19,14 @@
 #include "RosegardenParameterBox.h"
 
 #include "RosegardenParameterArea.h"
-#include <ktabwidget.h>
-#include <qfont.h>
-#include <qframe.h>
-#include <qscrollview.h>
-#include <qstring.h>
-#include <qvbox.h>
-#include <qwidget.h>
-#include <qwidgetstack.h>
+#include <QTabWidget>
+#include <QFont>
+#include <QFrame>
+#include <QScrollArea>
+#include <QString>
+#include <QWidget>
+#include <QVBoxLayout>
+#include <QStackedWidget>
 
 
 namespace Rosegarden

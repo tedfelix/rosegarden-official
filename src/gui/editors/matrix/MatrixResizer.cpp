@@ -15,11 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-
 #include "MatrixResizer.h"
 
-#include <klocale.h>
-#include <kstddirs.h>
 #include "base/Event.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -27,273 +24,234 @@
 #include "base/ViewElement.h"
 #include "commands/matrix/MatrixModifyCommand.h"
 #include "commands/notation/NormalizeRestsCommand.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/RosegardenCanvasView.h"
+#include "document/CommandHistory.h"
 #include "MatrixElement.h"
-#include "MatrixStaff.h"
+#include "MatrixScene.h"
 #include "MatrixTool.h"
-#include "MatrixView.h"
-#include <kaction.h>
-#include <kglobal.h>
-#include <qiconset.h>
-#include <qpoint.h>
-#include <qstring.h>
+#include "MatrixWidget.h"
+#include "MatrixViewSegment.h"
+#include "MatrixMouseEvent.h"
 #include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
 
-MatrixResizer::MatrixResizer(MatrixView* parent)
-        : MatrixTool("MatrixResizer", parent),
-        m_currentElement(0),
-        m_currentStaff(0)
+MatrixResizer::MatrixResizer(MatrixWidget *parent) :
+    MatrixTool("matrixresizer.rc", "MatrixResizer", parent),
+    m_currentElement(0),
+    m_currentViewSegment(0)
 {
-    QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-    QCanvasPixmap pixmap(pixmapDir + "/toolbar/select.xpm");
-    QIconSet icon = QIconSet(pixmap);
-
-    new KAction(i18n("Switch to Select Tool"), icon, Key_F2, this,
-                SLOT(slotSelectSelected()), actionCollection(),
-                "select");
-
-    new KAction(i18n("Switch to Draw Tool"), "pencil", Key_F3, this,
-                SLOT(slotDrawSelected()), actionCollection(),
-                "draw");
-
-    new KAction(i18n("Switch to Erase Tool"), "eraser", Key_F4, this,
-                SLOT(slotEraseSelected()), actionCollection(),
-                "erase");
-
-    new KAction(i18n("Switch to Move Tool"), "move", Key_F5, this,
-                SLOT(slotMoveSelected()), actionCollection(),
-                "move");
-
-    createMenu("matrixresizer.rc");
+    createAction("select", SLOT(slotSelectSelected()));
+    createAction("draw", SLOT(slotDrawSelected()));
+    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("move", SLOT(slotMoveSelected()));
+    
+    createMenu();
 }
 
-void MatrixResizer::handleEventRemoved(Event *event)
+void
+MatrixResizer::handleEventRemoved(Event *event)
 {
     if (m_currentElement && m_currentElement->event() == event) {
         m_currentElement = 0;
     }
 }
 
-void MatrixResizer::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement* el)
+void
+MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixResizer::handleLeftButtonPress() : el = "
-    << el << endl;
+                 << e->element << endl;
 
-    if (!el)
-        return ; // nothing to erase
+    if (!e->element) return;
 
-    m_currentElement = dynamic_cast<MatrixElement*>(el);
-    m_currentStaff = m_mParentView->getStaff(staffNo);
+    m_currentViewSegment = e->viewSegment;
+    m_currentElement = e->element;
 
-    if (m_currentElement) {
+    // Add this element and allow movement
+    //
+    EventSelection* selection = m_scene->getSelection();
+    Event *event = m_currentElement->event();
 
-        // Add this element and allow movement
-        //
-        EventSelection* selection = m_mParentView->getCurrentSelection();
+    if (selection) {
+        EventSelection *newSelection;
 
-        if (selection) {
-            EventSelection *newSelection;
-
-            if ((e->state() & Qt::ShiftButton) ||
-                    selection->contains(m_currentElement->event()))
-                newSelection = new EventSelection(*selection);
-            else
-                newSelection = new EventSelection(m_currentStaff->getSegment());
-
-            newSelection->addEvent(m_currentElement->event());
-            m_mParentView->setCurrentSelection(newSelection, true, true);
-            m_mParentView->canvas()->update();
+        if ((e->modifiers & Qt::ShiftModifier) ||
+            selection->contains(event)) {
+            newSelection = new EventSelection(*selection);
         } else {
-            m_mParentView->setSingleSelectedEvent(m_currentStaff->getSegment(),
-                                                  m_currentElement->event(),
-                                                  true);
-            m_mParentView->canvas()->update();
+            newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
+
+        newSelection->addEvent(event);
+        m_scene->setSelection(newSelection, true);
+//        m_mParentView->canvas()->update();
+    } else {
+        m_scene->setSingleSelectedEvent(m_currentViewSegment,
+                                        m_currentElement,
+                                        true);
+//            m_mParentView->canvas()->update();
     }
 }
 
-int MatrixResizer::handleMouseMove(timeT newTime,
-                                   int,
-                                   QMouseEvent *e)
+MatrixResizer::FollowMode
+MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
 {
+    if (!e) return NoFollow;
+
     setBasicContextHelp();
 
-    if (!m_currentElement || !m_currentStaff)
-        return RosegardenCanvasView::NoFollow;
+    if (!m_currentElement || !m_currentViewSegment) return NoFollow;
 
-    if (getSnapGrid().getSnapSetting() != SnapGrid::NoSnap) {
-        setContextHelp(i18n("Hold Shift to avoid snapping to beat grid"));
+    if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
+        setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
     } else {
         clearContextHelp();
     }
 
-    // For the resizer we normally don't want to use the official
-    // time, because it's snapped to the left and we want to snap in
-    // the closest direction instead
-
-    if (e) {
-        QPoint p = m_mParentView->inverseMapPoint(e->pos());
-        newTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+    // snap in the closest direction
+    timeT snapTime = e->snappedLeftTime;
+    if (e->snappedRightTime - e->time < e->time - e->snappedLeftTime) {
+        snapTime = e->snappedRightTime;
     }
 
-    timeT newDuration = newTime - m_currentElement->getViewAbsoluteTime();
+    timeT newDuration = snapTime - m_currentElement->getViewAbsoluteTime();
+    timeT durationDiff = newDuration - m_currentElement->getViewDuration();
 
-    if (newDuration == 0) {
-        newDuration += getSnapGrid().getSnapTime
-                       (m_currentElement->getViewAbsoluteTime());
-    }
+    EventSelection* selection = m_scene->getSelection();
+    if (!selection || selection->getAddedEvents() == 0) return NoFollow;
 
-    int width = getSnapGrid().getRulerScale()->getXForTime
-        (m_currentElement->getViewAbsoluteTime() + newDuration)
-        - m_currentElement->getLayoutX() + 1;
-
-    int initialWidth = m_currentElement->getWidth();
-
-    int diffWidth = initialWidth - width;
-
-    EventSelection* selection = m_mParentView->getCurrentSelection();
     EventSelection::eventcontainer::iterator it =
         selection->getSegmentEvents().begin();
 
-    MatrixElement *element = 0;
     for (; it != selection->getSegmentEvents().end(); it++) {
-        element = m_currentStaff->getElement(*it);
 
-        if (element) {
-            int newWidth = element->getWidth() - diffWidth;
-
-            MATRIX_DEBUG << "MatrixResizer::handleMouseMove - "
-            << "new width = " << newWidth << endl;
-
-            element->setWidth(newWidth);
-            m_currentStaff->positionElement(element);
+        MatrixElement *element = 0;
+        ViewElementList::iterator vi = m_currentViewSegment->findEvent(*it);
+        if (vi != m_currentViewSegment->getViewElementList()->end()) {
+            element = static_cast<MatrixElement *>(*vi);
         }
+        if (!element) continue;
+
+        timeT t = element->getViewAbsoluteTime();
+        timeT d = element->getViewDuration();
+        
+        d = d + durationDiff;
+        if (d < 0) {
+            t = t + d;
+            d = -d;
+        } else if (d == 0) {
+            d = getSnapGrid()->getSnapTime(t);
+        }
+
+        element->reconfigure(t, d);
+//            m_currentStaff->positionElement(element);
+//        }
     }
 
-    m_mParentView->canvas()->update();
-    return RosegardenCanvasView::FollowHorizontal;
+//    m_mParentView->canvas()->update();
+    return FollowHorizontal;
 }
 
-void MatrixResizer::handleMouseRelease(timeT newTime,
-                                       int,
-                                       QMouseEvent *e)
+void
+MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
 {
-    if (!m_currentElement || !m_currentStaff)
-        return ;
+    if (!e || !m_currentElement || !m_currentViewSegment) return;
 
-    // For the resizer we don't want to use the time passed in,
-    // because it's snapped to the left and we want to snap in the
-    // closest direction instead
-
-    if (e) {
-        QPoint p = m_mParentView->inverseMapPoint(e->pos());
-        newTime = getSnapGrid().snapX(p.x(), SnapGrid::SnapEither);
+    // snap in the closest direction
+    timeT snapTime = e->snappedLeftTime;
+    if (e->snappedRightTime - e->time < e->time - e->snappedLeftTime) {
+        snapTime = e->snappedRightTime;
     }
 
-    timeT diffDuration =
-        newTime - m_currentElement->getViewAbsoluteTime() -
-        m_currentElement->getViewDuration();
+    timeT newDuration = snapTime - m_currentElement->getViewAbsoluteTime();
+    timeT durationDiff = newDuration - m_currentElement->getViewDuration();
 
-    EventSelection *selection = m_mParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
+    if (!selection || selection->getAddedEvents() == 0) return;
 
-    if (selection->getAddedEvents() == 0)
-        return ;
-    else {
-        QString commandLabel = i18n("Resize Event");
+    QString commandLabel = tr("Resize Event");
+    if (selection->getAddedEvents() > 1) commandLabel = tr("Resize Events");
 
-        if (selection->getAddedEvents() > 1)
-            commandLabel = i18n("Resize Events");
+    MacroCommand *macro = new MacroCommand(commandLabel);
 
-        KMacroCommand *macro = new KMacroCommand(commandLabel);
+    EventSelection::eventcontainer::iterator it =
+        selection->getSegmentEvents().begin();
 
-        EventSelection::eventcontainer::iterator it =
-            selection->getSegmentEvents().begin();
+    Segment &segment = m_currentViewSegment->getSegment();
 
-        Segment &segment = m_currentStaff->getSegment();
+    EventSelection *newSelection = new EventSelection(segment);
 
-        EventSelection *newSelection = new EventSelection(segment);
+    timeT normalizeStart = selection->getStartTime();
+    timeT normalizeEnd = selection->getEndTime();
 
-        timeT normalizeStart = selection->getStartTime();
-        timeT normalizeEnd = selection->getEndTime();
+    for (; it != selection->getSegmentEvents().end(); it++) {
 
-        for (; it != selection->getSegmentEvents().end(); it++) {
-            timeT eventTime = (*it)->getAbsoluteTime();
-            timeT eventDuration = (*it)->getDuration() + diffDuration;
+        timeT t = (*it)->getAbsoluteTime();
+        timeT d = (*it)->getDuration();
 
+        MATRIX_DEBUG << "MatrixResizer::handleMouseRelease - "
+                     << "Time = " << t
+                     << ", Duration = " << d << endl;
 
-            MATRIX_DEBUG << "MatrixResizer::handleMouseRelease - "
-            << "Time = " << eventTime
-            << ", Duration = " << eventDuration << endl;
-
-
-            if (eventDuration < 0) {
-                eventTime += eventDuration;
-                eventDuration = -eventDuration;
-            }
-
-            if (eventDuration == 0) {
-                eventDuration += getSnapGrid().getSnapTime(eventTime);
-            }
-
-            if (eventTime + eventDuration >= segment.getEndMarkerTime()) {
-                eventDuration = std::min(eventDuration,
-                                         segment.getEndMarkerTime() - eventTime);
-            }
-
-            Event *newEvent =
-                new Event(**it,
-                          eventTime,
-                          eventDuration);
-
-            macro->addCommand(new MatrixModifyCommand(segment,
-                              *it,
-                              newEvent,
-                              false,
-                              false));
-
-            newSelection->addEvent(newEvent);
+        d = d + durationDiff;
+        if (d < 0) {
+            t = t + d;
+            d = -d;
+        } else if (d == 0) {
+            d = getSnapGrid()->getSnapTime(t);
         }
 
-        normalizeStart = std::min(normalizeStart, newSelection->getStartTime());
-        normalizeEnd = std::max(normalizeEnd, newSelection->getEndTime());
+        if (t + d > segment.getEndMarkerTime()) {
+            d = segment.getEndMarkerTime() - t;
+            if (d <= 0) {
+                d = segment.getEndMarkerTime();
+                t = d - getSnapGrid()->getSnapTime(t);
+            }
+        }
 
-        macro->addCommand(new NormalizeRestsCommand(segment,
-                          normalizeStart,
-                          normalizeEnd));
+        Event *newEvent = new Event(**it, t, d);
 
-        m_mParentView->setCurrentSelection(0, false, false);
-        m_mParentView->addCommandToHistory(macro);
-        m_mParentView->setCurrentSelection(newSelection, false, false);
+        macro->addCommand(new MatrixModifyCommand(segment,
+                                                  *it,
+                                                  newEvent,
+                                                  false,
+                                                  false));
+
+        newSelection->addEvent(newEvent);
     }
 
-    m_mParentView->update();
+    normalizeStart = std::min(normalizeStart, newSelection->getStartTime());
+    normalizeEnd = std::max(normalizeEnd, newSelection->getEndTime());
+
+    macro->addCommand(new NormalizeRestsCommand(segment,
+                                                normalizeStart,
+                                                normalizeEnd));
+
+    m_scene->setSelection(0, false);
+    CommandHistory::getInstance()->addCommand(macro);
+    m_scene->setSelection(newSelection, false);
+
+//    m_mParentView->update();
     m_currentElement = 0;
     setBasicContextHelp();
 }
 
 void MatrixResizer::ready()
 {
-    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotMatrixScrolled(int, int)));
-    m_mParentView->setCanvasCursor(Qt::sizeHorCursor);
+//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+//            this, SLOT(slotMatrixScrolled(int, int)));
+    m_widget->setCanvasCursor(Qt::sizeHorCursor);
     setBasicContextHelp();
 }
 
 void MatrixResizer::stow()
 {
-    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotMatrixScrolled(int, int)));
+//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
+//               this, SLOT(slotMatrixScrolled(int, int)));
 }
-
+/*!!!
 void MatrixResizer::slotMatrixScrolled(int newX, int newY)
 {
     QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
@@ -306,21 +264,23 @@ void MatrixResizer::slotMatrixScrolled(int newX, int newY)
     }
 
     p = m_mParentView->inverseMapPoint(p);
-    int newTime = getSnapGrid().snapX(p.x());
+    int newTime = getSnapGrid()->snapX(p.x());
     handleMouseMove(newTime, 0, 0);
 }
-
+*/
 void MatrixResizer::setBasicContextHelp()
 {
-    EventSelection *selection = m_mParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
     if (selection && selection->getAddedEvents() > 1) {
-        setContextHelp(i18n("Click and drag to resize selected notes"));
+        setContextHelp(tr("Click and drag to resize selected notes"));
     } else {
-        setContextHelp(i18n("Click and drag to resize a note"));
+        setContextHelp(tr("Click and drag to resize a note"));
     }
 }
 
 const QString MatrixResizer::ToolName   = "resizer";
 
 }
+
 #include "MatrixResizer.moc"
+
