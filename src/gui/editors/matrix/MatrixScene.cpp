@@ -56,6 +56,13 @@ MatrixScene::MatrixScene() :
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
+
+    m_pointer = new QGraphicsLineItem;
+    m_pointer->setZValue(5);
+    m_pointer->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 3));
+    m_pointer->setLine(0, 0, 0, height());
+    addItem(m_pointer);
+    repositionPointer();
 }
 
 MatrixScene::~MatrixScene()
@@ -91,6 +98,9 @@ MatrixScene::setSegments(RosegardenDocument *document,
     
     m_document->getComposition().addObserver(this);
 
+    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
+    
     SegmentSelection selection;
     selection.insert(segments.begin(), segments.end());
     
@@ -309,6 +319,23 @@ MatrixScene::recreateLines()
     }
 
     recreatePitchHighlights();
+
+    repositionPointer();
+}
+
+void
+MatrixScene::repositionPointer()
+{
+    if (!m_document) return;
+    timeT t = m_document->getComposition().getPosition();
+    double x = m_scale->getXForTime(t);
+    m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
+}
+
+void
+MatrixScene::slotPointerPositionChanged(timeT)
+{
+    repositionPointer();
 }
 
 void

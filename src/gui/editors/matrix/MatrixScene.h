@@ -105,6 +105,7 @@ signals:
     
 protected slots:    
     void slotCommandExecuted();
+    void slotPointerPositionChanged(timeT);
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *);
@@ -133,9 +134,12 @@ private:
     std::vector<QGraphicsLineItem *> m_verticals;
     std::vector<QGraphicsRectItem *> m_highlights;
 
+    QGraphicsLineItem *m_pointer;
+
     void setupMouseEvent(QGraphicsSceneMouseEvent *, MatrixMouseEvent &) const;
     void recreateLines();
     void recreatePitchHighlights();
+    void repositionPointer();
     void setSelectionElementStatus(EventSelection *, bool, bool = false);
 };
 

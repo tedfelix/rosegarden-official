@@ -75,7 +75,8 @@ public:
 
     virtual void initStatusBar() { }//!!!
     virtual void updateViewCaption() { }//!!!
-    virtual timeT getInsertionTime() { return 0; }//!!!
+
+    virtual timeT getInsertionTime() const;
 
 signals:
     void editTriggerSegment(int);

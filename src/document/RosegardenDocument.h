@@ -312,12 +312,6 @@ public:
     void prepareAudio();
 
     /**
-     * Cause the playPositionChanged signal to be emitted and any
-     * associated internal work in the document to happen
-     */
-    void setPlayPosition(timeT);
-
-    /**
      * Cause the loopChanged signal to be emitted and any
      * associated internal work in the document to happen
      */
@@ -459,7 +453,7 @@ public slots:
     void slotAutoSave();
 
     void slotSetPointerPosition(timeT);
-    void slotSetPlayPosition(timeT t) { setPlayPosition(t); }
+
     void slotSetLoop(timeT s, timeT e) {setLoop(s,e);}
 
     void slotDocColoursChanged();

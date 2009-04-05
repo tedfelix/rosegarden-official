@@ -165,31 +165,12 @@ MatrixElement::setSelected(bool selected)
     QColor colour;
 
     if (selected) {
-
-        //colour = GUIPalette::getColour(GUIPalette::SelectedElement);
-        item->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectedElement),2));
-
+        item->setPen(QPen(GUIPalette::getColour(GUIPalette::SelectedElement),
+                          2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
     } else {
-        
-        item->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
-        
+        item->setPen
+            (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
     }
-    
-
-    //} else if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
-
-        //colour = Qt::gray;
-
-    //} else {
-
-        //long velocity = 100;
-        //event()->get<Int>(BaseProperties::VELOCITY, velocity);
-        //colour = DefaultVelocityColour::getInstance()->getColour(velocity);
-    //}
-
-    //colour.setAlpha(160);
-
-    //item->setBrush(colour);
 }
 
 MatrixElement *

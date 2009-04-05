@@ -450,6 +450,13 @@ NewMatrixView::setSelection(EventSelection *s, bool preview)
     if (m_matrixWidget) m_matrixWidget->setSelection(s, preview);
 }
 
+timeT
+NewMatrixView::getInsertionTime() const
+{
+    if (!m_document) return 0;
+    return m_document->getComposition().getPosition();
+}
+
 const SnapGrid *
 NewMatrixView::getSnapGrid() const
 {

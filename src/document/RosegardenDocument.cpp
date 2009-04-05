@@ -2326,12 +2326,6 @@ RosegardenDocument::slotSetPointerPosition(timeT t)
 }
 
 void
-RosegardenDocument::setPlayPosition(timeT t)
-{
-    emit playPositionChanged(t);
-}
-
-void
 RosegardenDocument::setLoop(timeT t0, timeT t1)
 {
     m_composition.setLoopStart(t0);
