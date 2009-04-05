@@ -57,7 +57,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_dialogControl = *control; // copy in the ControlParameter
 
     setModal(true);
-    setWindowTitle(tr("Edit Control Parameter"));
+    setWindowTitle(tr("Edit Controller"));
 
     QGridLayout *metagrid = new QGridLayout;
     setLayout(metagrid);
@@ -66,7 +66,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     metagrid->addWidget(vbox, 0, 0);
 
 
-    QGroupBox *frame = new QGroupBox( tr("Control Event Properties"), vbox );
+    QGroupBox *frame = new QGroupBox(tr("Controller Properties"), vbox);
     vboxLayout->addWidget(frame);
     vbox->setLayout(vboxLayout);
     frame->setContentsMargins(10, 10, 10, 10);
@@ -75,10 +75,16 @@ ControlParameterEditDialog::ControlParameterEditDialog(
 
     layout->addWidget(new QLabel(tr("Name:"), frame), 0, 0);
     m_nameEdit = new LineEdit(frame);
-    layout->addWidget(m_nameEdit, 0, 1);
+
+    layout->addWidget(m_nameEdit, 0, 1, 1, 2);
 
     layout->addWidget(new QLabel(tr("Type:"), frame), 1, 0);
     m_typeCombo = new QComboBox(frame);
+
+    // spacing hack will stretch the whole grid layout, so combos don't get
+    // scrunched up:
+    m_typeCombo->setMinimumContentsLength(20);
+
     layout->addWidget(m_typeCombo, 1, 1, 1, 2);
 
     layout->addWidget(new QLabel(tr("Description:"), frame), 2, 0);
@@ -89,7 +95,7 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_hexValue = new QLabel(frame);
     layout->addWidget(m_hexValue, 3, 1);
 
-    layout->addWidget(new QLabel(tr("Control Event value:"), frame), 3, 0);
+    layout->addWidget(new QLabel(tr("Controller number:"), frame), 3, 0);
     m_controllerBox = new QSpinBox(frame);
     layout->addWidget(m_controllerBox, 3, 2);
 
@@ -224,9 +230,15 @@ ControlParameterEditDialog::populate()
     int pos = 0, setItem = 0;
     ColourMap &colourMap = m_doc->getComposition().getGeneralColourMap();
     RCMap::const_iterator it;
-    for (it = colourMap.begin(); it != colourMap.end(); ++it)
-        if (m_control->getColourIndex() == it->first)
-            setItem = pos++;
+
+    // I can't believe we never fixed this in all these years.  The way this was
+    // structured, it was impossible for setItem to increment in order to arrive
+    // at any useful value, so the color always came out "Default" 100% of the
+    // time.
+    for (it = colourMap.begin(); it != colourMap.end(); ++it) {
+        pos++;
+        if (m_control->getColourIndex() == it->first) setItem = (pos - 1);
+    }
 
     m_colourCombo->setCurrentIndex(setItem);
 

@@ -93,37 +93,35 @@ ControlEditorDialog::ControlEditorDialog
     new QLabel("", mainFrame);
     new QLabel(tr("  Controllers for %1 (device %2)")
            .arg(deviceName)
-               .arg(device), mainFrame);
+           .arg(device), mainFrame);
     new QLabel("", mainFrame);
-
-    
     
     QStringList sl;
-    sl    << tr("Controller name  ")
-        << tr("Controller type  ")
-        << tr("Controller value  ")
+    sl  << tr("Name  ")
+        << tr("Type  ")
+        << tr("Number  ")
         << tr("Description  ")
-        << tr("Min  ")
-        << tr("Max  ")
-        << tr("Default  ")
+        << tr("Min. value  ")
+        << tr("Max. value  ")
+        << tr("Default value  ")
         << tr("Color  ")
         << tr("Position on instrument panel");
     
-    m_listView = new QTreeWidget(mainFrame);
-    m_listView->setHeaderLabels(sl);
+    m_treeWidget = new QTreeWidget(mainFrame);
+    m_treeWidget->setHeaderLabels(sl);
     
-//     m_listView->setColumnAlignment(0, Qt::AlignLeft);    //&&& align per item now:
-//     m_listViewItem->setTextAlignment(0, Qt::AlignLeft);    
+//     m_treeWidget->setColumnAlignment(0, Qt::AlignLeft);    //&&& align per item now:
+//     m_treeWidgetItem->setTextAlignment(0, Qt::AlignLeft);    
     
         
-    mainFrameLayout->addWidget(m_listView);
+    mainFrameLayout->addWidget(m_treeWidget);
     
     // Align remaining columns centrally
 //     for (int i = 1; i < 9; ++i)
-//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align per item now
+//         m_treeWidget->setColumnAlignment(i, Qt::AlignHCenter);    //&&& align per item now
     
     
-//     m_listView->restoreLayout(ControlEditorConfigGroup);    //&&&
+//     m_treeWidget->restoreLayout(ControlEditorConfigGroup);    //&&&
     
     QFrame *btnBox = new QFrame(mainFrame);
     mainFrameLayout->addWidget(btnBox);
@@ -164,15 +162,15 @@ ControlEditorDialog::ControlEditorDialog
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
-    connect(m_listView, SIGNAL(doubleClicked(QTreeWidgetItem *)),
-            SLOT(slotEdit(QTreeWidgetItem *)));
+    connect(m_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+            SLOT(slotEdit(QTreeWidgetItem *, int)));
 
     // Highlight all columns - enable extended selection mode
     //
-    m_listView->setAllColumnsShowFocus(true);
+    m_treeWidget->setAllColumnsShowFocus(true);
     
-    m_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
-//     m_listView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
+//     m_treeWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     initDialog();
 
@@ -183,7 +181,7 @@ ControlEditorDialog::~ControlEditorDialog()
 {
     RG_DEBUG << "\n*** ControlEditorDialog::~ControlEditorDialog\n" << endl;
 
-//     m_listView->saveLayout(ControlEditorConfigGroup);    //&&&
+//     m_treeWidget->saveLayout(ControlEditorConfigGroup);    //&&&
     
 }
 
@@ -195,11 +193,11 @@ ControlEditorDialog::initDialog()
 }
 
 void
-ControlEditorDialog::slotUpdate()
+ControlEditorDialog::slotUpdate(bool added)
 {
     RG_DEBUG << "ControlEditorDialog::slotUpdate" << endl;
 
-    //QPtrList<QTreeWidgetItem> selection = m_listView->selectedItems();
+    //QPtrList<QTreeWidgetItem> selection = m_treeWidget->selectedItems();
 
     MidiDevice *md =
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
@@ -210,7 +208,7 @@ ControlEditorDialog::slotUpdate()
     QTreeWidgetItem *item;
     int i = 0;
 
-    m_listView->clear();
+    m_treeWidget->clear();
 
     for (; it != md->endControllers(); ++it) {
         Composition &comp = m_doc->getComposition();
@@ -238,7 +236,7 @@ ControlEditorDialog::slotUpdate()
         if (it->getType() == PitchBend::EventType) {
             item = new ControlParameterItem(
                                             i++,
-                                            m_listView,
+                                            m_treeWidget,
                                             QStringList()
                                                 << strtoqstr(it->getName())
                                                 << strtoqstr(it->getType())
@@ -253,7 +251,7 @@ ControlEditorDialog::slotUpdate()
         } else {
             item = new ControlParameterItem(
                             i++,
-                            m_listView,
+                            m_treeWidget,
                             QStringList()
                                 << strtoqstr(it->getName())
                                 << strtoqstr(it->getType())
@@ -277,19 +275,40 @@ ControlEditorDialog::slotUpdate()
 //         item->setPixmap(7, colourPixmap);
         item->setIcon(7, QIcon(colourPixmap));
 
-        m_listView->addTopLevelItem(item);
+        m_treeWidget->addTopLevelItem(item);
     }
 
-    if(m_listView->topLevelItemCount() == 0) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(m_listView, QStringList(tr("<none>")));
-        m_listView->addTopLevelItem(item);
+    if(m_treeWidget->topLevelItemCount() == 0) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(m_treeWidget, QStringList(tr("<none>")));
+        m_treeWidget->addTopLevelItem(item);
 
-        m_listView->setSelectionMode(QAbstractItemView::NoSelection);
+        m_treeWidget->setSelectionMode(QAbstractItemView::NoSelection);
     } else {
-        m_listView->setSelectionMode(QAbstractItemView::ExtendedSelection);
+        m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
-
-
+    
+    // This logic is kind of frigged up, and may be too fragile.  It assumes
+    // that if you added an item, the last thing iterated through will be that
+    // new item, so the value of the variable item will be the last thing
+    // iterated through, and therefore the newest item you just added and want
+    // to edit.
+    //
+    // I got substantially far along the way to making this quick and dirty hack
+    // work before I thought it would be a lot cleaner to have the
+    // AddControlParameterCommand itself launch the dialog and allow the user to
+    // edit the parameters before ever adding it to the list at all.  That would
+    // be a lot cleaner, but it would also require going against the flow of how
+    // this logic always worked, so it would require a lot more thought to
+    // achieve the same end result that way.  Instead, I just used this hack
+    // overloaded slotUpdate() to tell it when a new controller was added, so we
+    // could grab it here and launch the dialog on the generic blah we just added
+    // to the list right before this slot got called with the optional bool set
+    // true.
+    //
+    if (added) {
+        RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor" << endl;
+        slotEdit(item, 0);
+    }
 }
 
 /*
@@ -316,6 +335,7 @@ ControlEditorDialog::slotAdd()
                                        ControlParameter());
 
     addCommandToHistory(command);
+    slotUpdate(true);
 }
 
 void
@@ -323,12 +343,12 @@ ControlEditorDialog::slotDelete()
 {
     RG_DEBUG << "ControlEditorDialog::slotDelete" << endl;
 
-//     if (!m_listView->currentIndex())
-    if(! m_listView->currentItem())
+//     if (!m_treeWidget->currentIndex())
+    if(! m_treeWidget->currentItem())
         return ;
 
     ControlParameterItem *item =
-        dynamic_cast<ControlParameterItem*>(m_listView->currentItem());
+        dynamic_cast<ControlParameterItem*>(m_treeWidget->currentItem());
 
     if (item) {
         RemoveControlParameterCommand *command =
@@ -385,11 +405,7 @@ ControlEditorDialog::checkModified()
 }
 
 void
-ControlEditorDialog::slotEdit()
-{}
-
-void
-ControlEditorDialog::slotEdit(QTreeWidgetItem *i)
+ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
 {
     RG_DEBUG << "ControlEditorDialog::slotEdit" << endl;
 

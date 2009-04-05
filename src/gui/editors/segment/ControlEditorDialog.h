@@ -67,7 +67,8 @@ public:
     DeviceId getDevice() { return m_device; }
 
 public slots:
-    void slotUpdate();
+    void slotUpdate(bool added);
+    void slotUpdate() { slotUpdate(false); }
 
 /*
     void slotEditCopy();
@@ -78,8 +79,7 @@ public slots:
     void slotDelete();
     void slotClose();
 
-    void slotEdit();
-    void slotEdit(QTreeWidgetItem *);
+    void slotEdit(QTreeWidgetItem *, int);
 
 signals:
     void closing();
@@ -91,9 +91,9 @@ protected:
     void setupActions();
 
     //--------------- Data members ---------------------------------
-    Studio      *m_studio;
-    RosegardenDocument        *m_doc;
-    DeviceId     m_device;
+    Studio                  *m_studio;
+    RosegardenDocument      *m_doc;
+    DeviceId                 m_device;
 
     QPushButton             *m_closeButton;
 
@@ -103,7 +103,7 @@ protected:
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
 
-    QTreeWidget               *m_listView;
+    QTreeWidget             *m_treeWidget;
 
     bool                     m_modified;
 

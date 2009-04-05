@@ -172,7 +172,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
              </property>
              <property name="text" >
-              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Manage banks ...</string>
+              <string comment="Create, load or export bank (or patch) definitions with program names for the selected device." >Banks...</string>
              </property>
             </widget>
            </item>
@@ -200,7 +200,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style="-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;/p>&lt;/body>&lt;/html></string>
              </property>
              <property name="text" >
-              <string>Edit controllers ...</string>
+              <string>Controllers...</string>
              </property>
             </widget>
            </item>
