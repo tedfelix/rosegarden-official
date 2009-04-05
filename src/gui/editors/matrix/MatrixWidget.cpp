@@ -53,7 +53,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_toolBox(0),
     m_currentTool(0),
     m_drumMode(drumMode),
-    m_zoomFactor(1.0),
+    m_hZoomFactor(1.0),
+    m_vZoomFactor(1.0),
     m_currentVelocity(100),
     m_referenceScale(0),
     m_inMove(false)
@@ -77,6 +78,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(zoomIn()),
+            this, SLOT(slotZoomInFromPanner()));
+
+    connect(m_hpanner, SIGNAL(zoomOut()),
+            this, SLOT(slotZoomOutFromPanner()));
 
     m_toolBox = new MatrixToolBox(this);
 }
@@ -128,18 +135,38 @@ MatrixWidget::segmentsContainNotes() const
 }
 
 void
-MatrixWidget::setZoomFactor(double factor)
+MatrixWidget::setHorizontalZoomFactor(double factor)
 {
-    m_zoomFactor = factor;
-    if (m_referenceScale) m_referenceScale->setXZoomFactor(factor);
+    m_hZoomFactor = factor;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
-    m_view->scale(factor, 1.0);
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
 }
 
 double
-MatrixWidget::getZoomFactor() const
+MatrixWidget::getHorizontalZoomFactor() const
 {
-    return m_zoomFactor;
+    return m_hZoomFactor;
+}
+
+void
+MatrixWidget::slotZoomInFromPanner() 
+{
+    m_hZoomFactor /= 1.1;
+    m_vZoomFactor /= 1.1;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+}
+
+void
+MatrixWidget::slotZoomOutFromPanner() 
+{
+    m_hZoomFactor *= 1.1;
+    m_vZoomFactor *= 1.1;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
 }
 
 EventSelection *

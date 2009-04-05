@@ -61,8 +61,8 @@ public:
 
     MatrixScene *getScene() { return m_scene; }
 
-    void setZoomFactor(double factor);
-    double getZoomFactor() const;
+    void setHorizontalZoomFactor(double factor);
+    double getHorizontalZoomFactor() const;
 
     int getCurrentVelocity() const { return m_currentVelocity; }
 
@@ -100,6 +100,9 @@ public slots:
     void slotSetCurrentVelocity(int velocity) { m_currentVelocity = velocity; }
     void slotSetSnap(timeT);
 
+    void slotZoomInFromPanner();
+    void slotZoomOutFromPanner();
+
 protected slots:
     void slotDispatchMousePress(const MatrixMouseEvent *);
     void slotDispatchMouseRelease(const MatrixMouseEvent *);
@@ -116,7 +119,8 @@ private:
     MatrixToolBox *m_toolBox; // I own this
     MatrixTool *m_currentTool; // Toolbox owns this
     bool m_drumMode;
-    double m_zoomFactor;
+    double m_hZoomFactor;
+    double m_vZoomFactor;
     int m_currentVelocity;
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
     bool m_inMove;

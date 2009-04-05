@@ -33,31 +33,29 @@ public:
 
 signals:
     void pannedRectChanged(QRectF);
+    void zoomIn();
+    void zoomOut();
 
 public slots:
     void slotSetPannedRect(QRectF);
 
 protected:
-    class PannerViewport : public QWidget
-    {
-    public:
-        PannerViewport(Panner *p) : QWidget(p), m_p(p) { }
-    protected:
-        void paintEvent(QPaintEvent *);
-        Panner *m_p;
-    };
-
-    friend class PannerViewport;
     QRectF m_pannedRect;
 
     void moveTo(QPoint);
 
+    virtual void paintEvent(QPaintEvent *);
     virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseMoveEvent(QMouseEvent *e);
     virtual void mouseReleaseEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void wheelEvent(QWheelEvent *e);
 
     virtual void resizeEvent(QResizeEvent *);
+
+    bool m_clicked;
+    QRectF m_clickedRect;
+    QPoint m_clickedPoint;
 };
 
 }

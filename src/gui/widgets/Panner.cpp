@@ -23,15 +23,18 @@
 #include <QPolygon>
 #include <QMouseEvent>
 
+#include <iostream>
+
 namespace Rosegarden
 {
 	
-Panner::Panner()
+Panner::Panner() :
+    m_clicked(false)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setMouseTracking(true);
     setInteractive(false);
-    setViewport(new PannerViewport(this));
 }
 
 void
@@ -50,14 +53,16 @@ Panner::resizeEvent(QResizeEvent *)
 }
 
 void
-Panner::PannerViewport::paintEvent(QPaintEvent *e)
+Panner::paintEvent(QPaintEvent *e)
 {
+    QGraphicsView::paintEvent(e);
+
     QPainter paint;
-    paint.begin(this);
+    paint.begin(viewport());
 
     QPainterPath path;
     path.addRect(rect());
-    path.addPolygon(m_p->mapFromScene(m_p->m_pannedRect));
+    path.addPolygon(mapFromScene(m_pannedRect));
 
     QColor c(GUIPalette::getColour(GUIPalette::PannerOverlay));
     c.setAlpha(40);
@@ -67,21 +72,29 @@ Panner::PannerViewport::paintEvent(QPaintEvent *e)
 
     paint.setBrush(Qt::NoBrush);
     paint.setPen(QPen(GUIPalette::getColour(GUIPalette::PannerOverlay), 0));
-    paint.drawConvexPolygon(m_p->mapFromScene(m_p->m_pannedRect));
+    paint.drawConvexPolygon(mapFromScene(m_pannedRect));
 
-    RG_DEBUG << "draw polygon: " << m_p->mapFromScene(m_p->m_pannedRect) << endl;
+    RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect) << endl;
     paint.end();
 }
  
 void
 Panner::mousePressEvent(QMouseEvent *e)
 {
+    if (e->button() != Qt::LeftButton) {
+        QGraphicsView::mouseDoubleClickEvent(e);
+        return;
+    }
+    m_clicked = true;
+    m_clickedRect = m_pannedRect;
+    m_clickedPoint = e->pos();
 }
 
 void
 Panner::mouseDoubleClickEvent(QMouseEvent *e)
 {
     if (e->button() != Qt::LeftButton) {
+        QGraphicsView::mouseDoubleClickEvent(e);
         return;
     }
 
@@ -91,11 +104,39 @@ Panner::mouseDoubleClickEvent(QMouseEvent *e)
 void
 Panner::mouseMoveEvent(QMouseEvent *e)
 {
+    if (!m_clicked) return;
+    QPointF cp = mapToScene(m_clickedPoint);
+    QPointF mp = mapToScene(e->pos());
+    QPointF delta = mp - cp;
+    QRectF nr = m_clickedRect;
+    nr.translate(delta);
+    slotSetPannedRect(nr);
+    emit pannedRectChanged(m_pannedRect);
 }
 
 void
 Panner::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (e->button() != Qt::LeftButton) {
+        QGraphicsView::mouseDoubleClickEvent(e);
+        return;
+    }
+
+    if (m_clicked) {
+        mouseMoveEvent(e);
+    }
+
+    m_clicked = false;
+}
+
+void
+Panner::wheelEvent(QWheelEvent *e)
+{
+    if (e->delta() > 0) {
+        emit zoomOut();
+    } else {
+        emit zoomIn();
+    }
 }
 
 void
@@ -104,7 +145,7 @@ Panner::moveTo(QPoint p)
     QPointF sp = mapToScene(p);
     QRectF nr = m_pannedRect;
     double d = sp.x() - nr.center().x();
-    nr.adjust(d, 0, d, 0);
+    nr.translate(d, 0);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
 }

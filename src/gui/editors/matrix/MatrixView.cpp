@@ -386,7 +386,7 @@ NewMatrixView::slotChangeHorizontalZoom(int)
     MATRIX_DEBUG << "MatrixView::slotChangeHorizontalZoom() : zoom factor = "
                  << zoomSize << endl;
 
-    m_matrixWidget->setZoomFactor(zoomSize);
+    m_matrixWidget->setHorizontalZoomFactor(zoomSize);
 
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);

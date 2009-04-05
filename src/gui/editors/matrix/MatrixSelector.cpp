@@ -538,11 +538,18 @@ MatrixSelector::getSelection(EventSelection *&selection)
     // effective, either, because the colliding items returned
     // includes things like the horizontal and vertical background
     // lines -- and so it changes often: every time we cross a line.
-    // More thought needed.  It might be better to use the event
-    // properties (i.e. time and pitch) to calculate this "from first
-    // principles" rather than doing it graphically.  That might also
-    // be helpful to avoid us dragging off the logical edges of the
-    // scene.
+    // More thought needed.
+
+    // It might be better to use the event properties (i.e. time and
+    // pitch) to calculate this "from first principles" rather than
+    // doing it graphically.  That might also be helpful to avoid us
+    // dragging off the logical edges of the scene.
+
+    // (Come to think of it, though, that would be troublesome just
+    // because of the requirement to use all events that have any part
+    // inside the selection.  Quickly finding all events that start
+    // within a time range is trivial, finding all events that
+    // intersect one is more of a pain.)
     if (l == m_previousCollisions) return false;
     m_previousCollisions = l;
 
