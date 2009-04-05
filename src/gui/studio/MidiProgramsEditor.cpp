@@ -84,7 +84,7 @@ MidiProgramsEditor::makeAdditionalWidget(QWidget *parent)
     m_msb = new QSpinBox(frame);
     m_lsb = new QSpinBox(frame);
 
-    frame->setContentsMargins(2, 2, 2, 2);
+    frame->setContentsMargins(1, 1, 1, 1);
     QGridLayout *gridLayout = new QGridLayout(frame); // margin
 
     gridLayout->addWidget(new QLabel(tr("Percussion"), frame),
@@ -231,6 +231,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
         // QToolTip::remove
         //    ( getEntryButton(i) );
         getEntryButton(i)->setToolTip(QString(""));  //@@@ Usefull ?
+        getEntryButton(i)->setMaximumHeight( 12 );
 
         for (it = programSubset.begin(); it != programSubset.end(); it++) {
             if (it->getProgram() == i) {
@@ -525,7 +526,7 @@ MidiProgramsEditor::slotEntryMenuItemSelected(int i)
         newMapping = "";
     } else {
         --i;
-        if (i < kml.size()) {
+        if (i < (int)kml.size()) {
             newMapping = kml[i].getName();
         }
     }

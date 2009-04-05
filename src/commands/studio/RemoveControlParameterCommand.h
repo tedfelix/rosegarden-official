@@ -38,6 +38,7 @@ class RemoveControlParameterCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(RemoveControlParameterCommand)
 
+;
 public:
     RemoveControlParameterCommand(Studio *studio,
                                   DeviceId device,

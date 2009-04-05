@@ -36,7 +36,7 @@ namespace Rosegarden
 class MidiBankTreeWidgetItem : public MidiDeviceTreeWidgetItem
 {
     Q_DECLARE_TR_FUNCTIONS(MidiBankTreeWidgetItem)
-
+;
 public:
     MidiBankTreeWidgetItem(DeviceId deviceId,
                          int bankNb,

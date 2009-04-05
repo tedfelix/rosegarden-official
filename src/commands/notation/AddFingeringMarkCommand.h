@@ -35,7 +35,7 @@ class CommandRegistry;
 class AddFingeringMarkCommand : public BasicSelectionCommand
 {
     Q_DECLARE_TR_FUNCTIONS(AddFingeringMarkCommand)
-
+;
 public:
     AddFingeringMarkCommand(std::string fingering,
                             EventSelection &selection) :
