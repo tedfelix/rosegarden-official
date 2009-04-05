@@ -359,6 +359,22 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
+#ifdef Q_WS_X11
+#if QT_VERSION >= 0x040500
+    bool systemSpecified = false;
+    for (int i = 1; i < argc; ++i) {
+        if (!strcmp(argv[i], "-graphicssystem")) {
+            systemSpecified = true;
+            break;
+        }
+    }
+    if (!systemSpecified) {
+        RG_DEBUG << "Setting default raster graphics system for Qt 4.5+" << endl;
+        QApplication::setGraphicsSystem("raster");
+    }
+#endif
+#endif
+
     RosegardenApplication theApp(argc, argv);
 
     RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
