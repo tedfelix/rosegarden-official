@@ -1368,6 +1368,7 @@ QInputDialog QComboBox::on,
 QComboBox::drop-down,
 #App QWidget QComboBox::drop-down,
 QInputDialog QComboBox::drop-down,
+QFileDialog QComboBox::drop-down,
 #RosegardenParameterArea QComboBox::drop-down
 {
     subcontrol-origin: padding;
@@ -1404,6 +1405,7 @@ descendant selector: */
 QComboBox QAbstractItemView,
 #App QWidget QComboBox QAbstractItemView,
 QInputDialog QComboBox QAbstractItemView,
+QFileDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
     border: 1px solid #AAAAAA;
