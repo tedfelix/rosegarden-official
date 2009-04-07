@@ -2029,14 +2029,16 @@ bool RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     // just feel safer going ahead and chmod -w'ing the file anyway though.
     // Plus I already wrote the code.
     // 
-    RG_DEBUG << "Running chmod a-w " << saveAsInfo.absFilePath() << endl;
+    if (asTemplate) {
+        RG_DEBUG << "Running chmod a-w " << saveAsInfo.absFilePath() << endl;
 
-    QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "a-w";
-    procArgs << saveAsInfo.absFilePath();
+        QProcess *proc = new QProcess;
+        QStringList procArgs;
+        procArgs << "a-w";
+        procArgs << saveAsInfo.absFilePath();
 
-    proc->execute("chmod", procArgs);
+        proc->execute("chmod", procArgs);
+    }
 
     if (!res) {
         if (!errMsg.isEmpty())
