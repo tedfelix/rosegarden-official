@@ -27,16 +27,22 @@
 #include "MatrixResizer.h"
 #include "MatrixVelocity.h"
 #include "MatrixMouseEvent.h"
+#include "PianoKeyboard.h"
 
 #include <QGraphicsView>
 #include <QGridLayout>
 #include <QScrollBar>
 #include <QTimer>
+#include <QGraphicsScene>
+#include <QGraphicsProxyWidget>
+#include <QWheelEvent>
 
 #include "document/RosegardenDocument.h"
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
+
+#include "gui/rulers/PitchRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -58,7 +64,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_vZoomFactor(1.0),
     m_currentVelocity(100),
     m_referenceScale(0),
-    m_inMove(false)
+    m_inMove(false),
+    m_pitchRuler(0),
+    m_pianoView(0)
 {
     QGridLayout *layout = new QGridLayout;
     setLayout(layout);
@@ -66,25 +74,46 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_view = new Panned;
     m_view->setRenderHints(QPainter::Antialiasing);
     m_view->setBackgroundBrush(Qt::white);
-    layout->addWidget(m_view, 0, 0);
+    layout->addWidget(m_view, 0, 1, 1, 1);
+
+    m_pitchRuler = new PianoKeyboard(0);
+
+    m_pianoView = new Panned();
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+
+    layout->addWidget(m_pianoView, 0, 0, 1, 1);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
     m_hpanner->setRenderHints(QPainter::Antialiasing);
     m_hpanner->setBackgroundBrush(Qt::white);
-    layout->addWidget(m_hpanner, 1, 0);
+    layout->addWidget(m_hpanner, 1, 0, 1, 2);
+
+    m_pianoScene = new QGraphicsScene();
+    QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
+    m_pianoView->setScene(m_pianoScene);
+    m_pianoView->centerOn(pianoKbd);
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_pianoView, SLOT(slotSetPannedRect(QRectF)));
+
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
+            m_pianoView, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotZoomInFromPanner()));
 
     connect(m_hpanner, SIGNAL(zoomOut()),
             this, SLOT(slotZoomOutFromPanner()));
+
+    connect(m_pianoView, SIGNAL(wheelEventReceived(QWheelEvent *)),
+            m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
 
     m_toolBox = new MatrixToolBox(this);
 }
@@ -126,6 +155,13 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_toolBox->setScene(m_scene);
 
     m_hpanner->setScene(m_scene);
+
+    // If piano scene and matrix scene don't have the same height
+    // one may shift from the other when scrolling vertically
+    QRectF viewRect = m_scene->sceneRect();
+    QRectF pianoRect = m_pianoScene->sceneRect();
+    pianoRect.setHeight(viewRect.height());
+    m_pianoScene->setSceneRect(pianoRect);
 }
 
 bool
@@ -158,6 +194,9 @@ MatrixWidget::slotZoomInFromPanner()
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    m_pianoView->resetMatrix();
+    m_pianoView->scale(m_vZoomFactor, m_vZoomFactor);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
 }
 
 void
@@ -168,6 +207,9 @@ MatrixWidget::slotZoomOutFromPanner()
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    m_pianoView->resetMatrix();
+    m_pianoView->scale(m_vZoomFactor, m_vZoomFactor);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
 }
 
 EventSelection *
@@ -245,6 +287,8 @@ MatrixWidget::slotDispatchMousePress(const MatrixMouseEvent *e)
 void
 MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 {
+    m_pitchRuler->drawHoverNote(e->pitch);
+
     if (!m_currentTool) return;
 
     if (m_inMove) {

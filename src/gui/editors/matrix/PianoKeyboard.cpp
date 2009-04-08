@@ -68,7 +68,8 @@ QSize PianoKeyboard::sizeHint() const
 
 QSize PianoKeyboard::minimumSizeHint() const
 {
-    return m_keySize;
+    return QSize(m_keySize.width(),
+                 m_keySize.height() * m_nbKeys);
 }
 
 void PianoKeyboard::computeKeyPos()

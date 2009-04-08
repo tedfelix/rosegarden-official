@@ -20,6 +20,8 @@
 
 #include <QGraphicsView>
 
+class QWheelEvent;
+
 namespace Rosegarden
 {
 
@@ -33,15 +35,18 @@ public:
 
 signals:
     void pannedRectChanged(QRectF);
+    void wheelEventReceived(QWheelEvent *);
 
 public slots:
     void slotSetPannedRect(QRectF);
+    void slotEmulateWheelEvent(QWheelEvent *ev);
 
 protected:
     QRectF m_pannedRect;
 
     virtual void resizeEvent(QResizeEvent *);
     virtual void drawForeground(QPainter *, const QRectF &);
+    virtual void wheelEvent(QWheelEvent *);
 };
 
 }

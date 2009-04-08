@@ -25,6 +25,7 @@
 
 #include <vector>
 
+class QGraphicsScene;
 
 namespace Rosegarden
 {
@@ -41,6 +42,7 @@ class ZoomableRulerScale;
 class Panner;
 class Panned;
 class EventSelection;
+class PitchRuler;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -130,6 +132,10 @@ private:
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
+
+    PitchRuler *m_pitchRuler; // I own this
+    Panned *m_pianoView; // I own this
+    QGraphicsScene *m_pianoScene; // I own this 
 };
 
 }

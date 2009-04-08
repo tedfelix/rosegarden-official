@@ -65,6 +65,19 @@ Panned::slotSetPannedRect(QRectF pr)
 {
     centerOn(pr.center());
 }
+
+void
+Panned::wheelEvent(QWheelEvent *ev)
+{
+    emit wheelEventReceived(ev);
+    QGraphicsView::wheelEvent(ev);
+}
+
+void
+Panned::slotEmulateWheelEvent(QWheelEvent *ev)
+{
+    QGraphicsView::wheelEvent(ev);
+}
     
 }
 
