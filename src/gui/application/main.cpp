@@ -45,6 +45,8 @@
 #include <QDialogButtonBox>
 #include <QTimer>
 #include <QApplication>
+#include <QtGui>
+#include <QPlastiqueStyle>
 
 #include <sys/time.h>
 
@@ -355,6 +357,14 @@ void usage()
 
 int main(int argc, char *argv[])
 {
+    // Many elements of our GUI looked nauseating on a KDE4 box with the default
+    // Oxygen style.  Apparently I was depdending on having Plastique underneath
+    // everything to a larger extent than I realized.  To address this, we'll
+    // force Plastique.  We might eventually have to take a copy of Plastique
+    // and maintain it ourselves, or at least the subtle parts of Plastique we
+    // don't already override with our heavily customized UI.
+    QApplication::setStyle(new QPlastiqueStyle);
+
     setsid(); // acquire shiny new process group
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
