@@ -1376,11 +1376,12 @@ QFileDialog QComboBox::drop-down,
     subcontrol-position: top right;
     width: 15px;
 
-    border-left-width: 1px;
+
+/*  border-left-width: 1px;
     border-left-color: #AAAAAA;
-    border-left-style: solid; /* just a single line */
-    border-top-right-radius: 3px; /* same radius as the QComboBox */
-    border-bottom-right-radius: 3px;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;*/
 }
 
 QComboBox::down-arrow,
@@ -1409,8 +1410,9 @@ QInputDialog QComboBox QAbstractItemView,
 QFileDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
-    border: 1px solid #AAAAAA;
-    background-color: #FFFFFF;
+    border-image: url(:pixmaps/style/combo-dropdown.png) 2;
+/*    border: 1px solid #AAAAAA;
+    background-color: #FFFFFF; */
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
     color: #000000;
