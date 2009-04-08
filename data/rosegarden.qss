@@ -239,7 +239,8 @@ toolbar) is styled using the ::handle subcontrol. */
 QToolBar:top,
 QToolBar:bottom
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    border-image: url(:pixmaps/style/toolbar-pixmap.png) 0;
+   /* background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);*/
     color: #000000;
 }
 
