@@ -70,9 +70,9 @@ namespace Rosegarden
 {
 
 NewMatrixView::NewMatrixView(RosegardenDocument *doc,
-			     std::vector<Segment *> segments,
-			     bool drumMode,
-			     QWidget *parent) :
+                 std::vector<Segment *> segments,
+                 bool drumMode,
+                 QWidget *parent) :
     EditViewBase(doc, segments, parent),
     m_tracking(true),
     m_quantizations(BasicQuantizer::getStandardQuantizations())
@@ -249,25 +249,29 @@ NewMatrixView::initActionsToolbar()
     MATRIX_DEBUG << "MatrixView::initActionsToolbar" << endl;
 
     QToolBar *actionsToolbar = findToolbar("Actions Toolbar");
-//	QToolBar *actionsToolbar = m_actionsToolBar;
-	//actionsToolbar->setLayout( new QHBoxLayout(actionsToolbar) );
-	
+//    QToolBar *actionsToolbar = m_actionsToolBar;
+    //actionsToolbar->setLayout(new QHBoxLayout(actionsToolbar));
+    
     if (!actionsToolbar) {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
         << "tool bar not found" << endl;
         return ;
     }
 
+    QString comboStyle("QComboBox::enabled,QComboBox{ border: 1px solid #000000; border-radius: 3px; padding: 0 5px 0 5px; min-width: 2em; color: #000000; } QComboBox::enabled:hover, QComboBox:hover, QComboBox::drop-down:hover { background-color: #CCDFFF; } QComboBox::!editable, QComboBox::drop-down:!editable { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #EEEEEE, stop:1 #DDDDDD); } QComboBox::!editable:on, QComboBox::drop-down:editable:on, { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE); } QComboBox::on { padding-top: 3px; padding-left: 4px; } QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; } QComboBox::down-arrow { image: url(:pixmaps/style/arrow-down-small.png); } QComboBox::down-arrow:on { top: 1px; left: 1px; } QComboBox QAbstractItemView { border-image: url(:pixmaps/style/combo-dropdown.png) 1; selection-background-color: #80AFFF; selection-color: #FFFFFF; color: #000000; }");
+
     // The SnapGrid combo and Snap To... menu items
     //
     QLabel *sLabel = new QLabel(tr(" Grid: "), actionsToolbar);
     sLabel->setIndent(10);
-	actionsToolbar->addWidget( sLabel );
+    actionsToolbar->addWidget(sLabel);
+    sLabel->setObjectName("Humbug");
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
 
     m_snapGridCombo = new QComboBox(actionsToolbar);
-	actionsToolbar->addWidget( m_snapGridCombo );
+    m_snapGridCombo->setStyleSheet(comboStyle);
+    actionsToolbar->addWidget(m_snapGridCombo);
 
     for (unsigned int i = 0; i < m_snapValues.size(); i++) {
 
@@ -302,11 +306,13 @@ NewMatrixView::initActionsToolbar()
 
     QLabel *vlabel = new QLabel(tr(" Velocity: "), actionsToolbar);
     vlabel->setIndent(10);
+    vlabel->setObjectName("Humbug");
     actionsToolbar->addWidget(vlabel);
     
     m_velocityCombo = new QComboBox(actionsToolbar);
+    m_velocityCombo->setStyleSheet(comboStyle);
     actionsToolbar->addWidget(m_velocityCombo);
-	
+    
     for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
@@ -318,10 +324,12 @@ NewMatrixView::initActionsToolbar()
     //
     QLabel *qLabel = new QLabel(tr(" Quantize: "), actionsToolbar);
     qLabel->setIndent(10);
-    actionsToolbar->addWidget( qLabel );
+    qLabel->setObjectName("Humbug");
+    actionsToolbar->addWidget(qLabel);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
-    actionsToolbar->addWidget( m_quantizeCombo );
+    m_quantizeCombo->setStyleSheet(comboStyle);
+    actionsToolbar->addWidget(m_quantizeCombo);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
 
@@ -350,11 +358,11 @@ NewMatrixView::initZoomToolbar()
     
     std::vector<double> zoomSizes;
     static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
-			  1.0,
+              1.0,
                           1.1, 1.2, 1.5, 1.9, 2.5,
                           3.5, 5.0, 7.0, 10.0, 20.0 };
 //    static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
-//			  1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
+//              1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     for (int i = 0; i < sizeof(z)/sizeof(z[0]); ++i) zoomSizes.push_back(z[i]);
     
     m_hZoomSlider = new ZoomSlider<double>
@@ -363,11 +371,13 @@ NewMatrixView::initZoomToolbar()
     m_hZoomSlider->setFocusPolicy(Qt::NoFocus);
 
     QLabel *label = new QLabel(tr("  Zoom:  "));
+    label->setObjectName("Humbug");
     zoomToolbar->addWidget(label);
 
     m_zoomLabel = new QLabel();
     m_zoomLabel->setIndent(10);
     m_zoomLabel->setFixedWidth(80);
+    m_zoomLabel->setObjectName("Humbug");
     m_zoomLabel->setText(tr("%1%").arg(m_hZoomSlider->getCurrentSize()*100.0));
 
     connect(m_hZoomSlider,
@@ -661,7 +671,7 @@ NewMatrixView::slotVelocityDown()
     if (!getSelection()) return;
 
     CommandHistory::getInstance()->addCommand
-        (new ChangeVelocityCommand( -10, *getSelection()));
+        (new ChangeVelocityCommand(-10, *getSelection()));
 
     slotSetCurrentVelocityFromSelection();
 }

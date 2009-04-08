@@ -261,6 +261,7 @@ QToolBar:bottom QLabel
     color: #000000;
 }
 
+
 QToolBar::handle:top,
 QToolBar::handle:bottom
 {
@@ -1290,7 +1291,6 @@ QInputDialog QComboBox,
 }
 
 QComboBox::!enabled,
-/*#MinorDialog QComboBox::enabled,*/
 #View QComboBox::!enabled,
 #App QComboBox::!enabled,
 #App QWidget QComboBox::!enabled,
@@ -1324,7 +1324,6 @@ QInputDialog QComboBox::drop-down:hover,
 }
 
 QComboBox::editable,
-/*#MinorDialog QComboBox::editable,*/
 #View QComboBox::editable,
 #App QComboBox::editable,
 #App QWidget QComboBox::editable,
@@ -1347,7 +1346,7 @@ QInputDialog QComboBox::drop-down:!edtiable,
 
 /* QComboBox gets the "on" state when the popup is open */
 QComboBox::!editable:on,
-QComboBox::drop-down:editable:on
+QComboBox::drop-down:editable:on,
 #App QWidget QComboBox::!editable:on,
 #App QWidget QComboBox::drop-down:editable:on,
 QInputDialog QComboBox::drop-down:edtiable:on,
@@ -1375,13 +1374,6 @@ QFileDialog QComboBox::drop-down,
     subcontrol-origin: padding;
     subcontrol-position: top right;
     width: 15px;
-
-
-/*  border-left-width: 1px;
-    border-left-color: #AAAAAA;
-    border-left-style: solid;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 3px;*/
 }
 
 QComboBox::down-arrow,
@@ -1410,7 +1402,7 @@ QInputDialog QComboBox QAbstractItemView,
 QFileDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
-    border-image: url(:pixmaps/style/combo-dropdown.png) 2;
+    border-image: url(:pixmaps/style/combo-dropdown.png) 1;
 /*    border: 1px solid #AAAAAA;
     background-color: #FFFFFF; */
     selection-background-color: #80AFFF;
@@ -1712,4 +1704,15 @@ QTreeView
     color: #000000;
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
+}
+
+/* I don't really get this, and I don't guess I care anymore.  It just makes
+ * utterly no sense.  I can make the backgrounds any color I want with a pixmap,
+ * so I know I'm selecting for these, but the foreground color has had a sticky
+ * override on it since a few sweeping changes ago, and I have no idea how to
+ * solve it without resorting to this.
+ */
+QLabel#Humbug
+{
+    color: #000000;
 }

@@ -834,6 +834,7 @@ void RosegardenMainWindow::initZoomToolbar()
     }
 
     QLabel *label = new QLabel(tr("  Zoom:  "));
+    label->setObjectName("Humbug");
     zoomToolbar->addWidget(label);
 
     std::vector<double> zoomSizes; // in units-per-pixel
@@ -851,11 +852,12 @@ void RosegardenMainWindow::initZoomToolbar()
     QString maxZoom = QString("%1%").arg(factors[(sizeof(factors) / sizeof(factors[0])) - 1] * 100.0);
 
     m_zoomSlider = new ZoomSlider<double>
-                   (zoomSizes, -1, Qt::Horizontal, zoomToolbar, "kde toolbar widget");
+                   (zoomSizes, -1, Qt::Horizontal, zoomToolbar);
     m_zoomSlider->setTracking(true);
     m_zoomSlider->setFocusPolicy(Qt::NoFocus);
-    m_zoomLabel = new QLabel(minZoom, zoomToolbar, "kde toolbar widget");
+    m_zoomLabel = new QLabel(minZoom, zoomToolbar);
     m_zoomLabel->setIndent(10);
+    m_zoomLabel->setObjectName("Humbug");
 
     connect(m_zoomSlider, SIGNAL(valueChanged(int)),
             this, SLOT(slotChangeZoom(int)));
