@@ -236,10 +236,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
                                RosegardenParameterArea::CLASSIC_STYLE);
     m_sidebarStyle->addItem(tr("Tabbed"),
                                RosegardenParameterArea::TAB_BOX_STYLE);
-
     m_sidebarStyle->setCurrentIndex( settings.value("sidebarstyle",
                                    0).toUInt() );
     layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
+
+    //!!! This needs to be removed eventually, and all associated logic cleaned
+    // up, but for now I'm leaving it alone, and just hiding it.
+    m_sidebarStyle->hide();
+
     ++row;
 
     layout->addWidget(new QLabel(tr("Note name style"),
@@ -302,6 +306,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_globalStyle->setCurrentIndex( settings.value("Install Own Theme", 1).toUInt() );
     layout->addWidget(m_globalStyle, row, 1, row- row+1, 3);
 
+    //!!! this too is obsolete, and needs to be neatly expunged one day
+    m_globalStyle->hide();
     ++row;
 
     layout->setRowStretch(row, 10);

@@ -353,8 +353,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
-        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 0+1, Qt::AlignHCenter);
-//@@@  m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 0+1, 2- 1, Qt::AlignHCenter);
+        m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 1, 3, Qt::AlignHCenter);
         m_rotaryFrame->setContentsMargins(8, 8, 8, 8);
         m_rotaryGrid = new QGridLayout(m_rotaryFrame);
         m_rotaryGrid->setSpacing(1);
@@ -384,15 +383,15 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         if (it->getIPBPosition() == -1)
             continue;
 
-        // Get the knob colour - only if the colour is non-default (>0)
+        // Get the knob colour (even if it's default, because otherwise it turns
+        // black instead of the default color from the map!  it was here the
+        // whole time, this simple!)
         //
-        QColor knobColour = QColor(Qt::black); // special case for Rotary
-        if (it->getColourIndex() > 0) {
-            Colour c =
-                comp.getGeneralColourMap().getColourByIndex
-                (it->getColourIndex());
-            knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
-        }
+        QColor knobColour = it->getColourIndex();
+        Colour c =
+            comp.getGeneralColourMap().getColourByIndex
+            (it->getColourIndex());
+        knobColour = QColor(c.getRed(), c.getGreen(), c.getBlue());
 
         Rotary *rotary = 0;
 
@@ -1318,10 +1317,16 @@ MIDIInstrumentParameterPanel::getValueFromRotary(int rotary)
 void
 MIDIInstrumentParameterPanel::showAdditionalControls(bool showThem)
 {
+    // Now that the MIDI IPB can scroll, and since nobody seems to have
+    // implemented/repaired the tab layout mode (probably by design, and a
+    // good design) we'll do away with putting a limit on the number of
+    // controllers visible, and just always show them all
+    showThem = true;
+
     m_instrumentLabel->setShown(showThem);
     int index = 0;
     for (RotaryMap::iterator it = m_rotaries.begin(); it != m_rotaries.end(); ++it) {
-        it->second.first->parentWidget()->setShown(showThem || (index < 8));
+        it->second.first->parentWidget()->setShown(showThem);
         //it->second.first->setShown(showThem || (index < 8));
         //it->second.second->setShown(showThem || (index < 8));
         index++;

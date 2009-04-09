@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -57,7 +56,7 @@ public:
     // Add a rosegarden parameter box to the list that are to be displayed.
 
     void addRosegardenParameterBox(RosegardenParameterBox *b);
-	void setScrollAreaWidget();
+    void setScrollAreaWidget();
 
     // List the supported methods of arranging the various parameter-box
     // widgets within the parameter area.
@@ -92,11 +91,11 @@ private:
                     RosegardenParameterBox *box);
 
 //     Q3ScrollView *m_scrollArea; // Holds the m_classic container
-	QScrollArea *m_scrollArea;	
-	
-	QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
-	QVBoxLayout *m_classicLayout;
-	
+    QScrollArea *m_scrollArea;    
+    
+    QWidget *m_classic;        // The container widget for m_style==CLASSIC_STYLE.
+    QVBoxLayout *m_classicLayout;
+    
     QTabWidget *m_tabBox;     // The container widget for m_style==TAB_BOX_STYLE.
     QWidget *m_active;         // The current container widget.
     QWidget *m_spacing;

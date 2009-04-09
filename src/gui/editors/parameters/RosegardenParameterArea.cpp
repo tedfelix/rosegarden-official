@@ -44,43 +44,43 @@ namespace Rosegarden
 {
 
 RosegardenParameterArea::RosegardenParameterArea(
-	QWidget *parent,
-	const char *name
-	)	//, WFlags f)
-	: QStackedWidget(parent),//, name),//, f),
+    QWidget *parent,
+    const char *name
+    )    //, WFlags f)
+    : QStackedWidget(parent),//, name),//, f),
         m_style(RosegardenParameterArea::CLASSIC_STYLE),
-		m_scrollArea( new QScrollArea(this) ),
- 		m_classic(new QWidget()),
-		m_classicLayout( new QVBoxLayout(m_classic) ),
+        m_scrollArea( new QScrollArea(this) ),
+         m_classic(new QWidget()),
+        m_classicLayout( new QVBoxLayout(m_classic) ),
         m_tabBox(new QTabWidget(this)),
         m_active(0),
         m_spacing(0)
 {
-	setObjectName( name );
-		
-	m_classic->setLayout(m_classicLayout);
-	
-	//m_scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	// Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
-	m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-	
-	// add 2 wigets as stacked widgets
+    setObjectName( name );
+        
+    m_classic->setLayout(m_classicLayout);
+    
+    //m_scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    // Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
+    m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    
+    // add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
-	addWidget(m_scrollArea);//, CLASSIC_STYLE);	//&&& 
+    addWidget(m_scrollArea);//, CLASSIC_STYLE);    //&&& 
 
     // Install the widget that implements the tab-style to the widget-stack.
-	addWidget(m_tabBox); //, TAB_BOX_STYLE);
-	
-	setCurrentWidget( m_scrollArea );
-	
-	//m_scrollArea->setVisible( true );
+//    addWidget(m_tabBox); //, TAB_BOX_STYLE);
+    
+    setCurrentWidget( m_scrollArea );
+    
+    //m_scrollArea->setVisible( true );
 }
 
 void RosegardenParameterArea::addRosegardenParameterBox(
     RosegardenParameterBox *b)
 {
     RG_DEBUG << "RosegardenParameterArea::addRosegardenParameterBox" << endl;
-	
+    
     // Check that the box hasn't been added before.
 
     for (unsigned int i = 0; i < m_parameterBoxes.size(); i++) {
@@ -97,20 +97,20 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     // parallels the above array of parameter boxes.
 
     QGroupBox *box = new QGroupBox(b->getLongLabel(), m_classic);
-	//box->setMinimumSize( 40,40 );
-	m_classicLayout->addWidget(box);
-	
-	box->setLayout( new QVBoxLayout(box) );
+    //box->setMinimumSize( 40,40 );
+    m_classicLayout->addWidget(box);
+    
+    box->setLayout( new QVBoxLayout(box) );
     box->layout()->setMargin( 4 ); // about half the default value
     QFont f;
     f.setBold( true );
     box->setFont( f );
-	
+    
     m_groupBoxes.push_back(box);
 
-	// add the ParameterBox to the Layout
+    // add the ParameterBox to the Layout
     box->layout()->addWidget(b);
-	
+    
     if (m_spacing)
         delete m_spacing;
     m_spacing = new QFrame(m_classic);
@@ -125,18 +125,18 @@ void RosegardenParameterArea::addRosegardenParameterBox(
 
     // Queue a redisplay of the parameter area, to incorporate the new box.
 
-// 	update();
+//     update();
 }
 
 void RosegardenParameterArea::setScrollAreaWidget()
 {
-	m_scrollArea->setWidget(m_classic);
+    m_scrollArea->setWidget(m_classic);
 }
-	
+    
 void RosegardenParameterArea::setArrangement(Arrangement style)
 {
     RG_DEBUG << "RosegardenParameterArea::setArrangement(" << style << ")" << endl;
-	//CJ-TODO Kill this fcn or implement Tab Style
+    //CJ-TODO Kill this fcn or implement Tab Style
     // Lookup the container of the specified style.
 
     //QWidget *container;

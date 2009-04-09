@@ -189,7 +189,11 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     //
     m_ipbPosition->addItem(tr("<not showing>"));
 
-    for (unsigned int i = 0; i < 32; i++)
+    // I couldn't find a constant for the maximum possible controller slots.
+    // This seems to be it.  It used to be 32.  I upped it to 1024 because the
+    // IPB is in a scrollable widget now, and that seems like a really
+    // comfortable amount of headroom without being totally nuts like MAX_INT
+    for (unsigned int i = 0; i < 1024; i++)
         m_ipbPosition->addItem(QString("%1").arg(i));
 
     if (m_control->getType() == Controller::EventType)
