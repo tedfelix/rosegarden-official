@@ -258,7 +258,11 @@ NewMatrixView::initActionsToolbar()
         return ;
     }
 
-    QString comboStyle("QComboBox::enabled,QComboBox{ border: 1px solid #000000; border-radius: 3px; padding: 0 5px 0 5px; min-width: 2em; color: #000000; } QComboBox::enabled:hover, QComboBox:hover, QComboBox::drop-down:hover { background-color: #CCDFFF; } QComboBox::!editable, QComboBox::drop-down:!editable { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #EEEEEE, stop:1 #DDDDDD); } QComboBox::!editable:on, QComboBox::drop-down:editable:on, { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE); } QComboBox::on { padding-top: 3px; padding-left: 4px; } QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; } QComboBox::down-arrow { image: url(:pixmaps/style/arrow-down-small.png); } QComboBox::down-arrow:on { top: 1px; left: 1px; } QComboBox QAbstractItemView { border-image: url(:pixmaps/style/combo-dropdown.png) 1; selection-background-color: #80AFFF; selection-color: #FFFFFF; color: #000000; }");
+    // There's some way to do this kind of thing with states or properties or
+    // something, but I couldn't ever get it to work.  So, again, I'll just use
+    // another hacky hard coded internal stylesheet.
+    //
+    QString comboStyle("QComboBox::enabled,QComboBox{ border: 1px solid #AAAAAA; border-radius: 3px; padding: 0 5px 0 5px; min-width: 2em; color: #000000; } QComboBox::enabled:hover, QComboBox:hover, QComboBox::drop-down:hover { background-color: #CCDFFF; } QComboBox::!editable, QComboBox::drop-down:!editable { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #EEEEEE, stop:1 #DDDDDD); } QComboBox::!editable:on, QComboBox::drop-down:editable:on, { background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #E0E0E0, stop:1 #EEEEEE); } QComboBox::on { padding-top: 3px; padding-left: 4px; } QComboBox::drop-down { subcontrol-origin: padding; subcontrol-position: top right; width: 15px; } QComboBox::down-arrow { image: url(:pixmaps/style/arrow-down-small.png); } QComboBox::down-arrow:on { top: 1px; left: 1px; } QComboBox QAbstractItemView { border-image: url(:pixmaps/style/combo-dropdown.png) 1; selection-background-color: #80AFFF; selection-color: #FFFFFF; color: #000000; }");
 
     // The SnapGrid combo and Snap To... menu items
     //
