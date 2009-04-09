@@ -1423,6 +1423,7 @@ QWidget#SPECIAL_LABEL,
 {
     color: #000000;
     background-color: #999999;
+    border: 0 solid transparent; /* no sunken border on these */
 }
 
 
@@ -1434,6 +1435,7 @@ QWidget#SPECIAL_LABEL,
 {
     background-color: #404040;
     color: #C0D8FF;
+    border: 0 solid transparent; /* no sunken border on these */
 }
 
 #RosegardenTransport QFrame QWidget
