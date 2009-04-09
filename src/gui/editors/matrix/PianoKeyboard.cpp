@@ -52,9 +52,17 @@ PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         m_lastKeyPressed(0)
 {
     m_hoverHighlight->hide();
-    m_hoverHighlight->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::MatrixKeyboardFocus));
+//    m_hoverHighlight->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::MatrixKeyboardFocus));
+    QColor c = GUIPalette::getColour(GUIPalette::MatrixKeyboardFocus);
+    int r, g, b, a;
+    c.getRgb(&r, &g, &b, &a);
+    QString colorStr = QString("rgba(%1, %2, %3, %4)").arg(r).arg(g).arg(b).arg(a);
+    QString localStyle = QString("background: %1").arg(colorStr);
+    m_hoverHighlight->setStyleSheet(localStyle);
 
-    setPaletteBackgroundColor(QColor(238, 238, 224));
+//    setPaletteBackgroundColor(QColor(238, 238, 224));
+    localStyle = "background: rgb(238, 238, 224); color: black;";
+    setStyleSheet(localStyle);
 
     computeKeyPos();
     setMouseTracking(true);
