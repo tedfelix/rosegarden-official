@@ -773,15 +773,15 @@ QTabWidget QScrollBar:left-arrow:horizontal,
 QScrollBar:left-arrow:horizontal
 {
     image: url(:pixmaps/style/arrow-left.png);
-    width: 10px;
-    height 10px;
+    width: 8px;
+    height 8px;
 }
 
 QScrollBar::right-arrow:horizontal
 {
     image: url(:pixmaps/style/arrow-right.png);
-    width: 10px;
-    height 10px;
+    width: 8px;
+    height 8px;
 }
 
 QScrollBar::add-page:horizontal,
@@ -794,7 +794,7 @@ QScrollBar::add-line:horizontal
 {
     border: 2px solid #404040;
     background: #808080;
-    width: 20px;
+    width: 10px;
     subcontrol-position: right;
     subcontrol-origin: margin;
 }
@@ -803,7 +803,7 @@ QScrollBar::sub-line:horizontal
 {
     border: 2px solid #404040;
     background: #808080;
-    width: 20px;
+    width: 10px;
     subcontrol-position: left;
     subcontrol-origin: margin;
 }
@@ -812,14 +812,14 @@ QScrollBar:horizontal
 {
     border: 2px solid #404040;
     background-color: none;
-    height: 15px;
-    margin: 0px 20px 0 20px;
+    height: 16px;
+    margin: 0px 10px 0 10px;
 }
 
 QScrollBar::handle:horizontal
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    min-width: 20px;
+    min-width: 10px;
 }
 
 
@@ -827,15 +827,15 @@ QScrollBar::handle:horizontal
 QScrollBar:up-arrow:vertical
 {
     image: url(:pixmaps/style/arrow-up.png);
-    width: 10px;
-    height 10px;
+    width: 8px;
+    height 8px;
 }
 
 QScrollBar::down-arrow:vertical
 {
     image: url(:pixmaps/style/arrow-down.png);
-    width: 10px;
-    height 10px;
+    width: 8px;
+    height 8px;
 }
 
 QTabWidget QScrollBar::add-page:vertical,
@@ -850,7 +850,7 @@ QScrollBar::add-line:vertical
 {
     border: 2px solid #404040;
     background: #808080;
-    height: 20px;
+    height: 10px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
@@ -859,7 +859,7 @@ QScrollBar::sub-line:vertical
 {
     border: 2px solid #404040;
     background: #808080;
-    height: 20px;
+    height: 10px;
     subcontrol-position: top;
     subcontrol-origin: margin;
 }
@@ -868,14 +868,19 @@ QScrollBar:vertical
 {
     border: 2px solid #404040;
     background-color: none;
-    width: 15px;
-    margin: 20px 0 20px 0;
+    width: 16px;
+    margin: 10px 0 10px 0;
+}
+
+QComboBox QAbstractItemView QScrollBar:vertical
+{
+    width: 12px;
 }
 
 QScrollBar::handle:vertical
 {
     background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
-    min-width: 20px;
+    min-height: 10px;
 }
 
 
@@ -1140,7 +1145,6 @@ QToolButton::checked,
 }
 
 QToolButton::enabled:hover,
-#tempoview QToolButton::enabled:hover,
 #View QToolButton::enabled:hover,
 #App QToolButton::enabled:hover,
 #RosegardenParameterArea QToolButton::enabled:hover
@@ -1382,6 +1386,8 @@ QInputDialog QComboBox::down-arrow,
 #RosegardenParameterArea QComboBox::down-arrow
 {
     image: url(:pixmaps/style/arrow-down-small.png);
+    width: 8px;
+    height 8px;
 }
 
 QComboBox::down-arrow:on,
@@ -1402,9 +1408,7 @@ QInputDialog QComboBox QAbstractItemView,
 QFileDialog QComboBox QAbstractItemView,
 #RosegardenParameterArea QComboBox QAbstractItemView
 {
-    border-image: url(:pixmaps/style/combo-dropdown.png) 1;
-/*    border: 1px solid #AAAAAA;
-    background-color: #FFFFFF; */
+    border-image: url(:pixmaps/style/combo-dropdown.png) 4;
     selection-background-color: #80AFFF;
     selection-color: #FFFFFF;
     color: #000000;
