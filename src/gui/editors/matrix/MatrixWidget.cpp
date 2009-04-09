@@ -77,6 +77,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     layout->addWidget(m_view, 0, 1, 1, 1);
 
     m_pitchRuler = new PianoKeyboard(0);
+    m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
 
     m_pianoView = new Panned();
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
