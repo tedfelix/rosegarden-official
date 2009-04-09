@@ -15,107 +15,140 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_DEVICEMANAGERDIALOG_H_
-#define _RG_DEVICEMANAGERDIALOG_H_
+
+#ifndef DEVICESMANAGERNEW_H
+#define DEVICESMANAGERNEW_H
+
+#include "DeviceManagerDialogUi.h"
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include "gui/general/ActionFileClient.h"
+#include "base/MidiTypes.h"
+#include "base/Studio.h"
 
-#include <QMainWindow>
-#include <QString>
-#include <QStringList>
+#include <QWidget>
+#include <QDialog>
+#include <QObject>
 
-#include <vector>
-
-
-class QWidget;
-class QTableWidget;
-class QTableWidgetItem;
-class QPushButton;
-class QCloseEvent;
-class QDialogButtonBox;
 
 namespace Rosegarden
 {
 
-class Studio;
+
+typedef std::vector<MidiDevice *> MidiDeviceList;
+
 class RosegardenDocument;
-class MidiDevice;
+class Studio;
 
-
-class DeviceManagerDialog : public QMainWindow, public ActionFileClient
+/** Creates a device manager dialog
+ *
+ * \author Emanuel Rumpf
+ */
+class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
 {
     Q_OBJECT
-public:
-    DeviceManagerDialog(QWidget *parent, RosegardenDocument *document);
-    ~DeviceManagerDialog();
-
-    void setModified(bool value);
-
-signals:
-    void deviceNamesChanged();
-
-    void editBanks(DeviceId);
-    void editControllers(DeviceId);
-
-    void closing();
-
-protected slots:
-    void slotClose();
-    void slotAddPlayDevice();
-    void slotAddRecordDevice();
-    void slotDeletePlayDevice();
-    void slotDeleteRecordDevice();
-    void slotPlayValueChanged(int row, int col);
-    void slotRecordValueChanged(int row, int col);
-    void slotPlayDeviceSelected(int row, int col);
-    void slotRecordDeviceSelected(int row, int col);
-
-    // for play devices only:
-    void slotImport();
-    void slotExport();
-    void slotSetBanks();
-    void slotSetControllers();
-
-    void slotDevicesResyncd();
-    void populate();
-
-protected:
-    virtual void closeEvent(QCloseEvent *);
-
-private:
-    RosegardenDocument *m_document;
-    Studio *m_studio;
-	
-	QDialogButtonBox * m_dialogButtonBox;
-
-    QPushButton *m_deletePlayButton;
-    QPushButton *m_deleteRecordButton;
-    QPushButton *m_importButton;
-    QPushButton *m_exportButton;
-    QPushButton *m_banksButton;
-    QPushButton *m_controllersButton;
-
-    QStringList m_playConnections;
-    QStringList m_recordConnections;
-    void makeConnectionList(MidiDevice::DeviceDirection direction, 
-			    QStringList &list);
     
-    QTableWidget *m_playTable;
-    QTableWidget *m_recordTable;
-
-    typedef std::vector<MidiDevice *> MidiDeviceList;
-    MidiDeviceList m_playDevices;
-    MidiDeviceList m_recordDevices;
-
-    DeviceId getPlayDeviceIdAt(int row); // NO_DEVICE = not found
-    DeviceId getRecordDeviceIdAt(int row); // NO_DEVICE = not found
-
-    QString m_noConnectionString;
+public:
+    
+    DeviceManagerDialog (QWidget* parent, RosegardenDocument* doc);
+    ~DeviceManagerDialog();
+    
+    /**
+    *    Clear all lists
+    */
+    void clearAllPortsLists();
+    
+    /**
+    *    make Slot connections
+    */
+    void connectSignalsToSlots();
+    
+    MidiDevice* getDeviceByName(QString deviceName);
+    MidiDevice* getDeviceById(DeviceId devId);
+    
+    MidiDevice* getMidiDeviceOfItem(QTreeWidgetItem* twItem);
+    MidiDevice* getCurrentlySelectedDevice(QTreeWidget* treeWid);
+    
+    void connectMidiDeviceToPort (MidiDevice* mdev, QString portName);
+    
+    /**
+    *    If the selected device has changed, this
+    *    marks (checks) the associated list entry in the ports list (connection)
+    */
+    void updateCheckStatesOfPortsList(QTreeWidget* treeWid_ports, QTreeWidget* treeWid_devices);
+    
+    /**
+    *    adds/removes list entries in the visible devices-list (treeWid),
+    *    if the (invisible) device-list of the sequencer has changed
+    */
+    void updateDevicesList(DeviceList* devices, QTreeWidget* treeWid, 
+                            MidiDevice::DeviceDirection in_out_direction);
+    
+    /**
+    *    search treeWid for the item associated with devId
+    */
+    QTreeWidgetItem* searchItemWithDeviceId(QTreeWidget* treeWid, DeviceId devId);
+    
+    QTreeWidgetItem* searchItemWithPort(QTreeWidget* treeWid, QString portName);
+    
+    /**
+    *    add/remove list entries in the visible ports-list (connections),
+    *    if the (invisible) connections of the sequencer/studio have changed.
+    */
+    void updatePortsList(QTreeWidget* treeWid, MidiDevice::DeviceDirection PlayRecDir);
+    
+    
+signals:
+    //void deviceNamesChanged();
+    
+    void editBanks (DeviceId);
+    void editControllers (DeviceId);
+    
+    void sigDeviceNameChanged(DeviceId);
+    
+    
+public slots:
+    void slotOutputPortClicked(QTreeWidgetItem * item, int column);
+    void slotPlaybackDeviceSelected();
+    
+    void slotInputPortClicked(QTreeWidgetItem * item, int column);
+    void slotRecordDeviceSelected();
+    void slotRecordDevicesListItemClicked(QTreeWidgetItem* item, int col);
+    
+    void slotDeviceItemChanged (QTreeWidgetItem * item, int column);
+    
+    void slotRefreshOutputPorts();
+    void slotRefreshInputPorts();
+    
+    void slotAddPlaybackDevice();
+    void slotAddRecordDevice();
+    
+    void slotDeletePlaybackDevice();
+    void slotDeleteRecordDevice();
+    
+    void slotManageBanksOfPlaybackDevice();
+    void slotEditControllerDefinitions();
+    
+    void show();
+    void slotClose();
+    void slotHelpRequested();
+    
+protected:
+    //
+    RosegardenDocument *m_doc;
+    Studio *m_studio;
+    
+    /**
+    *    used to store the device ID in the QTreeWidgetItem
+    *    of the visible device list (QTreeWidget)
+    */
+    int m_UserRole_DeviceId; // = Qt::UserRole + 1;
+    
+    QString m_noPortName;
 };
 
 
-}
+} // end namespace Rosegarden
 
-#endif
+#endif // DEVICESMANAGERNEW_H
+

@@ -170,7 +170,7 @@
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
 #include "gui/widgets/TmpStatusMsg.h"
-#include "gui/ui/DevicesManagerNew.h"
+#include "gui/studio/DeviceManagerDialog.h"
 #include "gui/widgets/InputDialog.h"
 
 #include <QApplication>
@@ -703,8 +703,7 @@ void RosegardenMainWindow::setupActions()
     createAction("remap_instruments", SLOT(slotRemapInstruments()));
     createAction("audio_mixer", SLOT(slotOpenAudioMixer()));
     createAction("midi_mixer", SLOT(slotOpenMidiMixer()));
-    createAction("open_devices_manager_new", SLOT(slotOpenDeviceManagerNew()));
-    createAction("manage_devices", SLOT(slotManageMIDIDevices()));
+    createAction("manage_midi_devices", SLOT(slotManageMIDIDevices()));
     createAction("manage_synths", SLOT(slotManageSynths()));
     createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
     createAction("enable_midi_routing", SLOT(slotEnableMIDIThruRouting()));
@@ -7790,7 +7789,7 @@ void RosegardenMainWindow::slotOpenDeviceManagerNew()
         //delete m_devicesManagerNew;
     }
     if(! m_devicesManagerNew){
-        m_devicesManagerNew = new DevicesManagerNew(this, getDocument());
+        m_devicesManagerNew = new DeviceManagerDialog(this, getDocument());
         //m_devicesManagerNew->setupUi(dynamic_cast<QDialog*>(m_devicesManagerNew));
         
         //devMan->setAttribute(Qt::WA_DeleteOnClose);    // destroys dialog, if close event was accepted

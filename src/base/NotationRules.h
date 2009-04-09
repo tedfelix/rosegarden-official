@@ -59,7 +59,23 @@ namespace Rosegarden
 class NotationRules
 {
 public:
-    NotationRules() { };
+    NotationRules() {
+        // This class is used in various places, and each different place pulls
+        // a bit of this and a bit of that, but nothing uses everything.  This
+        // creates a number of annoying compiler warnings about unused
+        // variables, and a shifting list of unused variables.  What's unused by
+        // this class is used by that class, and so on.  So let's use them all
+        // one time for something totally pointless, just to shut up these
+        // compiler warnings once and for all.
+        int foo = scale_Cmajor[0];
+        foo = scale_Cminor[0];
+        foo = scale_Cminor_harmonic[0];
+        foo = steps_Cmajor[0];
+        foo = steps_Cminor[0];
+        foo = steps_Cminor_harmonic[0];
+        foo = steps_Cmajor_with_sharps[0];
+        foo = steps_Cmajor_with_flats[0];    
+    };
     ~NotationRules() { };
 
     /**

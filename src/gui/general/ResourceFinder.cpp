@@ -31,7 +31,7 @@ namespace Rosegarden
 
    * Bundled into the application as Qt4 resources.  These may be
      opened using Qt classes such as QFile, with "fake" file paths
-     starting with a colon.  For example ":ui/rosegardenui.rc".
+     starting with a colon.  For example ":rc/rosegardenui.rc".
 
    * Installed with the Rosegarden package, or separately by a
      system administrator.  These files are found beneath some root

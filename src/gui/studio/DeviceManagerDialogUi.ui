@@ -1,7 +1,7 @@
 <ui version="4.0" >
  <author>Emanuel Rumpf</author>
- <class>DevicesManagerNewUi</class>
- <widget class="QMainWindow" name="DevicesManagerNewUi" >
+ <class>DeviceManagerDialogUi</class>
+ <widget class="QMainWindow" name="DeviceManagerDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -18,7 +18,7 @@
    </font>
   </property>
   <property name="windowTitle" >
-   <string>Midi Devices Manager</string>
+   <string>Manage MIDI Devices</string>
   </property>
   <property name="windowIcon" >
    <iconset resource="../../../data/data.qrc" >
@@ -958,7 +958,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>DevicesManagerNewUi</receiver>
+   <receiver>DeviceManagerDialogUi</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel" >
@@ -974,7 +974,7 @@ p, li { white-space: pre-wrap; }
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>DevicesManagerNewUi</receiver>
+   <receiver>DeviceManagerDialogUi</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel" >

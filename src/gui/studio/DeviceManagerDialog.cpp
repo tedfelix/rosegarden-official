@@ -4,21 +4,23 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
-*/
+
+    Written February 2009 by Emanuel Rumpf.
+
+ */
 
 
 #include "DeviceManagerDialog.h"
 
-#include "ChangeRecordDeviceCommand.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/Device.h"
@@ -33,916 +35,1003 @@
 #include "commands/studio/RenameDeviceCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "gui/dialogs/ExportDeviceDialog.h"
-#include "gui/dialogs/ImportDeviceDialog.h"
-#include "gui/general/ResourceFinder.h"
-#include "gui/widgets/TmpStatusMsg.h"
+#include "gui/general/IconLoader.h"
 
-#include <QApplication>
-#include <QAction>
-#include <QFileDialog>
-#include <QMainWindow>
-#include <QMessageBox>
-#include <QByteArray>
-#include <QDataStream>
-#include <QDialog>
-#include <QDir>
-#include <QFileInfo>
-#include <QFrame>
-#include <QGridLayout>
-#include <QGroupBox>
-#include <QLayout>
-#include <QPushButton>
-#include <QSizePolicy>
-#include <QString>
-#include <QStringList>
-#include <QTableWidget>
-#include <QTableWidgetItem>
-#include <QHeaderView>
-#include <QToolTip>
 #include <QWidget>
-#include <QComboBox>
-#include <QCheckBox>
-#include <QShortcut>
-#include <QDialogButtonBox>
+#include <QMainWindow>
+#include <QObject>
+#include <QFont>
+#include <QMessageBox>
 
-// #include <kglobal.h>
-// #include <kstandardshortcut.h>
-// #include <kstandardaction.h>
 
 namespace Rosegarden
 {
 
-static const int PLAY_NAME_COL = 0;
-static const int PLAY_CONNECTION_COL = 1;
-
-static const int RECORD_NAME_COL = 0;
-static const int RECORD_CURRENT_COL = 1;
-static const int RECORD_CONNECTION_COL = 2;
-
-
-DeviceManagerDialog::DeviceManagerDialog(QWidget *parent,
-            RosegardenDocument *document) :
-            QMainWindow(parent),
-            m_document(document),
-            m_studio(&document->getStudio())
-{
-    QFrame * mainBox = new QFrame(this);
-    setCentralWidget(mainBox);
-    mainBox->setContentsMargins(10, 10, 10, 10);
-    QVBoxLayout *mainLayout = new QVBoxLayout(mainBox);
-    mainLayout->setSpacing(10);
-	
-	resize( 780, 500 );
-	
-    setWindowTitle(tr("Manage MIDI Devices"));
-
-	
-	// setup playback devices
-	// **************************************************************************
-	//
-    QGroupBox *groupBox = new QGroupBox(tr("Play devices"), mainBox);
-    QHBoxLayout *groupBoxLayout = new QHBoxLayout;
-    mainLayout->addWidget(groupBox);
-
-    m_playTable = new QTableWidget(0, 2, groupBox);
-//     m_playTable->setSorting(false);
-	m_playTable->setSortingEnabled(false);
-	/*
-    m_playTable->setRowMovingEnabled(false);	//&&&
-    m_playTable->setColumnMovingEnabled(false);
-	*/
-	m_playTable->setShowGrid(false);
-	
-	m_playTable->setHorizontalHeaderItem( PLAY_NAME_COL, new QTableWidgetItem( tr("Device")));
-	m_playTable->setHorizontalHeaderItem( PLAY_CONNECTION_COL, new QTableWidgetItem( tr("Connection")));
-	
-    m_playTable->horizontalHeader()->show();
-    m_playTable->verticalHeader()->hide();
-	
-// 	m_playTable->setLeftMargin(0);
-	m_playTable->setContentsMargins(0, 4, 0, 4);	// left, top, right, bottom
-	
-	//     m_playTable->setSelectionMode(QTableWidget::SingleRow);
-	m_playTable->setSelectionBehavior( QAbstractItemView::SelectRows );
-    groupBoxLayout->addWidget(m_playTable);
-
-	
-	// setup action buttons for playback devices
-	// **************************************************************************
-	//
-    QFrame *frame = new QFrame(groupBox);
-    QGridLayout *vlayout = new QGridLayout(frame);
-    groupBoxLayout->addWidget(frame);
-
-    QPushButton *addButton = new QPushButton(tr("New"));
-    m_deletePlayButton = new QPushButton(tr("Delete"));
-    m_importButton = new QPushButton(tr("Import..."));
-    m_exportButton = new QPushButton(tr("Export..."));
-    m_banksButton = new QPushButton(tr("Banks..."));
-    m_controllersButton = new QPushButton(tr("Control Events..."));
-
-    vlayout->addWidget(addButton, 0, 0);
-    vlayout->addWidget(m_deletePlayButton, 0, 1);
-    vlayout->addWidget(m_importButton, 1, 0);
-    vlayout->addWidget(m_exportButton, 1, 1);
-    vlayout->addWidget(m_banksButton, 2, 0);
-    vlayout->addWidget(m_controllersButton, 2, 1);
-    vlayout->addWidget(new QLabel(" "), 3, 0, 1, 2);
-    vlayout->setRowStretch(3, 10);
-
-    frame->setLayout(vlayout);
-    groupBox->setLayout(groupBoxLayout);
-
-    addButton->setToolTip(tr("Create a new Play device"));
-    m_deletePlayButton->setToolTip(tr("Delete the selected device"));
-    m_importButton->setToolTip(tr("Import Bank, Program and Controller data from a Rosegarden file to the selected device"));
-    m_exportButton->setToolTip(tr("Export Bank and Controller data to a Rosegarden interchange file"));
-    m_banksButton->setToolTip(tr("View and edit Banks and Programs for the selected device"));
-    m_controllersButton->setToolTip(tr("View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box "));
-
-	// connect action buttons - for playback devices
-    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddPlayDevice()));
-    connect(m_deletePlayButton, SIGNAL(clicked()), this, SLOT(slotDeletePlayDevice()));
-    connect(m_importButton, SIGNAL(clicked()), this, SLOT(slotImport()));
-    connect(m_exportButton, SIGNAL(clicked()), this, SLOT(slotExport()));
-    connect(m_banksButton, SIGNAL(clicked()), this, SLOT(slotSetBanks()));
-    connect(m_controllersButton, SIGNAL(clicked()), this, SLOT(slotSetControllers()));
-
-	
-	/* // old:
-	connect(m_playTable, SIGNAL(valueChanged(int, int)),
-			this, SLOT(slotPlayValueChanged (int, int)));
-	connect(m_playTable, SIGNAL(currentChanged(int, int)),
-			this, SLOT(slotPlayDeviceSelected (int, int)));
-	*/
-// 	connect(m_playTable, SIGNAL(cellChanged(int, int)),
-// 			this, SLOT(slotPlayValueChanged (int, int)));
-	connect(m_playTable, SIGNAL(cellChanged(int, int)),
-			this, SLOT(slotPlayDeviceSelected (int, int)));
-	
-	
-	// setup record devices
-	// **************************************************************************
-	//
-	groupBox = new QGroupBox(tr("Record devices"), mainBox);
-    groupBoxLayout = new QHBoxLayout;
-    mainLayout->addWidget(groupBox);
-
-    m_recordTable = new QTableWidget(0, 3, groupBox);
-//     m_recordTable->setSorting(false);
-	m_playTable->setSortingEnabled(false);
-	m_recordTable->setShowGrid(false);
-	/*
-    m_recordTable->setRowMovingEnabled(false);		//&&&
-    m_recordTable->setColumnMovingEnabled(false);
-	*/
-	
-    m_recordTable->setHorizontalHeaderItem( RECORD_NAME_COL, new QTableWidgetItem( tr("Device")));
-	m_recordTable->setHorizontalHeaderItem( RECORD_CURRENT_COL, new QTableWidgetItem( tr("Current")));
-	m_recordTable->setHorizontalHeaderItem( RECORD_CONNECTION_COL, new QTableWidgetItem( tr("Connection")));
-	
-    m_recordTable->horizontalHeader()->show();
-    m_recordTable->verticalHeader()->hide();
-	
-// 	m_recordTable->setLeftMargin(0);
-	m_recordTable->setContentsMargins(0, 4, 0, 4);	// left, top, right, bottom
-	
-//     m_recordTable->setSelectionMode(QTableWidget::SingleRow);
-	m_recordTable->setSelectionBehavior( QAbstractItemView::SelectRows );
-// 	m_recordTable->setSelectionMode( QAbstractItemView::ExtendedSelection );
-	
-    groupBoxLayout->addWidget(m_recordTable);
-	
-	
-	
-	// setup action buttons - for record devices
-	// **************************************************************************
-	//
-	frame = new QFrame(groupBox);
-    vlayout = new QGridLayout(frame);
-    groupBoxLayout->addWidget(frame);
-
-    addButton = new QPushButton(tr("New"), frame);
-    m_deleteRecordButton = new QPushButton(tr("Delete"), frame);
-
-    vlayout->addWidget(addButton, 0, 0);
-    vlayout->addWidget(m_deleteRecordButton, 0, 1);
-    vlayout->addWidget(new QLabel(" "), 1, 0, 1, 2);
-    vlayout->setRowStretch(1, 10);
-
-    frame->setLayout(vlayout);
-    groupBox->setLayout(groupBoxLayout);
-
-    addButton->setToolTip(tr("Create a new Record device"));
-    m_deleteRecordButton->setToolTip(tr("Delete the selected device"));
-
-	// connect action buttons - for record devices
-    connect(addButton, SIGNAL(clicked()), this, SLOT(slotAddRecordDevice()));
-    connect(m_deleteRecordButton, SIGNAL(clicked()), this, SLOT(slotDeleteRecordDevice()));
-
-	
-	// 
-    connect(m_recordTable, SIGNAL(currentChanged(int, int)),
-            this, SLOT(slotRecordDeviceSelected (int, int)));
-    connect(m_recordTable, SIGNAL(valueChanged(int, int)),
-            this, SLOT(slotRecordValueChanged (int, int)));
-
-    connect(document, SIGNAL(devicesResyncd()), this, SLOT(slotDevicesResyncd()));
-
-    m_noConnectionString = tr("No connection");
-
-    slotDevicesResyncd();
-
-    setMinimumHeight(400);
-    setMinimumWidth(600);
-
-    
-	/*
-	// replaced by QDialogButtonBox 
-	//
-	QFrame* btnBox = new QFrame(mainBox);
-    btnBox->setContentsMargins(0, 0, 0, 0);
-    QHBoxLayout* layout = new QHBoxLayout(btnBox);
-    layout->setSpacing(10);
-    mainLayout->addWidget(btnBox);
-
-    btnBox->setSizePolicy(
-        QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
-
-    QPushButton *closeButton = new QPushButton(tr("Close"), btnBox);
-
-    layout->addStretch(10);
-    layout->addWidget(closeButton);
-    layout->addSpacing(5);
-	*/
-
-	/*
-    KAction* close = KStandardAction::close(this,
-                                       SLOT(slotClose()),
-                                       actionCollection());
-	*/
-    QAction *close = createAction("file_close", SLOT(slotClose()) );
-
-//     closeButton->setText(close->text());
-//     connect(closeButton, SIGNAL(clicked()), this, SLOT(slotClose()));
-
-    mainBox->setLayout(mainLayout);
-
-    // some adjustments
-	/*
-    new KToolBarPopupAction(tr("Und&o"),
-                            "undo",
-                            KStandardShortcut::shortcut(KStandardShortcut::Undo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Undo));
-
-    new KToolBarPopupAction(tr("Re&do"),
-                            "redo",
-                            KStandardShortcut::shortcut(KStandardShortcut::Redo),
-                            actionCollection(),
-                            KStandardAction::stdName(KStandardAction::Redo));
-	*/
-	
-    createGUI("devicemanager.rc"); //@@@JAS orig. 0
-
-//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
-//     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),//&&&
-//             this, SLOT(populate()));
-
-    m_playTable->setCurrentCell( -1, 0);
-    m_recordTable->setCurrentCell( -1, 0);
-
-//     setAutoSaveSettings(DeviceManagerConfigGroup, true);		//&&&
-
-    //    enableButtonOK(false);
-    //    enableButtonApply(false);
-	
-	
-	// setup dialog buttons
-	// **************************************************************************
-	//
-	QDialogButtonBox::StandardButtons sbuttons = \
-//			QDialogButtonBox::Ok |
-			QDialogButtonBox::Close | 
-//			QDialogButtonBox::Apply |
-//			QDialogButtonBox::RestoreDefaults |
-			QDialogButtonBox::Help;
-    //QDialogButtonBox *
-	m_dialogButtonBox = new QDialogButtonBox( sbuttons, Qt::Horizontal, this );
-	m_dialogButtonBox->setObjectName( "dialog_base_button_box" );
-	mainLayout->addWidget( m_dialogButtonBox );
-    
-    // fist disable the Apply button
-	QPushButton * btApply;
-	btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-	if( btApply )
-		btApply->setEnabled( false );
-	
-    // setup connctions for the Buttons of QDialogButtonBox:
-	// **************************************************************************
-	//
-    //@@@### this connection doesn't work: - but why ???
-//     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton * button)), 
-//             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton * button)) );
-//	connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
-	connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotClose()));
-	//
-	
-	//
-	
-}// end of constructor
-
 
 DeviceManagerDialog::~DeviceManagerDialog()
 {
-    if (m_document) {
-//         CommandHistory::getInstance()->detachView(actionCollection());		//&&&
-        m_document = 0;
-    }
-    
-    RG_DEBUG << "\n*** DeviceManagerDialog::~DeviceManagerDialog\n" << endl;
+    // destructor
 }
+
+
+DeviceManagerDialog::DeviceManagerDialog(QWidget * parent,
+                                     RosegardenDocument *
+                                     doc) : QMainWindow(parent),
+    Ui::DeviceManagerDialogUi(), m_doc(doc)
+{
+    RG_DEBUG << "DeviceManagerDialog::ctor" << endl;
+
+    // start constructor
+    setObjectName("DeviceManager");
+    setWindowModality(Qt::NonModal);
+
+    m_UserRole_DeviceId = Qt::UserRole + 1;
+    m_noPortName = tr("[ No port ]");
+
+    //m_doc = 0;    // RG document
+    m_studio = &m_doc->getStudio();
+
+    setupUi(this);
+
+    // gui adjustments
+    //
+    // adjust some column widths for better visibility
+    m_treeWidget_playbackDevices->setColumnWidth(0, 200);   // column, width
+    m_treeWidget_recordDevices->setColumnWidth(0, 150);
+    m_treeWidget_recordDevices->setColumnWidth(1, 50);
+    m_treeWidget_recordDevices->setColumnWidth(3, 150);
+
+    connectSignalsToSlots();
+
+    clearAllPortsLists();
+}
+
+void
+DeviceManagerDialog::show()
+{
+    RG_DEBUG << "DeviceManagerDialog::show()" << endl;
+
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+
+    // select the top level item by default, if one exists, just as the bank
+    // editor does
+    if (m_treeWidget_playbackDevices->topLevelItem(0)) {
+        m_treeWidget_playbackDevices->topLevelItem(0)->setSelected(true);
+    }
+    if (m_treeWidget_recordDevices->topLevelItem(0)) {
+        m_treeWidget_recordDevices->topLevelItem(0)->setSelected(true);
+    }
+
+    QMainWindow::show();
+}
+
 
 void
 DeviceManagerDialog::slotClose()
 {
-    if (m_document) {
-//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
-        m_document = 0;
+    RG_DEBUG << "DeviceManagerDialog::slotClose()" << endl;
+    /*
+       if (m_doc) {
+       //CommandHistory::getInstance()->detachView(actionCollection());    //&&&
+       m_doc = 0;
+       }
+     */
+    close(0);
+}
+
+
+void
+DeviceManagerDialog::slotRefreshOutputPorts()
+{
+    RG_DEBUG << "DeviceManagerDialog::slotRefreshOutputPorts()" << endl;
+
+    updatePortsList(m_treeWidget_outputPorts, MidiDevice::Play);
+
+    updateDevicesList(0, m_treeWidget_playbackDevices,
+                      MidiDevice::Play);
+
+    updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
+                                 m_treeWidget_playbackDevices);
+}
+
+
+void
+DeviceManagerDialog::slotRefreshInputPorts()
+{
+    RG_DEBUG << "DeviceManagerDialog::slotRefreshInputPorts()" << endl;
+
+    updatePortsList(m_treeWidget_inputPorts, MidiDevice::Record);
+
+    updateDevicesList(0, m_treeWidget_recordDevices,
+                      MidiDevice::Record);
+
+    updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
+                                 m_treeWidget_recordDevices);
+}
+
+
+
+
+void
+DeviceManagerDialog::slotPlaybackDeviceSelected()
+{
+    RG_DEBUG << "DeviceManagerDialog::slotPlaybackDeviceSelected()" << endl;
+    //
+    updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
+                                 m_treeWidget_playbackDevices);
+
+    // center selected item
+    QTreeWidgetItem *twItemS;
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    if (!mdev) {
+        return;
+    }
+    twItemS =
+            searchItemWithPort(m_treeWidget_outputPorts,
+                               strtoqstr(mdev->getConnection()));
+    if (twItemS) {
+        m_treeWidget_outputPorts->scrollToItem(twItemS,
+                                               QAbstractItemView::
+                                               PositionAtCenter);
+    }
+}
+
+
+void
+DeviceManagerDialog::slotRecordDeviceSelected()
+{
+    RG_DEBUG << "DeviceManagerDialog::slotRecordDevicesSelected()" << endl;
+    //
+    updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
+                                 m_treeWidget_recordDevices);
+
+    // center selected item
+    QTreeWidgetItem *twItemS;
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_recordDevices);
+    if (!mdev) {
+        return;
+    }
+    twItemS =
+            searchItemWithPort(m_treeWidget_inputPorts,
+                               strtoqstr(mdev->getConnection()));
+    if (twItemS) {
+        m_treeWidget_inputPorts->scrollToItem(twItemS,
+                                              QAbstractItemView::
+                                              PositionAtCenter);
+    }
+}
+
+
+
+void
+DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
+{
+    RG_DEBUG << "DeviceManagerDialog::slotOutputPortClicked(...)" << endl;
+
+    MidiDevice *mdev;
+    QString portName;
+    int OutputPortListColumn_Name = 0;
+
+    portName = twItem->text(OutputPortListColumn_Name);
+
+    RG_DEBUG << "DeviceManagerDialog: portName: " << portName << endl;
+
+    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    if (!mdev) {
+        return;
+    }
+    connectMidiDeviceToPort(mdev, portName);
+
+    // update the playback-devices-list 
+    updateDevicesList(0, m_treeWidget_playbackDevices,
+                      MidiDevice::Play);
+
+    updateCheckStatesOfPortsList(m_treeWidget_outputPorts,
+                                 m_treeWidget_playbackDevices);
+}
+
+
+void
+DeviceManagerDialog::slotInputPortClicked(QTreeWidgetItem *
+                                                   twItem, int column)
+{
+    RG_DEBUG << "DeviceManagerDialog::slotInputPortClicked(...)" << endl;
+
+    MidiDevice *mdev;
+    QString portName;
+    int InputPortListColumn_Name = 0;
+
+    portName = twItem->text(InputPortListColumn_Name);
+    mdev = getCurrentlySelectedDevice(m_treeWidget_recordDevices);
+    if (!mdev) {
+        return;
+    }
+    connectMidiDeviceToPort(mdev, portName);
+
+    // center selected item
+    QTreeWidgetItem *twItemS;
+    twItemS = searchItemWithPort(m_treeWidget_inputPorts, portName);
+    if (twItemS) {
+        m_treeWidget_inputPorts->scrollToItem(twItemS,
+                                              QAbstractItemView::
+                                              PositionAtCenter);
     }
 
-    close();
+    // update the record-devices-list
+    updateDevicesList(0, m_treeWidget_recordDevices,
+                      MidiDevice::Record);
+    updateCheckStatesOfPortsList(m_treeWidget_inputPorts,
+                                 m_treeWidget_recordDevices);
 }
 
-void
-DeviceManagerDialog::slotDevicesResyncd()
-{
-    makeConnectionList(MidiDevice::Play, m_playConnections);
-    makeConnectionList(MidiDevice::Record, m_recordConnections);
 
-    populate();
+QTreeWidgetItem
+*DeviceManagerDialog::searchItemWithPort(QTreeWidget *treeWid,
+                                                    QString
+                                                    portName)
+{
+    RG_DEBUG << "DeviceManagerDialog::searchItemWithPort(...)" << endl;
+
+    // find the TreeWidgetItem, that is associated with the port with portName
+    // searches Items of treeWid
+    int i, cnt;
+    QTreeWidgetItem *twItem;
+    QString portNameX;
+
+    if (portName == "") {
+        portName = m_noPortName;
+    }
+
+    cnt = treeWid->topLevelItemCount();
+    for (i = 0; i < cnt; i++) {
+        twItem = treeWid->topLevelItem(i);
+
+        portNameX = twItem->text(0);
+        if (portNameX == portName) {
+            return twItem;
+        }
+    }
+    return 0;               //twItem;
 }
 
-void
-DeviceManagerDialog::populate()
+
+QTreeWidgetItem
+*DeviceManagerDialog::searchItemWithDeviceId(QTreeWidget *treeWid,
+                                           DeviceId devId)
 {
-    DeviceList *devices = m_studio->getDevices();
+    RG_DEBUG << "DeviceManagerDialog::searchItemWithDeviceId(..., devId = "
+             << devId << ")" << endl;
 
-    //QSettings settings;
-    //settings.beginGroup( SequencerOptionsConfigGroup );
+    // find the TreeWidgetItem, that is associated with the device with devId
+    // searches Items of treeWid
+    int i, cnt;
+    QTreeWidgetItem *twItem;
+    DeviceId devIdx;
 
-    //DeviceId recordDevice = settings.value("midirecorddevice").toUInt();
-    //settings.endGroup();
-    m_playDevices.clear();
-    m_recordDevices.clear();
+    cnt = treeWid->topLevelItemCount();
+    for (i = 0; i < cnt; i++) {
+        twItem = treeWid->topLevelItem(i);
 
-    for (DeviceList::iterator it = devices->begin();
-         it != devices->end(); ++it) {
-        if ((*it)->getType() == Device::Midi) {
-            MidiDevice *md =
-                dynamic_cast<MidiDevice *>(*it);
-            if (md) {
-                if (md->getDirection() == MidiDevice::Play) {
-                    m_playDevices.push_back(md);
-                } else {
-                    m_recordDevices.push_back(md);
-                }
+        devIdx = twItem->data(0, m_UserRole_DeviceId).toInt();
+        if (devIdx == devId) {
+            return twItem;
+        }
+    }
+    return 0;               //twItem;
+}
+
+
+void
+DeviceManagerDialog::updateDevicesList(DeviceList * devices,
+                                     QTreeWidget * treeWid,
+                                     MidiDevice::DeviceDirection in_out_direction)
+{
+    RG_DEBUG << "DeviceManagerDialog::updateDevicesList(...)" << endl;
+
+    /**
+     * This method:
+     * 1. removes deleted devices from list
+     * 2. adds a list entry, if a new device was found
+     * 3. updates the port-names (connections) of the listed devices
+     *
+     * params:
+     * in_out_direction must be MidiDevice::Play or MidiDevice::Record
+     **/
+//         * col: the column in the treeWidget to show the connection-name (port)
+    int i, cnt;
+    QTreeWidgetItem *twItem;
+    DeviceId devId = Device::NO_DEVICE;
+    Device *device;
+    MidiDevice *mdev;
+    QString outPort;
+    QList < MidiDevice * >midiDevices;
+    QString devName;
+
+    //DeviceList *
+    devices = m_studio->getDevices();
+
+//         QStringList listEntries;
+    QList <DeviceId> listEntries;
+
+
+//         cnt = m_treeWidget_playbackDevices->topLevelItemCount();
+    cnt = treeWid->topLevelItemCount();
+    // create a list of IDs of all listed devices
+    //
+    //for( i=0; i < cnt; i++ ){
+    i = 0;
+    while (i < cnt) {
+        twItem = treeWid->topLevelItem(i);
+
+        devId = twItem->data(0, m_UserRole_DeviceId).toInt();
+        mdev = getDeviceById(devId);
+
+        // if the device does not exist (anymore),
+        // auto-remove the device from the list
+        if (!mdev) {    //== Device::NO_DEVICE ){
+            twItem = treeWid->takeTopLevelItem(i); // remove list entry
+            //
+            cnt = treeWid->topLevelItemCount(); // update count
+            continue;
+        }
+        listEntries << static_cast < int >(devId); // append to list
+        //
+        i += 1;
+    }
+
+
+    cnt = devices->size();
+    //
+    for (i = 0; i < cnt; i++) {
+        device = devices->at(i);
+
+        if (device->getType() == Device::Midi) {
+            mdev = dynamic_cast < MidiDevice * >(device);
+            if (mdev) {
+                midiDevices << mdev; // append
+            } else {
+                //RG_DEBUG << "ERROR: mdev is NULL in updateDevicesList() " << endl;
+                //continue;
             }
+        }               // end if MidiDevice
+    }
+
+
+    cnt = midiDevices.size();
+    //
+    for (i = 0; i < cnt; i++) {
+
+        mdev = midiDevices.at(i);
+
+        RG_DEBUG << "DeviceManagerDialog: mdev = midiDevices.at(" << i << ") == id: " << mdev->getId() << endl;
+
+        if (mdev->getDirection() == in_out_direction) {
+
+            RG_DEBUG << "DeviceManagerDialog: direction matches in_out_direction" << endl;
+
+            //m_playDevices.push_back ( mdev );
+            devId = mdev->getId();
+            outPort = strtoqstr(mdev->getConnection());
+
+            if (!listEntries.contains(devId)) {
+                // device is not listed
+                // create new entry
+                RG_DEBUG << "DeviceManagerDialog: listEntries does not contain devId " 
+                         << devId << endl;
+                twItem =
+                        new QTreeWidgetItem(treeWid,
+                                            QStringList() <<
+                                            strtoqstr(mdev->getName()));
+
+                // set port text
+                if (mdev->getDirection() == MidiDevice::Record) {
+                    // set record en-/disabled
+                    twItem->setText(1,
+                                    mdev->isRecording() ? tr("Yes") :
+                                    tr("No"));
+                    twItem->setText(2, outPort);
+                } else {
+                    twItem->setText(1, outPort);
+                }
+
+                // save deviceId in data field
+                twItem->setData(0, m_UserRole_DeviceId,
+                                QVariant((int) mdev->getId()));
+                twItem->setFlags(twItem->flags() | Qt::ItemIsEditable);
+                twItem->setSizeHint(0, QSize(24, 24));
+                treeWid->addTopLevelItem(twItem);
+
+            } else {  // list contains mdev (midi-device)
+                RG_DEBUG << "DeviceManagerDialog: device is already listed" << endl;
+
+                // device is already listed
+                twItem = searchItemWithDeviceId(treeWid, devId);
+                if (twItem) {
+                    RG_DEBUG << "DeviceManagerDialog: twItem is non-zero" << endl;
+
+                    devName = strtoqstr(mdev->getName());
+
+                    RG_DEBUG << "DeviceManagerDialog: devName: " << devName << endl;
+
+                    if (devName != twItem->text(0)) {
+                        RG_DEBUG << "DeviceManagerDialog: devName != twItem->text(0)" << endl;
+
+                        twItem->setText(0, devName);
+                    }
+                    // update connection-name (port)
+                    if (mdev->getDirection() == MidiDevice::Record) {
+                        twItem->setText(1,
+                                        mdev->isRecording() ? tr("Yes")
+                                : tr("No"));
+                        twItem->setText(2, outPort);
+                    } else {
+                        RG_DEBUG << "DeviceManagerDialog: twItem->setText(1, "
+                                 << outPort << ")" << endl;
+
+                        twItem->setText(1, outPort);
+                    }
+                } else {
+                    RG_DEBUG <<
+                    "Warning: twItem is NULL in DeviceManagerDialog::updateDevicesList() "
+                             << endl;
+                }
+            }       // if contains
+
+
+        } else          // other connection-direction, ignore
+        {
+            // skip
+        }
+
+    }                       // end for device
+
+}                               // end funciton updateDevicesList()
+
+
+MidiDevice
+*DeviceManagerDialog::getDeviceById(DeviceId devId)
+{
+    RG_DEBUG << "DeviceManagerDialog::getDeviceById(...)" << endl;
+
+    MidiDevice *mdev;
+    Device *dev;
+    dev = m_studio->getDevice(devId);
+    mdev = dynamic_cast < MidiDevice * >(dev);
+    return mdev;
+}
+
+MidiDevice
+*DeviceManagerDialog::getDeviceByName(QString deviceName)
+{
+    RG_DEBUG << "DeviceManagerDialog::getDeviceByName(...)" << endl;
+
+    Device *dev;
+    MidiDevice *mdev;
+    int i, cnt;
+    DeviceList *devices;
+
+    devices = m_studio->getDevices();
+    cnt = devices->size();
+
+    // search in the device list for deviceName
+    for (i = 0; i < cnt; i++) {
+        dev = devices->at(i);
+
+        if (dev->getType() == Device::Midi) {
+            mdev = dynamic_cast < MidiDevice * >(dev);
+            if (mdev->getName() == qstrtostr(deviceName)) {
+                return mdev;
+            }
+            //if ( mdev->getDirection() == MidiDevice::Play )
+
         }
     }
 
-	while (m_playTable->rowCount() > 0) {
-        m_playTable->removeRow(m_playTable->rowCount() - 1);
+    return 0;
+}
+
+MidiDevice
+*DeviceManagerDialog::getCurrentlySelectedDevice(QTreeWidget *treeWid)
+{
+    RG_DEBUG << "DeviceManagerDialog::getCurrentlySelectedDevice(...)" << endl;
+
+    // return the device user-selected in the m_treeWidget_playbackDevices
+    //
+    QTreeWidgetItem *twItem;
+    MidiDevice *mdev;
+    DeviceId devId;
+    QList <QTreeWidgetItem *> twItemsSelected;
+
+    //twItem = m_treeWidget_playbackDevices->currentItem();
+
+    twItemsSelected = treeWid->selectedItems();
+    twItem = 0;
+    if (twItemsSelected.count() >= 1)
+        twItem = twItemsSelected.at(0);
+
+    if (!twItem)
+        return 0;
+
+    devId = twItem->data(0, m_UserRole_DeviceId).toInt();
+    mdev = getDeviceById(devId);
+//        mdev = getDeviceByName( twItem->text( 0 ) );    // item->text(column)
+    RG_DEBUG << "DeviceManagerDialog: returning non-zero mdev" << endl;
+    return mdev;
+}
+
+
+MidiDevice
+*DeviceManagerDialog::getMidiDeviceOfItem(QTreeWidgetItem *twItem)
+{
+    RG_DEBUG << "DeviceManagerDialog::getMidiDeviceOfItem(...)" << endl;
+
+    // return the device represented by twItem
+    //
+    MidiDevice *mdev;
+    DeviceId devId;
+
+    if (!twItem)
+        return 0;
+    devId = twItem->data(0, m_UserRole_DeviceId).toInt();
+    mdev = getDeviceById(devId);
+//        mdev = getDeviceByName( twItem->text( 0 ) );    // item->text(column)
+    return mdev;
+}
+
+
+void
+DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
+                                                QTreeWidget *treeWid_devices)
+{
+    RG_DEBUG << "DeviceManagerDialog::updateCheckStatesOfPortsList(...)" << endl;
+
+    QTreeWidgetItem *twItem;
+    QFont font;
+
+    MidiDevice *mdev = getCurrentlySelectedDevice(treeWid_devices);
+    if (!mdev) return;
+
+    IconLoader il;
+
+    QString outPort = strtoqstr(mdev->getConnection());
+
+    if (outPort.isEmpty()) {
+        outPort = m_noPortName; // nullPort
     }
-	while (m_recordTable->rowCount() > 0) {
-		m_recordTable->removeRow(m_recordTable->rowCount() - 1);
-    }
 
-    int deviceCount = 0;
+    RG_DEBUG << "DeviceManagerDialog: outPort: " << outPort
+             << " id: " << mdev->getId() << endl;
 
-    for (MidiDeviceList::iterator it = m_playDevices.begin();
-         it != m_playDevices.end(); ++it) {
+    int cnt = treeWid_ports->topLevelItemCount();
 
-// 		 m_playTable->insertRows(deviceCount, 1);
-		 m_playTable->insertRow(deviceCount);
-		
-        QString deviceName = tr("%1").arg(deviceCount + 1);
-        QString connectionName = strtoqstr((*it)->getConnection());
+    for (int i = 0; i < cnt; i++) {
+        twItem = treeWid_ports->topLevelItem(i);
 
-// 		m_playTable->setText(deviceCount, PLAY_NAME_COL, strtoqstr((*it)->getName()));
-//		m_playTable->item(deviceCount, PLAY_NAME_COL)->setText( strtoqstr((*it)->getName()) );
-		// or:
-        m_playTable->setItem(deviceCount, PLAY_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
-		
-        int currentConnectionIndex = m_playConnections.size() - 1;
-        for (unsigned int i = 0; i < m_playConnections.size(); ++i) {
-            if (m_playConnections[i] == connectionName)
-                currentConnectionIndex = i;
+        twItem->setIcon(0, il.load("DeviceManagerDialog/icon-plugged-out.png"));
+        twItem->setSizeHint(0, QSize(24, 24));
+        font = twItem->font(0);
+        font.setWeight(QFont::Normal);
+        twItem->setFont(0, font); // 0=column
+
+        if (outPort == twItem->text(0)) {
+            font.setWeight(QFont::Bold);
+            twItem->setFont(0, font); // 0=column
+            twItem->setIcon(0, il.load("DeviceManagerDialog/icon-plugged-in.png"));
         }
 
-		/*
-        Q3ComboTableItem *item = new Q3ComboTableItem(m_playTable, m_playConnections, false);
-        item->setCurrentIndex(currentConnectionIndex);
-        m_playTable->setItem(deviceCount, PLAY_CONNECTION_COL, item);
-		*/
-		QComboBox *combo = new QComboBox( m_playTable );
-		combo->addItems( m_playConnections );
-		combo->setCurrentIndex( currentConnectionIndex );
-		m_playTable->setCellWidget( deviceCount, PLAY_CONNECTION_COL, combo );
 
-//         m_playTable->adjustRow(deviceCount);	//&&&
-        ++deviceCount;
+    } // end for i
+
+    treeWid_ports->update();        // update view
+
+}  // end updateCheckStatesOfPortsList()
+
+
+void
+DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice * mdev,
+                                           QString portName)
+{
+    RG_DEBUG << "DeviceManagerDialog::connectMidiDeviceToPort(" << mdev->getId()
+             << ", " << portName << ")" << endl;
+
+    if (!mdev) {
+        RG_DEBUG << "Warning: mdev is NULL in DeviceManagerDialog::connectPlaybackDeviceToOutputPort() "
+                 << endl;
+        return;
     }
-
-    int minPlayColumnWidths[] = { 250, 270 };
-    for (int i = 0; i < 2; ++i) {
-//         m_playTable->adjustColumn(i);	//&&&
-		
-        if (m_playTable->columnWidth(i) < minPlayColumnWidths[i])
-            m_playTable->setColumnWidth(i, minPlayColumnWidths[i]);
+    if (mdev->getType() != Device::Midi) {
+        RG_DEBUG << "Warning: Type of mdev is not Device::Midi in DeviceManagerDialog::connectMidiDeviceToPort() "
+                 << endl;
+        //return;
     }
+    QString outPort;
+    outPort = strtoqstr(mdev->getConnection());
 
-    deviceCount = 0;
+    DeviceId devId = mdev->getId();
 
-    for (MidiDeviceList::iterator it = m_recordDevices.begin();
-         it != m_recordDevices.end(); ++it) {
+    if (outPort != portName) {
+        if ((portName == "") || (portName == m_noPortName)) {
+            CommandHistory::getInstance()->addCommand(new
+                                                      ReconnectDeviceCommand
+                                                                (m_studio, devId,
+                                                                ""));
+            mdev->setConnection("");
+            //### FIXME!!!: This does not really disconnect the port !
+            
+        } else {
+            RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
+                     << " devId " << devId << endl;
 
-// 		 m_recordTable->insertRows(deviceCount, 1);
-		 m_recordTable->insertRow(deviceCount);
+            CommandHistory::getInstance()->addCommand(
+                                                   new ReconnectDeviceCommand (
+                                                           m_studio, devId,
+                                                           qstrtostr (portName)));
 
-        QString deviceName = tr("%1").arg(deviceCount + 1);
-        QString connectionName = strtoqstr((*it)->getConnection());
-
-//         m_recordTable->setText(deviceCount, RECORD_NAME_COL, strtoqstr((*it)->getName()));
-//		m_recordTable->item(deviceCount, RECORD_NAME_COL)->setText( strtoqstr((*it)->getName()) );
-		// or:
-	m_recordTable->setItem(deviceCount, RECORD_NAME_COL, new QTableWidgetItem(strtoqstr((*it)->getName())) );
-		
-
-        int currentConnectionIndex = m_recordConnections.size() - 1;
-        for (unsigned int i = 0; i < m_recordConnections.size(); ++i) {
-            if (m_recordConnections[i] == connectionName)
-                currentConnectionIndex = i;
+            // ah HAH!  here was the culprit preventing the various intended
+            // updates from working correctly                                                           
+            mdev->setConnection(qstrtostr(portName));
         }
-		
-		/*
-        Q3ComboTableItem *item = new Q3ComboTableItem(m_recordTable, m_recordConnections, false);
-        item->setCurrentIndex(currentConnectionIndex);
-        m_recordTable->setItem(deviceCount, RECORD_CONNECTION_COL, item);
-		*/
-		
-		QComboBox *	combo = new QComboBox( m_recordTable );
-		combo->addItems( m_recordConnections );
-		combo->setCurrentIndex( currentConnectionIndex );
-		m_recordTable->setCellWidget( deviceCount, RECORD_CONNECTION_COL, combo );
-		
-		/*
-        Q3CheckTableItem *check = new Q3CheckTableItem(m_recordTable, QString());
-        //check->setChecked((*it)->getId() == recordDevice);
-        //check->setText(((*it)->getId() == recordDevice) ?
-        //	       tr("Yes") : tr("No"));
-        check->setChecked((*it)->isRecording());
-        check->setText((*it)->isRecording() ? tr("Yes") : tr("No"));
-        m_recordTable->setItem(deviceCount, RECORD_CURRENT_COL, check);
-		*/
-
-		QCheckBox *check = new QCheckBox( m_recordTable );
-		check->setChecked( (*it)->isRecording() );
-		check->setText( (*it)->isRecording() ? tr("Yes") : tr("No") );
-		m_recordTable->setCellWidget( deviceCount, RECORD_CURRENT_COL, check );		
-
-//         m_recordTable->adjustRow(deviceCount);	//&&&
-        ++deviceCount;
     }
-
-    int minRecordColumnWidths[] = { 180, 70, 270 };
-    for (int i = 0; i < 3; ++i) {
-//         m_recordTable->adjustColumn(i);	//&&&
-		
-        if (m_recordTable->columnWidth(i) < minRecordColumnWidths[i])
-            m_recordTable->setColumnWidth(i, minRecordColumnWidths[i]);
-    }
-
-    slotPlayDeviceSelected(m_playTable->currentRow(), m_playTable->currentColumn());
-    slotRecordDeviceSelected(m_recordTable->currentRow(), m_recordTable->currentColumn());
 }
+
 
 void
-DeviceManagerDialog::makeConnectionList(MidiDevice::DeviceDirection direction,
-                                        QStringList &list)
+DeviceManagerDialog::clearAllPortsLists()
 {
-    list.clear();
+    RG_DEBUG << "DeviceManagerDialog::clearAllPortsLists()" << endl;
 
-    unsigned int connections = RosegardenSequencer::getInstance()->
-        getConnections(Device::Midi, direction);
+//         m_playDevices.clear();
+//         m_recordDevices.clear();
 
-    for (unsigned int i = 0; i < connections; ++i) {
+    m_treeWidget_playbackDevices->clear();
+    m_treeWidget_recordDevices->clear();
+    m_treeWidget_outputPorts->clear();
+    m_treeWidget_inputPorts->clear();
+}
 
-        list.append(RosegardenSequencer::getInstance()->
-                    getConnection(Device::Midi, direction, i));
+
+void
+DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
+                                   MidiDevice::DeviceDirection PlayRecDir)
+{
+    RG_DEBUG << "DeviceManagerDialog::updatePortsList(...)" << endl;
+
+    /**
+     *    updates (adds/removes) the ports listed in the TreeWidget
+     *    this does not update/set the checkStates !
+     **/
+    int i, portsCount, cnt;
+    QTreeWidgetItem *twItem;
+    QString portName;
+    QStringList portNamesAvail;     // available ports names (connections)
+    QStringList portNamesListed;
+
+    RosegardenSequencer *seq;
+    seq = RosegardenSequencer::getInstance();
+
+    portsCount = seq->getConnections(Device::Midi, PlayRecDir);     // MidiDevice::Play or MidiDevice::Record
+    for (i = 0; i < portsCount; ++i) {
+        portName = seq->getConnection(Device::Midi, PlayRecDir, i); // last: int connectionNr
+        portNamesAvail << portName; // append
     }
 
-    list.append(tr("No connection"));
-}
+
+    // create a list of all listed portNames
+    cnt = treeWid->topLevelItemCount();
+    i = 0;
+    while (i < cnt) {
+        twItem = treeWid->topLevelItem(i);
+
+        portName = twItem->text(0);
+
+        if (!portNamesAvail.contains(portName)) {
+            // port disappeared, remove entry
+
+            twItem = treeWid->takeTopLevelItem(i); // remove list entry
+            //
+            cnt = treeWid->topLevelItemCount(); // update count
+            continue;
+        }
+
+        portNamesListed << portName;    // append to list
+        //
+        i += 1;
+    }
+
+    portNamesAvail << m_noPortName; // add nullPort
+    portsCount += 1;        // inc count
+
+    for (i = 0; i < portsCount; ++i) {
+
+        //portName = seq->getConnection( Device::Midi, PlayRecDir, i );    // last: int connectionNr
+        portName = portNamesAvail.at(i);
+
+        if (!portNamesListed.contains(portName)) {
+            // item is not in list
+            // create new entry
+            twItem =
+                    new QTreeWidgetItem(treeWid,
+                                        QStringList() << portName);
+
+            //twItem->setCheckState( 0, Qt::Unchecked );
+            //itemx->setFlags( itemx->flags() &! Qt::ItemIsUserCheckable );
+            treeWid->addTopLevelItem(twItem);
+        }
+
+    }                       // end for i
+
+}                               // end updatePortsList()
+
 
 void
-DeviceManagerDialog::closeEvent(QCloseEvent *e)
+DeviceManagerDialog::slotAddPlaybackDevice()
 {
-    emit closing();
-    QMainWindow::closeEvent(e);
-}
+    RG_DEBUG << "DeviceManagerDialog::slotAddPlaybackDevice()" << endl;
 
-DeviceId
-DeviceManagerDialog::getPlayDeviceIdAt(int row)
-{
-    if (row < 0 || row > (int)m_playDevices.size())
-        return Device::NO_DEVICE;
-    return m_playDevices[row]->getId();
-}
-
-DeviceId
-DeviceManagerDialog::getRecordDeviceIdAt(int row)
-{
-    if (row < 0 || row > (int)m_recordDevices.size())
-        return Device::NO_DEVICE;
-    return m_recordDevices[row]->getId();
-}
-
-void
-DeviceManagerDialog::slotAddPlayDevice()
-{
     QString connection = "";
-    if (m_playConnections.size() > 0)
-        connection = m_playConnections[m_playConnections.size() - 1];
-    CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
-        (m_studio,
-         qstrtostr(tr("New Device")),
-         Device::Midi,
-         MidiDevice::Play,
-         qstrtostr(connection));
+    //         if ( m_playConnections.size() > 0 )
+    //             connection = m_playConnections[m_playConnections.size() - 1];
+
+    CreateOrDeleteDeviceCommand *command =
+            new CreateOrDeleteDeviceCommand(m_studio,
+                                            qstrtostr(tr("New Device")),
+                                            Device::Midi,
+                                            MidiDevice::Play,
+                                            qstrtostr(connection));
     CommandHistory::getInstance()->addCommand(command);
+
+    //     updatePlaybackDevicesList();
+    slotRefreshOutputPorts();
 }
 
 void
 DeviceManagerDialog::slotAddRecordDevice()
 {
+    RG_DEBUG << "DeviceManagerDialog::slotAddRecordDevice()" << endl;
+
     QString connection = "";
-    if (m_recordConnections.size() > 0)
-        connection = m_recordConnections[m_recordConnections.size() - 1];
-    CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
-        (m_studio,
-         qstrtostr(tr("New Device")),
-         Device::Midi,
-         MidiDevice::Record,
-         qstrtostr(connection));
+    //     if ( m_recordConnections.size() > 0 )
+    //         connection = m_recordConnections[m_recordConnections.size() - 1];
+
+    CreateOrDeleteDeviceCommand *command =
+            new CreateOrDeleteDeviceCommand(m_studio,
+                                            qstrtostr(tr("New Device")),
+                                            Device::Midi,
+                                            MidiDevice::Record,
+                                            qstrtostr(connection));
     CommandHistory::getInstance()->addCommand(command);
+
+    //     updateRecordDevicesList();
+    slotRefreshInputPorts();
 }
 
+
 void
-DeviceManagerDialog::slotDeletePlayDevice()
+DeviceManagerDialog::slotDeletePlaybackDevice()
 {
-    // should really grey out if nothing current
-    DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
+    RG_DEBUG << "DeviceManagerDialog::slotDeletePlaybackDevice()" << endl;
+
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    if (!mdev)
+        return;
+    DeviceId id = mdev->getId();
+    
     if (id == Device::NO_DEVICE)
-        return ;
-    CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
-        (m_studio, id);
+        return;
+    CreateOrDeleteDeviceCommand *command =
+            new CreateOrDeleteDeviceCommand(m_studio, id);
     CommandHistory::getInstance()->addCommand(command);
 
     RosegardenSequencer::getInstance()->removeDevice(id);
+
+    slotRefreshOutputPorts();
 }
+
 
 void
 DeviceManagerDialog::slotDeleteRecordDevice()
 {
-    DeviceId id = getRecordDeviceIdAt(m_recordTable->currentRow());
+    RG_DEBUG << "DeviceManagerDialog::slotDeleteRecordDevice()" << endl;
+
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_recordDevices);
+    if (!mdev)
+        return;
+    DeviceId id = mdev->getId();
+    
     if (id == Device::NO_DEVICE)
-        return ;
-    CreateOrDeleteDeviceCommand *command = new CreateOrDeleteDeviceCommand
-        (m_studio, id);
+        return;
+    CreateOrDeleteDeviceCommand *command =
+            new CreateOrDeleteDeviceCommand(m_studio, id);
     CommandHistory::getInstance()->addCommand(command);
+
+    slotRefreshInputPorts();
 }
 
+
 void
-DeviceManagerDialog::slotPlayValueChanged(int row, int col)
+DeviceManagerDialog::slotManageBanksOfPlaybackDevice()
 {
-    if (!m_document)
-        return ; // closing
-    DeviceId id = getPlayDeviceIdAt(row);
-    if (id == Device::NO_DEVICE)
-        return ;
+    RG_DEBUG << "DeviceManagerDialog::slotManageBanksOfPlaybackDevice()" << endl;
 
-    Device *device = m_studio->getDevice(id);
-    if (!device) {
-        std::cerr << "WARNING: DeviceManagerDialog::slotPlayValueChanged(): device at row "
-                  << row << " (id " << id << ") not found in studio"
-                  << std::endl;
-        return ;
-    }
-
-    switch (col) {
-
-    case PLAY_NAME_COL: {
-        std::string name = qstrtostr(m_playTable->item(row, col)->text() );
-        if (device->getName() != name) {
-
-            CommandHistory::getInstance()->addCommand
-                (new RenameDeviceCommand(m_studio, id, name));
-            emit deviceNamesChanged();
-
-            RosegardenSequencer::getInstance()->
-					renameDevice(id, m_playTable->item(row, col)->text() );
-        }
-    }
-        break;
-
-    case PLAY_CONNECTION_COL: {
-		std::string connection = qstrtostr(m_playTable->item(row, col)->text() );
-        if (connection == qstrtostr(m_noConnectionString))
-            connection = "";
-        if (device->getConnection() != connection) {
-            CommandHistory::getInstance()->addCommand
-                (new ReconnectDeviceCommand(m_studio, id, connection));
-        }
-    }
-        break;
-    }
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    if (!mdev)
+        return;
+    DeviceId devId = mdev->getId();
+    if (devId == Device::NO_DEVICE)
+        return;
+    
+    emit editBanks(devId);
 }
 
+
 void
-DeviceManagerDialog::slotRecordValueChanged(int row, int col)
+DeviceManagerDialog::slotEditControllerDefinitions()
 {
-    if (!m_document)
-        return ; // closing
-    DeviceId id = getRecordDeviceIdAt(row);
-    if (id == Device::NO_DEVICE)
-        return ;
+    RG_DEBUG << "DeviceManagerDialog::slotEditControllerDefinitions()" << endl;
 
-    Device *device = m_studio->getDevice(id);
-    if (!device) {
-        std::cerr << "WARNING: DeviceManagerDialog::slotRecordValueChanged(): device at row "
-                  << row << " (id " << id << ") not found in studio"
-                  << std::endl;
-        return ;
-    }
-
-    switch (col) {
-
-    case RECORD_NAME_COL: {
-		std::string name = qstrtostr(m_recordTable->item(row, col)->text() );
-        if (device->getName() != name) {
-
-            CommandHistory::getInstance()->addCommand
-                (new RenameDeviceCommand(m_studio, id, name));
-            emit deviceNamesChanged();
-
-            RosegardenSequencer::getInstance()->
-					renameDevice(id, m_recordTable->item(row, col)->text() );
-        }
-    }
-        break;
-
-    case RECORD_CONNECTION_COL: {
-		std::string connection = qstrtostr(m_recordTable->item(row, col)->text() );
-        if (device->getConnection() != connection) {
-            CommandHistory::getInstance()->addCommand
-                (new ReconnectDeviceCommand(m_studio, id, connection));
-        }
-    }
-        break;
-
-    case RECORD_CURRENT_COL: {
-        m_recordTable->blockSignals(true);
-		
-		
-        QCheckBox *check =
-            dynamic_cast<QCheckBox *>(m_recordTable->item(row, col));
-		
-        if (!check)
-            return ;
-
-        bool actionConnect = check->isChecked();
-
-        // The following lines are not strictly needed, but give the checkboxes
-        // a smoother behavior while waiting a confirmation from the sequencer.
-        //
-        check->setText(actionConnect ? tr("Yes") : tr("No"));
-        MidiDevice *device =
-            dynamic_cast<MidiDevice*>(m_studio->getDevice(id));
-        device->setRecording(actionConnect);
-
-        m_recordTable->setCurrentCell(row, 0);
-
-        CommandHistory::getInstance()->addCommand
-            (new ChangeRecordDeviceCommand(id, actionConnect));
-
-        m_recordTable->blockSignals(false);
-    }
-        break;
-    }
+    MidiDevice *mdev;
+    mdev = getCurrentlySelectedDevice(m_treeWidget_playbackDevices);
+    if (!mdev)
+        return;
+    DeviceId devId = mdev->getId();
+    if (devId == Device::NO_DEVICE)
+        return;
+    
+    emit editControllers(devId);
 }
 
-void
-DeviceManagerDialog::slotPlayDeviceSelected(int row, int col)
-{
-    RG_DEBUG << "slotPlayDeviceSelected(" << row << "," << col << ")" << endl;
 
-    bool enable = (row >= 0 && row < (int)m_playDevices.size());
-    m_deletePlayButton->setEnabled(enable);
-    m_importButton->setEnabled(enable);
-    m_exportButton->setEnabled(enable);
-    m_banksButton->setEnabled(enable);
-    m_controllersButton->setEnabled(enable);
+void
+DeviceManagerDialog::slotHelpRequested()
+{
+    QMessageBox::information(this,
+                             tr
+                                               ("Help for the Midi Devices-Manager Dialog"),
+                             tr
+                                               ("This is Rosegardens central connection station. Create and connect your Midi Devices here! "),
+                             QMessageBox::Ok, QMessageBox::Ok);
 }
 
-void
-DeviceManagerDialog::slotRecordDeviceSelected(int row, int col)
-{
-    RG_DEBUG << "slotRecordDeviceSelected(" << row << "," << col << ")" << endl;
 
-    bool enable = (row >= 0 && row < (int)m_recordDevices.size());
-    m_deleteRecordButton->setEnabled(enable);
+void
+DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
+                                         int column)
+{
+    RG_DEBUG << "DeviceManagerDialog::slotDeviceItemChanged(...)" << endl;
+
+    /** called, if an item of the playback or record devices list (treeWidgetItem) changed
+        if the device-name column has been changed, the device will be renamed.
+     **/
+    MidiDevice *mdev;
+    QString devName;
+
+    mdev = getMidiDeviceOfItem(twItem);
+    if (!mdev) {
+        RG_DEBUG <<
+        "Warning: mdev is NULL in DeviceManagerDialog::slotPlaybackDeviceItemChanged() "
+                 << endl;
+        return;
+    }
+    devName = twItem->text(0);
+
+    if (devName != strtoqstr(mdev->getName())) {
+        CommandHistory::getInstance()->addCommand(new RenameDeviceCommand(m_studio,
+                                                                          mdev->getId(),
+                                                                          qstrtostr
+                                                                          (devName)));
+        emit sigDeviceNameChanged(mdev->getId());
+    }
+
 }
 
-void
-DeviceManagerDialog::slotImport()
-{
-    DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
-    if (id == Device::NO_DEVICE)
-        return ;
-
-    ResourceFinder rf;
-    QString deviceDir = rf.getResourceDir( "library" );
-
-/*### what does this mean?
-    QDir dir(deviceDir);
-    if (!dir.exists()) {
-        deviceDir = ":ROSEGARDENDEVICE";
-    } else {
-        deviceDir = "file://" + deviceDir;
-    }
-*/
-
-    QString url_str = QFileDialog::getOpenFileName( this, tr("Import from Device in File"), deviceDir,
-                      tr("Rosegarden Device files") + " (*.rgd *.RGD)" + ";;" +
-                      tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-                      tr("Sound fonts") + " (*.sf2 *.SF2)" + ";;" +
-                      tr("All files") + " (*)", 0, 0 );
-
-    QUrl url( url_str );
-	
-    if (url.isEmpty())
-        return ;
-	
-	
-    ImportDeviceDialog *dialog = new ImportDeviceDialog(this, url);
-    if (dialog->doImport() && dialog->exec() == QDialog::Accepted) {
-
-        ModifyDeviceCommand *command = 0;
-
-        BankList banks(dialog->getBanks());
-        ProgramList programs(dialog->getPrograms());
-        ControlList controls(dialog->getControllers());
-        KeyMappingList keyMappings(dialog->getKeyMappings());
-        MidiDevice::VariationType variation(dialog->getVariationType());
-        std::string librarianName(dialog->getLibrarianName());
-        std::string librarianEmail(dialog->getLibrarianEmail());
-
-        // don't record the librarian when
-        // merging banks -- it's misleading.
-        // (also don't use variation type)
-        if (!dialog->shouldOverwriteBanks()) {
-            librarianName = "";
-            librarianEmail = "";
-        }
-
-        command = new ModifyDeviceCommand(m_studio,
-                                          id,
-                                          dialog->getDeviceName(),
-                                          librarianName,
-                                          librarianEmail);
-
-        if (dialog->shouldOverwriteBanks()) {
-            command->setVariation(variation);
-        }
-        if (dialog->shouldImportBanks()) {
-            command->setBankList(banks);
-            command->setProgramList(programs);
-        }
-        if (dialog->shouldImportControllers()) {
-            command->setControlList(controls);
-        }
-        if (dialog->shouldImportKeyMappings()) {
-            command->setKeyMappingList(keyMappings);
-        }
-
-        command->setOverwrite(dialog->shouldOverwriteBanks());
-        command->setRename(dialog->shouldRename());
-
-        CommandHistory::getInstance()->addCommand(command);
-
-        if (dialog->shouldRename())
-            emit deviceNamesChanged();
-    }
-
-    delete dialog;
-}
 
 void
-DeviceManagerDialog::slotExport()
+DeviceManagerDialog::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
+                                                    int col)
 {
-    QString extension = "rgd";
+    RG_DEBUG << "DeviceManagerDialog::slotRecordDevicesListItemClicked(...)" << endl;
+    
+    MidiDevice *mdev;
+    mdev = getMidiDeviceOfItem(twItem);
+    if (!mdev)
+        return;
 
-	QString name = QFileDialog::getSaveFileName( this, tr("Export Device as..."), QDir::currentPath(), 
-			(extension.isEmpty() ? QString("*") : ("*." + extension)) );
-			/*
-        KFileDialog::getSaveFileName(":ROSEGARDEN",
-                                     (extension.isEmpty() ? QString("*") : ("*." + extension)),
-                                     this,
-                                     tr("Export Device as..."));
-*/
-    // Check for the existence of the name
-    if (name.isEmpty())
-        return ;
+    if (col == 1) {         // column: enable recording
 
-    // Append extension if we don't have one
-    //
-    if (!extension.isEmpty()) {
-        if (!name.endsWith("." + extension)) {
-            name += "." + extension;
-        }
-    }
+        if (mdev->isRecording()) {
 
-    QFileInfo info(name);
-
-    if (info.isDir()) {
-        QMessageBox::warning
-            (dynamic_cast<QWidget*>(this),
-            "", /* stupid extra parameter because pure Qt sucks */
-            tr("You have specified a directory"),
-            QMessageBox::Ok,
-            QMessageBox::Ok);
-        return ;
-    }
-
-    if (info.exists()) {
-        int overwrite = QMessageBox::question
-            (dynamic_cast<QWidget*>(this),
-            "", /* stupid extra parameter because pure Qt sucks */
-            tr("The specified file exists.  Overwrite?"),
-            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-
-        if (overwrite != QMessageBox::Yes)
-            return ;
-
-    }
-
-    std::vector<DeviceId> devices;
-    DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
-    MidiDevice *md = 0;
-    if (id != Device::NO_DEVICE) {
-        md = dynamic_cast<MidiDevice *>(m_studio->getDevice(id));
-    }
-    if (md) {
-        ExportDeviceDialog ed(this, strtoqstr(md->getName()));
-        if (ed.exec() != QDialog::Accepted)
-            return ;
-        if (ed.getExportType() == ExportDeviceDialog::ExportOne) {
-            devices.push_back(id);
-        }
-    }
-
-    QString errMsg;
-    if (!m_document->exportStudio(name, errMsg, devices)) {
-        if (errMsg != "") {
-            QMessageBox::critical
-                (0, "", tr(QString("Could not export studio to file at %1\n(%2)")
-                           .arg(name).arg(errMsg)));
+            mdev->setRecording(false);
         } else {
-            QMessageBox::critical
-                (0, "", tr(QString("Could not export studio to file at %1")
-                           .arg(name)));
+            mdev->setRecording(true);
         }
+
+        // update list entry
+        twItem->setText(1, mdev->isRecording() ? tr("Yes") : tr("No"));
     }
 }
 
-void
-DeviceManagerDialog::slotSetBanks()
-{
-    DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
-    emit editBanks(id);
-}
 
 void
-DeviceManagerDialog::slotSetControllers()
+DeviceManagerDialog::connectSignalsToSlots()
 {
-    DeviceId id = getPlayDeviceIdAt(m_playTable->currentRow());
-    emit editControllers(id);
-}
+    RG_DEBUG << "DeviceManagerDialog::connectSignalsToSlots()" << endl;
 
-}
+    // playback devices
+    connect(m_treeWidget_outputPorts,
+            SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
+            SLOT(slotOutputPortClicked(QTreeWidgetItem *, int)));
+    connect(m_treeWidget_playbackDevices,
+            SIGNAL(itemSelectionChanged()), this,
+            SLOT(slotPlaybackDeviceSelected()));
+
+    connect(m_treeWidget_playbackDevices,
+            SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
+            SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
+
+
+    // record devices
+    connect(m_treeWidget_inputPorts,
+            SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
+            SLOT(slotInputPortClicked(QTreeWidgetItem *, int)));
+    connect(m_treeWidget_recordDevices, SIGNAL(itemSelectionChanged()),
+            this, SLOT(slotRecordDeviceSelected()));
+
+    connect(m_treeWidget_recordDevices,
+            SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,
+            SLOT(slotRecordDevicesListItemClicked
+                                   (QTreeWidgetItem *, int)));
+    connect(m_treeWidget_recordDevices,
+            SIGNAL(itemChanged(QTreeWidgetItem *, int)), this,
+            SLOT(slotDeviceItemChanged(QTreeWidgetItem *, int)));
+
+
+    // refresh buttons
+    connect(pushButton_refreshOutputPorts, SIGNAL(clicked()),
+            this, SLOT(slotRefreshOutputPorts()));
+    connect(pushButton_refreshInputPorts, SIGNAL(clicked()),
+            this, SLOT(slotRefreshInputPorts()));
+
+    connect(pushButton_addLV2Device, SIGNAL(clicked()),
+            this, SLOT(slotAddLV2Device()));
+
+    // dialog box buttons
+    QDialogButtonBox *bbox;
+    // connect help button
+    bbox = findChild < QDialogButtonBox * >("buttonBox");
+    connect(bbox, SIGNAL(helpRequested()), this,
+            SLOT(slotHelpRequested()));
+    // connect close button
+    QPushButton *pbClose;
+    pbClose = bbox->button(QDialogButtonBox::Close);
+    connect(pbClose, SIGNAL(clicked()), this, SLOT(slotClose()));
+
+    // buttons
+    connect(pushButton_newPlaybackDevice, SIGNAL(clicked()), this,
+            SLOT(slotAddPlaybackDevice()));
+    connect(pushButton_newRecordDevice, SIGNAL(clicked()), this,
+            SLOT(slotAddRecordDevice()));
+
+    connect(pushButton_deletePlaybackDevice, SIGNAL(clicked()), this,
+            SLOT(slotDeletePlaybackDevice()));
+    connect(pushButton_deleteRecordDevice, SIGNAL(clicked()), this,
+            SLOT(slotDeleteRecordDevice()));
+
+    connect(pushButton_manageBanksOfPlaybackDevice, SIGNAL(clicked()),
+            this, SLOT(slotManageBanksOfPlaybackDevice()));
+    connect(pushButton_editControllerDefinitions, SIGNAL(clicked()),
+            this, SLOT(slotEditControllerDefinitions()));
+
+
+} 
+
+
+} // namespace Rosegarden
 
 #include "DeviceManagerDialog.moc"

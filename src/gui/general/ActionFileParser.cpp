@@ -51,7 +51,7 @@ ActionFileParser::~ActionFileParser()
 QString
 ActionFileParser::findRcFile(QString name)
 {
-    return ResourceFinder().getResourcePath("ui", name);
+    return ResourceFinder().getResourcePath("rc", name);
 }
 
 bool

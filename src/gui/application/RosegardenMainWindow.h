@@ -26,7 +26,7 @@
 #include "sound/AudioFile.h"
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
-#include "gui/ui/DevicesManagerNew.h"
+#include "gui/studio/DeviceManagerDialogUi.h"
 
 #include <QDockWidget>
 #include <QString>
@@ -1609,7 +1609,7 @@ private:
 
     AudioPluginManager *m_pluginManager;
 
-    DevicesManagerNew * m_devicesManagerNew;
+    DeviceManagerDialog * m_devicesManagerNew;
     
     QTimer* m_autoSaveTimer;
 
