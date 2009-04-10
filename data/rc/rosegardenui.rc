@@ -277,8 +277,8 @@
   <Action name="file_print"/>
   <Action name="file_print_preview"/>
   <Separator/>
-  <Action name="edit_undo"/>
-  <Action name="edit_redo"/>
+  <Action name="edit_toolbar_undo" text="&amp;Nothing to undo" icon="undo"/>
+  <Action name="edit_toolbar_redo" text="N&amp;othing to redo" icon="redo"/>
   <Action name="edit_cut"/>
   <Action name="edit_copy"/>
   <Action name="edit_paste"/>

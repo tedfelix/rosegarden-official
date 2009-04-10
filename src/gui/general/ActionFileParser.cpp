@@ -386,6 +386,7 @@ ActionFileParser::setActionText(QString actionName, QString text)
 {
     if (actionName == "" || text == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     action->setText(translate(actionName, text, "text"));
     return true;
@@ -396,6 +397,7 @@ ActionFileParser::setActionIcon(QString actionName, QString icon)
 {
     if (actionName == "" || icon == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     action->setIcon(IconLoader().load(icon));
     return true;
@@ -406,6 +408,7 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
 {
     if (actionName == "" || shortcut == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
 
     /*
@@ -434,6 +437,7 @@ ActionFileParser::setActionGroup(QString actionName, QString groupName)
 {
     if (actionName == "" || groupName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     QActionGroup *group = findGroup(groupName);
     action->setActionGroup(group);
@@ -445,6 +449,7 @@ ActionFileParser::setActionChecked(QString actionName, bool checked)
 {
     if (actionName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     action->setCheckable(true);
     action->setChecked(checked);
@@ -562,6 +567,7 @@ ActionFileParser::enableActionInState(QString stateName, QString actionName)
 {
     if (stateName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateEnableMap[stateName].push_back(action);
     connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
@@ -573,6 +579,7 @@ ActionFileParser::disableActionInState(QString stateName, QString actionName)
 {
     if (stateName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
     if (!action) return false;
     m_stateDisableMap[stateName].push_back(action);
     connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
