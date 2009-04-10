@@ -1197,9 +1197,9 @@
 <file>pixmaps/stock/translate.png</file>
 <file>pixmaps/stock/undo.png</file>
 
-<file>pixmaps/DevicesManagerNew/icon-plugged-in.png</file>
-<file>pixmaps/DevicesManagerNew/icon-plugged-out.png</file>
-<file>pixmaps/DevicesManagerNew/image-connect.png</file>
+<file>pixmaps/misc/icon-plugged-in.png</file>
+<file>pixmaps/misc/icon-plugged-out.png</file>
+<file>pixmaps/misc/image-connect.png</file>
 
 <file>pixmaps/icons/window-audiomixer.png</file>
 <file>pixmaps/icons/window-eventlist.png</file>

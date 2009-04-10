@@ -611,7 +611,7 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
     for (int i = 0; i < cnt; i++) {
         twItem = treeWid_ports->topLevelItem(i);
 
-        twItem->setIcon(0, il.load("DeviceManagerDialog/icon-plugged-out.png"));
+        twItem->setIcon(0, il.load("icon-plugged-out.png"));
         twItem->setSizeHint(0, QSize(24, 24));
         font = twItem->font(0);
         font.setWeight(QFont::Normal);
@@ -620,7 +620,7 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
         if (outPort == twItem->text(0)) {
             font.setWeight(QFont::Bold);
             twItem->setFont(0, font); // 0=column
-            twItem->setIcon(0, il.load("DeviceManagerDialog/icon-plugged-in.png"));
+            twItem->setIcon(0, il.load("icon-plugged-in.png"));
         }
 
 
