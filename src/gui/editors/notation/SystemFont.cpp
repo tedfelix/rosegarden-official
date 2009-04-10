@@ -29,6 +29,7 @@
 
 #include <QFont>
 #include <QFontInfo>
+#include <QFontDatabase>
 #include <QFileInfo>
 #include <QPixmap>
 #include <QString>
@@ -53,6 +54,12 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         return new SystemFontQt(font);
     }
 
+    bool haveFonts = false;
+    if (!haveFonts) {
+        unbundleFonts();
+        haveFonts = true;
+    }
+
 #ifdef HAVE_XFT
 
     FcPattern *pattern, *match;
@@ -61,52 +68,12 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     XftFont *xfont = 0;
 
     Display *dpy = QPaintDevice::x11AppDisplay();
-    static bool haveFcDirectory = false;
 
     if (!dpy) {
         std::cerr << "SystemFont::loadSystemFont[Xft]: Xft support requested but no X11 display available!" << std::endl;
         goto qfont;
     }
 	
-    if (!haveFcDirectory) {
-
-        QStringList fontFiles = ResourceFinder().getResourceFiles("fonts", "pfa");
-        NOTATION_DEBUG << "Found font files: " << fontFiles << endl;
-
-        for (QStringList::const_iterator i = fontFiles.begin();
-             i != fontFiles.end(); ++i) {
-            QString fontFile(*i);
-            if (!fontFile.startsWith(":")) continue; // unpacked already
-            QString name = QFileInfo(fontFile).fileName();
-            ResourceFinder().unbundleResource("fonts", name);
-        }
-
-        QString fontDir = ResourceFinder().getResourceDir("fonts");
-        QString fontSaveDir = ResourceFinder().getResourceSaveDir("fonts");
-
-        if (fontDir != fontSaveDir && fontSaveDir != "") {
-            if (!FcConfigAppFontAddDir
-                (FcConfigGetCurrent(),
-                 (const FcChar8 *)fontSaveDir.toLocal8Bit().data())) {
-                NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontSaveDir << " to fontconfig, continuing without it" << endl;
-            } else {
-                NOTATION_DEBUG << "Added font save dir \"" << fontSaveDir << "\" to font config path" << endl;
-            }
-        }
-		
-        if (fontDir != "") {
-            if (!FcConfigAppFontAddDir
-                (FcConfigGetCurrent(),
-                 (const FcChar8 *)fontDir.toLocal8Bit().data())) {
-                NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
-            } else {
-                NOTATION_DEBUG << "Added font dir \"" << fontDir << "\" to font config path" << endl;
-            }
-        }
-
-        haveFcDirectory = true;
-    }
-
     pattern = FcPatternCreate();
     FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *)name.toLatin1().data());
     FcPatternAddInteger(pattern, FC_PIXEL_SIZE, size);
@@ -189,6 +156,49 @@ qfont:
 
     NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: Wrong family returned, failing" << endl;
     return 0;
+}
+
+void
+SystemFont::unbundleFonts()
+{
+    QStringList fontFiles;
+    fontFiles << ResourceFinder().getResourceFiles("fonts", "pfa");
+    fontFiles << ResourceFinder().getResourceFiles("fonts", "pfb");
+    fontFiles << ResourceFinder().getResourceFiles("fonts", "ttf");
+    fontFiles << ResourceFinder().getResourceFiles("fonts", "otf");
+
+    NOTATION_DEBUG << "Found font files: " << fontFiles << endl;
+
+    for (QStringList::const_iterator i = fontFiles.begin();
+         i != fontFiles.end(); ++i) {
+        QString fontFile(*i);
+        QString name = QFileInfo(fontFile).fileName();
+        if (fontFile.startsWith(":")) {
+            ResourceFinder().unbundleResource("fonts", name);
+            fontFile = ResourceFinder().getResourcePath("fonts", name);
+            if (fontFile.startsWith(":")) { // unbundling failed
+                continue;
+            }
+        }
+        addFont(fontFile);
+    }
+}
+
+void
+SystemFont::addFont(QString fileName)
+{
+#ifdef HAVE_XFT
+    if (!FcConfigAppFontAddFile
+        (FcConfigGetCurrent(),
+         (const FcChar8 *)fileName.toLocal8Bit().data())) {
+        NOTATION_DEBUG << "SystemFont::addFont[Xft]: Failed to add font file " << fileName << " to fontconfig, continuing without it" << endl;
+    } else {
+        NOTATION_DEBUG << "Added font file \"" << fileName << "\" to fontconfig" << endl;
+    }
+#else
+    QFontDatabase::addApplicationFont(fileName);
+    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database" << endl;
+#endif
 }
 
 }
