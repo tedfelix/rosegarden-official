@@ -289,6 +289,7 @@ void
 MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 {
     m_pitchRuler->drawHoverNote(e->pitch);
+    m_pianoView->update();
 
     if (!m_currentTool) return;
 
