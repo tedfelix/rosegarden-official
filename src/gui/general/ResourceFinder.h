@@ -102,6 +102,22 @@ public:
      */
     QString getAutoloadSavePath();
 
+    /**
+     * If the named resource file in the given resource category is
+     * available only as a bundled resource, copy it out into the user
+     * location returned by getResourceSavePath so that it can be read
+     * by non-Qt code.  Any subsequent call to getResourcePath for
+     * this resource should return a true file path (if the resource
+     * exists) in either user or system location, or an empty string
+     * (if the resource does not exist), but never a ":"-prefixed
+     * resource path.  This function does not overwrite any existing
+     * unbundled copy of the resource.
+     *
+     * Return false if a system error occurs during unbundling
+     * (e.g. disk full).
+     */
+    bool unbundleResource(QString resourceCat, QString fileName);
+
 protected:
     QString getUserResourcePrefix();
     QStringList getSystemResourcePrefixList();

@@ -41,6 +41,9 @@
 <file>fonts/mappings/sonata.xml</file>
 <file>fonts/mappings/steinberg.xml</file>
 <file>fonts/mappings/xinfonia.xml</file>
+<file>fonts/LilyPond-feta-design20.pfa</file>
+<file>fonts/LilyPond-parmesan-design20.pfa</file>
+<file>fonts/LilyPond-feta-nummer-design10.pfa</file>
 <file>styles/Classical.xml</file>
 <file>styles/Cross.xml</file>
 <file>styles/Mensural.xml</file>

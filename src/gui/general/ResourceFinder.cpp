@@ -239,23 +239,8 @@ ResourceFinder::getResourceFiles(QString resourceCat, QString fileExt)
 QString
 ResourceFinder::getAutoloadPath()
 {
-    QString path = getResourcePath("autoload", "autoload.rg");
-    
-    if (path.startsWith(':')) {
-        // This is the lowest-priority alternative path for this
-        // resource, so we know that there must be no installed copy.
-        // Install one to the user location.
-        RG_DEBUG << "ResourceFinder::getAutoloadPath: Autoload file is bundled, un-bundling it" << endl;
-        QString target = getAutoloadSavePath();
-        QFile file(path);
-        if (!file.copy(target)) {
-            std::cerr << "ResourceFinder::getAutoloadPath: ERROR: Failed to un-bundle autoload resource file to user location \"" << target << "\"" << std::endl;
-        }
-	// Try to reload from user location
-	path = getResourcePath("autoload", "autoload.rg");
-    }
-
-    return path;
+    if (!unbundleResource("autoload", "autoload.rg")) return "";
+    return getResourcePath("autoload", "autoload.rg");
 }
 
 QString
@@ -263,6 +248,27 @@ ResourceFinder::getAutoloadSavePath()
 {
     return getResourceSavePath("autoload", "autoload.rg");
 }
+
+bool
+ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
+{
+    QString path = getResourcePath(resourceCat, fileName);
+    
+    if (!path.startsWith(':')) return true;
+
+    // This is the lowest-priority alternative path for this
+    // resource, so we know that there must be no installed copy.
+    // Install one to the user location.
+    RG_DEBUG << "ResourceFinder::unbundleResource: File " << fileName << " is bundled, un-bundling it" << endl;
+    QString target = getResourceSavePath(resourceCat, fileName);
+    QFile file(path);
+    if (!file.copy(target)) {
+        std::cerr << "ResourceFinder::unbundleResource: ERROR: Failed to un-bundle resource file \"" << fileName << "\" to user location \"" << target << "\"" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 
 }
 

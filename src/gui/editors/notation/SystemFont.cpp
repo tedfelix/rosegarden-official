@@ -16,9 +16,7 @@
 */
 
 
-//#include <QDir>
-
-//include  this first:
+// "qtextstream.h must be included before any header file that defines Status"
 #include <QTextStream>
 
 #include "SystemFont.h"
@@ -31,6 +29,7 @@
 
 #include <QFont>
 #include <QFontInfo>
+#include <QFileInfo>
 #include <QPixmap>
 #include <QString>
 
@@ -70,15 +69,42 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
     }
 	
     if (!haveFcDirectory) {
-        //!!! We will need to be able to "unpack" fonts from Qt4 resources
-        QString fontDir = ResourceFinder().getResourceDir("fonts");
-		
-        if (!FcConfigAppFontAddDir(FcConfigGetCurrent(),
-                                   (const FcChar8 *)fontDir.toLatin1().data())) {
-            NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
+
+        QStringList fontFiles = ResourceFinder().getResourceFiles("fonts", "pfa");
+        NOTATION_DEBUG << "Found font files: " << fontFiles << endl;
+
+        for (QStringList::const_iterator i = fontFiles.begin();
+             i != fontFiles.end(); ++i) {
+            QString fontFile(*i);
+            if (!fontFile.startsWith(":")) continue; // unpacked already
+            QString name = QFileInfo(fontFile).fileName();
+            ResourceFinder().unbundleResource("fonts", name);
         }
+
+        QString fontDir = ResourceFinder().getResourceDir("fonts");
+        QString fontSaveDir = ResourceFinder().getResourceSaveDir("fonts");
+
+        if (fontDir != fontSaveDir && fontSaveDir != "") {
+            if (!FcConfigAppFontAddDir
+                (FcConfigGetCurrent(),
+                 (const FcChar8 *)fontSaveDir.toLocal8Bit().data())) {
+                NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontSaveDir << " to fontconfig, continuing without it" << endl;
+            } else {
+                NOTATION_DEBUG << "Added font save dir \"" << fontSaveDir << "\" to font config path" << endl;
+            }
+        }
+		
+        if (fontDir != "") {
+            if (!FcConfigAppFontAddDir
+                (FcConfigGetCurrent(),
+                 (const FcChar8 *)fontDir.toLocal8Bit().data())) {
+                NOTATION_DEBUG << "SystemFont::loadSystemFont[Xft]: Failed to add font directory " << fontDir << " to fontconfig, continuing without it" << endl;
+            } else {
+                NOTATION_DEBUG << "Added font dir \"" << fontDir << "\" to font config path" << endl;
+            }
+        }
+
         haveFcDirectory = true;
-        NOTATION_DEBUG << "Added font dir \"" << fontDir << "\" to font config path" << endl;
     }
 
     pattern = FcPatternCreate();
