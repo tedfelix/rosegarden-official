@@ -1722,3 +1722,15 @@ QLabel#Humbug
 {
     color: #000000;
 }
+
+/* Hrm.  Has no effect at all.  Probably not worth much more bother, since Qt
+ * automatically inverts the stock arrow pixmaps, and they're sort of legible,
+ * but it might ultimately be worth subclassing QPlastiqueStyle in order to
+ * specify different pixmaps, since this bit here doesn't seem to work.
+ */
+QFileDialog
+{
+    leftarrow-icon: url(:pixmaps/style/arrow-left-inverted.png);
+    rightarrow-icon: url(:pixmaps/style/arrow-right-inverted.png);
+    uparrow-icon: url(:pixmaps/style/arrow-up-inverted.png);
+}

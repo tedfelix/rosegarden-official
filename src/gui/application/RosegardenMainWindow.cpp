@@ -1826,7 +1826,9 @@ void RosegardenMainWindow::slotFileOpen()
     }
 
     QString fname = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath(),
-                    tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
+                    tr("All supported files") + " (*.rg *.RG *.mid *.MID *.midi *.MIDI)" + ";;" +
+                    tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
+                    tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("All files") + " (*)", 0, 0);
     
     QUrl url(fname);

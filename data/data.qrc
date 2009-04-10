@@ -69,6 +69,9 @@
 <file>pixmaps/style/arrow-up-small-inverted.png</file>
 <file>pixmaps/style/arrow-right-small-inverted.png</file>
 <file>pixmaps/style/arrow-left-small-inverted.png</file>
+<file>pixmaps/style/arrow-left-inverted.png</file>
+<file>pixmaps/style/arrow-right-inverted.png</file>
+<file>pixmaps/style/arrow-up-inverted.png</file>
 <file>pixmaps/style/connect-button-arrow.png</file>
 <file>pixmaps/misc/configure-audio.png</file>
 <file>pixmaps/misc/configure-general.png</file>
