@@ -17,7 +17,7 @@ RCC		= $(QTDIR)/bin/rcc
 LUPDATE		= $(QTDIR)/bin/lupdate
 LRELEASE	= $(QTDIR)/bin/lrelease
 
-CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -D'VERSION="Thorn"'
+CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g -D'VERSION="Thorn"'
 CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
 LDFLAGS		= 
 
@@ -38,7 +38,7 @@ LDLIBS		= \
 		-L$(CCDIR)/lib \
 		-L$(QTLIB) \
 		-lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
-		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
+		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f -llirc_client
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))

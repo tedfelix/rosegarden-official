@@ -246,13 +246,10 @@ public:
      */
     bool launchSequencer();
 
-#ifdef HAVE_LIBJACK
     /*
      * Launch and control JACK if required to by configuration 
      */
     bool launchJack();
-
-#endif // HAVE_LIBJACK
 
 
     /**
@@ -295,12 +292,10 @@ public:
      */
     Clipboard* getClipboard() { return m_clipboard; }
 
-#ifdef HAVE_LIBLO
     /**
      * Return the plugin native GUI manager, if we have one
      */
     AudioPluginOSCGUIManager *getPluginGUIManager() { return m_pluginGUIManager; }
-#endif
 
     /**
      * Plug a widget into our common shortcuts
@@ -1572,9 +1567,7 @@ private:
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
 
-#ifdef HAVE_LIBJACK
     QProcess* m_jackProcess;
-#endif // HAVE_LIBJACK
 
     ZoomSlider<double> *m_zoomSlider;
     QLabel             *m_zoomLabel;
@@ -1630,9 +1623,7 @@ private:
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-#ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_pluginGUIManager;
-#endif
 
     static RosegardenMainWindow *m_myself;
 
@@ -1650,10 +1641,8 @@ private:
 
     RosegardenParameterArea *m_parameterArea;
     
-#ifdef HAVE_LIRC        
     LircClient *m_lircClient;
     LircCommander *m_lircCommander;
-#endif     
 };
 
 

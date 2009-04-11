@@ -19,7 +19,6 @@
 #ifndef _ALSAPORT_H_
 #define _ALSAPORT_H_
 
-#ifdef HAVE_ALSA
 #include <alsa/asoundlib.h> // ALSA
 
 namespace Rosegarden
@@ -72,8 +71,6 @@ struct AlsaPortCmp
 
 
 }
-
-#endif // HAVE_ALSA
 
 #endif // _RG_ALSA_PORT_H_
 

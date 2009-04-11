@@ -143,7 +143,6 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     // JACK Transport
     //
-#ifdef HAVE_LIBJACK
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     label = new QLabel(tr("Use JACK transport"), frame);
@@ -173,7 +172,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     ++row;
 
     settings.endGroup();
-#endif
+    
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     layout->setRowMinimumHeight(row, 20);
@@ -414,7 +413,6 @@ void GeneralConfigurationPage::apply()
 
     settings.endGroup();
 
-#ifdef HAVE_LIBJACK
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     // Write the JACK entry
@@ -464,7 +462,6 @@ void GeneralConfigurationPage::apply()
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
-#endif // HAVE_LIBJACK
 
     if (mainTextureChanged) {
         QMessageBox::information(this, "", tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));

@@ -30,13 +30,13 @@
 
 #include "misc/Strings.h"
 
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
 #include <ft2build.h>
 #include FT_FREETYPE_H 
 #include FT_OUTLINE_H
 #include FT_GLYPH_H
 #include <X11/Xft/Xft.h>
-#endif
+//#endif
 
 #include <iostream>
 
@@ -72,7 +72,7 @@ FontViewFrame::setFont(QString font)
 void
 FontViewFrame::loadFont()
 {
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
     if (m_tableFont) {
         XftFontClose(x11AppDisplay(), (XftFont *)m_tableFont);
     }
@@ -114,15 +114,15 @@ FontViewFrame::loadFont()
         QMessageBox::critical(this, "", tr("Error: Unable to open best-match font %1")
                            .arg(QString((const char *)matchFamily)));
     }
-#else
-    QFont *qf = new QFont(m_fontName);
-    qf->setPixelSize(m_fontSize);
-    qf->setWeight(QFont::Normal);
-    qf->setItalic(false);
-    QFontInfo fi(*qf);
-    std::cerr << "Loaded Qt font \"" << fi.family() << "\" (exactMatch = " << (fi.exactMatch() ? "true" : "false") << ")" << std::endl;
-    m_tableFont = qf;
-#endif
+//#else
+//    QFont *qf = new QFont(m_fontName);
+//    qf->setPixelSize(m_fontSize);
+//    qf->setWeight(QFont::Normal);
+//    qf->setItalic(false);
+//    QFontInfo fi(*qf);
+//    std::cerr << "Loaded Qt font \"" << fi.family() << "\" (exactMatch = " << (fi.exactMatch() ? "true" : "false") << ")" << std::endl;
+//    m_tableFont = qf;
+//#endif
 
     m_ascent = QFontMetrics(font()).ascent(); // ascent of numbering font, not notation font
 }
@@ -171,7 +171,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     if ( !cell.width() || !cell.height() )
         return ;
 
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
     Drawable drawable = (Drawable)handle();
     XftDraw *draw = XftDrawCreate(x11AppDisplay(), drawable,
                                   (Visual *)x11Visual(), x11Colormap());
@@ -183,7 +183,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
     col.color.blue = pen.blue () | pen.blue() << 8;
     col.color.alpha = 0xffff;
     col.pixel = pen.pixel();
-#endif
+//#endif
 
     p.setPen(Qt::black);
 
@@ -218,7 +218,7 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
         }
     }
 
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
     p.end();
 
     for (int j = 1; j <= 16; j++) {
@@ -241,31 +241,31 @@ void FontViewFrame::paintEvent( QPaintEvent* e )
             }
         }
     }
-#else
-    p.setFont(*(QFont *)m_tableFont);
-
-    for (int j = 1; j <= 16; j++) {
-        for (int i = 1; i <= 16; i++) {
-
-            int x = i * cell.width();
-            int y = j * cell.height();
-
-            x += ml;
-            y += mt;
-
-            QChar c(m_row * 256 + (j - 1) * 16 + i - 1);
-            p.drawText(x, y, QString(c));
-        }
-    }
-
-    p.end();
-#endif
+//#else
+//    p.setFont(*(QFont *)m_tableFont);
+//
+//    for (int j = 1; j <= 16; j++) {
+//        for (int i = 1; i <= 16; i++) {
+//
+//            int x = i * cell.width();
+//            int y = j * cell.height();
+//
+//            x += ml;
+//            y += mt;
+//
+//            QChar c(m_row * 256 + (j - 1) * 16 + i - 1);
+//            p.drawText(x, y, QString(c));
+//        }
+//    }
+//
+//    p.end();
+//#endif
 }
 
 bool
 FontViewFrame::hasRow(int r) const
 {
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
     if (m_glyphs) {
         if (r < 256) return true;
     } else {
@@ -277,9 +277,9 @@ FontViewFrame::hasRow(int r) const
             }
         }
     }
-#else
-    if (r < 256) return true;
-#endif
+//#else
+//    if (r < 256) return true;
+//#endif
     return false;
 }
 

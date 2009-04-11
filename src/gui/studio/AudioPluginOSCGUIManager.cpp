@@ -15,8 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef HAVE_LIBLO
-
 #include "AudioPluginOSCGUIManager.h"
 
 #include "sound/Midi.h"
@@ -98,11 +96,8 @@ AudioPluginOSCGUIManager::~AudioPluginOSCGUIManager()
     }
     m_guis.clear();
 
-#ifdef HAVE_LIBLO_THREADSTOP
-
     if (m_haveOSCThread)
         lo_server_thread_stop(m_serverThread);
-#endif
 }
 
 void
@@ -700,5 +695,3 @@ done:
 }
 
 }
-
-#endif

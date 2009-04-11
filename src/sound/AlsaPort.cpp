@@ -17,8 +17,6 @@
 #include <cstdlib>
 #include <cstdio>
 
-#ifdef HAVE_ALSA
-
 // ALSA
 #include <alsa/asoundlib.h>
 #include <alsa/seq_event.h>
@@ -30,11 +28,9 @@
 #include "MappedStudio.h"
 #include "misc/Strings.h"
 
-#ifdef HAVE_LIBJACK
 #include <jack/types.h>
 #include <unistd.h> // for usleep
 #include <cmath>
-#endif
 
 namespace Rosegarden
 {
@@ -181,5 +177,3 @@ AlsaPortCmp::operator()(AlsaPortDescription *a1, AlsaPortDescription *a2)
 }
 
 }
-
-#endif // HAVE_ALSA

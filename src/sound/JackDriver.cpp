@@ -23,9 +23,6 @@
 #include "Audit.h"
 #include "PluginFactory.h"
 
-#ifdef HAVE_ALSA
-#ifdef HAVE_LIBJACK
-
 //#define DEBUG_JACK_DRIVER 1
 //#define DEBUG_JACK_TRANSPORT 1
 //#define DEBUG_JACK_PROCESS 1
@@ -2458,6 +2455,3 @@ JackDriver::reportFailure(MappedEvent::FailureCode code)
 
 
 }
-
-#endif // HAVE_LIBJACK
-#endif // HAVE_ALSA

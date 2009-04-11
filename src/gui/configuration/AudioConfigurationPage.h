@@ -56,9 +56,7 @@ public:
     static QString title()     { return tr("Audio Settings"); }
     static QString iconName()  { return "configure-audio"; }
 
-#ifdef HAVE_LIBJACK
     QString getJackPath() { return m_jackPath->text(); }
-#endif // HAVE_LIBJACK
 
     static QString getBestAvailableAudioEditor();
 
@@ -71,13 +69,10 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-#ifdef HAVE_LIBJACK
     QCheckBox *m_startJack;
     LineEdit  *m_jackPath;
-#endif // HAVE_LIBJACK
 
 
-#ifdef HAVE_LIBJACK
     // Number of JACK input ports our RG client creates - 
     // this decides how many audio input destinations
     // we have.
@@ -86,8 +81,6 @@ protected:
     QCheckBox    *m_createSubmasterOuts;
 
     QComboBox    *m_audioRecFormat;
-
-#endif // HAVE_LIBJACK
 
     LineEdit*  m_externalAudioEditorPath;
     QComboBox* m_previewStyle;

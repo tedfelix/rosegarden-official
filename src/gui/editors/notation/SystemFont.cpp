@@ -60,7 +60,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
         haveFonts = true;
     }
 
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
 
     FcPattern *pattern, *match;
     FcResult result;
@@ -118,7 +118,7 @@ SystemFont::loadSystemFont(const SystemFontSpec &spec)
 
 qfont:
 
-#endif
+//#endif
 
     QFont qfont(name, size, QFont::Normal);
     qfont.setPixelSize(size);
@@ -187,7 +187,7 @@ SystemFont::unbundleFonts()
 void
 SystemFont::addFont(QString fileName)
 {
-#ifdef HAVE_XFT
+//#ifdef HAVE_XFT
     if (!FcConfigAppFontAddFile
         (FcConfigGetCurrent(),
          (const FcChar8 *)fileName.toLocal8Bit().data())) {
@@ -195,10 +195,10 @@ SystemFont::addFont(QString fileName)
     } else {
         NOTATION_DEBUG << "Added font file \"" << fileName << "\" to fontconfig" << endl;
     }
-#else
-    QFontDatabase::addApplicationFont(fileName);
-    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database" << endl;
-#endif
+//#else
+//    QFontDatabase::addApplicationFont(fileName);
+//    NOTATION_DEBUG << "Added font file \"" << fileName << "\" to Qt font database" << endl;
+//#endif
 }
 
 }

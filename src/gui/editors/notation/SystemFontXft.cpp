@@ -16,8 +16,6 @@
 */
 
 
-#ifdef HAVE_XFT
-
 // include this first:
 #include <QTextStream>
 
@@ -198,6 +196,3 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 }
 
 }
-
-#endif /* HAVE_XFT */
-

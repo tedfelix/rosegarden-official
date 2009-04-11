@@ -22,9 +22,8 @@
 #ifndef _RG_LIRCCLIENT_H_
 #define _RG_LIRCCLIENT_H_
 
-#ifdef HAVE_LIRC
-
 #include <QObject>
+
 #include <lirc/lirc_client.h>
 
 class QSocketNotifier;
@@ -58,7 +57,5 @@ private:
 
 
 }
-
-#endif
 
 #endif

@@ -22,8 +22,6 @@
 #include <set>
 #include <map>
 
-#ifdef HAVE_ALSA
-
 #include <alsa/asoundlib.h> // ALSA
 
 #include "SoundDriver.h"
@@ -33,9 +31,7 @@
 #include "Scavenger.h"
 #include "RunnablePluginInstance.h"
 
-#ifdef HAVE_LIBJACK
 #include "JackDriver.h"
-#endif
 
 namespace Rosegarden
 {
@@ -78,12 +74,8 @@ public:
     // Return the sample rate
     //
     virtual unsigned int getSampleRate() const {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getSampleRate();
         else return 0;
-#else
-        return 0;
-#endif
     }
 
     // Define here to catch this being reset
@@ -111,30 +103,21 @@ public:
 
     
     virtual RealTime getAudioPlayLatency() {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
-#endif
-        return RealTime::zeroTime;
     }
 
     virtual RealTime getAudioRecordLatency() {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
-#endif
         return RealTime::zeroTime;
     }
 
     virtual RealTime getInstrumentPlayLatency(InstrumentId id) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getInstrumentPlayLatency(id);
-#endif
         return RealTime::zeroTime;
     }
 
     virtual RealTime getMaximumPlayLatency() {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
-#endif
         return RealTime::zeroTime;
     }
         
@@ -144,64 +127,48 @@ public:
     virtual void setPluginInstance(InstrumentId id,
                                    QString identifier,
                                    int position) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstance(id, identifier, position);
-#endif
     }
 
     virtual void removePluginInstance(InstrumentId id, int position) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->removePluginInstance(id, position);
-#endif
     }
 
     // Remove all plugin instances
     //
     virtual void removePluginInstances() {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->removePluginInstances();
-#endif
     }
 
     virtual void setPluginInstancePortValue(InstrumentId id,
                                             int position,
                                             unsigned long portNumber,
                                             float value) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
-#endif
     }
 
     virtual float getPluginInstancePortValue(InstrumentId id,
                                              int position,
                                              unsigned long portNumber) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstancePortValue(id, position, portNumber);
-#endif
         return 0;
     }
 
     virtual void setPluginInstanceBypass(InstrumentId id,
                                          int position,
                                          bool value) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstanceBypass(id, position, value);
-#endif
     }
 
     virtual QStringList getPluginInstancePrograms(InstrumentId id,
                                                   int position) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstancePrograms(id, position);
-#endif
         return QStringList();
     }
 
     virtual QString getPluginInstanceProgram(InstrumentId id,
                                              int position) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position);
-#endif
         return QString();
     }
 
@@ -209,53 +176,41 @@ public:
                                              int position,
                                              int bank,
                                              int program) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, bank, program);
-#endif
         return QString();
     }
 
     virtual unsigned long getPluginInstanceProgram(InstrumentId id,
                                                    int position,
                                                    QString name) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getPluginInstanceProgram(id, position, name);
-#endif
         return 0;
     }
     
     virtual void setPluginInstanceProgram(InstrumentId id,
                                           int position,
                                           QString program) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstanceProgram(id, position, program);
-#endif
     }
 
     virtual QString configurePlugin(InstrumentId id,
                                     int position,
                                     QString key,
                                     QString value) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->configurePlugin(id, position, key, value);
-#endif
         return QString();
     }
 
     virtual void setAudioBussLevels(int bussId,
                                     float dB,
                                     float pan) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setAudioBussLevels(bussId, dB, pan);
-#endif
     }
 
     virtual void setAudioInstrumentLevels(InstrumentId instrument,
                                           float dB,
                                           float pan) {
-#ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setAudioInstrumentLevels(instrument, dB, pan);
-#endif
     }
 
     virtual void claimUnwantedPlugin(void *plugin);
@@ -346,21 +301,13 @@ public:
     virtual void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
                                            int &audioInstrumentCount) {
         audioInstrumentBase = AudioInstrumentBase;
-#ifdef HAVE_LIBJACK
         audioInstrumentCount = AudioInstrumentCount;
-#else
-        audioInstrumentCount = 0;
-#endif
     }
  
     virtual void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
                                                int &ssInstrumentCount) {
         ssInstrumentBase = SoftSynthInstrumentBase;
-#ifdef HAVE_DSSI
         ssInstrumentCount = SoftSynthInstrumentCount;
-#else
-        ssInstrumentCount = 0;
-#endif
     }
 
     virtual QString getStatusLog();
@@ -480,9 +427,7 @@ private:
 
     bool                         m_haveShutdown;
 
-#ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
-#endif
 
     Scavenger<RunnablePluginInstance> m_pluginScavenger;
 
@@ -547,8 +492,6 @@ private:
 };
 
 }
-
-#endif // HAVE_ALSA
 
 #endif // _ALSADRIVER_H_
 

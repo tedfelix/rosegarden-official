@@ -21,12 +21,12 @@
 
 #include "LircClient.h"
 
-#ifdef HAVE_LIRC
-
 #include "misc/Debug.h"
 #include "base/Exception.h"
+
 #include <QObject>
 #include <QSocketNotifier>
+
 #include <fcntl.h>
 #include <cstdlib>
 
@@ -89,5 +89,3 @@ void LircClient::readButton()
 }
 
 #include "LircClient.moc"
-
-#endif
