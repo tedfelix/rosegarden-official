@@ -7,7 +7,6 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 LINK_DIRECTORIES(
-    ${KDE4_LIB_DIR} 
     ${ALSA_LIB_DIR}
     ${JACK_LIB_DIR}
     ${XFT_LIB_DIR}
@@ -19,7 +18,6 @@ LINK_DIRECTORIES(
 
 INCLUDE_DIRECTORIES(AFTER
     ${QT_INCLUDE_DIR} 
-    ${KDE4_INCLUDE_DIR} 
     ${ALSA_INC_DIR}
     ${JACK_INC_DIR}
     ${XFT_INC_DIR}
@@ -35,11 +33,11 @@ INCLUDE_DIRECTORIES(AFTER
 SET(CMAKE_INCLUDE_PATH ".")
 
 # Common sources
-INCLUDE(BaseFileList.txt)
-INCLUDE(MiscFileList.txt)
+#INCLUDE(BaseFileList.txt)
+#INCLUDE(MiscFileList.txt)
 
 # Sound sources
-INCLUDE(SoundFileList.txt)
+#INCLUDE(SoundFileList.txt)
 
 QT4_AUTOMOC(${common_sound_SRCS})
 
@@ -54,19 +52,13 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 # sequencer executable
-INCLUDE(SequencerFileList.txt)
+#INCLUDE(SequencerFileList.txt)
 
-IF(WANT_SOUND)
-    SET(snd_SRCS ${sound_SRCS})
-ELSE(WANT_SOUND)
-    SET(snd_SRCS ${nosnd_SRCS})
-ENDIF(WANT_SOUND)
+SET(snd_SRCS ${sound_SRCS})
 
 # gui executable
-INCLUDE(GUIFileList.txt)
+#INCLUDE(GUIFileList.txt)
 
-# KDE4_ADD_UI_FILES(gui_SRCS ${ui_SRCS})
-QT4_AUTOMOC(${ui_SRCS})
 QT4_AUTOMOC(${gui_SRCS})
 QT4_AUTOMOC(${segmentcanvas_SRCS})
 QT4_AUTOMOC(${commands_SRCS})
@@ -132,26 +124,16 @@ IF(USE_PCH)
 ENDIF(USE_PCH)
 
 
-
-KDE4_ADD_EXECUTABLE(rosegarden 
-    #${commands_SRCS}
-    #${document_SRCS}
-    #${gui_SRCS}
-    #${sequencer_SRCS}
-    #${segmentcanvas_SRCS}
-    gui/application/main.cpp
-)
-
 IF(USE_PCH)
     ADD_DEPENDENCIES(rosegarden precompiled_headers)
 ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegarden
-	#${QT_AND_KDECORE_LIBS} 
-	${KDECORE_LIBS}
+#${QT_AND_KDECORE_LIBS} 
+${KDECORE_LIBS}
 #    ${QT4_LIBS}
     ${QT_LIBRARIES}
-	${QT_QT3SUPPORT_LIBRARY}
+${QT_QT3SUPPORT_LIBRARY}
     
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
@@ -170,7 +152,7 @@ TARGET_LINK_LIBRARIES(rosegarden
     RosegardenCommands
     RosegardenCommon
     
-	Rosegarden_rc_data
+Rosegarden_rc_data
 #    ResourceFinder
 #    IconLoader
 )
@@ -192,18 +174,13 @@ INSTALL(FILES ${RC_FILES}
         DESTINATION ${DATA_INSTALL_DIR}/rosegarden )
 
 IF(WANT_TEST)
-    INCLUDE(TestFileList.txt)
+#    INCLUDE(TestFileList.txt)
 
     CREATE_TEST_SOURCELIST(RosegardenTest
-    	RosegardenTestDriver.cpp
+    RosegardenTestDriver.cpp
         ${tests_SRCS}
 #        base/test/transpose.cpp
 #        base/test/segmenttransposecommand.cpp
-    )
-
-    KDE4_ADD_EXECUTABLE(RosegardenTestDriver
-        RosegardenTestDriver.cpp
-        ${tests_SRCS}
     )
 
     TARGET_LINK_LIBRARIES(RosegardenTestDriver
@@ -214,9 +191,6 @@ IF(WANT_TEST)
         ${XFT_LIBS}
         ${LIRC_LIBS}
         ${JACK_LIBS}
-        kio
-        kdeui
-        kdeprint
         RosegardenExtended
         RosegardenSequencer
         RosegardenSegmentCanvas
