@@ -118,7 +118,9 @@ install:
 	$(INSTALL) -m 755 src/helpers/rosegarden-project-package $(BINDIR)
 
 uninstall:
-	rm -rf $(DATADIR)
+	rm -rf $(DATADIR)/examples
+	rm -rf $(DATADIR)/library
+	rmdir $(DATADIR)
 	rm $(BINDIR)/rosegarden09
 
 .PHONY: instrument-ts menu-ts ts ts-noobsolete locale
