@@ -8,7 +8,10 @@ QTLIB		= $(QTDIR)/lib
 CCDIR		= /usr
 
 BINDIR          = $(QTDIR)/bin
-DATADIR         = $(QTDIR)/share/rosegarden
+# NOTE:  we'll want the data directory for installed global files to be
+# different from current distro packages to facilitate concurrent
+# installations...  just setting it to "rosegarden-09" for now
+DATADIR         = $(QTDIR)/share/rosegarden-09
 
 CCACHE		= 
 CC		= $(CCACHE) $(CCDIR)/bin/cc
@@ -43,7 +46,7 @@ LDLIBS		= \
 		-L$(CCDIR)/lib \
 		-L$(QTLIB) \
 		-lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
-		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
+		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f -llirc_client
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -104,13 +107,19 @@ dependencies:
 	sh ./make-dependencies
 
 install:
-	$(INSTALL) -m 644 -D data/examples/* $(DATADIR)/examples/
-	$(INSTALL) -m 644 -D data/library/* $(DATADIR)/library/
-	$(INSTALL) -m 755 rosegarden $(BINDIR)/rosegarden
+	mkdir -m 755 -p $(DATADIR)/examples
+	mkdir -m 755 -p $(DATADIR)/library
+	$(INSTALL) -m 644 data/examples/* $(DATADIR)/examples/
+	$(INSTALL) -m 644 data/library/* $(DATADIR)/library/
+	$(INSTALL) -m 755 rosegarden $(BINDIR)/rosegarden09
+	#NB: we really need to do project package and audiofile importer in real code, and we have to totally rethink lilypondview because it depends on KDE3 DCOP
+	$(INSTALL) -m 755 src/helpers/rosegarden-audiofile-importer $(BINDIR)
+	$(INSTALL) -m 755 src/helpers/rosegarden-lilypondview $(BINDIR)
+	$(INSTALL) -m 755 src/helpers/rosegarden-project-package $(BINDIR)
 
 uninstall:
 	rm -rf $(DATADIR)
-	rm $(BINDIR)/rosegarden
+	rm $(BINDIR)/rosegarden09
 
 .PHONY: instrument-ts menu-ts ts ts-noobsolete locale
 
