@@ -75,7 +75,7 @@ SET(studio_library_UIS
 QT4_AUTOMOC(${studio_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(studio ${studio_library}_SRCS ${studio_library_HDRS})
+ADD_LIBRARY(studio ${studio_library_SRCS} ${studio_library_HDRS})
 #ADD_EXECUTABLE(studio ${studio_library_SRCS})
 #TARGET_LINK_LIBRARIES(studio ${QT_LIBRARIES})
 

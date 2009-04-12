@@ -137,7 +137,7 @@ SET(segment_commands_library_HDRS
 QT4_AUTOMOC(${segment_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(segment_commands ${segment_commands_library}_SRCS ${segment_commands_library_HDRS})
+ADD_LIBRARY(segment_commands ${segment_commands_library_SRCS} ${segment_commands_library_HDRS})
 #SET_TARGET_PROPERTIES(segment_commands PROPERTIES VERSION 0.0.0)
 #TARGET_LINK_LIBRARIES(segment_commands ${QT_LIBRARIES})
 

@@ -79,7 +79,7 @@ SET(edit_commands_library_HDRS
 QT4_AUTOMOC(${edit_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(edit_commands ${edit_commands_library}_SRCS ${edit_commands_library_HDRS})
+ADD_LIBRARY(edit_commands ${edit_commands_library_SRCS} ${edit_commands_library_HDRS})
 #SET_TARGET_PROPERTIES(edit_commands PROPERTIES VERSION 0.0.0)
 #TARGET_LINK_LIBRARIES(edit_commands ${QT_LIBRARIES})
 

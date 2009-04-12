@@ -123,7 +123,7 @@ SET(dialogs_library_UIS
 QT4_AUTOMOC(${dialogs_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(dialogs ${dialogs_library}_SRCS ${dialogs_library_HDRS})
+ADD_LIBRARY(dialogs ${dialogs_library_SRCS} ${dialogs_library_HDRS})
 #ADD_EXECUTABLE(dialogs ${dialogs_library_SRCS})
 #TARGET_LINK_LIBRARIES(dialogs ${QT_LIBRARIES})
 

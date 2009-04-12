@@ -25,7 +25,7 @@ SET(matrix_commands_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(matrix_commands ${matrix_commands_library}_SRCS ${matrix_commands_library_HDRS})
+ADD_LIBRARY(matrix_commands ${matrix_commands_library_SRCS} ${matrix_commands_library_HDRS})
 SET_TARGET_PROPERTIES(matrix_commands PROPERTIES VERSION 0.0.0)
 
 # add install target:

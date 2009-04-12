@@ -56,7 +56,7 @@ SET(matrix_library_HDRS
 QT4_AUTOMOC(${matrix_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(matrix ${matrix_library}_SRCS ${matrix_library_HDRS})
+ADD_LIBRARY(matrix ${matrix_library_SRCS} ${matrix_library_HDRS})
 SET_TARGET_PROPERTIES(matrix PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(matrix ${QT_LIBRARIES})
 

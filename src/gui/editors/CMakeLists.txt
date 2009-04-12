@@ -17,7 +17,7 @@ SET(editors_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(editors ${editors_library}_SRCS ${editors_library_HDRS})
+ADD_LIBRARY(editors ${editors_library_SRCS} ${editors_library_HDRS})
 SET_TARGET_PROPERTIES(editors PROPERTIES VERSION 0.0.0)
 
 # add install target:

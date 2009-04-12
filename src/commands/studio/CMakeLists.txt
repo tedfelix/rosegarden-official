@@ -39,7 +39,7 @@ SET(studio_commands_library_HDRS
 QT4_AUTOMOC(${studio_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(studio_commands ${studio_commands_library}_SRCS ${studio_commands_library_HDRS})
+ADD_LIBRARY(studio_commands ${studio_commands_library_SRCS} ${studio_commands_library_HDRS})
 #SET_TARGET_PROPERTIES(studio_commands PROPERTIES VERSION 0.0.0)
 #TARGET_LINK_LIBRARIES(studio_commands ${QT_LIBRARIES})
 

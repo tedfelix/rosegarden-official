@@ -17,7 +17,7 @@ SET(gui_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(gui ${gui_library}_SRCS ${gui_library_HDRS})
+ADD_LIBRARY(gui ${gui_library_SRCS} ${gui_library_HDRS})
 SET_TARGET_PROPERTIES(gui PROPERTIES VERSION 0.0.0)
 
 # add install target:

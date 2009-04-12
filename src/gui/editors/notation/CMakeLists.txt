@@ -105,7 +105,7 @@ SET(notation_library_HDRS
 QT4_AUTOMOC(${notation_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(notation ${notation_library}_SRCS ${notation_library_HDRS})
+ADD_LIBRARY(notation ${notation_library_SRCS} ${notation_library_HDRS})
 #SET_TARGET_PROPERTIES(notation PROPERTIES VERSION 0.0.0)
 #TARGET_LINK_LIBRARIES(notation ${QT_LIBRARIES})
 

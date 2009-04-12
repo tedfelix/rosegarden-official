@@ -28,7 +28,7 @@ SET(sequencer_library_HDRS
 QT4_AUTOMOC(${sequencer_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(sequencer ${sequencer_library}_SRCS ${sequencer_library_HDRS})
+ADD_LIBRARY(sequencer ${sequencer_library_SRCS} ${sequencer_library_HDRS})
 SET_TARGET_PROPERTIES(sequencer PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(sequencer ${QT_LIBRARIES})
 

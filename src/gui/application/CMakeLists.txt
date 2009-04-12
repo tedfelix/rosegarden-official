@@ -9,7 +9,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
 # ########## application library ##########
 # Sources:
-SET(application_library_SRCS
+SET(application_SRCS
     main.cpp
     RosegardenApplication.cpp
     SetWaitCursor.cpp
@@ -21,7 +21,7 @@ SET(application_library_SRCS
 )
 
 # Headers:
-SET(application_library_HDRS
+SET(application_HDRS
     TransportStatus.h
     StartupTester.h
     LircClient.h
@@ -34,12 +34,11 @@ SET(application_library_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${application_library_SRCS})
+QT4_AUTOMOC(${application_SRCS})
 
 # actual target:
-ADD_LIBRARY(application ${application_library}_SRCS ${application_library_HDRS})
-#ADD_EXECUTABLE(application ${application_library_SRCS})
+ADD_LIBRARY(application ${application_SRCS} ${application_HDRS})
 #TARGET_LINK_LIBRARIES(application ${QT_LIBRARIES})
 
 # add install target:
-#INSTALL(TARGETS application DESTINATION bin)
+INSTALL(TARGETS application DESTINATION bin)

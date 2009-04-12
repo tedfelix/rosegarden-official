@@ -122,7 +122,7 @@ SET(base_library_HDRS
 QT4_AUTOMOC(${base_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(base ${base_library}_SRCS ${base_library_HDRS})
+ADD_LIBRARY(base ${base_library_SRCS} ${base_library_HDRS})
 
 # add install target:
 #INSTALL(TARGETS base DESTINATION bin)

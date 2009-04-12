@@ -106,4 +106,4 @@ SET(sound_library_HDRS
 QT4_AUTOMOC(${sound_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(sound ${sound_library}_SRCS ${sound_library_HDRS})
+ADD_LIBRARY(sound ${sound_library_SRCS} ${sound_library_HDRS})

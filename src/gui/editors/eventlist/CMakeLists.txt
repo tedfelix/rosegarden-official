@@ -27,7 +27,7 @@ SET(eventlist_library_HDRS
 QT4_AUTOMOC(${eventlist_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(eventlist ${eventlist_library}_SRCS ${eventlist_library_HDRS})
+ADD_LIBRARY(eventlist ${eventlist_library_SRCS} ${eventlist_library_HDRS})
 SET_TARGET_PROPERTIES(eventlist PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(eventlist ${QT_LIBRARIES})
 

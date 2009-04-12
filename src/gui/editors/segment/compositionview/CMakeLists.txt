@@ -67,7 +67,7 @@ SET(compositionview_library_HDRS
 QT4_AUTOMOC(${compositionview_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(compositionview ${compositionview_library}_SRCS ${compositionview_library_HDRS})
+ADD_LIBRARY(compositionview ${compositionview_library_SRCS} ${compositionview_library_HDRS})
 SET_TARGET_PROPERTIES(compositionview PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(compositionview ${QT_LIBRARIES})
 

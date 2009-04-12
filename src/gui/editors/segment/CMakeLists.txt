@@ -53,7 +53,7 @@ SET(segment_library_HDRS
 QT4_AUTOMOC(${segment_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(segment ${segment_library}_SRCS ${segment_library_HDRS})
+ADD_LIBRARY(segment ${segment_library_SRCS} ${segment_library_HDRS})
 
 # add install target:
 #INSTALL(TARGETS segment DESTINATION bin)

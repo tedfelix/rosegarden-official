@@ -39,7 +39,7 @@ SET(guitar_library_HDRS
 QT4_AUTOMOC(${guitar_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(guitar ${guitar_library}_SRCS ${guitar_library_HDRS})
+ADD_LIBRARY(guitar ${guitar_library_SRCS} ${guitar_library_HDRS})
 SET_TARGET_PROPERTIES(guitar PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(guitar ${QT_LIBRARIES})
 

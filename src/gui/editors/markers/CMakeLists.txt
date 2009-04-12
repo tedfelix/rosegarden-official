@@ -17,7 +17,7 @@ SET(markers_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(markers ${markers_library}_SRCS ${markers_library_HDRS})
+ADD_LIBRARY(markers ${markers_library_SRCS} ${markers_library_HDRS})
 SET_TARGET_PROPERTIES(markers PROPERTIES VERSION 0.0.0)
 
 # add install target:
