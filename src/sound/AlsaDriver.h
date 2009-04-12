@@ -336,6 +336,7 @@ public:
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
+    virtual void removeConnection( DeviceId, QString connectionName );  // overrides defin. in SoundDriver.h
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
     virtual unsigned int getTimers();

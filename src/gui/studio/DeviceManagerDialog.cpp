@@ -648,21 +648,33 @@ DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice * mdev,
                  << endl;
         //return;
     }
+    
+    RosegardenSequencer *seq;
+    seq = RosegardenSequencer::getInstance();
+    
     QString outPort;
     outPort = strtoqstr(mdev->getConnection());
 
     DeviceId devId = mdev->getId();
 
-    if (outPort != portName) {
-        if ((portName == "") || (portName == m_noPortName)) {
+    if (outPort != portName) {  // then: port changed
+        if ((portName == "") || (portName == m_noPortName)) {   // disconnect
             CommandHistory::getInstance()->addCommand(new
                                                       ReconnectDeviceCommand
                                                                 (m_studio, devId,
                                                                 ""));
+            
+            // note: 
+            // seq->removeConnection() (in sequencer/RosegardenSequencer.cpp) 
+            // calls SoundDriver->removeConnection(), (in sound/SoundDriver.cpp) 
+            // which is implemented in the subclass sound/AlsaDriver.cpp
+            // 
+            seq->removeConnection( mdev->getId(), strtoqstr(mdev->getConnection()) );
+            // mdev->getDirection()
             mdev->setConnection("");
             //### FIXME!!!: This does not really disconnect the port !
             
-        } else {
+        } else {    // re-connect
             RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
                      << " devId " << devId << endl;
 

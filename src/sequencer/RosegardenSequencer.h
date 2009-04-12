@@ -143,6 +143,7 @@ public:
                                   unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId,
                                QString connection);
+    virtual void removeConnection(unsigned int deviceId, QString connection);
     virtual void setPlausibleConnection(unsigned int deviceId,
                                         QString idealConnection);
     

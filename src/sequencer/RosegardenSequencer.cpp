@@ -638,6 +638,16 @@ RosegardenSequencer::setConnection(unsigned int deviceId,
     m_driver->setConnection(deviceId, connection);
 }
 
+
+
+void RosegardenSequencer::removeConnection(unsigned int deviceId, QString connection)
+{
+    LOCKED;
+    
+    m_driver->removeConnection(deviceId, connection);
+}
+
+
 void
 RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,
                                             QString connection)

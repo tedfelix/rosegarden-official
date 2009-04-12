@@ -304,6 +304,7 @@ public:
                                   MidiDevice::DeviceDirection,
                                   unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
+    virtual void removeConnection( DeviceId, QString connectionName ) { };  // implemented in AlsaDriver.cpp
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
 
     virtual unsigned int getTimers() { return 0; }

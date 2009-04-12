@@ -2189,7 +2189,7 @@ RosegardenDocument::stopRecordingMidi()
         }
     }
 
-    for (int i = 0; i < toErase.size(); ++i) {
+    for (unsigned int i = 0; i < toErase.size(); ++i) {
         m_recordMIDISegments.erase(toErase[i]);
     }
 
