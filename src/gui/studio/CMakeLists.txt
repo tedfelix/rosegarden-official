@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## studio executable ##########
+# ########## studio library ##########
 # Sources:
-SET(studio_executable_SRCS
+SET(studio_library_SRCS
     MidiMixerVUMeter.cpp
     BankEditorDialog.cpp
     NameSetEditor.cpp
@@ -36,7 +36,7 @@ SET(studio_executable_SRCS
 )
 
 # Headers:
-SET(studio_executable_HDRS
+SET(studio_library_HDRS
     AudioPluginClipboard.h
     MidiKeyMapTreeWidgetItem.h
     AudioMixerWindow.h
@@ -65,18 +65,19 @@ SET(studio_executable_HDRS
 )
 
 # UI files:
-SET(studio_executable_UIS
+SET(studio_library_UIS
     DeviceManagerDialogUi.ui
     NoPortDialogUi.ui
 )
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${studio_executable_SRCS})
+QT4_AUTOMOC(${studio_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(studio ${studio_executable_SRCS})
-TARGET_LINK_LIBRARIES(studio ${QT_LIBRARIES})
+ADD_LIBRARY(studio ${studio_library}_SRCS ${studio_library_HDRS})
+#ADD_EXECUTABLE(studio ${studio_library_SRCS})
+#TARGET_LINK_LIBRARIES(studio ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS studio DESTINATION bin)
+#INSTALL(TARGETS studio DESTINATION bin)

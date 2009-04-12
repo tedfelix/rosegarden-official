@@ -17,7 +17,7 @@ SET(helpers_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(helpers ${helpers_library}_SCRS ${helpers_library_HDRS})
+ADD_LIBRARY(helpers ${helpers_library}_SRCS ${helpers_library_HDRS})
 SET_TARGET_PROPERTIES(helpers PROPERTIES VERSION 0.0.0)
 
 # add install target:

@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## base executable ##########
+# ########## base library ##########
 # Sources:
-SET(base_executable_SRCS
+SET(base_library_SRCS
     RulerScale.cpp
     NotationQuantizer.cpp
     Segment.cpp
@@ -60,7 +60,7 @@ SET(base_executable_SRCS
 )
 
 # Headers:
-SET(base_executable_HDRS
+SET(base_library_HDRS
     AudioLevel.h
     ColourMap.h
     Device.h
@@ -119,11 +119,10 @@ SET(base_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${base_executable_SRCS})
+QT4_AUTOMOC(${base_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(base ${base_executable_SRCS})
-TARGET_LINK_LIBRARIES(base ${QT_LIBRARIES})
+ADD_LIBRARY(base ${base_library}_SRCS ${base_library_HDRS})
 
 # add install target:
-INSTALL(TARGETS base DESTINATION bin)
+#INSTALL(TARGETS base DESTINATION bin)

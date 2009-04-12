@@ -114,7 +114,7 @@ SET(widgets_library_HDRS
 QT4_AUTOMOC(${widgets_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(widgets ${widgets_library}_SCRS ${widgets_library_HDRS})
+ADD_LIBRARY(widgets ${widgets_library}_SRCS ${widgets_library_HDRS})
 SET_TARGET_PROPERTIES(widgets PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(widgets ${QT_LIBRARIES})
 

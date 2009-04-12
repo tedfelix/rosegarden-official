@@ -17,7 +17,7 @@ SET(commands_library_HDRS
 
 
 # actual target:
-ADD_LIBRARY(commands ${commands_library}_SCRS ${commands_library_HDRS})
+ADD_LIBRARY(commands ${commands_library}_SRCS ${commands_library_HDRS})
 SET_TARGET_PROPERTIES(commands PROPERTIES VERSION 0.0.0)
 
 # add install target:

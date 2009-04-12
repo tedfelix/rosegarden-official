@@ -71,7 +71,7 @@ SET(rulers_library_HDRS
 QT4_AUTOMOC(${rulers_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(rulers ${rulers_library}_SCRS ${rulers_library_HDRS})
+ADD_LIBRARY(rulers ${rulers_library}_SRCS ${rulers_library_HDRS})
 SET_TARGET_PROPERTIES(rulers PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(rulers ${QT_LIBRARIES})
 

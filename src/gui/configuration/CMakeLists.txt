@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## configuration executable ##########
+# ########## configuration library ##########
 # Sources:
-SET(configuration_executable_SRCS
+SET(configuration_library_SRCS
     HeadersConfigurationPage.cpp
     GeneralConfigurationPage.cpp
     ConfigurationPage.cpp
@@ -25,7 +25,7 @@ SET(configuration_executable_SRCS
 )
 
 # Headers:
-SET(configuration_executable_HDRS
+SET(configuration_library_HDRS
     DocumentMetaConfigurationPage.h
     MatrixConfigurationPage.h
     HeadersConfigurationPage.h
@@ -42,11 +42,12 @@ SET(configuration_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${configuration_executable_SRCS})
+QT4_AUTOMOC(${configuration_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(configuration ${configuration_executable_SRCS})
-TARGET_LINK_LIBRARIES(configuration ${QT_LIBRARIES})
+ADD_LIBRARY(configuration ${configuration_library}_SRCS ${configuration_library_HDRS})
+#ADD_EXECUTABLE(configuration ${configuration_library_SRCS})
+#TARGET_LINK_LIBRARIES(configuration ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS configuration DESTINATION bin)
+#INSTALL(TARGETS configuration DESTINATION bin)

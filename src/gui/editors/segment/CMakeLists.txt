@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## segment executable ##########
+# ########## segment library ##########
 # Sources:
-SET(segment_executable_SRCS
+SET(segment_library_SRCS
     TrackLabel.cpp
     TrackEditor.cpp
     TrackHeader.cpp
@@ -29,7 +29,7 @@ SET(segment_executable_SRCS
 )
 
 # Headers:
-SET(segment_executable_HDRS
+SET(segment_library_HDRS
     PlayListViewItem.h
     PlayListView.h
     PlayList.h
@@ -50,11 +50,10 @@ SET(segment_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${segment_executable_SRCS})
+QT4_AUTOMOC(${segment_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(segment ${segment_executable_SRCS})
-TARGET_LINK_LIBRARIES(segment ${QT_LIBRARIES})
+ADD_LIBRARY(segment ${segment_library}_SRCS ${segment_library_HDRS})
 
 # add install target:
-INSTALL(TARGETS segment DESTINATION bin)
+#INSTALL(TARGETS segment DESTINATION bin)

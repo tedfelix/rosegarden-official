@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## parameters executable ##########
+# ########## parameters library ##########
 # Sources:
-SET(parameters_executable_SRCS
+SET(parameters_library_SRCS
     RosegardenParameterBox.cpp
     SegmentParameterBox.cpp
     AudioInstrumentParameterPanel.cpp
@@ -21,7 +21,7 @@ SET(parameters_executable_SRCS
 )
 
 # Headers:
-SET(parameters_executable_HDRS
+SET(parameters_library_HDRS
     MIDIInstrumentParameterPanel.h
     InstrumentParameterPanel.h
     AudioInstrumentParameterPanel.h
@@ -34,11 +34,12 @@ SET(parameters_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${parameters_executable_SRCS})
+QT4_AUTOMOC(${parameters_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(parameters ${parameters_executable_SRCS})
-TARGET_LINK_LIBRARIES(parameters ${QT_LIBRARIES})
+ADD_LIBRARY(parameters ${parameters_library}_SRCS ${parameters_library_HDRS})
+#ADD_EXECUTABLE(parameters ${parameters_library_SRCS})
+#TARGET_LINK_LIBRARIES(parameters ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS parameters DESTINATION bin)
+#INSTALL(TARGETS parameters DESTINATION bin)

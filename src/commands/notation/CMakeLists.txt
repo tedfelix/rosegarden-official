@@ -1,5 +1,5 @@
 # ########## Project setup ##########
-PROJECT(notation)
+PROJECT(notation_commands)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
 # ########## Qt4 setup ##########
@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## notation library ##########
+# ########## notation_commands library ##########
 # Sources:
-SET(notation_library_SRCS
+SET(notation_commands_library_SRCS
     EraseEventCommand.cpp
     IncrementDisplacementsCommand.cpp
     ChangeStemsCommand.cpp
@@ -60,7 +60,7 @@ SET(notation_library_SRCS
 )
 
 # Headers:
-SET(notation_library_HDRS
+SET(notation_commands_library_HDRS
     TieNotesCommand.h
     DeCounterpointCommand.h
     AddMarkCommand.h
@@ -112,12 +112,12 @@ SET(notation_library_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${notation_library_SRCS})
+QT4_AUTOMOC(${notation_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(notation ${notation_library}_SCRS ${notation_library_HDRS})
-SET_TARGET_PROPERTIES(notation PROPERTIES VERSION 0.0.0)
-TARGET_LINK_LIBRARIES(notation ${QT_LIBRARIES})
+ADD_LIBRARY(notation_commands ${notation_commands_library}_SRCS ${notation_commands_library_HDRS})
+#SET_TARGET_PROPERTIES(notation_commands PROPERTIES VERSION 0.0.0)
+#TARGET_LINK_LIBRARIES(notation_commands ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS notation DESTINATION lib)
+#INSTALL(TARGETS notation_commands DESTINATION lib)

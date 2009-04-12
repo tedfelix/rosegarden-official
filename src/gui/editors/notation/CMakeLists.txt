@@ -105,9 +105,9 @@ SET(notation_library_HDRS
 QT4_AUTOMOC(${notation_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(notation ${notation_library}_SCRS ${notation_library_HDRS})
-SET_TARGET_PROPERTIES(notation PROPERTIES VERSION 0.0.0)
-TARGET_LINK_LIBRARIES(notation ${QT_LIBRARIES})
+ADD_LIBRARY(notation ${notation_library}_SRCS ${notation_library_HDRS})
+#SET_TARGET_PROPERTIES(notation PROPERTIES VERSION 0.0.0)
+#TARGET_LINK_LIBRARIES(notation ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS notation DESTINATION lib)
+#INSTALL(TARGETS notation DESTINATION lib)

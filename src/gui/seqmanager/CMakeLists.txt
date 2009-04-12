@@ -41,7 +41,7 @@ SET(seqmanager_library_HDRS
 QT4_AUTOMOC(${seqmanager_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(seqmanager ${seqmanager_library}_SCRS ${seqmanager_library_HDRS})
+ADD_LIBRARY(seqmanager ${seqmanager_library}_SRCS ${seqmanager_library_HDRS})
 SET_TARGET_PROPERTIES(seqmanager PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(seqmanager ${QT_LIBRARIES})
 

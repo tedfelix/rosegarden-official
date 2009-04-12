@@ -1,5 +1,5 @@
 # ########## Project setup ##########
-PROJECT(edit)
+PROJECT(edit_commands)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
 # ########## Qt4 setup ##########
@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## edit library ##########
+# ########## edit_commands library ##########
 # Sources:
-SET(edit_library_SRCS
+SET(edit_commands_library_SRCS
     InvertCommand.cpp
     EraseCommand.cpp
     PasteEventsCommand.cpp
@@ -42,7 +42,7 @@ SET(edit_library_SRCS
 )
 
 # Headers:
-SET(edit_library_HDRS
+SET(edit_commands_library_HDRS
     AddDotCommand.h
     RemoveMarkerCommand.h
     EventQuantizeCommand.h
@@ -76,12 +76,12 @@ SET(edit_library_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${edit_library_SRCS})
+QT4_AUTOMOC(${edit_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(edit ${edit_library}_SCRS ${edit_library_HDRS})
-SET_TARGET_PROPERTIES(edit PROPERTIES VERSION 0.0.0)
-TARGET_LINK_LIBRARIES(edit ${QT_LIBRARIES})
+ADD_LIBRARY(edit_commands ${edit_commands_library}_SRCS ${edit_commands_library_HDRS})
+#SET_TARGET_PROPERTIES(edit_commands PROPERTIES VERSION 0.0.0)
+#TARGET_LINK_LIBRARIES(edit_commands ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS edit DESTINATION lib)
+#INSTALL(TARGETS edit_commands DESTINATION lib)

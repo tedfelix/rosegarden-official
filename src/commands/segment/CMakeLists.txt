@@ -1,5 +1,5 @@
 # ########## Project setup ##########
-PROJECT(segment)
+PROJECT(segment_commands)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
 # ########## Qt4 setup ##########
@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## segment library ##########
+# ########## segment_commands library ##########
 # Sources:
-SET(segment_library_SRCS
+SET(segment_commands_library_SRCS
     SegmentTransposeCommand.cpp
     SegmentSyncCommand.cpp
     AddTracksCommand.cpp
@@ -71,7 +71,7 @@ SET(segment_library_SRCS
 )
 
 # Headers:
-SET(segment_library_HDRS
+SET(segment_commands_library_HDRS
     SetTriggerSegmentBasePitchCommand.h
     RenameTrackCommand.h
     AddTriggerSegmentCommand.h
@@ -134,12 +134,12 @@ SET(segment_library_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${segment_library_SRCS})
+QT4_AUTOMOC(${segment_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(segment ${segment_library}_SCRS ${segment_library_HDRS})
-SET_TARGET_PROPERTIES(segment PROPERTIES VERSION 0.0.0)
-TARGET_LINK_LIBRARIES(segment ${QT_LIBRARIES})
+ADD_LIBRARY(segment_commands ${segment_commands_library}_SRCS ${segment_commands_library_HDRS})
+#SET_TARGET_PROPERTIES(segment_commands PROPERTIES VERSION 0.0.0)
+#TARGET_LINK_LIBRARIES(segment_commands ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS segment DESTINATION lib)
+#INSTALL(TARGETS segment_commands DESTINATION lib)

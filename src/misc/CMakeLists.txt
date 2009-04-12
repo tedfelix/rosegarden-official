@@ -28,7 +28,7 @@ SET(misc_library_HDRS
 QT4_AUTOMOC(${misc_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(misc ${misc_library}_SCRS ${misc_library_HDRS})
+ADD_LIBRARY(misc ${misc_library}_SRCS ${misc_library_HDRS})
 SET_TARGET_PROPERTIES(misc PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(misc ${QT_LIBRARIES})
 

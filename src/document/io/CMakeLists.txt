@@ -35,7 +35,7 @@ SET(io_library_HDRS
 QT4_AUTOMOC(${io_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(io ${io_library}_SCRS ${io_library_HDRS})
+ADD_LIBRARY(io ${io_library}_SRCS ${io_library_HDRS})
 SET_TARGET_PROPERTIES(io PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(io ${QT_LIBRARIES})
 

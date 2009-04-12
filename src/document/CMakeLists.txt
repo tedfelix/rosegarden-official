@@ -43,7 +43,7 @@ SET(document_library_HDRS
 QT4_AUTOMOC(${document_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(document ${document_library}_SCRS ${document_library_HDRS})
+ADD_LIBRARY(document ${document_library}_SRCS ${document_library_HDRS})
 SET_TARGET_PROPERTIES(document PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(document ${QT_LIBRARIES})
 

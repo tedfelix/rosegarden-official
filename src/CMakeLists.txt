@@ -75,11 +75,11 @@ INCLUDE(document/CMakeLists.txt)
 
 #QT4_AUTOMOC(${common_sound_SRCS})
 
-ADD_LIBRARY(RosegardenCommon STATIC
-    ${base_SRCS}
-    ${misc_SRCS}
-    ${common_sound_SRCS}
-)
+#ADD_LIBRARY(RosegardenCommon STATIC
+#    ${base_SRCS}
+#    ${misc_SRCS}
+#    ${common_sound_SRCS}
+#)
 
 IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenCommon precompiled_headers)
@@ -88,7 +88,7 @@ ENDIF(USE_PCH)
 # sequencer executable
 #INCLUDE(SequencerFileList.txt)
 
-SET(snd_SRCS ${sound_SRCS})
+#SET(snd_SRCS ${sound_SRCS})
 
 # gui executable
 #INCLUDE(GUIFileList.txt)
@@ -99,10 +99,10 @@ SET(snd_SRCS ${sound_SRCS})
 #QT4_AUTOMOC(${document_SRCS})
 #QT4_AUTOMOC(${sequencer_SRCS})
 
-ADD_LIBRARY(RosegardenExtended STATIC
-    ${document_SRCS}
-    ${gui_SRCS}
-)
+#ADD_LIBRARY(RosegardenExtended STATIC
+#    ${document_SRCS}
+#    ${gui_SRCS}
+#)
 
 
 #MACRO(RG_GEN_DATA_RC) #
@@ -119,9 +119,9 @@ ADD_LIBRARY(RosegardenExtended STATIC
 
 #RG_GEN_DATA_RC()
 
-ADD_LIBRARY(Rosegarden_rc_data STATIC
-    ../data/data.cpp
-)
+#ADD_LIBRARY(Rosegarden_rc_data STATIC
+#    ../data/data.cpp
+#)
 #ADD_LIBRARY(ResourceFinder STATIC
 #    gui/general/ResourceFinder.h
 #    gui/general/ResourceFinder.cpp
@@ -132,14 +132,14 @@ ADD_LIBRARY(Rosegarden_rc_data STATIC
 #)
 
 
-ADD_LIBRARY(RosegardenSequencer STATIC
-    ${snd_SRCS}
-    ${sequencer_SRCS}
-)
+#ADD_LIBRARY(RosegardenSequencer STATIC
+#    ${snd_SRCS}
+#    ${sequencer_SRCS}
+#)
 
-ADD_LIBRARY(RosegardenCommands STATIC
-    ${commands_SRCS}
-)
+#ADD_LIBRARY(RosegardenCommands STATIC
+#    ${commands_SRCS}
+#)
 
 IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenExtended precompiled_headers)
@@ -149,9 +149,9 @@ IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenCommands precompiled_headers)
 ENDIF(USE_PCH)
 
-ADD_LIBRARY(RosegardenSegmentCanvas STATIC
-    ${segmentcanvas_SRCS}
-)
+#ADD_LIBRARY(RosegardenSegmentCanvas STATIC
+#    ${segmentcanvas_SRCS}
+#)
 
 IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenSegmentCanvas precompiled_headers)
@@ -163,10 +163,6 @@ ENDIF(COMMAND cmake_policy)
 
 
 ADD_EXECUTABLE(rosegarden
-    #${commands_SRCS}
-    #${document_SRCS}
-    #${gui_SRCS}
-    #${segmentcanvas_SRCS}
     gui/application/main.cpp
 )
 
@@ -185,15 +181,39 @@ TARGET_LINK_LIBRARIES(rosegarden
     ${ALSA_LIBS} 
     ${JACK_LIBS}
     ${FFTW3F_LIBS}
-    RosegardenExtended
-    RosegardenSequencer
-    RosegardenSegmentCanvas
-    RosegardenCommands
-    RosegardenCommon
-    
-Rosegarden_rc_data
-#    ResourceFinder
-#    IconLoader
+    segment_commands
+    matrix_commands
+    edit_commands
+    studio
+    studio_commands
+    notation_commands
+    commands
+    helpers
+    dialogs
+    application
+    seqmanager
+    widgets
+    configuration
+    studio
+    compositionview
+    segment
+    parameters
+    markers
+    matrix
+    tempo
+    guitar
+    notation
+    eventlist
+    editors
+    rulers
+    general
+    gui
+    sound
+    base
+    sequencer
+    misc
+    io
+    document
 )
 
 SET (BIN_INSTALL_DIR /tmp)
@@ -211,39 +231,39 @@ INSTALL(PROGRAMS
         DESTINATION ${BIN_INSTALL_DIR} )
 
 # Install GUI resource files
-FILE(GLOB RC_FILES gui/ui/*.rc)
-INSTALL(FILES ${RC_FILES}
-        DESTINATION ${DATA_INSTALL_DIR}/rosegarden )
+#FILE(GLOB RC_FILES gui/ui/*.rc)
+#INSTALL(FILES ${RC_FILES}
+#        DESTINATION ${DATA_INSTALL_DIR}/rosegarden )
 
-IF(WANT_TEST)
+#IF(WANT_TEST)
 #    INCLUDE(TestFileList.txt)
 
-    CREATE_TEST_SOURCELIST(RosegardenTest
-    RosegardenTestDriver.cpp
-        ${tests_SRCS}
+#    CREATE_TEST_SOURCELIST(RosegardenTest
+#    RosegardenTestDriver.cpp
+#        ${tests_SRCS}
 #        base/test/transpose.cpp
 #        base/test/segmenttransposecommand.cpp
-    )
+#    )
 
-    TARGET_LINK_LIBRARIES(RosegardenTestDriver
-        ${QT_LIBS} 
-        ${LIBLO_LIBS}
-        ${LRDF_LIBS}
-        ${FFTW3F_LIBS}
-        ${XFT_LIBS}
-        ${LIRC_LIBS}
-        ${JACK_LIBS}
-        RosegardenExtended
-        RosegardenSequencer
-        RosegardenSegmentCanvas
-        RosegardenCommands
-        RosegardenCommon
-    )
-    FOREACH(currenttest ${tests_SRCS})
-        GET_FILENAME_COMPONENT(TestName ${currenttest} NAME_WE)
-        ADD_TEST(test/${TestName} RosegardenTestDriver test/${TestName})
-    ENDFOREACH(currenttest ${tests_SRCS})
-ENDIF(WANT_TEST)
+#    TARGET_LINK_LIBRARIES(RosegardenTestDriver
+#        ${QT_LIBS} 
+#        ${LIBLO_LIBS}
+#        ${LRDF_LIBS}
+#        ${FFTW3F_LIBS}
+#        ${XFT_LIBS}
+#        ${LIRC_LIBS}
+#        ${JACK_LIBS}
+#        RosegardenExtended
+#        RosegardenSequencer
+#        RosegardenSegmentCanvas
+#        RosegardenCommands
+#        RosegardenCommon
+#    )
+#    FOREACH(currenttest ${tests_SRCS})
+#        GET_FILENAME_COMPONENT(TestName ${currenttest} NAME_WE)
+#        ADD_TEST(test/${TestName} RosegardenTestDriver test/${TestName})
+#    ENDFOREACH(currenttest ${tests_SRCS})
+#ENDIF(WANT_TEST)
 
 
 

@@ -25,7 +25,7 @@ SET(tempo_library_HDRS
 QT4_AUTOMOC(${tempo_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(tempo ${tempo_library}_SCRS ${tempo_library_HDRS})
+ADD_LIBRARY(tempo ${tempo_library}_SRCS ${tempo_library_HDRS})
 SET_TARGET_PROPERTIES(tempo PROPERTIES VERSION 0.0.0)
 TARGET_LINK_LIBRARIES(tempo ${QT_LIBRARIES})
 

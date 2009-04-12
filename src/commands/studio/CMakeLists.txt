@@ -1,5 +1,5 @@
 # ########## Project setup ##########
-PROJECT(studio)
+PROJECT(studio_commands)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.4.5)
 
 # ########## Qt4 setup ##########
@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## studio library ##########
+# ########## studio_commands library ##########
 # Sources:
-SET(studio_library_SRCS
+SET(studio_commands_library_SRCS
     ReconnectDeviceCommand.cpp
     RemoveControlParameterCommand.cpp
     ModifyControlParameterCommand.cpp
@@ -22,7 +22,7 @@ SET(studio_library_SRCS
 )
 
 # Headers:
-SET(studio_library_HDRS
+SET(studio_commands_library_HDRS
     ModifyInstrumentMappingCommand.h
     AddControlParameterCommand.h
     RemoveControlParameterCommand.h
@@ -36,12 +36,12 @@ SET(studio_library_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${studio_library_SRCS})
+QT4_AUTOMOC(${studio_commands_library_SRCS})
 
 # actual target:
-ADD_LIBRARY(studio ${studio_library}_SCRS ${studio_library_HDRS})
-SET_TARGET_PROPERTIES(studio PROPERTIES VERSION 0.0.0)
-TARGET_LINK_LIBRARIES(studio ${QT_LIBRARIES})
+ADD_LIBRARY(studio_commands ${studio_commands_library}_SRCS ${studio_commands_library_HDRS})
+#SET_TARGET_PROPERTIES(studio_commands PROPERTIES VERSION 0.0.0)
+#TARGET_LINK_LIBRARIES(studio_commands ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS studio DESTINATION lib)
+#INSTALL(TARGETS studio_commands DESTINATION lib)

@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## application executable ##########
+# ########## application library ##########
 # Sources:
-SET(application_executable_SRCS
+SET(application_library_SRCS
     main.cpp
     RosegardenApplication.cpp
     SetWaitCursor.cpp
@@ -21,7 +21,7 @@ SET(application_executable_SRCS
 )
 
 # Headers:
-SET(application_executable_HDRS
+SET(application_library_HDRS
     TransportStatus.h
     StartupTester.h
     LircClient.h
@@ -34,11 +34,12 @@ SET(application_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${application_executable_SRCS})
+QT4_AUTOMOC(${application_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(application ${application_executable_SRCS})
-TARGET_LINK_LIBRARIES(application ${QT_LIBRARIES})
+ADD_LIBRARY(application ${application_library}_SRCS ${application_library_HDRS})
+#ADD_EXECUTABLE(application ${application_library_SRCS})
+#TARGET_LINK_LIBRARIES(application ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS application DESTINATION bin)
+#INSTALL(TARGETS application DESTINATION bin)

@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## dialogs executable ##########
+# ########## dialogs library ##########
 # Sources:
-SET(dialogs_executable_SRCS
+SET(dialogs_library_SRCS
     DocumentConfigureDialog.cpp
     SplitByPitchDialog.cpp
     RescaleDialog.cpp
@@ -61,7 +61,7 @@ SET(dialogs_executable_SRCS
 )
 
 # Headers:
-SET(dialogs_executable_HDRS
+SET(dialogs_library_HDRS
     ShowSequencerStatusDialog.h
     TupletDialog.h
     AudioPluginDialog.h
@@ -114,17 +114,18 @@ SET(dialogs_executable_HDRS
 )
 
 # UI files:
-SET(dialogs_executable_UIS
+SET(dialogs_library_UIS
     RosegardenTransportUi.ui
 )
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${dialogs_executable_SRCS})
+QT4_AUTOMOC(${dialogs_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(dialogs ${dialogs_executable_SRCS})
-TARGET_LINK_LIBRARIES(dialogs ${QT_LIBRARIES})
+ADD_LIBRARY(dialogs ${dialogs_library}_SRCS ${dialogs_library_HDRS})
+#ADD_EXECUTABLE(dialogs ${dialogs_library_SRCS})
+#TARGET_LINK_LIBRARIES(dialogs ${QT_LIBRARIES})
 
 # add install target:
-INSTALL(TARGETS dialogs DESTINATION bin)
+#INSTALL(TARGETS dialogs DESTINATION bin)

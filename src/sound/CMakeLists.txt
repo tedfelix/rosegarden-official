@@ -7,9 +7,9 @@ FIND_PACKAGE(Qt4 REQUIRED)
 INCLUDE(${QT_USE_FILE})
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${QT_INCLUDES})
 
-# ########## sound executable ##########
+# ########## sound library ##########
 # Sources:
-SET(sound_executable_SRCS
+SET(sound_library_SRCS
     PluginIdentifier.cpp
     BWFAudioFile.cpp
     AudioProcess.cpp
@@ -52,7 +52,7 @@ SET(sound_executable_SRCS
 )
 
 # Headers:
-SET(sound_executable_HDRS
+SET(sound_library_HDRS
     AlsaDriver.h
     AudioPlayQueue.h
     Audit.h
@@ -103,11 +103,7 @@ SET(sound_executable_HDRS
 
 
 # scan files and run moc on all that need it:
-QT4_AUTOMOC(${sound_executable_SRCS})
+QT4_AUTOMOC(${sound_library_SRCS})
 
 # actual target:
-ADD_EXECUTABLE(sound ${sound_executable_SRCS})
-TARGET_LINK_LIBRARIES(sound ${QT_LIBRARIES})
-
-# add install target:
-INSTALL(TARGETS sound DESTINATION bin)
+ADD_LIBRARY(sound ${sound_library}_SRCS ${sound_library_HDRS})
