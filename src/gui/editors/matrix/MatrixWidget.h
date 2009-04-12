@@ -43,6 +43,7 @@ class Panner;
 class Panned;
 class EventSelection;
 class PitchRuler;
+class MidiKeyMapping;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -135,7 +136,9 @@ private:
 
     PitchRuler *m_pitchRuler; // I own this
     Panned *m_pianoView; // I own this
-    QGraphicsScene *m_pianoScene; // I own this 
+    QGraphicsScene *m_pianoScene; // I own this
+    MidiKeyMapping *m_localMapping; // I own this
+
 };
 
 }

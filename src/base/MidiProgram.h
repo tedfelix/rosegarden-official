@@ -96,20 +96,32 @@ public:
     std::string          getMapForKeyName(MidiByte pitch) const;
     void                 setMap(const KeyNameMap &map) { m_map = map; }
     
-    // Return 0 if the supplied argument is the lowest pitch in the
-    // mapping, 1 if it is the second-lowest, etc.  Return -1 if it
-    // is not in the mapping at all.  Not instant.
+    /**
+     * Return 0 if the supplied argument is the lowest pitch in the
+     * mapping, 1 if it is the second-lowest, etc.  Return -1 if it
+     * is not in the mapping at all.  Not instant.
+     */
     int                  getOffset(MidiByte pitch) const;
 
-    // Return the offset'th pitch in the mapping.  Return -1 if there
-    // are fewer than offset pitches in the mapping (or offset < 0).
-    // Not instant.
+    /**
+     * Return the offset'th pitch in the mapping.  Return -1 if there
+     * are fewer than offset pitches in the mapping (or offset < 0).
+     * Not instant.
+     */
     int                  getPitchForOffset(int offset) const;
 
-    // Return the difference between the top and bottom pitches
-    // contained in the map.
-    //
+    /**
+     * Return the difference between the top and bottom pitches
+     * contained in the map.
+     */
     int                  getPitchExtent() const;
+
+    /**
+     * Add blank pitches to the key mapping to have it extends from at most
+     * minpitch to maxpitch.
+     */
+    void                 extend(int minPitch = 0, int maxpitch = 127);
+
 
 private:
     std::string m_name;

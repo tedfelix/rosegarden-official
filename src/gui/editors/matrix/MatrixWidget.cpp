@@ -43,10 +43,14 @@
 #include "gui/widgets/Panned.h"
 
 #include "gui/rulers/PitchRuler.h"
+#include "gui/rulers/PercussionPitchRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
+#include "base/Composition.h"
+#include "base/Instrument.h"
+#include "base/MidiProgram.h"
 #include "base/RulerScale.h"
 
 namespace Rosegarden
@@ -66,7 +70,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_referenceScale(0),
     m_inMove(false),
     m_pitchRuler(0),
-    m_pianoView(0)
+    m_pianoView(0),
+    m_pianoScene(0),
+    m_localMapping(0)
 {
     QGridLayout *layout = new QGridLayout;
     setLayout(layout);
@@ -76,12 +82,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_view->setBackgroundBrush(Qt::white);
     layout->addWidget(m_view, 0, 1, 1, 1);
 
-    m_pitchRuler = new PianoKeyboard(0);
-    m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
-
-    m_pianoView = new Panned();
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-
+    m_pianoView = new Panned;
     layout->addWidget(m_pianoView, 0, 0, 1, 1);
 
     m_hpanner = new Panner;
@@ -90,10 +91,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hpanner->setBackgroundBrush(Qt::white);
     layout->addWidget(m_hpanner, 1, 0, 1, 2);
 
-    m_pianoScene = new QGraphicsScene();
-    QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
-    m_pianoView->setScene(m_pianoScene);
-    m_pianoView->centerOn(pianoKbd);
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
@@ -122,6 +119,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 MatrixWidget::~MatrixWidget()
 {
     delete m_scene;
+    delete m_pianoScene;
+    delete m_localMapping;
 }
 
 void
@@ -156,6 +155,48 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_toolBox->setScene(m_scene);
 
     m_hpanner->setScene(m_scene);
+
+ ///!!! Used for test as currently arg drumMode passed
+ ///    to MatrixWidget ctor is always false (yg)
+ /// m_drumMode = true;  
+
+    Composition &comp = document->getComposition();
+
+    Track *track =
+        comp.getTrackById(segments[0]->getTrack());
+
+    Instrument *instr = document->getStudio().
+                        getInstrumentById(track->getInstrument());
+
+    const MidiKeyMapping *mapping = 0;
+
+    if (instr) {
+        mapping = instr->getKeyMapping();
+        if (mapping) {
+            RG_DEBUG << "MatrixView: Instrument has key mapping: "
+            << mapping->getName() << endl;
+            m_localMapping = new MidiKeyMapping(*mapping);
+            m_localMapping->extend();
+        } else {
+            RG_DEBUG << "MatrixView: Instrument has no key mapping\n";
+        }
+    }
+
+    if (m_drumMode && mapping && !m_localMapping->getMap().empty()) {
+        m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
+                                                m_scene->getYResolution()); 
+    } else {
+        m_pitchRuler = new PianoKeyboard(0);
+    }
+
+    m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+
+    delete m_pianoScene;
+    m_pianoScene = new QGraphicsScene();
+    QGraphicsProxyWidget *pianoKbd = m_pianoScene->addWidget(m_pitchRuler);
+    m_pianoView->setScene(m_pianoScene);
+    m_pianoView->centerOn(pianoKbd);
 
     // If piano scene and matrix scene don't have the same height
     // one may shift from the other when scrolling vertically
@@ -402,6 +443,7 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
         if (m_scene) m_scene->ensurePointerVisible();
     }
 }
+
 
 }
 

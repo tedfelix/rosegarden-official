@@ -192,6 +192,14 @@ MidiKeyMapping::getPitchExtent() const
     return maxPitch - minPitch;
 }
 
+void
+MidiKeyMapping::extend(int minPitch, int maxpitch)
+{
+    int minKMPitch = getPitchForOffset(0);
+    int maxKMPitch = getPitchForOffset(0) + getPitchExtent() - 1;
+    if (minPitch < minKMPitch) getMap()[minPitch] = std::string("");
+    if (maxpitch > maxKMPitch) getMap()[maxpitch] = std::string("");
+}
 	
 
 }
