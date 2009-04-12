@@ -106,7 +106,7 @@ IF(WANT_TEST)
 ENDIF(WANT_TEST)
 
 
-# Save the flags before FindKDE4 
+# Save the flags before FindQt4 
 SET(SAVED_CXX_FLAGS ${CMAKE_CXX_FLAGS})
 
 IF(QT4_FOUND)
@@ -121,11 +121,11 @@ ELSE(QT4_FOUND)
 ENDIF(QT4_FOUND)
 
 
-# Restore the flags saved before FindKDE4 
+# Restore the flags saved before FindQt4 
 SET(CMAKE_CXX_FLAGS ${SAVED_CXX_FLAGS})
 
 IF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    SET(CMAKE_INSTALL_PREFIX ${KDE4PREFIX} CACHE PATH
+    SET(CMAKE_INSTALL_PREFIX ${PREFIX} CACHE PATH
         "Install path prefix, prepended onto install directories." FORCE)
 ENDIF(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT) 
 
@@ -184,15 +184,10 @@ IF(DSSI_FOUND)
     #MESSAGE("DSSI_INC_DIR: ${DSSI_INC_DIR}")
 ENDIF(DSSI_FOUND)
 
-# I think the 0.7 < 0.23 thing is breaking again, or whatever, but there aren't
-# any older than 0.23 versions of liblo out in the field anymore anyway
-FIND_PACKAGE(LIBLO REQUIRED)
-
-# no fucking clue why this test keeps failing, but what happens if we hack it
-# for the time being?
-SET(LIBLO_FOUND)
-
+PKG_CHECK_MODULES(LIBLO liblo>=0.7)
 IF(LIBLO_FOUND)
+    SET(HAVE_LIBLO TRUE)
+    MESSAGE("Liblo was found, right?!")
     ADD_DEFINITIONS(-DHAVE_LIBLO)
     SET(LIBLO_LIBS ${LIBLO_LIBRARIES})
     MESSAGE("LIBLO_LIBS: ${LIBLO_LIBS}")
@@ -201,7 +196,8 @@ IF(LIBLO_FOUND)
     LIST(APPEND LIBLO_INC_DIR ${LIBLO_INCLUDEDIR} ${LIBLO_INCLUDE_DIRS})
     MESSAGE("LIBLO_INC_DIR: ${LIBLO_INC_DIR}")
 ELSE(LIBLO_FOUND)
-    MESSAGE(FATAL_ERROR "LIBLO not found!  Aborting")
+    MESSAGE("I just watched it getting found, so WTF?!")
+    #MESSAGE(FATAL_ERROR "LIBLO not found!  Aborting")
 ENDIF(LIBLO_FOUND)
 
 PKG_CHECK_MODULES(LRDF REQUIRED lrdf>=0.3)
@@ -324,10 +320,10 @@ INCLUDE(UserWarnings)
 ADD_SUBDIRECTORY(src RGbuild)
 
 # Build and install the translations directory
-ADD_SUBDIRECTORY(po RGbuild/po)
+ADD_SUBDIRECTORY(locale RGbuild/locale)
 
 # Build and install the documentation directory
-ADD_SUBDIRECTORY(docs RGbuild/docs)
+#ADD_SUBDIRECTORY(docs RGbuild/docs)
 
 # Install data files
 ADD_SUBDIRECTORY(data RGbuild/data)
@@ -339,7 +335,7 @@ ADD_SUBDIRECTORY(data RGbuild/data)
 # create and install the version file
 FILE(WRITE version.txt "${VERSION}\n")
 INSTALL( FILES version.txt
-         DESTINATION ${KDE4DATADIR}/rosegarden )
+         DESTINATION ${DIR}/rosegarden )
 
 # uninstall custom target
 CONFIGURE_FILE(

@@ -32,6 +32,40 @@ INCLUDE_DIRECTORIES(AFTER
 
 SET(CMAKE_INCLUDE_PATH ".")
 
+INCLUDE(commands/segment/CMakeLists.txt)
+INCLUDE(commands/matrix/CMakeLists.txt)
+INCLUDE(commands/edit/CMakeLists.txt)
+INCLUDE(commands/studio/CMakeLists.txt)
+INCLUDE(commands/notation/CMakeLists.txt)
+INCLUDE(commands/CMakeLists.txt)
+INCLUDE(helpers/CMakeLists.txt)
+INCLUDE(gui/dialogs/CMakeLists.txt)
+INCLUDE(gui/application/CMakeLists.txt)
+INCLUDE(gui/seqmanager/CMakeLists.txt)
+INCLUDE(gui/widgets/CMakeLists.txt)
+INCLUDE(gui/configuration/CMakeLists.txt)
+INCLUDE(gui/studio/CMakeLists.txt)
+INCLUDE(gui/editors/segment/compositionview/CMakeLists.txt)
+INCLUDE(gui/editors/segment/CMakeLists.txt)
+INCLUDE(gui/editors/parameters/CMakeLists.txt)
+INCLUDE(gui/editors/markers/CMakeLists.txt)
+INCLUDE(gui/editors/matrix/CMakeLists.txt)
+INCLUDE(gui/editors/tempo/CMakeLists.txt)
+INCLUDE(gui/editors/guitar/CMakeLists.txt)
+INCLUDE(gui/editors/notation/CMakeLists.txt)
+INCLUDE(gui/editors/eventlist/CMakeLists.txt)
+INCLUDE(gui/editors/CMakeLists.txt)
+INCLUDE(gui/rulers/CMakeLists.txt)
+INCLUDE(gui/general/CMakeLists.txt)
+INCLUDE(gui/CMakeLists.txt)
+INCLUDE(sound/CMakeLists.txt)
+INCLUDE(base/CMakeLists.txt)
+INCLUDE(sequencer/CMakeLists.txt)
+INCLUDE(misc/CMakeLists.txt)
+INCLUDE(document/io/CMakeLists.txt)
+INCLUDE(document/CMakeLists.txt)
+
+
 # Common sources
 #INCLUDE(BaseFileList.txt)
 #INCLUDE(MiscFileList.txt)
@@ -39,7 +73,7 @@ SET(CMAKE_INCLUDE_PATH ".")
 # Sound sources
 #INCLUDE(SoundFileList.txt)
 
-QT4_AUTOMOC(${common_sound_SRCS})
+#QT4_AUTOMOC(${common_sound_SRCS})
 
 ADD_LIBRARY(RosegardenCommon STATIC
     ${base_SRCS}
@@ -59,11 +93,11 @@ SET(snd_SRCS ${sound_SRCS})
 # gui executable
 #INCLUDE(GUIFileList.txt)
 
-QT4_AUTOMOC(${gui_SRCS})
-QT4_AUTOMOC(${segmentcanvas_SRCS})
-QT4_AUTOMOC(${commands_SRCS})
-QT4_AUTOMOC(${document_SRCS})
-QT4_AUTOMOC(${sequencer_SRCS})
+#QT4_AUTOMOC(${gui_SRCS})
+#QT4_AUTOMOC(${segmentcanvas_SRCS})
+#QT4_AUTOMOC(${commands_SRCS})
+#QT4_AUTOMOC(${document_SRCS})
+#QT4_AUTOMOC(${sequencer_SRCS})
 
 ADD_LIBRARY(RosegardenExtended STATIC
     ${document_SRCS}
@@ -71,19 +105,19 @@ ADD_LIBRARY(RosegardenExtended STATIC
 )
 
 
-MACRO(RG_GEN_DATA_RC) #
+#MACRO(RG_GEN_DATA_RC) #
   #  SET(_customName "${ARGV1}")
  #   GET_FILENAME_COMPONENT(_in_file ${_header} ABSOLUTE)
 #    GET_FILENAME_COMPONENT(_basename ${_header} NAME_WE)
     
-    SET(_rcc_out "./_rcc_out.txt")
-    ADD_CUSTOM_COMMAND(OUTPUT ${_rcc_out}
-        COMMAND "rcc ../data/data.qrc > ../data/data.cpp" > ${_rcc_out}
-        #DEPENDS ${_in_file}
-    )
-ENDMACRO(RG_GEN_DATA_RC)
+#    SET(_rcc_out "./_rcc_out.txt")
+#    ADD_CUSTOM_COMMAND(OUTPUT ${_rcc_out}
+#        COMMAND "rcc ../data/data.qrc > ../data/data.cpp" > ${_rcc_out}
+#        #DEPENDS ${_in_file}
+#    )
+#ENDMACRO(RG_GEN_DATA_RC)
 
-RG_GEN_DATA_RC()
+#RG_GEN_DATA_RC()
 
 ADD_LIBRARY(Rosegarden_rc_data STATIC
     ../data/data.cpp
@@ -123,18 +157,26 @@ IF(USE_PCH)
     ADD_DEPENDENCIES(RosegardenSegmentCanvas precompiled_headers)
 ENDIF(USE_PCH)
 
+IF(COMMAND cmake_policy)
+    cmake_policy(SET CMP0003 NEW)
+ENDIF(COMMAND cmake_policy)
+
+
+ADD_EXECUTABLE(rosegarden
+    #${commands_SRCS}
+    #${document_SRCS}
+    #${gui_SRCS}
+    #${segmentcanvas_SRCS}
+    gui/application/main.cpp
+)
 
 IF(USE_PCH)
     ADD_DEPENDENCIES(rosegarden precompiled_headers)
 ENDIF(USE_PCH)
 
 TARGET_LINK_LIBRARIES(rosegarden
-#${QT_AND_KDECORE_LIBS} 
-${KDECORE_LIBS}
-#    ${QT4_LIBS}
     ${QT_LIBRARIES}
-${QT_QT3SUPPORT_LIBRARY}
-    
+    ${QT_QT3SUPPORT_LIBRARY}    
     ${LIBLO_LIBS}
     ${LRDF_LIBS}
     ${FFTW3F_LIBS}
@@ -143,9 +185,6 @@ ${QT_QT3SUPPORT_LIBRARY}
     ${ALSA_LIBS} 
     ${JACK_LIBS}
     ${FFTW3F_LIBS}
-    kio
-    kdeui
-#    kdeprint
     RosegardenExtended
     RosegardenSequencer
     RosegardenSegmentCanvas
@@ -156,6 +195,9 @@ Rosegarden_rc_data
 #    ResourceFinder
 #    IconLoader
 )
+
+SET (BIN_INSTALL_DIR /tmp)
+SET (DATA_INSTALLDIR /tmp)
 
 # Install targets
 INSTALL(TARGETS rosegarden 
@@ -184,7 +226,7 @@ IF(WANT_TEST)
     )
 
     TARGET_LINK_LIBRARIES(RosegardenTestDriver
-        ${QT_AND_KDECORE_LIBS} 
+        ${QT_LIBS} 
         ${LIBLO_LIBS}
         ${LRDF_LIBS}
         ${FFTW3F_LIBS}
