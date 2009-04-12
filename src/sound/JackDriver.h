@@ -16,6 +16,9 @@
 #ifndef _JACKDRIVER_H_
 #define _JACKDRIVER_H_
 
+#ifdef HAVE_ALSA
+#ifdef HAVE_LIBJACK
+
 #include "RunnablePluginInstance.h"
 #include <jack/jack.h>
 #include "SoundDriver.h"
@@ -280,6 +283,9 @@ protected:
 
 
 }
+
+#endif
+#endif
 
 #endif
 

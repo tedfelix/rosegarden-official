@@ -16,6 +16,8 @@
 */
 
 
+#ifdef HAVE_LIBLO
+
 #include "OSCMessage.h"
 
 #include <cstdlib>
@@ -74,3 +76,5 @@ OSCMessage::getArg(size_t i, char &type) const
 }
 
 }
+
+#endif // HAVE_LIBLO

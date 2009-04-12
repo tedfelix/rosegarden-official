@@ -219,7 +219,9 @@
 #include <QFontDialog>
 #include <QPageSetupDialog>
 
+#ifdef HAVE_LIBJACK
 #include <jack/jack.h>
+#endif
 
 
 namespace Rosegarden
@@ -236,7 +238,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_doc(0),
     m_sequencerThread(0),
     m_sequencerCheckedIn(false),
+#ifdef HAVE_LIBJACK
     m_jackProcess(0),
+#endif
     m_zoomSlider(0),
     m_seqManager(0),
     m_transport(0),
@@ -257,12 +261,16 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_markerEditor(0),
     m_tempoView(0),
     m_triggerSegmentManager(0),
+#ifdef HAVE_LIBLO
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
+#endif
     m_playTimer(new QTimer(static_cast<QObject *>(this))),
     m_stopTimer(new QTimer(static_cast<QObject *>(this))),
     m_startupTester(0),
+#ifdef HAVE_LIRC
     m_lircClient(0),
     m_lircCommander(0),
+#endif
     m_firstRun(false),
     m_haveAudioImporter(false),
     m_parameterArea(0),
@@ -281,6 +289,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     //
     if (m_useSequencer) {
 
+#ifdef HAVE_LIBJACK
+#define OFFER_JACK_START_OPTION 1
+#ifdef OFFER_JACK_START_OPTION
         // First we check if jackd is running already
 
         std::string jackClientName = "rosegarden";
@@ -301,6 +312,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
             //this client was just for testing
             jack_client_close(testJackClient);
         }
+#endif // OFFER_JACK_START_OPTION
+#endif // HAVE_LIBJACK
 
         // This causes the QPainter::begin debug message
         emit startupStatusMessage(tr("Starting sequencer..."));
@@ -510,6 +523,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // All toolbars should be created before this is called
     //### implement or find alternative : rgTempQtIV->setAutoSaveSettings(MainWindowConfigGroup, true);
 
+#ifdef HAVE_LIRC
+
     try {
         m_lircClient = new LircClient();
     } catch (Exception e) {
@@ -520,6 +535,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     if (m_lircClient) {
         m_lircCommander = new LircCommander(m_lircClient, this);
     }
+#endif
 
     leaveActionState("have_project_packager"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     leaveActionState("have_lilypondview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
@@ -538,7 +554,9 @@ RosegardenMainWindow::~RosegardenMainWindow()
         getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
+#ifdef HAVE_LIBLO
     delete m_pluginGUIManager;
+#endif
 
     if (isSequencerRunning()) {
         RosegardenSequencer::getInstance()->quit();
@@ -550,8 +568,11 @@ RosegardenMainWindow::~RosegardenMainWindow()
 
     delete m_seqManager;
 
+#ifdef HAVE_LIRC
+
     delete m_lircCommander;
     delete m_lircClient;
+#endif
 
     delete m_doc;
     Profiles::getInstance()->dump();
@@ -605,6 +626,8 @@ void RosegardenMainWindow::setupActions()
     //!!! NO -- ActionFileParser should do this for us if the actions
     // are declared in the .rc file.  It isn't working properly atm,
     // but it needs fixing there, not here
+//    new KToolBarPopupAction(tr("Und&o"), "undo", KStdAccel::shortcut(KStdAccel::Undo), actionCollection(), KStdAction::stdName(KStdAction::Undo));
+//    new KToolBarPopupAction(tr("Re&do"), "redo", KStdAccel::shortcut(KStdAccel::Redo), actionCollection(), KStdAction::stdName(KStdAction::Redo));
 
     createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
@@ -1140,10 +1163,13 @@ void RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
 
+#ifdef HAVE_LIBLO
+
     if (m_pluginGUIManager) {
         m_pluginGUIManager->stopAllGUIs();
         m_pluginGUIManager->setStudio(&m_doc->getStudio());
     }
+#endif
 
     if (getView() &&
         getView()->getTrackEditor() &&
@@ -4321,6 +4347,7 @@ void RosegardenMainWindow::slotTestStartupTester()
         }
     }
 
+#ifdef HAVE_LIBJACK
     if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
 
         m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
@@ -4340,6 +4367,7 @@ void RosegardenMainWindow::slotTestStartupTester()
             }
         }
     }
+#endif
 
     if (missingFeatures.count() > 0) {
         QString message = tr("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
@@ -4404,6 +4432,7 @@ bool RosegardenMainWindow::launchSequencer()
     return true;
 }
 
+#ifdef HAVE_LIBJACK
 bool RosegardenMainWindow::launchJack()
 {
     QSettings settings;
@@ -4455,6 +4484,7 @@ bool RosegardenMainWindow::launchJack()
 
     return m_jackProcess != 0 ? m_jackProcess->state() == QProcess::Running : true;
 }
+#endif
 
 void RosegardenMainWindow::slotDocumentDevicesResyncd()
 {
@@ -6215,7 +6245,11 @@ RosegardenMainWindow::slotManageSynths()
         return ;
     }
 
-    m_synthManager = new SynthPluginManagerDialog(this, m_doc, m_pluginGUIManager);
+    m_synthManager = new SynthPluginManagerDialog(this, m_doc
+#ifdef HAVE_LIBLO
+                     , m_pluginGUIManager
+#endif
+                                                );
 
     connect(m_synthManager, SIGNAL(closing()),
             this, SLOT(slotSynthPluginManagerClosed()));
@@ -6611,7 +6645,9 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     AudioPluginDialog *dialog =
         new AudioPluginDialog(parent,
                               m_doc->getPluginManager(),
+#ifdef HAVE_LIBLO
                               m_pluginGUIManager,
+#endif
                               container,
                               index);
 
@@ -6918,6 +6954,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
 
     m_doc->slotDocumentModified();
 
+#ifdef HAVE_LIBLO
     // This modification came from our own plugin dialog, so update
     // any external GUIs
     if (m_pluginGUIManager) {
@@ -6925,6 +6962,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
                                        pluginIndex,
                                        portIndex);
     }
+#endif
 }
 
 void
@@ -7023,9 +7061,12 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
     // Set modified
     m_doc->slotDocumentModified();
 
+#ifdef HAVE_LIBLO
+
     if (m_pluginGUIManager)
         m_pluginGUIManager->updateProgram(instrumentId,
                                           pluginIndex);
+#endif
 }
 
 void
@@ -7074,8 +7115,11 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
                         ((*i)->getId(), (*pli)->getPosition(),
                          false, key, value);
 
+#ifdef HAVE_LIBLO
+
                         m_pluginGUIManager->updateConfiguration
                         ((*i)->getId(), (*pli)->getPosition(), key);
+#endif
 
                     }
                 }
@@ -7158,14 +7202,18 @@ void
 RosegardenMainWindow::slotShowPluginGUI(InstrumentId instrument,
                                     int index)
 {
+#ifdef HAVE_LIBLO
     m_pluginGUIManager->showGUI(instrument, index);
+#endif
 }
 
 void
 RosegardenMainWindow::slotStopPluginGUI(InstrumentId instrument,
                                     int index)
 {
+#ifdef HAVE_LIBLO
     m_pluginGUIManager->stopGUI(instrument, index);
+#endif
 }
 
 void

@@ -1636,8 +1636,13 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             if (handler.hasActiveAudio() ||
                 (m_pluginManager && !handler.pluginsNotFound().empty())) {
 
+#ifdef HAVE_LIBJACK
                 QMessageBox::information
                     (0, "", tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
+#else
+                QMessageBox::information
+                    (0, "", tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
+#endif
             }
             CurrentProgressDialog::thaw();
 

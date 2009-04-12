@@ -57,7 +57,9 @@ class AudioPluginDialog : public QDialog
 public:
     AudioPluginDialog(QWidget *parent,
                       AudioPluginManager *aPM,
+#ifdef HAVE_LIBLO
                       AudioPluginOSCGUIManager *aGM,
+#endif
                       PluginContainer *instrument,
                       int index);
 
@@ -83,7 +85,10 @@ public slots:
     void slotPaste();
     void slotDefault();
     void slotShowGUI();
+
+#ifdef HAVE_LIBLO
     virtual void slotEditor();
+#endif
 
 signals:
     void pluginSelected(InstrumentId, int pluginIndex, int plugin);
@@ -113,7 +118,9 @@ protected:
     //--------------- Data members ---------------------------------
 
     AudioPluginManager  *m_pluginManager;
+#ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_pluginGUIManager;
+#endif
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 

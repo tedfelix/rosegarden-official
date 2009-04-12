@@ -59,12 +59,16 @@ namespace Rosegarden
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      AudioPluginManager *aPM,
+#ifdef HAVE_LIBLO
                                      AudioPluginOSCGUIManager *aGM,
+#endif
                                      PluginContainer *pluginContainer,
                                      int index):
     QDialog(parent),
     m_pluginManager(aPM),
+#ifdef HAVE_LIBLO
     m_pluginGUIManager(aGM),
+#endif
     m_pluginContainer(pluginContainer),
     m_containerId(pluginContainer->getId()),
     m_programLabel(0),
@@ -200,11 +204,13 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
+#ifdef HAVE_LIBLO
     m_editorButton = new QPushButton(tr("Editor"));
     RG_DEBUG << "AudioPluginDialog::ctor - created Editor button" << endl;
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
     connect(m_editorButton, SIGNAL(clicked(bool)), this, SLOT(slotEditor()));
     m_editorButton->setEnabled(false);
+#endif
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
@@ -218,11 +224,15 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
 
 
 
+#ifdef HAVE_LIBLO
 void
 AudioPluginDialog::slotEditor()
 {
     slotShowGUI();
 }
+#endif
+
+
 
 void
 AudioPluginDialog::slotShowGUI()
@@ -666,9 +676,11 @@ AudioPluginDialog::slotPluginSelected(int i)
         m_guiShown = true;
     }
 
+#ifdef HAVE_LIBLO
     bool gui = false;
     m_pluginGUIManager->hasGUI(m_containerId, m_index);
     m_editorButton->setEnabled(gui);    
+#endif
 
 }
 

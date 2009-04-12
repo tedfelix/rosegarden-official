@@ -22,6 +22,8 @@
 #include <QString>
 #include "Instrument.h"
 
+#ifdef HAVE_DSSI
+
 #include <dssi.h>
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
@@ -178,6 +180,8 @@ protected:
 };
 
 };
+
+#endif // HAVE_DSSI
 
 #endif // _DSSIPLUGININSTANCE_H_
 

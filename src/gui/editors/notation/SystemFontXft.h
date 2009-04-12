@@ -18,6 +18,8 @@
 #ifndef _RG_SYSTEMFONTXFT_H_
 #define _RG_SYSTEMFONTXFT_H_
 
+#ifdef HAVE_XFT
+
 #include "SystemFont.h"
 
 #include <ft2build.h>
@@ -43,5 +45,7 @@ private:
 };
 
 }
+
+#endif
 
 #endif

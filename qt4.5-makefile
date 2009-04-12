@@ -1,32 +1,29 @@
-# These paths set up for Ubuntu 8.04 with qt4-dev.
+# These paths set up for Ubuntu 8.04 with Qt 4.5 compiled to /usr/local
 
-QTDIR		= /usr
+QTDIR		= /usr/local
 
-QTINC		= $(QTDIR)/include/qt4
+QTINC		= $(QTDIR)/include
 QTLIB		= $(QTDIR)/lib
 
 CCDIR		= /usr
 
-BINDIR          = $(QTDIR)/bin
-DATADIR         = $(QTDIR)/share/rosegarden
-
 CCACHE		= 
-CC		= $(CCACHE) $(CCDIR)/bin/cc
-CXX		= $(CCACHE) $(CCDIR)/bin/c++
 LD		= $(CXX)
-MOC		= $(QTDIR)/bin/moc-qt4
-UIC		= $(QTDIR)/bin/uic-qt4
+MOC		= $(QTDIR)/bin/moc
+UIC		= $(QTDIR)/bin/uic
 RCC		= $(QTDIR)/bin/rcc
 LUPDATE		= $(QTDIR)/bin/lupdate
 LRELEASE	= $(QTDIR)/bin/lrelease
-INSTALL         = $(CCDIR)/bin/install
+CC		= $(CCACHE) $(CCDIR)/bin/cc
+CXX		= $(CCACHE) $(CCDIR)/bin/c++
 
 DEFINES         = -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_DSSI -DHAVE_LADSPA -DHAVE_LIBLO -DHAVE_LIBLRDF -DHAVE_XFT -DHAVE_LIRC
-CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 $(DEFINES) -g-D'VERSION="Thorn"'
+CXXFLAGS	= -DQT3_SUPPORT -Wall -O0 -g $(DEFINES) -D'VERSION="Thorn"'
 CXXFLAGS	:= $(CXXFLAGS) -DDEBUG -DBUILD_DEBUG
 LDFLAGS		= 
 
 INCLUDES	= \
+		-I/usr/local/include \
 		-I$(QTINC)/Qt3Support \
 		-I$(QTINC)/QtCore \
 		-I$(QTINC)/QtGui \
@@ -34,16 +31,15 @@ INCLUDES	= \
 		-I$(QTINC)/QtNetwork \
 		-I$(QTINC) \
 		-I$(CCDIR)/include \
-		-I/usr/local/include \
 		-I/usr/include/freetype2 \
                 -Isrc/base \
 		-Isrc
 
 LDLIBS		= \
-		-L$(CCDIR)/lib \
 		-L$(QTLIB) \
 		-lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore \
-		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f
+		-ljack -lasound -llo -llrdf -lraptor -lXft -lfftw3f -llirc_client \
+		-L$(CCDIR)/lib \
 
 RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -102,15 +98,6 @@ test:
 
 dependencies:
 	sh ./make-dependencies
-
-install:
-	$(INSTALL) -m 644 -D data/examples/* $(DATADIR)/examples/
-	$(INSTALL) -m 644 -D data/library/* $(DATADIR)/library/
-	$(INSTALL) -m 755 rosegarden $(BINDIR)/rosegarden
-
-uninstall:
-	rm -rf $(DATADIR)
-	rm $(BINDIR)/rosegarden
 
 .PHONY: instrument-ts menu-ts ts ts-noobsolete locale
 

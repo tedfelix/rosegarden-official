@@ -18,6 +18,8 @@
 #include <cstdlib>
 #include "misc/Strings.h"
 
+#ifdef HAVE_LADSPA
+
 #include <dlfcn.h>
 #include <QDir>
 #include <cmath>
@@ -27,7 +29,9 @@
 #include "MappedStudio.h"
 #include "PluginIdentifier.h"
 
+#ifdef HAVE_LIBLRDF
 #include "lrdf.h"
+#endif // HAVE_LIBLRDF
 
 
 namespace Rosegarden
@@ -583,6 +587,8 @@ LADSPAPluginFactory::getPluginPath()
     return pathList;
 }
 
+
+#ifdef HAVE_LIBLRDF
 std::vector<QString>
 LADSPAPluginFactory::getLRDFPath(QString &baseUri)
 {
@@ -600,6 +606,7 @@ LADSPAPluginFactory::getLRDFPath(QString &baseUri)
     baseUri = LADSPA_BASE;
     return lrdfPaths;
 }
+#endif
 
 void
 LADSPAPluginFactory::discoverPlugins()
@@ -618,6 +625,7 @@ LADSPAPluginFactory::discoverPlugins()
 //    	      << "trace is ";
 //    std::cerr << kdBacktrace() << std::endl;
 
+#ifdef HAVE_LIBLRDF
     // Initialise liblrdf and read the description files
     //
     lrdf_init();
@@ -640,6 +648,7 @@ LADSPAPluginFactory::discoverPlugins()
     if (haveSomething) {
         generateTaxonomy(baseUri + "Plugin", "");
     }
+#endif // HAVE_LIBLRDF
 
     generateFallbackCategories();
 
@@ -653,9 +662,11 @@ LADSPAPluginFactory::discoverPlugins()
         }
     }
 
+#ifdef HAVE_LIBLRDF
     // Cleanup after the RDF library
     //
     lrdf_cleanup();
+#endif // HAVE_LIBLRDF
 
     std::cerr << "LADSPAPluginFactory::discoverPlugins - done" << std::endl;
 }
@@ -684,6 +695,7 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
     int index = 0;
     while ((descriptor = fn(index))) {
 
+#ifdef HAVE_LIBLRDF
         char * def_uri = 0;
         lrdf_defaults *defs = 0;
 
@@ -729,6 +741,7 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
                 ++controlPortNumber;
             }
         }
+#endif // HAVE_LIBLRDF
 
         QString identifier = PluginIdentifier::createIdentifier
                              ("ladspa", soName, descriptor->Label);
@@ -794,6 +807,7 @@ LADSPAPluginFactory::generateFallbackCategories()
 void
 LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
 {
+#ifdef HAVE_LIBLRDF
     lrdf_uris *uris = lrdf_get_instances( qStrToCharPtrLocal8(uri) );
 
     if (uris != NULL) {
@@ -814,6 +828,10 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
         }
         lrdf_free_uris(uris);
     }
+#endif
 }
 
 }
+
+#endif // HAVE_LADSPA
+

@@ -21,9 +21,10 @@
 #ifndef _RG_LIRCCOMMANDER_H_
 #define _RG_LIRCCOMMANDER_H_
 
-#include "base/Track.h"
+#ifdef HAVE_LIRC
 
 #include <QObject>
+#include "base/Track.h"
 
 
 namespace Rosegarden
@@ -98,5 +99,7 @@ private:
 
 
 }
+
+#endif
 
 #endif

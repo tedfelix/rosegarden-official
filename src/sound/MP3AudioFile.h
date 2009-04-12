@@ -16,6 +16,8 @@
 #ifndef _MP3AUDIOFILE_H_
 #define _MP3AUDIOFILE_H_
 
+#ifdef HAVE_LIBMAD
+
 #include "AudioFile.h"
 
 namespace Rosegarden
@@ -113,6 +115,8 @@ public:
 };
 
 }
+
+#endif // HAVE_LIBMAD
 
 #endif // _MP3AUDIOFILE_H_
 

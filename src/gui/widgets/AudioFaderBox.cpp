@@ -243,9 +243,13 @@ AudioFaderBox::slotSetInstrument(Studio *studio,
         if (instrument->getType() == Instrument::SoftSynth) {
             bool gui = false;
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): is soft synth" << endl;
+#ifdef HAVE_LIBLO
+
             gui = RosegardenMainWindow::self()->getPluginGUIManager()->hasGUI
                   (instrument->getId(), Instrument::SYNTH_PLUGIN_POSITION);
             RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << "): has gui = " << gui << endl;
+#endif
+
             m_synthGUIButton->setEnabled(gui);
         }
     }

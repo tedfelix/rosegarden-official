@@ -51,7 +51,9 @@ class SynthPluginManagerDialog : public QMainWindow, public ActionFileClient
 public:
     SynthPluginManagerDialog(QWidget *parent,
                              RosegardenDocument *doc
+#ifdef HAVE_LIBLO
                              , AudioPluginOSCGUIManager *guiManager
+#endif
         );
 
     virtual ~SynthPluginManagerDialog();
@@ -102,7 +104,9 @@ protected:
     QDialogButtonBox* m_dialogButtonBox;
     
     
+#ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_guiManager;
+#endif
 };
 
 

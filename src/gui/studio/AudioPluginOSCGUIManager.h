@@ -19,6 +19,7 @@
 #ifndef _RG_AUDIOPLUGINOSCGUIMANAGER_H_
 #define _RG_AUDIOPLUGINOSCGUIMANAGER_H_
 
+#ifdef HAVE_LIBLO
 
 #include "base/MidiProgram.h"
 #include "sound/RingBuffer.h"
@@ -95,5 +96,7 @@ protected:
 
 
 }
+
+#endif
 
 #endif

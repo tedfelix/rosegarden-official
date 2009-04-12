@@ -100,6 +100,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     settings.endGroup();
 
+#ifdef HAVE_LIBJACK
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     label = new QLabel(tr("Record audio files as"), frame);
@@ -114,6 +115,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     settings.endGroup();
 
+#endif
     settings.beginGroup( GeneralOptionsConfigGroup );
 
     layout->addWidget(new QLabel(tr("External audio editor"), frame),
@@ -149,6 +151,7 @@ AudioConfigurationPage::AudioConfigurationPage(
                       row, 0);
 //    ++row;
 
+#ifdef HAVE_LIBJACK
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     m_createFaderOuts = new QCheckBox(tr("for individual audio instruments"), frame);
@@ -168,6 +171,7 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     settings.endGroup();
+#endif
 
     layout->setRowStretch(row, 10);
 
@@ -175,6 +179,10 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     // --------------------- Startup control ----------------------
     //
+#ifdef HAVE_LIBJACK
+#define OFFER_JACK_START_OPTION 1
+#ifdef OFFER_JACK_START_OPTION
+
     frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
     layout = new QGridLayout(frame);
@@ -223,6 +231,9 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     settings.endGroup();
 
+#endif // OFFER_JACK_START_OPTION
+#endif // HAVE_LIBJACK
+
 }
 
 void
@@ -239,16 +250,20 @@ AudioConfigurationPage::apply()
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 
+#ifdef HAVE_LIBJACK
+#ifdef OFFER_JACK_START_OPTION
     // Jack control
     //
     settings.setValue("jackstart", m_startJack->isChecked());
     settings.setValue("jackcommand", m_jackPath->text());
+#endif // OFFER_JACK_START_OPTION
 
     // Jack audio inputs
     //
     settings.setValue("audiofaderouts", m_createFaderOuts->isChecked());
     settings.setValue("audiosubmasterouts", m_createSubmasterOuts->isChecked());
     settings.setValue("audiorecordfileformat", m_audioRecFormat->currentIndex());
+#endif
 
     settings.endGroup();
     settings.beginGroup( GeneralOptionsConfigGroup );

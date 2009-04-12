@@ -42,6 +42,7 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenDocument *doc,
         : TabbedConfigurationPage(doc, parent, name)
 {
 #ifdef NOT_DEFINED
+#ifdef HAVE_LIBJACK
     QSettings settings;
     settings.beginGroup( LatencyOptionsConfigGroup );
 
@@ -111,11 +112,13 @@ LatencyConfigurationPage::LatencyConfigurationPage(RosegardenDocument *doc,
     addTab(frame, tr("JACK Latency"));
 
     settings.endGroup();
+#endif  // HAVE_LIBJACK
 #endif // NOT_DEFINED
 }
 
 void LatencyConfigurationPage::apply()
 {
+#ifdef HAVE_LIBJACK
     QSettings settings;
     settings.beginGroup( LatencyOptionsConfigGroup );
 
@@ -128,6 +131,7 @@ void LatencyConfigurationPage::apply()
     settings.setValue("jackrecordlatencyusec", jackRecord * 1000);
 
     settings.endGroup();
+#endif  // HAVE_LIBJACK
 }
 
 void LatencyConfigurationPage::slotFetchLatencyValues()

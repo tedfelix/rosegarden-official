@@ -21,6 +21,8 @@
 #ifndef _LADSPAPLUGININSTANCE_H_
 #define _LADSPAPLUGININSTANCE_H_
 
+#ifdef HAVE_LADSPA
+
 #include <ladspa.h>
 #include "RunnablePluginInstance.h"
 
@@ -122,6 +124,8 @@ protected:
 };
 
 }
+
+#endif // HAVE_LADSPA
 
 #endif // _LADSPAPLUGININSTANCE_H_
 

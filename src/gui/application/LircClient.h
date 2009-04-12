@@ -22,8 +22,9 @@
 #ifndef _RG_LIRCCLIENT_H_
 #define _RG_LIRCCLIENT_H_
 
-#include <QObject>
+#ifdef HAVE_LIRC
 
+#include <QObject>
 #include <lirc/lirc_client.h>
 
 class QSocketNotifier;
@@ -45,7 +46,7 @@ public slots:
     void readButton();
     
 signals:
-    void buttonPressed(char *);
+    void buttonPressed(const char *);
         
 private:
     int                 m_socket;
@@ -57,5 +58,7 @@ private:
 
 
 }
+
+#endif
 
 #endif

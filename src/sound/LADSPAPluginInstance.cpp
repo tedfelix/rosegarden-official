@@ -17,6 +17,8 @@
 #include "LADSPAPluginInstance.h"
 #include "LADSPAPluginFactory.h"
 
+#ifdef HAVE_LADSPA
+
 //#define DEBUG_LADSPA 1
 
 namespace Rosegarden
@@ -420,3 +422,7 @@ LADSPAPluginInstance::cleanup()
 
 
 }
+
+#endif // HAVE_LADSPA
+
+

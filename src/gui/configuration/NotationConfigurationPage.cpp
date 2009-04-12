@@ -463,11 +463,15 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     m_font = new QComboBox(frame);
     connect(m_font, SIGNAL(activated(int)), this, SLOT(slotModified()));
 
+#ifdef HAVE_XFT
     m_viewButton = new QPushButton(tr("View"), frame);
     layout->addWidget(m_font, row, 1, row- row+1, 2);
     layout->addWidget(m_viewButton, row, 3);
     QObject::connect(m_viewButton, SIGNAL(clicked()),
                      this, SLOT(slotViewButtonPressed()));
+#else
+    layout->addWidget(m_font, row, 1, row- row+1, 3);
+#endif
     m_font->setEditable(false);
     QObject::connect(m_font, SIGNAL(activated(int)),
                      this, SLOT(slotFontComboChanged(int)));
@@ -605,6 +609,7 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
 void
 NotationConfigurationPage::slotViewButtonPressed()
 {
+#ifdef HAVE_XFT
     QString fontName = m_untranslatedFont[m_font->currentIndex()];
 
     try {
@@ -623,6 +628,7 @@ NotationConfigurationPage::slotViewButtonPressed()
     } catch (Exception f) {
         QMessageBox::critical(0, "", tr(f.getMessage().c_str()) );
     }
+#endif
 }
 
 void

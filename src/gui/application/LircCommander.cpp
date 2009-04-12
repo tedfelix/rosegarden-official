@@ -21,6 +21,8 @@
 #include "LircCommander.h"
 #include "LircClient.h"
 
+#ifdef HAVE_LIRC
+
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/segment/TrackButtons.h"
@@ -157,3 +159,5 @@ void LircCommander::slotExecute(char *command)
 }
 
 #include "LircCommander.moc"
+
+#endif

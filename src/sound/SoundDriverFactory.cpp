@@ -14,7 +14,9 @@
 
 #include "DummyDriver.h"
 
+#ifdef HAVE_ALSA
 #include "AlsaDriver.h"
+#endif
 
 #include "SoundDriverFactory.h"
 
@@ -30,7 +32,10 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
 
     driver = new DummyDriver(studio);
 #else
+#ifdef HAVE_ALSA
+
     driver = new AlsaDriver(studio);
+#endif
 #endif
 
     initialised = driver->initialise();

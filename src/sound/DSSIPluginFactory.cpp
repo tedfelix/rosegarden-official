@@ -17,6 +17,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "misc/Strings.h"
+#ifdef HAVE_DSSI
 
 #include <dlfcn.h>
 #include "AudioPluginInstance.h"
@@ -24,7 +25,9 @@
 #include "MappedStudio.h"
 #include "PluginIdentifier.h"
 
+#ifdef HAVE_LIBLRDF
 #include "lrdf.h"
+#endif // HAVE_LIBLRDF
 
 namespace Rosegarden
 {
@@ -254,6 +257,7 @@ DSSIPluginFactory::getPluginPath()
 }
 
 
+#ifdef HAVE_LIBLRDF
 std::vector<QString>
 DSSIPluginFactory::getLRDFPath(QString &baseUri)
 {
@@ -280,6 +284,7 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
 
     return lrdfPaths;
 }
+#endif
 
 
 void
@@ -313,6 +318,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
             continue;
         }
 
+#ifdef HAVE_LIBLRDF
         char *def_uri = 0;
         lrdf_defaults *defs = 0;
 
@@ -362,6 +368,7 @@ DSSIPluginFactory::discoverPlugins(QString soName)
                 ++controlPortNumber;
             }
         }
+#endif // HAVE_LIBLRDF
 
         QString identifier = PluginIdentifier::createIdentifier
                              ("dssi", soName, ladspaDescriptor->Label);
@@ -378,3 +385,6 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 
 
 }
+
+#endif // HAVE_DSSI
+

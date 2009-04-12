@@ -1210,9 +1210,14 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
 
     if (!warnUser) return;
 
+#ifdef HAVE_LIBJACK
     if ((m_soundDriverStatus & (AUDIO_OK | MIDI_OK | VERSION_OK)) ==
         (AUDIO_OK | MIDI_OK | VERSION_OK)) return;
-        
+#else
+    if ((m_soundDriverStatus & (MIDI_OK | VERSION_OK)) ==
+        (MIDI_OK | VERSION_OK)) return;
+#endif
+
     StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
@@ -1234,7 +1239,30 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         return;
     }
 
-    if (!(m_soundDriverStatus & AUDIO_OK)) {
+#ifdef HAVE_LIBJACK
+
+/*
+ * KMessageBox::information:
+ *
+ * static void   information (QWidget *parent, const QString &text, const
+ * QString &caption=QString(), const QString &dontShowAgainName=QString(),
+ * Options options=Notify)
+ *
+ * QMessageBox:
+ *
+ * QMessageBox ( Icon icon, const QString & title, const QString & text,
+ * StandardButtons buttons = NoButton, QWidget * parent = 0, Qt::WindowFlags f =
+ * Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint )
+ */
+
+//###
+//@@@
+//
+// This dialog is really getting on my nerves, and I don't have time to rewrite
+// it so it can have a don't show this again button
+//
+// TODO!!!
+/*    if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenMainWindow::self()->awaitDialogClearance();
         QMessageBox::information(RosegardenMainWindow::self(),
                                  tr("Failed to connect to JACK"),
@@ -1247,7 +1275,8 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
                                  // removed from the dialog above.  It used to
                                  // use the "startup-jack-failed" key for this
                                  // purpose.
-    }
+    }*/
+#endif
     CurrentProgressDialog::thaw();
 }
 
