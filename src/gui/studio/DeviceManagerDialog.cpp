@@ -1015,9 +1015,6 @@ DeviceManagerDialog::connectSignalsToSlots()
     connect(pushButton_refreshInputPorts, SIGNAL(clicked()),
             this, SLOT(slotRefreshInputPorts()));
 
-    connect(pushButton_addLV2Device, SIGNAL(clicked()),
-            this, SLOT(slotAddLV2Device()));
-
     // dialog box buttons
     QDialogButtonBox *bbox;
     // connect help button
@@ -1044,8 +1041,6 @@ DeviceManagerDialog::connectSignalsToSlots()
             this, SLOT(slotManageBanksOfPlaybackDevice()));
     connect(pushButton_editControllerDefinitions, SIGNAL(clicked()),
             this, SLOT(slotEditControllerDefinitions()));
-
-
 } 
 
 
