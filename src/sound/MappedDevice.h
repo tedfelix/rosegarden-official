@@ -71,8 +71,10 @@ public:
     MidiDevice::DeviceDirection getDirection() const { return m_direction; }
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
     
-    bool isRecording() const { return m_recording; }
-    void setRecording(bool recording) { m_recording = recording; }
+    //bool isRecording() const { return m_recording; }
+    //void setRecording(bool recording) { m_recording = recording; }
+    bool isRecording() const { return true; }
+    void setRecording(bool recording) { m_recording = true; }
 
 protected:
 

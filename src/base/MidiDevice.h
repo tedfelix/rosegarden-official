@@ -170,8 +170,19 @@ public:
     virtual std::string toXmlString();
     
     // Accessors for recording property
-    bool isRecording() {return m_recording; }
-    void setRecording(bool recording) {m_recording = recording;}
+//  bool isRecording() {return m_recording; }
+//  void setRecording(bool recording) {m_recording = recording;}
+
+    // EXPERIMENTAL: Let's try effectively removing the isRecording property by
+    // having it always hard coded to true.  In a world where all but the first
+    // connection has to be set up explicitly, the chances of any user having
+    // something connected from which they do not wish to record are low, and
+    // beyond that, in the even that they do, I think they should be able to
+    // selectively record using the filters in the TPB well enough that it would
+    // just never be necessary to ever change this setting.  I want to try
+    // eliminating it and see how it works in practice.
+    bool isRecording() {return true; }
+    void setRecording(bool recording) {m_recording = true;}
 
 protected:
     void generatePresentationList();

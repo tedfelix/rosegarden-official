@@ -1609,8 +1609,6 @@ private:
 
     AudioPluginManager *m_pluginManager;
 
-    DeviceManagerDialog * m_devicesManagerNew;
-    
     QTimer* m_autoSaveTimer;
 
     Clipboard *m_clipboard;
@@ -1620,7 +1618,6 @@ private:
     TrackParameterBox             *m_trackParameterBox;
 
     PlayListDialog        *m_playList;
-    DeviceManagerDialog   *m_deviceManager;
     SynthPluginManagerDialog *m_synthManager;
     AudioMixerWindow      *m_audioMixer;
     MidiMixerWindow       *m_midiMixer;
@@ -1654,6 +1651,8 @@ private:
     LircClient *m_lircClient;
     LircCommander *m_lircCommander;
 #endif     
+
+    DeviceManagerDialog * m_devicesManagerNew;    
 };
 
 

@@ -253,7 +253,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_autoSaveTimer(new QTimer(static_cast<QObject *>(this))),
     m_clipboard(new Clipboard),
     m_playList(0),
-    m_deviceManager(0),
     m_synthManager(0),
     m_audioMixer(0),
     m_midiMixer(0),
@@ -1034,9 +1033,6 @@ void RosegardenMainWindow::initView()
 
     //    delete m_playList;
     //    m_playList = 0;
-
-    delete m_deviceManager;
-    m_deviceManager = 0;
 
     delete m_synthManager;
     m_synthManager = 0;
@@ -6199,7 +6195,38 @@ RosegardenMainWindow::slotChangeCompositionLength()
 void
 RosegardenMainWindow::slotManageMIDIDevices()
 {
-    if (m_deviceManager) {
+    if (m_devicesManagerNew != 0){
+        RG_DEBUG << "Warning: m_devicesManagerNew was NOT null, in RosegardenMainWindow::slotOpenDeviceManagerNew() " << endl;
+        //delete m_devicesManagerNew;
+    }
+    if (! m_devicesManagerNew){
+        m_devicesManagerNew = new DeviceManagerDialog(this, getDocument());
+        //m_devicesManagerNew->setupUi(dynamic_cast<QDialog*>(m_devicesManagerNew));
+        
+        //devMan->setAttribute(Qt::WA_DeleteOnClose);    // destroys dialog, if close event was accepted
+        
+        connect(m_devicesManagerNew, SIGNAL(editBanks(DeviceId)),
+            this, SLOT(slotEditBanks(DeviceId)));
+        
+        connect(m_devicesManagerNew, SIGNAL(editControllers(DeviceId)),
+            this, SLOT(slotEditControlParameters(DeviceId)));
+        
+        if (m_midiMixer) {
+//             connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
+//                         m_midiMixer, SLOT(slotSynchronise()));
+        }
+    }
+    
+    QToolButton *tb = findChild<QToolButton*>("manage_midi_devices");
+    if(tb){
+        tb->setDown(true);
+    }
+    
+    m_devicesManagerNew->show();
+
+// old slotManageMIDIDevices for old dialog that no longer exists, left in case
+// any useful tricks remain to be discovered by looking through the old code.
+/*    if (m_deviceManager) {
         m_deviceManager->show();
         m_deviceManager->raise();
         m_deviceManager->setActiveWindow();
@@ -6232,7 +6259,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
     }
 
 
-    m_deviceManager->show();
+    m_deviceManager->show();*/
 }
 
 void
@@ -7325,14 +7352,16 @@ RosegardenMainWindow::slotBankEditorClosed()
 void
 RosegardenMainWindow::slotDeviceManagerClosed()
 {
-    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()\n";
+// obsolete, or merely unimplemented for the new dialog?
+//
+/*    RG_DEBUG << "RosegardenMainWindow::slotDeviceManagerClosed()\n";
 
     if (m_doc->isModified()) {
         if (m_view)
             m_view->slotSelectTrackSegments(m_doc->getComposition().getSelectedTrack());
     }
 
-    m_deviceManager = 0;
+    m_deviceManager = 0;*/
 }
 
 void
@@ -7779,77 +7808,9 @@ RosegardenMainWindow::slotJumpToQuickMarker()
     m_doc->jumpToQuickMarker();
 }
 
-
-
-
-
 void RosegardenMainWindow::slotOpenDeviceManagerNew()
 {
-    
-    if(m_devicesManagerNew != 0){
-        RG_DEBUG << "Warning: m_deviceManagerNew was NOT null, , in RosegardenMainWindow::slotOpenDeviceManagerNew() " << endl;
-        //delete m_devicesManagerNew;
-    }
-    if(! m_devicesManagerNew){
-        m_devicesManagerNew = new DeviceManagerDialog(this, getDocument());
-        //m_devicesManagerNew->setupUi(dynamic_cast<QDialog*>(m_devicesManagerNew));
-        
-        //devMan->setAttribute(Qt::WA_DeleteOnClose);    // destroys dialog, if close event was accepted
-        
-        /*
-        // moved to constructor
-        // adjust some column widths for better visibility
-        m_devicesManagerNew->m_treeWidget_playbackDevices->setColumnWidth(0, 200);    // column, width
-        m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth(0, 200);    // column, width
-        m_devicesManagerNew->m_treeWidget_recordDevices->setColumnWidth(1, 60);    // column, width
-        
-        m_devicesManagerNew->move(60, 40);
-        */
-        
-//         connect(m_devicesManagerNew, SIGNAL(closing()),
-//             this, SLOT(slotDeviceManagerClosed()));
-        
-//         connect(this, SIGNAL(documentAboutToChange()),
-//             m_devicesManagerNew, SLOT(close()));
-        
-        // for updating the track/instrument list
-        //
-//         connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
-//             m_view, SLOT(slotSynchroniseWithComposition()));
-        
-        connect(m_devicesManagerNew, SIGNAL(editBanks(DeviceId)),
-            this, SLOT(slotEditBanks(DeviceId)));
-        
-        connect(m_devicesManagerNew, SIGNAL(editControllers(DeviceId)),
-            this, SLOT(slotEditControlParameters(DeviceId)));
-        
-        if (m_midiMixer) {
-//             connect(m_devicesManagerNew, SIGNAL(deviceNamesChanged()),
-//                         m_midiMixer, SLOT(slotSynchronise()));
-        }
-    
-        
-        
-    }// end if
-    //
-    
-    
-//     QAction *ac = findAction("open_devices_manager_new");
-    QToolButton *tb = findChild<QToolButton*>("open_devices_manager_new");
-    if(tb){
-        tb->setDown(true);
-    }
-    
-    m_devicesManagerNew->show();
-//     m_devicesManagerNew->raise();
-//     m_devicesManagerNew->activateWindow();
-    
-    //m_devicesManagerNew->refillAllPortsLists();
-    
-    
 }
-
-
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 
