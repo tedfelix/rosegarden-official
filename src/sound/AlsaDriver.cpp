@@ -1328,37 +1328,56 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 
 void AlsaDriver::removeConnection( DeviceId devId, QString connectionName ){
     
+    // FIXME: something may be wrong/missing in this function
+    //
     int err;
+    
+    //RG_DEBUG << "      " << endl;
+    std::cerr << "Entering: AlsaDriver::removeConnection( devId:" << devId << ", conn:" << connectionName << " ) " << std::endl;
     
     DeviceIntMap::iterator j = m_outputPorts.find( devId );
     
+    int n = 0;
     while( j != m_outputPorts.end() ){
-        
+        n++;
         ClientPortPair cpPair;  // note: ClientPortPair is defined in AlsaPort.h as std::pair of <int,int>
         cpPair = getPortByName( qstrtostr(connectionName));
     
+        std::cerr << "Key01 - n:"<<n<< ", j->first:"<<j->first<< ", j->second:"<<j->second<< "   in AlsaDriver::removeConnection() " << std::endl;
+        
         // disconnect
         //
         // alsa-doc:
         // err = snd_seq_disconnect_from( seq, my_receive_port, src_client, src_port  ); // snd_seq_t*, int,int,int
         // err = snd_seq_disconnect_to( seq, my_send_port, dest_client, dest_port  ); // snd_seq_t*, int,int,int
         //
-        //
-        // FIXME: something is still wrong here: disconnection is applied to two devices :-( 
-        // is the devId found twice 
-        //
         // note: cpPair.first is the clientId, cpPair.second is the portId
-        err = snd_seq_disconnect_from( m_midiHandle, j->second, cpPair.first, cpPair.second  );
+        err = snd_seq_disconnect_to( m_midiHandle, j->second, cpPair.first, cpPair.second  );
         if( err != 0 ){
-            // try both versions
-            err = snd_seq_disconnect_to( m_midiHandle, j->second, cpPair.first, cpPair.second  );
+            std::cerr << "Warning: First try to disconnect failed   in AlsaDriver::removeConnection() " <<  std::endl;
+            
+            // try the second version:
             if( err != 0 ){
-                std::cerr << "Warning: Could not disconnect midiport in AlsaDriver::removeConnection() " << std::endl;
+                err = snd_seq_disconnect_from( m_midiHandle, j->second, cpPair.first, cpPair.second  );
+                std::cerr << "Warning: Could not disconnect midiport   in AlsaDriver::removeConnection() " << std::endl;
             }
         }
         
         j++;
     }// end while(j)
+    
+    
+    //### hm.. is this the right thing to do..?
+    m_devicePortMap[devId] = ClientPortPair( -1, -1 );
+    
+    /*
+    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+        if (m_alsaPorts[i]->m_name == qstrtostr(connectionName)) {
+            m_alsaPorts[i]->m_client = -1;
+            m_alsaPorts[i]->m_port = -1;
+        }
+    }
+    */
     
 }
 

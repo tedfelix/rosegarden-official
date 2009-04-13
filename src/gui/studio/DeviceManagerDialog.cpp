@@ -383,7 +383,8 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
         i += 1;
     }
 
-
+    
+    // fill the midiDevices list
     cnt = devices->size();
     //
     for (i = 0; i < cnt; i++) {
@@ -489,7 +490,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
 
     }                       // end for device
 
-}                               // end funciton updateDevicesList()
+}                               // end function updateDevicesList()
 
 
 MidiDevice
@@ -672,7 +673,7 @@ DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice * mdev,
             seq->removeConnection( mdev->getId(), strtoqstr(mdev->getConnection()) );
             // mdev->getDirection()
             mdev->setConnection("");
-            //### FIXME!!!: This does not really disconnect the port !
+            //### FIXME ports are being disconnected now. Still buggy ? Verify !
             
         } else {    // re-connect
             RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
