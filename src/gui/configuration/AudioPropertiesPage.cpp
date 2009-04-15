@@ -165,15 +165,17 @@ AudioPropertiesPage::slotFileDialog()
 {
     AudioFileManager &afm = m_doc->getAudioFileManager();
 
-    QFileDialog *fileDialog = new QFileDialog(this, QString(afm.getAudioPath().c_str()),
-                              "file dialog");
+    QFileDialog *fileDialog = new QFileDialog(this, tr("Audio Recording Path"), QString(afm.getAudioPath().c_str()));
 	fileDialog->setFileMode( QFileDialog::Directory );
-	
-    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
-            SLOT(slotFileSelected(const QString&)));
 
-    connect(fileDialog, SIGNAL(destroyed()),
-            SLOT(slotDirectoryDialogClosed()));
+// Interestingly enough, these slots didn't exist in stable_1_7 either, and
+// nobody ever noticed the Qt runtime warnings.
+//
+//    connect(fileDialog, SIGNAL(fileSelected(const QString&)),
+//            SLOT(slotFileSelected(const QString&)));
+//
+//    connect(fileDialog, SIGNAL(destroyed()),
+//            SLOT(slotDirectoryDialogClosed()));
 
     if (fileDialog->exec() == QDialog::Accepted) {
         m_path->setText(fileDialog->selectedFile());

@@ -1455,6 +1455,8 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
         const RealTime &startTime,
         const RealTime &endTime)
 {
+    RG_DEBUG << "RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition()..." << endl;
+
     // Add at current track if it's an audio track, otherwise at first
     // empty audio track if there is one, otherwise at first audio track.
     // This behaviour should be of no interest to proficient users (who

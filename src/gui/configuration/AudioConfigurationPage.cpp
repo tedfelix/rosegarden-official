@@ -32,6 +32,7 @@
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
