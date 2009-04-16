@@ -21,6 +21,7 @@
 #include "PianoKeyboard.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
 #include "document/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
@@ -126,8 +127,24 @@ NewMatrixView::updateWindowTitle()
         if (track)
             trackPosition = track->getPosition();
 
-        setWindowTitle(tr("%1 - Segment Track #%2 - %3")
+        QString segLabel = strtoqstr(m_segments[0]->getLabel());
+        if (segLabel.isEmpty()) {
+            segLabel = " ";
+        } else {
+            segLabel = QString(" \"%1\" ").arg(segLabel);
+        }
+
+        QString trkLabel = strtoqstr(track->getLabel());
+        if (trkLabel.isEmpty() || trkLabel == tr("<untitled>")) {
+            trkLabel = " ";
+        } else {
+            trkLabel = QString(" \"%1\" ").arg(trkLabel);
+        }
+
+        setWindowTitle(tr("%1 - Segment%2Track%3#%4 - %5")
                     .arg(getDocument()->getTitle())
+                    .arg(segLabel)
+                    .arg(trkLabel)
                     .arg(trackPosition + 1)
                     .arg(view));
 
