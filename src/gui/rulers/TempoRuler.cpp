@@ -527,6 +527,9 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
             m_composition->getMusicalTimeForAbsoluteTime
             (time, bar, beat, fraction, remainder);
             RealTime rt = m_composition->getElapsedRealTime(time);
+           
+            // bars in user space start at 1, not 0
+            bar++;
 
             // blargh -- duplicated with TempoView::makeTimeString
             timeText = QString("%1%2%3-%4%5-%6%7-%8%9")
