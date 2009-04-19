@@ -451,13 +451,19 @@ subcontrol. By default, the indicator is placed in the Top Left corner of the
 Contents rectangle of the widget.  The spacing property specifies the spacing
 between the check indicator and the text. */
 
-QCheckBox QLabel,
-QCheckBox
+QCheckBox:enabled QLabel,
+QCheckBox:enabled
 {
     color: #FFFFFF
 }
 
-QCheckBox::indicator
+QCheckbox:!enabled QLabel,
+QCheckBox:!enabled
+{
+    color: #000000;
+}
+
+QCheckBox::indicator:enabled
 {
     background: url(:pixmaps/style/checkbox-checked.png);
 }
@@ -481,6 +487,11 @@ QCheckBox::indicator:unchecked
 QCheckBox::indicator:!enabled
 {
     image: url(:pixmaps/style/checkbox_disabled.png);
+}
+
+QCheckBox::indicator:checked:!enabled
+{
+    image: url(:pixmaps/style/checkbox_checked_disabled.png);
 }
 
 QCheckBox::indicator:unchecked:hover
@@ -531,9 +542,16 @@ subcontrol. By default, the indicator is placed in the Top Left corner of the
 Contents rectangle of the widget.  The spacing property specifies the spacing
 between the check indicator and the text. */
 
-QRadioButton QLabel
+QRadioButton:enabled QLabel,
+QRadioButton:enabled
 {
     color: #FFFFFF;
+}
+
+QRadioButton:!enabled QLabel,
+QRadioButton:!enabled
+{
+    color: #000000;
 }
 
 QRadioButton::indicator
@@ -542,36 +560,65 @@ QRadioButton::indicator
     height: 13px;
 }
 
-QRadioButton::indicator::unchecked
+QRadioButton::indicator::unchecked:enabled
 {
     image: url(:pixmaps/style/radiobutton_unchecked.png);
 }
 
-QRadioButton::indicator:unchecked:hover
+QRadioButton::indicator::unchecked:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_unchecked_disabled.png);
+}
+
+QRadioButton::indicator:unchecked:hover:enabled
 {
     image: url(:pixmaps/style/radiobutton_unchecked_hover.png);
 }
 
-QRadioButton::indicator:unchecked:pressed
+QRadioButton::indicator:unchecked:hover:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_unchecked_hover_disabled.png);
+}
+
+QRadioButton::indicator:unchecked:pressed:enabled
 {
     image: url(:pixmaps/style/radiobutton_unchecked_pressed.png);
 }
 
-QRadioButton::indicator::checked
+QRadioButton::indicator:unchecked:pressed:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_unchecked_pressed_disabled.png);
+}
+
+QRadioButton::indicator::checked:enabled
 {
     image: url(:pixmaps/style/radiobutton_checked.png);
 }
 
-QRadioButton::indicator:checked:hover
+QRadioButton::indicator::checked:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_checked_disabled.png);
+}
+
+QRadioButton::indicator:checked:hover:enabled
 {
     image: url(:pixmaps/style/radiobutton_checked_hover.png);
 }
 
-QRadioButton::indicator:checked:pressed
+QRadioButton::indicator:checked:hover:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_checked_hover_disabled.png);
+}
+
+QRadioButton::indicator:checked:pressed:enabled
 {
     image: url(:pixmaps/style/radiobutton_checked_pressed.png);
 }
 
+QRadioButton::indicator:checked:pressed:!enabled
+{
+    image: url(:pixmaps/style/radiobutton_checked_pressed_disabled.png);
+}
 
 /*  QColumnView
 
