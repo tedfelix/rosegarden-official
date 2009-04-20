@@ -906,13 +906,18 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                 // resync Devices and Instruments
                 //
                 m_doc->syncDevices();
-
-                /*QSettings settings;
+                
+                /*
+                // replaced with call to restoreRecordSubscriptions()
+                //
+                QSettings settings;
                 settings.beginGroup( SequencerOptionsConfigGroup );
-
+                
                 QString recordDeviceStr = settings.value("midirecorddevice").toString() ;
                 sendMIDIRecordingDevice(recordDeviceStr);
-                settings.endGroup();*/
+                settings.endGroup();
+                // */
+                
                 restoreRecordSubscriptions();
             }
 
@@ -1467,9 +1472,10 @@ SequenceManager::reinitialiseSequencerStudio()
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
 
-    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
-
-    //sendMIDIRecordingDevice(recordDeviceStr);
+//     why is this commented out ? should it ?
+//     QString recordDeviceStr = settings.value("midirecorddevice").toString();
+//     sendMIDIRecordingDevice(recordDeviceStr);
+    
     restoreRecordSubscriptions();
 
     // Toggle JACK audio ports appropriately

@@ -121,7 +121,7 @@ protected:
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
 
-    void addMIDIDevice(QString name, bool createAtSequencer);
+    void addMIDIDevice(QString name, bool createAtSequencer, QString dir);  // dir = play|record
     void setMIDIDeviceConnection(QString connection);
     void setMIDIDeviceName(QString name);
     void skipToNextPlayDevice();

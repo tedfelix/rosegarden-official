@@ -1238,8 +1238,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             QString direction = atts.value("direction").toLower();
 
             if (direction.isNull() ||
-                    direction == "" ||
-                    direction == "play") { // ignore inputs
+                direction == "" ||
+                direction == "play") { // ignore inputs
 
                 // This will leave m_device set only if there is a
                 // valid play midi device to modify:
@@ -1250,7 +1250,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                         m_device->setName(qstrtostr(nameStr));
                     }
 				} else if (!nameStr.isEmpty()) {
-                    addMIDIDevice(nameStr, m_createDevices); // also sets m_device
+                    addMIDIDevice(nameStr, m_createDevices, "play"); // also sets m_device
+                }
+            }
+            
+            
+            if (direction == "record" ){
+                if (m_device) {
+                    if (!nameStr.isEmpty()) {
+                        m_device->setName(qstrtostr(nameStr));
+                    }
+                } else if (!nameStr.isEmpty()) {
+                    addMIDIDevice(nameStr, m_createDevices, "record"); // also sets m_device
                 }
             }
 
@@ -2259,14 +2270,32 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
 }
 
 void
-RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer)
+RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir )
 {
+    /**
+    *   params:
+    *   QString name           : device name
+    *   bool createAtSequencer : normally true
+    *   QString dir            : direction "play" or "record"
+    **/
+    
     unsigned int deviceId = 0;
+    
+    MidiDevice::DeviceDirection devDir;
+    
+    if( dir=="play" ){
+        devDir = MidiDevice::Play;
+    }else if( dir=="record" ){
+        devDir = MidiDevice::Record;
+    }else{
+        SEQMAN_DEBUG << "Error: Device direction invalid   in RoseXmlHandler::addMIDIDevice() " << endl;
+        return;
+    }
 
     if (createAtSequencer) {
 
         deviceId = RosegardenSequencer::getInstance()->
-            addDevice(Device::Midi, MidiDevice::Play);
+            addDevice(Device::Midi, devDir ); //MidiDevice::Play);
 
         if (deviceId == Device::NO_DEVICE) {
             SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "

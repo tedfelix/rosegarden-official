@@ -225,7 +225,18 @@ DeviceManagerDialog::slotOutputPortClicked(QTreeWidgetItem *twItem, int column)
         return;
     }
     connectMidiDeviceToPort(mdev, portName);
-
+    
+    /*
+    // center selected item
+    QTreeWidgetItem *twItemS;
+    twItemS = searchItemWithPort(m_treeWidget_outputPorts, portName);
+    if (twItemS) {
+       m_treeWidget_outputPorts->scrollToItem(twItemS,
+                                               QAbstractItemView::
+                                               PositionAtCenter);
+    }
+    */
+    
     // update the playback-devices-list 
     updateDevicesList(0, m_treeWidget_playbackDevices,
                       MidiDevice::Play);
