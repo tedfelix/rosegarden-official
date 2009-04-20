@@ -161,7 +161,7 @@
       <Action name="remove_ornament" text="&amp;Remove Ornament..." />
       <Action name="make_ornament" text="Ma&amp;ke Ornament..." />
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
-      <!-- <Action name="ornament_actionmenu" /> -->
+      <Action name="ornament_actionmenu" />
     </Menu>
   <Separator/>
     <Menu name="Fingering">
