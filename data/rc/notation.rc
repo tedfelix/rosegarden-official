@@ -65,7 +65,7 @@
       <text>S&amp;pacing</text>
       <!-- JAS Custom coded menu actions created based on available font sizes -->
       <!-- JAS See src/gui/editors/notation/NotationView.cpp -->
-      <!-- JAS action name="note_font_size_" + sizes[i} (1, 2, etc. ) -->
+      <!-- JAS action name="note_font_size_" + sizes[i] (1, 2, etc. ) -->
     </Menu>
     <!-- JAS original <Action name="proportion_actionmenu" /> -->
     <Menu name="proportion_actionmenu">
@@ -161,7 +161,7 @@
       <Action name="remove_ornament" text="&amp;Remove Ornament..." />
       <Action name="make_ornament" text="Ma&amp;ke Ornament..." />
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
-      <Action name="ornament_actionmenu" />
+      <!-- <Action name="ornament_actionmenu" /> -->
     </Menu>
   <Separator/>
     <Menu name="Fingering">
@@ -189,9 +189,12 @@
     <!-- JAS original <Action name="note_style_actionmenu" /> -->
     <Menu name="note_style_actionmenu">
       <text>Note &amp;Style</text>
-      <!-- JAS Custom coded menu actions created based on available styles -->
+      <!-- Should be Custom Coded, but deal with it later -->
       <!-- JAS See src/commands/notation/ChangeStyleCommand.cpp -->
-      <!-- JAS action name="style_" + NoteStyleName -->
+      <Action name="style_classical" text="&amp;Classical" />
+      <Action name="style_cross" text="C&amp;ross" />
+      <Action name="style_mensural" text="&amp;Mensural" />
+      <Action name="style_triangle" text="&amp;Triangle" />
   <Separator/>
     </Menu>
     <Menu name="Respell">

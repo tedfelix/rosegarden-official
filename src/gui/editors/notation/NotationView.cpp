@@ -56,6 +56,7 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     setCentralWidget(m_notationWidget);
     m_notationWidget->setSegments(doc, segments);
 
+    //Many actions are created here
     m_commandRegistry = new NotationCommandRegistry(this);
 
     setupActions();
@@ -73,16 +74,28 @@ NewNotationView::~NewNotationView()
 void
 NewNotationView::setupActions()
 {
+    //setup actions common to all views.
     EditViewBase::setupActions(true);
 
-    //Actions first appear in "file" MenuBar menu
+    //"file" MenuBar menu
+    // "file_save"
+    // Created in EditViewBase::setupActions() via creatAction()
+
     createAction("file_print", SLOT(slotFilePrint()));
     createAction("file_print_preview", SLOT(slotFilePrintPreview()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
     createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
 
-    //Actions first appear in "edit" MenuBar menu
-    //Where is "edit_undo" & "edit_redo" created?
+    // "file_close"
+    // Created in EditViewBase::setupActions() via creatAction()
+
+    // "edit" MenuBar menu
+    // "edit_undo"
+    // Created in EditViewBase::setupActions() via creatAction()
+
+    // "edit_redo"
+    // Created in EditViewBase::setupActions() via creatAction()
+
     createAction("cut_and_close", SLOT(slotEditCutAndClose()));
     createAction("general_paste", SLOT(slotEditGeneralPaste()));
     createAction("delete", SLOT(slotEditDelete()));
@@ -94,13 +107,22 @@ NewNotationView::setupActions()
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
     
-    //Actions first appear in "view" MenuBar menu
-    // "note _font_actionmenu" created below.
-    // "note _font_size_actionmenu" created below.
-    // NEED to create "stretch_actionmenu" subMenu
-    // NEED to create "proportion_actionmenu" subMenu
+    //"view" MenuBar menu
+    // "note_font_actionmenu" subMenu
+    // Custom Code. Coded below.
 
-    //"layout" submenu 
+    // "note_font_size_actionmenu" subMenu
+    // Custom Code. Coded below.
+    
+    // "stretch_actionmenu" subMenu
+    // Custom Code. Coded below.
+    // Code deactivated.
+
+    // "proportion_actionmenu" subMenu
+    // Custom Code. Coded below.
+    // Code deactivated.
+
+    // "layout" submenu 
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
@@ -108,50 +130,101 @@ NewNotationView::setupActions()
     createAction("lyric_editor", SLOT(slotEditLyrics()));
     createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
 
-    // NEED to create "add_control_ruler" subMenu
+    // "add_control_ruler" subMenu
+    // was disabled in kde3 version:
+    // createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
 
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
 
-    //Actions first appear in "document" Menubar menu
+    //"document" Menubar menu
     createAction("add_tempo", SLOT(slotAddTempo()));
     createAction("add_time_signature", SLOT(slotAddTimeSignature()));
 
-    //Actions first appear in "segment" Menubar menu
-    //"open-with" subMenu created in EditViewBase
+    //"segment" Menubar menu
+    // "open-with" subMenu
+    // Created in EditViewBase::setupActions() via creatAction()
 
     createAction("add_clef", SLOT(slotEditAddClef()));
     createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
     createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
     createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
+
+    // "set_segment_start"
+    // Created in EditViewBase::setupActions() via creatAction()
+    
+    // "set_segment_duration"
+    // Created in EditViewBase::setupActions() via creatAction()
+
     createAction("transpose_segment", SLOT(slotEditTranspose()));
     createAction("switch_preset", SLOT(slotEditSwitchPreset()));
 
-    //Actions first appear in "Notes" Menubar menu
+    //"Notes" Menubar menu
 
-    //Where is "Marks" subMenu created?  AddMarkCommand.cpp?
-    //Grep for action names give no results
-    //NEED slots to go with action in this menu.
+    // "Marks" subMenu
+    //Created in Constructor via NotationCommandRegistry()
+    //with AddMarkCommand::registerCommand()
+    //with RemoveMarksCommand::registerCommand()
 
-    //"ornaments" subMenu
+    // "ornaments" subMenu
     createAction("use_ornament", SLOT(slotUseOrnament()));
     createAction("make_ornament", SLOT(slotMakeOrnament()));
     createAction("remove_ornament", SLOT(slotRemoveOrnament()));
 
-    //Where is "Fingering" subMenu created? AddFingeringMArkCommand.cpp
+    // "Fingering" subMenu
+    // Created in Constructor via NotationCommandRegistry()
+    // with AddFingeringMarkCommand::registerCommand()
+    // with RemoveFingeringMarksCommand::registerCommand()
 
-    //Where is "Slashes" subMenu created?
+    // "Slashes" subMenu
+    // Created in Constructor via NotationCommandRegistry()
+    // with AddSlashesCommand::registerCommand()
 
-    // NEED to create "note_style_actionmenu" subMenu
+    // "note_style_actionmenu" subMenu
+    // Created in Constructor via NotationCommandRegistry()
+    // with ChangeStyleCommand::registerCommand()
+    // actionCreate really should be a custon code. Oh, well.
 
-    //Where is "Respell" subMenu created?
 
-    //Where are "stem_up", "stem_down", & "restore_stems" created?
+    // "Respell" subMenu
+    // Created in Constructor via NotationCommandRegistry()
+    // with RespellCommand::registerCommand()
+    
+    // "stem_up"
+    // Created in Constructor via NotationCommandRegistry()
+    // with ChangeStemsCommand::registerCommand()
+    
+    // "stem_down"
+    // Created in Constructor via NotationCommandRegistry()
+    // with ChangeStemsCommand::registerCommand()
+    
+    // "restore_stems"
+    // Created in Constructor via NotationCommandRegistry()
+    // with RestoreStemsCommand::registerCommand();
 
-    //Actions first appear in "Phrase" Menubar menu
-    //Where are "make_chord", "beam", "auto_beam", "break_group" &
-    //"remove_indentations" created?
+    //"Phrase" Menubar menu
+    // "make_chord"
+    // Created in Constructor via NotationCommandRegistry()
+    // with MakeChordCommand::registerCommand();
+
+    // "beam"
+    // Created in Constructor via NotationCommandRegistry()
+    // with BeamCommand::registerCommand();
+
+    // "auto_beam"
+    // Created in Constructor via NotationCommandRegistry()
+    // with AutoBeamCommand::registerCommand();
+
+    // "break_group"
+    // Created in Constructor via NotationCommandRegistry()
+    // with BreakCommand::registerCommand();
+
+    // "remove_indications"
+
     createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
     createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
+
+//### JAS Stop here for now!
+
     //Where are "break_tuplet", "slur", & "phrasing_slur" created?
     
     //"Slurs" subMenu

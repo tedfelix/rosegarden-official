@@ -41,7 +41,7 @@ ChangeStyleCommand::registerCommand(CommandRegistry *r)
          i != styles.end(); ++i) {
 
         QString styleQName(*i);
-        r->registerCommand("style_" + styleQName,
+        r->registerCommand("style_" + styleQName.toLower(),
                            new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>());
     }
 }
