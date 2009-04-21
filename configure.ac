@@ -1,5 +1,9 @@
 
-AC_INIT(Rosegarden, 09.06, rosegarden-devel@lists.sourceforge.net)
+AC_INIT(Rosegarden, 09.10, rosegarden-devel@lists.sourceforge.net)
+
+dnl  Each release will need the proper version  (e.g. 09.10) in the line above
+dnl  and the proper codename (e.g. Abraham Darby) in the following line
+CODENAME="Thorn"
 
 AC_CONFIG_SRCDIR(src/base/Composition.h)
 
@@ -34,23 +38,27 @@ PKG_CHECK_MODULES([fftw3f],[fftw3f >= 3.0.0],[],[])
 
 AC_PATH_PROG([PERL],[perl])
 if test x$PERL = x ; then
-       	AC_MSG_ERROR([
-Failed to find required perl program.
-])
+       	AC_MSG_ERROR([Failed to find required perl program.])
 fi
 
 AC_PATH_PROG([XARGS],[xargs])
 if test x$XARGS = x ; then
-       	AC_MSG_ERROR([
-Failed to find required xargs program.
-])
+       	AC_MSG_ERROR([Failed to find required xargs program.])
 fi
 
 AC_PATH_PROG([MAKEDEPEND],[makedepend])
 if test x$MAKEDEPEND = x ; then
-       	AC_MSG_ERROR([
-Failed to find required makedepend program.
-])
+       	AC_MSG_ERROR([Failed to find required makedepend program.])
+fi
+
+AC_PATH_PROG([SHA1SUM],[sha1sum])
+if test x$SHA1SUM = x ; then
+       	AC_MSG_ERROR([Failed to find required sha1sum program.])
+fi
+
+AC_PATH_PROG([CUT],[cut])
+if test x$CUT = x ; then
+       	AC_MSG_ERROR([Failed to find required cut program.])
 fi
 
 BUILDFLAGS="-DNDEBUG -DNO_TIMING -DBUILD_RELEASE"
@@ -61,6 +69,8 @@ CXXFLAGS="$CXXFLAGS $BUILDFLAGS"
 AC_SUBST(PERL)
 AC_SUBST(XARGS)
 AC_SUBST(MAKEDEPEND)
+AC_SUBST(SHA1SUM)
+AC_SUBST(CUT)
 
 AC_SUBST(CFLAGS)
 AC_SUBST(CXXFLAGS)
@@ -68,6 +78,8 @@ AC_SUBST(HAVES)
 
 AC_SUBST(CC)
 AC_SUBST(CXX)
+
+AC_SUBST(CODENAME)
 
 AC_OUTPUT([Makefile])
 

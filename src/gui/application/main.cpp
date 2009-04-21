@@ -312,19 +312,6 @@ visible at the bottom of rosegarden/sequencer/main.cpp.
 static QString description =
        RosegardenApplication::tr("Rosegarden - A sequencer and musical notation editor");
 
-/*&&& removed options -- we'll want a different set anyway 
-
-static KCmdLineOptions options[] =
-    {
-        { "nosequencer", I18N_NOOP("Don't use the sequencer (support editing only)"), 0 },
-        { "nosplash", I18N_NOOP("Don't show the splash screen"), 0 },
-        { "nofork", I18N_NOOP("Don't automatically run in the background"), 0 },
-        { "ignoreversion", I18N_NOOP("Ignore installed version - for devs only"), 0 },
-        { "+[File]", I18N_NOOP("file to open"), 0 },
-        { 0, 0, 0 }
-    };
-*/
-
 // -----------------------------------------------------------------
 
 #ifdef Q_WS_X11
@@ -348,15 +335,21 @@ static int _x_errhandler(Display *dpy, XErrorEvent *err)
 void usage()
 {
     std::cerr << "Rosegarden: A sequencer and musical notation editor" << std::endl;
-    std::cerr << "Version " << VERSION << std::endl;
-    std::cerr << std::endl;
     std::cerr << "Usage: rosegarden [--nosplash] [--nosequencer] [file.rg]" << std::endl;
-    std::cerr << std::endl;
+    std::cerr << "       rosegarden --version" << std::endl;
     exit(2);
 }
 
 int main(int argc, char *argv[])
 {
+    for (int i = 1; i < argc; ++i) {
+        if (!strcmp(argv[i], "--version")) {
+            std::cout << "Rosegarden version: " << VERSION << " (\"" << CODENAME << "\")" << std::endl;
+            std::cout << "Build key: " << BUILDKEY << std::endl;
+            return 0;
+        }
+    }
+
     // Many elements of our GUI looked nauseating on a KDE4 box with the default
     // Oxygen style.  Apparently I was depdending on having Plastique underneath
     // everything to a larger extent than I realized.  To address this, we'll

@@ -1,62 +1,70 @@
 
-VERSION		= @PACKAGE_VERSION@
+VERSION		:= @PACKAGE_VERSION@
+CODENAME	:= @CODENAME@
 
-PREFIX		= /usr/local
+PREFIX		:= /usr/local
 
-CXX		= @CXX@ 
-LD		= @CXX@
-INSTALL         = @INSTALL@
-MKDIR_P         = @MKDIR_P@
-PERL		= @PERL@
-XARGS		= @XARGS@
-MAKEDEPEND	= @MAKEDEPEND@
+CXX		:= @CXX@ 
+LD		:= @CXX@
+INSTALL         := @INSTALL@
+MKDIR_P         := @MKDIR_P@
+PERL		:= @PERL@
+XARGS		:= @XARGS@
+MAKEDEPEND	:= @MAKEDEPEND@
+SHA1SUM		:= @SHA1SUM@
+CUT		:= @CUT@
 
-MOC		= @MOC@
-UIC		= @UIC@
-RCC		= @RCC@
-LUPDATE		= @LUPDATE@
-LRELEASE	= @LRELEASE@
+MOC		:= @MOC@
+UIC		:= @UIC@
+RCC		:= @RCC@
+LUPDATE		:= @LUPDATE@
+LRELEASE	:= @LRELEASE@
 
-CXXFLAGS	= @CXXFLAGS@ \
-		  @HAVES@ \
-		  @CFLAGS@ \
-		  @QT_CXXFLAGS@ \
-		  @JACK_CFLAGS@ \
-		  @ALSA_CFLAGS@ \
-		  @DSSI_CFLAGS@ \
-		  @liblo_CFLAGS@ \
-		  @lrdf_CFLAGS@ \
-		  @Xft_CFLAGS@ \
-		  @fftw3f_CFLAGS@ \
-		  -D'VERSION="$(VERSION)"' \
-		  -Isrc
+CXXFLAGS	:= @CXXFLAGS@ \
+		   @HAVES@ \
+		   @CFLAGS@ \
+		   @QT_CXXFLAGS@ \
+		   @JACK_CFLAGS@ \
+		   @ALSA_CFLAGS@ \
+		   @DSSI_CFLAGS@ \
+		   @liblo_CFLAGS@ \
+		   @lrdf_CFLAGS@ \
+		   @Xft_CFLAGS@ \
+		   @fftw3f_CFLAGS@ \
+		   -D'VERSION="$(VERSION)"' \
+		   -D'CODENAME="$(CODENAME)"' \
+		   -Isrc
 
-MOCFLAGS	= @HAVES@
+MOCFLAGS	:= @HAVES@
 
-LIBS		= @QT_LIBS@ \
-		  @JACK_LIBS@ \
-		  @ALSA_LIBS@ \
-		  @DSSI_LIBS@ \
-		  @liblo_LIBS@ \
-		  @lrdf_LIBS@ \
-		  @Xft_LIBS@ \
-		  @fftw3f_LIBS@ \
-		  @LIBS@
+LIBS		:= @QT_LIBS@ \
+		   @JACK_LIBS@ \
+		   @ALSA_LIBS@ \
+		   @DSSI_LIBS@ \
+		   @liblo_LIBS@ \
+		   @lrdf_LIBS@ \
+		   @Xft_LIBS@ \
+		   @fftw3f_LIBS@ \
+		   @LIBS@
 
-INSTBINDIR	= $(DESTDIR)$(PREFIX)/bin
-INSTDATADIR	= $(DESTDIR)$(PREFIX)/share/rosegarden
+INSTBINDIR	:= $(DESTDIR)$(PREFIX)/bin
+INSTDATADIR	:= $(DESTDIR)$(PREFIX)/share/rosegarden
 
-RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
-QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
-HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
-SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
-QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
-OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
-QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
-UI		= $(wildcard src/*/*/*.ui)
-UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
-RCS		= $(wildcard data/ui/*.rc)
-TRANSLATIONS	= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
+RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
+QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
+HEADERS		:= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
+SOURCES		:= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
+QHEADERS	:= $(shell fgrep -l Q_OBJECT $(HEADERS))
+OBJECTS		:= $(patsubst %.cpp,%.o,$(SOURCES))
+QSOURCES	:= $(patsubst %.h,%.moc,$(QHEADERS))
+UI		:= $(wildcard src/*/*/*.ui)
+UIHEADERS	:= $(patsubst %.ui,%.h,$(UI))
+RCS		:= $(wildcard data/rc/*.rc)
+PRESETS		:= $(wildcard data/presets/*.xml)
+TRANSLATIONS	:= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
+
+BUILDKEY	:= $(shell cat $(SOURCES) $(HEADERS) | $(SHA1SUM) | $(CUT) -c1-10)
+CXXFLAGS	:= $(CXXFLAGS) -D'BUILDKEY="$(BUILDKEY)"'
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
 
@@ -79,10 +87,10 @@ rosegarden:	$(OBJECTS)
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
 instrument-ts:
-	$(PERL) scripts/extract_instrument_tr_strings.pl `ls -1 data/presets/*.xml` > data/InstrumentStrings.cpp
+	$(PERL) scripts/extract_instrument_tr_strings.pl $(PRESETS) > data/InstrumentStrings.cpp
 
 menu-ts:
-	$(PERL) scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
+	$(PERL) scripts/extract_menu_tr_strings.pl $(RCS) > data/QMenuStrings.cpp
 
 ts:	menu-ts instrument-ts
 	$(MKDIR_P) locale
@@ -117,8 +125,8 @@ install:
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
 	$(MKDIR_P) -m 755 $(INSTDATADIR)/examples
 	$(MKDIR_P) -m 755 $(INSTDATADIR)/library
-	$(INSTALL) -m 644 data/examples/* $(INSTDATADIR)/examples/
-	$(INSTALL) -m 644 data/library/* $(INSTDATADIR)/library/
+	$(INSTALL) -m 644 data/examples/*.rg $(INSTDATADIR)/examples/
+	$(INSTALL) -m 644 data/library/*.rgd $(INSTDATADIR)/library/
 	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
 	$(INSTALL) -m 755 src/helpers/rosegarden-audiofile-importer $(INSTBINDIR)
 	$(INSTALL) -m 755 src/helpers/rosegarden-lilypondview $(INSTBINDIR)
