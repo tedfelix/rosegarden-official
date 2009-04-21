@@ -106,11 +106,12 @@ GUIPalette::GUIPalette()
     m_defaultsMap[SegmentSplitLine] = QColor(Qt::black);
 
     m_defaultsMap[MatrixElementBorder] = QColor(Qt::black);
+    m_defaultsMap[MatrixElementLightBorder] = QColor(90, 90, 90);
     m_defaultsMap[MatrixElementBlock] = QColor(98, 128, 232);
     m_defaultsMap[MatrixOverlapBlock] = QColor(Qt::black);
-    m_defaultsMap[MatrixHorizontalLine] = QColor(Qt::black);
-    m_defaultsMap[MatrixPitchHighlight] = QColor(128, 128, 128, 100);
-    m_defaultsMap[MatrixTonicHighlight] = QColor(128, 128, 128, 180);
+    m_defaultsMap[MatrixHorizontalLine] = QColor(200, 200, 200);
+    m_defaultsMap[MatrixPitchHighlight] = QColor(205, 205, 205);
+    m_defaultsMap[MatrixTonicHighlight] = QColor(160, 160, 160);
 
     m_defaultsMap[LoopRulerBackground] = QColor(120, 120, 120);
     m_defaultsMap[LoopRulerForeground] = QColor(Qt::white);
@@ -145,8 +146,9 @@ GUIPalette::GUIPalette()
     m_defaultsMap[LevelMeterSolidRed] = QColor(255, 0, 0);
 
     m_defaultsMap[BarLine] = QColor(Qt::black);
+    m_defaultsMap[MatrixBarLine] = QColor(60, 60, 60);
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
-    m_defaultsMap[BeatLine] = QColor(100, 100, 100);
+    m_defaultsMap[BeatLine] = QColor(200, 200, 200);
     m_defaultsMap[SubBeatLine] = QColor(212, 212, 212);
     m_defaultsMap[StaffConnectingLine] = QColor(192, 192, 192);
     m_defaultsMap[StaffConnectingTerminatingLine] = QColor(128, 128, 128);
@@ -241,6 +243,7 @@ const char* const GUIPalette::SegmentLabel = "segmentlabel";
 const char* const GUIPalette::SegmentSplitLine = "segmentsplitline";
 
 const char* const GUIPalette::MatrixElementBorder = "matrixelementborder";
+const char* const GUIPalette::MatrixElementLightBorder = "matrixelementlightborder";
 const char* const GUIPalette::MatrixElementBlock = "matrixelementblock";
 const char* const GUIPalette::MatrixOverlapBlock = "matrixoverlapblock";
 const char* const GUIPalette::MatrixHorizontalLine = "matrixhorizontalline";
@@ -274,6 +277,7 @@ const char* const GUIPalette::LevelMeterSolidOrange = "levelmetersolidorange";
 const char* const GUIPalette::LevelMeterSolidRed = "levelmetersolidred";
 
 const char* const GUIPalette::BarLine = "barline";
+const char* const GUIPalette::MatrixBarLine = "matrixbarline";
 const char* const GUIPalette::BarLineIncorrect = "barlineincorrect";
 const char* const GUIPalette::BeatLine = "beatline";
 const char* const GUIPalette::SubBeatLine = "subbeatline";

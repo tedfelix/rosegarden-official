@@ -52,7 +52,8 @@ MatrixScene::MatrixScene() :
     m_scale(0),
     m_snapGrid(0),
     m_resolution(8),
-    m_selection(0)
+    m_selection(0),
+    m_currentSegmentIndex(0)
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
@@ -181,13 +182,30 @@ MatrixScene::setSegments(RosegardenDocument *document,
     }
 
     recreateLines();
+    updateCurrentSegment();
 }
 
 Segment *
 MatrixScene::getCurrentSegment()
 {
     if (m_segments.empty()) return 0;
-    return m_segments[0]; //!!! for now
+    if (m_currentSegmentIndex >= m_segments.size()) {
+        m_currentSegmentIndex = int(m_segments.size()) - 1;
+    }
+    return m_segments[m_currentSegmentIndex];
+}
+
+void
+MatrixScene::setCurrentSegment(Segment *s)
+{
+    for (int i = 0; i < int(m_segments.size()); ++i) {
+        if (s == m_segments[i]) {
+            m_currentSegmentIndex = i;
+            return;
+        }
+    }
+    std::cerr << "WARNING: MatrixScene::setCurrentSegment: unknown segment "
+              << s << std::endl;
 }
 
 bool
@@ -224,7 +242,8 @@ MatrixScene::recreateLines()
     }
     
 //    double pw = 1.0 / 64.0;
-    double pw = 0.5;
+//    double pw = 0.5;
+    double pw = 0;
 
     double x0 = m_scale->getXForTime(start);
     double x1 = m_scale->getXForTime(end);
@@ -244,7 +263,8 @@ MatrixScene::recreateLines()
             addItem(line);
             m_horizontals.push_back(line);
         }
-        line->setLine(x0 + 0.5, y + 0.5, x1 + 0.5, y + 0.5);
+//        line->setLine(x0 + 0.5, y + 0.5, x1 + 0.5, y + 0.5);
+        line->setLine(x0, y, x1, y);
         line->show();
         ++i;
     }
@@ -281,7 +301,7 @@ MatrixScene::recreateLines()
         }
 
         double dx = width / gridLines;
-        double x = x0 + 0.5;
+        double x = x0;
 
         for (int index = 0; index < gridLines; ++index) {
 
@@ -293,18 +313,18 @@ MatrixScene::recreateLines()
                 line = m_verticals[i];
             } else {
                 line = new QGraphicsLineItem;
-                line->setZValue(-10);
+                line->setZValue(index > 0 ? -10 : -8);
                 addItem(line);
                 m_verticals.push_back(line);
             }
 
             if (index == 0) {
-                line->setPen(QPen(GUIPalette::getColour(GUIPalette::BarLine), pw));
+                line->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixBarLine), pw));
             } else {
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
             }
 
-            line->setLine(x, 0.5, x, 128 * (m_resolution + 1) + 0.5);
+            line->setLine(x, 0, x, 128 * (m_resolution + 1));
             line->show();
 
             x += dx;
@@ -356,7 +376,7 @@ MatrixScene::recreatePitchHighlights()
         if (!segment->getNextKeyTime(k0, k1)) k1 = segment->getEndMarkerTime();
 
         if (k0 == k1) {
-            std::cerr << "WARNING: MatrixScene::recreateLines: k0 == k1 == " 
+            std::cerr << "WARNING: MatrixScene::recreatePitchHighlights: k0 == k1 == " 
                       << k0 << std::endl;
             break;
         }
@@ -402,7 +422,8 @@ MatrixScene::recreatePitchHighlights()
                                    (GUIPalette::MatrixPitchHighlight));
                 }
 
-                rect->setRect(0.5, 0.5, x1 - x0, m_resolution + 1);
+//                rect->setRect(0.5, 0.5, x1 - x0, m_resolution + 1);
+                rect->setRect(0, 0, x1 - x0, m_resolution + 1);
                 rect->setPos(x0, (127 - pitch) * (m_resolution + 1));
                 rect->show();
 
@@ -448,7 +469,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         }
     }
 
-    mme.viewSegment = m_viewSegments[0]; //!!!
+    mme.viewSegment = m_viewSegments[m_currentSegmentIndex];
 
     mme.time = m_scale->getTimeForX(sx);
 
@@ -644,6 +665,8 @@ MatrixScene::setSelectionElementStatus(EventSelection *s,
                                        bool set,
                                        bool preview)
 {
+    if (!s) return;
+
     MatrixViewSegment *vs = 0;
 
     for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
@@ -682,6 +705,24 @@ MatrixScene::setSelectionElementStatus(EventSelection *s,
     }
 }
 
+void
+MatrixScene::updateCurrentSegment()
+{
+    for (int i = 0; i < m_viewSegments.size(); ++i) {
+        bool current = (i == m_currentSegmentIndex);
+        ViewElementList *vel = m_viewSegments[i]->getViewElementList();
+        for (ViewElementList::const_iterator j = vel->begin();
+             j != vel->end(); ++j) {
+            MatrixElement *mel = dynamic_cast<MatrixElement *>(*j);
+            if (!mel) continue;
+            mel->setCurrent(current);
+        }
+    }
+
+    // changing the current segment may have overridden selection border colours
+    setSelectionElementStatus(m_selection, true, false);
+}
+
 static bool
 canPreviewAnotherNote() //!!! dupe with NotationScene
 {
@@ -711,7 +752,9 @@ MatrixScene::setSnap(timeT t)
     MATRIX_DEBUG << "MatrixScene::slotSetSnap: time is " << t << endl;
     m_snapGrid->setSnapTime(t);
 
-    m_segments[0]->setSnapGridSize(t);
+    for (size_t i = 0; i < m_segments.size(); ++i) {
+        m_segments[i]->setSnapGridSize(t);
+    }
 
     QSettings settings;
     settings.beginGroup(MatrixViewConfigGroup);

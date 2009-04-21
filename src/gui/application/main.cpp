@@ -346,6 +346,7 @@ int main(int argc, char *argv[])
         if (!strcmp(argv[i], "--version")) {
             std::cout << "Rosegarden version: " << VERSION << " (\"" << CODENAME << "\")" << std::endl;
             std::cout << "Build key: " << BUILDKEY << std::endl;
+            std::cout << "Built against Qt version: " << QT_VERSION_STR << std::endl;
             return 0;
         }
     }

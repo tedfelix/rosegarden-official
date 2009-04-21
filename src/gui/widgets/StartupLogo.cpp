@@ -83,7 +83,9 @@ void StartupLogo::paintEvent(QPaintEvent*)
 
     //QString version(VERSION);
     //int sepIdx = version.find("-");
-    QString versionLabel(VERSION);
+
+    QString versionLabel = QString("%1 \"%2\"").arg(VERSION).arg(CODENAME);
+//    QString versionLabel(VERSION);
     //QString("R%1 v%2").arg(version.left(sepIdx)).arg(version.mid(sepIdx + 1));
     int versionWidth = metrics.width(versionLabel);
 

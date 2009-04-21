@@ -65,7 +65,7 @@ Panner::paintEvent(QPaintEvent *e)
     path.addPolygon(mapFromScene(m_pannedRect));
 
     QColor c(GUIPalette::getColour(GUIPalette::PannerOverlay));
-    c.setAlpha(40);
+    c.setAlpha(80);
     paint.setPen(Qt::NoPen);
     paint.setBrush(c);
     paint.drawPath(path);

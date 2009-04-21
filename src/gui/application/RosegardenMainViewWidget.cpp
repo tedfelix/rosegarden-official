@@ -440,30 +440,15 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment* p)
 
 void RosegardenMainViewWidget::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
 {
-    NewNotationView *notationView =
-        new NewNotationView(getDocument(), segmentsToEdit, this);
-
-    notationView->show();
-
-#ifdef NOT_JUST_NOW
-    NotationView *view = createNotationView(segmentsToEdit);
-    if (view)
-        view->show();
-#endif
+    NewNotationView *view = createNotationView(segmentsToEdit);
+    if (view) view->show();
 }
 
-NotationView *
+NewNotationView *
 RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEdit)
 {
-#ifdef NOT_JUST_NOW
-    NotationView *notationView =
-        new NotationView(getDocument(), segmentsToEdit, this, true);
-
-    if (!notationView->isOK()) {
-        RG_DEBUG << "slotEditSegmentNotation : operation cancelled" << endl;
-        delete notationView;
-        return 0;
-    }
+    NewNotationView *notationView =
+        new NewNotationView(getDocument(), segmentsToEdit, this);
 
     // For tempo changes (ugh -- it'd be nicer to make a tempo change
     // command that could interpret all this stuff from the dialog)
@@ -548,12 +533,11 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
                             m_trackEditor->getCompositionView()->visibleWidth() / 2);
         timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
         // then scroll the notation view to that time, "localized" for the current segment
-        notationView->scrollToTime(centerSegmentView);
-        notationView->updateView();
+//!!!        notationView->scrollToTime(centerSegmentView);
+//!!!        notationView->updateView();
     }
 
     return notationView;
-#endif
 }
 
 void RosegardenMainViewWidget::slotEditSegmentMatrix(Segment* p)
@@ -562,6 +546,32 @@ void RosegardenMainViewWidget::slotEditSegmentMatrix(Segment* p)
 
     std::vector<Segment *> segmentsToEdit;
 
+    if (haveSelection()) {
+
+        SegmentSelection selection = getSelection();
+
+        if (!p || (selection.find(p) != selection.end())) {
+            for (SegmentSelection::iterator i = selection.begin();
+                    i != selection.end(); ++i) {
+                if ((*i)->getType() != Segment::Audio) {
+                    segmentsToEdit.push_back(*i);
+                }
+            }
+        } else {
+            if (p->getType() != Segment::Audio) {
+                segmentsToEdit.push_back(p);
+            }
+        }
+
+    } else if (p) {
+        if (p->getType() != Segment::Audio) {
+            segmentsToEdit.push_back(p);
+        }
+    } else {
+        return ;
+    }
+
+/*!!!
     // unlike notation, if we're calling for this on a particular
     // segment we don't open all the other selected segments as well
     // (fine in notation because they're in a single window)
@@ -583,7 +593,7 @@ void RosegardenMainViewWidget::slotEditSegmentMatrix(Segment* p)
         }
         return ;
     }
-
+*/
     if (segmentsToEdit.empty()) {
         /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
@@ -598,6 +608,32 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
 
     std::vector<Segment *> segmentsToEdit;
 
+    if (haveSelection()) {
+
+        SegmentSelection selection = getSelection();
+
+        if (!p || (selection.find(p) != selection.end())) {
+            for (SegmentSelection::iterator i = selection.begin();
+                    i != selection.end(); ++i) {
+                if ((*i)->getType() != Segment::Audio) {
+                    segmentsToEdit.push_back(*i);
+                }
+            }
+        } else {
+            if (p->getType() != Segment::Audio) {
+                segmentsToEdit.push_back(p);
+            }
+        }
+
+    } else if (p) {
+        if (p->getType() != Segment::Audio) {
+            segmentsToEdit.push_back(p);
+        }
+    } else {
+        return ;
+    }
+
+/*!!!
     // unlike notation, if we're calling for this on a particular
     // segment we don't open all the other selected segments as well
     // (fine in notation because they're in a single window)
@@ -619,7 +655,7 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
         }
         return ;
     }
-
+*/
     if (segmentsToEdit.empty()) {
         /* was sorry */ QMessageBox::warning(this, "", tr("No non-audio segments selected"));
         return ;
@@ -630,6 +666,9 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
 
 void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> segmentsToEdit)
 {
+    NewMatrixView *view = createMatrixView(segmentsToEdit, false);
+    if (view) view->show();
+/*!!!
     int count = 0;
     for (std::vector<Segment *>::iterator i = segmentsToEdit.begin();
             i != segmentsToEdit.end(); ++i) {
@@ -642,10 +681,15 @@ void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> seg
                 break;
         }
     }
+*/
 }
 
 void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
 {
+    NewMatrixView *view = createMatrixView(segmentsToEdit, true);
+    if (view) view->show();
+
+/*!!!
     int count = 0;
     for (std::vector<Segment *>::iterator i = segmentsToEdit.begin();
             i != segmentsToEdit.end(); ++i) {
@@ -658,6 +702,7 @@ void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segm
                 break;
         }
     }
+*/
 }
 
 NewMatrixView *
@@ -748,7 +793,7 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
         // Seems to work better for matrix view to scroll to left side
         // + m_trackEditor->getCompositionView()->visibleWidth() / 2);
         timeT centerSegmentView = m_trackEditor->getRulerScale()->getTimeForX(centerX);
-        // then scroll the notation view to that time, "localized" for the current segment
+        // then scroll the view to that time, "localized" for the current segment
 //!!!        matrixView->scrollToTime(centerSegmentView);
 //!!!        matrixView->updateView();
     }
@@ -1764,10 +1809,8 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     std::vector<Segment *> segments;
     segments.push_back(segment);
 
-#ifdef NOT_JUST_NOW //!!!
-    NotationView *view = createNotationView(segments);
-    if (!view)
-        return ;
+    NewNotationView *view = createNotationView(segments);
+    if (!view) return ;
 
     /* signal no longer exists
         QObject::connect
@@ -1776,7 +1819,6 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
     */
 
     view->show();
-#endif
 }
 
 void

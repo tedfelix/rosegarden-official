@@ -77,6 +77,8 @@ public:
                                 bool preview);
 
     Segment *getCurrentSegment();
+    void setCurrentSegment(Segment *);
+
     bool segmentsContainNotes() const;
 
     int getYResolution() const { return m_resolution; }
@@ -132,6 +134,8 @@ private:
     int m_resolution;
     EventSelection *m_selection; // I own this
 
+    int m_currentSegmentIndex;
+
     // These are the background items -- the grid lines and the shadings
     // used to highlight the first, third and fifth in the current key
     std::vector<QGraphicsLineItem *> m_horizontals;
@@ -144,6 +148,7 @@ private:
     void recreateLines();
     void recreatePitchHighlights();
     void repositionPointer();
+    void updateCurrentSegment();
     void setSelectionElementStatus(EventSelection *, bool, bool = false);
 };
 

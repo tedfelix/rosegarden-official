@@ -64,6 +64,7 @@ public:
     static const char* const SegmentSplitLine;
 
     static const char* const MatrixElementBorder;
+    static const char* const MatrixElementLightBorder;
     static const char* const MatrixElementBlock;
     static const char* const MatrixOverlapBlock;
     static const char* const MatrixHorizontalLine;
@@ -97,6 +98,7 @@ public:
     static const char* const LevelMeterSolidRed;
 
     static const char* const BarLine;
+    static const char* const MatrixBarLine;
     static const char* const BarLineIncorrect;
     static const char* const BeatLine;
     static const char* const SubBeatLine;

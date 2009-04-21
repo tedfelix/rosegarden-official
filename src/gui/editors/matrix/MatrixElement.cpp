@@ -42,6 +42,7 @@ MatrixElement::MatrixElement(MatrixScene *scene, Event *event, bool drum) :
     ViewElement(event),
     m_scene(scene),
     m_drum(drum),
+    m_current(true),
     m_item(0)
 {
     reconfigure();
@@ -117,11 +118,11 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             m_scene->addItem(m_item);
         }
         QPolygonF polygon;
-        polygon << QPointF(0.5, 0.5)
+        polygon << QPointF(0, 0)
                 << QPointF(fres/2, fres/2)
-                << QPointF(0.5, fres)
+                << QPointF(0, fres)
                 << QPointF(-fres/2, fres/2)
-                << QPointF(0.5, 0.5);
+                << QPointF(0, 0);
         item->setPolygon(polygon);
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
@@ -136,7 +137,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         }
         float width = m_width;
         if (width < 1) width = 1;
-        QRectF rect(0.5, 0.5, width, fres + 1);
+        QRectF rect(0, 0, width, fres + 1);
         item->setRect(rect);
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
@@ -170,6 +171,41 @@ MatrixElement::setSelected(bool selected)
     } else {
         item->setPen
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+    }
+}
+
+void
+MatrixElement::setCurrent(bool current)
+{
+    if (m_current == current) return;
+
+    QAbstractGraphicsShapeItem *item =
+        dynamic_cast<QAbstractGraphicsShapeItem *>(m_item);
+    if (!item) return;
+
+    QColor colour;
+    
+    if (!current) {
+        colour = QColor(200, 200, 200);
+    } else {
+        if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+            colour = Qt::gray;
+        } else {
+            long velocity = 100;
+            event()->get<Int>(BaseProperties::VELOCITY, velocity);
+            colour = DefaultVelocityColour::getInstance()->getColour(velocity);
+        }
+    }
+
+    item->setBrush(colour);
+    item->setZValue(current ? 1 : 0);
+
+    if (current) {
+        item->setPen
+            (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
+    } else {
+        item->setPen
+            (QPen(GUIPalette::getColour(GUIPalette::MatrixElementLightBorder), 0));
     }
 }
 

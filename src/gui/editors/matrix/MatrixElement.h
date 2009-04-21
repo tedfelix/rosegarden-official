@@ -44,6 +44,8 @@ public:
 
     void setSelected(bool selected);
 
+    void setCurrent(bool current);
+
     /// Adjust the item to reflect the values of our event
     void reconfigure();
     
@@ -60,9 +62,11 @@ public:
     void reconfigure(timeT time, timeT duration, int pitch, int velocity);
 
     static MatrixElement *getMatrixElement(QGraphicsItem *);
+
 protected:
     MatrixScene *m_scene;
     bool m_drum;
+    bool m_current;
     QGraphicsItem *m_item;
     double m_width;
 };

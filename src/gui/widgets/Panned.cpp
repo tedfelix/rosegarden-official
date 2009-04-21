@@ -24,8 +24,6 @@ namespace Rosegarden
 	
 Panned::Panned()
 {
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void

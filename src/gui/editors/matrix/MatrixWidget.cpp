@@ -78,16 +78,16 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     setLayout(layout);
 
     m_view = new Panned;
-    m_view->setRenderHints(QPainter::Antialiasing);
     m_view->setBackgroundBrush(Qt::white);
     layout->addWidget(m_view, 0, 1, 1, 1);
 
     m_pianoView = new Panned;
+    m_pianoView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_pianoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     layout->addWidget(m_pianoView, 0, 0, 1, 1);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
-    m_hpanner->setRenderHints(QPainter::Antialiasing);
     m_hpanner->setBackgroundBrush(Qt::white);
     layout->addWidget(m_hpanner, 1, 0, 1, 2);
 
