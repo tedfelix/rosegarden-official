@@ -1,0 +1,139 @@
+
+VERSION		= @PACKAGE_VERSION@
+
+PREFIX		= /usr/local
+
+CXX		= @CXX@ 
+LD		= @CXX@
+INSTALL         = @INSTALL@
+MKDIR_P         = @MKDIR_P@
+PERL		= @PERL@
+XARGS		= @XARGS@
+MAKEDEPEND	= @MAKEDEPEND@
+
+MOC		= @MOC@
+UIC		= @UIC@
+RCC		= @RCC@
+LUPDATE		= @LUPDATE@
+LRELEASE	= @LRELEASE@
+
+CXXFLAGS	= @CXXFLAGS@ \
+		  @HAVES@ \
+		  @CFLAGS@ \
+		  @QT_CXXFLAGS@ \
+		  @JACK_CFLAGS@ \
+		  @ALSA_CFLAGS@ \
+		  @DSSI_CFLAGS@ \
+		  @liblo_CFLAGS@ \
+		  @lrdf_CFLAGS@ \
+		  @Xft_CFLAGS@ \
+		  @fftw3f_CFLAGS@ \
+		  -D'VERSION="$(VERSION)"' \
+		  -Isrc
+
+MOCFLAGS	= @HAVES@
+
+LIBS		= @QT_LIBS@ \
+		  @JACK_LIBS@ \
+		  @ALSA_LIBS@ \
+		  @DSSI_LIBS@ \
+		  @liblo_LIBS@ \
+		  @lrdf_LIBS@ \
+		  @Xft_LIBS@ \
+		  @fftw3f_LIBS@ \
+		  @LIBS@
+
+INSTBINDIR	= $(DESTDIR)$(PREFIX)/bin
+INSTDATADIR	= $(DESTDIR)$(PREFIX)/share/rosegarden
+
+RESOURCES	= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
+QRCSOURCES	= $(patsubst %.qrc,%.cpp,$(RESOURCES))
+HEADERS		= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
+SOURCES		= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
+QHEADERS	= $(shell fgrep -l Q_OBJECT $(HEADERS))
+OBJECTS		= $(patsubst %.cpp,%.o,$(SOURCES))
+QSOURCES	= $(patsubst %.h,%.moc,$(QHEADERS))
+UI		= $(wildcard src/*/*/*.ui)
+UIHEADERS	= $(patsubst %.ui,%.h,$(UI))
+RCS		= $(wildcard data/ui/*.rc)
+TRANSLATIONS	= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
+
+all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
+
+rosegarden:	$(OBJECTS)
+		$(CXX) $(LDFLAGS) -o $@ $^ $(LIBS)
+
+%.h: %.ui
+	$(UIC) $< > $@
+
+%.cpp: %.ui %.h
+	$(UIC) -pch $(patsubst %.cpp,%.moc,$@) -impl $(patsubst %.cpp,%.h,$@) $(patsubst %.cpp,%.ui,$@) > $@
+
+%.moc: %.h
+	$(MOC) $(MOCFLAGS) $< -o $@
+
+%.cpp: %.qrc
+	$(RCC) $< -o $@
+
+%.o: %.cpp
+	$(CXX) -c $(CXXFLAGS) $< -o $@
+
+instrument-ts:
+	$(PERL) scripts/extract_instrument_tr_strings.pl `ls -1 data/presets/*.xml` > data/InstrumentStrings.cpp
+
+menu-ts:
+	$(PERL) scripts/extract_menu_tr_strings.pl `ls -1 data/ui/*.rc` > data/QMenuStrings.cpp
+
+ts:	menu-ts instrument-ts
+	$(MKDIR_P) locale
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
+ts-noobsolete:	menu-ts instrument-ts
+	$(MKDIR_P) locale
+	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts locale/rosegarden.ts $(TRANSLATIONS)
+
+locale:
+	$(LRELEASE) $(TRANSLATIONS)
+
+clean:
+	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
+
+test:
+	echo $(QSOURCES)
+
+dependencies: $(SOURCES) $(HEADERS) Makefile
+	@echo Rebuilding dependencies file...
+	@rm -f $@ 
+	@touch $@
+	@echo $(SOURCES) | $(XARGS) --max-args=100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
+	@echo Done
+
+qrc:
+	bash ./scripts/rebuild-qrc
+	rm -f data/data.o
+	rm -f data/data.cpp
+
+install:
+	$(MKDIR_P) -m 755 $(INSTBINDIR)
+	$(MKDIR_P) -m 755 $(INSTDATADIR)/examples
+	$(MKDIR_P) -m 755 $(INSTDATADIR)/library
+	$(INSTALL) -m 644 data/examples/* $(INSTDATADIR)/examples/
+	$(INSTALL) -m 644 data/library/* $(INSTDATADIR)/library/
+	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
+	$(INSTALL) -m 755 src/helpers/rosegarden-audiofile-importer $(INSTBINDIR)
+	$(INSTALL) -m 755 src/helpers/rosegarden-lilypondview $(INSTBINDIR)
+	$(INSTALL) -m 755 src/helpers/rosegarden-project-package $(INSTBINDIR)
+
+uninstall:
+	rm -rf $(INSTDATADIR)/examples
+	rm -rf $(INSTDATADIR)/library
+	rmdir $(INSTDATADIR)
+	rm -f $(INSTBINDIR)/rosegarden
+	rm -f $(INSTBINDIR)/rosegarden-audiofile-importer
+	rm -f $(INSTBINDIR)/rosegarden-lilypondview
+	rm -f $(INSTBINDIR)/rosegarden-project-package
+
+.PHONY: instrument-ts menu-ts ts ts-noobsolete locale
+
+include dependencies
+
