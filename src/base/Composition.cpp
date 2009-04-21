@@ -15,9 +15,9 @@
 
 #include "Composition.h"
 #include "misc/Debug.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "FastVector.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
 

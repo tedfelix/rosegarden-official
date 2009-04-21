@@ -17,8 +17,8 @@
 #define _AUDIO_PROCESS_H_
 
 #include "SoundDriver.h"
-#include "Instrument.h"
-#include "RealTime.h"
+#include "base/Instrument.h"
+#include "base/RealTime.h"
 #include "RingBuffer.h"
 #include "RunnablePluginInstance.h"
 #include "AudioPlayQueue.h"

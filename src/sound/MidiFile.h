@@ -24,7 +24,7 @@
 
 #include "Midi.h"
 #include "MidiEvent.h"
-#include "Composition.h"
+#include "base/Composition.h"
 #include "SoundFile.h"
 
 // Conversion class for Composition to and

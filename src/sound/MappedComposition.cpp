@@ -15,7 +15,7 @@
 #include <QDataStream>
 #include "MappedComposition.h"
 #include "MappedEvent.h"
-#include "SegmentPerformanceHelper.h"
+#include "base/SegmentPerformanceHelper.h"
 #include <iostream>
 
 namespace Rosegarden

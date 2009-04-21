@@ -22,14 +22,14 @@
 #include <algorithm>
 #include <cmath> // fabs, pow
 
-#include "NotationTypes.h"
+#include "base/NotationTypes.h"
 #include "AnalysisTypes.h"
 #include "Event.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "CompositionTimeSliceAdapter.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include "Composition.h"
-#include "Profiler.h"
+#include "base/Profiler.h"
 
 #include "Sets.h"
 #include "Quantizer.h"

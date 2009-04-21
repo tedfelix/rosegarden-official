@@ -17,7 +17,7 @@
 #define _RG_VIEW_SEGMENT_H_
 
 #include "ViewElement.h"
-#include "Segment.h"
+#include "base/Segment.h"
 
 #include <iostream>
 #include <cassert>

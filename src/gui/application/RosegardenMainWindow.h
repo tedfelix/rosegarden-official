@@ -295,12 +295,10 @@ public:
      */
     Clipboard* getClipboard() { return m_clipboard; }
 
-#ifdef HAVE_LIBLO
     /**
      * Return the plugin native GUI manager, if we have one
      */
     AudioPluginOSCGUIManager *getPluginGUIManager() { return m_pluginGUIManager; }
-#endif
 
     /**
      * Plug a widget into our common shortcuts
@@ -1627,9 +1625,7 @@ private:
     TriggerSegmentManager *m_triggerSegmentManager;
     std::set<ControlEditorDialog *> m_controlEditors;
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-#ifdef HAVE_LIBLO
     AudioPluginOSCGUIManager *m_pluginGUIManager;
-#endif
 
     static RosegardenMainWindow *m_myself;
 

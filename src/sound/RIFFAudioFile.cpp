@@ -14,8 +14,8 @@
 */
 
 #include "RIFFAudioFile.h"
-#include "RealTime.h"
-#include "Profiler.h"
+#include "base/RealTime.h"
+#include "base/Profiler.h"
 
 using std::cout;
 using std::cerr;

@@ -15,7 +15,7 @@
 #define _PROPERTY_MAP_H_
 
 #include "Property.h"
-#include "PropertyName.h"
+#include "base/PropertyName.h"
 
 #include <map>
 

@@ -27,8 +27,8 @@
 #include <alsa/asoundlib.h> // ALSA
 
 #include "SoundDriver.h"
-#include "Instrument.h"
-#include "Device.h"
+#include "base/Instrument.h"
+#include "base/Device.h"
 #include "AlsaPort.h"
 #include "Scavenger.h"
 #include "RunnablePluginInstance.h"
@@ -357,11 +357,7 @@ public:
     virtual void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
                                                int &ssInstrumentCount) {
         ssInstrumentBase = SoftSynthInstrumentBase;
-#ifdef HAVE_DSSI
         ssInstrumentCount = SoftSynthInstrumentCount;
-#else
-        ssInstrumentCount = 0;
-#endif
     }
 
     virtual QString getStatusLog();

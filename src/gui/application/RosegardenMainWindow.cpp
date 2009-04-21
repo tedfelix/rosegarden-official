@@ -260,9 +260,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_markerEditor(0),
     m_tempoView(0),
     m_triggerSegmentManager(0),
-#ifdef HAVE_LIBLO
     m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
-#endif
     m_playTimer(new QTimer(static_cast<QObject *>(this))),
     m_stopTimer(new QTimer(static_cast<QObject *>(this))),
     m_startupTester(0),
@@ -553,9 +551,7 @@ RosegardenMainWindow::~RosegardenMainWindow()
         getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
-#ifdef HAVE_LIBLO
     delete m_pluginGUIManager;
-#endif
 
     if (isSequencerRunning()) {
         RosegardenSequencer::getInstance()->quit();
@@ -1159,13 +1155,10 @@ void RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     m_segmentParameterBox->setDocument(m_doc);
     m_instrumentParameterBox->setDocument(m_doc);
 
-#ifdef HAVE_LIBLO
-
     if (m_pluginGUIManager) {
         m_pluginGUIManager->stopAllGUIs();
         m_pluginGUIManager->setStudio(&m_doc->getStudio());
     }
-#endif
 
     if (getView() &&
         getView()->getTrackEditor() &&
@@ -6272,11 +6265,7 @@ RosegardenMainWindow::slotManageSynths()
         return ;
     }
 
-    m_synthManager = new SynthPluginManagerDialog(this, m_doc
-#ifdef HAVE_LIBLO
-                     , m_pluginGUIManager
-#endif
-                                                );
+    m_synthManager = new SynthPluginManagerDialog(this, m_doc, m_pluginGUIManager);
 
     connect(m_synthManager, SIGNAL(closing()),
             this, SLOT(slotSynthPluginManagerClosed()));
@@ -6672,9 +6661,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     AudioPluginDialog *dialog =
         new AudioPluginDialog(parent,
                               m_doc->getPluginManager(),
-#ifdef HAVE_LIBLO
                               m_pluginGUIManager,
-#endif
                               container,
                               index);
 
@@ -6981,7 +6968,6 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
 
     m_doc->slotDocumentModified();
 
-#ifdef HAVE_LIBLO
     // This modification came from our own plugin dialog, so update
     // any external GUIs
     if (m_pluginGUIManager) {
@@ -6989,7 +6975,6 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
                                        pluginIndex,
                                        portIndex);
     }
-#endif
 }
 
 void
@@ -7088,12 +7073,9 @@ RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
     // Set modified
     m_doc->slotDocumentModified();
 
-#ifdef HAVE_LIBLO
-
     if (m_pluginGUIManager)
         m_pluginGUIManager->updateProgram(instrumentId,
                                           pluginIndex);
-#endif
 }
 
 void
@@ -7142,12 +7124,8 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
                         ((*i)->getId(), (*pli)->getPosition(),
                          false, key, value);
 
-#ifdef HAVE_LIBLO
-
                         m_pluginGUIManager->updateConfiguration
                         ((*i)->getId(), (*pli)->getPosition(), key);
-#endif
-
                     }
                 }
             }
@@ -7229,18 +7207,14 @@ void
 RosegardenMainWindow::slotShowPluginGUI(InstrumentId instrument,
                                     int index)
 {
-#ifdef HAVE_LIBLO
     m_pluginGUIManager->showGUI(instrument, index);
-#endif
 }
 
 void
 RosegardenMainWindow::slotStopPluginGUI(InstrumentId instrument,
                                     int index)
 {
-#ifdef HAVE_LIBLO
     m_pluginGUIManager->stopGUI(instrument, index);
-#endif
 }
 
 void

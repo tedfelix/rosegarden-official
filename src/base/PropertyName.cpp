@@ -17,8 +17,8 @@
 #include <iostream>
 #include <string>
 
-#include "PropertyName.h"
-#include "Exception.h"
+#include "base/PropertyName.h"
+#include "base/Exception.h"
 
 #include <cassert>
 

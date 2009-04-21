@@ -13,12 +13,12 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Segment.h"
-#include "NotationTypes.h"
-#include "BaseProperties.h"
+#include "base/Segment.h"
+#include "base/NotationTypes.h"
+#include "base/BaseProperties.h"
 #include "Composition.h"
 #include "BasicQuantizer.h"
-#include "Profiler.h"
+#include "base/Profiler.h"
 
 #include <iostream>
 #include <algorithm>

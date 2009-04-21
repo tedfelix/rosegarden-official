@@ -16,7 +16,7 @@
 #include "ScriptAPI.h"
 
 #include "Composition.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Event.h"
 #include "Sets.h"
 

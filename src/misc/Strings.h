@@ -21,8 +21,8 @@
 #include <QVariant>
 #include <QTextStream>
 
-#include "PropertyName.h"
-#include "Exception.h"
+#include "base/PropertyName.h"
+#include "base/Exception.h"
 
 extern QString strtoqstr(const std::string &);
 extern QString strtoqstr(const Rosegarden::PropertyName &);

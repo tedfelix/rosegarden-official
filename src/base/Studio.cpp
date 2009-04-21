@@ -15,13 +15,13 @@
 
 #include <iostream>
 
-#include "Studio.h"
+#include "base/Studio.h"
 #include "MidiDevice.h"
 #include "AudioDevice.h"
 #include "SoftSynthDevice.h"
 #include "Instrument.h"
 
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Track.h"
 #include "Composition.h"
 

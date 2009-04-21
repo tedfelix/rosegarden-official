@@ -53,41 +53,31 @@
 namespace Rosegarden
 {
 
-    SynthPluginManagerDialog::SynthPluginManagerDialog( 
-            QWidget *parent,
-            RosegardenDocument *doc
-                                                        
-#ifdef HAVE_LIBLO
-            , AudioPluginOSCGUIManager *guiManager
-#endif
-            ):
-            QMainWindow ( parent ),
-            m_document ( doc ),
-            m_studio ( &doc->getStudio() ),
-            m_pluginManager ( doc->getPluginManager() )
-#ifdef HAVE_LIBLO
-            , m_guiManager ( guiManager )
-#endif
-    {
-        // start constructor
-        //
-        setWindowTitle ( tr ( "Manage Synth Plugins" ) );
-        resize ( 760, 520 );
-        move ( 100, 80 );
-
-        setupGuiMain();
-        setupGuiCreatePluginList();
-
-        createGUI ( "synthpluginmanager.rc" );
-
+SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
+                                                   RosegardenDocument *doc,
+                                                   AudioPluginOSCGUIManager *guiManager) :
+    QMainWindow ( parent ),
+    m_document ( doc ),
+    m_studio ( &doc->getStudio() ),
+    m_pluginManager ( doc->getPluginManager() ),
+    m_guiManager ( guiManager )
+{
+    // start constructor
+    //
+    setWindowTitle ( tr ( "Manage Synth Plugins" ) );
+    resize ( 760, 520 );
+    move ( 100, 80 );
+    
+    setupGuiMain();
+    setupGuiCreatePluginList();
+    
+    createGUI ( "synthpluginmanager.rc" );
+    
 //         setAutoSaveSettings(SynthPluginManagerConfigGroup, true);    //&&&
-    }
+}
 
-
-
-
-
-    void SynthPluginManagerDialog:: setupGuiMain(){
+    void
+    SynthPluginManagerDialog:: setupGuiMain(){
         //
         m_centralWidget = new QWidget ( this );
         m_centralWidget->setObjectName ( QString::fromUtf8 ( "m_centralWidget" ) );
@@ -126,12 +116,12 @@ namespace Rosegarden
         // ------------------------------------------------------------------
         //
         QDialogButtonBox::StandardButtons sbuttons = \
-                QDialogButtonBox::Close |
+            QDialogButtonBox::Close |
 //                 QDialogButtonBox::Ok |
 //                 QDialogButtonBox::Cancel |
 //                 QDialogButtonBox::Apply |
 //                 QDialogButtonBox::RestoreDefaults |
-                QDialogButtonBox::Help;
+            QDialogButtonBox::Help;
         //
         //QDialogButtonBox *
         m_dialogButtonBox = new QDialogButtonBox ( sbuttons, Qt::Horizontal, this );
@@ -167,7 +157,7 @@ namespace Rosegarden
         int count = 0;
 
         for ( PluginIterator itr = m_pluginManager->begin();
-                itr != m_pluginManager->end(); ++itr ){
+              itr != m_pluginManager->end(); ++itr ){
 
             if ( ( *itr )->isSynth() ){
                 m_synthPlugins.push_back ( count );
@@ -186,10 +176,10 @@ namespace Rosegarden
             //  pluginLayout->addWidget(new QLabel(instrument->getPresentationName().c_str(),
             //                     pluginFrame), i, 0);
             m_scrollWidgetLayout->addWidget ( new QLabel ( QString ( "%1" ).arg ( i + 1 ),
-                                              m_scrollWidget ), i, 0 );
+                                                           m_scrollWidget ), i, 0 );
 
             AudioPluginInstance *plugin = instrument->getPlugin
-                                          ( Instrument::SYNTH_PLUGIN_POSITION );
+                ( Instrument::SYNTH_PLUGIN_POSITION );
 
             std::string identifier;
             if ( plugin )
@@ -227,15 +217,12 @@ namespace Rosegarden
             connect ( controlsButton, SIGNAL ( clicked() ), this, SLOT ( slotControlsButtonClicked() ) );
             m_controlsButtons.push_back ( controlsButton );
 
-#ifdef HAVE_LIBLO
-
             QPushButton *guiButton = new QPushButton ( tr ( "Editor >>" ), m_scrollWidget );
             m_scrollWidgetLayout->addWidget ( guiButton, i, 3 );
             guiButton->setEnabled ( m_guiManager->hasGUI
                                     ( id, Instrument::SYNTH_PLUGIN_POSITION ) );
             connect ( guiButton, SIGNAL ( clicked() ), this, SLOT ( slotGUIButtonClicked() ) );
             m_guiButtons.push_back ( guiButton );
-#endif
 
         }// end for i
         
@@ -246,7 +233,7 @@ namespace Rosegarden
 
     SynthPluginManagerDialog::~SynthPluginManagerDialog(){
         RG_DEBUG << "\n*** SynthPluginManagerDialog::~SynthPluginManagerDialog()"
-        << endl;
+                 << endl;
     }
 
 
@@ -257,7 +244,7 @@ namespace Rosegarden
             tr ( "Create plugin instances here, e.g. software synthesizers and effects. " ),
             QMessageBox::Ok,
             QMessageBox::Ok
-        );
+            );
     }
 
 
@@ -347,7 +334,7 @@ namespace Rosegarden
         const QObject *s = sender();
 
         RG_DEBUG << "SynthPluginManagerDialog::slotPluginChanged(" << index
-        << ")" << endl;
+                 << ")" << endl;
 
         int instrumentNo = -1;
 
@@ -365,7 +352,7 @@ namespace Rosegarden
 
         if ( index >= int ( m_synthPlugins.size() ) ){
             RG_DEBUG << "WARNING: SynthPluginManagerDialog::slotValueChanged: synth "
-            << index << " out of range" << endl;
+                     << index << " out of range" << endl;
             return ;
         }
 
@@ -377,7 +364,7 @@ namespace Rosegarden
         if ( instrument ){
 
             AudioPluginInstance *pluginInstance = instrument->getPlugin
-                                                  ( Instrument::SYNTH_PLUGIN_POSITION );
+                ( Instrument::SYNTH_PLUGIN_POSITION );
 
             if ( pluginInstance ){
 
@@ -393,7 +380,7 @@ namespace Rosegarden
                     for ( ; it != plugin->end(); ++it ){
 
                         if ( ( ( *it )->getType() & PluginPort::Control ) &&
-                                ( ( *it )->getType() & PluginPort::Input ) ){
+                             ( ( *it )->getType() & PluginPort::Input ) ){
 
                             if ( pluginInstance->getPort ( count ) == 0 ){
                                 pluginInstance->addPort ( count, ( float ) ( *it )->getDefaultValue() );
@@ -413,17 +400,16 @@ namespace Rosegarden
             }
         }
 
-#ifdef HAVE_LIBLO
         if ( instrumentNo < m_guiButtons.size() ){
-            m_guiButtons[instrumentNo]->setEnabled
+        m_guiButtons[instrumentNo]->setEnabled
             ( m_guiManager->hasGUI
               ( id, Instrument::SYNTH_PLUGIN_POSITION ) );
-        }
-#endif
-
-        emit pluginSelected ( id, Instrument::SYNTH_PLUGIN_POSITION,
-                              m_synthPlugins[index] );
     }
 
+    emit pluginSelected ( id, Instrument::SYNTH_PLUGIN_POSITION,
+                          m_synthPlugins[index] );
 }
+
+}
+
 #include "SynthPluginManagerDialog.moc"

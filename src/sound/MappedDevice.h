@@ -17,8 +17,8 @@
 
 #include <QDataStream>
 
-#include "Device.h"
-#include "MidiDevice.h"
+#include "base/Device.h"
+#include "base/MidiDevice.h"
 #include "MappedCommon.h"
 
 #ifndef _MAPPEDDEVICE_H_

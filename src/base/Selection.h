@@ -17,10 +17,10 @@
 #define SELECTION_H
 
 #include <set>
-#include "PropertyName.h"
+#include "base/PropertyName.h"
 #include "Event.h"
-#include "Segment.h"
-#include "NotationTypes.h"
+#include "base/Segment.h"
+#include "base/NotationTypes.h"
 #include "Composition.h"
 
 namespace Rosegarden {

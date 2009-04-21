@@ -14,7 +14,7 @@
 */
 
 #include "MidiDevice.h"
-#include "MidiTypes.h"
+#include "base/MidiTypes.h"
 #include "Instrument.h"
 #include "ControlParameter.h"
 

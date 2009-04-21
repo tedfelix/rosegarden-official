@@ -14,9 +14,9 @@
 */
 
 #include "Selection.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "SegmentNotationHelper.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 
 namespace Rosegarden {
 

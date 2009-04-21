@@ -22,7 +22,7 @@
 #include "FastVector.h"
 
 #include "RealTime.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Track.h"
 #include "Configuration.h"
 #include "XmlExportable.h"

@@ -17,7 +17,7 @@
 #define _CLIPBOARD_H_
 
 #include <set>
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Selection.h"
 
 namespace Rosegarden

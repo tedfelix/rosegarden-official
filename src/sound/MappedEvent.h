@@ -14,9 +14,9 @@
 
 #include <QDataStream>
 
-#include "RealTime.h"
-#include "Track.h"
-#include "Event.h"
+#include "base/RealTime.h"
+#include "base/Track.h"
+#include "base/Event.h"
 
 
 #ifndef _MAPPEDEVENT_H_

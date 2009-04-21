@@ -16,7 +16,7 @@
 #ifndef _SCRIPT_API_H_
 #define _SCRIPT_API_H_
 
-#include "Segment.h"
+#include "base/Segment.h"
 
 namespace Rosegarden
 {

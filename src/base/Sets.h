@@ -20,11 +20,11 @@
 #include <algorithm>
 
 #include "Event.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "CompositionTimeSliceAdapter.h"
-#include "BaseProperties.h"
-#include "NotationTypes.h"
-#include "MidiTypes.h"
+#include "base/BaseProperties.h"
+#include "base/NotationTypes.h"
+#include "base/MidiTypes.h"
 #include "Quantizer.h"
 
 namespace Rosegarden

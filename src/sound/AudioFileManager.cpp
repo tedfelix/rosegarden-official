@@ -48,7 +48,6 @@
 #include "AudioFileManager.h"
 #include "WAVAudioFile.h"
 #include "BWFAudioFile.h"
-#include "MP3AudioFile.h"
 #include "misc/Strings.h"
 
 namespace Rosegarden
@@ -176,22 +175,6 @@ AudioFileManager::addFile(const std::string &filePath)
             throw BadAudioPathException(e);
         }
     }
-#ifdef HAVE_LIBMAD
-    else if (ext == "mp3") {
-        try {
-            aF = new MP3AudioFile(id, getShortFilename(filePath), filePath);
-
-            if (aF->open() == false) {
-                delete aF;
-                std::cerr << "AudioFileManager: Malformed mp3 audio file in " << filePath << std::endl;
-                throw BadAudioPathException(filePath, __FILE__, __LINE__);
-            }
-        } catch (SoundFile::BadSoundFileException e) {
-            delete aF;
-            throw BadAudioPathException(e);
-        }
-    }
-#endif // HAVE_LIBMAD
     else {
         std::cerr << "AudioFileManager: Unsupported audio file extension in " << filePath << std::endl;
         throw BadAudioPathException(filePath, __FILE__, __LINE__);

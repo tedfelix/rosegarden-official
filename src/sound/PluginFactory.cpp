@@ -17,13 +17,8 @@
 #include "PluginIdentifier.h"
 #include "misc/Strings.h"
 
-#ifdef HAVE_LADSPA
 #include "LADSPAPluginFactory.h"
-#endif
-
-#ifdef HAVE_DSSI
 #include "DSSIPluginFactory.h"
-#endif
 
 #include <iostream>
 
@@ -32,19 +27,13 @@ namespace Rosegarden
 
 int PluginFactory::m_sampleRate = 48000;
 
-#ifdef HAVE_LADSPA
 static LADSPAPluginFactory *_ladspaInstance = 0;
-#endif
-
-#ifdef HAVE_DSSI
 static LADSPAPluginFactory *_dssiInstance = 0;
-#endif
 
 PluginFactory *
 PluginFactory::instance(QString pluginType)
 {
     if (pluginType == "ladspa") {
-#ifdef HAVE_LADSPA
         if (!_ladspaInstance) {
             std::cerr << "PluginFactory::instance(" << pluginType
             << "): creating new LADSPAPluginFactory" << std::endl;
@@ -52,13 +41,7 @@ PluginFactory::instance(QString pluginType)
             _ladspaInstance->discoverPlugins();
         }
         return _ladspaInstance;
-#else
-
-        return 0;
-#endif
-
     } else if (pluginType == "dssi") {
-#ifdef HAVE_DSSI
         if (!_dssiInstance) {
             std::cerr << "PluginFactory::instance(" << pluginType
             << "): creating new DSSIPluginFactory" << std::endl;
@@ -66,14 +49,9 @@ PluginFactory::instance(QString pluginType)
             _dssiInstance->discoverPlugins();
         }
         return _dssiInstance;
-#else
-
+    } else {
         return 0;
-#endif
-
     }
-    else
-        return 0;
 }
 
 PluginFactory *

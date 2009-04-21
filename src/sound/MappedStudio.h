@@ -19,10 +19,10 @@
 #include <QString>
 
 #include "MappedCommon.h"
-#include "Instrument.h"
-#include "Device.h"
+#include "base/Instrument.h"
+#include "base/Device.h"
 
-#include "AudioPluginInstance.h" // for PluginPort::PortDisplayHint //!!!???
+#include "base/AudioPluginInstance.h" // for PluginPort::PortDisplayHint //!!!???
 
 #ifndef _MAPPEDSTUDIO_H_
 #define _MAPPEDSTUDIO_H_

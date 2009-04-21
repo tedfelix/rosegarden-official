@@ -14,11 +14,11 @@
 */
 
 #include "SegmentNotationHelper.h"
-#include "NotationTypes.h"
+#include "base/NotationTypes.h"
 #include "Quantizer.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include "Composition.h"
 
 #include <iostream>

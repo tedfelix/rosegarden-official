@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -15,8 +15,6 @@
 
 #ifndef _DSSI_PLUGIN_FACTORY_H_
 #define _DSSI_PLUGIN_FACTORY_H_
-
-#ifdef HAVE_DSSI
 
 #include "LADSPAPluginFactory.h"
 #include <dssi.h>
@@ -48,9 +46,7 @@ protected:
 
     virtual std::vector<QString> getPluginPath();
 
-#ifdef HAVE_LIBLRDF
     virtual std::vector<QString> getLRDFPath(QString &baseUri);
-#endif
 
     virtual void discoverPlugins(QString soName);
 
@@ -59,8 +55,6 @@ protected:
 };
 
 }
-
-#endif
 
 #endif
 

@@ -16,8 +16,6 @@
 #ifndef _LADSPA_PLUGIN_FACTORY_H_
 #define _LADSPA_PLUGIN_FACTORY_H_
 
-#ifdef HAVE_LADSPA
-
 #include "PluginFactory.h"
 #include <ladspa.h>
 
@@ -62,9 +60,7 @@ protected:
 
     virtual std::vector<QString> getPluginPath();
 
-#ifdef HAVE_LIBLRDF
     virtual std::vector<QString> getLRDFPath(QString &baseUri);
-#endif
 
     virtual void discoverPlugins(QString soName);
     virtual void generateTaxonomy(QString uri, QString base);
@@ -91,8 +87,6 @@ protected:
 };
 
 }
-
-#endif
 
 #endif
 

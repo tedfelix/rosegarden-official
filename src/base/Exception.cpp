@@ -13,7 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "Exception.h"
+#include "base/Exception.h"
 
 #include <iostream>
 

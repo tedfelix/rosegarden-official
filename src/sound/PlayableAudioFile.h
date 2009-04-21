@@ -16,7 +16,7 @@
 #ifndef _PLAYABLE_AUDIO_FILE_H_
 #define _PLAYABLE_AUDIO_FILE_H_
 
-#include "Instrument.h"
+#include "base/Instrument.h"
 #include "RingBuffer.h"
 #include "AudioFile.h"
 #include "AudioCache.h"

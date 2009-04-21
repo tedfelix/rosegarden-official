@@ -17,7 +17,7 @@
 #define _SEQUENCER_DATA_BLOCK_H_
 
 #include "ControlBlock.h"
-#include "RealTime.h"
+#include "base/RealTime.h"
 #include "MappedEvent.h"
 
 namespace Rosegarden

@@ -16,7 +16,7 @@
 #define _ROSEGARDEN_MIDI_EVENT_H_
 
 #include "Midi.h"
-#include "Event.h"
+#include "base/Event.h"
 
 // MidiEvent holds MIDI and Event data during MIDI file I/O.
 // We don't use this class at all for playback or recording of MIDI -

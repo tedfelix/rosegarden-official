@@ -23,7 +23,7 @@
 #include <utility>
 
 #include "CompositionTimeSliceAdapter.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Composition.h"
 #include "Selection.h"
 

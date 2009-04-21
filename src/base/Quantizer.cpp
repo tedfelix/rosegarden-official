@@ -15,12 +15,12 @@
 */
 
 #include "Quantizer.h"
-#include "BaseProperties.h"
-#include "NotationTypes.h"
+#include "base/BaseProperties.h"
+#include "base/NotationTypes.h"
 #include "Selection.h"
 #include "Composition.h"
 #include "Sets.h"
-#include "Profiler.h"
+#include "base/Profiler.h"
 
 #include <iostream>
 #include <cmath>

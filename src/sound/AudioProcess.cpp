@@ -20,8 +20,8 @@
 #include "RecordableAudioFile.h"
 #include "WAVAudioFile.h"
 #include "MappedStudio.h"
-#include "Profiler.h"
-#include "AudioLevel.h"
+#include "base/Profiler.h"
+#include "base/AudioLevel.h"
 #include "AudioPlayQueue.h"
 #include "PluginFactory.h"
 

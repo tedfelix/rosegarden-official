@@ -15,8 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef HAVE_LIBLO
-
 #include "AudioPluginOSCGUI.h"
 
 #include "misc/Debug.h"
@@ -222,4 +220,3 @@ AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 
 }
 
-#endif

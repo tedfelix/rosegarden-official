@@ -18,7 +18,7 @@
 #define _EVENT_H_
 
 #include "PropertyMap.h"
-#include "Exception.h"
+#include "base/Exception.h"
 
 #include <string>
 #include <vector>

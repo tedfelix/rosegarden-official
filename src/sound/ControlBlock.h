@@ -16,8 +16,8 @@
 #ifndef _CONTROLBLOCK_H_
 #define _CONTROLBLOCK_H_
 
-#include "MidiProgram.h"
-#include "Track.h"
+#include "base/MidiProgram.h"
+#include "base/Track.h"
 
 namespace Rosegarden 
 {

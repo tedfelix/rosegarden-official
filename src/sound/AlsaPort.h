@@ -13,7 +13,7 @@
 
 #include <vector>
 #include <set>
-#include "Instrument.h"
+#include "base/Instrument.h"
 #include "MappedCommon.h"
 
 #ifndef _ALSAPORT_H_

@@ -13,8 +13,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include "SegmentPerformanceHelper.h"
-#include "BaseProperties.h"
+#include "base/SegmentPerformanceHelper.h"
+#include "base/BaseProperties.h"
 #include <iostream>
 
 namespace Rosegarden 

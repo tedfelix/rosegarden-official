@@ -30,7 +30,7 @@
 
 #include "PeakFileManager.h"
 #include "AudioFile.h"
-#include "RealTime.h"
+#include "base/RealTime.h"
 #include "PeakFile.h"
 
 namespace Rosegarden

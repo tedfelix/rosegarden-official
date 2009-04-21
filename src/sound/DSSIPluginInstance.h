@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -20,9 +20,7 @@
 #include <set>
 #include <map>
 #include <QString>
-#include "Instrument.h"
-
-#ifdef HAVE_DSSI
+#include "base/Instrument.h"
 
 #include <dssi.h>
 #include "RingBuffer.h"
@@ -180,8 +178,6 @@ protected:
 };
 
 };
-
-#endif // HAVE_DSSI
 
 #endif // _DSSIPLUGININSTANCE_H_
 

@@ -14,7 +14,7 @@
 */
 
 #include "SegmentMatrixHelper.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 
 namespace Rosegarden
 {

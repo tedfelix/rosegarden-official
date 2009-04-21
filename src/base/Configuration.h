@@ -26,7 +26,7 @@
 #include "Instrument.h"
 #include "RealTime.h"
 #include "PropertyMap.h"
-#include "Exception.h"
+#include "base/Exception.h"
 #include "XmlExportable.h"
 
 #ifndef _CONFIGURATION_H_

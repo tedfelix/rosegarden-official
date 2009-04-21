@@ -15,7 +15,7 @@
 
 #include "SoftSynthDevice.h"
 #include "Instrument.h"
-#include "MidiTypes.h"
+#include "base/MidiTypes.h"
 
 #include <cstdio>
 #include <cstdlib>

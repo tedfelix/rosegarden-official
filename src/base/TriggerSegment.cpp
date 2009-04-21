@@ -15,9 +15,9 @@
 
 #include "TriggerSegment.h"
 
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Composition.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 
 namespace Rosegarden
 {

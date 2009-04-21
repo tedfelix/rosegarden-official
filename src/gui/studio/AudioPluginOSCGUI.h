@@ -19,8 +19,6 @@
 #ifndef _RG_AUDIOPLUGINOSCGUI_H_
 #define _RG_AUDIOPLUGINOSCGUI_H_
 
-#ifdef HAVE_LIBLO
-
 #include <lo/lo.h>
 
 #include <QString>
@@ -61,10 +59,8 @@ protected:
 };
     
 
-
 }
 
 
 #endif
 
-#endif

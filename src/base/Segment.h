@@ -23,7 +23,7 @@
 
 #include "Track.h"
 #include "Event.h"
-#include "NotationTypes.h"
+#include "base/NotationTypes.h"
 #include "RefreshStatus.h"
 #include "RealTime.h"
 #include "MidiProgram.h"

@@ -369,7 +369,6 @@ int main(int argc, char *argv[])
 
     srandom((unsigned int)time(0) * (unsigned int)getpid());
 
-#ifdef QT_RASTER_SYSTEM_CAUSES_TOO_MANY_DRAWING_GLITCHES
 #ifdef Q_WS_X11
 #if QT_VERSION >= 0x040500
     bool systemSpecified = false;
@@ -380,10 +379,15 @@ int main(int argc, char *argv[])
         }
     }
     if (!systemSpecified) {
-        RG_DEBUG << "Setting default raster graphics system for Qt 4.5+" << endl;
-        QApplication::setGraphicsSystem("raster");
+        // Set the native graphics system unless the user has
+        // explicitly asked for something else on the command line.
+        // This should (?) override the option with which Qt was
+        // compiled, if it differs from native.  There are numerous
+        // problems with the raster graphics system in current RG,
+        // which is a pity because it's much faster.
+        RG_DEBUG << "Setting native graphics system for Qt 4.5+" << endl;
+        QApplication::setGraphicsSystem("native");
     }
-#endif
 #endif
 #endif
 

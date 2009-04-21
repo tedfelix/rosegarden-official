@@ -16,8 +16,8 @@
 #ifndef _AUDIO_PLAY_QUEUE_H_
 #define _AUDIO_PLAY_QUEUE_H_
 
-#include "RealTime.h"
-#include "Instrument.h"
+#include "base/RealTime.h"
+#include "base/Instrument.h"
 
 #include <set>
 #include <vector>

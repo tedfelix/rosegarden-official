@@ -21,7 +21,7 @@
 #endif
 
 #include "ControlParameter.h"
-#include "MidiTypes.h"
+#include "base/MidiTypes.h"
 
 namespace Rosegarden
 {

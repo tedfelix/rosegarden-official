@@ -29,10 +29,11 @@
 #include <QUrl>
 
 #include "AudioFile.h"
-#include "XmlExportable.h"
 #include "PeakFileManager.h"
 #include "PeakFile.h"
-#include "Exception.h"
+
+#include "base/XmlExportable.h"
+#include "base/Exception.h"
 
 // AudioFileManager loads and maps audio files to their
 // internal references (ids).  A point of contact for

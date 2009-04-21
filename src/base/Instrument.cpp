@@ -15,8 +15,8 @@
 
 #include "Instrument.h"
 #include "MidiDevice.h"
-#include "AudioPluginInstance.h"
-#include "AudioLevel.h"
+#include "base/AudioPluginInstance.h"
+#include "base/AudioLevel.h"
 
 #if (__GNUC__ < 3)
 #include <strstream>

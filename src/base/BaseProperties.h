@@ -14,7 +14,7 @@
 #ifndef _BASE_PROPERTIES_H_
 #define _BASE_PROPERTIES_H_
 
-#include "PropertyName.h"
+#include "base/PropertyName.h"
 
 namespace Rosegarden
 {

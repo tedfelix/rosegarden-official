@@ -29,7 +29,7 @@
 #include "RosegardenParameterBox.h"
 #include <map>
 #include <vector>
-#include "Composition.h"
+#include "base/Composition.h"
 
 #include <QString>
 #include <QCheckBox> // #include <QCheckBox> in QT4, thinking ahead

@@ -23,7 +23,7 @@
 #include <list>
 #include <utility>
 
-#include "Segment.h"
+#include "base/Segment.h"
 
 namespace Rosegarden {
 

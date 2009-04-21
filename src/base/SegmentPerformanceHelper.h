@@ -17,7 +17,7 @@
 #ifndef _SEGMENT_PERFORMANCE_HELPER_H_
 #define _SEGMENT_PERFORMANCE_HELPER_H_
 
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Composition.h" // for RealTime
 
 namespace Rosegarden 

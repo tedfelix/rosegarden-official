@@ -19,7 +19,7 @@
 #define _RG_RULER_SCALE_H_
 
 #include "Event.h"
-#include "Segment.h"
+#include "base/Segment.h"
 #include "Selection.h"
 
 namespace Rosegarden {

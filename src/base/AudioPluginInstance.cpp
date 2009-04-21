@@ -12,7 +12,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "AudioPluginInstance.h"
+#include "base/AudioPluginInstance.h"
 #include "Instrument.h"
 
 #include <iostream>

@@ -17,7 +17,7 @@
 #include "AudioPlayQueue.h"
 #include "misc/Debug.h"
 #include "PlayableAudioFile.h"
-#include "Profiler.h"
+#include "base/Profiler.h"
 
 //#define DEBUG_AUDIO_PLAY_QUEUE 1
 //#define FINE_DEBUG_AUDIO_PLAY_QUEUE 1

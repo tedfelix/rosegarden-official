@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -16,12 +16,10 @@
 #include <vector>
 #include <set>
 #include <QString>
-#include "Instrument.h"
+#include "base/Instrument.h"
 
 #ifndef _LADSPAPLUGININSTANCE_H_
 #define _LADSPAPLUGININSTANCE_H_
-
-#ifdef HAVE_LADSPA
 
 #include <ladspa.h>
 #include "RunnablePluginInstance.h"
@@ -124,8 +122,6 @@ protected:
 };
 
 }
-
-#endif // HAVE_LADSPA
 
 #endif // _LADSPAPLUGININSTANCE_H_
 

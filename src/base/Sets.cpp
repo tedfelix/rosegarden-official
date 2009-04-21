@@ -16,7 +16,7 @@
 #include "Sets.h"
 
 #include "Event.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include "Quantizer.h"
 
 namespace Rosegarden {

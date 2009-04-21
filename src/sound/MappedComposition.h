@@ -26,7 +26,7 @@
 // (sequencer suitable) versions of the core Events.
 //
 
-#include <Composition.h>
+#include "base/Composition.h"
 #include "MappedEvent.h"
 #include <set>
 #include <QDataStream>

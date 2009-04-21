@@ -22,8 +22,8 @@
 #include "RunnablePluginInstance.h"
 #include <jack/jack.h>
 #include "SoundDriver.h"
-#include "Instrument.h"
-#include "RealTime.h"
+#include "base/Instrument.h"
+#include "base/RealTime.h"
 #include "ExternalTransport.h"
 #include <QStringList>
 

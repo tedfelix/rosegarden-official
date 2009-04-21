@@ -12,7 +12,7 @@
   COPYING included with this distribution for more information.
 */
 
-#include "Instrument.h"
+#include "base/Instrument.h"
 #include "MappedDevice.h"
 #include "MappedCommon.h"
 

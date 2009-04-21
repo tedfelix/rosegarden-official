@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
   Rosegarden
   A sequencer and musical notation editor.
@@ -16,8 +17,6 @@
 
 #include "LADSPAPluginInstance.h"
 #include "LADSPAPluginFactory.h"
-
-#ifdef HAVE_LADSPA
 
 //#define DEBUG_LADSPA 1
 
@@ -422,7 +421,5 @@ LADSPAPluginInstance::cleanup()
 
 
 }
-
-#endif // HAVE_LADSPA
 
 

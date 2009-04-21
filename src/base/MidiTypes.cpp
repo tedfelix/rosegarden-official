@@ -14,7 +14,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "MidiTypes.h"
+#include "base/MidiTypes.h"
 
 namespace Rosegarden
 {

@@ -24,7 +24,7 @@
 #include <set>
 #include <vector>
 
-#include "NotationTypes.h"
+#include "base/NotationTypes.h"
 
 namespace Rosegarden
 {

@@ -697,7 +697,6 @@ AlsaDriver::generateInstruments()
 //        }
 //    } 
 
-#ifdef HAVE_DSSI
     // Create a number of soft synth Instruments
     //
     {
@@ -732,7 +731,6 @@ AlsaDriver::generateInstruments()
             m_devices.push_back(device);
         }
     }
-#endif
 
 #ifdef HAVE_LIBJACK
 

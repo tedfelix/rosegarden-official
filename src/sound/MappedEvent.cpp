@@ -19,10 +19,10 @@
 #include <QDir>
 
 #include "MappedEvent.h"
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include "Midi.h"
-#include "MidiTypes.h"
-#include "NotationTypes.h" // for Note::EventType
+#include "base/MidiTypes.h"
+#include "base/NotationTypes.h" // for Note::EventType
 
 #include <cassert>
 #include <cstdlib>

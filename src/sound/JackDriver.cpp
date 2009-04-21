@@ -18,8 +18,8 @@
 #include "AlsaDriver.h"
 #include "MappedStudio.h"
 #include "AudioProcess.h"
-#include "Profiler.h"
-#include "AudioLevel.h"
+#include "base/Profiler.h"
+#include "base/AudioLevel.h"
 #include "Audit.h"
 #include "PluginFactory.h"
 

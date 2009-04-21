@@ -20,7 +20,7 @@
 #include <QStringList>
 #include <vector>
 
-#include "RealTime.h"
+#include "base/RealTime.h"
 
 namespace Rosegarden
 {

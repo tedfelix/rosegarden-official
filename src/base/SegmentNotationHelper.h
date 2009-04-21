@@ -17,7 +17,7 @@
 #ifndef _SEGMENT_NOTATION_HELPER_H_
 #define _SEGMENT_NOTATION_HELPER_H_
 
-#include "Segment.h"
+#include "base/Segment.h"
 
 namespace Rosegarden 
 {

@@ -18,7 +18,7 @@
 #include <list>
 #include <QStringList>
 
-#include "Device.h"
+#include "base/Device.h"
 #include "MappedComposition.h"
 #include "MappedInstrument.h"
 #include "MappedDevice.h"

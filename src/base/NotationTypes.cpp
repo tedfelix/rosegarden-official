@@ -16,8 +16,8 @@
 
 #include <cstdio> // needed for sprintf()
 #include "NotationRules.h"
-#include "NotationTypes.h"
-#include "BaseProperties.h"
+#include "base/NotationTypes.h"
+#include "base/BaseProperties.h"
 #include <iostream>
 #include <cstdlib> // for atoi
 #include <limits.h> // for SHRT_MIN

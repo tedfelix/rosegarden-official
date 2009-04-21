@@ -11,7 +11,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "BaseProperties.h"
+#include "base/BaseProperties.h"
 #include <vector>
 
 #if (__GNUC__ < 3)
