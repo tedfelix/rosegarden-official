@@ -9,6 +9,7 @@ AC_CONFIG_SRCDIR(src/base/Composition.h)
 
 AC_LANG_CPLUSPLUS
 
+AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
@@ -61,9 +62,17 @@ if test x$CUT = x ; then
        	AC_MSG_ERROR([Failed to find required cut program.])
 fi
 
-BUILDFLAGS="-DNDEBUG -DNO_TIMING -DBUILD_RELEASE"
+DEBUGFLAGS="-DDEBUG -DBUILD_DEBUG -DWANT_TIMING"
+RELEASEFLAGS="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
+
+if test "x$GCC" = "xyes"; then
+	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1"
+	RELEASEFLAGS="$RELEASEFLAGS -g0 -O2 -Wall"
+fi
+
+BUILDFLAGS="$RELEASEFLAGS"
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [default=no]])],[AC_MSG_NOTICE([enabling debug build])
-BUILDFLAGS="-DDEBUG -O0 -DBUILD_DEBUG -DWANT_TIMING"])
+BUILDFLAGS="$DEBUGFLAGS"])
 CXXFLAGS="$CXXFLAGS $BUILDFLAGS"
 
 AC_SUBST(PERL)

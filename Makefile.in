@@ -22,7 +22,6 @@ LRELEASE	:= @LRELEASE@
 
 CXXFLAGS	:= @CXXFLAGS@ \
 		   @HAVES@ \
-		   @CFLAGS@ \
 		   @QT_CXXFLAGS@ \
 		   @JACK_CFLAGS@ \
 		   @ALSA_CFLAGS@ \
