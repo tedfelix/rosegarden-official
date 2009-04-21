@@ -103,8 +103,12 @@ clean:
 test:
 	echo $(QSOURCES)
 
-dependencies:
-	sh ./make-dependencies
+dependencies: $(SOURCES) $(HEADERS)
+	@echo Rebuilding dependencies file...
+	@rm -f $@ 
+	@touch $@
+	@echo $(SOURCES) | xargs --max-args=100 makedepend -f$@ -a -Y -Isrc >/dev/null 2>&1
+	@echo Done
 
 qrc:
 	bash ./scripts/rebuild-qrc
