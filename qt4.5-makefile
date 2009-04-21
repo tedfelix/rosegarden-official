@@ -99,6 +99,11 @@ test:
 dependencies:
 	sh ./make-dependencies
 
+qrc:
+	bash ./scripts/rebuild-qrc
+	rm -f data/data.o
+	rm -f data/data.cpp
+
 .PHONY: instrument-ts menu-ts ts ts-noobsolete locale
 
 include dependencies
