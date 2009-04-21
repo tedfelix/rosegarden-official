@@ -63,7 +63,7 @@ RCS		:= $(wildcard data/rc/*.rc)
 PRESETS		:= $(wildcard data/presets/*.xml)
 TRANSLATIONS	:= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
 
-BUILDKEY	:= $(shell cat $(SOURCES) $(HEADERS) | $(SHA1SUM) | $(CUT) -c1-10)
+BUILDKEY	:= $(shell cat $(SOURCES) | $(SHA1SUM) | $(CUT) -c1-10)
 CXXFLAGS	:= $(CXXFLAGS) -D'BUILDKEY="$(BUILDKEY)"'
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
