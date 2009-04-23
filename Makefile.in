@@ -53,6 +53,7 @@ RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.
 QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
 HEADERS		:= $(filter-out templates/template.h, $(wildcard src/*.h src/*/*.h src/*/*/*.h src/*/*/*/*.h src/*/*/*/*/*.h))
 SOURCES		:= $(QRCSOURCES) $(filter-out templates/template.cpp, $(wildcard src/*.cpp src/*/*.cpp src/*/*/*.cpp src/*/*/*/*.cpp src/*/*/*/*/*.cpp))
+KEYSOURCES	:= $(filter-out data/data.cpp, $(SOURCES))
 QHEADERS	:= $(shell fgrep -l Q_OBJECT $(HEADERS))
 OBJECTS		:= $(patsubst %.cpp,%.o,$(SOURCES))
 QSOURCES	:= $(patsubst %.h,%.moc,$(QHEADERS))
@@ -62,7 +63,7 @@ RCS		:= $(wildcard data/rc/*.rc)
 PRESETS		:= $(wildcard data/presets/*.xml)
 TRANSLATIONS	:= $(filter-out locale/rosegarden.ts, $(wildcard locale/*.ts))
 
-BUILDKEY	:= $(shell cat $(SOURCES) | $(SHA1SUM) | $(CUT) -c1-10)
+BUILDKEY	:= $(shell cat $(KEYSOURCES) | $(SHA1SUM) | $(CUT) -c1-10)
 CXXFLAGS	:= $(CXXFLAGS) -D'BUILDKEY="$(BUILDKEY)"'
 
 all:	$(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES) rosegarden
