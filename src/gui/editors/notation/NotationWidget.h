@@ -24,8 +24,6 @@
 #include <QWidget>
 #include <vector>
 
-class QGraphicsView;
-
 namespace Rosegarden
 {
 
@@ -36,6 +34,9 @@ class Note;
 class NotationToolBox;
 class NotationTool;
 class NotationMouseEvent;
+class Panner;
+class Panned;
+class ZoomableRulerScale;
 
 class NotationWidget : public QWidget,
                        public SelectionManager
@@ -92,11 +93,17 @@ protected slots:
     void slotDispatchMouseMove(const NotationMouseEvent *);
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
 
+    void slotZoomInFromPanner();
+    void slotZoomOutFromPanner();
+
 private:
     RosegardenDocument *m_document; // I do not own this
-    QGraphicsView *m_view; // I own this
-    QGraphicsView *m_hpanner; // I own this
+    Panned *m_view; // I own this
+    Panner *m_hpanner; // I own this
     NotationScene *m_scene; // I own this
+    double m_hZoomFactor;
+    double m_vZoomFactor;
+    ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
 };

@@ -120,6 +120,12 @@ NotationScene::setNotationWidget(NotationWidget *w)
     m_widget = w;
 }
 
+const RulerScale *
+NotationScene::getRulerScale() const
+{
+    return m_hlayout;
+}
+
 void
 NotationScene::setStaffs(RosegardenDocument *document,
                           vector<Segment *> segments)

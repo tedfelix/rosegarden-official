@@ -26,7 +26,12 @@
 #include <QGridLayout>
 #include <QScrollBar>
 
+#include "base/RulerScale.h"
+
 #include "document/RosegardenDocument.h"
+
+#include "gui/widgets/Panner.h"
+#include "gui/widgets/Panned.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -37,24 +42,36 @@ namespace Rosegarden
 NotationWidget::NotationWidget() :
     m_document(0),
     m_view(0),
-    m_scene(0)
+    m_scene(0),
+    m_hZoomFactor(1),
+    m_vZoomFactor(1),
+    m_referenceScale(0)
 {
     QGridLayout *layout = new QGridLayout;
     setLayout(layout);
 
-    m_view = new QGraphicsView;
+    m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
     layout->addWidget(m_view, 0, 0);
 
-    m_hpanner = new QGraphicsView;
+    m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(80);
-    m_hpanner->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_hpanner->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    m_hpanner->setInteractive(false);
     m_hpanner->setBackgroundBrush(Qt::white);
 //    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
 //                              QPainter::SmoothPixmapTransform);
     layout->addWidget(m_hpanner, 1, 0);
+
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_hpanner, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
+            m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(zoomIn()),
+            this, SLOT(slotZoomInFromPanner()));
+
+    connect(m_hpanner, SIGNAL(zoomOut()),
+            this, SLOT(slotZoomOutFromPanner()));
 
     m_toolBox = new NotationToolBox(this);
     
@@ -78,10 +95,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
 {
     m_document = document;
 
+    delete m_referenceScale;
+
     delete m_scene;
     m_scene = new NotationScene();
     m_scene->setNotationWidget(this);
     m_scene->setStaffs(document, segments);
+
+    m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
 
     connect(m_scene, SIGNAL(mousePressed(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMousePress(const NotationMouseEvent *)));
@@ -186,6 +207,26 @@ void
 NotationWidget::setSelection(EventSelection *selection, bool preview)
 {
     if (m_scene) m_scene->setSelection(selection, preview);
+}
+
+void
+NotationWidget::slotZoomInFromPanner() 
+{
+    m_hZoomFactor /= 1.1;
+    m_vZoomFactor /= 1.1;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+}
+
+void
+NotationWidget::slotZoomOutFromPanner() 
+{
+    m_hZoomFactor *= 1.1;
+    m_vZoomFactor *= 1.1;
+    if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
+    m_view->resetMatrix();
+    m_view->scale(m_hZoomFactor, m_vZoomFactor);
 }
 
 }

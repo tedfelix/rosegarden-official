@@ -44,6 +44,7 @@ class NotationElement;
 class NotationWidget;
 class RosegardenDocument;
 class Segment;
+class RulerScale;
 
 class NotationScene : public QGraphicsScene,
                       public CompositionObserver,
@@ -70,6 +71,7 @@ public:
     virtual EventSelection *getSelection() const { return 0; } //!!!
     virtual void setSelection(EventSelection* s, bool preview) { } //!!!
 
+    const RulerScale *getRulerScale() const;
 
     /**
      * Show and sound the given note.  The height is used for display,
