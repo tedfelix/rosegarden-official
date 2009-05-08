@@ -288,9 +288,9 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
-    m_headersPage->apply();
-
     settings.endGroup();
+
+    m_headersPage->apply();
 }
  
 void
