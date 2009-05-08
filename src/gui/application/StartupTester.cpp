@@ -76,12 +76,12 @@ StartupTester::run()
     procArgs << "--conftest";
 //    m_proc->execute("rosegarden-audiofile-importer", procArgs);
     m_proc->start("rosegarden-audiofile-importer", procArgs);
-	m_proc->waitForFinished();
+    m_proc->waitForFinished();
 
-	// Wait for stdout to be processed by stdoutReceived
-	// Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
-	while(m_proc->bytesAvailable() > 0)
-		usleep(10000);
+    // Wait for stdout to be processed by stdoutReceived
+    // Note if this isn't done, this thread will go ahead and delete m_proc before the stdoutReceived slot is called
+    while(m_proc->bytesAvailable() > 0)
+        usleep(10000);
 
     if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
         RG_DEBUG << "StartupTester - No audio file importer available" << endl;
@@ -104,11 +104,11 @@ StartupTester::run()
     procArgs << "--conftest";
 //    m_proc->execute("rosegarden-project-package", procArgs);
     m_proc->start("rosegarden-project-package", procArgs);
-	m_proc->waitForFinished();
+    m_proc->waitForFinished();
 
-	// Wait for stdout to be processed by stdoutReceived
-	while(m_proc->bytesAvailable() > 0)
-		usleep(10000);
+    // Wait for stdout to be processed by stdoutReceived
+    while(m_proc->bytesAvailable() > 0)
+        usleep(10000);
 
     if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
         m_haveProjectPackager = false;
@@ -127,32 +127,31 @@ StartupTester::run()
     //setup "rosegarden-lilypondview" process
     m_proc = new QProcess();
     m_stdoutBuffer = "";
-//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
     QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
                      this, SLOT(stdoutReceived()));
-    procArgs << "--conftest";
-//    m_proc->execute("rosegarden-lilypondview", procArgs);
-    m_proc->start("rosegarden-lilypondview", procArgs);
-	m_proc->waitForFinished();
+    procArgs << "--version";
+    m_proc->start("lilypond", procArgs);
+    m_proc->waitForFinished();
 
-	// Wait for stdout to be processed by stdoutReceived
-	while(m_proc->bytesAvailable() > 0)
-		usleep(10000);
+    // Wait for stdout to be processed by stdoutReceived
+    while(m_proc->bytesAvailable() > 0)
+        usleep(10000);
 
     if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
-        RG_DEBUG << "StartupTester - No lilypondview available" << endl;
+        RG_DEBUG << "StartupTester - No lilypond available" << endl;
         m_haveLilyPondView = false;
         parseStdoutBuffer(m_lilyPondViewMissing);
     } else {
-        RG_DEBUG << "StartupTester - lilypondview OK" << endl;
+        RG_DEBUG << "StartupTester - lilypond OK" << endl;
         m_haveLilyPondView = true;
-        QRegExp re("LilyPond version: ([^\n]*)");
+        QRegExp re("LilyPond ([^\n]*)");
         if (re.search(m_stdoutBuffer) != -1) {
             LilyPondOptionsDialog::setDefaultLilyPondVersion(re.cap(1));
+            RG_DEBUG << "StartupTester using LilyPond version: " << re.cap(1) << endl;
         }
     }
     delete m_proc;
-    	
+        
     m_lilyPondViewMutex.unlock();
 }
 
@@ -175,11 +174,9 @@ StartupTester::isReady()
 }
 
 void
-//StartupTester::stdoutReceived(QProcess *, char *buffer, int len)
 StartupTester::stdoutReceived()
 {
-//    m_stdoutBuffer += QString::fromLatin1(buffer, len);
-	m_stdoutBuffer.append(m_proc->readAllStandardOutput());
+    m_stdoutBuffer.append(m_proc->readAllStandardOutput());
 }
 
 void
@@ -231,17 +228,17 @@ StartupTester::isVersionNewerThan(QString a, QString b)
     int be = blist.size();
     int e = std::max(ae, be);
     for (int i = 0; i < e; ++i) {
-	int an = 0, bn = 0;
-	if (i < ae) {
-	    an = alist[i].toInt();
-	    if (an == 0) an = -1; // non-numeric field -> "-pre1" etc
-	}
-	if (i < be) {
-	    bn = blist[i].toInt();
-	    if (bn == 0) bn = -1;
-	}
-	if (an < bn) return false;
-	if (an > bn) return true;
+    int an = 0, bn = 0;
+    if (i < ae) {
+        an = alist[i].toInt();
+        if (an == 0) an = -1; // non-numeric field -> "-pre1" etc
+    }
+    if (i < be) {
+        bn = blist[i].toInt();
+        if (bn == 0) bn = -1;
+    }
+    if (an < bn) return false;
+    if (an > bn) return true;
     }
     return false;
 }

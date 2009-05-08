@@ -62,7 +62,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         m_appendLabel(0)
 {
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     QFrame *frame;
     QGridLayout *layout;
@@ -88,7 +88,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_client->addItem(tr("Notation editor"));
     m_client->addItem(tr("Matrix editor"));
     m_client->addItem(tr("Event List editor"));
-    m_client->setCurrentIndex( settings.value("doubleclickclient", NotationView).toUInt() );
+    m_client->setCurrentIndex(settings.value("doubleclickclient", NotationView).toUInt());
 
     layout->addWidget(m_client, row, 1, row- row+1, 2);
     ++row;
@@ -98,7 +98,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_countIn = new QSpinBox(frame);
     connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
-    m_countIn->setValue( settings.value("countinbars", 0).toUInt() );
+    m_countIn->setValue(settings.value("countinbars", 0).toUInt());
     m_countIn->setMaximum(10);
     m_countIn->setMinimum(0);
     layout->addWidget(m_countIn, row, 1, row- row+1, 2);
@@ -114,7 +114,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_autoSave->addItem(tr("Every half an hour"));
     m_autoSave->addItem(tr("Never"));
 
-    bool doAutoSave = qStrToBool( settings.value("autosave", "true" ) ) ;
+    bool doAutoSave = qStrToBool(settings.value("autosave", "true")) ;
     int autoSaveInterval = settings.value("autosaveinterval", 300).toUInt() ;
     if (!doAutoSave || autoSaveInterval == 0) {
         m_autoSave->setCurrentIndex(4); // off
@@ -136,7 +136,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_appendLabel = new QCheckBox(frame);
     connect(m_appendLabel, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    m_appendLabel->setChecked( qStrToBool( settings.value("appendlabel", "true" ) ) );
+    m_appendLabel->setChecked(qStrToBool(settings.value("appendlabel", "true")));
     layout->addWidget(m_appendLabel, row, 1, row- row+1, 2);
     row++;
     settings.endGroup();
@@ -144,7 +144,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     // JACK Transport
     //
 #ifdef HAVE_LIBJACK
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
     label = new QLabel(tr("Use JACK transport"), frame);
     layout->addWidget(label, row, 0);
@@ -160,8 +160,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
         m_jackTransport->addItem(tr("Sync, and offer timebase master"));
     */
 
-    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
-    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
+    bool jackMaster = qStrToBool(settings.value("jackmaster", "false")) ;
+    bool jackTransport = qStrToBool(settings.value("jacktransport", "false")) ;
 /*
     if (jackTransport)
         m_jackTransport->setCurrentIndex(1);
@@ -174,7 +174,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     settings.endGroup();
 #endif
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     layout->setRowMinimumHeight(row, 20);
     ++row;
@@ -215,7 +215,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     addTab(frame, tr("Behavior"));
 
     //
-    // "Appearance" tab
+    // "Presentation" tab
     //
     frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);
@@ -236,8 +236,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
                                RosegardenParameterArea::CLASSIC_STYLE);
     m_sidebarStyle->addItem(tr("Tabbed"),
                                RosegardenParameterArea::TAB_BOX_STYLE);
-    m_sidebarStyle->setCurrentIndex( settings.value("sidebarstyle",
-                                   0).toUInt() );
+    m_sidebarStyle->setCurrentIndex(settings.value("sidebarstyle",
+                                   0).toUInt());
     layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
 
     //!!! This needs to be removed eventually, and all associated logic cleaned
@@ -253,7 +253,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     connect(m_nameStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_nameStyle->addItem(tr("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->addItem(tr("Localized (where available)"));
-    m_nameStyle->setCurrentIndex( settings.value("notenamestyle", Local).toUInt() );
+    m_nameStyle->setCurrentIndex(settings.value("notenamestyle", Local).toUInt());
     layout->addWidget(m_nameStyle, row, 1, row- row+1, 3);
     ++row;
 /*
@@ -283,38 +283,84 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_backgroundTextures->setChecked(qStrToBool(settings.value("backgroundtextures", true)));
 
     settings.endGroup();
-    settings.beginGroup( MatrixViewConfigGroup );
+    settings.beginGroup(MatrixViewConfigGroup);
 
     m_matrixBackgroundTextures->setChecked(qStrToBool(settings.value(
             "backgroundtextures-1.6-plus", true)));
     settings.endGroup();
 
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
     m_notationBackgroundTextures->setChecked(qStrToBool(settings.value(
             "backgroundtextures", true)));
     settings.endGroup();
 
-    settings.beginGroup( GeneralOptionsConfigGroup );
-    ++row;
-
-    layout->addWidget(new QLabel(tr("Use bundled Klearlook theme"), frame), row, 0);
-    m_globalStyle = new QComboBox(frame);
-    connect(m_globalStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_globalStyle->addItem(tr("Never"));
-    m_globalStyle->addItem(tr("When not running under KDE"));
-    m_globalStyle->addItem(tr("Always"));
-    m_globalStyle->setCurrentIndex( settings.value("Install Own Theme", 1).toUInt() );
-    layout->addWidget(m_globalStyle, row, 1, row- row+1, 3);
-
-    //!!! this too is obsolete, and needs to be neatly expunged one day
-    m_globalStyle->hide();
     ++row;
 
     layout->setRowStretch(row, 10);
 
     addTab(frame, tr("Presentation"));
 
+
+    //
+    // "External Applications" tab
+    //
+
+    frame = new QFrame(m_tabWidget);
+    frame->setContentsMargins(10, 10, 10, 10);
+    layout = new QGridLayout(frame);
+    layout->setSpacing(5);
+
+    row = 0;
+
+    layout->setRowMinimumHeight(row, 15);
+    ++row;
+
+    QLabel *explanation = new QLabel(tr("<qt>Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a \"run command\" box (typically <b>Alt+F2</b>) which should allow Rosegarden to make use of it when necessary.<br></qt>"), frame);
+    explanation->setWordWrap(true);
+    layout->addWidget(explanation, row, 0, 1, 4);
+    ++row;
+
+    layout->addWidget(new QLabel(tr("PDF viewer"),
+                      frame), row, 0);
+
+    m_pdfViewer = new QComboBox(frame);
+    connect(m_pdfViewer, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
+    m_pdfViewer->addItem(tr("Evince (GNOME)"));
+    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
+    m_pdfViewer->addItem(tr("KPDF (KDE 3.x)"));
+    m_pdfViewer->setToolTip(tr("Used to preview generated LilyPond output"));
+
+    layout->addWidget(m_pdfViewer, row, 1, 1, 3);
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Command-line file printing utility"),
+                      frame), row, 0);
+
+    m_filePrinter = new QComboBox(frame);
+    connect(m_filePrinter, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    m_filePrinter->addItem(tr("KPrinter (KDE)"));
+    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
+    m_filePrinter->addItem(tr("lpr (no GUI)"));
+    m_filePrinter->addItem(tr("lp (no GUI)"));
+    m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
+
+    layout->addWidget(m_filePrinter, row, 1, 1, 3);
+    ++row;
+
+    settings.beginGroup(ExternalApplicationsConfigGroup);
+    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", Okular).toUInt());
+    m_filePrinter->setCurrentIndex(settings.value("fileprinter", KPrinter).toUInt());
     settings.endGroup();
+
+    ++row;
+
+
+
+    layout->setRowStretch(row, 10);
+
+    addTab(frame, tr("External Applications"));
+
 }
 
 void
@@ -327,16 +373,28 @@ GeneralConfigurationPage::slotShowStatus()
 void GeneralConfigurationPage::apply()
 {
     QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
+
+    // tacking the newest external applications settings up here at the top so
+    // they're easier to keep track of while putting this together--feel free to
+    // relocate this code if this offends your sensibilities
+    settings.beginGroup(ExternalApplicationsConfigGroup);
+
+    int pdfViewerIndex = getPdfViewer();
+    settings.setValue("pdfviewer", pdfViewerIndex);
+
+    int filePrinterIndex = getFilePrinter();
+    settings.setValue("fileprinter", filePrinterIndex);
+
+    settings.endGroup();
+
+
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     int countIn = getCountInSpin();
     settings.setValue("countinbars", countIn);
 
     int client = getDblClickClient();
     settings.setValue("doubleclickclient", client);
-
-    int globalstyle = m_globalStyle->currentIndex();
-    settings.setValue("Install Own Theme", globalstyle);
 
     int namestyle = getNoteNameStyle();
     settings.setValue("notenamestyle", namestyle);
@@ -345,46 +403,46 @@ void GeneralConfigurationPage::apply()
 */
     bool texturesChanged = false;
     bool mainTextureChanged = false;
-    //### settings.beginGroup( GeneralOptionsConfigGroup );
+    //### settings.beginGroup(GeneralOptionsConfigGroup);
 
-    if ( qStrToBool( settings.value("backgroundtextures", "true" ) )  !=
+    if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
         m_backgroundTextures->isChecked()) {
         texturesChanged = true;
         mainTextureChanged = true;
         settings.endGroup();
     } else {
         settings.endGroup();
-        settings.beginGroup( MatrixViewConfigGroup );
-        if ( qStrToBool( settings.value("backgroundtextures-1.6-plus", "false" ) )  !=
+        settings.beginGroup(MatrixViewConfigGroup);
+        if (qStrToBool(settings.value("backgroundtextures-1.6-plus", "false"))  !=
             m_matrixBackgroundTextures->isChecked()) {
             texturesChanged = true;
             settings.endGroup();
         } else {
             settings.endGroup();
-            settings.beginGroup( NotationViewConfigGroup );
-            if ( qStrToBool( settings.value("backgroundtextures", "true" ) )  !=
+            settings.beginGroup(NotationViewConfigGroup);
+            if (qStrToBool(settings.value("backgroundtextures", "true"))  !=
                 m_notationBackgroundTextures->isChecked()) {
                 texturesChanged = true;
             }
             settings.endGroup();
         }
     }
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     settings.setValue("backgroundtextures", m_backgroundTextures->isChecked());
     settings.endGroup();
 
-    settings.beginGroup( MatrixViewConfigGroup );
+    settings.beginGroup(MatrixViewConfigGroup);
 
     settings.setValue("backgroundtextures-1.6-plus", m_matrixBackgroundTextures->isChecked());
     settings.endGroup();
 
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
     settings.setValue("backgroundtextures", m_notationBackgroundTextures->isChecked());
     settings.endGroup();
 
-    settings.beginGroup( GeneralOptionsConfigGroup );
+    settings.beginGroup(GeneralOptionsConfigGroup);
 
     int sidebarStyle = m_sidebarStyle->currentIndex();
     settings.setValue("sidebarstyle", sidebarStyle);
@@ -415,7 +473,7 @@ void GeneralConfigurationPage::apply()
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Write the JACK entry
     //

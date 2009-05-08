@@ -59,6 +59,22 @@ public:
         Local
     };
 
+    enum PdfViewer
+    {
+        Okular,
+        Evince,
+        Acroread,
+        KPDF
+    };
+
+    enum FilePrinter
+    {
+        KPrinter,
+        GtkLP,
+        Lpr,
+        Lp
+    };
+
     GeneralConfigurationPage(RosegardenDocument *doc,
                              QWidget *parent=0, const char *name=0);
 
@@ -80,6 +96,8 @@ protected:
     int getDblClickClient()         { return m_client->currentIndex(); }
     int getNoteNameStyle()          { return m_nameStyle->currentIndex(); }
     int getAppendLabel()            { return m_appendLabel->isChecked(); }
+    int getPdfViewer()              { return m_pdfViewer->currentIndex(); }
+    int getFilePrinter()            { return m_filePrinter->currentIndex(); }
     
     //--------------- Data members ---------------------------------
     RosegardenDocument* m_doc;
@@ -96,6 +114,9 @@ protected:
     QComboBox* m_globalStyle;
     QCheckBox* m_appendLabel;
     QCheckBox *m_jackTransport;
+
+    QComboBox *m_pdfViewer;
+    QComboBox *m_filePrinter;
 
 };
 

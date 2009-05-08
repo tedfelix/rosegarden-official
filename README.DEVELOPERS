@@ -1,0 +1,34 @@
+The new build system has some targets that are only used for maintenance during
+development work, and aren't of any interest to end users or casual followers of
+the development line of code.
+
+MAKE TARGET       FUNCTION
+-----------       --------
+
+ts                Update translation files.  Run before editing one of the .ts
+                  files so that is is up to date before you begin work.  (Heikki
+                  is this correct?)
+
+ts-noobsolete     Update translations and drop obsolete translations.  Run to
+                  clean up any old translations after making big string changes in
+                  the course of development.
+
+locale            Release all translations.  Run after editing any of the .ts
+                  files or applying a patch from a translator.
+
+qrc               Rebuild data/data.qrc to include all .pfa .png .qss .rc
+                  .rg .rgd .xml .xpm files under the data/ directory that have
+                  been added to the Subversion repository.  Warns you if any
+                  files exist which have not been added to the respository, and
+                  does not add these files.  (Files must be added before they
+                  can be built into the resource bundle so as to make it
+                  difficult to commit a version of data.qrc that refers to files
+                  that only exist in the developer's local working copy, which
+                  breaks the repository for everyone else.)
+
+tarball           Prepare a tarball for release, stripping out unwanted
+                  development files, and giving the tarball an appropriate name.
+                  NOTE: this hasn't actually been ported to the new build system
+                  yet!!
+
+

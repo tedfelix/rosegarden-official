@@ -136,6 +136,7 @@
 #include "gui/general/FileSource.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/AutoSaveFinder.h"
+#include "gui/general/LilyPondProcessor.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
@@ -4675,12 +4676,13 @@ std::map<QProcess *, QTemporaryFile *> RosegardenMainWindow::m_lilyTempFileMap;
 
 void RosegardenMainWindow::slotPrintLilyPond()
 {
-    TmpStatusMsg msg(tr("Printing LilyPond file..."), this);
+    TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
     QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
+        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
         delete file;
     }
     QString filename = file->fileName(); // must call this before close()
@@ -4688,7 +4690,7 @@ void RosegardenMainWindow::slotPrintLilyPond()
     if (!exportLilyPondFile(filename, true)) {
         return ;
     }
-    //setup "rosegarden-lilypondview" process
+/*    //setup "rosegarden-lilypondview" process
     QProcess *proc = new QProcess;
     QStringList procArgs;
     procArgs << "--graphical";
@@ -4697,7 +4699,11 @@ void RosegardenMainWindow::slotPrintLilyPond()
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->start("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit
+    proc->start("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit*/
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
+    if (dialog->exec() != QDialog::Accepted) {
+        return;
+    }
 }
 
 void RosegardenMainWindow::slotPreviewLilyPond()
@@ -4716,7 +4722,7 @@ void RosegardenMainWindow::slotPreviewLilyPond()
         return ;
     }
     //setup "rosegarden-lilypondview" process
-    QProcess *proc = new QProcess;
+    /*QProcess *proc = new QProcess;
     QStringList procArgs;
     procArgs << "--graphical";
     procArgs << "--pdf";
@@ -4724,7 +4730,12 @@ void RosegardenMainWindow::slotPreviewLilyPond()
     connect(proc, SIGNAL(processExited(QProcess *)),
             this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
     m_lilyTempFileMap[proc] = file;
-    proc->execute("rosegarden-lilypondview", procArgs);
+    proc->execute("rosegarden-lilypondview", procArgs);*/
+
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
+    if (dialog->exec() != QDialog::Accepted) {
+        return;
+    }
 }
 
 void RosegardenMainWindow::slotLilyPondViewProcessExited(QProcess *p)
