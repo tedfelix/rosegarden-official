@@ -114,21 +114,21 @@ LilyPondExporter::readConfigVariables(void)
 {
     // grab settings info
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(LilyPondExportConfigGroup);
 
     m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
-    m_paperLandscape = qStrToBool( settings.value("lilypaperlandscape", "false" ) ) ;
+    m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false")) ;
     m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
-    m_raggedBottom = qStrToBool( settings.value("lilyraggedbottom", "false" ) ) ;
+    m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
-    m_exportLyrics = qStrToBool( settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT ) ) ;
+    m_exportLyrics = qStrToBool(settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT)) ;
     m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt() ;
-    m_exportBeams = qStrToBool( settings.value("lilyexportbeamings", "false" ) ) ;
-    m_exportStaffGroup = qStrToBool( settings.value("lilyexportstaffbrackets", "true" ) ) ;
+    m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false")) ;
+    m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true")) ;
 
     m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_6).toUInt() ;
-    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS ).toUInt() ;
-    m_chordNamesMode = qStrToBool( settings.value("lilychordnamesmode", "false" ) ) ;
+    m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt() ;
+    m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false")) ;
     settings.endGroup();
 }
 
@@ -185,15 +185,15 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
             if (i.getIndicationType() == Indication::Slur) {
                 if ((*m)->get
                         <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^( ";
+                    str << "^(";
                 else
-                    str << "_( ";
+                    str << "_(";
             } else if (i.getIndicationType() == Indication::PhrasingSlur) {
                 if ((*m)->get
                         <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^\\( ";
+                    str << "^\\(";
                 else
-                    str << "_\\( ";
+                    str << "_\\(";
             } else if (i.getIndicationType() == Indication::Crescendo) {
                 str << "\\< ";
             } else if (i.getIndicationType() == Indication::Decrescendo) {
@@ -447,7 +447,7 @@ LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
 
         inStr = protectIllegalChars(Marks::getFingeringFromMark(eventMark));
 
-        if (inStr != "0" && inStr != "1" && inStr != "2" && inStr != "3" && inStr != "4" && inStr != "5" && inStr != "+" ) {
+        if (inStr != "0" && inStr != "1" && inStr != "2" && inStr != "3" && inStr != "4" && inStr != "5" && inStr != "+") {
             inStr = "\\markup { \\finger \"" + inStr + "\" } ";
         }
 
@@ -527,7 +527,7 @@ LilyPondExporter::protectIllegalChars(std::string inStr)
 struct MarkerComp {
     // Sort Markers by time
     // Perhaps this should be made generic with a template?
-    bool operator()( Marker *a, Marker *b ) { 
+    bool operator()(Marker *a, Marker *b) { 
         return a->getTime() < b->getTime();
     }
 };
@@ -884,20 +884,20 @@ LilyPondExporter::write()
     }
     // Markers
     // Skip until marker, make sure there's only one marker per measure
-    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+    if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
         str << indent(col++) << "markers = {" << std::endl;
         timeT prevMarkerTime = 0;
 
         // Need the markers sorted by time
-        Composition::markercontainer markers( m_composition->getMarkers() ); // copy
-        std::sort( markers.begin(), markers.end(), MarkerComp() );
+        Composition::markercontainer markers(m_composition->getMarkers()); // copy
+        std::sort(markers.begin(), markers.end(), MarkerComp());
         Composition::markerconstiterator i_marker = markers.begin();
 
-        while  ( i_marker != markers.end() ) {
+        while  (i_marker != markers.end()) {
             timeT markerTime = m_composition->getBarStartForTime((*i_marker)->getTime());
             RG_DEBUG << "Marker: " << (*i_marker)->getTime() << " previous: " << prevMarkerTime << endl;
             // how to cope with time signature changes?
-            if ( markerTime > prevMarkerTime ) {
+            if (markerTime > prevMarkerTime) {
                 str << indent(col);
                 writeSkip(m_composition->getTimeSignatureAt(markerTime),
                         markerTime, markerTime - prevMarkerTime, false, str);
@@ -1010,7 +1010,7 @@ LilyPondExporter::write()
 	    InstrumentId instrumentId = track->getInstrument();
 	    bool isMidiTrack = instrumentId >= MidiInstrumentBase;
     
-            if (isMidiTrack && ( // Skip non-midi tracks.
+            if (isMidiTrack && (// Skip non-midi tracks.
 		(m_exportSelection == EXPORT_ALL_TRACKS) || 
                 ((m_exportSelection == EXPORT_NONMUTED_TRACKS) && (!track->isMuted())) ||
                 ((m_exportSelection == EXPORT_SELECTED_TRACK) && (m_view != NULL) &&
@@ -1088,11 +1088,11 @@ LilyPondExporter::write()
 		            chord.replace(QRegExp("h"), "b");
 
 		            // DEBUG: str << " %{ '" << chord.toUtf8() << "' %} ";
-                            QRegExp rx( "^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$" );
-		            if ( rx.search( chord ) != -1 ) {
+                            QRegExp rx("^([a-g]([ei]s)?)([:](m|dim|aug|maj|sus|\\d+|[.^]|[+-])*)?(/[+]?[a-g]([ei]s)?)?$");
+		            if (rx.search(chord) != -1) {
 				// The chord duration is zero, but the chord
 				// intervals is given with skips (see below).
-                                QRegExp rxStart( "^([a-g]([ei]s)?)" );
+                                QRegExp rxStart("^([a-g]([ei]s)?)");
 		                chord.replace(QRegExp(rxStart), QString("\\1") + QString("4*0"));
                             } else {
 				// Skip improper chords.
@@ -1115,9 +1115,9 @@ LilyPondExporter::write()
                             lastTime = myTime;
 			}
 		    } // for
-                    if ( numberOfChords >= 0 ) {
+                    if (numberOfChords >= 0) {
 			writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, compositionEndTime - lastTime, false, str);
-			if ( numberOfChords == 1) str << "s8 ";
+			if (numberOfChords == 1) str << "s8 ";
 			str << std::endl;
 	                str << indent(--col) << "} % ChordNames " << std::endl;
                     }
@@ -1168,7 +1168,7 @@ LilyPondExporter::write()
                      */
                     str << std::endl << indent(col)
                         << "\\context Staff = \"track "
-                        << (trackPos + 1) << (staffName.str() == "" ? "" : ", " )
+                        << (trackPos + 1) << (staffName.str() == "" ? "" : ", ")
                         << staffName.str() << "\" ";
 
                     str << "<< " << std::endl;
@@ -1226,7 +1226,7 @@ LilyPondExporter::write()
                     if (tempoCount > 0) {
                         str << indent(col) << "\\new Voice \\globalTempo" << std::endl;
                     }
-                    if ( m_exportMarkerMode != EXPORT_NO_MARKERS ) {
+                    if (m_exportMarkerMode != EXPORT_NO_MARKERS) {
                         str << indent(col) << "\\new Voice \\markers" << std::endl;
                     }
 
@@ -1459,14 +1459,14 @@ LilyPondExporter::write()
 			    }
 		        }
 
-			text.replace( QRegExp(" _+([^ ])") , " \\1" );
-			text.replace( "\"_\"" , " " );
+			text.replace(QRegExp(" _+([^ ])") , " \\1");
+			text.replace("\"_\"" , " ");
 		
 		        // Do not create empty context for lyrics.
 		        // Does this save some vertical space, as was written
 		        // in earlier comment?
-		        QRegExp rx( "\"" );
-		        if ( rx.search( text ) != -1 ) {
+		        QRegExp rx("\"");
+		        if (rx.search(text) != -1) {
 		    
 		            if (m_languageLevel <= LILYPOND_VERSION_2_10) {
 			        str << indent(col) << "\\lyricsto \"" << voiceNumber.str() << "\""
@@ -1491,7 +1491,7 @@ LilyPondExporter::write()
 				str << indent(col) << qStrToStrUtf8("\\unset ignoreMelismata") << std::endl;
 				str << indent(--col) << qStrToStrUtf8("} % Lyrics ") << (currentVerse+1) << std::endl;
 			    // close the Lyrics context
-		        } // if ( rx.search( text....
+		        } // if (rx.search(text....
 		    } // for (long currentVerse = 0....
 		} // if (m_exportLyrics....
             } // if (isMidiTrack.... 
@@ -1838,7 +1838,7 @@ LilyPondExporter::writeBar(Segment *s,
 
 	// Test whether the next note is grace note or not.
 	// The start or end of beamed grouping should be put in proper places.
-	str << qStrToStrUtf8( endGroupBeamingsStr );
+	str << qStrToStrUtf8(endGroupBeamingsStr);
 	if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
 	    if (isGrace == 0) { 
 	        isGrace = 1;
@@ -1893,7 +1893,7 @@ LilyPondExporter::writeBar(Segment *s,
                 }
             }
 	    
-	    if ( hiddenNote ) {
+	    if (hiddenNote) {
 	        str << "\\hideNotes ";
 	    }
 
@@ -2021,7 +2021,7 @@ LilyPondExporter::writeBar(Segment *s,
 	        }
 	    }
 
-	    if ( hiddenNote ) {
+	    if (hiddenNote) {
 	        str << "\\unHideNotes ";
 	    }
 
@@ -2299,9 +2299,9 @@ LilyPondExporter::writeBar(Segment *s,
                         str << "c:" << barreStart << "-" << barreEnd << "-" << barreFret << ";";
                     }
 
-                    if (fingering.getStringStatus( 6-stringNum ) == Guitar::Fingering::MUTED) {
+                    if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::MUTED) {
                         str << stringNum << "-x;";
-                    } else if (fingering.getStringStatus( 6-stringNum ) == Guitar::Fingering::OPEN) {
+                    } else if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::OPEN) {
                         str << stringNum << "-o;";
                     } else {
                         int stringStatus = fingering.getStringStatus(6-stringNum);

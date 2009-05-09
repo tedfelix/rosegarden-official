@@ -97,9 +97,12 @@ LilyPondProcessor::puke(QString error)
     m_info->setText(tr("Fatal error.  Processing aborted."));
     QMessageBox::critical(this, tr("Rosegarden - Fatal processing error!"), error, QMessageBox::Ok, QMessageBox::Ok);
 
-    // abort processing after a fatal error, which makes calls to puke()
-    // effectively like a spot return with error code.
+    // abort processing after a fatal error, so calls to puke() abort the whole
+    // process in its tracks
     reject();
+
+    // Well, that was the theory.  In practice it apparently isn't so easy to do
+    // the bash equivalent of a spontaneous "exit 1" inside a QDialog.  Hrm.
 }
 
 void
@@ -166,13 +169,13 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         // read preferences from last export from QSettings to offer clues what
         // failed
         QSettings settings;
-        settings.beginGroup(NotationViewConfigGroup);
+        settings.beginGroup(LilyPondExportConfigGroup);
         bool exportedBeams = settings.value("lilyexportbeamings", false).toBool();
         bool exportedBrackets = settings.value("lilyexportstaffbrackets", false).toBool();
         settings.endGroup();
 
-        std::cerr << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false")
-                  << " exportedBrackets == " << (exportedBrackets ? "true" : "false");
+        std::cerr << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false") << std::endl
+                  << " exportedBrackets == " << (exportedBrackets ? "true" : "false") << std::endl;
 
         QString vomitus = QString(tr("<qt><p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>"));
 
@@ -187,6 +190,10 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         vomitus += QString(tr("<p>Processing terminated due to fatal errors.</p></qt>"));
 
         puke(vomitus);
+
+        // puke doesn't actually work, so we have to return in order to avoid
+        // further processing
+        return;
     }
 
     QString pdfName = m_filename.replace(".ly", ".pdf");
@@ -204,7 +211,12 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     // the user to specify the location of any of these explicitly, and I'd like
     // to avoid having to go to that length if at all possible, in order to
     // reduce complexity both in code and on the user side of the configuration
-    // page
+    // page (I guess arguably the configuration page shouldn't exist, and we
+    // should just try things sequentially until something works, but it gets
+    // into real headaches trying to guess what someone would prefer based on
+    // what desktop they're running, and anyway specifying explicitly avoids the
+    // reason why my copy of acroread is normally chmod -x so the script
+    // ancestor of this class wouldn't pick it up against my wishes)
     switch (pdfViewerIndex) {
         case 0: pdfViewer = "okular";   break;
         case 1: pdfViewer = "evince";   break;
