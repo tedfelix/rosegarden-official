@@ -185,15 +185,15 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
             if (i.getIndicationType() == Indication::Slur) {
                 if ((*m)->get
                         <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^(";
+                    str << "^( ";
                 else
-                    str << "_(";
+                    str << "_( ";
             } else if (i.getIndicationType() == Indication::PhrasingSlur) {
                 if ((*m)->get
                         <Bool>(NotationProperties::SLUR_ABOVE))
-                    str << "^\\(";
+                    str << "^\\( ";
                 else
-                    str << "_\\(";
+                    str << "_\\( ";
             } else if (i.getIndicationType() == Indication::Crescendo) {
                 str << "\\< ";
             } else if (i.getIndicationType() == Indication::Decrescendo) {
