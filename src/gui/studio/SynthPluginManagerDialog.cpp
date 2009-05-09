@@ -135,7 +135,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             btApply->setEnabled ( false );
         }
 
-//         connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+//         connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
         connect ( m_dialogButtonBox, SIGNAL ( rejected() ), this, SLOT ( slotClose() ) );
         connect ( m_dialogButtonBox, SIGNAL ( helpRequested() ), this, SLOT ( slotHelpRequested() ) );
 

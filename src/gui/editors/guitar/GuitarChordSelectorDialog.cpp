@@ -279,15 +279,14 @@ GuitarChordSelectorDialog::slotEditFingering()
 }
 
 void
-GuitarChordSelectorDialog::slotOk()
+GuitarChordSelectorDialog::accept()
 {
     if (m_chordMap.needSave()) {
         saveUserChordMap();
         m_chordMap.clearNeedSave();
     }
     
-    //KDialogBase::slotOk(); 
-	accept();
+    QDialog::accept();
 }
 
 void

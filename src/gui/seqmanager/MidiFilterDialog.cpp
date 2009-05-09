@@ -228,10 +228,10 @@ MidiFilterDialog::slotApply()
 }
 
 void
-MidiFilterDialog::slotOk()
+MidiFilterDialog::accept()
 {
     slotApply();
-    accept();
+    QDialog::accept();
 }
 
 void

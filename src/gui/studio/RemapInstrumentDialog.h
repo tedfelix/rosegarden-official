@@ -48,7 +48,7 @@ public:
 public slots:
     void slotRemapReleased();
 
-    void slotOk();
+    void accept();
     void slotApply();
 
 signals:

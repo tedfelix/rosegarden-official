@@ -447,7 +447,7 @@ TempoDialog::slotActionChanged()
 }
 
 void
-TempoDialog::slotOk()
+TempoDialog::accept()
 {
     tempoT tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
     RG_DEBUG << "Tempo is " << tempo << endl;
@@ -489,7 +489,7 @@ TempoDialog::slotOk()
                          action);
     }
 
-//    KDialogBase::slotOk();	//&&& FIX
+    QDialog::accept();
 }
 
 void

@@ -41,7 +41,7 @@ public:
 
 protected slots:
     void slotStartFretChanged(int);
-    virtual void slotOk();
+    virtual void accept();
     
 protected:
 

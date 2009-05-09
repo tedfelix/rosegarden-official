@@ -61,7 +61,7 @@ protected slots:
     void slotDeleteFingering();
     void slotEditFingering();
 
-    virtual void slotOk();
+    virtual void accept();
 
 protected:
 

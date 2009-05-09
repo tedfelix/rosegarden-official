@@ -44,7 +44,7 @@ public:
 
 public slots:
 
-    void slotOk();
+    void accept();
     void slotApply();
     void slotSetModified();
 

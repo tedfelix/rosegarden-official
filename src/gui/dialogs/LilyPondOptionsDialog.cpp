@@ -266,6 +266,11 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyExportStaffGroup->setChecked(settings.value("lilyexportstaffbrackets", "true").toBool());
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
 
+    std::cerr << "QSettings for LilyPond (populateDefaultValues):" << std::endl
+              << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
+              << "  lilyraggedbottom: " << (settings.value("lilyraggedbottom").toBool() ? "true" : "false") << std::endl
+              << std::endl;
+
     settings.endGroup();
 }
 
@@ -288,16 +293,22 @@ LilyPondOptionsDialog::slotApply()
     settings.setValue("lilyexportbeamings", m_lilyExportBeams->isChecked());
     settings.setValue("lilyexportstaffbrackets", m_lilyExportStaffGroup->isChecked());
     settings.setValue("lilyexportmarkermode", m_lilyMarkerMode->currentIndex());
+
+    std::cerr << "QSettings for LilyPond (slotApply):" << std::endl
+              << "  lilyexportmarkermode: " << settings.value("lilyexportmarkermode").toUInt() << std::endl
+              << "  lilyraggedbottom: " << (settings.value("lilyraggedbottom").toBool() ? "true" : "false") << std::endl
+              << std::endl;
+
     settings.endGroup();
 
     m_headersPage->apply();
 }
  
 void
-LilyPondOptionsDialog::slotOk()
+LilyPondOptionsDialog::accept()
 {
     slotApply();
-    accept();
+    QDialog::accept();
 }
 
 void

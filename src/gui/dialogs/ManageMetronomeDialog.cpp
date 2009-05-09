@@ -381,10 +381,10 @@ ManageMetronomeDialog::slotInstrumentChanged(int i)
 }
 
 void
-ManageMetronomeDialog::slotOk()
+ManageMetronomeDialog::accept()
 {
     slotApply();
-    accept();
+    QDialog::accept();
 }
 
 void

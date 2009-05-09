@@ -173,7 +173,7 @@ TriggerSegmentDialog::getTimeAdjust() const
 }
 
 void
-TriggerSegmentDialog::slotOk()
+TriggerSegmentDialog::accept()
 {
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
@@ -182,9 +182,9 @@ TriggerSegmentDialog::slotOk()
     settings.setValue("triggersegmentretune", m_retune->isChecked());
     settings.setValue("triggersegmentlastornament", m_segment->currentIndex());
 
-    accept();
-
     settings.endGroup();
+
+    QDialog::accept();
 }
 
 }

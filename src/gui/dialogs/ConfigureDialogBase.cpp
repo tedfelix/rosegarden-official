@@ -83,7 +83,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
     //
      connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton *)),
              this, SLOT(slotButtonBoxButtonClicked(QAbstractButton *)) );
-//    connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+//    connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
 //    connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
         
     //// setup dialog buttons OLD CODE:
@@ -118,7 +118,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
     QPushButton *helpButton = new QPushButton("Help",buttonBox);
 //    connect(helpButton, SIGNAL(clicked()), this, SLOT(slotHelp()));
     QPushButton *okButton = new QPushButton("OK",buttonBox);
-    connect(okButton, SIGNAL(clicked()), this, SLOT(slotOk()));
+    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
 
     m_applyButton = new QPushButton("Apply",buttonBox);
     m_applyButton->setEnabled(false);
@@ -194,7 +194,7 @@ ConfigureDialogBase::~ConfigureDialogBase()
 ////        close();
     //}
     //else if( bRole == QDialogButtonBox::AcceptRole ){
-        //slotOk();
+        //accept();
     //}
     //else if( bRole == QDialogButtonBox::HelpRole ){
 ////         slotHelp();
@@ -241,10 +241,10 @@ ConfigureDialogBase::slotActivateApply()
 }
 
 void
-ConfigureDialogBase::slotOk()
+ConfigureDialogBase::accept()
 {
     slotApply();
-//    accept();
+    QDialog::accept();
     close();
 }
 

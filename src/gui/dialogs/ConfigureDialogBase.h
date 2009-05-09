@@ -58,7 +58,7 @@ public:
 protected slots:
 	
 //	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
-	virtual void slotOk();
+	virtual void accept();
     virtual void slotApply();
     virtual void slotCancelOrClose();
 

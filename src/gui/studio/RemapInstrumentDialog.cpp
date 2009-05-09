@@ -155,10 +155,10 @@ RemapInstrumentDialog::slotRemapReleased()
 }
 
 void
-RemapInstrumentDialog::slotOk()
+RemapInstrumentDialog::accept()
 {
     slotApply();
-    accept();
+    QDialog::accept();
 }
 
 void

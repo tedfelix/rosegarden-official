@@ -48,7 +48,7 @@ public:
     void setModified(bool value);
 
 public slots:
-    void slotOk();
+    void accept();
     void slotApply();
     void slotSetModified();
     void slotResolutionChanged(int);

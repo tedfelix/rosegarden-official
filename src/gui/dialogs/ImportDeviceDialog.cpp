@@ -229,14 +229,14 @@ ImportDeviceDialog::doImport()
         = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(slotOk()));
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancel()));
 
     return true;
 }
 
 void
-ImportDeviceDialog::slotOk()
+ImportDeviceDialog::accept()
 {
     int index = 0;
     if (m_deviceCombo)
@@ -250,9 +250,9 @@ ImportDeviceDialog::slotOk()
     settings.setValue("importbanksoverwrite", v == 1);
     if (m_rename)
         settings.setValue("importbanksrename", m_rename->isChecked());
-    accept();
-
     settings.endGroup();
+
+    QDialog::accept();
 }
 
 void
