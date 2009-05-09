@@ -59,6 +59,14 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 }
 
 void
+Panned::scrollContentsBy(int dx, int dy)
+{
+    emit pannedContentsScrolled(dx, dy);
+
+    QGraphicsView::scrollContentsBy(dx, dy);
+}
+
+void
 Panned::slotSetPannedRect(QRectF pr)
 {
     centerOn(pr.center());

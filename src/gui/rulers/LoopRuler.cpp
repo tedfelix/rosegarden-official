@@ -93,7 +93,7 @@ LoopRuler::~LoopRuler()
 {}
 
 void
-LoopRuler::setSnapGrid(SnapGrid *grid)
+LoopRuler::setSnapGrid(const SnapGrid *grid)
 {
     if (grid == 0) m_grid = &m_defaultGrid;
     else m_grid = grid;

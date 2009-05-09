@@ -36,6 +36,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 #include <QWheelEvent>
+#include <QWidget>
 
 #include "document/RosegardenDocument.h"
 
@@ -44,6 +45,7 @@
 
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
+#include "gui/rulers/StandardRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -72,25 +74,39 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_pitchRuler(0),
     m_pianoView(0),
     m_pianoScene(0),
-    m_localMapping(0)
+    m_localMapping(0),
+    m_topStandardRuler(0),
+    m_bottomStandardRuler(0),
+    m_layout(0)
 {
-    QGridLayout *layout = new QGridLayout;
-    setLayout(layout);
+    m_layout = new QGridLayout;
+    setLayout(m_layout);
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
-    layout->addWidget(m_view, 0, 1, 1, 1);
+    m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
     m_pianoView = new Panned;
     m_pianoView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_pianoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    layout->addWidget(m_pianoView, 0, 0, 1, 1);
+    m_layout->addWidget(m_pianoView, PANNED_ROW, HEADER_COL, 1, 1);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
     m_hpanner->setBackgroundBrush(Qt::white);
-    layout->addWidget(m_hpanner, 1, 0, 1, 2);
+    m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
 
+    // Rulers being not defined still, they can't be added to m_layout.
+    // This will be done in setSegments().
+
+    // Move the scroll bar from m_view to MatrixWidget
+    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_layout->addWidget(m_view->horizontalScrollBar(),
+                        HSLIDER_ROW, MAIN_COL, 1, 1);
+
+    // Hide or show the horizontal scroll bar when needed
+    connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
+            this, SLOT(slotHScrollBarRangeChanged(int, int)));
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
@@ -103,6 +119,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_pianoView, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_view, SIGNAL(pannedContentsScrolled(int, int)),
+            this, SLOT(slotHScroll()));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotZoomInFromPanner()));
@@ -156,10 +175,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
 
- ///!!! Used for test as currently arg drumMode passed
- ///    to MatrixWidget ctor is always false (yg)
- /// m_drumMode = true;  
-
     Composition &comp = document->getComposition();
 
     Track *track =
@@ -204,6 +219,23 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     QRectF pianoRect = m_pianoScene->sceneRect();
     pianoRect.setHeight(viewRect.height());
     m_pianoScene->setSceneRect(pianoRect);
+
+    m_topStandardRuler = new StandardRuler(document,
+                                 m_referenceScale, 0, 25,
+                                 false);
+
+    m_bottomStandardRuler = new StandardRuler(document,
+                                               m_referenceScale, 0, 25,
+                                               true);
+
+    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
+
+    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+
+    m_topStandardRuler->connectRulerToDocPointer(document);
+    m_bottomStandardRuler->connectRulerToDocPointer(document);
 }
 
 bool
@@ -252,6 +284,20 @@ MatrixWidget::slotZoomOutFromPanner()
     m_pianoView->resetMatrix();
     m_pianoView->scale(m_vZoomFactor, m_vZoomFactor);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
+}
+
+void
+MatrixWidget::slotHScroll()
+{
+    // Get time of the window left
+    QPointF topLeft = m_view->mapToScene(0, 0);
+
+    // Apply zoom correction
+    int x = topLeft.x() * m_hZoomFactor;
+
+    // Scroll rulers accordingly
+    m_topStandardRuler->slotScrollHoriz(x);
+    m_bottomStandardRuler->slotScrollHoriz(x);
 }
 
 EventSelection *
@@ -330,7 +376,8 @@ void
 MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 {
     m_pitchRuler->drawHoverNote(e->pitch);
-    m_pianoView->update();
+    m_pianoView->update();   // Needed to remove black trailers left by
+                             // hover note at hight zoom levels
 
     if (!m_currentTool) return;
 
@@ -444,6 +491,15 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
     }
 }
 
+void
+MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
+{
+    if (max > min) {
+        m_view->horizontalScrollBar()->show(); 
+    } else {
+        m_view->horizontalScrollBar()->hide();
+    }
+}
 
 }
 

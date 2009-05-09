@@ -51,7 +51,7 @@ public:
                   const char* name = 0);
 //                  WFlags f=0);
 
-    void setSnapGrid(SnapGrid *grid);
+    void setSnapGrid(const SnapGrid *grid);
 
     LoopRuler* getLoopRuler() { return m_loopRuler; }
 

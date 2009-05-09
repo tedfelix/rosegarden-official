@@ -26,6 +26,7 @@
 #include <vector>
 
 class QGraphicsScene;
+class QGridLayout;
 
 namespace Rosegarden
 {
@@ -44,6 +45,7 @@ class Panned;
 class EventSelection;
 class PitchRuler;
 class MidiKeyMapping;
+class StandardRuler;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -110,6 +112,8 @@ public slots:
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 
+    void slotHScroll();
+
 protected slots:
     void slotDispatchMousePress(const MatrixMouseEvent *);
     void slotDispatchMouseRelease(const MatrixMouseEvent *);
@@ -117,6 +121,8 @@ protected slots:
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
     void slotEnsureLastMouseMoveVisible();
+
+    void slotHScrollBarRangeChanged(int min, int max);
 
 private:
     RosegardenDocument *m_document; // I do not own this
@@ -138,6 +144,32 @@ private:
     Panned *m_pianoView; // I own this
     QGraphicsScene *m_pianoScene; // I own this
     MidiKeyMapping *m_localMapping; // I own this
+
+    StandardRuler *m_topStandardRuler; // I own this
+    StandardRuler *m_bottomStandardRuler; // I own this
+
+    QGridLayout *m_layout; // I own this
+
+    /**
+     * Widgets vertical positions inside the main QGridLayout
+     */
+    enum {
+        CHORDNAMERULER_ROW,
+        TEMPORULER_ROW,
+        TOPRULER_ROW,
+        PANNED_ROW,
+        BOTTOMRULER_ROW,
+        HSLIDER_ROW,
+        PANNER_ROW
+    };
+
+    /**
+     * Widgets horizontal positions inside the main QGridLayout
+     */
+    enum {
+        HEADER_COL,
+        MAIN_COL
+    };
 
 };
 

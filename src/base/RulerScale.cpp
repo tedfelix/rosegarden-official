@@ -364,4 +364,16 @@ ZoomableRulerScale::getXForTime(timeT time) const
     return m_reference->getXForTime(time) * m_xfactor;
 }
 
+int
+ZoomableRulerScale::getFirstVisibleBar() const
+{
+    return m_reference->getFirstVisibleBar();
+}
+
+int
+ZoomableRulerScale::getLastVisibleBar() const
+{
+    return m_reference->getLastVisibleBar();
+}
+
 }

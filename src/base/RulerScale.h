@@ -228,6 +228,8 @@ public:
     virtual int getBarForX(double x) const;
     virtual timeT getTimeForX(double x) const;
     virtual double getXForTime(timeT time) const;
+    virtual int getFirstVisibleBar() const;
+    virtual int getLastVisibleBar() const;
 
     void setXZoomFactor(double f) { m_xfactor = f; }
     double getXZoomFactor() const { return m_xfactor; }

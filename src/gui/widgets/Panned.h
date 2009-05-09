@@ -36,6 +36,7 @@ public:
 signals:
     void pannedRectChanged(QRectF);
     void wheelEventReceived(QWheelEvent *);
+    void pannedContentsScrolled(int, int);
 
 public slots:
     void slotSetPannedRect(QRectF);
@@ -47,6 +48,7 @@ protected:
     virtual void resizeEvent(QResizeEvent *);
     virtual void drawForeground(QPainter *, const QRectF &);
     virtual void wheelEvent(QWheelEvent *);
+    virtual void scrollContentsBy(int dx, int dy);
 };
 
 }

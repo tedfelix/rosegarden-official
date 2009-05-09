@@ -88,7 +88,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 
 }
 
-void StandardRuler::setSnapGrid(SnapGrid *grid)
+void StandardRuler::setSnapGrid(const SnapGrid *grid)
 {
     m_loopRuler->setSnapGrid(grid);
 }
