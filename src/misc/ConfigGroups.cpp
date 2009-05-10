@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -17,7 +17,6 @@
 
 namespace Rosegarden 
 {
-
     //
     // QSettings group names
     //
@@ -46,5 +45,5 @@ namespace Rosegarden
     const char* const PresetDialogConfigGroup = "Parameter_Presets";
     const char* const ExternalApplicationsConfigGroup = "External_Applications";
     const char* const LilyPondExportConfigGroup = "LilyPond_Export";
-
+    const char* const DoNotShowConfigGroup = "Do_Not_Show_Again";
 }

@@ -62,7 +62,7 @@
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "EditViewBase.h"
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"

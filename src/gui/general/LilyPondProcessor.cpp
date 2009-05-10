@@ -18,7 +18,7 @@
 #include "LilyPondProcessor.h"
 
 #include "gui/general/IconLoader.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QProcess>

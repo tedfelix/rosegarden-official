@@ -16,15 +16,13 @@
 */
 
 
-// #include <QDir>
-
 #include "SequenceManager.h"
 
 #include "sound/Midi.h"
 #include "sound/ControlBlock.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Exception.h"
@@ -57,7 +55,6 @@
 #include "sound/SoundDriver.h"
 #include "TempoSegmentMmapper.h"
 #include "TimeSigSegmentMmapper.h"
-#include <algorithm>
 
 #include <QSettings>
 #include <QMessageBox>
@@ -72,6 +69,7 @@
 #include <QStringList>
 #include <QTimer>
 
+#include <algorithm>
 
 namespace Rosegarden
 {
@@ -1106,8 +1104,10 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        QMessageBox::information(
-                            
+                        QSettings settings;
+                        settings.beginGroup(DoNotShowConfigGroup);
+
+                        QMessageBox::information(                            
                           RosegardenMainWindow::self(),
                           "", /* no title  */
                           tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 

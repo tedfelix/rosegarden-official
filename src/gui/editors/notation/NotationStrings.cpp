@@ -20,7 +20,7 @@
 #include <QApplication>
 
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "gui/configuration/GeneralConfigurationPage.h"

@@ -18,7 +18,7 @@
 
 #include "RescaleDialog.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
 #include "misc/Strings.h"

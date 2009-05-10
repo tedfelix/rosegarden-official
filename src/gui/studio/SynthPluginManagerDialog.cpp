@@ -28,7 +28,7 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
 
 

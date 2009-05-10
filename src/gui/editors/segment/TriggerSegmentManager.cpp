@@ -42,7 +42,7 @@
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"

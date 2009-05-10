@@ -34,7 +34,7 @@
 #include "ControlParameterEditDialog.h"
 #include "ControlParameterItem.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/Command.h"
 #include "document/CommandHistory.h"
 

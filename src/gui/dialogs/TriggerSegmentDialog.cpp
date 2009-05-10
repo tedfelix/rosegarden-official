@@ -21,7 +21,7 @@
 
 #include "base/BaseProperties.h"
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/TriggerSegment.h"
 #include <QComboBox>

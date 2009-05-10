@@ -22,7 +22,7 @@
 
 #include <QDir>
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "gui/widgets/StartupLogo.h"
 #include "NoteFont.h"

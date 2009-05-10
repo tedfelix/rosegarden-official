@@ -24,7 +24,7 @@
 #include "base/AudioLevel.h"
 #include "base/Studio.h"
 #include "misc/Debug.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QImage>
 #include <QApplication>

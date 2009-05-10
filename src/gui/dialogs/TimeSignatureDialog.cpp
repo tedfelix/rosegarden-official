@@ -18,7 +18,7 @@
 
 #include "TimeSignatureDialog.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "gui/widgets/TimeWidget.h"

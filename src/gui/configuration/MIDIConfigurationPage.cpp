@@ -21,7 +21,7 @@
 #include "misc/Strings.h"
 #include "sound/Midi.h"
 #include "sound/SoundDriver.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "ConfigurationPage.h"

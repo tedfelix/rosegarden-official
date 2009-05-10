@@ -19,7 +19,7 @@
 #include "InterpretDialog.h"
 #include <QApplication>
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "commands/notation/InterpretCommand.h"
 #include "misc/Strings.h"
 #include <QSettings>

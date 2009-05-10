@@ -44,7 +44,7 @@
 #include "commands/segment/SetTriggerSegmentBaseVelocityCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultRetuneCommand.h"
 #include "commands/segment/SetTriggerSegmentDefaultTimeAdjustCommand.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"

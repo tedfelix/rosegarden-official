@@ -14,7 +14,7 @@
 
 #include <string>
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include <QSettings>
 #include "misc/Strings.h"
 

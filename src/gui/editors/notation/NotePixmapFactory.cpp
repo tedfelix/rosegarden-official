@@ -20,7 +20,7 @@
 #include "misc/Debug.h"
 #include "base/NotationRules.h"
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"

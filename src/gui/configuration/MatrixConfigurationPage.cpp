@@ -18,10 +18,10 @@
 
 #include "MatrixConfigurationPage.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "TabbedConfigurationPage.h"
 #include <QSettings>

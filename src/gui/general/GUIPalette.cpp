@@ -20,7 +20,7 @@
 #include <QApplication>
 
 #include "base/Colour.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include <QSettings>
 #include <QColor>
 

@@ -25,7 +25,7 @@
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/rulers/StandardRuler.h"
 #include "base/Composition.h"

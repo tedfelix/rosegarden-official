@@ -16,7 +16,7 @@
 */
 
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/io/LilyPondExporter.h"
 #include "document/RosegardenDocument.h"
 #include "gui/configuration/HeadersConfigurationPage.h"

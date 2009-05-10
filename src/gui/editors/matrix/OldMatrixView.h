@@ -31,7 +31,7 @@
 #include "MatrixVLayout.h"
 #include "MatrixCanvasView.h"
 #include "base/Event.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include <vector>
 
 #include <QDockWidget>

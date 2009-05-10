@@ -30,7 +30,7 @@
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QApplication>
 #include <QSettings>

@@ -87,7 +87,7 @@
 #include "document/io/MupExporter.h"
 #include "document/io/MusicXmlExporter.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AddTracksDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"

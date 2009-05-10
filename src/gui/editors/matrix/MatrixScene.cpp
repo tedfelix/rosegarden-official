@@ -24,7 +24,7 @@
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include "misc/Debug.h"
 #include "base/RulerScale.h"

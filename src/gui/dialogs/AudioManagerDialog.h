@@ -21,7 +21,7 @@
 
 #include "sound/AudioFile.h"
 #include <QMainWindow>
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/general/ActionFileClient.h"
 
 

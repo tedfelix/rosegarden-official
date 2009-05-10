@@ -22,7 +22,7 @@
 
 #include "sound/Midi.h"
 #include <QDir>
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"

@@ -59,7 +59,7 @@
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/matrix/MatrixInsertionCommand.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"

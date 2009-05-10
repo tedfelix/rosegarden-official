@@ -20,7 +20,7 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"
 #include "base/Composition.h"

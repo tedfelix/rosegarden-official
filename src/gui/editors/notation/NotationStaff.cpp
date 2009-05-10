@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/Device.h"
 #include "base/Event.h"

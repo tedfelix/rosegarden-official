@@ -32,7 +32,7 @@
 #include "CompositionModel.h"
 #include "CompositionView.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/general/BaseTool.h"
 #include "gui/general/RosegardenCanvasView.h"
 #include "SegmentPencil.h"

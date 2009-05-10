@@ -36,7 +36,7 @@
 #include "base/Track.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/widgets/AudioListItem.h"

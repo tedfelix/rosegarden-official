@@ -24,7 +24,7 @@
 #include "PlayList.h"
 #include "PlayListView.h"
 #include "PlayListViewItem.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QLayout>
 #include <QSettings>

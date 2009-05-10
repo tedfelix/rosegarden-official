@@ -19,7 +19,7 @@
 #include "LatencyConfigurationPage.h"
 #include <QLayout>
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "ConfigurationPage.h"
 #include "document/RosegardenDocument.h"
 #include "TabbedConfigurationPage.h"

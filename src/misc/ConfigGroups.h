@@ -1,4 +1,4 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -18,8 +18,8 @@
  */
 
 
-#ifndef _CONSTANTS_H_
-#define _CONSTANTS_H_
+#ifndef _CONFIG_GROUPS_H_
+#define _CONFIG_GROUPS_H_
 
 namespace Rosegarden 
 {
@@ -48,6 +48,7 @@ namespace Rosegarden
     extern const char* const PresetDialogConfigGroup;
     extern const char* const ExternalApplicationsConfigGroup;
     extern const char* const LilyPondExportConfigGroup;
+    extern const char* const DoNotShowConfigGroup;
 }
 
 #endif

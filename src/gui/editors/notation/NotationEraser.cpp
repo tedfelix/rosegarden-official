@@ -21,7 +21,7 @@
 #include <QApplication>
 
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "gui/general/EditTool.h"

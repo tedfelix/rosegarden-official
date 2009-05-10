@@ -15,7 +15,7 @@
 
 #include <Q3Canvas>
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/application/RosegardenMainWindow.h"

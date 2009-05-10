@@ -26,7 +26,7 @@
 #include "base/SnapGrid.h"
 #include "commands/edit/EventEditCommand.h"
 #include "document/CommandHistory.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/general/GUIPalette.h"

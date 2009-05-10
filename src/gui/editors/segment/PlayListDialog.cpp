@@ -18,7 +18,7 @@
 
 #include "PlayListDialog.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "PlayList.h"
 #include <QDialog>
 #include <QDialogButtonBox>

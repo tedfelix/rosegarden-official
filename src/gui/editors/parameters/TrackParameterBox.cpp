@@ -26,7 +26,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ClefIndex.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Colour.h"
 #include "base/ColourMap.h"

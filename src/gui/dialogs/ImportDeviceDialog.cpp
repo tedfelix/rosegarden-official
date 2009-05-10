@@ -18,7 +18,7 @@
 #include "ImportDeviceDialog.h"
 
 #include "misc/Strings.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 #include "document/RosegardenDocument.h"

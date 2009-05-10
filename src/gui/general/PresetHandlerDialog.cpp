@@ -24,7 +24,7 @@
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QComboBox>
 #include <QSettings>

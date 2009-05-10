@@ -23,7 +23,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 

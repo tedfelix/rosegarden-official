@@ -18,7 +18,7 @@
 
 #include "AddTracksDialog.h"
 
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>

@@ -32,7 +32,7 @@
 #include "commands/edit/RemoveMarkerCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/Command.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/widgets/TmpStatusMsg.h"

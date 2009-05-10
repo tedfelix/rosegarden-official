@@ -19,7 +19,7 @@
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "NotationWidget.h"
 #include "NotationCommandRegistry.h"
 #include "NoteFontFactory.h"

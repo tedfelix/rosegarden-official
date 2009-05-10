@@ -87,7 +87,7 @@
 #include "commands/segment/SegmentTransposeCommand.h"
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenDocument.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "document/io/LilyPondExporter.h"
 #include "GuitarChordInserter.h"
 #include "gui/application/SetWaitCursor.h"

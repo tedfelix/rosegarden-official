@@ -17,7 +17,7 @@
 
 #include "ChangeRecordDeviceCommand.h"
 #include "StudioControl.h"
-#include "document/ConfigGroups.h"
+#include "misc/ConfigGroups.h"
 #include "sound/MappedEvent.h"
 #include <QApplication>
 #include <QSettings>
