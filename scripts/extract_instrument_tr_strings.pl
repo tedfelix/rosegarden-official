@@ -22,11 +22,12 @@ print qq{
  * This file has been automatically generated and should not be compiled.
  *
  * The purpose of the file is to collect the translation strings from the
- * presets.xml files which are used in setting the player ability.
+ * presets.xml file which are used to provide a sort of built-in
+ * encyclopedia of arranging to aid composers.
  * 
- * The code is prepared for  lupdate  program. There is make ts target :
+ * The code is prepared for the lupdate program. There is make ts target:
  *
- *   make -f qt4-makefile ts
+ *   make ts
  *
  * which is used to extract translation strings and to update ts/*.tr files.
  */

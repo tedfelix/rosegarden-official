@@ -8,7 +8,7 @@ Rosegarden is a MIDI and audio sequencer and musical notation editor for Linux
 
 Please keep an eye on the FAQ for known problems and workarounds:
 
-  http://rosegarden.wiki.sourceforge.net/Frequently+Asked+Questions
+  http://rosegardenmusic.com/wiki/frequently_asked_questions
 
 When you find bugs, first check whether a newer version of Rosegarden
 has been released yet; if not, please continue on to:
@@ -40,14 +40,14 @@ Runtime requirements
 In order to be fully functional and provide the optimal user experience,
 Rosegarden requires the following external applications.  We suggest listing
 them as your distro's equivalent of "recommends" level dependencies.  (Yes, this
-is a long list, and yes, these are all necessary for an optimal user
-experience.  They are listed in approximately descending order of importance
+is a long list, and yes, we really do use all of these for something.)
 
   - perl
   - bash
-  - qsynth AND fluid-soundfont-gm OR timidity AND freepats
+  - qsynth AND fluid-soundfont-gm* OR timidity AND freepats*
   - lilypond
-  - ocular OR xpdf OR acroread OR kpdf OR evince
+  - ocular OR acroread OR kpdf OR evince
+  - kprinter OR gtklp OR lpr OR lp
   - jackd
   - sox
   - sndfile-resample
@@ -58,6 +58,10 @@ experience.  They are listed in approximately descending order of importance
   - qjackctl
   - DSSI plugins (any your distro carries)
   - LADSPA plugins (any your distro carries)
+
+  * the key here being that either softsynth should come with an installed
+    soundfont or patchset in order that it can play General MIDI as configured
+    "out of the box"
 
 
 Installation instructions

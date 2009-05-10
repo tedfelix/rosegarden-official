@@ -1,25 +1,16 @@
-
 This directory contains the source for the instrument definition presets.
 
 I am maintaining it in plain text "conf file" format for ease of editing.  If
-you make changes to the file, you must generate a new presets.xml by running
+you make changes to presets-editable.conf, you must generate a new presets.xml
+by running
 
   ./regenerate-presets
 
-The default presets-editable.conf contains U.S. English definitions.
+After generating the file, go to the main rosegarden/ directory and run
 
-To translate it, copy it to presets-editable-<lang>.conf (for example
-presets-editable-fr.conf or presets-editable-zh_CN.conf), edit it appropriately,
-and run ./regenerate-presets to generate your new translated XML file.  Note
-that _only_ the "name" strings (including "category name") should be translated
--- you _must_ leave the clef names untouched, or they will fail to work.  The
-displayed clef names themselves are translated separately as part of the
-program's .ts file.
+  make ts
 
-Once you've generated a translation as presets-<lang>.xml in this directory, it
-should then be installed by the standard install process and picked up
-automatically by Rosegarden.
-
-Please send your translated .conf file to us at the rosegarden-devel mailing
-list.
-
+in order to update the translations with your changes.  They will appear in the
+.ts files for the respective languages, and will appear in the GUI in context.
+This method replaces the old presets-editable.XX.conf method and the old
+presets-XX.xml files.

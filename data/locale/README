@@ -1,0 +1,69 @@
+
+TRANSLATORS: Translation process in brief, change 'fi.ts' with your own locale
+
+0  ( add missing locale with "cp locale/rosegarden.ts locale/fi.ts" )
+
+1  run "linguist locale/fi.ts" in the base source directory
+
+2  find next uncomplete translation ( Ctrl + L )
+
+3  complete a translation
+
+    3.1  type in a new translation
+
+    3.2  find a nearly matching translation to start with
+
+        3.2.1  select tab "Phrases and guesses"
+
+        3.2.2  select best guess ( Ctrl + 1 ... Ctrl + 5 )
+
+        3.2.3  complete the best guess
+
+    3.3  check the context of the translation
+
+        3.3.1  select tab "Source code"
+
+	3.3.2  browse the source code around the translation
+
+        3.3.3  adjust the translation according to the context
+
+    3.4  fix the warnings of the translation
+
+        3.4.1  select tab "Warnings"
+
+        3.4.2  fix the translation until warnings disappear
+
+    3.5  complete a good translation with the "uncomplete" status
+
+        3.5.1  no changes needed, just accept
+
+4  accept translation and jump to next uncomplete ( Ctrl + Enter )
+
+5  repeat steps 2 - 4 for uncomplete strings, or, test translation with 6 - 9
+
+6  save the work ( Ctrl + S )
+
+7  release the translation ( File > Release )
+
+8  quit ( Ctrl + Q )
+
+9  check the translation with "LC_ALL=fi ./rosegarden"
+
+10  commit your changes
+
+
+
+MAINTAINERS: Update translations
+
+1  run "make ts"
+
+
+MAINTAINERS: Update translations & drop obsolete translations
+
+1  run "make ts-noobsolete"
+
+
+MAINTAINERS: Release all translations
+
+1  run "make locale"
+

@@ -387,8 +387,8 @@ int main(int argc, char *argv[])
 
     RosegardenApplication theApp(argc, argv);
 
-    RG_DEBUG << "System Locale: " << QLocale::system().name() << endl;
-    RG_DEBUG << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << endl;
+    std::cerr << "System Locale: " << QLocale::system().name() << std::endl;
+    std::cerr << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << std::endl;
 
     QTranslator qtTranslator;
     bool qtTranslationsLoaded = 
@@ -396,26 +396,20 @@ int main(int argc, char *argv[])
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     if (qtTranslationsLoaded) {
         theApp.installTranslator(&qtTranslator);
-        RG_DEBUG << "Qt translations loaded successfully." << endl;
+        std::cerr << "Qt translations loaded successfully." << std::endl;
     } else {
-        RG_DEBUG << "Qt translations not loaded." << endl;
+        std::cerr << "Qt translations not loaded." << std::endl;
     }
 
     QTranslator rgTranslator;
-    //
-    //@@@ RG is now run from the build directory. Translations are at locale/.
-    //@@@ When "make install" works, relative directory locale/ should be
-    //@@@ replaced with the install directory, which is(?) one of the following:
-    //@@@   /usr/share/rosegarden/locale or 
-    //@@@   /usr/local/share/rosegarden/locale
-    //
+    std::cerr << "RG Translation: trying to load :locale/" << QLocale::system().name() << std::endl;
     bool rgTranslationsLoaded = 
-      rgTranslator.load(QLocale::system().name(), "locale/");
+      rgTranslator.load(QLocale::system().name(), ":locale/");
     if (rgTranslationsLoaded) {
-        RG_DEBUG << "RG translations loaded successfully." << endl;
+        std::cerr << "RG Translations loaded successfully." << std::endl;
         theApp.installTranslator(&rgTranslator);
     } else {
-        RG_DEBUG << "RG translations not loaded." << endl;
+        std::cerr << "RG Translations not loaded." << std::endl;
     }
 
     theApp.setOrganizationName("rosegardenmusic");
