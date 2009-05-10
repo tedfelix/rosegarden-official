@@ -1106,13 +1106,35 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         QSettings settings;
                         settings.beginGroup(DoNotShowConfigGroup);
+                        bool showTimerWarning = settings.value("showlowtimer", true).toBool();
+                        settings.endGroup();
 
-                        QMessageBox::information(                            
-                          RosegardenMainWindow::self(),
-                          "", /* no title  */
-                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"), 
-                          QMessageBox::Ok,
-                          QMessageBox::Ok);
+                        if (showTimerWarning) {
+                            QMessageBox info(RosegardenMainWindow::self());
+                            info.setText(tr("System timer resolution is too low"));
+                            info.setInformativeText(tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"));
+                            info.setStandardButtons(QMessageBox::Ok);
+                            info.setDefaultButton(QMessageBox::Ok);
+                            QPushButton *ignoreButton = info.addButton(tr("Disable Warning"), QMessageBox::ActionRole);
+                            ignoreButton->setToolTip(tr("Do not display this warning in the future"));
+                            info.setIcon(QMessageBox::Warning);
+
+                            info.exec();
+                            if (info.clickedButton() == ignoreButton) {                               
+                                showTimerWarning = false;
+
+                                settings.beginGroup(DoNotShowConfigGroup);
+                                settings.setValue("showlowtimer", showTimerWarning);
+                                settings.endGroup();
+
+                                QMessageBox::information(RosegardenMainWindow::self(),
+                                                         "",
+                                                         tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
+                                                         QMessageBox::Ok,
+                                                         QMessageBox::Ok);
+
+                            }
+                        }
                         
                         CurrentProgressDialog::thaw();
 
@@ -1126,13 +1148,38 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
 
                         RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        QMessageBox::information(
-                          RosegardenMainWindow::self(),
-                          "", /* no title */
-                          tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"),
-                          QMessageBox::Ok,
-                          QMessageBox::Ok);
-                        
+                        QSettings settings;
+                        settings.beginGroup(DoNotShowConfigGroup);
+                        bool showAltTimerWarning = settings.value("showaltlowtimer", true).toBool();
+                        settings.endGroup();
+
+                        if (showAltTimerWarning) {
+                            QMessageBox info(RosegardenMainWindow::self());
+                            info.setText(tr("System timer resolution is too low"));
+                            info.setInformativeText(tr("<h3>System timer resolution is too low</h3><p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"));
+                            info.setStandardButtons(QMessageBox::Ok);
+                            info.setDefaultButton(QMessageBox::Ok);
+                            QPushButton *ignoreButton = info.addButton(tr("Disable Warning"), QMessageBox::ActionRole);
+                            ignoreButton->setToolTip(tr("Do not display this warning in the future"));
+                            info.setIcon(QMessageBox::Warning);
+
+                            info.exec();
+                            if (info.clickedButton() == ignoreButton) {                               
+                                showAltTimerWarning = false;
+
+                                settings.beginGroup(DoNotShowConfigGroup);
+                                settings.setValue("showaltlowtimer", showAltTimerWarning);
+                                settings.endGroup();
+
+                                QMessageBox::information(RosegardenMainWindow::self(),
+                                                         "",
+                                                         tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
+                                                         QMessageBox::Ok,
+                                                         QMessageBox::Ok);
+
+                            }
+                        }
+
                         CurrentProgressDialog::thaw();
                     }
                 }
