@@ -1115,7 +1115,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"));
                             info.setStandardButtons(QMessageBox::Ok);
                             info.setDefaultButton(QMessageBox::Ok);
-                            QPushButton *ignoreButton = info.addButton(tr("Disable Warning"), QMessageBox::ActionRole);
+                            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
                             ignoreButton->setToolTip(tr("Do not display this warning in the future"));
                             info.setIcon(QMessageBox::Warning);
 
@@ -1164,7 +1164,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
                             info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"));
                             info.setStandardButtons(QMessageBox::Ok);
                             info.setDefaultButton(QMessageBox::Ok);
-                            QPushButton *ignoreButton = info.addButton(tr("Disable Warning"), QMessageBox::ActionRole);
+                            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
                             ignoreButton->setToolTip(tr("Do not display this warning in the future"));
                             info.setIcon(QMessageBox::Warning);
 
@@ -1320,7 +1320,7 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
             info.setInformativeText(tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
             info.setStandardButtons(QMessageBox::Ok);
             info.setDefaultButton(QMessageBox::Ok);
-            QPushButton *ignoreButton = info.addButton(tr("Disable Warning"), QMessageBox::ActionRole);
+            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
             ignoreButton->setToolTip(tr("Do not display this warning in the future"));
             info.setIcon(QMessageBox::Warning);
 
@@ -1437,10 +1437,27 @@ SequenceManager::sendAudioLevel(MappedEvent *mE)
 {
     RosegardenMainViewWidget *v;
 // 	QList<RosegardenMainViewWidget>& viewList = m_doc->getViewList();
-	QList<RosegardenMainViewWidget*> viewList = m_doc->getViewList();
+    QList<RosegardenMainViewWidget*> viewList = m_doc->getViewList();
 
-//     for (v = viewList.first(); v != 0; v = viewList.next()) {
-	for( int i=0; i< viewList.count(); i++ ){
+    // Some bit of incomplete rewriting here...  I wonder if this fixes one of
+    // the mysterious crashes. It used to read:
+    //
+    //   for (v = viewList.first(); v != 0; v = viewList.next()) {
+    //
+    // but that no longer compiles, because QList has no ::next() method (though
+    // it apparently did in Qt3.)  It seemed after a glance at the QList API the
+    // thing to do would be to do what someone started here, and take advantage
+    // of how you can use QList like an array, addressed by index in brackets.
+    // The problem is whoever started that never did anything with v, and I
+    // wound up here because I happened to notice the compiler warning about v
+    // always being used uninitialized.
+    //
+    // I'm not sure what this code does, and have only done very minimal
+    // research into any of this.  This solution looks sensible, but there may
+    // be unintended consequences.
+    for (int i=0; i < viewList.count(); i++ ) {
+        std::cerr << "SequenceManager::setAudioLevel() firing mysterious code that used to have v uninitialized." << std::endl;
+        v = viewList[i];
         v->showVisuals(mE);
     }
 
