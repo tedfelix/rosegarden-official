@@ -91,13 +91,18 @@ instrument-ts:
 menu-ts:
 	$(PERL) scripts/extract_menu_tr_strings.pl $(RCS) > data/QMenuStrings.cpp
 
-ts:	menu-ts instrument-ts
+autoload-ts:
+	gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml # (couldn't make macro $(GUNZIP_C) work)
+	$(PERL) scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml > data/AutoloadStrings.cpp
+	rm -f data/autoload/autoload.xml
+
+ts:	menu-ts instrument-ts autoload-ts
 	$(MKDIR_P) data/locale
-	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
 
 ts-noobsolete:	menu-ts instrument-ts
 	$(MKDIR_P) data/locale
-	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
 
 locale:
 	$(LRELEASE) $(TRANSLATIONS)

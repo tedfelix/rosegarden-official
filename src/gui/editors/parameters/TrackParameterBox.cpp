@@ -630,8 +630,14 @@ TrackParameterBox::updateHighLow()
 
 //    m_highButton->setText(tr("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
 //    m_lowButton->setText(tr("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
-    m_highButton->setText(strtoqstr(highest.getAsString(useSharps, includeOctave, base)));
-    m_lowButton->setText(strtoqstr(lowest.getAsString(useSharps, includeOctave, base)));
+    m_highButton->setText(tr(strtoqstr(highest.getAsString(useSharps, includeOctave, base))));
+    m_lowButton->setText(tr(strtoqstr(lowest.getAsString(useSharps, includeOctave, base))));
+
+    std::cout << "TEMPORARY CODE:" << std::endl;
+    for (int tmp = 0; tmp < 128; tmp++) {
+        Pitch tmpP(tmp, accidental);
+        std::cout << "print 'QObject::tr(\"" << tmpP.getAsString(useSharps, includeOctave, base) << "\");'" << std::endl;
+    }
 
     m_presetLbl->setEnabled(false);
 }
