@@ -3,172 +3,172 @@
 <TS version="2.0" language="es">
 <defaultcodec></defaultcodec>
 <context>
-    <name>DeviceManagerDialog</name>
+    <name>DeviceManagerDialogUi</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">Gestionar Dispositivos MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="542"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="543"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="549"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="581"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="582"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="551"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="554"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="555"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="558"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="559"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Bancos...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="561"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="563"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="564"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="565"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="566"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="567"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="600"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="568"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="601"/>
         <source>New</source>
         <translation type="unfinished">Nuevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="569"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="570"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="571"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="572"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="572"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="573"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="574"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="575"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="579"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="614"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="628"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="580"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="615"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="629"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="585"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="586"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="588"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="635"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="589"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="636"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="590"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="637"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="591"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="638"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="592"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="593"/>
         <source>This button will be removed as this was the wrong place to put it.  Do not bother translating this tooltip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="596"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="597"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="598"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="599"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="602"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="603"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="604"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="605"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="608"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
         <source>Receives is data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="610"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="615"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="616"/>
         <source>Default record device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="621"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="622"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="623"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="624"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="632"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="633"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distributions hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as Virtual Keyboard&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16922,9 +16922,19 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Filtros de grabación</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
+        <source>&lt;qt&gt;&lt;p&gt;This track will only record MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="202"/>
         <source>Channel</source>
         <translation type="unfinished">Canal</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
+        <source>&lt;qt&gt;&lt;p&gt;This track will only record MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
@@ -16935,6 +16945,11 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="233"/>
         <source>Notation size:</source>
         <translation type="unfinished">Tamaño de notación:</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose normal, \small or \tiny for this staff when exporting to LilyPond.  This is as close as we get to enabling you to print parts in cue size&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="238"/>
@@ -17022,6 +17037,26 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Clave</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="299"/>
+        <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
+        <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this transpose property set&lt;p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="350"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the lowest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the highest suggested playable note, using a staff&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="159"/>
         <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -17032,21 +17067,6 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
-        <source>This track will only record MIDI from the selected device, filtering anything else out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
-        <source>This track will only record MIDI from the selected channel, filtering anything else out</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
-        <source>Choose normal, \small or \tiny for this staff when exporting to LilyPond.  This is as close as we get to allowing you to print parts in cue size</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
         <source>&lt;qt&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -17054,11 +17074,6 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="299"/>
-        <source>&lt;qt&gt;New segments will be created with this clef inserted at the beginning&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -17147,16 +17162,6 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Transportar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
-        <source>New segments will be created with this transpose property set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="367"/>
-        <source>New segments will be created using this color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>Pitch</source>
         <translation type="unfinished">Altura</translation>
@@ -17173,24 +17178,19 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="350"/>
-        <source>Choose the lowest suggested playable note, using a staff</source>
-        <translation type="unfinished">Escoger la nota más baja sugerida empleando un pentagrama</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="353"/>
         <source>Highest</source>
         <translation type="unfinished">Hasta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
-        <source>Choose the highest suggested playable note, using a staff</source>
-        <translation type="unfinished">Escoger la nota más alta sugerida empleando un pentagrama</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="364"/>
         <source>Color</source>
         <translation type="unfinished">Color</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="367"/>
+        <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="547"/>
