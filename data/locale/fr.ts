@@ -48,7 +48,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Banques...</translation>
+        <translation>Banques...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
