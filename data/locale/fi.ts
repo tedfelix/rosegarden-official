@@ -3,447 +3,174 @@
 <TS version="2.0" language="fi_FI">
 <defaultcodec></defaultcodec>
 <context>
-    <name>DeviceManagerDialogUi</name>
+    <name>DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">Hallitse MIDI-laitteita</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="536"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="538"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="543"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="587"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="549"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="581"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sisäinen synth</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
         <source>Default playback device</source>
         <translation type="unfinished">Oletustoistolaite</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="549"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your playback devices here. Connect them to outgoing ports at right. Double click the device name to change it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="554"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="556"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Bank definitions define, how the programs (sounds) of a device are called, which settings to use for it, etc..&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is possible to load and save these (bank-) settings as *.rgd files in order to export, import and share it.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="564"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="559"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Pankit...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="566"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;New controllers add a knob&lt;/span&gt; to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="561"/>
+        <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="575"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="563"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="576"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="621"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="565"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="567"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="600"/>
         <source>New</source>
         <translation type="unfinished">Uusi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="577"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="569"/>
+        <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="571"/>
         <source>Delete</source>
         <translation type="unfinished">Poista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="578"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="572"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="580"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="574"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="585"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="632"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="653"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="579"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="614"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="628"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="591"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a playback device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an outgoing alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="585"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="601"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="667"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="588"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="635"/>
+        <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="608"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="674"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="590"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="637"/>
         <source>Refresh</source>
         <translation type="unfinished">Virkistä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="610"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LV2 is the most recent plugin standard for linux audio and effect plugins.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;More information is available on the &lt;a href=&quot;http://lv2plug.in/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;LV2 Plugin Website&lt;/span&gt;&lt;/a&gt; .&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="592"/>
+        <source>This button will be removed as this was the wrong place to put it.  Do not bother translating this tooltip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="620"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="596"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="622"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="598"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="602"/>
+        <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="604"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Poista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="626"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="608"/>
         <source>Receives is data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="627"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="633"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="615"/>
         <source>Default record device</source>
         <translation type="unfinished">Oletusnauhoituslaite</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="637"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your record devices here. Connect them to incoming ports at right. &lt;span style=&quot; text-decoration: underline;&quot;&gt;Double click the device name to change it.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Double click an entry in the &quot;Enabled&quot; column, &lt;/span&gt;to enable the device for recording!&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="646"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="621"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="648"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="623"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="657"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a record device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an incoming alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by other midi-sequencers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="632"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distributions hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as Virtual Keyboard&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DevicesManagerNewUi</name>
-    <message>
-        <source>Midi Devices Manager</source>
-        <translation type="obsolete">Midi-laitteiden hallinta</translation>
-    </message>
-    <message>
-        <source>List of playback devices</source>
-        <translation type="obsolete">Lista toistolaitteista</translation>
-    </message>
-    <message>
-        <source>Playback device name</source>
-        <translation type="obsolete">Toistolaitteen nimi</translation>
-    </message>
-    <message>
-        <source>Currently connected to</source>
-        <translation type="obsolete">Nyt yhdistettynä</translation>
-    </message>
-    <message>
-        <source>Default playback device</source>
-        <translation type="obsolete">Oletustoistolaite</translation>
-    </message>
-    <message>
-        <source>Internal Synth</source>
-        <translation type="obsolete">Sisäinen Synth</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Uusi</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Poista</translation>
-    </message>
-    <message>
-        <source>Manage bank definitions...</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Hallitse pankkimäärittelyitä...</translation>
-    </message>
-    <message>
-        <source>List of record devices</source>
-        <translation type="obsolete">Lista nauhoituslaitteista</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Poista</translation>
-    </message>
-    <message>
-        <source>Record device name</source>
-        <translation type="obsolete">Tallenna laitteen nimi</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="obsolete">Sallittu</translation>
-    </message>
-    <message>
-        <source>Default record device</source>
-        <translation type="obsolete">Oletusnauhoituslaite</translation>
-    </message>
-    <message>
-        <source>NO</source>
-        <translation type="obsolete">EI</translation>
-    </message>
-    <message>
-        <source>Null Port</source>
-        <translation type="obsolete">Tyhjä portti</translation>
-    </message>
-    <message>
-        <source>Available incoming ports</source>
-        <translation type="obsolete">Saatavat sisääntulevat portit</translation>
-    </message>
-    <message>
-        <source>Found incoming ports - click to connect</source>
-        <translation type="obsolete">Löydettiin sisääntulevia portteja - klikkaa yhdistääksesi</translation>
-    </message>
-    <message>
-        <source>Refresh</source>
-        <translation type="obsolete">Virkistä</translation>
-    </message>
-    <message>
-        <source>Available outgoing ports</source>
-        <translation type="obsolete">Saatavat ulostulevat portit</translation>
-    </message>
-    <message>
-        <source>Found outgoing ports - click to connect</source>
-        <translation type="obsolete">Löydettiin ulostulevia portteja - klikkaa yhdistääksesi</translation>
-    </message>
-</context>
-<context>
-    <name>Dialog</name>
-    <message>
-        <source>Midi Devices Manager</source>
-        <translation type="obsolete">Midi-laitteiden hallinta</translation>
-    </message>
-    <message>
-        <source>List of playback devices</source>
-        <translation type="obsolete">Lista toisto-laitteista</translation>
-    </message>
-    <message>
-        <source>Playback device name</source>
-        <translation type="obsolete">Toistolaiteen nimi</translation>
-    </message>
-    <message>
-        <source>Currently connected to</source>
-        <translation type="obsolete">Nyt yhdistettynä</translation>
-    </message>
-    <message>
-        <source>Default playback device</source>
-        <translation type="obsolete">Oletustoistolaite</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="216"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="217"/>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="218"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dear user&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The default ouput-device has not been assigned any port yet.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Please select the midi-port you would like to be used by Rosegardens Default-Output-Device.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you haven&apos;t done so, &lt;span style=&quot; text-decoration: underline;&quot;&gt;start your sound-synth first&lt;/span&gt; and press the refresh button. (e.g. qsynth or timidity)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;For more advanced options open the DevicesManager dialog from the menu later. If you would like Rosegarden &lt;span style=&quot; text-decoration: underline;&quot;&gt;to remember these settings&lt;/span&gt;, save your Document as &quot;Default Studio&quot; by selecting [[Studio//Save as DefaultStudio]] in the menu.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="232"/>
-        <source>List of Ports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="235"/>
-        <source>Available outputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="240"/>
-        <source>No port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="242"/>
-        <source>Internal Synth</source>
-        <translation>Sisäinen synth</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="246"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a playback device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an outgoing alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Uusi</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Poista</translation>
-    </message>
-    <message>
-        <source>Manage bank definitions...</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Hallitse pankkien määrittelyjä...</translation>
-    </message>
-    <message>
-        <source>List of record devices</source>
-        <translation type="obsolete">Lista nauhoituslaitteista</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="obsolete">Poista</translation>
-    </message>
-    <message>
-        <source>Record device name</source>
-        <translation type="obsolete">Nauhoituslaitteen nimi</translation>
-    </message>
-    <message>
-        <source>Enabled</source>
-        <translation type="obsolete">Sallittu</translation>
-    </message>
-    <message>
-        <source>Default record device</source>
-        <translation type="obsolete">Oletusnauhoituslaite</translation>
-    </message>
-    <message>
-        <source>NO</source>
-        <translation type="obsolete">EI</translation>
-    </message>
-    <message>
-        <source>Null Port</source>
-        <translation type="obsolete">Tyhjä portti</translation>
-    </message>
-    <message>
-        <source>Available incoming ports</source>
-        <translation type="obsolete">Saatavat sisääntulevat portit</translation>
-    </message>
-    <message>
-        <source>Found incoming ports - click to connect</source>
-        <translation type="obsolete">Löydettiin sisääntulevia portteja - klikkaa yhdistääksesi</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="233"/>
-        <source>Refresh</source>
-        <translation>Virkistä</translation>
-    </message>
-    <message>
-        <source>Available outgoing ports</source>
-        <translation type="obsolete">Saatavat ulostulevat portit</translation>
-    </message>
-    <message>
-        <source>Found outgoing ports - click to connect</source>
-        <translation type="obsolete">Löydettiin ulostulevia portteja - klikkaa yhdistääksesi</translation>
-    </message>
-</context>
-<context>
-    <name>NotationView</name>
-    <message>
-        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
-Not enough space was found.
-If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="obsolete">Rajoitettu liittämistyyppi vaatii liitäntäpaikan kohdalla riittävästi tyhjää tilaa (jossa on vain taukoja), jotta kaikki tapahtumat voitaisiin liittää.
-Tyhjää tilaa ei löytynyt riittävästi.
-Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käyttöä &quot;Muokkaa&quot;-valikon &quot;Liitä...&quot;-valinnasta.  Voit myös halutessasi vaihtaa oletusliitäntätyypin myös joksikin muuksi kuin Rajoitettu.</translation>
     </message>
 </context>
 <context>
@@ -3160,10 +2887,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <translation>Tuo &amp;MIDI-tiedosto...</translation>
     </message>
     <message>
-        <source>Import &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Tuo &amp;Rosegarden 2.1 -tiedosto...</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="858"/>
         <source>&amp;Merge</source>
         <translation>&amp;Sulauta</translation>
@@ -3177,10 +2900,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="860"/>
         <source>Merge &amp;MIDI file...</source>
         <translation>Sulauta &amp;MIDI-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Sulauta &amp;Rosegarden 2.1 -tiedosto...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="862"/>
@@ -3336,10 +3055,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="908"/>
         <source>&amp;Audio Mixer</source>
         <translation>Ääni&amp;sekoitin</translation>
-    </message>
-    <message>
-        <source>MIDI Mi&amp;ixer</source>
-        <translation type="obsolete">MIDI-se&amp;koitin</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="910"/>
@@ -3775,10 +3490,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../QMenuStrings.cpp" line="903"/>
         <source>Edit Mar&amp;kers...</source>
         <translation>Muokkaa &amp;kirjanmerkkejä...</translation>
-    </message>
-    <message>
-        <source>Open the New MIDI Devices &amp;Manager</source>
-        <translation type="obsolete">Avaa uusi MIDI-laitteiden &amp;hallitsija</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="497"/>
@@ -5839,10 +5550,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>TicksBelow the current selected track</source>
-        <translation type="obsolete">Valitun raidan alapuolella</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="76"/>
         <source>At the bottom</source>
         <translation>Alhaalla</translation>
@@ -5985,17 +5692,9 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <translation>&lt;ei lisäosaa&gt;</translation>
     </message>
     <message>
-        <source>Audio plugin button</source>
-        <translation type="obsolete">Ääni-lisäosa -painike</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;synth puuttuu&gt;</translation>
-    </message>
-    <message>
-        <source>Synth plugin button</source>
-        <translation type="obsolete">Synth-lisäosa -painike</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
@@ -6006,10 +5705,6 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="168"/>
         <source>Set the audio pan position in the stereo field</source>
         <translation>Aseta äänen jakaantuminen stereokenttään</translation>
-    </message>
-    <message>
-        <source>Open synth plugin&apos;s native editor</source>
-        <translation type="obsolete">Avaa synth-lisäosan oma muokkain</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
@@ -6212,26 +5907,6 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>*.wav|WAV files (*.wav)
-*.*|All files</source>
-        <translation type="obsolete">*.wav|WAV-tiedostot (*.wav)
-*.*|Kaikki tiedostot</translation>
-    </message>
-    <message>
-        <source>*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)
-*.wav|WAV files (*.wav)
-*.flac|FLAC files (*.flac)
-*.ogg|Ogg files (*.ogg)
-*.mp3|MP3 files (*.mp3)
-*.*|All files</source>
-        <translation type="obsolete">*.wav *.flac *.ogg *.mp3|Äänitiedostot (*.wav *.flac *.ogg *.mp3)
-*.wav|WAV tiedostot (*.wav)
-*.flac|FLAC tiedostot (*.flac)
-*.ogg|Ogg tiedostot (*.ogg)
-*.mp3|MP3 tiedostot (*.mp3)
-*.*|Kaikki tiedostot</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
         <source>Select one or more audio files</source>
         <translation>Valitse yksi tai useampia äänitiedostoja</translation>
@@ -6392,10 +6067,6 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Audio plugin button</source>
-        <translation type="obsolete">Ääni-lisäosa -painike</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Audio %1</source>
         <translation>Ääni %1</translation>
@@ -6465,17 +6136,9 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <translation>Lisäosa:</translation>
     </message>
     <message>
-        <source>Select a plugin from this list.</source>
-        <translation type="obsolete">Valitse lisäosa tästä listasta.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="147"/>
         <source>Bypass</source>
         <translation>Ohita</translation>
-    </message>
-    <message>
-        <source>Bypass this plugin.</source>
-        <translation type="obsolete">Ohita tämä lisäosa.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="156"/>
@@ -6484,17 +6147,9 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <translation>&lt;portit&gt;</translation>
     </message>
     <message>
-        <source>Input and output port counts.</source>
-        <translation type="obsolete">Sisään- ja ulostuloporttien määrät.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="435"/>
         <source>&lt;id&gt;</source>
         <translation>&lt;id&gt;</translation>
-    </message>
-    <message>
-        <source>Unique ID of plugin.</source>
-        <translation type="obsolete">Lisäosan uniikki ID.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
@@ -6515,14 +6170,6 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="188"/>
         <source>Paste plugin parameters</source>
         <translation>Liitä lisäosan ominaisuudet</translation>
-    </message>
-    <message>
-        <source>Default</source>
-        <translation type="obsolete">Oletus  </translation>
-    </message>
-    <message>
-        <source>Set to defaults</source>
-        <translation type="obsolete">Aseta oletuksiksi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="204"/>
@@ -6548,10 +6195,6 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="433"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;ei lisäosaa&gt;</translation>
-    </message>
-    <message>
-        <source>This plugin has too many controls to edit here.</source>
-        <translation type="obsolete">Tällä lisäosalla on liian monta ohjainta tässä muokattavaksi.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
@@ -6884,10 +6527,6 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <translation>Nollaa</translation>
     </message>
     <message>
-        <source>MIDI Device</source>
-        <translation type="obsolete">MIDI-laite</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="131"/>
         <source>MIDI Device/Bankname</source>
         <translation type="unfinished"></translation>
@@ -7180,10 +6819,6 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
         <source>Change &amp;Note Style</source>
         <translation>Vaihda &amp;nuotin tyyliä</translation>
     </message>
-    <message>
-        <source>Note &amp;Style</source>
-        <translation type="obsolete">Nuotin t&amp;yyli</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::ChangeTiePositionCommand</name>
@@ -7213,12 +6848,6 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
 </context>
 <context>
     <name>Rosegarden::ChordNameRuler</name>
-    <message>
-        <source>Chord name ruler.
-Turn it on and off from the Settings-&gt;Rulers menu.</source>
-        <translation type="obsolete">Sointunimi-viivain.
-Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translation>
-    </message>
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or        manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off from the Settings-&gt;Rulers menu.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -7516,10 +7145,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
         <translation>Muuta sävellyksen pituus</translation>
     </message>
     <message>
-        <source>Set the Start and End bar markers for this Composition</source>
-        <translation type="obsolete">Aseta alku- ja lopputahtien kirjanmerkit tälle sävellykselle</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
         <source>Change the start and end markers for the composition:</source>
         <translation type="unfinished"></translation>
@@ -7563,46 +7188,14 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <source>Manage Control Events</source>
-        <translation type="obsolete">Hallitse Hallintatapahtumia</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="86"/>
         <source>&lt;no device&gt;</source>
         <translation>&lt;ei laitetta&gt;</translation>
     </message>
     <message>
-        <source>  Control Events for %1 (device %2)</source>
-        <translation type="obsolete">  Hallintatapahtumat %1:lle (laite %2)</translation>
-    </message>
-    <message>
-        <source>Control Event name  </source>
-        <translation type="obsolete">Hallintatapahtuman nimi  </translation>
-    </message>
-    <message>
-        <source>Control Event type  </source>
-        <translation type="obsolete">Hallintatapahtuman tyyppi  </translation>
-    </message>
-    <message>
-        <source>Control Event value  </source>
-        <translation type="obsolete">Hallintatapahtuman arvo  </translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="103"/>
         <source>Description  </source>
         <translation>Kuvaus  </translation>
-    </message>
-    <message>
-        <source>Min  </source>
-        <translation type="obsolete">Alin  </translation>
-    </message>
-    <message>
-        <source>Max  </source>
-        <translation type="obsolete">Ylin  </translation>
-    </message>
-    <message>
-        <source>Default  </source>
-        <translation type="obsolete">Oletus  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
@@ -7704,14 +7297,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
 <context>
     <name>Rosegarden::ControlParameterEditDialog</name>
     <message>
-        <source>Edit Control Parameter</source>
-        <translation type="obsolete">Muokkaa Hallintamuuttujia</translation>
-    </message>
-    <message>
-        <source>Control Event Properties</source>
-        <translation type="obsolete">Hallitse tapahtuman ominaisuuksia</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
         <translation>Nimi:</translation>
@@ -7725,10 +7310,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
         <translation>Kuvaus:</translation>
-    </message>
-    <message>
-        <source>Control Event value:</source>
-        <translation type="obsolete">Hallintatapahtuman arvo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="60"/>
@@ -7954,162 +7535,7 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
     </message>
 </context>
 <context>
-    <name>Rosegarden::DeviceEditorDialog</name>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Hallitse MIDI-laitteita</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Laite</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nimi</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Tyyppi</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="obsolete">Yhteys</translation>
-    </message>
-    <message>
-        <source>Add Play Device</source>
-        <translation type="obsolete">Lisää toistolaite</translation>
-    </message>
-    <message>
-        <source>Add Record Device</source>
-        <translation type="obsolete">Lisää nauhoituslaite</translation>
-    </message>
-    <message>
-        <source>Delete Device</source>
-        <translation type="obsolete">Poista laite</translation>
-    </message>
-    <message>
-        <source>Device %1</source>
-        <translation type="obsolete">Laite %1</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="obsolete">Toista</translation>
-    </message>
-    <message>
-        <source>Record</source>
-        <translation type="obsolete">Nauhoita</translation>
-    </message>
-    <message>
-        <source>No connection</source>
-        <translation type="obsolete">Ei yhteyttä</translation>
-    </message>
-    <message>
-        <source>Apply pending changes?</source>
-        <translation type="obsolete">Toteuta odottavat muutokset?</translation>
-    </message>
-    <message>
-        <source>&lt;new device&gt;</source>
-        <translation type="obsolete">&lt;uusi laite&gt;</translation>
-    </message>
-    <message>
-        <source>New Device</source>
-        <translation type="obsolete">Uusi laite</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::DeviceManagerDialog</name>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Hallitse MIDI-laitteita</translation>
-    </message>
-    <message>
-        <source>Play devices</source>
-        <translation type="obsolete">Toistolaitteet</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Laite</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="obsolete">Yhteys</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Uusi</translation>
-    </message>
-    <message>
-        <source>Delete</source>
-        <translation type="obsolete">Poista</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="obsolete">Tuo...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="obsolete">Vie...</translation>
-    </message>
-    <message>
-        <source>Banks...</source>
-        <translation type="obsolete">Pankit...</translation>
-    </message>
-    <message>
-        <source>Control Events...</source>
-        <translation type="obsolete">Hallintatapahtumat...</translation>
-    </message>
-    <message>
-        <source>Create a new Play device</source>
-        <translation type="obsolete">Luo uusi toistolaite</translation>
-    </message>
-    <message>
-        <source>Delete the selected device</source>
-        <translation type="obsolete">Poista tämä valittu laite</translation>
-    </message>
-    <message>
-        <source>Import Bank, Program and Controller data from a Rosegarden file to the selected device</source>
-        <translation type="obsolete">Tuo pankki, ohjelma ja hallintadata Rosegarden-tiedostosta valittuun laitteeseen</translation>
-    </message>
-    <message>
-        <source>Export Bank and Controller data to a Rosegarden interchange file</source>
-        <translation type="obsolete">Vie pankki- ja ohjaintiedot Rosegradenin vaihtotiedostoon</translation>
-    </message>
-    <message>
-        <source>View and edit Banks and Programs for the selected device</source>
-        <translation type="obsolete">Katso ja muokkaa valitun laitteen pankkia ja ohjelmia</translation>
-    </message>
-    <message>
-        <source>View and edit Control Events for the selected device - these are special Event types that you can define against your device and control through Control Rulers or the Instrument Parameter Box </source>
-        <translation type="obsolete">Katso ja muokkaa valitun laitteen hallintatapahtumia - nämä ovat erityistapahtumatyyppejä, jotka voit määrittää laitekohtaisesti ja joita voit hallita Hallinta-viivaimista tai Instrumenttimuuttujat-laatikosta</translation>
-    </message>
-    <message>
-        <source>Record devices</source>
-        <translation type="obsolete">Nauhoituslaitteet</translation>
-    </message>
-    <message>
-        <source>Current</source>
-        <translation type="obsolete">Nykyinen</translation>
-    </message>
-    <message>
-        <source>Create a new Record device</source>
-        <translation type="obsolete">Luo uusi nauhoituslaite</translation>
-    </message>
-    <message>
-        <source>No connection</source>
-        <translation type="obsolete">Ei yhteyttä</translation>
-    </message>
-    <message>
-        <source>%1</source>
-        <translation type="obsolete">%1</translation>
-    </message>
-    <message>
-        <source>Yes</source>
-        <translation type="obsolete">Kyllä</translation>
-    </message>
-    <message>
-        <source>No</source>
-        <translation type="obsolete">Ei</translation>
-    </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="809"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="830"/>
@@ -8125,22 +7551,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="925"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import from Device in File</source>
-        <translation type="obsolete">Tuo laitetiedostosta</translation>
-    </message>
-    <message>
-        <source>Export Device as...</source>
-        <translation type="obsolete">Vie laite nimellä...</translation>
-    </message>
-    <message>
-        <source>You have specified a directory</source>
-        <translation type="obsolete">Olet määrittänyt hakemiston</translation>
-    </message>
-    <message>
-        <source>The specified file exists.  Overwrite?</source>
-        <translation type="obsolete">Määritetty tiedosto on jo olemassa.  Kirjoitetaanko sen päälle?</translation>
     </message>
 </context>
 <context>
@@ -8414,13 +7824,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
     </message>
 </context>
 <context>
-    <name>Rosegarden::EditToolBox</name>
-    <message>
-        <source>EditToolBox::createTool called - this should never happen</source>
-        <translation type="obsolete">EditToolBox::createTool kutsuttu - tämän ei tulisi tapahtua</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::EditView</name>
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1098"/>
@@ -8610,20 +8013,6 @@ Kytke se päälle ja pois kohdasta Asetukset-&gt;Viivaimet -valikko.</translatio
         <location filename="../../src/gui/general/EditViewBase.cpp" line="288"/>
         <source>Set Segment Duration</source>
         <translation>Aseta osan kesto</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditViewCommandArgumentQuerier</name>
-    <message>
-        <source>Rosegarden - Query</source>
-        <translation type="obsolete">Rosegarden - Kysely</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EditViewCommandRegistry</name>
-    <message>
-        <source>Rosegarden - Warning</source>
-        <translation type="obsolete">Rosegarden - Varoitus</translation>
     </message>
 </context>
 <context>
@@ -9270,12 +8659,6 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <source>All files</source>
         <translation type="unfinished">Kaikki tiedostot</translation>
     </message>
-    <message>
-        <source>%1|Requested file (%2)
-*.wav|WAV files (*.wav)</source>
-        <translation type="obsolete">%1|Vaadittu tiedosto (%2)
-*.wav|WAV-tiedostot (*.wav)</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::FileMergeDialog</name>
@@ -9567,18 +8950,6 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <translation>Nuotinnus</translation>
     </message>
     <message>
-        <source>Use bundled Klearlook theme</source>
-        <translation type="obsolete">Käytä mukana tulevaa Klearklook-teemaa</translation>
-    </message>
-    <message>
-        <source>When not running under KDE</source>
-        <translation type="obsolete">Kun KDE:tä ei ajeta</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Aina</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="301"/>
         <source>Presentation</source>
         <translation>Esitys</translation>
@@ -9842,10 +9213,6 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="187"/>
         <source>Additional headers</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Non-printable headers</source>
-        <translation type="obsolete">Tulostumattomat otsikot</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="207"/>
@@ -10121,22 +9488,6 @@ Esimerkkiteksti tiedostosta:</translation>
         <location filename="../../src/commands/notation/IncrementDisplacementsCommand.h" line="54"/>
         <source>Fine Reposition</source>
         <translation>Hienosijoitus</translation>
-    </message>
-    <message>
-        <source>Push &amp;Left</source>
-        <translation type="obsolete">Työnnä &amp;vasemmalle</translation>
-    </message>
-    <message>
-        <source>Push &amp;Right</source>
-        <translation type="obsolete">Työnnä &amp;oikealle</translation>
-    </message>
-    <message>
-        <source>Push &amp;Up</source>
-        <translation type="obsolete">Työnnä &amp;ylös</translation>
-    </message>
-    <message>
-        <source>Push &amp;Down</source>
-        <translation type="obsolete">Työnnä &amp;alas</translation>
     </message>
 </context>
 <context>
@@ -10633,14 +9984,6 @@ sen sijaan?</translation>
         <translation>LilyPond -vienti/esikatselu</translation>
     </message>
     <message>
-        <source>General options</source>
-        <translation type="obsolete">Yleisvalinnat</translation>
-    </message>
-    <message>
-        <source>Advanced options</source>
-        <translation type="obsolete">Lisävalinnat</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="77"/>
         <source>Layout</source>
         <translation type="unfinished">Taitto</translation>
@@ -10754,10 +10097,6 @@ sen sijaan?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Staff level options</source>
-        <translation type="obsolete">Viivastotason asetukset</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
         <source>Export content</source>
         <translation>Vie sisältö</translation>
@@ -10781,14 +10120,6 @@ sen sijaan?</translation>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Selected segments</source>
         <translation>Valitut osat</translation>
-    </message>
-    <message>
-        <source>Merge tracks that have the same name</source>
-        <translation type="obsolete">Yhdistä raidat joilla on sama nimi</translation>
-    </message>
-    <message>
-        <source>Notation options</source>
-        <translation type="obsolete">Nuotinnusasetukset</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="172"/>
@@ -10827,10 +10158,6 @@ sen sijaan?</translation>
         <translation>Vie viivastoja yhdistävät kaaret</translation>
     </message>
     <message>
-        <source>Layout options</source>
-        <translation type="obsolete">Asettelun valinnat</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="184"/>
         <source>Left</source>
         <translation>Vasen</translation>
@@ -10846,10 +10173,6 @@ sen sijaan?</translation>
         <translation>Oikea</translation>
     </message>
     <message>
-        <source>Lyrics alignment</source>
-        <translation type="obsolete">Sanoituksien sijainti</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="207"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation>Liehuna ladottu alalaita (viivastoja ei levitetä koko sivun alalle)</translation>
@@ -10858,18 +10181,6 @@ sen sijaan?</translation>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Interpret chord texts as lead sheet chord names</source>
         <translation>Tulkitse sointutekstit omalle rivilleen sointunimiksi</translation>
-    </message>
-    <message>
-        <source>Miscellaneous options</source>
-        <translation type="obsolete">Sekalaiset valinnat</translation>
-    </message>
-    <message>
-        <source>Enable &quot;point and click&quot; debugging</source>
-        <translation type="obsolete">Salli &quot;osoita-ja-klikkaa&quot; -korjailu</translation>
-    </message>
-    <message>
-        <source>Export \midi block</source>
-        <translation type="obsolete">Vie \midi -lohko</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="211"/>
@@ -11022,16 +10333,6 @@ sen sijaan?</translation>
 </context>
 <context>
     <name>Rosegarden::LoopRuler</name>
-    <message>
-        <source>Click and drag to move the playback pointer.
-Shift-click and drag to set a range for looping or editing.
-Shift-click to clear the loop or range.
-Double-click to start playback.</source>
-        <translation type="obsolete">Klikkaa ja vedä siirtääksesi toisto-osoittimen.
-Shift-klikkaa ja vedä asettaaksesi alueen silmukaksi tai muokattavaksi.
-Shift-klikkaa poistaaksesi silmukan tai alueen.
-Tupla-klikkaa aloittaaksesi toiston.</translation>
-    </message>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="87"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a rangefor looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Double-click to  start playback.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -11246,10 +10547,6 @@ toiston alussa siirrettävän tiedon määrän takia.</translation>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
         <source>&lt;qt&gt;use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;use program changes from an external source to manipulate these controls (only valid for the currently-active track)&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;käytä ohjelmamuutoksia ulkosesta lähteestä muuttaaksesi näitä valintoja (pätee vain nyt aktiivisena olevalle raidalle)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
@@ -11468,18 +10765,6 @@ korun nuotit.</translation>
         <translation>Hallitse kirjanmerkkejä</translation>
     </message>
     <message>
-        <source>Marker time  </source>
-        <translation type="obsolete">Kirjanmerkin aika  </translation>
-    </message>
-    <message>
-        <source>Marker text  </source>
-        <translation type="obsolete">Merkintäteksti  </translation>
-    </message>
-    <message>
-        <source>Marker description </source>
-        <translation type="obsolete">Kirjanmerkin kuvaus </translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="86"/>
         <source>Time  </source>
         <translation type="unfinished">Aika  </translation>
@@ -11592,10 +10877,6 @@ korun nuotit.</translation>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description:</source>
-        <translation type="obsolete">Kuvaus:</translation>
     </message>
 </context>
 <context>
@@ -11843,10 +11124,6 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <source>Couldn&apos;t apply piano roll layout</source>
         <translation>Ei voitu soveltaa pianorulla-taittoa</translation>
     </message>
-    <message>
-        <source>default message</source>
-        <translation type="obsolete">oletusviesti</translation>
-    </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="1142"/>
         <source>  %n event(s) selected </source>
@@ -12059,17 +11336,6 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::MidiBankListViewItem</name>
-    <message>
-        <source>Percussion Bank</source>
-        <translation type="obsolete">Lyömäsoitinpankki</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Pankki</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::MidiBankTreeWidgetItem</name>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
@@ -12082,21 +11348,6 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Bank</source>
         <translation type="unfinished">Pankki</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiDeviceListViewItem</name>
-    <message>
-        <source>Percussion Bank</source>
-        <translation type="obsolete">Lyömäsoitinpankki</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Pankki</translation>
-    </message>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Kosketinkuvaus</translation>
     </message>
 </context>
 <context>
@@ -12175,13 +11426,6 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="104"/>
         <source>RECORD events to ignore</source>
         <translation>Sivuutettavat Nauhoitus-tapahtumat</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiKeyMapListViewItem</name>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Kosketinkuvaus</translation>
     </message>
 </context>
 <context>
@@ -12883,17 +12127,6 @@ hyödyttämään muitakin.</translation>
     </message>
 </context>
 <context>
-    <name>Rosegarden::NotationSelectionPaster</name>
-    <message>
-        <source>Couldn&apos;t paste at this point</source>
-        <translation type="obsolete">Ei voitu liittää tähän kohtaan</translation>
-    </message>
-    <message>
-        <source>Ready.</source>
-        <translation type="obsolete">Valmis.</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::NotationStaff</name>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="444"/>
@@ -13544,13 +12777,6 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="6078"/>
         <source>Can&apos;t insert note: No note duration selected</source>
         <translation>Ei voitu lisätä nuottia: Kestoa ei oltu valittu</translation>
-    </message>
-    <message numerus="yes">
-        <source>  %n event(s) selected </source>
-        <translation type="obsolete">
-            <numerusform>%n tapahtuma valittu</numerusform>
-            <numerusform>%n tapahtumaa valittu</numerusform>
-        </translation>
     </message>
 </context>
 <context>
@@ -14270,10 +13496,6 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
 <context>
     <name>Rosegarden::RescaleDialog</name>
     <message>
-        <source>Rescale</source>
-        <translation type="obsolete">Uudelleenmitoita</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="49"/>
         <source>Stretch or Squash</source>
         <translation type="unfinished"></translation>
@@ -14598,816 +13820,6 @@ Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla var
     </message>
 </context>
 <context>
-    <name>Rosegarden::RosegardenGUIApp</name>
-    <message>
-        <source>Attempted to launch JACK audio daemon failed.  Audio will be disabled.
-Please check configuration (Settings -&gt; Configure Rosegarden -&gt; Audio -&gt; Startup)
- and restart.</source>
-        <translation type="obsolete">Yritys käynnistää JACK-ääni -taustaprosessi epäonnistui.  Ääni on pois käytöstä.
-Tarkista asetukset (Asetukset -&gt; Aseta Rosegarden -&gt; Ääni -&gt; Aloitus)
- ja käynnistä uudelleen.</translation>
-    </message>
-    <message>
-        <source>Starting sequencer...</source>
-        <translation type="obsolete">Käynnistetään sekvensseriä...</translation>
-    </message>
-    <message>
-        <source>Initializing plugin manager...</source>
-        <translation type="obsolete">Alustetaan lisäosien hallintaa...</translation>
-    </message>
-    <message>
-        <source>Initializing view...</source>
-        <translation type="obsolete">Alustetaan näkymää...</translation>
-    </message>
-    <message>
-        <source>Special Parameters</source>
-        <translation type="obsolete">Erityisominaisuudet</translation>
-    </message>
-    <message>
-        <source>Starting sequence manager...</source>
-        <translation type="obsolete">Aloitetaan sekvensserinhallintaa...</translation>
-    </message>
-    <message>
-        <source>Clearing studio data...</source>
-        <translation type="obsolete">Tyhjennetään studiotietoja...</translation>
-    </message>
-    <message>
-        <source>Starting...</source>
-        <translation type="obsolete">Aloitetaan...</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Suurennos:  </translation>
-    </message>
-    <message>
-        <source>status</source>
-        <translation type="obsolete">tila</translation>
-    </message>
-    <message>
-        <source>%1 - %2</source>
-        <translation type="obsolete">%1 - %2</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist</source>
-        <translation type="obsolete">Tiedostoa &quot;%1&quot; ei ole</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; is actually a directory</source>
-        <translation type="obsolete">Tiedosto &quot;%1&quot; onkin tiedosto</translation>
-    </message>
-    <message>
-        <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="obsolete">Sinulla ei ole lukuoikeuksia kohteeseen &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>An auto-save file for this document has been found
-Do you want to open it instead ?</source>
-        <translation type="obsolete">Löydettiin tämän dokumentin ajonaikainen tallenne.
-Haluatko avata sen tämän asemesta?</translation>
-    </message>
-    <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Esimerkkitiedostot</translation>
-    </message>
-    <message>
-        <source>Untitled</source>
-        <translation type="obsolete">Ei nimeä</translation>
-    </message>
-    <message>
-        <source>Opening a new application window...</source>
-        <translation type="obsolete">Avataan uutta sovellusikkunaa...</translation>
-    </message>
-    <message>
-        <source>Creating new document...</source>
-        <translation type="obsolete">Luodaan uutta dokumenttia...</translation>
-    </message>
-    <message>
-        <source>Malformed URL
-%1</source>
-        <translation type="obsolete">Vääränmuotoin URL
-%1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Ei voida ladata tiedostoa %1</translation>
-    </message>
-    <message>
-        <source>Opening file...</source>
-        <translation type="obsolete">Avataan tiedosto...</translation>
-    </message>
-    <message>
-        <source>Open File</source>
-        <translation type="obsolete">Avaa tiedosto</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Tiedoston tallennus...</translation>
-    </message>
-    <message>
-        <source>Save File</source>
-        <translation type="obsolete">Tallenna tiedosto</translation>
-    </message>
-    <message>
-        <source>This is not a valid filename.
-</source>
-        <translation type="obsolete">Tämä ei ole kelpo tiedostonnimi.
-</translation>
-    </message>
-    <message>
-        <source>This is not a local file.
-</source>
-        <translation type="obsolete">Tämä ei ole paikallinen tiedosto.
-</translation>
-    </message>
-    <message>
-        <source>You have specified a directory</source>
-        <translation type="obsolete">Olet määrittänyt tiedoston</translation>
-    </message>
-    <message>
-        <source>The specified file exists.  Overwrite?</source>
-        <translation type="obsolete">Määritetty tiedosto on jo olemassa.  Kirjoitetaanko päälle?</translation>
-    </message>
-    <message>
-        <source>Saving file with a new filename...</source>
-        <translation type="obsolete">Tallennetaan tiedosto uudella nimellä...</translation>
-    </message>
-    <message>
-        <source>Rosegarden files</source>
-        <translation type="obsolete">Rosegarden-tiedostot</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="obsolete">Kaikki tiedostot</translation>
-    </message>
-    <message>
-        <source>Save as...</source>
-        <translation type="obsolete">Tallenna nimellä...</translation>
-    </message>
-    <message>
-        <source>Closing file...</source>
-        <translation type="obsolete">Suljetaan tiedosto...</translation>
-    </message>
-    <message>
-        <source>Printing...</source>
-        <translation type="obsolete">Tulostetaan...</translation>
-    </message>
-    <message>
-        <source>Previewing...</source>
-        <translation type="obsolete">Esikatsellaan...</translation>
-    </message>
-    <message>
-        <source>Exiting...</source>
-        <translation type="obsolete">Lopetetaan...</translation>
-    </message>
-    <message>
-        <source>Cutting selection...</source>
-        <translation type="obsolete">Leikataan valintaa...</translation>
-    </message>
-    <message>
-        <source>Copying selection to clipboard...</source>
-        <translation type="obsolete">Kopioidaan valintaa leikepöydälle...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Leikepöytä on tyhjä</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Syötetään leikepöydän tietoja...</translation>
-    </message>
-    <message>
-        <source>Duration of empty range to insert</source>
-        <translation type="obsolete">Syötettävän tyhjän alueen kesto</translation>
-    </message>
-    <message>
-        <source>This function needs no more than one segment to be selected.</source>
-        <translation type="obsolete">Tämä toiminto ei tarvitse kuin yhden valitun osan.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t join Audio segments</source>
-        <translation type="obsolete">Ei voitu liittää ääniosia</translation>
-    </message>
-    <message>
-        <source>rescaling an audio file</source>
-        <translation type="obsolete">uudelleenmitoitetaan äänitiedosto</translation>
-    </message>
-    <message>
-        <source>Rescaling audio file...</source>
-        <translation type="obsolete">Uudelleenmitoitetaan äänitiedosto...</translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Luodaan äänen esikatselua...</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Varoitus</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-You must set the audio file path to a valid directory in Document Properties before %1.
-Would you like to set it now?</source>
-        <translation type="obsolete">Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
-Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksista ennen %1.
-Haluatko asettaa sen nyt?</translation>
-    </message>
-    <message>
-        <source>Jog Selection</source>
-        <translation type="obsolete">Askella valinta</translation>
-    </message>
-    <message numerus="yes">
-        <source>Split %n Segment(s) at Time</source>
-        <translation type="obsolete">
-            <numerusform>Jaa %n osa kerrallaan</numerusform>
-            <numerusform>Jaa %n osaa kerrallaan</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Segment Start Time</source>
-        <translation type="obsolete">Osan alkuaika</translation>
-    </message>
-    <message>
-        <source>Set Segment Start Times</source>
-        <translation type="obsolete">Aseta osan alkuajat</translation>
-    </message>
-    <message>
-        <source>Set Segment Start Time</source>
-        <translation type="obsolete">Aseta osan alkuaika</translation>
-    </message>
-    <message>
-        <source>Segment Duration</source>
-        <translation type="obsolete">Osan kesto</translation>
-    </message>
-    <message>
-        <source>Set Segment Durations</source>
-        <translation type="obsolete">Aseta osan kestot</translation>
-    </message>
-    <message>
-        <source>Set Segment Duration</source>
-        <translation type="obsolete">Aseta osan kesto</translation>
-    </message>
-    <message>
-        <source>Set Global Tempo</source>
-        <translation type="obsolete">Aseta yleistempo</translation>
-    </message>
-    <message>
-        <source>Toggle the toolbar...</source>
-        <translation type="obsolete">Kytke työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the tools toolbar...</source>
-        <translation type="obsolete">Kytke Työkalut -työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the tracks toolbar...</source>
-        <translation type="obsolete">Kytke Raidat - työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the editor toolbar...</source>
-        <translation type="obsolete">Kytke Muokkain -työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the transport toolbar...</source>
-        <translation type="obsolete">Kytke Kuljetin -työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the zoom toolbar...</source>
-        <translation type="obsolete">Kytke Suurennos -työkalupalkki...</translation>
-    </message>
-    <message>
-        <source>Toggle the Transport</source>
-        <translation type="obsolete">Kytke Kuljetin</translation>
-    </message>
-    <message>
-        <source>Toggle the statusbar...</source>
-        <translation type="obsolete">Kytke tilapalkki...</translation>
-    </message>
-    <message>
-        <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
-
-        Segments-&gt;Collapse Segments.
-</source>
-        <translation type="obsolete">Liitäntätyökalua ei ole vielä toteutettu.  Ole hyvä ja valitse osat jotka halua liittää yhteen ja käytä sitten valikon kohtaa:
-
-        Osat -&gt; Luhista osat.
-</translation>
-    </message>
-    <message>
-        <source>Join tool not yet implemented</source>
-        <translation type="obsolete">Liitäntätyökalua ei ole vielä toteutettu</translation>
-    </message>
-    <message>
-        <source>Revert modified document to previous saved version?</source>
-        <translation type="obsolete">Palauta muutettu dokumentti aiemmin tallennetuksi versioksi?</translation>
-    </message>
-    <message>
-        <source>Import Rosegarden Project File</source>
-        <translation type="obsolete">Tuo Rosegarden-projekti -tiedosto</translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Projektitiedoston &quot;%1&quot; tuonti ei onnistunut</translation>
-    </message>
-    <message>
-        <source>Open MIDI File</source>
-        <translation type="obsolete">Avaa MIDI-tiedosto</translation>
-    </message>
-    <message>
-        <source>Merge MIDI File</source>
-        <translation type="obsolete">Sulauta MIDI-tiedosto</translation>
-    </message>
-    <message>
-        <source>Importing MIDI file...</source>
-        <translation type="obsolete">Tuo MIDI-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Calculating notation...</source>
-        <translation type="obsolete">Lasketaan nuotinnusta...</translation>
-    </message>
-    <message>
-        <source>Calculate Notation</source>
-        <translation type="obsolete">Laske nuotinnus</translation>
-    </message>
-    <message>
-        <source>Open X11 Rosegarden File</source>
-        <translation type="obsolete">Avaa X11 Rosegarden -tiedosto</translation>
-    </message>
-    <message>
-        <source>Importing X11 Rosegarden file...</source>
-        <translation type="obsolete">Tuodaan X11 Rosegarden -tiedosto</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Ei voitu ladata X11 Rosegarden -tiedostoa.  Se vaikuttaa olevan viallinen.</translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Avaa Hydrogen-tiedosto</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Tuo Hydrogen-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Ei voitu ladata Hydrogen-tiedostoa.  Se vaikuttaa olevan viallinen.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Vie ja tuo Rosegarden-projekti -tiedostoja</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Rosegarden-projekti -pakkaajan apuohjelma</translation>
-    </message>
-    <message>
-        <source>%1 - for project file support</source>
-        <translation type="obsolete">%1 - projektitiedoston tuki</translation>
-    </message>
-    <message>
-        <source>Notation previews through LilyPond</source>
-        <translation type="obsolete">Nuotinnuksen esikatselu LilyPondilla</translation>
-    </message>
-    <message>
-        <source>The Rosegarden LilyPondView helper script</source>
-        <translation type="obsolete">Rosegarden LilyPondView-apuohjelma</translation>
-    </message>
-    <message>
-        <source>%1 - for LilyPond preview support</source>
-        <translation type="obsolete">%1 - LilyPond -esikatselun tuki</translation>
-    </message>
-    <message>
-        <source>General audio file import and conversion</source>
-        <translation type="obsolete">Yleisäänitiedostojen tuonti ja muunnos</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Audio File Importer helper script</source>
-        <translation type="obsolete">Rosegardenin äänitiedostotuonnien apuohjelma</translation>
-    </message>
-    <message>
-        <source>%1 - for audio file import</source>
-        <translation type="obsolete">%1 - äänitiedoston tuonti</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Helper programs not found&lt;/h3&gt;&lt;p&gt;Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Apuohjelmia ei löytynyt&lt;/h3&gt;&lt;p&gt;Rosegarden ei voinut löytää yhtä tai useampaa apuohjelmaa, joita tarvitaan joidenkin toimintojen käyttöä varten.  Seuraavat toiminnot eivät ole käytössä:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;/ul&gt;</source>
-        <translation type="obsolete">&lt;/ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;To fix this, you should install the following additional programs:&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Korjataksesi tämän sinun täytyy asentaa seuraavat lisäohjelmat:&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Helper programs not found</source>
-        <translation type="obsolete">Apuohjelmia ei löytynyt</translation>
-    </message>
-    <message>
-        <source>Clearing down jackd...</source>
-        <translation type="obsolete">Ajetaan alas jackd...</translation>
-    </message>
-    <message>
-        <source>Starting jackd...</source>
-        <translation type="obsolete">Aloitetaan jackd...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
-Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation type="obsolete">Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja tallennus eivät ole enää tässä istunnossa käytössä.
-Ole hyvä, sulje ja käynnistä uudelleen Rosegarden palauttaaksesi äänitoiminnot.</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
-For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation type="obsolete">Rosegardenin sekvensseriprosessi keskeytyi odottamatta.  Ääni ja tallennus ei ole enää tässä istunnossa käytössä.
-Oikeiden ääni- ja MIDI-asetusten varalle löydät apua sivulta http://rosegardenmusic.com.</translation>
-    </message>
-    <message>
-        <source>Exporting Rosegarden Project file...</source>
-        <translation type="obsolete">Viedään Rosegarden-projekti -tiedosto...</translation>
-    </message>
-    <message>
-        <source>Rosegarden Project files
-</source>
-        <translation type="obsolete">Rosegarden-projekti -tiedostot
-</translation>
-    </message>
-    <message>
-        <source>Export as...</source>
-        <translation type="obsolete">Vie...</translation>
-    </message>
-    <message>
-        <source>Saving Rosegarden file to package failed: %1</source>
-        <translation type="obsolete">Rosegarden-tiedoston tallennus ei onnistunut pakettiin: %1</translation>
-    </message>
-    <message>
-        <source>Failed to export to project file &quot;%1&quot;</source>
-        <translation type="obsolete">Projektitiedoston &quot;%1&quot; vienti ei onnistunut</translation>
-    </message>
-    <message>
-        <source>Exporting MIDI file...</source>
-        <translation type="obsolete">Viedään MIDI-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Standard MIDI files
-</source>
-        <translation type="obsolete">Vakiomuotoiset MIDI-tiedostot
-</translation>
-    </message>
-    <message>
-        <source>Export failed.  The file could not be opened for writing.</source>
-        <translation type="obsolete">Vienti epäonnistui.  Tiedostoa ei voitu avata kirjoittamista varten.</translation>
-    </message>
-    <message>
-        <source>Exporting Csound score file...</source>
-        <translation type="obsolete">Viedään Csound-nuottitiedosto...</translation>
-    </message>
-    <message>
-        <source>Exporting Mup file...</source>
-        <translation type="obsolete">Viedään Mup-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Mup files
-</source>
-        <translation type="obsolete">Mup-tiedostot
-</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Viedään LilyPond-tiedosto...</translation>
-    </message>
-    <message>
-        <source>LilyPond files</source>
-        <translation type="obsolete">LilyPond-tiedostot</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Tulostetaan LilyPond-tiedosto...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Väliaikaisen tiedoston avaaminen LilyPond-vientiä varten ei onnistunut.</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Esikatsellaan LilyPond-tiedostoa...</translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">LilyPond-esikatselun ominaisuudet</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">LilyPond-esikatselun ominaisuudet</translation>
-    </message>
-    <message>
-        <source>Exporting MusicXML file...</source>
-        <translation type="obsolete">Viedään MusicXML-tiedosto...</translation>
-    </message>
-    <message>
-        <source>XML files</source>
-        <translation type="obsolete">XML-tiedostot</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before recording audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
-Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksista ennen nauhoittamista.
-Haluatko asettaa sen nyt?</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation type="obsolete">Virhe</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before you start to record audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Äänitiedostopolkua ei ole tai kirjoitus siihen ei onnistu.
-Ole hyvä ja aseta äänitiedostopoluksi kelpo hakemisto Asiakirjan ominaisuuksista ennen nauhoittamista.
-Haluatko asettaa sen nyt?</translation>
-    </message>
-    <message>
-        <source>Move playback pointer to time</source>
-        <translation type="obsolete">Siirrä toisto-osoitin ajankohtaan</translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Replace Tempo Change at %1</source>
-        <translation type="obsolete">Korvaa temponmuutos kohdassa %1</translation>
-    </message>
-    <message>
-        <source>Set Global and Default Tempo</source>
-        <translation type="obsolete">Aseta yleinen ja oletustempo</translation>
-    </message>
-    <message>
-        <source>Move Tempo Change</source>
-        <translation type="obsolete">Siirrä tempomuutos</translation>
-    </message>
-    <message>
-        <source>new marker</source>
-        <translation type="obsolete">uusi merkintä</translation>
-    </message>
-    <message>
-        <source>no description</source>
-        <translation type="obsolete">ei kuvausta</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to add audio file %1</source>
-        <translation type="obsolete">Sekvensseri ei onnistunut lisäämään äänitiedostoa %1</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to remove audio file id %1</source>
-        <translation type="obsolete">Sekvensseri ei onnistunut poistamaan äänitiedostoa, id %1</translation>
-    </message>
-    <message>
-        <source>Modify Segment label</source>
-        <translation type="obsolete">Muuta osan nimeä</translation>
-    </message>
-    <message>
-        <source>Modify Segments label</source>
-        <translation type="obsolete">Muuta osien nimiä</translation>
-    </message>
-    <message>
-        <source>Relabelling selection...</source>
-        <translation type="obsolete">Nimeä uudelleen valinta...</translation>
-    </message>
-    <message>
-        <source>Enter new label</source>
-        <translation type="obsolete">Syötä uusi nimi</translation>
-    </message>
-    <message>
-        <source>Play List</source>
-        <translation type="obsolete">Soittolista</translation>
-    </message>
-    <message>
-        <source>Queueing MIDI panic events for tranmission...</source>
-        <translation type="obsolete">Jonotetaan MIDI:n paniikkitapahtumat lähettämistä varten...</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to save this as your default studio?</source>
-        <translation type="obsolete">Haluatko todella tallentaa tämän oletusstudioksesi?</translation>
-    </message>
-    <message>
-        <source>Saving current document as default studio...</source>
-        <translation type="obsolete">Tallennetaan nykyinen dokumentti oletusstudioksi...</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to import your default studio and lose the current one?</source>
-        <translation type="obsolete">Haluatko todella tuoda oletusstudiosi ja hävittää tämänhetkisen studion?</translation>
-    </message>
-    <message>
-        <source>Import Studio from File</source>
-        <translation type="obsolete">Tuo studio tiedostosta</translation>
-    </message>
-    <message>
-        <source>Import Studio</source>
-        <translation type="obsolete">Tuo studio</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Uudempi versio saatavilla</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Uudempi versio saatavilla&lt;/h3&gt;&lt;p&gt;Uudempi Rosegardenin versio voi olla saatavilla.&lt;br&gt;Ole hyvä ja katso lisätietoja &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardenin nettisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::RosegardenGUIDoc</name>
-    <message>
-        <source>Warning</source>
-        <translation type="obsolete">Varoitus</translation>
-    </message>
-    <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Nykyistä tiedostoa on muokattu.
-Haluatko tallentaa sen?</translation>
-    </message>
-    <message numerus="yes">
-        <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation type="obsolete">
-            <numerusform>Poista %n äänitiedosto, joka nauhoitettiin tallentamattoman istunnon aikana?</numerusform>
-            <numerusform>Poista %n äänitiedostoa, jotka nauhoitettiin tallentamattoman istunnon aikana?</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>The following audio files were recorded during this session but have been unloaded
-from the audio file manager, and so are no longer in use in the document you are saving.
-
-You may want to clean up these files to save disk space.
-
-Please select any you wish to delete permanently from the hard disk.
-</source>
-        <translation type="obsolete">Seuraavat äänitiedostot najuhoitettiin tämän session aikana, mutta ne vapautettiin
-äänitiedoston hallitsijasta, ja ne eivät siksi ole enää käytössä asiakirjassa, jota olet tallentamassa.
-
-Voit haluta poistaa nämä tiedostot säästääksesi levytilaa.
-
-Ole hyvä ja valitse haluamasi tiedostot poistaaksesi ne pysyvästi kovalevyltä.
-</translation>
-    </message>
-    <message numerus="yes">
-        <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation type="obsolete">
-            <numerusform>&lt;qt&gt;Ollaan poistamassa %n äänitiedosto pysyvästi kovalevyltä.&lt;br&gt;Tapoja palauttaa tiedostoa ei ole.&lt;br&gt;Oletko varma?&lt;/qt&gt;</numerusform>
-            <numerusform>&lt;qt&gt;Ollaan poistamassa %n äänitiedostoa pysyvästi kovalevyltä.&lt;br&gt;Tapoja palauttaa tiedostoja ei ole.&lt;br&gt;Oletko varma?&lt;/qt&gt;</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>File %1 could not be deleted.</source>
-        <translation type="obsolete">Tiedostoa %1 ei voitu poistaa.</translation>
-    </message>
-    <message>
-        <source>Untitled</source>
-        <translation type="obsolete">Ei nimeä</translation>
-    </message>
-    <message>
-        <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="obsolete">Ei voitu avata tiedostoa &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Reading file...</source>
-        <translation type="obsolete">Luetaan tiedostoa...</translation>
-    </message>
-    <message>
-        <source>Could not open Rosegarden file</source>
-        <translation type="obsolete">Ei voitu avata Rosegarden-tiedostoa</translation>
-    </message>
-    <message>
-        <source>Error when parsing file &apos;%1&apos;: &quot;%2&quot;</source>
-        <translation type="obsolete">Virhe jäsenneltäessä tiedostoa &apos;%1&apos;: &quot;%2&quot;</translation>
-    </message>
-    <message>
-        <source>Generating audio previews...</source>
-        <translation type="obsolete">Luodaan ääniesikatseluja...</translation>
-    </message>
-    <message>
-        <source>Merge</source>
-        <translation type="obsolete">Sulauta</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Tiedoston tallennus...</translation>
-    </message>
-    <message>
-        <source>Error while writing on &apos;%1&apos;</source>
-        <translation type="obsolete">Virhe kirjoitettaessa paikkaan &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>File load cancelled</source>
-        <translation type="obsolete">Tiedoston lataaminen keskeytettiin</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Ääni ja lisäosat eivät ole saatavilla&lt;/h3&gt;&lt;p&gt;Tämä sävellys käyttää äänitiedostoja tai lisäosia, mutta Rosegarden on tällä hetkellä käynnissä ilman ääntä, koska JACK-äänipalvelin ei ollut saatavilla käynnistyksen yhteydessä.&lt;/p&gt;&lt;p&gt;Ole hyvä ja sulje Rosegarden, käynnistä JACK-äänipalvelin, ja käynnistä Rosegarden uudelleen, jos haluat ladata sävellyksen kokonaan.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VAROITUS:&lt;/b&gt; Jos tallennat tämän sävellyksen uudelleen, sen kaikki ääni- ja lisäosatiedot ja asetukset häviävät.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Ääni ja lisäosat eivät ole saatavilla&lt;/h3&gt;&lt;p&gt;Tämä sävellys käyttää äänitiedostoja tai lisäosia, mutta käytät Rosegardenin versiota, joka käännettiin ilman äänitukea.&lt;/p&gt;&lt;p&gt;&lt;b&gt;VAROITUS:&lt;/b&gt; Jos tallennat tämän sävellyksen uudelleen tällä Rosegardenin versiolla, sen kaikki ääni- ja lisäosatiedot ja asetukset häviävät.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Incorrect audio sample rate&lt;/h3&gt;&lt;p&gt;This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).&lt;/p&gt;&lt;p&gt;Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.&lt;/p&gt;&lt;p&gt;Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Väärä äänen näytteenottotaajuus&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, jotka nauhoitettiin tai tuotiin äänipalvelimelta, joka käyttää eri näytteenottotaajuutta (%1 Hz) kuin mikä on nykyisen JACK-palvelimen näytteenottotaajuus (%2 Hz).&lt;p/&gt;&lt;p&gt;Rosegarden soittaa tämän sävellyksen oikealla nopeudella, mutta sisällytetyt äänitiedostot kuulostavat todennäköisesti kamalalta.&lt;/p&gt;&lt;p&gt;Ole hyvä ja harkitse JACK-palvelimen käynnistämistä oikella taajuudella (%3 Hz) aja tämän sävellyksen uudelleen lataamista ennen kuin jatkat työskentelyä sen parissa.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Yhteensopimattomia äänen näytteenottotaajuuksia&lt;/h3&gt;&lt;p&gt;Tämä sävellys sisältää äänitiedostoja, joilla on useampi kuin yksi näytteenottotaajuus.&lt;p/&gt;&lt;p&gt;Rosegarden soittaa ne oikealla nopeudella, mutta äänitiedostot, joiden näytteenottotaajuus poikkeaa nykyisen JACK-palvelimen näytteenottotaajudesta (%1 Hz) kuulostavat todennäköisesti kamalalta.&lt;/p&gt;&lt;p&gt;Ole hyvä ja katso äänitiedostojen hallinnasta lisää yksityiskohtia, ja harkitse väärällä näytteenottotaajudella olevien tiedostojen näytteistämistä uudelleen.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Inconsistent sample rates</source>
-        <translation type="obsolete">Yhteensopimattomia näytteenottotaajuuksia</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Plugins not found&lt;/h3&gt;&lt;p&gt;The following audio plugins could not be loaded:&lt;/p&gt;&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Lisäosia ei löytynyt&lt;/h3&gt;&lt;p&gt;Seuraavaa ääni-lisäosaa ei ladattu:&lt;/p&gt;&lt;ul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (kohdasta %2)&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>This file contains one or more old element types that are now deprecated.
-Support for these elements may disappear in future versions of Rosegarden.
-We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
-        <translation type="obsolete">Tämä tiedosto sisältää yhden tai useampia vanhoja osasten tyyppejä, jota ovat nyt vanhentuneita.
-Tuki näille osasille voi kadota tulevissa Rosegardenin versioissa.
-Suosittelemme, että talletat tämän tiedoston tällä Rosegarden-versiolla varmistaaksesi, että se voidaan ladata vielä tulevissa versioissa.</translation>
-    </message>
-    <message>
-        <source>Insert Recorded MIDI</source>
-        <translation type="obsolete">Syötä nauhoitettu MIDI</translation>
-    </message>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(nauhoitettu)</translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Luodaan äänen esikatselua...</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::RosegardenGUIView</name>
-    <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Ei muita kuin ääniosia sävellyksessä</translation>
-    </message>
-    <message>
-        <source>Selection must contain only audio or non-audio segments</source>
-        <translation type="obsolete">Valinta saa sisältää vain yhden ääniosan tai muun kuin ääniosan</translation>
-    </message>
-    <message>
-        <source>No non-audio segments selected</source>
-        <translation type="obsolete">Muita kuin ääniosia ei valittuna</translation>
-    </message>
-    <message>
-        <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
-See Settings -&gt; Configure Rosegarden -&gt; Audio.</source>
-        <translation type="obsolete">Et ole vielä määritellyt Rosegardenin käyttämää äänimuokkainta.
-Katso Asetukset -&gt; Muokkaa ohjelman Rosegarden asetuksia -&gt; Ääni.</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">tuodaan ulkoista äänitiedostoa</translation>
-    </message>
-    <message>
-        <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="obsolete">tuodaan äänitiedostoa, joka täytyisi joko muuntaa tai muuttaa sen näytteenottotaajuutta</translation>
-    </message>
-    <message>
-        <source>Adding audio file...</source>
-        <translation type="obsolete">Lisätään äänitiedosto...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t add dropped file. </source>
-        <translation type="obsolete">Ei voitu lisätä tiputettua tiedostoa. </translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Luodaan äänen esikatselua...</translation>
-    </message>
-    <message>
-        <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="obsolete">Yritä kopioida tämä tiedosto hakemistoon, jonne sinulla on kirjoitusoikeus ja lisää se uudelleen</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
         <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="256"/>
@@ -15667,7 +14079,7 @@ Haluatko avata sen tämän asemesta?</translation>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1975"/>
         <source>The specified file exists.  Overwrite?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Määritetty tiedosto on jo olemassa.  Kirjoitetaanko päälle?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1991"/>
@@ -16162,7 +14574,7 @@ Oikeiden ääni- ja MIDI-asetusten varalle löydät apua sivulta http://rosegard
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4716"/>
         <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Väliaikaisen tiedoston avaaminen LilyPond-viennille ei onnistunut.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="4752"/>
@@ -16331,12 +14743,6 @@ Haluatko asettaa sen nyt?</translation>
 </context>
 <context>
     <name>Rosegarden::Rotary</name>
-    <message>
-        <source>Click and drag up and down or left and right to modify.
-Double click to edit value directly.</source>
-        <translation type="obsolete">Klikkaa ja vedä ylös ja alas tai vasemmelle ja oikealle muuttaaksesi arvoa.
-Kaksoisklikkauksella voit muokata arvoa suoraan.</translation>
-    </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="88"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
@@ -16607,10 +15013,6 @@ Kaksoisklikkauksella voit muokata arvoa suoraan.</translation>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1074"/>
         <source>Enter new label:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter new label</source>
-        <translation type="obsolete">Syötä uusi nimi</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1184"/>
@@ -16918,8 +15320,8 @@ Haluatko asettaa sen nyt?</translation>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="945"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1091"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="943"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1089"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -16928,8 +15330,8 @@ Ole hyvä ja käynnistä Rosegarden uudelleen jatkaaksesi äänen kanssa työske
 Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="951"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1097"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="949"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1095"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -16938,82 +15340,110 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="962"/>
-        <source>Run out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation>Prosessorin teho ei riittänyt reaaliaikaiseen äänenkäsittelyyn.  Ei voida jatkaa.</translation>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="960"/>
+        <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="988"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="986"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation>Vakava virhe tapahtui ALSA MIDI -alijärjestelmässä.  Sekvenssointia ei ehkä voida jatkaa.  Ole hyvä ja tarkista komentorivin tuloste saadaksesi lisää tietoa.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1014"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1012"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation>JACK-ääni -alijärjestelmä hukkaa näytteiden kehyksiä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1032"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1030"/>
         <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
         <translation>Äänitietojen lukeminen ajantasaisesti ääni-alijärjestelmää varten epäonnistui.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1036"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1034"/>
         <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
         <translation>Ei pystytty kirjoittamaan levylle äänitietoja niin nopeasti kuin ääni-alijärjestelmä vaatisi.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1040"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1038"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Äänisekoitin -alijärjestelmä ei pysy pystyssä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1044"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1042"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation>Ääni-alijärjestelmä ei pysy pystyssä.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1048"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1046"/>
         <source>Unknown sequencer failure mode!</source>
         <translation>Tuntematon sekvensserin virhetila!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1113"/>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Järjestelmän aikaerottelukyky on liian matala&lt;/h3&gt;&lt;p&gt;Rosegarden ei löytänyt korkeaerottelukykyistä aikalähdettä MIDI-esitystä varten.&lt;/p&gt;&lt;p&gt;Tämä voi tarkoittaa sitä, että käytät Linux-järjestelmää, jossa ytimen aikaerottelukyky on asetettu liian alhaiseksi.  Ole hyvä ja ota yhteyttä Linux-jakelijaasi saadaksesi lisää informaatiota.&lt;/p&gt;&lt;p&gt;Jotkut Linux-jakelijat tukevat jo pienen viiveen ydintä, katso lisäohjeita sivulta &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt;.&lt;/p&gt;</translation>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1114"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1163"/>
+        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1115"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for instructions.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1118"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1167"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1323"/>
+        <source>Suppress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1119"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1168"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1324"/>
+        <source>Do not display this warning in the future</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1132"/>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Järjestelmän aikaerottelukyky on liian matala&lt;/h3&gt;&lt;p&gt;Rosegarden ei löytänyt korkeaerottelukykyistä aikalähdettä MIDI-esitystä varten.&lt;/p&gt;&lt;p&gt;Saatat voida ratkaista tämän ongelman lataamalla ytintä varten RTC-moduulin.  Tehdäksesi tämän, yritä ajaa &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; komentorivi-ikkunassa ja käynnistämällä Rosegarden uudelleen&lt;/p&gt;&lt;p&gt;Vaihtoehtoisesti, tarkista tarjoaako Linux-jakelijasi multimedialle optimoitua ydintä.  Sivulle &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; on kerätty tästä tietoja.&lt;/p&gt;</translation>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1181"/>
+        <source>This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1232"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1164"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1319"/>
+        <source>&lt;h3&gt;Failed to connect to JACK&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1320"/>
+        <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1337"/>
+        <source>This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1289"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Sekä MIDI että Ääni -alijärjestelmien alustaminen epäonnistui.&lt;/p&gt;&lt;p&gt;Voit jatkaa ilman sekvensseriä, mutta suosittelen Rosegardenin sulkemista, käskyn&quot;alsaconf&quot; ajamista pääkäyttäjänä ja Rosegardenin käynnistämistä uudelleen. Jos haluat nimenomaan olla käyttämättä sekvensseriä, käytä &quot;rosegarden --nosequencer&quot; välttääksesi jatkossa tämän virheilmoituksen näkemisen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1234"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1291"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;MIDI-alijärjestelmän alustaminen epäonnistui.&lt;/p&gt;&lt;p&gt;Voit jatkaa ilman sekvensseriä, mutta suosittelen Rosegardenin sulkemista, käskyn&quot;modprobe snd-seq-midi&quot; ajamista pääkäyttäjänä ja Rosegardenin käynnistämistä uudelleen. Jos haluat nimenomaan olla käyttämättä sekvensseriä, käytä &quot;rosegarden --nosequencer&quot; välttääksesi jatkossa tämän virheilmoituksen näkemisen.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
-        <source>&lt;p&gt;The Rosegarden sequencer module version does not match the GUI module version.&lt;/p&gt;&lt;p&gt;You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegardenin sekvensserimoduulin versio ei sovi yhteen käyttöliittymämoduulin version kanssa.&lt;/p&gt;&lt;p&gt;Olet todennäköisesti sekoittanut tiedostot kahdesta Rosegardenin versiosta.  Ole hyvä ja tarkista asennus.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1242"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1302"/>
         <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
         <translation>&lt;h3&gt;Sekvensserin käynnistys ei onnistunut&lt;/h3&gt;%1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to JACK</source>
-        <translation type="obsolete">Yhdistäminen JACK-palvelimeen epäonnistui</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Failed to connect to JACK audio server.&lt;/h3&gt;&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Yhdistäminen JACK-äänipalvelimeen epäonnistui.&lt;/h3&gt;&lt;p&gt;Rosegarden ei voinut yhdistää JACK-äänipalvelimelle.  Tämä todennäköisesti tarkoittaa, että JACK-palvelin ei ole käynnissä.&lt;/p&gt;&lt;p&gt;Jos haluat voida toistaa tai nauhoittaa äänitiedostoja tai käyttää lisäosia, sinun tulee sulkea Rosegarden ja käynnistää JACK-palvelin ennen Rosegardenin käynnistämistä uudelleen.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -17078,14 +15508,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <location filename="../../src/commands/notation/SetVisibilityCommand.h" line="46"/>
         <source>Set Visibility</source>
         <translation>Aseta näkyvyys</translation>
-    </message>
-    <message>
-        <source>Make &amp;Visible</source>
-        <translation type="obsolete">Tee nä&amp;kyväksi</translation>
-    </message>
-    <message>
-        <source>Make &amp;Invisible</source>
-        <translation type="obsolete">Tee &amp;näkymättömäksi</translation>
     </message>
 </context>
 <context>
@@ -17433,10 +15855,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>Hallitse Synth-lisäosia</translation>
     </message>
     <message>
-        <source>Synth plugins</source>
-        <translation type="obsolete">Synth-lisäosat</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="191"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;tyhjä&gt;</translation>
@@ -17460,10 +15878,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="244"/>
         <source>Create plugin instances here, e.g. software synthesizers and effects. </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Close</source>
-        <translation type="obsolete">Sulje</translation>
     </message>
 </context>
 <context>
@@ -18485,7 +16899,7 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="132"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="711"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="705"/>
         <source>&lt;untitled&gt;</source>
         <translation>&lt;ei nimeä&gt;</translation>
     </message>
@@ -18501,19 +16915,9 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation>Laite</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="159"/>
-        <source>&lt;qt&gt;&lt;p&gt;This allows you to choose how you play sound with MIDI. It can be a hardware interface, the various devices available to your soundcard or a software synth interface such as Timidity.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>Instrument</source>
         <translation>Instrumentti</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="169"/>
-        <source>&lt;qt&gt;&lt;p&gt;You can choose the sound your MIDI interface will make. The patches available will depend on your MIDI device set in the MIDI Device Manager.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="180"/>
@@ -18521,19 +16925,9 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation>Nauhoitussuodattimet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
-        <source>&lt;qt&gt;&lt;p&gt;Things you can choose to record through.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="202"/>
         <source>Channel</source>
         <translation>Kanava</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
-        <source>&lt;qt&gt;&lt;p&gt;Choose the channel to which you want to record.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
@@ -18546,309 +16940,320 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation>Nuotinnuksen koko:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
-        <source>&lt;qt&gt;&lt;p&gt;Allows you to change the size of the individual staff on exporting to LilyPond.&lt;p&gt;&lt;p&gt; This can be useful if the staff is for the purposes of ....what??? &lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="239"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="238"/>
         <source>Normal</source>
         <translation>Normaali</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="240"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="239"/>
         <source>Small</source>
         <translation>Pieni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="241"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="240"/>
         <source>Tiny</source>
         <translation>Pikkuruinen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="248"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="247"/>
         <source>Bracket type:</source>
         <translation>Sulkumerkin tyyppi:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="251"/>
-        <source>&lt;qt&gt;&lt;p&gt;This allows you to set the Grand Staff Brackets that suit the track.&lt;/p&gt;&lt;p&gt;For example if you have two tracks that belong to a piano score, each would have this set for export to LilyPond.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="254"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="252"/>
         <source>-----</source>
         <translation>-----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="253"/>
         <source>[----</source>
         <translation>[----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="254"/>
         <source>----]</source>
         <translation>----]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
         <source>[---]</source>
         <translation>[---]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
         <source>{----</source>
         <translation>{----</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
         <source>----}</source>
         <translation>----}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>{[---</source>
         <translation>{[---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="261"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>---]}</source>
         <translation>---]}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="270"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="268"/>
         <source>Create segments with</source>
         <translation>Luo osat </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="282"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
         <source>Preset</source>
         <translation>Esiasetus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="285"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="283"/>
         <source>&lt;none&gt;</source>
         <translation>&lt;tyhjä&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="288"/>
-        <source>&lt;qt&gt;&lt;p&gt;The name of the &lt;b&gt;preset&lt;/b&gt; that you have loaded will appear here.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="292"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
         <source>Load</source>
         <translation>Lataa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="293"/>
-        <source>&lt;qt&gt;&lt;p&gt;A dialog will appear which will allow you to choose some preset parameters for your track.&lt;/p&gt;&lt;p&gt;Instruments are grouped for easy discovery, you can choose the level of ability of your player and whether to change existing segment parameters or just new segments in the track.&lt;/p&gt;&lt;p&gt;If you use a preset, you don&apos;t have to change any of the other parameters for new segments.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="301"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="296"/>
         <source>Clef</source>
         <translation>Avain</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="304"/>
-        <source>&lt;qt&gt;&lt;p&gt;Choose from an array of Clefs suited to your instrument.&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="159"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="169"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the instrument this track will use for playback. (Configure the instrument in &lt;b&gt;Instrument Parameters&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
+        <source>This track will only record MIDI from the selected device, filtering anything else out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
+        <source>This track will only record MIDI from the selected channel, filtering anything else out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
+        <source>Choose normal, \small or \tiny for this staff when exporting to LilyPond.  This is as close as we get to allowing you to print parts in cue size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
+        <source>&lt;qt&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
+        <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="299"/>
+        <source>&lt;qt&gt;New segments will be created with this clef inserted at the beginning&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="301"/>
         <source>treble</source>
         <translation>diskantti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="302"/>
         <source>bass</source>
         <translation>basso</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="308"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="303"/>
         <source>crotales</source>
         <translation>crotales</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="309"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="304"/>
         <source>xylophone</source>
         <translation>ksylofoni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="310"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="305"/>
         <source>guitar</source>
         <translation>kitarakitara</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="311"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
         <source>contrabass</source>
         <translation>kontrabasso</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="312"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
         <source>celesta</source>
         <translation>celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="308"/>
         <source>old celesta</source>
         <translation>vanha celesta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="309"/>
         <source>french</source>
         <translation>ranskalainen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="310"/>
         <source>soprano</source>
         <translation>sopraano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="311"/>
         <source>mezzosoprano</source>
         <translation>mezzosopraano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="317"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="312"/>
         <source>alto</source>
         <translation>altto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="318"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
         <source>tenor</source>
         <translation>tenori</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="319"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
         <source>baritone</source>
         <translation>baritoni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="320"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
         <source>varbaritone</source>
         <translation>varbaritoni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="321"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
         <source>subbass</source>
         <translation>alibasso</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="324"/>
         <source>Transpose</source>
         <translation>Siirrä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
-        <source>&lt;qt&gt;&lt;p&gt;Set the transpose for your instrument. This will play in the proper key but will export to the correct key for your instrument.&lt;/p&gt;&lt;p&gt;For example a trumpet in Bb needs to be 2 tones below its written notation. &lt;b&gt;OK Michael, is this little factoid correct? I tried the preset out in 1.7.3 to see what it did and extrapolated from there.&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
+        <source>New segments will be created with this transpose property set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="349"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="367"/>
+        <source>New segments will be created using this color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>Pitch</source>
         <translation>Sävelkorkeus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="352"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="346"/>
         <source>Lowest</source>
         <translation>Matalin</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="354"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="361"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="348"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="355"/>
         <source>---</source>
         <translation>---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="350"/>
         <source>Choose the lowest suggested playable note, using a staff</source>
         <translation>Valitse alin ehdotettu soiva nuotti, joka on viivastolla</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="359"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="353"/>
         <source>Highest</source>
         <translation>Korkein</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="362"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
         <source>Choose the highest suggested playable note, using a staff</source>
         <translation>Valitse korkein ehdotettu soiva nuotti, joka on viivastolla</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="370"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="364"/>
         <source>Color</source>
         <translation>Väri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="373"/>
-        <source>&lt;qt&gt;&lt;p&gt;Set the default color of &lt;b&gt;new&lt;/b&gt; segments in the track.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="553"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="554"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="547"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="548"/>
         <source>Audio</source>
         <translation>Ääni</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="568"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="587"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="562"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="581"/>
         <source>All</source>
         <translation>Kaikki</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="715"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="709"/>
         <source>[ Track %1 - %2 ]</source>
         <translation>[ Raita %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="917"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="911"/>
         <source>Default</source>
         <translation>Oletus  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="930"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="924"/>
         <source>Add New Color</source>
         <translation>Lisää uusi väri</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="956"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="950"/>
         <source>New Color Name</source>
         <translation>Uusi värinimi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="957"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="951"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter new name</source>
-        <translation type="obsolete">Syötä uusi nimi</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="953"/>
         <source>New</source>
         <translation>Uusi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="991"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="985"/>
         <source>Highest playable note</source>
         <translation>Korkein soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1013"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1007"/>
         <source>Lowest playable note</source>
         <translation>Alin soiva nuotti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1074"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1068"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation>Instrumentin esiasetus-tietokanta on turmeltunut.  Tarkista asennuksesi.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1118"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1112"/>
         <source>Segment</source>
         <translation>Osa</translation>
     </message>
@@ -19344,17 +17749,17 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation>Rosegarden - Sekvensseri ja nuotintaja</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="423"/>
+        <location filename="../../src/gui/application/main.cpp" line="417"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="678"/>
+        <location filename="../../src/gui/application/main.cpp" line="672"/>
         <source>Welcome!</source>
         <translation>Tervetuloa!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="694"/>
+        <location filename="../../src/gui/application/main.cpp" line="688"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to &lt;a href=&quot;http://www.rosegardenmusic.com/&quot;&gt;http://www.rosegardenmusic.com/&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;Tervetuloa Rosegardenin pariin!&lt;/h2&gt;&lt;p&gt;Tervetuloa Rosegarden ääni- ja MIDI-sekvensserin sekä nuotintajan pariin.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Jos et ole ehtinyt, haluat ehkä asentaa joitain äänen syntetisointi (DSSI)-lisäosia, tai erillisen syntetisointiohjelman, kuten QSynth.  Rosegarden ei syntetisoi itse MIDI-ääntä, joten ilman äänen syntetisoijaa et kuule ääntä.&lt;/li&gt;&lt;li&gt;Rosegarden käyttää äänipalvelinta (JACK) nauhoittaakseen ja toistaakseen ääntä sekä toistaakseen DSSI-lisäosia.  Nämä ominaisuudet ovat käytössä vain jos JACK-palvelin on päällä.&lt;/li&gt;&lt;li&gt;Rosegardenilla on kattavahko ohjekirja: katse Ohje-valikosta käsikirja, oppaat ja muu informaatio!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegardenin on tuonut käyttöösi ryhmä vapaaehtoisia ympäri maailman.  Oppiaksesi lisää käy sivulla &lt;a href=&quot;http://www.rosegardenmusic.com/&quot;&gt;http://www.rosegardenmusic.com/&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
@@ -19365,13 +17770,6 @@ tahdit [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2637"/>
         <source>(recorded)</source>
         <translation type="unfinished">(nauhoitettu)</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenGUIDoc</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">(nauhoitettu)</translation>
     </message>
 </context>
 <context>

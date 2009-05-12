@@ -156,7 +156,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     QLabel *devLabel = new QLabel(tr("Device"), m_playbackGroup);
     groupLayout->addWidget(devLabel, row, 0);
     m_playDevice = new QComboBox(m_playbackGroup);
-    m_playDevice->setToolTip(tr("<qt><p>This allows you to choose how you play sound with MIDI. It can be a hardware interface, the various devices available to your soundcard or a software synth interface such as Timidity.</p></qt>"));
+    m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_playDevice, row, 1, row- row+1, 2);
 
@@ -166,7 +166,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
     groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
-    m_instrument->setToolTip(tr("<qt><p>You can choose the sound your MIDI interface will make. The patches available will depend on your MIDI device set in the MIDI Device Manager.</p></qt>"));
+    m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>.</p></qt>"));
     m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
@@ -192,7 +192,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // recording device
     groupLayout->addWidget(new QLabel(tr("Device"), m_recordGroup), row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
-    m_recDevice->setToolTip(tr("<qt><p>Things you can choose to record through.</p></qt>"));
+    m_recDevice->setToolTip(tr("<qt><p>This track will only record MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
@@ -201,7 +201,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     row++;
     groupLayout->addWidget(new QLabel(tr("Channel"), m_recordGroup), row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
-    m_recChannel->setToolTip(tr("<qt><p>Choose the channel to which you want to record.</p></qt>"));
+    m_recChannel->setToolTip(tr("<qt><p>This track will only record MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
@@ -233,8 +233,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
-     m_staffSizeCombo->setToolTip(tr("<qt><p>Allows you to change the size of the individual staff on exporting to LilyPond.<p>"
-"<p> This can be useful if the staff is for the purposes of ....what??? </p></qt>"));
+    m_staffSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny for this staff when exporting to LilyPond.  This is as close as we get to enabling you to print parts in cue size</p></qt>"));
     m_staffSizeCombo->setMinimumWidth(width11);
     m_staffSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
     m_staffSizeCombo->addItem(tr("Small"), StaffTypes::Small);
@@ -248,8 +247,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_grandStaffLbl = new QLabel(tr("Bracket type:"), m_staffGroup);
     groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
-    m_staffBracketCombo->setToolTip(tr("<qt><p>This allows you to set the Grand Staff Brackets that suit the track.</p>"
-"<p>For example if you have two tracks that belong to a piano score, each would have this set for export to LilyPond.</p></qt>"));
+    m_staffBracketCombo->setToolTip(tr("<qt>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
     m_staffBracketCombo->setMinimumWidth(width11);
     m_staffBracketCombo->addItem(tr("-----"), Brackets::None);
     m_staffBracketCombo->addItem(tr("[----"), Brackets::SquareOn);
@@ -285,14 +283,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_presetLbl = new QLabel(tr("<none>"), m_defaultsGroup);
     m_presetLbl->setObjectName("SPECIAL_LABEL");
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_presetLbl->setToolTip(tr("<qt><p>The name of the <b>preset</b> that you have loaded will appear here.</p></qt>"));
     m_presetLbl->setFixedWidth(width20);
     groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
 
     m_presetButton = new QPushButton(tr("Load"), m_defaultsGroup);
-    m_presetButton->setToolTip(tr("<qt><p>A dialog will appear which will allow you to choose some preset parameters for your track.</p>"
-                                  "<p>Instruments are grouped for easy discovery, you can choose the level of ability of your player and whether to change existing segment parameters or just new segments in the track.</p>"
-                                  "<p>If you use a preset, you don't have to change any of the other parameters for new segments.</p></qt>"));
+    m_presetButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
     groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5-4+1);
 
     // default clef
@@ -301,7 +296,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_clefLbl = new QLabel(tr("Clef"), m_defaultsGroup);
     groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
     m_defClef = new QComboBox(m_defaultsGroup);
-    m_defClef->setToolTip(tr("<qt><p>Choose from an array of Clefs suited to your instrument.</p></qt>"));
+    m_defClef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
     m_defClef->setMinimumWidth(width11);
     m_defClef->addItem(tr("treble"), TrebleClef);
     m_defClef->addItem(tr("bass"), BassClef);
@@ -329,8 +324,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_transpLbl = new QLabel(tr("Transpose"), m_defaultsGroup);
     groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
-    m_defTranspose->setToolTip(tr("<qt><p>Set the transpose for your instrument. This will play in the proper key but will export to the correct key for your instrument.</p>"
-                                  "<p>For example a trumpet in Bb needs to be 2 tones below its written notation. <b>OK Michael, is this little factoid correct? I tried the preset out in 1.7.3 to see what it did and extrapolated from there.</b></p></qt>"));
+    m_defTranspose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set<p></qt>"));
     connect(m_defTranspose, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
 
@@ -353,13 +347,13 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     m_lowButton = new QPushButton(tr("---"), m_defaultsGroup);
     m_lowButton->setMinimumSize(75,0); //### this should be calculated with font metrics or something
-    m_lowButton->setToolTip(tr("Choose the lowest suggested playable note, using a staff"));
+    m_lowButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
     groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
 
     groupLayout->addWidget(new QLabel(tr("Highest"), m_defaultsGroup), row, 3, Qt::AlignRight);
 
     m_highButton = new QPushButton(tr("---"), m_defaultsGroup);
-    m_highButton->setToolTip(tr("Choose the highest suggested playable note, using a staff"));
+    m_highButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
     groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 4+1);
 
     updateHighLow();
@@ -370,7 +364,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_colorLbl = new QLabel(tr("Color"), m_defaultsGroup);
     groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
     m_defColor = new QComboBox(m_defaultsGroup);
-    m_defColor->setToolTip(tr("<qt><p>Set the default color of <b>new</b> segments in the track.</p></qt>"));
+    m_defColor->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
     m_defColor->setEditable(false);
     m_defColor->setMaxVisibleItems(20);
     groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);

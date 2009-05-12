@@ -2,6546 +2,173 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="id">
 <context>
-    <name></name>
+    <name>DeviceManagerDialog</name>
     <message>
-        <source>Project-Id-Version: id
-POT-Creation-Date: 2009-01-23 12:49-0500
-PO-Revision-Date: 2008-07-04 20:53+0700
-Last-Translator: Citra Paska &lt;dirgitadevina@yahoo.co.id&gt;
-Language-Team: Bahasa Indonesia &lt;proyek-ooo@yahoogroups.com&gt;
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Generator: KBabel 1.11.4
-</source>
-        <comment>translation of id.po to Bahasa Indonesia
-Copyright (C) 2008 Free Software Foundation, Inc.
-Citra Paska &lt;dirgitadevina@yahoo.co.id&gt;, 2008.</comment>
-        <translation type="obsolete">Project-Id-Version: id
-POT-Creation-Date: 2009-01-23 12:49-0500
-PO-Revision-Date: 2008-07-04 20:53+0700
-Last-Translator: Citra Paska &lt;dirgitadevina@yahoo.co.id&gt;
-Language-Team: Bahasa Indonesia &lt;proyek-ooo@yahoogroups.com&gt;
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Generator: KBabel 1.11.4
-</translation>
-    </message>
-    <message>
-        <source>Split by Pitch</source>
-        <translation type="obsolete">Bagi oleh Titi Nada</translation>
-    </message>
-    <message>
-        <source>Starting split pitch</source>
-        <translation type="obsolete">Memulai membagi titi nada</translation>
-    </message>
-    <message>
-        <source>Range up and down to follow music</source>
-        <translation type="obsolete">Jangkauan naik dan turun mengikuti musik</translation>
-    </message>
-    <message>
-        <source>Rescale</source>
-        <translation type="obsolete">Skala Ulang</translation>
-    </message>
-    <message>
-        <source>Duration of selection</source>
-        <translation type="obsolete">Durasi seleksi</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation type="obsolete">Reset</translation>
-    </message>
-    <message>
-        <source>Document Properties</source>
-        <translation type="obsolete">Properti Dokumen</translation>
-    </message>
-    <message>
-        <source>Make Ornament</source>
-        <translation type="obsolete">Buat Ornamen</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nama</translation>
-    </message>
-    <message>
-        <source>Name:  </source>
-        <translation type="obsolete">Nama:  </translation>
-    </message>
-    <message>
-        <source>Base pitch</source>
-        <translation type="obsolete">Titi nada dasar</translation>
-    </message>
-    <message>
-        <source>Text</source>
-        <translation type="obsolete">Teks</translation>
-    </message>
-    <message>
-        <source>Specification</source>
-        <translation type="obsolete">Spesifikasi</translation>
-    </message>
-    <message>
-        <source>Preview</source>
-        <translation type="obsolete">Pratampil</translation>
-    </message>
-    <message>
-        <source>Text:  </source>
-        <translation type="obsolete">Teks:  </translation>
-    </message>
-    <message>
-        <source>Style:  </source>
-        <translation type="obsolete">Gaya:  </translation>
-    </message>
-    <message>
-        <source>Dynamic</source>
-        <translation type="obsolete">Dinamis</translation>
-    </message>
-    <message>
-        <source>Direction</source>
-        <translation type="obsolete">Direksi</translation>
-    </message>
-    <message>
-        <source>Local Direction</source>
-        <translation type="obsolete">Direksi Lokal</translation>
-    </message>
-    <message>
-        <source>Tempo</source>
-        <translation type="obsolete">Tempo</translation>
-    </message>
-    <message>
-        <source>Local Tempo</source>
-        <translation type="obsolete">Tempo Lokal</translation>
-    </message>
-    <message>
-        <source>Lyric</source>
-        <translation type="obsolete">Lirik</translation>
-    </message>
-    <message>
-        <source>Chord</source>
-        <translation type="obsolete">Padu Nada</translation>
-    </message>
-    <message>
-        <source>Annotation</source>
-        <translation type="obsolete">Anotasi</translation>
-    </message>
-    <message>
-        <source>LilyPond Directive</source>
-        <translation type="obsolete">Direktif LilyPond</translation>
-    </message>
-    <message>
-        <source>Dynamic:  </source>
-        <translation type="obsolete">Dinamis:  </translation>
-    </message>
-    <message>
-        <source>ppp</source>
-        <translation type="obsolete">ppp</translation>
-    </message>
-    <message>
-        <source>pp</source>
-        <translation type="obsolete">pp</translation>
-    </message>
-    <message>
-        <source>p</source>
-        <translation type="obsolete">p</translation>
-    </message>
-    <message>
-        <source>mp</source>
-        <translation type="obsolete">mp</translation>
-    </message>
-    <message>
-        <source>mf</source>
-        <translation type="obsolete">mf</translation>
-    </message>
-    <message>
-        <source>f</source>
-        <translation type="obsolete">f</translation>
-    </message>
-    <message>
-        <source>ff</source>
-        <translation type="obsolete">ff</translation>
-    </message>
-    <message>
-        <source>fff</source>
-        <translation type="obsolete">fff</translation>
-    </message>
-    <message>
-        <source>rfz</source>
-        <translation type="obsolete">rfz</translation>
-    </message>
-    <message>
-        <source>sf</source>
-        <translation type="obsolete">sf</translation>
-    </message>
-    <message>
-        <source>Direction:  </source>
-        <translation type="obsolete">Direksi:  </translation>
-    </message>
-    <message>
-        <source>  ,</source>
-        <translation type="obsolete">  ,</translation>
-    </message>
-    <message>
-        <source>D.C. al Fine</source>
-        <translation type="obsolete">D.C. al Fine</translation>
-    </message>
-    <message>
-        <source>D.S. al Fine</source>
-        <translation type="obsolete">D.S. al Fine</translation>
-    </message>
-    <message>
-        <source>D.S. al Coda</source>
-        <translation type="obsolete">D.S. al Coda</translation>
-    </message>
-    <message>
-        <source>Coda</source>
-        <translation type="obsolete">Coda</translation>
-    </message>
-    <message>
-        <source>Local Direction:  </source>
-        <translation type="obsolete">Direksi Lokal:  </translation>
-    </message>
-    <message>
-        <source>accel.</source>
-        <translation type="obsolete">accel.</translation>
-    </message>
-    <message>
-        <source>ritard.</source>
-        <translation type="obsolete">ritard.</translation>
-    </message>
-    <message>
-        <source>ralletando</source>
-        <translation type="obsolete">ralletando</translation>
-    </message>
-    <message>
-        <source>legato</source>
-        <translation type="obsolete">legato</translation>
-    </message>
-    <message>
-        <source>simile</source>
-        <translation type="obsolete">simile</translation>
-    </message>
-    <message>
-        <source>pizz.</source>
-        <translation type="obsolete">pizz.</translation>
-    </message>
-    <message>
-        <source>arco</source>
-        <translation type="obsolete">arco</translation>
-    </message>
-    <message>
-        <source>sul tasto</source>
-        <translation type="obsolete">sul tasto</translation>
-    </message>
-    <message>
-        <source>con legno</source>
-        <translation type="obsolete">con legno</translation>
-    </message>
-    <message>
-        <source>sul G</source>
-        <translation type="obsolete">sul G</translation>
-    </message>
-    <message>
-        <source>ordinario</source>
-        <translation type="obsolete">ordinario</translation>
-    </message>
-    <message>
-        <source>Muta in </source>
-        <translation type="obsolete">Muta in </translation>
-    </message>
-    <message>
-        <source>volti subito </source>
-        <translation type="obsolete">volti subito </translation>
-    </message>
-    <message>
-        <source>soli</source>
-        <translation type="obsolete">soli</translation>
-    </message>
-    <message>
-        <source>div.</source>
-        <translation type="obsolete">div.</translation>
-    </message>
-    <message>
-        <source>Tempo:  </source>
-        <translation type="obsolete">Tempo:  </translation>
-    </message>
-    <message>
-        <source>Grave</source>
-        <translation type="obsolete">Grave</translation>
-    </message>
-    <message>
-        <source>Adagio</source>
-        <translation type="obsolete">Adagio</translation>
-    </message>
-    <message>
-        <source>Largo</source>
-        <translation type="obsolete">Largo</translation>
-    </message>
-    <message>
-        <source>Lento</source>
-        <translation type="obsolete">Lento</translation>
-    </message>
-    <message>
-        <source>Andante</source>
-        <translation type="obsolete">Andante</translation>
-    </message>
-    <message>
-        <source>Moderato</source>
-        <translation type="obsolete">Moderato</translation>
-    </message>
-    <message>
-        <source>Allegretto</source>
-        <translation type="obsolete">Allegretto</translation>
-    </message>
-    <message>
-        <source>Allegro</source>
-        <translation type="obsolete">Allegro</translation>
-    </message>
-    <message>
-        <source>Vivace</source>
-        <translation type="obsolete">Vivace</translation>
-    </message>
-    <message>
-        <source>Presto</source>
-        <translation type="obsolete">Presto</translation>
-    </message>
-    <message>
-        <source>Prestissimo</source>
-        <translation type="obsolete">Prestissimo</translation>
-    </message>
-    <message>
-        <source>Maestoso</source>
-        <translation type="obsolete">Maestoso</translation>
-    </message>
-    <message>
-        <source>Sostenuto</source>
-        <translation type="obsolete">Sostenuto</translation>
-    </message>
-    <message>
-        <source>Tempo Primo</source>
-        <translation type="obsolete">Tempo Primo</translation>
-    </message>
-    <message>
-        <source>Local Tempo:  </source>
-        <translation type="obsolete">Tempo Local:  </translation>
-    </message>
-    <message>
-        <source>Directive:  </source>
-        <translation type="obsolete">Direktif:  </translation>
-    </message>
-    <message>
-        <source>Example</source>
-        <translation type="obsolete">Contoh</translation>
-    </message>
-    <message>
-        <source>Event Filter</source>
-        <translation type="obsolete">Penyaring Peristiwa</translation>
-    </message>
-    <message>
-        <source>lowest:</source>
-        <translation type="obsolete">terendah:</translation>
-    </message>
-    <message>
-        <source>highest:</source>
-        <translation type="obsolete">tertinggi:</translation>
-    </message>
-    <message>
-        <source>Pitch:</source>
-        <translation type="obsolete">Titi nada:</translation>
-    </message>
-    <message>
-        <source>Velocity:</source>
-        <translation type="obsolete">Kecepatan:</translation>
-    </message>
-    <message>
-        <source>Duration:</source>
-        <translation type="obsolete">Durasi:</translation>
-    </message>
-    <message>
-        <source>include</source>
-        <translation type="obsolete">termasuk</translation>
-    </message>
-    <message>
-        <source>exclude</source>
-        <translation type="obsolete">tidak termasuk</translation>
-    </message>
-    <message>
-        <source>edit</source>
-        <translation type="obsolete">sunting</translation>
-    </message>
-    <message>
-        <source>longest</source>
-        <translation type="obsolete">terpanjang</translation>
-    </message>
-    <message>
-        <source>Include all</source>
-        <translation type="obsolete">termasuk semua</translation>
-    </message>
-    <message>
-        <source>Include entire range of values</source>
-        <translation type="obsolete">Termasuk semua jangkauan nilai</translation>
-    </message>
-    <message>
-        <source>Exclude all</source>
-        <translation type="obsolete">Tidak termasuk semua</translation>
-    </message>
-    <message>
-        <source>Exclude entire range of values</source>
-        <translation type="obsolete">Tidak termasuk semua jangkauan nilai</translation>
-    </message>
-    <message>
-        <source>shortest</source>
-        <translation type="obsolete">terpendek</translation>
-    </message>
-    <message>
-        <source>Lowest pitch</source>
-        <translation type="obsolete">Titi nada terendah</translation>
-    </message>
-    <message>
-        <source>Highest pitch</source>
-        <translation type="obsolete">Titi nada tertinggi</translation>
-    </message>
-    <message>
-        <source>Use Ornament</source>
-        <translation type="obsolete">Pakai Ornamen</translation>
-    </message>
-    <message>
-        <source>Notation</source>
-        <translation type="obsolete">Notasi</translation>
-    </message>
-    <message>
-        <source>Display as:  </source>
-        <translation type="obsolete">Tampilan sebagai:  </translation>
-    </message>
-    <message>
-        <source>Mordent</source>
-        <translation type="obsolete">Mordent</translation>
-    </message>
-    <message>
-        <source>Inverted mordent</source>
-        <translation type="obsolete">Mordent berbalik</translation>
-    </message>
-    <message>
-        <source>Long mordent</source>
-        <translation type="obsolete">Mordent panjang</translation>
-    </message>
-    <message>
-        <source>Long inverted mordent</source>
-        <translation type="obsolete">Mordent panjang berbalik</translation>
-    </message>
-    <message>
-        <source>Text mark</source>
-        <translation type="obsolete">Penanda teks</translation>
-    </message>
-    <message>
-        <source>   Text:  </source>
-        <translation type="obsolete">   Teks:  </translation>
-    </message>
-    <message>
-        <source>Performance</source>
-        <translation type="obsolete">Performa</translation>
-    </message>
-    <message>
-        <source>Truncate if longer than note</source>
-        <translation type="obsolete">Dipotong apabila lebih panjang dari not</translation>
-    </message>
-    <message>
-        <source>Pitch Selector</source>
-        <translation type="obsolete">Selektor Titi Nada</translation>
-    </message>
-    <message>
-        <source>Audio Segment Duration</source>
-        <translation type="obsolete">Durasi Segmen Suara</translation>
-    </message>
-    <message>
-        <source>The selected audio segment contains:</source>
-        <translation type="obsolete">Segmen suara yang dipilih mengandung:</translation>
-    </message>
-    <message>
-        <source>beat(s)</source>
-        <translation type="obsolete">ketukan</translation>
-    </message>
-    <message>
-        <source>bar(s)</source>
-        <translation type="obsolete">bar</translation>
-    </message>
-    <message>
-        <source>Play </source>
-        <translation type="obsolete">Putar</translation>
-    </message>
-    <message>
-        <source>in the time of  </source>
-        <translation type="obsolete">dalam waktu  </translation>
-    </message>
-    <message>
-        <source>Timing calculations</source>
-        <translation type="obsolete">Kalkulasi waktu</translation>
-    </message>
-    <message>
-        <source>Selected region:</source>
-        <translation type="obsolete">Wilayah yang dipilih:</translation>
-    </message>
-    <message>
-        <source>Metronome</source>
-        <translation type="obsolete">Metronom</translation>
-    </message>
-    <message>
-        <source>Metronome Instrument</source>
-        <translation type="obsolete">Instrumen Metronom</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Perangkat</translation>
-    </message>
-    <message>
-        <source>%1 - %2</source>
-        <translation type="obsolete">%1 - %2.%3%4</translation>
-    </message>
-    <message>
-        <source>%1 - No connection</source>
-        <translation type="obsolete">Tak ada koneksi</translation>
-    </message>
-    <message>
-        <source>Instrument</source>
-        <translation type="obsolete">Instrumen</translation>
-    </message>
-    <message>
-        <source>Beats</source>
-        <translation type="obsolete">Ketukan</translation>
-    </message>
-    <message>
-        <source>Resolution</source>
-        <translation type="obsolete">Resolusi</translation>
-    </message>
-    <message>
-        <source>None</source>
-        <translation type="obsolete">Nihil</translation>
-    </message>
-    <message>
-        <source>Bars only</source>
-        <translation type="obsolete">Hanya bar</translation>
-    </message>
-    <message>
-        <source>Bars and beats</source>
-        <translation type="obsolete">Bar dan ketukan</translation>
-    </message>
-    <message>
-        <source>Bars, beats, and divisions</source>
-        <translation type="obsolete">Bar, ketukan, dan divisi</translation>
-    </message>
-    <message>
-        <source>Bar velocity</source>
-        <translation type="obsolete">Velositas bar</translation>
-    </message>
-    <message>
-        <source>Beat velocity</source>
-        <translation type="obsolete">Velositas ketukan</translation>
-    </message>
-    <message>
-        <source>Sub-beat velocity</source>
-        <translation type="obsolete">Velositas subketukan</translation>
-    </message>
-    <message>
-        <source>Pitch</source>
-        <translation type="obsolete">Titi Nada</translation>
-    </message>
-    <message>
-        <source>for Bar</source>
-        <translation type="obsolete">untuk Bar</translation>
-    </message>
-    <message>
-        <source>for Beat</source>
-        <translation type="obsolete">untuk Ketukan</translation>
-    </message>
-    <message>
-        <source>for Sub-beat</source>
-        <translation type="obsolete">Untuk Subketukan</translation>
-    </message>
-    <message>
-        <source>Metronome Activated</source>
-        <translation type="obsolete">Metronom Diaktifkan</translation>
-    </message>
-    <message>
-        <source>Playing</source>
-        <translation type="obsolete">Memutar</translation>
-    </message>
-    <message>
-        <source>Recording</source>
-        <translation type="obsolete">Merekam</translation>
-    </message>
-    <message>
-        <source>Synth plugin </source>
-        <translation type="obsolete">&lt;tak ada plugin&gt;</translation>
-    </message>
-    <message>
-        <source>%1 (%2)</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Choose Text Encoding</source>
-        <translation type="obsolete">Pilih Enkode Teks</translation>
-    </message>
-    <message>
-        <source>
-This file contains text in an unknown language encoding.
-
-Please select one of the following estimated text encodings
-for use with the text in this file:
-</source>
-        <translation type="obsolete">
-Berkas ini memiliki teks dengan bahasa enkode yang tidak diketahui.
-
-Silakan pilih satu dari beberapa enkode teks berikut
-untuk digunakan dengan teks di dalam berkas ini:
-</translation>
-    </message>
-    <message>
-        <source>Japanese Shift-JIS</source>
-        <translation type="obsolete">Jepang Shift-JIS</translation>
-    </message>
-    <message>
-        <source>Western Europe</source>
-        <translation type="obsolete">Eropa Barat</translation>
-    </message>
-    <message>
-        <source>Western Europe + Euro</source>
-        <translation type="obsolete">Eropa Barat + Euro</translation>
-    </message>
-    <message>
-        <source>Eastern Europe</source>
-        <translation type="obsolete">Eropa Timur</translation>
-    </message>
-    <message>
-        <source>Southern Europe</source>
-        <translation type="obsolete">Eropa Selatan</translation>
-    </message>
-    <message>
-        <source>Northern Europe</source>
-        <translation type="obsolete">Erupa Utara</translation>
-    </message>
-    <message>
-        <source>Arabic</source>
-        <translation type="obsolete">Arab</translation>
-    </message>
-    <message>
-        <source>Greek</source>
-        <translation type="obsolete">Yunani</translation>
-    </message>
-    <message>
-        <source>Hebrew</source>
-        <translation type="obsolete">Yahudi</translation>
-    </message>
-    <message>
-        <source>Turkish</source>
-        <translation type="obsolete">Turki</translation>
-    </message>
-    <message>
-        <source>Thai</source>
-        <translation type="obsolete">Thailand</translation>
-    </message>
-    <message>
-        <source>Baltic</source>
-        <translation type="obsolete">Baltik</translation>
-    </message>
-    <message>
-        <source>Traditional Chinese</source>
-        <translation type="obsolete">Cina Tradisional</translation>
-    </message>
-    <message>
-        <source>Simplified Chinese</source>
-        <translation type="obsolete">Cina Sederhana</translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="obsolete">Rusia</translation>
-    </message>
-    <message>
-        <source>Ukrainian</source>
-        <translation type="obsolete">Ukraina</translation>
-    </message>
-    <message>
-        <source>Tamil</source>
-        <translation type="obsolete">Tamil</translation>
-    </message>
-    <message>
-        <source>Microsoft Code Page %1</source>
-        <translation type="obsolete">Halaman Kode Microsoft %1</translation>
-    </message>
-    <message>
-        <source>
-Example text from file:</source>
-        <translation type="obsolete">
-Teks contoh dari berkas:</translation>
-    </message>
-    <message>
-        <source>Time Signature</source>
-        <translation type="obsolete">Paraf Waktu</translation>
-    </message>
-    <message>
-        <source>Time signature</source>
-        <translation type="obsolete">Paraf waktu</translation>
-    </message>
-    <message>
-        <source>Hide the time signature</source>
-        <translation type="obsolete">Sembunyikan paraf waktu</translation>
-    </message>
-    <message>
-        <source>Show as common time</source>
-        <translation type="obsolete">Tampilkan sebagai waktu biasa</translation>
-    </message>
-    <message>
-        <source>Display as common time</source>
-        <translation type="obsolete">Tampilkan sebagai waktu biasa</translation>
-    </message>
-    <message>
-        <source>Configure Rosegarden</source>
-        <translation type="obsolete">Konfigurasi Rosegarden</translation>
-    </message>
-    <message>
-        <source>Edit Marker</source>
-        <translation type="obsolete">Sunting Penanda</translation>
-    </message>
-    <message>
-        <source>Marker Time</source>
-        <translation type="obsolete">Waktu Penanda</translation>
-    </message>
-    <message>
-        <source>Marker Properties</source>
-        <translation type="obsolete">Properti Penanda</translation>
-    </message>
-    <message>
-        <source>Text:</source>
-        <translation type="obsolete">Teks:</translation>
-    </message>
-    <message>
-        <source>Description:</source>
-        <translation type="obsolete">Deskripsi:</translation>
-    </message>
-    <message>
-        <source>Sequencer status</source>
-        <translation type="obsolete">Status sekuenser</translation>
-    </message>
-    <message>
-        <source>Sequencer status:</source>
-        <translation type="obsolete">Status sekuenser:</translation>
-    </message>
-    <message>
-        <source>Status not available.</source>
-        <translation type="obsolete">Status tak tersedia.</translation>
-    </message>
-    <message>
-        <source>Sequencer is not running or is not responding.</source>
-        <translation type="obsolete">Sekuenser tidak berjalan atau tidak merespon.</translation>
-    </message>
-    <message>
-        <source>Sequencer is not returning a valid status report.</source>
-        <translation type="obsolete">Sekuenser tidak menjawab dengan status yang sah.</translation>
-    </message>
-    <message>
-        <source>Merge File</source>
-        <translation type="obsolete">Gabung Berkas</translation>
-    </message>
-    <message>
-        <source>Merge new file  </source>
-        <translation type="obsolete">Gabung berkas baru  </translation>
-    </message>
-    <message>
-        <source>At start of existing composition</source>
-        <translation type="obsolete">Dari permulaan komposisi yang ada</translation>
-    </message>
-    <message>
-        <source>From end of existing composition</source>
-        <translation type="obsolete">Dari akhir komposisi yang ada</translation>
-    </message>
-    <message>
-        <source>The file has different time signatures or tempos.</source>
-        <translation type="obsolete">Berkasnya memiliki tanda tangan waktu atau tempo yang berbeda.</translation>
-    </message>
-    <message>
-        <source>Add Tracks</source>
-        <translation type="obsolete">Tambah Jalur</translation>
-    </message>
-    <message>
-        <source>How many tracks do you want to add?</source>
-        <translation type="obsolete">Berapa banyak jalur yang hendak Anda tambah?</translation>
-    </message>
-    <message>
-        <source>Add tracks</source>
-        <translation type="obsolete">Tambah jalur</translation>
-    </message>
-    <message>
-        <source>Event Properties</source>
-        <translation type="obsolete">Properti Peristiwa</translation>
-    </message>
-    <message>
-        <source>Event type:</source>
-        <translation type="obsolete">Jenis peristiwa:</translation>
-    </message>
-    <message>
-        <source>Absolute time:</source>
-        <translation type="obsolete">Waktu absolut:</translation>
-    </message>
-    <message>
-        <source>Controller name:</source>
-        <translation type="obsolete">Nama kontroler:</translation>
-    </message>
-    <message>
-        <source>&lt;none&gt;</source>
-        <translation type="obsolete">&lt;nihil&gt;</translation>
-    </message>
-    <message>
-        <source>Meta string:</source>
-        <translation type="obsolete">String meta:</translation>
-    </message>
-    <message>
-        <source>Load data</source>
-        <translation type="obsolete">Memuat data</translation>
-    </message>
-    <message>
-        <source>Save data</source>
-        <translation type="obsolete">Menyimpan data</translation>
-    </message>
-    <message>
-        <source>Notation Properties</source>
-        <translation type="obsolete">Properti Notasi</translation>
-    </message>
-    <message>
-        <source>Notation time:</source>
-        <translation type="obsolete">Waktu notasi:</translation>
-    </message>
-    <message>
-        <source>Notation duration:</source>
-        <translation type="obsolete">Durasi notasi:</translation>
-    </message>
-    <message>
-        <source>Note pitch:</source>
-        <translation type="obsolete">Titi nada not:</translation>
-    </message>
-    <message>
-        <source>Note velocity:</source>
-        <translation type="obsolete">Velositas not:</translation>
-    </message>
-    <message>
-        <source>Controller number:</source>
-        <translation type="obsolete">Nomor/angka kontroler:</translation>
-    </message>
-    <message>
-        <source>Controller value:</source>
-        <translation type="obsolete">Nilai kontroler:</translation>
-    </message>
-    <message>
-        <source>Key pitch:</source>
-        <translation type="obsolete">Titi nada kunci:</translation>
-    </message>
-    <message>
-        <source>Key pressure:</source>
-        <translation type="obsolete">Tekanan kunci:</translation>
-    </message>
-    <message>
-        <source>Channel pressure:</source>
-        <translation type="obsolete">Tekanan kanal:</translation>
-    </message>
-    <message>
-        <source>Program change:</source>
-        <translation type="obsolete">Perubahan program:</translation>
-    </message>
-    <message>
-        <source>Data length:</source>
-        <translation type="obsolete">Panjang data:</translation>
-    </message>
-    <message>
-        <source>Data:</source>
-        <translation type="obsolete">Data:</translation>
-    </message>
-    <message>
-        <source>Indication:</source>
-        <translation type="obsolete">Indikasi:</translation>
-    </message>
-    <message>
-        <source>Text type:</source>
-        <translation type="obsolete">Jenis teks:</translation>
-    </message>
-    <message>
-        <source>Key name:</source>
-        <translation type="obsolete">Nama kunci:</translation>
-    </message>
-    <message>
-        <source>Unsupported event type:</source>
-        <translation type="obsolete">Jenis peristiwa yang tidak didukung:</translation>
-    </message>
-    <message>
-        <source>Edit Duration</source>
-        <translation type="obsolete">Sunting Durasi</translation>
-    </message>
-    <message>
-        <source>Edit Notation Duration</source>
-        <translation type="obsolete">Sunting Durasi Notasi</translation>
-    </message>
-    <message>
-        <source>Edit Pitch</source>
-        <translation type="obsolete">Sunting Titi Nada</translation>
-    </message>
-    <message>
-        <source>*.syx|System exclusive files (*.syx)</source>
-        <translation type="obsolete">*.syx|Berkas eksklusif sistem (*.syx)</translation>
-    </message>
-    <message>
-        <source>Load System Exclusive data in File</source>
-        <translation type="obsolete">Muatkan data Eksklusif Sistem dalam Berkas</translation>
-    </message>
-    <message>
-        <source>Save System Exclusive data to...</source>
-        <translation type="obsolete">Simpan data Eksklusif Sistem ke...</translation>
-    </message>
-    <message>
-        <source>&amp;Skip</source>
-        <translation type="obsolete">Lewa&amp;ti</translation>
-    </message>
-    <message>
-        <source>Skip &amp;All</source>
-        <translation type="obsolete">Lewati Semu&amp;a</translation>
-    </message>
-    <message>
-        <source>Can&apos;t find file &quot;%1&quot;.
-Would you like to try and locate this file or skip it?</source>
-        <translation type="obsolete">Tak dapat menemukan berkas &quot;%1&quot;.
-Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
-    </message>
-    <message>
-        <source>%1|Requested file (%2)
-*.wav|WAV files (*.wav)</source>
-        <translation type="obsolete">%1|Berkas yang dipinta (%2)
-*.wav|Berkas WAV (*.wav)</translation>
-    </message>
-    <message>
-        <source>Select an Audio File</source>
-        <translation type="obsolete">Pilih Berkas Suara</translation>
-    </message>
-    <message>
-        <source>Up an Octave</source>
-        <translation type="obsolete">Naik Satu Oktaf</translation>
-    </message>
-    <message>
-        <source>Down an Octave</source>
-        <translation type="obsolete">Turun Satu Oktaf</translation>
-    </message>
-    <message>
-        <source>Transpose into appropriate octave</source>
-        <translation type="obsolete">Transposisi ke oktaf yang sesuai</translation>
-    </message>
-    <message>
-        <source>%1 down an octave</source>
-        <translation type="obsolete">%1 turun satu oktaf</translation>
-    </message>
-    <message>
-        <source>%1 down two octaves</source>
-        <translation type="obsolete">%1 turun dua oktaf</translation>
-    </message>
-    <message>
-        <source>%1 up an octave</source>
-        <translation type="obsolete">%1 naik satu oktaf</translation>
-    </message>
-    <message>
-        <source>%1 up two octaves</source>
-        <translation type="obsolete">%1 naik dua oktaf</translation>
-    </message>
-    <message>
-        <source>French violin</source>
-        <translation type="obsolete">Biola Perancis</translation>
-    </message>
-    <message>
-        <source>Soprano</source>
-        <translation type="obsolete">Soprano</translation>
-    </message>
-    <message>
-        <source>Mezzo-soprano</source>
-        <translation type="obsolete">Mezzo-soprano</translation>
-    </message>
-    <message>
-        <source>Alto</source>
-        <translation type="obsolete">Alto</translation>
-    </message>
-    <message>
-        <source>Tenor</source>
-        <translation type="obsolete">Tenor</translation>
-    </message>
-    <message>
-        <source>C-baritone</source>
-        <translation type="obsolete">C-baritone</translation>
-    </message>
-    <message>
-        <source>F-baritone</source>
-        <translation type="obsolete">F-baritone</translation>
-    </message>
-    <message>
-        <source>Bass</source>
-        <translation type="obsolete">Bass</translation>
-    </message>
-    <message>
-        <source>Sub-bass</source>
-        <translation type="obsolete">Sub-bass</translation>
-    </message>
-    <message>
-        <source>Recording...</source>
-        <translation type="obsolete">Merekam...</translation>
-    </message>
-    <message>
-        <source>Recording time remaining:  </source>
-        <translation type="obsolete">Siswa waktu perekaman:  </translation>
-    </message>
-    <message>
-        <source>Just how big is your hard disk?</source>
-        <translation type="obsolete">Seberapa besar hard disk Anda?</translation>
-    </message>
-    <message>
-        <source>Specify Interval</source>
-        <translation type="obsolete">Menentukan Interval</translation>
-    </message>
-    <message>
-        <source>Reference note:</source>
-        <translation type="obsolete">Not referensi:</translation>
-    </message>
-    <message>
-        <source>Target note:</source>
-        <translation type="obsolete">Not target:</translation>
-    </message>
-    <message>
-        <source>Effect on Key</source>
-        <translation type="obsolete">Efek pada Kunci</translation>
-    </message>
-    <message>
-        <source>a minor</source>
-        <translation type="obsolete">minor</translation>
-    </message>
-    <message>
-        <source>a major</source>
-        <translation type="obsolete">mayor</translation>
-    </message>
-    <message>
-        <source>an (unknown)</source>
-        <translation type="obsolete">sebuah (tak dikenal)</translation>
-    </message>
-    <message>
-        <source>%1 octave</source>
-        <translation type="obsolete">%1 oktaf</translation>
-    </message>
-    <message>
-        <source>%1 second</source>
-        <translation type="obsolete">%1 kedua</translation>
-    </message>
-    <message>
-        <source>%1 third</source>
-        <translation type="obsolete">%1 ketiga</translation>
-    </message>
-    <message>
-        <source>%1 fourth</source>
-        <translation type="obsolete">%1 keempat</translation>
-    </message>
-    <message>
-        <source>%1 fifth</source>
-        <translation type="obsolete">%1 kelima</translation>
-    </message>
-    <message>
-        <source>%1 sixth</source>
-        <translation type="obsolete">%1 keenam</translation>
-    </message>
-    <message>
-        <source>%1 seventh</source>
-        <translation type="obsolete">%1 ketujuh</translation>
-    </message>
-    <message>
-        <source>%1</source>
-        <translation type="obsolete">%1</translation>
-    </message>
-    <message>
-        <source>up %1</source>
-        <translation type="obsolete">naik %1</translation>
-    </message>
-    <message>
-        <source>down %1</source>
-        <translation type="obsolete">turun %1</translation>
-    </message>
-    <message>
-        <source>Intrinsics</source>
-        <translation type="obsolete">Intrinsik</translation>
-    </message>
-    <message>
-        <source>Event type: </source>
-        <translation type="obsolete">Jenis peristiwa: </translation>
-    </message>
-    <message>
-        <source>Absolute time: </source>
-        <translation type="obsolete">Waktu absolut: </translation>
-    </message>
-    <message>
-        <source>Duration: </source>
-        <translation type="obsolete">Durasi: </translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Jenis</translation>
-    </message>
-    <message>
-        <source>Value</source>
-        <translation type="obsolete">Nilai</translation>
-    </message>
-    <message>
-        <source>Name       </source>
-        <translation type="obsolete">Nama       </translation>
-    </message>
-    <message>
-        <source>Type       </source>
-        <translation type="obsolete">Jenis      </translation>
-    </message>
-    <message>
-        <source>Value      </source>
-        <translation type="obsolete">Nilai      </translation>
-    </message>
-    <message>
-        <source>Delete this property</source>
-        <translation type="obsolete">Hapus properti ini</translation>
-    </message>
-    <message>
-        <source>Edit Lyrics</source>
-        <translation type="obsolete">Sunting Lirik</translation>
-    </message>
-    <message>
-        <source>Lyrics for this segment</source>
-        <translation type="obsolete">Lirik untuk segmen ini</translation>
-    </message>
-    <message>
-        <source>Remove Verse</source>
-        <translation type="obsolete">Buan&amp;g Penanda</translation>
-    </message>
-    <message>
-        <source>Import from Device...</source>
-        <translation type="obsolete">Impor dari Perangkat...</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Tak dapat mengunduh berkas %1</translation>
-    </message>
-    <message>
-        <source>Cannot open file %1</source>
-        <translation type="obsolete">Tak dapat membuka berkas %1</translation>
-    </message>
-    <message>
-        <source>No devices found in file %1</source>
-        <translation type="obsolete">Tak ditemukan perangkat dalam berkas %1</translation>
-    </message>
-    <message>
-        <source>Source device</source>
-        <translation type="obsolete">Perangkat sumber</translation>
-    </message>
-    <message>
-        <source>Import from: </source>
-        <translation type="obsolete">Diimpor dari: </translation>
-    </message>
-    <message>
-        <source>Device %1</source>
-        <translation type="obsolete">Perangkat %1</translation>
-    </message>
-    <message>
-        <source>Import banks</source>
-        <translation type="obsolete">Impor bank</translation>
-    </message>
-    <message>
-        <source>Import key mappings</source>
-        <translation type="obsolete">Impor pemetaan kunci</translation>
-    </message>
-    <message>
-        <source>Import controllers</source>
-        <translation type="obsolete">Impor kontroler</translation>
-    </message>
-    <message>
-        <source>Import device name</source>
-        <translation type="obsolete">Impor nama perangkat</translation>
-    </message>
-    <message>
-        <source>Bank import behavior</source>
-        <translation type="obsolete">Kebiasaan impor bank</translation>
-    </message>
-    <message>
-        <source>Merge banks</source>
-        <translation type="obsolete">Gabungkan bank</translation>
-    </message>
-    <message>
-        <source>Overwrite banks</source>
-        <translation type="obsolete">Ditulis timpa pada bank</translation>
-    </message>
-    <message>
-        <source>Bank %1:%2</source>
-        <translation type="obsolete">Bank %1:%2</translation>
-    </message>
-    <message>
-        <source>Recording Source</source>
-        <translation type="obsolete">Sumber Merekam</translation>
-    </message>
-    <message>
-        <source>Channel:</source>
-        <translation type="obsolete">Kanal:</translation>
-    </message>
-    <message>
-        <source>any</source>
-        <translation type="obsolete">apa saja</translation>
-    </message>
-    <message>
-        <source>Device:</source>
-        <translation type="obsolete">Perangkat:</translation>
-    </message>
-    <message>
-        <source>No connection</source>
-        <translation type="obsolete">Tak ada koneksi</translation>
-    </message>
-    <message>
-        <source>Select Unused Audio Files</source>
-        <translation type="obsolete">Pilih Berkas Suara Tak Terpakai</translation>
-    </message>
-    <message>
-        <source>File name</source>
-        <translation type="obsolete">Nama berkas</translation>
-    </message>
-    <message>
-        <source>File size</source>
-        <translation type="obsolete">Ukuran berkas</translation>
-    </message>
-    <message>
-        <source>Last modified date</source>
-        <translation type="obsolete">Tanggal terakhir diubah</translation>
-    </message>
-    <message>
-        <source> (not found) </source>
-        <translation type="obsolete"> (tak ketemu) </translation>
-    </message>
-    <message>
-        <source>Audio File Manager</source>
-        <translation type="obsolete">Manajer Berkas Suara</translation>
-    </message>
-    <message>
-        <source>* Some audio files are encoded at a sample rate different from that of the JACK audio server.
-Rosegarden will play them at the correct speed, but they will sound terrible.
-Please consider resampling such files externally, or adjusting the sample rate of the JACK server.</source>
-        <translation type="obsolete">* Beberapa berkas suara dienkodekan pada rerata sampel yang berbeda dari yang dimiliki oleh server suara JACK.
-Rosegarden akan tetap memainkan berkas tersebut pada kecepatan yang tepat, namun akan terdengar tidak mengenakkan.
-Silakan untuk mensampel ulang berkas tersebut dengan aplikasi luar, atau setel rerata sampel pada server JACK.</translation>
-    </message>
-    <message>
-        <source>&amp;Add Audio File...</source>
-        <translation type="obsolete">T&amp;ambah Berkas Suara...</translation>
-    </message>
-    <message>
-        <source>&amp;Unload Audio File</source>
-        <translation type="obsolete">Kel&amp;uarkan Berkas Suara</translation>
-    </message>
-    <message>
-        <source>&amp;Play Preview</source>
-        <translation type="obsolete">&amp;Putar Pratampil</translation>
-    </message>
-    <message>
-        <source>&amp;Insert into Selected Audio Track</source>
-        <translation type="obsolete">S&amp;isipkan pada Jalur Suara yang Dipilih</translation>
-    </message>
-    <message>
-        <source>Unload &amp;all Audio Files</source>
-        <translation type="obsolete">Keluarkan Semu&amp;a Berkas Suara</translation>
-    </message>
-    <message>
-        <source>Unload all &amp;Unused Audio Files</source>
-        <translation type="obsolete">Keluarkan Sem&amp;ua Berkas Suara Tak Dipakai</translation>
-    </message>
-    <message>
-        <source>&amp;Delete Unused Audio Files...</source>
-        <translation type="obsolete">Hapus Berkas Suara Tak &amp;Dipakai</translation>
-    </message>
-    <message>
-        <source>&amp;Export Audio File...</source>
-        <translation type="obsolete">&amp;Ekspor Berkas Suara...</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <translation type="obsolete">Durasi</translation>
-    </message>
-    <message>
-        <source>Envelope</source>
-        <translation type="obsolete">Amplop</translation>
-    </message>
-    <message>
-        <source>Sample rate</source>
-        <translation type="obsolete">Rerata sampel</translation>
-    </message>
-    <message>
-        <source>Channels</source>
-        <translation type="obsolete">Kanal</translation>
-    </message>
-    <message>
-        <source>&lt;no audio files&gt;</source>
-        <translation type="obsolete">&lt;tak ada berkas suara&gt;</translation>
-    </message>
-    <message>
-        <source>*.wav|WAV files (*.wav)</source>
-        <translation type="obsolete">*.wav|berkas WAV (*.wav)</translation>
-    </message>
-    <message>
-        <source>Choose a name to save this file as</source>
-        <translation type="obsolete">Pilih sebuah nama untuk menyimpan berkas</translation>
-    </message>
-    <message>
-        <source>Exporting audio file...</source>
-        <translation type="obsolete">Mengekspor berkas suara...</translation>
-    </message>
-    <message>
-        <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="obsolete">Ini akan membuang berkas &quot;%1&quot; beserta seluruh segmen yang berhubungan dengan berkas tersebut.  Apakah Anda yakin?</translation>
-    </message>
-    <message>
-        <source>*.wav|WAV files (*.wav)
-*.*|All files</source>
-        <translation type="obsolete">*.wav|berkas WAV (*.wav)
-*.*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)
-*.wav|WAV files (*.wav)
-*.flac|FLAC files (*.flac)
-*.ogg|Ogg files (*.ogg)
-*.mp3|MP3 files (*.mp3)
-*.*|All files</source>
-        <translation type="obsolete">*.wav *.flac *.ogg *.mp3|Berkas suara (*.wav *.flac *.ogg *.mp3)
-*.wav|Berkas WAV (*.wav)
-*.flac|Berkas FLAC (*.flac)
-*.ogg|Berkas Ogg (*.ogg)
-*.mp3|Berkas MP3 (*.mp3)
-*.*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>Select one or more audio files</source>
-        <translation type="obsolete">Pilih satu atau lebih berkas suara</translation>
-    </message>
-    <message>
-        <source>This will unload all audio files and remove their associated segments.
-This action cannot be undone, and associations with these files will be lost.
-Files will not be removed from your disk.
-Are you sure?</source>
-        <translation type="obsolete">Ini akan membuang semua berkas suara, begitupula dengan segmen-segmen yang berhubungan dengan berkas-berkas tersebut.
-Aksi ini tidak bisa diputar balik atau dibatalkan, dan semua hubungan pada berkas-berkas tersebut akan turut dihilangkan.
-Namun, berkas aslinya tetap tidak akan dibuang dari hard disk.
-Apakah Anda yakin?</translation>
-    </message>
-    <message>
-        <source>This will unload all audio files that are not associated with any segments in this composition.
-This action cannot be undone, and associations with these files will be lost.
-Files will not be removed from your disk.
-Are you sure?</source>
-        <translation type="obsolete">Ini akan membuang semua berkas suara yang tidak memiliki hubungan dengan segmen manapun di dalam komposisi.
-Aksi ini tidak bisa diputar balik atau dibatalkan, dan semua hubungan dengan berkas-berkas ini akan turut dihapus.
-Namun, berkas asli tidak akan dibuang dari hard disk.
-Apakah Anda yakin?</translation>
-    </message>
-    <message>
-        <source>The following audio files are not used in the current composition.
-
-Please select the ones you wish to delete permanently from the hard disk.
-</source>
-        <translation type="obsolete">Berkas suara berikut tidak dipakai pada komposisi bersangkutan.
-
-Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
-</translation>
-    </message>
-    <message>
-        <source>File %1 could not be deleted.</source>
-        <translation type="obsolete">Berkas %1 tidak akan dihapus.</translation>
-    </message>
-    <message>
-        <source>Change Audio File label</source>
-        <translation type="obsolete">Ubah label Berkas Suara</translation>
-    </message>
-    <message>
-        <source>Enter new label</source>
-        <translation type="obsolete">Masukkan label baru</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Mengimpor berkas suara...</translation>
-    </message>
-    <message>
-        <source>Adding audio file...</source>
-        <translation type="obsolete">Menambah berkas suara...</translation>
-    </message>
-    <message>
-        <source>Failed to add audio file. </source>
-        <translation type="obsolete">Gagal menambah berkas suara. </translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-    <message>
-        <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="obsolete">Cobalah untuk menyalin berkas ini ke direktori di mana Anda memiliki akses menulis dan tambahkan ulang berkasi ini</translation>
-    </message>
-    <message>
-        <source>Rosegarden Transport</source>
-        <translation type="obsolete">Transportasi Rosegarden</translation>
-    </message>
-    <message>
-        <source>PITCH WHEEL</source>
-        <translation type="obsolete">RODA TITI NADA</translation>
-    </message>
-    <message>
-        <source>CONTROLLER</source>
-        <translation type="obsolete">KONTROLER</translation>
-    </message>
-    <message>
-        <source>PRESSURE</source>
-        <translation type="obsolete">TEKANAN</translation>
-    </message>
-    <message>
-        <source>SYS MESSAGE</source>
-        <translation type="obsolete">PESAN SISTEM</translation>
-    </message>
-    <message>
-        <source>Quantize</source>
-        <translation type="obsolete">Kuantisasi</translation>
-    </message>
-    <message>
-        <source>Advanced</source>
-        <translation type="obsolete">Lanjutan</translation>
-    </message>
-    <message>
-        <source>Export Devices...</source>
-        <translation type="obsolete">Ekspor Perangkat...</translation>
-    </message>
-    <message>
-        <source>Export devices</source>
-        <translation type="obsolete">Ekspor perangkat</translation>
-    </message>
-    <message>
-        <source>Export all devices</source>
-        <translation type="obsolete">Ekspor semua perangkat</translation>
-    </message>
-    <message>
-        <source>Export selected device only</source>
-        <translation type="obsolete">Ekspor hanya perangkat yang dipilih</translation>
-    </message>
-    <message>
-        <source>         (&quot;%1&quot;)</source>
-        <translation type="obsolete">         (&quot;%1&quot;)</translation>
-    </message>
-    <message>
-        <source>Change Composition Length</source>
-        <translation type="obsolete">Ubah Panjang Komposisi</translation>
-    </message>
-    <message>
-        <source>Start Bar</source>
-        <translation type="obsolete">Bar Mulai</translation>
-    </message>
-    <message>
-        <source>End Bar</source>
-        <translation type="obsolete">Bari Akhir</translation>
-    </message>
-    <message>
-        <source>LilyPond Export/Preview</source>
-        <translation type="obsolete">Ekspor/Pratampil LilyPond</translation>
-    </message>
-    <message>
-        <source>General options</source>
-        <translation type="obsolete">Opsi umum</translation>
-    </message>
-    <message>
-        <source>Advanced options</source>
-        <translation type="obsolete">Opsi lanjutan</translation>
-    </message>
-    <message>
-        <source>Headers</source>
-        <translation type="obsolete">Tajuk</translation>
-    </message>
-    <message>
-        <source>Basic options</source>
-        <translation type="obsolete">Opsi dasar</translation>
-    </message>
-    <message>
-        <source>Compatibility level</source>
-        <translation type="obsolete">Tingkat kompatibilitas</translation>
-    </message>
-    <message>
-        <source>LilyPond %1</source>
-        <translation type="obsolete">LilyPond %1</translation>
-    </message>
-    <message>
-        <source>Paper size</source>
-        <translation type="obsolete">Ukuran kertas</translation>
-    </message>
-    <message>
-        <source>A3</source>
-        <translation type="obsolete">A3</translation>
-    </message>
-    <message>
-        <source>A4</source>
-        <translation type="obsolete">A4</translation>
-    </message>
-    <message>
-        <source>A5</source>
-        <translation type="obsolete">A5</translation>
-    </message>
-    <message>
-        <source>A6</source>
-        <translation type="obsolete">A6</translation>
-    </message>
-    <message>
-        <source>Legal</source>
-        <translation type="obsolete">Legal</translation>
-    </message>
-    <message>
-        <source>US Letter</source>
-        <translation type="obsolete">Surat AS (Letter)</translation>
-    </message>
-    <message>
-        <source>Tabloid</source>
-        <translation type="obsolete">Tabloid</translation>
-    </message>
-    <message>
-        <source>do not specify</source>
-        <translation type="obsolete">jangan ditentukan</translation>
-    </message>
-    <message>
-        <source>Font size</source>
-        <translation type="obsolete">Ukuran huruf</translation>
-    </message>
-    <message>
-        <source>%1 pt</source>
-        <translation type="obsolete">%1 pt</translation>
-    </message>
-    <message>
-        <source>Staff level options</source>
-        <translation type="obsolete">Opsi tingkat staf</translation>
-    </message>
-    <message>
-        <source>Export content</source>
-        <translation type="obsolete">Ekpor isi</translation>
-    </message>
-    <message>
-        <source>All tracks</source>
-        <translation type="obsolete">Semua jalur</translation>
-    </message>
-    <message>
-        <source>Non-muted tracks</source>
-        <translation type="obsolete">Jalur yang tak dibisukan</translation>
-    </message>
-    <message>
-        <source>Selected track</source>
-        <translation type="obsolete">Jalur terpilih</translation>
-    </message>
-    <message>
-        <source>Selected segments</source>
-        <translation type="obsolete">Segmen terpilih</translation>
-    </message>
-    <message>
-        <source>Merge tracks that have the same name</source>
-        <translation type="obsolete">Gabungkan jalur yang bernama sama</translation>
-    </message>
-    <message>
-        <source>Notation options</source>
-        <translation type="obsolete">Opsi notasi</translation>
-    </message>
-    <message>
-        <source>First</source>
-        <translation type="obsolete">Pertama</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="obsolete">Semua</translation>
-    </message>
-    <message>
-        <source>Export tempo marks </source>
-        <translation type="obsolete">Ekpor penanda tempo</translation>
-    </message>
-    <message>
-        <source>Export lyrics</source>
-        <translation type="obsolete">Ekspor lirik</translation>
-    </message>
-    <message>
-        <source>Layout options</source>
-        <translation type="obsolete">Opsi tataletak</translation>
-    </message>
-    <message>
-        <source>Lyrics alignment</source>
-        <translation type="obsolete">Perataan lirik</translation>
-    </message>
-    <message>
-        <source>Miscellaneous options</source>
-        <translation type="obsolete">Opsi lain-lain</translation>
-    </message>
-    <message>
-        <source>No markers</source>
-        <translation type="obsolete">Tanpa Submaster</translation>
-    </message>
-    <message>
-        <source>Rehearsal marks</source>
-        <translation type="obsolete">Buang semua penanda</translation>
-    </message>
-    <message>
-        <source>Marker text</source>
-        <translation type="obsolete">Waktu Penanda</translation>
-    </message>
-    <message>
-        <source>Export markers</source>
-        <translation type="obsolete">Ekpor penanda tempo</translation>
-    </message>
-    <message>
-        <source>&lt;no preview generated for this audio file&gt;</source>
-        <translation type="obsolete">&lt;tak ada pratampil yang digenerasikan untuk berkas suara ini&gt;</translation>
-    </message>
-    <message>
-        <source>Audio Plugin</source>
-        <translation type="obsolete">Plugin Suara</translation>
-    </message>
-    <message>
-        <source>Editor</source>
-        <translation type="obsolete">Editor</translation>
-    </message>
-    <message>
-        <source>Plugin</source>
-        <translation type="obsolete">Plugin</translation>
-    </message>
-    <message>
-        <source>Category:</source>
-        <translation type="obsolete">Kategori:</translation>
-    </message>
-    <message>
-        <source>Plugin:</source>
-        <translation type="obsolete">Plugin:</translation>
-    </message>
-    <message>
-        <source>Select a plugin from this list.</source>
-        <translation type="obsolete">Pilih plugin dari daftar.</translation>
-    </message>
-    <message>
-        <source>&lt;id&gt;</source>
-        <translation type="obsolete">&lt;id&gt;</translation>
-    </message>
-    <message>
-        <source>Unique ID of plugin.</source>
-        <translation type="obsolete">ID unik plugin.</translation>
-    </message>
-    <message>
-        <source>Copy plugin parameters</source>
-        <translation type="obsolete">Salin parameter plugin</translation>
-    </message>
-    <message>
-        <source>Paste plugin parameters</source>
-        <translation type="obsolete">Tempel parameter plugin</translation>
-    </message>
-    <message>
-        <source>(any)</source>
-        <translation type="obsolete">(apa saja)</translation>
-    </message>
-    <message>
-        <source>(unclassified)</source>
-        <translation type="obsolete">(tak diklasifikasikan)</translation>
-    </message>
-    <message>
-        <source>(none)</source>
-        <translation type="obsolete">(nihil)</translation>
-    </message>
-    <message>
-        <source>&lt;no plugin&gt;</source>
-        <translation type="obsolete">&lt;tak ada plugin&gt;</translation>
-    </message>
-    <message>
-        <source>This plugin has too many controls to edit here.</source>
-        <translation type="obsolete">Plugin ini memiliki banyak kontrol untuk disunting di sini.</translation>
-    </message>
-    <message>
-        <source>Id: %1</source>
-        <translation type="obsolete">Id: %1</translation>
-    </message>
-    <message>
-        <source>mono</source>
-        <translation type="obsolete">mono</translation>
-    </message>
-    <message>
-        <source>stereo</source>
-        <translation type="obsolete">stereo</translation>
-    </message>
-    <message>
-        <source>%1 in, %2 out</source>
-        <translation type="obsolete">%1 masuk, %2 keluar</translation>
-    </message>
-    <message>
-        <source>Program:  </source>
-        <translation type="obsolete">Program:  </translation>
-    </message>
-    <message>
-        <source>&lt;none selected&gt;</source>
-        <translation type="obsolete">&lt;tak ada yang dipilih&gt;</translation>
-    </message>
-    <message>
-        <source>Pattern</source>
-        <translation type="obsolete">Pola</translation>
-    </message>
-    <message>
-        <source>First Value</source>
-        <translation type="obsolete">Nilai Pertama</translation>
-    </message>
-    <message>
-        <source>Second Value</source>
-        <translation type="obsolete">Nilai Kedua</translation>
-    </message>
-    <message>
-        <source>Low Value</source>
-        <translation type="obsolete">Nilai Rendah</translation>
-    </message>
-    <message>
-        <source>High Value</source>
-        <translation type="obsolete">Nilai Tinggi</translation>
-    </message>
-    <message>
-        <source>Insert Tempo Change</source>
-        <translation type="obsolete">Sisipkan Perubahan Tempo</translation>
-    </message>
-    <message>
-        <source>New tempo:</source>
-        <translation type="obsolete">Tempo baru:</translation>
-    </message>
-    <message>
-        <source>Time of tempo change</source>
-        <translation type="obsolete">Waktu perubahan tempo</translation>
-    </message>
-    <message>
-        <source>The pointer is currently at </source>
-        <translation type="obsolete">Penunjuk saat ini berada di </translation>
-    </message>
-    <message>
-        <source>Replace the last tempo change</source>
-        <translation type="obsolete">Gantikan perubahan tempo terakhir</translation>
-    </message>
-    <message>
-        <source>Apply this tempo from the start of this bar</source>
-        <translation type="obsolete">Gunakan tempo berikut mulai dari permulaan bar ini</translation>
-    </message>
-    <message>
-        <source>Apply this tempo to the whole composition</source>
-        <translation type="obsolete">Gunakan tempo ini ke semua komposisi</translation>
-    </message>
-    <message>
-        <source>Also make this the default tempo</source>
-        <translation type="obsolete">Juga jadikan ini sebagai tempo dasar</translation>
-    </message>
-    <message>
-        <source>%1.%2 s,</source>
-        <translation type="obsolete">%1.%2 s,</translation>
-    </message>
-    <message>
-        <source>There are no other tempo changes.</source>
-        <translation type="obsolete">Tidak ada perubahan tempo yang lain.</translation>
-    </message>
-    <message>
-        <source> bpm</source>
-        <translation type="obsolete"> bpm</translation>
-    </message>
-    <message>
-        <source>Playing audio file</source>
-        <translation type="obsolete">Memutar berkas suara</translation>
-    </message>
-    <message>
-        <source>Playing audio file &quot;%1&quot;</source>
-        <translation type="obsolete">Memutar berkas usara &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Key Change</source>
-        <translation type="obsolete">Perubahan Kunci</translation>
-    </message>
-    <message>
-        <source>Key signature</source>
-        <translation type="obsolete">Tanda tangan kunci</translation>
-    </message>
-    <message>
-        <source>Key transposition</source>
-        <translation type="obsolete">Transposisi kunci</translation>
-    </message>
-    <message>
-        <source>Key</source>
-        <translation type="obsolete">Kunci</translation>
-    </message>
-    <message>
-        <source>Major</source>
-        <translation type="obsolete">Mayor</translation>
-    </message>
-    <message>
-        <source>Minor</source>
-        <translation type="obsolete">Minor</translation>
-    </message>
-    <message>
-        <source>Transpose key according to segment transposition</source>
-        <translation type="obsolete">Transposisi kunci berdasar transposisi segmen</translation>
-    </message>
-    <message>
-        <source>Apply to current segment only</source>
-        <translation type="obsolete">Hanya diterapkan pada segmen bersangkutan</translation>
-    </message>
-    <message>
-        <source>Apply to all segments at this time</source>
-        <translation type="obsolete">Terapkan untuk semua segmen saat ini</translation>
-    </message>
-    <message>
-        <source>Exclude percussion segments</source>
-        <translation type="obsolete">Tidak termasuk segmen perkusi</translation>
-    </message>
-    <message>
-        <source>Transpose into this key</source>
-        <translation type="obsolete">Transposisikan ke kunci ini</translation>
-    </message>
-    <message>
-        <source>No such key</source>
-        <translation type="obsolete">Bukan berupa kunci</translation>
-    </message>
-    <message>
-        <source>Interpret</source>
-        <translation type="obsolete">Interpretasi</translation>
-    </message>
-    <message>
-        <source>Interpretations to apply</source>
-        <translation type="obsolete">Interpretasi yang hendak dipakai</translation>
-    </message>
-    <message>
-        <source>Apply text dynamics (p, mf, ff etc)</source>
-        <translation type="obsolete">Terapkan teks dinamis (p, mf, ff, dll.)</translation>
-    </message>
-    <message>
-        <source>Stress beats</source>
-        <translation type="obsolete">Tekanan ketukan</translation>
-    </message>
-    <message>
-        <source>All available interpretations</source>
-        <translation type="obsolete">Semua interprestasi yang tersedia</translation>
-    </message>
-    <message>
-        <source>Starting sequencer...</source>
-        <translation type="obsolete">Memulai sekuenser...</translation>
-    </message>
-    <message>
-        <source>Special Parameters</source>
-        <translation type="obsolete">Parameter Khusus</translation>
-    </message>
-    <message>
-        <source>Starting sequence manager...</source>
-        <translation type="obsolete">Memulai manajer sekuenser...</translation>
-    </message>
-    <message>
-        <source>Clearing studio data...</source>
-        <translation type="obsolete">Membersihkan data studio...</translation>
-    </message>
-    <message>
-        <source>Import Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Mengimpor berkas &amp;Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Import &amp;MIDI file...</source>
-        <translation type="obsolete">Mengimpor berkas &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Import &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Mengimpor berkas &amp;Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Import &amp;Hydrogen file...</source>
-        <translation type="obsolete">Mengimpor berkas &amp;Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;File...</source>
-        <translation type="obsolete">Menggabungkan &amp;Berkas...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;MIDI file...</source>
-        <translation type="obsolete">Menggabungkan berkas &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Menggabungkan berkas &amp;Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;Hydrogen file...</source>
-        <translation type="obsolete">Menggabungkan berkas &amp;Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Export Rosegarden &amp;Project file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Export &amp;MIDI file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Export &amp;LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>Export Music&amp;XML file...</source>
-        <translation type="obsolete">Mengekspor berkas Music&amp;XML...</translation>
-    </message>
-    <message>
-        <source>Export &amp;Csound score file...</source>
-        <translation type="obsolete">Mengekspor berkas skor &amp;Csound...</translation>
-    </message>
-    <message>
-        <source>Export M&amp;up file...</source>
-        <translation type="obsolete">Mengekspor berkas M&amp;up...</translation>
-    </message>
-    <message>
-        <source>Play&amp;list</source>
-        <translation type="obsolete">Daftar Ma&amp;in</translation>
-    </message>
-    <message>
-        <source>Rosegarden &amp;Tutorial</source>
-        <translation type="obsolete">&amp;Tutorial Rosegarden</translation>
-    </message>
-    <message>
-        <source>Show Trac&amp;ks Toolbar</source>
-        <translation type="obsolete">Tampil&amp;kan Baris Alat Jalur</translation>
-    </message>
-    <message>
-        <source>Show &amp;Editors Toolbar</source>
-        <translation type="obsolete">Tampilkan Baris Alat &amp;Editor</translation>
-    </message>
-    <message>
-        <source>Show &amp;Zoom Toolbar</source>
-        <translation type="obsolete">Menampilkan Baris Alat &amp;Zum</translation>
-    </message>
-    <message>
-        <source>Show Tra&amp;nsport</source>
-        <translation type="obsolete">Menampilkan Tra&amp;nspor</translation>
-    </message>
-    <message>
-        <source>Show Track &amp;Labels</source>
-        <translation type="obsolete">Menampilkan &amp;Label Jalur</translation>
-    </message>
-    <message>
-        <source>Show Te&amp;mpo Ruler</source>
-        <translation type="obsolete">Menampilkan Penggaris Te&amp;mpo</translation>
-    </message>
-    <message>
-        <source>Show Segment Pre&amp;views</source>
-        <translation type="obsolete">Menampilkan Pratamp&amp;il Segmen</translation>
-    </message>
-    <message>
-        <source>Show Special &amp;Parameters</source>
-        <translation type="obsolete">Menampilkan &amp;Parameter Khusus</translation>
-    </message>
-    <message>
-        <source>&amp;Select and Edit</source>
-        <translation type="obsolete">Pilih dan &amp;Sunting</translation>
-    </message>
-    <message>
-        <source>&amp;Draw</source>
-        <translation type="obsolete">&amp;Gambar</translation>
-    </message>
-    <message>
-        <source>&amp;Erase</source>
-        <translation type="obsolete">Hapu&amp;s</translation>
-    </message>
-    <message>
-        <source>&amp;Move</source>
-        <translation type="obsolete">&amp;Pindahkan</translation>
-    </message>
-    <message>
-        <source>&amp;Resize</source>
-        <translation type="obsolete">Mengubah Uku&amp;ran</translation>
-    </message>
-    <message>
-        <source>&amp;Split</source>
-        <translation type="obsolete">&amp;Bagi</translation>
-    </message>
-    <message>
-        <source>&amp;Join</source>
-        <translation type="obsolete">&amp;Gabung</translation>
-    </message>
-    <message>
-        <source>&amp;Harmonize</source>
-        <translation type="obsolete">&amp;Harmonisasi</translation>
-    </message>
-    <message>
-        <source>Open Tempo and Time Signature Editor</source>
-        <translation type="obsolete">Buka Penyunting Tempo dan Paraf Waktu</translation>
-    </message>
-    <message>
-        <source>Cut Range</source>
-        <translation type="obsolete">Potong Jangkauan</translation>
-    </message>
-    <message>
-        <source>Copy Range</source>
-        <translation type="obsolete">Jangkauan Salin</translation>
-    </message>
-    <message>
-        <source>Paste Range</source>
-        <translation type="obsolete">Tempel Jangkauan</translation>
-    </message>
-    <message>
-        <source>Insert Range...</source>
-        <translation type="obsolete">Sisip Jangkauan...</translation>
-    </message>
-    <message>
-        <source>Select &amp;All Segments</source>
-        <translation type="obsolete">Pilih Semu&amp;a Segmen</translation>
-    </message>
-    <message>
-        <source>Edit Mar&amp;kers...</source>
-        <translation type="obsolete">Sunting Penan&amp;da...</translation>
-    </message>
-    <message>
-        <source>Edit Document P&amp;roperties...</source>
-        <translation type="obsolete">Sunting P&amp;roperti Dokumen...</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Default Editor</source>
-        <translation type="obsolete">Buka &amp;dalam Penyunting Utama</translation>
-    </message>
-    <message>
-        <source>Open in Matri&amp;x Editor</source>
-        <translation type="obsolete">Buka di Penyunting Metri&amp;ks</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Percussion Matrix Editor</source>
-        <translation type="obsolete">Buka di Penyunting Metriks &amp;Perkusi</translation>
-    </message>
-    <message>
-        <source>Open in &amp;Notation Editor</source>
-        <translation type="obsolete">Buka di Penyunting &amp;Notasi</translation>
-    </message>
-    <message>
-        <source>&amp;Quantize...</source>
-        <translation type="obsolete">&amp;Kuantisasi...</translation>
-    </message>
-    <message>
-        <source>Repeat Last Quantize</source>
-        <translation type="obsolete">Ulang Kuantisasi Terakhir</translation>
-    </message>
-    <message>
-        <source>Set Duration...</source>
-        <translation type="obsolete">Mengatur Durasi...</translation>
-    </message>
-    <message>
-        <source>Manage A&amp;udio Files</source>
-        <translation type="obsolete">Memanajemen Berkas S&amp;uara</translation>
-    </message>
-    <message>
-        <source>Show Segment Labels</source>
-        <translation type="obsolete">Menampilkan Label Segmen</translation>
-    </message>
-    <message>
-        <source>Add &amp;Track</source>
-        <translation type="obsolete">&amp;Tambah Jalur</translation>
-    </message>
-    <message>
-        <source>&amp;Add Tracks...</source>
-        <translation type="obsolete">T&amp;ambah Jalur...</translation>
-    </message>
-    <message>
-        <source>D&amp;elete Track</source>
-        <translation type="obsolete">Hapus Jal&amp;ur</translation>
-    </message>
-    <message>
-        <source>Move Track &amp;Down</source>
-        <translation type="obsolete">Memin&amp;dah Jalur Turun</translation>
-    </message>
-    <message>
-        <source>Move Track &amp;Up</source>
-        <translation type="obsolete">Memindah Jal&amp;ur Naik</translation>
-    </message>
-    <message>
-        <source>Select &amp;Next Track</source>
-        <translation type="obsolete">Pilih Jalur Sela&amp;njutnya</translation>
-    </message>
-    <message>
-        <source>Select &amp;Previous Track</source>
-        <translation type="obsolete">&amp;Pilih Jalur Sebelumnya</translation>
-    </message>
-    <message>
-        <source>Mute or Unmute Track</source>
-        <translation type="obsolete">Bisukan atau Suarakan Jalur</translation>
-    </message>
-    <message>
-        <source>&amp;Mute all Tracks</source>
-        <translation type="obsolete">Bisukan Se&amp;mua Jalur</translation>
-    </message>
-    <message>
-        <source>&amp;Unmute all Tracks</source>
-        <translation type="obsolete">Suarakan Semua Jal&amp;ur</translation>
-    </message>
-    <message>
-        <source>&amp;Remap Instruments...</source>
-        <translation type="obsolete">Petakan Ulang Inst&amp;rumen...</translation>
-    </message>
-    <message>
-        <source>&amp;Audio Mixer</source>
-        <translation type="obsolete">Mikser Suar&amp;a</translation>
-    </message>
-    <message>
-        <source>Midi Mi&amp;xer</source>
-        <translation type="obsolete">Mi&amp;kser Midi</translation>
-    </message>
-    <message>
-        <source>Manage MIDI &amp;Devices</source>
-        <translation type="obsolete">Memanajemen Perangkat MI&amp;DI</translation>
-    </message>
-    <message>
-        <source>Modify MIDI &amp;Filters</source>
-        <translation type="obsolete">Ubah Penyari&amp;ng MIDI</translation>
-    </message>
-    <message>
-        <source>Manage &amp;Metronome</source>
-        <translation type="obsolete">Memanajemen &amp;Metronom</translation>
-    </message>
-    <message>
-        <source>&amp;Save Current Document as Default Studio</source>
-        <translation type="obsolete">&amp;Simpan Dokumen Bersangkutan sebagai Studio Utama</translation>
-    </message>
-    <message>
-        <source>&amp;Import Default Studio</source>
-        <translation type="obsolete">&amp;Impor Studio Utama</translation>
-    </message>
-    <message>
-        <source>Im&amp;port Studio from File...</source>
-        <translation type="obsolete">Mengim&amp;por Studi dari Berkas...</translation>
-    </message>
-    <message>
-        <source>&amp;Reset MIDI Network</source>
-        <translation type="obsolete">Set Ulang Ja&amp;ringan MIDI</translation>
-    </message>
-    <message>
-        <source>&amp;Play</source>
-        <translation type="obsolete">&amp;Putar</translation>
-    </message>
-    <message>
-        <source>&amp;Stop</source>
-        <translation type="obsolete">&amp;Henti</translation>
-    </message>
-    <message>
-        <source>&amp;Fast Forward</source>
-        <translation type="obsolete">Maju Cepa&amp;t</translation>
-    </message>
-    <message>
-        <source>&amp;Record</source>
-        <translation type="obsolete">&amp;Rekam</translation>
-    </message>
-    <message>
-        <source>Rewind to &amp;Beginning</source>
-        <translation type="obsolete">Ulang hing&amp;ga Awal</translation>
-    </message>
-    <message>
-        <source>Fast Forward to &amp;End</source>
-        <translation type="obsolete">Maju C&amp;epat hingg Akhir</translation>
-    </message>
-    <message>
-        <source>Panic</source>
-        <translation type="obsolete">Panik</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zum:  </translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist</source>
-        <translation type="obsolete">Berkas &quot;%1&quot; tidak ada</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; is actually a directory</source>
-        <translation type="obsolete">Berkas &quot;%1&quot; sebenarnya adalah direktori</translation>
-    </message>
-    <message>
-        <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="obsolete">Anda tidak memiliki izin menulis untuk &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>An auto-save file for this document has been found
-Do you want to open it instead ?</source>
-        <translation type="obsolete">Berkas simpan-otomatis untuk dukumen ini telah ditemukan
-Apakah Anda hendak membukanya?</translation>
-    </message>
-    <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Berkas Contoh</translation>
-    </message>
-    <message>
-        <source>Opening a new application window...</source>
-        <translation type="obsolete">Membuka jendela aplikasi yang baru...</translation>
-    </message>
-    <message>
-        <source>Creating new document...</source>
-        <translation type="obsolete">Membuat dokumen yang baru...</translation>
-    </message>
-    <message>
-        <source>Opening file...</source>
-        <translation type="obsolete">Membuka berkas...</translation>
-    </message>
-    <message>
-        <source>Open File</source>
-        <translation type="obsolete">Buka Berkas</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Menyimpan berkas...</translation>
-    </message>
-    <message>
-        <source>This is not a valid filename.
-</source>
-        <translation type="obsolete">Ini bukanlah nama berkas yang sah.
-</translation>
-    </message>
-    <message>
-        <source>This is not a local file.
-</source>
-        <translation type="obsolete">Ini bukanlah berkas lokal.
-</translation>
-    </message>
-    <message>
-        <source>The specified file exists.  Overwrite?</source>
-        <translation type="obsolete">Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
-    </message>
-    <message>
-        <source>Saving file with a new filename...</source>
-        <translation type="obsolete">Menyimpan berkas dengan nama yang baru....</translation>
-    </message>
-    <message>
-        <source>Rosegarden files</source>
-        <translation type="obsolete">Berkas Rosegarden</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="obsolete">Semua berkas</translation>
-    </message>
-    <message>
-        <source>Save as...</source>
-        <translation type="obsolete">Menyimpan sebagai...</translation>
-    </message>
-    <message>
-        <source>Closing file...</source>
-        <translation type="obsolete">Menutup berkas...</translation>
-    </message>
-    <message>
-        <source>Exiting...</source>
-        <translation type="obsolete">Keluar...</translation>
-    </message>
-    <message>
-        <source>Cutting selection...</source>
-        <translation type="obsolete">Memotong seleksi...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Papan klip kosong</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Menyisipkan isi papan klip...</translation>
-    </message>
-    <message>
-        <source>This function needs no more than one segment to be selected.</source>
-        <translation type="obsolete">Fungsi ini memerlukan tidak lebih dari satu segmen yang dipilih.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t join Audio segments</source>
-        <translation type="obsolete">Tak dapat menggabungkan segmen Suara</translation>
-    </message>
-    <message>
-        <source>rescaling an audio file</source>
-        <translation type="obsolete">menskalakan ulang berkas suara</translation>
-    </message>
-    <message>
-        <source>Rescaling audio file...</source>
-        <translation type="obsolete">Menskala ulang berkas suara...</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-You must set the audio file path to a valid directory in Document Properties before %1.
-Would you like to set it now?</source>
-        <translation type="obsolete">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Anda harus mengeset jalur berkas suara pada direktori yang benar dalam Properti Dokumen sebelum %1.
-Apakah Anda hendak mengesetnya sekarang?</translation>
-    </message>
-    <message>
-        <source>Segment Duration</source>
-        <translation type="obsolete">Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Segment Durations</source>
-        <translation type="obsolete">Atur Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Segment Duration</source>
-        <translation type="obsolete">Atur Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Global Tempo</source>
-        <translation type="obsolete">Atur Tempo Global</translation>
-    </message>
-    <message>
-        <source>Join tool not yet implemented</source>
-        <translation type="obsolete">Perkakas gabung (join) belum diimplementasikan</translation>
-    </message>
-    <message>
-        <source>*.rgp|Rosegarden Project files
-*|All files</source>
-        <translation type="obsolete">*.rgp|Berkas Proyek Rosegarden
-*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>Import Rosegarden Project File</source>
-        <translation type="obsolete">Impor Berkas Proyek Rosegarden</translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Gagal mengimpor berkas proyek &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Open MIDI File</source>
-        <translation type="obsolete">Membuka Berkas MIDI</translation>
-    </message>
-    <message>
-        <source>Merge MIDI File</source>
-        <translation type="obsolete">Menggabung Berkas MIDI</translation>
-    </message>
-    <message>
-        <source>Importing MIDI file...</source>
-        <translation type="obsolete">Mengimpor berkas MIDI...</translation>
-    </message>
-    <message>
-        <source>Calculating notation...</source>
-        <translation type="obsolete">Menkalkulasi notasi...</translation>
-    </message>
-    <message>
-        <source>Calculate Notation</source>
-        <translation type="obsolete">Menkalkulasi Notasi</translation>
-    </message>
-    <message>
-        <source>*.rose|Rosegarden-2 files
-*|All files</source>
-        <translation type="obsolete">*.rose|Berkas Rosegarden-2
-*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>Open Rosegarden 2.1 File</source>
-        <translation type="obsolete">Buka Berkas Rosegarden 2.1</translation>
-    </message>
-    <message>
-        <source>Importing Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Mengimpor berkas Rosegarden 2.1...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Rosegarden 2.1 file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Tak dapat memuat berkas Rosegarden 2.1.  Berkas itu sepertinya rusak.</translation>
-    </message>
-    <message>
-        <source>*.h2song|Hydrogen files
-*|All files</source>
-        <translation type="obsolete">*.h2song|Berkas Hydrogen
-*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Buka Berkas Hydrogen</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Mengimpor berkas Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Tak dapat memuat berkas Hydrogen.  Berkas tersebut sepertinya rusak.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Mengekspor berkas Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Pemaket Proyek Rosegarden tidak tersedia</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;seting dasar&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>Starting the sequencer...</source>
-        <translation type="obsolete">Memulai sekuenser...</translation>
-    </message>
-    <message>
-        <source>Couldn&apos;t start the sequencer</source>
-        <translation type="obsolete">Tak dapat memulai sekuenser</translation>
-    </message>
-    <message>
-        <source>Clearing down jackd...</source>
-        <translation type="obsolete">Membersihkan jackd...</translation>
-    </message>
-    <message>
-        <source>Starting jackd...</source>
-        <translation type="obsolete">Memulai jackd...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
-Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation type="obsolete">Proses sekuenser Rosegarden telah mati tanpa terduga.  Fungsi suara dan perekaman tidak dapat tersedia bagi sesi kali ini.
-Silakan untuk keluar dan menjalankan kembali Rosegarden untuk mengembalikan kemampuan suaranya.</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
-For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation type="obsolete">Sekuenser Rosegarden tidak dapat dijalankan, sehingga fungsi suara dan perekaman tidak akan tersedia untuk sesi ini.
-Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http://rosegardenmusic.com.</translation>
-    </message>
-    <message>
-        <source>Exporting Rosegarden Project file...</source>
-        <translation type="obsolete">Mengekspor berkas Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Rosegarden Project files
-</source>
-        <translation type="obsolete">Berkas Proyek Rosegarden
-</translation>
-    </message>
-    <message>
-        <source>Export as...</source>
-        <translation type="obsolete">Diekspor sebagai...</translation>
-    </message>
-    <message>
-        <source>Saving Rosegarden file to package failed: %1</source>
-        <translation type="obsolete">Gagal menyimpan berkas Rosegarden ke paket: %1</translation>
-    </message>
-    <message>
-        <source>Failed to export to project file &quot;%1&quot;</source>
-        <translation type="obsolete">Gagal mengekspor berkas proyek &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Exporting MIDI file...</source>
-        <translation type="obsolete">Mengekspor berkas MIDI...</translation>
-    </message>
-    <message>
-        <source>Standard MIDI files
-</source>
-        <translation type="obsolete">Berkas MIDI standar
-</translation>
-    </message>
-    <message>
-        <source>Exporting Csound score file...</source>
-        <translation type="obsolete">Mengekspor berkas skor Csound...</translation>
-    </message>
-    <message>
-        <source>Exporting Mup file...</source>
-        <translation type="obsolete">Mengekspor berkas Mup...</translation>
-    </message>
-    <message>
-        <source>Mup files
-</source>
-        <translation type="obsolete">Berkas Mup
-</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>LilyPond files</source>
-        <translation type="obsolete">Berkas Lilypond</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Ekspor/Pratampil LilyPond</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Pratampil LilyPond tidak tersedia</translation>
-    </message>
-    <message>
-        <source>Exporting MusicXML file...</source>
-        <translation type="obsolete">Mengekspor berkas MusicXML...</translation>
-    </message>
-    <message>
-        <source>XML files</source>
-        <translation type="obsolete">Berkas XML</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before you start to record audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Silakan untuk mengeset jalur berkas suara pada direktori yang benar di dalam Properti Dokumen sebelum Anda memulai untuk merekam suara.
-Apakah Anda hendak mengesetnya sekarang?</translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Replace Tempo Change at %1</source>
-        <translation type="obsolete">Ganti Perubahan Tempo pada %1</translation>
-    </message>
-    <message>
-        <source>Move Tempo Change</source>
-        <translation type="obsolete">PIndahkan Perubahan Tempo</translation>
-    </message>
-    <message>
-        <source>new marker</source>
-        <translation type="obsolete">Sisip Penanda</translation>
-    </message>
-    <message>
-        <source>no description</source>
-        <translation type="obsolete">Deskripsi:</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to add audio file %1</source>
-        <translation type="obsolete">Sekuenser gagal menambahkan berkas suara %1</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to remove audio file id %1</source>
-        <translation type="obsolete">Sekuenser gagal membuang berkas suara %1</translation>
-    </message>
-    <message>
-        <source>Modify Segment label</source>
-        <translation type="obsolete">Ubah label Segmen</translation>
-    </message>
-    <message>
-        <source>Modify Segments label</source>
-        <translation type="obsolete">Ubah label Segmen</translation>
-    </message>
-    <message>
-        <source>Relabelling selection...</source>
-        <translation type="obsolete">Melabeli ulang seleksi...</translation>
-    </message>
-    <message>
-        <source>Play List</source>
-        <translation type="obsolete">Daftar Main</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html</source>
-        <translation type="obsolete">http://rosegarden.sourceforge.net/tutorial/en/chapter-0.html</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="obsolete">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to save this as your default studio?</source>
-        <translation type="obsolete">Apakah Anda yakin untuk menyimpan ini sebagai studio utama Anda?</translation>
-    </message>
-    <message>
-        <source>Saving current document as default studio...</source>
-        <translation type="obsolete">Menyimpan dokumen saat ini sebagai studio utama...</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to import your default studio and lose the current one?</source>
-        <translation type="obsolete">Apakah Anda yakin untuk mengimpor studio utama Anda dan kehilangan studio saat ini?</translation>
-    </message>
-    <message>
-        <source>Import Studio from File</source>
-        <translation type="obsolete">Mengimpor Studio dari Berkas</translation>
-    </message>
-    <message>
-        <source>Import Studio</source>
-        <translation type="obsolete">Impor Studio</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Tersedia versi terbaru&lt;/h3&gt;&lt;p&gt;Versi terbaru dari Rosegarden mungkin sudah tersedia.&lt;br&gt;Silakan kunjungi &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;situs Rosegarden&lt;/a&gt; untuk informasi lebih lanjut.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Tersedia versi terbaru</translation>
-    </message>
-    <message>
-        <source>Failed to load soundfont %1</source>
-        <translation type="obsolete">Gagal memuat soundfont %1</translation>
-    </message>
-    <message>
-        <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="obsolete">Rosegarden - Editor sekuenser dan notasi musik</translation>
-    </message>
-    <message>
-        <source>Don&apos;t use the sequencer (support editing only)</source>
-        <translation type="obsolete">Jangan gunakan sekuenser (hanya mendukung penyuntingan)</translation>
-    </message>
-    <message>
-        <source>Don&apos;t show the splash screen</source>
-        <translation type="obsolete">Jangan tampilkan layar kilas</translation>
-    </message>
-    <message>
-        <source>Don&apos;t automatically run in the background</source>
-        <translation type="obsolete">Jangan berjalan secara otomatis di balik latar</translation>
-    </message>
-    <message>
-        <source>file to open</source>
-        <translation type="obsolete">berkas untuk dibuka</translation>
-    </message>
-    <message>
-        <source>Installation contains the wrong version of Rosegarden.</source>
-        <translation type="obsolete">Instalasi mengandung versi Rosegarden yang salah.</translation>
-    </message>
-    <message>
-        <source>Installation problem</source>
-        <translation type="obsolete">Permasalahan instalasi</translation>
-    </message>
-    <message>
-        <source>Rosegarden does not appear to have been installed.</source>
-        <translation type="obsolete">Rosegarden sepertinya belum terpasang.</translation>
-    </message>
-    <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <source>Copyright 2000 - 2008 Guillaume Laurent, Chris Cannam, Richard Bown
-Parts copyright 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent
-LilyPond fonts copyright 1997 - 2005 Han-Wen Nienhuys and Jan Nieuwenhuizen</source>
-        <translation type="obsolete">Hak cipta 2000 - 2007 Guillaume Laurent, Chris Cannam, Richard Bown
-Hak cipta per bagian 1994 - 2004 Chris Cannam, Andy Green, Richard Bown, Guillaume Laurent
-Hak cipta huruf Lilypond 1997 - 2005 Han-Wen Nienhuys dan Jan Nieuwenhuizen</translation>
-    </message>
-    <message>
-        <source>UI improvements
-bug fixes</source>
-        <translation type="obsolete">Peningkatan UI
-perbaikan hama kode</translation>
-    </message>
-    <message>
-        <source>Segment colours
-Other UI and bug fixes</source>
-        <translation type="obsolete">Warna segmen
-Perbaikan UI dan hama kode lainnya</translation>
-    </message>
-    <message>
-        <source>Russian translation
-i18n-ization</source>
-        <translation type="obsolete">Terjemahan Rusia
-i18n-ization</translation>
-    </message>
-    <message>
-        <source>German translation</source>
-        <translation type="obsolete">Terjemahan Jerman</translation>
-    </message>
-    <message>
-        <source>French translation</source>
-        <translation type="obsolete">Terjemahan Perancis</translation>
-    </message>
-    <message>
-        <source>French translation
-Bug fixes</source>
-        <translation type="obsolete">Terjemahan Perancis
-Perbaikan hama kode</translation>
-    </message>
-    <message>
-        <source>Italian translation</source>
-        <translation type="obsolete">Terjemahan Italia</translation>
-    </message>
-    <message>
-        <source>Swedish translation</source>
-        <translation type="obsolete">Terjemahan Swedia</translation>
-    </message>
-    <message>
-        <source>Estonian translation</source>
-        <translation type="obsolete">Terjemahan Estonia</translation>
-    </message>
-    <message>
-        <source>Dutch translation</source>
-        <translation type="obsolete">Terjemahan Belanda</translation>
-    </message>
-    <message>
-        <source>HSpinBox class</source>
-        <translation type="obsolete">Kelas HSpinBox</translation>
-    </message>
-    <message>
-        <source>Transposition by interval</source>
-        <translation type="obsolete">Transposisi oleh interval</translation>
-    </message>
-    <message>
-        <source>Japanese translation</source>
-        <translation type="obsolete">Terjemahan Jepang</translation>
-    </message>
-    <message>
-        <source>Simplified Chinese translation</source>
-        <translation type="obsolete">Terjemahan Cina Sederhana</translation>
-    </message>
-    <message>
-        <source>LIRC infrared remote-controller support</source>
-        <translation type="obsolete">Dukungan pengendali jarak jauh inframerah LIRC</translation>
-    </message>
-    <message>
-        <source>SCons/bksys building system</source>
-        <translation type="obsolete">Sistem pembangun SCons/bksys</translation>
-    </message>
-    <message>
-        <source>icons, icons, icons</source>
-        <translation type="obsolete">ikon, ikon, ikon</translation>
-    </message>
-    <message>
-        <source>Spanish translation</source>
-        <translation type="obsolete">Terjemahan Spanyol</translation>
-    </message>
-    <message>
-        <source>Catalan translation</source>
-        <translation type="obsolete">Terjemahan Katalonia</translation>
-    </message>
-    <message>
-        <source>Polish translation</source>
-        <translation type="obsolete">Terjemahan Polandia</translation>
-    </message>
-    <message>
-        <source>Klearlook theme</source>
-        <translation type="obsolete">Tema klearlook</translation>
-    </message>
-    <message>
-        <source>Your names</source>
-        <translation type="obsolete">Indonesia</translation>
-    </message>
-    <message>
-        <source>Your emails</source>
-        <translation type="obsolete">dirgitadevina@yahoo.co.id</translation>
-    </message>
-    <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Tak ada segmen nonsuara dalam komposisi</translation>
-    </message>
-    <message>
-        <source>Selection must contain only audio or non-audio segments</source>
-        <translation type="obsolete">Seleksi harus mengandung hanya segmen suara atau nonsuara</translation>
-    </message>
-    <message>
-        <source>No non-audio segments selected</source>
-        <translation type="obsolete">Tak ada segmen nonsuara yang dipilih</translation>
-    </message>
-    <message>
-        <source>Run out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="obsolete">Kehabisan kuasa prosesor untuk pemrosesan suara waktu nyata (real-time).  Tak dapat melanjutkan.</translation>
-    </message>
-    <message>
-        <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
-        <translation type="obsolete">Kesalahan serius telah terjadi pada subsistem MIDI ALSA.  Tidak mungkin untuk dapat melanjutkan sekuensi.  Silakan periksa keluaran konsol untuk informasi lebih lanjut.</translation>
-    </message>
-    <message>
-        <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation type="obsolete">Subsistem Suara JACK kehilangan bingkai-bingkai sampel (sample frame).</translation>
-    </message>
-    <message>
-        <source>Unknown sequencer failure mode!</source>
-        <translation type="obsolete">Kegagalan mode sekuenser tak dikenal!</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">&lt;h3&gt;Gagal menjalankan sekuenser&lt;/h3&gt;%1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to JACK</source>
-        <translation type="obsolete">Gagal terhubung ke JACK</translation>
-    </message>
-    <message>
-        <source>Modify MIDI filters...</source>
-        <translation type="obsolete">Ubah penyaring MIDI...</translation>
-    </message>
-    <message>
-        <source>Note</source>
-        <translation type="obsolete">Catatan</translation>
-    </message>
-    <message>
-        <source>Program Change</source>
-        <translation type="obsolete">Perubahan Program</translation>
-    </message>
-    <message>
-        <source>Key Pressure</source>
-        <translation type="obsolete">Tekanan Kunci</translation>
-    </message>
-    <message>
-        <source>Channel Pressure</source>
-        <translation type="obsolete">Tekanan Kanal</translation>
-    </message>
-    <message>
-        <source>Controller</source>
-        <translation type="obsolete">Kontroler</translation>
-    </message>
-    <message>
-        <source>System Exclusive</source>
-        <translation type="obsolete">Eksklusif Sistem</translation>
-    </message>
-    <message>
-        <source>Units:</source>
-        <translation type="obsolete">Unit:</translation>
-    </message>
-    <message>
-        <source>Time:</source>
-        <translation type="obsolete">Waktu:</translation>
-    </message>
-    <message>
-        <source>units</source>
-        <translation type="obsolete">unit</translation>
-    </message>
-    <message>
-        <source>Measures:</source>
-        <translation type="obsolete">Ukuran:</translation>
-    </message>
-    <message>
-        <source>Measure:</source>
-        <translation type="obsolete">Ukuran:</translation>
-    </message>
-    <message>
-        <source>beats:</source>
-        <translation type="obsolete">ketukan:</translation>
-    </message>
-    <message>
-        <source>beat:</source>
-        <translation type="obsolete">ketukan:</translation>
-    </message>
-    <message>
-        <source>%1:</source>
-        <translation type="obsolete">%1:</translation>
-    </message>
-    <message>
-        <source>Seconds:</source>
-        <translation type="obsolete">Detik:</translation>
-    </message>
-    <message>
-        <source>msec:</source>
-        <translation type="obsolete">mdet:</translation>
-    </message>
-    <message>
-        <source>(%1/%2 time)</source>
-        <translation type="obsolete">(%1/%2 waktu)</translation>
-    </message>
-    <message>
-        <source>(starting %1.%2 qpm, %2.%3 bpm)</source>
-        <translation type="obsolete">(memulai %1.%2 qpm, %2.%3 bpm)</translation>
-    </message>
-    <message>
-        <source>(starting %1.%2 bpm)</source>
-        <translation type="obsolete">(memulai %1.%2 bpm)</translation>
-    </message>
-    <message>
-        <source>(%1.%2 qpm, %2.%3 bpm)</source>
-        <translation type="obsolete">(%1.%2 qpm, %2.%3 bpm)</translation>
-    </message>
-    <message>
-        <source>(%1.%2 bpm)</source>
-        <translation type="obsolete">(%1.%2 bpm)</translation>
-    </message>
-    <message>
-        <source>C</source>
-        <translation type="obsolete">C</translation>
-    </message>
-    <message>
-        <source>D</source>
-        <translation type="obsolete">D</translation>
-    </message>
-    <message>
-        <source>E</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F</source>
-        <translation type="obsolete">F</translation>
-    </message>
-    <message>
-        <source>G</source>
-        <translation type="obsolete">G</translation>
-    </message>
-    <message>
-        <source>A</source>
-        <translation type="obsolete">A</translation>
-    </message>
-    <message>
-        <source>B</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>-2</source>
-        <translation type="obsolete">-2</translation>
-    </message>
-    <message>
-        <source>-1</source>
-        <translation type="obsolete">-1</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation type="obsolete">0</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation type="obsolete">1</translation>
-    </message>
-    <message>
-        <source>2</source>
-        <translation type="obsolete">2</translation>
-    </message>
-    <message>
-        <source>3</source>
-        <translation type="obsolete">3</translation>
-    </message>
-    <message>
-        <source>4</source>
-        <translation type="obsolete">4</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation type="obsolete">5</translation>
-    </message>
-    <message>
-        <source>6</source>
-        <translation type="obsolete">6</translation>
-    </message>
-    <message>
-        <source>7</source>
-        <translation type="obsolete">7</translation>
-    </message>
-    <message>
-        <source>natural</source>
-        <translation type="obsolete">natural</translation>
-    </message>
-    <message>
-        <source>In %1</source>
-        <translation type="obsolete">Masuk %1</translation>
-    </message>
-    <message>
-        <source>Master</source>
-        <translation type="obsolete">Master</translation>
-    </message>
-    <message>
-        <source>Sub %1</source>
-        <translation type="obsolete">Sub %1</translation>
-    </message>
-    <message>
-        <source>In %1 R</source>
-        <translation type="obsolete">Masuk %1 R</translation>
-    </message>
-    <message>
-        <source>In %1 L</source>
-        <translation type="obsolete">Masuk %1 L</translation>
-    </message>
-    <message>
-        <source>Master R</source>
-        <translation type="obsolete">Master R</translation>
-    </message>
-    <message>
-        <source>Master L</source>
-        <translation type="obsolete">Master L</translation>
-    </message>
-    <message>
-        <source>Sub %1 R</source>
-        <translation type="obsolete">Sub %1 R</translation>
-    </message>
-    <message>
-        <source>Sub %1 L</source>
-        <translation type="obsolete">Sub %1 L</translation>
-    </message>
-    <message>
-        <source>Audio plugin button</source>
-        <translation type="obsolete">Tombol plugin suara</translation>
-    </message>
-    <message>
-        <source>Mono or Stereo Instrument</source>
-        <translation type="obsolete">Instrumen Mono atau Stereo</translation>
-    </message>
-    <message>
-        <source>Record level</source>
-        <translation type="obsolete">Tingkat rekam</translation>
-    </message>
-    <message>
-        <source>Playback level</source>
-        <translation type="obsolete">Tingkat putar</translation>
-    </message>
-    <message>
-        <source>Audio level</source>
-        <translation type="obsolete">Tingkat suara</translation>
-    </message>
-    <message>
-        <source>In:</source>
-        <translation type="obsolete">Masuk:</translation>
-    </message>
-    <message>
-        <source>Out:</source>
-        <translation type="obsolete">Keluar:</translation>
-    </message>
-    <message>
-        <source>Processing...</source>
-        <translation type="obsolete">Memproses...</translation>
-    </message>
-    <message>
-        <source>Color</source>
-        <translation type="obsolete">Warna</translation>
-    </message>
-    <message>
-        <source>Modify Color Name</source>
-        <translation type="obsolete">Ubah Nama Warna</translation>
-    </message>
-    <message>
-        <source>Enter new name</source>
-        <translation type="obsolete">Masukkan nama baru</translation>
-    </message>
-    <message>
-        <source>Default Color</source>
-        <translation type="obsolete">Warna Utama</translation>
-    </message>
-    <message>
-        <source>Click and drag up and down or left and right to modify.
-Double click to edit value directly.</source>
-        <translation type="obsolete">Klik lalu seret ke atas dan ke bawah atau ke kiri dan ke kanan untuk mengubah.
-Klik ganda untuk menyunting nilainya secara langsung.</translation>
-    </message>
-    <message>
-        <source>Select a new value</source>
-        <translation type="obsolete">Pilih nilai baru</translation>
-    </message>
-    <message>
-        <source>Enter a new value</source>
-        <translation type="obsolete">Masukkan nilai baru</translation>
-    </message>
-    <message>
-        <source>Quantizer</source>
-        <translation type="obsolete">Kuantiser</translation>
-    </message>
-    <message>
-        <source>Quantizer type:</source>
-        <translation type="obsolete">Jenis kuantiser:</translation>
-    </message>
-    <message>
-        <source>Grid quantizer</source>
-        <translation type="obsolete">Kuantiser jejaring</translation>
-    </message>
-    <message>
-        <source>Legato quantizer</source>
-        <translation type="obsolete">Kuantiser legato</translation>
-    </message>
-    <message>
-        <source>Quantize for notation only (leave performance unchanged)</source>
-        <translation type="obsolete">Hanya kuantisasi untuk notasi (biarkan performanya tidak diubah)</translation>
-    </message>
-    <message>
-        <source>Notation parameters</source>
-        <translation type="obsolete">Parameter notasi</translation>
-    </message>
-    <message>
-        <source>Base grid unit:</source>
-        <translation type="obsolete">Unit jejaring dasar:</translation>
-    </message>
-    <message>
-        <source>Complexity:</source>
-        <translation type="obsolete">Kompleksitas:</translation>
-    </message>
-    <message>
-        <source>Very high</source>
-        <translation type="obsolete">Sangat tinggi</translation>
-    </message>
-    <message>
-        <source>High</source>
-        <translation type="obsolete">Tinggi</translation>
-    </message>
-    <message>
-        <source>Normal</source>
-        <translation type="obsolete">Normal</translation>
-    </message>
-    <message>
-        <source>Low</source>
-        <translation type="obsolete">Rendah</translation>
-    </message>
-    <message>
-        <source>Very low</source>
-        <translation type="obsolete">Sangat rendah</translation>
-    </message>
-    <message>
-        <source>2-in-the-time-of-3</source>
-        <translation type="obsolete">2-dalam-waktu-dari-3</translation>
-    </message>
-    <message>
-        <source>Any</source>
-        <translation type="obsolete">Lainnya</translation>
-    </message>
-    <message>
-        <source>Grid parameters</source>
-        <translation type="obsolete">Parameter jejaring</translation>
-    </message>
-    <message>
-        <source>Swing:</source>
-        <translation type="obsolete">Ayunan:</translation>
-    </message>
-    <message>
-        <source>After quantization</source>
-        <translation type="obsolete">Usai kuantisasi</translation>
-    </message>
-    <message>
-        <source>Show advanced options</source>
-        <translation type="obsolete">Menampilkan opsi lanjutan</translation>
-    </message>
-    <message>
-        <source>Full quantize</source>
-        <translation type="obsolete">Kuantisasi penuh</translation>
-    </message>
-    <message>
-        <source>Show Advanced Options</source>
-        <translation type="obsolete">Tampilkan Opsi Lanjutan</translation>
-    </message>
-    <message>
-        <source>Hide Advanced Options</source>
-        <translation type="obsolete">Sembunyikan Opsi Lanjutan</translation>
-    </message>
-    <message>
-        <source>Matrix</source>
-        <translation type="obsolete">Metriks</translation>
-    </message>
-    <message>
-        <source>Printable headers</source>
-        <translation type="obsolete">Tajuk yang dapat dicetak</translation>
-    </message>
-    <message>
-        <source>Dedication</source>
-        <translation type="obsolete">Dedikasi</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation type="obsolete">Judul</translation>
-    </message>
-    <message>
-        <source>Subtitle</source>
-        <translation type="obsolete">Subjudul</translation>
-    </message>
-    <message>
-        <source>Subsubtitle</source>
-        <translation type="obsolete">Subsubjudul</translation>
-    </message>
-    <message>
-        <source>Composer</source>
-        <translation type="obsolete">Komposer</translation>
-    </message>
-    <message>
-        <source>Meter</source>
-        <translation type="obsolete">Meter</translation>
-    </message>
-    <message>
-        <source>Arranger</source>
-        <translation type="obsolete">Penyusun</translation>
-    </message>
-    <message>
-        <source>Copyright</source>
-        <translation type="obsolete">Hak Cipta</translation>
-    </message>
-    <message>
-        <source>Tagline</source>
-        <translation type="obsolete">Baris pataka (tagline)</translation>
-    </message>
-    <message>
-        <source>Non-printable headers</source>
-        <translation type="obsolete">Tajuk yang tak dapat dicetak</translation>
-    </message>
-    <message>
-        <source>Add New Property</source>
-        <translation type="obsolete">Tambah Properti Baru</translation>
-    </message>
-    <message>
-        <source>Delete Property</source>
-        <translation type="obsolete">Hapus Properti</translation>
-    </message>
-    <message>
-        <source>{new property %1}</source>
-        <translation type="obsolete">{properti baru %1}</translation>
-    </message>
-    <message>
-        <source>{new property}</source>
-        <translation type="obsolete">{properti baru}</translation>
-    </message>
-    <message>
-        <source>{undefined}</source>
-        <translation type="obsolete">{tak ditentukan}</translation>
-    </message>
-    <message>
-        <source>Double-click opens segment in</source>
-        <translation type="obsolete">Klik ganda membuka segmen dalam</translation>
-    </message>
-    <message>
-        <source>Notation editor</source>
-        <translation type="obsolete">Editor notasi</translation>
-    </message>
-    <message>
-        <source>Matrix editor</source>
-        <translation type="obsolete">Editor metriks</translation>
-    </message>
-    <message>
-        <source>Event List editor</source>
-        <translation type="obsolete">Penyunting Daftar Peristiwa</translation>
-    </message>
-    <message>
-        <source>Auto-save interval</source>
-        <translation type="obsolete">Interval simpan otomatis</translation>
-    </message>
-    <message>
-        <source>Every 30 seconds</source>
-        <translation type="obsolete">Setiap 30 detik</translation>
-    </message>
-    <message>
-        <source>Every minute</source>
-        <translation type="obsolete">Setiap menit</translation>
-    </message>
-    <message>
-        <source>Every five minutes</source>
-        <translation type="obsolete">Setiap lima menit</translation>
-    </message>
-    <message>
-        <source>Every half an hour</source>
-        <translation type="obsolete">Setiap setengah jam</translation>
-    </message>
-    <message>
-        <source>Never</source>
-        <translation type="obsolete">Tidak pernah</translation>
-    </message>
-    <message>
-        <source>Use JACK transport</source>
-        <translation type="obsolete">Gunakan transportasi JACK</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="obsolete">Tak dikenal</translation>
-    </message>
-    <message>
-        <source>No MIDI, audio OK</source>
-        <translation type="obsolete">Tanpa MIDI, suara Oke</translation>
-    </message>
-    <message>
-        <source>MIDI OK, no audio</source>
-        <translation type="obsolete">MIDI Oke, tanpa suara</translation>
-    </message>
-    <message>
-        <source>MIDI OK, audio OK</source>
-        <translation type="obsolete">MIDI Oke, suara Oke</translation>
-    </message>
-    <message>
-        <source>No driver</source>
-        <translation type="obsolete">Tanpa driver</translation>
-    </message>
-    <message>
-        <source>Details...</source>
-        <translation type="obsolete">Detil...</translation>
-    </message>
-    <message>
-        <source>Behavior</source>
-        <translation type="obsolete">Kebiasaan</translation>
-    </message>
-    <message>
-        <source>Vertically stacked</source>
-        <translation type="obsolete">Bertumpuk vertikal</translation>
-    </message>
-    <message>
-        <source>Note name style</source>
-        <translation type="obsolete">Nama gaya not</translation>
-    </message>
-    <message>
-        <source>Always use US names (e.g. quarter, 8th)</source>
-        <translation type="obsolete">Selalu gunakan nama AS (cth: quarter, 8th)</translation>
-    </message>
-    <message>
-        <source>Localized (where available)</source>
-        <translation type="obsolete">Lokalisasi (jika tersedia)</translation>
-    </message>
-    <message>
-        <source>Show textured background on</source>
-        <translation type="obsolete">Aktifkan tampilan latar belakang bertekstur</translation>
-    </message>
-    <message>
-        <source>Main window</source>
-        <translation type="obsolete">Jendela utama</translation>
-    </message>
-    <message>
-        <source>Use bundled Klearlook theme</source>
-        <translation type="obsolete">Gunakan tema Klearlook yang dibundel serta</translation>
-    </message>
-    <message>
-        <source>When not running under KDE</source>
-        <translation type="obsolete">Apabila tidak berjalan di bawah KDE</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Selalu</translation>
-    </message>
-    <message>
-        <source>Presentation</source>
-        <translation type="obsolete">Presentasi</translation>
-    </message>
-    <message>
-        <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
-        <translation type="obsolete">Perubahan pada tekstur latar belakang di dalam jendela utama tidak akan tampak selama Anda belum menjalankan ulang Rosegarden.</translation>
-    </message>
-    <message>
-        <source>Always use default studio when loading files</source>
-        <translation type="obsolete">Selalu gunakan studio utama/setingan dasar saat memuat berkas</translation>
-    </message>
-    <message>
-        <source>Load SoundFont to SoundBlaster card at startup</source>
-        <translation type="obsolete">Memuat SoundFont pada kartu SoundBlaster saat permulaan</translation>
-    </message>
-    <message>
-        <source>Check this box to enable soundfont loading on EMU10K-based cards when Rosegarden is launched</source>
-        <translation type="obsolete">Cek kotak ini untuk mengaktifkan pemuatan soundfont pada kartu berbasis EMU10K saat Rosegarden dijalankan</translation>
-    </message>
-    <message>
-        <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
-        <translation type="obsolete">Jalur ke perintah &apos;asfxload&apos; atau &apos;sfxload&apos;</translation>
-    </message>
-    <message>
-        <source>SoundFont</source>
-        <translation type="obsolete">SoundFont</translation>
-    </message>
-    <message>
-        <source>General</source>
-        <translation type="obsolete">Umum</translation>
-    </message>
-    <message>
-        <source>MIDI Machine Control mode</source>
-        <translation type="obsolete">Mode Kontrol Mesin MIDI</translation>
-    </message>
-    <message>
-        <source>MMC Master</source>
-        <translation type="obsolete">MMC Master</translation>
-    </message>
-    <message>
-        <source>MMC Slave</source>
-        <translation type="obsolete">MMC Pembantu</translation>
-    </message>
-    <message>
-        <source>MTC Master</source>
-        <translation type="obsolete">MTC Master</translation>
-    </message>
-    <message>
-        <source>MTC Slave</source>
-        <translation type="obsolete">MTC Pembantu</translation>
-    </message>
-    <message>
-        <source>sfxload path</source>
-        <translation type="obsolete">Jalur sfxload</translation>
-    </message>
-    <message>
-        <source>Soundfont path</source>
-        <translation type="obsolete">Jalur Soundfont</translation>
-    </message>
-    <message>
-        <source>General Configuration</source>
-        <translation type="obsolete">Konfigurasi Umum</translation>
-    </message>
-    <message>
-        <source>%1 minutes %2.%3%4 seconds (%5 units, %6 measures)</source>
-        <translation type="obsolete">%1 menit %2.%3%4 detik (%5 unit, %6 ukuran)</translation>
-    </message>
-    <message>
-        <source>Filename:</source>
-        <translation type="obsolete">Nama berkas:</translation>
-    </message>
-    <message>
-        <source>Formal duration (to end marker):</source>
-        <translation type="obsolete">Durasi formal (hingga akhir penanda):</translation>
-    </message>
-    <message>
-        <source>Playing duration:</source>
-        <translation type="obsolete">Durasi permainan:</translation>
-    </message>
-    <message>
-        <source>Tracks:</source>
-        <translation type="obsolete">Jalur:</translation>
-    </message>
-    <message>
-        <source>%1 used, %2 total</source>
-        <translation type="obsolete">%1 digunakan, %2 total</translation>
-    </message>
-    <message>
-        <source>Segments:</source>
-        <translation type="obsolete">Segment:</translation>
-    </message>
-    <message>
-        <source>%1 MIDI, %2 audio, %3 total</source>
-        <translation type="obsolete">%1 MIDI, %2 suara, %3 total</translation>
-    </message>
-    <message>
-        <source>Statistics</source>
-        <translation type="obsolete">Statistik</translation>
-    </message>
-    <message>
-        <source>Track</source>
-        <translation type="obsolete">Jalur</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation type="obsolete">Label</translation>
-    </message>
-    <message>
-        <source>Time</source>
-        <translation type="obsolete">Waktu</translation>
-    </message>
-    <message>
-        <source>Events</source>
-        <translation type="obsolete">Peristiwa</translation>
-    </message>
-    <message>
-        <source>Polyphony</source>
-        <translation type="obsolete">Polifoni</translation>
-    </message>
-    <message>
-        <source>Transpose</source>
-        <translation type="obsolete">Transposisi</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <translation type="obsolete">Suara</translation>
-    </message>
-    <message>
-        <source>MIDI</source>
-        <translation type="obsolete">MIDI</translation>
-    </message>
-    <message>
-        <source>Segment Summary</source>
-        <translation type="obsolete">Ikhtisar Segmen</translation>
-    </message>
-    <message>
-        <source>Audio file path:</source>
-        <translation type="obsolete">Jalur berkas suara:</translation>
-    </message>
-    <message>
-        <source>Choose...</source>
-        <translation type="obsolete">Pilih...</translation>
-    </message>
-    <message>
-        <source>Disk space remaining:</source>
-        <translation type="obsolete">Ruang disk tersisa:</translation>
-    </message>
-    <message>
-        <source>Modify audio path</source>
-        <translation type="obsolete">Ubah jalur suara</translation>
-    </message>
-    <message>
-        <source>%1 out of %2 (%3% used)</source>
-        <translation type="obsolete">%1 dari %2 (%3% terpakai)</translation>
-    </message>
-    <message>
-        <source>minutes at</source>
-        <translation type="obsolete">menit pada</translation>
-    </message>
-    <message>
-        <source>MIDI Settings</source>
-        <translation type="obsolete">Pengaturan MIDI</translation>
-    </message>
-    <message>
-        <source>Default layout mode</source>
-        <translation type="obsolete">Mode tataletak utama/dasar</translation>
-    </message>
-    <message>
-        <source>Linear layout</source>
-        <translation type="obsolete">Tataletak linear</translation>
-    </message>
-    <message>
-        <source>Continuous page layout</source>
-        <translation type="obsolete">Tataletak halaman bersambung</translation>
-    </message>
-    <message>
-        <source>Multiple page layout</source>
-        <translation type="obsolete">Tataletak multihalaman</translation>
-    </message>
-    <message>
-        <source>Default spacing</source>
-        <translation type="obsolete">Spasi standar</translation>
-    </message>
-    <message>
-        <source>%1 % (normal)</source>
-        <translation type="obsolete">%1 (diskala ulang)</translation>
-    </message>
-    <message>
-        <source>Default duration factor</source>
-        <translation type="obsolete">Faktor durasi standar</translation>
-    </message>
-    <message>
-        <source>Full</source>
-        <translation type="obsolete">Penuh</translation>
-    </message>
-    <message>
-        <source>Layout</source>
-        <translation type="obsolete">Tataletak</translation>
-    </message>
-    <message>
-        <source>When inserting notes...</source>
-        <translation type="obsolete">Saat menyisipkan not...</translation>
-    </message>
-    <message>
-        <source>Ignore existing durations</source>
-        <translation type="obsolete">Abaikan durasi yang ada</translation>
-    </message>
-    <message>
-        <source>Editing</source>
-        <translation type="obsolete">Editing</translation>
-    </message>
-    <message>
-        <source>Affect only that octave</source>
-        <translation type="obsolete">Hanya mempengaruhi oktaf itu</translation>
-    </message>
-    <message>
-        <source>Affect all subsequent octaves</source>
-        <translation type="obsolete">Mempengaruhi semua subsekuen oktaf</translation>
-    </message>
-    <message>
-        <source>Affect only that bar</source>
-        <translation type="obsolete">Hanya mempengaruhi bar tersebut</translation>
-    </message>
-    <message>
-        <source>Cancel only when entering C major or A minor</source>
-        <translation type="obsolete">Hanya batal apabila memasuki C mayor atau A minor</translation>
-    </message>
-    <message>
-        <source>Cancel always</source>
-        <translation type="obsolete">Selalu batal</translation>
-    </message>
-    <message>
-        <source>Notation font</source>
-        <translation type="obsolete">Huruf notasi</translation>
-    </message>
-    <message>
-        <source>Origin:</source>
-        <translation type="obsolete">Asli:</translation>
-    </message>
-    <message>
-        <source>Copyright:</source>
-        <translation type="obsolete">Hak Cipta:</translation>
-    </message>
-    <message>
-        <source>Mapped by:</source>
-        <translation type="obsolete">Dipetakan oleh:</translation>
-    </message>
-    <message>
-        <source>Type:</source>
-        <translation type="obsolete">Jenis:</translation>
-    </message>
-    <message>
-        <source>Font size for single-staff views</source>
-        <translation type="obsolete">Ukuran huruf untuk tampilan staf tunggal</translation>
-    </message>
-    <message>
-        <source>Font size for multi-staff views</source>
-        <translation type="obsolete">Ukuran huruf untuk tampilan multistaf</translation>
-    </message>
-    <message>
-        <source>Font size for printing (pt)</source>
-        <translation type="obsolete">Ukuran huruf untuk cetak (pt)</translation>
-    </message>
-    <message>
-        <source>Text font</source>
-        <translation type="obsolete">Huruf teks</translation>
-    </message>
-    <message>
-        <source>%1 (smooth)</source>
-        <translation type="obsolete">%1 (halus)</translation>
-    </message>
-    <message>
-        <source>Audio Settings</source>
-        <translation type="obsolete">Pengaturan Suara</translation>
-    </message>
-    <message>
-        <source>JACK latency</source>
-        <translation type="obsolete">Latensi JACK</translation>
-    </message>
-    <message>
-        <source>JACK record latency (in ms)</source>
-        <translation type="obsolete">Latensi perekaman JACK (dalam mdet)</translation>
-    </message>
-    <message>
-        <source>JACK Latency</source>
-        <translation type="obsolete">Latensi JACK</translation>
-    </message>
-    <message>
-        <source>Audio preview scale</source>
-        <translation type="obsolete">Skala pratampil suara</translation>
-    </message>
-    <message>
-        <source>Record audio files as</source>
-        <translation type="obsolete">Rekam berkas suara sebagai</translation>
-    </message>
-    <message>
-        <source>16-bit PCM WAV format (smaller files)</source>
-        <translation type="obsolete">16-bit format PCM WAV (berkas lebih kecil)</translation>
-    </message>
-    <message>
-        <source>32-bit float WAV format (higher quality)</source>
-        <translation type="obsolete">32-bit format WAV mengalur (kualitas lebih tinggi)</translation>
-    </message>
-    <message>
-        <source>External audio editor</source>
-        <translation type="obsolete">Editor suara eksternal</translation>
-    </message>
-    <message>
-        <source>Create JACK outputs</source>
-        <translation type="obsolete">Buat keluaran JACK</translation>
-    </message>
-    <message>
-        <source>for individual audio instruments</source>
-        <translation type="obsolete">untuk instrumen suara individual</translation>
-    </message>
-    <message>
-        <source>for submasters</source>
-        <translation type="obsolete">untuk submaster</translation>
-    </message>
-    <message>
-        <source>Start JACK when Rosegarden starts</source>
-        <translation type="obsolete">Memulai JACK saat Rosegarden dimulai</translation>
-    </message>
-    <message>
-        <source>JACK command</source>
-        <translation type="obsolete">Perintah JACK</translation>
-    </message>
-    <message>
-        <source>JACK Startup</source>
-        <translation type="obsolete">Penyala JACK</translation>
-    </message>
-    <message>
-        <source>External audio editor path</source>
-        <translation type="obsolete">Jalur penyunting suara eksternal</translation>
-    </message>
-    <message>
-        <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation type="obsolete">Penyunting suara eksternal &quot;%1&quot; tidak ditemukan atau tidak bisa dieksekusi</translation>
-    </message>
-    <message>
-        <source>Add New Color</source>
-        <translation type="obsolete">Tambah Warna Baru</translation>
-    </message>
-    <message>
-        <source>Delete Color</source>
-        <translation type="obsolete">Hapus Warna</translation>
-    </message>
-    <message>
-        <source>Color Map</source>
-        <translation type="obsolete">Peta Warna</translation>
-    </message>
-    <message>
-        <source>New Color Name</source>
-        <translation type="obsolete">Nama Warna Baru</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Baru</translation>
-    </message>
-    <message>
-        <source>Latency</source>
-        <translation type="obsolete">Latensi</translation>
-    </message>
-    <message>
-        <source>Sequencer Latency</source>
-        <translation type="obsolete">Latensi Sekuenser</translation>
-    </message>
-    <message>
-        <source>Color Settings</source>
-        <translation type="obsolete">Pengaturan Warna</translation>
-    </message>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Pemetaan Jari</translation>
-    </message>
-    <message>
-        <source>Manage MIDI Banks and Programs</source>
-        <translation type="obsolete">Memanajemen Bank dan Program MIDI</translation>
-    </message>
-    <message>
-        <source>MIDI Device</source>
-        <translation type="obsolete">Perangkat MIDI</translation>
-    </message>
-    <message>
-        <source>MSB</source>
-        <translation type="obsolete">MSB</translation>
-    </message>
-    <message>
-        <source>LSB</source>
-        <translation type="obsolete">LSB</translation>
-    </message>
-    <message>
-        <source>Add Bank</source>
-        <translation type="obsolete">Tambah Bank</translation>
-    </message>
-    <message>
-        <source>Add Key Mapping</source>
-        <translation type="obsolete">Tambah Pemetaan Kunci</translation>
-    </message>
-    <message>
-        <source>Add a Bank to the current device</source>
-        <translation type="obsolete">Tambahkan Bank pada perangkat bersangkutan</translation>
-    </message>
-    <message>
-        <source>Add a Percussion Key Mapping to the current device</source>
-        <translation type="obsolete">Tambah Pemetaan Kunci Perkusi pada perangkat bersangkutan</translation>
-    </message>
-    <message>
-        <source>Delete the current Bank or Key Mapping</source>
-        <translation type="obsolete">Hapus Bank bersangkutan atau Pemetaan Kunci</translation>
-    </message>
-    <message>
-        <source>Delete all Banks and Key Mappings from the current Device</source>
-        <translation type="obsolete">Hapus semua Bank dan Pemetaan Kunci dari Perangkat bersangkutan</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="obsolete">Impor...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="obsolete">Ekspor...</translation>
-    </message>
-    <message>
-        <source>Import Bank and Program data from a Rosegarden file to the current Device</source>
-        <translation type="obsolete">Impor data Bank dan Program dari berkas Rosegarden ke Perangkat bersangkutan</translation>
-    </message>
-    <message>
-        <source>Export all Device and Bank information to a Rosegarden format  interchange file</source>
-        <translation type="obsolete">Ekspor semua informasi Perangkat dan Bank ke bentuk berkas pertukaran milik Rosegarden</translation>
-    </message>
-    <message>
-        <source>Copy all Program names from current Bank to clipboard</source>
-        <translation type="obsolete">Salin semua nama Program dari Bank bersangkutan ke papan klip</translation>
-    </message>
-    <message>
-        <source>Paste Program names from clipboard to current Bank</source>
-        <translation type="obsolete">Tempel nama Program dari papan klip ke Bank bersangkutan</translation>
-    </message>
-    <message>
-        <source>&lt;new bank&gt;</source>
-        <translation type="obsolete">&lt;bank baru&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;new mapping&gt;</source>
-        <translation type="obsolete">&lt;pemetaan baru&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;new mapping %1&gt;</source>
-        <translation type="obsolete">&lt;pemetaan baru %1&gt;</translation>
-    </message>
-    <message>
-        <source>Really delete this bank?</source>
-        <translation type="obsolete">Benar-benar ingin menghapus bank ini?</translation>
-    </message>
-    <message>
-        <source>Really delete this key mapping?</source>
-        <translation type="obsolete">Sungguh-sungguh ingin menghapus pemetaan kunci ini?</translation>
-    </message>
-    <message>
-        <source>Import Banks from Device in File</source>
-        <translation type="obsolete">Impor Bank dari Perangkat dalam Berkas</translation>
-    </message>
-    <message>
-        <source>Export Device as...</source>
-        <translation type="obsolete">Ekspor Perangkat sebagai...</translation>
-    </message>
-    <message>
-        <source>There are unsaved changes.
-Do you want to apply the changes before exiting the Bank Editor or discard the changes ?</source>
-        <translation type="obsolete">Terdapat perubahan yang belum disimpan.
-Apakah Anda hendak menyimpan perubahan tersebut sebelum keluar dari Penyunting Bank atau membatalkan perubahan yang sudah dibuat?</translation>
-    </message>
-    <message>
-        <source>Unsaved Changes</source>
-        <translation type="obsolete">Perubahan Belum Disimpan</translation>
-    </message>
-    <message>
-        <source>Librarian</source>
-        <translation type="obsolete">Pustakawan</translation>
-    </message>
-    <message>
-        <source>Email</source>
-        <translation type="obsolete">E-mail</translation>
-    </message>
-    <message>
-        <source>Percussion Bank</source>
-        <translation type="obsolete">Bank Perkusi</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Bank</translation>
-    </message>
-    <message>
-        <source>Change Record Device</source>
-        <translation type="obsolete">Ubah Perangkat Rekam</translation>
-    </message>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Memanajemen Perangkat MIDi</translation>
-    </message>
-    <message>
-        <source>Play devices</source>
-        <translation type="obsolete">Perangkat main</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="obsolete">Koneksi</translation>
-    </message>
-    <message>
-        <source>Banks...</source>
-        <translation type="obsolete">Bank...</translation>
-    </message>
-    <message>
-        <source>Create a new Play device</source>
-        <translation type="obsolete">Buat perangkat Main yang baru</translation>
-    </message>
-    <message>
-        <source>Delete the selected device</source>
-        <translation type="obsolete">Hapus perangkat yang dipilih</translation>
-    </message>
-    <message>
-        <source>Import Bank, Program and Controller data from a Rosegarden file to the selected device</source>
-        <translation type="obsolete">Impor data Bank, Program, dan Kontroler dari berkas Rosegarden ke perangkat yang dipilih</translation>
-    </message>
-    <message>
-        <source>Record devices</source>
-        <translation type="obsolete">Perangkat rekam</translation>
-    </message>
-    <message>
-        <source>Current</source>
-        <translation type="obsolete">Bersangkutan</translation>
-    </message>
-    <message>
-        <source>Create a new Record device</source>
-        <translation type="obsolete">Buat perangkat rekam yang baru</translation>
-    </message>
-    <message>
-        <source>New Device</source>
-        <translation type="obsolete">Perangkat Baru</translation>
-    </message>
-    <message>
-        <source>Import from Device in File</source>
-        <translation type="obsolete">Impor dari Perangkat di dalam Berkas</translation>
-    </message>
-    <message>
-        <source>Device or Instrument</source>
-        <translation type="obsolete">Perangkat atau Instrumen</translation>
-    </message>
-    <message>
-        <source>Choose Source and Destination</source>
-        <translation type="obsolete">Pilih Sumber dan Tujuan</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation type="obsolete">Dari</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation type="obsolete">Ke</translation>
-    </message>
-    <message>
-        <source>&lt;no devices&gt;</source>
-        <translation type="obsolete">&lt;tak ada perangkat&gt;</translation>
-    </message>
-    <message>
-        <source>Show &amp;Submasters</source>
-        <translation type="obsolete">Tampilkan &amp;Submaster</translation>
-    </message>
-    <message>
-        <source>No Submasters</source>
-        <translation type="obsolete">Tanpa Submaster</translation>
-    </message>
-    <message>
-        <source>Audio Mixer</source>
-        <translation type="obsolete">Mikser Suara</translation>
-    </message>
-    <message>
-        <source>Record input source</source>
-        <translation type="obsolete">Sumber masukan rekam</translation>
-    </message>
-    <message>
-        <source>Output destination</source>
-        <translation type="obsolete">Tujuan keluaran</translation>
-    </message>
-    <message>
-        <source>Mono or stereo</source>
-        <translation type="obsolete">Mono atau stereo</translation>
-    </message>
-    <message>
-        <source>Mute</source>
-        <translation type="obsolete">Bisu</translation>
-    </message>
-    <message>
-        <source>Solo</source>
-        <translation type="obsolete">Solo</translation>
-    </message>
-    <message>
-        <source>Audio %1</source>
-        <translation type="obsolete">Suara %1</translation>
-    </message>
-    <message>
-        <source>Audio master output level</source>
-        <translation type="obsolete">Tingkat keluaran master suara</translation>
-    </message>
-    <message>
-        <source>Controls</source>
-        <translation type="obsolete">Kontrol</translation>
-    </message>
-    <message>
-        <source>Editor &gt;&gt;</source>
-        <translation type="obsolete">Penyunting &gt;&gt;</translation>
-    </message>
-    <message>
-        <source>Bank and Program details</source>
-        <translation type="obsolete">Detil Bank dan Program</translation>
-    </message>
-    <message>
-        <source>Programs</source>
-        <translation type="obsolete">Program</translation>
-    </message>
-    <message>
-        <source>Percussion</source>
-        <translation type="obsolete">Perkusi</translation>
-    </message>
-    <message>
-        <source>MSB Value</source>
-        <translation type="obsolete">Nilai MSB</translation>
-    </message>
-    <message>
-        <source>LSB Value</source>
-        <translation type="obsolete">Nilai LSB</translation>
-    </message>
-    <message>
-        <source>Key Mapping: %1</source>
-        <translation type="obsolete">Pemetaan Kunci: %1</translation>
-    </message>
-    <message>
-        <source>&lt;no key mapping&gt;</source>
-        <translation type="obsolete">&lt;tak ada pemetaan kunci&gt;</translation>
-    </message>
-    <message>
-        <source>Key Mapping details</source>
-        <translation type="obsolete">Detil Pemetaan Kunci</translation>
-    </message>
-    <message>
-        <source>Pitches</source>
-        <translation type="obsolete">Titi Nada</translation>
-    </message>
-    <message>
-        <source>MIDI Mixer</source>
-        <translation type="obsolete">Mikser MIDI</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <translation type="obsolete">Volume</translation>
-    </message>
-    <message>
-        <source>Rosegarden Plugin</source>
-        <translation type="obsolete">Plugin Rosegarden</translation>
-    </message>
-    <message>
-        <source>Rosegarden: %1</source>
-        <translation type="obsolete">Rosegarden: %1</translation>
-    </message>
-    <message>
-        <source>Rosegarden: %1: %2</source>
-        <translation type="obsolete">Rosegarden: %1: %2</translation>
-    </message>
-    <message>
-        <source>Plugin slot %1</source>
-        <translation type="obsolete">Slot plugin %1</translation>
-    </message>
-    <message>
-        <source>Add Play Device</source>
-        <translation type="obsolete">Tambah Perangkat Main</translation>
-    </message>
-    <message>
-        <source>Add Record Device</source>
-        <translation type="obsolete">Tambah Perangkat Rekam</translation>
-    </message>
-    <message>
-        <source>Delete Device</source>
-        <translation type="obsolete">Hapus Perangkat</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="obsolete">Putar</translation>
-    </message>
-    <message>
-        <source>Record</source>
-        <translation type="obsolete">Rekam</translation>
-    </message>
-    <message>
-        <source>Apply pending changes?</source>
-        <translation type="obsolete">Terapkan perubahan yang ditunda?</translation>
-    </message>
-    <message>
-        <source>&lt;new device&gt;</source>
-        <translation type="obsolete">&lt;perangkat baru&gt;</translation>
-    </message>
-    <message>
-        <source>Click on a segment to delete it</source>
-        <translation type="obsolete">Klik [ada segmen untuk menghapusnya</translation>
-    </message>
-    <message>
-        <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
-        <translation type="obsolete">Klik pada segmen untuk memotongnya menjadi dua; tahan Shift agar tidak terkancing ke jejaring ketukan</translation>
-    </message>
-    <message>
-        <source>Click on a segment to split it in two</source>
-        <translation type="obsolete">Klik pada segmen untuk membaginya menjadi dua</translation>
-    </message>
-    <message>
-        <source>Click and drag to select segments</source>
-        <translation type="obsolete">Klik dan seret untuk memilih segmen</translation>
-    </message>
-    <message>
-        <source>Move Segment</source>
-        <translation type="obsolete">Memindah Segmen</translation>
-    </message>
-    <message>
-        <source>Move Segments</source>
-        <translation type="obsolete">Memindah Segmen</translation>
-    </message>
-    <message>
-        <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="obsolete">Tahan Shift untuk menghindari pengancingan pada jejaring ketukan</translation>
-    </message>
-    <message>
-        <source>Click and drag to select segments; middle-click and drag to draw an empty segment</source>
-        <translation type="obsolete">Klik dan seret untuk memilih segmen; klik tombol tengah dan seret untuk membuat segmen kosong</translation>
-    </message>
-    <message>
-        <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation type="obsolete">Klik dan seret untuk mengubah ukuran segmen; tahan Ctrl untuk menskala ulang isinya</translation>
-    </message>
-    <message>
-        <source>Click and drag to rescale segment</source>
-        <translation type="obsolete">Klik dan seret untuk menskala ulang segmen</translation>
-    </message>
-    <message>
-        <source>Click and drag to move segments; hold Ctrl as well to copy them</source>
-        <translation type="obsolete">Klik dan seret untuk memindahkan segmen; tahan Ctrl untuk menyalinnya</translation>
-    </message>
-    <message>
-        <source>Click and drag to copy segments</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin segmen</translation>
-    </message>
-    <message>
-        <source>Click and drag to move segment; hold Ctrl as well to copy it; double-click to edit</source>
-        <translation type="obsolete">Klik dan seret untuk memindahkan segmen; tahan Ctrl untuk menyalinnya; klik ganda untuk menyunting</translation>
-    </message>
-    <message>
-        <source>Click and drag to copy segment</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin segmen</translation>
-    </message>
-    <message>
-        <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
-        <translation type="obsolete">Tahan Shift agar tidak terkancing ke jejaring ketukan; tahan Ctrl untuk menskala ulang isinya</translation>
-    </message>
-    <message>
-        <source>Click and drag to move a segment</source>
-        <translation type="obsolete">Klik dan seret untuk memindah segmen</translation>
-    </message>
-    <message>
-        <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation type="obsolete">Tahan Shift untuk menghindari dikancingkannya pada baris bar</translation>
-    </message>
-    <message>
-        <source>Record or drop audio here</source>
-        <translation type="obsolete">Rekam atau jatuhkan suara di sini</translation>
-    </message>
-    <message>
-        <source>Click and drag to draw an empty segment.  Control+Alt click and drag to draw in overlap mode.</source>
-        <translation type="obsolete">Klik dan seret untuk memilih segmen; klik tombol tengah dan seret untuk membuat segmen kosong</translation>
-    </message>
-    <message>
-        <source>Change track name</source>
-        <translation type="obsolete">Ubah nama jalur</translation>
-    </message>
-    <message>
-        <source>Enter new track name</source>
-        <translation type="obsolete">Masukkan nama jalur yang baru</translation>
-    </message>
-    <message>
-        <source>ID</source>
-        <translation type="obsolete">ID</translation>
-    </message>
-    <message>
-        <source>Base velocity</source>
-        <translation type="obsolete">Velositas dasar</translation>
-    </message>
-    <message>
-        <source>&lt;no label&gt;</source>
-        <translation type="obsolete">&lt;tak ada label&gt;</translation>
-    </message>
-    <message>
-        <source>This will remove all triggered segments from the whole composition.  Are you sure?</source>
-        <translation type="obsolete">Ini akan membuang semua segmen berpicu dari keseluruhan komposisi.  Apakah Anda yakin?</translation>
-    </message>
-    <message>
-        <source>Remove all triggered segments</source>
-        <translation type="obsolete">Membuang semua segmen berpicu</translation>
-    </message>
-    <message>
-        <source>&amp;Musical Times</source>
-        <translation type="obsolete">Waktu &amp;Musikal</translation>
-    </message>
-    <message>
-        <source>&amp;Real Times</source>
-        <translation type="obsolete">Waktu &amp;Nyata</translation>
-    </message>
-    <message>
-        <source>Marker text  </source>
-        <translation type="obsolete">Waktu Penanda</translation>
-    </message>
-    <message>
-        <source>Pointer position</source>
-        <translation type="obsolete">Posisi penunjuk</translation>
-    </message>
-    <message>
-        <source>Close the Marker Editor</source>
-        <translation type="obsolete">Tutup Editor Penanda</translation>
-    </message>
-    <message>
-        <source>Remove all markers</source>
-        <translation type="obsolete">Buang semua penanda</translation>
-    </message>
-    <message>
-        <source>Add...</source>
-        <translation type="obsolete">Tambah...</translation>
-    </message>
-    <message>
-        <source>Move Up</source>
-        <translation type="obsolete">Naik</translation>
-    </message>
-    <message>
-        <source>Move Down</source>
-        <translation type="obsolete">Turun</translation>
-    </message>
-    <message>
-        <source>Select one or more Rosegarden files</source>
-        <translation type="obsolete">Pilih satu atau lebih berkas Rosegarden</translation>
-    </message>
-    <message>
-        <source>Edit Control Parameter</source>
-        <translation type="obsolete">Sunting Parameter Kontrol</translation>
-    </message>
-    <message>
-        <source>Name:</source>
-        <translation type="obsolete">Nama:</translation>
-    </message>
-    <message>
-        <source>Minimum value:</source>
-        <translation type="obsolete">Nilai minimum:</translation>
-    </message>
-    <message>
-        <source>Maximum value:</source>
-        <translation type="obsolete">Nilai maksimum:</translation>
-    </message>
-    <message>
-        <source>Default value:</source>
-        <translation type="obsolete">Nilai dasar:</translation>
-    </message>
-    <message>
-        <source>Color:</source>
-        <translation type="obsolete">Warna:</translation>
-    </message>
-    <message>
-        <source>Instrument Parameter Box position:</source>
-        <translation type="obsolete">Posisi Kotak Parameter Instrumen:</translation>
-    </message>
-    <message>
-        <source>&lt;no device&gt;</source>
-        <translation type="obsolete">&lt;tak ada perangkat&gt;</translation>
-    </message>
-    <message>
-        <source>Description  </source>
-        <translation type="obsolete">Deskripsi  </translation>
-    </message>
-    <message>
-        <source>Min  </source>
-        <translation type="obsolete">Min  </translation>
-    </message>
-    <message>
-        <source>Max  </source>
-        <translation type="obsolete">Maks  </translation>
-    </message>
-    <message>
-        <source>Color  </source>
-        <translation type="obsolete">Warna  </translation>
-    </message>
-    <message>
-        <source>Position on instrument panel</source>
-        <translation type="obsolete">Posisi pada panel instrumen</translation>
-    </message>
-    <message>
-        <source>Add a Control Parameter to the Studio</source>
-        <translation type="obsolete">Tambah Parameter Kontrol ke Studio</translation>
-    </message>
-    <message>
-        <source>Delete a Control Parameter from the Studio</source>
-        <translation type="obsolete">Hapus Parameter Kontrol dari Studio</translation>
-    </message>
-    <message>
-        <source>Close the Control Parameter editor</source>
-        <translation type="obsolete">Tutup editor Parameter Kontrol</translation>
-    </message>
-    <message>
-        <source>&lt;default&gt;</source>
-        <translation type="obsolete">&lt;seting dasar&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;no instrument&gt;</source>
-        <translation type="obsolete">&lt;tak ada instrumen&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;untitled audio&gt;</source>
-        <translation type="obsolete">&lt;suara tak berjudul&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;untitled&gt;</source>
-        <translation type="obsolete">&lt;tak berjudul&gt;</translation>
-    </message>
-    <message>
-        <source>Segment</source>
-        <translation type="obsolete">Segmen</translation>
-    </message>
-    <message>
-        <source>Segment Parameters</source>
-        <translation type="obsolete">Parameter Segmen</translation>
-    </message>
-    <message>
-        <source>%1 ms</source>
-        <translation type="obsolete">%1 ms</translation>
-    </message>
-    <message>
-        <source>Highest playable note</source>
-        <translation type="obsolete">Not tertinggi yang dapat dimainkan</translation>
-    </message>
-    <message>
-        <source>Lowest playable note</source>
-        <translation type="obsolete">Not terendah yang dapat dimainkan</translation>
-    </message>
-    <message>
-        <source>Track Parameters</source>
-        <translation type="obsolete">Parameter Jalur</translation>
-    </message>
-    <message>
-        <source>Channel</source>
-        <translation type="obsolete">Kanal</translation>
-    </message>
-    <message>
-        <source>Staff export options</source>
-        <translation type="obsolete">Opsi tingkat staf</translation>
-    </message>
-    <message>
-        <source>Notation size:</source>
-        <translation type="obsolete">Waktu notasi:</translation>
-    </message>
-    <message>
-        <source>Small</source>
-        <translation type="obsolete">semua</translation>
-    </message>
-    <message>
-        <source>Bracket type:</source>
-        <translation type="obsolete">Jenis teks:</translation>
-    </message>
-    <message>
-        <source>-----</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>[----</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>----]</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>[---]</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>{----</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>----}</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>{[---</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>---]}</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>Create segments with</source>
-        <translation type="obsolete">Membuat segmen dengan:</translation>
-    </message>
-    <message>
-        <source>Load</source>
-        <translation type="obsolete">Memuat</translation>
-    </message>
-    <message>
-        <source>bass</source>
-        <translation type="obsolete">bas</translation>
-    </message>
-    <message>
-        <source>xylophone</source>
-        <translation type="obsolete">silofon</translation>
-    </message>
-    <message>
-        <source>guitar</source>
-        <translation type="obsolete">gitar</translation>
-    </message>
-    <message>
-        <source>contrabass</source>
-        <translation type="obsolete">kontrabas</translation>
-    </message>
-    <message>
-        <source>celesta</source>
-        <translation type="obsolete">kalista</translation>
-    </message>
-    <message>
-        <source>soprano</source>
-        <translation type="obsolete">soprano</translation>
-    </message>
-    <message>
-        <source>mezzosoprano</source>
-        <translation type="obsolete">mezzosoprano</translation>
-    </message>
-    <message>
-        <source>alto</source>
-        <translation type="obsolete">alto</translation>
-    </message>
-    <message>
-        <source>tenor</source>
-        <translation type="obsolete">tenor</translation>
-    </message>
-    <message>
-        <source>baritone</source>
-        <translation type="obsolete">baritone</translation>
-    </message>
-    <message>
-        <source>varbaritone</source>
-        <translation type="obsolete">varbaritone</translation>
-    </message>
-    <message>
-        <source>subbass</source>
-        <translation type="obsolete">subbass</translation>
-    </message>
-    <message>
-        <source>Lowest</source>
-        <translation type="obsolete">Terendah</translation>
-    </message>
-    <message>
-        <source>---</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>Highest</source>
-        <translation type="obsolete">Tertinggi</translation>
-    </message>
-    <message>
-        <source>[ Track %1 - %2 ]</source>
-        <translation type="obsolete">[ Jalur %1 - %2 ]</translation>
-    </message>
-    <message>
-        <source>Instrument Parameters</source>
-        <translation type="obsolete">Parameter Instrumen</translation>
-    </message>
-    <message>
-        <source>Variation</source>
-        <translation type="obsolete">Variasi</translation>
-    </message>
-    <message>
-        <source>Program</source>
-        <translation type="obsolete">Program</translation>
-    </message>
-    <message>
-        <source>Channel out</source>
-        <translation type="obsolete">Kanal keluaran</translation>
-    </message>
-    <message>
-        <source>[ %1 ]</source>
-        <translation type="obsolete">[ %1 ]</translation>
-    </message>
-    <message>
-        <source>Switch to Draw Tool</source>
-        <translation type="obsolete">Pindah ke Perkakas Gambar</translation>
-    </message>
-    <message>
-        <source>Switch to Erase Tool</source>
-        <translation type="obsolete">Pindah ke Perkakas Hapus</translation>
-    </message>
-    <message>
-        <source>Switch to Move Tool</source>
-        <translation type="obsolete">Pindah ke Perkakas Pindah</translation>
-    </message>
-    <message>
-        <source>Switch to Resize Tool</source>
-        <translation type="obsolete">Pindah ke Perkakas Ubah Ukuran</translation>
-    </message>
-    <message>
-        <source>Click and drag to resize selected notes</source>
-        <translation type="obsolete">Klik dan seret untuk mengubah ukuran not yang dipilih</translation>
-    </message>
-    <message>
-        <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation type="obsolete">Klik dan seret untuk memindahkan not yang dipilihl tanah Ctrl untuk menyalin</translation>
-    </message>
-    <message>
-        <source>Click and drag to copy selected notes</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin not yang dipilih</translation>
-    </message>
-    <message>
-        <source>Switch to Select Tool</source>
-        <translation type="obsolete">Pindah ke Perkakas Seleksi</translation>
-    </message>
-    <message>
-        <source>Click and drag to resize a note</source>
-        <translation type="obsolete">Klik dan seret untuk mengubah ukuran not</translation>
-    </message>
-    <message>
-        <source>Copy and Move Event</source>
-        <translation type="obsolete">Salin dan Pindahkan Peristiwa</translation>
-    </message>
-    <message>
-        <source>Copy and Move Events</source>
-        <translation type="obsolete">Salin dan Pindahkan Peristiwa</translation>
-    </message>
-    <message>
-        <source>Move Event</source>
-        <translation type="obsolete">Pindahkan Peristiwa</translation>
-    </message>
-    <message>
-        <source>Move Events</source>
-        <translation type="obsolete">Pindahkan Peristiwa</translation>
-    </message>
-    <message>
-        <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
-        <translation type="obsolete">Klik dan seret untuk memindahkan not; tahan Ctrl untuk menyalinnya</translation>
-    </message>
-    <message>
-        <source>Click and drag to copy a note</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin not</translation>
-    </message>
-    <message>
-        <source>Resi&amp;ze</source>
-        <translation type="obsolete">&amp;Ubah Ukuran</translation>
-    </message>
-    <message>
-        <source>&amp;Velocity</source>
-        <translation type="obsolete">Kecepatan:</translation>
-    </message>
-    <message>
-        <source>C&amp;hord Insert Mode</source>
-        <translation type="obsolete">Mode Sisip Pa&amp;du Nada</translation>
-    </message>
-    <message>
-        <source>&amp;Legato</source>
-        <translation type="obsolete">&amp;Legato</translation>
-    </message>
-    <message>
-        <source>Select &amp;All</source>
-        <translation type="obsolete">Pilih Semu&amp;a</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Back</source>
-        <translation type="obsolete">Kursor &amp;Balik</translation>
-    </message>
-    <message>
-        <source>Cursor &amp;Forward</source>
-        <translation type="obsolete">Kursor &amp;Maju</translation>
-    </message>
-    <message>
-        <source>Cursor to St&amp;art</source>
-        <translation type="obsolete">Kursor ke &amp;Awal</translation>
-    </message>
-    <message>
-        <source>Cursor to &amp;End</source>
-        <translation type="obsolete">Kursor k&amp;e Akhir</translation>
-    </message>
-    <message>
-        <source>&amp;Solo</source>
-        <translation type="obsolete">&amp;Solo</translation>
-    </message>
-    <message>
-        <source>Clear Selection</source>
-        <translation type="obsolete">Bersihkan Seleksi</translation>
-    </message>
-    <message>
-        <source>Snap to %1</source>
-        <translation type="obsolete">Kancingkan ke %1</translation>
-    </message>
-    <message>
-        <source> Grid: </source>
-        <translation type="obsolete"> Jejaring: </translation>
-    </message>
-    <message>
-        <source>Unit</source>
-        <translation type="obsolete">Unit</translation>
-    </message>
-    <message>
-        <source>%1 - All Segments - %2</source>
-        <translation type="obsolete">%1 - Semua Segmen - %2</translation>
-    </message>
-    <message>
-        <source> Chord </source>
-        <translation type="obsolete"> Padu Nada </translation>
-    </message>
-    <message>
-        <source>Velocity change: %1</source>
-        <translation type="obsolete">Velositas</translation>
-    </message>
-    <message>
-        <source>Change Velocity</source>
-        <translation type="obsolete">Velositas dasar</translation>
-    </message>
-    <message>
-        <source>Change Velocities</source>
-        <translation type="obsolete">Kecepatan:</translation>
-    </message>
-    <message>
-        <source>Click and drag to scale velocity of selected notes</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin not yang dipilih</translation>
-    </message>
-    <message>
-        <source>Click and drag to scale velocity of note</source>
-        <translation type="obsolete">Klik dan seret untuk menyalin not</translation>
-    </message>
-    <message>
-        <source>Time  </source>
-        <translation type="obsolete">Waktu  </translation>
-    </message>
-    <message>
-        <source>Type  </source>
-        <translation type="obsolete">Jenis  </translation>
-    </message>
-    <message>
-        <source>Value  </source>
-        <translation type="obsolete">Nilai  </translation>
-    </message>
-    <message>
-        <source>Properties  </source>
-        <translation type="obsolete">Properti  </translation>
-    </message>
-    <message>
-        <source>Hidden</source>
-        <translation type="obsolete">Tersembunyi</translation>
-    </message>
-    <message>
-        <source>Common</source>
-        <translation type="obsolete">Umum</translation>
-    </message>
-    <message>
-        <source>%1.%2%3</source>
-        <translation type="obsolete">%1.%2%3</translation>
-    </message>
-    <message>
-        <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="obsolete">%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
-    </message>
-    <message>
-        <source>Tempo   </source>
-        <translation type="obsolete">Tempo   </translation>
-    </message>
-    <message>
-        <source>Guitar Chord Editor</source>
-        <translation type="obsolete">Penyunting Padu Nada Gitar</translation>
-    </message>
-    <message>
-        <source>Extension</source>
-        <translation type="obsolete">Ekstensi</translation>
-    </message>
-    <message>
-        <source>Guitar Chord Selector</source>
-        <translation type="obsolete">Selektor Padu Nada Gitar</translation>
-    </message>
-    <message>
-        <source>beginner</source>
-        <translation type="obsolete">pemula</translation>
-    </message>
-    <message>
-        <source>common</source>
-        <translation type="obsolete">umum</translation>
-    </message>
-    <message>
-        <source>all</source>
-        <translation type="obsolete">semua</translation>
-    </message>
-    <message>
-        <source>  Component: </source>
-        <translation type="obsolete">  Komponen: </translation>
-    </message>
-    <message>
-        <source>Codes</source>
-        <translation type="obsolete">Kode</translation>
-    </message>
-    <message>
-        <source>  Page: </source>
-        <translation type="obsolete">  Halaman: </translation>
-    </message>
-    <message>
-        <source>Close track headers</source>
-        <translation type="obsolete">Ubah nama jalur</translation>
-    </message>
-    <message>
-        <source>Show Track Headers</source>
-        <translation type="obsolete">Menampilkan &amp;Label Jalur</translation>
-    </message>
-    <message>
-        <source>&amp;Guitar Chord</source>
-        <translation type="obsolete">Padu Nada &amp;Gitar</translation>
-    </message>
-    <message>
-        <source>C&amp;ut and Close</source>
-        <translation type="obsolete">Potong dan T&amp;utup</translation>
-    </message>
-    <message>
-        <source>Grace Insert Mode</source>
-        <translation type="obsolete">Mode Sisip Pa&amp;du Nada</translation>
-    </message>
-    <message>
-        <source>Convert Notation For...</source>
-        <translation type="obsolete">Mengonversi berkas suara...</translation>
-    </message>
-    <message>
-        <source>  Size:  </source>
-        <translation type="obsolete">  Ukuran:  </translation>
-    </message>
-    <message>
-        <source>  Spacing:  </source>
-        <translation type="obsolete">  Spasi:  </translation>
-    </message>
-    <message>
-        <source>  Ready.</source>
-        <translation type="obsolete">  Siap.</translation>
-    </message>
-    <message>
-        <source>note</source>
-        <translation type="obsolete">not</translation>
-    </message>
-    <message>
-        <source>Grace</source>
-        <translation type="obsolete">Grave</translation>
-    </message>
-    <message>
-        <source>%1 %2</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source>Move Events to Staff Above</source>
-        <translation type="obsolete">Pindahkan Peristiwa ke Seg&amp;men Lainnya</translation>
-    </message>
-    <message>
-        <source>Move Events to Staff Below</source>
-        <translation type="obsolete">Pindahkan Peristiwa ke Seg&amp;men Lainnya</translation>
-    </message>
-    <message>
-        <source>Making chord...</source>
-        <translation type="obsolete">Membuat padu nada...</translation>
-    </message>
-    <message>
-        <source>Positioning ties...</source>
-        <translation type="obsolete">Menutup berkas...</translation>
-    </message>
-    <message>
-        <source>Restoring tie positions...</source>
-        <translation type="obsolete">Kembalikan Posisi</translation>
-    </message>
-    <message>
-        <source>Text: </source>
-        <translation type="obsolete">Teks: </translation>
-    </message>
-    <message>
-        <source>Fingering: </source>
-        <translation type="obsolete">Penjarian: </translation>
-    </message>
-    <message>
-        <source>Remove Ornaments</source>
-        <translation type="obsolete">Buang Ornamen</translation>
-    </message>
-    <message>
-        <source>...</source>
-        <translation type="obsolete">Tambah...</translation>
-    </message>
-    <message>
-        <source>unknown error</source>
-        <translation type="obsolete">kesalahan tak dikenal</translation>
-    </message>
-    <message>
-        <source>Track %1 : &quot;%2&quot;</source>
-        <translation type="obsolete">[ Jalur %1 - %2 ]</translation>
-    </message>
-    <message>
-        <source>normal</source>
-        <translation type="obsolete">Normal</translation>
-    </message>
-    <message>
-        <source>small</source>
-        <translation type="obsolete">semua</translation>
-    </message>
-    <message>
-        <source>--</source>
-        <translation type="obsolete">---</translation>
-    </message>
-    <message>
-        <source>C#</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>Eb</source>
-        <translation type="obsolete">E</translation>
-    </message>
-    <message>
-        <source>F#</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G#</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>Bb</source>
-        <translation type="obsolete">B</translation>
-    </message>
-    <message>
-        <source>%1: %2</source>
-        <translation type="obsolete">%1 (%2)</translation>
-    </message>
-    <message>
-        <source> in %1</source>
-        <translation type="obsolete">Masuk %1</translation>
-    </message>
-    <message>
-        <source>Ready.</source>
-        <translation type="obsolete">Siap.</translation>
-    </message>
-    <message>
-        <source>Indication</source>
-        <translation type="obsolete">Indikasi</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation type="obsolete">Lainnya</translation>
-    </message>
-    <message>
-        <source>Label:  </source>
-        <translation type="obsolete">Label:  </translation>
-    </message>
-    <message>
-        <source>Base pitch:  </source>
-        <translation type="obsolete">Titi nada dasar:  </translation>
-    </message>
-    <message>
-        <source>Base velocity:  </source>
-        <translation type="obsolete">Velositas dasar:  </translation>
-    </message>
-    <message>
-        <source>Duration  </source>
-        <translation type="obsolete">Durasi  </translation>
-    </message>
-    <message>
-        <source>Event Type  </source>
-        <translation type="obsolete">Jenis Peristiwa</translation>
-    </message>
-    <message>
-        <source>Pitch  </source>
-        <translation type="obsolete">Titi nada  </translation>
-    </message>
-    <message>
-        <source>Velocity  </source>
-        <translation type="obsolete">Velositas</translation>
-    </message>
-    <message>
-        <source>Type (Data1)  </source>
-        <translation type="obsolete">Jenis (Data1)  </translation>
-    </message>
-    <message>
-        <source>Value (Data2)  </source>
-        <translation type="obsolete">Nilai (Data2)  </translation>
-    </message>
-    <message>
-        <source>(group %1)  </source>
-        <translation type="obsolete">(kelompok %1)  </translation>
-    </message>
-    <message>
-        <source>&lt;no events at this filter level&gt;</source>
-        <translation type="obsolete">&lt;tak ada peristiwa untuk tingkat penyaringan ini&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;no events&gt;</source>
-        <translation type="obsolete">&lt;tak ada peristiwa&gt;</translation>
-    </message>
-    <message>
-        <source>Segment label</source>
-        <translation type="obsolete">Label segmen</translation>
-    </message>
-    <message>
-        <source>Label:</source>
-        <translation type="obsolete">Label:</translation>
-    </message>
-    <message>
-        <source>Open in Event Editor</source>
-        <translation type="obsolete">Buka di Penyunting Peristiwa</translation>
-    </message>
-    <message>
-        <source>%1 - Triggered Segment: %2</source>
-        <translation type="obsolete">%1 - Segmen Berpicu: %2</translation>
-    </message>
-    <message>
-        <source>Delete Tempo Change</source>
-        <translation type="obsolete">Hapus Perubahan Tempo</translation>
-    </message>
-    <message>
-        <source>Edit Tempo...</source>
-        <translation type="obsolete">Sunting Tempo...</translation>
-    </message>
-    <message>
-        <source>Edit Time Signature...</source>
-        <translation type="obsolete">Sunting Paraf Waktu...</translation>
-    </message>
-    <message>
-        <source>%1.%2%3 (%4.%5%6 bpm)</source>
-        <translation type="obsolete">%1.%2%3 (%4.%5%6 bpm)</translation>
-    </message>
-    <message>
-        <source>%1.%2%3 bpm</source>
-        <translation type="obsolete">%1.%2%3 bpm</translation>
-    </message>
-    <message>
-        <source>%1 - %2.%3%4</source>
-        <translation type="obsolete">%1 - %2.%3%4</translation>
-    </message>
-    <message>
-        <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
-        <translation type="obsolete">Jalur #%1, Segmen &quot;%2&quot; (id waktu-jalan %3)</translation>
-    </message>
-    <message>
-        <source>%1 controller</source>
-        <translation type="obsolete">%1 kontroler</translation>
-    </message>
-    <message>
-        <source>Insert Marker</source>
-        <translation type="obsolete">Sisip Penanda</translation>
-    </message>
-    <message>
-        <source>Delete Marker</source>
-        <translation type="obsolete">Hapus Penanda</translation>
-    </message>
-    <message>
-        <source>Edit Marker...</source>
-        <translation type="obsolete">Sunting Penanda...</translation>
-    </message>
-    <message>
-        <source>Unsupported Event Type</source>
-        <translation type="obsolete">Jenis Peristiwa Tak Didukung</translation>
-    </message>
-    <message>
-        <source>Set Segment Duration...</source>
-        <translation type="obsolete">Atur Durasi Segmen...</translation>
-    </message>
-    <message>
-        <source>Convert notation for...</source>
-        <translation type="obsolete">Mengonversi berkas suara...</translation>
-    </message>
-    <message>
-        <source>Category</source>
-        <translation type="obsolete">Kategori</translation>
-    </message>
-    <message>
-        <source>Player Ability</source>
-        <translation type="obsolete">Kemampuan Pemutar</translation>
-    </message>
-    <message>
-        <source>Amateur</source>
-        <translation type="obsolete">Amatir</translation>
-    </message>
-    <message>
-        <source>Professional</source>
-        <translation type="obsolete">Profesional</translation>
-    </message>
-    <message>
-        <source>Only selected segments</source>
-        <translation type="obsolete">Segmen terpilih</translation>
-    </message>
-    <message>
-        <source>All segments in this track</source>
-        <translation type="obsolete">Terapkan untuk semua segmen saat ini</translation>
-    </message>
-    <message>
-        <source>Only for new segments</source>
-        <translation type="obsolete">Lirik untuk segmen ini</translation>
-    </message>
-    <message>
-        <source>Convert existing segments</source>
-        <translation type="obsolete">Tak dapat menggabungkan segmen Suara</translation>
-    </message>
-    <message>
-        <source>C%1</source>
-        <translation type="obsolete">C%1</translation>
-    </message>
-    <message>
-        <source>C#%1</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D%1</source>
-        <translation type="obsolete">D%1</translation>
-    </message>
-    <message>
-        <source>D#%1</source>
-        <translation type="obsolete">D#%1</translation>
-    </message>
-    <message>
-        <source>E%1</source>
-        <translation type="obsolete">E%1</translation>
-    </message>
-    <message>
-        <source>F%1</source>
-        <translation type="obsolete">F%1</translation>
-    </message>
-    <message>
-        <source>F#%1</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G%1</source>
-        <translation type="obsolete">G%1</translation>
-    </message>
-    <message>
-        <source>G#%1</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A%1</source>
-        <translation type="obsolete">A%1</translation>
-    </message>
-    <message>
-        <source>A#%1</source>
-        <translation type="obsolete">A#%1</translation>
-    </message>
-    <message>
-        <source>B%1</source>
-        <translation type="obsolete">B%1</translation>
-    </message>
-    <message>
-        <source>Can&apos;t open preset file %1</source>
-        <translation type="obsolete">Tak dapat membuka berkas preset %1</translation>
-    </message>
-    <message>
-        <source>&amp;Halve Durations</source>
-        <translation type="obsolete">Durasi</translation>
-    </message>
-    <message>
-        <source>&amp;Double Durations</source>
-        <translation type="obsolete">Durasi</translation>
-    </message>
-    <message>
-        <source>Show Velocity Property Ruler</source>
-        <translation type="obsolete">Tampilkan Peraturan Properti Velositas</translation>
-    </message>
-    <message>
-        <source>Insert item</source>
-        <translation type="obsolete">Sisip item</translation>
-    </message>
-    <message>
-        <source>Erase selected items</source>
-        <translation type="obsolete">Hapus item yang dipilih</translation>
-    </message>
-    <message>
-        <source>Clear ruler</source>
-        <translation type="obsolete">Bersihkan penggaris</translation>
-    </message>
-    <message>
-        <source>Insert line of controllers</source>
-        <translation type="obsolete">Sisipkan baris kontroler</translation>
-    </message>
-    <message>
-        <source>Flip forward</source>
-        <translation type="obsolete">Lipat ke depan</translation>
-    </message>
-    <message>
-        <source>Flip backwards</source>
-        <translation type="obsolete">Lipat ke belakang</translation>
-    </message>
-    <message>
-        <source>Draw property line</source>
-        <translation type="obsolete">Gambar baris properti</translation>
-    </message>
-    <message>
-        <source>Select all property values</source>
-        <translation type="obsolete">Pilih semua nilai properti</translation>
-    </message>
-    <message>
-        <source>%1 Controller %2 %3</source>
-        <translation type="obsolete">%1 Kontroler %2 %3</translation>
-    </message>
-    <message>
-        <source>I</source>
-        <translation type="obsolete">I</translation>
-    </message>
-    <message>
-        <source>II</source>
-        <translation type="obsolete">II</translation>
-    </message>
-    <message>
-        <source>III</source>
-        <translation type="obsolete">III</translation>
-    </message>
-    <message>
-        <source>IV</source>
-        <translation type="obsolete">IV</translation>
-    </message>
-    <message>
-        <source>V</source>
-        <translation type="obsolete">V</translation>
-    </message>
-    <message>
-        <source>VI</source>
-        <translation type="obsolete">VI</translation>
-    </message>
-    <message>
-        <source>VII</source>
-        <translation type="obsolete">VII</translation>
-    </message>
-    <message>
-        <source>VIII</source>
-        <translation type="obsolete">VIII</translation>
-    </message>
-    <message>
-        <source>&amp;Insert Note</source>
-        <translation type="obsolete">S&amp;isip Not</translation>
-    </message>
-    <message>
-        <source>&amp;Upper Octave</source>
-        <translation type="obsolete">Oktaf Ting&amp;gi</translation>
-    </message>
-    <message>
-        <source>&amp;Lower Octave</source>
-        <translation type="obsolete">Oktaf Ren&amp;dah</translation>
-    </message>
-    <message>
-        <source>Halving durations...</source>
-        <translation type="obsolete">Durasi permainan:</translation>
-    </message>
-    <message>
-        <source>Doubling durations...</source>
-        <translation type="obsolete">Menggandakan kecepatan....</translation>
-    </message>
-    <message>
-        <source>Rescaling...</source>
-        <translation type="obsolete">Menskala ulang...</translation>
-    </message>
-    <message>
-        <source>Transposing...</source>
-        <translation type="obsolete">Mentransposisikan...</translation>
-    </message>
-    <message>
-        <source>Transposing up one semitone...</source>
-        <translation type="obsolete">Mentransposisikan naik satu setengah nada...</translation>
-    </message>
-    <message>
-        <source>Transposing up one octave...</source>
-        <translation type="obsolete">Mentransposisikan naik satu oktaf...</translation>
-    </message>
-    <message>
-        <source>Transposing down one semitone...</source>
-        <translation type="obsolete">Mentransposisikan turun satu setengah nada...</translation>
-    </message>
-    <message>
-        <source>Transposing down one octave...</source>
-        <translation type="obsolete">Mentransposisikan turun satu oktaf...</translation>
-    </message>
-    <message>
-        <source>Inverting...</source>
-        <translation type="obsolete">Membalikkan...</translation>
-    </message>
-    <message>
-        <source>Downloading file %1</source>
-        <translation type="obsolete">Mengunduh berkas %1</translation>
-    </message>
-    <message>
-        <source>Converting audio file...</source>
-        <translation type="obsolete">Mengonversi berkas suara...</translation>
-    </message>
-    <message>
-        <source>Resampling audio file...</source>
-        <translation type="obsolete">Mensampel ulang berkas suara...</translation>
-    </message>
-    <message>
-        <source>Converting and resampling audio file...</source>
-        <translation type="obsolete">Mengonversi dan mensampel ulang berkas suara...</translation>
-    </message>
-    <message>
-        <source>Importing audio file...</source>
-        <translation type="obsolete">Mengimpor berkas suara...</translation>
-    </message>
-    <message>
-        <source>Failed to convert or resample audio file on import</source>
-        <translation type="obsolete">Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
-    </message>
-    <message>
-        <source>Sync segment parameters</source>
-        <translation type="obsolete">Parameter Segmen</translation>
-    </message>
-    <message>
-        <source>Change segment transposition</source>
-        <translation type="obsolete">Mengubah transposisi segmen</translation>
-    </message>
-    <message>
-        <source>Rename Track</source>
-        <translation type="obsolete">Namai Ulang Jalur</translation>
-    </message>
-    <message>
-        <source>Re&amp;label...</source>
-        <translation type="obsolete">Labeli Ulang...</translation>
-    </message>
-    <message>
-        <source>Resize Segment</source>
-        <translation type="obsolete">Ukur Ulang Segmen</translation>
-    </message>
-    <message>
-        <source>Split Twice Segment</source>
-        <translation type="obsolete">Bagi Segmen</translation>
-    </message>
-    <message>
-        <source>Remove &amp;Tempo Change...</source>
-        <translation type="obsolete">Buang Perubahan &amp;Tempo</translation>
-    </message>
-    <message>
-        <source>Erase Segment</source>
-        <translation type="obsolete">Hapus Segmen</translation>
-    </message>
-    <message>
-        <source>(rescaled)</source>
-        <translation type="obsolete">(diskala ulang)</translation>
-    </message>
-    <message>
-        <source>Paste as New Triggered Segment</source>
-        <translation type="obsolete">Tempel sebagai Segmen Berpicu yang Baru</translation>
-    </message>
-    <message>
-        <source>Change Segment Color Map...</source>
-        <translation type="obsolete">Ubah Peta Warna Segmen...</translation>
-    </message>
-    <message>
-        <source>Quick-Copy Segment</source>
-        <translation type="obsolete">Salin-Cepat Segmen</translation>
-    </message>
-    <message>
-        <source>Split Audio Segment</source>
-        <translation type="obsolete">Bagi Segmen Suara</translation>
-    </message>
-    <message>
-        <source>(split)</source>
-        <translation type="obsolete"> (bagi)</translation>
-    </message>
-    <message>
-        <source>Label Segments</source>
-        <translation type="obsolete">Label Segmen</translation>
-    </message>
-    <message>
-        <source>Open or Close Range</source>
-        <translation type="obsolete">Buka atau Tutup Jangkauan</translation>
-    </message>
-    <message>
-        <source>Transpose by &amp;Interval...</source>
-        <translation type="obsolete">Transposisi oleh &amp;Interval...</translation>
-    </message>
-    <message>
-        <source>(part %1)</source>
-        <translation type="obsolete">%1 (bagian)</translation>
-    </message>
-    <message>
-        <source>Create Segment</source>
-        <translation type="obsolete">Buat Segmen</translation>
-    </message>
-    <message>
-        <source>(inserted)</source>
-        <translation type="obsolete">%1 (disisipkan)</translation>
-    </message>
-    <message>
-        <source>unknown audio file</source>
-        <translation type="obsolete">berkas suara tak dikenal</translation>
-    </message>
-    <message>
-        <source>Set Tempos from Beat Segment</source>
-        <translation type="obsolete">Atur Tempo dari Segmen Ketukan</translation>
-    </message>
-    <message>
-        <source>Change Segment Color Map</source>
-        <translation type="obsolete">Ubah Peta Warna Segmen</translation>
-    </message>
-    <message>
-        <source>(copied)</source>
-        <translation type="obsolete">(disalin)</translation>
-    </message>
-    <message>
-        <source>Change Segment Color...</source>
-        <translation type="obsolete">Ubah Warna Segmen...</translation>
-    </message>
-    <message>
-        <source>(upper)</source>
-        <translation type="obsolete">%1 (atas)</translation>
-    </message>
-    <message>
-        <source>(lower)</source>
-        <translation type="obsolete">%1 (bawah)</translation>
-    </message>
-    <message>
-        <source>Add Te&amp;mpo Change...</source>
-        <translation type="obsolete">Tambah Perubahan Te&amp;mpo...</translation>
-    </message>
-    <message>
-        <source>Set Base Velocity</source>
-        <translation type="obsolete">Atur Kecapatan Dasar</translation>
-    </message>
-    <message>
-        <source>Delete Range</source>
-        <translation type="obsolete">Hapus Jangkauan</translation>
-    </message>
-    <message>
-        <source>Change &amp;Composition Start and End...</source>
-        <translation type="obsolete">Ubah Awal dan Akhir &amp;Komposisi...</translation>
-    </message>
-    <message>
-        <source>Move Tracks...</source>
-        <translation type="obsolete">Pindahkan Jalur...</translation>
-    </message>
-    <message>
-        <source>Change Segment Color</source>
-        <translation type="obsolete">Ubah Warna Segmen</translation>
-    </message>
-    <message>
-        <source>Distribute Audio Segments over MIDI</source>
-        <translation type="obsolete">Distribusi Segmen Suara melalui MIDI</translation>
-    </message>
-    <message>
-        <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="obsolete">Tambah Perubahan Paraf &amp;Waktu...</translation>
-    </message>
-    <message>
-        <source>Add Triggered Segment</source>
-        <translation type="obsolete">Tambah Segmen Berpicu</translation>
-    </message>
-    <message>
-        <source>Remove &amp;Time Signature Change...</source>
-        <translation type="obsolete">Buang Perubahan Paraf Wak&amp;tu...</translation>
-    </message>
-    <message>
-        <source>Repeat Segments</source>
-        <translation type="obsolete">Ulang Segmen</translation>
-    </message>
-    <message>
-        <source>Add Tracks...</source>
-        <translation type="obsolete">Tambah Jalur...</translation>
-    </message>
-    <message>
-        <source>Modify &amp;Default Tempo...</source>
-        <translation type="obsolete">Ubah Tempo Stan&amp;dar...</translation>
-    </message>
-    <message>
-        <source>Delete Triggered Segment</source>
-        <translation type="obsolete">Hapus Segmen Berpicu</translation>
-    </message>
-    <message>
-        <source>Split Segment</source>
-        <translation type="obsolete">Bagi Segmen</translation>
-    </message>
-    <message>
-        <source>Delete Tracks...</source>
-        <translation type="obsolete">Hapus Jalur...</translation>
-    </message>
-    <message>
-        <source>Insert Range</source>
-        <translation type="obsolete">Sisip Jangkauan</translation>
-    </message>
-    <message>
-        <source>Set Base Pitch</source>
-        <translation type="obsolete">Atur Titi Nada Dasar</translation>
-    </message>
-    <message>
-        <source>Paste Tempos and Time Signatures</source>
-        <translation type="obsolete">Tempel Tempo dan Paraf Waktu</translation>
-    </message>
-    <message>
-        <source>Sync segment clef</source>
-        <translation type="obsolete">Label segmen</translation>
-    </message>
-    <message>
-        <source>Insert Note</source>
-        <translation type="obsolete">Sisip Not</translation>
-    </message>
-    <message>
-        <source>Erase Note</source>
-        <translation type="obsolete">Hapus Not</translation>
-    </message>
-    <message>
-        <source>Insert Percussion Note</source>
-        <translation type="obsolete">Sisipkan Not Perkusi</translation>
-    </message>
-    <message>
-        <source>Move Note</source>
-        <translation type="obsolete">Pindahkan Not</translation>
-    </message>
-    <message>
-        <source>Modify Note</source>
-        <translation type="obsolete">Ubah Not</translation>
-    </message>
-    <message>
-        <source>Paste into an existing gap [&quot;restricted&quot;]</source>
-        <translation type="obsolete">Tempel pada gap yang sudah ada [&quot;terbatas&quot;]</translation>
-    </message>
-    <message>
-        <source>Erase existing events to make room [&quot;simple&quot;]</source>
-        <translation type="obsolete">Hapus peristiwa yang ada untuk menambah ruang [&quot;sederhana&quot;]</translation>
-    </message>
-    <message>
-        <source>Move existing events out of the way [&quot;open-n-paste&quot;]</source>
-        <translation type="obsolete">Singkirkan peristiwa yang ada [&quot;buka-dan-tempel&quot;]</translation>
-    </message>
-    <message>
-        <source>&amp;Add Dot</source>
-        <translation type="obsolete">T&amp;ambah Titik</translation>
-    </message>
-    <message>
-        <source>&amp;Remove Marker</source>
-        <translation type="obsolete">Buan&amp;g Penanda</translation>
-    </message>
-    <message>
-        <source>&amp;Increase Velocity</source>
-        <translation type="obsolete">Na&amp;ikkan Kecepatan</translation>
-    </message>
-    <message>
-        <source>&amp;Reduce Velocity</source>
-        <translation type="obsolete">Tu&amp;runkan Kecepatan</translation>
-    </message>
-    <message>
-        <source>Insert Event</source>
-        <translation type="obsolete">Sisip Peristiwa</translation>
-    </message>
-    <message>
-        <source>&amp;Up a Semitone</source>
-        <translation type="obsolete">Naik Setengah &amp;Nada</translation>
-    </message>
-    <message>
-        <source>&amp;Down a Semitone</source>
-        <translation type="obsolete">Turun Setengah Na&amp;da</translation>
-    </message>
-    <message>
-        <source>Up an &amp;Octave</source>
-        <translation type="obsolete">Naik Satu &amp;Oktaf</translation>
-    </message>
-    <message>
-        <source>Down an Octa&amp;ve</source>
-        <translation type="obsolete">Turun Satu Okta&amp;f</translation>
-    </message>
-    <message>
-        <source>&amp;Transpose by Semitones...</source>
-        <translation type="obsolete">&amp;Transposisi oleh Setengah Nada...</translation>
-    </message>
-    <message>
-        <source>&amp;Set Note Type</source>
-        <translation type="obsolete">Atur Jeni&amp;s Not</translation>
-    </message>
-    <message>
-        <source>Edit E&amp;vent</source>
-        <translation type="obsolete">Sunting Peristi&amp;wa</translation>
-    </message>
-    <message>
-        <source>Set &amp;Property</source>
-        <translation type="obsolete">Atur &amp;Properti</translation>
-    </message>
-    <message>
-        <source>&amp;Add Marker</source>
-        <translation type="obsolete">T&amp;ambah Penanda</translation>
-    </message>
-    <message>
-        <source>Cu&amp;t</source>
-        <translation type="obsolete">Po&amp;tong</translation>
-    </message>
-    <message>
-        <source>&amp;Clear Triggers</source>
-        <translation type="obsolete">Bersihkan Pi&amp;cu</translation>
-    </message>
-    <message>
-        <source>Grid &amp;Quantize</source>
-        <translation type="obsolete">Kuantisasi &amp;Jejaring</translation>
-    </message>
-    <message>
-        <source>&amp;Retrograde</source>
-        <translation type="obsolete">&amp;Retrograde</translation>
-    </message>
-    <message>
-        <source>&amp;Invert</source>
-        <translation type="obsolete">Kebal&amp;ikan</translation>
-    </message>
-    <message>
-        <source>Edit L&amp;yrics</source>
-        <translation type="obsolete">Sunting L&amp;irik</translation>
-    </message>
-    <message>
-        <source>&amp;Move Events to Other Segment</source>
-        <translation type="obsolete">Pindahkan Peristiwa ke Seg&amp;men Lainnya</translation>
-    </message>
-    <message>
-        <source>Re&amp;trograde Invert</source>
-        <translation type="obsolete">Kebalikan Re&amp;trograde</translation>
-    </message>
-    <message>
-        <source>&amp;Modify Marker</source>
-        <translation type="obsolete">Ubah Penand&amp;a</translation>
-    </message>
-    <message>
-        <source>&amp;Add Control Parameter</source>
-        <translation type="obsolete">T&amp;ambah Parameter Kontrol</translation>
-    </message>
-    <message>
-        <source>Modify &amp;Instrument Mapping</source>
-        <translation type="obsolete">Ubah Pemetaan &amp;Instrumen</translation>
-    </message>
-    <message>
-        <source>&amp;Remove Control Parameter</source>
-        <translation type="obsolete">Buang Pa&amp;rameter Kontrol</translation>
-    </message>
-    <message>
-        <source>Reconnect Device</source>
-        <translation type="obsolete">Koneksikan Ulang Perangkat</translation>
-    </message>
-    <message>
-        <source>Create Device</source>
-        <translation type="obsolete">Membuat Perangkat</translation>
-    </message>
-    <message>
-        <source>Modify &amp;MIDI Bank</source>
-        <translation type="obsolete">Ubah Bank &amp;MIDI</translation>
-    </message>
-    <message>
-        <source>Modify &amp;Device Mapping</source>
-        <translation type="obsolete">Ubah Pemetaan Perangka&amp;t</translation>
-    </message>
-    <message>
-        <source>Rename Device</source>
-        <translation type="obsolete">Namai Ulang Perangkat</translation>
-    </message>
-    <message>
-        <source>&amp;Modify Control Parameter</source>
-        <translation type="obsolete">Ubah Para&amp;meter Kontrol</translation>
-    </message>
-    <message>
-        <source>Respell with %1</source>
-        <translation type="obsolete">Eja ulang dengan %1</translation>
-    </message>
-    <message>
-        <source>&amp;Natural</source>
-        <translation type="obsolete">&amp;Natural</translation>
-    </message>
-    <message>
-        <source>N&amp;one</source>
-        <translation type="obsolete">N&amp;ihil</translation>
-    </message>
-    <message>
-        <source>Insert Guitar Chord</source>
-        <translation type="obsolete">Sisi Padu Nada Gitar</translation>
-    </message>
-    <message>
-        <source>Add Te&amp;xt Mark...</source>
-        <translation type="obsolete">Tambah Penanda Te&amp;ks</translation>
-    </message>
-    <message>
-        <source>Add Pedal &amp;Press</source>
-        <translation type="obsolete">Tambah Tekanan &amp;Pedal</translation>
-    </message>
-    <message>
-        <source>Add Pedal &amp;Release</source>
-        <translation type="obsolete">Tambah Pelepasan Peda&amp;l</translation>
-    </message>
-    <message>
-        <source>Fi&amp;x Notation Quantization</source>
-        <translation type="obsolete">Perbai&amp;ki Kuantisasi Notasi</translation>
-    </message>
-    <message>
-        <source>Set Visibility</source>
-        <translation type="obsolete">Atur Visibilitas (Kenampakan)</translation>
-    </message>
-    <message>
-        <source>Change &amp;Note Style</source>
-        <translation type="obsolete">Ubah Gaya &amp;Not</translation>
-    </message>
-    <message>
-        <source>Insert Text</source>
-        <translation type="obsolete">Sisip Teks</translation>
-    </message>
-    <message>
-        <source>&amp;Interpret...</source>
-        <translation type="obsolete">&amp;Interpretasi...</translation>
-    </message>
-    <message>
-        <source>Add Double-Octave Up</source>
-        <translation type="obsolete">Tambah Oktaf-Ganda Naik</translation>
-    </message>
-    <message>
-        <source>Add Octave &amp;Up</source>
-        <translation type="obsolete">Tambah Oktaf Na&amp;ik</translation>
-    </message>
-    <message>
-        <source>Add Octave &amp;Down</source>
-        <translation type="obsolete">Tambah Oktaf Tu&amp;run</translation>
-    </message>
-    <message>
-        <source>Add Double Octave Down</source>
-        <translation type="obsolete">Tambah Oktaf Turun Ganda</translation>
-    </message>
-    <message>
-        <source>Add &amp;Crescendo</source>
-        <translation type="obsolete">Tambah &amp;Crescendo</translation>
-    </message>
-    <message>
-        <source>Add &amp;Decrescendo</source>
-        <translation type="obsolete">Tambah &amp;Decrescendo</translation>
-    </message>
-    <message>
-        <source>Add &amp;Glissando</source>
-        <translation type="obsolete">Tambah &amp;Glissando</translation>
-    </message>
-    <message>
-        <source>Add &amp;%1%2</source>
-        <translation type="obsolete">Tambah &amp;%1%2</translation>
-    </message>
-    <message>
-        <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="obsolete">Buang Kuantisasi No&amp;tasi</translation>
-    </message>
-    <message>
-        <source>Make &amp;Chord</source>
-        <translation type="obsolete">Buat &amp;Padu Nada</translation>
-    </message>
-    <message>
-        <source>Change all to &amp;Key %1...</source>
-        <translation type="obsolete">Ubah Semua ke &amp;Kunci %1...</translation>
-    </message>
-    <message>
-        <source>Add &amp;Key Change...</source>
-        <translation type="obsolete">Tambah Perubahan &amp;Kunci...</translation>
-    </message>
-    <message>
-        <source>Edit Text</source>
-        <translation type="obsolete">Sunting Teks</translation>
-    </message>
-    <message>
-        <source>&amp;Remove All Marks</source>
-        <translation type="obsolete">Buang Semua Pen&amp;anda</translation>
-    </message>
-    <message>
-        <source>S&amp;forzando</source>
-        <translation type="obsolete">S&amp;forzando</translation>
-    </message>
-    <message>
-        <source>Sta&amp;ccato</source>
-        <translation type="obsolete">Sta&amp;ccato</translation>
-    </message>
-    <message>
-        <source>R&amp;inforzando</source>
-        <translation type="obsolete">R&amp;inforzando</translation>
-    </message>
-    <message>
-        <source>T&amp;enuto</source>
-        <translation type="obsolete">T&amp;enuto</translation>
-    </message>
-    <message>
-        <source>&amp;Accent</source>
-        <translation type="obsolete">&amp;Aksen</translation>
-    </message>
-    <message>
-        <source>&amp;Staccatissimo</source>
-        <translation type="obsolete">&amp;Staccatissimo</translation>
-    </message>
-    <message>
-        <source>&amp;Marcato</source>
-        <translation type="obsolete">&amp;Marcato</translation>
-    </message>
-    <message>
-        <source>&amp;Pause</source>
-        <translation type="obsolete">Hen&amp;ti</translation>
-    </message>
-    <message>
-        <source>Mo&amp;rdent</source>
-        <translation type="obsolete">Mo&amp;rdent</translation>
-    </message>
-    <message>
-        <source>Inverted Mordent</source>
-        <translation type="obsolete">Mordent Berbalik</translation>
-    </message>
-    <message>
-        <source>Long Mordent</source>
-        <translation type="obsolete">Mordent Panjang</translation>
-    </message>
-    <message>
-        <source>Lon&amp;g Inverted Mordent</source>
-        <translation type="obsolete">Mordent Panjan&amp;g Berbalik</translation>
-    </message>
-    <message>
-        <source>&amp;%1%2</source>
-        <translation type="obsolete">&amp;%1%2</translation>
-    </message>
-    <message>
-        <source>Add %1</source>
-        <translation type="obsolete">Tambah %1</translation>
-    </message>
-    <message>
-        <source>Restore Positions</source>
-        <translation type="obsolete">Kembalikan Posisi</translation>
-    </message>
-    <message>
-        <source>&amp;Restore Tie Positions</source>
-        <translation type="obsolete">Kembalikan Posisi</translation>
-    </message>
-    <message>
-        <source>Change to &amp;Key %1...</source>
-        <translation type="obsolete">Ubah ke &amp;Kunci %1...</translation>
-    </message>
-    <message>
-        <source>&amp;Remove Fingerings</source>
-        <translation type="obsolete">Buang Penja&amp;rian</translation>
-    </message>
-    <message>
-        <source>Add Other &amp;Fingering...</source>
-        <translation type="obsolete">Tambah Penjarian &amp;Lainnya...</translation>
-    </message>
-    <message>
-        <source>Add Fingering &amp;0 (Thumb)</source>
-        <translation type="obsolete">Tambah Penjarian &amp;0 (Jempol)</translation>
-    </message>
-    <message>
-        <source>Add Fingering &amp;%1</source>
-        <translation type="obsolete">Tambah Penjarian &amp;%1</translation>
-    </message>
-    <message>
-        <source> imported from Hydrogen </source>
-        <translation type="obsolete"> mengimpor dari Hydrogen </translation>
-    </message>
-    <message>
-        <source>LilyPond does not allow spaces or backslashes in filenames.
-
-Would you like to use
-
- %1
-
- instead?</source>
-        <translation type="obsolete">Lilypond tidak memperbolehkan spasi atau garis miring dalam nama berkas.
-
-Apakah Anda ingin menggunakan
-
- %1
-
- di dalam nama berkas?</translation>
-    </message>
-    <message>
-        <source>Nothing to undo</source>
-        <translation type="obsolete">Tak ada yang mesti dibatalkan</translation>
-    </message>
-    <message>
-        <source>Nothing to redo</source>
-        <translation type="obsolete">Tak ada yang mesi diulang</translation>
-    </message>
-    <message>
-        <source>Und&amp;o %1</source>
-        <translation type="obsolete">Ba&amp;tal %1</translation>
-    </message>
-    <message>
-        <source>Re&amp;do %1</source>
-        <translation type="obsolete">Ula&amp;ng %1</translation>
-    </message>
-    <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Berkas bersangkutan telah diubah.
-Anda ingin menyimpannya?</translation>
-    </message>
-    <message>
-        <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="obsolete">Tak dapat membuka berkas &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Reading file...</source>
-        <translation type="obsolete">Membaca berkas...</translation>
-    </message>
-    <message>
-        <source>Could not open Rosegarden file</source>
-        <translation type="obsolete">Tak dapat membuka berkas Rosegarden</translation>
-    </message>
-    <message>
-        <source>Generating audio previews...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-    <message>
-        <source>Merge</source>
-        <translation type="obsolete">Gabung</translation>
-    </message>
-    <message>
-        <source>File load cancelled</source>
-        <translation type="obsolete">Memuat berkas dibatalkan</translation>
-    </message>
-    <message>
-        <source>Inconsistent sample rates</source>
-        <translation type="obsolete">Rerata sampel tak konsisten</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>This file contains one or more old element types that are now deprecated.
-Support for these elements may disappear in future versions of Rosegarden.
-We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
-        <translation type="obsolete">Berkas ini mengandung satu atau dua jenis elemen lama.
-Dukungan untuk elemen ini mungkin akan ditiadakan untuk versi Rosegarden yang lebih lanjut.
-Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden yang sekarang untuk menjamin bahea berkas tersebut masih bisa dibuka oleh versi yang lebih baru.</translation>
-    </message>
-    <message>
-        <source>Insert Recorded MIDI</source>
-        <translation type="obsolete">Sisip MIDI yang telah Direkam</translation>
-    </message>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">%1 (direkam)</translation>
-    </message>
-    <message>
-        <source>This file was written by Rosegarden %1, and it uses
-a different file format that cannot be read by this version.</source>
-        <translation type="obsolete">Berkas ini ditulis oleh Rosegarden %1, dan menggunakan
-format berkas yang berbeda yang tidak bisa dibaca oleh versi ini.</translation>
-    </message>
-    <message>
-        <source>This file was written by Rosegarden %1, which is more recent than this version.
-There may be some incompatibilities with the file format.</source>
-        <translation type="obsolete">Berkas ini ditulis oleh Rosegarden %1, yang merupakan versi lebih baru dari versi yang digunakan saat ini.
-Mungkin saja ada beberapa ketidakcocokan dengan format berkasnya.</translation>
-    </message>
-    <message>
-        <source>Se&amp;gment</source>
-        <translation type="obsolete">Se&amp;gmen</translation>
-    </message>
-    <message>
-        <source>Edit &amp;With</source>
-        <translation type="obsolete">Sunting Deng&amp;an</translation>
-    </message>
-    <message>
-        <source>Actions Toolbar</source>
-        <translation type="obsolete">Baris Alat Aksi</translation>
-    </message>
-    <message>
-        <source>Time Toolbar</source>
-        <translation type="obsolete">Baris Alat Waktu</translation>
-    </message>
-    <message>
-        <source>Transport Toolbar</source>
-        <translation type="obsolete">Baris Alat Transpor</translation>
-    </message>
-    <message>
-        <source>Zoom Toolbar</source>
-        <translation type="obsolete">Baris Alat Zum</translation>
-    </message>
-    <message>
-        <source>T&amp;ransport</source>
-        <translation type="obsolete">T&amp;ranspor</translation>
-    </message>
-    <message>
-        <source>Number of Stereo &amp;Inputs</source>
-        <translation type="obsolete">Jumlah Masuk&amp;an Stereo</translation>
-    </message>
-    <message>
-        <source>&amp;Number of Submasters</source>
-        <translation type="obsolete">Jumlah Su&amp;bmaster</translation>
-    </message>
-    <message>
-        <source>&amp;Import</source>
-        <translation type="obsolete">&amp;Impor</translation>
-    </message>
-    <message>
-        <source>&amp;Merge</source>
-        <translation type="obsolete">Gabun&amp;g</translation>
-    </message>
-    <message>
-        <source>&amp;Export</source>
-        <translation type="obsolete">&amp;Ekspor</translation>
-    </message>
-    <message>
-        <source>&amp;Composition</source>
-        <translation type="obsolete">&amp;Komposisi</translation>
-    </message>
-    <message>
-        <source>&amp;Studio</source>
-        <translation type="obsolete">&amp;Studio</translation>
-    </message>
-    <message>
-        <source>Se&amp;gments</source>
-        <translation type="obsolete">Se&amp;gment</translation>
-    </message>
-    <message>
-        <source>Trac&amp;ks</source>
-        <translation type="obsolete">Ja&amp;lur</translation>
-    </message>
-    <message>
-        <source>Set &amp;Instrument</source>
-        <translation type="obsolete">Atur &amp;Instrumen</translation>
-    </message>
-    <message>
-        <source>&amp;Toolbars</source>
-        <translation type="obsolete">Baris Ala&amp;t</translation>
-    </message>
-    <message>
-        <source>&amp;Rulers</source>
-        <translation type="obsolete">Pengga&amp;ris</translation>
-    </message>
-    <message>
-        <source>Tools Toolbar</source>
-        <translation type="obsolete">Baris Alat Perkakas</translation>
-    </message>
-    <message>
-        <source>Tracks Toolbar</source>
-        <translation type="obsolete">Baris Alat Jalur</translation>
-    </message>
-    <message>
-        <source>Editors Toolbar</source>
-        <translation type="obsolete">Baris Alat Penyunting</translation>
-    </message>
-    <message>
-        <source>&amp;Layout Mode</source>
-        <translation type="obsolete">Mode Tata&amp;letak</translation>
-    </message>
-    <message>
-        <source>Add Event Ruler</source>
-        <translation type="obsolete">Tambah Penggaris Peristiwa</translation>
-    </message>
-    <message>
-        <source>N&amp;ote</source>
-        <translation type="obsolete">N&amp;ot</translation>
-    </message>
-    <message>
-        <source>Mar&amp;ks</source>
-        <translation type="obsolete">Penan&amp;da</translation>
-    </message>
-    <message>
-        <source>&amp;Ornaments</source>
-        <translation type="obsolete">&amp;Ornamen</translation>
-    </message>
-    <message>
-        <source>&amp;Fingerings</source>
-        <translation type="obsolete">Pen&amp;jarian</translation>
-    </message>
-    <message>
-        <source>&amp;Phrase</source>
-        <translation type="obsolete">&amp;Frase</translation>
-    </message>
-    <message>
-        <source>Tie &amp;Position</source>
-        <translation type="obsolete">Posisi penunjuk</translation>
-    </message>
-    <message>
-        <source>&amp;Octaves</source>
-        <translation type="obsolete">&amp;Oktaf</translation>
-    </message>
-    <message>
-        <source>Ad&amp;just</source>
-        <translation type="obsolete">Se&amp;tel</translation>
-    </message>
-    <message>
-        <source>&amp;Notes</source>
-        <translation type="obsolete">&amp;Not</translation>
-    </message>
-    <message>
-        <source>&amp;Quantize</source>
-        <translation type="obsolete">&amp;Kuantisasi</translation>
-    </message>
-    <message>
-        <source>Trans&amp;pose</source>
-        <translation type="obsolete">Trans&amp;posisi</translation>
-    </message>
-    <message>
-        <source>Convert</source>
-        <translation type="obsolete">Konversi</translation>
-    </message>
-    <message>
-        <source>Velocities</source>
-        <translation type="obsolete">Kecepatan:</translation>
-    </message>
-    <message>
-        <source>&amp;Visibility</source>
-        <translation type="obsolete">&amp;Visibilitas</translation>
-    </message>
-    <message>
-        <source>Local &amp;Cursor</source>
-        <translation type="obsolete">&amp;Kursor Lokal</translation>
-    </message>
-    <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">Baris Alat Not</translation>
-    </message>
-    <message>
-        <source>Group Toolbar</source>
-        <translation type="obsolete">Baris Alat Kelompok</translation>
-    </message>
-    <message>
-        <source>Marks Toolbar</source>
-        <translation type="obsolete">Baris Alat Penanda</translation>
-    </message>
-    <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">Baris Alat Meta</translation>
-    </message>
-    <message>
-        <source>Layout Toolbar</source>
-        <translation type="obsolete">Baris Alat Tataletak</translation>
-    </message>
-    <message>
-        <source>Control Ruler actions</source>
-        <translation type="obsolete">Aksi Penggaris Kontrol</translation>
-    </message>
-    <message>
-        <source>Property Ruler actions</source>
-        <translation type="obsolete">Aksi Penggaris Properti</translation>
-    </message>
-    <message>
-        <source>&amp;Action</source>
-        <translation type="obsolete">&amp;Aksi</translation>
-    </message>
-    <message>
-        <source>General Toolbar</source>
-        <translation type="obsolete">Baris Alat Umum</translation>
-    </message>
-    <message>
-        <source>&amp;Grid</source>
-        <translation type="obsolete">Jejarin&amp;g</translation>
-    </message>
-    <message>
-        <source>&amp;Segment</source>
-        <translation type="obsolete">&amp;Segmen</translation>
-    </message>
-    <message>
-        <source>Hide additional controls</source>
-        <translation type="obsolete">Sembunyikan kontrol tambahan</translation>
-    </message>
-    <message>
-        <source>Panic Button</source>
-        <translation type="obsolete">Tombol Panik</translation>
-    </message>
-    <message>
-        <source>Shows MIDI activity in and out of Rosegarden</source>
-        <translation type="obsolete">Tampilkan aktivitas keluar dan masuk MIDI dari Rosegarden</translation>
-    </message>
-    <message>
-        <source>IN</source>
-        <translation type="obsolete">MASUK</translation>
-    </message>
-    <message>
-        <source>OUT</source>
-        <translation type="obsolete">KELUAR</translation>
-    </message>
-    <message>
-        <source>NO EVENTS</source>
-        <translation type="obsolete">TANPA PERISTIWA</translation>
-    </message>
-    <message>
-        <source>SIG</source>
-        <translation type="obsolete">SIG</translation>
-    </message>
-    <message>
-        <source>DIV</source>
-        <translation type="obsolete">DIV</translation>
-    </message>
-    <message>
-        <source>/16</source>
-        <translation type="obsolete">/16</translation>
-    </message>
-    <message>
-        <source>TEMPO</source>
-        <translation type="obsolete">TEMPO</translation>
-    </message>
-    <message>
-        <source>END</source>
-        <translation type="obsolete">AKHIR</translation>
-    </message>
-    <message>
-        <source>BAR</source>
-        <translation type="obsolete">BAR</translation>
-    </message>
-    <message>
-        <source>Switch between real time, musical time, and frame count</source>
-        <translation type="obsolete">Berpindah antara waktu nyata, waktu musik, dan hitungan bingkai</translation>
-    </message>
-    <message>
-        <source>Show additional controls</source>
-        <translation type="obsolete">Tampilkan kontrol tambahan</translation>
-    </message>
-    <message>
-        <source>Moves the current pointer position back one bar.</source>
-        <translation type="obsolete">Memundurkan posisi penunjuk satu bar.</translation>
-    </message>
-    <message>
-        <source>Play/Pause</source>
-        <translation type="obsolete">Putar/Tahan</translation>
-    </message>
-    <message>
-        <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation type="obsolete">Memainkan aransemen mulai dari posisi penunjuk, atau menghentikan permainan apabila sudah dalam posisi memainkan sebelumnya.</translation>
-    </message>
-    <message>
-        <source>Stops playback or recording.</source>
-        <translation type="obsolete">Menghentikan permainan atau perekaman.</translation>
-    </message>
-    <message>
-        <source>Fast forward</source>
-        <translation type="obsolete">Maju cepat</translation>
-    </message>
-    <message>
-        <source>Moves the current pointer position forwards one bar.</source>
-        <translation type="obsolete">Memajukan posisi penunjuk satu bar.</translation>
-    </message>
-    <message>
-        <source>Fast forward to end</source>
-        <translation type="obsolete">Maju cepat hingga akhir</translation>
-    </message>
-    <message>
-        <source>Display time to end</source>
-        <translation type="obsolete">Tampilkan waktu hingga akhir</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that Rosegarden has an autosave feature?&lt;br&gt;&lt;br&gt;
-You can select your autosave interval from &lt;b&gt;Settings-&gt;Configure
-Rosegarden&lt;/b&gt;.&lt;br&gt;&lt;br&gt;
-When something goes awry, such as a power outage or a Rosegarden crash
-(unfortunately, it happens...) simply load the file you were working on, and you&apos;ll be given the
-option to load the autosaved version, or the unmodified original.&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Rosegarden memiliki fitur simpan otomatis?&lt;br&gt;&lt;br&gt;
-Anda bisa memilih interval simpan otomatis dari &lt;b&gt;Pengaturan-&gt;Konfigurasi
-Rosegarden&lt;/b&gt;.&lt;br&gt;&lt;br&gt;
-Apabila sesuatu yang tidak diinginkan terjadi, seperti listrik yang tiba-tiba terputus atau Rosegarden mengalami &quot;kecelakaan&quot; (sayangnya, itu bisa saja terjadi...) 
-cukup dengan memuat berkas yang sedang Anda kerjakan, dan Anda akan diberi sebuah
-opsi untuk memuat versi simpanan otomatisnya, atau tetap menggunakan
-yang belum diubah tersebut&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;
-...that you can save the current document as your default studio by using
-&lt;b&gt;Composition -&gt; Studio -&gt; Save Current Document as Default Studio&lt;/b&gt;?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;
-...bahwa Anda bisa menyimpan dokumen bersangkutan
-(yang terbuka pada saat itu) sebagai studio utama/dasar Anda
-dengan menggunakan
-&lt;b&gt;Composisi -&gt; Studio -&gt; Simpan Dokumen Bersangkutan sebagai Studio Dasar&lt;/b&gt;?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that your default studio is a complete Rosegarden composition that gets
-loaded every time you create a new document or import a MIDI file?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa studio dasar Anda adalah komposisi lengkap dari Rosegarden yang
-akan dimuat setiap Anda membuat dokumen baru atau mengimpor berkas MIDI?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that your default studio can contain instrument assignments, document properties, LilyPond headers,
-and many other things?&lt;br&gt;&lt;br&gt;The default studio is a complete Rosegarden composition, so it can contain anything that you may wish to have available in each
-new document you create.&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa studio dasar Anda bisa memiliki penambahan instrumen, properti dokumen
-tajuk LilyPond, dan masih banyak lagi?&lt;br&gt;&lt;br&gt;Studio dasar adalah komposisi lengkap milik Rosegarden, sehingga ia bisa mengandung apa saja yang hendak Anda tambahkan di tiap dokumen baru yang Anda buat.&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that Rosegarden will detect and create a default connection for ALSA soft
-synth applications that are started after Rosegarden is already running?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Rosegarden akan mendeteksi dan membuat koneksi dasar untuk peranti sintetiser ALSA
-yang akan dijalankan setelah Rosegarden berjalan?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that if you place a note at the wrong pitch using the notation or matrix editor, you can move it one semitone at a time with the up and down arrow keys on your keyboard?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa apabila Anda meletakkan not pada titi nada yang salah menggunakan notasi atau penyunting metriks, Anda bisa memindahkannya dalam satu setengah nada satu waktu dengan tombol panah atas dan bawah pada papan ketik Anda?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can edit multiple segments on multiple tracks simultaneously in
-the notation editor?  Simply select the segments, then use &lt;b&gt;Edit -&gt; Open in Notation Editor&lt;/b&gt;.&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa menyunting banyak segmen dalam banyak jalur secara berkesinambungan
-di dalam penyunting notasi?  Cukup dengan memilih segmen-segmen tersebut, lalu gunakan
-&lt;b&gt;Sunting -&gt; Buka di Penyunting Notasi&lt;/b&gt;.&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that Rosegarden can export files for use by LilyPond, the high-quality score typesetting system?&lt;br&gt;&lt;br&gt;
-From the &lt;b&gt;File&lt;/b&gt; menu, navigate to &lt;b&gt;Export -&gt; Export LilyPond File&lt;/b&gt;&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Rosegarden bisa mengekspor berkas untuk digunakan oleh LilyPond, sistem penyusunan huruf skor yang berkualitas tinggi?&lt;br&gt;&lt;br&gt;
-Dari menu &lt;b&gt;Berkas&lt;/b&gt;, bernavigasilah ke &lt;b&gt;Ekspor -&gt; Ekspor Berkas LilyPond&lt;/b&gt;&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that Rosegarden can print via LilyPond, the high-quality score typesetting system?&lt;br&gt;&lt;br&gt;
-From the &lt;b&gt;File&lt;/b&gt; menu, navigate to &lt;b&gt;Preview with LilyPond&lt;/b&gt;.  The file
-will be exported, rendered, and a preview will appear in KPDF, or one of
-several other PDF viewers, where it can then be printed as well.&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Rosegarden dapat mencetak melalui LilyPond, sistem penyusunan huruf skor berkualitas tinggi?&lt;br&gt;&lt;br&gt;
-Dari menu &lt;b&gt;Berkas&lt;/b&gt;, bernavigasilah ke &lt;b&gt;Pratampil dengan LilyPond&lt;/b&gt;.  Berkas tersebut
-akan diekspor, diambil gambarnya, dan dipratampilkan melalui KPDF, atau satu dari
-sejumlah penampil berkas PDF, yang mana ini bisa pula untuk dicetak.&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can change segment labels using the controls on the Segment Parameters box
-in the main window?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa mengubah label segmen menggunakan kontrol pada kotak Parameter Segmen
-di dalam jendela utama?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can change the name of a track by double clicking on the label?  (The
-label must be visible for this to work.)&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa mengubah nama jalur dengan menklik ganda pada labelnya?  
-(Label tersebut harus terlihat untuk bisa melakukan ini.)&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can configure what happens when you double-click on a segment?&lt;br&gt;&lt;br&gt;Go to &lt;b&gt;Settings -&gt; Configure Rosegarden&lt;/b&gt; and choose your preferred editing window under the &lt;b&gt;Behaviour&lt;/b&gt; tab.&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa mengonfigurasi apa yang akan terjadi saat Anda menklik ganda pada segmen?&lt;br&gt;&lt;br&gt;Pergilah ke &lt;b&gt;Pengaturan -&gt; Konfigurasi Rosegarden&lt;/b&gt; dan pilih jendela penyuntingan yang Anda kehendaki pada tabulasi &lt;b&gt;Kebiasaan&lt;/b&gt;.&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can change the total number of bars in the composition via
-&lt;b&gt;Composition -&gt; Change Composition Start and End&lt;/b&gt;?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa mengubah jumlah total bar pada komposisi melalui
-&lt;b&gt;Komposisi -&gt; Ubah Komposisi Mulai dan Akhir&lt;/b&gt;?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;...that you can add tempo and time-signature changes by double-clicking on the values displayed in the transport window or tempo rulers?&lt;/p&gt;
-</source>
-        <translation type="obsolete">&lt;p&gt;...bahwa Anda bisa menambahkan tempo dan perubahan paraf waktu dengan menklik ganda pada nilai yang ditampilkan dalam jendela transpor atau penggaris tempo?&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source> 	 
-&lt;p&gt;...that you can use the mouse wheel to scroll up and down, scroll left and right, and zoom in and out?&lt;br&gt;&lt;br&gt;Just roll the wheel to scroll up or down.  Hold Alt as well to scroll left or right, or hold Ctrl to zoom in and out.&lt;/p&gt; 	 
-</source>
-        <translation type="obsolete"> 	 
-&lt;p&gt;...bahwa Anda bisa menggunakan roda tetikus untuk menggulung naik dan turun, menggulung ke kiri dan ke kanan, dan memperbesar maupun memperkecil tampilan?&lt;br&gt;&lt;br&gt;Cukup dengan memutar roda tetikus tersebut untuk menggulung naik atau turun.  Tahan Alt untuk menggulung ke kiri atau ke kanan, atau tahan Ctrl untuk memperkecil atau memperbesar tampilan.&lt;/p&gt; 	 
-</translation>
-    </message>
-    <message>
-        <source> 	 
-&lt;p&gt;...that you can add audio to your Rosegarden composition just by dragging an audio file from your file manager and dropping it on the Rosegarden segment canvas?  (Make sure you drop it on an audio track!)&lt;br&gt;&lt;br&gt;You can also drop audio files from Rosegarden&apos;s audio file manager window onto the segment canvas, and from other programs onto the audio file manager.&lt;/p&gt;
-</source>
-        <translation type="obsolete"> 	 
-&lt;p&gt;...bahwa Anda bisa menambahkan suara pada komposisi Rosegarden Anda hanya dengan menyeret sebuah berkas suara dari manajer berkas Anda dan menjatuhkannya tepat pada kanvas segmen Rosegarden?  (Pastikanlah bahwa Anda menjatuhkannya tepat pada jalur suara!)&lt;br&gt;&lt;br&gt;Anda juga bisa menjatuhkan berkas suara dari manajer berkas suara milik Rosegarden ke dalam kanvas segmen, dan dari program lainnya ke dalam manajer berkas suara.&lt;/p&gt;
-</translation>
-    </message>
-    <message>
-        <source>GNU Lilypond</source>
-        <translation type="obsolete">GNU Lilypond</translation>
-    </message>
-    <message>
-        <source>Copyright (c) 1997--2003 Han-Wen Nienhuys and Jan Nieuwenhuizen</source>
-        <translation type="obsolete">Hak Cipta (c) 1997--2003 Han-Wen Nienhuys dan Jan Nieuwenhuizen</translation>
-    </message>
-    <message>
-        <source>Chris Cannam</source>
-        <translation type="obsolete">Chris Cannam</translation>
-    </message>
-    <message>
-        <source>pixmap</source>
-        <translation type="obsolete">pixmap</translation>
-    </message>
-    <message>
-        <source>Feta</source>
-        <translation type="obsolete">Feta</translation>
-    </message>
-    <message>
-        <source>scalable</source>
-        <translation type="obsolete">dapat diskalakan</translation>
-    </message>
-    <message>
-        <source>Fughetta</source>
-        <translation type="obsolete">Fughetta</translation>
-    </message>
-    <message>
-        <source>Created by Blake Hodgetts; freely redistributable.  See http://www.efn.org/~bch/aboutfonts.html</source>
-        <translation type="obsolete">Dibuat oleh Blake Hodgetts; bisa didistribusikan dengan bebas.  Lihat http://www.efn.org/~bch/aboutfonts.html</translation>
-    </message>
-    <message>
-        <source>Copyright 1995-1999 Blake Hodgetts</source>
-        <translation type="obsolete">Hak Cipta 1995-1999 Blake Hodgetts</translation>
-    </message>
-    <message>
-        <source>Inkpen</source>
-        <translation type="obsolete">Inkpen</translation>
-    </message>
-    <message>
-        <source>Inkpen is part of Sibelius, but other fonts may use the same mappings.</source>
-        <translation type="obsolete">Inkpen adalah bagian dari Sibelius, tetapi huruf lainnya mungkin menggunakan pemetaan yang sama.</translation>
-    </message>
-    <message>
-        <source>Copyright Sibelius Software Ltd</source>
-        <translation type="obsolete">Hak Cipta Sibelius Software Ltd</translation>
-    </message>
-    <message>
-        <source>Maestro</source>
-        <translation type="obsolete">Maestro</translation>
-    </message>
-    <message>
-        <source>Maestro is part of Finale, but other fonts use the same mappings.</source>
-        <translation type="obsolete">Maestro adalah bagian dari Finale, tetapi huruf lainnya menggunakan pemetaan yang sama.</translation>
-    </message>
-    <message>
-        <source>Copyright Coda Inc</source>
-        <translation type="obsolete">Hak Cipta Coda Inc</translation>
-    </message>
-    <message>
-        <source>Opus is part of Sibelius, but other fonts may use the same mappings.</source>
-        <translation type="obsolete">Opus adalah bagian dari Sibelius, tetapi huruf lainnya mungkin menggunakan pemetaan yang sama.</translation>
-    </message>
-    <message>
-        <source>Petrucci</source>
-        <translation type="obsolete">Petrucci</translation>
-    </message>
-    <message>
-        <source>Petrucci is part of Finale, but other fonts use the same mappings.</source>
-        <translation type="obsolete">Petrucci adalah bagian dari Finale, tetapi huruf lainnya menggunakan pemetaan yang sama.</translation>
-    </message>
-    <message>
-        <source>RG21</source>
-        <translation type="obsolete">RG21</translation>
-    </message>
-    <message>
-        <source>Rosegarden 2.1</source>
-        <translation type="obsolete">Rosegarden 2.1</translation>
-    </message>
-    <message>
-        <source>Copyright (c) 1994--2001 Chris Cannam</source>
-        <translation type="obsolete">Hak Cipta (c) 1994--2001 Chris Cannam</translation>
-    </message>
-    <message>
-        <source>Sonata</source>
-        <translation type="obsolete">Sonata</translation>
-    </message>
-    <message>
-        <source>Adobe</source>
-        <translation type="obsolete">Adobe</translation>
-    </message>
-    <message>
-        <source>Copyright Adobe Inc</source>
-        <translation type="obsolete">Hak Cipta Adobe Inc</translation>
-    </message>
-    <message>
-        <source>Steinberg</source>
-        <translation type="obsolete">Steinberg</translation>
-    </message>
-    <message>
-        <source>The Steinberg Notation font is part of Cubase.</source>
-        <translation type="obsolete">Huruf Notasi Steinberg adalah bagian dari Cubase.</translation>
-    </message>
-    <message>
-        <source>Copyright Steinberg Inc</source>
-        <translation type="obsolete">Hak Cipta Steinberg Inc</translation>
-    </message>
-    <message>
-        <source>Xinfonia</source>
-        <translation type="obsolete">Xinfonia</translation>
-    </message>
-    <message>
-        <source>xemo.org</source>
-        <translation type="obsolete">xemo.org</translation>
-    </message>
-    <message>
-        <source>Copyright 2001-2003 Xemus Software LLC</source>
-        <translation type="obsolete">Hak Cipta 2001-2003 Xemus Software LLC</translation>
-    </message>
-    <message>
-        <source>Classical</source>
-        <translation type="obsolete">Klasikal</translation>
-    </message>
-</context>
-<context>
-    <name>DeviceManagerDialogUi</name>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="535"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="540"/>
         <source>Manage MIDI Devices</source>
         <translation type="unfinished">Memanajemen Perangkat MIDi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="536"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
         <source>MIDI Playback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="538"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="543"/>
         <source>Sends its data through</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="539"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
         <source>Rosegarden playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="587"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="549"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="581"/>
         <source>Internal Synth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
         <source>Default playback device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="549"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your playback devices here. Connect them to outgoing ports at right. Double click the device name to change it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="554"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="556"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Bank definitions define, how the programs (sounds) of a device are called, which settings to use for it, etc..&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is possible to load and save these (bank-) settings as *.rgd files in order to export, import and share it.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
+        <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="564"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="559"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished">Bank...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="566"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;New controllers add a knob&lt;/span&gt; to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="561"/>
+        <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="575"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="563"/>
         <source>Controllers...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="576"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="621"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="565"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="567"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="600"/>
         <source>New</source>
         <translation type="unfinished">Baru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="577"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="569"/>
+        <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="571"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="578"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="572"/>
         <source>MIDI outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="580"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="574"/>
         <source>Available outputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="585"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="632"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="653"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="579"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="614"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="628"/>
         <source>No port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="591"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a playback device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an outgoing alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="585"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="601"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="667"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="588"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="635"/>
+        <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="608"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="674"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="590"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="637"/>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="610"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LV2 is the most recent plugin standard for linux audio and effect plugins.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;More information is available on the &lt;a href=&quot;http://lv2plug.in/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;LV2 Plugin Website&lt;/span&gt;&lt;/a&gt; .&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="592"/>
+        <source>This button will be removed as this was the wrong place to put it.  Do not bother translating this tooltip</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="620"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="596"/>
         <source>MIDI Recording</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="622"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="598"/>
+        <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="602"/>
+        <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="604"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="626"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="608"/>
         <source>Receives is data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="627"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
         <source>Rosegarden recording device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="633"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="615"/>
         <source>Default record device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="637"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your record devices here. Connect them to incoming ports at right. &lt;span style=&quot; text-decoration: underline;&quot;&gt;Double click the device name to change it.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Double click an entry in the &quot;Enabled&quot; column, &lt;/span&gt;to enable the device for recording!&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="646"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="621"/>
         <source>MIDI inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="648"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="623"/>
         <source>Available inputs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="657"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a record device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an incoming alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by other midi-sequencers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DevicesManagerNewUi</name>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Baru</translation>
-    </message>
-</context>
-<context>
-    <name>Dialog</name>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="216"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="217"/>
-        <source>-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="218"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dear user&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The default ouput-device has not been assigned any port yet.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Please select the midi-port you would like to be used by Rosegardens Default-Output-Device.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;If you haven&apos;t done so, &lt;span style=&quot; text-decoration: underline;&quot;&gt;start your sound-synth first&lt;/span&gt; and press the refresh button. (e.g. qsynth or timidity)&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;For more advanced options open the DevicesManager dialog from the menu later. If you would like Rosegarden &lt;span style=&quot; text-decoration: underline;&quot;&gt;to remember these settings&lt;/span&gt;, save your Document as &quot;Default Studio&quot; by selecting [[Studio//Save as DefaultStudio]] in the menu.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="232"/>
-        <source>List of Ports</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="235"/>
-        <source>Available outputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="240"/>
-        <source>No port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="242"/>
-        <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="246"/>
-        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;Sans Serif&apos;; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a playback device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an outgoing alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Baru</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/studio/NoPortDialogUi.h" line="233"/>
-        <source>Refresh</source>
+        <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="632"/>
+        <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distributions hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as Virtual Keyboard&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9323,10 +2950,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished">Mengimpor berkas &amp;MIDI...</translation>
     </message>
     <message>
-        <source>Import &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Mengimpor berkas &amp;Rosegarden 2.1...</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="857"/>
         <source>Import &amp;Hydrogen file...</source>
         <translation type="unfinished">Mengimpor berkas &amp;Hydrogen...</translation>
@@ -9345,10 +2968,6 @@ p, li { white-space: pre-wrap; }
         <location filename="../QMenuStrings.cpp" line="860"/>
         <source>Merge &amp;MIDI file...</source>
         <translation type="unfinished">Menggabungkan berkas &amp;MIDI...</translation>
-    </message>
-    <message>
-        <source>Merge &amp;Rosegarden 2.1 file...</source>
-        <translation type="obsolete">Menggabungkan berkas &amp;Rosegarden 2.1...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="862"/>
@@ -12059,10 +5678,6 @@ For example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
     </message>
     <message>
-        <source>Audio plugin button</source>
-        <translation type="obsolete">Tombol plugin suara</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
         <translation type="unfinished"></translation>
@@ -12278,26 +5893,6 @@ For example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>*.wav|WAV files (*.wav)
-*.*|All files</source>
-        <translation type="obsolete">*.wav|berkas WAV (*.wav)
-*.*|Semua berkas</translation>
-    </message>
-    <message>
-        <source>*.wav *.flac *.ogg *.mp3|Audio files (*.wav *.flac *.ogg *.mp3)
-*.wav|WAV files (*.wav)
-*.flac|FLAC files (*.flac)
-*.ogg|Ogg files (*.ogg)
-*.mp3|MP3 files (*.mp3)
-*.*|All files</source>
-        <translation type="obsolete">*.wav *.flac *.ogg *.mp3|Berkas suara (*.wav *.flac *.ogg *.mp3)
-*.wav|Berkas WAV (*.wav)
-*.flac|Berkas FLAC (*.flac)
-*.ogg|Berkas Ogg (*.ogg)
-*.mp3|Berkas MP3 (*.mp3)
-*.*|Semua berkas</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
         <source>Select one or more audio files</source>
         <translation type="unfinished">Pilih satu atau lebih berkas suara</translation>
@@ -12457,10 +6052,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Audio plugin button</source>
-        <translation type="obsolete">Tombol plugin suara</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Audio %1</source>
         <translation type="unfinished">Suara %1</translation>
@@ -12530,10 +6121,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <translation type="unfinished">Plugin:</translation>
     </message>
     <message>
-        <source>Select a plugin from this list.</source>
-        <translation type="obsolete">Pilih plugin dari daftar.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="147"/>
         <source>Bypass</source>
         <translation type="unfinished"></translation>
@@ -12548,10 +6135,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="435"/>
         <source>&lt;id&gt;</source>
         <translation type="unfinished">&lt;id&gt;</translation>
-    </message>
-    <message>
-        <source>Unique ID of plugin.</source>
-        <translation type="obsolete">ID unik plugin.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
@@ -12597,10 +6180,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="433"/>
         <source>&lt;no plugin&gt;</source>
         <translation type="unfinished">&lt;tak ada plugin&gt;</translation>
-    </message>
-    <message>
-        <source>This plugin has too many controls to edit here.</source>
-        <translation type="obsolete">Plugin ini memiliki banyak kontrol untuk disunting di sini.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
@@ -12931,10 +6510,6 @@ Silakan pilih salah satu yang hendak dibuang permanen dari hard disk.
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="104"/>
         <source>Reset</source>
         <translation type="unfinished">Reset</translation>
-    </message>
-    <message>
-        <source>MIDI Device</source>
-        <translation type="obsolete">Perangkat MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="131"/>
@@ -13607,14 +7182,6 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <translation type="unfinished">Deskripsi  </translation>
     </message>
     <message>
-        <source>Min  </source>
-        <translation type="obsolete">Min  </translation>
-    </message>
-    <message>
-        <source>Max  </source>
-        <translation type="obsolete">Maks  </translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
         <source>Manage Controllers</source>
         <translation type="unfinished"></translation>
@@ -13713,10 +7280,6 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 </context>
 <context>
     <name>Rosegarden::ControlParameterEditDialog</name>
-    <message>
-        <source>Edit Control Parameter</source>
-        <translation type="obsolete">Sunting Parameter Kontrol</translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
@@ -13956,134 +7519,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::DeviceEditorDialog</name>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Memanajemen Perangkat MIDi</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Perangkat</translation>
-    </message>
-    <message>
-        <source>Name</source>
-        <translation type="obsolete">Nama</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation type="obsolete">Jenis</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="obsolete">Koneksi</translation>
-    </message>
-    <message>
-        <source>Add Play Device</source>
-        <translation type="obsolete">Tambah Perangkat Main</translation>
-    </message>
-    <message>
-        <source>Add Record Device</source>
-        <translation type="obsolete">Tambah Perangkat Rekam</translation>
-    </message>
-    <message>
-        <source>Delete Device</source>
-        <translation type="obsolete">Hapus Perangkat</translation>
-    </message>
-    <message>
-        <source>Device %1</source>
-        <translation type="obsolete">Perangkat %1</translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="obsolete">Putar</translation>
-    </message>
-    <message>
-        <source>Record</source>
-        <translation type="obsolete">Rekam</translation>
-    </message>
-    <message>
-        <source>No connection</source>
-        <translation type="obsolete">Tak ada koneksi</translation>
-    </message>
-    <message>
-        <source>Apply pending changes?</source>
-        <translation type="obsolete">Terapkan perubahan yang ditunda?</translation>
-    </message>
-    <message>
-        <source>&lt;new device&gt;</source>
-        <translation type="obsolete">&lt;perangkat baru&gt;</translation>
-    </message>
-    <message>
-        <source>New Device</source>
-        <translation type="obsolete">Perangkat Baru</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::DeviceManagerDialog</name>
-    <message>
-        <source>Manage MIDI Devices</source>
-        <translation type="obsolete">Memanajemen Perangkat MIDi</translation>
-    </message>
-    <message>
-        <source>Play devices</source>
-        <translation type="obsolete">Perangkat main</translation>
-    </message>
-    <message>
-        <source>Device</source>
-        <translation type="obsolete">Perangkat</translation>
-    </message>
-    <message>
-        <source>Connection</source>
-        <translation type="obsolete">Koneksi</translation>
-    </message>
-    <message>
-        <source>New</source>
-        <translation type="obsolete">Baru</translation>
-    </message>
-    <message>
-        <source>Import...</source>
-        <translation type="obsolete">Impor...</translation>
-    </message>
-    <message>
-        <source>Export...</source>
-        <translation type="obsolete">Ekspor...</translation>
-    </message>
-    <message>
-        <source>Banks...</source>
-        <translation type="obsolete">Bank...</translation>
-    </message>
-    <message>
-        <source>Create a new Play device</source>
-        <translation type="obsolete">Buat perangkat Main yang baru</translation>
-    </message>
-    <message>
-        <source>Delete the selected device</source>
-        <translation type="obsolete">Hapus perangkat yang dipilih</translation>
-    </message>
-    <message>
-        <source>Import Bank, Program and Controller data from a Rosegarden file to the selected device</source>
-        <translation type="obsolete">Impor data Bank, Program, dan Kontroler dari berkas Rosegarden ke perangkat yang dipilih</translation>
-    </message>
-    <message>
-        <source>Record devices</source>
-        <translation type="obsolete">Perangkat rekam</translation>
-    </message>
-    <message>
-        <source>Current</source>
-        <translation type="obsolete">Bersangkutan</translation>
-    </message>
-    <message>
-        <source>Create a new Record device</source>
-        <translation type="obsolete">Buat perangkat rekam yang baru</translation>
-    </message>
-    <message>
-        <source>No connection</source>
-        <translation type="obsolete">Tak ada koneksi</translation>
-    </message>
-    <message>
-        <source>%1</source>
-        <translation type="obsolete">%1</translation>
-    </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="809"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="830"/>
@@ -14099,18 +7535,6 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="925"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Import from Device in File</source>
-        <translation type="obsolete">Impor dari Perangkat di dalam Berkas</translation>
-    </message>
-    <message>
-        <source>Export Device as...</source>
-        <translation type="obsolete">Ekspor Perangkat sebagai...</translation>
-    </message>
-    <message>
-        <source>The specified file exists.  Overwrite?</source>
-        <translation type="obsolete">Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
     </message>
 </context>
 <context>
@@ -15215,12 +8639,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <source>All files</source>
         <translation type="unfinished">Semua berkas</translation>
     </message>
-    <message>
-        <source>%1|Requested file (%2)
-*.wav|WAV files (*.wav)</source>
-        <translation type="obsolete">%1|Berkas yang dipinta (%2)
-*.wav|Berkas WAV (*.wav)</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::FileMergeDialog</name>
@@ -15512,18 +8930,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <translation type="unfinished">Notasi</translation>
     </message>
     <message>
-        <source>Use bundled Klearlook theme</source>
-        <translation type="obsolete">Gunakan tema Klearlook yang dibundel serta</translation>
-    </message>
-    <message>
-        <source>When not running under KDE</source>
-        <translation type="obsolete">Apabila tidak berjalan di bawah KDE</translation>
-    </message>
-    <message>
-        <source>Always</source>
-        <translation type="obsolete">Selalu</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="301"/>
         <source>Presentation</source>
         <translation type="unfinished">Presentasi</translation>
@@ -15787,10 +9193,6 @@ Apakah Anda ingin tetap mencari berkas ini atau melewatinya saja?</translation>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="187"/>
         <source>Additional headers</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Non-printable headers</source>
-        <translation type="obsolete">Tajuk yang tak dapat dicetak</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="207"/>
@@ -16555,14 +9957,6 @@ Apakah Anda ingin menggunakan
         <translation type="unfinished">Ekspor/Pratampil LilyPond</translation>
     </message>
     <message>
-        <source>General options</source>
-        <translation type="obsolete">Opsi umum</translation>
-    </message>
-    <message>
-        <source>Advanced options</source>
-        <translation type="obsolete">Opsi lanjutan</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="77"/>
         <source>Layout</source>
         <translation type="unfinished">Tataletak</translation>
@@ -16676,10 +10070,6 @@ Apakah Anda ingin menggunakan
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Staff level options</source>
-        <translation type="obsolete">Opsi tingkat staf</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
         <source>Export content</source>
         <translation type="unfinished">Ekpor isi</translation>
@@ -16703,14 +10093,6 @@ Apakah Anda ingin menggunakan
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="111"/>
         <source>Selected segments</source>
         <translation type="unfinished">Segmen terpilih</translation>
-    </message>
-    <message>
-        <source>Merge tracks that have the same name</source>
-        <translation type="obsolete">Gabungkan jalur yang bernama sama</translation>
-    </message>
-    <message>
-        <source>Notation options</source>
-        <translation type="obsolete">Opsi notasi</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="172"/>
@@ -16749,10 +10131,6 @@ Apakah Anda ingin menggunakan
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Layout options</source>
-        <translation type="obsolete">Opsi tataletak</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="184"/>
         <source>Left</source>
         <translation type="unfinished"></translation>
@@ -16768,10 +10146,6 @@ Apakah Anda ingin menggunakan
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Lyrics alignment</source>
-        <translation type="obsolete">Perataan lirik</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="207"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation type="unfinished"></translation>
@@ -16780,10 +10154,6 @@ Apakah Anda ingin menggunakan
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="203"/>
         <source>Interpret chord texts as lead sheet chord names</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Miscellaneous options</source>
-        <translation type="obsolete">Opsi lain-lain</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="211"/>
@@ -17364,10 +10734,6 @@ the ornament&apos;s notes.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Marker text  </source>
-        <translation type="obsolete">Waktu Penanda</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="86"/>
         <source>Time  </source>
         <translation type="unfinished">Waktu  </translation>
@@ -17480,10 +10846,6 @@ the ornament&apos;s notes.</source>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="111"/>
         <source>Comment:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Description:</source>
-        <translation type="obsolete">Deskripsi:</translation>
     </message>
 </context>
 <context>
@@ -17939,17 +11301,6 @@ Double-click to open the marker editor.</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::MidiBankListViewItem</name>
-    <message>
-        <source>Percussion Bank</source>
-        <translation type="obsolete">Bank Perkusi</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Bank</translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::MidiBankTreeWidgetItem</name>
     <message>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="40"/>
@@ -17962,21 +11313,6 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/studio/MidiBankTreeWidgetItem.cpp" line="50"/>
         <source>Bank</source>
         <translation type="unfinished">Bank</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiDeviceListViewItem</name>
-    <message>
-        <source>Percussion Bank</source>
-        <translation type="obsolete">Bank Perkusi</translation>
-    </message>
-    <message>
-        <source>Bank</source>
-        <translation type="obsolete">Bank</translation>
-    </message>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Pemetaan Jari</translation>
     </message>
 </context>
 <context>
@@ -18055,13 +11391,6 @@ Double-click to open the marker editor.</source>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="104"/>
         <source>RECORD events to ignore</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiKeyMapListViewItem</name>
-    <message>
-        <source>Key Mapping</source>
-        <translation type="obsolete">Pemetaan Jari</translation>
     </message>
 </context>
 <context>
@@ -18754,13 +12083,6 @@ of others.</source>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="702"/>
         <source>%1 (jaggy)</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::NotationSelectionPaster</name>
-    <message>
-        <source>Ready.</source>
-        <translation type="obsolete">Siap.</translation>
     </message>
 </context>
 <context>
@@ -20128,10 +13450,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RescaleDialog</name>
     <message>
-        <source>Rescale</source>
-        <translation type="obsolete">Skala Ulang</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="49"/>
         <source>Stretch or Squash</source>
         <translation type="unfinished"></translation>
@@ -20445,525 +13763,6 @@ Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden ya
         <location filename="../../src/document/RosegardenDocument.cpp" line="2785"/>
         <source>Generating audio preview...</source>
         <translation type="unfinished">Megenerasikan pratampil suara...</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::RosegardenGUIApp</name>
-    <message>
-        <source>Starting sequencer...</source>
-        <translation type="obsolete">Memulai sekuenser...</translation>
-    </message>
-    <message>
-        <source>Special Parameters</source>
-        <translation type="obsolete">Parameter Khusus</translation>
-    </message>
-    <message>
-        <source>Starting sequence manager...</source>
-        <translation type="obsolete">Memulai manajer sekuenser...</translation>
-    </message>
-    <message>
-        <source>Clearing studio data...</source>
-        <translation type="obsolete">Membersihkan data studio...</translation>
-    </message>
-    <message>
-        <source>  Zoom:  </source>
-        <translation type="obsolete">  Zum:  </translation>
-    </message>
-    <message>
-        <source>%1 - %2</source>
-        <translation type="obsolete">%1 - %2.%3%4</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; does not exist</source>
-        <translation type="obsolete">Berkas &quot;%1&quot; tidak ada</translation>
-    </message>
-    <message>
-        <source>File &quot;%1&quot; is actually a directory</source>
-        <translation type="obsolete">Berkas &quot;%1&quot; sebenarnya adalah direktori</translation>
-    </message>
-    <message>
-        <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation type="obsolete">Anda tidak memiliki izin menulis untuk &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>An auto-save file for this document has been found
-Do you want to open it instead ?</source>
-        <translation type="obsolete">Berkas simpan-otomatis untuk dukumen ini telah ditemukan
-Apakah Anda hendak membukanya?</translation>
-    </message>
-    <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Berkas Contoh</translation>
-    </message>
-    <message>
-        <source>Opening a new application window...</source>
-        <translation type="obsolete">Membuka jendela aplikasi yang baru...</translation>
-    </message>
-    <message>
-        <source>Creating new document...</source>
-        <translation type="obsolete">Membuat dokumen yang baru...</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Tak dapat mengunduh berkas %1</translation>
-    </message>
-    <message>
-        <source>Opening file...</source>
-        <translation type="obsolete">Membuka berkas...</translation>
-    </message>
-    <message>
-        <source>Open File</source>
-        <translation type="obsolete">Buka Berkas</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Menyimpan berkas...</translation>
-    </message>
-    <message>
-        <source>This is not a valid filename.
-</source>
-        <translation type="obsolete">Ini bukanlah nama berkas yang sah.
-</translation>
-    </message>
-    <message>
-        <source>This is not a local file.
-</source>
-        <translation type="obsolete">Ini bukanlah berkas lokal.
-</translation>
-    </message>
-    <message>
-        <source>The specified file exists.  Overwrite?</source>
-        <translation type="obsolete">Berkas yang ditentukan sudah ada.  Ditimpa?</translation>
-    </message>
-    <message>
-        <source>Saving file with a new filename...</source>
-        <translation type="obsolete">Menyimpan berkas dengan nama yang baru....</translation>
-    </message>
-    <message>
-        <source>Rosegarden files</source>
-        <translation type="obsolete">Berkas Rosegarden</translation>
-    </message>
-    <message>
-        <source>All files</source>
-        <translation type="obsolete">Semua berkas</translation>
-    </message>
-    <message>
-        <source>Save as...</source>
-        <translation type="obsolete">Menyimpan sebagai...</translation>
-    </message>
-    <message>
-        <source>Closing file...</source>
-        <translation type="obsolete">Menutup berkas...</translation>
-    </message>
-    <message>
-        <source>Exiting...</source>
-        <translation type="obsolete">Keluar...</translation>
-    </message>
-    <message>
-        <source>Cutting selection...</source>
-        <translation type="obsolete">Memotong seleksi...</translation>
-    </message>
-    <message>
-        <source>Clipboard is empty</source>
-        <translation type="obsolete">Papan klip kosong</translation>
-    </message>
-    <message>
-        <source>Inserting clipboard contents...</source>
-        <translation type="obsolete">Menyisipkan isi papan klip...</translation>
-    </message>
-    <message>
-        <source>This function needs no more than one segment to be selected.</source>
-        <translation type="obsolete">Fungsi ini memerlukan tidak lebih dari satu segmen yang dipilih.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t join Audio segments</source>
-        <translation type="obsolete">Tak dapat menggabungkan segmen Suara</translation>
-    </message>
-    <message>
-        <source>rescaling an audio file</source>
-        <translation type="obsolete">menskalakan ulang berkas suara</translation>
-    </message>
-    <message>
-        <source>Rescaling audio file...</source>
-        <translation type="obsolete">Menskala ulang berkas suara...</translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-You must set the audio file path to a valid directory in Document Properties before %1.
-Would you like to set it now?</source>
-        <translation type="obsolete">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Anda harus mengeset jalur berkas suara pada direktori yang benar dalam Properti Dokumen sebelum %1.
-Apakah Anda hendak mengesetnya sekarang?</translation>
-    </message>
-    <message>
-        <source>Segment Duration</source>
-        <translation type="obsolete">Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Segment Durations</source>
-        <translation type="obsolete">Atur Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Segment Duration</source>
-        <translation type="obsolete">Atur Durasi Segmen</translation>
-    </message>
-    <message>
-        <source>Set Global Tempo</source>
-        <translation type="obsolete">Atur Tempo Global</translation>
-    </message>
-    <message>
-        <source>Join tool not yet implemented</source>
-        <translation type="obsolete">Perkakas gabung (join) belum diimplementasikan</translation>
-    </message>
-    <message>
-        <source>Import Rosegarden Project File</source>
-        <translation type="obsolete">Impor Berkas Proyek Rosegarden</translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Gagal mengimpor berkas proyek &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Open MIDI File</source>
-        <translation type="obsolete">Membuka Berkas MIDI</translation>
-    </message>
-    <message>
-        <source>Merge MIDI File</source>
-        <translation type="obsolete">Menggabung Berkas MIDI</translation>
-    </message>
-    <message>
-        <source>Importing MIDI file...</source>
-        <translation type="obsolete">Mengimpor berkas MIDI...</translation>
-    </message>
-    <message>
-        <source>Calculating notation...</source>
-        <translation type="obsolete">Menkalkulasi notasi...</translation>
-    </message>
-    <message>
-        <source>Calculate Notation</source>
-        <translation type="obsolete">Menkalkulasi Notasi</translation>
-    </message>
-    <message>
-        <source>Open Hydrogen File</source>
-        <translation type="obsolete">Buka Berkas Hydrogen</translation>
-    </message>
-    <message>
-        <source>Importing Hydrogen file...</source>
-        <translation type="obsolete">Mengimpor berkas Hydrogen...</translation>
-    </message>
-    <message>
-        <source>Can&apos;t load Hydrogen file.  It appears to be corrupted.</source>
-        <translation type="obsolete">Tak dapat memuat berkas Hydrogen.  Berkas tersebut sepertinya rusak.</translation>
-    </message>
-    <message>
-        <source>Export and import of Rosegarden Project files</source>
-        <translation type="obsolete">Mengekspor berkas Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden Project Packager helper script</source>
-        <translation type="obsolete">Pemaket Proyek Rosegarden tidak tersedia</translation>
-    </message>
-    <message>
-        <source>&lt;ul&gt;</source>
-        <translation type="obsolete">&lt;seting dasar&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>Clearing down jackd...</source>
-        <translation type="obsolete">Membersihkan jackd...</translation>
-    </message>
-    <message>
-        <source>Starting jackd...</source>
-        <translation type="obsolete">Memulai jackd...</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
-Please exit and restart Rosegarden to restore sound capability.</source>
-        <translation type="obsolete">Proses sekuenser Rosegarden telah mati tanpa terduga.  Fungsi suara dan perekaman tidak dapat tersedia bagi sesi kali ini.
-Silakan untuk keluar dan menjalankan kembali Rosegarden untuk mengembalikan kemampuan suaranya.</translation>
-    </message>
-    <message>
-        <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
-For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
-        <translation type="obsolete">Sekuenser Rosegarden tidak dapat dijalankan, sehingga fungsi suara dan perekaman tidak akan tersedia untuk sesi ini.
-Untuk asistensi dengan suara dan konfigurasi MIDI yang tepat, kunjungilah http://rosegardenmusic.com.</translation>
-    </message>
-    <message>
-        <source>Exporting Rosegarden Project file...</source>
-        <translation type="obsolete">Mengekspor berkas Proyek Rosegarden...</translation>
-    </message>
-    <message>
-        <source>Rosegarden Project files
-</source>
-        <translation type="obsolete">Berkas Proyek Rosegarden
-</translation>
-    </message>
-    <message>
-        <source>Export as...</source>
-        <translation type="obsolete">Diekspor sebagai...</translation>
-    </message>
-    <message>
-        <source>Saving Rosegarden file to package failed: %1</source>
-        <translation type="obsolete">Gagal menyimpan berkas Rosegarden ke paket: %1</translation>
-    </message>
-    <message>
-        <source>Failed to export to project file &quot;%1&quot;</source>
-        <translation type="obsolete">Gagal mengekspor berkas proyek &quot;%1&quot;</translation>
-    </message>
-    <message>
-        <source>Exporting MIDI file...</source>
-        <translation type="obsolete">Mengekspor berkas MIDI...</translation>
-    </message>
-    <message>
-        <source>Standard MIDI files
-</source>
-        <translation type="obsolete">Berkas MIDI standar
-</translation>
-    </message>
-    <message>
-        <source>Exporting Csound score file...</source>
-        <translation type="obsolete">Mengekspor berkas skor Csound...</translation>
-    </message>
-    <message>
-        <source>Exporting Mup file...</source>
-        <translation type="obsolete">Mengekspor berkas Mup...</translation>
-    </message>
-    <message>
-        <source>Mup files
-</source>
-        <translation type="obsolete">Berkas Mup
-</translation>
-    </message>
-    <message>
-        <source>Exporting LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>LilyPond files</source>
-        <translation type="obsolete">Berkas Lilypond</translation>
-    </message>
-    <message>
-        <source>Printing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>Failed to open a temporary file for LilyPond export.</source>
-        <translation type="obsolete">Gagal mengonversi dan mensampel ulang berkas suara saat mengimpor</translation>
-    </message>
-    <message>
-        <source>Previewing LilyPond file...</source>
-        <translation type="obsolete">Mengekspor berkas &amp;Lilypond...</translation>
-    </message>
-    <message>
-        <source>LilyPond Preview Options</source>
-        <translation type="obsolete">Ekspor/Pratampil LilyPond</translation>
-    </message>
-    <message>
-        <source>LilyPond preview options</source>
-        <translation type="obsolete">Pratampil LilyPond tidak tersedia</translation>
-    </message>
-    <message>
-        <source>Exporting MusicXML file...</source>
-        <translation type="obsolete">Mengekspor berkas MusicXML...</translation>
-    </message>
-    <message>
-        <source>XML files</source>
-        <translation type="obsolete">Berkas XML</translation>
-    </message>
-    <message>
-        <source>The audio file path does not exist or is not writable.
-Please set the audio file path to a valid directory in Document Properties before you start to record audio.
-Would you like to set it now?</source>
-        <translation type="obsolete">Jalur berkas suara tidak ada atau tidak bisa ditulis.
-Silakan untuk mengeset jalur berkas suara pada direktori yang benar di dalam Properti Dokumen sebelum Anda memulai untuk merekam suara.
-Apakah Anda hendak mengesetnya sekarang?</translation>
-    </message>
-    <message>
-        <source>%1%</source>
-        <translation type="obsolete">%1%</translation>
-    </message>
-    <message>
-        <source>Replace Tempo Change at %1</source>
-        <translation type="obsolete">Ganti Perubahan Tempo pada %1</translation>
-    </message>
-    <message>
-        <source>Move Tempo Change</source>
-        <translation type="obsolete">PIndahkan Perubahan Tempo</translation>
-    </message>
-    <message>
-        <source>new marker</source>
-        <translation type="obsolete">Sisip Penanda</translation>
-    </message>
-    <message>
-        <source>no description</source>
-        <translation type="obsolete">Deskripsi:</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to add audio file %1</source>
-        <translation type="obsolete">Sekuenser gagal menambahkan berkas suara %1</translation>
-    </message>
-    <message>
-        <source>Sequencer failed to remove audio file id %1</source>
-        <translation type="obsolete">Sekuenser gagal membuang berkas suara %1</translation>
-    </message>
-    <message>
-        <source>Modify Segment label</source>
-        <translation type="obsolete">Ubah label Segmen</translation>
-    </message>
-    <message>
-        <source>Modify Segments label</source>
-        <translation type="obsolete">Ubah label Segmen</translation>
-    </message>
-    <message>
-        <source>Relabelling selection...</source>
-        <translation type="obsolete">Melabeli ulang seleksi...</translation>
-    </message>
-    <message>
-        <source>Enter new label</source>
-        <translation type="obsolete">Masukkan label baru</translation>
-    </message>
-    <message>
-        <source>Play List</source>
-        <translation type="obsolete">Daftar Main</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="obsolete">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to save this as your default studio?</source>
-        <translation type="obsolete">Apakah Anda yakin untuk menyimpan ini sebagai studio utama Anda?</translation>
-    </message>
-    <message>
-        <source>Saving current document as default studio...</source>
-        <translation type="obsolete">Menyimpan dokumen saat ini sebagai studio utama...</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to import your default studio and lose the current one?</source>
-        <translation type="obsolete">Apakah Anda yakin untuk mengimpor studio utama Anda dan kehilangan studio saat ini?</translation>
-    </message>
-    <message>
-        <source>Import Studio from File</source>
-        <translation type="obsolete">Mengimpor Studio dari Berkas</translation>
-    </message>
-    <message>
-        <source>Import Studio</source>
-        <translation type="obsolete">Impor Studio</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Tersedia versi terbaru</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Tersedia versi terbaru&lt;/h3&gt;&lt;p&gt;Versi terbaru dari Rosegarden mungkin sudah tersedia.&lt;br&gt;Silakan kunjungi &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;situs Rosegarden&lt;/a&gt; untuk informasi lebih lanjut.&lt;/p&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::RosegardenGUIDoc</name>
-    <message>
-        <source>The current file has been modified.
-Do you want to save it?</source>
-        <translation type="obsolete">Berkas bersangkutan telah diubah.
-Anda ingin menyimpannya?</translation>
-    </message>
-    <message>
-        <source>File %1 could not be deleted.</source>
-        <translation type="obsolete">Berkas %1 tidak akan dihapus.</translation>
-    </message>
-    <message>
-        <source>Can&apos;t open file &apos;%1&apos;</source>
-        <translation type="obsolete">Tak dapat membuka berkas &apos;%1&apos;</translation>
-    </message>
-    <message>
-        <source>Reading file...</source>
-        <translation type="obsolete">Membaca berkas...</translation>
-    </message>
-    <message>
-        <source>Could not open Rosegarden file</source>
-        <translation type="obsolete">Tak dapat membuka berkas Rosegarden</translation>
-    </message>
-    <message>
-        <source>Generating audio previews...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-    <message>
-        <source>Merge</source>
-        <translation type="obsolete">Gabung</translation>
-    </message>
-    <message>
-        <source>Saving file...</source>
-        <translation type="obsolete">Menyimpan berkas...</translation>
-    </message>
-    <message>
-        <source>File load cancelled</source>
-        <translation type="obsolete">Memuat berkas dibatalkan</translation>
-    </message>
-    <message>
-        <source>Inconsistent sample rates</source>
-        <translation type="obsolete">Rerata sampel tak konsisten</translation>
-    </message>
-    <message>
-        <source>&lt;li&gt;%1 (from %2)&lt;/li&gt;</source>
-        <translation type="obsolete">&lt;li&gt;%1 (dari %2)&lt;/li&gt;</translation>
-    </message>
-    <message>
-        <source>This file contains one or more old element types that are now deprecated.
-Support for these elements may disappear in future versions of Rosegarden.
-We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
-        <translation type="obsolete">Berkas ini mengandung satu atau dua jenis elemen lama.
-Dukungan untuk elemen ini mungkin akan ditiadakan untuk versi Rosegarden yang lebih lanjut.
-Kami menyarankan supaya Anda menyimpan ulang berkas ini dari versi Rosegarden yang sekarang untuk menjamin bahea berkas tersebut masih bisa dibuka oleh versi yang lebih baru.</translation>
-    </message>
-    <message>
-        <source>Insert Recorded MIDI</source>
-        <translation type="obsolete">Sisip MIDI yang telah Direkam</translation>
-    </message>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">%1 (direkam)</translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::RosegardenGUIView</name>
-    <message>
-        <source>No non-audio segments in composition</source>
-        <translation type="obsolete">Tak ada segmen nonsuara dalam komposisi</translation>
-    </message>
-    <message>
-        <source>Selection must contain only audio or non-audio segments</source>
-        <translation type="obsolete">Seleksi harus mengandung hanya segmen suara atau nonsuara</translation>
-    </message>
-    <message>
-        <source>No non-audio segments selected</source>
-        <translation type="obsolete">Tak ada segmen nonsuara yang dipilih</translation>
-    </message>
-    <message>
-        <source>importing a remote audio file</source>
-        <translation type="obsolete">Mengimpor berkas suara...</translation>
-    </message>
-    <message>
-        <source>Adding audio file...</source>
-        <translation type="obsolete">Menambah berkas suara...</translation>
-    </message>
-    <message>
-        <source>Generating audio preview...</source>
-        <translation type="obsolete">Megenerasikan pratampil suara...</translation>
-    </message>
-    <message>
-        <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="obsolete">Cobalah untuk menyalin berkas ini ke direktori di mana Anda memiliki akses menulis dan tambahkan ulang berkasi ini</translation>
     </message>
 </context>
 <context>
@@ -21881,12 +14680,6 @@ Apakah Anda hendak mengesetnya sekarang?</translation>
 <context>
     <name>Rosegarden::Rotary</name>
     <message>
-        <source>Click and drag up and down or left and right to modify.
-Double click to edit value directly.</source>
-        <translation type="obsolete">Klik lalu seret ke atas dan ke bawah atau ke kiri dan ke kanan untuk mengubah.
-Klik ganda untuk menyunting nilainya secara langsung.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="88"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
@@ -22156,10 +14949,6 @@ Klik ganda untuk menyunting nilainya secara langsung.</translation>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1074"/>
         <source>Enter new label:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Enter new label</source>
-        <translation type="obsolete">Masukkan label baru</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1184"/>
@@ -22464,94 +15253,126 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SequenceManager</name>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="945"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1091"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="943"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1089"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="951"/>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1097"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="949"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1095"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="962"/>
-        <source>Run out of processor power for real-time audio processing.  Cannot continue.</source>
-        <translation type="unfinished">Kehabisan kuasa prosesor untuk pemrosesan suara waktu nyata (real-time).  Tak dapat melanjutkan.</translation>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="960"/>
+        <source>Out of processor power for real-time audio processing.  Cannot continue.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="988"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="986"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation type="unfinished">Kesalahan serius telah terjadi pada subsistem MIDI ALSA.  Tidak mungkin untuk dapat melanjutkan sekuensi.  Silakan periksa keluaran konsol untuk informasi lebih lanjut.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1014"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1012"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
         <translation type="unfinished">Subsistem Suara JACK kehilangan bingkai-bingkai sampel (sample frame).</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1032"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1030"/>
         <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1036"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1034"/>
         <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1040"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1038"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1044"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1042"/>
         <source>The audio subsystem is failing to keep up.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1048"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1046"/>
         <source>Unknown sequencer failure mode!</source>
         <translation type="unfinished">Kegagalan mode sekuenser tak dikenal!</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1113"/>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for instructions.&lt;/p&gt;</source>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1114"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1163"/>
+        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1115"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for instructions.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1118"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1167"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1323"/>
+        <source>Suppress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1119"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1168"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1324"/>
+        <source>Do not display this warning in the future</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1132"/>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1181"/>
+        <source>This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1232"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1164"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1319"/>
+        <source>&lt;h3&gt;Failed to connect to JACK&lt;/h3&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1320"/>
+        <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1337"/>
+        <source>This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1289"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1234"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1291"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1236"/>
-        <source>&lt;p&gt;The Rosegarden sequencer module version does not match the GUI module version.&lt;/p&gt;&lt;p&gt;You have probably mixed up files from two different versions of Rosegarden.  Please check your installation.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1242"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1302"/>
         <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
         <translation type="unfinished">&lt;h3&gt;Gagal menjalankan sekuenser&lt;/h3&gt;%1</translation>
-    </message>
-    <message>
-        <source>Failed to connect to JACK</source>
-        <translation type="obsolete">Gagal terhubung ke JACK</translation>
     </message>
 </context>
 <context>
@@ -23999,7 +16820,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="132"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="711"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="705"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;tak berjudul&gt;</translation>
     </message>
@@ -24015,19 +16836,9 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished">Perangkat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="159"/>
-        <source>&lt;qt&gt;&lt;p&gt;This allows you to choose how you play sound with MIDI. It can be a hardware interface, the various devices available to your soundcard or a software synth interface such as Timidity.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="166"/>
         <source>Instrument</source>
         <translation type="unfinished">Instrumen</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="169"/>
-        <source>&lt;qt&gt;&lt;p&gt;You can choose the sound your MIDI interface will make. The patches available will depend on your MIDI device set in the MIDI Device Manager.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="180"/>
@@ -24035,19 +16846,9 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
-        <source>&lt;qt&gt;&lt;p&gt;Things you can choose to record through.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="202"/>
         <source>Channel</source>
         <translation type="unfinished">Kanal</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
-        <source>&lt;qt&gt;&lt;p&gt;Choose the channel to which you want to record.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="215"/>
@@ -24060,309 +16861,320 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished">Waktu notasi:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
-        <source>&lt;qt&gt;&lt;p&gt;Allows you to change the size of the individual staff on exporting to LilyPond.&lt;p&gt;&lt;p&gt; This can be useful if the staff is for the purposes of ....what??? &lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="239"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="238"/>
         <source>Normal</source>
         <translation type="unfinished">Normal</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="240"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="239"/>
         <source>Small</source>
         <translation type="unfinished">semua</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="241"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="240"/>
         <source>Tiny</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="248"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="247"/>
         <source>Bracket type:</source>
         <translation type="unfinished">Jenis teks:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="251"/>
-        <source>&lt;qt&gt;&lt;p&gt;This allows you to set the Grand Staff Brackets that suit the track.&lt;/p&gt;&lt;p&gt;For example if you have two tracks that belong to a piano score, each would have this set for export to LilyPond.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="254"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="252"/>
         <source>-----</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="253"/>
         <source>[----</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="254"/>
         <source>----]</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="255"/>
         <source>[---]</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="256"/>
         <source>{----</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="257"/>
         <source>----}</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="260"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="258"/>
         <source>{[---</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="261"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="259"/>
         <source>---]}</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="270"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="268"/>
         <source>Create segments with</source>
         <translation type="unfinished">Membuat segmen dengan:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="282"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="280"/>
         <source>Preset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="285"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="283"/>
         <source>&lt;none&gt;</source>
         <translation type="unfinished">&lt;nihil&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="288"/>
-        <source>&lt;qt&gt;&lt;p&gt;The name of the &lt;b&gt;preset&lt;/b&gt; that you have loaded will appear here.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="292"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="289"/>
         <source>Load</source>
         <translation type="unfinished">Memuat</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="293"/>
-        <source>&lt;qt&gt;&lt;p&gt;A dialog will appear which will allow you to choose some preset parameters for your track.&lt;/p&gt;&lt;p&gt;Instruments are grouped for easy discovery, you can choose the level of ability of your player and whether to change existing segment parameters or just new segments in the track.&lt;/p&gt;&lt;p&gt;If you use a preset, you don&apos;t have to change any of the other parameters for new segments.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="301"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="296"/>
         <source>Clef</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="304"/>
-        <source>&lt;qt&gt;&lt;p&gt;Choose from an array of Clefs suited to your instrument.&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="159"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the device this track will use for playback.&lt;/p&gt;&lt;p&gt;Click &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices.xpm&quot;&gt; to connect this device to a useful output if you do not hear sound&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="169"/>
+        <source>&lt;qt&gt;&lt;p&gt;Choose the instrument this track will use for playback. (Configure the instrument in &lt;b&gt;Instrument Parameters&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="195"/>
+        <source>This track will only record MIDI from the selected device, filtering anything else out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="204"/>
+        <source>This track will only record MIDI from the selected channel, filtering anything else out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="236"/>
+        <source>Choose normal, \small or \tiny for this staff when exporting to LilyPond.  This is as close as we get to allowing you to print parts in cue size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="250"/>
+        <source>&lt;qt&gt;Bracket staffs in LilyPond&lt;br&gt;(fragile, use with caution)&lt;/p&gt;&lt;qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="290"/>
+        <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="299"/>
+        <source>&lt;qt&gt;New segments will be created with this clef inserted at the beginning&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="301"/>
         <source>treble</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="302"/>
         <source>bass</source>
         <translation type="unfinished">bas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="308"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="303"/>
         <source>crotales</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="309"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="304"/>
         <source>xylophone</source>
         <translation type="unfinished">silofon</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="310"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="305"/>
         <source>guitar</source>
         <translation type="unfinished">gitar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="311"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="306"/>
         <source>contrabass</source>
         <translation type="unfinished">kontrabas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="312"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="307"/>
         <source>celesta</source>
         <translation type="unfinished">kalista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="308"/>
         <source>old celesta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="309"/>
         <source>french</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="310"/>
         <source>soprano</source>
         <translation type="unfinished">soprano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="311"/>
         <source>mezzosoprano</source>
         <translation type="unfinished">mezzosoprano</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="317"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="312"/>
         <source>alto</source>
         <translation type="unfinished">alto</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="318"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="313"/>
         <source>tenor</source>
         <translation type="unfinished">tenor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="319"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="314"/>
         <source>baritone</source>
         <translation type="unfinished">baritone</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="320"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="315"/>
         <source>varbaritone</source>
         <translation type="unfinished">varbaritone</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="321"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="316"/>
         <source>subbass</source>
         <translation type="unfinished">subbass</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="329"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="324"/>
         <source>Transpose</source>
         <translation type="unfinished">Transposisi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="332"/>
-        <source>&lt;qt&gt;&lt;p&gt;Set the transpose for your instrument. This will play in the proper key but will export to the correct key for your instrument.&lt;/p&gt;&lt;p&gt;For example a trumpet in Bb needs to be 2 tones below its written notation. &lt;b&gt;OK Michael, is this little factoid correct? I tried the preset out in 1.7.3 to see what it did and extrapolated from there.&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="327"/>
+        <source>New segments will be created with this transpose property set</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="349"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="367"/>
+        <source>New segments will be created using this color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="343"/>
         <source>Pitch</source>
         <translation type="unfinished">Titi Nada</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="352"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="346"/>
         <source>Lowest</source>
         <translation type="unfinished">Terendah</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="354"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="361"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="348"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="355"/>
         <source>---</source>
         <translation type="unfinished">---</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="350"/>
         <source>Choose the lowest suggested playable note, using a staff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="359"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="353"/>
         <source>Highest</source>
         <translation type="unfinished">Tertinggi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="362"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="356"/>
         <source>Choose the highest suggested playable note, using a staff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="370"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="364"/>
         <source>Color</source>
         <translation type="unfinished">Warna</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="373"/>
-        <source>&lt;qt&gt;&lt;p&gt;Set the default color of &lt;b&gt;new&lt;/b&gt; segments in the track.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="553"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="554"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="547"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="548"/>
         <source>Audio</source>
         <translation type="unfinished">Suara</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="568"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="587"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="562"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="581"/>
         <source>All</source>
         <translation type="unfinished">Semua</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="715"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="709"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Jalur %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="917"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="911"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="930"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="924"/>
         <source>Add New Color</source>
         <translation type="unfinished">Tambah Warna Baru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="956"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="950"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nama Warna Baru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="957"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="951"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Enter new name</source>
-        <translation type="obsolete">Masukkan nama baru</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="953"/>
         <source>New</source>
         <translation type="unfinished">Baru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="991"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="985"/>
         <source>Highest playable note</source>
         <translation type="unfinished">Not tertinggi yang dapat dimainkan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1013"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1007"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">Not terendah yang dapat dimainkan</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1074"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1068"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1118"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1112"/>
         <source>Segment</source>
         <translation type="unfinished">Segmen</translation>
     </message>
@@ -24856,17 +17668,17 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished">Rosegarden - Editor sekuenser dan notasi musik</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="423"/>
+        <location filename="../../src/gui/application/main.cpp" line="417"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="678"/>
+        <location filename="../../src/gui/application/main.cpp" line="672"/>
         <source>Welcome!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="694"/>
+        <location filename="../../src/gui/application/main.cpp" line="688"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the Help menu for the handbook, tutorials, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to &lt;a href=&quot;http://www.rosegardenmusic.com/&quot;&gt;http://www.rosegardenmusic.com/&lt;/a&gt;.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24877,13 +17689,6 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2637"/>
         <source>(recorded)</source>
         <translation type="unfinished">%1 (direkam)</translation>
-    </message>
-</context>
-<context>
-    <name>RosegardenGUIDoc</name>
-    <message>
-        <source>(recorded)</source>
-        <translation type="obsolete">%1 (direkam)</translation>
     </message>
 </context>
 <context>

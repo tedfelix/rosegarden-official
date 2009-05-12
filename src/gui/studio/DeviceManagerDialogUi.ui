@@ -2,7 +2,10 @@
 <ui version="4.0">
  <author>Emanuel Rumpf</author>
  <class>DeviceManagerDialogUi</class>
- <widget class="QMainWindow" name="DeviceManagerDialog">
+ <widget class="QMainWindow" name="DeviceManagerDialogUi">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -72,11 +75,7 @@
            </font>
           </property>
           <property name="toolTip">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your playback devices here. Connect them to outgoing ports at right. Double click the device name to change it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
@@ -164,13 +163,7 @@ QLineEdit
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Bank definitions define, how the programs (sounds) of a device are called, which settings to use for it, etc..&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;It is possible to load and save these (bank-) settings as *.rgd files in order to export, import and share it.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string comment="Create, load or export bank (or patch) definitions with program names for the selected device.">Banks...</string>
@@ -192,13 +185,7 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Rosegarden supports virtual controllers. Some are defined by default. Click here to remove, add, edit them.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;New controllers add a knob&lt;/span&gt; to the instrument-parameter-panel. (Which usually can be found at the left side of the main window. (the tracks view))&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string>Controllers...</string>
@@ -243,6 +230,9 @@ p, li { white-space: pre-wrap; }
                <height>22</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</string>
+             </property>
              <property name="text">
               <string>New</string>
              </property>
@@ -264,6 +254,9 @@ p, li { white-space: pre-wrap; }
                <width>16777215</width>
                <height>22</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string>Delete</string>
@@ -315,13 +308,7 @@ p, li { white-space: pre-wrap; }
            </font>
           </property>
           <property name="toolTip">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a playback device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an outgoing alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by software-synthesizers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI outputs for any hardware detected and supported by your distribution, and any available soft synths such as QSynth, ZynAddSubFX, etc.&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
@@ -419,12 +406,7 @@ QTreeView::branch {
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string>Refresh</string>
@@ -437,7 +419,7 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QPushButton" name="pushButton_addLV2Device">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -458,13 +440,7 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;LV2 is the most recent plugin standard for linux audio and effect plugins.&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;More information is available on the &lt;a href=&quot;http://lv2plug.in/&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;LV2 Plugin Website&lt;/span&gt;&lt;/a&gt; .&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>This button will be removed as this was the wrong place to put it.  Do not bother translating this tooltip</string>
              </property>
              <property name="text">
               <string comment="Create, load or export bank (or patch) definitions with program names for the selected device."/>
@@ -479,6 +455,9 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="1" column="1">
          <widget class="QFrame" name="frame_4">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -564,6 +543,9 @@ p, li { white-space: pre-wrap; }
                <height>22</height>
               </size>
              </property>
+             <property name="toolTip">
+              <string>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</string>
+             </property>
              <property name="text">
               <string>New</string>
              </property>
@@ -585,6 +567,9 @@ p, li { white-space: pre-wrap; }
                <width>16777215</width>
                <height>22</height>
               </size>
+             </property>
+             <property name="toolTip">
+              <string>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string comment="Create, load or export bank (or patch) definitions with program names for the selected device.">Delete</string>
@@ -614,6 +599,9 @@ p, li { white-space: pre-wrap; }
            </property>
            <item>
             <widget class="QPushButton" name="pushButton_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="maximumSize">
               <size>
                <width>16777215</width>
@@ -630,6 +618,9 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QPushButton" name="pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -674,13 +665,7 @@ p, li { white-space: pre-wrap; }
            </font>
           </property>
           <property name="toolTip">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Create your record devices here. Connect them to incoming ports at right. &lt;span style=&quot; text-decoration: underline;&quot;&gt;Double click the device name to change it.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;span style=&quot; text-decoration:none;&quot;&gt;Double click an entry in the &quot;Enabled&quot; column, &lt;/span&gt;to enable the device for recording!&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; text-decoration: underline;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string/>
           </property>
           <property name="autoFillBackground">
            <bool>false</bool>
@@ -780,13 +765,7 @@ QLineEdit
            </font>
           </property>
           <property name="toolTip">
-           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;First select (or create) a record device (at left). Then &lt;span style=&quot; text-decoration: underline;&quot;&gt;double-click&lt;/span&gt; here&lt;span style=&quot; text-decoration: underline;&quot;&gt; to connect&lt;/span&gt; it to an incoming alsa-&lt;span style=&quot; text-decoration: underline;&quot;&gt;midi port.&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Alsa-midi ports are created by the drivers for external midi hardware, or by midi-software itself, e.g. by other midi-sequencers. &lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           <string>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distributions hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as Virtual Keyboard&lt;/p&gt;&lt;/qt&gt;</string>
           </property>
           <property name="styleSheet">
            <string notr="true">/*Style the QTreeWidget items in this widget to resemble and behave like push buttons.*/
@@ -877,12 +856,7 @@ QTreeView::branch {
               </size>
              </property>
              <property name="toolTip">
-              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click to refresh the port-list, if a new midi-device was (de-)connected, or a midi-software was opened or closed. Rosegarden also provides some support to auto-detect these kind of changes.&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              <string>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</string>
              </property>
              <property name="text">
               <string>Refresh</string>
@@ -894,6 +868,9 @@ p, li { white-space: pre-wrap; }
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_11">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -919,6 +896,9 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="1" column="1">
          <widget class="QFrame" name="frame_7">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
           </property>
