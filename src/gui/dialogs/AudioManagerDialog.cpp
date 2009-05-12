@@ -467,7 +467,7 @@ AudioManagerDialog::getCurrentSelection()
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
         //QMessageBox::warning
-        //        (this, "Error: Selection is empty!", 
+        //        (this, tr("Error: Selection is empty!"), 
         //        tr("Please select an audio item in the list!"), QMessageBox::Yes );
         return 0;
     }
@@ -498,7 +498,7 @@ AudioManagerDialog::slotExportAudio()
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
         QMessageBox::warning
-                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes );
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -562,7 +562,7 @@ AudioManagerDialog::slotRemove()
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
     if (til.isEmpty() ){
         QMessageBox::warning
-                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes );
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
@@ -669,7 +669,7 @@ AudioManagerDialog::slotPlayPreview()
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
     if (til.isEmpty() ){
         QMessageBox::warning
-                (this, "Error: Selection is empty!", tr("Please select an audio item in the list!"), QMessageBox::Yes );
+                (this, tr("Error: Selection is empty!"), tr("Please select an audio item in the list!"), QMessageBox::Yes );
         return;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>( til[0] );
