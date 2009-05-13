@@ -501,7 +501,7 @@ TrackParameterBox::populatePlaybackDeviceList()
 
         if (devId != (DeviceId)(currentDevId)) {
             currentDevId = int(devId);
-            QString deviceName = strtoqstr(device->getName());
+            QString deviceName = QObject::tr(strtoqstr(device->getName()));
             m_playDevice->addItem(deviceName);
             m_playDeviceIds.push_back(currentDevId);
         }
@@ -625,19 +625,22 @@ TrackParameterBox::updateHighLow()
     int base = settings.value("midipitchoctave", -2).toInt() ;
     settings.endGroup();
 
-    bool useSharps = true;
-    bool includeOctave = true;
+    bool includeOctave = false;
 
-//    m_highButton->setText(tr("High: %1").arg(highest.getAsString(useSharps, includeOctave, base)));
-//    m_lowButton->setText(tr("Low: %1").arg(lowest.getAsString(useSharps, includeOctave, base)));
-    m_highButton->setText(tr(strtoqstr(highest.getAsString(useSharps, includeOctave, base))));
-    m_lowButton->setText(tr(strtoqstr(lowest.getAsString(useSharps, includeOctave, base))));
+    // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
+    // that explicitly works with the key of C major, and does not allow the
+    // calling code to specify how the accidentals should be written out.
+    //
+    // Separate the note letter from the octave to avoid undue burden on
+    // translators having to retranslate the same thing but for a number
+    // difference
+    QString tmp = QObject::tr(strtoqstr(highest.getAsString(includeOctave, base)));
+    tmp += tr(" %1").arg(highest.getOctave(base));
+    m_highButton->setText(tmp);
 
-    std::cout << "TEMPORARY CODE:" << std::endl;
-    for (int tmp = 0; tmp < 128; tmp++) {
-        Pitch tmpP(tmp, accidental);
-        std::cout << "print 'QObject::tr(\"" << tmpP.getAsString(useSharps, includeOctave, base) << "\");'" << std::endl;
-    }
+    tmp = QObject::tr(strtoqstr(lowest.getAsString(includeOctave, base)));
+    tmp += tr(" %1").arg(lowest.getOctave(base));
+    m_lowButton->setText(tmp);
 
     m_presetLbl->setEnabled(false);
 }
@@ -910,7 +913,7 @@ TrackParameterBox::slotDocColoursChanged()
     unsigned int i = 0;
 
     for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
-        QString qtrunc(strtoqstr(it->second.second));
+        QString qtrunc(QObject::tr(strtoqstr(it->second.second)));
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {

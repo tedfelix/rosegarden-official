@@ -264,11 +264,11 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 
     // Set instrument name
     //
-    m_instrumentLabel->setText(strtoqstr(instrument->getPresentationName()));
+    m_instrumentLabel->setText(QObject::tr(strtoqstr(instrument->getPresentationName())));
 
     // Set Studio Device name
     //
-    QString connection(strtoqstr(md->getConnection()));
+    QString connection(QObject::tr(strtoqstr(md->getConnection())));
     if (connection == "") {
         m_connectionLabel->setText(tr("[ %1 ]").arg(tr("No connection")));
     } else {
@@ -276,7 +276,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         // remove trailing "(duplex)", "(read only)", "(write only)" etc
         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");
 
-        QString text = tr("[ %1 ]").arg(connection);
+        QString text = QObject::tr("[ %1 ]").arg(connection);
         /*QString origText(text);
 
         QFontMetrics metrics(m_connectionLabel->fontMetrics());
@@ -290,7 +290,7 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
         }
 
         if (text.length() > origText.length() - 7) text = origText;*/
-        m_connectionLabel->setText(text);
+        m_connectionLabel->setText(QObject::tr(text));
     }
 
     // Enable all check boxes
@@ -432,7 +432,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // with the existing rotary widget.
 
             QLabel *label = rmi->second.second;
-            label->setText(strtoqstr(it->getName()));
+            label->setText(QObject::tr(strtoqstr(it->getName())));
 
             ++rmi;
 
@@ -468,7 +468,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Add a label
-            QLabel *label = new SqueezedLabel(strtoqstr(it->getName()), hbox);
+            QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;
@@ -647,7 +647,7 @@ MIDIInstrumentParameterPanel::populateBankList()
     for (BankList::const_iterator i = banks.begin();
             i != banks.end(); ++i) {
         m_banks.push_back(*i);
-        m_bankValue->addItem(strtoqstr(i->getName()));
+        m_bankValue->addItem(QObject::tr(strtoqstr(i->getName())));
     }
 
     m_bankValue->setEnabled(m_selectedInstrument->sendsBankSelect());
@@ -713,9 +713,9 @@ MIDIInstrumentParameterPanel::populateProgramList()
     for (unsigned int i = 0; i < programs.size(); ++i) {
         std::string programName = programs[i].getName();
         if (programName != "") {
-            m_programValue->addItem(QString("%1. %2")
+            m_programValue->addItem(QObject::tr("%1. %2")
                                        .arg(programs[i].getProgram() + 1)
-                                       .arg(strtoqstr(programName)));
+                                       .arg(QObject::tr(strtoqstr(programName))));
             if (m_selectedInstrument->getProgram() == programs[i]) {
                 currentProgram = m_programs.size();
             }
@@ -835,9 +835,9 @@ MIDIInstrumentParameterPanel::populateVariationList()
             					 tr("(default)") :
             					 strtoqstr(programName));
             */
-            m_variationValue->addItem(QString("%1. %2")
+            m_variationValue->addItem(QObject::tr("%1. %2")
                                          .arg(variations[i] + 1)
-                                         .arg(strtoqstr(programName)));
+                                         .arg(QObject::tr(strtoqstr(programName))));
             if (m_selectedInstrument->getProgram() == program) {
                 currentVariation = m_variations.size();
             }

@@ -1740,6 +1740,24 @@ Pitch::getAsString(bool useSharps, bool inclOctave, int octaveBase) const
     return std::string(tmp);
 }
 
+std::string
+Pitch::getAsString(bool inclOctave, int octaveBase) const
+{
+    std::string s;
+    s += getNoteName(Key("C major"));
+
+    Accidental acc = getAccidental(Key("C major"));
+    
+    if (acc == Accidentals::Sharp) s += "#";
+    else if (acc == Accidentals::Flat) s += "b";
+
+    if (!inclOctave) return s;
+
+    char tmp[10];
+    sprintf(tmp, "%s%d", s.c_str(), getOctave(octaveBase));
+    return std::string(tmp);
+}
+
 int
 Pitch::getIndexForNote(char noteName)
 {

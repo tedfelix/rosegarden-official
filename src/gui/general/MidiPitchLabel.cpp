@@ -29,10 +29,12 @@ namespace Rosegarden
 
 MidiPitchLabel::MidiPitchLabel(int pitch)
 {
+    // this was refactored to take advantage of these translations being
+    // available in other contexts, and to avoid extra work for translators
     static QString notes[] = {
-        tr("C%1"),  tr("C#%1"), tr("D%1"),  tr("D#%1"),
-        tr("E%1"),  tr("F%1"),  tr("F#%1"), tr("G%1"),
-        tr("G#%1"), tr("A%1"),  tr("A#%1"), tr("B%1")
+        QObject::tr("C"),  QObject::tr("C#"), QObject::tr("D"),  QObject::tr("D#"),
+        QObject::tr("E"),  QObject::tr("F"),  QObject::tr("F#"), QObject::tr("G"),
+        QObject::tr("G#"), QObject::tr("A"),  QObject::tr("A#"), QObject::tr("B")
     };
 
     if (pitch < 0 || pitch > 127) {
@@ -47,7 +49,7 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
         int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
 
         int octave = (int)(((float)pitch) / 12.0) + baseOctave;
-        m_midiNote = notes[pitch % 12].arg(octave);
+        m_midiNote = QString("%1 %2").arg(notes[pitch % 12]).arg(octave);
 
         settings.endGroup();
     }

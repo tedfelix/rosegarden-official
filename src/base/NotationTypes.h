@@ -920,6 +920,10 @@ public:
     bool isDiatonicInKey(const Key &key) const;
     
     /**
+     * This overloaded member function exists to allow old code to continue
+     * working.  It is broken, perhaps hopelessly so, and should be considered
+     * deprecated.
+     *
      * Return a reference name for this pitch. (C4, Bb2, etc...)
      * according to http://www.harmony-central.com/MIDI/Doc/table2.html
      * 
@@ -933,6 +937,28 @@ public:
      */
     std::string getAsString(bool useSharps,
                             bool inclOctave = true,
+                            int octaveBase = -2) const;
+
+    /**
+     * This overloaded member function is the preferred version to use in new
+     * code.
+     *
+     * Return a reference name for this pitch.  (C4, Bb2, etc...)
+     * using the key of C major explicitly, which should allow the accidentals
+     * to take their natural forms of C# Eb F# G# Ab Bb from the key, rather
+     * than being forced sharp explicilty.
+     *
+     * Forcing them sharp does not work for reasons unknown.  The note letter
+     * seems to come from either sharps or flats, as the pitch for A#/Bb always
+     * returns a note letter B based on its height on staff in key C major, but
+     * it returns a sharp using the method above.
+     *
+     * It is my hope that allowing the notes to take whatever accidentals they
+     * want will resolve the brokenness.  I suspect this is the result of
+     * Arnout's work on transposing from one key to another and displaying
+     * accidentals in a more natural fashion.
+     */
+    std::string getAsString(bool inclOctave = true,
                             int octaveBase = -2) const;
 
     /**

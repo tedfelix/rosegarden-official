@@ -30,7 +30,7 @@ print qq{
  * 
  * The code is prepared for the lupdate program. There is make ts target:
  *
- *   make ts
+ *   make autoload-ts
  *
  * which is used to extract translation strings and to update ts/*.tr files.
  *
@@ -54,13 +54,50 @@ while (<>) {
     }
     my $line = $_;
 
-
     if ($line =~ /name="([^"]*)"/) {
         $name = $1;
 
-        print 'QObject::tr("' . $name . '");';
-        print ' /* ' . $file;
-        print ' */
+        # strip out some special strings inside name="" fields that should not
+        # be translated
+        if (($name ne "copyright")        &&
+            ($name ne "title")            &&
+            ($name ne "subtitle")         &&
+            ($name ne "author")           &&
+            ($name ne "Michael McIntyre") &&
+            ($name ne "segmentmap")) {
+
+                print 'QObject::tr("' . $name . '");';
+                print ' /* ' . $file;
+                print ' */
 ';
+        }
     }
 }
+
+# Some extra strings that didn't get extracted, probably due to a simple bug,
+# but should be included (remember folks, I don't speak Prle):
+print 'QObject::tr("Copyright (c) xxxx Copyright Holder"); /* default LilyPond/notation header */
+';
+print 'QObject::tr("Not Yet Titled");                      /* default LilyPond/notation header */
+';
+print 'QObject::tr("not yet subtitled");                   /* default LilyPond/notation header */
+';
+print 'QObject::tr("Unknown");                             /* default LilyPond/notation header */
+';
+
+print 'QObject::tr("Pan");                                 /* default MIDI controller */
+';
+print 'QObject::tr("Chorus");                              /* default MIDI controller */
+';
+print 'QObject::tr("Volume");                              /* default MIDI controller */
+';
+print 'QObject::tr("Reverb");                              /* default MIDI controller */
+';
+print 'QObject::tr("Sustain");                             /* default MIDI controller */
+';
+print 'QObject::tr("Expression");                          /* default MIDI controller */
+';
+print 'QObject::tr("Modulation");                          /* default MIDI controller */
+';
+print 'QObject::tr("PitchBend");                           /* default MIDI controller */
+';

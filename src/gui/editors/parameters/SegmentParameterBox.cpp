@@ -381,7 +381,9 @@ SegmentParameterBox::slotDocColoursChanged()
     unsigned int i = 0;
 
     for (RCMap::const_iterator it = temp.begin(); it != temp.end(); ++it) {
-        QString qtrunc(strtoqstr(it->second.second));
+        // wrap in tr() call in case the color is on the list of translated ones
+        // we're including since 09.10
+        QString qtrunc(QObject::tr(strtoqstr(it->second.second)));
         QPixmap colour(15, 15);
         colour.fill(GUIPalette::convertColour(it->second.first));
         if (qtrunc == "") {
@@ -983,24 +985,9 @@ SegmentParameterBox::slotColourSelected(int value)
 void
 SegmentParameterBox::updateHighLow()
 {
-    // Key of C major and NoAccidental means any "black key" notes will be
-    // written as sharps.
-    Accidental accidental = Accidentals::NoAccidental;
-    Rosegarden::Key key = Rosegarden::Key("C major");
-
-    Pitch highest(m_highestPlayable, accidental);
-    Pitch lowest(m_lowestPlayable, accidental);
-
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    int base = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
-    //!!! FIXME this code is broken, and needs to be fixed after the fashion of
-    //the TPB, but I'm not bothering with that at this time, because they are
-    //going to be hidden for 1.3 anyway
-//    m_highButton->setText(QString("&High:   %1%2").arg(highest.getNoteName(key)).arg(highest.getOctave(base)));
-//    m_lowButton->setText(QString("&Low:   %1%2").arg(lowest.getNoteName(key)).arg(lowest.getOctave(base)));
+    // this was never fully implemented, and never will be, so the partial
+    // implementation has been removed pending removal of this entire method
+    // from the class
 }
 
 void
