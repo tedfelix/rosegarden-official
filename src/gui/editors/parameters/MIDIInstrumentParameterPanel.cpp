@@ -76,7 +76,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
-    
+
+    //tooltips for all of the above, let's see what happens
+    m_bankValue->setToolTip(tr("<qt>Sets the midi bank.</qt>"));
+    m_channelValue->setToolTip(tr("<qt>Sets the channel number.</qt>"));
+    m_programValue->setToolTip(tr("<qt>Sets the midi program.</qt>"));
+    QString checkBoxTip = tr("<qt>Check this box to allow you to set the value.</qt>"); 
+    m_bankCheckBox->setToolTip(tr(checkBoxTip));
+    m_programCheckBox->setToolTip(tr(checkBoxTip));
+    m_variationCheckBox->setToolTip(tr(checkBoxTip));
+    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to access program changes and variations for percussion instruments. It will of course set the channel to percussion.</p></qt>"));
+
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
     m_variationValue->setMaxVisibleItems(20);
@@ -466,6 +476,8 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             hbox->setLayout(hboxLayout);
 
             rotary->setKnobColour(knobColour);
+            //Here goes!
+            rotary->setToolTip(tr("<qt><p>Place mouse over rotary control, <b>hold down</b> left mouse button and drag up and down to change value.</p><p>A small blue tooltip will tell the value.</p></qt>"));
 
             // Add a label
             QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);
