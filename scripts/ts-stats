@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# script originally by Pedro Lopez-Cabanillas; adapted to Qt4 by D. Michael
+# McIntyre
+#
+# no license was specified, so GPL is assumed
+
+unset LC_MESSAGES 
+unset LANG
+
+puke() {
+    echo $1
+    exit 1
+}
+
+cd data/locale || puke "This script must run from the rosegarden/ directory."
+
+if [ "x$(basename $(pwd))" != "xlocale" -o $(ls *.ts 2>/dev/null|wc -w) -eq 0 ]; then
+    echo "Current directory doesn't seem to have any translations."
+    echo "Please, use this script from inside the locale/ directory."
+    exit 1
+fi
+
+STATS=""
+TRANSLATED=0
+UNFINISHED=0
+UNTRANSLATED=0
+COMPLETION=0
+TOTAL=0
+OBSOLETE=0
+
+function getValues() {
+    # analyze the file's strings with grep and friends, since I can't find a
+    # program whose output to parse to produce these statistics the way Pedro's
+    # original version of this script used msgfmt
+
+    UNTRANSLATED=$(grep "<translation.*></translation>" $1 | wc -l | cut -d \  -f 1)
+#    UNFINISHED=$(grep "<translation" $1 | grep unfinished | wc -l | cut -d \  -f 1)
+    UNFINISHED=$(grep "<translation.*>.\+<" $1 | grep unfinished | wc -l | cut -d \  -f 1)
+    TRANSLATED=$(grep "<translation.*>.\+<" $1 | wc -l | cut -d \  -f 1)
+    TOTAL=$(grep "</translation" $1 | wc -l | cut -d \  -f 1)
+    COMPLETION=$((($TRANSLATED*5)/$TOTAL))
+    OBSOLETE=$(grep "<translation" $1 | grep obsolete | wc -l | cut -d \  -f 1)
+}
+
+getValues "rosegarden.ts"
+TS=$TOTAL
+
+cat << EOF
+
+--------------------------------------------------------------------------------
+             TRANSLATION STATUS REPORT FOR THE ROSEGARDEN PROJECT
+--------------------------------------------------------------------------------
+
+                    rosegarden.ts contains $TS messages
+
+Language   Total       Translated  Untranslated   Unfinished   Obsolete  Status
+--------   -----       ----------  ------------   ----------   --------  -------
+EOF
+
+
+W=0
+
+for P in *.ts; do
+    # skip rosegarden.ts since it is the baseline, not a translation
+    [ "$P" == "rosegarden.ts" ] && continue
+
+    getValues $P
+    MSG=""
+    if [ $TS != $TOTAL ]; then
+	MSG="Warning!"
+	W=1
+    fi
+    BAR='['
+    COUNT=0
+    while [ "$COUNT" -lt "$COMPLETION" ]; do
+	BAR="$BAR"'%'
+	COUNT=$(($COUNT+1))
+    done
+    while [ "$COUNT" -lt 5 ]; do
+	BAR="${BAR}-"
+	COUNT=$(($COUNT+1))
+    done
+    BAR="$BAR]"
+    printf "%-6s     %-5d       %-5d       %-5d          %-5d        %-5d     %-10s  \n" ${P/.ts/} $TOTAL $TRANSLATED $UNFINISHED $UNTRANSLATED $OBSOLETE $BAR $MSG
+done | sort -k 3,3rn -k 1
+
+if [ $W == 1 ]; then
+    echo -e "\nSome translations have more or fewer messages than rosegarden.ts"
+fi
+
+echo -e "\n\"Unfinished\" only includes unfinished messages that have been translated"
+
+echo -e "\nReport produced on $(date -R)"
