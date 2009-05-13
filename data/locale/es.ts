@@ -5280,107 +5280,123 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>Cb</source>
-        <translation type="unfinished"></translation>
+        <translation>Do bemol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
-        <translation type="unfinished">Do</translation>
+        <translation>Do</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
-        <translation type="unfinished">Do sostenido</translation>
+        <translation>Do sostenido</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="377"/>
         <source>Db</source>
-        <translation type="unfinished"></translation>
+        <translation>Re bemol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
-        <translation type="unfinished">Re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="379"/>
         <source>Eb</source>
-        <translation type="unfinished">Mi bemol</translation>
+        <translation>Mi bemol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
-        <translation type="unfinished">Mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="381"/>
         <source>E#</source>
-        <translation type="unfinished"></translation>
+        <translation>Mi sostenido</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="382"/>
         <source>Fb</source>
+        <translation>Fa bemol</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <source>D#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
-        <translation type="unfinished">Fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
-        <translation type="unfinished">Fa sostenido</translation>
+        <translation>Fa sostenido</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
-        <translation type="unfinished">Sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
-        <translation type="unfinished">Sol sostenido</translation>
+        <translation>Sol sostenido</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="387"/>
         <source>Ab</source>
-        <translation type="unfinished"></translation>
+        <translation>La bemol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
-        <translation type="unfinished"></translation>
+        <translation>La sostenido</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
-        <translation type="unfinished">La</translation>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="390"/>
         <source>Bb</source>
-        <translation type="unfinished">Si bemol</translation>
+        <translation>Si bemol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
-        <translation type="unfinished">Si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
-        <translation type="unfinished"></translation>
+        <translation>Si sostenido</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>General MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dispositivo General MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">General MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
@@ -5625,12 +5641,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trompeta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Trombone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trombón</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
@@ -5640,12 +5656,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Muted Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trompeta con sordino</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>French Horn</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Trompa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="102"/>
@@ -6263,11 +6279,161 @@ así lo desea.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>General MIDI Device</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Dispositivo General MIDI</translation>
+    </message>
+    <message>
+        <source>General MIDI</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">General MIDI</translation>
+    </message>
+    <message>
+        <source>Glockenspiel</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Glockenspiel</translation>
+    </message>
+    <message>
+        <source>Vibraphone</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Vibráfono</translation>
+    </message>
+    <message>
+        <source>Xylophone</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Xilófono</translation>
+    </message>
+    <message>
+        <source>Violin</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Violín</translation>
+    </message>
+    <message>
+        <source>Viola</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Viola</translation>
+    </message>
+    <message>
+        <source>Contrabass</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Contrabajo</translation>
+    </message>
+    <message>
+        <source>Timpani</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Timbal</translation>
+    </message>
+    <message>
+        <source>Trumpet</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Trompeta</translation>
+    </message>
+    <message>
+        <source>Trombone</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Trombón</translation>
+    </message>
+    <message>
+        <source>Muted Trumpet</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Trompeta con sordino</translation>
+    </message>
+    <message>
+        <source>French Horn</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Trompa</translation>
+    </message>
+    <message>
+        <source>Oboe</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Oboe</translation>
+    </message>
+    <message>
+        <source>Bassoon</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Fagot</translation>
+    </message>
+    <message>
+        <source>Piccolo</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Flautín</translation>
+    </message>
+    <message>
+        <source>Flute</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Flauta</translation>
+    </message>
+    <message>
+        <source>Shakuhachi</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Shakuhachi</translation>
+    </message>
+    <message>
+        <source>Koto</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Koto</translation>
+    </message>
+    <message>
+        <source>Ukulele</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Ukulele</translation>
+    </message>
+    <message>
+        <source>Mandolin</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Mandolina</translation>
+    </message>
+    <message>
+        <source>Pan</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Panorama</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Volumen</translation>
+    </message>
+    <message>
+        <source>Sustain</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Sostenido</translation>
+    </message>
+    <message>
+        <source>Tambourine</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Pandereta</translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Audio </translation>
+    </message>
+    <message>
+        <source>blue</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">azúl</translation>
+    </message>
+    <message>
+        <source>green</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">verde</translation>
+    </message>
+    <message>
+        <source>gold</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">oro</translation>
+    </message>
+    <message>
+        <source>orange</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">anaranjado</translation>
+    </message>
+    <message>
         <location filename="../AutoloadStrings.cpp" line="234"/>
         <location filename="../AutoloadStrings.cpp" line="297"/>
         <location filename="../AutoloadStrings.cpp" line="736"/>
         <source>Pan</source>
-        <translation type="unfinished">Panorama</translation>
+        <translation>Panorama</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="235"/>
@@ -6620,7 +6786,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">azúl</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -6755,7 +6921,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">verde</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
@@ -6825,7 +6991,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">oro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
@@ -6925,7 +7091,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">anaranjado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
@@ -8706,6 +8872,65 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
         <translation type="unfinished">Desconocida</translation>
+    </message>
+    <message>
+        <source>C%1</source>
+        <translation type="obsolete">Do%1</translation>
+    </message>
+    <message>
+        <source>C#%1</source>
+        <translation type="obsolete">Do#%1</translation>
+    </message>
+    <message>
+        <source>D%1</source>
+        <translation type="obsolete">Re%1</translation>
+    </message>
+    <message>
+        <source>D#%1</source>
+        <translation type="obsolete">Re#%1</translation>
+    </message>
+    <message>
+        <source>E%1</source>
+        <translation type="obsolete">Mi%1</translation>
+    </message>
+    <message>
+        <source>F%1</source>
+        <translation type="obsolete">Fa%1</translation>
+    </message>
+    <message>
+        <source>F#%1</source>
+        <translation type="obsolete">Fa#%1</translation>
+    </message>
+    <message>
+        <source>G%1</source>
+        <translation type="obsolete">Sol%1</translation>
+    </message>
+    <message>
+        <source>G#%1</source>
+        <translation type="obsolete">Sol#%1</translation>
+    </message>
+    <message>
+        <source>A%1</source>
+        <translation type="obsolete">La%1</translation>
+    </message>
+    <message>
+        <source>A#%1</source>
+        <translation type="obsolete">La#%1</translation>
+    </message>
+    <message>
+        <source>B%1</source>
+        <translation type="obsolete">Si%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
+        <source>[ %1 ]</source>
+        <translation type="unfinished">[ %1 ]</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="716"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="838"/>
+        <source>%1. %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14022,7 +14247,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="273"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
@@ -14938,64 +15162,52 @@ Doble clic para abrir el editor de marcadores.</translation>
 <context>
     <name>Rosegarden::MidiPitchLabel</name>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C%1</source>
-        <translation type="unfinished">Do%1</translation>
+        <translation type="obsolete">Do%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C#%1</source>
-        <translation type="unfinished">Do#%1</translation>
+        <translation type="obsolete">Do#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D%1</source>
-        <translation type="unfinished">Re%1</translation>
+        <translation type="obsolete">Re%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D#%1</source>
-        <translation type="unfinished">Re#%1</translation>
+        <translation type="obsolete">Re#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>E%1</source>
-        <translation type="unfinished">Mi%1</translation>
+        <translation type="obsolete">Mi%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F%1</source>
-        <translation type="unfinished">Fa%1</translation>
+        <translation type="obsolete">Fa%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F#%1</source>
-        <translation type="unfinished">Fa#%1</translation>
+        <translation type="obsolete">Fa#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>G%1</source>
-        <translation type="unfinished">Sol%1</translation>
+        <translation type="obsolete">Sol%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>G#%1</source>
-        <translation type="unfinished">Sol#%1</translation>
+        <translation type="obsolete">Sol#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A%1</source>
-        <translation type="unfinished">La%1</translation>
+        <translation type="obsolete">La%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A#%1</source>
-        <translation type="unfinished">La#%1</translation>
+        <translation type="obsolete">La#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>B%1</source>
-        <translation type="unfinished">Si%1</translation>
+        <translation type="obsolete">Si%1</translation>
     </message>
 </context>
 <context>
@@ -20673,52 +20885,58 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Todas</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="638"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="642"/>
+        <source> %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="718"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Pista %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="922"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="920"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="935"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="933"/>
         <source>Add New Color</source>
         <translation type="unfinished">Añadir Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nombre del Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="964"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
         <source>New</source>
         <translation type="unfinished">Nuevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="996"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="994"/>
         <source>Highest playable note</source>
         <translation type="unfinished">La nota más alta que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1016"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">La nota más baja que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1079"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1077"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation type="unfinished">Hay un problema catastrófico con los parametros preprogramados.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1123"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1121"/>
         <source>Segment</source>
         <translation type="unfinished">Segmento</translation>
     </message>

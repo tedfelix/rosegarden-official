@@ -5275,11 +5275,13 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
         <translation type="unfinished">Do</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
         <translation type="unfinished">Do#</translation>
@@ -5290,6 +5292,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
         <translation type="unfinished">Re</translation>
@@ -5300,6 +5303,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished">Mib</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
         <translation type="unfinished">Mi</translation>
@@ -5315,21 +5319,30 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <source>D#</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
         <translation type="unfinished">Fa</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
         <translation type="unfinished">Fa#</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
         <translation type="unfinished">Sol</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
         <translation type="unfinished">Sol#</translation>
@@ -5340,11 +5353,13 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
         <translation type="unfinished">La</translation>
@@ -5355,6 +5370,7 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <translation type="unfinished">Sib</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
         <translation type="unfinished">Si</translation>
@@ -5363,6 +5379,26 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pan</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Pan</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Volume</translation>
+    </message>
+    <message>
+        <source>Sustain</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Sustain</translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Audio</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -8698,6 +8734,65 @@ Se vuoi incollare comunque, prova ad usare un altro tipo di incollaggio dall&apo
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
         <translation type="unfinished">Sconosciuto</translation>
+    </message>
+    <message>
+        <source>C%1</source>
+        <translation type="obsolete">C%1</translation>
+    </message>
+    <message>
+        <source>C#%1</source>
+        <translation type="obsolete">C#%1</translation>
+    </message>
+    <message>
+        <source>D%1</source>
+        <translation type="obsolete">D%1</translation>
+    </message>
+    <message>
+        <source>D#%1</source>
+        <translation type="obsolete">D#%1</translation>
+    </message>
+    <message>
+        <source>E%1</source>
+        <translation type="obsolete">E%1</translation>
+    </message>
+    <message>
+        <source>F%1</source>
+        <translation type="obsolete">F%1</translation>
+    </message>
+    <message>
+        <source>F#%1</source>
+        <translation type="obsolete">F#%1</translation>
+    </message>
+    <message>
+        <source>G%1</source>
+        <translation type="obsolete">G%1</translation>
+    </message>
+    <message>
+        <source>G#%1</source>
+        <translation type="obsolete">G#%1</translation>
+    </message>
+    <message>
+        <source>A%1</source>
+        <translation type="obsolete">A%1</translation>
+    </message>
+    <message>
+        <source>A#%1</source>
+        <translation type="obsolete">A#%1</translation>
+    </message>
+    <message>
+        <source>B%1</source>
+        <translation type="obsolete">B%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
+        <source>[ %1 ]</source>
+        <translation type="unfinished">[ %1 ]</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="716"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="838"/>
+        <source>%1. %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14012,7 +14107,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="273"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
@@ -14927,64 +15021,52 @@ Doppio click per aprire l&apos;editor dei marcatori.</translation>
 <context>
     <name>Rosegarden::MidiPitchLabel</name>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C%1</source>
-        <translation type="unfinished">C%1</translation>
+        <translation type="obsolete">C%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C#%1</source>
-        <translation type="unfinished">C#%1</translation>
+        <translation type="obsolete">C#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D%1</source>
-        <translation type="unfinished">D%1</translation>
+        <translation type="obsolete">D%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D#%1</source>
-        <translation type="unfinished">D#%1</translation>
+        <translation type="obsolete">D#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>E%1</source>
-        <translation type="unfinished">E%1</translation>
+        <translation type="obsolete">E%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F%1</source>
-        <translation type="unfinished">F%1</translation>
+        <translation type="obsolete">F%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F#%1</source>
-        <translation type="unfinished">F#%1</translation>
+        <translation type="obsolete">F#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>G%1</source>
-        <translation type="unfinished">G%1</translation>
+        <translation type="obsolete">G%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>G#%1</source>
-        <translation type="unfinished">G#%1</translation>
+        <translation type="obsolete">G#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A%1</source>
-        <translation type="unfinished">A%1</translation>
+        <translation type="obsolete">A%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A#%1</source>
-        <translation type="unfinished">A#%1</translation>
+        <translation type="obsolete">A#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>B%1</source>
-        <translation type="unfinished">B%1</translation>
+        <translation type="obsolete">B%1</translation>
     </message>
 </context>
 <context>
@@ -20671,52 +20753,58 @@ battute [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Tutti</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="638"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="642"/>
+        <source> %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="718"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Traccia %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="922"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="920"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="935"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="933"/>
         <source>Add New Color</source>
         <translation type="unfinished">Aggiungi nuovo colore</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nuovo nome colore</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="964"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
         <source>New</source>
         <translation type="unfinished">Nuovo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="996"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="994"/>
         <source>Highest playable note</source>
         <translation type="unfinished">Nota più alta riproducibile</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1016"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">Nota più bassa riproducibile</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1079"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1077"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation type="unfinished">Il database predefinito degli strumenti è rovinato. Controlla l&apos;installazione.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1123"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1121"/>
         <source>Segment</source>
         <translation type="unfinished">Segmento</translation>
     </message>

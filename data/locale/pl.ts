@@ -5278,11 +5278,13 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="375"/>
         <source>C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="376"/>
         <source>C#</source>
         <translation type="unfinished">C#%1</translation>
@@ -5293,6 +5295,7 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <location filename="../InstrumentStrings.cpp" line="378"/>
         <source>D</source>
         <translation type="unfinished">Nr</translation>
@@ -5303,6 +5306,7 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="380"/>
         <source>E</source>
         <translation type="unfinished"></translation>
@@ -5318,21 +5322,30 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
+        <source>D#</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="383"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="384"/>
         <source>F#</source>
         <translation type="unfinished">F#%1</translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
         <location filename="../InstrumentStrings.cpp" line="385"/>
         <source>G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="386"/>
         <source>G#</source>
         <translation type="unfinished">G#%1</translation>
@@ -5343,11 +5356,13 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="388"/>
         <source>A#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="389"/>
         <source>A</source>
         <translation type="unfinished">A4</translation>
@@ -5358,6 +5373,7 @@ jeśli chcesz.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="37"/>
         <location filename="../InstrumentStrings.cpp" line="391"/>
         <source>B</source>
         <translation type="unfinished"></translation>
@@ -5366,6 +5382,26 @@ jeśli chcesz.</translation>
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pan</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Panorama</translation>
+    </message>
+    <message>
+        <source>Volume</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Głośność</translation>
+    </message>
+    <message>
+        <source>Sustain</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Pedał</translation>
+    </message>
+    <message>
+        <source>Audio</source>
+        <comment>DYNAMIC STRING</comment>
+        <translation type="obsolete">Audio</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -8701,6 +8737,65 @@ jeśli chcesz.</translation>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
         <translation type="unfinished">Nieznane</translation>
+    </message>
+    <message>
+        <source>C%1</source>
+        <translation type="obsolete">C%1</translation>
+    </message>
+    <message>
+        <source>C#%1</source>
+        <translation type="obsolete">C#%1</translation>
+    </message>
+    <message>
+        <source>D%1</source>
+        <translation type="obsolete">D%1</translation>
+    </message>
+    <message>
+        <source>D#%1</source>
+        <translation type="obsolete">D#%1</translation>
+    </message>
+    <message>
+        <source>E%1</source>
+        <translation type="obsolete">E%1</translation>
+    </message>
+    <message>
+        <source>F%1</source>
+        <translation type="obsolete">F%1</translation>
+    </message>
+    <message>
+        <source>F#%1</source>
+        <translation type="obsolete">F#%1</translation>
+    </message>
+    <message>
+        <source>G%1</source>
+        <translation type="obsolete">G%1</translation>
+    </message>
+    <message>
+        <source>G#%1</source>
+        <translation type="obsolete">G#%1</translation>
+    </message>
+    <message>
+        <source>A%1</source>
+        <translation type="obsolete">A%1</translation>
+    </message>
+    <message>
+        <source>A#%1</source>
+        <translation type="obsolete">A#%1</translation>
+    </message>
+    <message>
+        <source>B%1</source>
+        <translation type="obsolete">H%1</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
+        <source>[ %1 ]</source>
+        <translation type="unfinished">[ %1 ]</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="716"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="838"/>
+        <source>%1. %2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14022,7 +14117,6 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="273"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
@@ -14938,64 +15032,52 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MidiPitchLabel</name>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C%1</source>
-        <translation type="unfinished">C%1</translation>
+        <translation type="obsolete">C%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>C#%1</source>
-        <translation type="unfinished">C#%1</translation>
+        <translation type="obsolete">C#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D%1</source>
-        <translation type="unfinished">D%1</translation>
+        <translation type="obsolete">D%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="33"/>
         <source>D#%1</source>
-        <translation type="unfinished">D#%1</translation>
+        <translation type="obsolete">D#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>E%1</source>
-        <translation type="unfinished">E%1</translation>
+        <translation type="obsolete">E%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F%1</source>
-        <translation type="unfinished">F%1</translation>
+        <translation type="obsolete">F%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>F#%1</source>
-        <translation type="unfinished">F#%1</translation>
+        <translation type="obsolete">F#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="34"/>
         <source>G%1</source>
-        <translation type="unfinished">G%1</translation>
+        <translation type="obsolete">G%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>G#%1</source>
-        <translation type="unfinished">G#%1</translation>
+        <translation type="obsolete">G#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A%1</source>
-        <translation type="unfinished">A%1</translation>
+        <translation type="obsolete">A%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>A#%1</source>
-        <translation type="unfinished">A#%1</translation>
+        <translation type="obsolete">A#%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>B%1</source>
-        <translation type="unfinished">H%1</translation>
+        <translation type="obsolete">H%1</translation>
     </message>
 </context>
 <context>
@@ -20681,52 +20763,58 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation type="unfinished">Wszystkie</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="638"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="642"/>
+        <source> %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="718"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Ścieżka#%1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="922"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="920"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="935"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="933"/>
         <source>Add New Color</source>
         <translation type="unfinished">Dodaj Nowy Kolor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nazwa Nowego Koloru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="964"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
         <source>New</source>
         <translation type="unfinished">Nowy</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="996"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="994"/>
         <source>Highest playable note</source>
         <translation type="unfinished">Najwyższa możliwa do wykonania nuta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1016"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">Najniższa możliwa do wykonania nuta</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1079"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1077"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation type="unfinished">Baza danych instrumentów jest zepsuta. Sprawdź Twoją instalację.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1123"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1121"/>
         <source>Segment</source>
         <translation type="unfinished">Segment</translation>
     </message>
