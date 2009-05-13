@@ -5279,637 +5279,97 @@ así lo desea.</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C-2</source>
-        <translation>do -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D-2</source>
-        <translation>re -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb-2</source>
-        <translation>mi bem. -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab-2</source>
-        <translation>la bem. -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb-2</source>
-        <translation>si bem. -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb-1</source>
-        <translation>mi bem. -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab-1</source>
-        <translation>la bem. -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb-1</source>
-        <translation>si bem. -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb0</source>
-        <translation>mi bem. 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab0</source>
-        <translation>la bem. 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb0</source>
-        <translation>si bem. 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb1</source>
-        <translation>mi bem. 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab1</source>
-        <translation>la bem. 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb1</source>
-        <translation>si bem. 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb2</source>
-        <translation>mi bem. 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab2</source>
-        <translation>la bem. 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb2</source>
-        <translation>si bem. 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb3</source>
-        <translation>mi bem. 3</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab3</source>
-        <translation>la bem. 3</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb3</source>
-        <translation>si bem. 3</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb4</source>
-        <translation>mi bem. 4</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab4</source>
-        <translation>la bem. 4</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb4</source>
-        <translation>si bem. 4</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb5</source>
-        <translation>mi bem. 5</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab5</source>
-        <translation>la bem. 5</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb5</source>
-        <translation>si bem. 5</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb6</source>
-        <translation>mi bem. 6</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab6</source>
-        <translation>la bem. 6</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb6</source>
-        <translation>si bem. 6</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb7</source>
-        <translation>mi bem. 7</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Ab7</source>
-        <translation>la bem. 7</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Bb7</source>
-        <translation>si bem. 7</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>Eb8</source>
-        <translation>mi bem. 8</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E-2</source>
-        <translation>mi -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F-2</source>
-        <translation>fa -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#-2</source>
-        <translation>F sos. -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G-2</source>
-        <translation>sol-2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A-2</source>
-        <translation>la -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B-2</source>
-        <translation>si -2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C-1</source>
-        <translation>do -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#-1</source>
-        <translation>do sos. -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D-1</source>
-        <translation>re -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E-1</source>
-        <translation>mi -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F-1</source>
-        <translation>fa -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#-1</source>
-        <translation>fa sos. -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G-1</source>
-        <translation>sol -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A-1</source>
-        <translation>la -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B-1</source>
-        <translation>mi -1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C0</source>
-        <translation>do 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#0</source>
-        <translation>do sos. 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D0</source>
-        <translation>re 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E0</source>
-        <translation>mi 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F0</source>
-        <translation>fa 0 </translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#0</source>
-        <translation>fa sos. 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G0</source>
-        <translation>sol 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A0</source>
-        <translation>la 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B0</source>
-        <translation>si 0</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C1</source>
-        <translation>do 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#1</source>
-        <translation>do sos. 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D1</source>
-        <translation>re 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E1</source>
-        <translation>mi 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F1</source>
-        <translation>fa 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#1</source>
-        <translation>fa sos. 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G1</source>
-        <translation>sol 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A1</source>
-        <translation>la 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B1</source>
-        <translation>si 1</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C2</source>
-        <translation>do 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#2</source>
-        <translation>do sos. 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D2</source>
-        <translation>re 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E2</source>
-        <translation>mi 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F2</source>
-        <translation>fa 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#2</source>
-        <translation>fa sos. 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G2</source>
-        <translation>la 2</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A2</source>
+        <source>Cb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B2</source>
+        <location filename="../InstrumentStrings.cpp" line="375"/>
+        <source>C</source>
+        <translation type="unfinished">Do</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="376"/>
+        <source>C#</source>
+        <translation type="unfinished">Do sostenido</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="377"/>
+        <source>Db</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C3</source>
+        <location filename="../InstrumentStrings.cpp" line="378"/>
+        <source>D</source>
+        <translation type="unfinished">Re</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="379"/>
+        <source>Eb</source>
+        <translation type="unfinished">Mi bemol</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="380"/>
+        <source>E</source>
+        <translation type="unfinished">Mi</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="381"/>
+        <source>E#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#3</source>
+        <location filename="../InstrumentStrings.cpp" line="382"/>
+        <source>Fb</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D3</source>
+        <location filename="../InstrumentStrings.cpp" line="383"/>
+        <source>F</source>
+        <translation type="unfinished">Fa</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="384"/>
+        <source>F#</source>
+        <translation type="unfinished">Fa sostenido</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="385"/>
+        <source>G</source>
+        <translation type="unfinished">Sol</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="386"/>
+        <source>G#</source>
+        <translation type="unfinished">Sol sostenido</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="387"/>
+        <source>Ab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E3</source>
+        <location filename="../InstrumentStrings.cpp" line="388"/>
+        <source>A#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F3</source>
-        <translation type="unfinished"></translation>
+        <location filename="../InstrumentStrings.cpp" line="389"/>
+        <source>A</source>
+        <translation type="unfinished">La</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#3</source>
-        <translation type="unfinished"></translation>
+        <location filename="../InstrumentStrings.cpp" line="390"/>
+        <source>Bb</source>
+        <translation type="unfinished">Si bemol</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G3</source>
-        <translation type="unfinished"></translation>
+        <location filename="../InstrumentStrings.cpp" line="391"/>
+        <source>B</source>
+        <translation type="unfinished">Si</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A3</source>
-        <translation type="unfinished">A3</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A4</source>
-        <translation type="unfinished">A4</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A5</source>
-        <translation type="unfinished">A5</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A6</source>
-        <translation type="unfinished">A6</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>D8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>F#8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>G8</source>
+        <location filename="../InstrumentStrings.cpp" line="392"/>
+        <source>B#</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -20904,7 +20364,7 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="132"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="713"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="714"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;sin título&gt;</translation>
     </message>
@@ -21213,52 +20673,52 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <translation type="unfinished">Todas</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="717"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="718"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Pista %1 - %2 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="921"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="922"/>
         <source>Default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="934"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="935"/>
         <source>Add New Color</source>
         <translation type="unfinished">Añadir Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nombre del Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="962"/>
         <source>Enter new name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="963"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="964"/>
         <source>New</source>
         <translation type="unfinished">Nuevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="995"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="996"/>
         <source>Highest playable note</source>
         <translation type="unfinished">La nota más alta que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1017"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1018"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">La nota más baja que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1078"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1079"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation type="unfinished">Hay un problema catastrófico con los parametros preprogramados.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1122"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1123"/>
         <source>Segment</source>
         <translation type="unfinished">Segmento</translation>
     </message>
@@ -21974,14 +21434,6 @@ compases [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
         <translation type="unfinished">Muestra tiempo restante</translation>
-    </message>
-</context>
-<context>
-    <name>nQObject</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#-2</source>
-        <translation type="unfinished">do sos. -2</translation>
     </message>
 </context>
 </TS>
