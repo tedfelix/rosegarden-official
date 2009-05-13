@@ -178,7 +178,7 @@
         <location filename="../InstrumentStrings.cpp" line="374"/>
         <source></source>
         <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -3538,7 +3538,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="32"/>
-        <location filename="../AutoloadStrings.cpp" line="86"/>
+        <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Violin</source>
         <translation></translation>
     </message>
@@ -3549,7 +3549,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
-        <location filename="../AutoloadStrings.cpp" line="87"/>
+        <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Viola</source>
         <translation></translation>
     </message>
@@ -3570,7 +3570,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
-        <location filename="../AutoloadStrings.cpp" line="89"/>
+        <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Contrabass</source>
         <translation></translation>
     </message>
@@ -3711,7 +3711,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
-        <location filename="../AutoloadStrings.cpp" line="206"/>
+        <location filename="../AutoloadStrings.cpp" line="201"/>
         <source>Mandolin</source>
         <translation></translation>
     </message>
@@ -3722,7 +3722,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="68"/>
-        <location filename="../AutoloadStrings.cpp" line="183"/>
+        <location filename="../AutoloadStrings.cpp" line="178"/>
         <source>Ukulele</source>
         <translation></translation>
     </message>
@@ -3748,7 +3748,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
-        <location filename="../AutoloadStrings.cpp" line="153"/>
+        <location filename="../AutoloadStrings.cpp" line="148"/>
         <source>Koto</source>
         <translation></translation>
     </message>
@@ -3759,7 +3759,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="75"/>
-        <location filename="../AutoloadStrings.cpp" line="118"/>
+        <location filename="../AutoloadStrings.cpp" line="113"/>
         <source>Piccolo</source>
         <translation></translation>
     </message>
@@ -3770,7 +3770,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
-        <location filename="../AutoloadStrings.cpp" line="119"/>
+        <location filename="../AutoloadStrings.cpp" line="114"/>
         <source>Flute</source>
         <translation></translation>
     </message>
@@ -3911,7 +3911,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="105"/>
-        <location filename="../AutoloadStrings.cpp" line="123"/>
+        <location filename="../AutoloadStrings.cpp" line="118"/>
         <source>Shakuhachi</source>
         <translation></translation>
     </message>
@@ -3932,7 +3932,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
-        <location filename="../AutoloadStrings.cpp" line="114"/>
+        <location filename="../AutoloadStrings.cpp" line="109"/>
         <source>Oboe</source>
         <translation></translation>
     </message>
@@ -4043,7 +4043,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
-        <location filename="../AutoloadStrings.cpp" line="116"/>
+        <location filename="../AutoloadStrings.cpp" line="111"/>
         <source>Bassoon</source>
         <translation></translation>
     </message>
@@ -4509,7 +4509,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="224"/>
-        <location filename="../AutoloadStrings.cpp" line="93"/>
+        <location filename="../AutoloadStrings.cpp" line="88"/>
         <source>Timpani</source>
         <translation></translation>
     </message>
@@ -4525,7 +4525,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="227"/>
-        <location filename="../AutoloadStrings.cpp" line="55"/>
+        <location filename="../AutoloadStrings.cpp" line="50"/>
         <source>Glockenspiel</source>
         <translation></translation>
     </message>
@@ -4561,7 +4561,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
-        <location filename="../AutoloadStrings.cpp" line="57"/>
+        <location filename="../AutoloadStrings.cpp" line="52"/>
         <source>Vibraphone</source>
         <translation></translation>
     </message>
@@ -4652,7 +4652,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
-        <location filename="../AutoloadStrings.cpp" line="59"/>
+        <location filename="../AutoloadStrings.cpp" line="54"/>
         <source>Xylophone</source>
         <translation></translation>
     </message>
@@ -4753,7 +4753,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
-        <location filename="../AutoloadStrings.cpp" line="272"/>
+        <location filename="../AutoloadStrings.cpp" line="267"/>
         <source>Tambourine</source>
         <translation></translation>
     </message>
@@ -4894,13 +4894,13 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="300"/>
-        <location filename="../AutoloadStrings.cpp" line="293"/>
+        <location filename="../AutoloadStrings.cpp" line="288"/>
         <source>Claves</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="301"/>
-        <location filename="../AutoloadStrings.cpp" line="199"/>
+        <location filename="../AutoloadStrings.cpp" line="194"/>
         <source>Castanets</source>
         <translation></translation>
     </message>
@@ -4911,13 +4911,13 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="288"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
         <source>Maracas</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="287"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
         <source>Cabasa</source>
         <translation></translation>
     </message>
@@ -5153,7 +5153,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="351"/>
-        <location filename="../AutoloadStrings.cpp" line="68"/>
+        <location filename="../AutoloadStrings.cpp" line="63"/>
         <source>Harmonica</source>
         <translation></translation>
     </message>
@@ -5274,17 +5274,162 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>C#-2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>D-2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#-2</source>
+        <source>Eb-2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab-2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb-2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb-1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab-1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb-1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb5</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb6</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Ab7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Bb7</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>Eb8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5309,17 +5454,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#-2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A-2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#-2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5344,11 +5479,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#-1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E-1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5369,17 +5499,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#-1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A-1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#-1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5404,11 +5524,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5429,17 +5544,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5464,11 +5569,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5489,17 +5589,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5524,11 +5614,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5549,17 +5634,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5584,11 +5659,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5609,17 +5679,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A3</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5644,11 +5704,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E4</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5669,17 +5724,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A4</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5704,11 +5749,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E5</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5729,17 +5769,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5764,11 +5794,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E6</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5789,17 +5814,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A6</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5824,11 +5839,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E7</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5849,17 +5859,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>A#7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>A7</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>B#7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5884,11 +5884,6 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source>E#8</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
         <source>E8</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5909,3339 +5904,3337 @@ If you want to paste anyway, consider using one of the other paste types from th
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
-        <source>copyright</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="40"/>
-        <source>title</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="41"/>
-        <source>subtitle</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="42"/>
-        <source>author</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>General MIDI Device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="44"/>
-        <source>Michael McIntyre</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="45"/>
+        <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="46"/>
+        <location filename="../AutoloadStrings.cpp" line="41"/>
         <source>Acoustic Grand Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="47"/>
+        <location filename="../AutoloadStrings.cpp" line="42"/>
         <source>Bright Acoustic Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="48"/>
+        <location filename="../AutoloadStrings.cpp" line="43"/>
         <source>Electric Grand Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="49"/>
+        <location filename="../AutoloadStrings.cpp" line="44"/>
         <source>Honky-tonk Piano</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="50"/>
+        <location filename="../AutoloadStrings.cpp" line="45"/>
         <source>Electric Piano 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="51"/>
+        <location filename="../AutoloadStrings.cpp" line="46"/>
         <source>Electric Piano 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="52"/>
+        <location filename="../AutoloadStrings.cpp" line="47"/>
         <source>Harpsichord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="53"/>
+        <location filename="../AutoloadStrings.cpp" line="48"/>
         <source>Clavi</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="54"/>
+        <location filename="../AutoloadStrings.cpp" line="49"/>
         <source>Celesta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="56"/>
+        <location filename="../AutoloadStrings.cpp" line="51"/>
         <source>Music Box</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="58"/>
+        <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="60"/>
+        <location filename="../AutoloadStrings.cpp" line="55"/>
         <source>Tubular Bells</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="61"/>
+        <location filename="../AutoloadStrings.cpp" line="56"/>
         <source>Dulcimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="62"/>
+        <location filename="../AutoloadStrings.cpp" line="57"/>
         <source>Drawbar Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="63"/>
+        <location filename="../AutoloadStrings.cpp" line="58"/>
         <source>Percussive Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="64"/>
+        <location filename="../AutoloadStrings.cpp" line="59"/>
         <source>Rock Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="65"/>
+        <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Church Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="66"/>
+        <location filename="../AutoloadStrings.cpp" line="61"/>
         <source>Reed Organ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="67"/>
+        <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="69"/>
+        <location filename="../AutoloadStrings.cpp" line="64"/>
         <source>Tango Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="70"/>
+        <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="71"/>
+        <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="72"/>
+        <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="73"/>
+        <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="74"/>
+        <location filename="../AutoloadStrings.cpp" line="69"/>
         <source>Electric Guitar (muted)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="75"/>
+        <location filename="../AutoloadStrings.cpp" line="70"/>
         <source>Overdriven Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="76"/>
+        <location filename="../AutoloadStrings.cpp" line="71"/>
         <source>Distortion Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="77"/>
+        <location filename="../AutoloadStrings.cpp" line="72"/>
         <source>Guitar harmonics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="78"/>
+        <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="79"/>
+        <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Fingered Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="80"/>
+        <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Picked Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="81"/>
+        <location filename="../AutoloadStrings.cpp" line="76"/>
         <source>Fretless Bass</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="82"/>
+        <location filename="../AutoloadStrings.cpp" line="77"/>
         <source>Slap Bass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="83"/>
+        <location filename="../AutoloadStrings.cpp" line="78"/>
         <source>Slap Bass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="84"/>
+        <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Synth Bass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="85"/>
+        <location filename="../AutoloadStrings.cpp" line="80"/>
         <source>Synth Bass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="88"/>
+        <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Cello</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="90"/>
+        <location filename="../AutoloadStrings.cpp" line="85"/>
         <source>Tremolo Strings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="91"/>
+        <location filename="../AutoloadStrings.cpp" line="86"/>
         <source>Pizzicato Strings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="92"/>
+        <location filename="../AutoloadStrings.cpp" line="87"/>
         <source>Orchestral Harp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="94"/>
+        <location filename="../AutoloadStrings.cpp" line="89"/>
         <source>String Ensemble 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="95"/>
+        <location filename="../AutoloadStrings.cpp" line="90"/>
         <source>String Ensemble 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="96"/>
+        <location filename="../AutoloadStrings.cpp" line="91"/>
         <source>SynthStrings 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="97"/>
+        <location filename="../AutoloadStrings.cpp" line="92"/>
         <source>SynthStrings 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="98"/>
+        <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>Choir Aahs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="99"/>
+        <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>Voice Oohs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="100"/>
+        <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Synth Voice</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="101"/>
+        <location filename="../AutoloadStrings.cpp" line="96"/>
         <source>Orchestra Hit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="102"/>
+        <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="103"/>
+        <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Trombone</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="104"/>
+        <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Tuba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="105"/>
+        <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Muted Trumpet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="106"/>
+        <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>French Horn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="107"/>
+        <location filename="../AutoloadStrings.cpp" line="102"/>
         <source>Brass Section</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="108"/>
+        <location filename="../AutoloadStrings.cpp" line="103"/>
         <source>SynthBrass 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="109"/>
+        <location filename="../AutoloadStrings.cpp" line="104"/>
         <source>SynthBrass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="110"/>
+        <location filename="../AutoloadStrings.cpp" line="105"/>
         <source>Soprano Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="111"/>
+        <location filename="../AutoloadStrings.cpp" line="106"/>
         <source>Alto Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="112"/>
+        <location filename="../AutoloadStrings.cpp" line="107"/>
         <source>Tenor Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="113"/>
+        <location filename="../AutoloadStrings.cpp" line="108"/>
         <source>Baritone Sax</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="115"/>
+        <location filename="../AutoloadStrings.cpp" line="110"/>
         <source>English Horn</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="117"/>
+        <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Clarinet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="120"/>
+        <location filename="../AutoloadStrings.cpp" line="115"/>
         <source>Recorder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="121"/>
+        <location filename="../AutoloadStrings.cpp" line="116"/>
         <source>Pan Flute</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="122"/>
+        <location filename="../AutoloadStrings.cpp" line="117"/>
         <source>Blown Bottle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="124"/>
+        <location filename="../AutoloadStrings.cpp" line="119"/>
         <source>Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="125"/>
+        <location filename="../AutoloadStrings.cpp" line="120"/>
         <source>Ocarina</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="126"/>
+        <location filename="../AutoloadStrings.cpp" line="121"/>
         <source>Lead 1 (square)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="127"/>
+        <location filename="../AutoloadStrings.cpp" line="122"/>
         <source>Lead 2 (sawtooth)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="128"/>
+        <location filename="../AutoloadStrings.cpp" line="123"/>
         <source>Lead 3 (calliope)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="129"/>
+        <location filename="../AutoloadStrings.cpp" line="124"/>
         <source>Lead 4 (chiff)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="130"/>
+        <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 5 (charang)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="131"/>
+        <location filename="../AutoloadStrings.cpp" line="126"/>
         <source>Lead 6 (voice)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="132"/>
+        <location filename="../AutoloadStrings.cpp" line="127"/>
         <source>Lead 7 (fifths)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="133"/>
+        <location filename="../AutoloadStrings.cpp" line="128"/>
         <source>Lead 8 (bass + lead)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="134"/>
+        <location filename="../AutoloadStrings.cpp" line="129"/>
         <source>Pad 1 (new age)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="135"/>
+        <location filename="../AutoloadStrings.cpp" line="130"/>
         <source>Pad 2 (warm)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="136"/>
+        <location filename="../AutoloadStrings.cpp" line="131"/>
         <source>Pad 3 (polysynth)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="137"/>
+        <location filename="../AutoloadStrings.cpp" line="132"/>
         <source>Pad 4 (choir)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="138"/>
+        <location filename="../AutoloadStrings.cpp" line="133"/>
         <source>Pad 5 (bowed)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="139"/>
+        <location filename="../AutoloadStrings.cpp" line="134"/>
         <source>Pad 6 (metallic)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="140"/>
+        <location filename="../AutoloadStrings.cpp" line="135"/>
         <source>Pad 7 (halo)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="141"/>
+        <location filename="../AutoloadStrings.cpp" line="136"/>
         <source>Pad 8 (sweep)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="142"/>
+        <location filename="../AutoloadStrings.cpp" line="137"/>
         <source>FX 1 (rain)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="143"/>
+        <location filename="../AutoloadStrings.cpp" line="138"/>
         <source>FX 2 (soundtrack)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="144"/>
+        <location filename="../AutoloadStrings.cpp" line="139"/>
         <source>FX 3 (crystal)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="145"/>
+        <location filename="../AutoloadStrings.cpp" line="140"/>
         <source>FX 4 (atmosphere)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="146"/>
+        <location filename="../AutoloadStrings.cpp" line="141"/>
         <source>FX 5 (brightness)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="147"/>
+        <location filename="../AutoloadStrings.cpp" line="142"/>
         <source>FX 6 (goblins)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="148"/>
+        <location filename="../AutoloadStrings.cpp" line="143"/>
         <source>FX 7 (echoes)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="149"/>
+        <location filename="../AutoloadStrings.cpp" line="144"/>
         <source>FX 8 (sci-fi)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="150"/>
+        <location filename="../AutoloadStrings.cpp" line="145"/>
         <source>Sitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="151"/>
+        <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>Banjo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="152"/>
+        <location filename="../AutoloadStrings.cpp" line="147"/>
         <source>Shamisen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="154"/>
+        <location filename="../AutoloadStrings.cpp" line="149"/>
         <source>Kalimba</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="155"/>
+        <location filename="../AutoloadStrings.cpp" line="150"/>
         <source>Bag pipe</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="156"/>
+        <location filename="../AutoloadStrings.cpp" line="151"/>
         <source>Fiddle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="157"/>
+        <location filename="../AutoloadStrings.cpp" line="152"/>
         <source>Shanai</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="158"/>
+        <location filename="../AutoloadStrings.cpp" line="153"/>
         <source>Tinkle Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="159"/>
+        <location filename="../AutoloadStrings.cpp" line="154"/>
         <source>Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="160"/>
+        <location filename="../AutoloadStrings.cpp" line="155"/>
         <source>Steel Drums</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="161"/>
+        <location filename="../AutoloadStrings.cpp" line="156"/>
         <source>Woodblock</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="162"/>
+        <location filename="../AutoloadStrings.cpp" line="157"/>
         <source>Taiko Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="163"/>
+        <location filename="../AutoloadStrings.cpp" line="158"/>
         <source>Melodic Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="164"/>
+        <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Synth Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="165"/>
+        <location filename="../AutoloadStrings.cpp" line="160"/>
         <source>Reverse Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="166"/>
+        <location filename="../AutoloadStrings.cpp" line="161"/>
         <source>Guitar Fret Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="167"/>
+        <location filename="../AutoloadStrings.cpp" line="162"/>
         <source>Breath Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="168"/>
+        <location filename="../AutoloadStrings.cpp" line="163"/>
         <source>Seashore</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="169"/>
+        <location filename="../AutoloadStrings.cpp" line="164"/>
         <source>Bird Tweet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="170"/>
+        <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Telephone Ring</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="171"/>
+        <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Helicopter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="172"/>
+        <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Applause</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="173"/>
+        <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Gunshot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="174"/>
+        <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Bank 0:8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="175"/>
+        <location filename="../AutoloadStrings.cpp" line="170"/>
         <source>Detuned EP 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="176"/>
+        <location filename="../AutoloadStrings.cpp" line="171"/>
         <source>Detuned EP 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="177"/>
+        <location filename="../AutoloadStrings.cpp" line="172"/>
         <source>Coupled Harpsichord</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="178"/>
+        <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Church Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="179"/>
+        <location filename="../AutoloadStrings.cpp" line="174"/>
         <source>Detuned Organ 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="180"/>
+        <location filename="../AutoloadStrings.cpp" line="175"/>
         <source>Detuned Organ 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="181"/>
+        <location filename="../AutoloadStrings.cpp" line="176"/>
         <source>Church Organ 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="182"/>
+        <location filename="../AutoloadStrings.cpp" line="177"/>
         <source>Italian Accordion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="184"/>
+        <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="185"/>
+        <location filename="../AutoloadStrings.cpp" line="180"/>
         <source>Hawaiian Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="186"/>
+        <location filename="../AutoloadStrings.cpp" line="181"/>
         <source>Funk Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="187"/>
+        <location filename="../AutoloadStrings.cpp" line="182"/>
         <source>Feedback Guitar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="188"/>
+        <location filename="../AutoloadStrings.cpp" line="183"/>
         <source>Guitar Feedback</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="189"/>
+        <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Synth Bass 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="190"/>
+        <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Synth Bass 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="191"/>
+        <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Slow Violin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="192"/>
+        <location filename="../AutoloadStrings.cpp" line="187"/>
         <source>Orchestral Pad</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="193"/>
+        <location filename="../AutoloadStrings.cpp" line="188"/>
         <source>Synth Strings 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="194"/>
+        <location filename="../AutoloadStrings.cpp" line="189"/>
         <source>Brass 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="195"/>
+        <location filename="../AutoloadStrings.cpp" line="190"/>
         <source>Synth Brass 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="196"/>
+        <location filename="../AutoloadStrings.cpp" line="191"/>
         <source>Synth Brass 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="197"/>
+        <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Sine Wave</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="198"/>
+        <location filename="../AutoloadStrings.cpp" line="193"/>
         <source>Taisho Koto</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="200"/>
+        <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Concert Bass Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="201"/>
+        <location filename="../AutoloadStrings.cpp" line="196"/>
         <source>Melo Tom 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="202"/>
+        <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="203"/>
+        <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Bank 0:9</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="204"/>
+        <location filename="../AutoloadStrings.cpp" line="199"/>
         <source>Burst Noise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="205"/>
+        <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="207"/>
+        <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 1:0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="208"/>
+        <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="209"/>
+        <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="210"/>
+        <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="211"/>
+        <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="212"/>
+        <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="213"/>
+        <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="214"/>
+        <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="215"/>
+        <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="216"/>
+        <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Room</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="217"/>
+        <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Room 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="218"/>
+        <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Room 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="219"/>
+        <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Room 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="220"/>
+        <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Room 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="221"/>
+        <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Room 5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="222"/>
+        <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Room 6</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="223"/>
+        <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Room 7</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="224"/>
+        <location filename="../AutoloadStrings.cpp" line="219"/>
         <source>Power</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="225"/>
+        <location filename="../AutoloadStrings.cpp" line="220"/>
         <source>Power 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="226"/>
+        <location filename="../AutoloadStrings.cpp" line="221"/>
         <source>Power 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="227"/>
+        <location filename="../AutoloadStrings.cpp" line="222"/>
         <source>Power 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="228"/>
+        <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="229"/>
+        <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>TR-808</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="230"/>
+        <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Jazz</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="231"/>
+        <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Jazz 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="232"/>
+        <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="233"/>
+        <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="234"/>
+        <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="235"/>
+        <location filename="../AutoloadStrings.cpp" line="230"/>
         <source>Brush</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="236"/>
+        <location filename="../AutoloadStrings.cpp" line="231"/>
         <source>Brush 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="237"/>
+        <location filename="../AutoloadStrings.cpp" line="232"/>
         <source>Brush 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="238"/>
+        <location filename="../AutoloadStrings.cpp" line="233"/>
         <source>Orchestra Kit</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="234"/>
+        <location filename="../AutoloadStrings.cpp" line="297"/>
+        <location filename="../AutoloadStrings.cpp" line="736"/>
+        <source>Pan</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="235"/>
+        <location filename="../AutoloadStrings.cpp" line="298"/>
+        <location filename="../AutoloadStrings.cpp" line="737"/>
+        <source>Chorus</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="236"/>
+        <location filename="../AutoloadStrings.cpp" line="299"/>
+        <location filename="../AutoloadStrings.cpp" line="738"/>
+        <source>Volume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="237"/>
+        <location filename="../AutoloadStrings.cpp" line="300"/>
+        <location filename="../AutoloadStrings.cpp" line="739"/>
+        <source>Reverb</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="238"/>
+        <location filename="../AutoloadStrings.cpp" line="301"/>
+        <location filename="../AutoloadStrings.cpp" line="740"/>
+        <source>Sustain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="239"/>
         <location filename="../AutoloadStrings.cpp" line="302"/>
-        <source>Pan</source>
+        <location filename="../AutoloadStrings.cpp" line="741"/>
+        <source>Expression</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="240"/>
         <location filename="../AutoloadStrings.cpp" line="303"/>
-        <source>Chorus</source>
+        <location filename="../AutoloadStrings.cpp" line="742"/>
+        <source>Modulation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="241"/>
         <location filename="../AutoloadStrings.cpp" line="304"/>
-        <source>Volume</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="242"/>
-        <location filename="../AutoloadStrings.cpp" line="305"/>
-        <source>Reverb</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="243"/>
-        <location filename="../AutoloadStrings.cpp" line="306"/>
-        <source>Sustain</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="244"/>
-        <location filename="../AutoloadStrings.cpp" line="307"/>
-        <source>Expression</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="245"/>
-        <location filename="../AutoloadStrings.cpp" line="308"/>
-        <source>Modulation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="246"/>
-        <location filename="../AutoloadStrings.cpp" line="309"/>
+        <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="247"/>
+        <location filename="../AutoloadStrings.cpp" line="242"/>
         <source>General MIDI Percussion</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="248"/>
-        <location filename="../AutoloadStrings.cpp" line="249"/>
-        <location filename="../AutoloadStrings.cpp" line="250"/>
-        <location filename="../AutoloadStrings.cpp" line="251"/>
-        <location filename="../AutoloadStrings.cpp" line="252"/>
+        <location filename="../AutoloadStrings.cpp" line="243"/>
+        <location filename="../AutoloadStrings.cpp" line="244"/>
+        <location filename="../AutoloadStrings.cpp" line="245"/>
+        <location filename="../AutoloadStrings.cpp" line="246"/>
+        <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="253"/>
+        <location filename="../AutoloadStrings.cpp" line="248"/>
         <source>Acoustic Bass Drum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="254"/>
+        <location filename="../AutoloadStrings.cpp" line="249"/>
         <source>Bass Drum 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="255"/>
+        <location filename="../AutoloadStrings.cpp" line="250"/>
         <source>Side Stick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="256"/>
+        <location filename="../AutoloadStrings.cpp" line="251"/>
         <source>Acoustic Snare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="257"/>
+        <location filename="../AutoloadStrings.cpp" line="252"/>
         <source>Hand Clap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="258"/>
+        <location filename="../AutoloadStrings.cpp" line="253"/>
         <source>Electric Snare</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="259"/>
+        <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Low Floor Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="260"/>
+        <location filename="../AutoloadStrings.cpp" line="255"/>
         <source>Closed Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="261"/>
+        <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="262"/>
+        <location filename="../AutoloadStrings.cpp" line="257"/>
         <source>Pedal Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="263"/>
+        <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>Low Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="264"/>
+        <location filename="../AutoloadStrings.cpp" line="259"/>
         <source>Open Hi-Hat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="265"/>
+        <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="266"/>
+        <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="267"/>
+        <location filename="../AutoloadStrings.cpp" line="262"/>
         <source>Crash Cymbal 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="268"/>
+        <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="269"/>
+        <location filename="../AutoloadStrings.cpp" line="264"/>
         <source>Ride Cymbal 1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="270"/>
+        <location filename="../AutoloadStrings.cpp" line="265"/>
         <source>Chinese Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="271"/>
+        <location filename="../AutoloadStrings.cpp" line="266"/>
         <source>Ride Bell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="273"/>
+        <location filename="../AutoloadStrings.cpp" line="268"/>
         <source>Splash Cymbal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="274"/>
+        <location filename="../AutoloadStrings.cpp" line="269"/>
         <source>Cowbell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="275"/>
+        <location filename="../AutoloadStrings.cpp" line="270"/>
         <source>Crash Cymbal 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="276"/>
+        <location filename="../AutoloadStrings.cpp" line="271"/>
         <source>Vibraslap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="277"/>
+        <location filename="../AutoloadStrings.cpp" line="272"/>
         <source>Ride Cymbal 2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="278"/>
+        <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>Hi Bongo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="279"/>
+        <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>Low Bongo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="280"/>
+        <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>Mute Hi Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="281"/>
+        <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>Open Hi Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>Low Conga</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>High Timbale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="284"/>
+        <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>Low Timbale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="285"/>
+        <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>High Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="286"/>
+        <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>Low Agogo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="289"/>
+        <location filename="../AutoloadStrings.cpp" line="284"/>
         <source>Short Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="290"/>
+        <location filename="../AutoloadStrings.cpp" line="285"/>
         <source>Long Whistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="291"/>
+        <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>Short Guiro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="292"/>
+        <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>Long Guiro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="294"/>
+        <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>Hi Wood Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="295"/>
+        <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>Low Wood Block</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="296"/>
+        <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>Mute Cuica</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="297"/>
+        <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>Open Cuica</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="298"/>
+        <location filename="../AutoloadStrings.cpp" line="293"/>
         <source>Mute Triangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="299"/>
+        <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Triangle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="300"/>
+        <location filename="../AutoloadStrings.cpp" line="295"/>
         <source>MIDI input system device</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="301"/>
+        <location filename="../AutoloadStrings.cpp" line="296"/>
         <source>&amp;lt;none&amp;gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="310"/>
+        <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="311"/>
+        <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="312"/>
-        <source>segmentmap</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../AutoloadStrings.cpp" line="314"/>
+        <location filename="../AutoloadStrings.cpp" line="308"/>
         <source>AudioDefault</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="315"/>
+        <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>MidnightBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="316"/>
+        <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>NavyBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="317"/>
+        <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>CornflowerBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="318"/>
+        <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>DarkSlateBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="319"/>
+        <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>SlateBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="320"/>
+        <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>MediumSlateBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="321"/>
+        <location filename="../AutoloadStrings.cpp" line="315"/>
         <source>LightSlateBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="322"/>
+        <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>MediumBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="323"/>
+        <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="324"/>
+        <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="325"/>
+        <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="326"/>
+        <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>DeepSkyBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="327"/>
+        <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="328"/>
+        <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>LightSkyBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="329"/>
+        <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>SteelBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="330"/>
+        <location filename="../AutoloadStrings.cpp" line="324"/>
         <source>LightSteelBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="331"/>
+        <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="332"/>
+        <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>PowderBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="333"/>
+        <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>PaleTurquoise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="334"/>
+        <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>DarkTurquoise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="335"/>
+        <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumTurquoise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="336"/>
+        <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>turquoise</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="337"/>
+        <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="338"/>
+        <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>LightCyan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="339"/>
+        <location filename="../AutoloadStrings.cpp" line="333"/>
         <source>CadetBlue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="340"/>
+        <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>MediumAquamarine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="341"/>
+        <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>aquamarine</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="342"/>
+        <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="343"/>
+        <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>DarkOliveGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="344"/>
+        <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>DarkSeaGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="345"/>
+        <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="346"/>
+        <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>MediumSeaGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="347"/>
+        <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>LightSeaGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="348"/>
+        <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>PaleGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="349"/>
+        <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>SpringGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="350"/>
+        <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>LawnGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="351"/>
+        <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="352"/>
+        <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>chartreuse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="353"/>
+        <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>MediumSpringGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="354"/>
+        <location filename="../AutoloadStrings.cpp" line="348"/>
         <source>GreenYellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="355"/>
+        <location filename="../AutoloadStrings.cpp" line="349"/>
         <source>LimeGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="356"/>
+        <location filename="../AutoloadStrings.cpp" line="350"/>
         <source>YellowGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="357"/>
+        <location filename="../AutoloadStrings.cpp" line="351"/>
         <source>ForestGreen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="358"/>
+        <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>OliveDrab</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="359"/>
+        <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>DarkKhaki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="360"/>
+        <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>khaki</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="361"/>
+        <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>PaleGoldenrod</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="362"/>
+        <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>LightGoldenrodYellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="363"/>
+        <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="364"/>
+        <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="365"/>
+        <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="366"/>
+        <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LightGoldenrod</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="367"/>
+        <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>goldenrod</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="368"/>
+        <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>DarkGoldenrod</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="369"/>
+        <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>RosyBrown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="370"/>
+        <location filename="../AutoloadStrings.cpp" line="364"/>
         <source>IndianRed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="371"/>
+        <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>SaddleBrown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="372"/>
+        <location filename="../AutoloadStrings.cpp" line="366"/>
         <source>sienna</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="373"/>
+        <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>peru</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="374"/>
+        <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>burlywood</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="375"/>
+        <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>beige</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="376"/>
+        <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>wheat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="377"/>
+        <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>SandyBrown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="378"/>
+        <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>tan</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="379"/>
+        <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="380"/>
+        <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>firebrick</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="381"/>
+        <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="382"/>
+        <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>DarkSalmon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="383"/>
+        <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="384"/>
+        <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LightSalmon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="385"/>
+        <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="386"/>
+        <location filename="../AutoloadStrings.cpp" line="380"/>
         <source>DarkOrange</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="387"/>
+        <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="388"/>
+        <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>LightCoral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="389"/>
+        <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="390"/>
+        <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="391"/>
+        <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="392"/>
+        <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="393"/>
+        <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="394"/>
+        <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="395"/>
+        <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>LightPink</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="396"/>
+        <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>PaleVioletRed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="397"/>
+        <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="398"/>
+        <location filename="../AutoloadStrings.cpp" line="392"/>
         <source>MediumVioletRed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="399"/>
+        <location filename="../AutoloadStrings.cpp" line="393"/>
         <source>VioletRed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="400"/>
+        <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="401"/>
+        <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="402"/>
+        <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>plum</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="403"/>
+        <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>orchid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="404"/>
+        <location filename="../AutoloadStrings.cpp" line="398"/>
         <source>MediumOrchid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="405"/>
+        <location filename="../AutoloadStrings.cpp" line="399"/>
         <source>DarkOrchid</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="406"/>
+        <location filename="../AutoloadStrings.cpp" line="400"/>
         <source>DarkViolet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="407"/>
+        <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="408"/>
+        <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="409"/>
+        <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>MediumPurple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="410"/>
+        <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>thistle</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="411"/>
+        <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="412"/>
+        <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="413"/>
+        <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="414"/>
+        <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="415"/>
+        <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>seashell1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="416"/>
+        <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>seashell2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="417"/>
+        <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>seashell3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="418"/>
+        <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>seashell4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="419"/>
+        <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="420"/>
+        <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="421"/>
+        <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="422"/>
+        <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="423"/>
+        <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>bisque1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="424"/>
+        <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>bisque2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="425"/>
+        <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>bisque3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="426"/>
+        <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>bisque4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="427"/>
+        <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>PeachPuff1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="428"/>
+        <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>PeachPuff2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="429"/>
+        <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>PeachPuff3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="430"/>
+        <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>PeachPuff4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="431"/>
+        <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>NavajoWhite1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="432"/>
+        <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>NavajoWhite2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="433"/>
+        <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>NavajoWhite3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="434"/>
+        <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>NavajoWhite4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="435"/>
+        <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LemonChiffon1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="436"/>
+        <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LemonChiffon2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="437"/>
+        <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LemonChiffon3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="438"/>
+        <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LemonChiffon4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="439"/>
+        <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>cornsilk1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="440"/>
+        <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>cornsilk2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="441"/>
+        <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>cornsilk3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="442"/>
+        <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>cornsilk4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="443"/>
+        <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>ivory1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="444"/>
+        <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>ivory2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="445"/>
+        <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>ivory3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="446"/>
+        <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>ivory4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="447"/>
+        <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>honeydew1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="448"/>
+        <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>honeydew2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="449"/>
+        <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>honeydew3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="450"/>
+        <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>honeydew4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="451"/>
+        <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>LavenderBlush1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="452"/>
+        <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>LavenderBlush2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="453"/>
+        <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>LavenderBlush3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="454"/>
+        <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>LavenderBlush4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="455"/>
+        <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>MistyRose1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="456"/>
+        <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>MistyRose2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="457"/>
+        <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>MistyRose3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="458"/>
+        <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>MistyRose4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="459"/>
+        <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="460"/>
+        <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="461"/>
+        <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="462"/>
+        <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="463"/>
+        <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>SlateBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="464"/>
+        <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>SlateBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="465"/>
+        <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>SlateBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="466"/>
+        <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>SlateBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="467"/>
+        <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>RoyalBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="468"/>
+        <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>RoyalBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="469"/>
+        <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>RoyalBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="470"/>
+        <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>RoyalBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="471"/>
+        <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="472"/>
+        <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="473"/>
+        <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="474"/>
+        <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="475"/>
+        <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="476"/>
+        <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="477"/>
+        <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="478"/>
+        <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="479"/>
+        <location filename="../AutoloadStrings.cpp" line="473"/>
         <source>SteelBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="480"/>
+        <location filename="../AutoloadStrings.cpp" line="474"/>
         <source>SteelBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="481"/>
+        <location filename="../AutoloadStrings.cpp" line="475"/>
         <source>SteelBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="482"/>
+        <location filename="../AutoloadStrings.cpp" line="476"/>
         <source>SteelBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="483"/>
+        <location filename="../AutoloadStrings.cpp" line="477"/>
         <source>DeepSkyBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="484"/>
+        <location filename="../AutoloadStrings.cpp" line="478"/>
         <source>DeepSkyBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="485"/>
+        <location filename="../AutoloadStrings.cpp" line="479"/>
         <source>DeepSkyBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="486"/>
+        <location filename="../AutoloadStrings.cpp" line="480"/>
         <source>DeepSkyBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="487"/>
+        <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="488"/>
+        <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="489"/>
+        <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="490"/>
+        <location filename="../AutoloadStrings.cpp" line="484"/>
         <source>SkyBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="491"/>
+        <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>LightSkyBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="492"/>
+        <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>LightSkyBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="493"/>
+        <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>LightSkyBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="494"/>
+        <location filename="../AutoloadStrings.cpp" line="488"/>
         <source>LightSkyBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="495"/>
+        <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>SlateGray1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="496"/>
+        <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>SlateGray2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="497"/>
+        <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>SlateGray3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="498"/>
+        <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>SlateGray4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="499"/>
+        <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>LightSteelBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="500"/>
+        <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>LightSteelBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="501"/>
+        <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>LightSteelBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="502"/>
+        <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightSteelBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="503"/>
+        <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="504"/>
+        <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="505"/>
+        <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="506"/>
+        <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="507"/>
+        <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightCyan1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="508"/>
+        <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightCyan2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="509"/>
+        <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>LightCyan3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="510"/>
+        <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>LightCyan4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="511"/>
+        <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>PaleTurquoise1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="512"/>
+        <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>PaleTurquoise2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="513"/>
+        <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>PaleTurquoise3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="514"/>
+        <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>PaleTurquoise4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="515"/>
+        <location filename="../AutoloadStrings.cpp" line="509"/>
         <source>CadetBlue1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="516"/>
+        <location filename="../AutoloadStrings.cpp" line="510"/>
         <source>CadetBlue2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="517"/>
+        <location filename="../AutoloadStrings.cpp" line="511"/>
         <source>CadetBlue3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="518"/>
+        <location filename="../AutoloadStrings.cpp" line="512"/>
         <source>CadetBlue4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="519"/>
+        <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>turquoise1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="520"/>
+        <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>turquoise2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="521"/>
+        <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>turquoise3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="522"/>
+        <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>turquoise4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="523"/>
+        <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="524"/>
+        <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="525"/>
+        <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="526"/>
+        <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="527"/>
+        <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>DarkSlateGray1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="528"/>
+        <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>DarkSlateGray2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="529"/>
+        <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>DarkSlateGray3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="530"/>
+        <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>DarkSlateGray4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="531"/>
+        <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>aquamarine1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="532"/>
+        <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>aquamarine2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="533"/>
+        <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>aquamarine3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="534"/>
+        <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>aquamarine4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="535"/>
+        <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>DarkSeaGreen1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="536"/>
+        <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>DarkSeaGreen2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="537"/>
+        <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>DarkSeaGreen3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="538"/>
+        <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>DarkSeaGreen4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="539"/>
+        <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="540"/>
+        <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="541"/>
+        <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="542"/>
+        <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="543"/>
+        <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>PaleGreen1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="544"/>
+        <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>PaleGreen2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="545"/>
+        <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>PaleGreen3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="546"/>
+        <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>PaleGreen4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="547"/>
+        <location filename="../AutoloadStrings.cpp" line="541"/>
         <source>SpringGreen1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="548"/>
+        <location filename="../AutoloadStrings.cpp" line="542"/>
         <source>SpringGreen2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="549"/>
+        <location filename="../AutoloadStrings.cpp" line="543"/>
         <source>SpringGreen3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="550"/>
+        <location filename="../AutoloadStrings.cpp" line="544"/>
         <source>SpringGreen4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="551"/>
+        <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="552"/>
+        <location filename="../AutoloadStrings.cpp" line="546"/>
         <source>green2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="553"/>
+        <location filename="../AutoloadStrings.cpp" line="547"/>
         <source>green3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="554"/>
+        <location filename="../AutoloadStrings.cpp" line="548"/>
         <source>green4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="555"/>
+        <location filename="../AutoloadStrings.cpp" line="549"/>
         <source>chartreuse1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="556"/>
+        <location filename="../AutoloadStrings.cpp" line="550"/>
         <source>chartreuse2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="557"/>
+        <location filename="../AutoloadStrings.cpp" line="551"/>
         <source>chartreuse3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="558"/>
+        <location filename="../AutoloadStrings.cpp" line="552"/>
         <source>chartreuse4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="559"/>
+        <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>OliveDrab1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="560"/>
+        <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>OliveDrab2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="561"/>
+        <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>OliveDrab3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="562"/>
+        <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>OliveDrab4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="563"/>
+        <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>DarkOliveGreen1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="564"/>
+        <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>DarkOliveGreen2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="565"/>
+        <location filename="../AutoloadStrings.cpp" line="559"/>
         <source>DarkOliveGreen3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="566"/>
+        <location filename="../AutoloadStrings.cpp" line="560"/>
         <source>DarkOliveGreen4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="567"/>
+        <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>khaki1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="568"/>
+        <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>khaki2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="569"/>
+        <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>khaki3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="570"/>
+        <location filename="../AutoloadStrings.cpp" line="564"/>
         <source>khaki4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="571"/>
+        <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>LightGoldenrod1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="572"/>
+        <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>LightGoldenrod2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="573"/>
+        <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>LightGoldenrod3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="574"/>
+        <location filename="../AutoloadStrings.cpp" line="568"/>
         <source>LightGoldenrod4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="575"/>
+        <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="576"/>
+        <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="577"/>
+        <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="578"/>
+        <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="579"/>
+        <location filename="../AutoloadStrings.cpp" line="573"/>
         <source>yellow1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="580"/>
+        <location filename="../AutoloadStrings.cpp" line="574"/>
         <source>yellow2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="581"/>
+        <location filename="../AutoloadStrings.cpp" line="575"/>
         <source>yellow3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="582"/>
+        <location filename="../AutoloadStrings.cpp" line="576"/>
         <source>yellow4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="583"/>
+        <location filename="../AutoloadStrings.cpp" line="577"/>
         <source>gold1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="584"/>
+        <location filename="../AutoloadStrings.cpp" line="578"/>
         <source>gold2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="585"/>
+        <location filename="../AutoloadStrings.cpp" line="579"/>
         <source>gold3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="586"/>
+        <location filename="../AutoloadStrings.cpp" line="580"/>
         <source>gold4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="587"/>
+        <location filename="../AutoloadStrings.cpp" line="581"/>
         <source>goldenrod1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="588"/>
+        <location filename="../AutoloadStrings.cpp" line="582"/>
         <source>goldenrod2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="589"/>
+        <location filename="../AutoloadStrings.cpp" line="583"/>
         <source>goldenrod3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="590"/>
+        <location filename="../AutoloadStrings.cpp" line="584"/>
         <source>goldenrod4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="591"/>
+        <location filename="../AutoloadStrings.cpp" line="585"/>
         <source>DarkGoldenrod1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="592"/>
+        <location filename="../AutoloadStrings.cpp" line="586"/>
         <source>DarkGoldenrod2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="593"/>
+        <location filename="../AutoloadStrings.cpp" line="587"/>
         <source>DarkGoldenrod3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="594"/>
+        <location filename="../AutoloadStrings.cpp" line="588"/>
         <source>DarkGoldenrod4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="595"/>
+        <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>RosyBrown1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="596"/>
+        <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>RosyBrown2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="597"/>
+        <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>RosyBrown3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="598"/>
+        <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>RosyBrown4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="599"/>
+        <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="600"/>
+        <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="601"/>
+        <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="602"/>
+        <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="603"/>
+        <location filename="../AutoloadStrings.cpp" line="597"/>
         <source>sienna1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="604"/>
+        <location filename="../AutoloadStrings.cpp" line="598"/>
         <source>sienna2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="605"/>
+        <location filename="../AutoloadStrings.cpp" line="599"/>
         <source>sienna3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="606"/>
+        <location filename="../AutoloadStrings.cpp" line="600"/>
         <source>sienna4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="607"/>
+        <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>burlywood1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="608"/>
+        <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>burlywood2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="609"/>
+        <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>burlywood3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="610"/>
+        <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>burlywood4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="611"/>
+        <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>wheat1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="612"/>
+        <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>wheat2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="613"/>
+        <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>wheat3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="614"/>
+        <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>wheat4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="615"/>
+        <location filename="../AutoloadStrings.cpp" line="609"/>
         <source>tan1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="616"/>
+        <location filename="../AutoloadStrings.cpp" line="610"/>
         <source>tan2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="617"/>
+        <location filename="../AutoloadStrings.cpp" line="611"/>
         <source>tan3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="618"/>
+        <location filename="../AutoloadStrings.cpp" line="612"/>
         <source>tan4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="619"/>
+        <location filename="../AutoloadStrings.cpp" line="613"/>
         <source>chocolate1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="620"/>
+        <location filename="../AutoloadStrings.cpp" line="614"/>
         <source>chocolate2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="621"/>
+        <location filename="../AutoloadStrings.cpp" line="615"/>
         <source>chocolate3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="622"/>
+        <location filename="../AutoloadStrings.cpp" line="616"/>
         <source>chocolate4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="623"/>
+        <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>firebrick1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="624"/>
+        <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>firebrick2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="625"/>
+        <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>firebrick3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="626"/>
+        <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>firebrick4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="627"/>
+        <location filename="../AutoloadStrings.cpp" line="621"/>
         <source>brown1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="628"/>
+        <location filename="../AutoloadStrings.cpp" line="622"/>
         <source>brown2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="629"/>
+        <location filename="../AutoloadStrings.cpp" line="623"/>
         <source>brown3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="630"/>
+        <location filename="../AutoloadStrings.cpp" line="624"/>
         <source>brown4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="631"/>
+        <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="632"/>
+        <location filename="../AutoloadStrings.cpp" line="626"/>
         <source>salmon2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="633"/>
+        <location filename="../AutoloadStrings.cpp" line="627"/>
         <source>salmon3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="634"/>
+        <location filename="../AutoloadStrings.cpp" line="628"/>
         <source>salmon4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="635"/>
+        <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>LightSalmon1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="636"/>
+        <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>LightSalmon2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="637"/>
+        <location filename="../AutoloadStrings.cpp" line="631"/>
         <source>LightSalmon3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="638"/>
+        <location filename="../AutoloadStrings.cpp" line="632"/>
         <source>LightSalmon4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="639"/>
+        <location filename="../AutoloadStrings.cpp" line="633"/>
         <source>orange1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="640"/>
+        <location filename="../AutoloadStrings.cpp" line="634"/>
         <source>orange2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="641"/>
+        <location filename="../AutoloadStrings.cpp" line="635"/>
         <source>orange3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="642"/>
+        <location filename="../AutoloadStrings.cpp" line="636"/>
         <source>orange4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="643"/>
+        <location filename="../AutoloadStrings.cpp" line="637"/>
         <source>DarkOrange1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="644"/>
+        <location filename="../AutoloadStrings.cpp" line="638"/>
         <source>DarkOrange2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="645"/>
+        <location filename="../AutoloadStrings.cpp" line="639"/>
         <source>DarkOrange3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="646"/>
+        <location filename="../AutoloadStrings.cpp" line="640"/>
         <source>DarkOrange4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="647"/>
+        <location filename="../AutoloadStrings.cpp" line="641"/>
         <source>coral1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="648"/>
+        <location filename="../AutoloadStrings.cpp" line="642"/>
         <source>coral2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="649"/>
+        <location filename="../AutoloadStrings.cpp" line="643"/>
         <source>coral3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="650"/>
+        <location filename="../AutoloadStrings.cpp" line="644"/>
         <source>coral4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="651"/>
+        <location filename="../AutoloadStrings.cpp" line="645"/>
         <source>tomato1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="652"/>
+        <location filename="../AutoloadStrings.cpp" line="646"/>
         <source>tomato2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="653"/>
+        <location filename="../AutoloadStrings.cpp" line="647"/>
         <source>tomato3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="654"/>
+        <location filename="../AutoloadStrings.cpp" line="648"/>
         <source>tomato4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="655"/>
+        <location filename="../AutoloadStrings.cpp" line="649"/>
         <source>OrangeRed1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="656"/>
+        <location filename="../AutoloadStrings.cpp" line="650"/>
         <source>OrangeRed2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="657"/>
+        <location filename="../AutoloadStrings.cpp" line="651"/>
         <source>OrangeRed3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="658"/>
+        <location filename="../AutoloadStrings.cpp" line="652"/>
         <source>OrangeRed4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="659"/>
+        <location filename="../AutoloadStrings.cpp" line="653"/>
         <source>red1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="660"/>
+        <location filename="../AutoloadStrings.cpp" line="654"/>
         <source>red2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="661"/>
+        <location filename="../AutoloadStrings.cpp" line="655"/>
         <source>red3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="662"/>
+        <location filename="../AutoloadStrings.cpp" line="656"/>
         <source>red4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="663"/>
+        <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>DeepPink1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="664"/>
+        <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>DeepPink2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="665"/>
+        <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>DeepPink3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="666"/>
+        <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>DeepPink4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="667"/>
+        <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>HotPink1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="668"/>
+        <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>HotPink2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="669"/>
+        <location filename="../AutoloadStrings.cpp" line="663"/>
         <source>HotPink3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="670"/>
+        <location filename="../AutoloadStrings.cpp" line="664"/>
         <source>HotPink4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="671"/>
+        <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>pink1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="672"/>
+        <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>pink2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="673"/>
+        <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>pink3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="674"/>
+        <location filename="../AutoloadStrings.cpp" line="668"/>
         <source>pink4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="675"/>
+        <location filename="../AutoloadStrings.cpp" line="669"/>
         <source>LightPink1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="676"/>
+        <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>LightPink2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="677"/>
+        <location filename="../AutoloadStrings.cpp" line="671"/>
         <source>LightPink3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="678"/>
+        <location filename="../AutoloadStrings.cpp" line="672"/>
         <source>LightPink4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="679"/>
+        <location filename="../AutoloadStrings.cpp" line="673"/>
         <source>PaleVioletRed1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="680"/>
+        <location filename="../AutoloadStrings.cpp" line="674"/>
         <source>PaleVioletRed2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="681"/>
+        <location filename="../AutoloadStrings.cpp" line="675"/>
         <source>PaleVioletRed3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="682"/>
+        <location filename="../AutoloadStrings.cpp" line="676"/>
         <source>PaleVioletRed4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="683"/>
+        <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>maroon1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="684"/>
+        <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>maroon2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="685"/>
+        <location filename="../AutoloadStrings.cpp" line="679"/>
         <source>maroon3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="686"/>
+        <location filename="../AutoloadStrings.cpp" line="680"/>
         <source>maroon4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="687"/>
+        <location filename="../AutoloadStrings.cpp" line="681"/>
         <source>VioletRed1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="688"/>
+        <location filename="../AutoloadStrings.cpp" line="682"/>
         <source>VioletRed2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="689"/>
+        <location filename="../AutoloadStrings.cpp" line="683"/>
         <source>VioletRed3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="690"/>
+        <location filename="../AutoloadStrings.cpp" line="684"/>
         <source>VioletRed4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="691"/>
+        <location filename="../AutoloadStrings.cpp" line="685"/>
         <source>magenta1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="692"/>
+        <location filename="../AutoloadStrings.cpp" line="686"/>
         <source>magenta2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="693"/>
+        <location filename="../AutoloadStrings.cpp" line="687"/>
         <source>magenta3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="694"/>
+        <location filename="../AutoloadStrings.cpp" line="688"/>
         <source>magenta4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="695"/>
+        <location filename="../AutoloadStrings.cpp" line="689"/>
         <source>orchid1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="696"/>
+        <location filename="../AutoloadStrings.cpp" line="690"/>
         <source>orchid2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="697"/>
+        <location filename="../AutoloadStrings.cpp" line="691"/>
         <source>orchid3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="698"/>
+        <location filename="../AutoloadStrings.cpp" line="692"/>
         <source>orchid4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="699"/>
+        <location filename="../AutoloadStrings.cpp" line="693"/>
         <source>plum1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="700"/>
+        <location filename="../AutoloadStrings.cpp" line="694"/>
         <source>plum2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="701"/>
+        <location filename="../AutoloadStrings.cpp" line="695"/>
         <source>plum3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="702"/>
+        <location filename="../AutoloadStrings.cpp" line="696"/>
         <source>plum4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="703"/>
+        <location filename="../AutoloadStrings.cpp" line="697"/>
         <source>MediumOrchid1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="704"/>
+        <location filename="../AutoloadStrings.cpp" line="698"/>
         <source>MediumOrchid2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="705"/>
+        <location filename="../AutoloadStrings.cpp" line="699"/>
         <source>MediumOrchid3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="706"/>
+        <location filename="../AutoloadStrings.cpp" line="700"/>
         <source>MediumOrchid4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="707"/>
+        <location filename="../AutoloadStrings.cpp" line="701"/>
         <source>DarkOrchid1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="708"/>
+        <location filename="../AutoloadStrings.cpp" line="702"/>
         <source>DarkOrchid2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="709"/>
+        <location filename="../AutoloadStrings.cpp" line="703"/>
         <source>DarkOrchid3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="710"/>
+        <location filename="../AutoloadStrings.cpp" line="704"/>
         <source>DarkOrchid4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="711"/>
+        <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="712"/>
+        <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="713"/>
+        <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="714"/>
+        <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="715"/>
+        <location filename="../AutoloadStrings.cpp" line="709"/>
         <source>MediumPurple1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="716"/>
+        <location filename="../AutoloadStrings.cpp" line="710"/>
         <source>MediumPurple2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="717"/>
+        <location filename="../AutoloadStrings.cpp" line="711"/>
         <source>MediumPurple3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="718"/>
+        <location filename="../AutoloadStrings.cpp" line="712"/>
         <source>MediumPurple4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="719"/>
+        <location filename="../AutoloadStrings.cpp" line="713"/>
         <source>thistle1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="720"/>
+        <location filename="../AutoloadStrings.cpp" line="714"/>
         <source>thistle2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="721"/>
+        <location filename="../AutoloadStrings.cpp" line="715"/>
         <source>thistle3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="722"/>
+        <location filename="../AutoloadStrings.cpp" line="716"/>
         <source>thistle4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="723"/>
+        <location filename="../AutoloadStrings.cpp" line="717"/>
         <source>black</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="724"/>
+        <location filename="../AutoloadStrings.cpp" line="718"/>
         <source>DarkSlateGray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="725"/>
+        <location filename="../AutoloadStrings.cpp" line="719"/>
         <source>DimGray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="726"/>
+        <location filename="../AutoloadStrings.cpp" line="720"/>
         <source>SlateGray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="727"/>
+        <location filename="../AutoloadStrings.cpp" line="721"/>
         <source>LightSlateGray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="728"/>
+        <location filename="../AutoloadStrings.cpp" line="722"/>
         <source>grey</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="729"/>
+        <location filename="../AutoloadStrings.cpp" line="723"/>
         <source>LightGray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="730"/>
+        <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="731"/>
+        <location filename="../AutoloadStrings.cpp" line="725"/>
         <source>generalmap</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="732"/>
+        <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>Blue pastel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="733"/>
+        <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="734"/>
+        <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="735"/>
+        <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="736"/>
+        <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../AutoloadStrings.cpp" line="737"/>
+        <location filename="../AutoloadStrings.cpp" line="731"/>
         <source>default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="732"/>
+        <source>Copyright (c) xxxx Copyright Holder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="733"/>
+        <source>Not Yet Titled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="734"/>
+        <source>not yet subtitled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../AutoloadStrings.cpp" line="735"/>
+        <source>Unknown</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -18891,62 +18884,62 @@ Would you like to set it now?</source>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="326"/>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="669"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="671"/>
         <source>%1 ms</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="388"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="390"/>
         <source>Default</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="401"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="403"/>
         <source>Add New Color</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="956"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="958"/>
         <source>New Color Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="957"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
         <source>Enter new name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="961"/>
         <source>New</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1011"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="998"/>
         <source>Highest playable note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1031"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1018"/>
         <source>Lowest playable note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1060"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1047"/>
         <source>Modify Segment label</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1062"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1049"/>
         <source>Modify Segments label</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1074"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1061"/>
         <source>Enter new label:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1184"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1171"/>
         <source>Instrument</source>
         <translation></translation>
     </message>
@@ -20816,7 +20809,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="132"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="711"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="713"/>
         <source>&lt;untitled&gt;</source>
         <translation></translation>
     </message>
@@ -21125,52 +21118,52 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="715"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="717"/>
         <source>[ Track %1 - %2 ]</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="917"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="921"/>
         <source>Default</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="930"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="934"/>
         <source>Add New Color</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="956"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
         <source>New Color Name</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="957"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="961"/>
         <source>Enter new name:</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="963"/>
         <source>New</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="991"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="995"/>
         <source>Highest playable note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1013"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1017"/>
         <source>Lowest playable note</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1074"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1078"/>
         <source>The instrument preset database is corrupt.  Check your installation.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1118"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1122"/>
         <source>Segment</source>
         <translation></translation>
     </message>
@@ -21886,6 +21879,14 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.h" line="1159"/>
         <source>Display time to end</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>nQObject</name>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="374"/>
+        <source>C#-2</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
