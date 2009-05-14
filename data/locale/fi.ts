@@ -144,7 +144,7 @@
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
-        <source>Receives is data from</source>
+        <source>Receives its data from</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -210,8 +210,8 @@
         <location filename="../QMenuStrings.cpp" line="406"/>
         <location filename="../QMenuStrings.cpp" line="446"/>
         <location filename="../QMenuStrings.cpp" line="851"/>
-        <location filename="../QMenuStrings.cpp" line="1024"/>
-        <location filename="../QMenuStrings.cpp" line="1062"/>
+        <location filename="../QMenuStrings.cpp" line="1017"/>
+        <location filename="../QMenuStrings.cpp" line="1055"/>
         <source>&amp;File</source>
         <translation>&amp;Tiedosto</translation>
     </message>
@@ -237,8 +237,8 @@
         <location filename="../QMenuStrings.cpp" line="408"/>
         <location filename="../QMenuStrings.cpp" line="452"/>
         <location filename="../QMenuStrings.cpp" line="882"/>
-        <location filename="../QMenuStrings.cpp" line="1026"/>
-        <location filename="../QMenuStrings.cpp" line="1063"/>
+        <location filename="../QMenuStrings.cpp" line="1019"/>
+        <location filename="../QMenuStrings.cpp" line="1056"/>
         <source>&amp;Close</source>
         <translation>&amp;Sulje</translation>
     </message>
@@ -252,8 +252,8 @@
         <location filename="../QMenuStrings.cpp" line="182"/>
         <location filename="../QMenuStrings.cpp" line="453"/>
         <location filename="../QMenuStrings.cpp" line="884"/>
-        <location filename="../QMenuStrings.cpp" line="1027"/>
-        <location filename="../QMenuStrings.cpp" line="1064"/>
+        <location filename="../QMenuStrings.cpp" line="1020"/>
+        <location filename="../QMenuStrings.cpp" line="1057"/>
         <source>&amp;Edit</source>
         <translation>&amp;Muokkaa</translation>
     </message>
@@ -298,9 +298,8 @@
         <location filename="../QMenuStrings.cpp" line="397"/>
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="790"/>
-        <location filename="../QMenuStrings.cpp" line="995"/>
-        <location filename="../QMenuStrings.cpp" line="1046"/>
-        <location filename="../QMenuStrings.cpp" line="1072"/>
+        <location filename="../QMenuStrings.cpp" line="1039"/>
+        <location filename="../QMenuStrings.cpp" line="1065"/>
         <source>&amp;Help</source>
         <translation>&amp;Ohje</translation>
     </message>
@@ -315,9 +314,8 @@
         <location filename="../QMenuStrings.cpp" line="398"/>
         <location filename="../QMenuStrings.cpp" line="436"/>
         <location filename="../QMenuStrings.cpp" line="791"/>
-        <location filename="../QMenuStrings.cpp" line="996"/>
-        <location filename="../QMenuStrings.cpp" line="1047"/>
-        <location filename="../QMenuStrings.cpp" line="1073"/>
+        <location filename="../QMenuStrings.cpp" line="1040"/>
+        <location filename="../QMenuStrings.cpp" line="1066"/>
         <source>Rosegarden &amp;Handbook</source>
         <translation>Rosegardenin &amp;käsikirja</translation>
     </message>
@@ -332,9 +330,8 @@
         <location filename="../QMenuStrings.cpp" line="399"/>
         <location filename="../QMenuStrings.cpp" line="437"/>
         <location filename="../QMenuStrings.cpp" line="792"/>
-        <location filename="../QMenuStrings.cpp" line="997"/>
-        <location filename="../QMenuStrings.cpp" line="1048"/>
-        <location filename="../QMenuStrings.cpp" line="1074"/>
+        <location filename="../QMenuStrings.cpp" line="1041"/>
+        <location filename="../QMenuStrings.cpp" line="1067"/>
         <source>&amp;What&apos;s This?</source>
         <translation>&amp;Mikä tämä on?</translation>
     </message>
@@ -342,7 +339,7 @@
         <location filename="../QMenuStrings.cpp" line="44"/>
         <location filename="../QMenuStrings.cpp" line="348"/>
         <location filename="../QMenuStrings.cpp" line="793"/>
-        <location filename="../QMenuStrings.cpp" line="998"/>
+        <location filename="../QMenuStrings.cpp" line="995"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation>&amp;Rosegardenin esiopastus</translation>
     </message>
@@ -350,7 +347,7 @@
         <location filename="../QMenuStrings.cpp" line="45"/>
         <location filename="../QMenuStrings.cpp" line="349"/>
         <location filename="../QMenuStrings.cpp" line="794"/>
-        <location filename="../QMenuStrings.cpp" line="999"/>
+        <location filename="../QMenuStrings.cpp" line="996"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation>&amp;Ohjelmointivirheiden raportoimisohjeet</translation>
     </message>
@@ -358,7 +355,7 @@
         <location filename="../QMenuStrings.cpp" line="46"/>
         <location filename="../QMenuStrings.cpp" line="350"/>
         <location filename="../QMenuStrings.cpp" line="795"/>
-        <location filename="../QMenuStrings.cpp" line="1000"/>
+        <location filename="../QMenuStrings.cpp" line="997"/>
         <source>Tip of the &amp;Day</source>
         <translation>Päivän &amp;vihje</translation>
     </message>
@@ -373,9 +370,8 @@
         <location filename="../QMenuStrings.cpp" line="400"/>
         <location filename="../QMenuStrings.cpp" line="438"/>
         <location filename="../QMenuStrings.cpp" line="796"/>
-        <location filename="../QMenuStrings.cpp" line="1001"/>
-        <location filename="../QMenuStrings.cpp" line="1049"/>
-        <location filename="../QMenuStrings.cpp" line="1075"/>
+        <location filename="../QMenuStrings.cpp" line="1042"/>
+        <location filename="../QMenuStrings.cpp" line="1068"/>
         <source>Switch application &amp;language...</source>
         <translation>Vaihda ohjelman &amp;kieli...</translation>
     </message>
@@ -390,9 +386,8 @@
         <location filename="../QMenuStrings.cpp" line="401"/>
         <location filename="../QMenuStrings.cpp" line="439"/>
         <location filename="../QMenuStrings.cpp" line="797"/>
-        <location filename="../QMenuStrings.cpp" line="1002"/>
-        <location filename="../QMenuStrings.cpp" line="1050"/>
-        <location filename="../QMenuStrings.cpp" line="1076"/>
+        <location filename="../QMenuStrings.cpp" line="1043"/>
+        <location filename="../QMenuStrings.cpp" line="1069"/>
         <source>&amp;Get Help Online</source>
         <translation>&amp;Hae verkko-ohjeita </translation>
     </message>
@@ -407,9 +402,8 @@
         <location filename="../QMenuStrings.cpp" line="402"/>
         <location filename="../QMenuStrings.cpp" line="440"/>
         <location filename="../QMenuStrings.cpp" line="798"/>
-        <location filename="../QMenuStrings.cpp" line="1003"/>
-        <location filename="../QMenuStrings.cpp" line="1051"/>
-        <location filename="../QMenuStrings.cpp" line="1077"/>
+        <location filename="../QMenuStrings.cpp" line="1044"/>
+        <location filename="../QMenuStrings.cpp" line="1070"/>
         <source>&amp;Translate This Application</source>
         <translation>&amp;Käännä tämä ohjelma</translation>
     </message>
@@ -424,9 +418,9 @@
         <location filename="../QMenuStrings.cpp" line="403"/>
         <location filename="../QMenuStrings.cpp" line="441"/>
         <location filename="../QMenuStrings.cpp" line="799"/>
-        <location filename="../QMenuStrings.cpp" line="1004"/>
-        <location filename="../QMenuStrings.cpp" line="1052"/>
-        <location filename="../QMenuStrings.cpp" line="1078"/>
+        <location filename="../QMenuStrings.cpp" line="998"/>
+        <location filename="../QMenuStrings.cpp" line="1045"/>
+        <location filename="../QMenuStrings.cpp" line="1071"/>
         <source>&amp;About Rosegarden</source>
         <translation>&amp;Lisätietoja Rosegardenista</translation>
     </message>
@@ -440,9 +434,8 @@
         <location filename="../QMenuStrings.cpp" line="355"/>
         <location filename="../QMenuStrings.cpp" line="404"/>
         <location filename="../QMenuStrings.cpp" line="800"/>
-        <location filename="../QMenuStrings.cpp" line="1005"/>
-        <location filename="../QMenuStrings.cpp" line="1053"/>
-        <location filename="../QMenuStrings.cpp" line="1079"/>
+        <location filename="../QMenuStrings.cpp" line="1046"/>
+        <location filename="../QMenuStrings.cpp" line="1072"/>
         <source>About &amp;KDE</source>
         <translation>Lisätietoja &amp;KDE:stä</translation>
     </message>
@@ -460,9 +453,9 @@
         <location filename="../QMenuStrings.cpp" line="183"/>
         <location filename="../QMenuStrings.cpp" line="454"/>
         <location filename="../QMenuStrings.cpp" line="885"/>
-        <location filename="../QMenuStrings.cpp" line="1007"/>
-        <location filename="../QMenuStrings.cpp" line="1028"/>
-        <location filename="../QMenuStrings.cpp" line="1065"/>
+        <location filename="../QMenuStrings.cpp" line="1000"/>
+        <location filename="../QMenuStrings.cpp" line="1021"/>
+        <location filename="../QMenuStrings.cpp" line="1058"/>
         <source>&amp;Nothing to undo</source>
         <translation>&amp;Ei peruttavaa</translation>
     </message>
@@ -475,9 +468,9 @@
         <location filename="../QMenuStrings.cpp" line="184"/>
         <location filename="../QMenuStrings.cpp" line="455"/>
         <location filename="../QMenuStrings.cpp" line="886"/>
-        <location filename="../QMenuStrings.cpp" line="1008"/>
-        <location filename="../QMenuStrings.cpp" line="1029"/>
-        <location filename="../QMenuStrings.cpp" line="1066"/>
+        <location filename="../QMenuStrings.cpp" line="1001"/>
+        <location filename="../QMenuStrings.cpp" line="1022"/>
+        <location filename="../QMenuStrings.cpp" line="1059"/>
         <source>N&amp;othing to redo</source>
         <translation>Ei &amp;palautettavaa</translation>
     </message>
@@ -510,7 +503,7 @@
         <location filename="../QMenuStrings.cpp" line="443"/>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <location filename="../QMenuStrings.cpp" line="847"/>
-        <location filename="../QMenuStrings.cpp" line="1059"/>
+        <location filename="../QMenuStrings.cpp" line="1052"/>
         <source>Switch to Select Tool</source>
         <translation>Vaihda valintatyökaluun</translation>
     </message>
@@ -518,7 +511,7 @@
         <location filename="../QMenuStrings.cpp" line="69"/>
         <location filename="../QMenuStrings.cpp" line="143"/>
         <location filename="../QMenuStrings.cpp" line="849"/>
-        <location filename="../QMenuStrings.cpp" line="1060"/>
+        <location filename="../QMenuStrings.cpp" line="1053"/>
         <source>Switch to Inserting Notes</source>
         <translation>Vaihda nuottien syöttöön</translation>
     </message>
@@ -533,7 +526,7 @@
         <location filename="../QMenuStrings.cpp" line="824"/>
         <location filename="../QMenuStrings.cpp" line="836"/>
         <location filename="../QMenuStrings.cpp" line="848"/>
-        <location filename="../QMenuStrings.cpp" line="1061"/>
+        <location filename="../QMenuStrings.cpp" line="1054"/>
         <source>Switch to Erase Tool</source>
         <translation>Vaihda poistotyökaluun</translation>
     </message>
@@ -545,7 +538,7 @@
         <location filename="../QMenuStrings.cpp" line="407"/>
         <location filename="../QMenuStrings.cpp" line="447"/>
         <location filename="../QMenuStrings.cpp" line="872"/>
-        <location filename="../QMenuStrings.cpp" line="1025"/>
+        <location filename="../QMenuStrings.cpp" line="1018"/>
         <source>&amp;Save</source>
         <translation>&amp;Tallenna</translation>
     </message>
@@ -609,32 +602,32 @@
         <location filename="../QMenuStrings.cpp" line="150"/>
         <location filename="../QMenuStrings.cpp" line="191"/>
         <location filename="../QMenuStrings.cpp" line="469"/>
-        <location filename="../QMenuStrings.cpp" line="1036"/>
-        <location filename="../QMenuStrings.cpp" line="1068"/>
+        <location filename="../QMenuStrings.cpp" line="1029"/>
+        <location filename="../QMenuStrings.cpp" line="1061"/>
         <source>&amp;View</source>
         <translation>&amp;Katso</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="116"/>
         <location filename="../QMenuStrings.cpp" line="151"/>
-        <location filename="../QMenuStrings.cpp" line="1037"/>
-        <location filename="../QMenuStrings.cpp" line="1069"/>
+        <location filename="../QMenuStrings.cpp" line="1030"/>
+        <location filename="../QMenuStrings.cpp" line="1062"/>
         <source>&amp;Musical Times</source>
         <translation>&amp;Musiikkiajat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="117"/>
         <location filename="../QMenuStrings.cpp" line="152"/>
-        <location filename="../QMenuStrings.cpp" line="1038"/>
-        <location filename="../QMenuStrings.cpp" line="1070"/>
+        <location filename="../QMenuStrings.cpp" line="1031"/>
+        <location filename="../QMenuStrings.cpp" line="1063"/>
         <source>&amp;Real Times</source>
         <translation>&amp;Kellonajat</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="118"/>
         <location filename="../QMenuStrings.cpp" line="153"/>
-        <location filename="../QMenuStrings.cpp" line="1039"/>
-        <location filename="../QMenuStrings.cpp" line="1071"/>
+        <location filename="../QMenuStrings.cpp" line="1032"/>
+        <location filename="../QMenuStrings.cpp" line="1064"/>
         <source>Ra&amp;w Times</source>
         <translation>Kä&amp;sittelemättömät ajat</translation>
     </message>
@@ -670,7 +663,7 @@
         <location filename="../QMenuStrings.cpp" line="123"/>
         <location filename="../QMenuStrings.cpp" line="334"/>
         <location filename="../QMenuStrings.cpp" line="973"/>
-        <location filename="../QMenuStrings.cpp" line="1040"/>
+        <location filename="../QMenuStrings.cpp" line="1033"/>
         <source>Sett&amp;ings</source>
         <translation>&amp;Asetukset</translation>
     </message>
@@ -678,7 +671,7 @@
         <location filename="../QMenuStrings.cpp" line="124"/>
         <location filename="../QMenuStrings.cpp" line="336"/>
         <location filename="../QMenuStrings.cpp" line="769"/>
-        <location filename="../QMenuStrings.cpp" line="1041"/>
+        <location filename="../QMenuStrings.cpp" line="1034"/>
         <source>Show &amp;Toolbar</source>
         <translation>Näytä työ&amp;kalupalkki</translation>
     </message>
@@ -686,7 +679,7 @@
         <location filename="../QMenuStrings.cpp" line="125"/>
         <location filename="../QMenuStrings.cpp" line="337"/>
         <location filename="../QMenuStrings.cpp" line="780"/>
-        <location filename="../QMenuStrings.cpp" line="1042"/>
+        <location filename="../QMenuStrings.cpp" line="1035"/>
         <source>Hide St&amp;atusbar</source>
         <translation>&amp;Piilota tilarivi</translation>
     </message>
@@ -695,7 +688,7 @@
         <location filename="../QMenuStrings.cpp" line="342"/>
         <location filename="../QMenuStrings.cpp" line="787"/>
         <location filename="../QMenuStrings.cpp" line="992"/>
-        <location filename="../QMenuStrings.cpp" line="1043"/>
+        <location filename="../QMenuStrings.cpp" line="1036"/>
         <source>Configure S&amp;hortcuts...</source>
         <translation>Aseta &amp;lyhenteet...</translation>
     </message>
@@ -704,7 +697,7 @@
         <location filename="../QMenuStrings.cpp" line="343"/>
         <location filename="../QMenuStrings.cpp" line="788"/>
         <location filename="../QMenuStrings.cpp" line="993"/>
-        <location filename="../QMenuStrings.cpp" line="1044"/>
+        <location filename="../QMenuStrings.cpp" line="1037"/>
         <source>Configure Tool&amp;bars...</source>
         <translation>Aseta &amp;työkalut...</translation>
     </message>
@@ -713,7 +706,7 @@
         <location filename="../QMenuStrings.cpp" line="344"/>
         <location filename="../QMenuStrings.cpp" line="789"/>
         <location filename="../QMenuStrings.cpp" line="994"/>
-        <location filename="../QMenuStrings.cpp" line="1045"/>
+        <location filename="../QMenuStrings.cpp" line="1038"/>
         <source>&amp;Configure Rosegarden...</source>
         <translation>Aseta &amp;Rosegarden...</translation>
     </message>
@@ -721,16 +714,16 @@
         <location filename="../QMenuStrings.cpp" line="137"/>
         <location filename="../QMenuStrings.cpp" line="140"/>
         <location filename="../QMenuStrings.cpp" line="358"/>
-        <location filename="../QMenuStrings.cpp" line="1054"/>
-        <location filename="../QMenuStrings.cpp" line="1057"/>
+        <location filename="../QMenuStrings.cpp" line="1047"/>
+        <location filename="../QMenuStrings.cpp" line="1050"/>
         <source>Actions Toolbar</source>
         <translation>Toiminnot -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="138"/>
         <location filename="../QMenuStrings.cpp" line="162"/>
-        <location filename="../QMenuStrings.cpp" line="1055"/>
-        <location filename="../QMenuStrings.cpp" line="1080"/>
+        <location filename="../QMenuStrings.cpp" line="1048"/>
+        <location filename="../QMenuStrings.cpp" line="1073"/>
         <source>Time Toolbar</source>
         <translation>Aika -työkalupalkki</translation>
     </message>
@@ -740,16 +733,16 @@
         <location filename="../QMenuStrings.cpp" line="405"/>
         <location filename="../QMenuStrings.cpp" line="442"/>
         <location filename="../QMenuStrings.cpp" line="802"/>
-        <location filename="../QMenuStrings.cpp" line="1012"/>
-        <location filename="../QMenuStrings.cpp" line="1056"/>
+        <location filename="../QMenuStrings.cpp" line="1005"/>
+        <location filename="../QMenuStrings.cpp" line="1049"/>
         <source>Transport Toolbar</source>
         <translation>Kuljetin -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="141"/>
         <location filename="../QMenuStrings.cpp" line="359"/>
-        <location filename="../QMenuStrings.cpp" line="1015"/>
-        <location filename="../QMenuStrings.cpp" line="1058"/>
+        <location filename="../QMenuStrings.cpp" line="1008"/>
+        <location filename="../QMenuStrings.cpp" line="1051"/>
         <source>Zoom Toolbar</source>
         <translation>Suurennos -työkalupalkki</translation>
     </message>
@@ -798,7 +791,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="188"/>
         <location filename="../QMenuStrings.cpp" line="890"/>
-        <location filename="../QMenuStrings.cpp" line="1032"/>
+        <location filename="../QMenuStrings.cpp" line="1025"/>
         <source>&amp;Delete</source>
         <translation>&amp;Poista</translation>
     </message>
@@ -898,7 +891,7 @@
         <location filename="../QMenuStrings.cpp" line="210"/>
         <location filename="../QMenuStrings.cpp" line="483"/>
         <location filename="../QMenuStrings.cpp" line="897"/>
-        <location filename="../QMenuStrings.cpp" line="1030"/>
+        <location filename="../QMenuStrings.cpp" line="1023"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation>Lisää te&amp;mpon vaihto...</translation>
     </message>
@@ -906,7 +899,7 @@
         <location filename="../QMenuStrings.cpp" line="211"/>
         <location filename="../QMenuStrings.cpp" line="484"/>
         <location filename="../QMenuStrings.cpp" line="898"/>
-        <location filename="../QMenuStrings.cpp" line="1031"/>
+        <location filename="../QMenuStrings.cpp" line="1024"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation>Lisää ta&amp;htilajin muutos...</translation>
     </message>
@@ -1525,7 +1518,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="356"/>
         <location filename="../QMenuStrings.cpp" line="801"/>
-        <location filename="../QMenuStrings.cpp" line="1009"/>
+        <location filename="../QMenuStrings.cpp" line="1002"/>
         <source>Tools Toolbar</source>
         <translation>Työkalut -työkalupalkki</translation>
     </message>
@@ -3331,87 +3324,87 @@
         <translation>Tallenna &amp;asetukset</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1006"/>
+        <location filename="../QMenuStrings.cpp" line="999"/>
         <source>Main Toolbar</source>
         <translation>Päätyökalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1010"/>
+        <location filename="../QMenuStrings.cpp" line="1003"/>
         <source>Tracks Toolbar</source>
         <translation>Raidat -työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1011"/>
+        <location filename="../QMenuStrings.cpp" line="1004"/>
         <source>Editors Toolbar</source>
         <translation>Muokkaimet -työkalupalkki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1013"/>
+        <location filename="../QMenuStrings.cpp" line="1006"/>
         <source>Rewind to Beginning</source>
         <translation>Kelaa alkuun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1014"/>
+        <location filename="../QMenuStrings.cpp" line="1007"/>
         <source>Fast Forward to End</source>
         <translation>Kelaa loppuun</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1016"/>
+        <location filename="../QMenuStrings.cpp" line="1009"/>
         <source>Insert Tempo Change</source>
         <translation>Syötä tempon muutos</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1017"/>
+        <location filename="../QMenuStrings.cpp" line="1010"/>
         <source>Insert Tempo Change at Playback Position</source>
         <translation>Syötä tempon muutos toisto-osoittimen kohdalle</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1018"/>
+        <location filename="../QMenuStrings.cpp" line="1011"/>
         <source>Delete Tempo Change</source>
         <translation>Poista tempon muutos</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1019"/>
+        <location filename="../QMenuStrings.cpp" line="1012"/>
         <source>Ramp Tempo to Next Tempo</source>
         <translation>Liuuta tempo vähitellen seuraavaan tempoon</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1020"/>
+        <location filename="../QMenuStrings.cpp" line="1013"/>
         <source>Un-Ramp Tempo</source>
         <translation>Poista tempon liuuttaminen</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1021"/>
+        <location filename="../QMenuStrings.cpp" line="1014"/>
         <source>Edit Tempo...</source>
         <translation>Muokkaa tempoa...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1022"/>
+        <location filename="../QMenuStrings.cpp" line="1015"/>
         <source>Edit Time Signature...</source>
         <translation>Muokkaa tahtilajimerkintää...</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1023"/>
+        <location filename="../QMenuStrings.cpp" line="1016"/>
         <source>Open Tempo and Time Signature Editor</source>
         <translation>Avaa tempo- ja tahtilajimerkintöjen muokkain</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1033"/>
+        <location filename="../QMenuStrings.cpp" line="1026"/>
         <source>&amp;Edit Item</source>
         <translation>&amp;Muokkaa oliota</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1034"/>
+        <location filename="../QMenuStrings.cpp" line="1027"/>
         <source>Select &amp;All</source>
         <translation>Valitse &amp;kaikki</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1035"/>
+        <location filename="../QMenuStrings.cpp" line="1028"/>
         <source>&amp;Clear Selection</source>
         <translation>T&amp;yhjää valinta</translation>
     </message>
     <message>
-        <location filename="../QMenuStrings.cpp" line="1067"/>
+        <location filename="../QMenuStrings.cpp" line="1060"/>
         <source>Pa&amp;ste as New Triggered Segment</source>
         <translation>Li&amp;itä uutena sysättävänä osana</translation>
     </message>
@@ -5381,26 +5374,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../InstrumentStrings.cpp" line="392"/>
         <source>B#</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Pan</source>
-        <comment>DYNAMIC STRING</comment>
-        <translation type="obsolete">Jako</translation>
-    </message>
-    <message>
-        <source>Volume</source>
-        <comment>DYNAMIC STRING</comment>
-        <translation type="obsolete">Äänenvoimakkuus</translation>
-    </message>
-    <message>
-        <source>Sustain</source>
-        <comment>DYNAMIC STRING</comment>
-        <translation type="obsolete">Pedaali</translation>
-    </message>
-    <message>
-        <source>Audio</source>
-        <comment>DYNAMIC STRING</comment>
-        <translation type="obsolete">Ääni</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
@@ -8736,54 +8709,6 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
         <translation type="unfinished">Tuntematon</translation>
-    </message>
-    <message>
-        <source>C%1</source>
-        <translation type="obsolete">C%1</translation>
-    </message>
-    <message>
-        <source>C#%1</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D%1</source>
-        <translation type="obsolete">D%1</translation>
-    </message>
-    <message>
-        <source>D#%1</source>
-        <translation type="obsolete">D#%1</translation>
-    </message>
-    <message>
-        <source>E%1</source>
-        <translation type="obsolete">E%1</translation>
-    </message>
-    <message>
-        <source>F%1</source>
-        <translation type="obsolete">F%1</translation>
-    </message>
-    <message>
-        <source>F#%1</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G%1</source>
-        <translation type="obsolete">G%1</translation>
-    </message>
-    <message>
-        <source>G#%1</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A%1</source>
-        <translation type="obsolete">A%1</translation>
-    </message>
-    <message>
-        <source>A#%1</source>
-        <translation type="obsolete">A#%1</translation>
-    </message>
-    <message>
-        <source>B%1</source>
-        <translation type="obsolete">B%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
@@ -15027,57 +14952,6 @@ Tupla-klikkaa avataksesi merkintöjen muokkaimen.</translation>
         <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="153"/>
         <source>Instrument</source>
         <translation>Instrumentti</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::MidiPitchLabel</name>
-    <message>
-        <source>C%1</source>
-        <translation type="obsolete">C%1</translation>
-    </message>
-    <message>
-        <source>C#%1</source>
-        <translation type="obsolete">C#%1</translation>
-    </message>
-    <message>
-        <source>D%1</source>
-        <translation type="obsolete">D%1</translation>
-    </message>
-    <message>
-        <source>D#%1</source>
-        <translation type="obsolete">D#%1</translation>
-    </message>
-    <message>
-        <source>E%1</source>
-        <translation type="obsolete">E%1</translation>
-    </message>
-    <message>
-        <source>F%1</source>
-        <translation type="obsolete">F%1</translation>
-    </message>
-    <message>
-        <source>F#%1</source>
-        <translation type="obsolete">F#%1</translation>
-    </message>
-    <message>
-        <source>G%1</source>
-        <translation type="obsolete">G%1</translation>
-    </message>
-    <message>
-        <source>G#%1</source>
-        <translation type="obsolete">G#%1</translation>
-    </message>
-    <message>
-        <source>A%1</source>
-        <translation type="obsolete">A%1</translation>
-    </message>
-    <message>
-        <source>A#%1</source>
-        <translation type="obsolete">A#%1</translation>
-    </message>
-    <message>
-        <source>B%1</source>
-        <translation type="obsolete">B%1</translation>
     </message>
 </context>
 <context>
