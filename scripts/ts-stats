@@ -35,11 +35,15 @@ function getValues() {
     # original version of this script used msgfmt
 
     UNTRANSLATED=$(grep "<translation.*></translation>" $1 | wc -l | cut -d \  -f 1)
-#    UNFINISHED=$(grep "<translation" $1 | grep unfinished | wc -l | cut -d \  -f 1)
+    
     UNFINISHED=$(grep "<translation.*>.\+<" $1 | grep unfinished | wc -l | cut -d \  -f 1)
+    
     TRANSLATED=$(grep "<translation.*>.\+<" $1 | wc -l | cut -d \  -f 1)
-    TOTAL=$(grep "</translation" $1 | wc -l | cut -d \  -f 1)
+
+    ((TOTAL = UNTRANSLATED + TRANSLATED))
+
     COMPLETION=$((($TRANSLATED*5)/$TOTAL))
+
     OBSOLETE=$(grep "<translation" $1 | grep obsolete | wc -l | cut -d \  -f 1)
 }
 
@@ -68,7 +72,17 @@ for P in *.ts; do
     getValues $P
     MSG=""
     if [ $TS != $TOTAL ]; then
-	MSG="Warning!"
+
+    # Suppress warning, because every translation has a different total by this
+    # metric, yet if I use a metric based on the physical number of
+    # </translation> tags in the file, I always get a higher number than can
+    # ever be accounted for, even after working with dummy files that are s///g
+    # hacked to get everything finished and translated.  It seems the best we
+    # can do with this is a rough estimate, rather than the kind of precise
+    # figures we used to get from msgfmt.  The lupdate and lrelease tools just
+    # don't have any kind of reporting mode to exploit for this, so I've muddled
+    # through as best I could.
+#	MSG="Warning!"
 	W=1
     fi
     BAR='['
@@ -81,14 +95,23 @@ for P in *.ts; do
 	BAR="${BAR}-"
 	COUNT=$(($COUNT+1))
     done
-    BAR="$BAR]"
-    printf "%-6s     %-5d       %-5d       %-5d          %-5d        %-5d     %-10s  \n" ${P/.ts/} $TOTAL $TRANSLATED $UNFINISHED $UNTRANSLATED $OBSOLETE $BAR $MSG
+    BAR="$BAR]$MSG"
+    printf "%-6s     %-5d       %-5d       %-5d          %-5d        %-5d     %-10s  \n" ${P/.ts/} $TOTAL $TRANSLATED $UNTRANSLATED $UNFINISHED $OBSOLETE $BAR
 done | sort -k 3,3rn -k 1
 
-if [ $W == 1 ]; then
-    echo -e "\nSome translations have more or fewer messages than rosegarden.ts"
-fi
+#f [ $W == 1 ]; then
+#   echo -e "\nSome translations have more or fewer messages than rosegarden.ts"
+#i
 
-echo -e "\n\"Unfinished\" only includes unfinished messages that have been translated"
+cat << EOF
 
-echo -e "\nReport produced on $(date -R)"
+"Unfinished" only includes unfinished messages that have been translated.  There
+may be many more unfinished messages that do not yet have translations.
+
+We don't yet have an explanation why the Total is different per language.  We are still
+learning the new translation tools, and these statistics should be considered a
+rough estimate only.
+
+
+Report produced on $(date -R)
+EOF

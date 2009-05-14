@@ -99,10 +99,12 @@ autoload-ts:
 ts:	menu-ts instrument-ts autoload-ts
 	$(MKDIR_P) data/locale
 	$(LUPDATE) $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	@scripts/ts-stats
 
 ts-noobsolete:	menu-ts instrument-ts
 	$(MKDIR_P) data/locale
 	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
+	@scripts/ts-stats
 
 locale:
 	$(LRELEASE) $(TRANSLATIONS)
@@ -145,7 +147,7 @@ uninstall:
 	rm -f $(INSTBINDIR)/rosegarden-lilypondview
 	rm -f $(INSTBINDIR)/rosegarden-project-package
 
-.PHONY: instrument-ts menu-ts ts ts-noobsolete locale
+.PHONY: autoload-ts instrument-ts menu-ts ts ts-noobsolete locale
 
 include dependencies
 

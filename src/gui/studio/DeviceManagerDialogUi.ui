@@ -704,7 +704,7 @@ QLineEdit
           </column>
           <column>
            <property name="text">
-            <string>Receives is data from</string>
+            <string>Receives its data from</string>
            </property>
           </column>
           <item>
