@@ -31,6 +31,7 @@
 #include "base/SnapGrid.h"
 
 #include "gui/general/GUIPalette.h"
+#include "gui/widgets/Panned.h"
 
 #include "base/BaseProperties.h"
 #include "base/NotationRules.h"
@@ -40,6 +41,8 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsLineItem>
 #include <QSettings>
+#include <QPointF>
+#include <QRectF>
 
 namespace Rosegarden
 {
@@ -349,7 +352,9 @@ MatrixScene::repositionPointer()
     if (!m_document) return;
     timeT t = m_document->getComposition().getPosition();
     double x = m_scale->getXForTime(t);
-    m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
+//  m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
+    m_pointer->setLine(0, 0.5, 0, 128 * (m_resolution + 1) + 0.5);
+    m_pointer->setPos(x + 0.5, 0);
     if (m_widget && m_widget->getPlayTracking()) ensurePointerVisible();
 }
 
@@ -544,7 +549,25 @@ MatrixScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
 void
 MatrixScene::ensurePointerVisible()
 {
-    if (m_pointer) m_pointer->ensureVisible();
+    if (m_pointer) {
+        double x = m_pointer->x();
+        Panned *view = m_widget->getView();
+        int w = view->width();
+        int h = view->height();
+
+        // Horizontal position (%) of playback pointer 
+        // inside the view when play tracking is on.
+        const int percentPos = 50; 
+
+        // Construct a rect around the pointer. The whole rect will be
+        // kept inside the view.
+        int wm = w * (100 - percentPos) / 100;
+        int eps = h / 10;
+        QRectF r = view->mapToScene(0, eps, wm, h - eps).boundingRect();
+        r.moveLeft(x);
+
+        view->ensureVisible(r, 10, 0);
+    }
 }
 
 void

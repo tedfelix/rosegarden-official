@@ -61,6 +61,7 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 void
 Panned::scrollContentsBy(int dx, int dy)
 {
+    // used to scroll rulers
     emit pannedContentsScrolled(dx, dy);
 
     QGraphicsView::scrollContentsBy(dx, dy);

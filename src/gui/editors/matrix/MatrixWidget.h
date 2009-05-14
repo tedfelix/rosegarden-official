@@ -65,6 +65,7 @@ public:
                      std::vector<Segment *> segments);
 
     MatrixScene *getScene() { return m_scene; }
+    Panned *getView() { return m_view; }
 
     void setHorizontalZoomFactor(double factor);
     double getHorizontalZoomFactor() const;
