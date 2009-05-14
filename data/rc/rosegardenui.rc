@@ -247,9 +247,9 @@
   </Menu>
 
   <Menu name="help" append="about_merge">
+    <text>&amp;Help</text>
     <Action name="tutorial" text="&amp;Rosegarden tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
-    <Action name="help_show_tip" text="Tip of the &amp;Day" icon="idea" />
   <Separator/> 
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
   </Menu>

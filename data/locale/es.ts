@@ -298,6 +298,7 @@
         <location filename="../QMenuStrings.cpp" line="397"/>
         <location filename="../QMenuStrings.cpp" line="435"/>
         <location filename="../QMenuStrings.cpp" line="790"/>
+        <location filename="../QMenuStrings.cpp" line="995"/>
         <location filename="../QMenuStrings.cpp" line="1039"/>
         <location filename="../QMenuStrings.cpp" line="1065"/>
         <source>&amp;Help</source>
@@ -339,7 +340,7 @@
         <location filename="../QMenuStrings.cpp" line="44"/>
         <location filename="../QMenuStrings.cpp" line="348"/>
         <location filename="../QMenuStrings.cpp" line="793"/>
-        <location filename="../QMenuStrings.cpp" line="995"/>
+        <location filename="../QMenuStrings.cpp" line="996"/>
         <source>&amp;Rosegarden tutorial</source>
         <translation type="unfinished"></translation>
     </message>
@@ -347,7 +348,7 @@
         <location filename="../QMenuStrings.cpp" line="45"/>
         <location filename="../QMenuStrings.cpp" line="349"/>
         <location filename="../QMenuStrings.cpp" line="794"/>
-        <location filename="../QMenuStrings.cpp" line="996"/>
+        <location filename="../QMenuStrings.cpp" line="997"/>
         <source>&amp;Bug Reporting Guidelines</source>
         <translation type="unfinished">&amp;Directivas de Reporte de Errores</translation>
     </message>
@@ -355,7 +356,6 @@
         <location filename="../QMenuStrings.cpp" line="46"/>
         <location filename="../QMenuStrings.cpp" line="350"/>
         <location filename="../QMenuStrings.cpp" line="795"/>
-        <location filename="../QMenuStrings.cpp" line="997"/>
         <source>Tip of the &amp;Day</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8717,13 +8717,13 @@ así lo desea.</translation>
         <translation type="unfinished">Desconocida</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="279"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="289"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="716"/>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="838"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="728"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="850"/>
         <source>%1. %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14006,47 +14006,77 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="480"/>
+        <source>&lt;qt&gt;&lt;p&gt;Place mouse over rotary control, &lt;b&gt;hold down&lt;/b&gt; left mouse button and drag up and down to change value.&lt;/p&gt;&lt;p&gt;A small blue tooltip will tell the value.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="81"/>
+        <source>&lt;qt&gt;Sets the midi bank.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="82"/>
+        <source>&lt;qt&gt;Sets the channel number.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="83"/>
+        <source>&lt;qt&gt;Sets the midi program.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="84"/>
+        <source>&lt;qt&gt;Check this box to allow you to set the value.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="88"/>
+        <source>&lt;qt&gt;&lt;p&gt;Check this to access program changes and variations for percussion instruments. It will of course set the channel to percussion.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="94"/>
         <source>Bank</source>
         <translation type="unfinished">Banco</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="85"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="95"/>
         <source>Variation</source>
         <translation type="unfinished">Variación</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="86"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="96"/>
         <source>Program</source>
         <translation type="unfinished">Programa</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="87"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="97"/>
         <source>Channel out</source>
         <translation type="unfinished">Canal de salida</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="88"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="98"/>
         <source>Percussion</source>
         <translation type="unfinished">Percusión</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="111"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="121"/>
         <source>&lt;qt&gt;use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="113"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="123"/>
         <source>Receive external</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="273"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="283"/>
         <source>[ %1 ]</source>
         <translation type="unfinished">[ %1 ]</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="273"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="283"/>
         <source>No connection</source>
         <translation type="unfinished">Sin conexión</translation>
     </message>
@@ -14138,107 +14168,142 @@ las notas del ornamento.</translation>
         <translation type="unfinished">Dispositivo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="113"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="95"/>
+        <source>&lt;qt&gt;Choose the source of the sound. You can use a midi device if it is connected.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="114"/>
         <source>%1 - %2</source>
         <translation type="unfinished">%1 - %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="115"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="116"/>
         <source>%1 - No connection</source>
         <translation type="unfinished">%1 - Sin conexión</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="123"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="124"/>
         <source>Instrument</source>
         <translation type="unfinished">Instrumento</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="130"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="126"/>
+        <source>&lt;qt&gt;Choose from the usual midi candidates.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="132"/>
         <source>Beats</source>
         <translation type="unfinished">Golpes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="136"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="138"/>
         <source>Resolution</source>
         <translation type="unfinished">Resolución</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="138"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
+        <source>&lt;qt&gt;Sets the resolution of the metronome.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
         <source>None</source>
         <translation type="unfinished">Nada</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="139"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="142"/>
         <source>Bars only</source>
         <translation type="unfinished">Compases sólamente</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="143"/>
         <source>Bars and beats</source>
         <translation type="unfinished">Compases y partes</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="141"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="144"/>
         <source>Bars, beats, and divisions</source>
         <translation type="unfinished">Compases, partes y divisiones</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="145"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="148"/>
         <source>Bar velocity</source>
         <translation type="unfinished">Velocidad de Compás</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="152"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="150"/>
+        <source>&lt;qt&gt;dragons. That&apos;s what you get for hiring an amateur musician. Not even a talented amateur.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="156"/>
         <source>Beat velocity</source>
         <translation type="unfinished">Velocidad de Parte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="159"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="158"/>
+        <source>&lt;qt&gt;Sets velocity of metronome ticks for main beat of bar.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="164"/>
         <source>Sub-beat velocity</source>
         <translation type="unfinished">Velocidad de sub-parte</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="174"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="166"/>
+        <source>&lt;qt&gt;Sets velocity of metronome ticks for non main beats. Yuck!&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="180"/>
         <source>Pitch</source>
         <translation type="unfinished">Altura</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="180"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="181"/>
+        <source>&lt;qt&gt;WCan you believe this! You can even change the pitch of the metronome tick.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="187"/>
         <source>for Bar</source>
         <translation type="unfinished">por cada Compás </translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="181"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="188"/>
         <source>for Beat</source>
         <translation type="unfinished">por cada División</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="182"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="189"/>
         <source>for Sub-beat</source>
         <translation type="unfinished">por cada Subdivisión</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="186"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="193"/>
         <source>Metronome Activated</source>
         <translation type="unfinished">Metrónomo Activado</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="189"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="196"/>
         <source>Playing</source>
         <translation type="unfinished">Tocando</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="191"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="198"/>
         <source>Recording</source>
         <translation type="unfinished">Grabando</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="288"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="295"/>
         <source>Synth plugin </source>
         <translation type="unfinished">Plugin de Sintetizador</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="317"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="324"/>
         <source>%1 (%2)</source>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
