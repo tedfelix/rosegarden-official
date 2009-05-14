@@ -318,7 +318,7 @@
         <location filename="../QMenuStrings.cpp" line="1040"/>
         <location filename="../QMenuStrings.cpp" line="1066"/>
         <source>Rosegarden &amp;Handbook</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Manual de Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="43"/>
@@ -334,7 +334,7 @@
         <location filename="../QMenuStrings.cpp" line="1041"/>
         <location filename="../QMenuStrings.cpp" line="1067"/>
         <source>&amp;What&apos;s This?</source>
-        <translation type="unfinished"></translation>
+        <translation>¿Qué es &amp;esto?</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="44"/>
@@ -342,7 +342,7 @@
         <location filename="../QMenuStrings.cpp" line="793"/>
         <location filename="../QMenuStrings.cpp" line="996"/>
         <source>&amp;Rosegarden tutorial</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutorial &amp;Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="45"/>
@@ -350,14 +350,14 @@
         <location filename="../QMenuStrings.cpp" line="794"/>
         <location filename="../QMenuStrings.cpp" line="997"/>
         <source>&amp;Bug Reporting Guidelines</source>
-        <translation type="unfinished">&amp;Directivas de Reporte de Errores</translation>
+        <translation>&amp;Directivas de reporte de errores</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="46"/>
         <location filename="../QMenuStrings.cpp" line="350"/>
         <location filename="../QMenuStrings.cpp" line="795"/>
         <source>Tip of the &amp;Day</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sugerencia del día</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="47"/>
@@ -373,7 +373,7 @@
         <location filename="../QMenuStrings.cpp" line="1042"/>
         <location filename="../QMenuStrings.cpp" line="1068"/>
         <source>Switch application &amp;language...</source>
-        <translation type="unfinished"></translation>
+        <translation>Cambiar e&amp;l idioma de la aplicación...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="48"/>
@@ -389,7 +389,7 @@
         <location filename="../QMenuStrings.cpp" line="1043"/>
         <location filename="../QMenuStrings.cpp" line="1069"/>
         <source>&amp;Get Help Online</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Obtener ayda en línea</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="49"/>
@@ -405,7 +405,7 @@
         <location filename="../QMenuStrings.cpp" line="1044"/>
         <location filename="../QMenuStrings.cpp" line="1070"/>
         <source>&amp;Translate This Application</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;raducir esta aplicación</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="50"/>
@@ -422,7 +422,7 @@
         <location filename="../QMenuStrings.cpp" line="1045"/>
         <location filename="../QMenuStrings.cpp" line="1071"/>
         <source>&amp;About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Acerca de Rosegarden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="51"/>
@@ -437,12 +437,13 @@
         <location filename="../QMenuStrings.cpp" line="1046"/>
         <location filename="../QMenuStrings.cpp" line="1072"/>
         <source>About &amp;KDE</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>I know this is a future obsolete string, but I haven&apos;t figured out how to get rid of it, so I went ahead and translated it anyway.</translatorcomment>
+        <translation>Acerda de &amp;KDE</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="52"/>
         <source>General Toolbar</source>
-        <translation type="unfinished">Barra de Herramientas General</translation>
+        <translation>Barra de Herramientas General</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="56"/>
@@ -457,7 +458,7 @@
         <location filename="../QMenuStrings.cpp" line="1021"/>
         <location filename="../QMenuStrings.cpp" line="1058"/>
         <source>&amp;Nothing to undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nada que deshacer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="57"/>
@@ -472,7 +473,7 @@
         <location filename="../QMenuStrings.cpp" line="1022"/>
         <location filename="../QMenuStrings.cpp" line="1059"/>
         <source>N&amp;othing to redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Nada &amp;que rehacer</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="58"/>
@@ -481,7 +482,7 @@
         <location filename="../QMenuStrings.cpp" line="457"/>
         <location filename="../QMenuStrings.cpp" line="888"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Copiar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="59"/>
@@ -490,7 +491,7 @@
         <location filename="../QMenuStrings.cpp" line="458"/>
         <location filename="../QMenuStrings.cpp" line="889"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Pegar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="68"/>
@@ -505,7 +506,7 @@
         <location filename="../QMenuStrings.cpp" line="847"/>
         <location filename="../QMenuStrings.cpp" line="1052"/>
         <source>Switch to Select Tool</source>
-        <translation type="unfinished">Cambiar a herramienta de selección</translation>
+        <translation>Cambiar a herramienta de selección</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="69"/>
@@ -513,7 +514,7 @@
         <location filename="../QMenuStrings.cpp" line="849"/>
         <location filename="../QMenuStrings.cpp" line="1053"/>
         <source>Switch to Inserting Notes</source>
-        <translation type="unfinished">Cambiar a inserción de notas</translation>
+        <translation>Cambiar a inserción de notas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="70"/>
@@ -528,7 +529,7 @@
         <location filename="../QMenuStrings.cpp" line="848"/>
         <location filename="../QMenuStrings.cpp" line="1054"/>
         <source>Switch to Erase Tool</source>
-        <translation type="unfinished">Cambiar a herramienta de borrado</translation>
+        <translation>Cambiar a herramienta de borrado</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="72"/>
@@ -540,27 +541,27 @@
         <location filename="../QMenuStrings.cpp" line="872"/>
         <location filename="../QMenuStrings.cpp" line="1018"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Guardar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="103"/>
         <source>&amp;Insert Event</source>
-        <translation type="unfinished">&amp;Insertar Evento</translation>
+        <translation>&amp;Insertar evento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="104"/>
         <source>&amp;Delete Event</source>
-        <translation type="unfinished">&amp;Borrar Evento</translation>
+        <translation>&amp;Borrar evento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="105"/>
         <source>&amp;Edit Event</source>
-        <translation type="unfinished">&amp;Editar Evento</translation>
+        <translation>&amp;Editar evento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="106"/>
         <source>&amp;Advanced Event Editor</source>
-        <translation type="unfinished">Editor &amp;Avanzado de Eventos</translation>
+        <translation>Editor &amp;avanzado de eventos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="107"/>
@@ -568,12 +569,12 @@
         <location filename="../QMenuStrings.cpp" line="456"/>
         <location filename="../QMenuStrings.cpp" line="887"/>
         <source>Cu&amp;t</source>
-        <translation type="unfinished">Cor&amp;tar</translation>
+        <translation>Cor&amp;tar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="110"/>
         <source>&amp;Select All</source>
-        <translation type="unfinished"></translation>
+        <translation>Seleccionar &amp;todo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="111"/>
@@ -613,7 +614,7 @@
         <location filename="../QMenuStrings.cpp" line="1030"/>
         <location filename="../QMenuStrings.cpp" line="1062"/>
         <source>&amp;Musical Times</source>
-        <translation type="unfinished">Tiempos &amp;Musicales</translation>
+        <translation>Tiempos &amp;musicales</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="117"/>
@@ -621,7 +622,7 @@
         <location filename="../QMenuStrings.cpp" line="1031"/>
         <location filename="../QMenuStrings.cpp" line="1063"/>
         <source>&amp;Real Times</source>
-        <translation type="unfinished">Tiempos &amp;Reales</translation>
+        <translation>Tiempos &amp;reales</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="118"/>
@@ -629,13 +630,13 @@
         <location filename="../QMenuStrings.cpp" line="1032"/>
         <location filename="../QMenuStrings.cpp" line="1064"/>
         <source>Ra&amp;w Times</source>
-        <translation type="unfinished">Tiempos Cr&amp;udos</translation>
+        <translation>Tiempos cr&amp;udos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="119"/>
         <location filename="../QMenuStrings.cpp" line="485"/>
         <source>Se&amp;gment</source>
-        <translation type="unfinished">Seg&amp;mento</translation>
+        <translation>Seg&amp;mento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="120"/>
@@ -643,21 +644,21 @@
         <location filename="../QMenuStrings.cpp" line="486"/>
         <location filename="../QMenuStrings.cpp" line="920"/>
         <source>Edit &amp;With</source>
-        <translation type="unfinished">Editar &amp;Con</translation>
+        <translation>Editar &amp;con</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="121"/>
         <location filename="../QMenuStrings.cpp" line="488"/>
         <location filename="../QMenuStrings.cpp" line="922"/>
         <source>Open in Matri&amp;x Editor</source>
-        <translation type="unfinished">Abrir en el Editor de Matri&amp;z</translation>
+        <translation>Abrir en el editor de matri&amp;z</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="122"/>
         <location filename="../QMenuStrings.cpp" line="215"/>
         <location filename="../QMenuStrings.cpp" line="924"/>
         <source>Open in &amp;Notation Editor</source>
-        <translation type="unfinished">Abrir en el Editor de &amp;Partitura</translation>
+        <translation>Abrir en el editor de &amp;partitura</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="123"/>
@@ -665,7 +666,7 @@
         <location filename="../QMenuStrings.cpp" line="973"/>
         <location filename="../QMenuStrings.cpp" line="1033"/>
         <source>Sett&amp;ings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Herramientas</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="124"/>
@@ -749,22 +750,22 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="163"/>
         <source>Insert Marker</source>
-        <translation type="unfinished">Insertar marcador</translation>
+        <translation>Insertar marcador</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="164"/>
         <source>Insert Marker at Playback Position</source>
-        <translation type="unfinished">Insertar marcador en la posición de reproducción</translation>
+        <translation>Insertar marcador en la posición de reproducción</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="165"/>
         <source>Delete Marker</source>
-        <translation type="unfinished">Borrar un marcador</translation>
+        <translation>Borrar un marcador</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="166"/>
         <source>Edit Marker</source>
-        <translation type="unfinished">Editar Marcador</translation>
+        <translation>Editar marcador</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="168"/>
@@ -773,7 +774,7 @@
         <location filename="../QMenuStrings.cpp" line="377"/>
         <location filename="../QMenuStrings.cpp" line="383"/>
         <source>Switch to Move Tool</source>
-        <translation type="unfinished">Cambiar a Herramienta de Movimiento</translation>
+        <translation>Cambiar a herramienta de movimiento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="169"/>
@@ -782,7 +783,7 @@
         <location filename="../QMenuStrings.cpp" line="376"/>
         <location filename="../QMenuStrings.cpp" line="381"/>
         <source>Switch to Draw Tool</source>
-        <translation type="unfinished">Cambiar a Herramienta de Dibujo</translation>
+        <translation>Cambiar a herramienta de dibujo</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="170"/>
@@ -791,7 +792,7 @@
         <location filename="../QMenuStrings.cpp" line="379"/>
         <location filename="../QMenuStrings.cpp" line="384"/>
         <source>Switch to Resize Tool</source>
-        <translation type="unfinished">Cambiar a Herramienta de Redimensionamiento</translation>
+        <translation>Cambiar a herramienta de redimensionamiento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="188"/>
@@ -808,12 +809,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="192"/>
         <source>&amp;Grid</source>
-        <translation type="unfinished">&amp;Rejilla</translation>
+        <translation>&amp;Rejilla</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="193"/>
         <source>&amp;No Snap</source>
-        <translation type="unfinished">&amp;No Ajustar</translation>
+        <translation>&amp;No ajustar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="194"/>
@@ -896,7 +897,7 @@
         <location filename="../QMenuStrings.cpp" line="482"/>
         <location filename="../QMenuStrings.cpp" line="896"/>
         <source>&amp;Composition</source>
-        <translation type="unfinished">&amp;Composición</translation>
+        <translation>&amp;Composición</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="210"/>
@@ -904,7 +905,7 @@
         <location filename="../QMenuStrings.cpp" line="897"/>
         <location filename="../QMenuStrings.cpp" line="1023"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation type="unfinished">Añadir cambio de tempo...</translation>
+        <translation>Añadir ca&amp;mbio de tempo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="211"/>
@@ -912,19 +913,19 @@
         <location filename="../QMenuStrings.cpp" line="898"/>
         <location filename="../QMenuStrings.cpp" line="1024"/>
         <source>Add Time Si&amp;gnature Change...</source>
-        <translation type="unfinished">Añadir Cambio de M&amp;edida del Compás</translation>
+        <translation>Añadir cambio de m&amp;edida del compás...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="212"/>
         <source>&amp;Segment</source>
-        <translation type="unfinished">&amp;Segmento</translation>
+        <translation>&amp;Segmento</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="214"/>
         <location filename="../QMenuStrings.cpp" line="487"/>
         <location filename="../QMenuStrings.cpp" line="925"/>
         <source>Open in &amp;Event List Editor</source>
-        <translation type="unfinished">Abrir en el Editor de Lista de &amp;Eventos</translation>
+        <translation>Abrir en el editor de lista de &amp;eventos</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="216"/>
@@ -941,20 +942,20 @@
         <location filename="../QMenuStrings.cpp" line="218"/>
         <location filename="../QMenuStrings.cpp" line="585"/>
         <source>Ad&amp;just</source>
-        <translation type="unfinished">A&amp;juste</translation>
+        <translation>A&amp;juste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="219"/>
         <location filename="../QMenuStrings.cpp" line="593"/>
         <source>&amp;Quantize</source>
-        <translation type="unfinished">&amp;Cuantificación</translation>
+        <translation>&amp;Cuantificación</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="220"/>
         <location filename="../QMenuStrings.cpp" line="594"/>
         <location filename="../QMenuStrings.cpp" line="927"/>
         <source>&amp;Quantize...</source>
-        <translation type="unfinished">Cuanti&amp;ficar...</translation>
+        <translation>Cuanti&amp;ficar...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="221"/>
@@ -964,37 +965,37 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="222"/>
         <source>&amp;Legato</source>
-        <translation type="unfinished">&amp;Ligado</translation>
+        <translation>&amp;Ligado</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="223"/>
         <location filename="../QMenuStrings.cpp" line="590"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
-        <translation type="unfinished">Fusionar Notas d&amp;e Igual Altura</translation>
+        <translation>Fusionar notas d&amp;e igual altura</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="224"/>
         <location filename="../QMenuStrings.cpp" line="624"/>
         <location filename="../QMenuStrings.cpp" line="933"/>
         <source>Jog &amp;Left</source>
-        <translation type="unfinished">Correr a la &amp;Izquierda</translation>
+        <translation>Saltar a la &amp;izquierda</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="225"/>
         <source>&amp;Jog Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Saltar al &amp;derecho</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="226"/>
         <location filename="../QMenuStrings.cpp" line="614"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">&amp;Incrementar Velocidad</translation>
+        <translation>&amp;Incrementar velocidad</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="227"/>
         <location filename="../QMenuStrings.cpp" line="615"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">&amp;Reducir Velocidad</translation>
+        <translation>&amp;Reducir velocidad</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="228"/>
@@ -1015,37 +1016,37 @@
         <location filename="../QMenuStrings.cpp" line="231"/>
         <location filename="../QMenuStrings.cpp" line="599"/>
         <source>&amp;Halve Durations</source>
-        <translation type="unfinished">&amp;Partir duraciones por la mitad</translation>
+        <translation>&amp;Partir duraciones por la mitad</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="232"/>
         <location filename="../QMenuStrings.cpp" line="600"/>
         <source>&amp;Double Durations</source>
-        <translation type="unfinished">Doblar duraciones</translation>
+        <translation>&amp;Doblar duraciones</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="233"/>
         <location filename="../QMenuStrings.cpp" line="601"/>
         <source>Stretch or S&amp;quash...</source>
-        <translation type="unfinished">Estirar o Enco&amp;ger...</translation>
+        <translation>Estirar o enco&amp;ger...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="234"/>
         <location filename="../QMenuStrings.cpp" line="602"/>
         <source>Trans&amp;pose</source>
-        <translation type="unfinished">Trans&amp;portar</translation>
+        <translation>Trans&amp;portar</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="235"/>
         <location filename="../QMenuStrings.cpp" line="603"/>
         <source>&amp;Up a Semitone</source>
-        <translation type="unfinished">S&amp;ubir un Semitono</translation>
+        <translation>S&amp;ubir un semitono</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="236"/>
         <location filename="../QMenuStrings.cpp" line="604"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">&amp;Bajar un Semitono</translation>
+        <translation>&amp;Bajar un semitono</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="237"/>
@@ -3270,17 +3271,17 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="944"/>
         <source>Add &amp;Track</source>
-        <translation type="unfinished">Añadir &amp;Pista</translation>
+        <translation>Añadir &amp;pista</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="945"/>
         <source>&amp;Add Tracks...</source>
-        <translation type="unfinished">Añadir Pistas...</translation>
+        <translation>Añadir pista&amp;s...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="946"/>
         <source>D&amp;elete Track</source>
-        <translation type="unfinished">&amp;Borrar Pista</translation>
+        <translation>&amp;Borrar pista</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="947"/>
@@ -3537,7 +3538,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="357"/>
         <source>Tenor</source>
-        <translation type="unfinished">Tenor</translation>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
@@ -3547,12 +3548,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
-        <translation type="unfinished">Bajo</translation>
+        <translation>Bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
-        <translation type="unfinished">Triangle</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -5322,7 +5323,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="35"/>
         <source>D#</source>
-        <translation type="unfinished"></translation>
+        <translation>Do sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="36"/>
@@ -5384,12 +5385,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>General MIDI Device</source>
-        <translation type="unfinished">Dispositivo General MIDI</translation>
+        <translation>Dispositivo General MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation type="unfinished">General MIDI</translation>
+        <translation>General MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
@@ -5634,12 +5635,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
-        <translation type="unfinished">Trompeta</translation>
+        <translation>Trompeta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="98"/>
         <source>Trombone</source>
-        <translation type="unfinished">Trombón</translation>
+        <translation>Trombón</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
@@ -5649,12 +5650,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
         <source>Muted Trumpet</source>
-        <translation type="unfinished">Trompeta con sordino</translation>
+        <translation>Trompeta con sordino</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="101"/>
         <source>French Horn</source>
-        <translation type="unfinished">Trompa</translation>
+        <translation>Trompa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="102"/>
@@ -6290,7 +6291,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Volume</source>
-        <translation type="unfinished">Volumen</translation>
+        <translation>Volumen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
@@ -6304,7 +6305,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="301"/>
         <location filename="../AutoloadStrings.cpp" line="740"/>
         <source>Sustain</source>
-        <translation type="unfinished">Sostenido</translation>
+        <translation>Sostenido</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="239"/>
@@ -6339,7 +6340,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="246"/>
         <location filename="../AutoloadStrings.cpp" line="247"/>
         <source> </source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="248"/>
@@ -6574,7 +6575,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio </translation>
+        <translation>Audio </translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="308"/>
@@ -6584,12 +6585,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>MidnightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul de medianoche</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>NavyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul marino</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="311"/>
@@ -6624,17 +6625,17 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul real</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished">azúl</translation>
+        <translation>azul</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>azul Dodger</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
@@ -6694,7 +6695,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
@@ -6764,12 +6765,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
         <source>green</source>
-        <translation type="unfinished">verde</translation>
+        <translation>Verde</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="346"/>
         <source>chartreuse</source>
-        <translation type="unfinished"></translation>
+        <translation>Chartreuse</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="347"/>
@@ -6809,7 +6810,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>khaki</source>
-        <translation type="unfinished"></translation>
+        <translation>Caqui</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="355"/>
@@ -6829,12 +6830,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Amarillo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished">oro</translation>
+        <translation>Oro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
@@ -6874,7 +6875,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="367"/>
         <source>peru</source>
-        <translation type="unfinished"></translation>
+        <translation>Perú</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="368"/>
@@ -6884,12 +6885,12 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>beige</source>
-        <translation type="unfinished"></translation>
+        <translation>Beige</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>wheat</source>
-        <translation type="unfinished"></translation>
+        <translation>Triticali</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="371"/>
@@ -6904,7 +6905,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation type="unfinished"></translation>
+        <translation>Chocolate</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
@@ -6934,7 +6935,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
         <source>orange</source>
-        <translation type="unfinished">anaranjado</translation>
+        <translation>Anaranjado</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="380"/>
@@ -6944,7 +6945,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="381"/>
         <source>coral</source>
-        <translation type="unfinished"></translation>
+        <translation>Coral</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
@@ -6954,7 +6955,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>Tomate</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
@@ -6964,22 +6965,22 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosa caliente</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
@@ -7009,7 +7010,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="394"/>
         <source>magenta</source>
-        <translation type="unfinished"></translation>
+        <translation>Magenta</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
@@ -7304,22 +7305,22 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
@@ -7344,62 +7345,62 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="461"/>
         <source>RoyalBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul real 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="462"/>
         <source>RoyalBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul real 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="463"/>
         <source>RoyalBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul real 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="464"/>
         <source>RoyalBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul real 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul Dodger 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul Dodger 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul Dodger 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul Dodger 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="473"/>
@@ -7624,22 +7625,22 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
         <source>cyan1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="518"/>
         <source>cyan2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="519"/>
         <source>cyan3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="520"/>
         <source>cyan4</source>
-        <translation type="unfinished"></translation>
+        <translation>Ciano 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
@@ -7764,7 +7765,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="545"/>
         <source>green1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verde 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="546"/>
@@ -8649,7 +8650,7 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="722"/>
         <source>grey</source>
-        <translation type="unfinished"></translation>
+        <translation>Gris</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="723"/>
@@ -8659,37 +8660,37 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>Blanco</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
         <source>generalmap</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
         <source>Blue pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Azul claro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="727"/>
         <source>Red pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Rojo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="728"/>
         <source>Green pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Verde</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="729"/>
         <source>Orange pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Anaranjado claro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="730"/>
         <source>Yellow pastel</source>
-        <translation type="unfinished"></translation>
+        <translation>Amarillo claro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="731"/>
@@ -8704,28 +8705,28 @@ así lo desea.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="733"/>
         <source>Not Yet Titled</source>
-        <translation type="unfinished"></translation>
+        <translation>Todavía sin título</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="734"/>
         <source>not yet subtitled</source>
-        <translation type="unfinished"></translation>
+        <translation>todavía sin subtítulo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
-        <translation type="unfinished">Desconocida</translation>
+        <translation>Desconocida</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="289"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="728"/>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="850"/>
         <source>%1. %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1. %2</translation>
     </message>
 </context>
 <context>
@@ -8733,7 +8734,7 @@ así lo desea.</translation>
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="63"/>
         <source>Rosegarden - Query</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;¡Hola!  ¿Qué tal?  Ni idea qué hace este diálgo, pero supongo que no debe ser visto por un usuario a menos que algo muy terrible ocurre.  ¡No te preocupes!&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -10358,112 +10359,112 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="84"/>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="97"/>
         <source>Clef</source>
-        <translation type="unfinished">Clave</translation>
+        <translation>Clave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="65"/>
         <source>Existing notes following clef change</source>
-        <translation type="unfinished">Existen notas a continuación del cambio de clave</translation>
+        <translation>Existen notas a continuación del cambio de clave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="75"/>
         <source>Lower clef</source>
-        <translation type="unfinished">Clave más grave</translation>
+        <translation>Clave más grave</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="82"/>
         <source>Up an Octave</source>
-        <translation type="unfinished">Subir una Octava</translation>
+        <translation>Subir una octava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="90"/>
         <source>Down an Octave</source>
-        <translation type="unfinished">Bajar una Octava</translation>
+        <translation>Bajar una octava</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="95"/>
         <source>Higher clef</source>
-        <translation type="unfinished">Clave más aguda</translation>
+        <translation>Clave más aguda</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="105"/>
         <source>Maintain current pitches</source>
-        <translation type="unfinished">Mantener los tonos actuales</translation>
+        <translation>Mantener los tonos actuales</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="109"/>
         <source>Transpose into appropriate octave</source>
-        <translation type="unfinished">Transporte a la octava apropiada</translation>
+        <translation>Transporte a la octava apropiada</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="250"/>
         <source>%1 down an octave</source>
-        <translation type="unfinished">%1 una octava inferior</translation>
+        <translation>%1 una octava inferior</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="253"/>
         <source>%1 down two octaves</source>
-        <translation type="unfinished">%1 dos octavas abajo</translation>
+        <translation>%1 dos octavas abajo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="256"/>
         <source>%1 up an octave</source>
-        <translation type="unfinished">%1 una octava superior</translation>
+        <translation>%1 una octava superior</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="259"/>
         <source>%1 up two octaves</source>
-        <translation type="unfinished">%1 dos octabas arriba</translation>
+        <translation>%1 dos octabas arriba</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="268"/>
         <source>Treble</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="270"/>
         <source>French violin</source>
-        <translation type="unfinished">Violín francés</translation>
+        <translation>Violín francés</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="272"/>
         <source>Soprano</source>
-        <translation type="unfinished">Soprano</translation>
+        <translation>Soprano</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="274"/>
         <source>Mezzo-soprano</source>
-        <translation type="unfinished">Mezzo soprano</translation>
+        <translation>Mezzo soprano</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="276"/>
         <source>Alto</source>
-        <translation type="unfinished">Alto</translation>
+        <translation>Alto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="278"/>
         <source>Tenor</source>
-        <translation type="unfinished">Tenor</translation>
+        <translation>Tenor</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="280"/>
         <source>C-baritone</source>
-        <translation type="unfinished">Do barítono</translation>
+        <translation>Do barítono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="282"/>
         <source>F-baritone</source>
-        <translation type="unfinished">Fa barítono</translation>
+        <translation>Fa barítono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="284"/>
         <source>Bass</source>
-        <translation type="unfinished">Bajo</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ClefDialog.cpp" line="286"/>
         <source>Sub-bass</source>
-        <translation type="unfinished">Sub-bajo</translation>
+        <translation>Contrabajo</translation>
     </message>
 </context>
 <context>
@@ -10471,7 +10472,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/notation/ClefInsertionCommand.cpp" line="75"/>
         <source>Add Cle&amp;f Change...</source>
-        <translation type="unfinished">Añadir Ca&amp;mbio de Clave...</translation>
+        <translation>Añadir ca&amp;mbio de clave...</translation>
     </message>
 </context>
 <context>
@@ -10543,27 +10544,27 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Name</source>
-        <translation type="unfinished">Nombre</translation>
+        <translation>Nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Color</source>
-        <translation type="unfinished">Color</translation>
+        <translation>Color</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="76"/>
         <source>Modify Color Name</source>
-        <translation type="unfinished">Modificar Nombre de Color</translation>
+        <translation>Modificar nombre de color</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="77"/>
         <source>Enter new name</source>
-        <translation type="unfinished">Introducir nuevo nombre</translation>
+        <translation>Introducir nuevo nombre</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="117"/>
         <source>Default Color</source>
-        <translation type="unfinished">Color por Omisión</translation>
+        <translation>Color por omisión</translation>
     </message>
 </context>
 <context>
@@ -10573,7 +10574,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="56"/>
         <location filename="../../src/document/CommandHistory.cpp" line="60"/>
         <source>&amp;Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Deshacer</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="52"/>
@@ -10616,13 +10617,13 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="533"/>
         <source>&amp;Undo %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Deshacer %1</translation>
     </message>
     <message>
         <location filename="../../src/document/CommandHistory.cpp" line="511"/>
         <location filename="../../src/document/CommandHistory.cpp" line="534"/>
         <source>Re&amp;do %1</source>
-        <translation type="unfinished">Re&amp;hacer %1</translation>
+        <translation>Re&amp;hacer %1</translation>
     </message>
 </context>
 <context>
