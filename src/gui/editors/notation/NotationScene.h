@@ -97,6 +97,8 @@ public:
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
 
+    bool constrainToSegmentArea(QPointF &scenePos);
+
     void slotSetInsertCursorPosition(timeT position,
                                      bool scroll, bool updateNow) { }
 

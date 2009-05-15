@@ -1136,6 +1136,42 @@ NotationScene::playNote(Segment &segment, int pitch, int velocity)
     StudioControl::sendMappedEvent(mE);
 }    
     
+bool
+NotationScene::constrainToSegmentArea(QPointF &scenePos)
+{
+    //!!!
+#ifdef NOT_JUST_YET
+    bool ok = true;
+
+    int pitch = 127 - (lrint(scenePos.y()) / (m_resolution + 1));
+    if (pitch < 0) {
+        ok = false;
+        scenePos.setY(127 * (m_resolution + 1));
+    } else if (pitch > 127) {
+        ok = false;
+        scenePos.setY(0);
+    }
+
+    timeT t = m_scale->getTimeForX(scenePos.x());
+    timeT start = 0, end = 0;
+    for (size_t i = 0; i < m_segments.size(); ++i) {
+        timeT t0 = m_segments[i]->getStartTime();
+        timeT t1 = m_segments[i]->getEndMarkerTime();
+        if (i == 0 || t0 < start) start = t0;
+        if (i == 0 || t1 > end) end = t1; 
+    }
+    if (t < start) {
+        ok = false;
+        scenePos.setX(m_scale->getXForTime(start));
+    } else if (t > end) {
+        ok = false;
+        scenePos.setX(m_scale->getXForTime(end));
+    }
+    return ok;
+#endif
+    return true;
+}
+
 }
 
 #include "NotationScene.moc"

@@ -88,6 +88,8 @@ protected slots:
     void slotDispatchMouseMove(const NotationMouseEvent *);
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
 
+    void slotEnsureLastMouseMoveVisible();
+
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 
@@ -101,6 +103,8 @@ private:
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
+    bool m_inMove;
+    QPointF m_lastMouseMoveScenePos;
 };
 
 }

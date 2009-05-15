@@ -24,10 +24,6 @@
 #include "NotationSelector.h"
 #include "NotationEraser.h"
 
-#include <QGraphicsView>
-#include <QGridLayout>
-#include <QScrollBar>
-
 #include "base/RulerScale.h"
 
 #include "document/RosegardenDocument.h"
@@ -37,6 +33,11 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+
+#include <QGraphicsView>
+#include <QGridLayout>
+#include <QScrollBar>
+#include <QTimer>
 
 namespace Rosegarden
 {
@@ -199,6 +200,14 @@ NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
     if (!m_currentTool) return;
     NotationTool::FollowMode mode = m_currentTool->handleMouseMove(e);
     
+    if (mode != NotationTool::NoFollow) {
+        m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
+        m_inMove = true;
+        slotEnsureLastMouseMoveVisible();
+        QTimer::singleShot(100, this, SLOT(slotEnsureLastMouseMoveVisible()));
+        m_inMove = false;
+    }
+
     /*!!!
 if (getCanvasView()->isTimeForSmoothScroll()) {
 
@@ -214,6 +223,16 @@ if (getCanvasView()->isTimeForSmoothScroll()) {
     }
     */
 }
+
+void
+NotationWidget::slotEnsureLastMouseMoveVisible()
+{
+    m_inMove = true;
+    QPointF pos = m_lastMouseMoveScenePos;
+    if (m_scene) m_scene->constrainToSegmentArea(pos);
+    m_view->ensureVisible(QRectF(pos, pos));
+    m_inMove = false;
+}    
 
 void
 NotationWidget::slotDispatchMouseRelease(const NotationMouseEvent *e)
