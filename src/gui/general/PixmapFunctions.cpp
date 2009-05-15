@@ -94,26 +94,36 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
 
         for (int x = 0; x < image.width(); ++x) {
 
-            QColor pixel(image.pixel(x, y));
+            QRgb oldPixel = image.pixel(x, y);
+            QColor oldColour(oldPixel);
 
             int oldHue;
-            pixel.hsv(&oldHue, &s, &v);
+            oldColour.hsv(&oldHue, &s, &v);
+
+            int newHue = hue;
 
             if (oldHue >= 0) {
                 if (!warned) {
                     std::cerr << "PixmapFunctions::recolour: Not a greyscale pixmap "
-                              << "(found rgb value " << pixel.red() << ","
-                              << pixel.green() << "," << pixel.blue()
+                              << "(found rgb value " << oldColour.red() << ","
+                              << oldColour.green() << "," << oldColour.blue()
                               << "), hoping for the best" << std::endl;
                     warned = true;
                 }
+                newHue = hue;
             }
 
-            image.setPixel
-                (x, y, QColor(hue,
-                              255 - v,
-                              v > minimum ? v : minimum,
-                              QColor::Hsv).rgb());
+            QColor newColour(newHue,
+                             255 - v,
+                             v > minimum ? v : minimum,
+                             QColor::Hsv);
+
+            QRgb newPixel = qRgba(newColour.red(),
+                                  newColour.green(),
+                                  newColour.blue(),
+                                  qAlpha(oldPixel));
+
+            image.setPixel(x, y, newPixel);
         }
     }
 

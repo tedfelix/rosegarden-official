@@ -45,7 +45,7 @@ QPixmap *NoteFont::m_blankPixmap = 0;
 
 
 NoteFont::NoteFont(QString fontName, int size) :
-        m_fontMap(fontName)
+    m_fontMap(fontName)
 {
     // Do the size checks first, to avoid doing the extra work if they fail
 

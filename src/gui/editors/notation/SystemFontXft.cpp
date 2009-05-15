@@ -114,6 +114,8 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
     }
  
     QPixmap map(extents.width, extents.height);
+    // map cannot be transparent yet, because then a plain old XftDraw
+    // would not be able to draw on it (it would not be a normal X pixmap)
     map.fill(Qt::white);
 
     Drawable drawable = (Drawable)map.handle();
@@ -153,18 +155,27 @@ SystemFontXft::renderChar(CharName charName, int glyph, int code,
 
     success = true;
 
-    QImage im = map.toImage();
+    QImage im = map.toImage().convertToFormat(QImage::Format_ARGB32);
 
     for (int y = 0; y < im.height(); ++y) {
         for (int x = 0; x < im.width(); ++x) {
-            if (im.pixel(x, y) == Qt::white) {
-                im.setPixel(x, y, qRgba(0, 0, 0, 255));
-            }
+            // We now have a non-transparent pixmap that is largely
+            // greyscale (maybe not entirely, e.g. if subpixel
+            // antialiasing has been applied).  We want to make it
+            // transparent, preferably with a sensible alpha blend.
+            // Let's just make the alpha level inversely proportional
+            // to some vague measure of brightness.  Maybe refine this
+            // later
+            QRgb px = im.pixel(x, y);
+            int r = qRed(px), g = qGreen(px), b = qBlue(px);
+            int bright = (r + g + b) / 3;
+            int alpha = 255 - bright;
+            im.setPixel(x, y, qRgba(r, g, b, alpha));
         }
     }
 
     map = QPixmap::fromImage(im);
-    
+
     //!!! experimental stuff
 /*!!!
     FT_Face face = XftLockFace(m_font);
