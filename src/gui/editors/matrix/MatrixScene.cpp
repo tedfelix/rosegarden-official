@@ -636,8 +636,10 @@ MatrixScene::setSelection(EventSelection *s,
         setSelectionElementStatus(m_selection, false);
     }
 
-    delete m_selection;
-    m_selection = s;
+    if (s != m_selection) {
+        delete m_selection;
+        m_selection = s;
+    }
     
     if (m_selection) {
         setSelectionElementStatus(m_selection, true, preview);
