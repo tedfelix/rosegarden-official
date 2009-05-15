@@ -213,10 +213,10 @@ JackDriver::initialise(bool reinitialise)
 
     // attempt connection to JACK server
     //
-    if ((m_client = jack_client_new(jackClientName.c_str())) == 0) {
+    if ((m_client = jack_client_open(jackClientName.c_str(), JackNullOption, 0)) == 0) {
         audit << "JackDriver::initialiseAudio - "
-        << "JACK server not running"
-        << std::endl;
+	      << "JACK server not running"
+	      << std::endl;
         return ;
     }
 
