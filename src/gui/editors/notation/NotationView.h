@@ -63,12 +63,16 @@ protected slots:
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
 
+    void slotSetSelectTool();
+    void slotSetEraseTool();
+
 private:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
 
     void setupActions();
+    void setMenuStates();
 };
 
 }

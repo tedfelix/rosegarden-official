@@ -182,7 +182,7 @@ NoteInserter::handleMouseRelease(const NotationMouseEvent *e)
 
     if (lastInsertedEvent) {
 
-        m_widget->setSingleSelectedEvent(staff->getId(), lastInsertedEvent);
+        m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
 /*!!!
         if (m_widget->isInChordMode()) {
             m_widget->slotSetInsertCursorAndRecentre
@@ -219,7 +219,7 @@ NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 
     if (lastInsertedEvent) {
 
-        m_widget->setSingleSelectedEvent(segment, lastInsertedEvent);
+        m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
 
         if (m_widget->isInChordMode()) {
             if (m_scene) {

@@ -27,6 +27,7 @@
 #include "GuitarChordInserter.h"
 #include "NotationEraser.h"
 #include "NotationSelector.h"
+#include "NotationScene.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -36,7 +37,8 @@ namespace Rosegarden
 
 NotationToolBox::NotationToolBox(NotationWidget *parent) :
     BaseToolBox(parent),
-    m_widget(parent)
+    m_widget(parent),
+    m_scene(0)
 {
 }
 
@@ -87,16 +89,28 @@ NotationToolBox::createTool(QString toolName)
 
     m_tools.insert(toolName, tool);
 
+    if (m_scene) {
+        tool->setScene(m_scene);
+        connect(m_scene, SIGNAL(eventRemoved(Event *)),
+                tool, SLOT(handleEventRemoved(Event *)));
+    }
+
     return tool;
 }
 
 void
 NotationToolBox::setScene(NotationScene *scene)
 {
+    m_scene = scene;
+
     for (QHash<QString, BaseTool *>::iterator i = m_tools.begin();
          i != m_tools.end(); ++i) {
         NotationTool *nt = dynamic_cast<NotationTool *>(*i);
-        if (nt) nt->setScene(scene);
+        if (nt) {
+            nt->setScene(scene);
+            connect(scene, SIGNAL(eventRemoved(Event *)),
+                    nt, SLOT(handleEventRemoved(Event *)));
+        }
     }
 }
 

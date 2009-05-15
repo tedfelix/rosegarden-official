@@ -21,6 +21,8 @@
 #include "NotationToolBox.h"
 #include "NoteInserter.h"
 #include "NotationMouseEvent.h"
+#include "NotationSelector.h"
+#include "NotationEraser.h"
 
 #include <QGraphicsView>
 #include <QGridLayout>
@@ -138,6 +140,34 @@ NotationWidget::getCurrentSegment()
 {
     if (!m_scene) return 0;
     return m_scene->getCurrentSegment();
+}
+
+NotationTool *
+NotationWidget::getCurrentTool() const
+{
+    return m_currentTool;
+}
+
+void
+NotationWidget::slotSetTool(QString name)
+{
+    NotationTool *tool = dynamic_cast<NotationTool *>(m_toolBox->getTool(name));
+    if (!tool) return;
+    if (m_currentTool) m_currentTool->stow();
+    m_currentTool = tool;
+    m_currentTool->ready();
+}
+
+void
+NotationWidget::slotSetEraseTool()
+{
+//!!!    slotSetTool(NotationEraser::ToolName);
+}
+
+void
+NotationWidget::slotSetSelectTool()
+{
+    slotSetTool(NotationSelector::ToolName);
 }
 
 void

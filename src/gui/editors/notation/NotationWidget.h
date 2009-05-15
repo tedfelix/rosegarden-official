@@ -55,22 +55,12 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection* s, bool preview);
 
-    //!!! to keep current NoteInserter implementation happy:
-    void setSingleSelectedEvent(int staffNo,
-                                Event *event,
-                                bool preview = false,
-                                bool redrawNow = false) { }
-
-    void setSingleSelectedEvent(Segment &segment,
-                                Event *event,
-                                bool preview = false,
-                                bool redrawNow = false) { }
-
     bool isInChordMode() { return false; }
     bool isInTripletMode() { return false; }
     bool isInGraceMode() { return false; }
 
     NotationToolBox *getToolBox() { return m_toolBox; }
+    NotationTool *getCurrentTool() const;
 
     void setCanvasCursor(QCursor cursor);
 
@@ -86,6 +76,11 @@ public:
 //    void handleEventRemoved(Event *) { }
 //    bool areAnnotationsVisible() { return true; }
 //    bool areLilyPondDirectivesVisible() { return true; }
+
+public slots:
+    void slotSetTool(QString name);
+    void slotSetSelectTool();
+    void slotSetEraseTool();
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);

@@ -48,6 +48,7 @@ public:
 protected:
     virtual BaseTool *createTool(QString toolName);
     NotationWidget *m_widget;
+    NotationScene *m_scene;
 };
 
 

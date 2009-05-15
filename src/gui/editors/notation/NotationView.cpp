@@ -17,12 +17,16 @@
 
 #include "NotationView.h"
 
-#include "document/RosegardenDocument.h"
-#include "document/CommandHistory.h"
-#include "misc/ConfigGroups.h"
 #include "NotationWidget.h"
 #include "NotationCommandRegistry.h"
 #include "NoteFontFactory.h"
+#include "NoteInserter.h"
+#include "RestInserter.h"
+
+#include "document/RosegardenDocument.h"
+#include "document/CommandHistory.h"
+#include "misc/ConfigGroups.h"
+
 #include "base/Clipboard.h"
 #include "base/Selection.h"
 
@@ -293,8 +297,8 @@ NewNotationView::setupActions()
     //Where are "make_invisible" & "make_visible" created?
 
     //Actions first appear in "Tools" Menubar menu
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
+    createAction("select", SLOT(slotSetSelectTool()));
+    createAction("erase", SLOT(slotSetEraseTool()));
 
     //"NoteTools" subMenu
     //NEED to create actions
@@ -593,6 +597,58 @@ NewNotationView::setupActions()
 
 }
 
+void 
+NewNotationView::setMenuStates()
+{
+    // 1. set selection-related states
+
+    // Clear states first, then enter only those ones that apply
+    // (so as to avoid ever clearing one after entering another, in
+    // case the two overlap at all)
+    leaveActionState("have_selection");
+    leaveActionState("have_notes_in_selection");
+    leaveActionState("have_rests_in_selection");
+
+    if (!m_notationWidget) return;
+
+    EventSelection *selection = m_notationWidget->getSelection();
+
+    if (selection) {
+
+        NOTATION_DEBUG << "NotationView::setMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)" << endl;
+
+        enterActionState("have_selection");
+        if (selection->contains(Note::EventType)) {
+            enterActionState("have_notes_in_selection");
+        }
+        if (selection->contains(Note::EventRestType)) {
+            enterActionState("have_rests_in_selection");
+        }
+    }
+
+    // 2. set inserter-related states
+
+    // #1372863 -- RestInserter is a subclass of NoteInserter, so we
+    // need to test dynamic_cast<RestInserter *> before
+    // dynamic_cast<NoteInserter *> (which will succeed for both)
+#ifdef NOT_JUST_NOW
+    if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
+        NOTATION_DEBUG << "Have rest inserter " << endl;
+        leaveActionState("note_insert_tool_current");
+        enterActionState("rest_insert_tool_current");
+    } else
+#endif
+        if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
+        NOTATION_DEBUG << "Have note inserter " << endl;
+        leaveActionState("rest_insert_tool_current");
+        enterActionState("note_insert_tool_current");
+    } else {
+        NOTATION_DEBUG << "Have neither inserter " << endl;
+        leaveActionState("note_insert_tool_current");
+        leaveActionState("rest_insert_tool_current");
+    }
+}
+
 Segment *
 NewNotationView::getCurrentSegment()
 {
@@ -760,6 +816,20 @@ NewNotationView::slotEditGeneralPaste()
 
     settings.endGroup();
 }
+
+void
+NewNotationView::slotSetSelectTool()
+{
+    if (m_notationWidget) m_notationWidget->slotSetSelectTool();
+    setMenuStates();
+}    
+
+void
+NewNotationView::slotSetEraseTool()
+{
+    if (m_notationWidget) m_notationWidget->slotSetEraseTool();
+    setMenuStates();
+}    
 
 }
 
