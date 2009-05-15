@@ -186,8 +186,7 @@ void
 NotationElement::setSelected(bool selected)
 {
     m_recentlyRegenerated = false;
-    if (m_item)
-        m_item->setSelected(selected);
+    if (m_item) m_item->setSelected(selected);
 }
 
 NotationElement *

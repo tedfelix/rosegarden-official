@@ -743,7 +743,7 @@ void NotationSelector::slotMakeVisible()
 
 void NotationSelector::setViewCurrentSelection(bool preview)
 {
-    EventSelection *selection = getSelection();
+    EventSelection *selection = getEventsInSelectionRect();
 
     if (m_selectionToMerge) {
         if (selection &&
@@ -771,75 +771,29 @@ NotationSelector::getStaffForElement(NotationElement *elt)
     return 0;
 }
 
-EventSelection* NotationSelector::getSelection()
+EventSelection *
+NotationSelector::getEventsInSelectionRect()
 {
     // If selection rect is not visible or too small,
     // return 0
     //
     if (!m_selectionRect->isVisible()) return 0;
 
-#ifdef NOT_JUST_YET
     //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
-    if (m_selectionRect->width()  > -3 &&
-        m_selectionRect->width()  <  3 &&
-        m_selectionRect->height() > -3 &&
-        m_selectionRect->height() <  3) return 0;
+    QRectF rect = m_selectionRect->rect();
 
-    Q3CanvasItemList itemList = m_selectionRect->collisions(false);
-    Q3CanvasItemList::Iterator it;
+    if (rect.width()  > -3 &&
+        rect.width()  <  3 &&
+        rect.height() > -3 &&
+        rect.height() <  3) return 0;
 
-    QRect rect = m_selectionRect->rect().normalize();
-    QCanvasNotationSprite *sprite = 0;
-
-    if (!m_selectedStaff) {
-
-        // Scan the list of collisions, looking for a valid notation
-        // element; if we find one, initialise m_selectedStaff from it.
-        // If we don't find one, we have no selection.  This is a little
-        // inefficient but we only do it for the first event in the
-        // selection.
-
-        for (it = itemList.begin(); it != itemList.end(); ++it) {
-            
-            if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
-
-            NotationElement &el = sprite->getNotationElement();
-
-            NotationStaff *staff = getStaffForElement(&el);
-            if (!staff) continue;
-            
-            int x = (int)(*it)->x();
-            bool shifted = false;
-            int nbw = staff->getNotePixmapFactory(false).getNoteBodyWidth();
-
-            
-            // #957364 (Notation: Hard to select upper note in
-            // chords of seconds) -- adjust x-coord for shifted
-            // note head
-            if (el.event()->get<Rosegarden::Bool>
-                (staff->getProperties().NOTE_HEAD_SHIFTED, shifted) && shifted) {
-                x += nbw;
-            }
-
-            if (!rect.contains(x, int((*it)->y()), true)) {
-                // #988217 (Notation: Special column of pixels
-                // prevents sweep selection) -- for notes, test
-                // again with centred x-coord
-                if (!el.isNote() || !rect.contains(x + nbw/2, int((*it)->y()), true)) {
-                    continue;
-                }
-            }
-                
-            m_selectedStaff = staff;
-            break;
-            }
-        }
-    }
+    QList<QGraphicsItem *> l = m_selectionRect->collidingItems
+        (Qt::IntersectsItemShape);
 
     if (!m_selectedStaff) return 0;
-    Segment& originalSegment = m_selectedStaff->getSegment();
+    Segment& segment = m_selectedStaff->getSegment();
 
     // If we selected the whole staff, force that to happen explicitly
     // rather than relying on collisions with the rectangle -- because
@@ -849,50 +803,50 @@ EventSelection* NotationSelector::getSelection()
     // to use though.)
     
     if (m_wholeStaffSelectionComplete) {
-    EventSelection *selection = new EventSelection(originalSegment,
-                               originalSegment.getStartTime(),
-                               originalSegment.getEndMarkerTime());
+        EventSelection *selection = new EventSelection(segment,
+                                                       segment.getStartTime(),
+                                                       segment.getEndMarkerTime());
         return selection;
     }
     
-    EventSelection* selection = new EventSelection(originalSegment);
+    EventSelection *selection = new EventSelection(segment);
+    int nbw = m_selectedStaff->getNotePixmapFactory(false).getNoteBodyWidth();
 
-    for (it = itemList.begin(); it != itemList.end(); ++it) {
+    for (int i = 0; i < l.size(); ++i) {
 
-        if ((sprite = dynamic_cast<QCanvasNotationSprite*>(*it))) {
-
-            NotationElement &el = sprite->getNotationElement();
+        QGraphicsItem *item = l[i];
+        NotationElement *element = NotationElement::getNotationElement(item);
+        if (!element) continue;
             
-            int x = (int)(*it)->x();
-            bool shifted = false;
-            int nbw = m_selectedStaff->getNotePixmapFactory(false).getNoteBodyWidth();
+        double x = element->getSceneX();
+        double y = element->getSceneY();
 
-            // #957364 (Notation: Hard to select upper note in chords
-            // of seconds) -- adjust x-coord for shifted note head
-            if (el.event()->get<Rosegarden::Bool>
-                            (m_selectedStaff->getProperties().NOTE_HEAD_SHIFTED, shifted)
-                            && shifted) {
-                x += nbw;
-            }
+        bool shifted = false;
 
-            // check if the element's rect
-            // is actually included in the selection rect.
-            //
-            if (!rect.contains(x, int((*it)->y()), true))  {
-                // #988217 (Notation: Special column of pixels
-                // prevents sweep selection) -- for notes, test again
-                // with centred x-coord
-                if (!el.isNote() || !rect.contains(x + nbw/2, int((*it)->y()), true)) {
-                    continue;
-                }
+        // #957364 (Notation: Hard to select upper note in chords
+        // of seconds) -- adjust x-coord for shifted note head
+        if (element->event()->get<Bool>(m_selectedStaff->getProperties().
+                                       NOTE_HEAD_SHIFTED, shifted) && shifted) {
+            x += nbw;
+        }
+
+        // check if the element's rect
+        // is actually included in the selection rect.
+        //
+        if (!rect.contains(x, y))  {
+            // #988217 (Notation: Special column of pixels
+            // prevents sweep selection) -- for notes, test again
+            // with centred x-coord
+            if (!element->isNote() || !rect.contains(x + nbw/2, y)) {
+                continue;
             }
+        }
                 
-            // must be in the same segment as we first started on,
-            // we can't select events across multiple segments
-            if (selection->getSegment().findSingle(el.event()) !=
+        // must be in the same segment as we first started on,
+        // we can't select events across multiple segments
+        if (selection->getSegment().findSingle(element->event()) !=
             selection->getSegment().end()) {
-                selection->addEvent(el.event());
-            }
+            selection->addEvent(element->event());
         }
     }
 
@@ -902,9 +856,6 @@ EventSelection* NotationSelector::getSelection()
         delete selection;
         return 0;
     }
-
-#endif
-    return 0;//!!!
 }
 
 const QString NotationSelector::ToolName = "notationselector";

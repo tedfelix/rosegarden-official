@@ -1045,10 +1045,24 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
 
     if (!staff) return;
 
+    timeT from = 0;
+    timeT to = 0;
+    bool first = true;
+
     for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;
+
+        timeT t = e->getNotationAbsoluteTime();
+        timeT d = e->getNotationDuration();
+        if (first || t < from) {
+            from = t;
+        }
+        if (first || t + d > to) {
+            to = t + d;
+        }
+        first = false;
         
         ViewElementList::iterator staffi = staff->findEvent(e);
         if (staffi == staff->getViewElementList()->end()) continue;
@@ -1069,6 +1083,10 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
             }
         }
     }
+
+    RG_DEBUG << "NotationScene::setSelectionElementStatus: from = " << from << ", to = " << to << endl;
+    
+    staff->regenerate(from, to, false);
 }
 
 void

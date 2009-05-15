@@ -141,7 +141,7 @@ protected:
     void drag(int x, int y, bool final);
     void dragFine(int x, int y, bool final);
 
-    EventSelection *getSelection();
+    EventSelection *getEventsInSelectionRect();
 
     //--------------- Data members ---------------------------------
 
