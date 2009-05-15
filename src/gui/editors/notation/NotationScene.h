@@ -68,8 +68,16 @@ public:
     NotationProperties &getProperties() { return *m_properties; }
     RosegardenDocument *getDocument() { return m_document; }
 
-    virtual EventSelection *getSelection() const { return 0; } //!!!
-    virtual void setSelection(EventSelection* s, bool preview) { } //!!!
+    virtual EventSelection *getSelection() const { return m_selection; }
+    virtual void setSelection(EventSelection* s, bool preview);
+
+    void setSingleSelectedEvent(NotationStaff *staff,
+                                NotationElement *e,
+                                bool preview);
+
+    void setSingleSelectedEvent(Segment *segment,
+                                Event *e,
+                                bool preview);
 
     const RulerScale *getRulerScale() const;
 
@@ -94,7 +102,7 @@ public:
 
 
     // more dubious:
-    void handleEventRemoved(Event *) { }//!!! tell tools, in case they have m_someEvent stored
+    void handleEventRemoved(Event *);
     bool areAnnotationsVisible() { return true; }
     bool areLilyPondDirectivesVisible() { return true; }
 
@@ -105,6 +113,8 @@ signals:
     void mouseDoubleClicked(const NotationMouseEvent *e);
 
     void sceneDeleted(); // all segments have been removed
+
+    void eventRemoved(Event *);
     
     /**
      * Emitted when the mouse cursor moves to a different height
@@ -149,6 +159,8 @@ private:
     std::vector<Segment *> m_segments; // I do not own these
     std::vector<NotationStaff *> m_staffs; // I own these
 
+    EventSelection *m_selection; // I own this
+
     NotationHLayout *m_hlayout; // I own this
     NotationVLayout *m_vlayout; // I own this
 
@@ -187,6 +199,7 @@ private:
     void layoutAll();
     void layout(NotationStaff *singleStaff, timeT start, timeT end);
     
+    void setSelectionElementStatus(EventSelection *, bool, bool = false);
 };
 
 }

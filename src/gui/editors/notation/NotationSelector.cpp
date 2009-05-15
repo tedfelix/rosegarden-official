@@ -15,11 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
-#include <Q3CanvasItemList>
-#include <Q3CanvasRectangle>
 #include "NotationSelector.h"
+#include "NotationElement.h"
+#include "NotationProperties.h"
+#include "NotationStaff.h"
+#include "NotationTool.h"
+#include "NotationWidget.h"
+#include "NotePixmapFactory.h"
+#include "NotationMouseEvent.h"
+#include "NotationScene.h"
+
 #include "misc/Debug.h"
 
 #include "base/Event.h"
@@ -28,21 +33,14 @@
 #include "base/Selection.h"
 #include "base/ViewElement.h"
 #include "base/BaseProperties.h"
+
 #include "commands/edit/MoveAcrossSegmentsCommand.h"
 #include "commands/edit/MoveCommand.h"
 #include "commands/edit/TransposeCommand.h"
 #include "commands/notation/IncrementDisplacementsCommand.h"
-#include "gui/general/EditTool.h"
+
 #include "gui/general/GUIPalette.h"
-#include "gui/general/LinedStaff.h"
-#include "gui/general/RosegardenCanvasView.h"
-#include "gui/widgets/CanvasSimpleSprite.h"
-#include "NotationElement.h"
-#include "NotationProperties.h"
-#include "NotationStaff.h"
-#include "NotationTool.h"
-#include "NotationView.h"
-#include "NotePixmapFactory.h"
+
 #include <QAction>
 #include <QApplication>
 #include <QIcon>
@@ -56,21 +54,21 @@ namespace Rosegarden
  
 using namespace BaseProperties;
 
-NotationSelector::NotationSelector(NotationView* view)
-        : NotationTool("NotationSelector", view),
-        m_selectionRect(0),
-        m_updateRect(false),
-        m_selectedStaff(0),
-        m_clickedElement(0),
-        m_selectionToMerge(0),
-        m_justSelectedBar(false),
-        m_wholeStaffSelectionComplete(false)
+NotationSelector::NotationSelector(NotationWidget *widget) :
+    NotationTool("notationselector.rc", "NotationSelector", widget),
+    m_selectionRect(0),
+    m_updateRect(false),
+    m_selectedStaff(0),
+    m_clickedElement(0),
+    m_selectionToMerge(0),
+    m_justSelectedBar(false),
+    m_wholeStaffSelectionComplete(false)
 {
-    connect(m_parentView, SIGNAL(usedSelection()),
+    connect(m_widget, SIGNAL(usedSelection()),
             this, SLOT(slotHideSelection()));
 
     connect(this, SIGNAL(editElement(NotationStaff *, NotationElement *, bool)),
-            m_parentView, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
+            m_widget, SLOT(slotEditElement(NotationStaff *, NotationElement *, bool)));
 
     createAction("insert", SLOT(slotInsertSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
@@ -93,7 +91,7 @@ NotationSelector::NotationSelector(NotationView* view)
     //                SLOT(slotCollapseRests()), actionCollection(),
     //                "collapse_rests");
 
-    createMenu("notationselector.rc");
+    createMenu();
 }
 
 NotationSelector::~NotationSelector()
@@ -101,17 +99,11 @@ NotationSelector::~NotationSelector()
     delete m_selectionToMerge;
 }
 
-void NotationSelector::handleLeftButtonPress(timeT t,
-        int height,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+NotationSelector::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    std::cerr << "NotationSelector::handleMousePress: time is " << t << ", staffNo is "
-              << staffNo << ", e and element are " << e << " and " << element << std::endl;
-
     if (m_justSelectedBar) {
-        handleMouseTripleClick(t, height, staffNo, e, element);
+        handleMouseTripleClick(e);
         m_justSelectedBar = false;
         return ;
     }
@@ -120,62 +112,65 @@ void NotationSelector::handleLeftButtonPress(timeT t,
 
     delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
-    if (e->state() & Qt::ShiftButton) {
+    if (e->buttons & Qt::ShiftButton) {
         m_clickedShift = true;
-        selectionToMerge = m_nParentView->getCurrentSelection();
+        selectionToMerge = m_scene->getSelection();
     } else {
         m_clickedShift = false;
     }
     m_selectionToMerge =
         (selectionToMerge ? new EventSelection(*selectionToMerge) : 0);
 
-    m_clickedElement = dynamic_cast<NotationElement*>(element);
-    if (m_clickedElement) {
-        m_selectedStaff = getStaffForElement(m_clickedElement);
-        m_lastDragPitch = -400;
-        m_lastDragTime = m_clickedElement->event()->getNotationAbsoluteTime();
-    } else {
-        m_selectedStaff = 0; // don't know yet; wait until we have an element
+    m_selectedStaff = e->staff;
+    m_clickedElement = 0;
+
+    if (e->exact) {
+        m_clickedElement = e->element;
+        if (m_clickedElement) {
+            m_lastDragPitch = -400;
+            m_lastDragTime = m_clickedElement->event()->getNotationAbsoluteTime();
+        }
     }
 
-    m_selectionRect->setX(e->x());
-    m_selectionRect->setY(e->y());
-    m_selectionRect->setSize(0, 0);
+    if (!m_selectionRect) {
+        m_selectionRect = new QGraphicsRectItem;
+        m_scene->addItem(m_selectionRect);
+        QColor c = GUIPalette::getColour(GUIPalette::SelectionRectangle);
+        m_selectionRect->setPen(QPen(c, 2));
+        c.setAlpha(50);
+        m_selectionRect->setBrush(c);
+    }
 
-    m_selectionRect->show();
+    m_selectionOrigin = QPointF(e->sceneX, e->sceneY);
+    m_selectionRect->setRect(QRectF(m_selectionOrigin, QSize()));
+    m_selectionRect->hide();
     m_updateRect = true;
     m_startedFineDrag = false;
-
-    //m_parentView->setCursorPosition(p.x());
 }
 
-void NotationSelector::handleRightButtonPress(timeT t,
-        int height,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+NotationSelector::handleRightButtonPress(const NotationMouseEvent *e)
 {
+    // if nothing selected, permit the possibility of selecting
+    // something before showing the menu
     std::cerr << "NotationSelector::handleRightButtonPress" << std::endl;
 
-    const EventSelection *sel = m_nParentView->getCurrentSelection();
+    const EventSelection *sel = m_scene->getSelection();
 
     if (!sel || sel->getSegmentEvents().empty()) {
 
-        // if nothing selected, permit the possibility of selecting
-        // something before showing the menu
-
-        if (element) {
-            m_clickedElement = dynamic_cast<NotationElement*>(element);
-            m_selectedStaff = getStaffForElement(m_clickedElement);
-            m_nParentView->setSingleSelectedEvent
-                (m_selectedStaff->getId(), m_clickedElement->event(),
-                 true, true);
+        if (e->element) {
+            m_clickedElement = e->element;
+            m_selectedStaff = e->staff;
+            m_scene->setSingleSelectedEvent
+                (m_selectedStaff, m_clickedElement, true);
         }
 
-        handleLeftButtonPress(t, height, staffNo, e, element);
+        //!!!??? do we really want this? removing for now
+//        handleLeftButtonPress(e);
     }
 
-    EditTool::handleRightButtonPress(t, height, staffNo, e, element);
+    NotationTool::handleRightButtonPress(e);
 }
 
 void NotationSelector::slotClickTimeout()
@@ -183,21 +178,16 @@ void NotationSelector::slotClickTimeout()
     m_justSelectedBar = false;
 }
 
-void NotationSelector::handleMouseDoubleClick(timeT,
-        int,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
-    m_clickedElement = dynamic_cast<NotationElement*>(element);
+    m_clickedElement = e->element;
 
-    NotationStaff *staff = m_nParentView->getNotationStaff(staffNo);
-    if (!staff)
-        return ;
+    NotationStaff *staff = e->staff;
+    if (!staff) return;
     m_selectedStaff = staff;
 
-    bool advanced = (e->state() & Qt::ShiftButton);
+    bool advanced = (e->buttons & Qt::ShiftButton);
 
     if (m_clickedElement) {
 
@@ -205,11 +195,12 @@ void NotationSelector::handleMouseDoubleClick(timeT,
 
     } else {
 
-        QRect rect = staff->getBarExtents(e->x(), e->y());
+        QRect rect = staff->getBarExtents(e->sceneX, e->sceneY);
 
-        m_selectionRect->setX(rect.x() + 1);
-        m_selectionRect->setY(rect.y());
-        m_selectionRect->setSize(rect.width() - 1, rect.height());
+        m_selectionRect->setRect(rect.x() + 0.5, rect.y() + 0.5,
+                                 rect.width(), rect.height());
+//        m_selectionRect->setY(rect.y());
+//        m_selectionRect->setSize(rect.width() - 1, rect.height());
 
         m_selectionRect->show();
         m_updateRect = false;
@@ -219,38 +210,30 @@ void NotationSelector::handleMouseDoubleClick(timeT,
                            SLOT(slotClickTimeout()));
     }
 
-    return ;
+    return;
 }
 
-void NotationSelector::handleMouseTripleClick(timeT t,
-        int height,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 {
-    if (!m_justSelectedBar)
-        return ;
+    if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
-    NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
-    m_clickedElement = dynamic_cast<NotationElement*>(element);
+    m_clickedElement = e->element;
 
-    NotationStaff *staff = m_nParentView->getNotationStaff(staffNo);
-    if (!staff)
-        return ;
+    NotationStaff *staff = e->staff;
+    if (!staff) return;
     m_selectedStaff = staff;
 
     if (m_clickedElement) {
 
         // should be safe, as we've already set m_justSelectedBar false
-        handleLeftButtonPress(t, height, staffNo, e, element);
-        return ;
+        handleLeftButtonPress(e);
+        return;
 
     } else {
 
-        m_selectionRect->setX(staff->getX());
-        m_selectionRect->setY(staff->getY());
-        m_selectionRect->setSize(int(staff->getTotalWidth()) - 1,
+        m_selectionRect->setRect(staff->getX(), staff->getY(),
+                                 staff->getTotalWidth() - 1,
                                  staff->getTotalHeight() - 1);
 
         m_selectionRect->show();
@@ -259,28 +242,27 @@ void NotationSelector::handleMouseTripleClick(timeT t,
 
     m_wholeStaffSelectionComplete = true;
 
-    return ;
+    return;
 }
 
-int NotationSelector::handleMouseMove(timeT, int,
-                                      QMouseEvent* e)
+NotationSelector::FollowMode
+NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
-    if (!m_updateRect)
-        return RosegardenCanvasView::NoFollow;
+    if (!m_updateRect) return NoFollow;
 
-    int w = int(e->x() - m_selectionRect->x());
-    int h = int(e->y() - m_selectionRect->y());
+    int w = int(e->sceneX - m_selectionRect->x());
+    int h = int(e->sceneY - m_selectionRect->y());
 
     if (m_clickedElement /* && !m_clickedElement->isRest() */) {
 
         if (m_startedFineDrag) {
-            dragFine(e->x(), e->y(), false);
+            dragFine(e->sceneX, e->sceneY, false);
         } else if (m_clickedShift) {
             if (w > 2 || w < -2 || h > 2 || h < -2) {
-                dragFine(e->x(), e->y(), false);
+                dragFine(e->sceneX, e->sceneY, false);
             }
         } else if (w > 3 || w < -3 || h > 3 || h < -3) {
-            drag(e->x(), e->y(), false);
+            drag(e->sceneX, e->sceneY, false);
         }
 
     } else {
@@ -295,31 +277,34 @@ int NotationSelector::handleMouseMove(timeT, int,
         else
             --h;
 
-        m_selectionRect->setSize(w, h);
+        QPointF p0(m_selectionOrigin);
+        QPointF p1(e->sceneX, e->sceneY);
+        QRectF r = QRectF(p0, p1).normalized();
+
+        m_selectionRect->setRect(r.x() + 0.5, r.y() + 0.5, r.width(), r.height());
+        m_selectionRect->show();
+
+//        m_selectionRect->setSize(w, h);
         setViewCurrentSelection(true);
-        m_nParentView->canvas()->update();
+//        m_nParentView->canvas()->update();
     }
 
-    return RosegardenCanvasView::FollowHorizontal | RosegardenCanvasView::FollowVertical;
+    return FollowMode(FollowHorizontal | FollowVertical);
 }
 
-void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
+void NotationSelector::handleMouseRelease(const NotationMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseRelease" << endl;
     m_updateRect = false;
-
-    NOTATION_DEBUG << "selectionRect width, height: " << m_selectionRect->width()
-    << ", " << m_selectionRect->height() << endl;
 
     // Test how far we've moved from the original click position -- not
     // how big the rectangle is (if we were dragging an event, the
     // rectangle size will still be zero).
 
-    if (((e->x() - m_selectionRect->x()) > -3 &&
-            (e->x() - m_selectionRect->x()) < 3 &&
-            (e->y() - m_selectionRect->y()) > -3 &&
-            (e->y() - m_selectionRect->y()) < 3) &&
-            !m_startedFineDrag) {
+    int w = int(e->sceneX - m_selectionRect->x());
+    int h = int(e->sceneY - m_selectionRect->y());
+
+    if (w > -3 && w < 3 && h > -3 && h < 3 && !m_startedFineDrag) {
 
         if (m_clickedElement != 0 && m_selectedStaff) {
             
@@ -328,8 +313,8 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
             // event
 
             if (m_selectionToMerge &&
-                    m_selectionToMerge->getSegment() ==
-                    m_selectedStaff->getSegment()) {
+                m_selectionToMerge->getSegment() ==
+                m_selectedStaff->getSegment()) {
 
                 // if the event was already part of the selection, we want to
                 // remove it
@@ -339,15 +324,12 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
                     m_selectionToMerge->addEvent(m_clickedElement->event());
                 }
                 
-                m_nParentView->setCurrentSelection(m_selectionToMerge,
-                                                   true, true);
+                m_scene->setSelection(m_selectionToMerge, true);
                 m_selectionToMerge = 0;
 
             } else {
 
-                m_nParentView->setSingleSelectedEvent
-                (m_selectedStaff->getId(), m_clickedElement->event(),
-                 true, true);
+                m_scene->setSingleSelectedEvent(m_selectedStaff, m_clickedElement, true);
             }
             /*
                     } else if (m_selectedStaff) {
@@ -367,9 +349,9 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
     } else {
 
         if (m_startedFineDrag) {
-            dragFine(e->x(), e->y(), true);
+            dragFine(e->sceneX, e->sceneY, true);
         } else if (m_clickedElement /* && !m_clickedElement->isRest() */) {
-            drag(e->x(), e->y(), true);
+            drag(e->sceneX, e->sceneY, true);
         } else {
             setViewCurrentSelection(false);
         }
@@ -378,7 +360,7 @@ void NotationSelector::handleMouseRelease(timeT, int, QMouseEvent *e)
     m_clickedElement = 0;
     m_selectionRect->hide();
     m_wholeStaffSelectionComplete = false;
-    m_nParentView->canvas()->update();
+    //!!! m_nParentView->canvas()->update();
 }
 
 void NotationSelector::drag(int x, int y, bool final)
@@ -388,13 +370,14 @@ void NotationSelector::drag(int x, int y, bool final)
     if (!m_clickedElement || !m_selectedStaff)
         return ;
 
-    EventSelection *selection = m_nParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
     if (!selection || !selection->contains(m_clickedElement->event())) {
         selection = new EventSelection(m_selectedStaff->getSegment());
         selection->addEvent(m_clickedElement->event());
     }
-    m_nParentView->setCurrentSelection(selection);
+    m_scene->setSelection(selection, false);
 
+#ifdef NOT_JUST_YET
     LinedStaff *targetStaff = m_nParentView->getStaffForCanvasCoords(x, y);
     if (!targetStaff)
         targetStaff = m_selectedStaff;
@@ -560,6 +543,7 @@ void NotationSelector::drag(int x, int y, bool final)
             delete command;
         }
     }
+#endif
 }
 
 void NotationSelector::dragFine(int x, int y, bool final)
@@ -569,13 +553,14 @@ void NotationSelector::dragFine(int x, int y, bool final)
     if (!m_clickedElement || !m_selectedStaff)
         return ;
 
-    EventSelection *selection = m_nParentView->getCurrentSelection();
+    EventSelection *selection = m_scene->getSelection();
     if (!selection)
         selection = new EventSelection(m_selectedStaff->getSegment());
     if (!selection->contains(m_clickedElement->event()))
         selection->addEvent(m_clickedElement->event());
-    m_nParentView->setCurrentSelection(selection);
+    m_scene->setSelection(selection, false);
 
+#ifdef NOT_JUST_YET
     // Fine drag modifies the DISPLACED_X and DISPLACED_Y properties on
     // each event.  The modifications have to be relative to the previous
     // values of these properties, not to zero, so for each event we need
@@ -591,10 +576,8 @@ void NotationSelector::dragFine(int x, int y, bool final)
                     selection->getSegmentEvents().begin();
                 i != selection->getSegmentEvents().end(); ++i) {
             long prevX = 0, prevY = 0;
-            (*i)->get
-            <Int>(DISPLACED_X, prevX);
-            (*i)->get
-            <Int>(DISPLACED_Y, prevY);
+            (*i)->get<Int>(DISPLACED_X, prevX);
+            (*i)->get<Int>(DISPLACED_Y, prevY);
             (*i)->setMaybe<Int>(xProperty, prevX);
             (*i)->setMaybe<Int>(yProperty, prevY);
         }
@@ -660,38 +643,47 @@ void NotationSelector::dragFine(int x, int y, bool final)
         selection->getSegment().updateRefreshStatuses(startTime, endTime);
         m_nParentView->update();
     }
+
+#endif
 }
 
 void NotationSelector::ready()
 {
-    m_selectionRect = new Q3CanvasRectangle(m_nParentView->canvas());
+//!!!    m_selectionRect = new Q3CanvasRectangle(m_nParentView->canvas());
 
-    m_selectionRect->hide();
-    m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
+//    if (m_selectionRect) {
+//        m_selectionRect->hide();
+//       m_selectionRect->setPen(GUIPalette::getColour(GUIPalette::SelectionRectangle));
 
-    m_nParentView->setCanvasCursor(Qt::arrowCursor);
-    m_nParentView->setHeightTracking(false);
+    m_widget->setCanvasCursor(Qt::arrowCursor);
+    //!!!??? m_widget->setHeightTracking(false);
 }
 
 void NotationSelector::stow()
 {
     delete m_selectionRect;
     m_selectionRect = 0;
-    m_nParentView->canvas()->update();
+    //m_nParentView->canvas()->update();
+}
+
+void NotationSelector::handleEventRemoved(Event *e)
+{
+    if (m_clickedElement && m_clickedElement->event() == e) {
+        m_clickedElement = 0;
+    }
 }
 
 void NotationSelector::slotHideSelection()
 {
-    if (!m_selectionRect)
-        return ;
+    if (!m_selectionRect) return;
     m_selectionRect->hide();
-    m_selectionRect->setSize(0, 0);
-    m_nParentView->canvas()->update();
+//    m_selectionRect->setSize(0, 0);
+//    m_nParentView->canvas()->update();
 }
 
 void NotationSelector::slotInsertSelected()
 {
-    m_nParentView->slotLastNoteAction();
+    //!!!??? m_nParentView->slotLastNoteAction();
 }
 
 void NotationSelector::slotEraseSelected()
@@ -755,25 +747,27 @@ void NotationSelector::setViewCurrentSelection(bool preview)
 
     if (m_selectionToMerge) {
         if (selection &&
-                m_selectionToMerge->getSegment() == selection->getSegment()) {
+            m_selectionToMerge->getSegment() == selection->getSegment()) {
             selection->addFromSelection(m_selectionToMerge);
         } else {
             return ;
         }
     }
 
-    m_nParentView->setCurrentSelection(selection, preview, true);
+    m_scene->setSelection(selection, preview);
 }
 
 NotationStaff *
 NotationSelector::getStaffForElement(NotationElement *elt)
 {
+#ifdef NOT_JUST_YET
     for (int i = 0; i < m_nParentView->getStaffCount(); ++i) {
         NotationStaff *staff = m_nParentView->getNotationStaff(i);
         if (staff->getSegment().findSingle(elt->event()) !=
                 staff->getSegment().end())
             return staff;
     }
+#endif
     return 0;
 }
 
@@ -782,8 +776,9 @@ EventSelection* NotationSelector::getSelection()
     // If selection rect is not visible or too small,
     // return 0
     //
-    if (!m_selectionRect->visible()) return 0;
+    if (!m_selectionRect->isVisible()) return 0;
 
+#ifdef NOT_JUST_YET
     //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
 
@@ -907,6 +902,9 @@ EventSelection* NotationSelector::getSelection()
         delete selection;
         return 0;
     }
+
+#endif
+    return 0;//!!!
 }
 
 const QString NotationSelector::ToolName = "notationselector";
@@ -914,4 +912,4 @@ const QString NotationSelector::ToolName = "notationselector";
 }
 #include "NotationSelector.moc"
 
-#endif
+

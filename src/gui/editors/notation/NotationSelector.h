@@ -15,33 +15,30 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_NOTATIONSELECTOR_H_
 #define _RG_NOTATIONSELECTOR_H_
 
-#include <Q3CanvasRectangle>
 #include "NotationTool.h"
-#include "NotationElement.h"
-#include <QString>
+
 #include "base/Event.h"
+
+#include <QString>
+#include <QPointF>
 
 
 class QMouseEvent;
-class Q3CanvasRectangle;
-class m_clickedElement;
+class QGraphicsRectItem;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class NotationView;
-class NotationStaff;
+class NotationWidget;
 class NotationElement;
 class EventSelection;
 class Event;
-
+class NotationStaff;
 
 /**
  * Rectangular note selection
@@ -56,42 +53,22 @@ public:
 
     ~NotationSelector();
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent*,
-                                       ViewElement* el);
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
 
-    virtual void handleRightButtonPress(timeT time,
-                                        int height,
-                                        int staffNo,
-                                        QMouseEvent*,
-                                        ViewElement*);
+    virtual void handleRightButtonPress(const NotationMouseEvent *);
 
-    virtual int handleMouseMove(timeT,
-                                int height,
-                                QMouseEvent*);
+    virtual FollowMode handleMouseMove(const NotationMouseEvent *);
 
-    virtual void handleMouseRelease(timeT time,
-                                    int height,
-                                    QMouseEvent*);
+    virtual void handleMouseRelease(const NotationMouseEvent *);
 
-    virtual void handleMouseDoubleClick(timeT,
-                                        int height,
-                                        int staffNo,
-                                        QMouseEvent*,
-                                        ViewElement*);
+    virtual void handleMouseDoubleClick(const NotationMouseEvent *);
 
-    virtual void handleMouseTripleClick(timeT,
-                                        int height,
-                                        int staffNo,
-                                        QMouseEvent*,
-                                        ViewElement*);
+    virtual void handleMouseTripleClick(const NotationMouseEvent *);
 
     /**
      * Create the selection rect
      *
-     * We need this because NotationView deletes all QCanvasItems
+     * We need this because NotationScene deletes all scene items
      * along with it. This happens before the NotationSelector is
      * deleted, so we can't delete the selection rect in
      * ~NotationSelector because that leads to double deletion.
@@ -104,21 +81,19 @@ public:
     virtual void stow();
 
     /**
-     * Returns the currently selected events
-     *
-     * The returned result is owned by the caller
-     */
-    EventSelection* getSelection();
-
-    /**
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
-    virtual void handleEventRemoved(Event *event) {
+    virtual void handleEventRemoved(Event *event);
+
+#ifdef NOT_DEFINED
+//!!! {
         if (m_clickedElement && m_clickedElement->event() == event) {
             m_clickedElement = 0;
         }
     }
+    */
+#endif
 
     static const QString ToolName;
 
@@ -151,7 +126,7 @@ public slots:
     void slotClickTimeout();
 
 protected:
-    NotationSelector(NotationView*);
+    NotationSelector(NotationWidget *);
 
     /**
      * Set the current selection on the parent NotationView
@@ -166,9 +141,12 @@ protected:
     void drag(int x, int y, bool final);
     void dragFine(int x, int y, bool final);
 
+    EventSelection *getSelection();
+
     //--------------- Data members ---------------------------------
 
-    Q3CanvasRectangle* m_selectionRect;
+    QGraphicsRectItem *m_selectionRect;
+    QPointF m_selectionOrigin;
     bool m_updateRect;
 
     NotationStaff *m_selectedStaff;
@@ -186,8 +164,6 @@ protected:
 };
 
 
-
 }
 
-#endif
 #endif

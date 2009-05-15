@@ -33,6 +33,7 @@ Panner::Panner() :
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setOptimizationFlags(QGraphicsView::DontSavePainterState);
     setMouseTracking(true);
     setInteractive(false);
 }

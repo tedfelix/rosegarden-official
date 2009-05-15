@@ -18,6 +18,8 @@
 #include "NotationScene.h"
 
 #include "base/Segment.h"
+#include "base/BaseProperties.h"
+
 #include "NotationStaff.h"
 #include "NotationHLayout.h"
 #include "NotationVLayout.h"
@@ -53,6 +55,7 @@ NotationScene::NotationScene() :
     m_properties(0),
     m_notePixmapFactory(0),
     m_notePixmapFactorySmall(0),
+    m_selection(0),
     m_hlayout(0),
     m_vlayout(0),
     m_title(0),
@@ -972,6 +975,97 @@ NotationScene::layout(NotationStaff *singleStaff,
         //!!! bogus
         m_staffs[i]->setPointerPosition(*m_hlayout, 0);
         m_staffs[i]->setInsertCursorPosition(*m_hlayout, 0);
+    }
+}
+
+void
+NotationScene::handleEventRemoved(Event *e)
+{
+    if (m_selection && m_selection->contains(e)) m_selection->removeEvent(e);
+    emit eventRemoved(e);
+}
+
+void
+NotationScene::setSelection(EventSelection *s,
+                            bool preview)
+{
+    if (m_selection) {
+        setSelectionElementStatus(m_selection, false);
+    }
+
+    delete m_selection;
+    m_selection = s;
+    
+    if (m_selection) {
+        setSelectionElementStatus(m_selection, true, preview);
+    }
+}
+
+void
+NotationScene::setSingleSelectedEvent(NotationStaff *staff,
+                                      NotationElement *e,
+                                      bool preview)
+{
+    if (!staff || !e) return;
+    EventSelection *s = new EventSelection(staff->getSegment());
+    s->addEvent(e->event());
+    setSelection(s, preview);
+}
+
+void
+NotationScene::setSingleSelectedEvent(Segment *seg,
+                                      Event *e,
+                                      bool preview)
+{
+    if (!seg || !e) return;
+    EventSelection *s = new EventSelection(*seg);
+    s->addEvent(e);
+    setSelection(s, preview);
+}
+
+void
+NotationScene::setSelectionElementStatus(EventSelection *s, 
+                                         bool set,
+                                         bool preview)
+{
+    if (!s) return;
+
+    NotationStaff *staff = 0;
+
+    for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
+         i != m_staffs.end(); ++i) {
+
+        if (&(*i)->getSegment() == &s->getSegment()) {
+            staff = *i;
+            break;
+        }
+    }
+
+    if (!staff) return;
+
+    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+         i != s->getSegmentEvents().end(); ++i) {
+
+        Event *e = *i;
+        
+        ViewElementList::iterator staffi = staff->findEvent(e);
+        if (staffi == staff->getViewElementList()->end()) continue;
+        
+        NotationElement *el = static_cast<NotationElement *>(*staffi);
+        
+        el->setSelected(set);
+
+        if (set && preview) {
+            long pitch;
+            if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+                long velocity = -1;
+                (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+                if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                      e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                    playNote(s->getSegment(), pitch, velocity);
+                }
+            }
+        }
     }
 }
 

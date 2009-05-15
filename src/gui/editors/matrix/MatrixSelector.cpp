@@ -101,7 +101,7 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     // Do the merge selection thing
     //
-    delete m_selectionToMerge; // you can safely delete 0, you know?
+    delete m_selectionToMerge;
     const EventSelection *selectionToMerge = 0;
     if (e->modifiers & Qt::ShiftModifier) {
         selectionToMerge = m_scene->getSelection();

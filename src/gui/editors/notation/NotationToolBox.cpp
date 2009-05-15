@@ -74,11 +74,11 @@ NotationToolBox::createTool(QString toolName)
     else if (toolNamelc == NotationEraser::ToolName)
 
         tool = new NotationEraser(m_nParentView);
-
+*/
     else if (toolNamelc == NotationSelector::ToolName)
 
-        tool = new NotationSelector(m_nParentView);
-*/
+        tool = new NotationSelector(m_widget);
+
     else {
         QMessageBox::critical(0, "", QString("NotationToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));

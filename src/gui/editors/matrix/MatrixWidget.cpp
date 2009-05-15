@@ -94,6 +94,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
     m_hpanner->setBackgroundBrush(Qt::white);
+    m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
     m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
 
     // Rulers being not defined still, they can't be added to m_layout.

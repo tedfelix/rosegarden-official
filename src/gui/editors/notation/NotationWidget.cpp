@@ -52,11 +52,14 @@ NotationWidget::NotationWidget() :
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
+    m_view->setRenderHints(QPainter::TextAntialiasing |
+                           QPainter::SmoothPixmapTransform);
     layout->addWidget(m_view, 0, 0);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(80);
     m_hpanner->setBackgroundBrush(Qt::white);
+    m_hpanner->setRenderHints(0);
 //    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
 //                              QPainter::SmoothPixmapTransform);
     layout->addWidget(m_hpanner, 1, 0);
