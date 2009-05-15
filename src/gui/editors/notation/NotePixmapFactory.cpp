@@ -79,61 +79,61 @@ const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Ver
 const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
 NotePixmapFactory::NotePixmapFactory(QString fontName, int size) :
-        m_selected(false),
-        m_shaded(false),
-        m_tupletCountFont(defaultSerifFontFamily, 8, QFont::Bold),
-        m_tupletCountFontMetrics(m_tupletCountFont),
-        m_textMarkFont(defaultSerifFontFamily, 8, QFont::Bold, true),
-        m_textMarkFontMetrics(m_textMarkFont),
-        m_fingeringFont(defaultSerifFontFamily, 8, QFont::Bold),
-        m_fingeringFontMetrics(m_fingeringFont),
-        m_timeSigFont(defaultTimeSigFontFamily, 8, QFont::Bold),
-        m_timeSigFontMetrics(m_timeSigFont),
-        m_bigTimeSigFont(defaultTimeSigFontFamily, 12, QFont::Normal),
-        m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-        m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
-        m_ottavaFontMetrics(m_ottavaFont),
-        m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
-        m_clefOttavaFontMetrics(m_ottavaFont),
-        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
-        m_trackHeaderFontMetrics(m_trackHeaderFont),
-        m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
-        m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
-        m_generatedPixmap(0),
-        m_generatedWidth( -1),
-        m_generatedHeight( -1),
-        m_inPrinterMethod(false),
-        m_p(new NotePixmapPainter())
+    m_selected(false),
+    m_shaded(false),
+    m_tupletCountFont(defaultSerifFontFamily, 8, QFont::Bold),
+    m_tupletCountFontMetrics(m_tupletCountFont),
+    m_textMarkFont(defaultSerifFontFamily, 8, QFont::Bold, true),
+    m_textMarkFontMetrics(m_textMarkFont),
+    m_fingeringFont(defaultSerifFontFamily, 8, QFont::Bold),
+    m_fingeringFontMetrics(m_fingeringFont),
+    m_timeSigFont(defaultTimeSigFontFamily, 8, QFont::Bold),
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont(defaultTimeSigFontFamily, 12, QFont::Normal),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
+    m_ottavaFontMetrics(m_ottavaFont),
+    m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
+    m_clefOttavaFontMetrics(m_ottavaFont),
+    m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+    m_trackHeaderFontMetrics(m_trackHeaderFont),
+    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+    m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
+    m_generatedPixmap(0),
+    m_generatedWidth( -1),
+    m_generatedHeight( -1),
+    m_inPrinterMethod(false),
+    m_p(new NotePixmapPainter())
 {
     init(fontName, size);
 }
 
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
-        m_selected(false),
-        m_shaded(false),
-        m_tupletCountFont(npf.m_tupletCountFont),
-        m_tupletCountFontMetrics(m_tupletCountFont),
-        m_textMarkFont(npf.m_textMarkFont),
-        m_textMarkFontMetrics(m_textMarkFont),
-        m_fingeringFont(npf.m_fingeringFont),
-        m_fingeringFontMetrics(m_fingeringFont),
-        m_timeSigFont(npf.m_timeSigFont),
-        m_timeSigFontMetrics(m_timeSigFont),
-        m_bigTimeSigFont(npf.m_bigTimeSigFont),
-        m_bigTimeSigFontMetrics(m_bigTimeSigFont),
-        m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
-        m_ottavaFontMetrics(m_ottavaFont),
-        m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
-        m_clefOttavaFontMetrics(m_ottavaFont),
-        m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
-        m_trackHeaderFontMetrics(m_trackHeaderFont),
-        m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
-        m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
-        m_generatedPixmap(0),
-        m_generatedWidth( -1),
-        m_generatedHeight( -1),
-        m_inPrinterMethod(false),
-        m_p(new NotePixmapPainter())
+    m_selected(false),
+    m_shaded(false),
+    m_tupletCountFont(npf.m_tupletCountFont),
+    m_tupletCountFontMetrics(m_tupletCountFont),
+    m_textMarkFont(npf.m_textMarkFont),
+    m_textMarkFontMetrics(m_textMarkFont),
+    m_fingeringFont(npf.m_fingeringFont),
+    m_fingeringFontMetrics(m_fingeringFont),
+    m_timeSigFont(npf.m_timeSigFont),
+    m_timeSigFontMetrics(m_timeSigFont),
+    m_bigTimeSigFont(npf.m_bigTimeSigFont),
+    m_bigTimeSigFontMetrics(m_bigTimeSigFont),
+    m_ottavaFont(defaultSerifFontFamily, 8, QFont::Normal, true),
+    m_ottavaFontMetrics(m_ottavaFont),
+    m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
+    m_clefOttavaFontMetrics(m_ottavaFont),
+    m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+    m_trackHeaderFontMetrics(m_trackHeaderFont),
+    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+    m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
+    m_generatedPixmap(0),
+    m_generatedWidth( -1),
+    m_generatedHeight( -1),
+    m_inPrinterMethod(false),
+    m_p(new NotePixmapPainter())
 {
     init(npf.m_font->getName(), npf.m_font->getSize());
 }
@@ -343,6 +343,10 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
                                QPainter *painter, int x, int y)
 {
     NoteFont::CharacterType charType = m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
+
+    if (m_selected) {
+        std::cerr << "NotePixmapFactory::drawNoteAux: selected" << std::endl;
+    }
 
     bool drawFlag = params.m_drawFlag;
 

@@ -45,8 +45,7 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
         }
     }
 
-    QBitmap m;
-    m.fromImage(im);
+    QBitmap m = QBitmap::fromImage(im);
     return m;
 }
 
@@ -75,8 +74,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
         }
     }
 
-    QBitmap m;
-    m.fromImage(im);
+    QBitmap m = QBitmap::fromImage(im);
     return m;
 }
 
@@ -93,6 +91,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
     bool warned = false;
 
     for (int y = 0; y < image.height(); ++y) {
+
         for (int x = 0; x < image.width(); ++x) {
 
             QColor pixel(image.pixel(x, y));
@@ -103,25 +102,23 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
             if (oldHue >= 0) {
                 if (!warned) {
                     std::cerr << "PixmapFunctions::recolour: Not a greyscale pixmap "
-                    << "(found rgb value " << pixel.red() << ","
-                    << pixel.green() << "," << pixel.blue()
-                    << "), hoping for the best" << std::endl;
+                              << "(found rgb value " << pixel.red() << ","
+                              << pixel.green() << "," << pixel.blue()
+                              << "), hoping for the best" << std::endl;
                     warned = true;
                 }
             }
 
             image.setPixel
-            (x, y, QColor(hue,
-                          255 - v,
-                          v > minimum ? v : minimum,
-                          QColor::Hsv).rgb());
+                (x, y, QColor(hue,
+                              255 - v,
+                              v > minimum ? v : minimum,
+                              QColor::Hsv).rgb());
         }
     }
 
-    QPixmap rmap;
-    rmap.fromImage(image);
-    if (!map.mask().isNull())
-        rmap.setMask(map.mask());
+    QPixmap rmap = QPixmap::fromImage(image);
+    if (!map.mask().isNull()) rmap.setMask(map.mask());
     return rmap;
 }
 
@@ -147,24 +144,20 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
         }
     }
 
-    QPixmap rmap;
-    rmap.fromImage(image);
-    if (!map.mask().isNull())
-        rmap.setMask(map.mask());
+    QPixmap rmap = QPixmap::fromImage(image);
+    if (!map.mask().isNull()) rmap.setMask(map.mask());
     return rmap;
 }
 
 QPixmap
 PixmapFunctions::flipVertical(const QPixmap &map)
 {
-    QPixmap rmap;
     QImage i(map.toImage());
-    rmap.fromImage(i.mirror(false, true));
+    QPixmap rmap = QPixmap::fromImage(i.mirrored(false, true));
 
     if (!map.mask().isNull()) {
         QImage im(map.mask().toImage());
-        QBitmap newMask;
-        newMask.fromImage(im.mirror(false, true));
+        QBitmap newMask = QBitmap::fromImage(im.mirrored(false, true));
         rmap.setMask(newMask);
     }
 
@@ -174,14 +167,12 @@ PixmapFunctions::flipVertical(const QPixmap &map)
 QPixmap
 PixmapFunctions::flipHorizontal(const QPixmap &map)
 {
-    QPixmap rmap;
     QImage i(map.toImage());
-    rmap.fromImage(i.mirror(true, false));
+    QPixmap rmap = QPixmap::fromImage(i.mirrored(true, false));
 
     if (!map.mask().isNull()) {
         QImage im(map.mask().toImage());
-        QBitmap newMask;
-        newMask.fromImage(im.mirror(true, false));
+        QBitmap newMask = QBitmap::fromImage(im.mirrored(true, false));
         rmap.setMask(newMask);
     }
 
@@ -246,8 +237,8 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
         }
     }
 
-    dest.fromImage(idp);
-    destMask.fromImage(idm);
+    dest = QPixmap::fromImage(idp);
+    destMask = QPixmap::fromImage(idm);
 }
 
 }

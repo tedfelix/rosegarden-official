@@ -119,7 +119,7 @@ dependencies: $(SOURCES) $(HEADERS) Makefile
 	@echo Rebuilding dependencies file...
 	@rm -f $@ 
 	@touch $@
-	@echo $(SOURCES) | $(XARGS) --max-args=100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
+	@echo $(SOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
 	@echo Done
 
 qrc:

@@ -375,7 +375,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     }
 
     found = new QPixmap
-            (PixmapFunctions::colourPixmap(basePixmap, hue, minimum));
+        (PixmapFunctions::colourPixmap(basePixmap, hue, minimum));
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
