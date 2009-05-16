@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de">
+<TS version="2.0" language="de" sourcelanguage="en_US">
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
@@ -170,15 +170,6 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="633"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distributions hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as Virtual Keyboard&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Producing</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source></source>
-        <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation></translation>
     </message>
 </context>
 <context>
@@ -3507,7 +3498,7 @@
         <translation type="unfinished">Als neues getriggertes Segment einfügen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="707"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4047"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -3535,11 +3526,6 @@ als den eingeschränkten wählen.</translation>
         <translation type="unfinished">Tenor</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="358"/>
-        <source>Baritone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
         <translation type="unfinished">Bass</translation>
@@ -3558,69 +3544,69 @@ als den eingeschränkten wählen.</translation>
         <location filename="../InstrumentStrings.cpp" line="32"/>
         <location filename="../AutoloadStrings.cpp" line="81"/>
         <source>Violin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Geige</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="33"/>
         <source>Baroque violin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barockgeige</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
         <location filename="../AutoloadStrings.cpp" line="82"/>
         <source>Viola</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bratsche</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
         <source>Baroque viola</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barockbratsche</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
         <source>Violoncello</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violoncello</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="37"/>
         <source>Baroque violoncello</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barockvioloncello</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
         <location filename="../AutoloadStrings.cpp" line="84"/>
         <source>Contrabass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kontrabass</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="39"/>
         <source>Baroque contrabass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Barockkontrabass</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="40"/>
         <source>Soprano viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sopran-Gambe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="41"/>
         <source>Alto viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Alt-Gambe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="42"/>
         <source>Tenor viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Tenor-Gambe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="43"/>
         <source>Viola da gamba</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gambe</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="44"/>
         <source>Violone</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violone (Bass-Gambe)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="45"/>
@@ -3630,32 +3616,32 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="46"/>
         <source>Soprano guitar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Soprangitarre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="47"/>
         <source>Alto guitar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Altgitarre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
         <source>Guitar (prim)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">klassische Gitarre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
         <source>Contrabass guitar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kontrabass Gitarre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="50"/>
         <source>11-string alto guitar (treble)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">11-Saiten Altgitarre (Sopran)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="51"/>
         <source>11-string alto guitar (bass)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">11-Saiten Altgitarre (Bass)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
@@ -4923,23 +4909,6 @@ als den eingeschränkten wählen.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
-        <source>Maracas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
-        <source>Cabasa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="305"/>
-        <source>Quijada</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../InstrumentStrings.cpp" line="306"/>
         <source>Vibra slap</source>
         <translation type="unfinished"></translation>
@@ -5027,6 +4996,23 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
         <source>Percussion synthesizer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="303"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <source>Maracas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="304"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <source>Cabasa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="305"/>
+        <source>Quijada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5194,6 +5180,11 @@ als den eingeschränkten wählen.</translation>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
         <translation type="unfinished">Alt</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="358"/>
+        <source>Baritone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
@@ -15274,17 +15265,17 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="463"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">Noten&amp;font</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="483"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="487"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">&amp;Größe</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="503"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15292,23 +15283,23 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="726"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">Mehrere Segments können nicht in eins eingefügt werden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="697"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="751"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="753"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">Kein Einfügen an diesem Punkt möglich</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Die Zwischenablage ist leer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="718"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="774"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Inhalt der Zwischenablage einfügen...</translation>
     </message>
@@ -16317,8 +16308,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2278"/>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2322"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2282"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2326"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>

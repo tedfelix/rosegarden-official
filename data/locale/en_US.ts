@@ -173,15 +173,6 @@
     </message>
 </context>
 <context>
-    <name>Producing</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source></source>
-        <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
@@ -3507,7 +3498,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="707"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4047"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -3538,7 +3529,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="33"/>
         <source>Baroque violin</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
@@ -3549,7 +3540,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
         <source>Baroque viola</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
@@ -3559,7 +3550,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="37"/>
         <source>Baroque violoncello</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
@@ -3570,32 +3561,32 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="39"/>
         <source>Baroque contrabass</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="40"/>
         <source>Soprano viola da gamba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="41"/>
         <source>Alto viola da gamba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="42"/>
         <source>Tenor viola da gamba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="43"/>
         <source>Viola da gamba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="44"/>
         <source>Violone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="45"/>
@@ -3605,102 +3596,102 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="46"/>
         <source>Soprano guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="47"/>
         <source>Alto guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
         <source>Guitar (prim)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
         <source>Contrabass guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="50"/>
         <source>11-string alto guitar (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="51"/>
         <source>11-string alto guitar (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
         <source>Steel string guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
         <source>Pedal steel guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
         <source>12-string guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="55"/>
         <source>Electric guitar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="56"/>
         <source>Electric bass guitar (fretted)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="57"/>
         <source>Electric bass guitar (fretless)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
         <source>Lute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="59"/>
         <source>Cittern</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
         <source>Piccolo balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="61"/>
         <source>Prima balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="62"/>
         <source>Secunda balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="63"/>
         <source>Alto balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="64"/>
         <source>Bass balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="65"/>
         <source>Contrabass balalaika</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
@@ -3722,22 +3713,22 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
         <source>Banjo (5-string)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="70"/>
         <source>Tenor banjo</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="71"/>
         <source>Harp (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="72"/>
         <source>Harp (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
@@ -3759,7 +3750,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
         <source>Eb flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
@@ -3770,137 +3761,137 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
         <source>Alto flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="79"/>
         <source>Bass flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="80"/>
         <source>Contra-alto flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="81"/>
         <source>Contrabass flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
         <source>Transverse flute (D foot)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="83"/>
         <source>Transverse flute (C foot)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="84"/>
         <source>Transverse flute (B foot)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="85"/>
         <source>Alto transverse flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="86"/>
         <source>Garklein recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="87"/>
         <source>Sopranino recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="88"/>
         <source>Soprano recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="89"/>
         <source>Alto recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="90"/>
         <source>Tenor recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="91"/>
         <source>Bass recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="92"/>
         <source>Greatbass recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="93"/>
         <source>Contrabass recorder</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="94"/>
         <source>G soprano ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="95"/>
         <source>F soprano ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="96"/>
         <source>C soprano ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="97"/>
         <source>Bb soprano ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="98"/>
         <source>G alto ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="99"/>
         <source>F alto ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="100"/>
         <source>C alto ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="101"/>
         <source>Bb alto ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="102"/>
         <source>C bass ocarina</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="103"/>
         <source>Slide whistle</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="104"/>
         <source>Pan flute</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="105"/>
@@ -3916,12 +3907,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="107"/>
         <source>Piccolo oboe in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="108"/>
         <source>Piccolo oboe in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
@@ -3937,12 +3928,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="111"/>
         <source>English horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="112"/>
         <source>Baritone oboe</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="113"/>
@@ -3952,7 +3943,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="114"/>
         <source>Baroque oboe</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="115"/>
@@ -3962,77 +3953,77 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
         <source>Shawm</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="117"/>
         <source>Sopranino shawm</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
         <source>Descant pommer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="119"/>
         <source>Alto pommer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="120"/>
         <source>Soprano crumhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="121"/>
         <source>Alto crumhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="122"/>
         <source>Tenor crumhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="123"/>
         <source>Bass crumhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="124"/>
         <source>Greatbass crumhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="125"/>
         <source>Soprano cornamuse</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="126"/>
         <source>Alto cornamuse</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="127"/>
         <source>Tenor cornamuse</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="128"/>
         <source>Bass cornamuse</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="129"/>
         <source>Sopranino rauschpfeife</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="130"/>
         <source>Soprano rauschpfeife</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
@@ -4043,57 +4034,57 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="132"/>
         <source>Contrabassoon</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="133"/>
         <source>Dulcian</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="134"/>
         <source>Rackett</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="135"/>
         <source>Sopranino sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="136"/>
         <source>Soprano sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
         <source>Alto sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="138"/>
         <source>Tenor sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="139"/>
         <source>Baritone sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="140"/>
         <source>Bass sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="141"/>
         <source>Contrabass sarrusophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="142"/>
         <source>Bagpipe</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="143"/>
@@ -4103,112 +4094,112 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="144"/>
         <source>Soprano clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="145"/>
         <source>Eb clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="146"/>
         <source>D clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="147"/>
         <source>C clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="148"/>
         <source>Bb clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="149"/>
         <source>A clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="150"/>
         <source>Alto clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="151"/>
         <source>Bassett horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="152"/>
         <source>Bass clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="153"/>
         <source>Contra-alto clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="154"/>
         <source>Contrabass clarinet</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="155"/>
         <source>Sopranino chalumeau</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="156"/>
         <source>Soprano chalumeau</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="157"/>
         <source>Alto chalumeau</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="158"/>
         <source>Tenor chalumeau</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="159"/>
         <source>Sopranino saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="160"/>
         <source>Soprano saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="161"/>
         <source>Alto saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="162"/>
         <source>Tenor saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="163"/>
         <source>Baritone saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="164"/>
         <source>Bass saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="165"/>
         <source>Contrabass saxophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="166"/>
@@ -4218,7 +4209,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="167"/>
         <source>Wind synthesizer</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="168"/>
@@ -4228,97 +4219,97 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="169"/>
         <source>Piccolo trumpet in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="170"/>
         <source>Piccolo trumpet in A</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="171"/>
         <source>Trumpet in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="172"/>
         <source>Trumpet in D</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="173"/>
         <source>Trumpet in C</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="174"/>
         <source>Trumpet in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="175"/>
         <source>Bass trumpet in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="176"/>
         <source>Bass trumpet in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="177"/>
         <source>Baroque trumpet in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="178"/>
         <source>Baroque trumpet in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="179"/>
         <source>Baroque trumpet in D</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="180"/>
         <source>Baroque trumpet in C</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="181"/>
         <source>Baroque trumpet in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="182"/>
         <source>Cornet in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="183"/>
         <source>Cornet in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="184"/>
         <source>Flugelhorn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="185"/>
         <source>Cornettino</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="186"/>
         <source>Alto cornetto</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="187"/>
         <source>Tenor cornetto</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="188"/>
@@ -4328,107 +4319,107 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="189"/>
         <source>Alto ophicleide in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="190"/>
         <source>Alto ophicleide in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="191"/>
         <source>Bass ophicleide in C</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="192"/>
         <source>Bass ophicleide in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="193"/>
         <source>Contrabass ophicleide in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="194"/>
         <source>French horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="195"/>
         <source>French horn in C alto</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="196"/>
         <source>French horn in Bb alto</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="197"/>
         <source>French horn in A</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="198"/>
         <source>French horn in Ab</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="199"/>
         <source>French horn in G</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="200"/>
         <source>French horn in E</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="201"/>
         <source>French horn in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="202"/>
         <source>French horn in D</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="203"/>
         <source>French horn in C basso</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="204"/>
         <source>French horn in Bb basso</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="205"/>
         <source>Alto horn in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="206"/>
         <source>Alto horn in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="207"/>
         <source>Baritone horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="208"/>
         <source>Mellophone in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="209"/>
         <source>Mellophone in Eb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="210"/>
@@ -4443,37 +4434,37 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="212"/>
         <source>Wagner tuba in Bb</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="213"/>
         <source>Wagner tuba in F</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="214"/>
         <source>Soprano trombone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="215"/>
         <source>Alto trombone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="216"/>
         <source>Tenor trombone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="217"/>
         <source>Bass trombone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="218"/>
         <source>Contrabass trombone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="219"/>
@@ -4483,17 +4474,17 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="220"/>
         <source>F tuba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="221"/>
         <source>C tuba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="222"/>
         <source>Bb tuba</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="223"/>
@@ -4509,12 +4500,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="225"/>
         <source>Roto-toms (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="226"/>
         <source>Roto-toms (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="227"/>
@@ -4525,12 +4516,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="228"/>
         <source>Orff soprano glockenspiel</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="229"/>
         <source>Orff alto glockenspiel</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="230"/>
@@ -4545,12 +4536,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="232"/>
         <source>Almglocken (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="233"/>
         <source>Almglocken (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
@@ -4561,87 +4552,87 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
         <source>Orff soprano metallophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="236"/>
         <source>Orff alto metallophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="237"/>
         <source>Orff bass metallophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="238"/>
         <source>Tubular chimes</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="239"/>
         <source>Bass steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="240"/>
         <source>Cello steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="241"/>
         <source>Tenor steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="242"/>
         <source>Guitar steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="243"/>
         <source>Alto steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="244"/>
         <source>Soprano steel drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="245"/>
         <source>Hand bells (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="246"/>
         <source>Hand bells (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="247"/>
         <source>Tuned gongs</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="248"/>
         <source>Flexatone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="249"/>
         <source>Musical saw</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="250"/>
         <source>Musical glasses</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="251"/>
         <source>Glass harmonica</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
@@ -4652,47 +4643,47 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
         <source>Orff soprano xylophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="254"/>
         <source>Orff alto xylophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="255"/>
         <source>Orff bass xylophone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="256"/>
         <source>Marimba (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="257"/>
         <source>Marimba (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="258"/>
         <source>Dulcimer (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="259"/>
         <source>Dulcimer (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="260"/>
         <source>Mallet synthesizer (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="261"/>
         <source>Mallet synthesizer (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="262"/>
@@ -4702,27 +4693,27 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="263"/>
         <source>Snare drum</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="264"/>
         <source>Piccolo snare drum</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="265"/>
         <source>Military drum</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="266"/>
         <source>Tom-toms</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="267"/>
         <source>Chinese tom-toms</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="268"/>
@@ -4732,7 +4723,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="269"/>
         <source>Congas</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="270"/>
@@ -4742,7 +4733,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="271"/>
         <source>Bass drum</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
@@ -4753,12 +4744,12 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
         <source>Frame drum</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="274"/>
         <source>Tablas</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="275"/>
@@ -4768,82 +4759,82 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="276"/>
         <source>Finger cymbals</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="277"/>
         <source>Cymbals</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="278"/>
         <source>Hi-hat cymbals</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="279"/>
         <source>Suspended cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="280"/>
         <source>Ride cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="281"/>
         <source>Sizzle cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="282"/>
         <source>Crash cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="283"/>
         <source>Splash cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="284"/>
         <source>Chinese cymbal</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="285"/>
         <source>Triangle</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
         <source>Tam-tam</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="288"/>
         <source>Bells</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="289"/>
         <source>Sleighbells</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="290"/>
         <source>Bell plate</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="291"/>
         <source>Bowl gongs</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="292"/>
@@ -4853,37 +4844,37 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="293"/>
         <source>Metal castanets</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="294"/>
         <source>Automobile brake drums</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="295"/>
         <source>Iron pipes</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="296"/>
         <source>Chaines</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="297"/>
         <source>Anvil</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="298"/>
         <source>Woodblocks</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="299"/>
         <source>Temple blocks</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="300"/>
@@ -4900,7 +4891,97 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="302"/>
         <source>Guiro</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="306"/>
+        <source>Vibra slap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="307"/>
+        <source>Slit drum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="308"/>
+        <source>Whip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="309"/>
+        <source>Ratchet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="310"/>
+        <source>Thundersheet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="311"/>
+        <source>Sandpaper blocks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="312"/>
+        <source>Wooden wind chimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="313"/>
+        <source>Bamboo wind chimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="314"/>
+        <source>Metal wind chimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="315"/>
+        <source>Glass wind chimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="316"/>
+        <source>Shell wind chimes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="317"/>
+        <source>Stones</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="318"/>
+        <source>Finger snap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="319"/>
+        <source>Hand clap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="320"/>
+        <source>Slap</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="321"/>
+        <source>Stamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="322"/>
+        <source>Drum set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="323"/>
+        <source>Percussion synthesizer</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="303"/>
@@ -4920,96 +5001,6 @@ If you want to paste anyway, consider using one of the other paste types from th
         <translation></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="306"/>
-        <source>Vibra slap</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="307"/>
-        <source>Slit drum</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="308"/>
-        <source>Whip</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="309"/>
-        <source>Ratchet</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="310"/>
-        <source>Thundersheet</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="311"/>
-        <source>Sandpaper blocks</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="312"/>
-        <source>Wooden wind chimes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="313"/>
-        <source>Bamboo wind chimes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="314"/>
-        <source>Metal wind chimes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="315"/>
-        <source>Glass wind chimes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="316"/>
-        <source>Shell wind chimes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="317"/>
-        <source>Stones</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="318"/>
-        <source>Finger snap</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="319"/>
-        <source>Hand clap</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="320"/>
-        <source>Slap</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="321"/>
-        <source>Stamp</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="322"/>
-        <source>Drum set</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="323"/>
-        <source>Percussion synthesizer</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../InstrumentStrings.cpp" line="324"/>
         <source>Keyboards</source>
         <translation></translation>
@@ -5017,107 +5008,107 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="325"/>
         <source>Piano (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="326"/>
         <source>Piano (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="327"/>
         <source>Clavichord (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="328"/>
         <source>Clavichord (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="329"/>
         <source>Harpsichord (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="330"/>
         <source>Harpsichord (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="331"/>
         <source>Celesta (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="332"/>
         <source>Celesta (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="333"/>
         <source>Electric piano (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="334"/>
         <source>Electric piano (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="335"/>
         <source>Toy piano</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="336"/>
         <source>Keyboard synthesizer (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="337"/>
         <source>Keyboard synthesizer (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="338"/>
         <source>Organ (manual) (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="339"/>
         <source>Organ (manual) (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="340"/>
         <source>Organ (pedal)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="341"/>
         <source>Electronic organ (manual) (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="342"/>
         <source>Electronic organ (manual) (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="343"/>
         <source>Electronic organ (pedal)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="344"/>
         <source>Harmonium (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="345"/>
         <source>Harmonium (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="346"/>
@@ -5127,22 +5118,22 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="347"/>
         <source>Accordion (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="348"/>
         <source>Accordion (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="349"/>
         <source>Bandoneon (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="350"/>
         <source>Bandoneon (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="351"/>
@@ -5163,17 +5154,17 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="354"/>
         <source>Soprano</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="355"/>
         <source>Mezzosoprano</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="357"/>
@@ -5183,7 +5174,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="358"/>
         <source>Baritone</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
@@ -5193,7 +5184,7 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
         <source>Boy soprano</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="361"/>
@@ -5203,62 +5194,62 @@ If you want to paste anyway, consider using one of the other paste types from th
     <message>
         <location filename="../InstrumentStrings.cpp" line="362"/>
         <source>Kazoo (treble)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="363"/>
         <source>Kazoo (bass)</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="364"/>
         <source>Police whistle</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="365"/>
         <source>Bird whistle</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="366"/>
         <source>Duck call</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="367"/>
         <source>Mouth siren</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="368"/>
         <source>Siren</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="369"/>
         <source>Auto horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="370"/>
         <source>Klaxon horn</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="371"/>
         <source>Lion&apos;s roar</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="372"/>
         <source>Wind machine</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="373"/>
         <source>Pistol shot</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="374"/>
@@ -15222,17 +15213,17 @@ of others.</source>
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="463"/>
         <source>Note &amp;Font</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="483"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="487"/>
         <source>Si&amp;ze</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="503"/>
         <source>%n pixel(s)</source>
         <translation>
             <numerusform>%n pixel</numerusform>
@@ -15240,23 +15231,23 @@ of others.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="726"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="697"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="751"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="753"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>Clipboard is empty</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="718"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="774"/>
         <source>Inserting clipboard contents...</source>
         <translation></translation>
     </message>
@@ -16263,8 +16254,8 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2278"/>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2322"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2282"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2326"/>
         <source>...</source>
         <translation></translation>
     </message>

@@ -173,15 +173,6 @@
     </message>
 </context>
 <context>
-    <name>Producing</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source></source>
-        <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
@@ -3507,7 +3498,7 @@
         <translation type="unfinished">粘贴为新的触发片段(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="707"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4047"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -15246,40 +15237,40 @@ of others.</source>
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="463"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">音符字体(&amp;F)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="483"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="487"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">大小(&amp;Z)</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="503"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="726"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">无法将多个小节粘贴入一个文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="697"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="751"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="753"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">无法粘贴到这点。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">剪贴板是空的</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="718"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="774"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">正在插入剪贴板内容...</translation>
     </message>
@@ -16284,8 +16275,8 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2278"/>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2322"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2282"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2326"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>

@@ -174,15 +174,6 @@
     </message>
 </context>
 <context>
-    <name>Producing</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source></source>
-        <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
@@ -3509,7 +3500,7 @@
         <translation type="unfinished">Pegar como Nuevo &amp;Segmento Activado</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="707"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4047"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -3541,19 +3532,9 @@ así lo desea.</translation>
         <translation>Tenor</translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="358"/>
-        <source>Baritone</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
         <source>Bass</source>
         <translation>Bajo</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="285"/>
-        <source>Triangle</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="31"/>
@@ -3569,7 +3550,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="33"/>
         <source>Baroque violin</source>
-        <translation>Violín barroco</translation>
+        <translation type="unfinished">Violín barroco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="34"/>
@@ -3580,7 +3561,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="35"/>
         <source>Baroque viola</source>
-        <translation>Viola barroco</translation>
+        <translation type="unfinished">Viola barroco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="36"/>
@@ -3590,7 +3571,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="37"/>
         <source>Baroque violoncello</source>
-        <translation>Violoncello barroco</translation>
+        <translation type="unfinished">Violoncello barroco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="38"/>
@@ -3601,32 +3582,32 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="39"/>
         <source>Baroque contrabass</source>
-        <translation>Contrabajo barroco</translation>
+        <translation type="unfinished">Contrabajo barroco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="40"/>
         <source>Soprano viola da gamba</source>
-        <translation>Viola da gamba soprano</translation>
+        <translation type="unfinished">Viola da gamba soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="41"/>
         <source>Alto viola da gamba</source>
-        <translation>Viola da gamba alto</translation>
+        <translation type="unfinished">Viola da gamba alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="42"/>
         <source>Tenor viola da gamba</source>
-        <translation>Viola de gamba tenor</translation>
+        <translation type="unfinished">Viola de gamba tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="43"/>
         <source>Viola da gamba</source>
-        <translation>Viola da gamba</translation>
+        <translation type="unfinished">Viola da gamba</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="44"/>
         <source>Violone</source>
-        <translation>Violone</translation>
+        <translation type="unfinished">Violone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="45"/>
@@ -3636,102 +3617,102 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="46"/>
         <source>Soprano guitar</source>
-        <translation>Guitarra soprano</translation>
+        <translation type="unfinished">Guitarra soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="47"/>
         <source>Alto guitar</source>
-        <translation>Guitarra alto</translation>
+        <translation type="unfinished">Guitarra alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="48"/>
         <source>Guitar (prim)</source>
-        <translation>Guitarra (prim)</translation>
+        <translation type="unfinished">Guitarra (prim)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="49"/>
         <source>Contrabass guitar</source>
-        <translation>Guitarra contrabajo</translation>
+        <translation type="unfinished">Guitarra contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="50"/>
         <source>11-string alto guitar (treble)</source>
-        <translation>Guitarra alto de 11 cuerdas (clave de sol)</translation>
+        <translation type="unfinished">Guitarra alto de 11 cuerdas (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="51"/>
         <source>11-string alto guitar (bass)</source>
-        <translation>Guitarra alto de 11 cuerdas (clave de fa)</translation>
+        <translation type="unfinished">Guitarra alto de 11 cuerdas (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="52"/>
         <source>Steel string guitar</source>
-        <translation>Guitarra de cuerdas en acero</translation>
+        <translation type="unfinished">Guitarra de cuerdas en acero</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="53"/>
         <source>Pedal steel guitar</source>
-        <translation>&lt;i&gt;Pedal steel guitar&lt;/i&gt; (música country de EEUU)</translation>
+        <translation type="unfinished">&lt;i&gt;Pedal steel guitar&lt;/i&gt; (música country de EEUU)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="54"/>
         <source>12-string guitar</source>
-        <translation>Bajo sexto</translation>
+        <translation type="unfinished">Bajo sexto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="55"/>
         <source>Electric guitar</source>
-        <translation>Guitarra eléctrica</translation>
+        <translation type="unfinished">Guitarra eléctrica</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="56"/>
         <source>Electric bass guitar (fretted)</source>
-        <translation>Bajo eléctrico (con trastes)</translation>
+        <translation type="unfinished">Bajo eléctrico (con trastes)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="57"/>
         <source>Electric bass guitar (fretless)</source>
-        <translation>Bajo eléctrico (sin trastes)</translation>
+        <translation type="unfinished">Bajo eléctrico (sin trastes)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="58"/>
         <source>Lute</source>
-        <translation>Laúd</translation>
+        <translation type="unfinished">Laúd</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="59"/>
         <source>Cittern</source>
-        <translation>Cistre</translation>
+        <translation type="unfinished">Cistre</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="60"/>
         <source>Piccolo balalaika</source>
-        <translation>Balalaica píccolo</translation>
+        <translation type="unfinished">Balalaica píccolo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="61"/>
         <source>Prima balalaika</source>
-        <translation>Balalaica primero</translation>
+        <translation type="unfinished">Balalaica primero</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="62"/>
         <source>Secunda balalaika</source>
-        <translation>Balalaica segundo</translation>
+        <translation type="unfinished">Balalaica segundo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="63"/>
         <source>Alto balalaika</source>
-        <translation>Balalaica alto</translation>
+        <translation type="unfinished">Balalaica alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="64"/>
         <source>Bass balalaika</source>
-        <translation>Balalaica bajo</translation>
+        <translation type="unfinished">Balalaica bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="65"/>
         <source>Contrabass balalaika</source>
-        <translation>Balalaica contrabajo</translation>
+        <translation type="unfinished">Balalaica contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="66"/>
@@ -3753,22 +3734,22 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="69"/>
         <source>Banjo (5-string)</source>
-        <translation>Banjo (5 cuerdas)</translation>
+        <translation type="unfinished">Banjo (5 cuerdas)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="70"/>
         <source>Tenor banjo</source>
-        <translation>Banjo tenor</translation>
+        <translation type="unfinished">Banjo tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="71"/>
         <source>Harp (treble)</source>
-        <translation>Arpa (clave de sol)</translation>
+        <translation type="unfinished">Arpa (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="72"/>
         <source>Harp (bass)</source>
-        <translation>Arpa (clave de fa)</translation>
+        <translation type="unfinished">Arpa (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="73"/>
@@ -3790,7 +3771,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="76"/>
         <source>Eb flute</source>
-        <translation>Flauta en mi bemol</translation>
+        <translation type="unfinished">Flauta en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="77"/>
@@ -3801,137 +3782,137 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="78"/>
         <source>Alto flute</source>
-        <translation>Flauta alto</translation>
+        <translation type="unfinished">Flauta alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="79"/>
         <source>Bass flute</source>
-        <translation>Flauta bajo</translation>
+        <translation type="unfinished">Flauta bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="80"/>
         <source>Contra-alto flute</source>
-        <translation>Flauta contralto</translation>
+        <translation type="unfinished">Flauta contralto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="81"/>
         <source>Contrabass flute</source>
-        <translation>Flauta contrabajo</translation>
+        <translation type="unfinished">Flauta contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="82"/>
         <source>Transverse flute (D foot)</source>
-        <translation>Flauta travesera (pie en re)</translation>
+        <translation type="unfinished">Flauta travesera (pie en re)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="83"/>
         <source>Transverse flute (C foot)</source>
-        <translation>Flauta travesera (pie en do)</translation>
+        <translation type="unfinished">Flauta travesera (pie en do)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="84"/>
         <source>Transverse flute (B foot)</source>
-        <translation>Flauta travesera (pie en si)</translation>
+        <translation type="unfinished">Flauta travesera (pie en si)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="85"/>
         <source>Alto transverse flute</source>
-        <translation>Flauta travesera alto</translation>
+        <translation type="unfinished">Flauta travesera alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="86"/>
         <source>Garklein recorder</source>
-        <translation>Flauta dulce exilent</translation>
+        <translation type="unfinished">Flauta dulce exilent</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="87"/>
         <source>Sopranino recorder</source>
-        <translation>Flauta dulce sopranino</translation>
+        <translation type="unfinished">Flauta dulce sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="88"/>
         <source>Soprano recorder</source>
-        <translation>Flauta dulce soprano</translation>
+        <translation type="unfinished">Flauta dulce soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="89"/>
         <source>Alto recorder</source>
-        <translation>Flauta dulce alto</translation>
+        <translation type="unfinished">Flauta dulce alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="90"/>
         <source>Tenor recorder</source>
-        <translation>Flauta dulce tenor</translation>
+        <translation type="unfinished">Flauta dulce tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="91"/>
         <source>Bass recorder</source>
-        <translation>Flauta dulce bajo</translation>
+        <translation type="unfinished">Flauta dulce bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="92"/>
         <source>Greatbass recorder</source>
-        <translation>flauta dulce gran bajo</translation>
+        <translation type="unfinished">flauta dulce gran bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="93"/>
         <source>Contrabass recorder</source>
-        <translation>Flauta dulce contrabajo</translation>
+        <translation type="unfinished">Flauta dulce contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="94"/>
         <source>G soprano ocarina</source>
-        <translation>Ocarina soprano en sol</translation>
+        <translation type="unfinished">Ocarina soprano en sol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="95"/>
         <source>F soprano ocarina</source>
-        <translation>Ocarina soprano en fa</translation>
+        <translation type="unfinished">Ocarina soprano en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="96"/>
         <source>C soprano ocarina</source>
-        <translation>Ocarina soprano en do</translation>
+        <translation type="unfinished">Ocarina soprano en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="97"/>
         <source>Bb soprano ocarina</source>
-        <translation>Ocarina soprano en si bemol</translation>
+        <translation type="unfinished">Ocarina soprano en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="98"/>
         <source>G alto ocarina</source>
-        <translation>Ocarina alto en sol</translation>
+        <translation type="unfinished">Ocarina alto en sol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="99"/>
         <source>F alto ocarina</source>
-        <translation>Ocarina alto en fa</translation>
+        <translation type="unfinished">Ocarina alto en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="100"/>
         <source>C alto ocarina</source>
-        <translation>Ocarina alto en do</translation>
+        <translation type="unfinished">Ocarina alto en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="101"/>
         <source>Bb alto ocarina</source>
-        <translation>Ocarina alto en si bemol</translation>
+        <translation type="unfinished">Ocarina alto en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="102"/>
         <source>C bass ocarina</source>
-        <translation>Ocarina bajo</translation>
+        <translation type="unfinished">Ocarina bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="103"/>
         <source>Slide whistle</source>
-        <translation>Flauta de émbolo</translation>
+        <translation type="unfinished">Flauta de émbolo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="104"/>
         <source>Pan flute</source>
-        <translation>Zampoña</translation>
+        <translation type="unfinished">Zampoña</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="105"/>
@@ -3947,12 +3928,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="107"/>
         <source>Piccolo oboe in F</source>
-        <translation>Oboe píccolo en fa</translation>
+        <translation type="unfinished">Oboe píccolo en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="108"/>
         <source>Piccolo oboe in Eb</source>
-        <translation>Oboe piccolo en mi bemol</translation>
+        <translation type="unfinished">Oboe piccolo en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="109"/>
@@ -3968,12 +3949,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="111"/>
         <source>English horn</source>
-        <translation>Corno inglés</translation>
+        <translation type="unfinished">Corno inglés</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="112"/>
         <source>Baritone oboe</source>
-        <translation>Oboe barítono</translation>
+        <translation type="unfinished">Oboe barítono</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="113"/>
@@ -3983,7 +3964,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="114"/>
         <source>Baroque oboe</source>
-        <translation>Oboe barroco</translation>
+        <translation type="unfinished">Oboe barroco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="115"/>
@@ -3993,77 +3974,77 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="116"/>
         <source>Shawm</source>
-        <translation>Shawm</translation>
+        <translation type="unfinished">Shawm</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="117"/>
         <source>Sopranino shawm</source>
-        <translation>Shawm sopranino</translation>
+        <translation type="unfinished">Shawm sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="118"/>
         <source>Descant pommer</source>
-        <translation>Bombarda</translation>
+        <translation type="unfinished">Bombarda</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="119"/>
         <source>Alto pommer</source>
-        <translation>Bombarda alto</translation>
+        <translation type="unfinished">Bombarda alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="120"/>
         <source>Soprano crumhorn</source>
-        <translation>Cromorno soprano</translation>
+        <translation type="unfinished">Cromorno soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="121"/>
         <source>Alto crumhorn</source>
-        <translation>Cromorno alto</translation>
+        <translation type="unfinished">Cromorno alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="122"/>
         <source>Tenor crumhorn</source>
-        <translation>Cromorno tenor</translation>
+        <translation type="unfinished">Cromorno tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="123"/>
         <source>Bass crumhorn</source>
-        <translation>Cromorno bajo</translation>
+        <translation type="unfinished">Cromorno bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="124"/>
         <source>Greatbass crumhorn</source>
-        <translation>Cromorno gran bajo</translation>
+        <translation type="unfinished">Cromorno gran bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="125"/>
         <source>Soprano cornamuse</source>
-        <translation>Cornamusa soprano</translation>
+        <translation type="unfinished">Cornamusa soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="126"/>
         <source>Alto cornamuse</source>
-        <translation>Cornamusa alto</translation>
+        <translation type="unfinished">Cornamusa alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="127"/>
         <source>Tenor cornamuse</source>
-        <translation>Cornamusa tenor</translation>
+        <translation type="unfinished">Cornamusa tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="128"/>
         <source>Bass cornamuse</source>
-        <translation>Cornamusa bajo</translation>
+        <translation type="unfinished">Cornamusa bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="129"/>
         <source>Sopranino rauschpfeife</source>
-        <translation>Rauschpfeife sopranino</translation>
+        <translation type="unfinished">Rauschpfeife sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="130"/>
         <source>Soprano rauschpfeife</source>
-        <translation>Rauschpfeife soprano</translation>
+        <translation type="unfinished">Rauschpfeife soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="131"/>
@@ -4074,57 +4055,57 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="132"/>
         <source>Contrabassoon</source>
-        <translation>Contrafagot</translation>
+        <translation type="unfinished">Contrafagot</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="133"/>
         <source>Dulcian</source>
-        <translation>Bajón</translation>
+        <translation type="unfinished">Bajón</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="134"/>
         <source>Rackett</source>
-        <translation>Rackett</translation>
+        <translation type="unfinished">Rackett</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="135"/>
         <source>Sopranino sarrusophone</source>
-        <translation>Sarrusofón sopranino</translation>
+        <translation type="unfinished">Sarrusofón sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="136"/>
         <source>Soprano sarrusophone</source>
-        <translation>Sarrusofón soprano</translation>
+        <translation type="unfinished">Sarrusofón soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="137"/>
         <source>Alto sarrusophone</source>
-        <translation>Sarrusofón alto</translation>
+        <translation type="unfinished">Sarrusofón alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="138"/>
         <source>Tenor sarrusophone</source>
-        <translation>Sarrusofón tenor</translation>
+        <translation type="unfinished">Sarrusofón tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="139"/>
         <source>Baritone sarrusophone</source>
-        <translation>Sarrusofón barítono</translation>
+        <translation type="unfinished">Sarrusofón barítono</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="140"/>
         <source>Bass sarrusophone</source>
-        <translation>Sarrusofón bajo</translation>
+        <translation type="unfinished">Sarrusofón bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="141"/>
         <source>Contrabass sarrusophone</source>
-        <translation>Sarrusofón contrabajo</translation>
+        <translation type="unfinished">Sarrusofón contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="142"/>
         <source>Bagpipe</source>
-        <translation>Gaita</translation>
+        <translation type="unfinished">Gaita</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="143"/>
@@ -4134,112 +4115,112 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="144"/>
         <source>Soprano clarinet</source>
-        <translation>Clarinete sopranino</translation>
+        <translation type="unfinished">Clarinete sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="145"/>
         <source>Eb clarinet</source>
-        <translation>Clarinete en mi bemol</translation>
+        <translation type="unfinished">Clarinete en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="146"/>
         <source>D clarinet</source>
-        <translation>Clarinete en re</translation>
+        <translation type="unfinished">Clarinete en re</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="147"/>
         <source>C clarinet</source>
-        <translation>Clarinete en do</translation>
+        <translation type="unfinished">Clarinete en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="148"/>
         <source>Bb clarinet</source>
-        <translation>Clarinete en si bemol</translation>
+        <translation type="unfinished">Clarinete en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="149"/>
         <source>A clarinet</source>
-        <translation>Clarinete en la</translation>
+        <translation type="unfinished">Clarinete en la</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="150"/>
         <source>Alto clarinet</source>
-        <translation>Clarinete alto</translation>
+        <translation type="unfinished">Clarinete alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="151"/>
         <source>Bassett horn</source>
-        <translation>Corno di bassetto</translation>
+        <translation type="unfinished">Corno di bassetto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="152"/>
         <source>Bass clarinet</source>
-        <translation>Clarinete bajo</translation>
+        <translation type="unfinished">Clarinete bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="153"/>
         <source>Contra-alto clarinet</source>
-        <translation>Clarinete contralto</translation>
+        <translation type="unfinished">Clarinete contralto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="154"/>
         <source>Contrabass clarinet</source>
-        <translation>Clarinete contrabajo</translation>
+        <translation type="unfinished">Clarinete contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="155"/>
         <source>Sopranino chalumeau</source>
-        <translation>Salmoé sopranino</translation>
+        <translation type="unfinished">Salmoé sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="156"/>
         <source>Soprano chalumeau</source>
-        <translation>Salmoé soprano</translation>
+        <translation type="unfinished">Salmoé soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="157"/>
         <source>Alto chalumeau</source>
-        <translation>Salmoé alto</translation>
+        <translation type="unfinished">Salmoé alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="158"/>
         <source>Tenor chalumeau</source>
-        <translation>Salmoé tenor</translation>
+        <translation type="unfinished">Salmoé tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="159"/>
         <source>Sopranino saxophone</source>
-        <translation>Saxofón sopranino</translation>
+        <translation type="unfinished">Saxofón sopranino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="160"/>
         <source>Soprano saxophone</source>
-        <translation>Saxofón soprano</translation>
+        <translation type="unfinished">Saxofón soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="161"/>
         <source>Alto saxophone</source>
-        <translation>Saxofón alto</translation>
+        <translation type="unfinished">Saxofón alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="162"/>
         <source>Tenor saxophone</source>
-        <translation>Saxofón tenor</translation>
+        <translation type="unfinished">Saxofón tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="163"/>
         <source>Baritone saxophone</source>
-        <translation>Saxofón barítono</translation>
+        <translation type="unfinished">Saxofón barítono</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="164"/>
         <source>Bass saxophone</source>
-        <translation>Saxofón bajo</translation>
+        <translation type="unfinished">Saxofón bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="165"/>
         <source>Contrabass saxophone</source>
-        <translation>Saxofón contrabajo</translation>
+        <translation type="unfinished">Saxofón contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="166"/>
@@ -4249,7 +4230,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="167"/>
         <source>Wind synthesizer</source>
-        <translation>Sintetizadores de viento</translation>
+        <translation type="unfinished">Sintetizadores de viento</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="168"/>
@@ -4259,97 +4240,97 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="169"/>
         <source>Piccolo trumpet in Bb</source>
-        <translation>Trompeta píccolo en si bemol</translation>
+        <translation type="unfinished">Trompeta píccolo en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="170"/>
         <source>Piccolo trumpet in A</source>
-        <translation>Trompeta píccolo en la</translation>
+        <translation type="unfinished">Trompeta píccolo en la</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="171"/>
         <source>Trumpet in Eb</source>
-        <translation>Trompeta en mi bemol</translation>
+        <translation type="unfinished">Trompeta en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="172"/>
         <source>Trumpet in D</source>
-        <translation>Trompeta en re</translation>
+        <translation type="unfinished">Trompeta en re</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="173"/>
         <source>Trumpet in C</source>
-        <translation>Trompeta en do</translation>
+        <translation type="unfinished">Trompeta en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="174"/>
         <source>Trumpet in Bb</source>
-        <translation>Trompeta en si bemol</translation>
+        <translation type="unfinished">Trompeta en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="175"/>
         <source>Bass trumpet in Eb</source>
-        <translation>Trompeta baja en mi bemol</translation>
+        <translation type="unfinished">Trompeta baja en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="176"/>
         <source>Bass trumpet in Bb</source>
-        <translation>Trompeta baja en si bemol</translation>
+        <translation type="unfinished">Trompeta baja en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="177"/>
         <source>Baroque trumpet in F</source>
-        <translation>Trompeta barroca en fa</translation>
+        <translation type="unfinished">Trompeta barroca en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="178"/>
         <source>Baroque trumpet in Eb</source>
-        <translation>Trompeta barroca en mi bemol</translation>
+        <translation type="unfinished">Trompeta barroca en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="179"/>
         <source>Baroque trumpet in D</source>
-        <translation>Trompeta barroca en re</translation>
+        <translation type="unfinished">Trompeta barroca en re</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="180"/>
         <source>Baroque trumpet in C</source>
-        <translation>Trompeta barroca en do</translation>
+        <translation type="unfinished">Trompeta barroca en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="181"/>
         <source>Baroque trumpet in Bb</source>
-        <translation>Trompeta barroca en si bemol</translation>
+        <translation type="unfinished">Trompeta barroca en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="182"/>
         <source>Cornet in Eb</source>
-        <translation>Corneta en mi bemol</translation>
+        <translation type="unfinished">Corneta en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="183"/>
         <source>Cornet in Bb</source>
-        <translation>Corneta en si bemol</translation>
+        <translation type="unfinished">Corneta en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="184"/>
         <source>Flugelhorn</source>
-        <translation>Fliscorno</translation>
+        <translation type="unfinished">Fliscorno</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="185"/>
         <source>Cornettino</source>
-        <translation>Cornettino</translation>
+        <translation type="unfinished">Cornettino</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="186"/>
         <source>Alto cornetto</source>
-        <translation>Cornetto alto</translation>
+        <translation type="unfinished">Cornetto alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="187"/>
         <source>Tenor cornetto</source>
-        <translation>Cornetto tenor</translation>
+        <translation type="unfinished">Cornetto tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="188"/>
@@ -4359,107 +4340,107 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="189"/>
         <source>Alto ophicleide in F</source>
-        <translation>Figle en fa</translation>
+        <translation type="unfinished">Figle en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="190"/>
         <source>Alto ophicleide in Eb</source>
-        <translation>Figle en mi bemol</translation>
+        <translation type="unfinished">Figle en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="191"/>
         <source>Bass ophicleide in C</source>
-        <translation>Figle bajo en do</translation>
+        <translation type="unfinished">Figle bajo en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="192"/>
         <source>Bass ophicleide in Bb</source>
-        <translation>Figle bajo en si bemol</translation>
+        <translation type="unfinished">Figle bajo en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="193"/>
         <source>Contrabass ophicleide in Eb</source>
-        <translation>Figle contrabajo en mi bemol</translation>
+        <translation type="unfinished">Figle contrabajo en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="194"/>
         <source>French horn</source>
-        <translation>Trompa</translation>
+        <translation type="unfinished">Trompa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="195"/>
         <source>French horn in C alto</source>
-        <translation>Trompa alto en do</translation>
+        <translation type="unfinished">Trompa alto en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="196"/>
         <source>French horn in Bb alto</source>
-        <translation>Trompa alta en si bemol</translation>
+        <translation type="unfinished">Trompa alta en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="197"/>
         <source>French horn in A</source>
-        <translation>Trompa en la</translation>
+        <translation type="unfinished">Trompa en la</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="198"/>
         <source>French horn in Ab</source>
-        <translation>Trompa en la bemol</translation>
+        <translation type="unfinished">Trompa en la bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="199"/>
         <source>French horn in G</source>
-        <translation>Trompa en sol</translation>
+        <translation type="unfinished">Trompa en sol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="200"/>
         <source>French horn in E</source>
-        <translation>Trompa en mi</translation>
+        <translation type="unfinished">Trompa en mi</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="201"/>
         <source>French horn in Eb</source>
-        <translation>Trompa en mi bemol</translation>
+        <translation type="unfinished">Trompa en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="202"/>
         <source>French horn in D</source>
-        <translation>Trompa en re</translation>
+        <translation type="unfinished">Trompa en re</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="203"/>
         <source>French horn in C basso</source>
-        <translation>Trompa baja en do</translation>
+        <translation type="unfinished">Trompa baja en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="204"/>
         <source>French horn in Bb basso</source>
-        <translation>Trompa bajo en si bemol</translation>
+        <translation type="unfinished">Trompa bajo en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="205"/>
         <source>Alto horn in F</source>
-        <translation>Trompa alto en fa </translation>
+        <translation type="unfinished">Trompa alto en fa </translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="206"/>
         <source>Alto horn in Eb</source>
-        <translation>Trompa alto en mi bemol</translation>
+        <translation type="unfinished">Trompa alto en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="207"/>
         <source>Baritone horn</source>
-        <translation>Bombardino barítono </translation>
+        <translation type="unfinished">Bombardino barítono </translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="208"/>
         <source>Mellophone in F</source>
-        <translation>Melofono en fa</translation>
+        <translation type="unfinished">Melofono en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="209"/>
         <source>Mellophone in Eb</source>
-        <translation>Melofono en mi bemol</translation>
+        <translation type="unfinished">Melofono en mi bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="210"/>
@@ -4474,37 +4455,37 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="212"/>
         <source>Wagner tuba in Bb</source>
-        <translation>Tuba Wagner en si bemol</translation>
+        <translation type="unfinished">Tuba Wagner en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="213"/>
         <source>Wagner tuba in F</source>
-        <translation>Tuba Wagner en fa</translation>
+        <translation type="unfinished">Tuba Wagner en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="214"/>
         <source>Soprano trombone</source>
-        <translation>Trombón soprano</translation>
+        <translation type="unfinished">Trombón soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="215"/>
         <source>Alto trombone</source>
-        <translation>Trombón alto</translation>
+        <translation type="unfinished">Trombón alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="216"/>
         <source>Tenor trombone</source>
-        <translation>Trombón tenor</translation>
+        <translation type="unfinished">Trombón tenor</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="217"/>
         <source>Bass trombone</source>
-        <translation>Trombón bajo</translation>
+        <translation type="unfinished">Trombón bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="218"/>
         <source>Contrabass trombone</source>
-        <translation>Trombón contrabajo</translation>
+        <translation type="unfinished">Trombón contrabajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="219"/>
@@ -4514,17 +4495,17 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="220"/>
         <source>F tuba</source>
-        <translation>Tuba en fa</translation>
+        <translation type="unfinished">Tuba en fa</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="221"/>
         <source>C tuba</source>
-        <translation>Tuba en do</translation>
+        <translation type="unfinished">Tuba en do</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="222"/>
         <source>Bb tuba</source>
-        <translation>Tuba en si bemol</translation>
+        <translation type="unfinished">Tuba en si bemol</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="223"/>
@@ -4540,12 +4521,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="225"/>
         <source>Roto-toms (treble)</source>
-        <translation>Rototom (clave de sol)</translation>
+        <translation type="unfinished">Rototom (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="226"/>
         <source>Roto-toms (bass)</source>
-        <translation>Rototom (clave de fa)</translation>
+        <translation type="unfinished">Rototom (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="227"/>
@@ -4556,12 +4537,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="228"/>
         <source>Orff soprano glockenspiel</source>
-        <translation>Glockenspiel Orff soprano</translation>
+        <translation type="unfinished">Glockenspiel Orff soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="229"/>
         <source>Orff alto glockenspiel</source>
-        <translation>Glockenspiel Orff alto</translation>
+        <translation type="unfinished">Glockenspiel Orff alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="230"/>
@@ -4576,12 +4557,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="232"/>
         <source>Almglocken (treble)</source>
-        <translation>Almglocken (clave de sol)</translation>
+        <translation type="unfinished">Almglocken (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="233"/>
         <source>Almglocken (bass)</source>
-        <translation>Almglocken (clave de fa)</translation>
+        <translation type="unfinished">Almglocken (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="234"/>
@@ -4592,87 +4573,87 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="235"/>
         <source>Orff soprano metallophone</source>
-        <translation>Metalófono Orff soprano</translation>
+        <translation type="unfinished">Metalófono Orff soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="236"/>
         <source>Orff alto metallophone</source>
-        <translation>Metalófono Orff alto</translation>
+        <translation type="unfinished">Metalófono Orff alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="237"/>
         <source>Orff bass metallophone</source>
-        <translation>Metalófono Orff bajo</translation>
+        <translation type="unfinished">Metalófono Orff bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="238"/>
         <source>Tubular chimes</source>
-        <translation>Campanas tubulares</translation>
+        <translation type="unfinished">Campanas tubulares</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="239"/>
         <source>Bass steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago bajos</translation>
+        <translation type="unfinished">Tambores metálicos de Trinidad y Tobago bajos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="240"/>
         <source>Cello steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago cellos</translation>
+        <translation type="unfinished">Tambores metálicos de Trinidad y Tobago cellos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="241"/>
         <source>Tenor steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago tenores</translation>
+        <translation type="unfinished">Tambores metálicos de Trinidad y Tobago tenores</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="242"/>
         <source>Guitar steel drums</source>
-        <translation>tambores metálicos de Trinidad y Tobago guitarras</translation>
+        <translation type="unfinished">tambores metálicos de Trinidad y Tobago guitarras</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="243"/>
         <source>Alto steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago altos</translation>
+        <translation type="unfinished">Tambores metálicos de Trinidad y Tobago altos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="244"/>
         <source>Soprano steel drums</source>
-        <translation>Tambores metálicos de Trinidad y Tobago sopranos</translation>
+        <translation type="unfinished">Tambores metálicos de Trinidad y Tobago sopranos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="245"/>
         <source>Hand bells (treble)</source>
-        <translation>Campanas (clave de sol)</translation>
+        <translation type="unfinished">Campanas (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="246"/>
         <source>Hand bells (bass)</source>
-        <translation>Campanas (clave de fa)</translation>
+        <translation type="unfinished">Campanas (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="247"/>
         <source>Tuned gongs</source>
-        <translation>Gongs afinados</translation>
+        <translation type="unfinished">Gongs afinados</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="248"/>
         <source>Flexatone</source>
-        <translation>Flexatone</translation>
+        <translation type="unfinished">Flexatone</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="249"/>
         <source>Musical saw</source>
-        <translation>Sierra musical</translation>
+        <translation type="unfinished">Sierra musical</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="250"/>
         <source>Musical glasses</source>
-        <translation>Arpa de cristal</translation>
+        <translation type="unfinished">Arpa de cristal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="251"/>
         <source>Glass harmonica</source>
-        <translation>Armónica de cristal</translation>
+        <translation type="unfinished">Armónica de cristal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="252"/>
@@ -4683,47 +4664,47 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="253"/>
         <source>Orff soprano xylophone</source>
-        <translation>Xilófono Off soprano</translation>
+        <translation type="unfinished">Xilófono Off soprano</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="254"/>
         <source>Orff alto xylophone</source>
-        <translation>Xilófono Off alto</translation>
+        <translation type="unfinished">Xilófono Off alto</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="255"/>
         <source>Orff bass xylophone</source>
-        <translation>Xilófono Off bajo</translation>
+        <translation type="unfinished">Xilófono Off bajo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="256"/>
         <source>Marimba (treble)</source>
-        <translation>Marimba (clave de sol)</translation>
+        <translation type="unfinished">Marimba (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="257"/>
         <source>Marimba (bass)</source>
-        <translation>Marimba (clave de fa)</translation>
+        <translation type="unfinished">Marimba (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="258"/>
         <source>Dulcimer (treble)</source>
-        <translation>Dulcémele (clave de sol)</translation>
+        <translation type="unfinished">Dulcémele (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="259"/>
         <source>Dulcimer (bass)</source>
-        <translation>Dulcémele (clave de sol)</translation>
+        <translation type="unfinished">Dulcémele (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="260"/>
         <source>Mallet synthesizer (treble)</source>
-        <translation>Sintetizador de maletas (clave de sol)</translation>
+        <translation type="unfinished">Sintetizador de maletas (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="261"/>
         <source>Mallet synthesizer (bass)</source>
-        <translation>Sintetizador de maletas (clave de fa)</translation>
+        <translation type="unfinished">Sintetizador de maletas (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="262"/>
@@ -4733,27 +4714,27 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="263"/>
         <source>Snare drum</source>
-        <translation>Caja orquestal</translation>
+        <translation type="unfinished">Caja orquestal</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="264"/>
         <source>Piccolo snare drum</source>
-        <translation>Caja orquestal píccolo</translation>
+        <translation type="unfinished">Caja orquestal píccolo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="265"/>
         <source>Military drum</source>
-        <translation>Tambór militar</translation>
+        <translation type="unfinished">Tambór militar</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="266"/>
         <source>Tom-toms</source>
-        <translation>Tom toms</translation>
+        <translation type="unfinished">Tom toms</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="267"/>
         <source>Chinese tom-toms</source>
-        <translation>Tom toms chinos</translation>
+        <translation type="unfinished">Tom toms chinos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="268"/>
@@ -4763,7 +4744,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="269"/>
         <source>Congas</source>
-        <translation>Congas</translation>
+        <translation type="unfinished">Congas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="270"/>
@@ -4773,7 +4754,7 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="271"/>
         <source>Bass drum</source>
-        <translation>Bombo</translation>
+        <translation type="unfinished">Bombo</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="272"/>
@@ -4784,12 +4765,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="273"/>
         <source>Frame drum</source>
-        <translation>Tambor de marco</translation>
+        <translation type="unfinished">Tambor de marco</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="274"/>
         <source>Tablas</source>
-        <translation>Tablas</translation>
+        <translation type="unfinished">Tablas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="275"/>
@@ -4799,67 +4780,72 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="276"/>
         <source>Finger cymbals</source>
-        <translation>Chinchines</translation>
+        <translation type="unfinished">Chinchines</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="277"/>
         <source>Cymbals</source>
-        <translation>Platillos</translation>
+        <translation type="unfinished">Platillos</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="278"/>
         <source>Hi-hat cymbals</source>
-        <translation>Platillos hi-hat</translation>
+        <translation type="unfinished">Platillos hi-hat</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="279"/>
         <source>Suspended cymbal</source>
-        <translation>Platillo suspendido</translation>
+        <translation type="unfinished">Platillo suspendido</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="280"/>
         <source>Ride cymbal</source>
-        <translation>Platillo ride</translation>
+        <translation type="unfinished">Platillo ride</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="281"/>
         <source>Sizzle cymbal</source>
-        <translation>Platillo sizzle</translation>
+        <translation type="unfinished">Platillo sizzle</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="282"/>
         <source>Crash cymbal</source>
-        <translation>Platillo crash</translation>
+        <translation type="unfinished">Platillo crash</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="283"/>
         <source>Splash cymbal</source>
-        <translation>Platillo splash</translation>
+        <translation type="unfinished">Platillo splash</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="284"/>
         <source>Chinese cymbal</source>
-        <translation>Platillo chino</translation>
+        <translation type="unfinished">Platillo chino</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="285"/>
+        <source>Triangle</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="286"/>
         <source>Cowbells</source>
-        <translation>Cencerro</translation>
+        <translation type="unfinished">Cencerro</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="287"/>
         <source>Tam-tam</source>
-        <translation>Tamtam</translation>
+        <translation type="unfinished">Tamtam</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="288"/>
         <source>Bells</source>
-        <translation>Campanas</translation>
+        <translation type="unfinished">Campanas</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="289"/>
         <source>Sleighbells</source>
-        <translation>Cascabeles</translation>
+        <translation type="unfinished">Cascabeles</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="290"/>
@@ -4926,23 +4912,6 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="302"/>
         <source>Guiro</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
-        <source>Maracas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
-        <source>Cabasa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="305"/>
-        <source>Quijada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5028,12 +4997,29 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="322"/>
         <source>Drum set</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="303"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <source>Maracas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="304"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <source>Cabasa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="305"/>
+        <source>Quijada</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
         <source>Percussion synthesizer</source>
-        <translation>Batería</translation>
+        <translation type="unfinished">Batería</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="324"/>
@@ -5043,12 +5029,12 @@ así lo desea.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="325"/>
         <source>Piano (treble)</source>
-        <translation>Piano (clave de sol)</translation>
+        <translation type="unfinished">Piano (clave de sol)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="326"/>
         <source>Piano (bass)</source>
-        <translation>Piano (clave de fa)</translation>
+        <translation type="unfinished">Piano (clave de fa)</translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="327"/>
@@ -5200,6 +5186,11 @@ así lo desea.</translation>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
         <translation type="unfinished">Alto</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="358"/>
+        <source>Baritone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
@@ -10895,7 +10886,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.h" line="62"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Copiar</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="41"/>
@@ -15275,17 +15266,17 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="463"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">&amp;Fuente tipográfica de Nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="483"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="487"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">&amp;Tamaño</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="503"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15293,23 +15284,23 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="726"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">No es posible pegar múltiples segmentos en uno</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="697"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="751"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="753"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">No se puede pegar en este punto.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Portapapeles vacío</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="718"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="774"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
     </message>
@@ -16319,8 +16310,8 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2278"/>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2322"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2282"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2326"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
@@ -16374,7 +16365,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.h" line="85"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Pegar</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="91"/>
@@ -16438,7 +16429,7 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
     <message>
         <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="55"/>
         <source>&amp;Paste</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&amp;Pegar</translation>
     </message>
 </context>
 <context>
@@ -18445,7 +18436,7 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="288"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="326"/>

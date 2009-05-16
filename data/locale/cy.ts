@@ -173,15 +173,6 @@
     </message>
 </context>
 <context>
-    <name>Producing</name>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="374"/>
-        <source></source>
-        <comment>these strings for translation has revealed a BUG in Pitch. Where you see B# you should read that as Bb. Where you see E# you should read that as Eb. I suggest using the equivalent of C# Eb F# Ab Bb in your translation, since we are no longer constrained by program logic and we can use the most comfortable names for each &quot;black key&quot; pitch to control what the user sees, regardless of the (sometimes incorrect) string Rosegarden uses internally</comment>
-        <translation></translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
@@ -3507,7 +3498,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="651"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="707"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4047"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -3536,11 +3527,6 @@ os hoffech chi.</translation>
         <location filename="../InstrumentStrings.cpp" line="357"/>
         <source>Tenor</source>
         <translation type="unfinished">Tenor</translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="358"/>
-        <source>Baritone</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="359"/>
@@ -4926,23 +4912,6 @@ os hoffech chi.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../InstrumentStrings.cpp" line="303"/>
-        <location filename="../AutoloadStrings.cpp" line="283"/>
-        <source>Maracas</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="304"/>
-        <location filename="../AutoloadStrings.cpp" line="282"/>
-        <source>Cabasa</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../InstrumentStrings.cpp" line="305"/>
-        <source>Quijada</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../InstrumentStrings.cpp" line="306"/>
         <source>Vibra slap</source>
         <translation type="unfinished"></translation>
@@ -5030,6 +4999,23 @@ os hoffech chi.</translation>
     <message>
         <location filename="../InstrumentStrings.cpp" line="323"/>
         <source>Percussion synthesizer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="303"/>
+        <location filename="../AutoloadStrings.cpp" line="283"/>
+        <source>Maracas</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="304"/>
+        <location filename="../AutoloadStrings.cpp" line="282"/>
+        <source>Cabasa</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="305"/>
+        <source>Quijada</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5197,6 +5183,11 @@ os hoffech chi.</translation>
         <location filename="../InstrumentStrings.cpp" line="356"/>
         <source>Alto</source>
         <translation type="unfinished">Alto</translation>
+    </message>
+    <message>
+        <location filename="../InstrumentStrings.cpp" line="358"/>
+        <source>Baritone</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../InstrumentStrings.cpp" line="360"/>
@@ -15282,17 +15273,17 @@ cysylltu a&apos;r rhaglengellydd er mwyn cyhoeddi eich gwybodaeth Rheng i fantai
 <context>
     <name>Rosegarden::NewNotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="459"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="463"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">&amp;Ffont i&apos;r Nodau</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="483"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="487"/>
         <source>Si&amp;ze</source>
         <translation type="unfinished">Ma&amp;int</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="499"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="503"/>
         <source>%n pixel(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15303,23 +15294,23 @@ cysylltu a&apos;r rhaglengellydd er mwyn cyhoeddi eich gwybodaeth Rheng i fantai
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="670"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="726"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">Methu gludo Cylchrannau lluosol i mewn i un</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="697"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="751"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="753"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="807"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">Methu gludo wrth y fan yma.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="714"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="770"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Mae&apos;r gludfwrdd yn wag</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="718"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="774"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Mewnosod cynnyws y gludfwrdd...</translation>
     </message>
@@ -16336,8 +16327,8 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2278"/>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2322"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2282"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="2326"/>
         <source>...</source>
         <translation type="unfinished">...</translation>
     </message>
