@@ -140,7 +140,7 @@ SegmentParameterBox::initBox()
     m_label->setFont(font);
     m_label->setFixedWidth(width);
     //m_label->setFixedHeight(comboHeight);
-    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+//    m_label->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 
     // .. and edit button
     m_labelButton = new QPushButton(tr("Edit"), this);
@@ -451,8 +451,8 @@ SegmentParameterBox::populateBoxFromSegments()
 
     if (m_segments.size() == 0)
         m_label->setText("");
-    else
-        m_label->setText(strtoqstr(m_segments[0]->getLabel()));
+    else 
+        m_label->setText(QObject::tr(strtoqstr(m_segments[0]->getLabel())));
 
     // I never noticed this after all this time, but it seems to go all the way
     // back to the "..." button that this was never disabled if there was no
@@ -485,7 +485,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
         // Set label to "*" when multiple labels don't match
         //
-        if (strtoqstr((*it)->getLabel()) != m_label->text())
+        if (QObject::tr(strtoqstr((*it)->getLabel())) != m_label->text())
             m_label->setText("*");
 
         // Are all, some or none of the Segments repeating?
@@ -707,97 +707,7 @@ SegmentParameterBox::populateBoxFromSegments()
 
     m_colourValue->setEnabled(diffcolours != NotApplicable);
 
-    //!!! this is all borked up and useless; sort out after 1.3
-/*
-    switch (highlow) {
-    case All:
-        updateHighLow();
-        break;
-
-    case Some:
-    case None:
-    default:
-        m_highButton->setText(tr("High: ---"));
-        m_lowButton->setText(tr("Low: ----"));
-        highlow = NotApplicable;
-        break;
-    }
-
-    m_highButton->setEnabled(highlow != NotApplicable);
-    m_lowButton->setEnabled(highlow != NotApplicable);
-*/
-
-    // Enable or disable the fade in/out params
-/*
-    if (m_segments.size() == 1 &&
-            (*(m_segments.begin()))->getType() == Segment::Audio) {
-        m_autoFadeBox->blockSignals(true);
-        m_fadeInSpin->blockSignals(true);
-        m_fadeOutSpin->blockSignals(true);
-
-        ... !!! No, not setting up autofade widgets.  The implementation's too
-              incomplete to finish for this release.
-         
-              (Or for the next one after the one the previous comment referred to.)
-         
-              (Or for the one after the one after that.  Will we ever get those
-              working, or should Rich's final legacy simply be quietly disappeared?)
-         
-                m_fadeInLabel->show();
-                m_fadeInSpin->show();
-                m_fadeOutLabel->show();
-                m_fadeOutSpin->show();
-         
-             instead:
-        
-        m_fadeInLabel->hide();
-        m_fadeInSpin->hide();
-        m_fadeOutLabel->hide();
-        m_fadeOutSpin->hide();
-
-        m_autoFadeLabel->setEnabled(true);
-        m_autoFadeBox->setEnabled(true);
-        m_fadeInLabel->setEnabled(true);
-        m_fadeInSpin->setEnabled(true);
-        m_fadeOutLabel->setEnabled(true);
-        m_fadeOutSpin->setEnabled(true);
-
-        Segment *seg = *(m_segments.begin());
-
-        int fadeInTime = seg->getFadeInTime().sec * 1000 +
-                         seg->getFadeInTime().msec();
-        m_fadeInSpin->setValue(fadeInTime);
-
-        int fadeOutTime = seg->getFadeOutTime().sec * 1000 +
-                          seg->getFadeOutTime().msec();
-        m_fadeOutSpin->setValue(fadeOutTime);
-
-        m_autoFadeBox->setChecked(seg->isAutoFading());
-
-        m_autoFadeBox->blockSignals(false);
-        m_fadeInSpin->blockSignals(false);
-        m_fadeOutSpin->blockSignals(false);
-    } else {
-        m_autoFadeLabel->setEnabled(false);
-        m_autoFadeBox->setEnabled(false);
-        m_fadeInLabel->setEnabled(false);
-        m_fadeInSpin->setEnabled(false);
-        m_fadeOutLabel->setEnabled(false);
-        m_fadeOutSpin->setEnabled(false);
-
-        m_autoFadeLabel->hide();
-        m_autoFadeBox->hide();
-        m_fadeInLabel->hide();
-        m_fadeInSpin->hide();
-        m_fadeOutLabel->hide();
-        m_fadeOutSpin->hide();
-
-        m_autoFadeBox->setChecked(false);
-        m_fadeInSpin->setValue(0);
-        m_fadeOutSpin->setValue(0);
-    }
-*/
-
+    // deleted a large amount of "fix after 1.3" cruft from this spot
 }
 
 void SegmentParameterBox::slotRepeatPressed()
@@ -1104,26 +1014,6 @@ SegmentParameterBox::slotFadeInChanged(int value)
 {
     RG_DEBUG << "SegmentParameterBox::slotFadeInChanged - value = "
     << value << endl;
-/*
-    if (m_segments.size() == 0)
-        return ;
-
-    if (value == 0 && m_fadeOutSpin->value() == 0)
-        slotAudioFadeChanged(QCheckBox::Off);
-    else
-        slotAudioFadeChanged(QCheckBox::On);
-
-    // Convert from ms
-    //
-    RealTime fadeInTime(value / 1000, (value % 1000) * 1000000);
-
-    std::vector<Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
-        (*it)->setFadeInTime(fadeInTime);
-    }
-
-    emit documentModified();
-*/
 }
 
 void
@@ -1131,35 +1021,11 @@ SegmentParameterBox::slotFadeOutChanged(int value)
 {
     RG_DEBUG << "SegmentParameterBox::slotFadeOutChanged - value = "
     << value << endl;
-/*
-    if (m_segments.size() == 0)
-        return ;
-
-    if (value == 0 && m_fadeInSpin->value() == 0)
-        slotAudioFadeChanged(QCheckBox::Off);
-    else
-        slotAudioFadeChanged(QCheckBox::On);
-
-    // Convert from ms
-    //
-    RealTime fadeOutTime(value / 1000000, (value % 1000) * 10000000);
-
-    std::vector<Segment*>::iterator it;
-    for (it = m_segments.begin(); it != m_segments.end(); it++) {
-        (*it)->setFadeOutTime(fadeOutTime);
-    }
-
-    emit documentModified();
-*/
 }
 
 void
 SegmentParameterBox::showAdditionalControls(bool showThem)
 {
-    //!!! disabled until after 1.3
-    /*    m_highButton->setShown(showThem);
-        m_lowButton->setShown(showThem);
-        m_rangeLabel->setShown(showThem); */
 }
 
 QString

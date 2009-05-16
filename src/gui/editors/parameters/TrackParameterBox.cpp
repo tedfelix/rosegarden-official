@@ -471,7 +471,7 @@ TrackParameterBox::populatePlaybackDeviceList()
 
         //QString iname(strtoqstr((*it)->getPresentationName()));
         QString iname(strtoqstr((*it)->getName()));
-        QString pname(strtoqstr((*it)->getProgramName()));
+        QString pname(QObject::tr(strtoqstr((*it)->getProgramName())));
         Device *device = (*it)->getDevice();
         DeviceId devId = device->getId();
 
