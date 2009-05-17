@@ -152,6 +152,10 @@ public:
         // File format used for audio recording (data1 is 0=PCM,1=float)
         SystemAudioFileFormat    = 1 << 27
 
+        // An alsa sequencer port-connection was established or removed
+        //AlsaSeqPortConnectionChanged = 1 << 28   // not required, handled with SystemUpdateInstruments event
+        
+        
     } MappedEventType;
 
     typedef enum

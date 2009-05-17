@@ -986,11 +986,49 @@ DeviceManagerDialog::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
 }
 
 
+
+void DeviceManagerDialog::slotResyncDevicesReceived(){
+    /**
+    // devicesResyncd is emitted by RosegardenDocument::syncDevices(),
+    // which is called by SequenceManager::processAsynchronousMidi()
+    // on the event MappedEvent::SystemUpdateInstruments
+    //              ####################################
+    // which is send by the AlsaDriver, when devices have been added or removed,
+    // or if AlsaDriver::checkForNewClients() found any news
+    **/
+    RG_DEBUG << "DeviceManagerDialog::slotResyncDevicesReceived() -  refreshing listboxes " << endl;
+    
+    slotRefreshOutputPorts();
+    slotRefreshInputPorts();
+    
+}
+
+
 void
 DeviceManagerDialog::connectSignalsToSlots()
 {
     RG_DEBUG << "DeviceManagerDialog::connectSignalsToSlots()" << endl;
-
+    
+    
+    // connect devicesResyncd signal (updates the devices and ports lists)
+    // 
+    // it's emitted by RosegardenDocument::syncDevices(),
+    // which is called by SequenceManager::processAsynchronousMidi()
+    // on the event MappedEvent::SystemUpdateInstruments
+    //              ####################################
+    // which is send by the AlsaDriver, when devices have been added or removed,
+    // or if AlsaDriver::checkForNewClients() found any news
+    //
+    connect( m_doc,
+        SIGNAL(devicesResyncd()), this,
+        SLOT(slotResyncDevicesReceived()) );
+    
+//     //
+//     connect( m_doc,
+//         SIGNAL(signalAlsaSeqPortConnectionChanged()), this,
+//         SLOT(slotResyncDevicesReceived()) );
+    
+    
     // playback devices
     connect(m_treeWidget_outputPorts,
             SIGNAL(itemClicked(QTreeWidgetItem *, int)), this,

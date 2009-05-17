@@ -133,6 +133,8 @@ public slots:
     void slotClose();
     void slotHelpRequested();
     
+    void slotResyncDevicesReceived();
+    
 protected:
     //
     RosegardenDocument *m_doc;
