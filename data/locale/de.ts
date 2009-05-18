@@ -6,33 +6,33 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">MIDI-Geräte verwalten... </translation>
+        <translation>MIDI-Geräte verwalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="542"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Wiedergabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation>Sendet Daten durch</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden Wiedergabe Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="582"/>
         <source>Internal Synth</source>
-        <translation type="unfinished"></translation>
+        <translation>Interner Synthesizer</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="551"/>
         <source>Default playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreingestelltes Wiedergabe Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="555"/>
@@ -58,18 +58,18 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="564"/>
         <source>Controllers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Regler...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="566"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Neues Wiedergabegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="568"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="601"/>
         <source>New</source>
-        <translation type="unfinished">Neu</translation>
+        <translation>Neu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="570"/>
@@ -79,24 +79,24 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="572"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="573"/>
         <source>MIDI outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Ausgabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="575"/>
         <source>Available outputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorhandene Ausgaben</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="580"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="615"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="629"/>
         <source>No port</source>
-        <translation type="unfinished"></translation>
+        <translation>Kein Anschluss</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="586"/>
@@ -113,7 +113,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="591"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="638"/>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Erneuern</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="593"/>
@@ -123,17 +123,17 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="597"/>
         <source>MIDI Recording</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Aufnahme</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="599"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ein neues Aufnahmegerät anlegen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="603"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das ausgewählte Aufnahmegerät löschen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="605"/>
@@ -144,27 +144,27 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
         <source>Receives its data from</source>
-        <translation type="unfinished"></translation>
+        <translation>Empfängt Daten von</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="610"/>
         <source>Rosegarden recording device</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden Aufnahme Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="616"/>
         <source>Default record device</source>
-        <translation type="unfinished"></translation>
+        <translation>Voreingestelltes Aufnahme Gerät</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="622"/>
         <source>MIDI inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI Eingabe</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="624"/>
         <source>Available inputs</source>
-        <translation type="unfinished"></translation>
+        <translation>Verfügbare Eingaben</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="633"/>
@@ -177,17 +177,17 @@
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="44"/>
         <source>unknown error</source>
-        <translation type="unfinished">unbekannter Fehler</translation>
+        <translation>unbekannter Fehler</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="70"/>
         <source>Can&apos;t open font mapping file %1 or %2</source>
-        <translation type="unfinished">Kann Schriftartenübersetzungsdatei %1 oder %2 nicht öffnen</translation>
+        <translation>Kann Schriftartenübersetzungsdatei %1 oder %2 nicht öffnen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="74"/>
         <source>Can&apos;t open font mapping file %1</source>
-        <translation type="unfinished">Die Schriftartenübersetzungsdatei %1 kann nicht geöffnet werden</translation>
+        <translation>Die Schriftartenübersetzungsdatei %1 kann nicht geöffnet werden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="30"/>
@@ -5370,12 +5370,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="39"/>
         <source>General MIDI Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Allgemeines MIDI Gerät</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="40"/>
         <source>General MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Allgemein MIDI</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="41"/>
@@ -5430,7 +5430,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="53"/>
         <source>Marimba</source>
-        <translation type="unfinished"></translation>
+        <translation>Marimba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="55"/>
@@ -5460,7 +5460,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="60"/>
         <source>Church Organ</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirchenorgel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="61"/>
@@ -5470,7 +5470,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="62"/>
         <source>Accordion</source>
-        <translation type="unfinished"></translation>
+        <translation>Akkordeon</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="64"/>
@@ -5480,22 +5480,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="65"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustische Gitarre (Nylon-Saiten)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="66"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustische Gitarre (Stahl-Saiten</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="67"/>
         <source>Electric Guitar (jazz)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrische Gitarre (Jazz)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="68"/>
         <source>Electric Guitar (clean)</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektrische Gitarre (rein)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="69"/>
@@ -5520,17 +5520,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="73"/>
         <source>Acoustic Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Akustischer Bass</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="74"/>
         <source>Fingered Bass</source>
-        <translation type="unfinished"></translation>
+        <translation>Bass (gezupft)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="75"/>
         <source>Picked Bass</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bass (pick)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="76"/>
@@ -5560,7 +5560,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="83"/>
         <source>Cello</source>
-        <translation type="unfinished"></translation>
+        <translation>Cello</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="85"/>
@@ -5600,12 +5600,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="93"/>
         <source>Choir Aahs</source>
-        <translation type="unfinished"></translation>
+        <translation>Chor (Aaaa)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="94"/>
         <source>Voice Oohs</source>
-        <translation type="unfinished"></translation>
+        <translation>Stimme (Oooo)</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
@@ -5620,7 +5620,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="97"/>
         <source>Trumpet</source>
-        <translation type="unfinished"></translation>
+        <translation>Trompete</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="98"/>
@@ -5630,7 +5630,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="99"/>
         <source>Tuba</source>
-        <translation type="unfinished"></translation>
+        <translation>Tuba</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="100"/>
@@ -5685,7 +5685,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="112"/>
         <source>Clarinet</source>
-        <translation type="unfinished"></translation>
+        <translation>Klarinette</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="115"/>
@@ -5840,7 +5840,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="146"/>
         <source>Banjo</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Banjo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="147"/>
@@ -5930,27 +5930,27 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="165"/>
         <source>Telephone Ring</source>
-        <translation type="unfinished"></translation>
+        <translation>Telefonklingel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="166"/>
         <source>Helicopter</source>
-        <translation type="unfinished"></translation>
+        <translation>Hubschrauber</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="167"/>
         <source>Applause</source>
-        <translation type="unfinished"></translation>
+        <translation>Applaus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="168"/>
         <source>Gunshot</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewehrschuss</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="169"/>
         <source>Bank 0:8</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:8</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="170"/>
@@ -5970,7 +5970,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="173"/>
         <source>Church Bell</source>
-        <translation type="unfinished"></translation>
+        <translation>Kirchenglocke</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="174"/>
@@ -5995,7 +5995,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="179"/>
         <source>12 String Guitar</source>
-        <translation type="unfinished"></translation>
+        <translation>12-Saiten-Gitarre</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="180"/>
@@ -6060,7 +6060,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="192"/>
         <source>Sine Wave</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinus</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="193"/>
@@ -6070,7 +6070,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="195"/>
         <source>Concert Bass Drum</source>
-        <translation type="unfinished"></translation>
+        <translation>Konzert Basstrommel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="196"/>
@@ -6080,12 +6080,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="197"/>
         <source>808 Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>808 Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="198"/>
         <source>Bank 0:9</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:9</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="199"/>
@@ -6095,92 +6095,92 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="200"/>
         <source>Bank 0:16</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 0:16</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="202"/>
         <source>Bank 1:0</source>
-        <translation type="unfinished"></translation>
+        <translation>Bank 1:0</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="203"/>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="204"/>
         <source>Standard 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="205"/>
         <source>Standard 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="206"/>
         <source>Standard 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="207"/>
         <source>Standard 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="208"/>
         <source>Standard 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="209"/>
         <source>Standard 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="210"/>
         <source>Standard 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="211"/>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="212"/>
         <source>Room 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="213"/>
         <source>Room 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="214"/>
         <source>Room 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="215"/>
         <source>Room 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="216"/>
         <source>Room 5</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 5</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="217"/>
         <source>Room 6</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 6</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="218"/>
         <source>Room 7</source>
-        <translation type="unfinished"></translation>
+        <translation>Raumklang 7</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="219"/>
@@ -6205,37 +6205,37 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="223"/>
         <source>Electronic</source>
-        <translation type="unfinished"></translation>
+        <translation>Elektronisch</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="224"/>
         <source>TR-808</source>
-        <translation type="unfinished"></translation>
+        <translation>TR-808</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="225"/>
         <source>Jazz</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="226"/>
         <source>Jazz 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="227"/>
         <source>Jazz 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="228"/>
         <source>Jazz 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="229"/>
         <source>Jazz 4</source>
-        <translation type="unfinished"></translation>
+        <translation>Jazz 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="230"/>
@@ -6262,35 +6262,35 @@ als den eingeschränkten wählen.</translation>
         <location filename="../AutoloadStrings.cpp" line="297"/>
         <location filename="../AutoloadStrings.cpp" line="736"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="235"/>
         <location filename="../AutoloadStrings.cpp" line="298"/>
         <location filename="../AutoloadStrings.cpp" line="737"/>
         <source>Chorus</source>
-        <translation type="unfinished"></translation>
+        <translation>Chor</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="236"/>
         <location filename="../AutoloadStrings.cpp" line="299"/>
         <location filename="../AutoloadStrings.cpp" line="738"/>
         <source>Volume</source>
-        <translation type="unfinished">Lautstärke</translation>
+        <translation>Lautstärke</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="237"/>
         <location filename="../AutoloadStrings.cpp" line="300"/>
         <location filename="../AutoloadStrings.cpp" line="739"/>
         <source>Reverb</source>
-        <translation type="unfinished"></translation>
+        <translation>Halleffekt</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="238"/>
         <location filename="../AutoloadStrings.cpp" line="301"/>
         <location filename="../AutoloadStrings.cpp" line="740"/>
         <source>Sustain</source>
-        <translation type="unfinished">Halten</translation>
+        <translation>Halten</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="239"/>
@@ -8700,12 +8700,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="735"/>
         <source>Unknown</source>
-        <translation type="unfinished">Unbekannt</translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="289"/>
         <source>[ %1 ]</source>
-        <translation type="unfinished">[ %1 ]</translation>
+        <translation>[ %1 ]</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="728"/>
@@ -8727,7 +8727,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="115"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Warnung</translation>
     </message>
 </context>
 <context>
@@ -8943,7 +8943,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.h" line="38"/>
         <source>Slashes</source>
-        <translation type="unfinished">Wiederholungsstriche</translation>
+        <translation>Wiederholungsstriche</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddSlashesCommand.cpp" line="34"/>
@@ -8985,7 +8985,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/segment/AddTracksCommand.h" line="50"/>
         <source>Add Tracks...</source>
-        <translation type="unfinished">Spuren hinzufügen...</translation>
+        <translation>Spuren hinzufügen...</translation>
     </message>
 </context>
 <context>
@@ -9032,7 +9032,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/segment/AddTriggerSegmentCommand.cpp" line="34"/>
         <source>Add Triggered Segment</source>
-        <translation type="unfinished">Getriggertes Segment hinzufügen</translation>
+        <translation>Getriggertes Segment hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -9156,22 +9156,22 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="79"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;kein Plugin&gt;</translation>
+        <translation>&lt;kein Plugin&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="91"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;kein Synth&gt;</translation>
+        <translation>&lt;kein Synthesizer&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="151"/>
         <source>Editor</source>
-        <translation type="unfinished">Audio bearbeiten</translation>
+        <translation>Audio bearbeiten</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="168"/>
         <source>Set the audio pan position in the stereo field</source>
-        <translation type="unfinished">Die Audio-Hörposition im Stereofeld setzen</translation>
+        <translation>Die Audio-Hörposition im Stereofeld setzen</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
@@ -9191,17 +9191,17 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
         <source>Mono or Stereo Instrument</source>
-        <translation type="unfinished">Audio-Instrument in Mono oder Stereo</translation>
+        <translation>Audio-Instrument in Mono oder Stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="171"/>
         <source>Record level</source>
-        <translation type="unfinished">Aufnahmelautstärke = </translation>
+        <translation>Aufnahmelautstärke = </translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="172"/>
         <source>Playback level</source>
-        <translation type="unfinished">Wiedergabelautstärke = </translation>
+        <translation>Wiedergabelautstärke = </translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="173"/>
@@ -9211,12 +9211,12 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="184"/>
         <source>In:</source>
-        <translation type="unfinished">In:</translation>
+        <translation>In:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="189"/>
         <source>Out:</source>
-        <translation type="unfinished">Out:</translation>
+        <translation>Out:</translation>
     </message>
 </context>
 <context>
@@ -9258,13 +9258,13 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="171"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="343"/>
         <source>&lt;no synth&gt;</source>
-        <translation type="unfinished">&lt;kein Synth&gt;</translation>
+        <translation>&lt;kein Synthesizer&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="174"/>
         <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="347"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;kein Plugin&gt;</translation>
+        <translation>&lt;kein Plugin&gt;</translation>
     </message>
 </context>
 <context>
@@ -10217,22 +10217,22 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="40"/>
         <source>Audio Segment Duration</source>
-        <translation type="unfinished">Audio Segment Dauer</translation>
+        <translation>Audio Segment Dauer</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="45"/>
         <source>The selected audio segment contains:</source>
-        <translation type="unfinished">Das ausgewählte Audio Segment enthält:</translation>
+        <translation>Das ausgewählte Audio Segment enthält:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="60"/>
         <source>beat(s)</source>
-        <translation type="unfinished">Taktschlag(äge)</translation>
+        <translation>Taktschlag(äge)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/BeatsBarsDialog.cpp" line="61"/>
         <source>bar(s)</source>
-        <translation type="unfinished">Takt(e)</translation>
+        <translation>Takt(e)</translation>
     </message>
 </context>
 <context>
