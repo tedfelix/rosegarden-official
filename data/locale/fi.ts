@@ -7,49 +7,50 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="541"/>
         <source>Manage MIDI Devices</source>
-        <translation type="unfinished">Hallitse MIDI-laitteita</translation>
+        <translation>Hallitse MIDI-laitteita</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="542"/>
         <source>MIDI Playback</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-toisto</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="544"/>
         <source>Sends its data through</source>
-        <translation type="unfinished"></translation>
+        <translation>Lähettää sen tiedot läpi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="545"/>
         <source>Rosegarden playback device</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegardenin toistolaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="550"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="582"/>
         <source>Internal Synth</source>
-        <translation type="unfinished">Sisäinen synth</translation>
+        <translation>Sisäinen synth</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="551"/>
         <source>Default playback device</source>
-        <translation type="unfinished">Oletustoistolaite</translation>
+        <translation>Oletustoistolaite</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="555"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Luo uudet toistolaitteet täällä. Tuplaklikkaa toistolaitettaa muuttaaksesi sitä. Valitse laite täältä ja yhdistä se ALSA MIDI-ulostuloporttiin klikkaamalla oikealla portin kohdalla.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="558"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ohjelma määritelmät sallivat sinun määritellä Rosegardenille saatavilla olevat ohjelmat tai patchit tähän laitteeseen yhdistettyä laitteistoa (kiinteä tai ohjelmallinen syntetisointi) varten.&lt;/p&gt;&lt;p&gt;Sinulla täytyy olla jotain määritettynä kutakin välitettävää ohjelma- tai pankinmuutosta varten, sillä Rosegaden piilottaa kaikki määrittämättömät pankki- tai ohjelmanumerot.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="560"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished">Pankit...</translation>
+        <translatorcomment>Luo, lataa tai vie pankkien (tai patchien) määritelmät ...</translatorcomment>
+        <translation>Pankit...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="562"/>
@@ -8955,7 +8956,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/commands/segment/AddTempoChangeCommand.h" line="53"/>
         <source>Add Te&amp;mpo Change...</source>
-        <translation>Lisää tempon muutos...</translation>
+        <translation>Lisää te&amp;mpon muutos...</translation>
     </message>
 </context>
 <context>
@@ -9018,7 +9019,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="75"/>
         <source>Below the current selected track</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitun raidan alapuolella</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="76"/>
@@ -9180,17 +9181,17 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa ladataksesi audio-lisäosan</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="92"/>
         <source>Click to load a synth plugin for playing MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa ladataksesi syntetisointi-lisäosan MIDI-soittoa varten</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="169"/>
         <source>Open the synth plugin&apos;s native editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Avaa syntetisointi-lisäosan oma muokkain</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
@@ -9330,7 +9331,7 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="565"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="672"/>
         <source>Error: Selection is empty!</source>
-        <translation type="unfinished"></translation>
+        <translation>Virhe: Valinta on tyhjä!</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="509"/>
@@ -9356,33 +9357,33 @@ Esimerkiksi: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="725"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="733"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation>WAV-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="726"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="737"/>
         <source>All files</source>
-        <translation type="unfinished">Kaikki tiedostot</translation>
+        <translation>Kaikki tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="732"/>
         <source>Audio files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ääni-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="734"/>
         <source>FLAC files</source>
-        <translation type="unfinished"></translation>
+        <translation>FLAC-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
         <source>Ogg files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogg-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
         <source>MP3 files</source>
-        <translation type="unfinished"></translation>
+        <translation>MP3-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
@@ -9542,7 +9543,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="338"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Klikkaa ladataksesi audio-lisäosan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
@@ -9678,48 +9679,48 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="437"/>
         <source>Select a plugin from this list</source>
-        <translation type="unfinished"></translation>
+        <translation>Valitse lisäosa tästä listasta</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="150"/>
         <source>Bypass this plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohitä tämä lisäosa</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="159"/>
         <source>&lt;qt&gt;&lt;p&gt;Tells you if the plugin is &lt;b&gt;mono&lt;/b&gt;, &lt;b&gt;stereo&lt;/b&gt;, or has some other combination of input and output ports, such as &lt;b&gt;2 in, 1 out&lt;/b&gt;, which would take a stereo input and output mono&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kertoo, joko lisäosa on &lt;b&gt;mono&lt;/b&gt;, &lt;b&gt;stereo&lt;/b&gt;, tai sillä on jokin yhdistelmä sisään- ja ulostuloportteja, kuten &lt;b&gt;2 sisään, 1 ulos&lt;/b&gt;, jotka ottaisivat stereo-sisääntulon ja mono-ulostulon&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="161"/>
         <source>&lt;id&gt;</source>
         <comment>&apos;id&apos; is short for &apos;identification&apos;</comment>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="163"/>
         <source>Unique ID of plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisäosan yksilöivä ID</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="190"/>
         <source>Reset</source>
-        <translation type="unfinished">Nollaa</translation>
+        <translation>Palauta alkutilaan</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="195"/>
         <source>Reset plugin controls to factory defaults</source>
-        <translation type="unfinished"></translation>
+        <translation>Palauta lisäosan hallitsimat tehdasasetuksiin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="474"/>
         <source>&lt;qt&gt;&lt;p&gt;This plugin has too many controls to edit here.&lt;/p&gt;&lt;p&gt;Use the external editor, if available.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Tällä lisäosalla on liian monta hallitsinta tässä muokattavakasi.&lt;/p&gt;&lt;p&gt;Käytä ulkoista muokkainta, josa sellainen on saatavilla.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="479"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tällä lisäosalla ei ole ainuttakaan muokattavaa hallitsinta.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="489"/>
@@ -9830,7 +9831,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="168"/>
         <source>Audio Recording Path</source>
-        <translation type="unfinished"></translation>
+        <translation>Äänen nauhoituspolku</translation>
     </message>
 </context>
 <context>
@@ -10007,7 +10008,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="131"/>
         <source>MIDI Device/Bankname</source>
-        <translation type="unfinished"></translation>
+        <translation>MIDI-laite/-pankkinimi</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="132"/>
@@ -10119,7 +10120,7 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="328"/>
         <source>Close</source>
-        <translation type="unfinished">Sulje</translation>
+        <translation>Sulje</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1111"/>
@@ -10159,22 +10160,22 @@ Ole hyvä ja valitse halutessasi niistä joitakin poistaaksesi ne pysyvästi kov
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1611"/>
         <source>Rosegarden Device files</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden-laitetiedosto</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1612"/>
         <source>Rosegarden files</source>
-        <translation type="unfinished">Rosegarden-tiedostot</translation>
+        <translation>Rosegarden-tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1613"/>
         <source>Sound fonts</source>
-        <translation type="unfinished"></translation>
+        <translation>Ääni-kirjasimet</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1614"/>
         <source>All files</source>
-        <translation type="unfinished">Kaikki tiedostot</translation>
+        <translation>Kaikki tiedostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="1632"/>
@@ -10329,7 +10330,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="90"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or        manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off from the Settings-&gt;Rulers menu.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Sointunimi-viivain.  Tämä viivain analysoi harmoniat ja yrittää arvata mitä sointuja sävellyksesi sisältää.  Näitä sointuja ei voida tulostaa tai muokata, ja tiedolla on vain viiteellistä arvoa.&lt;/p&gt;&lt;p&gt;Aseta se päälle ja pois Asetukset-&gt;Viivaimet -valikosta.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -10625,7 +10626,7 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="59"/>
         <source>Change the start and end markers for the composition:</source>
-        <translation type="unfinished"></translation>
+        <translation>Muuta sävellyksen alku- ja loppumerkinnät:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CompositionLengthDialog.cpp" line="76"/>
@@ -10678,42 +10679,42 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
         <source>Manage Controllers</source>
-        <translation type="unfinished"></translation>
+        <translation>Hallitse ohjaimia</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="94"/>
         <source>  Controllers for %1 (device %2)</source>
-        <translation type="unfinished"></translation>
+        <translation>  Ohjaimet laitteelle %1 (laite %2)</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="100"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nimi  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="101"/>
         <source>Type  </source>
-        <translation type="unfinished">Tyyppi  </translation>
+        <translation>Tyyppi  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="102"/>
         <source>Number  </source>
-        <translation type="unfinished"></translation>
+        <translation>Numero  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="104"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Alin arvo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="105"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Ylin arvo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="106"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Oletusarvo  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="107"/>
@@ -10792,17 +10793,17 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="60"/>
         <source>Edit Controller</source>
-        <translation type="unfinished"></translation>
+        <translation>Muokkaa ohjainta</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="69"/>
         <source>Controller Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Ohjaimen ominaisuudet</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Ohjaimen numero:</translation>
+        <translation>Ohjaimen numero:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="102"/>
@@ -11023,12 +11024,12 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="923"/>
         <source>Help for the Midi Devices-Manager Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Apu MIDI-laitteiden hallinta -valikolle</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="925"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
-        <translation type="unfinished"></translation>
+        <translation>Tämä on Rosegardenin keskitetty yhteyksien hallitsin. Lisää ja yhdistä MIDI-laitteesit täällä!</translation>
     </message>
 </context>
 <context>
@@ -12125,17 +12126,17 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="87"/>
         <source>Requested file</source>
-        <translation type="unfinished"></translation>
+        <translation>Vaadittu tiedosto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="88"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation>WAV-tidostot</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="89"/>
         <source>All files</source>
-        <translation type="unfinished">Kaikki tiedostot</translation>
+        <translation>Kaikki tiedostot</translation>
     </message>
 </context>
 <context>
@@ -12435,72 +12436,72 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="318"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Rosegarden luottaa ulkoiseen ohjelmaan tuottaakseen tiettyjä ominaisuuksia.  Kunkin valitun ohjelman täytyy olla asennettuna ja saatavilla hakupolussa.  Kun valitsen käytettävän sovelluksen, varmistathan, että sen voi ajaa &quot;Suorita komento&quot;-laatikosta (yleisesti &lt;b&gt;Alt+F2&lt;/b&gt;), jolloin Rosegarden voi tarvitessaan käyttää sitä.&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="323"/>
         <source>PDF viewer</source>
-        <translation type="unfinished"></translation>
+        <translation>PDF-katselin</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="328"/>
         <source>Okular (KDE 4.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>Okular (KDE 4.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="329"/>
         <source>Evince (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Evince (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="330"/>
         <source>Adobe Acrobat Reader (non-free)</source>
-        <translation type="unfinished"></translation>
+        <translation>Adobe Acrobat Reader (ei-vapaa ohjelma)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="331"/>
         <source>KPDF (KDE 3.x)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPDF (KDE 3.x)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="332"/>
         <source>Used to preview generated LilyPond output</source>
-        <translation type="unfinished"></translation>
+        <translation>Käytetään tuotetun LilyPond-tuotoksen esikatseluun</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="337"/>
         <source>Command-line file printing utility</source>
-        <translation type="unfinished"></translation>
+        <translation>Komentorivipohjainen tiedostojen tulostusohjelma</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="342"/>
         <source>KPrinter (KDE)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="343"/>
         <source>Gtk-LP (GNOME)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gtk-LP (GNOME)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="344"/>
         <source>lpr (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lpr (ei graafista käyttöliittymää)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="345"/>
         <source>lp (no GUI)</source>
-        <translation type="unfinished"></translation>
+        <translation>lp (ei graafista käyttöliittymää)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="346"/>
         <source>Used to print generated LilyPond output without previewing it</source>
-        <translation type="unfinished"></translation>
+        <translation>Käytetään tulostamaan tuotettu LilyPond-tuotos ilman esikatselua</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="362"/>
         <source>External Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulkoiset ohjelmat</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="528"/>
@@ -12690,7 +12691,7 @@ Haluatko yrittää paikallistaa tiedostoa vai sivuuttaa sen?</translation>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="187"/>
         <source>Additional headers</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisäotsikot</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="207"/>
@@ -13464,7 +13465,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="77"/>
         <source>Layout</source>
-        <translation type="unfinished">Taitto</translation>
+        <translation>Taitto</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="84"/>
@@ -13572,7 +13573,7 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="161"/>
         <source>Specific options</source>
-        <translation type="unfinished"></translation>
+        <translation>Erityiset valinnat</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="105"/>
@@ -13686,82 +13687,82 @@ sen sijaan?</translation>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="60"/>
         <source>Preview</source>
-        <translation type="unfinished">Esikatselu</translation>
+        <translation>Esikatselu</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="61"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulosta</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="63"/>
         <source>Rosegarden - %1 with LilyPond...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - %1 LilyPondilla...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="74"/>
         <source>Cancel</source>
-        <translation type="unfinished"></translation>
+        <translation>Kumoa</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="97"/>
         <source>Fatal error.  Processing aborted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vakava virhe.  Käsittely keskeytettiin.</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="98"/>
         <source>Rosegarden - Fatal processing error!</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden - Vakava käsittelyvirhe!</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="111"/>
         <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajetaan &lt;b&gt;convert-ly&lt;/b&gt;...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="119"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="121"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;convert-ly&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="133"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;convert-ly&lt;/b&gt; päättyi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="136"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;convert-ly&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ajettiin &lt;b&gt;convert-ly&lt;/b&gt; onnistuneesti, mutta suoritus päättyi virheisiin.&lt;/p&gt;&lt;p&gt;Suoritus keskeytyi vakaviin virheisiin.&lt;p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="142"/>
         <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajetaan &lt;b&gt;lilypond&lt;/b&gt;...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="149"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="151"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;lilypond&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="165"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; finished...</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;lilypond&lt;/b&gt; päättyi...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="180"/>
         <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ajettiin &lt;b&gt;lilypond&lt;/b&gt; onnistuneesti, mutta suoritus päättyi virheisiin.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="183"/>
