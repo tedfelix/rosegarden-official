@@ -137,6 +137,7 @@
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/AutoSaveFinder.h"
 #include "gui/general/LilyPondProcessor.h"
+#include "gui/general/ProjectPackager.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
@@ -4530,22 +4531,27 @@ void RosegardenMainWindow::slotExportProject()
     }
 
     //setup "rosegarden-project-package" process
-    QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "--pack";
-    procArgs << rgFile;
-    procArgs << fileName;
-
-    proc->execute("rosegarden-project-package", procArgs);
-
-    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("Failed to export to project file \"%1\"").arg(fileName));
-        CurrentProgressDialog::thaw();
-        delete proc;
-        return ;
+    ProjectPackager *dialog = new ProjectPackager(this, ProjectPackager::Pack, fileName);
+    if (dialog->exec() != QDialog::Accepted) {
+        return;
     }
 
-    delete proc;
+//    QProcess *proc = new QProcess;
+//    QStringList procArgs;
+//    procArgs << "--pack";
+//    procArgs << rgFile;
+//    procArgs << fileName;
+//
+//    proc->execute("rosegarden-project-package", procArgs);
+//
+//    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
+//        /* was sorry */ QMessageBox::warning(this, "", tr("Failed to export to project file \"%1\"").arg(fileName));
+//        CurrentProgressDialog::thaw();
+//        delete proc;
+//      return ;
+//    }
+
+//    delete proc;
 }
 
 void RosegardenMainWindow::slotExportMIDI()
