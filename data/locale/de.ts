@@ -139,7 +139,7 @@
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="605"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="609"/>
@@ -10035,7 +10035,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="156"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="157"/>
@@ -10728,7 +10728,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
@@ -12568,7 +12568,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="61"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="62"/>
@@ -14348,7 +14348,7 @@ des getriggerten Segments, das die Noten der verzierung enthält.</translation>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="123"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="124"/>
@@ -16487,7 +16487,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="87"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/PlayList.cpp" line="88"/>
@@ -18458,47 +18458,47 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <translation type="unfinished">Neue Farbe hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="958"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="868"/>
         <source>New Color Name</source>
         <translation type="unfinished">Neuer Farbname</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="869"/>
         <source>Enter new name</source>
         <translation type="unfinished">Neuen Namen eingeben</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="871"/>
         <source>New</source>
         <translation type="unfinished">Neu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="998"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="908"/>
         <source>Highest playable note</source>
         <translation type="unfinished">Höchste spielbare Note</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="928"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">Tiefste spielbare Note</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1047"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="957"/>
         <source>Modify Segment label</source>
         <translation type="unfinished">Segmentbezeichnung ändern</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1049"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
         <source>Modify Segments label</source>
         <translation type="unfinished">Segmentbezeichnungen ändern</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="971"/>
         <source>Enter new label:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1171"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1037"/>
         <source>Instrument</source>
         <translation type="unfinished">Instrument</translation>
     </message>
@@ -20910,7 +20910,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="133"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="134"/>

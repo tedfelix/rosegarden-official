@@ -11290,7 +11290,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="268"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="299"/>
@@ -13922,7 +13922,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="252"/>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="272"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="233"/>
@@ -14796,7 +14796,7 @@ Doble clic para abrir el editor de marcadores.</translation>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2122"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/OldMatrixView.cpp" line="2166"/>
@@ -15234,7 +15234,7 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="364"/>
         <source>Off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ningún</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="394"/>
@@ -18455,47 +18455,47 @@ Por favor, configura el directorio de archivos de audio hacia un directorio vál
         <translation type="unfinished">Añadir Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="958"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="868"/>
         <source>New Color Name</source>
         <translation type="unfinished">Nombre del Nuevo Color</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="869"/>
         <source>Enter new name</source>
         <translation type="unfinished">Introducir nuevo nombre</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="871"/>
         <source>New</source>
         <translation type="unfinished">Nuevo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="998"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="908"/>
         <source>Highest playable note</source>
         <translation type="unfinished">La nota más alta que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="928"/>
         <source>Lowest playable note</source>
         <translation type="unfinished">La nota más baja que se puede tocar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1047"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="957"/>
         <source>Modify Segment label</source>
         <translation type="unfinished">Modificar etiqueta del Segmento</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1049"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
         <source>Modify Segments label</source>
         <translation type="unfinished">Modificar etiquetas de Segmentos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="971"/>
         <source>Enter new label:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1171"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1037"/>
         <source>Instrument</source>
         <translation type="unfinished">Instrumento</translation>
     </message>

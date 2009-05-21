@@ -18356,47 +18356,47 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="958"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="868"/>
         <source>New Color Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="869"/>
         <source>Enter new name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="961"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="871"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="998"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="908"/>
         <source>Highest playable note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1018"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="928"/>
         <source>Lowest playable note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1047"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="957"/>
         <source>Modify Segment label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1049"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="959"/>
         <source>Modify Segments label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1061"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="971"/>
         <source>Enter new label:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1171"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="1037"/>
         <source>Instrument</source>
         <translation type="unfinished"></translation>
     </message>
