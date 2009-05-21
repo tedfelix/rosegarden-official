@@ -17,7 +17,7 @@
     <sub-class-of type="application/x-gzip"/>
     <comment xml:lang="en">Rosegarden project</comment>
     <comment xml:lang="es">Proyecto de Rosegarden</comment>
-    <glob pattern="*.rgd"/>
+    <glob pattern="*.rgp"/>
   </mime-type>
   <mime-type type="audio/x-rosegarden-template">
     <sub-class-of type="application/x-gzip"/>

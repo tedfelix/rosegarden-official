@@ -50,9 +50,10 @@ INSTBINDIR	:= $(DESTDIR)$(PREFIX)/bin
 INSTMIME16DIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/16x16/mimetypes
 INSTMIME32DIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/mimetypes
 INSTMIME64DIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/64x64/mimetypes
-INSTMIMEXMLDIR	:= $(DESTDIR)$(PREFIX)/share/mime/packages/
-INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications/
-INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps/
+INSTMIMEDIR	:= $(DESTDIR)$(PREFIX)/share/mime
+INSTMIMEXMLDIR	:= $(INSTMIMEDIR)/packages
+INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications
+INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
 INSTDATADIR	:= $(DESTDIR)$(PREFIX)/share/rosegarden
 
 RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
@@ -146,30 +147,30 @@ install:
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME32DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME64DIR)
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16.png $(INSTMIME16DIR)/x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32.png $(INSTMIME32DIR)/x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64.png $(INSTMIME64DIR)/x-rosegarden-composition.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rgd.png $(INSTMIME16DIR)/x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rgd.png $(INSTMIME32DIR)/x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rgd.png $(INSTMIME64DIR)/x-rosegarden-device.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rgp.png $(INSTMIME16DIR)/x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rgp.png $(INSTMIME32DIR)/x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rgp.png $(INSTMIME64DIR)/x-rosegarden-project.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rgt.png $(INSTMIME16DIR)/x-rosegarden-template.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rgt.png $(INSTMIME32DIR)/x-rosegarden-template.png
-	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rgt.png $(INSTMIME64DIR)/x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden.png $(INSTMIME16DIR)/x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden.png $(INSTMIME32DIR)/x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden.png $(INSTMIME64DIR)/x-rosegarden-composition.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgd.png $(INSTMIME16DIR)/x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgd.png $(INSTMIME32DIR)/x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgd.png $(INSTMIME64DIR)/x-rosegarden-device.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgp.png $(INSTMIME16DIR)/x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgp.png $(INSTMIME32DIR)/x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgp.png $(INSTMIME64DIR)/x-rosegarden-project.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi16-rosegarden-rgt.png $(INSTMIME16DIR)/x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi32-rosegarden-rgt.png $(INSTMIME32DIR)/x-rosegarden-template.png
+	$(INSTALL) -m 644 data/pixmaps/icons/mm-mime-hi64-rosegarden-rgt.png $(INSTMIME64DIR)/x-rosegarden-template.png
 	$(MKDIR_P) -m 755 $(INSTMIMEXMLDIR)
 	$(INSTALL) -m 644 data/mime/rosegarden.xml $(INSTMIMEXMLDIR)
 	$(MKDIR_P) -m 755 $(INSTDESKTOPDIR)
 	$(INSTALL) -m 644 data/desktop/rosegarden.desktop $(INSTDESKTOPDIR)
 	$(MKDIR_P) -m 755 $(INSTICONDIR)
 	$(INSTALL) -m 644 data/pixmaps/icons/rg-rwb-rose3-32x32.png $(INSTICONDIR)/rosegarden.png
-	update-mime-database
+	update-mime-database $(INSTMIMEDIR)
 
 uninstall:
 	rm -rf $(INSTDATADIR)/examples
 	rm -rf $(INSTDATADIR)/library
-	rmdir $(INSTDATADIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTDATADIR)
 	rm -f $(INSTBINDIR)/rosegarden
 	rm -f $(INSTBINDIR)/rosegarden-audiofile-importer
 	rm -f $(INSTBINDIR)/rosegarden-lilypondview
@@ -180,8 +181,12 @@ uninstall:
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
 	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
-	update-mime-database
-	@echo Some empty directories may be left behind if they were not used for any other purpose.
+	update-mime-database $(INSTMIMEDIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTMIME16DIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTMIME32DIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTMIME64DIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTMIMEXMLDIR)
+	rmdir -p --ignore-fail-on-non-empty $(INSTICONDIR)
 
 .PHONY: autoload-ts instrument-ts menu-ts ts ts-noobsolete locale
 
