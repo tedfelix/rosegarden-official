@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="de" sourcelanguage="en_US">
+<TS version="2.0" language="de_DE" sourcelanguage="en_US">
 <context>
     <name>DeviceManagerDialogUi</name>
     <message>
@@ -2058,27 +2058,27 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="536"/>
         <source>&amp;1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;1</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="537"/>
         <source>&amp;2</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;2</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="538"/>
         <source>&amp;3</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;3</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="539"/>
         <source>&amp;4</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;4</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="540"/>
         <source>&amp;5</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;5</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="541"/>
@@ -5550,7 +5550,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="79"/>
         <source>Synth Bass 1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synthesizer Bass 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="80"/>
@@ -5610,7 +5610,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="95"/>
         <source>Synth Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthesizer Stimme</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="96"/>
@@ -5900,7 +5900,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="159"/>
         <source>Synth Drum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synthesizer Trommel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="160"/>
@@ -6020,17 +6020,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="184"/>
         <source>Synth Bass 3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synthesizer Bass 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="185"/>
         <source>Synth Bass 4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Synthesizer Bass 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="186"/>
         <source>Slow Violin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">langsame Violine</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="187"/>
@@ -6555,12 +6555,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="305"/>
         <source>Synth plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthesizer Plugin</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="306"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="308"/>
@@ -6570,52 +6570,52 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="309"/>
         <source>MidnightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>mitternachtsblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="310"/>
         <source>NavyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>marineblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="311"/>
         <source>CornflowerBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Kornblumenblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="312"/>
         <source>DarkSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>dunkelschieferblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="313"/>
         <source>SlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>schieferblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="314"/>
         <source>MediumSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittleres Schiefergrau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="315"/>
         <source>LightSlateBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Schiefer</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="316"/>
         <source>MediumBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>mittelblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="317"/>
         <source>RoyalBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>königsblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="318"/>
         <source>blue</source>
-        <translation type="unfinished"></translation>
+        <translation>blau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
@@ -6625,67 +6625,67 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
         <source>DeepSkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes himmelblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="321"/>
         <source>SkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Himmelblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="322"/>
         <source>LightSkyBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Himmelblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="323"/>
         <source>SteelBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>stahlblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="324"/>
         <source>LightSteelBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Stahlblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="325"/>
         <source>LightBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="326"/>
         <source>PowderBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>Pulverblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="327"/>
         <source>PaleTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Türkis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="328"/>
         <source>DarkTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation>dunkeltürkis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="329"/>
         <source>MediumTurquoise</source>
-        <translation type="unfinished"></translation>
+        <translation>mitteltürkis</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="330"/>
         <source>turquoise</source>
-        <translation type="unfinished"></translation>
+        <translation>türkisfarben</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="331"/>
         <source>cyan</source>
-        <translation type="unfinished"></translation>
+        <translation>blaugrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="332"/>
         <source>LightCyan</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="333"/>
@@ -6695,52 +6695,52 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="334"/>
         <source>MediumAquamarine</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittleres Aquamarin</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="335"/>
         <source>aquamarine</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquamarin</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="336"/>
         <source>DarkGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>dunkelgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="337"/>
         <source>DarkOliveGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>dunkelolivgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="338"/>
         <source>DarkSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Seegrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="339"/>
         <source>SeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Seegrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="340"/>
         <source>MediumSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittleres Seegrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="341"/>
         <source>LightSeaGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">leichtseegrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="342"/>
         <source>PaleGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Grün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="343"/>
         <source>SpringGreen</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">frühlingsgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="344"/>
@@ -6790,57 +6790,57 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="353"/>
         <source>DarkKhaki</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dunkles Khaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="354"/>
         <source>khaki</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Khaki</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="355"/>
         <source>PaleGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Goldrutengelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="356"/>
         <source>LightGoldenrodYellow</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Goldrutengelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="357"/>
         <source>LightYellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellgelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="358"/>
         <source>yellow</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="359"/>
         <source>gold</source>
-        <translation type="unfinished"></translation>
+        <translation>Gold</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="360"/>
         <source>LightGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Goldrutengelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="361"/>
         <source>goldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation>Goldrutengelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="362"/>
         <source>DarkGoldenrod</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Goldrutengelb</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="363"/>
         <source>RosyBrown</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="364"/>
@@ -6865,32 +6865,32 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="368"/>
         <source>burlywood</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernholz</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="369"/>
         <source>beige</source>
-        <translation type="unfinished"></translation>
+        <translation>Beige</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="370"/>
         <source>wheat</source>
-        <translation type="unfinished"></translation>
+        <translation>Weizen</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="371"/>
         <source>SandyBrown</source>
-        <translation type="unfinished"></translation>
+        <translation>sandbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="372"/>
         <source>tan</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="373"/>
         <source>chocolate</source>
-        <translation type="unfinished"></translation>
+        <translation>schokoladenfarben</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
@@ -6900,22 +6900,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
         <source>brown</source>
-        <translation type="unfinished"></translation>
+        <translation>braun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="376"/>
         <source>DarkSalmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dunkles Lachsrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="377"/>
         <source>salmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lachsrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="378"/>
         <source>LightSalmon</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Lachsrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="379"/>
@@ -6935,27 +6935,27 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="382"/>
         <source>LightCoral</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helle Koralle</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="383"/>
         <source>tomato</source>
-        <translation type="unfinished"></translation>
+        <translation>tomatenrot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="384"/>
         <source>OrangeRed</source>
-        <translation type="unfinished"></translation>
+        <translation>orangerot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="385"/>
         <source>red</source>
-        <translation type="unfinished"></translation>
+        <translation>rot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="386"/>
         <source>HotPink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heißes Pinkrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
@@ -6965,17 +6965,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
         <source>pink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pinkrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="389"/>
         <source>LightPink</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Pinkrosa</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="390"/>
         <source>PaleVioletRed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Violettrot</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
@@ -7000,17 +7000,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="395"/>
         <source>violet</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Violett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="396"/>
         <source>plum</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pflaumenfarben</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="397"/>
         <source>orchid</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Orchidee</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="398"/>
@@ -7040,292 +7040,292 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
         <source>MediumPurple</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mittleres Purpur</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="404"/>
         <source>thistle</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="405"/>
         <source>snow1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schneeweiß 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="406"/>
         <source>snow2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schneeweiß 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="407"/>
         <source>snow3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schneeweiß 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="408"/>
         <source>snow4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schneeweiß 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="409"/>
         <source>seashell1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seemuschel 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="410"/>
         <source>seashell2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seemuschel 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="411"/>
         <source>seashell3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seemuschel 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="412"/>
         <source>seashell4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seemuschel 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="413"/>
         <source>AntiqueWhite1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikweiß 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="414"/>
         <source>AntiqueWhite2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikweiß 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="415"/>
         <source>AntiqueWhite3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikweiß 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="416"/>
         <source>AntiqueWhite4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Antikweiß 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="417"/>
         <source>bisque1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bisque 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="418"/>
         <source>bisque2</source>
-        <translation type="unfinished"></translation>
+        <translation>Bisque 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="419"/>
         <source>bisque3</source>
-        <translation type="unfinished"></translation>
+        <translation>Bisque 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="420"/>
         <source>bisque4</source>
-        <translation type="unfinished"></translation>
+        <translation>Bisque 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="421"/>
         <source>PeachPuff1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfirsich 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="422"/>
         <source>PeachPuff2</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfirsich 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="423"/>
         <source>PeachPuff3</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfirsich 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="424"/>
         <source>PeachPuff4</source>
-        <translation type="unfinished"></translation>
+        <translation>Pfirsich 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="425"/>
         <source>NavajoWhite1</source>
-        <translation type="unfinished"></translation>
+        <translation>Navajo-Weiß 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="426"/>
         <source>NavajoWhite2</source>
-        <translation type="unfinished"></translation>
+        <translation>Navajo-Weiß 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="427"/>
         <source>NavajoWhite3</source>
-        <translation type="unfinished"></translation>
+        <translation>Navajo-Weiß 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="428"/>
         <source>NavajoWhite4</source>
-        <translation type="unfinished"></translation>
+        <translation>Navajo-Weiß 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="429"/>
         <source>LemonChiffon1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemon-Chiffon 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="430"/>
         <source>LemonChiffon2</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemon-Chiffon 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="431"/>
         <source>LemonChiffon3</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemon-Chiffon 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="432"/>
         <source>LemonChiffon4</source>
-        <translation type="unfinished"></translation>
+        <translation>Lemon-Chiffon 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="433"/>
         <source>cornsilk1</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisfarbene Seide 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="434"/>
         <source>cornsilk2</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisfarbene Seide 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="435"/>
         <source>cornsilk3</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisfarbene Seide 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="436"/>
         <source>cornsilk4</source>
-        <translation type="unfinished"></translation>
+        <translation>Maisfarbene Seide 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="437"/>
         <source>ivory1</source>
-        <translation type="unfinished"></translation>
+        <translation>Elfenbein 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="438"/>
         <source>ivory2</source>
-        <translation type="unfinished"></translation>
+        <translation>Elfenbein 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="439"/>
         <source>ivory3</source>
-        <translation type="unfinished"></translation>
+        <translation>Elfenbein 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="440"/>
         <source>ivory4</source>
-        <translation type="unfinished"></translation>
+        <translation>Elfenbein 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="441"/>
         <source>honeydew1</source>
-        <translation type="unfinished"></translation>
+        <translation>Honigtau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="442"/>
         <source>honeydew2</source>
-        <translation type="unfinished"></translation>
+        <translation>Honigtau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="443"/>
         <source>honeydew3</source>
-        <translation type="unfinished"></translation>
+        <translation>Honigtau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="444"/>
         <source>honeydew4</source>
-        <translation type="unfinished"></translation>
+        <translation>Honigtau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="445"/>
         <source>LavenderBlush1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lavendelblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="446"/>
         <source>LavenderBlush2</source>
-        <translation type="unfinished"></translation>
+        <translation>Lavendelblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="447"/>
         <source>LavenderBlush3</source>
-        <translation type="unfinished"></translation>
+        <translation>Lavendelblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="448"/>
         <source>LavenderBlush4</source>
-        <translation type="unfinished"></translation>
+        <translation>Lavendelblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="449"/>
         <source>MistyRose1</source>
-        <translation type="unfinished"></translation>
+        <translation>Misty Rose 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="450"/>
         <source>MistyRose2</source>
-        <translation type="unfinished"></translation>
+        <translation>Misty Rose 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="451"/>
         <source>MistyRose3</source>
-        <translation type="unfinished"></translation>
+        <translation>Misty Rose 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="452"/>
         <source>MistyRose4</source>
-        <translation type="unfinished"></translation>
+        <translation>Misty Rose 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="453"/>
         <source>azure1</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="454"/>
         <source>azure2</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="455"/>
         <source>azure3</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="456"/>
         <source>azure4</source>
-        <translation type="unfinished"></translation>
+        <translation>Azur 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="457"/>
         <source>SlateBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Schieferblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="458"/>
         <source>SlateBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Schieferblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="459"/>
         <source>SlateBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="460"/>
         <source>SlateBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Schieferblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="461"/>
@@ -7350,22 +7350,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="465"/>
         <source>blue1</source>
-        <translation type="unfinished"></translation>
+        <translation>blau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="466"/>
         <source>blue2</source>
-        <translation type="unfinished"></translation>
+        <translation>blau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="467"/>
         <source>blue3</source>
-        <translation type="unfinished"></translation>
+        <translation>blau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="468"/>
         <source>blue4</source>
-        <translation type="unfinished"></translation>
+        <translation>blau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
@@ -7430,17 +7430,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="481"/>
         <source>SkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="482"/>
         <source>SkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="483"/>
         <source>SkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Himmelblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="484"/>
@@ -7450,17 +7450,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="485"/>
         <source>LightSkyBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Himmelblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="486"/>
         <source>LightSkyBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Himmelblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="487"/>
         <source>LightSkyBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Himmelblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="488"/>
@@ -7470,142 +7470,142 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="489"/>
         <source>SlateGray1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schiefergrau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="490"/>
         <source>SlateGray2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schiefergrau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="491"/>
         <source>SlateGray3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schiefergrau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="492"/>
         <source>SlateGray4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schiefergrau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="493"/>
         <source>LightSteelBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Stahlblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="494"/>
         <source>LightSteelBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Stahlblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="495"/>
         <source>LightSteelBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Stahlblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="496"/>
         <source>LightSteelBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Stahlblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="497"/>
         <source>LightBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="498"/>
         <source>LightBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="499"/>
         <source>LightBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="500"/>
         <source>LightBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="501"/>
         <source>LightCyan1</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="502"/>
         <source>LightCyan2</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="503"/>
         <source>LightCyan3</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="504"/>
         <source>LightCyan4</source>
-        <translation type="unfinished"></translation>
+        <translation>Helles Cyan 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="505"/>
         <source>PaleTurquoise1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Türkis 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="506"/>
         <source>PaleTurquoise2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Türkis 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="507"/>
         <source>PaleTurquoise3</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Türkis 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="508"/>
         <source>PaleTurquoise4</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Türkis 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="509"/>
         <source>CadetBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrosenblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="510"/>
         <source>CadetBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrosenblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="511"/>
         <source>CadetBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrosenblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="512"/>
         <source>CadetBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>Matrosenblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="513"/>
         <source>turquoise1</source>
-        <translation type="unfinished"></translation>
+        <translation>türkisfarben 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="514"/>
         <source>turquoise2</source>
-        <translation type="unfinished"></translation>
+        <translation>türkisfarben 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="515"/>
         <source>turquoise3</source>
-        <translation type="unfinished"></translation>
+        <translation>türkisfarben 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="516"/>
         <source>turquoise4</source>
-        <translation type="unfinished"></translation>
+        <translation>türkisfarben 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="517"/>
@@ -7630,102 +7630,102 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="521"/>
         <source>DarkSlateGray1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Schiefergrau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="522"/>
         <source>DarkSlateGray2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Schiefergrau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="523"/>
         <source>DarkSlateGray3</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Schiefergrau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="524"/>
         <source>DarkSlateGray4</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Schiefergrau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="525"/>
         <source>aquamarine1</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquamarin 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="526"/>
         <source>aquamarine2</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquamarin 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="527"/>
         <source>aquamarine3</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquamarin 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="528"/>
         <source>aquamarine4</source>
-        <translation type="unfinished"></translation>
+        <translation>Aquamarin 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="529"/>
         <source>DarkSeaGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Seegrün 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="530"/>
         <source>DarkSeaGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Seegrün 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="531"/>
         <source>DarkSeaGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Seegrün 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="532"/>
         <source>DarkSeaGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation>Dunkles Seegrün 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="533"/>
         <source>SeaGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation>Seegrün 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="534"/>
         <source>SeaGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation>Seegrün 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="535"/>
         <source>SeaGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation>Seegrün 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="536"/>
         <source>SeaGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation>Seegrün 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="537"/>
         <source>PaleGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Grün 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="538"/>
         <source>PaleGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Grün 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="539"/>
         <source>PaleGreen3</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Grün 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="540"/>
         <source>PaleGreen4</source>
-        <translation type="unfinished"></translation>
+        <translation>Fahles Grün 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="541"/>
@@ -7810,12 +7810,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="557"/>
         <source>DarkOliveGreen1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dunkles Olivengrün 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="558"/>
         <source>DarkOliveGreen2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dunkles Olivengrün 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="559"/>
@@ -7830,17 +7830,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="561"/>
         <source>khaki1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Khaki 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="562"/>
         <source>khaki2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Khaki 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="563"/>
         <source>khaki3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Khaki 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="564"/>
@@ -7850,17 +7850,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="565"/>
         <source>LightGoldenrod1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Goldrutengelb 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="566"/>
         <source>LightGoldenrod2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Goldrutengelb 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="567"/>
         <source>LightGoldenrod3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Goldrutengelb 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="568"/>
@@ -7870,22 +7870,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="569"/>
         <source>LightYellow1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hellgelb 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="570"/>
         <source>LightYellow2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hellgelb 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="571"/>
         <source>LightYellow3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hellgelb 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="572"/>
         <source>LightYellow4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hellgelb 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="573"/>
@@ -7970,42 +7970,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="589"/>
         <source>RosyBrown1</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotbraun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="590"/>
         <source>RosyBrown2</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotbraun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="591"/>
         <source>RosyBrown3</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotbraun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="592"/>
         <source>RosyBrown4</source>
-        <translation type="unfinished"></translation>
+        <translation>Rotbraun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="593"/>
         <source>IndianRed1</source>
-        <translation type="unfinished"></translation>
+        <translation>Indianerrot 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="594"/>
         <source>IndianRed2</source>
-        <translation type="unfinished"></translation>
+        <translation>Indianerrot 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="595"/>
         <source>IndianRed3</source>
-        <translation type="unfinished"></translation>
+        <translation>Indianerrot 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="596"/>
         <source>IndianRed4</source>
-        <translation type="unfinished"></translation>
+        <translation>Indianerrot 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="597"/>
@@ -8030,42 +8030,42 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="601"/>
         <source>burlywood1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernholz 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="602"/>
         <source>burlywood2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernholz 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="603"/>
         <source>burlywood3</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernholz 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="604"/>
         <source>burlywood4</source>
-        <translation type="unfinished"></translation>
+        <translation>Kernholz 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="605"/>
         <source>wheat1</source>
-        <translation type="unfinished"></translation>
+        <translation>Weizen 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="606"/>
         <source>wheat2</source>
-        <translation type="unfinished"></translation>
+        <translation>Weizen 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="607"/>
         <source>wheat3</source>
-        <translation type="unfinished"></translation>
+        <translation>Weizen 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="608"/>
         <source>wheat4</source>
-        <translation type="unfinished"></translation>
+        <translation>Weizen 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="609"/>
@@ -8150,7 +8150,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="625"/>
         <source>salmon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Lachsrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="626"/>
@@ -8170,12 +8170,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="629"/>
         <source>LightSalmon1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Lachsrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="630"/>
         <source>LightSalmon2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Lachsrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="631"/>
@@ -8330,12 +8330,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="661"/>
         <source>HotPink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heißes Pinkrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="662"/>
         <source>HotPink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Heißes Pinkrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="663"/>
@@ -8350,17 +8350,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="665"/>
         <source>pink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pinkrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="666"/>
         <source>pink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pinkrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="667"/>
         <source>pink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pinkrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="668"/>
@@ -8370,17 +8370,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="669"/>
         <source>LightPink1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Pinkrosa 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="670"/>
         <source>LightPink2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hell Pinkrosa 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="671"/>
         <source>LightPink3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Pinkrosa 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="672"/>
@@ -8390,17 +8390,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="673"/>
         <source>PaleVioletRed1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Violettrot 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="674"/>
         <source>PaleVioletRed2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Violettrot 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="675"/>
         <source>PaleVioletRed3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Fahles Violettrot 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="676"/>
@@ -8470,62 +8470,62 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="689"/>
         <source>orchid1</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchidee 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="690"/>
         <source>orchid2</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchidee 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="691"/>
         <source>orchid3</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchidee 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="692"/>
         <source>orchid4</source>
-        <translation type="unfinished"></translation>
+        <translation>Orchidee 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="693"/>
         <source>plum1</source>
-        <translation type="unfinished"></translation>
+        <translation>Pflaumenfarben 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="694"/>
         <source>plum2</source>
-        <translation type="unfinished"></translation>
+        <translation>Pflaumenfarben 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="695"/>
         <source>plum3</source>
-        <translation type="unfinished"></translation>
+        <translation>Pflaumenfarben 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="696"/>
         <source>plum4</source>
-        <translation type="unfinished"></translation>
+        <translation>Pflaumenfarben 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="697"/>
         <source>MediumOrchid1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittlere Orchideenfarbe 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="698"/>
         <source>MediumOrchid2</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittlere Orchideenfarbe 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="699"/>
         <source>MediumOrchid3</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittlere Orchideenfarbe 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="700"/>
         <source>MediumOrchid4</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittlere Orchideenfarbe 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="701"/>
@@ -8570,17 +8570,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
         <source>MediumPurple1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mittleres Purpur 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="710"/>
         <source>MediumPurple2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mittleres Purpur 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="711"/>
         <source>MediumPurple3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mittleres Purpur 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="712"/>
@@ -8590,22 +8590,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="713"/>
         <source>thistle1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distel 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="714"/>
         <source>thistle2</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distel 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="715"/>
         <source>thistle3</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distel 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="716"/>
         <source>thistle4</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Distel 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="717"/>
@@ -8620,17 +8620,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="719"/>
         <source>DimGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Mattes Grau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="720"/>
         <source>SlateGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Schiefergrau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="721"/>
         <source>LightSlateGray</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Helles Schiefergrau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="722"/>
@@ -8640,12 +8640,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="723"/>
         <source>LightGray</source>
-        <translation type="unfinished"></translation>
+        <translation>Hellgrau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="724"/>
         <source>white</source>
-        <translation type="unfinished"></translation>
+        <translation>Weiß</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
@@ -8719,7 +8719,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="63"/>
         <source>Rosegarden - Query</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden Abfrage</translation>
     </message>
 </context>
 <context>
@@ -8998,7 +8998,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="51"/>
         <source>How many tracks do you want to add?</source>
-        <translation type="unfinished">Wie viele Spuren wollen Sie hinzufügen? (max. 24)</translation>
+        <translation type="unfinished">Wie viele Spuren möchten Sie hinzufügen? </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="69"/>
@@ -9040,52 +9040,52 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="55"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.h" line="56"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Audioeinstellungen</translation>
+        <translation>Audioeinstellungen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="91"/>
         <source>Audio preview scale</source>
-        <translation type="unfinished">Audio-Skalierung bei Vorschau</translation>
+        <translation>Audio-Skalierung bei Vorschau</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="96"/>
         <source>Linear - easier to see loud peaks</source>
-        <translation type="unfinished">Linear - macht es einfacher, laute Stellen zu erkennen</translation>
+        <translation>Linear - macht es einfacher, laute Stellen zu erkennen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="97"/>
         <source>Meter scaling - easier to see quiet activity</source>
-        <translation type="unfinished">Meßgerät Skalierung - erleichtert das erkennen von Aktivität bei ruhigen Stellen</translation>
+        <translation>Meßgerät Skalierung - erleichtert das erkennen von Aktivität bei ruhigen Stellen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="107"/>
         <source>Record audio files as</source>
-        <translation type="unfinished">Speichere Audio-Aufnahmen als</translation>
+        <translation>Speichere Audio-Aufnahmen als</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="110"/>
         <source>16-bit PCM WAV format (smaller files)</source>
-        <translation type="unfinished">16-bit PCM WAV Format (kleinere Dateien)</translation>
+        <translation>16-bit PCM WAV Format (kleinere Dateien)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="111"/>
         <source>32-bit float WAV format (higher quality)</source>
-        <translation type="unfinished">32-bit float WAV Format (höhere Qualität)</translation>
+        <translation>32-bit float WAV Format (höhere Qualität)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="122"/>
         <source>External audio editor</source>
-        <translation type="unfinished">Externer Audioeditor</translation>
+        <translation>Externer Audioeditor</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="143"/>
         <source>Choose...</source>
-        <translation type="unfinished">Auswählen...</translation>
+        <translation>Auswählen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="151"/>
@@ -9095,17 +9095,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="158"/>
         <source>for individual audio instruments</source>
-        <translation type="unfinished">für die jeweiligen Audio-Instrumente</translation>
+        <translation>für die jeweiligen Audio-Instrumente</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="166"/>
         <source>for submasters</source>
-        <translation type="unfinished">Keine Gruppenfader</translation>
+        <translation>Keine Gruppenfader</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="179"/>
         <source>General</source>
-        <translation type="unfinished">Allgemein</translation>
+        <translation>Allgemein</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="197"/>
@@ -9118,7 +9118,7 @@ If you want to start JACK automatically, make sure the command includes a full p
 For example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
 
 </source>
-        <translation type="unfinished">Rosegarden kann beim Starten prüfen, ob der &apos;JACK audio daemon&apos; (jackd) läuft und kann ihn, wenn er es nicht tut, automatisch starten. 
+        <translation>Rosegarden kann beim Starten prüfen, ob der &apos;JACK audio daemon&apos; (jackd) läuft und kann ihn, wenn er es nicht tut, automatisch starten. 
 
 JACK so zu steuern wird Rosegarden-Neulingen und solchen Anwendern, die Rosegarden als Hauptanwendung für JACK nutzen, empfohlen; dies mag einigen fortgeschritteneren Benutzern nicht ausreichen.
 Wenn Sie JACK automatisch starten wollen, muss die Kommandozeile einen vollständigen Pfad (soweit notwendig) sowie die Argumente, die Sie übergeben wollen, enthalten, 
@@ -9128,27 +9128,27 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="212"/>
         <source>Start JACK when Rosegarden starts</source>
-        <translation type="unfinished">JACK mit Rosegarden starten</translation>
+        <translation>JACK mit Rosegarden starten</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="217"/>
         <source>JACK command</source>
-        <translation type="unfinished">JACK-Startanweisung</translation>
+        <translation>JACK-Startanweisung</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="231"/>
         <source>JACK Startup</source>
-        <translation type="unfinished">Jack Startverhalten</translation>
+        <translation>Jack Startverhalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="243"/>
         <source>External audio editor path</source>
-        <translation type="unfinished">Externer Audioeditor</translation>
+        <translation>Externer Audioeditor</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="284"/>
         <source>External audio editor &quot;%1&quot; not found or not executable</source>
-        <translation type="unfinished">Der externe Audioeditor &quot;%1&quot; wurde nicht gefunden, oder ist nicht ausführbar.</translation>
+        <translation>Der externe Audioeditor &quot;%1&quot; wurde nicht gefunden, oder ist nicht ausführbar</translation>
     </message>
 </context>
 <context>
@@ -9176,17 +9176,17 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="81"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Anklicken um ein Audio-Plugin zu laden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="92"/>
         <source>Click to load a synth plugin for playing MIDI</source>
-        <translation type="unfinished"></translation>
+        <translation>Anklicken um ein Synthesizer Plugin zum Abspielen von MIDI zu laden</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="169"/>
         <source>Open the synth plugin&apos;s native editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Starte den internen Editor des Synthesizer Plugins</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="170"/>
@@ -9206,7 +9206,7 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="173"/>
         <source>Audio level</source>
-        <translation type="unfinished">Audiodatei hinzufügen</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="184"/>
@@ -9224,32 +9224,32 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="643"/>
         <source>Cannot download file %1</source>
-        <translation type="unfinished">Kann Datei %1 nicht herunterladen</translation>
+        <translation>Kann Datei %1 nicht herunterladen</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="709"/>
         <source>Converting audio file...</source>
-        <translation type="unfinished">Audiodatei wird gerade konvertiert...</translation>
+        <translation>Audiodatei wird gerade konvertiert...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="711"/>
         <source>Resampling audio file...</source>
-        <translation type="unfinished">Die Sampleraten der Audiodatei werden neu berechnet...</translation>
+        <translation>Die Sampleraten der Audiodatei werden neu berechnet...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="713"/>
         <source>Converting and resampling audio file...</source>
-        <translation type="unfinished">Umwandele und resample die Audiodatei...</translation>
+        <translation>Umwandele und resample die Audiodatei...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="715"/>
         <source>Importing audio file...</source>
-        <translation type="unfinished">Audiodatei wird importiert...</translation>
+        <translation>Audiodatei wird importiert...</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="775"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation type="unfinished">Das Umwandeln oder Resamplen der Audiodatei ist fehlgeschlagen.</translation>
+        <translation>Das Umwandeln oder Resamplen der Audiodatei ist fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -9272,118 +9272,118 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="98"/>
         <source>Audio File Manager</source>
-        <translation type="unfinished">Audiodatei Manager</translation>
+        <translation>Audiodatei Manager</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="142"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="143"/>
         <source>Duration</source>
-        <translation type="unfinished">Dauer</translation>
+        <translation>Dauer</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="144"/>
         <source>Envelope</source>
-        <translation type="unfinished">Hüllkurve</translation>
+        <translation>Hüllkurve</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="145"/>
         <source>Sample rate</source>
-        <translation type="unfinished">Abtastrate</translation>
+        <translation>Abtastrate</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="146"/>
         <source>Channels</source>
-        <translation type="unfinished">Kanäle</translation>
+        <translation>Kanäle</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="147"/>
         <source>Resolution</source>
-        <translation type="unfinished">Auflösung</translation>
+        <translation>Auflösung</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="148"/>
         <source>File</source>
-        <translation type="unfinished"></translation>
+        <translation>Datei</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="283"/>
         <source>&lt;no audio files&gt;</source>
-        <translation type="unfinished">&lt;keine Audiodateien&gt;</translation>
+        <translation>&lt;keine Audiodateien&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="501"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="565"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="672"/>
         <source>Please select an audio item in the list!</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte einen Audio-Eintrag aus der Liste wählen!</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="501"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="565"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="672"/>
         <source>Error: Selection is empty!</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler: leere Auswahl!</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="509"/>
         <source>Choose a name to save this file as </source>
-        <translation type="unfinished"></translation>
+        <translation>Namen zum Speichern der Datei auswählen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="509"/>
         <source>*.wav|WAV files (*.wav)</source>
-        <translation type="unfinished">*.wav|WAV-Dateien (*.wav)</translation>
+        <translation>*.wav|WAV-Dateien (*.wav)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="519"/>
         <source>Exporting audio file...</source>
-        <translation type="unfinished">Audiodatei wird exportiert...</translation>
+        <translation>Audiodatei wird exportiert...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="636"/>
         <source>This will unload audio file &quot;%1&quot; and remove all associated segments.  Are you sure?</source>
-        <translation type="unfinished">Wirklich die Audiodatei &quot;%1&quot; und alle zugehörigen Audiosegmente löschen?</translation>
+        <translation>Wirklich die Audiodatei &quot;%1&quot; und alle zugehörigen Audiosegmente löschen?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="725"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="733"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation>WAV Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="726"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="737"/>
         <source>All files</source>
-        <translation type="unfinished">Alle Dateien</translation>
+        <translation>Alle Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="732"/>
         <source>Audio files</source>
-        <translation type="unfinished"></translation>
+        <translation>Audio Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="734"/>
         <source>FLAC files</source>
-        <translation type="unfinished"></translation>
+        <translation>FLAC Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="735"/>
         <source>Ogg files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ogg Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="736"/>
         <source>MP3 files</source>
-        <translation type="unfinished"></translation>
+        <translation>MP3 Dateien</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="741"/>
         <source>Select one or more audio files</source>
-        <translation type="unfinished">Eine oder mehrere Audiodateien auswählen</translation>
+        <translation>Eine oder mehrere Audiodateien auswählen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="797"/>
@@ -9391,7 +9391,7 @@ zum Beispiel: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Dies wird alle Audiodateien herausnehmen sowie die zugehörigen Segmente entfernen.
+        <translation>Dies wird alle Audiodateien herausnehmen sowie die zugehörigen Segmente entfernen.
 Diese Aktion kann nicht rückgängig gemacht werden und alle Segmentzuordnungen sind unwiederbringlich verloren.
 Die Dateien bleiben jedoch auf der Festplatte erhalten.
 Wollen Sie das tun?</translation>
@@ -9402,7 +9402,7 @@ Wollen Sie das tun?</translation>
 This action cannot be undone, and associations with these files will be lost.
 Files will not be removed from your disk.
 Are you sure?</source>
-        <translation type="unfinished">Dies wird alle diejenigen Audiodateien aus der Komposition herausnehmen, die keinem Segment zugeordnet sind.
+        <translation>Dies wird alle diejenigen Audiodateien aus der Komposition herausnehmen, die keinem Segment zugeordnet sind.
 Dies Aktion kann nicht rückgängig gemacht werden.
 Die Dateien bleiben jedoch auf der Festplatte erhalten.
 Wollen Sie das tun?</translation>
@@ -9413,7 +9413,7 @@ Wollen Sie das tun?</translation>
 
 Please select the ones you wish to delete permanently from the hard disk.
 </source>
-        <translation type="unfinished">Die folgenden Audiodateien werden in der Komposition nicht verwendet.
+        <translation>Die folgenden Audiodateien werden in der Komposition nicht verwendet.
 
 Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht werden sollen.
 </translation>
@@ -9429,48 +9429,48 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="922"/>
         <source>File %1 could not be deleted.</source>
-        <translation type="unfinished">Die Datei %1 konnte nicht gelöscht werden.</translation>
+        <translation>Die Datei %1 konnte nicht gelöscht werden.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="955"/>
         <source>Change Audio File label</source>
-        <translation type="unfinished">Audiodateibezeichung ändern</translation>
+        <translation>Audiodateibezeichung ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="956"/>
         <source>Enter new label</source>
-        <translation type="unfinished">Neue Bezeichnung eingeben</translation>
+        <translation>Neue Bezeichnung eingeben</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1141"/>
         <source>importing a remote audio file</source>
-        <translation type="unfinished">importiere eine entfernte (remote) Audiodatei</translation>
+        <translation>importiere eine entfernte (remote) Audiodatei</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1143"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation type="unfinished">Importiere eine Audiodatei, welche konvertiert oder resampled werden muss</translation>
+        <translation>Importiere eine Audiodatei, welche konvertiert oder resampled werden muss</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1146"/>
         <source>Adding audio file...</source>
-        <translation type="unfinished">Füge Audiodatei hinzu...</translation>
+        <translation>Füge Audiodatei hinzu...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1167"/>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1172"/>
         <source>Failed to add audio file. </source>
-        <translation type="unfinished">Der Sequenzer konnte die Audio-Datei %1 nicht hinzufügen</translation>
+        <translation>Das Hinzufügen der Audiodatei schlug fehl.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1182"/>
         <source>Generating audio preview...</source>
-        <translation type="unfinished">Audio-Vorschau wird erzeugt...</translation>
+        <translation>Audio-Vorschau wird erzeugt...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="1190"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation type="unfinished">Versuchen Sie diese Datei in ein Verzeichnis zu kopieren, für das Sie Schreibberechtigung besitzen und fügen Sie sie erneut hinzu</translation>
+        <translation>Versuchen Sie diese Datei in ein Verzeichnis zu kopieren, für das Sie Schreibberechtigung besitzen und fügen Sie sie erneut hinzu</translation>
     </message>
 </context>
 <context>
@@ -9478,23 +9478,23 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="230"/>
         <source>Audio Mixer</source>
-        <translation type="unfinished">Audio Fader</translation>
+        <translation>Audio Mixer</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="262"/>
         <source>Record input source</source>
-        <translation type="unfinished">Aufnahmequelle</translation>
+        <translation>Aufnahmequelle</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="272"/>
         <source>Output destination</source>
-        <translation type="unfinished">Ausgabeziel</translation>
+        <translation>Ausgabeziel</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="285"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="444"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="293"/>
@@ -9502,28 +9502,28 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="451"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="452"/>
         <source>Audio level</source>
-        <translation type="unfinished">Audiodatei hinzufügen</translation>
+        <translation>Lautsärke</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="301"/>
         <source>Mono or stereo</source>
-        <translation type="unfinished">Mono oder Stereo</translation>
+        <translation>Mono oder Stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="309"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="459"/>
         <source>Mute</source>
-        <translation type="unfinished">Stummschalten</translation>
+        <translation>Stummschalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="317"/>
         <source>Solo</source>
-        <translation type="unfinished">Solo</translation>
+        <translation>Solo</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="325"/>
         <source>Arm recording</source>
-        <translation type="unfinished">Aufnahme vorbereiten</translation>
+        <translation>Aufnahme vorbereiten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="336"/>
@@ -9532,46 +9532,46 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="704"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="882"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;keine&gt;</translation>
+        <translation>&lt;keine&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="338"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="472"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum laden eines Audio Plugins anklicken</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="350"/>
         <source>Audio %1</source>
-        <translation type="unfinished">Audio %1</translation>
+        <translation>Audio %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="354"/>
         <source>Synth %1</source>
-        <translation type="unfinished">Synth %1</translation>
+        <translation>Synthesizer %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="480"/>
         <source>Sub %1</source>
-        <translation type="unfinished">Gruppe %1</translation>
+        <translation>Gruppe %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="529"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="530"/>
         <source>Audio master output level</source>
-        <translation type="unfinished">Audio Master Ausgangspegel</translation>
+        <translation>Audio Master Ausgangspegel</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="537"/>
         <source>Master</source>
-        <translation type="unfinished">Master</translation>
+        <translation>Master</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="650"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="705"/>
         <location filename="../../src/gui/studio/AudioMixerWindow.cpp" line="883"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;kein Plugin&gt;</translation>
+        <translation>&lt;kein Plugin&gt;</translation>
     </message>
 </context>
 <context>
@@ -9579,12 +9579,12 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="37"/>
         <source>Playing audio file</source>
-        <translation type="unfinished">Audiodatei wird abgespielt</translation>
+        <translation>Audiodatei wird abgespielt</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPlayingDialog.cpp" line="45"/>
         <source>Playing audio file &quot;%1&quot;</source>
-        <translation type="unfinished">Audiodatei &quot;%1&quot; wird abgespielt</translation>
+        <translation>Audiodatei &quot;%1&quot; wird abgespielt</translation>
     </message>
 </context>
 <context>
@@ -9592,89 +9592,89 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="80"/>
         <source>Audio Plugin</source>
-        <translation type="unfinished">Audio-Plugin</translation>
+        <translation>Audio-Plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="107"/>
         <source>Plugin</source>
-        <translation type="unfinished">Plugin</translation>
+        <translation>Plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="119"/>
         <source>Category:</source>
-        <translation type="unfinished">Kategorie:</translation>
+        <translation>Kategorie:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="130"/>
         <source>Plugin:</source>
-        <translation type="unfinished">Plugin:</translation>
+        <translation>Plugin:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="147"/>
         <source>Bypass</source>
-        <translation type="unfinished">Bypass</translation>
+        <translation>Bypass</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="156"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="434"/>
         <source>&lt;ports&gt;</source>
-        <translation type="unfinished">&lt;Anschlüsse&gt;</translation>
+        <translation>&lt;Anschlüsse&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="435"/>
         <source>&lt;id&gt;</source>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="176"/>
         <source>Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="181"/>
         <source>Copy plugin parameters</source>
-        <translation type="unfinished">Plugin-Parameter kopieren</translation>
+        <translation>Plugin-Parameter kopieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="183"/>
         <source>Paste</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="188"/>
         <source>Paste plugin parameters</source>
-        <translation type="unfinished">Plugin-Parameter einfügen</translation>
+        <translation>Plugin-Parameter einfügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="204"/>
         <source>Editor</source>
-        <translation type="unfinished">Audio bearbeiten</translation>
+        <translation>Audio bearbeiten</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="279"/>
         <source>(any)</source>
-        <translation type="unfinished">(irgendwelche)</translation>
+        <translation>(irgendwelche)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="280"/>
         <source>(unclassified)</source>
-        <translation type="unfinished">(nicht näher bestimmt)</translation>
+        <translation>(nicht näher bestimmt)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="303"/>
         <source>(none)</source>
-        <translation type="unfinished">(keine)</translation>
+        <translation>(keine)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="433"/>
         <source>&lt;no plugin&gt;</source>
-        <translation type="unfinished">&lt;kein Plugin&gt;</translation>
+        <translation>&lt;kein Plugin&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="140"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="437"/>
         <source>Select a plugin from this list</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Plugin aus dieser Liste auswählen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="150"/>
@@ -9690,7 +9690,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="161"/>
         <source>&lt;id&gt;</source>
         <comment>&apos;id&apos; is short for &apos;identification&apos;</comment>
-        <translation type="unfinished">&lt;id&gt;</translation>
+        <translation>&lt;id&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="163"/>
@@ -9700,7 +9700,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="190"/>
         <source>Reset</source>
-        <translation type="unfinished">Reset</translation>
+        <translation>Reset</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="195"/>
@@ -9725,23 +9725,23 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="537"/>
         <source>mono</source>
-        <translation type="unfinished">mono</translation>
+        <translation>mono</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="539"/>
         <source>stereo</source>
-        <translation type="unfinished">stereo</translation>
+        <translation>stereo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="541"/>
         <source>%1 in, %2 out</source>
-        <translation type="unfinished">%1 in, %2 out</translation>
+        <translation>%1 in, %2 out</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="570"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="804"/>
         <source>Program:  </source>
-        <translation type="unfinished">Programm:</translation>
+        <translation>Programm:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="574"/>
@@ -9750,7 +9750,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="813"/>
         <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="842"/>
         <source>&lt;none selected&gt;</source>
-        <translation type="unfinished">&lt;keine ausgewählt&gt;</translation>
+        <translation>&lt;keine ausgewählt&gt;</translation>
     </message>
 </context>
 <context>
@@ -9758,22 +9758,22 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="432"/>
         <source>Rosegarden Plugin</source>
-        <translation type="unfinished">Rosegarden PLugin</translation>
+        <translation>Rosegarden Plugin</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="435"/>
         <source>Rosegarden: %1</source>
-        <translation type="unfinished">Rosegarden: %1</translation>
+        <translation>Rosegarden: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="437"/>
         <source>Rosegarden: %1: %2</source>
-        <translation type="unfinished">Rosegarden: %1: %2</translation>
+        <translation>Rosegarden: %1: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="438"/>
         <source>Plugin slot %1</source>
-        <translation type="unfinished">Plugin %1</translation>
+        <translation>Plugin %1</translation>
     </message>
 </context>
 <context>
@@ -9781,37 +9781,37 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="50"/>
         <source>Audio</source>
-        <translation type="unfinished">Audio</translation>
+        <translation>Audio</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.h" line="51"/>
         <source>Audio Settings</source>
-        <translation type="unfinished">Audioeinstellungen</translation>
+        <translation>Audioeinstellungen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="66"/>
         <source>Audio file path:</source>
-        <translation type="unfinished">Pfad für Audiodateien</translation>
+        <translation>Pfad für Audiodateien:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="71"/>
         <source>Choose...</source>
-        <translation type="unfinished">Auswählen...</translation>
+        <translation>Auswählen...</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="76"/>
         <source>Disk space remaining:</source>
-        <translation type="unfinished">Verbleibender Plattenplatz:</translation>
+        <translation>Verbleibender Plattenplatz:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="81"/>
         <source>Equivalent minutes of 16-bit stereo:</source>
-        <translation type="unfinished">Entsprechende Anzahl Minuten bei 16-bit-Stereo</translation>
+        <translation>Entsprechende Anzahl Minuten bei 16-bit-Stereo:</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="94"/>
         <source>Modify audio path</source>
-        <translation type="unfinished">Audiodateipfad ändern</translation>
+        <translation>Audiodateipfad ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="136"/>
@@ -9821,7 +9821,7 @@ Bitte wählen Sie diejenigen aus, die permanent von der Festplatte gelöscht wer
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="159"/>
         <source>minutes at</source>
-        <translation type="unfinished">Minuten bei</translation>
+        <translation>Minuten bei</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="168"/>
@@ -10639,7 +10639,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="48"/>
         <source>Configure Rosegarden</source>
         <extracomment>QDialog(parent) //, tr(&quot;Configure Rosegarden&quot;), name)</extracomment>
-        <translation type="unfinished">Rosegarden konfigurieren</translation>
+        <translation>Rosegarden konfigurieren</translation>
     </message>
 </context>
 <context>
@@ -10647,7 +10647,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialogBase.cpp" line="109"/>
         <source>Configure Rosegarden</source>
-        <translation type="unfinished">Rosegarden konfigurieren</translation>
+        <translation>Rosegarden konfigurieren</translation>
     </message>
 </context>
 <context>
@@ -10663,12 +10663,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="86"/>
         <source>&lt;no device&gt;</source>
-        <translation type="unfinished">&lt;keine Geräte&gt;</translation>
+        <translation>&lt;keine Geräte&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="103"/>
         <source>Description  </source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
@@ -10683,88 +10683,88 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="100"/>
         <source>Name  </source>
-        <translation type="unfinished"></translation>
+        <translation>Name  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="101"/>
         <source>Type  </source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="102"/>
         <source>Number  </source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="104"/>
         <source>Min. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Minimaler Wert  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="105"/>
         <source>Max. value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Maximaler Wert  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="106"/>
         <source>Default value  </source>
-        <translation type="unfinished"></translation>
+        <translation>Vorgegebener Wert  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="107"/>
         <source>Color  </source>
-        <translation type="unfinished">Farbe</translation>
+        <translation>Farbe</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="108"/>
         <source>Position on instrument panel</source>
-        <translation type="unfinished">Position in der Instrumentenansicht</translation>
+        <translation>Position in der Instrumentenansicht</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="135"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
         <source>Add a Control Parameter to the Studio</source>
-        <translation type="unfinished">Control Parameter zum Studio hinzufügen</translation>
+        <translation>Control Parameter zum Studio hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="142"/>
         <source>Delete a Control Parameter from the Studio</source>
-        <translation type="unfinished">Control Parameter aus dem Studio löschen</translation>
+        <translation>Control Parameter aus dem Studio löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="144"/>
         <source>Close the Control Parameter editor</source>
-        <translation type="unfinished">Control Parameter Editor schließen</translation>
+        <translation>Control Parameter Editor schließen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="226"/>
         <source>&lt;default&gt;</source>
-        <translation type="unfinished">&lt;Standard&gt;</translation>
+        <translation>&lt;voreingestellt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="230"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;nicht dargestellt&gt;</translation>
+        <translation>&lt;nicht dargestellt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="282"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;keine&gt;</translation>
+        <translation>&lt;keine&gt;</translation>
     </message>
 </context>
 <context>
@@ -10772,17 +10772,17 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="76"/>
         <source>Name:</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="81"/>
         <source>Type:</source>
-        <translation type="unfinished">Typ:</translation>
+        <translation>Typ:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="90"/>
         <source>Description:</source>
-        <translation type="unfinished">Beschreibung</translation>
+        <translation>Beschreibung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="60"/>
@@ -10797,37 +10797,37 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="98"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Controller Nummer:</translation>
+        <translation>Controller Nummer:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="102"/>
         <source>Minimum value:</source>
-        <translation type="unfinished">Minimaler Wert:</translation>
+        <translation>Minimaler Wert:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="106"/>
         <source>Maximum value:</source>
-        <translation type="unfinished">Maximaler Wert:</translation>
+        <translation>Maximaler Wert:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="110"/>
         <source>Default value:</source>
-        <translation type="unfinished">Standardwert:</translation>
+        <translation>Voreingestellter Wert:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
-        <translation type="unfinished">Farbe:</translation>
+        <translation>Farbe:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="118"/>
         <source>Instrument Parameter Box position:</source>
-        <translation type="unfinished">Position der Instrument-Parameter-Box:</translation>
+        <translation>Position der Instrument-Parameter-Box:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="190"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;nicht dargestellt&gt;</translation>
+        <translation>&lt;nicht dargestellt&gt;</translation>
     </message>
 </context>
 <context>
@@ -10835,7 +10835,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="30"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Controller Event(s) entfernen</translation>
+        <translation>Controller Event(s) entfernen</translation>
     </message>
 </context>
 <context>
@@ -10843,7 +10843,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventInsertCommand.cpp" line="28"/>
         <source>Insert Controller Event</source>
-        <translation type="unfinished">Controller Event einfügen</translation>
+        <translation>Controller Event einfügen</translation>
     </message>
 </context>
 <context>
@@ -10851,12 +10851,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="186"/>
         <source>Unsupported Event Type</source>
-        <translation type="unfinished">Nicht unterstützter Eventtyp</translation>
+        <translation>Nicht unterstützter Eventtyp</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="196"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Pitch Bend</translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="201"/>
@@ -10871,7 +10871,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="474"/>
         <source>Add line of controllers</source>
-        <translation type="unfinished">Controller Linie hinzufügen</translation>
+        <translation>Controller Linie hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -10894,7 +10894,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/edit/CopyCommand.cpp" line="64"/>
         <source>Copy Range</source>
-        <translation type="unfinished">Bereich kopieren</translation>
+        <translation>Bereich kopieren</translation>
     </message>
 </context>
 <context>
@@ -10902,27 +10902,27 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="48"/>
         <source>Recording...</source>
-        <translation type="unfinished">Aufnahme läuft...</translation>
+        <translation>Aufnahme läuft...</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="60"/>
         <source>Recording time remaining:  </source>
-        <translation type="unfinished">Rest-Aufnahmezeit:  </translation>
+        <translation>Rest-Aufnahmezeit:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="68"/>
         <source>Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Stop</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="121"/>
         <source>Just how big is your hard disk?</source>
-        <translation type="unfinished">Wie groß ist denn Ihre Festplatte?</translation>
+        <translation>Wie groß ist denn Ihre Festplatte?</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="155"/>
         <source>Recording beyond end of composition:  </source>
-        <translation type="unfinished">Aufnahme nach dem Ende der Komposition:</translation>
+        <translation>Aufnahme nach dem Ende der Komposition:</translation>
     </message>
 </context>
 <context>
@@ -10930,12 +10930,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="63"/>
         <source>Delete Device</source>
-        <translation type="unfinished">Gerät löschen</translation>
+        <translation>Gerät löschen</translation>
     </message>
     <message>
         <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="63"/>
         <source>Create Device</source>
-        <translation type="unfinished">Gerät erzeugen</translation>
+        <translation>Gerät erzeugen</translation>
     </message>
 </context>
 <context>
@@ -10943,7 +10943,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="32"/>
         <source>Set Tempos from Beat Segment</source>
-        <translation type="unfinished">Erstelle Tempos von einem &apos;Beat Segment&apos; </translation>
+        <translation>Erstelle Tempos von einem &apos;Beat Segment&apos; </translation>
     </message>
 </context>
 <context>
@@ -10967,7 +10967,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/commands/segment/CutRangeCommand.cpp" line="33"/>
         <source>Cut Range</source>
-        <translation type="unfinished">Bereich schneiden</translation>
+        <translation>Bereich schneiden</translation>
     </message>
 </context>
 <context>
@@ -14290,7 +14290,7 @@ des getriggerten Segments, das die Noten der verzierung enthält.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="295"/>
         <source>Synth plugin </source>
-        <translation type="unfinished">Synth Plugin </translation>
+        <translation type="unfinished">Synthesizer Plugin </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="324"/>
@@ -19336,7 +19336,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="67"/>
         <source>Manage Synth Plugins</source>
-        <translation type="unfinished">Synth Plugins verwalten</translation>
+        <translation type="unfinished">Synthesizer Plugins verwalten</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="191"/>
@@ -19356,7 +19356,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="243"/>
         <source>Help for the Synth-Plugin Management Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hilfetext für die Synthesizer Plugin Verwaltung</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="244"/>
@@ -19409,7 +19409,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="152"/>
         <source>Scope</source>
-        <translation type="unfinished">Bereich</translation>
+        <translation>Bereich</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="167"/>
@@ -19588,7 +19588,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/notation/TextChangeCommand.cpp" line="33"/>
         <source>Edit Text</source>
-        <translation type="unfinished">Event verändern</translation>
+        <translation>Text verändern</translation>
     </message>
 </context>
 <context>
@@ -19969,7 +19969,7 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/commands/notation/TextInsertionCommand.cpp" line="34"/>
         <source>Insert Text</source>
-        <translation type="unfinished">Text einfügen</translation>
+        <translation>Text einfügen</translation>
     </message>
 </context>
 <context>
@@ -20353,17 +20353,17 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="88"/>
         <source>Click and hold with left mouse button to assign this Track to an Instrument.</source>
-        <translation type="unfinished">Klicke und halte mit dem linken Mausknopf um diese Spur einem Instrument zuzuweisen.</translation>
+        <translation>Klicke und halte mit dem linken Mausknopf um diese Spur einem Instrument zuzuweisen.</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="221"/>
         <source>Change track name</source>
-        <translation type="unfinished">Spurnamen ändern</translation>
+        <translation>Spurnamen ändern</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="222"/>
         <source>Enter new track name</source>
-        <translation type="unfinished">Neuen Spurnamen eingeben</translation>
+        <translation>Neuen Spurnamen eingeben</translation>
     </message>
 </context>
 <context>
@@ -20827,12 +20827,12 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="49"/>
         <source>Trigger Segment</source>
-        <translation type="unfinished">Getriggertes Segment</translation>
+        <translation>Getriggertes Segment</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="61"/>
         <source>Trigger segment: </source>
-        <translation type="unfinished">Getriggertes Segment</translation>
+        <translation>Getriggertes Segment:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="75"/>
@@ -20842,27 +20842,27 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="81"/>
         <source>As stored</source>
-        <translation type="unfinished">Wie gespeichert</translation>
+        <translation>Wie gespeichert</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="82"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Abschneiden, wenn länger als Note</translation>
+        <translation>Abschneiden, wenn länger als Note</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="83"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Zusammen mit der Note beenden</translation>
+        <translation>Zusammen mit der Note beenden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="84"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Strecke oder stauche Segment gemäß Notendauer</translation>
+        <translation>Strecke oder stauche Segment gemäß Notendauer</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TriggerSegmentDialog.cpp" line="86"/>
         <source>Adjust pitch to note</source>
-        <translation type="unfinished">Tonhöhe an Note anpassen</translation>
+        <translation>Tonhöhe an Note anpassen</translation>
     </message>
 </context>
 <context>
@@ -20870,82 +20870,82 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="88"/>
         <source>Manage Triggered Segments</source>
-        <translation type="unfinished">Verwalte getriggerte Segmente</translation>
+        <translation>Verwalte getriggerte Segmente</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="95"/>
         <source>ID</source>
-        <translation type="unfinished">ID</translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="96"/>
         <source>Label</source>
-        <translation type="unfinished">Bezeichnung</translation>
+        <translation>Bezeichnung</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="97"/>
         <source>Duration</source>
-        <translation type="unfinished">Dauer</translation>
+        <translation>Dauer</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="98"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Basistonhöhe</translation>
+        <translation>Basistonhöhe</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="99"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Basis Anschlagstärke</translation>
+        <translation>Basis Anschlagstärke</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="100"/>
         <source>Triggers</source>
-        <translation type="unfinished">Trigger</translation>
+        <translation>Trigger</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="132"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation>Hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="133"/>
         <source>Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation>Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="134"/>
         <source>Delete All</source>
-        <translation type="unfinished"></translation>
+        <translation>Alles löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="136"/>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="138"/>
         <source>Add a Triggered Segment</source>
-        <translation type="unfinished">Füge getriggertes Segment hinzu</translation>
+        <translation>Füge getriggertes Segment hinzu</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="140"/>
         <source>Delete a Triggered Segment</source>
-        <translation type="unfinished">Lösche getriggertes Segment</translation>
+        <translation>Lösche getriggertes Segment</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="142"/>
         <source>Delete All Triggered Segments</source>
-        <translation type="unfinished">Alle getriggerten Segemente löschen</translation>
+        <translation>Alle getriggerten Segemente löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="144"/>
         <source>Close the Triggered Segment Manager</source>
-        <translation type="unfinished">Schleße den Getriggerte Segmente Manager</translation>
+        <translation type="unfinished">Schließe den Getriggerte Segmente Manager</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="269"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">(keine)</translation>
+        <translation>&lt;kein Label&gt;</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="271"/>
@@ -20958,22 +20958,22 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="298"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;keine&gt;</translation>
+        <translation>&lt;keine&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="315"/>
         <source>This will remove all triggered segments from the whole composition.  Are you sure?</source>
-        <translation type="unfinished">Das wird alle getriggerten Segmente der gesamten Komposition entfernen. Sind Sie sicher?</translation>
+        <translation>Das wird alle getriggerten Segmente der gesamten Komposition entfernen. Sind Sie sicher?</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="319"/>
         <source>Remove all triggered segments</source>
-        <translation type="unfinished">Entferne alle getriggerten Segmente</translation>
+        <translation>Entferne alle getriggerten Segmente</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="345"/>
         <source>Trigger Segment Duration</source>
-        <translation type="unfinished">Länge des getriggerten Segments</translation>
+        <translation>Länge des getriggerten Segments</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="367"/>
@@ -20986,7 +20986,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="385"/>
         <source>Clipboard is empty</source>
-        <translation type="unfinished">Die Zwischenablage ist leer</translation>
+        <translation>Die Zwischenablage ist leer</translation>
     </message>
 </context>
 <context>
@@ -21007,7 +21007,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="49"/>
         <source>Tuplet</source>
-        <translation type="unfinished">Tuole</translation>
+        <translation>Tuole</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="58"/>
@@ -21017,47 +21017,47 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="77"/>
         <source>Play </source>
-        <translation type="unfinished">Abspielen </translation>
+        <translation>Abspielen </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="98"/>
         <source>in the time of  </source>
-        <translation type="unfinished">in der Zeit von  </translation>
+        <translation>in der Zeit von  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="104"/>
         <source>Timing is already correct: update display only</source>
-        <translation type="unfinished">Timing ist bereits korrigiert: aktualisiere Anzeige</translation>
+        <translation>Timing ist bereits korrigiert: aktualisiere Anzeige</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="115"/>
         <source>Timing calculations</source>
-        <translation type="unfinished">Timing-Berechnungen</translation>
+        <translation>Timing-Berechnungen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="123"/>
         <source>Selected region:</source>
-        <translation type="unfinished">Ausgewählte Region:</translation>
+        <translation>Ausgewählte Region:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="135"/>
         <source>Group with current timing:</source>
-        <translation type="unfinished">Gruppiere mit aktueller Aufteilung:</translation>
+        <translation>Gruppiere mit aktueller Aufteilung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="146"/>
         <source>Group with new timing:</source>
-        <translation type="unfinished">Gruppiere mit neuer Aufteilung:</translation>
+        <translation>Gruppiere mit neuer Aufteilung:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="157"/>
         <source>Gap created by timing change:</source>
-        <translation type="unfinished">Durch Veränderung der Aufteilung erzeugte Lücke:</translation>
+        <translation>Durch Veränderung der Aufteilung erzeugte Lücke:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TupletDialog.cpp" line="170"/>
         <source>Unchanged at end of selection:</source>
-        <translation type="unfinished">Am Ende der Selektion unverändert:</translation>
+        <translation>Am Ende der Selektion unverändert:</translation>
     </message>
 </context>
 <context>
@@ -21097,27 +21097,27 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="46"/>
         <source>Select Unused Audio Files</source>
-        <translation type="unfinished">Nicht verwendete Audiodateien auswählen</translation>
+        <translation>Nicht verwendete Audiodateien auswählen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File name</source>
-        <translation type="unfinished">Dateiname</translation>
+        <translation>Dateiname</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>File size</source>
-        <translation type="unfinished">Dateigröße:</translation>
+        <translation>Dateigröße</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="62"/>
         <source>Last modified date</source>
-        <translation type="unfinished">Letztes Änderungsdatum</translation>
+        <translation>Letztes Änderungsdatum</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UnusedAudioSelectionDialog.cpp" line="74"/>
         <source> (not found) </source>
-        <translation type="unfinished">(nicht gefunden)</translation>
+        <translation>(nicht gefunden)</translation>
     </message>
 </context>
 <context>
@@ -21125,27 +21125,27 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="54"/>
         <source>Use Ornament</source>
-        <translation type="unfinished">Verzierung verwenden</translation>
+        <translation>Verzierung verwenden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="64"/>
         <source>Notation</source>
-        <translation type="unfinished">Notation</translation>
+        <translation>Notation</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="71"/>
         <source>Display as:  </source>
-        <translation type="unfinished">Zeige als:</translation>
+        <translation>Zeige als:</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
         <source>Trill</source>
-        <translation type="unfinished">Triller</translation>
+        <translation>Triller</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
         <source>Trill with line</source>
-        <translation type="unfinished">Triller folgt der Linie</translation>
+        <translation>Triller folgt der Linie</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="87"/>
@@ -21155,12 +21155,12 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Turn</source>
-        <translation type="unfinished">Doppelschlag</translation>
+        <translation>Doppelschlag</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
         <source>Mordent</source>
-        <translation type="unfinished">Mordent</translation>
+        <translation>Mordent</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="88"/>
@@ -21170,22 +21170,22 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long mordent</source>
-        <translation type="unfinished">Langer Mordent</translation>
+        <translation>Langer Mordent</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="89"/>
         <source>Long inverted mordent</source>
-        <translation type="unfinished">Langer umgekehrter Mordent</translation>
+        <translation>Langer umgekehrter Mordent</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="96"/>
         <source>Text mark</source>
-        <translation type="unfinished">Textmarke</translation>
+        <translation>Textmarke</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="100"/>
         <source>   Text:  </source>
-        <translation type="unfinished">   Text:  </translation>
+        <translation>   Text:  </translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="107"/>
@@ -21205,27 +21205,27 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="135"/>
         <source>As stored</source>
-        <translation type="unfinished">Wie gespeichert</translation>
+        <translation>Wie gespeichert</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="136"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Abschneiden, wenn länger als Note</translation>
+        <translation>Abschneiden, wenn länger als Note</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="137"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Zusammen mit der Note beenden</translation>
+        <translation>Zusammen mit der Note beenden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="138"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Strecke oder stauche Segment gemäß Notendauer</translation>
+        <translation>Strecke oder stauche Segment gemäß Notendauer</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/UseOrnamentDialog.cpp" line="140"/>
         <source>Adjust pitch to note</source>
-        <translation type="unfinished">Tonhöhe an Note anpassen</translation>
+        <translation>Tonhöhe an Note anpassen</translation>
     </message>
 </context>
 <context>
@@ -21233,17 +21233,17 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="313"/>
         <source>Rosegarden - A sequencer and musical notation editor</source>
-        <translation type="unfinished">Rosegarden - ein Sequenzer und Notationseditor</translation>
+        <translation>Rosegarden - ein Sequenzer und Notationseditor</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="417"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="672"/>
         <source>Welcome!</source>
-        <translation type="unfinished">Willkommen!</translation>
+        <translation>Willkommen!</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="688"/>
@@ -21256,7 +21256,7 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/document/RosegardenDocument.cpp" line="2637"/>
         <source>(recorded)</source>
-        <translation type="unfinished">(aufgenommen)</translation>
+        <translation>(aufgenommen)</translation>
     </message>
 </context>
 <context>
