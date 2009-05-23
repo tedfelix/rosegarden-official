@@ -54,7 +54,7 @@ INSTMIMEDIR	:= $(DESTDIR)$(PREFIX)/share/mime
 INSTMIMEXMLDIR	:= $(INSTMIMEDIR)/packages
 INSTDESKTOPDIR	:= $(DESTDIR)$(PREFIX)/share/applications
 INSTICONDIR	:= $(DESTDIR)$(PREFIX)/share/icons/hicolor/32x32/apps
-INSTDATADIR	:= $(DESTDIR)$(PREFIX)/share/rosegarden
+INSTDATADIR	:= $(DESTDIR)$(PREFIX)/share/rosegarden-$(VERSION)
 
 RESOURCES	:= $(wildcard data/*.qrc data/*/*.qrc src/*.qrc src/*/*.qrc src/*/*/*.qrc src/*/*/*/*.qrc)
 QRCSOURCES	:= $(patsubst %.qrc,%.cpp,$(RESOURCES))
@@ -168,16 +168,14 @@ install:
 	update-mime-database $(INSTMIMEDIR)
 
 uninstall:
-	rm -rf $(INSTDATADIR)/examples
-	rm -rf $(INSTDATADIR)/library
-	rmdir -p --ignore-fail-on-non-empty $(INSTDATADIR)
+	rm -rf $(INSTDATADIR)
 	rm -f $(INSTBINDIR)/rosegarden
 	rm -f $(INSTBINDIR)/rosegarden-audiofile-importer
 	rm -f $(INSTBINDIR)/rosegarden-lilypondview
 	rm -f $(INSTBINDIR)/rosegarden-project-package
-	rm -f $(INSTMIME16DIR)/x-rosegarden*
-	rm -f $(INSTMIME32DIR)/x-rosegarden*
-	rm -f $(INSTMIME64DIR)/x-rosegarden*
+	rm -f $(INSTMIME16DIR)/audio-x-rosegarden*
+	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
+	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIMEXMLDIR)/rosegarden.xml
 	rm -f $(INSTDESKTOPDIR)/rosegarden.desktop
 	rm -f $(INSTICONDIR)/rosegarden.png
