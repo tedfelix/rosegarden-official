@@ -2,7 +2,7 @@
 VERSION		:= @PACKAGE_VERSION@
 CODENAME	:= @CODENAME@
 
-PREFIX		:= /usr/local
+PREFIX		:= @prefix@
 
 CXX		:= @CXX@ 
 LD		:= @CXX@
