@@ -502,6 +502,46 @@ MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
     }
 }
 
+void
+MatrixWidget::ensureXVisible(double x, int percentPos)
+{
+    int hMin = m_view->horizontalScrollBar()->minimum();
+    int hMax = m_view->horizontalScrollBar()->maximum();
+
+    int w = m_view->width();                // View width in pixels    
+    QRectF r = m_view->mapToScene(0, 0, w, 1).boundingRect();
+    double ws = r.width();                  // View width in scene units
+    double left = r.x();                    // View left x in scene units
+    double right = left + ws;               // View right x in scene units
+
+    QRectF sr = m_view->sceneRect();
+    double length = sr.width();             // Scene horizontal length
+    double x0 = sr.x();                     // Scene x minimum value
+
+    double treshold = left + (ws * percentPos) / 100;
+    double delta = x - treshold;
+  
+    if ((x < left) || (x > right)) {
+        // x is outside the view
+        //   ==> scroll to have the left of the view on x
+        int value = hMin + ((x - x0) * (hMax - hMin)) / (length - ws);
+        if (value < hMin) value = hMin;
+        else if (value > hMax) value = hMax;
+        m_view->horizontalScrollBar()->setValue(value);
+    } else if (delta > 0) {
+        // Set left of view to x - percentPos * step / 100
+        //    ==> Scroll to have x on treshold
+        int deltaPixels = delta * w / ws;
+        int value = m_view->horizontalScrollBar()->value() + deltaPixels;
+        if (value < hMin) value = hMin;
+        else if (value > hMax) value = hMax;
+        m_view->horizontalScrollBar()->setValue(value);
+    } else {
+        // Delta < 0 ==> do nothing
+    }
+}
+
+
 }
 
 #include "MatrixWidget.moc"

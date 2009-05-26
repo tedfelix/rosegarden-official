@@ -550,23 +550,31 @@ void
 MatrixScene::ensurePointerVisible()
 {
     if (m_pointer) {
-        double x = m_pointer->x();
-        Panned *view = m_widget->getView();
-        int w = view->width();
-        int h = view->height();
 
-        // Horizontal position (%) of playback pointer 
-        // inside the view when play tracking is on.
-        const int percentPos = 50; 
+// This doesn't work because view->ensureVisible() moves the view
+// a few pixels vertically each time it is called and I didn't find
+// any way to avoid it.
+//
+//         double x = m_pointer->x();
+//         Panned *view = m_widget->getView();
+//         int w = view->width();
+//         int h = view->height();
+// 
+//         // Horizontal position (%) of playback pointer 
+//         // inside the view when play tracking is on.
+//         const int percentPos = 50; 
+// 
+//         // Construct a rect around the pointer. The whole rect will be
+//         // kept inside the view.
+//         int wm = w * (100 - percentPos) / 100;
+//         int eps = h / 10;
+//         QRectF r = view->mapToScene(0, eps, wm, h - eps).boundingRect();
+//         r.moveLeft(x);
+// 
+//         view->ensureVisible(r, 10, 0);
 
-        // Construct a rect around the pointer. The whole rect will be
-        // kept inside the view.
-        int wm = w * (100 - percentPos) / 100;
-        int eps = h / 10;
-        QRectF r = view->mapToScene(0, eps, wm, h - eps).boundingRect();
-        r.moveLeft(x);
-
-        view->ensureVisible(r, 10, 0);
+// Replaced with a rewrite of ensureVisible
+        m_widget->ensureXVisible(m_pointer->x());
     }
 }
 

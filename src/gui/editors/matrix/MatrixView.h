@@ -80,6 +80,14 @@ public:
 
 signals:
     void editTriggerSegment(int);
+    void play();
+    void stop();
+    void rewindPlayback();
+    void fastForwardPlayback();
+    void rewindPlaybackToBeginning();
+    void fastForwardPlaybackToEnd();
+    void panic();
+
 
 protected slots:
     void slotChangeHorizontalZoom(int);

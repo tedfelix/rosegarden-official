@@ -80,6 +80,12 @@ public:
 
     void setCanvasCursor(QCursor cursor);
 
+    /**
+     * Horizontally scroll the view to have x (in scene coordinate) placed
+     * in its first percentPos %.  
+     */
+    void ensureXVisible(double x, int percentPos = 50);
+
     // These delegate to MatrixScene, which possesses the selection
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection *s, bool preview);
