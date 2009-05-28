@@ -81,8 +81,10 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
     groupBoxLayout->addWidget(new QLabel(tr("From")), 0, 0);
     groupBoxLayout->addWidget(new QLabel(tr("To")), 0, 1);
     m_fromCombo = new QComboBox(groupBox);
+    //m_fromCombo->setToolTip(tr("<qt>dragons</qt>"));
     groupBoxLayout->addWidget(m_fromCombo, 1, 0);
     m_toCombo = new QComboBox(groupBox);
+    //m_toCombo->setToolTip(tr("<qt>dragons</qt>"));
     groupBoxLayout->addWidget(m_toCombo, 1, 1);
     groupBox->setLayout(groupBoxLayout);
 

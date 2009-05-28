@@ -477,7 +477,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             rotary->setKnobColour(knobColour);
             //Here goes!
-            rotary->setToolTip(tr("<qt><p>Place mouse over rotary control, <b>hold down</b> left mouse button and drag up and down to change value.</p><p>A small blue tooltip will tell the value.</p></qt>"));
+            rotary->setToolTip(tr("<qt><p>Place mouse over rotary control, <b>hold down</b> left mouse button and drag up and down to change value.</p><p>A small blue tooltip shows the value.</p></qt>"));
 
             // Add a label
             QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);

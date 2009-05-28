@@ -105,9 +105,10 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                           tr("Export content"), frameBasic), 0, 0);
 
     m_lilyExportSelection = new QComboBox(frameBasic);
+    m_lilyExportSelection->setToolTip(tr("<qt>Choose which tracks to export.</qt>"));
     m_lilyExportSelection->addItem(tr("All tracks"));
     m_lilyExportSelection->addItem(tr("Non-muted tracks"));
-    m_lilyExportSelection->addItem(tr("Selected track"));
+    m_lilyExportSelection->addItem(tr("Selected tracks"));
     m_lilyExportSelection->addItem(tr("Selected segments"));
 
     layoutBasic->addWidget(m_lilyExportSelection, 0, 1);
@@ -185,6 +186,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportLyrics->addItem(tr("Center"));
     m_lilyExportLyrics->addItem(tr("Right"));
     layoutNotation->addWidget(m_lilyExportLyrics, 1, 1);
+    m_lilyExportLyrics->setToolTip(tr("<qt>Set the position of the <b>lyrics/words</b> in relation to the notes.</qt>"));
 
 
     m_lilyExportBeams = new QCheckBox(
@@ -208,6 +210,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyRaggedBottom, 5, 0, 0+1, 1- 0+1);
 
     m_lilyMarkerMode = new QComboBox(frameNotation);
+    m_lilyMarkerMode->setToolTip(tr("<qt>Set different score marks.</qt>"));
     m_lilyMarkerMode->addItem(tr("No markers"));
     m_lilyMarkerMode->addItem(tr("Rehearsal marks"));
     m_lilyMarkerMode->addItem(tr("Marker text"));

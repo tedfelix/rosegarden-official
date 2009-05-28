@@ -166,7 +166,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
     groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
-    m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>.</p></qt>"));
+    m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
     m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
     groupLayout->addWidget(m_instrument, row, 2);
@@ -192,7 +192,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // recording device
     groupLayout->addWidget(new QLabel(tr("Device"), m_recordGroup), row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
-    m_recDevice->setToolTip(tr("<qt><p>This track will only record MIDI from the selected device, filtering anything else out</p></qt>"));
+    m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/ MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
 
@@ -201,7 +201,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     row++;
     groupLayout->addWidget(new QLabel(tr("Channel"), m_recordGroup), row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
-    m_recChannel->setToolTip(tr("<qt><p>This track will only record MIDI from the selected channel, filtering anything else out</p></qt>"));
+    m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
     groupLayout->addWidget(m_recChannel, row, 2);
