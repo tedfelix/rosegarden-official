@@ -87,6 +87,8 @@ void
 MatrixScene::setMatrixWidget(MatrixWidget *w)
 {
     m_widget = w;
+    connect(m_widget, SIGNAL(moveDisplayedPointer(double)),
+            this, SLOT(slotMoveDisplayedPointer(double)));
 }
 
 void
@@ -347,14 +349,20 @@ MatrixScene::recreateLines()
 }
 
 void
+MatrixScene::slotMoveDisplayedPointer(double x)
+{
+//  m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
+    m_pointer->setLine(0, 0.5, 0, 128 * (m_resolution + 1) + 0.5);
+    m_pointer->setPos(x + 0.5, 0);
+}
+
+void
 MatrixScene::repositionPointer()
 {
     if (!m_document) return;
     timeT t = m_document->getComposition().getPosition();
     double x = m_scale->getXForTime(t);
-//  m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
-    m_pointer->setLine(0, 0.5, 0, 128 * (m_resolution + 1) + 0.5);
-    m_pointer->setPos(x + 0.5, 0);
+    slotMoveDisplayedPointer(x);
     if (m_widget && m_widget->getPlayTracking()) ensurePointerVisible();
 }
 

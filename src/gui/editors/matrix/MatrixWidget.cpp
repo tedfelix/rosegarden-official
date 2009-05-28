@@ -40,6 +40,11 @@
 
 #include "document/RosegardenDocument.h"
 
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/TransportStatus.h"
+
+#include "gui/seqmanager/SequenceManager.h"
+
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
 
@@ -237,6 +242,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_topStandardRuler->connectRulerToDocPointer(document);
     m_bottomStandardRuler->connectRulerToDocPointer(document);
+
+    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
+            this, SLOT(slotSetInsertCursorPosition(timeT)));
+    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
+            this, SLOT(slotSetInsertCursorPosition(timeT)));
 }
 
 bool
@@ -528,19 +538,47 @@ MatrixWidget::ensureXVisible(double x, int percentPos)
         if (value < hMin) value = hMin;
         else if (value > hMax) value = hMax;
         m_view->horizontalScrollBar()->setValue(value);
-    } else if (delta > 0) {
-        // Set left of view to x - percentPos * step / 100
-        //    ==> Scroll to have x on treshold
-        int deltaPixels = delta * w / ws;
-        int value = m_view->horizontalScrollBar()->value() + deltaPixels;
-        if (value < hMin) value = hMin;
-        else if (value > hMax) value = hMax;
-        m_view->horizontalScrollBar()->setValue(value);
     } else {
-        // Delta < 0 ==> do nothing
+        // Scroll is not forced if playback cursor is not running
+        TransportStatus status = RosegardenMainWindow::self()->
+                                  getSequenceManager()->getTransportStatus();
+        if (((status == PLAYING) || (status == RECORDING)) & (delta > 0)) {
+            // Set left of view to x - percentPos * step / 100
+            //    ==> Scroll to have x on treshold
+            int deltaPixels = delta * w / ws;
+            int value = m_view->horizontalScrollBar()->value() + deltaPixels;
+            if (value < hMin) value = hMin;
+            else if (value > hMax) value = hMax;
+            m_view->horizontalScrollBar()->setValue(value);
+        }
     }
 }
 
+void
+MatrixWidget::slotSetInsertCursorPosition(timeT t)
+{
+
+/// t is snapped to grid
+
+/// The two following expressions give the same value :
+///   m_scene->getRulerScale()->getXForTime(t)
+///   m_referenceScale->getXForTime(t) / m_hZoomFactor
+
+///!!! TODO   The zoom factor have to be applied twice !!!
+/// This is very weird : probably something is broken inside the 
+/// zoom computation and the conversions beetween view and scene units ...
+    emit moveDisplayedPointer(m_referenceScale->getXForTime(t)
+        / (m_hZoomFactor * m_hZoomFactor));   //!!!
+ ///   emit moveDisplayedPointer(
+ ///              m_scene->getRulerScale()->getXForTime(t) / m_hZoomFactor);
+
+/// Note : The following lines print the right bar number
+/// std::cerr << "Bar = "
+///           << m_document->getComposition().getBarNumber(t / m_hZoomFactor)
+///           << "\n";
+///    ==> The t argument value is wrong...
+
+}
 
 }
 

@@ -110,7 +110,7 @@ signals:
 protected slots:    
     void slotCommandExecuted();
     void slotPointerPositionChanged(timeT);
-
+    void slotMoveDisplayedPointer(double x);
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *);

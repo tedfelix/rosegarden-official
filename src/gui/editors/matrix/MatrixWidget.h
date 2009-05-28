@@ -98,6 +98,7 @@ public:
 
 signals:
     void editTriggerSegment(int);
+    void moveDisplayedPointer(double);
 
 public slots:
     void slotSelectAll();
@@ -128,6 +129,7 @@ protected slots:
     void slotDispatchMouseDoubleClick(const MatrixMouseEvent *);
 
     void slotEnsureLastMouseMoveVisible();
+    void slotSetInsertCursorPosition(timeT);
 
     void slotHScrollBarRangeChanged(int min, int max);
 
