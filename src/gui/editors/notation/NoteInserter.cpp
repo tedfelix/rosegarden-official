@@ -156,11 +156,10 @@ NoteInserter::handleMouseRelease(const NotationMouseEvent *e)
     if (!m_clickHappened || !staff) return;
 
     bool okay = computeLocationAndPreview(e);
+    clearPreview();
     m_clickHappened = false;
     m_clickStaff = 0;
     if (!okay) return;
-
-    clearPreview();
 
     Note note(m_noteType, m_noteDots);
     timeT endTime = m_clickTime + note.getDuration();
