@@ -117,6 +117,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                           tr("Compatibility level"), frameBasic), 1, 0);
 
     m_lilyLanguage = new QComboBox(frameBasic);
+    m_lilyLanguage->setToolTip(tr("<qt>Set the LilyPond version you have installed. Rosegarden only caters for stable releases of LilyPond.</qt>"));
 
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.6")));
     m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
@@ -129,6 +130,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     QHBoxLayout *hboxPaper = new QHBoxLayout;
     m_lilyPaperSize = new QComboBox(frameBasic);
+    m_lilyPaperSize->setToolTip(tr("<qt>Set the paper size.</qt>"));
     m_lilyPaperSize->addItem(tr("A3"));
     m_lilyPaperSize->addItem(tr("A4"));
     m_lilyPaperSize->addItem(tr("A5"));
@@ -139,6 +141,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyPaperSize->addItem(tr("do not specify"));
 
     m_lilyPaperLandscape = new QCheckBox(tr("Landscape"), frameBasic);
+    m_lilyPaperLandscape->setToolTip(tr("<qt>Check this if you want your score set in landscape.</qt>"));
 
     hboxPaper->addWidget(m_lilyPaperSize);
     hboxPaper->addWidget(new QLabel(" ", frameBasic)); // fixed-size spacer
@@ -149,6 +152,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
                           tr("Font size"), frameBasic), 3, 0);
 
     m_lilyFontSize = new QComboBox(frameBasic);
+    m_lilyFontSize->setToolTip(tr("<qt>Choose the font size of the score.</qt>"));
     int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
     for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
         m_lilyFontSize->addItem(tr("%1 pt").arg(sizes[i]));
@@ -177,7 +181,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(new QLabel(
 			 tr("Export tempo marks "), frameNotation), 0, 0);
     layoutNotation->addWidget(m_lilyTempoMarks, 0, 1);
- 
+    m_lilyTempoMarks->setToolTip(tr("<qt>Choose how often to show Tempo Marks in your score.</qt>"));
+
     layoutNotation->addWidget(new QLabel(
 			 tr("Export lyrics"), frameNotation), 1, 0);
     m_lilyExportLyrics = new QComboBox(frameNotation);
@@ -192,25 +197,28 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyExportBeams = new QCheckBox(
                             tr("Export beamings"), frameNotation);
     layoutNotation->addWidget(m_lilyExportBeams, 2, 0, 0+1, 1- 0+1);
+    m_lilyExportBeams->setToolTip(tr("<qt>Check to export Rosegarden beamings to your score.</qt>"));
 
     // recycle this for a new option to ignore the track brackets (so it is less
     // obnoxious to print single parts where brackets are in place)
     m_lilyExportStaffGroup = new QCheckBox(
                                  tr("Export track staff brackets"), frameNotation);
-    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1); 
+    layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 0+1, 1- 0+1);
+    m_lilyExportStaffGroup->setToolTip(tr("<qt>If you have only one staff in this score, you wouldn't want to export brackets.</qt>"));
 
     layoutGrid->setRowStretch(4, 10);
 
     m_lilyChordNamesMode = new QCheckBox(
                            tr("Interpret chord texts as lead sheet chord names"), frameNotation);
     layoutNotation->addWidget(m_lilyChordNamesMode, 4, 0, 0+1, 1- 0+1);
+    m_lilyChordNamesMode->setToolTip(tr("<qt><p>There is a tutorial on how to use this feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/index.html</p></qt>"));
 
     m_lilyRaggedBottom = new QCheckBox(
                            tr("Ragged bottom (systems will not be spread vertically across the page)"), frameNotation);
     layoutNotation->addWidget(m_lilyRaggedBottom, 5, 0, 0+1, 1- 0+1);
+    m_lilyRaggedBottom->setToolTip(tr("<qt><p>Useful for multipage scores: this will prevent ugly final pages.</p></qt>"));
 
     m_lilyMarkerMode = new QComboBox(frameNotation);
-    m_lilyMarkerMode->setToolTip(tr("<qt>Set different score marks.</qt>"));
     m_lilyMarkerMode->addItem(tr("No markers"));
     m_lilyMarkerMode->addItem(tr("Rehearsal marks"));
     m_lilyMarkerMode->addItem(tr("Marker text"));
@@ -218,7 +226,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(new QLabel(
                                    tr("Export markers"), frameNotation),6, 0);
     layoutNotation->addWidget(m_lilyMarkerMode, 6, 1);
-
+    m_lilyMarkerMode->setToolTip(tr("<qt>Set different score mark options.</qt>"));
 
     basicOptionsBox->setLayout(basicOptionsBoxLayout);
     specificOptionsBox->setLayout(specificOptionsBoxLayout);
