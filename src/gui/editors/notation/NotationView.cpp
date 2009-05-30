@@ -301,13 +301,45 @@ NewNotationView::setupActions()
     createAction("erase", SLOT(slotSetEraseTool()));
 
     //"NoteTools" subMenu
-    //NEED to create actions
-    // Example: createAction("crotchet", SLOT(slotNoteAction()));
+    //NEED to create action methods
+    createAction("breve", SLOT(slotNoteAction()));
+    createAction("semibreve", SLOT(slotNoteAction()));
+    createAction("minim", SLOT(slotNoteAction()));
+    createAction("crotchet", SLOT(slotNoteAction()));
+    createAction("quaver", SLOT(slotNoteAction()));
+    createAction("semiquaver", SLOT(slotNoteAction()));
+    createAction("demisemi", SLOT(slotNoteAction()));
+    createAction("hemidemisemi", SLOT(slotNoteAction()));
+    createAction("dotted_breve", SLOT(slotNoteAction()));
+    createAction("dotted_semibreve", SLOT(slotNoteAction()));
+    createAction("dotted_minim", SLOT(slotNoteAction()));
+    createAction("dotted_crotchet", SLOT(slotNoteAction()));
+    createAction("dotted_quaver", SLOT(slotNoteAction()));
+    createAction("dotted_semiquaver", SLOT(slotNoteAction()));
+    createAction("dotted_demisemi", SLOT(slotNoteAction()));
+    createAction("dotted_hemidemisemi", SLOT(slotNoteAction()));
     createAction("toggle_dot", SLOT(slotToggleDot()));
-    //Where is "switch_from_rest_to_note" created?
+//!!! not implemented yet    createAction("switch_from_note_to_rest", SLOT(slotSwitchFromNoteToRest()));
+//    createAction("switch_from_rest_to_note", SLOT(slotSwitchFromRestToNote()));
 
     //"RestTool" subMenu
-    //NEED to create actions as in "NoteTools"
+    //NEED to create action methods
+    createAction("rest_breve", SLOT(slotNoteAction()));
+    createAction("rest_semibreve", SLOT(slotNoteAction()));
+    createAction("rest_minim", SLOT(slotNoteAction()));
+    createAction("rest_crotchet", SLOT(slotNoteAction()));
+    createAction("rest_quaver", SLOT(slotNoteAction()));
+    createAction("rest_semiquaver", SLOT(slotNoteAction()));
+    createAction("rest_demisemi", SLOT(slotNoteAction()));
+    createAction("rest_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("dotted_rest_breve", SLOT(slotNoteAction()));
+    createAction("dotted_rest_semibreve", SLOT(slotNoteAction()));
+    createAction("dotted_rest_minim", SLOT(slotNoteAction()));
+    createAction("dotted_rest_crotchet", SLOT(slotNoteAction()));
+    createAction("dotted_rest_quaver", SLOT(slotNoteAction()));
+    createAction("dotted_rest_semiquaver", SLOT(slotNoteAction()));
+    createAction("dotted_rest_demisemi", SLOT(slotNoteAction()));
+    createAction("dotted_rest_hemidemisemi", SLOT(slotNoteAction()));
 
     //"Accidentals" submenu
     createAction("no_accidental", SLOT(slotNoAccidental()));
@@ -563,38 +595,6 @@ NewNotationView::setupActions()
 */
     //&&& add proportionActionMenu to the appropriate super-menu
 
-#ifdef NOT_JUST_NOW //!!!
-
-
-//!!!
-// I believe this one was never actually used:
-//    KActionMenu *ornamentActionMenu =
-//        new KActionMenu(tr("Use Ornament"), this, "ornament_actionmenu");
-
-
-    ag = new QActionGroup(this);
-
-    for (NoteActionDataMap::iterator actionDataIter = m_noteActionDataMap->begin();
-         actionDataIter != m_noteActionDataMap->end();
-         ++actionDataIter) {
-
-        NoteActionData noteActionData = **actionDataIter;
-
-        QAction *a = createAction(noteActionData.actionName,
-                                  SLOT(slotNoteAction()));
-        
-        ag->addAction(a);
-        a->setCheckable(true);
-
-        if (noteActionData.noteType == Note::Crotchet &&
-            noteActionData.dots == 0 && !noteActionData.rest) {
-            m_selectDefaultNote = a;
-        }
-    }
-
-#endif
-    //!!! NoteChangeActionData also never used, I think
-
 }
 
 void 
@@ -830,6 +830,48 @@ NewNotationView::slotSetEraseTool()
     if (m_notationWidget) m_notationWidget->slotSetEraseTool();
     setMenuStates();
 }    
+
+void
+NewNotationView::slotNoteAction()
+{
+    QObject *s = sender();
+    QString name = s->objectName();
+
+    Note::Type type = Note::Crotchet;
+    bool rest = false;
+    int dots = 0;
+
+    if (name.startsWith("dotted_")) {
+        dots = 1;
+        name = name.replace("dotted_", "");
+    }
+    if (name.startsWith("rest_")) {
+        rest = true;
+        name = name.replace("rest_", "");
+    }
+
+    if (name == "breve") type = Note::Breve;
+    else if (name == "semibreve") type = Note::Semibreve;
+    else if (name == "minim") type = Note::Minim;
+    else if (name == "crotchet") type = Note::Crotchet;
+    else if (name == "quaver") type = Note::Quaver;
+    else if (name == "semiquaver") type = Note::Semiquaver;
+    else if (name == "demisemi") type = Note::Demisemiquaver;
+    else if (name == "hemidemisemi") type = Note::Hemidemisemiquaver;
+
+    if (m_notationWidget) {
+        if (rest) {
+            m_notationWidget->slotSetRestInserter();
+        } else {
+            m_notationWidget->slotSetNoteInserter();
+        }
+        m_notationWidget->slotSetInsertedNote(type, dots);
+    }
+    
+    setMenuStates();
+
+    //!!! todo: set status bar indication
+}
 
 }
 

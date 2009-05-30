@@ -19,6 +19,7 @@
 #define _RG_NOTATION_WIDGET_H_
 
 #include "StaffLayout.h"
+#include "base/NotationTypes.h"
 #include "gui/general/SelectionManager.h"
 
 #include <QWidget>
@@ -81,6 +82,9 @@ public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();
     void slotSetEraseTool();
+    void slotSetNoteInserter();
+    void slotSetRestInserter();
+    void slotSetInsertedNote(Note::Type type, int dots);
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);

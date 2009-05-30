@@ -66,6 +66,8 @@ protected slots:
     void slotSetSelectTool();
     void slotSetEraseTool();
 
+    void slotNoteAction();
+
 private:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;

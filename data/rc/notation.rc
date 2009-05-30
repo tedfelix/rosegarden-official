@@ -351,21 +351,21 @@
     <Menu noMerge="1" name="NoteTools">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="breve" text="&amp;Double Whole Note" icon="menu-breve" shortcut="5" />
-      <Action name="semibreve" text="&amp;Whole Note" icon="menu-semibreve" shortcut="1" />
-      <Action name="minim" text="&amp;Half Note" icon="menu-minim" shortcut="2" />
-      <Action name="crotchet" text="&amp;Quarter Note" icon="menu-crotchet" shortcut="4" />
-      <Action name="quaver" text="&amp;Eighth Note" icon="menu-quaver" shortcut="8" />
+      <Action name="breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" />
+      <Action name="semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" />
+      <Action name="minim" text="&amp;Half Note" icon="minim" shortcut="2" />
+      <Action name="crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" />
+      <Action name="quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" />
       <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" />
-      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="menu-demisemi" shortcut="3" />
-      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="menu-hemidemisemi" shortcut="0" />
+      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" />
+      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" />
     <Separator/>
-      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="menu-dotted-semibreve" />
-      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="menu-dottedminim" />
-      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="menu-dotted-crotchet" />
-      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="menu-dotted-quaver" />
-      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="menu-dotted-semiquaver" />
-      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="menu-dotted-demisemi" />
+      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" />
+      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="dotted-minim" />
+      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="dotted-crotchet" />
+      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="dotted-quaver" />
+      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" />
+      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" />
     <Separator/>
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />

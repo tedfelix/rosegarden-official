@@ -172,6 +172,37 @@ NotationWidget::slotSetSelectTool()
 }
 
 void
+NotationWidget::slotSetNoteInserter()
+{
+    slotSetTool(NoteInserter::ToolName);
+}
+
+void
+NotationWidget::slotSetRestInserter()
+{
+    //!!!    slotSetTool(RestInserter::ToolName);
+}
+
+void
+NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
+{
+    NoteInserter *ni = dynamic_cast<NoteInserter *>(m_currentTool);
+    if (ni) {
+        ni->slotSetNote(type);
+        ni->slotSetDots(dots);
+        return;
+    }
+#ifdef NOT_JUST_NOW
+    RestInserter *ri = dynamic_cast<RestInserter *>(m_currentTool);
+    if (ri) {
+        ri->slotSetNote(type);
+        ri->slotSetDots(dots);
+        return;
+    }
+#endif
+}
+
+void
 NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
     if (e->buttons & Qt::LeftButton) {
