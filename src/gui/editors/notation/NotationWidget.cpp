@@ -20,6 +20,7 @@
 #include "NotationScene.h"
 #include "NotationToolBox.h"
 #include "NoteInserter.h"
+#include "RestInserter.h"
 #include "NotationMouseEvent.h"
 #include "NotationSelector.h"
 #include "NotationEraser.h"
@@ -180,7 +181,7 @@ NotationWidget::slotSetNoteInserter()
 void
 NotationWidget::slotSetRestInserter()
 {
-    //!!!    slotSetTool(RestInserter::ToolName);
+    slotSetTool(RestInserter::ToolName);
 }
 
 void
@@ -192,14 +193,13 @@ NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
         ni->slotSetDots(dots);
         return;
     }
-#ifdef NOT_JUST_NOW
+
     RestInserter *ri = dynamic_cast<RestInserter *>(m_currentTool);
     if (ri) {
         ri->slotSetNote(type);
         ri->slotSetDots(dots);
         return;
     }
-#endif
 }
 
 void

@@ -52,30 +52,31 @@ NotationToolBox::createTool(QString toolName)
     if (toolNamelc == NoteInserter::ToolName)
 
         tool = new NoteInserter(m_widget);
-/*!!!
+
     else if (toolNamelc == RestInserter::ToolName)
 
-        tool = new RestInserter(m_nParentView);
+        tool = new RestInserter(m_widget);
 
+/*!!!
     else if (toolNamelc == ClefInserter::ToolName)
 
-        tool = new ClefInserter(m_nParentView);
+        tool = new ClefInserter(m_widget);
 
     else if (toolNamelc == TextInserter::ToolName)
 
-        tool = new TextInserter(m_nParentView);
+        tool = new TextInserter(m_widget);
 
     else if (toolNamelc == GuitarChordInserter::ToolName)
 
-        tool = new GuitarChordInserter(m_nParentView);
+        tool = new GuitarChordInserter(m_widget);
 
 //    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
 
-//        tool = new LilyPondDirectiveInserter(m_nParentView);
+//        tool = new LilyPondDirectiveInserter(m_widget);
 
     else if (toolNamelc == NotationEraser::ToolName)
 
-        tool = new NotationEraser(m_nParentView);
+        tool = new NotationEraser(m_widget);
 */
     else if (toolNamelc == NotationSelector::ToolName)
 

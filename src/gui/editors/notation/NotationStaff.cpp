@@ -1815,6 +1815,7 @@ NotationStaff::showPreviewNote(double layoutX, int heightOnStaff,
 void
 NotationStaff::clearPreviewNote()
 {
+    if (!m_previewItem) return;
     m_previewItem->hide();
     delete m_previewItem;
     m_previewItem = 0;

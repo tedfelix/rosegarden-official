@@ -48,7 +48,6 @@
 #include <QIcon>
 #include <QRegExp>
 #include <QString>
-#include <QApplication>
 
 
 namespace Rosegarden
@@ -570,11 +569,7 @@ void NoteInserter::slotSetNote(Note::Type nt)
 
 void NoteInserter::slotSetDots(unsigned int dots)
 {
-    /* was toggle */ 
-// 	QAction *dotsAction = dynamic_cast<QAction*>
-//                                 (actionCollection()->action("toggle_dot"));
-	
-    QAction* dotsAction = findActionInParentView( "toggle_dot" );
+    QAction* dotsAction = findActionInParentView("toggle_dot");
 	
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);

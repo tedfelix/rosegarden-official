@@ -15,10 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include "RestInserter.h"
-
+#include "misc/Debug.h"
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -27,14 +25,14 @@
 #include "commands/notation/NoteInsertionCommand.h"
 #include "commands/notation/RestInsertionCommand.h"
 #include "commands/notation/TupletCommand.h"
-#include "gui/general/EditTool.h"
 #include "misc/Strings.h"
 #include "NotationStrings.h"
 #include "NotationTool.h"
-#include "NotationView.h"
+#include "NotationWidget.h"
 #include "NoteInserter.h"
 #include "NotePixmapFactory.h"
 #include "document/Command.h"
+#include "document/CommandHistory.h"
 
 #include <QAction>
 #include <QIcon>
@@ -47,15 +45,13 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-RestInserter::RestInserter(NotationView* view)
-    : NoteInserter("RestInserter", view)
+RestInserter::RestInserter(NotationWidget *widget) :
+    NoteInserter("restinserter.rc", "RestInserter", widget)
 {
     createAction("toggle_dot", SLOT(slotToggleDot()));
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("notes", SLOT(slotNotesSelected()));
-
-    createMenu("restinserter.rc");
 }
 
 void
@@ -79,7 +75,7 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     Command *activeCommand = insertionCommand;
 
-    if (m_nParentView->isInTripletMode()) {
+    if (m_widget->isInTripletMode()) {
         Segment::iterator i(segment.findTime(time));
         if (i != segment.end() &&
             !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
@@ -92,14 +88,14 @@ RestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
         }
     }
 
-    m_nParentView->addCommandToHistory(activeCommand);
+    CommandHistory::getInstance()->addCommand(activeCommand);
 
     return insertionCommand->getLastInsertedEvent();
 }
 
 void RestInserter::slotSetDots(unsigned int dots)
 {
-    QAction *dotsAction = findAction( "toggle_dot" );
+    QAction *dotsAction = findActionInParentView("toggle_dot");
 	
     if (dotsAction && m_noteDots != dots) {
         dotsAction->setChecked(dots > 0);
@@ -115,13 +111,12 @@ void RestInserter::slotToggleDot()
     QString actionName(NotationStrings::getReferenceName(note, true));
     actionName.replace(QRegExp("-"), "_");
 	
-    QAction *action = findAction( actionName );
-	
+    QAction *action = findActionInParentView( actionName );
 	
     if (!action) {
         std::cerr << "WARNING: No such action as " << qstrtostr(actionName) << std::endl;
     } else {
-        action->setEnabled(true);
+        action->setChecked(true);
     }
 }
 
@@ -131,14 +126,14 @@ void RestInserter::slotNotesSelected()
     QString actionName(NotationStrings::getReferenceName(note));
     actionName.replace(QRegExp("-"), "_");
 	
-    QAction *action = findAction( actionName );
-    action->setEnabled(true);
+    QAction *action = findActionInParentView(actionName);
+    action->setChecked(true);
 }
 
-const QString RestInserter::ToolName     = "restinserter";
+const QString RestInserter::ToolName = "restinserter";
 
 }
+
 #include "RestInserter.moc"
 
-#endif
 

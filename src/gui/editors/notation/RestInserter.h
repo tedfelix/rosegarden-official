@@ -15,26 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_RESTINSERTER_H_
 #define _RG_RESTINSERTER_H_
 
 #include "NoteInserter.h"
-#include <QString>
-#include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
-
-class Segment;
-class Note;
-class NotationView;
-class Event;
-
 
 /**
  * This tool will insert rests on mouse click events
@@ -46,7 +33,6 @@ class RestInserter : public NoteInserter
     friend class NotationToolBox;
 
 public:
-
     static const QString ToolName;
 
 public slots:
@@ -54,13 +40,13 @@ public slots:
     void slotSetDots(unsigned int dots);
 
 protected:
-    RestInserter(NotationView*);
+    RestInserter(NotationWidget *);
 
     virtual Event *doAddCommand(Segment &,
-                                            timeT time,
-                                            timeT endTime,
-                                            const Note &,
-                                            int pitch, Accidental);
+                                timeT time,
+                                timeT endTime,
+                                const Note &,
+                                int pitch, Accidental);
     virtual void showPreview();
 
 protected slots:
@@ -71,5 +57,4 @@ protected slots:
 
 }
 
-#endif
 #endif
