@@ -351,21 +351,21 @@
     <Menu noMerge="1" name="NoteTools">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" />
-      <Action name="semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" />
-      <Action name="minim" text="&amp;Half Note" icon="minim" shortcut="2" />
-      <Action name="crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" />
-      <Action name="quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" />
-      <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" />
-      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" />
-      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" />
+      <Action name="breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" checked="false" group="inserters" />
+      <Action name="semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" checked="false" group="inserters" />
+      <Action name="minim" text="&amp;Half Note" icon="minim" shortcut="2" checked="false" group="inserters" />
+      <Action name="crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" checked="true" group="inserters" />
+      <Action name="quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" checked="false" group="inserters" />
+      <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" checked="false" group="inserters" />
+      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" checked="false" group="inserters" />
+      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" checked="false" group="inserters" />
     <Separator/>
-      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" />
-      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="dotted-minim" />
-      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="dotted-crotchet" />
-      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="dotted-quaver" />
-      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" />
-      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" />
+      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" checked="false" group="inserters" />
+      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="dotted-minim" checked="false" group="inserters" />
+      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="dotted-crotchet" checked="false" group="inserters" />
+      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="dotted-quaver" checked="false" group="inserters" />
+      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" checked="false" group="inserters" />
+      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="inserters" />
     <Separator/>
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />
@@ -373,21 +373,21 @@
     <Menu noMerge="1" name="RestTools">
       <text>&amp;Rests</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" />
-      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" />
-      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" />
-      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" />
-      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" />
-      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" />
-      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" />
-      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" />
+      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" checked="false" group="inserters" />
+      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" checked="false" group="inserters" />
+      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" checked="false" group="inserters" />
+      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" checked="false" group="inserters" />
+      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" checked="false" group="inserters" />
+      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" checked="false" group="inserters" />
+      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" checked="false" group="inserters" />
+      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" checked="false" group="inserters" />
     <Separator/>
-      <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" />
-      <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" />
-      <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" />
-      <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" />
-      <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" />
-      <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" />
+      <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="inserters" />
+      <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="inserters" />
+      <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" checked="false" group="inserters" />
+      <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" checked="false" group="inserters" />
+      <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" checked="false" group="inserters" />
+      <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" checked="false" group="inserters" />
     <Separator/>
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_note_to_rest" text="Switch from &amp;Note to Rest" />
