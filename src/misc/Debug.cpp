@@ -25,6 +25,9 @@
 #include "gui/editors/guitar/Chord.h"
 #include "gui/editors/guitar/Fingering.h"
 
+namespace Rosegarden
+{
+
 QDebug &
 operator<<(QDebug &dbg, const std::string &s)
 {
@@ -107,6 +110,8 @@ operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
              dbg << "x ";
     }        
     return dbg;
+}
+
 }
 
 #endif

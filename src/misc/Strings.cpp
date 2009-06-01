@@ -23,6 +23,8 @@
 #include <QVariant>
 #include <QString>
 
+namespace Rosegarden
+{
 
 QString strtoqstr(const std::string &str)
 {
@@ -39,27 +41,14 @@ std::string qstrtostr(const QString &qstr)
     return std::string(qstr.toUtf8().data());
 }
 
-
 std::string qStrToStrUtf8(const QString &qstr)
 {
-	return qstrtostr( qstr );
-	//return std::string( qstr.toUtf8().data() );
+    return qstrtostr(qstr);
 }
 
 std::string qStrToStrLocal8(const QString &qstr)
 {
-	return std::string( qstr.toLocal8Bit().data() );
-}
-
-
-const char* qStrToCharPtrUtf8(const QString &qstr)
-{
-	return qstr.toUtf8().data();
-}
-
-const char* qStrToCharPtrLocal8(const QString &qstr)
-{
-	return qstr.toLocal8Bit().data();
+    return std::string(qstr.toLocal8Bit().data());
 }
 
 
@@ -158,4 +147,6 @@ operator<<(QTextStream &target, const std::string &str)
     return target << QString(str.c_str());
 }
 
+
+}
 

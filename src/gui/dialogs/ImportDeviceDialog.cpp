@@ -93,7 +93,7 @@ ImportDeviceDialog::doImport()
 
     source.waitForData();
     target = source.getLocalFilename();
-    std::string filename = qStrToCharPtrLocal8(target);
+    std::string filename = qStrToStrLocal8(target);
 
     bool fileRead = false;
     if (SF2PatchExtractor::isSF2File(filename)) {

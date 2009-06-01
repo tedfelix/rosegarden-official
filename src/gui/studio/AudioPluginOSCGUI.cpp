@@ -153,13 +153,14 @@ AudioPluginOSCGUI::setGUIUrl(QString url)
     if (m_address)
         lo_address_free(m_address);
 
-    char *host = lo_url_get_hostname( qStrToCharPtrUtf8(url));
-	char *port = lo_url_get_port( qStrToCharPtrUtf8(url));
+    QByteArray burl = url.toUtf8();
+
+    char *host = lo_url_get_hostname(burl.data());
+    char *port = lo_url_get_port(burl.data());
     m_address = lo_address_new(host, port);
     free(host);
     free(port);
-
-	m_basePath = lo_url_get_path( qStrToCharPtrUtf8(url));
+    m_basePath = lo_url_get_path(burl.data());
 }
 
 void
@@ -167,55 +168,57 @@ AudioPluginOSCGUI::show()
 {
     RG_DEBUG << "AudioPluginOSCGUI::show" << endl;
 
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/show";
-	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8(""));
+    QByteArray ba = path.toUtf8();
+    lo_send(m_address, ba.data(), "");
 }
 
 void
 AudioPluginOSCGUI::hide()
 {
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/hide";
-	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8(""));
+    QByteArray ba = path.toUtf8();
+    lo_send(m_address, ba.data(), "");
 }
 
 void
 AudioPluginOSCGUI::quit()
 {
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/quit";
-	lo_send(m_address, qStrToCharPtrUtf8(path), qStrToCharPtrUtf8(""));
+    QByteArray ba = path.toUtf8();
+    lo_send(m_address, ba.data(), "");
 }
 
 void
 AudioPluginOSCGUI::sendProgram(int bank, int program)
 {
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/program";
-	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("ii"), bank, program);
+    QByteArray ba = path.toUtf8();
+    lo_send(m_address, ba.data(), "ii", bank, program);
 }
 
 void
 AudioPluginOSCGUI::sendPortValue(int port, float value)
 {
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/control";
-	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("if"), port, value);
+    QByteArray ba = path.toUtf8();
+    lo_send(m_address, ba.data(), "if", port, value);
 }
 
 void
 AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 {
-    if (!m_address)
-        return ;
+    if (!m_address) return;
     QString path = m_basePath + "/configure";
-	lo_send(m_address, qStrToCharPtrUtf8(path),  qStrToCharPtrUtf8("ss"), key.data(), value.data());
+    QByteArray ba = path.toUtf8();
+    QByteArray bk = key.toUtf8();
+    QByteArray bv = value.toUtf8();
+    lo_send(m_address, ba.data(), "ss", bk.data(), bv.data());
 }
 
 }

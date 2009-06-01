@@ -1677,8 +1677,9 @@ AudioMixerWindow::toggleNamedWidgets(bool show, const char* const name)
     QLayoutIterator it = m_mainBox->layout()->iterator();
     QLayoutItem *child;
     while ((child = it.current()) != 0) {
-        QWidget * widget = child->widget();
-        if (widget && (!widget->objectName().isEmpty()) && !strcmp(qStrToCharPtrUtf8(widget->objectName()), name)) {
+        QWidget *widget = child->widget();
+        if (widget &&
+            widget->objectName() == QString::fromUtf8(name)) {
             if (show)
                 widget->show();
             else

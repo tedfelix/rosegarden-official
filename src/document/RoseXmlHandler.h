@@ -101,7 +101,7 @@ public:
     bool isCancelled() { return m_cancelled; }
 
     /// Return the error string set during the parsing (if any)
-    QString errorString();
+    QString errorString() const;
 
     bool hasActiveAudio() const { return m_hasActiveAudio; }
     std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }

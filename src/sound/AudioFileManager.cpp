@@ -646,7 +646,7 @@ AudioFileManager::importURL(const QUrl &url, int sampleRate)
 
     source.waitForData();
 
-    return importFile(qStrToCharPtrLocal8(source.getLocalFilename()),
+    return importFile(qStrToStrLocal8(source.getLocalFilename()),
                       sampleRate);
 }
 

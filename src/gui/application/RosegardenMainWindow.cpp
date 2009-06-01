@@ -1613,10 +1613,11 @@ void RosegardenMainWindow::saveGlobalProperties()
             QString errMsg;
             bool res = m_doc->saveDocument(tempname, errMsg);
             if (!res) {
-                if (!errMsg.isEmpty())
-                    QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg))));
-                else
-                    QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1").arg(tempname))) );
+                if (!errMsg.isEmpty()) {
+                    QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2").arg(tempname).arg(errMsg));
+                } else {
+                    QMessageBox::critical(this, "", tr("Could not save document at %1").arg(tempname));
+                }
             }
         }
     }
@@ -1915,11 +1916,11 @@ void RosegardenMainWindow::slotFileSave()
         bool res = m_doc->saveDocument(docFilePath, errMsg);
         if (!res) {
             if (! errMsg.isEmpty())
-                QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2")
-                                              .arg(docFilePath).arg(errMsg))));
+                QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2")
+                                      .arg(docFilePath).arg(errMsg));
             else
-                QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1")
-                                              .arg(docFilePath))));
+                QMessageBox::critical(this, "", tr("Could not save document at %1")
+                                      .arg(docFilePath));
         }
     }
 }
@@ -2037,11 +2038,11 @@ bool RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     if (!res) {
         if (!errMsg.isEmpty())
-            QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1\nError was : %2")
-                                          .arg(newName).arg(errMsg))));
+            QMessageBox::critical(this, "", tr("Could not save document at %1\nError was : %2")
+                                  .arg(newName).arg(errMsg));
         else
-            QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not save document at %1")
-                                          .arg(newName))));
+            QMessageBox::critical(this, "", tr("Could not save document at %1")
+                                  .arg(newName));
 
     } else {
 
@@ -5640,12 +5641,8 @@ RosegardenMainWindow::slotDocumentModified(bool m)
     << m_doc->getAbsFilePath() << endl;
 
     if (!m_doc->getAbsFilePath().isEmpty()) {
-        //### JAS the qStrToCharPtrUtf8(s) is probably unnecessary.
-        // slotStateChanged(qStrToCharPtrUtf8(QString("saved_file_modified")), m);
         slotStateChanged("saved_file_modified", m);
     } else {
-        //### JAS the qStrToCharPtrUtf8(s) is probably unnecessary.
-        // slotStateChanged(qStrToCharPtrUtf8(QString("new_file_modified")), m);
         slotStateChanged("new_file_modified", m);
     }
 
@@ -5653,19 +5650,11 @@ RosegardenMainWindow::slotDocumentModified(bool m)
 
 void
 RosegardenMainWindow::slotStateChanged(QString s,
-                                   bool noReverse)
+                                       bool noReverse)
 {
-    //     RG_DEBUG << "RosegardenMainWindow::slotStateChanged " << s << "," << noReverse << endl;
-
-//    stateChanged(s, noReverse ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse); 
-//@@@ JAS     rgTempQtIV->stateChanged(qStrToCharPtrUtf8(s), 0);  //### check later
-//@@@ JAS Rewriting code as follows.
     if (noReverse) {
-        //### JAS the qStrToCharPtrUtf8(s) is probably unnecessary.
-        // enterActionState(qStrToCharPtrUtf8(s));
-        enterActionState(qStrToCharPtrUtf8(s));
+        enterActionState(s);
     } else {
-        // leaveActionState(s);
         leaveActionState(s);
     }
 }
@@ -7479,11 +7468,11 @@ RosegardenMainWindow::slotSaveDefaultStudio()
     bool res = m_doc->saveDocument(autoloadFile, errMsg);
     if (!res) {
         if (!errMsg.isEmpty())
-            QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not auto-save document at %1\nError was : %2")
-                                          .arg(autoloadFile).arg(errMsg))));
+            QMessageBox::critical(this, "", tr("Could not auto-save document at %1\nError was : %2")
+                                  .arg(autoloadFile).arg(errMsg));
         else
-            QMessageBox::critical(this, "", tr(qStrToCharPtrUtf8(QString("Could not auto-save document at %1")
-                                          .arg(autoloadFile))));
+            QMessageBox::critical(this, "", tr("Could not auto-save document at %1")
+                                  .arg(autoloadFile));
 
     }
 }

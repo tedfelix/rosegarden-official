@@ -199,7 +199,7 @@ IdentifyTextCodecDialog::slotCodecSelected(int i)
 //    std::cerr << "codecs: ";
 //    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";
 //    std::cerr << std::endl;
-    QTextCodec *codec = QTextCodec::codecForName( qStrToCharPtrUtf8(strtoqstr(name)) );
+    QTextCodec *codec = QTextCodec::codecForName(name.c_str());
     if (!codec) return;
     m_codec = qstrtostr( codec->name() );
 //    std::cerr << "Applying codec " << m_codec << std::endl;

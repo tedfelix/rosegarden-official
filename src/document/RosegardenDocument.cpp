@@ -356,9 +356,9 @@ bool RosegardenDocument::saveIfModified()
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
-                    QMessageBox::critical( 0, "", tr( qStrToCharPtrUtf8( QString("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg)) )  );
+                    QMessageBox::critical( 0, "", tr("Could not save document at %1\n(%2)").arg(getAbsFilePath()).arg(errMsg));
                 } else {
-                    QMessageBox::critical( 0, "", tr( qStrToCharPtrUtf8( QString("Could not save document at %1").arg( getAbsFilePath() )) )  );
+                    QMessageBox::critical( 0, "", tr("Could not save document at %1").arg( getAbsFilePath() ));
                 }
             }
         }
@@ -1164,7 +1164,7 @@ bool RosegardenDocument::saveDocument(const QString& filename,
     temp.open(); // This creates the file and opens it atomically
 
     if ( temp.error() ) {
-        errMsg = tr( qStrToCharPtrUtf8( QString("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString()) )  );        //### removed .arg(strerror(status))
+        errMsg = tr("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString());        //### removed .arg(strerror(status))
         return false;
     }
 
@@ -1177,8 +1177,8 @@ bool RosegardenDocument::saveDocument(const QString& filename,
 
     if( temp.error() ){
         //status = temp.status();
-        errMsg = tr( qStrToCharPtrUtf8( QString("Failure in temporary file handling for file '%1': %2")
-                .arg(tempFileName).arg(temp.errorString() )) ); // .arg(strerror(status))
+        errMsg = tr("Failure in temporary file handling for file '%1': %2")
+            .arg(tempFileName).arg(temp.errorString()); // .arg(strerror(status))
         return false;
     }
 
@@ -1195,7 +1195,7 @@ bool RosegardenDocument::saveDocument(const QString& filename,
     // Therefore, delete first the existing file.
     if (dir.exists(filename)) dir.remove(filename);
     if (!dir.rename(tempFileName, filename)) {
-        errMsg = tr( qStrToCharPtrUtf8( QString("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename) )  );
+        errMsg = tr("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename);
         return false;
     }
 

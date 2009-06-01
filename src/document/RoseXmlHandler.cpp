@@ -2226,7 +2226,7 @@ RoseXmlHandler::characters(const QString& s)
 }
 
 QString
-RoseXmlHandler::errorString()
+RoseXmlHandler::errorString() const
 {
     return m_errorString;
 }

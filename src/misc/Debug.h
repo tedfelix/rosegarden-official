@@ -20,6 +20,7 @@
 #include <string>
 
 namespace Rosegarden {
+
     class Event;
     class Segment;
     class RealTime;
@@ -27,7 +28,6 @@ namespace Rosegarden {
     namespace Guitar {
 	class Chord;
     }
-}
 
 #ifndef NDEBUG
 
@@ -63,6 +63,8 @@ public:
 #define SEQMAN_DEBUG    RGNoDebug()
 
 #endif
+
+}
 
 #ifndef NO_TIMING
 

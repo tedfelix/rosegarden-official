@@ -954,7 +954,7 @@ TransportDialog::setMidiInLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiInLabel()
 {
-    m_transport->InDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS"))  );
+    m_transport->InDisplay->setText(tr("NO EVENTS"));
 
     // also, just to be sure:
     slotResetBackground();
@@ -1014,7 +1014,7 @@ TransportDialog::setMidiOutLabel(const MappedEvent *mE)
 void
 TransportDialog::slotClearMidiOutLabel()
 {
-	m_transport->OutDisplay->setText( qStrToCharPtrUtf8( tr("NO EVENTS")) ); 
+    m_transport->OutDisplay->setText(tr("NO EVENTS")); 
 }
 
 void

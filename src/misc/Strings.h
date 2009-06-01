@@ -1,10 +1,13 @@
-// -*- c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
-    A sequencer and musical notation editor.
+    A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
-    See the AUTHORS file for more details.
-
+ 
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+ 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,19 +27,25 @@
 #include "base/PropertyName.h"
 #include "base/Exception.h"
 
+class QTextCodec;
+
+namespace Rosegarden
+{
+
 extern QString strtoqstr(const std::string &);
 extern QString strtoqstr(const Rosegarden::PropertyName &);
+
 extern std::string qstrtostr(const QString &);
+
 extern double strtodouble(const std::string &);
 extern double qstrtodouble(const QString &);
+
 extern bool qStrToBool(const QString &s);
 extern bool qStrToBool(const QVariant &v);
+
 extern std::string qStrToStrLocal8(const QString &qstr);
 extern std::string qStrToStrUtf8(const QString &qstr);
-extern const char* qStrToCharPtrUtf8(const QString &qstr);
-extern const char* qStrToCharPtrLocal8(const QString &qstr);
 
-class QTextCodec;
 extern std::string convertFromCodec(std::string, QTextCodec *);
 
 std::ostream &
@@ -44,5 +53,8 @@ operator<<(std::ostream &, const QString &);
 
 QTextStream &
 operator<<(QTextStream &, const std::string &);
+
+}
+
 
 #endif

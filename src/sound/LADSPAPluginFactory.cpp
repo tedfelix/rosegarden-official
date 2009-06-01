@@ -497,9 +497,9 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    void *libraryHandle = dlopen( qStrToCharPtrLocal8(soName), RTLD_NOW);
-    if (libraryHandle)
-        m_libraryHandles[soName] = libraryHandle;
+    QByteArray bso = soName.toLocal8Bit();
+    void *libraryHandle = dlopen(bso.data(), RTLD_NOW);
+    if (libraryHandle) m_libraryHandles[soName] = libraryHandle;
 }
 
 void
@@ -630,7 +630,8 @@ LADSPAPluginFactory::discoverPlugins()
     for (size_t i = 0; i < lrdfPaths.size(); ++i) {
         QDir dir(lrdfPaths[i], "*.rdf;*.rdfs");
         for (unsigned int j = 0; j < dir.count(); ++j) {
-			if (!lrdf_read_file( qStrToCharPtrLocal8( QString("file:" + lrdfPaths[i] + "/" + dir[j]) ))) {
+	    QByteArray ba = QString("file:" + lrdfPaths[i] + "/" + dir[j]).toLocal8Bit();
+	    if (!lrdf_read_file(ba.data())) {
                 //		std::cerr << "LADSPAPluginFactory: read RDF file " << (lrdfPaths[i] + "/" + dir[j]) << std::endl;
                 haveSomething = true;
             }
@@ -663,7 +664,8 @@ LADSPAPluginFactory::discoverPlugins()
 void
 LADSPAPluginFactory::discoverPlugins(QString soName)
 {
-	void *libraryHandle = dlopen( qStrToCharPtrLocal8(soName), RTLD_LAZY);
+    QByteArray bso = soName.toLocal8Bit();
+    void *libraryHandle = dlopen(bso.data(), RTLD_LAZY);
 
     if (!libraryHandle) {
         std::cerr << "WARNING: LADSPAPluginFactory::discoverPlugins: couldn't dlopen "
@@ -794,7 +796,8 @@ LADSPAPluginFactory::generateFallbackCategories()
 void
 LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
 {
-    lrdf_uris *uris = lrdf_get_instances( qStrToCharPtrLocal8(uri) );
+    QByteArray ba = uri.toLocal8Bit();
+    lrdf_uris *uris = lrdf_get_instances(ba.data());
 
     if (uris != NULL) {
         for (int i = 0; i < uris->count; ++i) {
@@ -803,7 +806,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
         lrdf_free_uris(uris);
     }
 
-    uris = lrdf_get_subclasses( qStrToCharPtrLocal8(uri) );
+    uris = lrdf_get_subclasses(ba.data());
 
     if (uris != NULL) {
         for (int i = 0; i < uris->count; ++i) {
