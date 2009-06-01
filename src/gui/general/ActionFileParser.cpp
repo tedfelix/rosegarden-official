@@ -40,6 +40,11 @@ namespace Rosegarden
    
 ActionFileParser::ActionFileParser(QObject *actionOwner) :
     m_actionOwner(actionOwner),
+    m_lastToolbarPosition(Top),
+    m_inMenuBar(false),
+    m_inText(false),
+    m_inEnable(false),
+    m_inDisable(false),
     m_lastToolbarPosition(Top)
 {
 }
