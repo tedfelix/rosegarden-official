@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -43,13 +42,13 @@ namespace Rosegarden
 
 class TransportDialog;
 class Track;
-class TimeSigSegmentMmapper;
-class TempoSegmentMmapper;
+class TimeSigSegmentMapper;
+class TempoSegmentMapper;
 class Segment;
 class RosegardenDocument;
-class MetronomeMmapper;
+class MetronomeMapper;
 class CountdownDialog;
-class CompositionMmapper;
+class CompositionMapper;
 class Composition;
 class AudioManagerDialog;
 
@@ -58,14 +57,18 @@ class SequenceManager : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    SequenceManager(RosegardenDocument *doc,
-                    TransportDialog *transport);
+    /**
+     * Construct a SequenceManager.  The SequenceManager is not
+     * designed to operate without a document; you must call
+     * setDocument before you do anything with it.
+     */
+    SequenceManager(TransportDialog *transport);
     ~SequenceManager();
 
     /**
      * Replaces the internal document
      */
-    void setDocument(RosegardenDocument*);
+    void setDocument(RosegardenDocument *);
 
     /**
      * Return the current internal document
@@ -223,15 +226,15 @@ protected slots:
                              unsigned long kBUsed,
                              unsigned long kBAvail);
 
-    void slotScheduledCompositionMmapperReset() { resetCompositionMmapper(); }
+    void slotScheduledCompositionMapperReset() { resetCompositionMapper(); }
     
 protected:
 
-    void resetCompositionMmapper();
+    void resetCompositionMapper();
     void resetControlBlock();
-    void resetMetronomeMmapper();
-    void resetTempoSegmentMmapper();
-    void resetTimeSigSegmentMmapper();
+    void resetMetronomeMapper();
+    void resetTempoSegmentMapper();
+    void resetTimeSigSegmentMapper();
     void checkRefreshStatus();
     void sendMIDIRecordingDevice(const QString recordDeviceStr);
     void restoreRecordSubscriptions();
@@ -239,15 +242,14 @@ protected:
     
     //--------------- Data members ---------------------------------
 
-    MappedComposition  m_mC;
-    RosegardenDocument              *m_doc;
-    CompositionMmapper            *m_compositionMmapper;
-    MetronomeMmapper              *m_metronomeMmapper;
-    TempoSegmentMmapper           *m_tempoSegmentMmapper;
-    TimeSigSegmentMmapper         *m_timeSigSegmentMmapper;
+    RosegardenDocument    *m_doc;
+    CompositionMapper     *m_compositionMapper;
+    MetronomeMapper       *m_metronomeMapper;
+    TempoSegmentMapper    *m_tempoSegmentMapper;
+    TimeSigSegmentMapper  *m_timeSigSegmentMapper;
 
-    std::vector<Segment*> m_addedSegments;
-    std::vector<Segment*> m_removedSegments;
+    std::vector<Segment *> m_addedSegments;
+    std::vector<Segment *> m_removedSegments;
     bool m_metronomeNeedsRefresh;
 
     // statuses
@@ -274,10 +276,11 @@ protected:
     unsigned int m_compositionRefreshStatusId;
     bool m_updateRequested;
 
-    // used to schedule a composition mmapper reset when the composition end time marker changes
-    // this can be caused by a window resize, and since the reset is potentially expensive we want to collapse
-    // several following requests into one.
-    QTimer                    *m_compositionMmapperResetTimer;
+    // used to schedule a composition mapper reset when the
+    // composition end time marker changes this can be caused by a
+    // window resize, and since the reset is potentially expensive we
+    // want to collapse several following requests into one.
+    QTimer                    *m_compositionMapperResetTimer;
 
     // Just to make sure we don't bother the user too often
     //

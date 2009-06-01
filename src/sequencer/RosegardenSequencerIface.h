@@ -24,6 +24,7 @@
 #include "sound/MappedDevice.h"
 #include "sound/MappedStudio.h"
 #include "sound/MappedCommon.h"
+#include "sound/MappedSegment.h"
 
 namespace Rosegarden {
 
@@ -292,16 +293,16 @@ public:
     // Debug stuff, to check MmappedSegment::iterator
     virtual void dumpFirstSegment() = 0;
 
-    /// Remap a segment while playing
-    virtual void remapSegment(const QString& filename, size_t newSize) = 0;
+    /// A segment has been modified
+    virtual void segmentModified(MappedSegment *) = 0;
 
-    /// Add a segment while playing
-    virtual void addSegment(const QString& filename) = 0;
+    /// Add a segment
+    virtual void segmentAdded(MappedSegment *) = 0;
 
-    /// Delete a segment while playing
-    virtual void deleteSegment(const QString& filename) = 0;
+    /// Delete a segment
+    virtual void segmentAboutToBeDeleted(MappedSegment *) = 0;
 
-    /// Close all mmapped segments
+    /// Close all mapped segments
     virtual void closeAllSegments() = 0;
 
     /** Update mute (etc) statuses while playing. The sequencer handles

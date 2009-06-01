@@ -16,7 +16,7 @@
 */
 
 
-#include "MetronomeMmapper.h"
+#include "MetronomeMapper.h"
 #include "misc/Debug.h"
 #include <QApplication>
 
@@ -31,8 +31,9 @@
 #include "base/Studio.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMmapper.h"
+#include "SegmentMapper.h"
 #include "sound/MappedEvent.h"
+#include "sound/MappedSegment.h"
 #include <QSettings>
 #include <QString>
 #include <algorithm>
@@ -41,12 +42,12 @@
 namespace Rosegarden
 {
 
-MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
-        : SegmentMmapper(doc, 0, createFileName()),
-        m_metronome(0),  // no metronome to begin with
-        m_tickDuration(0, 100000000)
+MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped) :
+    SegmentMapper(doc, 0, mapped),
+    m_metronome(0),  // no metronome to begin with
+    m_tickDuration(0, 100000000)
 {
-    SEQMAN_DEBUG << "MetronomeMmapper ctor : " << this << endl;
+    SEQMAN_DEBUG << "MetronomeMapper ctor : " << this << endl;
 
     // get metronome device
     Studio &studio = m_doc->getStudio();
@@ -57,13 +58,13 @@ MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
 
     if (metronome) {
 
-        SEQMAN_DEBUG << "MetronomeMmapper: have metronome, it's on instrument " << metronome->getInstrument() << endl;
+        SEQMAN_DEBUG << "MetronomeMapper: have metronome, it's on instrument " << metronome->getInstrument() << endl;
 
         m_metronome = new MidiMetronome(*metronome);
     } else {
         m_metronome = new MidiMetronome
                       (SystemInstrumentBase);
-        SEQMAN_DEBUG << "MetronomeMmapper: no metronome for device " << device << endl;
+        SEQMAN_DEBUG << "MetronomeMapper: no metronome for device " << device << endl;
     }
 
     Composition& c = m_doc->getComposition();
@@ -76,17 +77,14 @@ MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
             TimeSignature sig = c.getTimeSignatureAt(t);
             timeT barDuration = sig.getBarDuration();
             std::vector<int> divisions;
-            if (depth > 0)
-                sig.getDivisions(depth - 1, divisions);
+            if (depth > 0) sig.getDivisions(depth - 1, divisions);
             int ticks = 1;
 
             for (int i = -1; i < (int)divisions.size(); ++i) {
-                if (i >= 0)
-                    ticks *= divisions[i];
+                if (i >= 0) ticks *= divisions[i];
 
                 for (int tick = 0; tick < ticks; ++tick) {
-                    if (i >= 0 && (tick % divisions[i] == 0))
-                        continue;
+                    if (i >= 0 && (tick % divisions[i] == 0)) continue;
                     timeT tickTime = t + (tick * barDuration) / ticks;
                     m_ticks.push_back(Tick(tickTime, i + 1));
                 }
@@ -97,7 +95,7 @@ MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
     }
 
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
     int midiClock = settings.value("midiclock", 0).toInt() ;
     int mtcMode = settings.value("mtcmode", 0).toInt() ;
@@ -108,12 +106,11 @@ MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
         // Insert 24 clocks per quarter note
         //
         for (timeT insertTime = c.getStartMarker();
-                insertTime < c.getEndMarker();
-                insertTime += quarterNote / 24) {
+             insertTime < c.getEndMarker();
+             insertTime += quarterNote / 24) {
             m_ticks.push_back(Tick(insertTime, 3));
         }
     }
-
 
     if (mtcMode > 0) {
         // do something
@@ -122,59 +119,56 @@ MetronomeMmapper::MetronomeMmapper(RosegardenDocument* doc)
     sortTicks();
 
     if (m_ticks.size() == 0) {
-        SEQMAN_DEBUG << "MetronomeMmapper : WARNING no ticks generated\n";
+        SEQMAN_DEBUG << "MetronomeMapper : WARNING no ticks generated\n";
     }
 
     // Done by init()
 
-    //     m_mmappedSize = computeMmappedSize();
-    //     if (m_mmappedSize > 0) {
-    //         setFileSize(m_mmappedSize);
-    //         doMmap();
+    //     m_mappedSize = computeMappedSize();
+    //     if (m_mappedSize > 0) {
+    //         setFileSize(m_mappedSize);
+    //         doMap();
     //         dump();
     //     }
     settings.endGroup();
 }
 
-MetronomeMmapper::~MetronomeMmapper()
+MetronomeMapper::~MetronomeMapper()
 {
-    SEQMAN_DEBUG << "~MetronomeMmapper " << this << endl;
+    SEQMAN_DEBUG << "~MetronomeMapper " << this << endl;
     delete m_metronome;
 }
 
-InstrumentId MetronomeMmapper::getMetronomeInstrument()
+InstrumentId MetronomeMapper::getMetronomeInstrument()
 {
     return m_metronome->getInstrument();
 }
 
-QString MetronomeMmapper::createFileName()
-{
-    return QDir::tempPath() + "/rosegarden_metronome";
-}
-
-void MetronomeMmapper::dump()
+void MetronomeMapper::dump()
 {
     RealTime eventTime;
     Composition& comp = m_doc->getComposition();
 
-    SEQMAN_DEBUG << "MetronomeMmapper::dump: instrument is " << m_metronome->getInstrument() << endl;
+    SEQMAN_DEBUG << "MetronomeMapper::dump: instrument is "
+                 << m_metronome->getInstrument() << endl;
 
-    MappedEvent* bufPos = m_mmappedEventBuffer, *mE;
+    int index = 0;
 
     for (TickContainer::iterator i = m_ticks.begin(); i != m_ticks.end(); ++i) {
 
         /*
-        SEQMAN_DEBUG << "MetronomeMmapper::dump: velocity = "
+        SEQMAN_DEBUG << "MetronomeMapper::dump: velocity = "
                      << int(velocity) << endl;
                      */
 
         eventTime = comp.getElapsedRealTime(i->first);
 
-        if (i->second == 3) // MIDI Clock
-        {
-            mE = new (bufPos) MappedEvent(0, MappedEvent::MidiSystemMessage);
-            mE->setData1(MIDI_TIMING_CLOCK);
-            mE->setEventTime(eventTime);
+        MappedEvent e;
+
+        if (i->second == 3) { // MIDI Clock
+            e = MappedEvent(0, MappedEvent::MidiSystemMessage);
+            e.setData1(MIDI_TIMING_CLOCK);
+            e.setEventTime(eventTime);
         } else {
             MidiByte velocity;
             MidiByte pitch;
@@ -193,70 +187,67 @@ void MetronomeMmapper::dump()
                 break;
             }
 
-            new (bufPos) MappedEvent(m_metronome->getInstrument(),
-                                     MappedEvent::MidiNoteOneShot,
-                                     pitch,
-                                     velocity,
-                                     eventTime,
-                                     m_tickDuration,
-                                     RealTime::zeroTime);
+            e = MappedEvent(m_metronome->getInstrument(),
+                            MappedEvent::MidiNoteOneShot,
+                            pitch,
+                            velocity,
+                            eventTime,
+                            m_tickDuration,
+                            RealTime::zeroTime);
         }
 
-        ++bufPos;
+        m_mapped->getBuffer()[index] = e;
+        ++index;
     }
 
-    // Store the number of events at the start of the shared memory region
-    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
+    m_mapped->setBufferFill(index);
 
-    SEQMAN_DEBUG << "MetronomeMmapper::dump: - "
-    << "Total events written = " << *(size_t *)m_mmappedRegion
-    << endl;
+    SEQMAN_DEBUG << "MetronomeMapper::dump: - "
+                 << "Total events written = " << index
+                 << endl;
 }
 
-void MetronomeMmapper::sortTicks()
+void
+MetronomeMapper::sortTicks()
 {
     sort(m_ticks.begin(), m_ticks.end());
 }
 
-size_t MetronomeMmapper::computeMmappedSize()
+int
+MetronomeMapper::calculateSize()
 {
     QSettings settings;
-    settings.beginGroup( Rosegarden::SequencerOptionsConfigGroup );
+    settings.beginGroup(Rosegarden::SequencerOptionsConfigGroup);
 
     int midiClock = settings.value("midiclock", 0).toInt() ;
     int mtcMode = settings.value("mtcmode", 0).toInt() ;
 
     // base size for Metronome ticks
-    size_t size = m_ticks.size() * sizeof(MappedEvent);
+    size_t size = m_ticks.size();
     Composition& comp = m_doc->getComposition();
 
-    if (midiClock == 1)
-    {
+    if (midiClock == 1) {
+
         using Rosegarden::Note;
 
         // Allow room for MIDI clocks
         int clocks = ( 24 * ( comp.getEndMarker() - comp.getStartMarker() ) ) / 
             Note(Note::Crotchet).getDuration();
 
-        /*
-        SEQMAN_DEBUG << "MetronomeMmapper::computeMmappedSize - " 
-                     << "Number of clock events catered for = " << clocks
-                     << endl;
-        */
-
-        size += clocks * sizeof(MappedEvent);
+        size += clocks;
     }
 
-    if (mtcMode > 0)
-    {
+    if (mtcMode > 0) {
         // Allow room for MTC timing messages (how?)
     }
+
     settings.endGroup();
 
     return size;
 }
 
-unsigned int MetronomeMmapper::getSegmentRepeatCount()
+int
+MetronomeMapper::getSegmentRepeatCount()
 {
     return 1;
 }

@@ -36,7 +36,6 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "MmappedSegment.h"
 #include "sound/ControlBlock.h"
 #include "sound/SoundDriver.h"
 #include "sound/SoundDriverFactory.h"
@@ -77,13 +76,10 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopStart(0, 0),
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
-    m_metaIterator(0),
     m_transportToken(1),
     m_isEndOfCompReached(false),
     m_mutex(true) // recursive
 {
-    m_segmentFilesPath = QDir::tempPath();
-
     // Initialise the MappedStudio
     //
     initialiseStudio();
@@ -208,7 +204,7 @@ RosegardenSequencer::play(const RealTime &time,
     m_driver->setAudioBufferSizes(m_audioMix, m_audioRead, m_audioWrite,
                                   m_smallFileSize);
 
-    cleanupMmapData();
+/*    cleanupMmapData();
 
     // Map all segments
     //
@@ -245,20 +241,19 @@ RosegardenSequencer::play(const RealTime &time,
         mmapSegment(timeSigSegmentFileName);
     else
         SEQUENCER_DEBUG << "RosegardenSequencer::play() - no time sig segment found\n";
-
-    initMetaIterator();
-
+*/
     // report
     //
     SEQUENCER_DEBUG << "RosegardenSequencer::play() - starting to play\n";
 
     // Test bits
-    //     m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
+    //     m_metaIterator = new MappedSegmentsMetaIterator(m_mappedSegments);
     //     MappedComposition testCompo;
     //     m_metaIterator->fillCompositionWithEventsUntil(&testCompo,
     //                                                    RealTime(2,0));
-
-    //     dumpFirstSegment();
+    
+//!!!
+    dumpFirstSegment();
 
     // keep it simple
     return true;
@@ -392,7 +387,7 @@ RosegardenSequencer::stop()
     m_lastFetchSongPosition.sec = 0;
     m_lastFetchSongPosition.nsec = 0;
 
-    cleanupMmapData();
+//    cleanupMmapData();
 
     Profiles::getInstance()->dump();
 
@@ -822,7 +817,7 @@ RosegardenSequencer::getMappedObjectId(int type)
 
 std::vector<QString>
 RosegardenSequencer::getPropertyList(int id,
-                                        const QString &property)
+                                     const QString &property)
 {
     LOCKED;
 
@@ -1048,25 +1043,32 @@ void RosegardenSequencer::dumpFirstSegment()
 {
     LOCKED;
 
-    SEQUENCER_DEBUG << "Dumping 1st segment data :\n";
+    SEQUENCER_DEBUG << "Dumping 1st segment data :" << endl;
 
     unsigned int i = 0;
-    MmappedSegment* firstMappedSegment = (*(m_mmappedSegments.begin())).second;
+    
+    std::set<MappedSegment *> segs = m_metaIterator.getSegments();
+    if (segs.empty()) {
+        SEQUENCER_DEBUG << "(no segments)" << endl;
+        return;
+    }
 
-    MmappedSegment::iterator it(firstMappedSegment);
+    MappedSegment *firstMappedSegment = *segs.begin();
+
+    MappedSegment::iterator it(firstMappedSegment);
 
     for (; !it.atEnd(); ++it) {
 
         MappedEvent evt = (*it);
         SEQUENCER_DEBUG << i << " : inst = " << evt.getInstrument()
-        << " - type = " << evt.getType()
-        << " - data1 = " << (unsigned int)evt.getData1()
-        << " - data2 = " << (unsigned int)evt.getData2()
-        << " - time = " << evt.getEventTime()
-        << " - duration = " << evt.getDuration()
-        << " - audio mark = " << evt.getAudioStartMarker()
-        << endl;
-
+                        << " - type = " << evt.getType()
+                        << " - data1 = " << (unsigned int)evt.getData1()
+                        << " - data2 = " << (unsigned int)evt.getData2()
+                        << " - time = " << evt.getEventTime()
+                        << " - duration = " << evt.getDuration()
+                        << " - audio mark = " << evt.getAudioStartMarker()
+                        << endl;
+        
         ++i;
     }
 
@@ -1074,75 +1076,56 @@ void RosegardenSequencer::dumpFirstSegment()
 
 }
 
-
-void RosegardenSequencer::remapSegment(const QString& filename, size_t newSize)
+void
+RosegardenSequencer::segmentModified(MappedSegment *segment)
 {
+    if (!segment) return;
+
     LOCKED;
 
-    if (m_transportStatus != PLAYING)
-        return ;
+    SEQUENCER_DEBUG << "RosegardenSequencer::segmentModified(" << segment << ")\n";
 
-    SEQUENCER_DEBUG << "RosegardenSequencer::remapSegment(" << filename << ")\n";
-
-    MmappedSegment* m = m_mmappedSegments[filename];
-    if (m->remap(newSize) && m_metaIterator)
-        m_metaIterator->resetIteratorForSegment(filename);
+    if (m_transportStatus == PLAYING) {
+        m_metaIterator.resetIteratorForSegment(segment);
+    }
 }
 
-void RosegardenSequencer::addSegment(const QString& filename)
+void
+RosegardenSequencer::segmentAdded(MappedSegment *segment)
 {
+    if (!segment) return;
+
     LOCKED;
 
-    if (m_transportStatus != PLAYING)
-        return ;
+    SEQUENCER_DEBUG << "MmappedSegment::segmentAdded(" << segment << ")\n";
 
-    SEQUENCER_DEBUG << "MmappedSegment::addSegment(" << filename << ")\n";
-
-    MmappedSegment* m = mmapSegment(filename);
-
-    if (m_metaIterator)
-        m_metaIterator->addSegment(m);
+    m_metaIterator.addSegment(segment);
 }
 
-void RosegardenSequencer::deleteSegment(const QString& filename)
+void
+RosegardenSequencer::segmentAboutToBeDeleted(MappedSegment *segment)
 {
+    if (!segment) return;
+
     LOCKED;
 
-    if (m_transportStatus != PLAYING)
-        return ;
+    SEQUENCER_DEBUG << "MmappedSegment::segmentAboutToBeDeleted(" << segment << ")\n";
 
-    SEQUENCER_DEBUG << "MmappedSegment::deleteSegment(" << filename << ")\n";
-
-    MmappedSegment* m = m_mmappedSegments[filename];
-
-    if (m_metaIterator)
-        m_metaIterator->deleteSegment(m);
-
-    delete m;
-
-    // #932415
-    m_mmappedSegments.erase(filename);
+    m_metaIterator.removeSegment(segment);
 }
 
-void RosegardenSequencer::closeAllSegments()
+void
+RosegardenSequencer::closeAllSegments()
 {
     LOCKED;
 
     SEQUENCER_DEBUG << "MmappedSegment::closeAllSegments()\n";
 
-    for (MmappedSegmentsMetaIterator::mmappedsegments::iterator
-            i = m_mmappedSegments.begin();
-            i != m_mmappedSegments.end(); ++i) {
-        if (m_metaIterator)
-            m_metaIterator->deleteSegment(i->second);
-
-        delete i->second;
-    }
-
-    m_mmappedSegments.clear();
+    m_metaIterator.clear();
 }
 
-void RosegardenSequencer::remapTracks()
+void
+RosegardenSequencer::remapTracks()
 {
     LOCKED;
 
@@ -1211,11 +1194,11 @@ RosegardenSequencer::getSlice(MappedComposition &composition,
 
     if (firstFetch || (start < m_lastStartTime)) {
         SEQUENCER_DEBUG << "[calling jumpToTime on start]" << endl;
-        m_metaIterator->jumpToTime(start);
+        m_metaIterator.jumpToTime(start);
     }
 
-    (void)m_metaIterator->fillCompositionWithEventsUntil
-    (firstFetch, &composition, start, end);
+    (void)m_metaIterator.fillCompositionWithEventsUntil
+        (firstFetch, &composition, start, end);
 
     //     setEndOfCompReached(eventsRemaining); // don't do that, it breaks recording because
     // playing stops right after it starts.
@@ -1269,7 +1252,7 @@ RosegardenSequencer::startPlaying()
     m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
 
     std::vector<MappedEvent> audioEvents;
-    m_metaIterator->getAudioEvents(audioEvents);
+    m_metaIterator.getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 
     //    SEQUENCER_DEBUG << "RosegardenSequencer::startPlaying: pausing to simulate high-load environment" << endl;
@@ -1479,43 +1462,6 @@ RosegardenSequencer::applyFiltering(MappedComposition *mC,
     }
 }
 
-
-MmappedSegment* RosegardenSequencer::mmapSegment(const QString& file)
-{
-    MmappedSegment* m = 0;
-
-    try {
-        m = new MmappedSegment(file);
-    } catch (Exception e) {
-        SEQUENCER_DEBUG << "RosegardenSequencer::mmapSegment() - couldn't map file " << file
-        << " : " << e.getMessage().c_str() << endl;
-        return 0;
-    }
-
-
-    m_mmappedSegments[file] = m;
-    return m;
-}
-
-void RosegardenSequencer::initMetaIterator()
-{
-    delete m_metaIterator;
-    m_metaIterator = new MmappedSegmentsMetaIterator(m_mmappedSegments);
-}
-
-void RosegardenSequencer::cleanupMmapData()
-{
-    for (MmappedSegmentsMetaIterator::mmappedsegments::iterator i =
-             m_mmappedSegments.begin(); i != m_mmappedSegments.end(); ++i) {
-        delete i->second;
-    }
-
-    m_mmappedSegments.clear();
-
-    delete m_metaIterator;
-    m_metaIterator = 0;
-}
-
 // Initialise the virtual studio with a few audio faders and
 // create a plugin manager.  For the moment this is pretty
 // arbitrary but eventually we'll drive this from the gui
@@ -1548,7 +1494,7 @@ void
 RosegardenSequencer::rationalisePlayingAudio()
 {
     std::vector<MappedEvent> audioEvents;
-    m_metaIterator->getAudioEvents(audioEvents);
+    m_metaIterator.getAudioEvents(audioEvents);
     m_driver->initialiseAudioQueue(audioEvents);
 }
 

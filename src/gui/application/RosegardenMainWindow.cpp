@@ -462,7 +462,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     emit startupStatusMessage(tr("Starting sequence manager..."));
 
     // transport is created by setupActions()
-    m_seqManager = new SequenceManager(m_doc, getTransport());
+    m_seqManager = new SequenceManager(getTransport());
+    m_seqManager->setDocument(m_doc);
 
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any

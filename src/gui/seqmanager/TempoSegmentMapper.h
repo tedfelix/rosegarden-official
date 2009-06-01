@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,40 +15,34 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTMMAPPERFACTORY_H_
-#define _RG_SEGMENTMMAPPERFACTORY_H_
+#ifndef _RG_TEMPOSEGMENTMAPPER_H_
+#define _RG_TEMPOSEGMENTMAPPER_H_
 
-
-
-class QString;
+#include "SpecialSegmentMapper.h"
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-class TimeSigSegmentMmapper;
-class TempoSegmentMmapper;
-class SegmentMmapper;
-class Segment;
 class RosegardenDocument;
-class MetronomeMmapper;
 
 
-class SegmentMmapperFactory
+class TempoSegmentMapper : public SpecialSegmentMapper
 {
-public:
+    friend class SegmentMapperFactory;
 
-    static SegmentMmapper* makeMmapperForSegment(RosegardenDocument*, Segment*,
-                                                 const QString& fileName);
+protected:
+    TempoSegmentMapper(RosegardenDocument *doc, MappedSegment *mapped) :
+        SpecialSegmentMapper(doc, mapped) {
+    }
 
-    static MetronomeMmapper*      makeMetronome(RosegardenDocument*);
-    static TimeSigSegmentMmapper* makeTimeSig(RosegardenDocument*);
-    static TempoSegmentMmapper*   makeTempo(RosegardenDocument*);
+    // overrides from SegmentMapper
+    virtual int calculateSize();
+
+    // override from SegmentMapper
+    virtual void dump();
 };
-
-//----------------------------------------
-
-
 
 }
 

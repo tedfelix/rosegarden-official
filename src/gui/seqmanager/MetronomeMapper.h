@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,19 +15,16 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_METRONOMEMMAPPER_H_
-#define _RG_METRONOMEMMAPPER_H_
+#ifndef _RG_METRONOMEMAPPER_H_
+#define _RG_METRONOMEMAPPER_H_
 
 #include "base/MidiProgram.h"
 #include "base/RealTime.h"
-#include "SegmentMmapper.h"
+#include "SegmentMapper.h"
 #include <QString>
 #include <utility>
 #include <vector>
 #include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
@@ -36,29 +32,26 @@ namespace Rosegarden
 class RosegardenDocument;
 class MidiMetronome;
 
-
-class MetronomeMmapper : public SegmentMmapper
+class MetronomeMapper : public SegmentMapper
 {
-    friend class SegmentMmapperFactory;
+    friend class SegmentMapperFactory;
 
 public:
-
-    virtual ~MetronomeMmapper();
+    virtual ~MetronomeMapper();
 
     InstrumentId getMetronomeInstrument();
 
-    // overrides from SegmentMmapper
-    virtual unsigned int getSegmentRepeatCount();
+    // overrides from SegmentMapper
+    virtual int getSegmentRepeatCount();
 
 protected:
-    MetronomeMmapper(RosegardenDocument* doc);
+    MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped);
 
-    virtual size_t computeMmappedSize();
+    virtual int calculateSize();
 
     void sortTicks();
-    QString createFileName();
 
-    // override from SegmentMmapper
+    // override from SegmentMapper
     virtual void dump();
 
     //--------------- Data members ---------------------------------
@@ -71,9 +64,6 @@ protected:
     const MidiMetronome* m_metronome;
     RealTime m_tickDuration;
 };
-
-//----------------------------------------
-
 
 }
 

@@ -36,7 +36,6 @@ class ActionFileParser : public QObject, public QXmlDefaultHandler
 
 public:
     ActionFileParser(QObject *actionOwner);
-    ActionFileParser(QObject *actionOwner, QWidget *menuOwner);
     virtual ~ActionFileParser();
     
     bool load(QString actionRcFile);
@@ -105,7 +104,6 @@ protected:
     StateMap m_stateDisableMap;
 
     QObject *m_actionOwner;
-    QWidget *m_menuOwner;
     bool m_inMenuBar;
     bool m_inText;
     bool m_inEnable;

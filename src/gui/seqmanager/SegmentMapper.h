@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,14 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_SEGMENTMMAPPER_H_
-#define _RG_SEGMENTMMAPPER_H_
+#ifndef _RG_SEGMENTMAPPER_H_
+#define _RG_SEGMENTMAPPER_H_
 
 #include <QString>
 #include "base/Event.h"
-
-
-
 
 namespace Rosegarden
 {
@@ -33,45 +29,49 @@ class Segment;
 class RosegardenDocument;
 class MappedEvent;
 class Event;
+class MappedSegment;
 
-
-class SegmentMmapper
+class SegmentMapper
 {
-    friend class SegmentMmapperFactory;
+    friend class SegmentMapperFactory;
+
 public:
-    virtual ~SegmentMmapper();
+    virtual ~SegmentMapper();
 
     /**
      * refresh the object after the segment has been modified
      * returns true if size changed (and thus the sequencer
-     * needs to be told about it
+     * needs to be told about it)
      */
     bool refresh();
 
-    QString getFileName() { return m_fileName; }
-    size_t getFileSize() const { return m_mmappedSize; }
+//    QString getFileName() { return m_fileName; }
+//    size_t getFileSize() const { return m_mmappedSize; }
 
-    virtual unsigned int getSegmentRepeatCount();
+    virtual int getSegmentRepeatCount();
+
+    MappedSegment *getMappedSegment() { return m_mapped; }
 
 protected:
-    SegmentMmapper(RosegardenDocument*, Segment*,
-                   const QString& fileName);
+    SegmentMapper(RosegardenDocument *, Segment *, MappedSegment *);
 
-    virtual size_t computeMmappedSize();
-    
-    virtual size_t addMmappedSize(Segment *);
+    virtual int calculateSize(); // in MappedEvents
+    virtual int addSize(int size, Segment *);
+
+//    virtual size_t computeMappedSize();
+//    virtual size_t addMappedSize(Segment *);
 
     /// actual setup, must be called after ctor, calls virtual methods
     virtual void init();
 
     /// set the size of the mmapped file
-    void setFileSize(size_t);
+//    void setFileSize(size_t);
 
     /// perform the mmap() of the file
-    void doMmap();
+//    void doMap();
 
     /// mremap() the file after a size change
-    void remap(size_t newsize);
+//    void remap(size_t newsize);
 
     /// dump all segment data in the file
     virtual void dump();
@@ -82,22 +82,10 @@ protected:
                              TriggerSegmentRec *rec);
 
     //--------------- Data members ---------------------------------
-    RosegardenDocument* m_doc;
-    Segment* m_segment;
-    QString m_fileName;
-
-    int m_fd;
-    size_t m_mmappedSize;
-
-    // The shared memory region starts with a size_t value
-    // representing the number of MappedEvents that follow.
-    void *m_mmappedRegion;
-
-    // And this points to the next byte in the shared memory region.
-    MappedEvent* m_mmappedEventBuffer;
+    RosegardenDocument *m_doc;
+    Segment *m_segment;
+    MappedSegment *m_mapped; // I take ownership of this
 };
-
-//----------------------------------------
 
 
 }

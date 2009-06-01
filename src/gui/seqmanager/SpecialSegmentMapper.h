@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,52 +15,27 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_COMPOSITIONMMAPPER_H_
-#define _RG_COMPOSITIONMMAPPER_H_
+#ifndef _RG_SPECIALSEGMENTMAPPER_H_
+#define _RG_SPECIALSEGMENTMAPPER_H_
 
-#include <map>
+#include "SegmentMapper.h"
 #include <QString>
-
-
-
 
 namespace Rosegarden
 {
 
-class SegmentMmapper;
-class Segment;
 class RosegardenDocument;
 
-
-class CompositionMmapper
+class SpecialSegmentMapper : public SegmentMapper
 {
-    friend class SequenceManager;
-
 public:
-    CompositionMmapper(RosegardenDocument *doc);
-    ~CompositionMmapper();
-
-    QString getSegmentFileName(Segment*);
-    size_t  getSegmentFileSize(Segment*);
-
-    void cleanup();
+    // overrides from SegmentMapper
+    virtual int getSegmentRepeatCount();
 
 protected:
-    bool segmentModified(Segment*);
-    void segmentAdded(Segment*);
-    void segmentDeleted(Segment*);
-
-    void mmapSegment(Segment*);
-    QString makeFileName(Segment*);
-
-    //--------------- Data members ---------------------------------
-
-    RosegardenDocument* m_doc;
-    typedef std::map<Segment*, SegmentMmapper*> segmentmmapers;
-
-    segmentmmapers m_segmentMmappers;
+    SpecialSegmentMapper(RosegardenDocument *doc,
+                         MappedSegment *mapped);
 };
-
 
 }
 

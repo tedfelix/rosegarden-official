@@ -16,50 +16,55 @@
 */
 
 
-#include "TimeSigSegmentMmapper.h"
+#include "TimeSigSegmentMapper.h"
 
 #include "base/Event.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMmapper.h"
+#include "SegmentMapper.h"
 #include "sound/MappedEvent.h"
-#include "SpecialSegmentMmapper.h"
+#include "sound/MappedSegment.h"
+#include "SpecialSegmentMapper.h"
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-void TimeSigSegmentMmapper::dump()
+void
+TimeSigSegmentMapper::dump()
 {
     RealTime eventTime;
 
     Composition& comp = m_doc->getComposition();
-    MappedEvent* bufPos = m_mmappedEventBuffer;
+
+    int index = 0;
 
     for (int i = 0; i < comp.getTimeSignatureCount(); ++i) {
 
         std::pair<timeT, TimeSignature> timeSigChange = comp.getTimeSignatureChange(i);
 
         eventTime = comp.getElapsedRealTime(timeSigChange.first);
-        MappedEvent* mappedEvent = new (bufPos) MappedEvent();
-        mappedEvent->setType(MappedEvent::TimeSignature);
-        mappedEvent->setEventTime(eventTime);
-        mappedEvent->setData1(timeSigChange.second.getNumerator());
-        mappedEvent->setData2(timeSigChange.second.getDenominator());
 
-        ++bufPos;
+        MappedEvent e;
+        e.setType(MappedEvent::TimeSignature);
+        e.setEventTime(eventTime);
+        e.setData1(timeSigChange.second.getNumerator());
+        e.setData2(timeSigChange.second.getDenominator());
+
+        m_mapped->getBuffer()[index] = e;
+        ++index;
     }
 
-    // Store the number of events at the start of the shared memory region
-    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
+    m_mapped->setBufferFill(index);
 }
 
-size_t TimeSigSegmentMmapper::computeMmappedSize()
+int
+TimeSigSegmentMapper::calculateSize()
 {
-    return m_doc->getComposition().getTimeSignatureCount() * sizeof(MappedEvent);
+    return m_doc->getComposition().getTimeSignatureCount();
 }
 
 }

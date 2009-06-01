@@ -37,8 +37,7 @@
 #include "base/Event.h"
 #include "sound/MappedStudio.h"
 #include "sound/ExternalTransport.h"
-
-#include "MmappedSegment.h"
+#include "sound/MappedSegment.h"
 
 #include <deque>
 
@@ -235,12 +234,15 @@ public:
     //
     virtual void clearStudio();
 
-    // Debug stuff, to check MmappedSegment::iterator
+    // Debug stuff, to check MappedSegment::iterator
     virtual void dumpFirstSegment();
 
-    virtual void remapSegment(const QString& filename, size_t newSize);
-    virtual void addSegment(const QString& filename);
-    virtual void deleteSegment(const QString& filename);
+    virtual void segmentModified(MappedSegment *);
+    virtual void segmentAdded(MappedSegment *);
+    virtual void segmentAboutToBeDeleted(MappedSegment *);
+//    virtual void remapSegment(const QString& filename, size_t newSize);
+//    virtual void addSegment(const QString& filename);
+//    virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();
     virtual void remapTracks();
 
@@ -357,10 +359,10 @@ protected:
     //
     void applyLatencyCompensation(MappedComposition &);
 
-    // mmap-related stuff
-    MmappedSegment* mmapSegment(const QString&);
-    void cleanupMmapData();
-    void initMetaIterator();
+    // map-related stuff
+//    MappedSegment *mapSegment(const QString&);
+//    void cleanupMmapData();
+//    void initMetaIterator();
 
     void rationalisePlayingAudio();
     void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
@@ -396,9 +398,9 @@ protected:
 
     // mmap segments
     // 
-    QString m_segmentFilesPath;
-    MmappedSegmentsMetaIterator::mmappedsegments m_mmappedSegments;
-    MmappedSegmentsMetaIterator* m_metaIterator;
+//!!!    QString m_segmentFilesPath;
+//!!!    MappedSegmentsMetaIterator::mappedsegments m_mappedSegments;
+    MappedSegmentsMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
     MappedComposition m_asyncQueue;

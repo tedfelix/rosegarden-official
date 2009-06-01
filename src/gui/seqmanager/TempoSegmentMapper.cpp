@@ -16,55 +16,58 @@
 */
 
 
-#include "TempoSegmentMmapper.h"
+#include "TempoSegmentMapper.h"
 
 #include "base/Event.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMmapper.h"
+#include "SegmentMapper.h"
 #include "sound/MappedEvent.h"
-#include "SpecialSegmentMmapper.h"
+#include "sound/MappedSegment.h"
+#include "SpecialSegmentMapper.h"
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-void TempoSegmentMmapper::dump()
+void TempoSegmentMapper::dump()
 {
     RealTime eventTime;
 
     Composition& comp = m_doc->getComposition();
-    MappedEvent* bufPos = m_mmappedEventBuffer;
+
+    int index = 0;
 
     for (int i = 0; i < comp.getTempoChangeCount(); ++i) {
 
         std::pair<timeT, tempoT> tempoChange = comp.getTempoChange(i);
 
         eventTime = comp.getElapsedRealTime(tempoChange.first);
-        MappedEvent* mappedEvent = new (bufPos) MappedEvent();
-        mappedEvent->setType(MappedEvent::Tempo);
-        mappedEvent->setEventTime(eventTime);
+        MappedEvent e;
+        e.setType(MappedEvent::Tempo);
+        e.setEventTime(eventTime);
 
         // Nasty hack -- we use the instrument ID to pass through the
         // raw tempo value, as it has the appropriate range (unlike
         // e.g. tempo1 + tempo2).  These events are not actually used
         // on the sequencer side yet, so this may change to something
         // nicer at some point.
-        mappedEvent->setInstrument(tempoChange.second);
+        e.setInstrument(tempoChange.second);
 
-        ++bufPos;
+        m_mapped->getBuffer()[index] = e;
+        ++index;
     }
 
-    // Store the number of events at the start of the shared memory region
-    *(size_t *)m_mmappedRegion = (bufPos - m_mmappedEventBuffer);
+    m_mapped->setBufferFill(index);
 }
 
-size_t TempoSegmentMmapper::computeMmappedSize()
+int
+TempoSegmentMapper::calculateSize()
 {
-    return m_doc->getComposition().getTempoChangeCount() * sizeof(MappedEvent);
+    return m_doc->getComposition().getTempoChangeCount();
 }
 
 }

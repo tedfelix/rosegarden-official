@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -16,10 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_AUDIOSEGMENTMMAPPER_H_
-#define _RG_AUDIOSEGMENTMMAPPER_H_
-
-#include "SegmentMmapper.h"
+#ifndef _RG_SEGMENTMAPPERFACTORY_H_
+#define _RG_SEGMENTMAPPERFACTORY_H_
 
 
 class QString;
@@ -28,26 +25,22 @@ class QString;
 namespace Rosegarden
 {
 
+class TimeSigSegmentMapper;
+class TempoSegmentMapper;
+class SegmentMapper;
+class MappedSegment;
 class Segment;
 class RosegardenDocument;
+class MetronomeMapper;
 
-
-class AudioSegmentMmapper : public SegmentMmapper
+class SegmentMapperFactory
 {
-    friend class SegmentMmapperFactory;
-
-protected:
-    AudioSegmentMmapper(RosegardenDocument*, Segment*,
-                        const QString& fileName);
-
-    virtual size_t computeMmappedSize();
-
-    /// dump all segment data in the file
-    virtual void dump();
+public:
+    static SegmentMapper *makeMapperForSegment(RosegardenDocument *, Segment *);
+    static MetronomeMapper *makeMetronome(RosegardenDocument *);
+    static TimeSigSegmentMapper *makeTimeSig(RosegardenDocument *);
+    static TempoSegmentMapper *makeTempo(RosegardenDocument *);
 };
-
-//----------------------------------------
-
 
 }
 

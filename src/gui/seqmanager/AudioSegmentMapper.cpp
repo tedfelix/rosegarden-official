@@ -15,8 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include "AudioSegmentMmapper.h"
+#include "AudioSegmentMapper.h"
 
 #include "base/Event.h"
 #include "base/Composition.h"
@@ -24,20 +23,24 @@
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
 #include "document/RosegardenDocument.h"
-#include "SegmentMmapper.h"
+#include "SegmentMapper.h"
 #include "sound/MappedEvent.h"
+#include "sound/MappedSegment.h"
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-AudioSegmentMmapper::AudioSegmentMmapper(RosegardenDocument* doc, Segment* s,
-        const QString& fileName)
-        : SegmentMmapper(doc, s, fileName)
-{}
+AudioSegmentMapper::AudioSegmentMapper(RosegardenDocument *doc,
+                                       Segment *s,
+                                       MappedSegment *mapped) :
+    SegmentMapper(doc, s, mapped)
+{
+}
 
-void AudioSegmentMmapper::dump()
+void
+AudioSegmentMapper::dump()
 {
     Composition &comp = m_doc->getComposition();
 
@@ -46,8 +49,8 @@ void AudioSegmentMmapper::dump()
 
     // Can't write out if no track
     if (!track) {
-        std::cerr << "AudioSegmentMmapper::dump: ERROR: No track for segment!"
-        << std::endl;
+        std::cerr << "AudioSegmentMapper::dump: ERROR: No track for segment!"
+                  << std::endl;
         return ;
     }
 
@@ -66,14 +69,12 @@ void AudioSegmentMmapper::dump()
     if (repeatCount > 0)
         repeatEndTime = m_segment->getRepeatEndTime();
 
-    MappedEvent* bufPos = m_mmappedEventBuffer;
+    int index = 0;
 
     for (int repeatNo = 0; repeatNo <= repeatCount; ++repeatNo) {
 
-        timeT playTime =
-            segmentStartTime + repeatNo * segmentDuration;
-        if (playTime >= repeatEndTime)
-            break;
+        timeT playTime = segmentStartTime + repeatNo * segmentDuration;
+        if (playTime >= repeatEndTime) break;
 
         playTime = playTime + m_segment->getDelay();
         eventTime = comp.getElapsedRealTime(playTime);
@@ -81,45 +82,48 @@ void AudioSegmentMmapper::dump()
 
         RealTime audioStart = m_segment->getAudioStartTime();
         RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
-        MappedEvent *mE =
-            new (bufPos) MappedEvent(track->getInstrument(),  // send instrument for audio
-                                     m_segment->getAudioFileId(),
-                                     eventTime,
-                                     audioDuration,
-                                     audioStart);
-        mE->setTrackId(track->getId());
-        mE->setRuntimeSegmentId(m_segment->getRuntimeId());
+
+        MappedEvent e(track->getInstrument(),  // send instrument for audio
+                      m_segment->getAudioFileId(),
+                      eventTime,
+                      audioDuration,
+                      audioStart);
+
+        e.setTrackId(track->getId());
+        e.setRuntimeSegmentId(m_segment->getRuntimeId());
 
         // Send the autofade if required
         //
         if (m_segment->isAutoFading()) {
-            mE->setAutoFade(true);
-            mE->setFadeInTime(m_segment->getFadeInTime());
-            mE->setFadeOutTime(m_segment->getFadeOutTime());
-            std::cout << "AudioSegmentMmapper::dump - "
-            << "SETTING AUTOFADE "
-            << "in = " << m_segment->getFadeInTime()
-            << ", out = " << m_segment->getFadeOutTime()
-            << std::endl;
+            e.setAutoFade(true);
+            e.setFadeInTime(m_segment->getFadeInTime());
+            e.setFadeOutTime(m_segment->getFadeOutTime());
+            std::cout << "AudioSegmentMapper::dump - "
+                      << "SETTING AUTOFADE "
+                      << "in = " << m_segment->getFadeInTime()
+                      << ", out = " << m_segment->getFadeOutTime()
+                      << std::endl;
         } else {
-            //            std::cout << "AudioSegmentMmapper::dump - "
+            //            std::cout << "AudioSegmentMapper::dump - "
             //                      << "NO AUTOFADE SET ON SEGMENT" << std::endl;
         }
 
-        ++bufPos;
+        m_mapped->getBuffer()[index] = e;
+        ++index;
     }
 
-    *(size_t *)m_mmappedRegion = repeatCount + 1;
+    m_mapped->setBufferFill(index);
 }
 
-size_t AudioSegmentMmapper::computeMmappedSize()
+int
+AudioSegmentMapper::calculateSize()
 {
     if (!m_segment) return 0;
 
     int repeatCount = getSegmentRepeatCount();
 
-    return (repeatCount + 1) * 1 * sizeof(MappedEvent);
     // audio segments don't have events, we just need room for 1 MappedEvent
+    return (repeatCount + 1) * 1;
 }
 
 }
