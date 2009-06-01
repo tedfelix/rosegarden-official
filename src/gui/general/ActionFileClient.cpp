@@ -50,9 +50,9 @@ ActionFileClient::createAction(QString actionName, QString connection)
     }
     QAction *action = new QAction(obj);
     action->setObjectName(actionName);
+    QByteArray bc = connection.toUtf8();
     if (connection != "") {
-        QObject::connect(action, SIGNAL(triggered()),
-                         obj, qStrToCharPtrUtf8(connection) );
+        QObject::connect(action, SIGNAL(triggered()), obj, bc.data());
     }
     return action;
 }
@@ -67,9 +67,9 @@ ActionFileClient::createAction(QString actionName, QObject *target, QString conn
     }
     QAction *action = new QAction(obj);
     action->setObjectName(actionName);
+    QByteArray bc = connection.toUtf8();
     if (connection != "") {
-        QObject::connect(action, SIGNAL(triggered()),
-                         target, qStrToCharPtrUtf8(connection) );
+        QObject::connect(action, SIGNAL(triggered()), target, bc.data());
     }
     return action;
 }
