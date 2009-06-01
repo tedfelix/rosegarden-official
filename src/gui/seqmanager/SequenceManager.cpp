@@ -153,6 +153,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
 
     DataBlockRepository::clear();
 
+    RosegardenSequencer::getInstance()->closeAllSegments();
+
     if (m_doc) m_doc->getComposition().removeObserver(this);
     disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()));
 

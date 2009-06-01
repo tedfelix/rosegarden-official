@@ -60,7 +60,6 @@ CompositionMapper::~CompositionMapper()
 {
     SEQMAN_DEBUG << "~CompositionMapper()\n";
 
-    //!!! how to synchronise this with sequencer?
     for (segmentmappers::iterator i = m_segmentMappers.begin();
          i != m_segmentMappers.end(); ++i) {
         delete i->second;
