@@ -73,7 +73,7 @@
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedCommon.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedDevice.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedEvent.h"
@@ -1740,7 +1740,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 }
 
 void
-RosegardenDocument::insertRecordedMidi(const MappedComposition &mC)
+RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 {
     RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events" << endl;
 
@@ -1784,7 +1784,7 @@ RosegardenDocument::insertRecordedMidi(const MappedComposition &mC)
         timeT updateFrom = m_composition.getDuration();
         bool haveNotes = false;
 
-        MappedComposition::const_iterator i;
+        MappedEventList::const_iterator i;
 
         // process all the incoming MappedEvents
         //
@@ -2006,7 +2006,7 @@ RosegardenDocument::updateRecordingMIDISegment()
 
     if (m_recordMIDISegments.size() == 0) {
         // make this call once to create one
-        insertRecordedMidi(MappedComposition());
+        insertRecordedMidi(MappedEventList());
         if (m_recordMIDISegments.size() == 0)
             return ; // not recording any MIDI
     }
@@ -2876,7 +2876,7 @@ void
 RosegardenDocument::initialiseControllers()
 {
     InstrumentList list = m_studio.getAllInstruments();
-    MappedComposition mC;
+    MappedEventList mC;
     MappedEvent *mE;
 
     InstrumentList::iterator it = list.begin();
@@ -2912,7 +2912,7 @@ RosegardenDocument::initialiseControllers()
         }
     }
 
-    StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedEventList(mC);
 }
 
 void
@@ -2921,7 +2921,7 @@ RosegardenDocument::clearAllPlugins()
     //RG_DEBUG << "clearAllPlugins" << endl;
 
     InstrumentList list = m_studio.getAllInstruments();
-    MappedComposition mC;
+    MappedEventList mC;
 
     InstrumentList::iterator it = list.begin();
     for (; it != list.end(); it++) {

@@ -50,7 +50,7 @@ namespace Rosegarden
 class SequenceManager;
 class RosegardenMainViewWidget;
 class ProgressDialog;
-class MappedComposition;
+class MappedEventList;
 class Event;
 class EditViewBase;
 class Clipboard;
@@ -287,7 +287,7 @@ public:
     /**
      * insert some recorded MIDI events into our recording Segment
      */
-    void insertRecordedMidi(const MappedComposition &mc);
+    void insertRecordedMidi(const MappedEventList &mc);
 
     /**
      * Update the recording value() -- called regularly from

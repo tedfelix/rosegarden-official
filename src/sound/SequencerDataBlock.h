@@ -33,7 +33,7 @@ struct LevelInfo
     int levelRight; // if stereo audio
 };
 
-class MappedComposition;
+class MappedEventList;
 
 
 #define SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS 512 // can't be a symbol
@@ -63,8 +63,8 @@ public:
     bool getVisual(MappedEvent &ev) const;
     void setVisual(const MappedEvent *ev);
 
-    int getRecordedEvents(MappedComposition &) const;
-    void addRecordedEvents(MappedComposition *);
+    int getRecordedEvents(MappedEventList &) const;
+    void addRecordedEvents(MappedEventList *);
 
     bool getTrackLevel(TrackId track, LevelInfo &) const;
     void setTrackLevel(TrackId track, const LevelInfo &);

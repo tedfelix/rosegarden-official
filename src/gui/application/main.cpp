@@ -300,7 +300,7 @@ and libRosegardenSound:
    Rosegarden Sequencer.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
-   MIDI files) and the MappedEvent and MappedComposition classes (the
+   MIDI files) and the MappedEvent and MappedEventList classes (the
    communication class for transferring events back and forth between
    sequencer and GUI).  This library is needed by the GUI as well as
    the Sequencer.

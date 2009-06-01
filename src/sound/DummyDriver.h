@@ -43,11 +43,11 @@ public:
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
 
-    virtual bool getMappedComposition(MappedComposition &) { }
+    virtual bool getMappedEventList(MappedEventList &) { }
 
-    virtual void processEventsOut(const MappedComposition & /*mC*/) { }
+    virtual void processEventsOut(const MappedEventList & /*mC*/) { }
 
-    virtual void processEventsOut(const MappedComposition &,
+    virtual void processEventsOut(const MappedEventList &,
                                   const RealTime &,
                                   const RealTime &) { }
 
@@ -147,7 +147,7 @@ public:
     virtual bool areClocksRunning() const { return true; }
 
 protected:
-    virtual void processMidiOut(const MappedComposition & /*mC*/,
+    virtual void processMidiOut(const MappedEventList & /*mC*/,
                                 const RealTime &, const RealTime &) { }
     virtual void generateInstruments()  { }
 

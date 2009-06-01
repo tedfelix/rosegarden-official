@@ -19,7 +19,7 @@
 #include <QStringList>
 
 #include "base/Device.h"
-#include "MappedComposition.h"
+#include "MappedEventList.h"
 #include "MappedInstrument.h"
 #include "MappedDevice.h"
 #include "SequencerDataBlock.h"
@@ -154,20 +154,20 @@ public:
     
     virtual RealTime getSequencerTime() = 0;
 
-    virtual bool getMappedComposition(MappedComposition &) = 0;
+    virtual bool getMappedEventList(MappedEventList &) = 0;
 
     virtual void startClocks() { }
     virtual void stopClocks() { }
 
     // Process some asynchronous events
     //
-    virtual void processEventsOut(const MappedComposition &mC) = 0;
+    virtual void processEventsOut(const MappedEventList &mC) = 0;
 
     // Process some scheduled events on the output queue.  The
     // slice times are here so that the driver can interleave
     // note-off events as appropriate.
     //
-    virtual void processEventsOut(const MappedComposition &mC,
+    virtual void processEventsOut(const MappedEventList &mC,
                                   const RealTime &sliceStart,
                                   const RealTime &sliceEnd) = 0;
 
@@ -424,7 +424,7 @@ public:
 protected:
     // Helper functions to be implemented by subclasses
     //
-    virtual void processMidiOut(const MappedComposition &mC,
+    virtual void processMidiOut(const MappedEventList &mC,
                                 const RealTime &sliceStart,
                                 const RealTime &sliceEnd) = 0;
     virtual void generateInstruments() = 0;
@@ -456,7 +456,7 @@ protected:
 
     DeviceId                                    m_midiRecordDevice;
 
-    MappedComposition                           m_returnComposition;
+    MappedEventList                           m_returnComposition;
     RecordStatus                                m_recordStatus;
 
 

@@ -23,7 +23,7 @@
 #include <QDateTime>
 
 #include "base/Profiler.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 
 #include "misc/Debug.h"
 

@@ -73,7 +73,7 @@ class ProgressBar;
 class PlayListDialog;
 class MidiMixerWindow;
 class MarkerEditor;
-class MappedComposition;
+class MappedEventList;
 class LircCommander;
 class LircClient;
 class InstrumentParameterBox;

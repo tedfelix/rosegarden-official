@@ -2505,11 +2505,11 @@ AlsaDriver::getAlsaTime()
 }
 
 
-// Get all pending input events and turn them into a MappedComposition.
+// Get all pending input events and turn them into a MappedEventList.
 //
 //
 bool
-AlsaDriver::getMappedComposition(MappedComposition &composition)
+AlsaDriver::getMappedEventList(MappedEventList &composition)
 {
     while (_failureReportReadIndex != _failureReportWriteIndex) {
         MappedEvent::FailureCode code = _failureReports[_failureReportReadIndex];
@@ -2522,7 +2522,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
     }
 
     if (!m_returnComposition.empty()) {
-        for (MappedComposition::iterator i = m_returnComposition.begin();
+        for (MappedEventList::iterator i = m_returnComposition.begin();
                 i != m_returnComposition.end(); ++i) {
             composition.insert(new MappedEvent(**i));
         }
@@ -2786,7 +2786,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
         case SND_SEQ_EVENT_CLOCK:
 #ifdef DEBUG_ALSA
 
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "got realtime MIDI clock" << std::endl;
 #endif
 
@@ -2802,7 +2802,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "START" << std::endl;
 #endif
 
@@ -2816,7 +2816,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "CONTINUE" << std::endl;
 #endif
 
@@ -2830,7 +2830,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
                 }
             }
 #ifdef DEBUG_ALSA
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "STOP" << std::endl;
 #endif
 
@@ -2839,7 +2839,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
         case SND_SEQ_EVENT_SONGPOS:
 #ifdef DEBUG_ALSA
 
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "SONG POSITION" << std::endl;
 #endif
 
@@ -2858,7 +2858,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
             m_portCheckNeeded = true;
 #ifdef DEBUG_ALSA
 
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "got announce event ("
             << int(event->type) << ")" << std::endl;
 #endif
@@ -2868,7 +2868,7 @@ AlsaDriver::getMappedComposition(MappedComposition &composition)
         default:
 #ifdef DEBUG_ALSA
 
-            std::cerr << "AlsaDriver::getMappedComposition - "
+            std::cerr << "AlsaDriver::getMappedEventList - "
             << "got unhandled MIDI event type from ALSA sequencer"
             << "(" << int(event->type) << ")" << std::endl;
 #endif
@@ -3443,7 +3443,7 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
 }
 
 void
-AlsaDriver::processMidiOut(const MappedComposition &mC,
+AlsaDriver::processMidiOut(const MappedEventList &mC,
                            const RealTime &sliceStart,
                            const RealTime &sliceEnd)
 {
@@ -3478,9 +3478,9 @@ AlsaDriver::processMidiOut(const MappedComposition &mC,
     << "), " << mC.size() << " events, now is " << now << std::endl;
 #endif
 
-    // NB the MappedComposition is implicitly ordered by time (std::multiset)
+    // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    for (MappedComposition::const_iterator i = mC.begin(); i != mC.end(); ++i) {
+    for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
         if ((*i)->getType() >= MappedEvent::Audio)
             continue;
 
@@ -4046,13 +4046,13 @@ AlsaDriver::stopClocks()
 
 
 void
-AlsaDriver::processEventsOut(const MappedComposition &mC)
+AlsaDriver::processEventsOut(const MappedEventList &mC)
 {
     processEventsOut(mC, RealTime::zeroTime, RealTime::zeroTime);
 }
 
 void
-AlsaDriver::processEventsOut(const MappedComposition &mC,
+AlsaDriver::processEventsOut(const MappedEventList &mC,
                              const RealTime &sliceStart,
                              const RealTime &sliceEnd)
 {
@@ -4078,7 +4078,7 @@ AlsaDriver::processEventsOut(const MappedComposition &mC,
     bool haveNewAudio = false;
 
     // insert audio events if we find them
-    for (MappedComposition::const_iterator i = mC.begin(); i != mC.end(); ++i) {
+    for (MappedEventList::const_iterator i = mC.begin(); i != mC.end(); ++i) {
 #ifdef HAVE_LIBJACK
 
         // Play an audio file

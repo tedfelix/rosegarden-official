@@ -13,7 +13,7 @@
 */
 
 #include <QDataStream>
-#include "MappedComposition.h"
+#include "MappedEventList.h"
 #include "MappedEvent.h"
 #include "base/SegmentPerformanceHelper.h"
 #include <iostream>
@@ -25,47 +25,47 @@ using std::cerr;
 using std::cout;
 using std::endl;
 
-MappedComposition::~MappedComposition()
+MappedEventList::~MappedEventList()
 {
     clear();
 }
 
 // copy constructor
-MappedComposition::MappedComposition(const MappedComposition &mC):
-        std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>()
+MappedEventList::MappedEventList(const MappedEventList &mC):
+    std::multiset<MappedEvent *, MappedEvent::MappedEventCmp>()
 {
     clear();
 
     // deep copy
-    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); it++)
         insert(new MappedEvent(**it));
 
 }
 
-MappedComposition &
-MappedComposition::operator=(const MappedComposition &c)
+MappedEventList &
+MappedEventList::operator=(const MappedEventList &c)
 {
     if (&c == this) return *this;
 
     clear();
 
-    for (MappedComposition::const_iterator it = c.begin(); it != c.end(); it++)
+    for (MappedEventList::const_iterator it = c.begin(); it != c.end(); it++)
         insert(new MappedEvent(**it));
 
     return *this;
 }
     
 void
-MappedComposition::merge(const MappedComposition &mC)
+MappedEventList::merge(const MappedEventList &mC)
 {
-    for (MappedComposition::const_iterator it = mC.begin(); it != mC.end(); it++)
+    for (MappedEventList::const_iterator it = mC.begin(); it != mC.end(); it++)
         insert(new MappedEvent(**it)); // deep copy
 }
 
 void
-MappedComposition::clear()
+MappedEventList::clear()
 {
-    for (MappedCompositionIterator it = begin(); it != end(); it++)
+    for (MappedEventListIterator it = begin(); it != end(); it++)
         delete (*it);
 
     erase(begin(), end());

@@ -164,7 +164,7 @@
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/MappedCommon.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedStudio.h"
 #include "sound/MidiFile.h"
@@ -3988,7 +3988,7 @@ RosegardenMainWindow::slotCheckTransportStatus()
 
         m_seqManager->setTransportStatus(status);
 
-        MappedComposition asynchronousQueue =
+        MappedEventList asynchronousQueue =
             RosegardenSequencer::getInstance()->pullAsynchronousMidiQueue();
 
         if (!asynchronousQueue.empty()) {
@@ -4029,7 +4029,7 @@ RosegardenMainWindow::slotUpdatePlaybackPosition()
 
     if (m_seqManager->getTransportStatus() == RECORDING) {
 
-        MappedComposition mC;
+        MappedEventList mC;
         if (SequencerDataBlock::getInstance()->getRecordedEvents(mC) > 0) {
             m_seqManager->processAsynchronousMidi(mC, 0);
             m_doc->insertRecordedMidi(mC);

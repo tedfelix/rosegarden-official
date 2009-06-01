@@ -35,7 +35,7 @@ namespace Rosegarden
 class RealTime;
 class MappedInstrument;
 class MappedEvent;
-class MappedComposition;
+class MappedEventList;
 
 typedef std::pair<Rosegarden::MidiByte, Rosegarden::MidiByte> MidiControlPair;
 
@@ -113,7 +113,7 @@ public:
     // interfaces.
     //
     static void sendMappedEvent(const MappedEvent& mE);
-    static void sendMappedComposition(const MappedComposition &mC);
+    static void sendMappedEventList(const MappedEventList &mC);
 
     // MappedInstrument
     //

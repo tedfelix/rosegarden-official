@@ -49,7 +49,7 @@
 #include "MetronomeMapper.h"
 #include "SegmentMapperFactory.h"
 #include "sound/AudioFile.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/SoundDriver.h"
@@ -816,7 +816,7 @@ punchin:
 }
 
 void
-SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
+SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                                          AudioManagerDialog *audioManagerDialog)
 {
     static bool boolShowingWarning = false;
@@ -826,7 +826,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     if (m_doc == 0 || mC.size() == 0)
         return ;
 
-    MappedComposition::const_iterator i;
+    MappedEventList::const_iterator i;
 
     // before applying through-filter, catch program-change-messages
     int prg;
@@ -864,7 +864,7 @@ SequenceManager::processAsynchronousMidi(const MappedComposition &mC,
     // output, but here we need both filtered (for OUT display) and
     // unfiltered (for insertable note callbacks) compositions, so
     // we've received the unfiltered copy and will filter here
-    MappedComposition tempMC =
+    MappedEventList tempMC =
         applyFiltering(mC,
                        MappedEvent::MappedEventType(
                            m_doc->getStudio().getMIDIThruFilter()));
@@ -1371,7 +1371,7 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 {
     Studio &studio = m_doc->getStudio();
     InstrumentList list = studio.getAllInstruments();
-    MappedComposition mC;
+    MappedEventList mC;
     MappedEvent *mE;
 
     std::set<InstrumentId> activeInstruments;
@@ -1443,9 +1443,9 @@ SequenceManager::preparePlayback(bool forceProgramChanges)
 
     }
 
-    // Send the MappedComposition if it's got anything in it
+    // Send the MappedEventList if it's got anything in it
     showVisuals(mC);
-    StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedEventList(mC);
 }
 
 void
@@ -1490,7 +1490,7 @@ SequenceManager::resetControllers()
     InstrumentList list = m_doc->getStudio().getPresentationInstruments();
     InstrumentList::iterator it;
 
-    MappedComposition mC;
+    MappedEventList mC;
 
     for (it = list.begin(); it != list.end(); it++) {
         if ((*it)->getType() == Instrument::Midi) {
@@ -1502,7 +1502,7 @@ SequenceManager::resetControllers()
         }
     }
 
-    StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedEventList(mC);
     //showVisuals(mC);
 }
 
@@ -1510,7 +1510,7 @@ void
 SequenceManager::resetMidiNetwork()
 {
     SEQMAN_DEBUG << "SequenceManager::resetMidiNetwork - resetting" << endl;
-    MappedComposition mC;
+    MappedEventList mC;
 
     // Should do all Midi Instrument - not just guess like this is doing
     // currently.
@@ -1525,7 +1525,7 @@ SequenceManager::resetMidiNetwork()
         mC.insert(mE);
     }
     showVisuals(mC);
-    StudioControl::sendMappedComposition(mC);
+    StudioControl::sendMappedEventList(mC);
 }
 
 void
@@ -1659,19 +1659,19 @@ SequenceManager::panic()
 }
 
 void
-SequenceManager::showVisuals(const MappedComposition &mC)
+SequenceManager::showVisuals(const MappedEventList &mC)
 {
-    MappedComposition::const_iterator it = mC.begin();
+    MappedEventList::const_iterator it = mC.begin();
     if (it != mC.end())
         m_transport->setMidiOutLabel(*it);
 }
 
-MappedComposition
-SequenceManager::applyFiltering(const MappedComposition &mC,
+MappedEventList
+SequenceManager::applyFiltering(const MappedEventList &mC,
                                 MappedEvent::MappedEventType filter)
 {
-    MappedComposition retMc;
-    MappedComposition::const_iterator it = mC.begin();
+    MappedEventList retMc;
+    MappedEventList::const_iterator it = mC.begin();
 
     for (; it != mC.end(); it++) {
         if (!((*it)->getType() & filter))

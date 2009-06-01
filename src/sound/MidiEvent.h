@@ -20,7 +20,7 @@
 
 // MidiEvent holds MIDI and Event data during MIDI file I/O.
 // We don't use this class at all for playback or recording of MIDI -
-// for that look at MappedEvent and MappedComposition.
+// for that look at MappedEvent and MappedEventList.
 //
 // Rosegarden doesn't have any internal concept of MIDI events, only
 // Events which are a superset of MIDI functionality.

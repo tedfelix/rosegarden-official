@@ -248,7 +248,7 @@ RosegardenSequencer::play(const RealTime &time,
 
     // Test bits
     //     m_metaIterator = new MappedSegmentsMetaIterator(m_mappedSegments);
-    //     MappedComposition testCompo;
+    //     MappedEventList testCompo;
     //     m_metaIterator->fillCompositionWithEventsUntil(&testCompo,
     //                                                    RealTime(2,0));
     
@@ -435,7 +435,7 @@ RosegardenSequencer::jumpTo(const RealTime &pos)
 
         // Now prebuffer as in startPlaying:
 
-        MappedComposition c;
+        MappedEventList c;
         fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
         // process whether we need to or not as this also processes
@@ -529,11 +529,11 @@ RosegardenSequencer::setMappedInstrument(int type, unsigned char channel,
 
 }
 
-// Process a MappedComposition sent from Sequencer with
+// Process a MappedEventList sent from Sequencer with
 // immediate effect
 //
 void
-RosegardenSequencer::processSequencerSlice(MappedComposition mC)
+RosegardenSequencer::processSequencerSlice(MappedEventList mC)
 {
     LOCKED;
 
@@ -547,7 +547,7 @@ RosegardenSequencer::processMappedEvent(MappedEvent mE)
 {
     LOCKED;
 
-    MappedComposition mC;
+    MappedEventList mC;
     mC.insert(new MappedEvent(mE));
     SEQUENCER_DEBUG << "processMappedEvent(ev) - sending out single event at time " << mE.getEventTime() << endl;
 
@@ -1153,12 +1153,12 @@ RosegardenSequencer::getNextTransportRequest(TransportRequest &request,
     return true;  // fix "control reaches end of non-void function warning"
 }
 
-MappedComposition
+MappedEventList
 RosegardenSequencer::pullAsynchronousMidiQueue()
 {
     QMutexLocker locker(&m_asyncQueueMutex);
-    MappedComposition mq = m_asyncQueue;
-    m_asyncQueue = MappedComposition();
+    MappedEventList mq = m_asyncQueue;
+    m_asyncQueue = MappedEventList();
     return mq;
 }
 
@@ -1169,7 +1169,7 @@ RosegardenSequencer::pullAsynchronousMidiQueue()
 // Get a slice of events from the GUI
 //
 void
-RosegardenSequencer::fetchEvents(MappedComposition &composition,
+RosegardenSequencer::fetchEvents(MappedEventList &composition,
                                     const RealTime &start,
                                     const RealTime &end,
                                     bool firstFetch)
@@ -1185,7 +1185,7 @@ RosegardenSequencer::fetchEvents(MappedComposition &composition,
 
 
 void
-RosegardenSequencer::getSlice(MappedComposition &composition,
+RosegardenSequencer::getSlice(MappedEventList &composition,
                                  const RealTime &start,
                                  const RealTime &end,
                                  bool firstFetch)
@@ -1208,13 +1208,13 @@ RosegardenSequencer::getSlice(MappedComposition &composition,
 
 
 void
-RosegardenSequencer::applyLatencyCompensation(MappedComposition &composition)
+RosegardenSequencer::applyLatencyCompensation(MappedEventList &composition)
 {
     RealTime maxLatency = m_driver->getMaximumPlayLatency();
     if (maxLatency == RealTime::zeroTime)
         return ;
 
-    for (MappedComposition::iterator i = composition.begin();
+    for (MappedEventList::iterator i = composition.begin();
             i != composition.end(); ++i) {
 
         RealTime instrumentLatency =
@@ -1243,7 +1243,7 @@ RosegardenSequencer::startPlaying()
     // ready for new playback
     m_driver->initialisePlayback(m_songPosition);
 
-    MappedComposition c;
+    MappedEventList c;
     fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
     // process whether we need to or not as this also processes
@@ -1272,7 +1272,7 @@ RosegardenSequencer::keepPlaying()
 {
     Profiler profiler("RosegardenSequencer::keepPlaying");
 
-    MappedComposition c;
+    MappedEventList c;
 
     RealTime fetchEnd = m_songPosition + m_readAhead;
     if (isLooping() && fetchEnd >= m_loopEnd) {
@@ -1330,7 +1330,7 @@ RosegardenSequencer::updateClocks()
         //
         m_driver->resetPlayback(oldPosition, m_songPosition);
 
-        MappedComposition c;
+        MappedEventList c;
         fetchEvents(c, m_songPosition, m_songPosition + m_readAhead, true);
 
         m_driver->processEventsOut(c, m_songPosition, m_songPosition + m_readAhead);
@@ -1366,8 +1366,8 @@ RosegardenSequencer::sleep(const RealTime &rt)
 void
 RosegardenSequencer::processRecordedMidi()
 {
-    MappedComposition mC;
-    m_driver->getMappedComposition(mC);
+    MappedEventList mC;
+    m_driver->getMappedEventList(mC);
 
     if (mC.empty()) return;
 
@@ -1381,19 +1381,19 @@ RosegardenSequencer::processRecordedMidi()
 }
 
 void
-RosegardenSequencer::routeEvents(MappedComposition *mC, bool useSelectedTrack)
+RosegardenSequencer::routeEvents(MappedEventList *mC, bool useSelectedTrack)
 {
     InstrumentId instrumentId;
 
     if (useSelectedTrack) {
         instrumentId = ControlBlock::getInstance()->getInstrumentForTrack
             (ControlBlock::getInstance()->getSelectedTrack());
-        for (MappedComposition::iterator i = mC->begin();
+        for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
             (*i)->setInstrument(instrumentId);
         }
     } else {
-        for (MappedComposition::iterator i = mC->begin();
+        for (MappedEventList::iterator i = mC->begin();
                 i != mC->end(); ++i) {
             instrumentId = ControlBlock::getInstance()->getInstrumentForEvent
                 ((*i)->getRecordedDevice(), (*i)->getRecordedChannel());
@@ -1420,8 +1420,8 @@ RosegardenSequencer::processRecordedAudio()
 void
 RosegardenSequencer::processAsynchronousEvents()
 {
-    MappedComposition mC;
-    m_driver->getMappedComposition(mC);
+    MappedEventList mC;
+    m_driver->getMappedEventList(mC);
     
     if (mC.empty()) {
         m_driver->processPending();
@@ -1445,13 +1445,13 @@ RosegardenSequencer::processAsynchronousEvents()
 
 
 void
-RosegardenSequencer::applyFiltering(MappedComposition *mC,
+RosegardenSequencer::applyFiltering(MappedEventList *mC,
                                        MidiFilter filter,
                                        bool filterControlDevice)
 {
-    for (MappedComposition::iterator i = mC->begin();
+    for (MappedEventList::iterator i = mC->begin();
             i != mC->end(); ) { // increment in loop
-        MappedComposition::iterator j = i;
+        MappedEventList::iterator j = i;
         ++j;
         if (((*i)->getType() & filter) ||
                 (filterControlDevice && ((*i)->getRecordedDevice() ==

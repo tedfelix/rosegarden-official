@@ -33,7 +33,7 @@
 
 #include "RosegardenSequencerIface.h"
 
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "base/Event.h"
 #include "sound/MappedStudio.h"
 #include "sound/ExternalTransport.h"
@@ -120,10 +120,10 @@ public:
     virtual void setMappedInstrument(int type, unsigned char channel,
                                      unsigned int id);
 
-    // The sequencer will process the MappedComposition as soon as it
+    // The sequencer will process the MappedEventList as soon as it
     // gets the chance.
     //
-    virtual void processSequencerSlice(MappedComposition mC);
+    virtual void processSequencerSlice(MappedEventList mC);
 
     virtual void processMappedEvent(MappedEvent mE);
 
@@ -256,7 +256,7 @@ public:
 
     bool getNextTransportRequest(TransportRequest &request, RealTime &time);
 
-    MappedComposition pullAsynchronousMidiQueue();
+    MappedEventList pullAsynchronousMidiQueue();
 
     //
     //
@@ -297,18 +297,18 @@ public:
     //
     void sleep(const RealTime &rt);
 
-    // Removes from a MappedComposition the events not matching
+    // Removes from a MappedEventList the events not matching
     // the supplied filer.
     //
-    void applyFiltering(MappedComposition *mC,
+    void applyFiltering(MappedEventList *mC,
                         MidiFilter filter,
                         bool filterControlDevice);
 
     // This method assigns an Instrument to each MappedEvent 
-    // belongin to the MappedComposition, and sends the 
+    // belongin to the MappedEventList, and sends the 
     // transformed events to the driver to be played.
     //
-    void routeEvents(MappedComposition *mC, bool useSelectedTrack);
+    void routeEvents(MappedEventList *mC, bool useSelectedTrack);
 
     // Are we looping?
     //
@@ -343,21 +343,21 @@ protected:
 
     // get events whilst handling loop
     //
-    void fetchEvents(MappedComposition &,
+    void fetchEvents(MappedEventList &,
                      const RealTime &start,
                      const RealTime &end,
                      bool firstFetch);
 
     // just get a slice of events between markers
     //
-    void getSlice(MappedComposition &,
+    void getSlice(MappedEventList &,
                   const RealTime &start,
                   const RealTime &end,
                   bool firstFetch);
 
     // adjust event times according to relative instrument latencies
     //
-    void applyLatencyCompensation(MappedComposition &);
+    void applyLatencyCompensation(MappedEventList &);
 
     // map-related stuff
 //    MappedSegment *mapSegment(const QString&);
@@ -403,7 +403,7 @@ protected:
     MappedSegmentsMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
-    MappedComposition m_asyncQueue;
+    MappedEventList m_asyncQueue;
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;

@@ -59,7 +59,7 @@ public:
 
     virtual RealTime getSequencerTime();
 
-    virtual bool getMappedComposition(MappedComposition &composition);
+    virtual bool getMappedEventList(MappedEventList &composition);
     
     virtual bool record(RecordStatus recordStatus,
                         const std::vector<InstrumentId> *armedInstruments = 0,
@@ -70,8 +70,8 @@ public:
     virtual void stopClocks();
     virtual bool areClocksRunning() const { return m_queueRunning; }
 
-    virtual void processEventsOut(const MappedComposition &mC);
-    virtual void processEventsOut(const MappedComposition &mC,
+    virtual void processEventsOut(const MappedEventList &mC);
+    virtual void processEventsOut(const MappedEventList &mC,
                                   const RealTime &sliceStart,
                                   const RealTime &sliceEnd);
 
@@ -393,7 +393,7 @@ protected:
     MappedDevice *createMidiDevice(AlsaPortDescription *,
                                    MidiDevice::DeviceDirection);
 
-    virtual void processMidiOut(const MappedComposition &mC,
+    virtual void processMidiOut(const MappedEventList &mC,
                                 const RealTime &sliceStart,
                                 const RealTime &sliceEnd);
 

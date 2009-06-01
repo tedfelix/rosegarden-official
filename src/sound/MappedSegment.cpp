@@ -18,7 +18,7 @@
 #include "MappedSegment.h"
 #include "misc/Debug.h"
 
-#include "MappedComposition.h"
+#include "MappedEventList.h"
 #include "Midi.h"
 #include "ControlBlock.h"
 
@@ -304,7 +304,7 @@ MappedSegmentsMetaIterator::acceptEvent(MappedEvent *evt,
 
 bool
 MappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
-                                                           MappedComposition* c,
+                                                           MappedEventList* c,
                                                            const RealTime& startTime,
                                                            const RealTime& endTime)
 {

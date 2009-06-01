@@ -24,7 +24,7 @@
 #include "base/RealTime.h"
 #include "base/Track.h"
 #include "gui/application/TransportStatus.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include <QObject>
 #include <QString>
@@ -99,7 +99,7 @@ public:
     void sendSequencerJump(const RealTime &time);
 
     // Events coming in
-    void processAsynchronousMidi(const MappedComposition &mC,
+    void processAsynchronousMidi(const MappedEventList &mC,
                                  AudioManagerDialog *aMD);
 
     // Before playing and recording.  If warnUser is true, show the
@@ -151,11 +151,11 @@ public:
     void panic();
 
     /// Send an MC to the view
-    void showVisuals(const MappedComposition &mC);
+    void showVisuals(const MappedEventList &mC);
 
-    /// Apply in-situ filtering to a MappedComposition
-    MappedComposition
-        applyFiltering(const MappedComposition &mC,
+    /// Apply in-situ filtering to a MappedEventList
+    MappedEventList
+        applyFiltering(const MappedEventList &mC,
                        MappedEvent::MappedEventType filter);
 
     CountdownDialog* getCountdownDialog() { return m_countdownDialog; }

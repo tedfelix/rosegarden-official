@@ -435,7 +435,7 @@ public:
     DataBlockRepository::blockid getDataBlockId() const { return m_dataBlockId; }
     void setDataBlockId(DataBlockRepository::blockid dataBlockId) { m_dataBlockId = dataBlockId; }
     
-    // How MappedEvents are ordered in the MappedComposition
+    // How MappedEvents are ordered in the MappedEventList
     //
     struct MappedEventCmp
     {

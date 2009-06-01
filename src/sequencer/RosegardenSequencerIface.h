@@ -18,7 +18,7 @@
 #include "gui/application/TransportStatus.h"
 
 #include "base/Event.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "base/Instrument.h"
 #include "sound/MappedDevice.h"
@@ -91,7 +91,7 @@ public:
     // The GUI can use this method to process an immediate selection
     // of MappedEvents (Program Changes, SysExs, async Events etc).
     //
-    virtual void processSequencerSlice(MappedComposition mC) = 0;
+    virtual void processSequencerSlice(MappedEventList mC) = 0;
 
     // The proper implementation
     //

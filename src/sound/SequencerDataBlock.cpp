@@ -14,7 +14,7 @@
 */
 
 #include "SequencerDataBlock.h"
-#include "MappedComposition.h"
+#include "MappedEventList.h"
 
 namespace Rosegarden
 {
@@ -63,7 +63,7 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 }
 
 int
-SequencerDataBlock::getRecordedEvents(MappedComposition &mC) const
+SequencerDataBlock::getRecordedEvents(MappedEventList &mC) const
 {
     static int readIndex = -1;
 
@@ -88,13 +88,13 @@ SequencerDataBlock::getRecordedEvents(MappedComposition &mC) const
 }
 
 void
-SequencerDataBlock::addRecordedEvents(MappedComposition *mC)
+SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 {
     // ringbuffer
     int index = m_recordEventIndex;
     MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
 
-    for (MappedComposition::iterator i = mC->begin(); i != mC->end(); ++i) {
+    for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
         recordBuffer[index] = **i;
         if (++index == SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE)
             index = 0;

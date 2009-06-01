@@ -25,7 +25,7 @@
 #include "base/RealTime.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedCommon.h"
-#include "sound/MappedComposition.h"
+#include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
 #include "sound/MappedStudio.h"
@@ -159,12 +159,12 @@ StudioControl::sendMappedEvent(const MappedEvent &mE)
 }
 
 void
-StudioControl::sendMappedComposition(const MappedComposition &mC)
+StudioControl::sendMappedEventList(const MappedEventList &mC)
 {
     if (mC.size() == 0)
         return ;
 
-    MappedComposition::const_iterator it = mC.begin();
+    MappedEventList::const_iterator it = mC.begin();
 
     for (; it != mC.end(); it++) {
         RosegardenSequencer::getInstance()->processMappedEvent(*it);
@@ -194,7 +194,7 @@ StudioControl::sendRPN(InstrumentId instrumentId,
 {
     Profiler profiler("StudioControl::sendRPN", true);
 
-    MappedComposition mC;
+    MappedEventList mC;
     MappedEvent *mE =
         new MappedEvent(instrumentId,
                         MappedEvent::MidiController,
@@ -229,7 +229,7 @@ StudioControl::sendRPN(InstrumentId instrumentId,
                          MidiMaxValue); // null
     mC.insert(mE);
 
-    sendMappedComposition(mC);
+    sendMappedEventList(mC);
 }
 
 void
@@ -241,7 +241,7 @@ StudioControl::sendNRPN(InstrumentId instrumentId,
 {
     Profiler profiler("StudioControl::sendNRPN", true);
 
-    MappedComposition mC;
+    MappedEventList mC;
     MappedEvent *mE =
         new MappedEvent(instrumentId,
                         MappedEvent::MidiController,
@@ -275,7 +275,7 @@ StudioControl::sendNRPN(InstrumentId instrumentId,
                          MidiMaxValue); // null
     mC.insert(mE);
 
-    sendMappedComposition(mC);
+    sendMappedEventList(mC);
 }
 
 }

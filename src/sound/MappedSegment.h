@@ -28,7 +28,7 @@
 
 namespace Rosegarden {
 
-class MappedComposition;
+class MappedEventList;
 
 /**
  * MappedSegment is the container class for segments that have been
@@ -131,7 +131,7 @@ public:
      * remaining, false if end of composition was reached
      */
     bool fillCompositionWithEventsUntil(bool firstFetch,
-                                        MappedComposition*,
+                                        MappedEventList*,
                                         const RealTime& start,
                                         const RealTime& end);
 
