@@ -240,9 +240,6 @@ public:
     virtual void segmentModified(MappedSegment *);
     virtual void segmentAdded(MappedSegment *);
     virtual void segmentAboutToBeDeleted(MappedSegment *);
-//    virtual void remapSegment(const QString& filename, size_t newSize);
-//    virtual void addSegment(const QString& filename);
-//    virtual void deleteSegment(const QString& filename);
     virtual void closeAllSegments();
     virtual void remapTracks();
 
@@ -359,11 +356,6 @@ protected:
     //
     void applyLatencyCompensation(MappedEventList &);
 
-    // map-related stuff
-//    MappedSegment *mapSegment(const QString&);
-//    void cleanupMmapData();
-//    void initMetaIterator();
-
     void rationalisePlayingAudio();
     void setEndOfCompReached(bool e) { m_isEndOfCompReached = e; }
     bool isEndOfCompReached() { return m_isEndOfCompReached; }
@@ -398,8 +390,6 @@ protected:
 
     // mmap segments
     // 
-//!!!    QString m_segmentFilesPath;
-//!!!    MappedSegmentsMetaIterator::mappedsegments m_mappedSegments;
     MappedSegmentsMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 

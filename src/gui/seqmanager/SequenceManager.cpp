@@ -74,57 +74,28 @@
 namespace Rosegarden
 {
 
-SequenceManager::SequenceManager(//RosegardenDocument *doc,
-                                 TransportDialog *transport) :
-//    m_doc(doc),
+SequenceManager::SequenceManager(TransportDialog *transport) :
     m_doc(0),
     m_compositionMapper(0),
     m_metronomeMapper(0),
     m_tempoSegmentMapper(0),
     m_timeSigSegmentMapper(0),
-//    m_compositionMapper(new CompositionMapper(m_doc)),
-//    m_metronomeMapper(SegmentMapperFactory::makeMetronome(m_doc)),
-//    m_tempoSegmentMapper(SegmentMapperFactory::makeTempo(m_doc)),
-//    m_timeSigSegmentMapper(SegmentMapperFactory::makeTimeSig(m_doc)),
     m_transportStatus(STOPPED),
     m_soundDriverStatus(NO_DRIVER),
     m_transport(transport),
     m_lastRewoundAt(clock()),
     m_countdownDialog(0),
-//    m_countdownTimer(new QTimer(m_doc)),
     m_countdownTimer(0),
     m_shownOverrunWarning(false),
     m_recordTime(new QTime()),
-//    m_compositionRefreshStatusId(m_doc->getComposition().getNewRefreshStatusId()),
     m_updateRequested(true),
-//    m_compositionMapperResetTimer(new QTimer(m_doc)),
     m_compositionMapperResetTimer(0),
-//    m_reportTimer(new QTimer(m_doc)),
     m_reportTimer(0),
     m_canReport(true),
     m_lastLowLatencySwitchSent(false),
     m_lastTransportStartPosition(0),
     m_sampleRate(0)
 {
-/*!!!
-    m_countdownDialog = new CountdownDialog(dynamic_cast<QWidget*>
-                                            (m_doc->parent())->parentWidget());
-    // Connect these for use later
-    //
-    connect(m_countdownTimer, SIGNAL(timeout()),
-            this, SLOT(slotCountdownTimerTimeout()));
-
-    connect(m_reportTimer, SIGNAL(timeout()),
-            this, SLOT(slotAllowReport()));
-
-    connect(m_compositionMapperResetTimer, SIGNAL(timeout()),
-            this, SLOT(slotScheduledCompositionMapperReset()));
-
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(update()));
-
-    m_doc->getComposition().addObserver(this);
-*/
     // The owner of this sequence manager will need to call
     // checkSoundDriverStatus on it to set up its status appropriately
     // immediately after construction; we used to do it from here but
@@ -195,13 +166,8 @@ SequenceManager::setDocument(RosegardenDocument *doc)
     resetCompositionMapper();
 
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
-
         SEQMAN_DEBUG << "Adding segment with rid " << (*i)->getRuntimeId() << endl;
-
         processAddedSegment(*i);
-
-//        m_segments.insert(SegmentRefreshMap::value_type
-//                          (*i, (*i)->getNewRefreshStatusId()));
     }
 
     for (Composition::triggersegmentcontaineriterator i =

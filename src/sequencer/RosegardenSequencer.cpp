@@ -245,12 +245,6 @@ RosegardenSequencer::play(const RealTime &time,
     // report
     //
     SEQUENCER_DEBUG << "RosegardenSequencer::play() - starting to play\n";
-
-    // Test bits
-    //     m_metaIterator = new MappedSegmentsMetaIterator(m_mappedSegments);
-    //     MappedEventList testCompo;
-    //     m_metaIterator->fillCompositionWithEventsUntil(&testCompo,
-    //                                                    RealTime(2,0));
     
 //!!!
     dumpFirstSegment();
