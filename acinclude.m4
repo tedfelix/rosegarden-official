@@ -10,7 +10,7 @@ AC_MSG_CHECKING([QTDIR])
 AC_ARG_WITH([qtdir], [  --with-qtdir=DIR        Qt installation directory [default=$QTDIR]], QTDIR=$withval)
 # Check that QTDIR is defined or that --with-qtdir given
 if test x"$QTDIR" = x ; then
-	# some usual Qt-locations
+	# some usual Qt locations
 	QT_SEARCH="/usr /opt /usr/lib/qt"
 else
 	QT_SEARCH=$QTDIR
@@ -26,7 +26,7 @@ for i in $QT_SEARCH ; do
 	done
 done
 if test x"$QTDIR" = x ; then
-	AC_MSG_ERROR([*** QTDIR must be defined, or --with-qtdir option given])
+	AC_MSG_ERROR([*** Failed to find Qt4 installation. QTDIR must be defined, or --with-qtdir option given])
 fi
 AC_MSG_RESULT([$QTDIR])
 
@@ -115,7 +115,36 @@ fi
 
 QT_CXXFLAGS="-I$QT_INCLUDES/Qt3Support -I$QT_INCLUDES/QtGui -I$QT_INCLUDES/QtXml -I$QT_INCLUDES/QtNetwork -I$QT_INCLUDES/QtCore -I$QT_INCLUDES -DQT3_SUPPORT"
 
-QT_LIBS="-L$QTDIR/lib -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore"
+AC_MSG_CHECKING([QTLIBDIR])
+AC_ARG_WITH([qtlibdir], [  --with-qtlibdir=DIR        Qt library directory [default=$QTLIBDIR]], QTLIBDIR=$withval)
+if test x"$QTLIBDIR" = x ; then
+	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32"
+else
+	QTLIB_SEARCH="$QTLIBDIR"
+	QTDIR=""
+fi
+for i in $QTLIB_SEARCH ; do
+	if test -f $i/libQtCore.so -a x$QTLIBDIR = x ; then
+	   	QTLIBDIR=$i
+	fi
+done
+if test x"$QTLIBDIR" = x ; then
+	AC_MSG_ERROR([
+Failed to find required Qt4 GUI link entry point (libQtGui.so).
+Define QTLIBDIR or use --with-qtlibdir to specify the library location.
+])
+fi
+if ! test -f $QTLIBDIR/libQt3Support.so ; then
+	AC_MSG_ERROR([
+Failed to find required Qt3 support library (libQt3Support) in
+the Qt4 library directory $QTLIBDIR.
+Please ensure you have the Qt3 compatibility library installed,
+and if necessary set QTDIR to the location of your Qt4 installation.
+])
+fi
+AC_MSG_RESULT([$QTLIBDIR])
+
+QT_LIBS="-L$QTLIBDIR -lQt3Support -lQtGui -lQtXml -lQtNetwork -lQtCore"
 
 AC_MSG_CHECKING([QT_CXXFLAGS])
 AC_MSG_RESULT([$QT_CXXFLAGS])
