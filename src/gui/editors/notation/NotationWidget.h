@@ -67,17 +67,6 @@ public:
 
     Segment *getCurrentSegment();
 
-    //!!! to keep current staff implementation happy:
-//    bool isInPrintMode() const { return false; }
-//    NotationHLayout *getHLayout() { return m_hlayout; }
-//    NotationVLayout *getVLayout() { return m_vlayout; }
-//    NotationProperties &getProperties() { return *m_properties; }
-//    RosegardenDocument *getDocument() { return m_document; }
-//    EventSelection *getCurrentSelection() { return 0; }
-//    void handleEventRemoved(Event *) { }
-//    bool areAnnotationsVisible() { return true; }
-//    bool areLilyPondDirectivesVisible() { return true; }
-
 public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();

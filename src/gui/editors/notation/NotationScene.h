@@ -119,6 +119,9 @@ signals:
 
     void eventRemoved(Event *);
     
+    void selectionChanged();
+    void selectionChanged(EventSelection *);
+
     /**
      * Emitted when the mouse cursor moves to a different height
      * on the staff

@@ -989,6 +989,8 @@ void
 NotationScene::setSelection(EventSelection *s,
                             bool preview)
 {
+    NOTATION_DEBUG << "NotationScene::setSelection: " << s << endl;
+
     if (m_selection) {
         setSelectionElementStatus(m_selection, false);
     }
@@ -1001,6 +1003,9 @@ NotationScene::setSelection(EventSelection *s,
     if (m_selection) {
         setSelectionElementStatus(m_selection, true, preview);
     }
+
+    emit selectionChanged(s);
+    emit selectionChanged();
 }
 
 void

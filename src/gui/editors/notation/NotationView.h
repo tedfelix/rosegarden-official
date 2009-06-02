@@ -70,13 +70,14 @@ protected slots:
     void slotClefAction();
     void slotText();
 
+    void slotUpdateMenuStates();
+
 private:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
 
     void setupActions();
-    void setMenuStates();
 };
 
 }

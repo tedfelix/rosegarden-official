@@ -18,6 +18,7 @@
 #include "NotationView.h"
 
 #include "NotationWidget.h"
+#include "NotationScene.h"
 #include "NotationCommandRegistry.h"
 #include "NoteFontFactory.h"
 #include "NoteInserter.h"
@@ -65,7 +66,13 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
     setupActions();
     createGUI("notation.rc");
-    setMenuStates();
+    slotUpdateMenuStates();
+
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+            this, SLOT(slotUpdateMenuStates()));
+
+    connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
+            this, SLOT(slotUpdateMenuStates()));
 }
 
 NewNotationView::~NewNotationView()
@@ -596,9 +603,9 @@ NewNotationView::setupActions()
 }
 
 void 
-NewNotationView::setMenuStates()
+NewNotationView::slotUpdateMenuStates()
 {
-    NOTATION_DEBUG << "NotationView::setMenuStates" << endl;
+    NOTATION_DEBUG << "NotationView::slotUpdateMenuStates" << endl;
 
     // 1. set selection-related states
 
@@ -615,7 +622,7 @@ NewNotationView::setMenuStates()
 
     if (selection) {
 
-        NOTATION_DEBUG << "NotationView::setMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)" << endl;
+        NOTATION_DEBUG << "NotationView::slotUpdateMenuStates: Have selection; it's " << selection << " covering range from " << selection->getStartTime() << " to " << selection->getEndTime() << " (" << selection->getSegmentEvents().size() << " events)" << endl;
 
         enterActionState("have_selection");
         if (selection->contains(Note::EventType)) {
@@ -624,6 +631,10 @@ NewNotationView::setMenuStates()
         if (selection->contains(Note::EventRestType)) {
             enterActionState("have_rests_in_selection");
         }
+
+    } else {
+
+        NOTATION_DEBUG << "Do not have a selection" << endl;
     }
 
     // 2. set inserter-related states
@@ -818,14 +829,14 @@ void
 NewNotationView::slotSetSelectTool()
 {
     if (m_notationWidget) m_notationWidget->slotSetSelectTool();
-    setMenuStates();
+    slotUpdateMenuStates();
 }    
 
 void
 NewNotationView::slotSetEraseTool()
 {
     if (m_notationWidget) m_notationWidget->slotSetEraseTool();
-    setMenuStates();
+    slotUpdateMenuStates();
 }    
 
 void
@@ -865,7 +876,7 @@ NewNotationView::slotNoteAction()
         m_notationWidget->slotSetInsertedNote(type, dots);
     }
     
-    setMenuStates();
+    slotUpdateMenuStates();
 
     //!!! todo: set status bar indication
 }
@@ -890,7 +901,7 @@ NewNotationView::slotClefAction()
     if (!m_notationWidget) return;
     m_notationWidget->slotSetClefInserter();
     m_notationWidget->slotSetInsertedClef(type);
-    setMenuStates();
+    slotUpdateMenuStates();
 }
 
 void
@@ -902,7 +913,7 @@ NewNotationView::slotText()
 */
     if (!m_notationWidget) return;
     m_notationWidget->slotSetTextInserter();
-    setMenuStates();
+    slotUpdateMenuStates();
 }
 
 }

@@ -639,31 +639,20 @@ ActionFileParser::disableMenuInState(QString stateName, QString menuName)
 }
 
 void
-ActionFileParser::setEnabled(QObject *o, bool e)
+ActionFileParser::setEnabled(QAction *a, bool e)
 {
-    QAction *a = dynamic_cast<QAction *>(o);
-    if (a) {
-        RG_DEBUG << "ActionFileParser::setEnabled: action " << a->objectName() << " state " << e << endl;
-        a->setEnabled(e);
-    } else {
-        QWidget *w = dynamic_cast<QWidget *>(o);
-        if (w) {
-            RG_DEBUG << "ActionFileParser::setEnabled: widget " << w->objectName() << " state " << e << endl;
-            w->setEnabled(e);
-        }
-    }
+    if (a) a->setEnabled(e);
 }
 
 void
 ActionFileParser::enterActionState(QString stateName)
 {
-    RG_DEBUG << "ActionFileParser::enterActionState: " << stateName << endl;
     Profiler p("ActionFileParser::enterActionState");
-    for (ObjectSet::iterator i = m_stateDisableMap[stateName].begin();
+    for (ActionSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
     }
-    for (ObjectSet::iterator i = m_stateEnableMap[stateName].begin();
+    for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
         setEnabled(*i, true);
     }
@@ -672,13 +661,12 @@ ActionFileParser::enterActionState(QString stateName)
 void
 ActionFileParser::leaveActionState(QString stateName)
 {
-    RG_DEBUG << "ActionFileParser::leaveActionState: " << stateName << endl;
     Profiler p("ActionFileParser::leaveActionState");
-    for (ObjectSet::iterator i = m_stateEnableMap[stateName].begin();
+    for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
     }
-    for (ObjectSet::iterator i = m_stateDisableMap[stateName].begin();
+    for (ActionSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
         setEnabled(*i, true);
     }
@@ -688,15 +676,17 @@ void
 ActionFileParser::slotObjectDestroyed()
 {
     QObject *o = sender();
+    QAction *a = dynamic_cast<QAction *>(o);
+    if (!a) return;
 
     for (StateMap::iterator i = m_stateEnableMap.begin();
          i != m_stateEnableMap.end(); ++i) {
-        i->erase(o);
+        i->erase(a);
     }
 
     for (StateMap::iterator i = m_stateDisableMap.begin();
          i != m_stateDisableMap.end(); ++i) {
-        i->erase(o);
+        i->erase(a);
     }
 }
 

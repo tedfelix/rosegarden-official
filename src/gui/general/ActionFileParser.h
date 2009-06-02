@@ -103,11 +103,11 @@ protected:
     QMenu *findMenu(QString name);
     QToolBar *findToolbar(QString name, Position position);
 
-    typedef std::set<QObject *> ObjectSet;
-    typedef QMap<QString, ObjectSet> StateMap;
+    typedef std::set<QAction *> ActionSet;
+    typedef QMap<QString, ActionSet> StateMap;
     StateMap m_stateEnableMap;
     StateMap m_stateDisableMap;
-    void setEnabled(QObject *, bool);
+    void setEnabled(QAction *, bool);
 
     QObject *m_actionOwner;
     bool m_inMenuBar;
