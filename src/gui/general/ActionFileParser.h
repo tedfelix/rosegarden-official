@@ -21,6 +21,7 @@
 #include <QXmlDefaultHandler>
 #include <QMap>
 #include <QObject>
+#include <set>
 
 class QAction;
 class QActionGroup;
@@ -89,6 +90,9 @@ protected:
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
 
+    bool enableMenuInState(QString stateName, QString menuName);
+    bool disableMenuInState(QString stateName, QString menuName);
+
     QString translate(QString actionName, QString text, QString purpose);
 
     QString findRcFile(QString name);
@@ -99,9 +103,11 @@ protected:
     QMenu *findMenu(QString name);
     QToolBar *findToolbar(QString name, Position position);
 
-    typedef QMap<QString, QList<QAction *> > StateMap;
+    typedef std::set<QObject *> ObjectSet;
+    typedef QMap<QString, ObjectSet> StateMap;
     StateMap m_stateEnableMap;
     StateMap m_stateDisableMap;
+    void setEnabled(QObject *, bool);
 
     QObject *m_actionOwner;
     bool m_inMenuBar;

@@ -826,11 +826,11 @@
     <Action name="fine_position_up"/>
     <Action name="fine_position_down"/>
     <Action name="fine_position_restore"/>
-	<Action name="tuplet"/>
-	<Action name="simple_tuplet"/>
-	<Action name="break_tuplets"/>
-	<Action name="make_invisible"/>
-	<Action name="make_visible"/>
+    <Action name="tuplet"/>
+    <Action name="simple_tuplet"/>
+    <Action name="break_tuplets"/>
+    <Action name="make_invisible"/>
+    <Action name="make_visible"/>
     <Action name="move_events_up_staff"/>
     <Action name="move_events_down_staff"/>
   </enable>
@@ -945,24 +945,24 @@
     <Menu name="Slashes"/>
     <Menu name="Transpose"/>
     <Menu name="Convert"/>
-<Menu name="Notes"/>
-<Menu name="beams"/>
-<Menu name="octaves"/>
-<Menu name="indications"/>
-<Menu name="Slurs"/>
-<Menu name="Ties"/>
-<Menu name="Marks"/>
-<Menu name="ornaments"/>
-<Menu name="Fingering"/>
-<Menu name="Slashes"/>
-<Menu name="Adjust"/>
-<Menu name="Respell"/>
-<Menu name="triplets"/>
-<Menu name="Stems"/>
-<Menu name="rests"/>
-<Menu name="transform_notes"/>
-<Menu name="quantize_notes"/>
-<Menu name="velocities"/>
+    <Menu name="Notes"/>
+    <Menu name="beams"/>
+    <Menu name="octaves"/>
+    <Menu name="indications"/>
+    <Menu name="Slurs"/>
+    <Menu name="Ties"/>
+    <Menu name="Marks"/>
+    <Menu name="ornaments"/>
+    <Menu name="Fingering"/>
+    <Menu name="Slashes"/>
+    <Menu name="Adjust"/>
+    <Menu name="Respell"/>
+    <Menu name="triplets"/>
+    <Menu name="Stems"/>
+    <Menu name="rests"/>
+    <Menu name="transform_notes"/>
+    <Menu name="quantize_notes"/>
+    <Menu name="velocities"/>
   </enable>
 </State>
 

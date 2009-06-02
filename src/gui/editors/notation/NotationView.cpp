@@ -60,14 +60,12 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     setCentralWidget(m_notationWidget);
     m_notationWidget->setSegments(doc, segments);
 
-    //Many actions are created here
+    // Many actions are created here
     m_commandRegistry = new NotationCommandRegistry(this);
 
     setupActions();
-
     createGUI("notation.rc");
-
-
+    setMenuStates();
 }
 
 NewNotationView::~NewNotationView()
@@ -600,6 +598,8 @@ NewNotationView::setupActions()
 void 
 NewNotationView::setMenuStates()
 {
+    NOTATION_DEBUG << "NotationView::setMenuStates" << endl;
+
     // 1. set selection-related states
 
     // Clear states first, then enter only those ones that apply

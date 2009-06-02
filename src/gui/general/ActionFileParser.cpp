@@ -30,11 +30,9 @@
 #include "ResourceFinder.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-
+#include "base/Profiler.h"
 #include "document/CommandHistory.h"
 
-using std::cerr;
-using std::endl;
 
 namespace Rosegarden
 {
@@ -62,6 +60,8 @@ ActionFileParser::findRcFile(QString name)
 bool
 ActionFileParser::load(QString actionRcFile)
 {
+    Profiler p("ActionFileParser::load");
+
     QString location = findRcFile(actionRcFile);
     if (location == "") {
         std::cerr << "ActionFileParser::load: Failed to find RC file \""
@@ -101,10 +101,14 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString menuName = atts.value("name");
         if (menuName == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No menu name provided in menu element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No menu name provided in menu element" << std::endl;
         }
         
-        if (!m_currentMenus.empty()) {
+        if (m_inEnable) {
+            enableMenuInState(m_currentState, menuName);
+        } else if (m_inDisable) {
+            disableMenuInState(m_currentState, menuName);
+        } else if (!m_currentMenus.empty()) {
             addMenuToMenu(m_currentMenus.last(), menuName);
         } else {
             addMenuToMenubar(menuName);
@@ -126,7 +130,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString toolbarName = atts.value("name");
         if (toolbarName == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No toolbar name provided in toolbar element" << std::endl;
         }
         (void)findToolbar(toolbarName, position); // creates it if necessary
         m_currentToolbar = toolbarName;
@@ -146,12 +150,12 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString actionName = atts.value("name");
         if (actionName == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No action name provided in action element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No action name provided in action element" << std::endl;
         }
 
         if (m_currentMenus.empty() && m_currentToolbar == "" &&
             (m_currentState == "" || (!m_inEnable && !m_inDisable))) {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state enable/disable element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state enable/disable element" << std::endl;
         }
 
         QString text = atts.value("text");
@@ -171,10 +175,15 @@ ActionFileParser::startElement(const QString& namespaceURI,
         
         // this can appear in menu, toolbar, state/enable, state/disable
 
-        if (m_inEnable) enableActionInState(m_currentState, actionName);
-        if (m_inDisable) disableActionInState(m_currentState, actionName);
-        if (!m_currentMenus.empty()) addActionToMenu(m_currentMenus.last(), actionName);
-        if (m_currentToolbar != "") addActionToToolbar(m_currentToolbar, actionName);
+        if (m_inEnable) {
+            enableActionInState(m_currentState, actionName);
+        } else if (m_inDisable) {
+            disableActionInState(m_currentState, actionName);
+        } else if (!m_currentMenus.empty()) {
+            addActionToMenu(m_currentMenus.last(), actionName);
+        } else if (m_currentToolbar != "") {
+            addActionToToolbar(m_currentToolbar, actionName);
+        }
 
     } else if (name == "separator") {
 
@@ -185,14 +194,14 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString stateName = atts.value("name");
         if (stateName == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No state name provided in state element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No state name provided in state element" << std::endl;
         }
         m_currentState = stateName;
 
     } else if (name == "enable") {
 
         if (m_currentState == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Enable element appears outside state element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Enable element appears outside state element" << std::endl;
         } else {
             m_inEnable = true;
         }
@@ -200,7 +209,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
     } else if (name == "disable") {
 
         if (m_currentState == "") {
-            cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Disable element appears outside state element" << endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Disable element appears outside state element" << std::endl;
         } else {
             m_inDisable = true;
         }
@@ -352,7 +361,7 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
 {
     QWidget *widget = dynamic_cast<QWidget *>(m_actionOwner);
     if (!widget) {
-        std::cerr << "ActionFileParser::findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars" << endl;
+        std::cerr << "ActionFileParser::findToolbar(\"" << toolbarName << "\"): Action owner is not a QWidget, cannot have toolbars" << std::endl;
         return 0;
     }
     QToolBar *toolbar = widget->findChild<QToolBar *>(toolbarName);
@@ -580,7 +589,7 @@ ActionFileParser::enableActionInState(QString stateName, QString actionName)
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    m_stateEnableMap[stateName].push_back(action);
+    m_stateEnableMap[stateName].insert(action);
     connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
     return true;
 }
@@ -592,34 +601,86 @@ ActionFileParser::disableActionInState(QString stateName, QString actionName)
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    m_stateDisableMap[stateName].push_back(action);
+    m_stateDisableMap[stateName].insert(action);
     connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
     return true;
+}
+
+bool
+ActionFileParser::enableMenuInState(QString stateName, QString menuName)
+{
+    if (stateName == "" || menuName == "") return false;
+    QMenu *menu = findMenu(menuName);
+    if (!menu) return false;
+    QList<QAction *> actions = menu->actions();
+    for (int i = 0; i < actions.size(); ++i) {
+        QAction *a = actions[i];
+        if (!a) continue;
+        m_stateEnableMap[stateName].insert(a);
+        connect(a, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    }
+    return true;
+}
+
+bool
+ActionFileParser::disableMenuInState(QString stateName, QString menuName)
+{
+    if (stateName == "" || menuName == "") return false;
+    QMenu *menu = findMenu(menuName);
+    if (!menu) return false;
+    QList<QAction *> actions = menu->actions();
+    for (int i = 0; i < actions.size(); ++i) {
+        QAction *a = actions[i];
+        if (!a) continue;
+        m_stateDisableMap[stateName].insert(a);
+        connect(a, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    }
+    return true;
+}
+
+void
+ActionFileParser::setEnabled(QObject *o, bool e)
+{
+    QAction *a = dynamic_cast<QAction *>(o);
+    if (a) {
+        RG_DEBUG << "ActionFileParser::setEnabled: action " << a->objectName() << " state " << e << endl;
+        a->setEnabled(e);
+    } else {
+        QWidget *w = dynamic_cast<QWidget *>(o);
+        if (w) {
+            RG_DEBUG << "ActionFileParser::setEnabled: widget " << w->objectName() << " state " << e << endl;
+            w->setEnabled(e);
+        }
+    }
 }
 
 void
 ActionFileParser::enterActionState(QString stateName)
 {
-    for (QList<QAction *>::iterator i = m_stateDisableMap[stateName].begin();
+    RG_DEBUG << "ActionFileParser::enterActionState: " << stateName << endl;
+    Profiler p("ActionFileParser::enterActionState");
+    for (ObjectSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
-        (*i)->setEnabled(false);
+        setEnabled(*i, false);
     }
-    for (QList<QAction *>::iterator i = m_stateEnableMap[stateName].begin();
+    for (ObjectSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
-        (*i)->setEnabled(true);
+        setEnabled(*i, true);
     }
 }
 
 void
 ActionFileParser::leaveActionState(QString stateName)
 {
-    for (QList<QAction *>::iterator i = m_stateEnableMap[stateName].begin();
+    RG_DEBUG << "ActionFileParser::leaveActionState: " << stateName << endl;
+    Profiler p("ActionFileParser::leaveActionState");
+    for (ObjectSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
-        (*i)->setEnabled(false);
+        setEnabled(*i, false);
     }
-    for (QList<QAction *>::iterator i = m_stateDisableMap[stateName].begin();
+    for (ObjectSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
-        (*i)->setEnabled(true);
+        setEnabled(*i, true);
     }
 }
 
@@ -627,8 +688,16 @@ void
 ActionFileParser::slotObjectDestroyed()
 {
     QObject *o = sender();
-    std::cerr << "WARNING: ActionFileParser::slotObjectDestroyed called, but not yet implemented" << std::endl;
-//!!! remove action from all maps
+
+    for (StateMap::iterator i = m_stateEnableMap.begin();
+         i != m_stateEnableMap.end(); ++i) {
+        i->erase(o);
+    }
+
+    for (StateMap::iterator i = m_stateDisableMap.begin();
+         i != m_stateDisableMap.end(); ++i) {
+        i->erase(o);
+    }
 }
 
 ActionFileMenuWrapper::ActionFileMenuWrapper(QMenu *menu, QObject *parent) :
