@@ -151,7 +151,7 @@ void
 ListEditView::setupActions(QString rcFileName, bool haveClipboard)
 {
     setRCFileName(rcFileName);
-    EditViewBase::setupActions(haveClipboard);
+    setupBaseActions(haveClipboard);
 }
 
 void

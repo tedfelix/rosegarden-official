@@ -62,7 +62,7 @@ void
 ClefInserter::ready()
 {
     m_widget->setCanvasCursor(Qt::crossCursor);
-//    m_nParentView->setHeightTracking(false);
+//!!!    m_nParentView->setHeightTracking(false);
 }
 
 void

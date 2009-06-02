@@ -79,7 +79,7 @@ void
 NewNotationView::setupActions()
 {
     //setup actions common to all views.
-    EditViewBase::setupActions(true);
+    setupBaseActions(true);
 
     //"file" MenuBar menu
     // "file_save"
@@ -890,6 +890,18 @@ NewNotationView::slotClefAction()
     if (!m_notationWidget) return;
     m_notationWidget->slotSetClefInserter();
     m_notationWidget->slotSetInsertedClef(type);
+    setMenuStates();
+}
+
+void
+NewNotationView::slotText()
+{
+/*!!! todo: restore
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+*/
+    if (!m_notationWidget) return;
+    m_notationWidget->slotSetTextInserter();
     setMenuStates();
 }
 

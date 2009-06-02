@@ -61,11 +61,11 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new ClefInserter(m_widget);
 
-/*!!!
     else if (toolNamelc == TextInserter::ToolName)
 
         tool = new TextInserter(m_widget);
 
+/*!!!
     else if (toolNamelc == GuitarChordInserter::ToolName)
 
         tool = new GuitarChordInserter(m_widget);

@@ -68,6 +68,7 @@ protected slots:
 
     void slotNoteAction();
     void slotClefAction();
+    void slotText();
 
 private:
     RosegardenDocument *m_document;

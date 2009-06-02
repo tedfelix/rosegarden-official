@@ -168,7 +168,7 @@ NewMatrixView::updateWindowTitle()
 void
 NewMatrixView::setupActions()
 {
-    EditViewBase::setupActions(true);
+    setupBaseActions(true);
 
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("draw", SLOT(slotSetPaintTool()));

@@ -190,7 +190,7 @@ protected:
     /**
      * create menus and toolbars
      */
-    virtual void setupActions(bool haveClipboard = true);
+    virtual void setupBaseActions(bool haveClipboard);
 
     /**
      * setup status bar

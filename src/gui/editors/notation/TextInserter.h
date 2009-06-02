@@ -15,25 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_TEXTINSERTER_H_
 #define _RG_TEXTINSERTER_H_
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include <QString>
 #include "base/Event.h"
-
-
-class QMouseEvent;
-
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class NotationView;
+class NotationWidget;
 
 
 /**
@@ -48,11 +41,8 @@ class TextInserter : public NotationTool
 public:
     virtual void ready();
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent*,
-                                       ViewElement* el);
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+
     static const QString ToolName;
 
 protected slots:
@@ -61,13 +51,11 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    TextInserter(NotationView*);
+    TextInserter(NotationWidget *);
     Text m_text;
 };
 
 
-
 }
 
-#endif
 #endif

@@ -24,7 +24,7 @@
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
-    <Action nmae="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
+    <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
   <Separator/>
     <Action name="cut_and_close" text="C&amp;ut and Close" shortcut="Ctrl+Shift+X" />
     <Action name="general_paste" text="Pa&amp;ste..." shortcut="Ctrl+Shift+V" />
@@ -280,7 +280,7 @@
       <Action name="make_notes_viable" text="Tie Notes at &amp;Barlines" />
       <Action name="de_counterpoint" text="Split-and-Tie Overlapping &amp;Chords" icon="transforms-decounterpoint" />
     </Menu>
-  <Separator/>
+    <Separator/>
     <Menu name="quantize_notes">
       <text>&amp;Quantize</text>
       <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
@@ -288,22 +288,22 @@
       <Action name="remove_quantization" text="Remo&amp;ve Notation Quantization" />
     </Menu>
     <Action name="interpret" text="&amp;Interpret..." />
-  <Separator/>
+    <Separator/>
     <Menu name="Rescale">
       <text>Rescale</text>
       <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
       <Action name="double_durations" text="&amp;Double Durations" shortcut="Ctrl+Shift+H" />
-    <Separator/>
+      <Separator/>
       <Action name="rescale" text="Stretch or S&amp;quash..." />
     </Menu>
     <Menu name="Transpose">
       <text>Trans&amp;pose</text>
       <Action name="transpose_up" text="&amp;Up a Semitone" shortcut="Up" />
       <Action name="transpose_down" text="&amp;Down a Semitone" shortcut="Down" />
-    <Separator/>
+      <Separator/>
       <Action name="transpose_up_octave" text="Up an &amp;Octave" shortcut="Ctrl+Up" />
       <Action name="transpose_down_octave" text="Down an Octa&amp;ve" shortcut="Ctrl+Down" />
-    <Separator/>
+      <Separator/>
       <Action name="general_transpose" text="&amp;Transpose by Semitones..." />
       <!-- JAS this action is called "transpose" in rosegardenui.rc.  Is this a different call? -->
       <Action name="general_diatonic_transpose" text="Transpose by &amp;Interval..." />
@@ -314,7 +314,7 @@
       <Action name="retrograde" text="&amp;Retrograde" />
       <Action name="retrograde_invert" text="Re&amp;trograde Invert" />
     </Menu>
-  <Separator/>
+    <Separator/>
     <Menu name="velocities">
       <text>Ve&amp;locities</text>
       <Action name="velocity_up" text="&amp;Increase Velocity" shortcut="Shift+Up" />
@@ -324,7 +324,7 @@
     <Menu name="fine_positioning">
       <text>&amp;Fine Positioning</text>
       <Action name="fine_position_restore" text="&amp;Restore Positions" />
-    <Separator/>
+      <Separator/>
       <Action name="fine_position_left" text="Push &amp;Left" />
       <Action name="fine_position_right" text="&amp;Push Right" />
       <Action name="fine_position_up" text="Push &amp;Up" />
@@ -347,25 +347,26 @@
     <!-- JAS for 'select' and 'erase' actions, do they belong to same group as matrix.rc and rosegardenui.rc. -->
     <!-- JAS Other tools in group are not selectable from menu -->
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_note" checked="true" />
+    <!-- Will need to handle F3 specially in the code: it switches to "the last used inserter", whether note, rest or whatever -->
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <Menu noMerge="1" name="NoteTools">
       <text>&amp;Notes</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" checked="false" group="inserters" />
-      <Action name="semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" checked="false" group="inserters" />
-      <Action name="minim" text="&amp;Half Note" icon="minim" shortcut="2" checked="false" group="inserters" />
-      <Action name="crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" checked="true" group="inserters" />
-      <Action name="quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" checked="false" group="inserters" />
-      <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" checked="false" group="inserters" />
-      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" checked="false" group="inserters" />
-      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" checked="false" group="inserters" />
+      <Action name="breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" checked="false" group="tools_note" />
+      <Action name="semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" checked="false" group="tools_note" />
+      <Action name="minim" text="&amp;Half Note" icon="minim" shortcut="2" checked="false" group="tools_note" />
+      <Action name="crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" checked="true" group="tools_note" />
+      <Action name="quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" checked="false" group="tools_note" />
+      <Action name="semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" checked="false" group="tools_note" />
+      <Action name="demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" checked="false" group="tools_note" />
+      <Action name="hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" checked="false" group="tools_note" />
     <Separator/>
-      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" checked="false" group="inserters" />
-      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="dotted-minim" checked="false" group="inserters" />
-      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="dotted-crotchet" checked="false" group="inserters" />
-      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="dotted-quaver" checked="false" group="inserters" />
-      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" checked="false" group="inserters" />
-      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="inserters" />
+      <Action name="dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" checked="false" group="tools_note" />
+      <Action name="dotted_minim" text="Dotted Half &amp;Note" icon="dotted-minim" checked="false" group="tools_note" />
+      <Action name="dotted_crotchet" text="Dotted Q&amp;uarter Note" icon="dotted-crotchet" checked="false" group="tools_note" />
+      <Action name="dotted_quaver" text="Dotted E&amp;ighth Note" icon="dotted-quaver" checked="false" group="tools_note" />
+      <Action name="dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" checked="false" group="tools_note" />
+      <Action name="dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="tools_note" />
     <Separator/>
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_rest_to_note" text="Switch from &amp;Rest to Note" shortcut="Y" />
@@ -373,21 +374,21 @@
     <Menu noMerge="1" name="RestTools">
       <text>&amp;Rests</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" checked="false" group="inserters" />
-      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" checked="false" group="inserters" />
-      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" checked="false" group="inserters" />
-      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" checked="false" group="inserters" />
-      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" checked="false" group="inserters" />
-      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" checked="false" group="inserters" />
-      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" checked="false" group="inserters" />
-      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" checked="false" group="inserters" />
+      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" checked="false" group="tools_note" />
+      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" checked="false" group="tools_note" />
+      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" checked="false" group="tools_note" />
+      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" checked="false" group="tools_note" />
+      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" checked="false" group="tools_note" />
+      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" checked="false" group="tools_note" />
+      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" checked="false" group="tools_note" />
+      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" checked="false" group="tools_note" />
     <Separator/>
-      <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="inserters" />
-      <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="inserters" />
-      <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" checked="false" group="inserters" />
-      <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" checked="false" group="inserters" />
-      <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" checked="false" group="inserters" />
-      <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" checked="false" group="inserters" />
+      <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="tools_note" />
+      <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="tools_note" />
+      <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" checked="false" group="tools_note" />
+      <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" checked="false" group="tools_note" />
+      <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" checked="false" group="tools_note" />
+      <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" checked="false" group="tools_note" />
     <Separator/>
       <Action name="toggle_dot" text="To&amp;ggle Dot" />
       <Action name="switch_from_note_to_rest" text="Switch from &amp;Note to Rest" />
@@ -404,14 +405,14 @@
     </Menu>
     <Menu noMerge="1" name="Clefs">
       <text>&amp;Clefs</text>
-      <Action name="treble_clef" text="&amp;Treble Clef" icon="clef-treble" checked="false" group="inserters" />
-      <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" checked="false" group="inserters" />
-      <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" checked="false" group="inserters" />
-      <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" checked="false" group="inserters" />
+      <Action name="treble_clef" text="&amp;Treble Clef" icon="clef-treble" checked="false" group="tools_note" />
+      <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" checked="false" group="tools_note" />
+      <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" checked="false" group="tools_note" />
+      <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" checked="false" group="tools_note" />
     </Menu>
   <Separator/>
-    <Action name="text" text="&amp;Text" icon="text" checked="false" group="inserters" shortcut="F8" />
-    <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="inserters" icon="guitarchord" shortcut="F9" />
+    <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
+    <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="tools_note" icon="guitarchord" shortcut="F9" />
   <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>

@@ -29,6 +29,7 @@
 #include "IconLoader.h"
 #include "ResourceFinder.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include "document/CommandHistory.h"
 
@@ -473,6 +474,7 @@ ActionFileParser::setMenuText(QString name, QString text)
 bool
 ActionFileParser::addMenuToMenu(QString parent, QString child)
 {
+    RG_DEBUG << "ActionFileParser::addMenuToMenu: " << parent << "," << child << endl;
     if (parent == "" || child == "") return false;
     QMenu *parentMenu = findMenu(parent);
     QMenu *childMenu = findMenu(child);
@@ -486,6 +488,7 @@ ActionFileParser::addMenuToMenu(QString parent, QString child)
 bool
 ActionFileParser::addMenuToMenubar(QString menuName)
 {
+    RG_DEBUG << "ActionFileParser::addMenuToMenubar: " << menuName << endl;
     if (menuName == "") return false;
     QMenu *menu = findMenu(menuName);
     if (!menu) return false;
@@ -498,6 +501,7 @@ ActionFileParser::addMenuToMenubar(QString menuName)
 bool
 ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 {
+    RG_DEBUG << "ActionFileParser::addActionToMenu: " << menuName << "," << actionName << endl;
     if (menuName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -511,6 +515,7 @@ ActionFileParser::addActionToMenu(QString menuName, QString actionName)
 bool
 ActionFileParser::addSeparatorToMenu(QString menuName)
 {
+    RG_DEBUG << "ActionFileParser::addSeparatorToMenu: " << menuName << endl;
     if (menuName == "") return false;
     QMenu *menu = findMenu(menuName);
     if (!menu) return false;
@@ -531,6 +536,7 @@ ActionFileParser::setToolbarText(QString name, QString text)
 bool
 ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
+    RG_DEBUG << "ActionFileParser::addActionToToolbar: " << toolbarName << "," << actionName << endl;
     if (toolbarName == "" || actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
@@ -544,6 +550,7 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 bool
 ActionFileParser::addSeparatorToToolbar(QString toolbarName)
 {
+    RG_DEBUG << "ActionFileParser::addSeparatorToToolbar: " << toolbarName << endl;
     if (toolbarName == "") return false;
     QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;

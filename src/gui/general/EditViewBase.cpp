@@ -73,7 +73,7 @@ void EditViewBase::readOptions()
 //    if (a) a->setChecked( ! m_toolBar->isHidden());
 }
 
-void EditViewBase::setupActions(bool haveClipboard)
+void EditViewBase::setupBaseActions(bool haveClipboard)
 {
     // Actions all edit views will have
 

@@ -67,6 +67,7 @@ public:
     NotationVLayout *getVLayout() { return m_vlayout; }
     NotationProperties &getProperties() { return *m_properties; }
     RosegardenDocument *getDocument() { return m_document; }
+    NotePixmapFactory *getNotePixmapFactory() { return m_notePixmapFactory; }
 
     virtual EventSelection *getSelection() const { return m_selection; }
     virtual void setSelection(EventSelection* s, bool preview);

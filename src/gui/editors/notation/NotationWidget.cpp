@@ -22,6 +22,7 @@
 #include "NoteInserter.h"
 #include "RestInserter.h"
 #include "ClefInserter.h"
+#include "TextInserter.h"
 #include "NotationMouseEvent.h"
 #include "NotationSelector.h"
 #include "NotationEraser.h"
@@ -214,6 +215,12 @@ NotationWidget::slotSetInsertedClef(Clef type)
 {
     ClefInserter *ci = dynamic_cast<ClefInserter *>(m_currentTool);
     if (ci) ci->slotSetClef(type);
+}
+
+void
+NotationWidget::slotSetTextInserter()
+{
+    slotSetTool(TextInserter::ToolName);
 }
 
 void

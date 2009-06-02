@@ -15,107 +15,80 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include "TextInserter.h"
 
-#include "base/Event.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
-#include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
 #include "gui/dialogs/TextEventDialog.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/LinedStaff.h"
 #include "NotationTool.h"
-#include "NotationView.h"
-#include "NotePixmapFactory.h"
+#include "NotationWidget.h"
 #include "NotationElement.h"
-#include <QAction>
-#include <QDialog>
-#include <QIcon>
-#include <QString>
-
+#include "NotationStaff.h"
+#include "NotationScene.h"
+#include "NotationMouseEvent.h"
+#include "document/CommandHistory.h"
 
 namespace Rosegarden
 {
 
-TextInserter::TextInserter(NotationView* view)
-        : NotationTool("TextInserter", view),
-        m_text("", Text::Dynamic)
+TextInserter::TextInserter(NotationWidget *widget) :
+    NotationTool("textinserter.rc", "TextInserter", widget),
+    m_text("", Text::Dynamic)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("notes", SLOT(slotNotesSelected()));
-
-    createMenu("textinserter.rc");
 }
 
-void TextInserter::slotNotesSelected()
+void
+TextInserter::slotNotesSelected()
 {
-    m_nParentView->slotLastNoteAction();
+//!!!    m_nParentView->slotLastNoteAction();
 }
 
-void TextInserter::slotEraseSelected()
+void
+TextInserter::slotEraseSelected()
 {
     invokeInParentView("erase");
 }
 
-void TextInserter::slotSelectSelected()
+void
+TextInserter::slotSelectSelected()
 {
     invokeInParentView("select");
 }
 
-void TextInserter::ready()
+void
+TextInserter::ready()
 {
-    m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setHeightTracking(false);
+    m_widget->setCanvasCursor(Qt::crossCursor);
+//!!!    m_nParentView->setHeightTracking(false);
 }
 
-void TextInserter::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+TextInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    if (staffNo < 0)
-        return ;
-    LinedStaff *staff = m_nParentView->getLinedStaff(staffNo);
+    if (!e->staff || !e->element) return;
 
     Text defaultText(m_text);
     timeT insertionTime;
     Event *eraseEvent = 0;
 
-    if (element && element->event()->isa(Text::EventType)) {
+    insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
+    if (e->exact && e->element->event()->isa(Text::EventType)) {
         // edit an existing text, if that's what we clicked on
-
         try {
-            defaultText = Text(*element->event());
-        } catch (Exception e) {}
-
-        insertionTime = element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
-
-        eraseEvent = element->event();
-
-    } else {
-
-        Event *clef = 0, *key = 0;
-
-        NotationElementList::iterator closestElement =
-            staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-                                                   clef, key, false, -1);
-
-        if (closestElement == staff->getViewElementList()->end())
-            return ;
-
-        insertionTime = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
-
+            defaultText = Text(*e->element->event());
+        } catch (Exception e) {
+        }
+        eraseEvent = e->element->event();
     }
 
     TextEventDialog *dialog = new TextEventDialog
-                              (m_nParentView, m_nParentView->getNotePixmapFactory(), defaultText);
+        (m_widget, m_scene->getNotePixmapFactory(), defaultText);
 
     if (dialog->exec() == QDialog::Accepted) {
 
@@ -123,28 +96,32 @@ void TextInserter::handleLeftButtonPress(timeT,
 
         TextInsertionCommand *command =
             new TextInsertionCommand
-            (staff->getSegment(), insertionTime, m_text);
+            (e->staff->getSegment(), insertionTime, m_text);
 
         if (eraseEvent) {
             MacroCommand *macroCommand = new MacroCommand(command->getName());
-            macroCommand->addCommand(new EraseEventCommand(staff->getSegment(),
-                                     eraseEvent, false));
+            macroCommand->addCommand(new EraseEventCommand
+                                     (e->staff->getSegment(),
+                                      eraseEvent, false));
             macroCommand->addCommand(command);
-            m_nParentView->addCommandToHistory(macroCommand);
+            CommandHistory::getInstance()->addCommand(macroCommand);
         } else {
-            m_nParentView->addCommandToHistory(command);
+            CommandHistory::getInstance()->addCommand(command);
         }
 
         Event *event = command->getLastInsertedEvent();
-        if (event)
-            m_nParentView->setSingleSelectedEvent(staffNo, event);
+        if (event) {
+            m_scene->setSingleSelectedEvent(&e->staff->getSegment(), event, false);
+        }
     }
 
     delete dialog;
 }
 
-const QString TextInserter::ToolName     = "textinserter";
+const QString TextInserter::ToolName = "textinserter";
 
 }
+
 #include "TextInserter.moc"
-#endif
+
+
