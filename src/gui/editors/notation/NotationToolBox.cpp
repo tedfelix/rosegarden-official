@@ -57,11 +57,11 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new RestInserter(m_widget);
 
-/*!!!
     else if (toolNamelc == ClefInserter::ToolName)
 
         tool = new ClefInserter(m_widget);
 
+/*!!!
     else if (toolNamelc == TextInserter::ToolName)
 
         tool = new TextInserter(m_widget);

@@ -15,102 +15,85 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include "ClefInserter.h"
 
-
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include "base/ViewElement.h"
 #include "commands/notation/ClefInsertionCommand.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/LinedStaff.h"
-#include "NotationElement.h"
-#include "NotationTool.h"
-#include "NotationView.h"
-#include "NotePixmapFactory.h"
 
-#include <QAction>
-#include <QIcon>
-#include <QString>
-#include <QMouseEvent>
+#include "NotationTool.h"
+#include "NotationWidget.h"
+#include "NotationElement.h"
+#include "NotationStaff.h"
+#include "NotationScene.h"
+#include "NotationMouseEvent.h"
+
+#include "document/CommandHistory.h"
 
 namespace Rosegarden
 {
 
-ClefInserter::ClefInserter(NotationView* view)
-        : NotationTool("ClefInserter", view),
-        m_clef(Clef::Treble)
+ClefInserter::ClefInserter(NotationWidget *widget) :
+    NotationTool("clefinserter.rc", "ClefInserter", widget),
+    m_clef(Clef::Treble)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("notes", SLOT(slotNotesSelected()));
-
-    createMenu("clefinserter.rc");
 }
 
-void ClefInserter::slotNotesSelected()
+void
+ClefInserter::slotNotesSelected()
 {
-    m_nParentView->slotLastNoteAction();
+//!!!    m_nParentView->slotLastNoteAction();
 }
 
-void ClefInserter::slotEraseSelected()
+void
+ClefInserter::slotEraseSelected()
 {
     invokeInParentView("erase");
 }
 
-void ClefInserter::slotSelectSelected()
+void
+ClefInserter::slotSelectSelected()
 {
     invokeInParentView("select");
 }
 
-void ClefInserter::ready()
+void
+ClefInserter::ready()
 {
-    m_nParentView->setCanvasCursor(Qt::crossCursor);
-    m_nParentView->setHeightTracking(false);
+    m_widget->setCanvasCursor(Qt::crossCursor);
+//    m_nParentView->setHeightTracking(false);
 }
 
-void ClefInserter::setClef(std::string clefType)
+void
+ClefInserter::slotSetClef(Clef clefType)
 {
     m_clef = clefType;
 }
 
-void ClefInserter::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement*)
+void
+ClefInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    if (staffNo < 0)
-        return ;
+    if (!e->staff || !e->element) return;
     Event *clef = 0, *key = 0;
 
-    LinedStaff *staff = m_nParentView->getLinedStaff(staffNo);
-
-    NotationElementList::iterator closestElement =
-        staff->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-                                               clef, key, false, -1);
-
-    if (closestElement == staff->getViewElementList()->end())
-        return ;
-
-    timeT time = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
-
+    timeT time = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
     ClefInsertionCommand *command =
-        new ClefInsertionCommand(staff->getSegment(), time, m_clef);
+        new ClefInsertionCommand(e->staff->getSegment(), time, m_clef);
 
-    m_nParentView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 
     Event *event = command->getLastInsertedEvent();
-    if (event)
-        m_nParentView->setSingleSelectedEvent(staffNo, event);
+    if (event) {
+        m_scene->setSingleSelectedEvent(&e->staff->getSegment(), event, false);
+    }
 }
 
-const QString ClefInserter::ToolName     = "clefinserter";
+const QString ClefInserter::ToolName = "clefinserter";
 
 }
+
 #include "ClefInserter.moc"
-#endif
+
 

@@ -19,10 +19,14 @@
 #define _NOTATION_MOUSE_EVENT_H_
 
 #include "base/NotationTypes.h"
+#include "base/Event.h"
 #include <QString>
 
 namespace Rosegarden
 {
+
+class NotationStaff;
+class NotationElement;
 
 class NotationMouseEvent
 {

@@ -14,26 +14,22 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-#ifdef NOT_JUST_NOW //!!!
 
 #ifndef _RG_CLEFINSERTER_H_
 #define _RG_CLEFINSERTER_H_
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include <QString>
 #include "base/Event.h"
 
-
-class QMouseEvent;
+#include <QString>
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class NotationView;
-
+class NotationWidget;
 
 /**
  * This tool will insert clefs on mouse click events
@@ -45,16 +41,14 @@ class ClefInserter : public NotationTool
     friend class NotationToolBox;
 
 public:
-    void setClef(std::string clefType);
-
     virtual void ready();
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent*,
-                                       ViewElement* el);
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+
     static const QString ToolName;
+
+public slots:
+    void slotSetClef(Clef clefType);
 
 protected slots:
     void slotNotesSelected();
@@ -62,16 +56,10 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    ClefInserter(NotationView*);
-    
-    //--------------- Data members ---------------------------------
-
+    ClefInserter(NotationWidget *);
     Clef m_clef;
 };
 
-
-
 }
 
-#endif
 #endif

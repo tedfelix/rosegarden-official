@@ -85,6 +85,8 @@ public slots:
     void slotSetNoteInserter();
     void slotSetRestInserter();
     void slotSetInsertedNote(Note::Type type, int dots);
+    void slotSetClefInserter();
+    void slotSetInsertedClef(Clef type);
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);

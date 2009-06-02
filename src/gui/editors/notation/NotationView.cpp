@@ -351,10 +351,10 @@ NewNotationView::setupActions()
     createAction("double_flat_accidental", SLOT(slotDoubleFlat()));
 
     //JAS "Clefs" subMenu
-    createAction("treble_clef", SLOT(slotTrebleClef()));
-    createAction("alto_clef", SLOT(slotAltoClef()));
-    createAction("tenor_clef", SLOT(slotTenorClef()));
-    createAction("bass_clef", SLOT(slotBassClef()));
+    createAction("treble_clef", SLOT(slotClefAction()));
+    createAction("alto_clef", SLOT(slotClefAction()));
+    createAction("tenor_clef", SLOT(slotClefAction()));
+    createAction("bass_clef", SLOT(slotClefAction()));
 
     createAction("text", SLOT(slotText()));
     createAction("guitarchord", SLOT(slotGuitarChord()));
@@ -631,14 +631,11 @@ NewNotationView::setMenuStates()
     // #1372863 -- RestInserter is a subclass of NoteInserter, so we
     // need to test dynamic_cast<RestInserter *> before
     // dynamic_cast<NoteInserter *> (which will succeed for both)
-#ifdef NOT_JUST_NOW
     if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
         NOTATION_DEBUG << "Have rest inserter " << endl;
         leaveActionState("note_insert_tool_current");
         enterActionState("rest_insert_tool_current");
-    } else
-#endif
-        if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
+    } else if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
         NOTATION_DEBUG << "Have note inserter " << endl;
         leaveActionState("rest_insert_tool_current");
         enterActionState("note_insert_tool_current");
@@ -871,6 +868,29 @@ NewNotationView::slotNoteAction()
     setMenuStates();
 
     //!!! todo: set status bar indication
+}
+
+void
+NewNotationView::slotClefAction()
+{
+    QObject *s = sender();
+    QString n = s->objectName();
+
+    Clef type = Clef::Treble;
+
+    if (n == "treble_clef") type = Clef::Treble;
+    else if (n == "alto_clef") type = Clef::Alto;
+    else if (n == "tenor_clef") type = Clef::Tenor;
+    else if (n == "bass_clef") type = Clef::Bass;
+
+/*!!! todo: restore status bar indication
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("clef-treble")));
+*/
+    if (!m_notationWidget) return;
+    m_notationWidget->slotSetClefInserter();
+    m_notationWidget->slotSetInsertedClef(type);
+    setMenuStates();
 }
 
 }

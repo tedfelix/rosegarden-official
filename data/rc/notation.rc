@@ -404,14 +404,14 @@
     </Menu>
     <Menu noMerge="1" name="Clefs">
       <text>&amp;Clefs</text>
-      <Action name="treble_clef" text="&amp;Treble Clef" icon="clef-treble" />
-      <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" />
-      <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" />
-      <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" />
+      <Action name="treble_clef" text="&amp;Treble Clef" icon="clef-treble" checked="false" group="inserters" />
+      <Action name="alto_clef" text="&amp;Alto Clef" icon="clef-alto" checked="false" group="inserters" />
+      <Action name="tenor_clef" text="Te&amp;nor Clef" icon="clef-tenor" checked="false" group="inserters" />
+      <Action name="bass_clef" text="&amp;Bass Clef" icon="clef-bass" checked="false" group="inserters" />
     </Menu>
   <Separator/>
-    <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
-    <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="tools_note" icon="guitarchord" shortcut="F9" />
+    <Action name="text" text="&amp;Text" icon="text" checked="false" group="inserters" shortcut="F8" />
+    <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="inserters" icon="guitarchord" shortcut="F9" />
   <Separator/>
     <Menu name="Move">
       <text>Local &amp;Cursor</text>
