@@ -19,6 +19,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
+#include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -774,6 +775,8 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
 void
 TransportDialog::updateTimeDisplay()
 {
+    Profiler profiler("TransportDialog::updateTimeDisplay");
+
     if (m_tenThousandths != m_lastTenThousandths) {
         if (m_tenThousandths < 0)
             m_transport->TenThousandthsPixmap->clear();

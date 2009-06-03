@@ -19,6 +19,7 @@
 #include "Rotary.h"
 
 #include "misc/Debug.h"
+#include "base/Profiler.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "TextFloat.h"
@@ -105,6 +106,8 @@ Rotary::setKnobColour(const QColor &colour)
 void
 Rotary::paintEvent(QPaintEvent *)
 {
+    Profiler profiler("Rotary::paintEvent");
+
     //!!! This should be pulled from GUIPalette eventually.  We're no longer
     // relying on Qt to come up with dark and mid and highlight and whatnot
     // colors, because they're getting inverted to a far lighter color than is

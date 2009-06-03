@@ -19,10 +19,17 @@
 #include <vector>
 #include <algorithm>
 
+#define WANT_TIMING 1
 //#define NO_TIMING 1
 
+#ifdef WANT_TIMING
+#undef NO_TIMING
+#endif
+
 #ifdef NDEBUG
+#ifndef WANT_TIMING
 #define NO_TIMING 1
+#endif
 #endif
 
 using std::cerr;

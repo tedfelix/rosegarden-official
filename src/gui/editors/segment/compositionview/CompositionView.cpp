@@ -25,6 +25,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "base/SnapGrid.h"
+#include "base/Profiler.h"
 #include "CompositionColourCache.h"
 #include "CompositionItemHelper.h"
 #include "CompositionItemImpl.h"
@@ -503,6 +504,8 @@ void CompositionView::resizeEvent(QResizeEvent* e)
 
 void CompositionView::viewportPaintEvent(QPaintEvent* e)
 {
+    Profiler profiler("CompositionView::viewportPaintEvent");
+
     QVector<QRect> rects = e->region().rects();
 
     for (unsigned int i = 0; i < rects.size(); ++i) {
