@@ -275,6 +275,10 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     
     bool haveClickHeight = false;
 
+    //!!! are any of our tools able to make proper use of e->time?
+    // would it be more useful if it was the absolute time of e->element
+    // rather than the click time on the staff?
+    
     if (nme.staff) {
 
         Event *clefEvent = 0, *keyEvent = 0;

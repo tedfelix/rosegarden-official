@@ -77,6 +77,7 @@ public slots:
     void slotSetClefInserter();
     void slotSetInsertedClef(Clef type);
     void slotSetTextInserter();
+    void slotSetGuitarChordInserter();
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);

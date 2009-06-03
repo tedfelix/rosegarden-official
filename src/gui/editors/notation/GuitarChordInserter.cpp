@@ -15,91 +15,84 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
 #include "GuitarChordInserter.h"
-
 
 #include "base/Event.h"
 #include "base/Exception.h"
-#include "base/Staff.h"
-#include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/GuitarChordInsertionCommand.h"
-#include "gui/general/EditTool.h"
-#include "gui/general/LinedStaff.h"
+#include "document/CommandHistory.h"
 #include "gui/editors/guitar/GuitarChordSelectorDialog.h"
 #include "misc/Debug.h"
+#include "NotationMouseEvent.h"
 #include "NotationElement.h"
-#include "NotationTool.h"
-#include "NotationView.h"
+#include "NotationStaff.h"
+#include "NotationWidget.h"
 #include "NotePixmapFactory.h"
-
-#include <QAction>
-#include <QDialog>
-#include <QIcon>
-#include <QString>
-#include <QMouseEvent>
 
 namespace Rosegarden
 {
 
-GuitarChordInserter::GuitarChordInserter(NotationView* view)
-        : NotationTool("GuitarChordInserter", view),
-        m_guitarChordSelector(0)
+GuitarChordInserter::GuitarChordInserter(NotationWidget *widget) :
+    NotationTool("guitarchordinserter.rc", "GuitarChordInserter", widget),
+    m_guitarChordSelector(0)
 {
     createAction("select", SLOT(slotSelectSelected()));
     createAction("erase", SLOT(slotEraseSelected()));
     createAction("notes", SLOT(slotNotesSelected()));
 
-    m_guitarChordSelector = new GuitarChordSelectorDialog(m_nParentView);
+    m_guitarChordSelector = new GuitarChordSelectorDialog(m_widget);
     m_guitarChordSelector->init();
-    createMenu("guitarchordinserter.rc");
 }
 
-void GuitarChordInserter::slotNotesSelected()
+void
+GuitarChordInserter::slotNotesSelected()
 {
-    m_nParentView->slotLastNoteAction();
+//!!!    m_nParentView->slotLastNoteAction();
 }
 
-void GuitarChordInserter::slotGuitarChordSelected()
+void
+GuitarChordInserter::slotGuitarChordSelected()
 {
     // Switch to last selected Guitar Chord
     // m_nParentView->slotLastGuitarChordAction();
 }
 
-void GuitarChordInserter::slotEraseSelected()
+void
+GuitarChordInserter::slotEraseSelected()
 {
     invokeInParentView("erase");
 }
 
-void GuitarChordInserter::slotSelectSelected()
+void
+GuitarChordInserter::slotSelectSelected()
 {
     invokeInParentView("select");
 }
 
-void GuitarChordInserter::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent* e,
-        ViewElement *element)
+void
+GuitarChordInserter::ready()
 {
-    NOTATION_DEBUG << "GuitarChordInserter::handleLeftButtonPress" << endl;
+    m_widget->setCanvasCursor(Qt::crossCursor);
+//!!!    m_nParentView->setHeightTracking(false);
+}
 
-    if (staffNo < 0) {
-        return ;
-    }
+void
+GuitarChordInserter::handleLeftButtonPress(const NotationMouseEvent *e)
+{
+    if (!e->staff) return;
 
-    Staff *staff = m_nParentView->getStaff(staffNo);
-
-    if (element && element->event()->isa(Guitar::Chord::EventType)) {
-        handleSelectedGuitarChord (element, staff);
+    if (e->element && e->exact &&
+        e->element->event()->isa(Guitar::Chord::EventType)) {
+        handleSelectedGuitarChord(e);
     } else {
-        createNewGuitarChord (element, staff, e);
+        createNewGuitarChord(e);
     }
 }
 
-bool GuitarChordInserter::processDialog( Staff* staff,
-                                       timeT& insertionTime)
+bool
+GuitarChordInserter::processDialog(NotationStaff* staff,
+                                   timeT& insertionTime)
 {
     bool result = false;
 
@@ -110,61 +103,45 @@ bool GuitarChordInserter::processDialog( Staff* staff,
             new GuitarChordInsertionCommand
             (staff->getSegment(), insertionTime, chord);
 
-        m_nParentView->addCommandToHistory(command);
+        CommandHistory::getInstance()->addCommand(command);
         result = true;
     }
 
     return result;
 }
 
-void GuitarChordInserter::handleSelectedGuitarChord (ViewElement* element, Staff *staff)
+void
+GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *e)
 {
-    NOTATION_DEBUG << "GuitarChordInserter::handleSelectedGuitarChord" << endl;
-
-
     // Get time of where guitar chord is inserted
-    timeT insertionTime = element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    timeT insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
     // edit an existing guitar chord, if that's what we clicked on
     try {
-        Guitar::Chord chord(*(element->event()));
+        Guitar::Chord chord(*(e->element->event()));
 
         m_guitarChordSelector->setChord(chord);
         
-        if ( processDialog( staff, insertionTime ) ) {
+        if (processDialog(e->staff, insertionTime)) {
             // Erase old guitar chord
             EraseEventCommand *command =
-                new EraseEventCommand(staff->getSegment(),
-                                      element->event(),
+                new EraseEventCommand(e->staff->getSegment(),
+                                      e->element->event(),
                                       false);
 
-            m_nParentView->addCommandToHistory(command);
+            CommandHistory::getInstance()->addCommand(command);
         }
     } catch (Exception e) {}
 }
 
-void GuitarChordInserter::createNewGuitarChord (ViewElement* element, Staff *staff, QMouseEvent* e)
+void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)
 {
-    NOTATION_DEBUG << "GuitarChordInserter::createNewGuitarChord" << endl;
-    Event *clef = 0, *key = 0;
-
-    LinedStaff *s = dynamic_cast<LinedStaff *>(staff);
-
-    NotationElementList::iterator closestElement =
-        s->getClosestElementToCanvasCoords(e->x(), (int)e->y(),
-                                           clef, key, false, -1);
-
-    if (closestElement == staff->getViewElementList()->end()) {
-        return ;
-    }
-
-    timeT insertionTime = (*closestElement)->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
-
-    processDialog( staff, insertionTime );
+    timeT insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    processDialog(e->staff, insertionTime);
 }
 
 const QString GuitarChordInserter::ToolName = "guitarchordinserter";
 
 }
+
 #include "GuitarChordInserter.moc"
-#endif

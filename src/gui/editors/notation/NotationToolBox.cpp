@@ -65,11 +65,11 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new TextInserter(m_widget);
 
-/*!!!
     else if (toolNamelc == GuitarChordInserter::ToolName)
 
         tool = new GuitarChordInserter(m_widget);
 
+/*!!!
 //    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
 
 //        tool = new LilyPondDirectiveInserter(m_widget);

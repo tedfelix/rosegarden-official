@@ -15,25 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
 #ifndef _RG_GUITAR_CHORD_INSERTER_H_
 #define _RG_GUITAR_CHORD_INSERTER_H_
 
 #include "NotationTool.h"
-#include <QString>
 #include "base/Event.h"
-
-
-class QMouseEvent;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
-class Staff;
-class NotationView;
+class NotationWidget;
 class GuitarChordSelectorDialog;
+class NotationStaff;
 
 /**
  * This tool will insert guitar chord on mouse click events
@@ -45,19 +40,9 @@ class GuitarChordInserter : public NotationTool
     friend class NotationToolBox;
 
 public:
+    virtual void ready();
 
-    virtual void handleLeftButtonPress(timeT t,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent* e,
-                                       ViewElement *element);
-
-/*
-    virtual void handleMouseDoubleClick(timeT,
-                                        int height, int staffNo,
-                                        QMouseEvent*,
-                                        ViewElement* el);
-*/
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
 
     static const QString ToolName;
 
@@ -68,24 +53,17 @@ protected slots:
     void slotNotesSelected();
 
 protected:
-    GuitarChordSelectorDialog* m_guitarChordSelector;
+    GuitarChordSelectorDialog *m_guitarChordSelector;
 
-    GuitarChordInserter(NotationView*);
+    GuitarChordInserter(NotationWidget *);
 
 private:
-    void handleSelectedGuitarChord (ViewElement* element,
-                                  Staff *staff);
+    void handleSelectedGuitarChord(const NotationMouseEvent *e);
+    void createNewGuitarChord(const NotationMouseEvent *e);
 
-    void createNewGuitarChord (ViewElement* element,
-                             Staff *staff,
-                             QMouseEvent* e);
-
-    bool processDialog (Staff *staff,
-                        timeT& insertionTime);
+    bool processDialog(NotationStaff *staff, timeT &insertionTime);
 };
-
 
 }
 
-#endif
 #endif

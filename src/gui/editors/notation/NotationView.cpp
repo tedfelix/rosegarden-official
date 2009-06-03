@@ -916,6 +916,18 @@ NewNotationView::slotText()
     slotUpdateMenuStates();
 }
 
+void
+NewNotationView::slotGuitarChord()
+{
+/*!!! todo: restore
+    m_currentNotePixmap->setPixmap
+        (NotePixmapFactory::toQPixmap(NotePixmapFactory::makeToolbarPixmap("text")));
+*/
+    if (!m_notationWidget) return;
+    m_notationWidget->slotSetGuitarChordInserter();
+    slotUpdateMenuStates();
+}
+
 }
 
 #include "NotationView.moc"

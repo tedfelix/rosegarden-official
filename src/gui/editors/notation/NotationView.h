@@ -69,6 +69,7 @@ protected slots:
     void slotNoteAction();
     void slotClefAction();
     void slotText();
+    void slotGuitarChord();
 
     void slotUpdateMenuStates();
 

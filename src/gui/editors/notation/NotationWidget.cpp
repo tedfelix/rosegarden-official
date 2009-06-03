@@ -23,6 +23,7 @@
 #include "RestInserter.h"
 #include "ClefInserter.h"
 #include "TextInserter.h"
+#include "GuitarChordInserter.h"
 #include "NotationMouseEvent.h"
 #include "NotationSelector.h"
 #include "NotationEraser.h"
@@ -221,6 +222,12 @@ void
 NotationWidget::slotSetTextInserter()
 {
     slotSetTool(TextInserter::ToolName);
+}
+
+void
+NotationWidget::slotSetGuitarChordInserter()
+{
+    slotSetTool(GuitarChordInserter::ToolName);
 }
 
 void
