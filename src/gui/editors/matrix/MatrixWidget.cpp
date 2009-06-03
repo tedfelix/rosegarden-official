@@ -526,30 +526,35 @@ MatrixWidget::ensureXVisible(double x, int percentPos)
 
     QRectF sr = m_view->sceneRect();
     double length = sr.width();             // Scene horizontal length
-    double x0 = sr.x();                     // Scene x minimum value
+    double x1 = sr.x();                     // Scene x minimum value
+    double x2 = x1 + length;                // Scene x maximum value
 
     double treshold = left + (ws * percentPos) / 100;
     double delta = x - treshold;
   
-    if ((x < left) || (x > right)) {
-        // x is outside the view
-        //   ==> scroll to have the left of the view on x
-        int value = hMin + ((x - x0) * (hMax - hMin)) / (length - ws);
-        if (value < hMin) value = hMin;
-        else if (value > hMax) value = hMax;
-        m_view->horizontalScrollBar()->setValue(value);
-    } else {
-        // Scroll is not forced if playback cursor is not running
-        TransportStatus status = RosegardenMainWindow::self()->
-                                  getSequenceManager()->getTransportStatus();
-        if (((status == PLAYING) || (status == RECORDING)) & (delta > 0)) {
-            // Set left of view to x - percentPos * step / 100
-            //    ==> Scroll to have x on treshold
-            int deltaPixels = delta * w / ws;
-            int value = m_view->horizontalScrollBar()->value() + deltaPixels;
+    // Is x inside the scene? If no do nothing.
+    if ((x > x1) && (x <= x2)) {
+        // Is x inside the view?
+        if ((x < left) || (x > right)) {
+            //  No  ==> scroll (jump) to have the left of the view on x
+            int value = hMin + ((x - x1) * (hMax - hMin)) / (length - ws);
             if (value < hMin) value = hMin;
             else if (value > hMax) value = hMax;
             m_view->horizontalScrollBar()->setValue(value);
+        } else {
+            // Yes ==> scroll if needed
+            // Scroll is not forced if playback cursor is not running
+            TransportStatus status = RosegardenMainWindow::self()->
+                                      getSequenceManager()->getTransportStatus();
+            if (((status == PLAYING) || (status == RECORDING)) & (delta > 0)) {
+                // Scroll to have x on treshold
+                //   ==> set left of view to x - percentPos * step / 100
+                int deltaPixels = delta * w / ws;
+                int value = m_view->horizontalScrollBar()->value() + deltaPixels;
+                if (value < hMin) value = hMin;
+                else if (value > hMax) value = hMax;
+                m_view->horizontalScrollBar()->setValue(value);
+            }
         }
     }
 }
@@ -557,27 +562,11 @@ MatrixWidget::ensureXVisible(double x, int percentPos)
 void
 MatrixWidget::slotSetInsertCursorPosition(timeT t)
 {
+    // Note - The two following expressions have the same value :
+    //   m_scene->getRulerScale()->getXForTime(t)
+    //   m_referenceScale->getXForTime(t) / m_hZoomFactor
 
-/// t is snapped to grid
-
-/// The two following expressions give the same value :
-///   m_scene->getRulerScale()->getXForTime(t)
-///   m_referenceScale->getXForTime(t) / m_hZoomFactor
-
-///!!! TODO   The zoom factor have to be applied twice !!!
-/// This is very weird : probably something is broken inside the 
-/// zoom computation and the conversions beetween view and scene units ...
-    emit moveDisplayedPointer(m_referenceScale->getXForTime(t)
-        / (m_hZoomFactor * m_hZoomFactor));   //!!!
- ///   emit moveDisplayedPointer(
- ///              m_scene->getRulerScale()->getXForTime(t) / m_hZoomFactor);
-
-/// Note : The following lines print the right bar number
-/// std::cerr << "Bar = "
-///           << m_document->getComposition().getBarNumber(t / m_hZoomFactor)
-///           << "\n";
-///    ==> The t argument value is wrong...
-
+    emit moveDisplayedPointer(m_scene->getRulerScale()->getXForTime(t));
 }
 
 }

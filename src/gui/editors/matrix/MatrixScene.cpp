@@ -351,6 +351,11 @@ MatrixScene::recreateLines()
 void
 MatrixScene::slotMoveDisplayedPointer(double x)
 {
+    // Never move the pointer outside the scene (else the scene will grow)
+    double x1 = sceneRect().x();
+    double x2 = x1 + sceneRect().width();
+    if ((x <= x1) || (x >= x2)) return;
+
 //  m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
     m_pointer->setLine(0, 0.5, 0, 128 * (m_resolution + 1) + 0.5);
     m_pointer->setPos(x + 0.5, 0);

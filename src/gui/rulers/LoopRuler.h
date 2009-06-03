@@ -79,6 +79,8 @@ public slots:
                            timeT endLoop);
 
 protected:
+    double mouseEventToSceneX(QMouseEvent *mE);
+
     virtual void mousePressEvent       (QMouseEvent*);
     virtual void mouseReleaseEvent     (QMouseEvent*);
     virtual void mouseDoubleClickEvent (QMouseEvent*);

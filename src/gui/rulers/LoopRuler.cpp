@@ -261,6 +261,26 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 
 }
 
+double
+LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
+{
+     // Currently two different properties hold the horizontal zoom factor in
+     // Qt4 port : HZoomable::m_hScaleFactor and ZoomableRulerScale::m_xfactor.
+     // The following code deals with this redundance.
+
+     double zoomX;
+     ZoomableRulerScale *zrs = dynamic_cast<ZoomableRulerScale *>(m_rulerScale);
+     if (zrs) {
+         zoomX = zrs->getXZoomFactor();
+     } else {
+         zoomX = 1.0;
+     }
+
+     double x = mE->pos().x() / getHScaleFactor() / zoomX
+                - m_currentXOffset / zoomX - m_xorigin;
+     return x;
+}
+
 void
 LoopRuler::mousePressEvent(QMouseEvent *mE)
 {
@@ -270,7 +290,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
     setLoopingMode((bs & Qt::ShiftModifier) != 0);
 
     if (mE->button() == Qt::LeftButton) {
-        double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
+        double x = mouseEventToSceneX(mE);
 
         if (m_loopingMode) {
             m_endLoop = m_startLoop = m_loopGrid.snapX(x);
@@ -281,6 +301,11 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
             // clicking on the ruler during playback
 //            RG_DEBUG << "emitting setPointerPosition(" << m_rulerScale->getTimeForX(x) << ")" << endl;
 //            emit setPointerPosition(m_rulerScale->getTimeForX(x));
+
+            // But we want to see the pointer under the mouse as soon as the
+            // button is pressed, before we begin to drag it.
+            emit dragPointerToPosition(m_grid->snapX(x));
+
         }
 
         m_activeMousePress = true;
@@ -315,7 +340,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
             // other views (typically, in the seg. canvas while the user has dragged the pointer
             // in an edit view)
             //
-            double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
+            double x = mouseEventToSceneX(mE);
             emit setPointerPosition(m_grid->snapX(x));
         }
         emit stopMouseMove();
@@ -326,7 +351,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
+    double x = mouseEventToSceneX(mE);
     if (x < 0)
         x = 0;
 
@@ -339,7 +364,7 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 {
-    double x = mE->pos().x() / getHScaleFactor() - m_currentXOffset - m_xorigin;
+    double x = mouseEventToSceneX(mE);
     if (x < 0)
         x = 0;
 
