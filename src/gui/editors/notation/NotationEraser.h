@@ -15,25 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_NOTATIONERASER_H_
 #define _RG_NOTATIONERASER_H_
 
 #include "NotationTool.h"
-#include <QString>
 #include "base/Event.h"
-
-
-class QMouseEvent;
-
 
 namespace Rosegarden
 {
-
-class ViewElement;
-class NotationView;
-
 
 /**
  * This tool will erase a note on mouse click events
@@ -45,14 +34,10 @@ class NotationEraser : public NotationTool
     friend class NotationToolBox;
 
 public:
-
     virtual void ready();
 
-    virtual void handleLeftButtonPress(timeT,
-                                       int height,
-                                       int staffNo,
-                                       QMouseEvent*,
-                                       ViewElement* el);
+    virtual void handleLeftButtonPress(const NotationMouseEvent *);
+
     static const QString ToolName;
 
 public slots:
@@ -62,15 +47,11 @@ public slots:
     void slotSelectSelected();
 
 protected:
-    NotationEraser(NotationView*);
-
-    //--------------- Data members ---------------------------------
+    NotationEraser(NotationWidget *);
 
     bool m_collapseRest;
 };
 
-
 }
 
-#endif
 #endif

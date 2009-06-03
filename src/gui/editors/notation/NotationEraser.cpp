@@ -15,36 +15,32 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include "NotationEraser.h"
-#include <QApplication>
 
 #include "misc/Strings.h"
 #include "misc/ConfigGroups.h"
-#include "base/ViewElement.h"
 #include "commands/notation/EraseEventCommand.h"
-#include "gui/general/EditTool.h"
 #include "NotationTool.h"
-#include "NotationView.h"
-#include "NotePixmapFactory.h"
-#include <QAction>
-#include <QSettings>
-#include <QIcon>
-#include <QString>
+#include "NotationWidget.h"
+#include "NotationStaff.h"
+#include "NotationElement.h"
+#include "NotationMouseEvent.h"
+#include "document/CommandHistory.h"
 
+#include <QSettings>
+#include <QAction>
 
 namespace Rosegarden
 {
 
-NotationEraser::NotationEraser(NotationView* view)
-        : NotationTool("NotationEraser", view),
-        m_collapseRest(false)
+NotationEraser::NotationEraser(NotationWidget *widget) :
+    NotationTool("notationeraser.rc", "NotationEraser", widget),
+    m_collapseRest(false)
 {
     QSettings settings;
-    settings.beginGroup( NotationViewConfigGroup );
+    settings.beginGroup(NotationViewConfigGroup);
 
-    m_collapseRest = qStrToBool( settings.value("collapse", "false" ) ) ;
+    m_collapseRest = qStrToBool(settings.value("collapse", "false"));
 
     QAction *a = createAction("toggle_rest_collapse", SLOT(slotToggleRestCollapse()));
     a->setCheckable(true);
@@ -53,51 +49,49 @@ NotationEraser::NotationEraser(NotationView* view)
     createAction("select", SLOT(slotSelectSelected()));
     createAction("insert", SLOT(slotInsertSelected()));
 
-    createMenu("notationeraser.rc");
-
     settings.endGroup();
 }
 
-void NotationEraser::ready()
+void
+NotationEraser::ready()
 {
-    m_nParentView->setCanvasCursor(Qt::pointingHandCursor);
-    m_nParentView->setHeightTracking(false);
+    m_widget->setCanvasCursor(Qt::pointingHandCursor);
+//!!!    m_nParentView->setHeightTracking(false);
 }
 
-void NotationEraser::handleLeftButtonPress(timeT,
-        int,
-        int staffNo,
-        QMouseEvent*,
-        ViewElement* element)
+void
+NotationEraser::handleLeftButtonPress(const NotationMouseEvent *e)
 {
-    if (!element || staffNo < 0)
-        return ;
+    if (!e->element || !e->staff) return;
 
     EraseEventCommand *command =
-        new EraseEventCommand(m_nParentView->getStaff(staffNo)->getSegment(),
-                              element->event(),
+        new EraseEventCommand(e->staff->getSegment(),
+                              e->element->event(),
                               m_collapseRest);
 
-    m_nParentView->addCommandToHistory(command);
+    CommandHistory::getInstance()->addCommand(command);
 }
 
-void NotationEraser::slotToggleRestCollapse()
+void
+NotationEraser::slotToggleRestCollapse()
 {
     m_collapseRest = !m_collapseRest;
 }
 
-void NotationEraser::slotInsertSelected()
+void
+NotationEraser::slotInsertSelected()
 {
-    m_nParentView->slotLastNoteAction();
+//!!!    m_nParentView->slotLastNoteAction();
 }
 
-void NotationEraser::slotSelectSelected()
+void
+NotationEraser::slotSelectSelected()
 {
     invokeInParentView("select");
 }
 
-const QString NotationEraser::ToolName   = "notationeraser";
+const QString NotationEraser::ToolName = "notationeraser";
 
 }
+
 #include "NotationEraser.moc"
-#endif

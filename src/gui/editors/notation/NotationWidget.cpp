@@ -166,7 +166,7 @@ NotationWidget::slotSetTool(QString name)
 void
 NotationWidget::slotSetEraseTool()
 {
-//!!!    slotSetTool(NotationEraser::ToolName);
+    slotSetTool(NotationEraser::ToolName);
 }
 
 void

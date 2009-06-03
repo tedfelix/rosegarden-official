@@ -69,7 +69,6 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new GuitarChordInserter(m_widget);
 
-/*!!!
 //    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
 
 //        tool = new LilyPondDirectiveInserter(m_widget);
@@ -77,7 +76,7 @@ NotationToolBox::createTool(QString toolName)
     else if (toolNamelc == NotationEraser::ToolName)
 
         tool = new NotationEraser(m_widget);
-*/
+
     else if (toolNamelc == NotationSelector::ToolName)
 
         tool = new NotationSelector(m_widget);
