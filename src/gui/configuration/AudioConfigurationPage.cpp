@@ -177,64 +177,6 @@ AudioConfigurationPage::AudioConfigurationPage(
     layout->setRowStretch(row, 10);
 
     addTab(frame, tr("General"));
-
-    // --------------------- Startup control ----------------------
-    //
-#ifdef HAVE_LIBJACK
-#define OFFER_JACK_START_OPTION 1
-#ifdef OFFER_JACK_START_OPTION
-
-    frame = new QFrame(m_tabWidget);
-    frame->setContentsMargins(10, 10, 10, 10);
-    layout = new QGridLayout(frame);
-    layout->setSpacing(5);
-
-    row = 0;
-
-    layout->setRowMinimumHeight(row, 15);
-    ++row;
-
-    label = new QLabel(tr("Rosegarden can start the JACK audio daemon (jackd) for you automatically if it isn't already running when Rosegarden starts.\n\nThis is recommended for beginners and those who use Rosegarden as their main audio application, but it might not be to the liking of advanced users.\n\nIf you want to start JACK automatically, make sure the command includes a full path where necessary as well as any command-line arguments you want to use.\n\nFor example: /usr/local/bin/jackd -d alsa -d hw -r44100 -p 2048 -n 2\n\n"), frame);
-    label->setWordWrap(true);
-
-    layout->addWidget(label, row, 0, row- row+1, 3- 0+1);
-    ++row;
-
-    settings.beginGroup( SequencerOptionsConfigGroup );
-
-    // JACK control things
-    //
-    bool startJack = qStrToBool( settings.value("jackstart", "false" ) ) ;
-    m_startJack = new QCheckBox(frame);
-    connect(m_startJack, SIGNAL(stateChanged(int)), this, SLOT(slotModified()));
-    m_startJack->setChecked(startJack);
-
-    layout->addWidget(new QLabel(tr("Start JACK when Rosegarden starts"), frame), 2, 0);
-
-    layout->addWidget(m_startJack, row, 1);
-    ++row;
-
-    layout->addWidget(new QLabel(tr("JACK command"), frame),
-                      row, 0);
-
-    QString jackPath = settings.value("jackcommand",
-                                        // "/usr/local/bin/jackd -d alsa -d hw -r 44100 -p 2048 -n 2") ;
-                                        "/usr/bin/qjackctl -s").toString();
-    m_jackPath = new LineEdit(jackPath, frame);
-    connect(m_jackPath, SIGNAL(textChanged(const QString &)), this, SLOT(slotModified()));
-
-    layout->addWidget(m_jackPath, row, 1, row- row+1, 3);
-    ++row;
-
-    layout->setRowStretch(row, 10);
-
-    addTab(frame, tr("JACK Startup"));
-
-    settings.endGroup();
-
-#endif // OFFER_JACK_START_OPTION
-#endif // HAVE_LIBJACK
-
 }
 
 void
@@ -252,13 +194,6 @@ AudioConfigurationPage::apply()
     settings.beginGroup( SequencerOptionsConfigGroup );
 
 #ifdef HAVE_LIBJACK
-#ifdef OFFER_JACK_START_OPTION
-    // Jack control
-    //
-    settings.setValue("jackstart", m_startJack->isChecked());
-    settings.setValue("jackcommand", m_jackPath->text());
-#endif // OFFER_JACK_START_OPTION
-
     // Jack audio inputs
     //
     settings.setValue("audiofaderouts", m_createFaderOuts->isChecked());

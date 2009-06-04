@@ -221,10 +221,6 @@
 #include <QFontDialog>
 #include <QPageSetupDialog>
 
-#ifdef HAVE_LIBJACK
-#include <jack/jack.h>
-#endif
-
 
 namespace Rosegarden
 {
@@ -240,9 +236,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_doc(0),
     m_sequencerThread(0),
     m_sequencerCheckedIn(false),
-#ifdef HAVE_LIBJACK
-    m_jackProcess(0),
-#endif
     m_zoomSlider(0),
     m_seqManager(0),
     m_transport(0),
@@ -283,43 +276,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                          startupStatusMessageReceiver,
                          SLOT(slotShowStatusMessage(QString)));
     }
-
-    // Try to start the sequencer
-    //
-    if (m_useSequencer) {
-#ifdef HAVE_LIBJACK
-//#define OFFER_JACK_START_OPTION 1
-#ifdef OFFER_JACK_START_OPTION
-        // First we check if jackd is running already
-/*
-        std::string jackClientName = "rosegarden";
-
-        // attempt connection to JACK server
-        //
-        jack_client_t* testJackClient;
-        testJackClient = jack_client_new(jackClientName.c_str());
-        if (testJackClient == 0) {
-
-            // If no connection to JACK
-            // try to launch JACK - if the configuration wants us to.
-            if (!launchJack()) {
-                StartupLogo::hideIfStillThere();
-                QMessageBox::critical(dynamic_cast<QWidget*>(this), "", tr("Attempted to launch JACK audio daemon failed.  Audio will be disabled.\nPlease check configuration (Settings -> Configure Rosegarden -> Audio -> Startup)\n and restart."));
-            }
-        } else {
-            //this client was just for testing
-            jack_client_close(testJackClient);
-        }
-*/
-#endif // OFFER_JACK_START_OPTION
-#endif // HAVE_LIBJACK
-
-        // This causes the QPainter::begin debug message
-//        emit startupStatusMessage(tr("Starting sequencer..."));
-//        launchSequencer();
-
-    } else
-        RG_DEBUG << "RosegardenMainWindow : don't use sequencer\n";
 
     // Plugin manager
     //
@@ -4424,60 +4380,6 @@ bool RosegardenMainWindow::launchSequencer()
 
     return true;
 }
-
-#ifdef HAVE_LIBJACK
-bool RosegardenMainWindow::launchJack()
-{
-    QSettings settings;
-    settings.beginGroup(SequencerOptionsConfigGroup);
-
-    bool startJack = qStrToBool(settings.value("jackstart", "false")) ;
-    settings.endGroup();
-
-    if (!startJack)
-        return true; // we don't do anything
-
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    QString jackPath = settings.value("jackcommand", "").toString();
-
-    emit startupStatusMessage(tr("Clearing down jackd..."));
-
-    //setup "/usr/bin/killall" process
-    QProcess *proc = new QProcess; // TODO: do it in a less clumsy way
-    QStringList procArgs;
-
-    procArgs << "-9";
-    procArgs << "jackd";
-
-    proc->execute("/usr/bin/killall", procArgs);
-
-    if (proc->exitCode())
-        RG_DEBUG << "couldn't kill any jackd processes" << endl;
-    else
-        RG_DEBUG << "killed old jackd processes" << endl;
-
-    emit startupStatusMessage(tr("Starting jackd..."));
-
-    if (jackPath != "") {
-
-        RG_DEBUG << "starting jack \"" << jackPath << "\"" << endl;
-
-        QStringList splitCommand;
-        splitCommand = jackPath.split(" ", QString::SkipEmptyParts);
-
-        RG_DEBUG << "RosegardenMainWindow::launchJack() : splitCommand length : "
-        << splitCommand.size() << endl;
-
-        // setup "jack" process
-        m_jackProcess = new QProcess;
-
-        m_jackProcess->start(splitCommand.takeFirst(), splitCommand);
-    }
-    settings.endGroup();
-
-    return m_jackProcess != 0 ? m_jackProcess->state() == QProcess::Running : true;
-}
-#endif
 
 void RosegardenMainWindow::slotDocumentDevicesResyncd()
 {
