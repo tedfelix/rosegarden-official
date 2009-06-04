@@ -116,17 +116,20 @@ fi
 QT_CXXFLAGS="-I$QT_INCLUDES/Qt3Support -I$QT_INCLUDES/QtGui -I$QT_INCLUDES/QtXml -I$QT_INCLUDES/QtNetwork -I$QT_INCLUDES/QtCore -I$QT_INCLUDES -DQT3_SUPPORT"
 
 AC_MSG_CHECKING([QTLIBDIR])
-AC_ARG_WITH([qtlibdir], [  --with-qtlibdir=DIR        Qt library directory [default=$QTLIBDIR]], QTLIBDIR=$withval)
+AC_ARG_WITH([qtlibdir], [  --with-qtlibdir=DIR     Qt library directory [default=$QTLIBDIR]], QTLIBDIR=$withval)
 if test x"$QTLIBDIR" = x ; then
 	QTLIB_SEARCH="$QTDIR/lib $QTDIR/lib64 $QTDIR/lib32"
 else
 	QTLIB_SEARCH="$QTLIBDIR"
 	QTDIR=""
 fi
+QTLIB_EXTS="so a dylib dll"
 for i in $QTLIB_SEARCH ; do
-	if test -f $i/libQtCore.so -a x$QTLIBDIR = x ; then
+    for j in $QTLIB_EXTS ; do
+	if test -f $i/libQtCore.$j -a x$QTLIBDIR = x ; then
 	   	QTLIBDIR=$i
 	fi
+    done
 done
 if test x"$QTLIBDIR" = x ; then
 	AC_MSG_ERROR([
@@ -134,7 +137,14 @@ Failed to find required Qt4 GUI link entry point (libQtGui.so).
 Define QTLIBDIR or use --with-qtlibdir to specify the library location.
 ])
 fi
-if ! test -f $QTLIBDIR/libQt3Support.so ; then
+QT3SUPPORT_PATH=""
+for j in $QTLIB_EXTS ; do
+    if test -f $QTLIBDIR/libQt3Support.$j ; then
+        QT3SUPPORT_PATH=$QTLIBDIR
+	break
+    fi
+done
+if [ x"$QT3SUPPORT_PATH" = x ]; then
 	AC_MSG_ERROR([
 Failed to find required Qt3 support library (libQt3Support) in
 the Qt4 library directory $QTLIBDIR.
