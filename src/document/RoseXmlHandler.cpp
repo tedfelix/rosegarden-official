@@ -199,39 +199,39 @@ ConfigurationXmlSubHandler::endElement(const QString&,
 
 RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
                                unsigned int elementCount,
-                               bool createNewDevicesWhenNeeded)
-        : ProgressReporter(0),
-        m_doc(doc),
-        m_currentSegment(0),
-        m_currentEvent(0),
-        m_currentTime(0),
-        m_chordDuration(0),
-        m_segmentEndMarkerTime(0),
-        m_inChord(false),
-        m_inGroup(false),
-        m_inComposition(false),
-        m_groupId(0),
-        m_foundTempo(false),
-        m_section(NoSection),
-        m_device(0),
-        m_deviceRunningId(Device::NO_DEVICE),
-        m_msb(0),
-        m_lsb(0),
-        m_instrument(0),
-        m_plugin(0),
-        m_pluginInBuss(false),
-        m_colourMap(0),
-        m_keyMapping(0),
-        m_pluginId(0),
-        m_totalElements(elementCount),
-        m_elementsSoFar(0),
-        m_subHandler(0),
-        m_deprecation(false),
-        m_createDevices(createNewDevicesWhenNeeded),
-        m_haveControls(false),
-        m_cancelled(false),
-        m_skipAllAudio(false),
-        m_hasActiveAudio(false)
+                               bool createNewDevicesWhenNeeded) :
+    ProgressReporter(0),
+    m_doc(doc),
+    m_currentSegment(0),
+    m_currentEvent(0),
+    m_currentTime(0),
+    m_chordDuration(0),
+    m_segmentEndMarkerTime(0),
+    m_inChord(false),
+    m_inGroup(false),
+    m_inComposition(false),
+    m_groupId(0),
+    m_foundTempo(false),
+    m_section(NoSection),
+    m_device(0),
+    m_deviceRunningId(Device::NO_DEVICE),
+    m_msb(0),
+    m_lsb(0),
+    m_instrument(0),
+    m_plugin(0),
+    m_pluginInBuss(false),
+    m_colourMap(0),
+    m_keyMapping(0),
+    m_pluginId(0),
+    m_totalElements(elementCount),
+    m_elementsSoFar(0),
+    m_subHandler(0),
+    m_deprecation(false),
+    m_createDevices(createNewDevicesWhenNeeded),
+    m_haveControls(false),
+    m_cancelled(false),
+    m_skipAllAudio(false),
+    m_hasActiveAudio(false)
 {}
 
 RoseXmlHandler::~RoseXmlHandler()
@@ -2105,7 +2105,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
     // Set percentage done
     //
     if ((m_totalElements > m_elementsSoFar) &&
-            (++m_elementsSoFar % 300 == 0)) {
+        (++m_elementsSoFar % 300 == 0)) {
 
         emit setValue(int(double(m_elementsSoFar) / double(m_totalElements) * 100.0));
         ProgressDialog::processEvents();

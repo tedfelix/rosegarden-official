@@ -137,7 +137,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
 void
 NotationWidget::setCanvasCursor(QCursor c)
 {
-    if (m_view) m_view->setCursor(c);
+    if (m_view) m_view->viewport()->setCursor(c);
 }
 
 Segment *
@@ -326,8 +326,9 @@ NotationWidget::slotZoomInFromPanner()
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
 }
 
 void
@@ -336,8 +337,9 @@ NotationWidget::slotZoomOutFromPanner()
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
 }
 
 }

@@ -81,10 +81,11 @@ ProgressDialog::ProgressDialog(QWidget *creator,
 
     m_chrono.start();
 
-    CurrentProgressDialog::set
-        (this);
+    CurrentProgressDialog::set(this);
 
-    setMinimumDuration(500); // set a default value for this
+    setMinimumDuration(4000); // set a default value for this
+
+    setValue(0);
 }
 
 
@@ -136,10 +137,9 @@ ProgressDialog::ProgressDialog(
     
 //     progressBar()->setTotalSteps(totalSteps);
     progressBar()->setMaximum(totalSteps);
-    
 
     RG_DEBUG << "ProgressDialog::ProgressDialog type 2 - "
-    << labelText << " - modal : " << modal << endl;
+             << labelText << " - modal : " << modal << endl;
 
 //    connect(progressBar(), SIGNAL(percentageChanged (int)),
     connect(progressBar(), SIGNAL(valueChanged (int)),
@@ -147,10 +147,10 @@ ProgressDialog::ProgressDialog(
 
     m_chrono.start();
 
-    CurrentProgressDialog::set
-        (this);
+    CurrentProgressDialog::set(this);
 
-    setMinimumDuration(500); // set a default value for this
+    setMinimumDuration(4000); // set a default value for this
+    setValue(0);
 }
 
 ProgressDialog::~ProgressDialog()
@@ -204,13 +204,14 @@ void ProgressDialog::slotCancel()
 
 void ProgressDialog::slotCheckShow(int)
 {
-    //     RG_DEBUG << "ProgressDialog::slotCheckShow() : "
-    //              << m_chrono.elapsed() << " - " << minimumDuration()
-    //              << endl;
+    RG_DEBUG << "ProgressDialog::slotCheckShow() : "
+             << m_chrono.elapsed() << " - " << minimumDuration()
+             << " (visible = " << isVisible() << ")"
+             << endl;
 
     if (!isVisible() &&
-            !m_frozen &&
-            m_chrono.elapsed() > minimumDuration()) {
+        !m_frozen &&
+        m_chrono.elapsed() > minimumDuration()) {
         RG_DEBUG << "ProgressDialog::slotCheckShow() : showing dialog\n";
         show();
         if (m_modal)
@@ -263,10 +264,24 @@ void ProgressDialog::processEvents()
     //    RG_DEBUG << "ProgressDialog::processEvents: modalVisible is "
     //         << m_modalVisible << endl;
     if (m_modalVisible) {
-        qApp->processEvents(QEventLoop::AllEvents, 50); //@@@ JAS added AllEvents
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents, 50);
     } else {
         rosegardenApplication->refreshGUI(50);
     }
+}
+
+void
+ProgressDialog::show()
+{
+    QProgressDialog::show();
+}
+
+void
+ProgressDialog::setVisible(bool v)
+{
+    RG_DEBUG << "ProgressDialog::setVisible: v = " << v << ", value = " << value() << ", max = " << maximum() << ", min = " << minimum() << ", minimumDuration = " << minimumDuration() << endl;
+    
+    QProgressDialog::setVisible(v);
 }
 
 }

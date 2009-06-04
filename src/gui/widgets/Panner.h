@@ -53,9 +53,15 @@ protected:
 
     virtual void resizeEvent(QResizeEvent *);
 
+    virtual void updateScene(const QList<QRectF> &);
+    virtual void drawItems(QPainter *, int, QGraphicsItem *[],
+                           const QStyleOptionGraphicsItem []);
+
     bool m_clicked;
     QRectF m_clickedRect;
     QPoint m_clickedPoint;
+
+    QPixmap m_cache;
 };
 
 }

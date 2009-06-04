@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -74,6 +73,9 @@ public slots:
 
     /// Restore the dialog to its normal state
     void slotThaw();
+
+    virtual void show();
+    virtual void setVisible(bool);
 
 protected slots:
     void slotCheckShow(int);

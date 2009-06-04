@@ -1054,7 +1054,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
             QGraphicsLineItem *lline = new QGraphicsLineItem
                 (int(x), y, int(x + length), y);
             m_scene->addItem(lline);
-            lline->setPen(lineColour);
+            lline->setPen(QPen(lineColour, 0));
             line = lline;
         }
 

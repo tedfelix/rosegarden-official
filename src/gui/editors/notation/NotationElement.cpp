@@ -115,6 +115,7 @@ void
 NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
     removeItem();
+    e->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
     e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;

@@ -47,6 +47,7 @@
 #include <QApplication>
 #include <QtGui>
 #include <QPlastiqueStyle>
+#include <QPixmapCache>
 
 #include <sys/time.h>
 
@@ -358,6 +359,8 @@ int main(int argc, char *argv[])
     // and maintain it ourselves, or at least the subtle parts of Plastique we
     // don't already override with our heavily customized UI.
     QApplication::setStyle(new QPlastiqueStyle);
+
+    QPixmapCache::setCacheLimit(8192); // KB
 
     setsid(); // acquire shiny new process group
 

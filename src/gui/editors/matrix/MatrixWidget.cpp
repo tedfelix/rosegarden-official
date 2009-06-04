@@ -277,10 +277,10 @@ MatrixWidget::slotZoomInFromPanner()
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    m_pianoView->resetMatrix();
-    m_pianoView->scale(m_vZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
+    m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
 }
 
@@ -290,10 +290,10 @@ MatrixWidget::slotZoomOutFromPanner()
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    m_view->resetMatrix();
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    m_pianoView->resetMatrix();
-    m_pianoView->scale(m_vZoomFactor, m_vZoomFactor);
+    QMatrix m;
+    m.scale(m_hZoomFactor, m_vZoomFactor);
+    m_view->setMatrix(m);
+    m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
 }
 
@@ -439,7 +439,7 @@ MatrixWidget::slotDispatchMouseDoubleClick(const MatrixMouseEvent *e)
 void
 MatrixWidget::setCanvasCursor(QCursor c)
 {
-    if (m_view) m_view->setCursor(c);
+    if (m_view) m_view->viewport()->setCursor(c);
 }
 
 void

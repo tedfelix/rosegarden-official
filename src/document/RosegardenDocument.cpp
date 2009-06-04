@@ -592,7 +592,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     connect(&progressDlg, SIGNAL(canceled()),
             &m_audioFileManager, SLOT(slotStopPreview()));
 
-    progressDlg.setMinimumDuration(500);
+//    progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
     setAbsFilePath(fileInfo.absFilePath());
 
@@ -603,8 +603,8 @@ bool RosegardenDocument::openDocument(const QString& filename,
     bool okay = GzipFile::readFromFile(filename, fileContents);
     if (!okay) errMsg = tr("Could not open Rosegarden file");
     else {
-    okay = xmlParse(fileContents, errMsg, &progressDlg,
-            permanent, cancelled);
+        okay = xmlParse(fileContents, errMsg, &progressDlg,
+                        permanent, cancelled);
     }
 
     if (!okay) {
@@ -1236,7 +1236,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         progress = new QProgressBar();    // deallocated by progressDlg, not use stack (qt4)
         progressDlg->setBar( progress );
         
-        progressDlg->setMinimumDuration(500);
+//        progressDlg->setMinimumDuration(500);
         progressDlg->setAutoReset(true);
 
     } else {

@@ -19,6 +19,7 @@
 
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
+#include "base/Profiler.h"
 
 #include <QPolygon>
 #include <QMouseEvent>
@@ -28,6 +29,12 @@
 namespace Rosegarden
 {
 	
+class PannerScene : public QGraphicsScene
+{
+public:
+    friend class Panner;
+};
+
 Panner::Panner() :
     m_clicked(false)
 {
@@ -56,10 +63,14 @@ Panner::resizeEvent(QResizeEvent *)
 void
 Panner::paintEvent(QPaintEvent *e)
 {
-    QGraphicsView::paintEvent(e);
+    Profiler profiler("Panner::paintEvent");
+
+    QPaintEvent *e2 = new QPaintEvent(e->region().boundingRect());
+    QGraphicsView::paintEvent(e2);
 
     QPainter paint;
     paint.begin(viewport());
+    paint.setClipRegion(e->region());
 
     QPainterPath path;
     path.addRect(rect());
@@ -77,6 +88,40 @@ Panner::paintEvent(QPaintEvent *e)
 
     RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect) << endl;
     paint.end();
+}
+
+void
+Panner::updateScene(const QList<QRectF> &)
+{
+    if (!m_cache.isNull()) m_cache = QPixmap();
+}
+
+void
+Panner::drawItems(QPainter *painter, int numItems,
+                  QGraphicsItem *items[],
+                  const QStyleOptionGraphicsItem options[])
+{
+    Profiler profiler("Panner::drawItems");
+
+    if (m_cache.size() != viewport()->size()) {
+
+        QGraphicsScene *s = scene();
+        if (!s) return;
+        PannerScene *ps = static_cast<PannerScene *>(s);
+
+        m_cache = QPixmap(viewport()->size());
+        m_cache.fill(Qt::transparent);
+        QPainter cachePainter;
+        cachePainter.begin(&m_cache);
+        cachePainter.setTransform(viewportTransform());
+        ps->drawItems(&cachePainter, numItems, items, options);
+        cachePainter.end();
+    }
+
+    painter->save();
+    painter->setTransform(QTransform());
+    painter->drawPixmap(0, 0, m_cache);
+    painter->restore();
 }
  
 void
