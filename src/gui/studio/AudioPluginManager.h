@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -64,8 +63,7 @@ public:
 
     // Sample rate
     //
-    void setSampleRate(unsigned int rate) { m_sampleRate = rate; }
-    unsigned int getSampleRate() const { return m_sampleRate; }
+    unsigned int getSampleRate() const;
 
     AudioPluginClipboard* getPluginClipboard() { return &m_pluginClipboard; }
 
@@ -98,7 +96,7 @@ protected:
     void fetchSampleRate();
 
     std::vector<AudioPlugin*> m_plugins;
-    unsigned int              m_sampleRate;
+    mutable unsigned int      m_sampleRate;
     AudioPluginClipboard      m_pluginClipboard;
     Enumerator                m_enumerator;
     QMutex                    m_mutex;

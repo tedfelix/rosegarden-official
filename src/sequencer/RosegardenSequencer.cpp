@@ -117,6 +117,7 @@ RosegardenSequencer::getInstance()
 {
     m_instanceMutex.lock();
     if (!m_instance) {
+        SEQUENCER_DEBUG << "RosegardenSequencer::getInstance: Creating" << endl;
         m_instance = new RosegardenSequencer();
     }
     m_instanceMutex.unlock();

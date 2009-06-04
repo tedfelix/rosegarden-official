@@ -287,12 +287,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     // Try to start the sequencer
     //
     if (m_useSequencer) {
-
 #ifdef HAVE_LIBJACK
-#define OFFER_JACK_START_OPTION 1
+//#define OFFER_JACK_START_OPTION 1
 #ifdef OFFER_JACK_START_OPTION
         // First we check if jackd is running already
-
+/*
         std::string jackClientName = "rosegarden";
 
         // attempt connection to JACK server
@@ -311,12 +310,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
             //this client was just for testing
             jack_client_close(testJackClient);
         }
+*/
 #endif // OFFER_JACK_START_OPTION
 #endif // HAVE_LIBJACK
 
         // This causes the QPainter::begin debug message
-        emit startupStatusMessage(tr("Starting sequencer..."));
-        launchSequencer();
+//        emit startupStatusMessage(tr("Starting sequencer..."));
+//        launchSequencer();
 
     } else
         RG_DEBUG << "RosegardenMainWindow : don't use sequencer\n";

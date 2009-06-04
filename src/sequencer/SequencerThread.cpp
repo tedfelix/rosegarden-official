@@ -33,6 +33,8 @@ namespace Rosegarden
 void
 SequencerThread::run()
 {
+    SEQUENCER_DEBUG << "SequencerThread::run" << endl;
+
     RosegardenSequencer &seq = *RosegardenSequencer::getInstance();
 
     TransportStatus lastSeqStatus = seq.getStatus();

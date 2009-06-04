@@ -38,16 +38,12 @@ namespace Rosegarden
 {
 
 AudioPluginManager::AudioPluginManager() :
-            m_sampleRate(0),
-            m_enumerator(this)
+    m_sampleRate(0),
+    m_enumerator(this)
 {
 //    std::cerr << "AudioPluginManager[" << this << "]::AudioPluginManager - "
 //    	      << "trace is ";
 //    std::cerr << kdBacktrace() << std::endl;
-
-
-    // fetch from sequencer
-    fetchSampleRate();
 
     // Clear the plugin clipboard
     //
@@ -284,10 +280,13 @@ AudioPluginManager::awaitEnumeration()
     }
 }
 
-void
-AudioPluginManager::fetchSampleRate()
+unsigned int
+AudioPluginManager::getSampleRate() const
 {
-    m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
+    if (m_sampleRate == 0) {
+        m_sampleRate = RosegardenSequencer::getInstance()->getSampleRate();
+    }
+    return m_sampleRate;
 }
 
 }

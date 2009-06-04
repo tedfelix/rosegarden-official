@@ -517,7 +517,9 @@ int main(int argc, char *argv[])
         startLogo = StartupLogo::getInstance();
         startLogo->setShowTip(!newVersion);
         startLogo->show();
-        theApp.processEvents();    
+        startLogo->repaint();
+        theApp.processEvents();
+        theApp.flushX();
     }
 
     struct timeval logoShowTime;
@@ -567,6 +569,7 @@ int main(int argc, char *argv[])
         if (startLogo) {
             startLogo->raise();
             startLogo->setHideEnabled(true);
+            startLogo->repaint();
             theApp.flushX();
         }
 
@@ -586,18 +589,6 @@ int main(int argc, char *argv[])
         startLogo->raise();
         startLogo->setHideEnabled(true);
         theApp.flushX();
-    }
-
-    // Check for sequencer and launch if needed
-    //
-    try {
-        rosegardengui->launchSequencer();
-    } catch (std::string e) {
-        RG_DEBUG << "RosegardenGUI - " << e << endl;
-    } catch (QString e) {
-        RG_DEBUG << "RosegardenGUI - " << e << endl;
-    } catch (Exception e) {
-        RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
     }
 
     settings.endGroup();
@@ -702,6 +693,16 @@ int main(int argc, char *argv[])
         CurrentProgressDialog::thaw();
     }
     settings.endGroup();
+
+    try {
+        rosegardengui->launchSequencer();
+    } catch (std::string e) {
+        RG_DEBUG << "RosegardenGUI - " << e << endl;
+    } catch (QString e) {
+        RG_DEBUG << "RosegardenGUI - " << e << endl;
+    } catch (Exception e) {
+        RG_DEBUG << "RosegardenGUI - " << e.getMessage() << endl;
+    }
 
     return theApp.exec();
 }
