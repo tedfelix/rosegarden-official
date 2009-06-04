@@ -55,7 +55,7 @@ class RulerScale
 {
 public:
     virtual ~RulerScale();
-    Composition *getComposition() const { return m_composition; }
+    virtual Composition *getComposition() const { return m_composition; }
 
     /**
      * Return the number of the first visible bar.
@@ -222,6 +222,7 @@ public:
     ZoomableRulerScale(const RulerScale *reference);
     virtual ~ZoomableRulerScale();
 
+    virtual Composition *getComposition() const;
     virtual double getBarPosition(int n) const;
     virtual double getBarWidth(int n) const;
     virtual double getBeatWidth(int n) const;

@@ -328,6 +328,12 @@ ZoomableRulerScale::~ZoomableRulerScale()
 {
 }
 
+Composition *
+ZoomableRulerScale::getComposition() const
+{
+    return m_reference->getComposition();
+}
+
 double
 ZoomableRulerScale::getBarPosition(int n) const
 {
