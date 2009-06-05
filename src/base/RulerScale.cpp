@@ -317,7 +317,7 @@ SegmentsRulerScale::getBarPosition(int n) const
 //////////////////////////////////////////////////////////////////////
 
 ZoomableRulerScale::ZoomableRulerScale(const RulerScale *reference) :
-    RulerScale(0),
+    RulerScale(reference->getComposition()),
     m_reference(reference),
     m_xfactor(1),
     m_yfactor(1)
@@ -326,12 +326,6 @@ ZoomableRulerScale::ZoomableRulerScale(const RulerScale *reference) :
 
 ZoomableRulerScale::~ZoomableRulerScale()
 {
-}
-
-Composition *
-ZoomableRulerScale::getComposition() const
-{
-    return m_reference->getComposition();
 }
 
 double
