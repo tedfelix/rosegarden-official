@@ -27,12 +27,12 @@ namespace Rosegarden
 {
 
 FingeringBox::FingeringBox(
-		unsigned int nbFrets,
-		unsigned int nbStrings, 
-		bool editable, 
-		QWidget *parent, 
-		const char* name
-	)
+        unsigned int nbFrets,
+        unsigned int nbStrings, 
+        bool editable, 
+        QWidget *parent, 
+        const char* name
+    )
     : QFrame(parent, name),
     m_nbFretsDisplayed(nbFrets),
     m_startFret(1),
@@ -61,17 +61,26 @@ FingeringBox::init()
 {
     setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setFixedSize(IMG_WIDTH, IMG_HEIGHT);
-	
-    //setBackgroundMode(PaletteBase);
-	setBackgroundRole( QPalette::Base );
+   
+    QString localStyle = "background-color: white";
+    setStyleSheet(localStyle);
+
     if (m_editable)
-        setMouseTracking(true);
-    
+        setMouseTracking(true);    
+}
+
+void
+FingeringBox::paintEvent(QPaintEvent *e)
+{
+    std::cerr << "FingeringBox::paintEvent()" << std::endl;
+    QPainter p;
+    drawContents(&p);
 }
 
 void
 FingeringBox::drawContents(QPainter* p)
 {
+    std::cerr << "FingeringBox::drawContents()" << std::endl;
 //    NOTATION_DEBUG << "FingeringBox::drawContents()" << endl;
     
     // For all strings on guitar
@@ -81,6 +90,8 @@ FingeringBox::drawContents(QPainter* p)
     // For all bars
     //   display bar
     // Horizontal separator line
+    
+    p->begin(this);
 
     // draw guitar chord fingering
     //
@@ -186,7 +197,7 @@ FingeringBox::mousePressEvent(QMouseEvent *event)
     if (!m_editable)
         return;
         
-	if((event->button() == Qt::LeftButton) && m_editable) {
+    if((event->button() == Qt::LeftButton) && m_editable) {
 
         // Find string position
         m_press_string_num = getStringNumber(event->pos());

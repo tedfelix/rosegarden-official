@@ -52,6 +52,15 @@ public:
 protected:
     void init();
 
+    /** In Qt4 there is no more drawContents() so we'll use paintEvent() to
+     * trigger the old code, hopefully with minimal modification
+     */
+    virtual void paintEvent(QPaintEvent*);
+
+    /** This was the old Qt3 way of updating the widget.  Rather than
+     * restructuring everything in new idiom, we use new idiom to call the old
+     * idiom while leaving it in place.
+     */
     virtual void drawContents(QPainter*);
 
     virtual void mousePressEvent(QMouseEvent*);
