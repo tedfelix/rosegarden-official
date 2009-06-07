@@ -59,6 +59,8 @@ void
 NoteSymbols::drawMuteSymbol ( QPainter* p,
                               unsigned int position ) const
 {
+    std::cerr << "NoteSymbols::drawMuteSymbol()" << std::endl;
+
     QRect v = p->viewport();
 
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
@@ -69,6 +71,9 @@ NoteSymbols::drawMuteSymbol ( QPainter* p,
 
     //std::cout << "NoteSymbols::drawMuteSymbol - drawing Mute symbol at string #" << position
     //<< std::endl;
+
+    QPen pen(Qt::black);
+    p->setPen(pen);
 
     p->drawLine ( x_pos.first - ( width / 2 ),
                   y_pos - ( height / 2 ),
@@ -85,6 +90,8 @@ void
 NoteSymbols::drawOpenSymbol ( QPainter* p,
                               unsigned int position ) const
 {
+    std::cerr << "NoteSymbols::drawOpenSymbol()" << std::endl;
+    
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
     unsigned int y_pos = getTopBorder( v.height() ) / 2;
@@ -94,7 +101,8 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
     //std::cout << "NoteSymbols::drawOpenSymbol - drawing Open symbol at string #" << position
     //<< std::endl;
 
-    p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
+    //p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
+    p->setBrush(Qt::black);
     p->drawEllipse( x_pos.first - ( radius / 2 ),
                     y_pos - ( radius / 2 ),
                     radius,
@@ -108,6 +116,7 @@ NoteSymbols::drawNoteSymbol ( QPainter* p,
                               bool transient ) const
 {
 //    NOTATION_DEBUG << "NoteSymbols::drawNoteSymbol - string: " << stringNb << ", fret:" << fretNb << endl;
+    std::cerr << "NoteSymbols::drawNoteSymbol()" << std::endl;
 
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), stringNb, m_nbOfStrings );
@@ -117,10 +126,10 @@ NoteSymbols::drawNoteSymbol ( QPainter* p,
 
     if (transient) {
         radius =  static_cast<unsigned int>( columnWidth /* * 0.9 */ );
-        p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
+        p->setBrush(Qt::black );
     } else {
         radius =  static_cast<unsigned int>( columnWidth * 0.7 );
-        p->setBrush( QBrush(p->brush().color(), Qt::SolidPattern) );
+        p->setBrush(Qt::black);
     }
 
     int x = x_pos.first - ( radius / 2 ),
@@ -159,6 +168,9 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
         posPair y_pos = getY ( v.height(), fretNb, m_nbOfFrets );
         double columnWidth = startXPos.second;
         unsigned int thickness = static_cast<unsigned int>( columnWidth * 0.7 );
+
+        QPen pen(Qt::black);
+        p->setPen(pen);
 
         p->drawRect( startXPos.first,
                      y_pos.first + ( y_pos.second / 4 ) + TOP_GUITAR_CHORD_MARGIN,
@@ -442,6 +454,7 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
     noteSymbols.drawStrings(p);
 
     unsigned int stringNb = 0;
+
     
     for (Fingering::const_iterator pos = fingering.begin();
          pos != fingering.end();
