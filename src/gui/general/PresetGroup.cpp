@@ -60,35 +60,21 @@ PresetGroup::PresetGroup() :
         m_amateur(false),
         m_pro(false)
 {
-    QString language = QLocale::system().name();
-
+    // NOTE: the following code was simplified to remove three layers of trying
+    // different ways to find presets.xml which were left over from the old
+    // translation mechanism of having multiple presets-XX.xml to choose from.
+    // Once cleaned of this language property, all statements distilled down to
+    // the same statement, so I removed the redundant code.
     ResourceFinder rf;
     QString presetFileName = rf.getResourcePath
-        ("presets", QString("presets-%2.xml").arg(language));
+        ("presets", QString("presets.xml"));
 
     if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
 
         RG_DEBUG << "Failed to open " << presetFileName << endl;
 
-        language.replace(QRegExp("_.*$"), "");
-        presetFileName = rf.getResourcePath
-            ("presets", QString("presets-%2.xml").arg(language));
-
-        if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
-
-            RG_DEBUG << "Failed to open " << presetFileName << endl;
-
-            presetFileName = rf.getResourcePath
-                ("presets", QString("presets.xml"));
-
-            if (presetFileName == "" || !QFileInfo(presetFileName).isReadable()) {
-
-                RG_DEBUG << "Failed to open " << presetFileName << endl;
-
-                throw PresetFileReadFailed
-                (qstrtostr(tr("Can't open preset file %1").arg(presetFileName)));
-            }
-        }
+        throw PresetFileReadFailed
+        (qstrtostr(tr("Can't open preset file %1").arg(presetFileName)));
     }
 
     QFile presetFile(presetFileName);
