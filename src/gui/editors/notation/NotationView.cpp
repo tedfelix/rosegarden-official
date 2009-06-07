@@ -39,6 +39,8 @@
 
 #include "gui/dialogs/PasteNotationDialog.h"
 
+#include "gui/general/IconLoader.h"
+
 #include <QWidget>
 #include <QAction>
 #include <QActionGroup>
@@ -67,6 +69,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     setupActions();
     createGUI("notation.rc");
     slotUpdateMenuStates();
+
+    setIcon(IconLoader().loadPixmap("window-notation"));
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdateMenuStates()));
