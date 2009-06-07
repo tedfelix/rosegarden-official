@@ -274,7 +274,7 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
     }
 
     // Now since the file is in the user's editable space, the user should get
-    // to edit it.  The chords.xml file I unbundled came out 444 instead of 666
+    // to edit it.  The chords.xml file I unbundled came out 444 instead of 644
     // which won't do.  Rather than put the chmod code there, I decided to put
     // it here, because I think it will always be appropriate to make unbundled
     // files editable.  That's rather the point in many cases, and for the rest,
@@ -282,15 +282,14 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
     // have you that were unbundled to improve performance.  (Dissenting
     // opinions welcome.  We can always shuffle this somewhere else if
     // necessary.  There are many possibilities.)
-    RG_DEBUG << "Running chmod +w " << target << endl;
+    QFile chmod(target);
+    chmod.setPermissions(QFile::ReadOwner |
+                         QFile::ReadUser  | /* for potential platform-independence */
+                         QFile::ReadGroup |
+                         QFile::ReadOther |
+                         QFile::WriteOwner|
+                         QFile::WriteUser); /* for potential platform-independence */
 
-    QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "+w";
-    procArgs << target;
-
-    proc->execute("chmod", procArgs);
-    
     return true;
 }
 

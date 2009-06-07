@@ -1982,14 +1982,11 @@ bool RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
     // Plus I already wrote the code.
     // 
     if (asTemplate) {
-        RG_DEBUG << "Running chmod a-w " << saveAsInfo.absFilePath() << endl;
-
-        QProcess *proc = new QProcess;
-        QStringList procArgs;
-        procArgs << "a-w";
-        procArgs << saveAsInfo.absFilePath();
-
-        proc->execute("chmod", procArgs);
+        QFile chmod(saveAsInfo.absFilePath());
+        chmod.setPermissions(QFile::ReadOwner |
+                             QFile::ReadUser  | /* for potential platform-independence */
+                             QFile::ReadGroup |
+                             QFile::ReadOther);
     }
 
     if (!res) {
