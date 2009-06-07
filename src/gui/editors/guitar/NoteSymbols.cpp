@@ -217,7 +217,8 @@ NoteSymbols::drawFrets ( QPainter* p ) const
     unsigned int rowHeight = yGuitarChord / m_nbOfFrets;
 
     QPen pen(p->pen());
-    pen.setWidth(imgHeight >= 100 ? FRET_PEN_WIDTH : FRET_PEN_WIDTH / 2);  
+    pen.setWidth(imgHeight >= 100 ? FRET_PEN_WIDTH : FRET_PEN_WIDTH / 2);
+    pen.setColor(Qt::black);
     p->save();
     p->setPen(pen);
     unsigned int y_pos = (getY ( imgHeight, 0, m_nbOfFrets )).first + TOP_GUITAR_CHORD_MARGIN;
@@ -261,6 +262,7 @@ NoteSymbols::drawStrings ( QPainter* p ) const
 
     QPen pen(p->pen());
     pen.setWidth(imgWidth >= 100 ? STRING_PEN_WIDTH : STRING_PEN_WIDTH / 2);  
+    pen.setColor(Qt::black);
     p->save();
     p->setPen(pen);
 

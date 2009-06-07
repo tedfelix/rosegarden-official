@@ -42,6 +42,11 @@ namespace Rosegarden
 GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     : QDialog(parent)
 {
+    QString localStyle = "QListView {background-color: #FFFFFF; alternate-background-color: #EEEEFF; color: #000000; selection-background-color: #80AFFF; selection-color: #FFFFFF;}";
+    // we'll use "localStyle" as a future search point, but switch over to a
+    // more meaningful variable name for the actual style assignment
+    QString listStyle = localStyle;
+
     setModal(true);
     setWindowTitle(tr("Guitar Chord Selector"));
     QGridLayout *metagrid = new QGridLayout;
@@ -52,10 +57,12 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     topLayout->addWidget(new QLabel(tr("Root"), page), 0, 0);
     m_rootNotesList = new QListWidget(page);
+    m_rootNotesList->setStyleSheet(listStyle);
     topLayout->addWidget(m_rootNotesList, 1, 0);
     
     topLayout->addWidget(new QLabel(tr("Extension"), page), 0, 1);
     m_chordExtList = new QListWidget(page);
+    m_chordExtList->setStyleSheet(listStyle);
     topLayout->addWidget(m_chordExtList, 1, 1);
     
     m_newFingeringButton = new QPushButton(tr("New"), page);
@@ -88,6 +95,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
+    m_fingeringsList->setStyleSheet(listStyle);
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page);
