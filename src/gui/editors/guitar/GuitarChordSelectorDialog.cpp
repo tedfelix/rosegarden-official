@@ -46,6 +46,13 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     QString localStyle = "QListView {background-color: #FFFFFF; alternate-background-color: #EEEEFF; color: #000000; selection-background-color: #80AFFF; selection-color: #FFFFFF;}";
     // we'll use "localStyle" as a future search point, but switch over to a
     // more meaningful variable name for the actual style assignment
+    //
+    // Note that I'm just slapping another local stylesheet on these damn
+    // QListView objects, because they're stubbornly refusing to be touched from
+    // the external stylesheet, and I'm beyond losing patience with dicking
+    // around to solve problems like this.  Our stylesheet and style code are a
+    // complete mess, and I will probably have to rewrite all of this one day,
+    // but not before Thorn/Abraham Darby releases.
     QString listStyle = localStyle;
 
     setModal(true);
@@ -104,11 +111,11 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_fingeringBox = new FingeringBox(false, page);
     topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 0+1);
     
-    connect(m_rootNotesList, SIGNAL(highlighted(int)),
+    connect(m_rootNotesList, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotRootHighlighted(int)));
-    connect(m_chordExtList, SIGNAL(highlighted(int)),
+    connect(m_chordExtList, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotChordExtHighlighted(int)));
-    connect(m_fingeringsList, SIGNAL(highlighted(QListWidgetItem*)),
+    connect(m_fingeringsList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(slotFingeringHighlighted(QListWidgetItem*)));
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
@@ -124,9 +131,9 @@ GuitarChordSelectorDialog::init()
 {
     // populate the listboxes
     //
-    std::vector<QString> chordFiles = getAvailableChordFiles();
+    QString chordFile = getChordFile();
     
-    parseChordFiles(chordFiles);
+    parseChordFile(chordFile);
 
 //    m_chordMap.debugDump();
     
@@ -235,7 +242,7 @@ GuitarChordSelectorDialog::slotNewFingering()
     newChord.setExt(m_chord.getExt());
     
     GuitarChordEditorDialog* chordEditorDialog = new GuitarChordEditorDialog(newChord, m_chordMap, this);
-    QListWidgetItem *tmpItem = 0;
+    //QListWidgetItem *tmpItem = 0; (unused)
     QList<QListWidgetItem*> tmpItemList;
     
     if (chordEditorDialog->exec() == QDialog::Accepted) {
@@ -376,6 +383,8 @@ GuitarChordSelectorDialog::populateFingerings(const Guitar::ChordMap::chordarray
 QPixmap
 GuitarChordSelectorDialog::getFingeringPixmap(const Guitar::Fingering& fingering) const
 {
+    std::cerr << "GuitarChordSelectorDialog::getFingeringPixmap()" << std::endl;
+
     QPixmap pixmap(FINGERING_PIXMAP_WIDTH, FINGERING_PIXMAP_HEIGHT);
     pixmap.fill();
     
@@ -441,14 +450,6 @@ GuitarChordSelectorDialog::evaluateChordComplexity(const QString& ext)
 }
 
 void
-GuitarChordSelectorDialog::parseChordFiles(const std::vector<QString>& chordFiles)
-{
-    for(std::vector<QString>::const_iterator i = chordFiles.begin(); i != chordFiles.end(); ++i) {
-        parseChordFile(*i);
-    }
-}
-
-void
 GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
 {
     ChordXmlHandler handler(m_chordMap);
@@ -475,28 +476,22 @@ GuitarChordSelectorDialog::setEditionEnabled(bool enabled)
     m_editFingeringButton->setEnabled(enabled);
 }
 
-std::vector<QString>
-GuitarChordSelectorDialog::getAvailableChordFiles()
+QString
+GuitarChordSelectorDialog::getChordFile()
 {
-    std::vector<QString> names;
+    QString name = "";
 
-    QString dicFile;
-    ResourceFinder rf;
-    QStringList chordDictFiles = rf.getResourceFiles("chords", "xml" );
+    // unbundle the factory chords.xml to ~/.local; user edits will be saved to
+    // this file, rather than a separate file as was previously the case in
+    // Rosegarden Classic
+    if (!ResourceFinder().unbundleResource("chords", "chords.xml")) return name;
 
-    std::cerr << "Gonna add some files --->" << std::endl;
-    
-//     for(QStringList::iterator i = chordDictFiles.begin(); i != chordDictFiles.end(); ++i) {
-    for (int i = 0; i < chordDictFiles.count(); i++){
-        dicFile = chordDictFiles.at(i);
-        
-        std::cerr << "GuitarChordSelectorDialog::getAvailableChordFiles : adding file " << dicFile << std::endl;
-        names.push_back(dicFile);
-    }
-    
-    std::cerr << "<--- If you don't see anything between these arrows, then I just did diddly squat." << std::endl;
+    name = ResourceFinder().getResourcePath("chords", "chords.xml");
 
-    return names;
+    std::cerr << "GuitarChordSelectorDialog::getChordFile : adding file \" " << name << "\"" << std::endl;
+    std::cerr << "  (if file on the preceding line was \"\" then this is a BUG)" << std::endl;    
+
+    return name;
 }
 
 bool
@@ -506,7 +501,6 @@ GuitarChordSelectorDialog::saveUserChordMap()
     
     ResourceFinder rf;
     QString userChordDictPath = rf.getResourceSaveDir("chords");
-        userChordDictPath += "/user_chords.xml";
     
     std::cerr << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << std::endl;
     QString errMsg;

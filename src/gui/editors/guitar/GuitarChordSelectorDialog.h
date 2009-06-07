@@ -65,7 +65,6 @@ protected slots:
 
 protected:
 
-    void parseChordFiles(const std::vector<QString>& chordFiles);
     void parseChordFile(const QString& chordFileName);
     void populateFingerings(const Guitar::ChordMap::chordarray&, const Guitar::Fingering& refFingering=Guitar::Fingering(0));
     void populateExtensions(const QStringList& extList);
@@ -82,8 +81,16 @@ protected:
     
     QPixmap getFingeringPixmap(const Guitar::Fingering& fingering) const;
          
-    /// Find all chord list files on the system
-    std::vector<QString> getAvailableChordFiles();
+    /// Unbundle chords.xml then return a path to its location in userspace.
+    //
+    // User edits will be saved to the user's local, writeable copy of
+    // chords.xml, rather than to a separate user_chords.xml as was the case in
+    // Rosegarden Classic.  This simplifies troubleshooting at the expense of
+    // losing the ability to drop random .xml files into the chord dictionary
+    // path and have them picked up.  (Nobody ever did that as far as I know,
+    // but if people complain, we can work something out.  I think it will be
+    // transparent to everyone, and if not, we'll hear about it!)
+    QString getChordFile();
 
     Guitar::ChordMap m_chordMap;
 

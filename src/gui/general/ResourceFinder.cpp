@@ -17,6 +17,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QStringList>
+#include <QProcess>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -39,7 +40,12 @@ namespace Rosegarden
      typically /usr/share/rosegarden or /usr/local/share/rosegarden.
      The first part of this (/usr/share/rosegarden) may be specified
      in the ROSEGARDEN environment variable; if this is not set, a
-     typical path (/usr/local, /usr) will be searched.
+     typical path (/usr/local, /usr) will be searched.  (Note that
+     now that we have a proper install target, we're installing any
+     such files to $PREFIX/share/rosegarden-$VERSION now, with the
+     aim of making it easier for users to keep a stable usable copy
+     around and play with an experimental one at the same time; in
+     order to encourage pre-release testing.)
 
    * Installed by the user in their home directory.  On Linux the
      locations of these files are identical to the system-wide
@@ -266,6 +272,25 @@ ResourceFinder::unbundleResource(QString resourceCat, QString fileName)
         std::cerr << "ResourceFinder::unbundleResource: ERROR: Failed to un-bundle resource file \"" << fileName << "\" to user location \"" << target << "\"" << std::endl;
         return false;
     }
+
+    // Now since the file is in the user's editable space, the user should get
+    // to edit it.  The chords.xml file I unbundled came out 444 instead of 666
+    // which won't do.  Rather than put the chmod code there, I decided to put
+    // it here, because I think it will always be appropriate to make unbundled
+    // files editable.  That's rather the point in many cases, and for the rest,
+    // nobody will likely notice they could have edited their font files or what
+    // have you that were unbundled to improve performance.  (Dissenting
+    // opinions welcome.  We can always shuffle this somewhere else if
+    // necessary.  There are many possibilities.)
+    RG_DEBUG << "Running chmod +w " << target << endl;
+
+    QProcess *proc = new QProcess;
+    QStringList procArgs;
+    procArgs << "+w";
+    procArgs << target;
+
+    proc->execute("chmod", procArgs);
+    
     return true;
 }
 
