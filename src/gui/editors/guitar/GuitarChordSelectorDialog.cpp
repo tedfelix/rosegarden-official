@@ -106,17 +106,35 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
     m_fingeringsList->setStyleSheet(listStyle);
+    m_fingeringsList->setIconSize(QSize(64,64));
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
-    m_fingeringBox = new FingeringBox(false, page);
+    m_fingeringBox = new FingeringBox(false, page, true);
     topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 0+1);
     
     connect(m_rootNotesList, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotRootHighlighted(int)));
     connect(m_chordExtList, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotChordExtHighlighted(int)));
+
+    // connect itemClicked() so it will fire if a user clicks directly on the
+    // fingering list doodad thingummy (and comments like "fingering list doodad
+    // thingummy" are what you get when you abandon half-finished code the core
+    // developers don't really understand, and expect them to keep it alive for
+    // you in perpetuity)
+    //
     connect(m_fingeringsList, SIGNAL(itemClicked(QListWidgetItem*)),
             this, SLOT(slotFingeringHighlighted(QListWidgetItem*)));
+
+    // connect currentRowChanged() so this can be fired when other widgets are
+    // manipulated, which will cause this one to pop back up to the top.  This
+    // slot triggers other updates in a leg bone connected to the thigh bone
+    // fashion, so we have to wire it to some input to get those updates to
+    // happen, and overloading this to fire two different ways was quick and
+    // cheap
+    //
+    connect(m_fingeringsList, SIGNAL(currentRowChanged(int)),
+            this, SLOT(slotFingeringHighlighted(int)));
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                        QDialogButtonBox::Cancel);
@@ -212,9 +230,18 @@ GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 }
 
 void
+GuitarChordSelectorDialog::slotFingeringHighlighted(int i)
+{
+    std::cerr << "GuitarChordSelectorDialog::slotFingeringHighlighted(int)" << std::endl;
+
+    QListWidgetItem* it = m_fingeringsList->item(i);
+    if (it) slotFingeringHighlighted(it);
+}
+
+void
 GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem* listBoxItem)
 {
-    std::cerr << "GuitarChordSelectorDialog::slotFingeringHighlighted\n";
+    std::cerr << "GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem*)" << std::endl;
     
     FingeringListBoxItem* fingeringItem = dynamic_cast<FingeringListBoxItem*>(listBoxItem);
     if (fingeringItem) {
@@ -400,7 +427,7 @@ GuitarChordSelectorDialog::getFingeringPixmap(const Guitar::Fingering& fingering
                    FINGERING_PIXMAP_HEIGHT - FINGERING_PIXMAP_H_MARGIN);
 
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, m_fingeringBox->getNoteSymbols(), p);
-    
+
     return pixmap;
 }
 

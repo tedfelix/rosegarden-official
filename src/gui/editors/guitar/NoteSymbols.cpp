@@ -109,6 +109,14 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
                     y_pos - ( radius / 2 ),
                     radius,
                     radius );
+
+    // little hack here to try to fix a problem I don't quite understand with
+    // brute force
+    p->setBrush(Qt::white);
+    p->drawEllipse( x_pos.first - ( radius / 2 ) + 1,
+                    y_pos - ( radius / 2 ) + 1,
+                    radius - 2,
+                    radius - 2);
 }
 
 void

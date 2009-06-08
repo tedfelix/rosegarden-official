@@ -31,27 +31,29 @@ FingeringBox::FingeringBox(
         unsigned int nbStrings, 
         bool editable, 
         QWidget *parent, 
-        const char* name
+        bool big
     )
-    : QFrame(parent, name),
+    : QFrame(parent),
     m_nbFretsDisplayed(nbFrets),
     m_startFret(1),
     m_nbStrings(nbStrings),
     m_transientFretNb(0),
     m_transientStringNb(0),
     m_editable(editable),
-    m_noteSymbols(m_nbStrings, m_nbFretsDisplayed)
+    m_noteSymbols(m_nbStrings, m_nbFretsDisplayed),
+    m_big(big)
 {
     init();    
 }
 
-FingeringBox::FingeringBox(bool editable, QWidget *parent, const char* name)
-    : QFrame(parent, name),
+FingeringBox::FingeringBox(bool editable, QWidget *parent, bool big)
+    : QFrame(parent),
     m_nbFretsDisplayed(DEFAULT_NB_DISPLAYED_FRETS),
     m_startFret(1),
     m_nbStrings(Guitar::Fingering::DEFAULT_NB_STRINGS),
     m_editable(editable),
-    m_noteSymbols(m_nbStrings, m_nbFretsDisplayed)
+    m_noteSymbols(m_nbStrings, m_nbFretsDisplayed),
+    m_big(big)
 {
     init();
 }
@@ -93,6 +95,10 @@ FingeringBox::drawContents(QPainter* p)
     
     p->begin(this);
 
+    // turn on antialiasing for the X and O symbols at larger sizes,  which
+    // makes a spectacular difference here, though it's not guaranteed to work
+    if (m_big) p->setRenderHint(QPainter::Antialiasing);
+
     // draw guitar chord fingering
     //
     m_noteSymbols.drawFretNumber(p, m_startFret);
@@ -131,7 +137,7 @@ FingeringBox::drawContents(QPainter* p)
     //
     if (hasMouse() &&
         m_transientFretNb > 0 && m_transientFretNb <= m_nbFretsDisplayed &&
-        m_transientStringNb >= 0 && m_transientStringNb <= m_nbStrings) {
+        m_transientStringNb > 0 && m_transientStringNb <= m_nbStrings) {
         p->setBrush(Qt::blue);
         m_noteSymbols.drawNoteSymbol(p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }

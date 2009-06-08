@@ -27,11 +27,9 @@ namespace Rosegarden {
 FingeringListBoxItem::FingeringListBoxItem(
 			const Guitar::Chord& chord, 
 			QListWidget* parent, QIcon &icon, 
-			//QPixmap pixmap, 
 			QString &fingeringString
 			)
 	: QListWidgetItem(icon, fingeringString, parent),
-//     : QListWidgetPixmap(parent, pixmap, fingeringString),
        m_chord(chord)
 {
 }

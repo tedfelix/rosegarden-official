@@ -36,8 +36,8 @@ class FingeringBox : public QFrame
     static const unsigned int IMG_HEIGHT = 200;
     
 public:
-	FingeringBox(unsigned int nbFrets, unsigned int nbStrings, bool editable, QWidget *parent, const char* name = 0);
-    FingeringBox(bool editable, QWidget *parent, const char* name = 0);
+    FingeringBox(unsigned int nbFrets, unsigned int nbStrings, bool editable, QWidget *parent, bool big = false);
+    FingeringBox(bool editable, QWidget *parent, bool big = false);
 
     void setStartFret(unsigned int f) { m_startFret = f; update(); }
     unsigned int getStartFret() const { return m_startFret; }
@@ -101,6 +101,13 @@ protected:
     Guitar::NoteSymbols m_noteSymbols;
 
     QRect m_r1, m_r2;
+
+    /** We use a little bool hack to tell this whether or not it's going to be
+     * big, so we can draw finer lines and turn off antialiasing for smaller
+     * renderings
+     */
+    bool m_big;
+
 };
 
 }
