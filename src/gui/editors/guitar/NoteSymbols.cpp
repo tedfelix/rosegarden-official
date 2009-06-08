@@ -73,6 +73,7 @@ NoteSymbols::drawMuteSymbol ( QPainter* p,
     //<< std::endl;
 
     QPen pen(Qt::black);
+    pen.setWidth(2);
     p->setPen(pen);
 
     p->drawLine ( x_pos.first - ( width / 2 ),
@@ -101,8 +102,9 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
     //std::cout << "NoteSymbols::drawOpenSymbol - drawing Open symbol at string #" << position
     //<< std::endl;
 
-    //p->setBrush( QBrush(p->brush().color(), Qt::NoBrush) );
-    p->setBrush(Qt::black);
+    QPen stylus(Qt::black);
+    stylus.setWidth(2);
+    p->setPen(stylus);
     p->drawEllipse( x_pos.first - ( radius / 2 ),
                     y_pos - ( radius / 2 ),
                     radius,
@@ -126,7 +128,7 @@ NoteSymbols::drawNoteSymbol ( QPainter* p,
 
     if (transient) {
         radius =  static_cast<unsigned int>( columnWidth /* * 0.9 */ );
-        p->setBrush(Qt::black );
+        p->setPen(Qt::black);
     } else {
         radius =  static_cast<unsigned int>( columnWidth * 0.7 );
         p->setBrush(Qt::black);
@@ -201,6 +203,7 @@ NoteSymbols::drawFretNumber ( QPainter* p,
         // Use NoteSymbols to grab X and Y for first fret
         posPair y_pos = getY( imgHeight, 0, m_nbOfFrets );
 
+        p->setPen(Qt::black);
         p->drawText( getLeftBorder( imgWidth ) / 4,
                      y_pos.first + ( y_pos.second / 2 ),
                      tmp );

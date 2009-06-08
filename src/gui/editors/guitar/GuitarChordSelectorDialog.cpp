@@ -183,6 +183,8 @@ GuitarChordSelectorDialog::slotRootHighlighted(int i)
 {
     std::cerr << "GuitarChordSelectorDialog::slotRootHighlighted " << i << std::endl;
 
+    if (i < 0) return;
+
     m_chord.setRoot(m_rootNotesList->item(i)->text() );
 
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
@@ -198,6 +200,8 @@ void
 GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 {
     std::cerr << "GuitarChordSelectorDialog::slotChordExtHighlighted " << i << std::endl;
+
+    if (i < 0) return;
 
     Guitar::ChordMap::chordarray chords = m_chordMap.getChords(m_chord.getRoot(), m_chordExtList->item(i)->text() );
     populateFingerings(chords);

@@ -132,6 +132,7 @@ FingeringBox::drawContents(QPainter* p)
     if (hasMouse() &&
         m_transientFretNb > 0 && m_transientFretNb <= m_nbFretsDisplayed &&
         m_transientStringNb >= 0 && m_transientStringNb <= m_nbStrings) {
+        p->setBrush(Qt::blue);
         m_noteSymbols.drawNoteSymbol(p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }
     
