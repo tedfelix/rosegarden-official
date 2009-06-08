@@ -56,7 +56,8 @@ NoteSymbols::getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets )
 }
 
 void
-NoteSymbols::drawMuteSymbol ( QPainter* p,
+NoteSymbols::drawMuteSymbol ( bool big,
+                              QPainter* p,
                               unsigned int position ) const
 {
     std::cerr << "NoteSymbols::drawMuteSymbol()" << std::endl;
@@ -73,7 +74,7 @@ NoteSymbols::drawMuteSymbol ( QPainter* p,
     //<< std::endl;
 
     QPen pen(Qt::black);
-    pen.setWidth(2);
+    if (big) pen.setWidth(2);
     p->setPen(pen);
 
     p->drawLine ( x_pos.first - ( width / 2 ),
@@ -88,7 +89,8 @@ NoteSymbols::drawMuteSymbol ( QPainter* p,
 }
 
 void
-NoteSymbols::drawOpenSymbol ( QPainter* p,
+NoteSymbols::drawOpenSymbol ( bool big,
+                              QPainter* p,
                               unsigned int position ) const
 {
     std::cerr << "NoteSymbols::drawOpenSymbol()" << std::endl;
@@ -103,7 +105,7 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
     //<< std::endl;
 
     QPen stylus(Qt::black);
-    stylus.setWidth(2);
+    if (big) stylus.setWidth(2);
     p->setPen(stylus);
     p->drawEllipse( x_pos.first - ( radius / 2 ),
                     y_pos - ( radius / 2 ),
@@ -113,14 +115,22 @@ NoteSymbols::drawOpenSymbol ( QPainter* p,
     // little hack here to try to fix a problem I don't quite understand with
     // brute force
     p->setBrush(Qt::white);
-    p->drawEllipse( x_pos.first - ( radius / 2 ) + 1,
-                    y_pos - ( radius / 2 ) + 1,
-                    radius - 2,
-                    radius - 2);
+    if (big) {
+        p->drawEllipse( x_pos.first - ( radius / 2 ) + 1,
+                        y_pos - ( radius / 2 ) + 1,
+                        radius - 2,
+                        radius - 2);
+    }/* else {
+        p->drawEllipse( x_pos.first - ( radius / 2 ) + 1,
+                        y_pos - ( radius / 2 ) + 1,
+                        radius - 3,
+                        radius - 3);
+    }*/
 }
 
 void
-NoteSymbols::drawNoteSymbol ( QPainter* p,
+NoteSymbols::drawNoteSymbol ( bool big,
+                              QPainter* p,
                               unsigned int stringNb,
                               int fretNb,
                               bool transient ) const
@@ -169,7 +179,7 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
 
     //std::cout << "NoteSymbols::drawBarreSymbol - start: " << start << ", end:" << end << std::endl;
 
-    drawNoteSymbol ( p, start, fretNb );
+    drawNoteSymbol (false, p, start, fretNb );
 
     if ( ( end - start ) >= 1 ) {
         QRect v = p->viewport();
@@ -188,7 +198,7 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
                      thickness );
     }
 
-    drawNoteSymbol ( p, end, fretNb );
+    drawNoteSymbol (false, p, end, fretNb );
 }
 
 void
@@ -473,15 +483,15 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
                 
         switch (*pos) {
         case Fingering::OPEN:
-                noteSymbols.drawOpenSymbol(p, stringNb);
+                noteSymbols.drawOpenSymbol(false, p, stringNb);
                 break;
 
         case Fingering::MUTED:
-                noteSymbols.drawMuteSymbol(p, stringNb);
+                noteSymbols.drawMuteSymbol(false, p, stringNb);
                 break;
 
         default:
-                noteSymbols.drawNoteSymbol(p, stringNb, *pos - (startFret - 1), false);
+                noteSymbols.drawNoteSymbol(false, p, stringNb, *pos - (startFret - 1), false);
                 break;
         }
     }

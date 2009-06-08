@@ -106,11 +106,11 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
     m_fingeringsList->setStyleSheet(listStyle);
-    m_fingeringsList->setIconSize(QSize(64,64));
+    m_fingeringsList->setIconSize(QSize(128,128));
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page, true);
-    topLayout->addWidget(m_fingeringBox, 2, 0, 0+1, 1- 0+1);
+    topLayout->addWidget(m_fingeringBox, 2, 0, 1, 2);
     
     connect(m_rootNotesList, SIGNAL(currentRowChanged(int)),
             this, SLOT(slotRootHighlighted(int)));

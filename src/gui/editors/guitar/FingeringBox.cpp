@@ -95,9 +95,9 @@ FingeringBox::drawContents(QPainter* p)
     
     p->begin(this);
 
-    // turn on antialiasing for the X and O symbols at larger sizes,  which
-    // makes a spectacular difference here, though it's not guaranteed to work
-    if (m_big) p->setRenderHint(QPainter::Antialiasing);
+    // turn on antialiasing for the X and O symbols,  which makes a spectacular
+    // difference here, though it's not guaranteed to work
+    p->setRenderHint(QPainter::Antialiasing);
 
     // draw guitar chord fingering
     //
@@ -116,17 +116,17 @@ FingeringBox::drawContents(QPainter* p)
         switch (*pos) {
         case Guitar::Fingering::OPEN:
 //                NOTATION_DEBUG << "Fingering::drawContents - drawing Open symbol on string " << stringNb << endl;
-                m_noteSymbols.drawOpenSymbol(p, stringNb);
+                m_noteSymbols.drawOpenSymbol(m_big, p, stringNb);
                 break;
 
         case Guitar::Fingering::MUTED:
 //                NOTATION_DEBUG << "Fingering::drawContents - drawing Mute symbol on string" << stringNb << endl;
-                m_noteSymbols.drawMuteSymbol(p, stringNb);
+                m_noteSymbols.drawMuteSymbol(m_big, p, stringNb);
                 break;
 
         default:
 //                NOTATION_DEBUG << "Fingering::drawContents - drawing note symbol at " << *pos << " on string " << stringNb << endl;
-                m_noteSymbols.drawNoteSymbol(p, stringNb, *pos - (m_startFret - 1), false);
+                m_noteSymbols.drawNoteSymbol(m_big, p, stringNb, *pos - (m_startFret - 1), false);
                 break;
         }
     }
@@ -139,7 +139,7 @@ FingeringBox::drawContents(QPainter* p)
         m_transientFretNb > 0 && m_transientFretNb <= m_nbFretsDisplayed &&
         m_transientStringNb > 0 && m_transientStringNb <= m_nbStrings) {
         p->setBrush(Qt::blue);
-        m_noteSymbols.drawNoteSymbol(p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
+        m_noteSymbols.drawNoteSymbol(m_big, p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }
     
     // DEBUG

@@ -64,7 +64,7 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
 
     topLayout->addItem(new QSpacerItem(1, 1), 6, 1);
 
-    m_fingeringBox = new FingeringBox(true, page);
+    m_fingeringBox = new FingeringBox(true, page, true);
     m_fingeringBox->setFingering(m_chord.getFingering());
     topLayout->addWidget(m_fingeringBox, 0, 0, 7- 0+1, 0- 0+1);
 

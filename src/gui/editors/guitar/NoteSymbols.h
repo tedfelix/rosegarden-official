@@ -102,17 +102,20 @@ public:
 
     //! Display a mute symbol in the QPainter object
     void
-    drawMuteSymbol ( QPainter* p,
+    drawMuteSymbol ( bool big,
+                     QPainter* p,
                      unsigned int position ) const;
 
     /* This code borrowed from KGuitar 0.5 */
     //! Display a open symbol in the QPainter object (KGuitar)
-    void drawOpenSymbol ( QPainter* p,
+    void drawOpenSymbol ( bool big,
+                          QPainter* p,
                           unsigned int position ) const;
 
     /* This code borrowed from KGuitar 0.5 */
     //! Display a note symbol in the QPainter object (KGuitar)
-    void drawNoteSymbol ( QPainter* p,
+    void drawNoteSymbol ( bool big,
+                          QPainter* p,
                           unsigned int stringNb,
                           int fretNb,
                           bool transient = false ) const;
