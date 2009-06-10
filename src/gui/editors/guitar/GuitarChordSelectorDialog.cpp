@@ -106,7 +106,7 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
     m_fingeringsList->setStyleSheet(listStyle);
-    m_fingeringsList->setIconSize(QSize(128,128));
+    m_fingeringsList->setIconSize(QSize(64,64));
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page, true);
@@ -162,6 +162,7 @@ void
 GuitarChordSelectorDialog::populate()
 {    
     QStringList rootList = m_chordMap.getRootList();
+
     if (rootList.count() > 0) {
         m_rootNotesList->addItems(rootList);
 
@@ -495,6 +496,7 @@ GuitarChordSelectorDialog::parseChordFile(const QString& chordFileName)
     reader.setErrorHandler(&handler);
     std::cerr << "GuitarChordSelectorDialog::parseChordFile() parsing " << chordFileName << std::endl;
     reader.parse(source);
+    std::cerr << "  parsed OK, without crashing!  W00t!" << std::endl;
     if (!ok)
         QMessageBox::critical(0, "", tr("couldn't parse chord dictionary : %1").arg(handler.errorString()));
     
@@ -532,13 +534,24 @@ GuitarChordSelectorDialog::saveUserChordMap()
     
     ResourceFinder rf;
     QString userChordDictPath = rf.getResourceSaveDir("chords");
+    userChordDictPath += "/chords.xml.wtf";
     
     std::cerr << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << std::endl;
     QString errMsg;
+
+    // delete the original first, before writing a new copy out (this should
+    // probably be converted to use safe saving, rename the original first, save
+    // the new one, delete the original and rename the new one, but I didn't go
+    // to that much trouble today because I figure almost nobody actually uses
+    // this feature anyway, and the amount of data in potential jeopardy is
+    // rather low compared with the effort required to write code instead of
+    // writing comments about the code I should have written but didn't)
+    QFile file(userChordDictPath);
+    if (file.exists()) file.remove();
     
     m_chordMap.saveDocument(userChordDictPath, true, errMsg);
     
-    return errMsg.isEmpty();    
+    return errMsg.isEmpty();
 }
 
 

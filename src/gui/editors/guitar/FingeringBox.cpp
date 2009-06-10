@@ -61,7 +61,6 @@ FingeringBox::FingeringBox(bool editable, QWidget *parent, bool big)
 void
 FingeringBox::init()
 {
-    setFrameStyle(QFrame::StyledPanel | QFrame::Sunken);
     setFixedSize(IMG_WIDTH, IMG_HEIGHT);
    
     QString localStyle = "background-color: white";
@@ -137,8 +136,8 @@ FingeringBox::drawContents(QPainter* p)
     //
     if (hasMouse() &&
         m_transientFretNb > 0 && m_transientFretNb <= m_nbFretsDisplayed &&
-        m_transientStringNb > 0 && m_transientStringNb <= m_nbStrings) {
-        p->setBrush(Qt::blue);
+        m_transientStringNb >= 0 && m_transientStringNb <= m_nbStrings) {
+        p->setBrush(QColor(0, 0x10, 0xFF, 0x10));
         m_noteSymbols.drawNoteSymbol(m_big, p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }
     

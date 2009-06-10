@@ -65,7 +65,7 @@ NoteSymbols::drawMuteSymbol ( bool big,
     QRect v = p->viewport();
 
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
-    unsigned int y_pos = getTopBorder( v.height() ) / 2;
+    unsigned int y_pos = (getTopBorder( v.height() ) / 2) + 2;
     double columnWidth = x_pos.second;
     unsigned int width = static_cast<unsigned int>( columnWidth * 0.7 );
     unsigned int height = static_cast<unsigned int>( columnWidth * 0.7 );
@@ -75,6 +75,9 @@ NoteSymbols::drawMuteSymbol ( bool big,
 
     QPen pen(Qt::black);
     if (big) pen.setWidth(2);
+
+    p->save();
+
     p->setPen(pen);
 
     p->drawLine ( x_pos.first - ( width / 2 ),
@@ -86,6 +89,8 @@ NoteSymbols::drawMuteSymbol ( bool big,
                  y_pos - ( height / 2 ),
                  ( x_pos.first - ( width / 2 ) ),
                  y_pos + ( height / 2 ) );
+
+    p->restore();
 }
 
 void
@@ -97,7 +102,7 @@ NoteSymbols::drawOpenSymbol ( bool big,
     
     QRect v = p->viewport();
     posPair x_pos = getX ( v.width(), position, m_nbOfStrings );
-    unsigned int y_pos = getTopBorder( v.height() ) / 2;
+    unsigned int y_pos = (getTopBorder(v.height()) / 2) + 2;
     double columnWidth = x_pos.second;
     unsigned int radius = static_cast<unsigned int>( columnWidth * 0.7 );
 
@@ -106,6 +111,9 @@ NoteSymbols::drawOpenSymbol ( bool big,
 
     QPen stylus(Qt::black);
     if (big) stylus.setWidth(2);
+
+    p->save();
+
     p->setPen(stylus);
     p->drawEllipse( x_pos.first - ( radius / 2 ),
                     y_pos - ( radius / 2 ),
@@ -126,6 +134,8 @@ NoteSymbols::drawOpenSymbol ( bool big,
                         radius - 3,
                         radius - 3);
     }*/
+
+    p->restore();
 }
 
 void
@@ -144,9 +154,11 @@ NoteSymbols::drawNoteSymbol ( bool big,
     double columnWidth = x_pos.second;
     unsigned int radius;
 
+    p->save();
+
     if (transient) {
         radius =  static_cast<unsigned int>( columnWidth /* * 0.9 */ );
-        p->setPen(Qt::black);
+        p->setPen(QColor(0, 0x10, 0xFF, 0xAA));
     } else {
         radius =  static_cast<unsigned int>( columnWidth * 0.7 );
         p->setBrush(Qt::black);
@@ -163,11 +175,8 @@ NoteSymbols::drawNoteSymbol ( bool big,
                     y,
                     radius,
                     radius );
-                    
-//    p->save();
-//    p->setPen(QColor(Qt::red));
-//    p->drawRect( x, y, radius, radius );
-//    p->restore();
+
+    p->restore();
 }
 
 void
@@ -189,13 +198,18 @@ NoteSymbols::drawBarreSymbol ( QPainter* p,
         double columnWidth = startXPos.second;
         unsigned int thickness = static_cast<unsigned int>( columnWidth * 0.7 );
 
-        QPen pen(Qt::black);
+        QPen pen(Qt::red); // to see if this is ever used 
+
+        p->save();
+
         p->setPen(pen);
 
         p->drawRect( startXPos.first,
                      y_pos.first + ( y_pos.second / 4 ) + TOP_GUITAR_CHORD_MARGIN,
                      endXPos.first - startXPos.first,
                      thickness );
+
+        p->restore();
     }
 
     drawNoteSymbol (false, p, end, fretNb );

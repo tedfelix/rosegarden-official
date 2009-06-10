@@ -15,6 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+//!!! NOTE: all the NOTATION_DEBUG in this file were converted to std::cerr,
+// because the messages weren't ever showing up.  I've been having this problem
+// in many other contexts, and we really should sort that out one of these days.
+// Something is busted somewhere.  Many different SOME_DEBUG streams go straight
+// to /dev/null currently.  Not even all the plain RG_DEBUG ones are working,
+// and I'm not sure what the common thread is.
+
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "ChordMap.h"
@@ -35,6 +42,7 @@ ChordMap::ChordMap()
 
 void ChordMap::insert(const Chord& c)
 {
+    std::cerr << "ChordMap::insert - inserting chord..." << std::endl;
     m_map.insert(c);
     m_needSave = true;
 }
@@ -46,16 +54,16 @@ ChordMap::getChords(const QString& root, const QString& ext) const
     chordarray res;
     
     Chord tmp(root, ext);
-    NOTATION_DEBUG << "ChordMap::getChords : chord = " << tmp << " - ext is empty : " << ext.isEmpty() << endl;
+    std::cerr << "ChordMap::getChords : chord = " /*<< tmp*/ << " - ext is empty : " << ext.isEmpty() << std::endl;
     
     for (chordset::const_iterator i = m_map.lower_bound(tmp); i != m_map.end(); ++i) {
-        NOTATION_DEBUG << "ChordMap::getChords : checking chord " << *i << endl;
+        std::cerr << "ChordMap::getChords : checking chord "/* << *i*/ << std::endl;
         
         if (i->getRoot() != root)
             break;
 
         if (/* ext.isNull() || */ i->getExt() == ext) {
-            NOTATION_DEBUG << "ChordMap::getChords : adding chord " << *i << endl;
+            std::cerr << "ChordMap::getChords : adding chord "/* << *i*/ << std::endl;
             res.push_back(*i);
         } else {
             break;
@@ -100,13 +108,13 @@ ChordMap::getExtList(const QString& root) const
     
     for(chordset::const_iterator i = m_map.lower_bound(tmp); i != m_map.end(); ++i) {
         const Chord& chord = *i;
-//        NOTATION_DEBUG << "ChordMap::getExtList : chord = " << chord << endl;
+//        std::cerr << "ChordMap::getExtList : chord = " << chord << std::endl;
          
         if (chord.getRoot() != root)
             break;
             
         if (chord.getExt() != currentExt) {
-//            NOTATION_DEBUG << "ChordMap::getExtList : adding ext " << chord.getExt() << " for root " << root << endl;
+//            std::cerr << "ChordMap::getExtList : adding ext " << chord.getExt() << " for root " << root << std::endl;
             extList.push_back(chord.getExt());
             currentExt = chord.getExt();
         }        
@@ -209,7 +217,7 @@ ChordMap::debugDump() const
 {
     for(chordset::const_iterator i = m_map.begin(); i != m_map.end(); ++i) {
         Chord chord = *i;
-        NOTATION_DEBUG << "ChordMap::debugDump " << chord << endl;
+        std::cerr << "ChordMap::debugDump " /*<< chord*/ << std::endl;
     } 
 }
 

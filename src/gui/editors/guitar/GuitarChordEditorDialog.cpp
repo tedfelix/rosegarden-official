@@ -59,7 +59,13 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     
     topLayout->addWidget(new QLabel(tr("Extension"), page), 4, 1);
     m_ext = new QComboBox(page);
-    m_ext->setEditable(true);
+
+    // This was editable on purpose, but to what end I could never fathom.
+    // Creating new extensions on the fly does not seem to work.  I'm not sure
+    // if it was supposed to work and didn't, or if it, like the barre symbol
+    // whatnots, just never got done.  I'll just un-editable it and move along
+    // then.
+    //m_ext->setEditable(true);
     topLayout->addWidget(m_ext, 5, 1);
 
     topLayout->addItem(new QSpacerItem(1, 1), 6, 1);
