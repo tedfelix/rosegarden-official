@@ -14,9 +14,9 @@ getinput() {
     bad=""
     runon=""
     while IFS='' read line; do
-	if [[ "$line" =~ 'error: ' ]]; then
+	if [[ "$line" =~ 'error: ' ]] || [[ "$line" =~ ': undefined ' ]]; then
 	    bad=yes
-	    b=${line##*error:}
+	    b=${line#*:[0-9]*:}
 	    a=${line%${b}}
 	    line="\033[01;37;44m$a\033[00m$b"
 	fi
@@ -25,7 +25,7 @@ getinput() {
 	    lines=`echo -e "$line" | fold | wc -l | awk '{ print $1 }'`
 	    [ -z "$lines" ] && lines=1
 	    count=$(($count+$lines))
-	    if [ "$count" -gt 10 ]; then
+	    if [ "$count" -gt 14 ]; then
 		c=$(getinput)
 		case "$c" in q) exit 1;; c) runon=yes;; esac
 		count=0
