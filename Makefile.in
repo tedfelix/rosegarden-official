@@ -68,6 +68,7 @@ UI		:= $(wildcard src/*/*/*.ui)
 UIHEADERS	:= $(patsubst %.ui,%.h,$(UI))
 RCS		:= $(wildcard data/rc/*.rc)
 TRANSLATIONS	:= $(filter-out data/locale/rosegarden.ts, $(wildcard data/locale/*.ts))
+TRANSLATIONSQM	:= $(filter-out data/locale/rosegarden.qm, $(shell echo $(TRANSLATIONS) | sed "s/ts/qm/g"))
 
 BUILDKEY	:= $(shell cat $(KEYSOURCES) | $(SHA1SUM) | $(CUT) -c1-10)
 CXXFLAGS	:= $(CXXFLAGS) -D'BUILDKEY="$(BUILDKEY)"'
@@ -92,6 +93,9 @@ rosegarden:	$(OBJECTS)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
 
+%.qm: %.ts
+	$(LRELEASE) $(@:.qm=.ts)
+
 instrument-ts:
 	$(PERL) scripts/extract_instrument_tr_strings.pl data/presets/presets.xml > data/InstrumentStrings.cpp
 
@@ -113,8 +117,7 @@ ts-noobsolete:	menu-ts instrument-ts
 	$(LUPDATE) -noobsolete $(HEADERS) $(SOURCES) data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $(TRANSLATIONS)
 	@scripts/ts-stats
 
-locale:
-	$(LRELEASE) $(TRANSLATIONS)
+locale:	$(TRANSLATIONSQM)
 
 clean:
 	rm -f $(QSOURCES) $(UIHEADERS) $(UISOURCES) $(UIMOC) $(OBJECTS) $(LIBRARIES) $(EXECUTABLES)
@@ -129,7 +132,7 @@ dependencies: $(SOURCES) $(HEADERS) Makefile
 	@echo $(SOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
 	@echo Done
 
-qrc:
+qrc:	locale
 	@bash ./scripts/rebuild-qrc
 	@rm -f data/data.o
 	@rm -f data/data.cpp
