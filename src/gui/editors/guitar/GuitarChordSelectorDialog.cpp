@@ -534,22 +534,17 @@ GuitarChordSelectorDialog::saveUserChordMap()
     
     ResourceFinder rf;
     QString userChordDictPath = rf.getResourceSaveDir("chords");
-    userChordDictPath += "/chords.xml.wtf";
+    userChordDictPath += "/chords.xml";
     
     std::cerr << "GuitarChordSelectorDialog::saveUserChordMap() : saving user chord map to " << userChordDictPath << std::endl;
     QString errMsg;
 
-    // delete the original first, before writing a new copy out (this should
-    // probably be converted to use safe saving, rename the original first, save
-    // the new one, delete the original and rename the new one, but I didn't go
-    // to that much trouble today because I figure almost nobody actually uses
-    // this feature anyway, and the amount of data in potential jeopardy is
-    // rather low compared with the effort required to write code instead of
-    // writing comments about the code I should have written but didn't)
-    QFile file(userChordDictPath);
-    if (file.exists()) file.remove();
-    
-    m_chordMap.saveDocument(userChordDictPath, true, errMsg);
+    // we're just saving back to chords.xml now, so we'll set this to be false,
+    // and we'll declare a named variable so it's easier for the next guy to
+    // figure out WTF the middle parameter in saveDocument() is for.  ARGH!
+    bool userChordsOnly = false;
+
+    m_chordMap.saveDocument(userChordDictPath, userChordsOnly, errMsg);
     
     return errMsg.isEmpty();
 }
