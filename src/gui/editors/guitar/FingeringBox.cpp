@@ -98,12 +98,6 @@ FingeringBox::drawContents(QPainter* p)
     // difference here, though it's not guaranteed to work
     p->setRenderHint(QPainter::Antialiasing);
 
-    // draw guitar chord fingering
-    //
-    m_noteSymbols.drawFretNumber(p, m_startFret);
-    m_noteSymbols.drawFrets(p);
-    m_noteSymbols.drawStrings(p);
-
     unsigned int stringNb = 0;
     
     // draw notes
@@ -129,6 +123,13 @@ FingeringBox::drawContents(QPainter* p)
                 break;
         }
     }
+
+    // draw guitar chord fingering after note symbols, to draw over fuzzy
+    // borders caused by antialiasing
+    //
+    m_noteSymbols.drawFretNumber(p, m_startFret);
+    m_noteSymbols.drawFrets(p);
+    m_noteSymbols.drawStrings(p);
 
     // TODO: detect barres and draw them in a special way ?
     

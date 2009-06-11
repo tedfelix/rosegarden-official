@@ -108,7 +108,12 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     topLayout->addWidget(new QLabel(tr("Fingerings"), page), 0, 3);
     m_fingeringsList = new QListWidget(page);
     m_fingeringsList->setStyleSheet(listStyle);
-    m_fingeringsList->setIconSize(QSize(64,64));
+
+    // try setting size to something 200 can be divided into evenly, in the hope
+    // of avoiding fuzzy half pixel scaling problems (50 was no good, but 100
+    // works well for grid lines here; dots still look awful, but who cares)
+    m_fingeringsList->setIconSize(QSize(100, 100));
+
     topLayout->addWidget(m_fingeringsList, 1, 3, 2, 1);
     
     m_fingeringBox = new FingeringBox(false, page, true);

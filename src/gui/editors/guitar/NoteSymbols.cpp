@@ -483,14 +483,8 @@ void
 NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guitar::NoteSymbols& noteSymbols, QPainter *p)
 {
     unsigned int startFret = fingering.getStartFret();
-    
-    noteSymbols.drawFretNumber(p, startFret);
-    noteSymbols.drawFrets(p);
-    noteSymbols.drawStrings(p);
-
     unsigned int stringNb = 0;
 
-    
     for (Fingering::const_iterator pos = fingering.begin();
          pos != fingering.end();
          ++pos, ++stringNb) {
@@ -509,7 +503,12 @@ NoteSymbols::drawFingeringPixmap(const Guitar::Fingering& fingering, const Guita
                 break;
         }
     }
-    
+   
+    // draw frets last, so the sharp lines don't get broken by the fuzzy
+    // outlines of the new antialiased note symbols
+    noteSymbols.drawFretNumber(p, startFret);
+    noteSymbols.drawFrets(p);
+    noteSymbols.drawStrings(p);
 }
 
 
