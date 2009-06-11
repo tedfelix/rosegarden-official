@@ -83,13 +83,15 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     m_chordComplexityCombo->addItem(tr("beginner"));
     m_chordComplexityCombo->addItem(tr("common"));
     m_chordComplexityCombo->addItem(tr("all"));
+    //m_chordComplexityCombo->setMinimumContentsLength(20);
     
     connect(m_chordComplexityCombo, SIGNAL(activated(int)),
             this, SLOT(slotComplexityChanged(int)));
 
     page->setContentsMargins(5, 5, 5, 5);
     QVBoxLayout* vboxLayout = new QVBoxLayout(page);
-    topLayout->addLayout(vboxLayout, 1, 2, 3, 1);
+    //topLayout->addLayout(vboxLayout, 1, 2, 3, 1);
+    topLayout->addLayout(vboxLayout, 2, 1);
     vboxLayout->addWidget(m_chordComplexityCombo);
     vboxLayout->addStretch(10);
     vboxLayout->addWidget(m_newFingeringButton); 
