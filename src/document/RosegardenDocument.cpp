@@ -226,6 +226,7 @@ const QString& RosegardenDocument::getTitle() const
 
 void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
+    RG_DEBUG << "RosegardenDocument::slotUpdateAllViews" << endl;
     for (int i=0; i < m_viewList.size(); ++i ){
         if (m_viewList.at(i) != sender) {
             // try to fix another crash, though I don't really understand

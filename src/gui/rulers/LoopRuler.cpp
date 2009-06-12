@@ -153,6 +153,8 @@ QSize LoopRuler::minimumSizeHint() const
 
 void LoopRuler::paintEvent(QPaintEvent* e)
 {
+    RG_DEBUG << "LoopRuler::paintEvent" << endl;
+
     QPainter paint(this);
 
     if (getHScaleFactor() != 1.0)

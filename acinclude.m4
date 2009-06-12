@@ -19,7 +19,7 @@ fi
 for i in $QT_SEARCH ; do
 	QT_INCLUDE_SEARCH="include/qt4 include"
 	for j in $QT_INCLUDE_SEARCH ; do
-	        if test -f $i/$j/Qt/qglobal.h -a x$QTDIR = x ; then
+	        if test -f $i/$j/Qt/qglobal.h && test x$QTDIR = x ; then
 			QTDIR=$i
 			QT_INCLUDES=$i/$j
 		fi
@@ -126,7 +126,7 @@ fi
 QTLIB_EXTS="so a dylib dll"
 for i in $QTLIB_SEARCH ; do
     for j in $QTLIB_EXTS ; do
-	if test -f $i/libQtCore.$j -a x$QTLIBDIR = x ; then
+	if test -f $i/libQtCore.$j && test x$QTLIBDIR = x ; then
 	   	QTLIBDIR=$i
 	fi
     done
