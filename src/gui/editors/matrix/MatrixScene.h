@@ -92,8 +92,6 @@ public:
 
     void playNote(Segment &segment, int pitch, int velocity = -1);
 
-    void ensurePointerVisible();
-    
     // SegmentObserver method forwarded from MatrixViewSegment
     void segmentEndMarkerTimeChanged(const Segment *s, bool shorten);
 
@@ -109,8 +107,7 @@ signals:
     
 protected slots:    
     void slotCommandExecuted();
-    void slotPointerPositionChanged(timeT);
-    void slotMoveDisplayedPointer(double x);
+
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *);
@@ -142,12 +139,9 @@ private:
     std::vector<QGraphicsLineItem *> m_verticals;
     std::vector<QGraphicsRectItem *> m_highlights;
 
-    QGraphicsLineItem *m_pointer;
-
     void setupMouseEvent(QGraphicsSceneMouseEvent *, MatrixMouseEvent &) const;
     void recreateLines();
     void recreatePitchHighlights();
-    void repositionPointer();
     void updateCurrentSegment();
     void setSelectionElementStatus(EventSelection *, bool, bool = false);
 };

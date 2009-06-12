@@ -39,8 +39,15 @@ signals:
 public slots:
     void slotSetPannedRect(QRectF);
 
+    void slotShowPositionPointer(float x); // scene coord; full height
+    void slotShowPositionPointer(QPointF top, float height); // scene coords
+    void slotHidePositionPointer();
+
 protected:
     QRectF m_pannedRect;
+    QPointF m_pointerTop;
+    float m_pointerHeight;
+    bool m_pointerVisible;
 
     void moveTo(QPoint);
 

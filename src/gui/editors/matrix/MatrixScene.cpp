@@ -60,13 +60,6 @@ MatrixScene::MatrixScene() :
 {
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotCommandExecuted()));
-
-    m_pointer = new QGraphicsLineItem;
-    m_pointer->setZValue(5);
-    m_pointer->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 3));
-    m_pointer->setLine(0, 0, 0, height());
-    addItem(m_pointer);
-    repositionPointer();
 }
 
 MatrixScene::~MatrixScene()
@@ -87,8 +80,6 @@ void
 MatrixScene::setMatrixWidget(MatrixWidget *w)
 {
     m_widget = w;
-    connect(m_widget, SIGNAL(moveDisplayedPointer(double)),
-            this, SLOT(slotMoveDisplayedPointer(double)));
 }
 
 void
@@ -104,9 +95,6 @@ MatrixScene::setSegments(RosegardenDocument *document,
     
     m_document->getComposition().addObserver(this);
 
-    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
-    
     SegmentSelection selection;
     selection.insert(segments.begin(), segments.end());
     
@@ -344,37 +332,6 @@ MatrixScene::recreateLines()
     }
 
     recreatePitchHighlights();
-
-    repositionPointer();
-}
-
-void
-MatrixScene::slotMoveDisplayedPointer(double x)
-{
-    // Never move the pointer outside the scene (else the scene will grow)
-    double x1 = sceneRect().x();
-    double x2 = x1 + sceneRect().width();
-    if ((x <= x1) || (x >= x2)) return;
-
-//  m_pointer->setLine(x + 0.5, 0.5, x + 0.5, 128 * (m_resolution + 1) + 0.5);
-    m_pointer->setLine(0, 0.5, 0, 128 * (m_resolution + 1) + 0.5);
-    m_pointer->setPos(x + 0.5, 0);
-}
-
-void
-MatrixScene::repositionPointer()
-{
-    if (!m_document) return;
-    timeT t = m_document->getComposition().getPosition();
-    double x = m_scale->getXForTime(t);
-    slotMoveDisplayedPointer(x);
-    if (m_widget && m_widget->getPlayTracking()) ensurePointerVisible();
-}
-
-void
-MatrixScene::slotPointerPositionChanged(timeT)
-{
-    repositionPointer();
 }
 
 void
@@ -557,38 +514,6 @@ MatrixScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *e)
     MatrixMouseEvent nme;
     setupMouseEvent(e, nme);
     emit mouseDoubleClicked(&nme);
-}
-
-void
-MatrixScene::ensurePointerVisible()
-{
-    if (m_pointer) {
-
-// This doesn't work because view->ensureVisible() moves the view
-// a few pixels vertically each time it is called and I didn't find
-// any way to avoid it.
-//
-//         double x = m_pointer->x();
-//         Panned *view = m_widget->getView();
-//         int w = view->width();
-//         int h = view->height();
-// 
-//         // Horizontal position (%) of playback pointer 
-//         // inside the view when play tracking is on.
-//         const int percentPos = 50; 
-// 
-//         // Construct a rect around the pointer. The whole rect will be
-//         // kept inside the view.
-//         int wm = w * (100 - percentPos) / 100;
-//         int eps = h / 10;
-//         QRectF r = view->mapToScene(0, eps, wm, h - eps).boundingRect();
-//         r.moveLeft(x);
-// 
-//         view->ensureVisible(r, 10, 0);
-
-// Replaced with a rewrite of ensureVisible
-        m_widget->ensureXVisible(m_pointer->x());
-    }
 }
 
 void

@@ -244,9 +244,12 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_bottomStandardRuler->connectRulerToDocPointer(document);
 
     connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotSetInsertCursorPosition(timeT)));
+            this, SLOT(slotPointerPositionChanged(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
-            this, SLOT(slotSetInsertCursorPosition(timeT)));
+            this, SLOT(slotPointerPositionChanged(timeT)));
+
+    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
 }
 
 bool
@@ -498,7 +501,7 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
 {
     m_playTracking = tracking;
     if (m_playTracking) {
-        if (m_scene) m_scene->ensurePointerVisible();
+        m_view->slotEnsurePositionPointerInView(true);
     }
 }
 
@@ -513,60 +516,30 @@ MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 }
 
 void
-MatrixWidget::ensureXVisible(double x, int percentPos)
+MatrixWidget::slotPointerPositionChanged(timeT t)
 {
-    int hMin = m_view->horizontalScrollBar()->minimum();
-    int hMax = m_view->horizontalScrollBar()->maximum();
+    QObject *s = sender();
+    bool fromDocument = (s == m_document);
 
-    int w = m_view->width();                // View width in pixels    
-    QRectF r = m_view->mapToScene(0, 0, w, 1).boundingRect();
-    double ws = r.width();                  // View width in scene units
-    double left = r.x();                    // View left x in scene units
-    double right = left + ws;               // View right x in scene units
+    if (!m_scene) return;
 
-    QRectF sr = m_view->sceneRect();
-    double length = sr.width();             // Scene horizontal length
-    double x1 = sr.x();                     // Scene x minimum value
-    double x2 = x1 + length;                // Scene x maximum value
+    double sceneX = m_scene->getRulerScale()->getXForTime(t);
 
-    double treshold = left + (ws * percentPos) / 100;
-    double delta = x - treshold;
-  
-    // Is x inside the scene? If no do nothing.
-    if ((x > x1) && (x <= x2)) {
-        // Is x inside the view?
-        if ((x < left) || (x > right)) {
-            //  No  ==> scroll (jump) to have the left of the view on x
-            int value = hMin + ((x - x1) * (hMax - hMin)) / (length - ws);
-            if (value < hMin) value = hMin;
-            else if (value > hMax) value = hMax;
-            m_view->horizontalScrollBar()->setValue(value);
-        } else {
-            // Yes ==> scroll if needed
-            // Scroll is not forced if playback cursor is not running
-            TransportStatus status = RosegardenMainWindow::self()->
-                                      getSequenceManager()->getTransportStatus();
-            if (((status == PLAYING) || (status == RECORDING)) & (delta > 0)) {
-                // Scroll to have x on treshold
-                //   ==> set left of view to x - percentPos * step / 100
-                int deltaPixels = delta * w / ws;
-                int value = m_view->horizontalScrollBar()->value() + deltaPixels;
-                if (value < hMin) value = hMin;
-                else if (value > hMax) value = hMax;
-                m_view->horizontalScrollBar()->setValue(value);
-            }
-        }
+    // Never move the pointer outside the scene (else the scene will grow)
+    double x1 = m_scene->sceneRect().x();
+    double x2 = x1 + m_scene->sceneRect().width();
+
+    if ((sceneX < x1) || (sceneX > x2)) {
+        m_view->slotHidePositionPointer();
+        m_hpanner->slotHidePositionPointer();
+    } else {
+        m_view->slotShowPositionPointer(sceneX);
+        m_hpanner->slotShowPositionPointer(sceneX);
     }
-}
 
-void
-MatrixWidget::slotSetInsertCursorPosition(timeT t)
-{
-    // Note - The two following expressions have the same value :
-    //   m_scene->getRulerScale()->getXForTime(t)
-    //   m_referenceScale->getXForTime(t) / m_hZoomFactor
-
-    emit moveDisplayedPointer(m_scene->getRulerScale()->getXForTime(t));
+    if (getPlayTracking() || !fromDocument) {
+        m_view->slotEnsurePositionPointerInView(fromDocument);
+    }
 }
 
 }

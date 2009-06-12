@@ -44,6 +44,7 @@
 #include "gui/dialogs/TransportDialog.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/StudioControl.h"
+#include "gui/dialogs/DialogSuppressor.h"
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "MetronomeMapper.h"
@@ -1088,41 +1089,46 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                         RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        QSettings settings;
-                        settings.beginGroup(DoNotShowConfigGroup);
-                        bool showTimerWarning = settings.value("showlowtimer", true).toBool();
-                        settings.endGroup();
+                        // This is to avoid us ever showing the same
+                        // dialog more than once during a single run
+                        // of the program -- it's quite separate from
+                        // the suppression function
+                        static bool showTimerWarning = true;
 
                         if (showTimerWarning) {
+
                             QMessageBox info(RosegardenMainWindow::self());
                             info.setText(tr("<h3>System timer resolution is too low</h3>"));
                             info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"));
                             info.setStandardButtons(QMessageBox::Ok);
                             info.setDefaultButton(QMessageBox::Ok);
-                            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
-                            ignoreButton->setToolTip(tr("Do not display this warning in the future"));
                             info.setIcon(QMessageBox::Warning);
 
-                            info.exec();
-                            if (info.clickedButton() == ignoreButton) {                               
-                                showTimerWarning = false;
+                            if (!DialogSuppressor::shouldSuppress
+                                (&info, "inadequatetimerresolution")) {
 
-                                settings.beginGroup(DoNotShowConfigGroup);
-                                settings.setValue("showlowtimer", showTimerWarning);
-                                settings.endGroup();
+                                info.exec();
 
-                                QMessageBox::information(RosegardenMainWindow::self(),
-                                                         "",
-                                                         tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
-                                                         QMessageBox::Ok,
-                                                         QMessageBox::Ok);
+                                if (DialogSuppressor::isSuppressed
+                                    ("inadequatetimerresolution")) {
+                                    
+                                    QMessageBox::information(RosegardenMainWindow::self(),
+                                                             "",
+                                                             tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
+                                                             QMessageBox::Ok,
+                                                             QMessageBox::Ok);
+                                }
 
+                            } else {
+                                // so these will show up when users
+                                // paste their debug stream reports,
+                                // and we'll have a clue what might be
+                                // wrong
+                                std::cerr << "TIMER WARNING squelched per user request.  Bad timing condition still exists." << std::endl;
                             }
-                        } else {
-                            // so these will show up when users paste their
-                            // debug stream reports, and we'll have a clue what
-                            // might be wrong
-                            std::cerr << "TIMER WARNING squelched per user request.  Bad timing condition still exists." << std::endl;
+
+                            // whatever, don't show again during this run
+                            showTimerWarning = false;
                         }
                         
                         CurrentProgressDialog::thaw();
@@ -1137,10 +1143,11 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                         RosegardenMainWindow::self()->awaitDialogClearance();
 
-                        QSettings settings;
-                        settings.beginGroup(DoNotShowConfigGroup);
-                        bool showAltTimerWarning = settings.value("showaltlowtimer", true).toBool();
-                        settings.endGroup();
+                        // This is to avoid us ever showing the same
+                        // dialog more than once during a single run
+                        // of the program -- it's quite separate from
+                        // the suppression function
+                        static bool showAltTimerWarning = true;
 
                         if (showAltTimerWarning) {
                             QMessageBox info(RosegardenMainWindow::self());
@@ -1148,30 +1155,33 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"));
                             info.setStandardButtons(QMessageBox::Ok);
                             info.setDefaultButton(QMessageBox::Ok);
-                            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
-                            ignoreButton->setToolTip(tr("Do not display this warning in the future"));
                             info.setIcon(QMessageBox::Warning);
 
-                            info.exec();
-                            if (info.clickedButton() == ignoreButton) {                               
-                                showAltTimerWarning = false;
+                            if (!DialogSuppressor::shouldSuppress
+                                (&info, "inadequatetimerresolutiontryrtc")) {
 
-                                settings.beginGroup(DoNotShowConfigGroup);
-                                settings.setValue("showaltlowtimer", showAltTimerWarning);
-                                settings.endGroup();
+                                info.exec();
 
-                                QMessageBox::information(RosegardenMainWindow::self(),
-                                                         "",
-                                                         tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
-                                                         QMessageBox::Ok,
-                                                         QMessageBox::Ok);
+                                if (DialogSuppressor::isSuppressed
+                                    ("inadequatetimerresolutiontryrtc")) {
 
+                                    QMessageBox::information(RosegardenMainWindow::self(),
+                                                             "",
+                                                             tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
+                                                             QMessageBox::Ok,
+                                                             QMessageBox::Ok);
+                                }
+
+                            } else {
+                                // so these will show up when users
+                                // paste their debug stream reports,
+                                // and we'll have a clue what might be
+                                // wrong
+                                std::cerr << "TIMER WARNING (suggesting RTC) squelched per user request.  Bad timing condition still exists." << std::endl;
                             }
-                        } else {
-                            // so these will show up when users paste their
-                            // debug stream reports, and we'll have a clue what
-                            // might be wrong
-                            std::cerr << "TIMER WARNING squelched per user request.  Bad timing condition still exists." << std::endl;
+
+                            // whatever, don't show again during this run
+                            showAltTimerWarning = false;
                         }
 
                         CurrentProgressDialog::thaw();
@@ -1293,10 +1303,10 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     if (!(m_soundDriverStatus & AUDIO_OK)) {
         RosegardenMainWindow::self()->awaitDialogClearance();
 
-        QSettings settings;
-        settings.beginGroup(DoNotShowConfigGroup);
-        bool showJackWarning = settings.value("showjackwarning", true).toBool();
-        settings.endGroup();
+        // This is to avoid us ever showing the same dialog more than
+        // once during a single run of the program -- it's quite
+        // separate from the suppression function
+        static bool showJackWarning = true;
 
         if (showJackWarning) {
             QMessageBox info(RosegardenMainWindow::self());
@@ -1304,30 +1314,28 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
             info.setInformativeText(tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
             info.setStandardButtons(QMessageBox::Ok);
             info.setDefaultButton(QMessageBox::Ok);
-            QPushButton *ignoreButton = info.addButton(tr("Suppress"), QMessageBox::ActionRole);
-            ignoreButton->setToolTip(tr("Do not display this warning in the future"));
             info.setIcon(QMessageBox::Warning);
 
-            info.exec();
-            if (info.clickedButton() == ignoreButton) {                               
-                showJackWarning = false;
+            if (!DialogSuppressor::shouldSuppress
+                (&info, "failedtoconnecttojack")) {
 
-                settings.beginGroup(DoNotShowConfigGroup);
-                settings.setValue("showjackwarning", showJackWarning);
-                settings.endGroup();
+                info.exec();
 
-                QMessageBox::information(RosegardenMainWindow::self(),
-                                         "",
-                                         tr("This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently."),
-                                         QMessageBox::Ok,
-                                         QMessageBox::Ok);
+                if (DialogSuppressor::isSuppressed("failedtoconnecttojack")) {
 
+                    QMessageBox::information(RosegardenMainWindow::self(),
+                                             "",
+                                             tr("This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently."),
+                                             QMessageBox::Ok,
+                                             QMessageBox::Ok);
+                }
+            } else {
+                // so these will show up when users paste their
+                // debug stream reports, and we'll have a clue what
+                // might be wrong
+                std::cerr << "JACK WARNING squelched per user request" << std::endl;
             }
-        } else {
-            // so these will show up when users paste their
-            // debug stream reports, and we'll have a clue what
-            // might be wrong
-            std::cerr << "JACK WARNING squelched per user request" << std::endl;
+            showJackWarning = false;
         }
     }
 #endif

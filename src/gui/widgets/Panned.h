@@ -42,8 +42,16 @@ public slots:
     void slotSetPannedRect(QRectF);
     void slotEmulateWheelEvent(QWheelEvent *ev);
 
+    void slotShowPositionPointer(float x); // scene coord; full height
+    void slotShowPositionPointer(QPointF top, float height); // scene coords
+    void slotHidePositionPointer();
+    void slotEnsurePositionPointerInView(bool page); // if visible
+
 protected:
     QRectF m_pannedRect;
+    QPointF m_pointerTop;
+    float m_pointerHeight;
+    bool m_pointerVisible;
 
     virtual void resizeEvent(QResizeEvent *);
     virtual void drawForeground(QPainter *, const QRectF &);

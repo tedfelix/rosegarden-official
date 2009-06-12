@@ -36,6 +36,7 @@ public:
 };
 
 Panner::Panner() :
+    m_pointerVisible(false),
     m_clicked(false)
 {
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -52,6 +53,31 @@ Panner::slotSetPannedRect(QRectF rect)
     
     m_pannedRect = rect;
     update();
+}
+
+void
+Panner::slotShowPositionPointer(float x) // scene coord; full height
+{
+    m_pointerVisible = true;
+    m_pointerTop = QPointF(x, 0);
+    m_pointerHeight = 0;
+    update(); //!!! should update old and new pointer areas only, really
+}
+
+void
+Panner::slotShowPositionPointer(QPointF top, float height) // scene coords
+{
+    m_pointerVisible = true;
+    m_pointerTop = top;
+    m_pointerHeight = height;
+    update(); //!!! should update old and new pointer areas only, really
+}
+
+void
+Panner::slotHidePositionPointer()
+{
+    m_pointerVisible = false;
+    update(); //!!! should update old pointer area only, really
 }
 
 void
@@ -85,6 +111,16 @@ Panner::paintEvent(QPaintEvent *e)
     paint.setBrush(Qt::NoBrush);
     paint.setPen(QPen(GUIPalette::getColour(GUIPalette::PannerOverlay), 0));
     paint.drawConvexPolygon(mapFromScene(m_pannedRect));
+
+    if (m_pointerVisible && scene()) {
+        QPoint top = mapFromScene(m_pointerTop);
+        float height = m_pointerHeight;
+        if (height == 0.f) height = scene()->height();
+        QPoint bottom = mapFromScene
+            (QPointF(m_pointerTop.x(), m_pointerTop.y() + height));
+        paint.setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
+        paint.drawLine(top, bottom);
+    }
 
     RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect) << endl;
     paint.end();
