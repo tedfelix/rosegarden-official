@@ -174,6 +174,7 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/widgets/InputDialog.h"
+#include "TranzportClient.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -263,6 +264,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_lircClient(0),
     m_lircCommander(0),
 #endif
+    m_tranzport(0),
     m_firstRun(false),
     m_haveAudioImporter(false),
     m_parameterArea(0),
@@ -493,6 +495,17 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     }
 #endif
 
+    // Tranzport
+    try 
+    {
+        m_tranzport = new TranzportClient(this);
+    }
+    catch (Exception e)
+    {
+        m_tranzport = 0;        
+        RG_DEBUG << e.getMessage().c_str() <<endl;        
+    }
+    
     leaveActionState("have_project_packager"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     leaveActionState("have_lilypondview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
@@ -527,7 +540,7 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete m_lircCommander;
     delete m_lircClient;
 #endif
-
+    delete m_tranzport;    
     delete m_doc;
     Profiles::getInstance()->dump();
 }

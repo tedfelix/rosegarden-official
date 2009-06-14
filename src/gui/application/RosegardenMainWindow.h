@@ -88,7 +88,8 @@ class AudioPluginDialog;
 class AudioMixerWindow;
 class AudioManagerDialog;
 class SequencerThread;
-
+class TranzportClient;
+    
 /**
   * The base class for the main Rosegarden application window.  This
   * sets up the main window and reads the config file as well as
@@ -1647,7 +1648,8 @@ private:
     LircClient *m_lircClient;
     LircCommander *m_lircCommander;
 #endif     
-
+    TranzportClient * m_tranzport;
+        
     DeviceManagerDialog * m_devicesManagerNew;    
 };
 

@@ -29,6 +29,7 @@ AC_CHECK_HEADER([lirc/lirc_client.h],[HAVES="$HAVES -DHAVE_LIRC"],[AC_MSG_ERROR(
 AC_CHECK_HEADER([X11/SM/SMlib.h],[],[AC_MSG_ERROR(Failed to find required X11 header X11/SM/SMlib.h)])
 AC_CHECK_LIB([lirc_client],[lirc_init],[LIBS="$LIBS -llirc_client"],[AC_MSG_ERROR(Failed to find required LIRC library lirc_client)])
 
+AC_C_BIGENDIAN([AC_SUBST(ENDIANNESS,"-DBIG_ENDIAN=1")],[AC_SUBST(ENDIANNESS,"-DLITTLE_ENDIAN=1")],[AC_MSG_ERROR(Could not find system endianess)])
 # hm, we'll probably want a newer version for jack_client_open
 PKG_CHECK_MODULES([JACK],[jack >= 0.77],[HAVES="$HAVES -DHAVE_LIBJACK"],[])
 PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[])

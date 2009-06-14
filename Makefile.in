@@ -30,11 +30,12 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   @lrdf_CFLAGS@ \
 		   @Xft_CFLAGS@ \
 		   @fftw3f_CFLAGS@ \
+		   @ENDIANNESS@ \
 		   -D'VERSION="$(VERSION)"' \
 		   -D'CODENAME="$(CODENAME)"' \
 		   -Isrc
 
-MOCFLAGS	:= @HAVES@
+MOCFLAGS	:= @HAVES@ @ENDIANNESS@
 
 LIBS		:= @QT_LIBS@ \
 		   @JACK_LIBS@ \
