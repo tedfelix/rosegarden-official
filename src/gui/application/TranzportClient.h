@@ -1,0 +1,137 @@
+
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
+/*
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2009 the Rosegarden development team.
+
+    This file is Copyright 2005
+        Immanuel Litzroth         <immanuel203@gmail.com>
+
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
+
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
+*/
+#ifndef _RG_TRANZPORTCLIENT_H_
+#define _RG_TRANZPORTCLIENT_H_
+
+#include <QObject>
+
+class QSocketNotifier;
+
+namespace Rosegarden
+{
+  class RosegardenMainWindow;
+
+  class TranzportClient : public QObject
+  {
+      Q_OBJECT
+      public:
+      TranzportClient(RosegardenMainWindow* rgGUIApp);
+      
+      virtual ~TranzportClient();
+
+    public slots:
+      void readData();
+
+    signals:
+    
+      void play();
+      void stop();
+      void record();
+      void rewind();
+      void rewindToBeginning();
+      void fastForward();
+      void fastForwardToEnd();
+      void toggleRecord();
+      void trackDown();
+      void trackUp();
+      void trackMute();
+      void trackRecord();
+         
+    public:
+      enum ButtonMasks 
+      {        
+#if BIG_ENDIAN
+#define SWAP(x) ((((uint32_t)(x) & 0xff000000) >> 24) |     \
+                     (((uint32_t)(x) & 0x00ff0000) >> 8)  |     \
+                     (((uint32_t)(x) & 0x0000ff00) << 8)  |     \
+                     (((uint32_t)(x) & 0x000000ff) << 24))
+#elif LITTLE_ENDIAN
+#define SWAP(x) x
+#else
+#error No endianness defined
+#endif
+
+      Battery     = SWAP(0x00004000),
+      Backlight   = SWAP(0x00008000),
+      TrackLeft   = SWAP(0x04000000),
+      TrackRight  = SWAP(0x40000000),
+      TrackRec    = SWAP(0x00040000),
+      TrackMute   = SWAP(0x00400000),
+      TrackSolo   = SWAP(0x00000400),
+      Undo        = SWAP(0x80000000),
+      In          = SWAP(0x02000000),
+      Out         = SWAP(0x20000000),
+      Punch       = SWAP(0x00800000),
+      Loop        = SWAP(0x00080000),
+      Prev        = SWAP(0x00020000),
+      Add         = SWAP(0x00200000),
+      Next        = SWAP(0x00000200),
+      Rewind      = SWAP(0x01000000),
+      FastForward = SWAP(0x10000000),
+      FootSwitch  = SWAP(0x00001000),
+      Stop        = SWAP(0x00010000),
+      Play        = SWAP(0x00100000),
+      Record      = SWAP(0x00000100),
+      Shift       = SWAP(0x08000000)
+#undef SWAP
+      };
+
+      enum Row 
+      {
+        Top,
+        Bottom,
+      };
+    
+      void
+      LCDWrite(const std::string& text,
+               Row row = Top,
+               uint8_t offset = 0);
+      
+      void 
+      write(const uint8_t* buf);
+      
+        
+    private:
+      int m_descriptor;
+      int m_writedescriptor;
+      
+      QSocketNotifier * m_socketNotifier;
+      uint8_t previousbuf[8];    
+      uint8_t currentbuf[8];
+      volatile uint32_t& previous_buttons;
+      volatile uint32_t& current_buttons;
+      volatile uint8_t& datawheel;
+      volatile uint8_t& status;      
+      RosegardenMainWindow    *m_rgGUIApp;
+      static const uint8_t LCDLength = 20;
+      TranzportClient(const TranzportClient&);
+     
+  };
+  
+    
+}
+
+
+#endif // _RG_TRANZPORTCLIENT_H_
+
+// Local Variables: **
+// compile-command:"cd ../../../;make -j 6" **
+// End: **
