@@ -127,8 +127,8 @@ protected:
     RosegardenDocument *m_doc;
     bool m_mainWindow;
     RulerScale *m_rulerScale;
-    SnapGrid    m_defaultGrid;
-    SnapGrid    m_loopGrid;
+    SnapGrid   m_defaultGrid;
+    SnapGrid   *m_loopGrid;
     const SnapGrid   *m_grid;
     QPen        m_quickMarkerPen;
     bool m_loopingMode;

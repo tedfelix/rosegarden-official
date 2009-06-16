@@ -59,7 +59,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_doc(doc),
     m_rulerScale(rulerScale),
     m_defaultGrid(rulerScale),
-    m_loopGrid(rulerScale),
+    m_loopGrid(new SnapGrid(rulerScale)),
     m_grid(&m_defaultGrid),
     m_quickMarkerPen(QPen(GUIPalette::getColour(GUIPalette::QuickMarker), 4)),
     m_loopingMode(false),
@@ -82,7 +82,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     // pointer position
     //
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
-    m_loopGrid.setSnapTime(SnapGrid::SnapToBeat);
+    m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
     this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range"
                         "for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to  "
@@ -90,34 +90,42 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
 }
 
 LoopRuler::~LoopRuler()
-{}
+{
+    delete m_loopGrid;
+}
 
 void
 LoopRuler::setSnapGrid(const SnapGrid *grid)
 {
-    if (grid == 0) m_grid = &m_defaultGrid;
-    else m_grid = grid;
+    delete m_loopGrid;
+    if (grid == 0) {
+        m_grid = &m_defaultGrid;
+        m_loopGrid = new SnapGrid(m_defaultGrid);
+    } else {
+        m_grid = grid;
+        m_loopGrid = new SnapGrid(*grid);
+    }
+    m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 }
 
 void LoopRuler::scrollHoriz(int x)
 {
+    // int w = width(); //, h = height();
+    // int dx = x - ( -m_currentXOffset);
+
     if (getHScaleFactor() != 1.0) {
         m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
-        repaint();
-        return;
+    } else {
+        m_currentXOffset = -x;
     }
 
-    int w = width(); //, h = height();
-    int dx = x - ( -m_currentXOffset);
-    m_currentXOffset = -x;
-
-    if (dx > w*3 / 4 || dx < -w*3 / 4) {
-        update();
-        return ;
-    }
+//    if (dx > w*3 / 4 || dx < -w*3 / 4) {
+//        update();
+//        return ;
+//    }
 
 /*### These bitBlts are not working
-	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?" << endl;
+    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt start?" << endl;
     if (dx > 0) { // moving right, so the existing stuff moves left
         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
         repaint(w - dx, 0, dx, h);
@@ -125,9 +133,9 @@ void LoopRuler::scrollHoriz(int x)
         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
         repaint(0, 0, -dx, h);
     }
-	RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?" << endl;
+    RG_DEBUG << "LoopRuler::scrollHoriz > Dodgy bitBlt end?" << endl;
 */
-	update();
+    update();
 }
 
 QSize LoopRuler::sizeHint() const
@@ -248,8 +256,9 @@ LoopRuler::drawLoopMarker(QPainter* paint)
     double x2 = (int)m_rulerScale->getXForTime(m_endLoop);
 
     if (x1 > x2) {
+        double tmp = x2;
         x2 = x1;
-        x1 = (int)m_rulerScale->getXForTime(m_endLoop);
+        x1 = tmp;
     }
 
     x1 += m_currentXOffset + m_xorigin;
@@ -266,21 +275,21 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
 {
-     // Currently two different properties hold the horizontal zoom factor in
-     // Qt4 port : HZoomable::m_hScaleFactor and ZoomableRulerScale::m_xfactor.
-     // The following code deals with this redundance.
+    // Currently two different properties hold the horizontal zoom factor in
+    // Qt4 port : HZoomable::m_hScaleFactor and ZoomableRulerScale::m_xfactor.
+    // The following code deals with this redundance.
 
      double zoomX;
-     ZoomableRulerScale *zrs = dynamic_cast<ZoomableRulerScale *>(m_rulerScale);
-     if (zrs) {
-         zoomX = zrs->getXZoomFactor();
-     } else {
-         zoomX = 1.0;
-     }
+    ZoomableRulerScale *zrs = dynamic_cast<ZoomableRulerScale *>(m_rulerScale);
+    if (zrs) {
+        zoomX = zrs->getXZoomFactor();
+    } else {
+        zoomX = 1.0;
+    }
 
-     double x = mE->pos().x() / getHScaleFactor() / zoomX
-                - m_currentXOffset / zoomX - m_xorigin;
-     return x;
+    double x = mE->pos().x() / getHScaleFactor() / zoomX
+               - m_currentXOffset / zoomX - m_xorigin;
+    return x;
 }
 
 void
@@ -295,7 +304,7 @@ LoopRuler::mousePressEvent(QMouseEvent *mE)
         double x = mouseEventToSceneX(mE);
 
         if (m_loopingMode) {
-            m_endLoop = m_startLoop = m_loopGrid.snapX(x);
+            m_endLoop = m_startLoop = m_loopGrid->snapX(x);
         } else {
             // No -- now that we're emitting when the button is
             // released, we _don't_ want to emit here as well --
@@ -372,7 +381,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
 
     if (m_loopingMode) {
         if (m_grid->snapX(x) != m_endLoop) {
-            m_endLoop = m_loopGrid.snapX(x);
+            m_endLoop = m_loopGrid->snapX(x);
             emit dragLoopToPosition(m_endLoop);
             update();
         }
@@ -388,11 +397,6 @@ void LoopRuler::slotSetLoopMarker(timeT startLoop,
 {
     m_startLoop = startLoop;
     m_endLoop = endLoop;
-
-    QPainter paint(this);
-    paint.setBrush(palette().foreground());
-    drawBarSections(&paint);
-    drawLoopMarker(&paint);
 
     update();
 }
