@@ -81,6 +81,8 @@ public slots:
     void slotSetLinearMode();
     void slotSetContinuousPageMode();
     void slotSetMultiPageMode();
+    void slotSetFontName(QString);
+    void slotSetFontSize(int);
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);

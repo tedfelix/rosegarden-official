@@ -166,6 +166,18 @@ NotationWidget::slotSetMultiPageMode()
     if (m_scene) m_scene->setPageMode(StaffLayout::MultiPageMode);
 }
 
+void
+NotationWidget::slotSetFontName(QString name)
+{
+    if (m_scene) m_scene->setFontName(name);
+}
+
+void
+NotationWidget::slotSetFontSize(int size)
+{
+    if (m_scene) m_scene->setFontSize(size);
+}
+
 NotationTool *
 NotationWidget::getCurrentTool() const
 {

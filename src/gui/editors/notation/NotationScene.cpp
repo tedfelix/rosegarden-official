@@ -115,6 +115,41 @@ NotationScene::setNotePixmapFactories(QString fontName, int size)
 
     if (m_hlayout) m_hlayout->setNotePixmapFactory(m_notePixmapFactory);
     if (m_vlayout) m_vlayout->setNotePixmapFactory(m_notePixmapFactory);
+
+    for (unsigned int i = 0; i < m_staffs.size(); ++i) {
+        m_staffs[i]->setNotePixmapFactories(m_notePixmapFactory,
+                                            m_notePixmapFactorySmall);
+    }
+}
+
+QString
+NotationScene::getFontName() const
+{
+    return m_notePixmapFactory->getFontName();
+}
+
+void 
+NotationScene::setFontName(QString name)
+{
+    if (name == getFontName()) return;
+    setNotePixmapFactories(name, getFontSize());
+    positionStaffs();
+    layoutAll();
+}
+
+int
+NotationScene::getFontSize() const
+{
+    return m_notePixmapFactory->getSize();
+}
+
+void
+NotationScene::setFontSize(int size)
+{
+    if (size == getFontSize()) return;
+    setNotePixmapFactories(getFontName(), size);
+    positionStaffs();
+    layoutAll();
 }
 
 void

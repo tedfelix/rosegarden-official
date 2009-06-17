@@ -540,7 +540,7 @@ NewNotationView::setupActions()
         QString actionName = QString("note_font_size_%1").arg(sizes[i]);
 
         QAction *sizeAction = createAction(actionName,
-                                SLOT(slotChangeFontSizeFromStringValue()));
+                                SLOT(slotChangeFontSizeFromAction()));
         sizeAction->setText(tr("%n pixel(s)", "", sizes[i]));
         sizeAction->setCheckable(true);
         ag->addAction(sizeAction);
@@ -686,6 +686,39 @@ NewNotationView::slotMultiPageMode()
 
     leaveActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
+}
+
+void
+NewNotationView::slotChangeFontFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
+    if (name.left(10) == "note_font_") {
+        name = name.right(name.length() - 10);
+        if (m_notationWidget) m_notationWidget->slotSetFontName(name);
+    } else {
+        QMessageBox::warning
+            (this, "", tr("Unknown font action %1").arg(name));
+    }
+}
+
+void
+NewNotationView::slotChangeFontSizeFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
+
+    if (name.left(15) == "note_font_size_") {
+        name = name.right(name.length() - 15);
+        bool ok = false;
+        int size = name.toInt(&ok);
+        if (ok) {
+            if (m_notationWidget) m_notationWidget->slotSetFontSize(size);
+            return;
+        } 
+    }
+    QMessageBox::warning
+        (this, "", tr("Unknown font size action %1").arg(name));
 }
 
 Segment *

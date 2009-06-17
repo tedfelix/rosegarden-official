@@ -75,6 +75,9 @@ protected slots:
     void slotContinuousPageMode();
     void slotMultiPageMode();
 
+    void slotChangeFontFromAction();
+    void slotChangeFontSizeFromAction();
+
     void slotUpdateMenuStates();
 
 private:

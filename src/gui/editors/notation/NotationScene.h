@@ -83,6 +83,12 @@ public:
     StaffLayout::PageMode getPageMode() const { return m_pageMode; } 
     void setPageMode(StaffLayout::PageMode mode);
 
+    QString getFontName() const;
+    void setFontName(QString);
+
+    int getFontSize() const;
+    void setFontSize(int);
+    
     const RulerScale *getRulerScale() const;
 
     /**
