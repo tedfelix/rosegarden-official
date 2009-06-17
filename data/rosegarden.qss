@@ -1378,7 +1378,7 @@ QComboBox::editable,
 #View QComboBox::editable,
 #App QComboBox::editable,
 #App QWidget QComboBox::editable,
-QInputDialog QComboBox::edtiable,
+QInputDialog QComboBox::editable,
 #RosegardenParameterArea QComboBox:editable
 {
     background-color: orange;
@@ -1388,7 +1388,7 @@ QComboBox::!editable,
 QComboBox::drop-down:!editable,
 #App QWidget QComboBox::!editable,
 #App QWidget QComboBox::drop-down:!editable,
-QInputDialog QComboBox::drop-down:!edtiable,
+QInputDialog QComboBox::drop-down:!editable,
 #RosegardenParameterArea QComboBox:!editable,
 #RosegardenParameterArea QComboBox::drop-down:!editable
 {
@@ -1400,7 +1400,7 @@ QComboBox::!editable:on,
 QComboBox::drop-down:editable:on,
 #App QWidget QComboBox::!editable:on,
 #App QWidget QComboBox::drop-down:editable:on,
-QInputDialog QComboBox::drop-down:edtiable:on,
+QInputDialog QComboBox::drop-down:editable:on,
 #RosegardenParameterArea QComboBox:!editable:on,
 #RosegardenParameterArea QComboBox::drop-down:editable:on
 {
