@@ -61,6 +61,9 @@ void StartupLogo::paintEvent(QPaintEvent*)
     // Print version number
     QPainter paint(this);
 
+    // begin() the painter if it isn't already active
+    if (!paint.isActive()) paint.begin(this);
+
     // Draw the splash screen image
     paint.drawPixmap(0,0,m_pixmap);
     
@@ -94,12 +97,14 @@ void StartupLogo::paintEvent(QPaintEvent*)
                    versionLabel);
 
     paint.drawText(m_pixmap.width() - (width + 10), y, m_statusMessage);
+
+    paint.end();
 }
 
 void StartupLogo::slotShowStatusMessage(QString message)
 {
     m_statusMessage = message;
-    paintEvent(0);
+    repaint(); //paintEvent(0);
     QApplication::flushX();
 }
 
