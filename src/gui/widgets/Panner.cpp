@@ -47,6 +47,21 @@ Panner::Panner() :
 }
 
 void
+Panner::setScene(QGraphicsScene *s)
+{
+    if (scene()) {
+        disconnect(scene(), SIGNAL(sceneRectChanged(const QRectF &)),
+                   this, SLOT(slotSceneRectChanged(const QRectF &)));
+    }
+    QGraphicsView::setScene(s);
+    if (scene()) fitInView(sceneRect(), Qt::KeepAspectRatio);
+    m_cache = QPixmap();
+    connect(scene(), SIGNAL(sceneRectChanged(const QRectF &)),
+            this, SLOT(slotSceneRectChanged(const QRectF &)));
+    RG_DEBUG << "Panner::setScene: scene is " << scene() << endl;
+}
+
+void
 Panner::slotSetPannedRect(QRectF rect) 
 {
     RG_DEBUG << "Panner::slotSetPannedRect(" << rect << ")" << endl;
@@ -84,6 +99,16 @@ void
 Panner::resizeEvent(QResizeEvent *)
 {
     if (scene()) fitInView(sceneRect(), Qt::KeepAspectRatio);
+    m_cache = QPixmap();
+}
+
+void
+Panner::slotSceneRectChanged(const QRectF &newRect)
+{
+    if (!scene()) return; // spurious
+    fitInView(newRect, Qt::KeepAspectRatio);
+    m_cache = QPixmap();
+    update();
 }
 
 void
@@ -194,6 +219,7 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     nr.translate(delta);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
+    update();
 }
 
 void
@@ -209,6 +235,7 @@ Panner::mouseReleaseEvent(QMouseEvent *e)
     }
 
     m_clicked = false;
+    update();
 }
 
 void
@@ -230,6 +257,7 @@ Panner::moveTo(QPoint p)
     nr.translate(d, 0);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
+    update();
 }
    
 }

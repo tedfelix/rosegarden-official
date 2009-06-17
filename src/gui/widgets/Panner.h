@@ -31,6 +31,8 @@ public:
     Panner();
     virtual ~Panner() { }
 
+    virtual void setScene(QGraphicsScene *);
+
 signals:
     void pannedRectChanged(QRectF);
     void zoomIn();
@@ -42,6 +44,9 @@ public slots:
     void slotShowPositionPointer(float x); // scene coord; full height
     void slotShowPositionPointer(QPointF top, float height); // scene coords
     void slotHidePositionPointer();
+
+protected slots:
+    void slotSceneRectChanged(const QRectF &);
 
 protected:
     QRectF m_pannedRect;
