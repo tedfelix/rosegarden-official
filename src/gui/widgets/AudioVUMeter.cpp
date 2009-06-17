@@ -77,7 +77,7 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
     // we'll try giving the area between the border and the actual meter the
     // same tint as the faders, for consistency of appearance
 
-    // first, we'll fill the whole background rect with a 10% alpha version of
+    // first, we'll fill the whole background rect with a 40% alpha version of
     // the border color
     QColor fill = palette().mid();
     int H = 0;
@@ -101,7 +101,7 @@ AudioVUMeter::paintEvent(QPaintEvent *e)
     paint.drawRect(1, h - m_yoff / 2 - 1, w - 2, m_yoff / 2);*/
     paint.end();
 
-    m_meter->paintEvent(e);
+//  m_meter->paintEvent(e);
 }
 
 AudioVUMeter::AudioVUMeterImpl::AudioVUMeterImpl(QWidget *parent,
