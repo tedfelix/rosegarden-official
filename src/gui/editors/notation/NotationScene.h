@@ -80,6 +80,9 @@ public:
                                 Event *e,
                                 bool preview);
 
+    StaffLayout::PageMode getPageMode() const { return m_pageMode; } 
+    void setPageMode(StaffLayout::PageMode mode);
+
     const RulerScale *getRulerScale() const;
 
     /**

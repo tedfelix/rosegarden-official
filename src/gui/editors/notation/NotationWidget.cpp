@@ -27,6 +27,7 @@
 #include "NotationMouseEvent.h"
 #include "NotationSelector.h"
 #include "NotationEraser.h"
+#include "StaffLayout.h"
 
 #include "base/RulerScale.h"
 
@@ -145,6 +146,24 @@ NotationWidget::getCurrentSegment()
 {
     if (!m_scene) return 0;
     return m_scene->getCurrentSegment();
+}
+
+void
+NotationWidget::slotSetLinearMode()
+{
+    if (m_scene) m_scene->setPageMode(StaffLayout::LinearMode);
+}
+
+void
+NotationWidget::slotSetContinuousPageMode()
+{
+    if (m_scene) m_scene->setPageMode(StaffLayout::ContinuousPageMode);
+}
+
+void
+NotationWidget::slotSetMultiPageMode()
+{
+    if (m_scene) m_scene->setPageMode(StaffLayout::MultiPageMode);
 }
 
 NotationTool *

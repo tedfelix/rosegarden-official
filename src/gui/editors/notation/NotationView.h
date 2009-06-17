@@ -71,6 +71,10 @@ protected slots:
     void slotText();
     void slotGuitarChord();
 
+    void slotLinearMode();
+    void slotContinuousPageMode();
+    void slotMultiPageMode();
+
     void slotUpdateMenuStates();
 
 private:

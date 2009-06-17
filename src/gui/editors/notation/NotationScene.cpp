@@ -492,6 +492,42 @@ NotationScene::getPageMargins(int &left, int &top)
 }
 
 void
+NotationScene::setPageMode(StaffLayout::PageMode mode)
+{
+    if (m_pageMode == mode) return;
+    m_pageMode = mode;
+
+    int pageWidth = getPageWidth();
+    int topMargin = 0, leftMargin = 0;
+    getPageMargins(leftMargin, topMargin);
+
+    m_hlayout->setPageMode(m_pageMode != StaffLayout::LinearMode);
+    m_hlayout->setPageWidth(pageWidth - leftMargin * 2);
+
+    NOTATION_DEBUG << "NotationScene::setPageMode: set layout's page width to "
+                   << (pageWidth - leftMargin * 2) << endl;
+
+    positionStaffs();
+    layoutAll();
+/*!!!
+    if (!m_printMode) {
+        // Layout is done : Time related to left of canvas should now
+        // correctly be determined and track headers contents be drawn.
+        m_headersGroup->slotUpdateAllHeaders(0, 0, true);
+    }
+
+    positionPages();
+
+
+    if (!m_printMode) {
+        updateView();
+        slotSetInsertCursorPosition(getInsertionTime(), false, false);
+        slotSetPointerPosition(getDocument()->getComposition().getPosition(), false);
+    }
+*/
+}
+
+void
 NotationScene::slotCommandExecuted()
 {
     checkUpdate();

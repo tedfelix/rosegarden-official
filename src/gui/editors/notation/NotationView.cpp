@@ -661,6 +661,33 @@ NewNotationView::slotUpdateMenuStates()
     }
 }
 
+void
+NewNotationView::slotLinearMode()
+{
+    //!!! would show all rulers here, if we had any
+
+    enterActionState("linear_mode");
+    if (m_notationWidget) m_notationWidget->slotSetLinearMode();
+}
+
+void
+NewNotationView::slotContinuousPageMode()
+{
+    //!!! would hide all rulers here, if we had any
+
+    leaveActionState("linear_mode");
+    if (m_notationWidget) m_notationWidget->slotSetContinuousPageMode();
+}
+
+void
+NewNotationView::slotMultiPageMode()
+{
+    //!!! would hide all rulers here, if we had any
+
+    leaveActionState("linear_mode");
+    if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
+}
+
 Segment *
 NewNotationView::getCurrentSegment()
 {
