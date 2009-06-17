@@ -51,6 +51,8 @@
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
 #include "gui/rulers/StandardRuler.h"
+#include "gui/rulers/TempoRuler.h"
+#include "gui/rulers/ChordNameRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -234,8 +236,23 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                                m_referenceScale, 0, 25,
                                                true);
 
+    m_tempoRuler = new TempoRuler(m_referenceScale,
+                                  document,
+                                  RosegardenMainWindow::self(),
+                                  0.0,    // xorigin
+                                  24,     // height
+                                  true);  // small
+
+    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
+                                          document,
+                                          segments,
+                                          0.0,     // xorigin
+                                          24);     // height
+
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
     m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
     m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
@@ -250,6 +267,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
+
+    m_tempoRuler->connectSignals();
+
+    m_chordNameRuler->setReady();
 }
 
 bool
@@ -312,6 +333,8 @@ MatrixWidget::slotHScroll()
     // Scroll rulers accordingly
     m_topStandardRuler->slotScrollHoriz(x);
     m_bottomStandardRuler->slotScrollHoriz(x);
+    m_tempoRuler->slotScrollHoriz(x);
+    m_chordNameRuler->slotScrollHoriz(x);
 }
 
 EventSelection *

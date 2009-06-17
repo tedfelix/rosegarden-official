@@ -46,6 +46,8 @@ class EventSelection;
 class PitchRuler;
 class MidiKeyMapping;
 class StandardRuler;
+class TempoRuler;
+class ChordNameRuler;
 
 /**
  * Container widget for the matrix editor (which is a QGraphicsView)
@@ -149,6 +151,8 @@ private:
 
     StandardRuler *m_topStandardRuler; // I own this
     StandardRuler *m_bottomStandardRuler; // I own this
+    TempoRuler *m_tempoRuler; // I own this
+    ChordNameRuler *m_chordNameRuler; // I own this
 
     QGridLayout *m_layout; // I own this
 
