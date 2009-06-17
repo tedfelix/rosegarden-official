@@ -53,8 +53,6 @@
 #include <QTreeWidgetItem>
 #include <QToolBar>
 
-#include <Q3CanvasPixmap>
-#include <Q3Canvas>
 
 namespace Rosegarden
 {

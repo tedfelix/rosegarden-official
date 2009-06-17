@@ -16,15 +16,6 @@
 */
 
 
-#include <Q3Canvas>
-#include <Q3CanvasPixmap>
-
-// #include <kglobal.h>
-// #include <kmainwindow.h>
-// #include <kstandardshortcut.h>
-// #include <kstandardaction.h>
-// #include <QDir>
-
 #include "TriggerSegmentManager.h"
 #include "TriggerManagerItem.h"
 

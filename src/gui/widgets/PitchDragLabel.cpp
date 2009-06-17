@@ -15,9 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3Canvas>
-#include <Q3CanvasPixmap>
-
 #include "PitchDragLabel.h"
 
 #include "base/NotationRules.h"

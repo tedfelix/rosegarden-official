@@ -15,8 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3Canvas>
-
 #include "RosegardenMainWindow.h"
 
 #include "gui/editors/segment/TrackEditor.h"

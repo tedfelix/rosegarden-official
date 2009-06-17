@@ -15,10 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-
-#include <Q3CanvasPixmap>
-#include <Q3Canvas>
-
 #include "MarkerEditor.h"
 #include "MarkerEditorViewItem.h"
 

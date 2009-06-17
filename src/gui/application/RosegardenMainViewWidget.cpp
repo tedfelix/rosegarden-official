@@ -16,9 +16,7 @@
 */
 
 
-#include <Q3Canvas>
 #include "RosegardenMainViewWidget.h"
-#include <QApplication>
 
 #include "sound/Midi.h"
 #include "gui/editors/segment/TrackButtons.h"
@@ -73,6 +71,8 @@
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
 #include "document/Command.h"
+
+#include <QApplication>
 #include <QSettings>
 #include <QMessageBox>
 #include <QProcess>
