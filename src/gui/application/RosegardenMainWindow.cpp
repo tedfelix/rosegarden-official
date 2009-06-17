@@ -270,7 +270,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 {
     setObjectName("App");
     m_myself = this;
-
+    
+    
+    // enable to load resources from rcc file (if not compiled in)
+    //QResource::registerResource("./data/data.rcc");
+    
     if (startupStatusMessageReceiver) {
         QObject::connect(this, SIGNAL(startupStatusMessage(QString)),
                          startupStatusMessageReceiver,
@@ -282,12 +286,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager = new AudioPluginManager();
 
-    // call inits to invoke all other construction parts
-    //
-    emit startupStatusMessage(tr("Initializing view...")); 
-    initStatusBar();
-    setupActions();
-    initZoomToolbar();
 
     QPixmap dummyPixmap; // any icon will do
     
@@ -370,6 +368,15 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     // Lookup the configuration parameter that specifies the default
     // arrangement, and instantiate it.
+    
+    
+    // call inits to invoke all other construction parts
+    //
+    emit startupStatusMessage(tr("Initializing view...")); 
+    initStatusBar();
+    setupActions();
+    initZoomToolbar();
+    
     
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -696,6 +703,8 @@ void RosegardenMainWindow::setupActions()
     createAction("toggle_tracking", SLOT(slotToggleTracking()));
     createAction("panic", SLOT(slotPanic()));
     createAction("debug_dump_segments", SLOT(slotDebugDump()));
+    
+    createAction("repeat_segment_onoff", m_segmentParameterBox, SLOT(slotRepeatPressed()));
 
     createGUI("rosegardenui.rc");
 
