@@ -125,6 +125,9 @@
   <!-- JAS some of matrix.rc "Transpose" shortcuts might interfere with rosegardenui arrow keys.  -->
   <Menu name="Segments">
     <text>Se&amp;gments</text>
+   
+     <Action name="repeat_segment_onoff" text="Repeat selected Seg&amp;ment on/off" shortcut="Shift+R" shortcut-context="application" />
+
     <Menu name="edit_with">
       <text>Edit &amp;With</text>
       <Action name="edit_default" text="Open in &amp;Default editor" shortcut="Return" />
