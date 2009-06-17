@@ -144,7 +144,7 @@ for j in $QTLIB_EXTS ; do
 	break
     fi
 done
-if [ x"$QT3SUPPORT_PATH" = x ]; then
+if test x"$QT3SUPPORT_PATH" = x ; then
 	AC_MSG_ERROR([
 Failed to find required Qt3 support library (libQt3Support) in
 the Qt4 library directory $QTLIBDIR.
