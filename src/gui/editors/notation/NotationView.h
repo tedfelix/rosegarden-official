@@ -80,6 +80,8 @@ protected slots:
 
     void slotUpdateMenuStates();
 
+    void slotTransformsInterpret();
+
 private:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;

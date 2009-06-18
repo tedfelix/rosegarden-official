@@ -30,14 +30,17 @@
 
 #include "base/Clipboard.h"
 #include "base/Selection.h"
+#include "base/NotationQuantizer.h"
 
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
 #include "commands/edit/CutAndCloseCommand.h"
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/PasteEventsCommand.h"
+#include "commands/notation/InterpretCommand.h"
 
 #include "gui/dialogs/PasteNotationDialog.h"
+#include "gui/dialogs/InterpretDialog.h"
 
 #include "gui/general/IconLoader.h"
 
@@ -991,6 +994,23 @@ NewNotationView::slotGuitarChord()
     m_notationWidget->slotSetGuitarChordInserter();
     slotUpdateMenuStates();
 }
+
+void
+NewNotationView::slotTransformsInterpret()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+
+    InterpretDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        CommandHistory::getInstance()->addCommand
+            (new InterpretCommand
+             (*selection,
+              getDocument()->getComposition().getNotationQuantizer(),
+              dialog.getInterpretations()));
+    }
+}
+    
 
 }
 
