@@ -128,7 +128,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_pianoView, SLOT(slotSetPannedRect(QRectF)));
 
-    connect(m_view, SIGNAL(pannedContentsScrolled(int, int)),
+    connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
@@ -229,8 +229,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_pianoScene->setSceneRect(pianoRect);
 
     m_topStandardRuler = new StandardRuler(document,
-                                 m_referenceScale, 0, 25,
-                                 false);
+                                           m_referenceScale, 0, 25,
+                                           false);
 
     m_bottomStandardRuler = new StandardRuler(document,
                                                m_referenceScale, 0, 25,
@@ -287,6 +287,7 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     if (m_referenceScale) m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetMatrix();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+    slotHScroll();
 }
 
 double
@@ -306,6 +307,7 @@ MatrixWidget::slotZoomInFromPanner()
     m_view->setMatrix(m);
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
+    slotHScroll();
 }
 
 void
@@ -319,6 +321,7 @@ MatrixWidget::slotZoomOutFromPanner()
     m_view->setMatrix(m);
     m_pianoView->setMatrix(m);
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() * m_vZoomFactor);
+    slotHScroll();
 }
 
 void
@@ -331,10 +334,11 @@ MatrixWidget::slotHScroll()
     int x = topLeft.x() * m_hZoomFactor;
 
     // Scroll rulers accordingly
-    m_topStandardRuler->slotScrollHoriz(x);
-    m_bottomStandardRuler->slotScrollHoriz(x);
-    m_tempoRuler->slotScrollHoriz(x);
-    m_chordNameRuler->slotScrollHoriz(x);
+    // ( -2 : to fix a small offset between view and rulers)
+    m_topStandardRuler->slotScrollHoriz(x - 2);
+    m_bottomStandardRuler->slotScrollHoriz(x - 2);
+    m_tempoRuler->slotScrollHoriz(x - 2);
+    m_chordNameRuler->slotScrollHoriz(x - 2);
 }
 
 EventSelection *

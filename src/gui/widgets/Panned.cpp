@@ -59,6 +59,7 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     RG_DEBUG << "Panned::drawForeground: pr = " << pr << endl;
 
     if (pr != m_pannedRect) {
+        if (pr.x() != m_pannedRect.x()) emit pannedContentsScrolled();
         m_pannedRect = pr;
         emit pannedRectChanged(pr);
     }
@@ -75,15 +76,6 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
         paint->drawLine(top, bottom);
         paint->restore();
     }
-}
-
-void
-Panned::scrollContentsBy(int dx, int dy)
-{
-    // used to scroll rulers
-    emit pannedContentsScrolled(dx, dy);
-
-    QGraphicsView::scrollContentsBy(dx, dy);
 }
 
 void

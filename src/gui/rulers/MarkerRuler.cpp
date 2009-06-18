@@ -128,7 +128,7 @@ void
 MarkerRuler::scrollHoriz(int x)
 {
     m_currentXOffset = static_cast<int>( -x / getHScaleFactor());
-    repaint();
+    update();
 }
 
 QSize 
