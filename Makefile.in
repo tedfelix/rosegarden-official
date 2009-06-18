@@ -128,7 +128,7 @@ distclean:	clean
 	rm -f aclocal.m4 acinclude.m4
 	rm -f config.log config.status configure
 	rm -f dependencies dependencies.bak
-	rm -f data/InstrumentStrings.cpp data/AutoloadStrings.cpp data/QMenuStrings.cpp
+	rm -f data/InstrumentStrings.cpp data/AutoloadStrings.cpp data/QMenuStrings.cpp data/data.cpp
 	rm -f src/gui/dialogs/RosegardenTransportUi.h
 	rm -f src/gui/studio/DeviceManagerDialogUi.h
 	rm -f Makefile
