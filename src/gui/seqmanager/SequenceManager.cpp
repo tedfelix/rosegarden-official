@@ -1226,7 +1226,7 @@ SequenceManager::fastForwardToEnd()
     SEQMAN_DEBUG << "SequenceManager::fastForwardToEnd()" << endl;
 
     Composition &comp = m_doc->getComposition();
-    m_doc->slotSetPointerPosition(comp.getDuration());
+    m_doc->slotSetPointerPosition(comp.getEndMarker());
 }
 
 void

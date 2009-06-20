@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,15 +20,22 @@
 #ifndef _RG_TRANZPORTCLIENT_H_
 #define _RG_TRANZPORTCLIENT_H_
 
+#include "base/Composition.h"
+#include "misc/Debug.h"
+
 #include <QObject>
+
+#include <queue>
 
 class QSocketNotifier;
 
 namespace Rosegarden
 {
+  
   class RosegardenMainWindow;
-
-  class TranzportClient : public QObject
+  class RosegardenDocument;
+  
+  class TranzportClient : public QObject, public CompositionObserver
   {
       Q_OBJECT
       public:
@@ -39,7 +45,18 @@ namespace Rosegarden
 
     public slots:
       void readData();
+      
+      void 
+      documentChanged(RosegardenDocument*);
+      
+      void writeCommandQueue();
 
+      void
+      pointerPositionChanged(timeT time);
+      
+      void
+      loopChanged(timeT t1,
+                  timeT t2);
     signals:
     
       void play();
@@ -54,7 +71,26 @@ namespace Rosegarden
       void trackUp();
       void trackMute();
       void trackRecord();
-         
+      void solo(bool);
+      void undo();
+      void redo();
+      
+      void setPosition(timeT);
+      
+    public:
+      
+      virtual void 
+      soloChanged(const Composition *, 
+                  bool  solo,
+                  TrackId  selectedTrack );
+            
+      virtual void 
+      trackChanged(const Composition *c,
+                   Track* t);
+          
+      void
+      stateUpdate();
+      
     public:
       enum ButtonMasks 
       {        
@@ -94,6 +130,23 @@ namespace Rosegarden
 #undef SWAP
       };
 
+      enum Light
+    {
+      LightRecord = 0,
+      LightTrackrec,
+      LightTrackmute,
+      LightTracksolo,
+      LightAnysolo,
+      LightLoop,
+      LightPunch
+    };
+
+      void
+      LightOn(Light l);
+      
+      void
+      LightOff(Light l);
+      
       enum Row 
       {
         Top,
@@ -106,14 +159,19 @@ namespace Rosegarden
                uint8_t offset = 0);
       
       void 
-      write(const uint8_t* buf);
+      write(uint64_t buf);
       
         
     private:
       int m_descriptor;
-      int m_writedescriptor;
       
-      QSocketNotifier * m_socketNotifier;
+      QSocketNotifier * m_socketReadNotifier;
+      QSocketNotifier* m_socketWriteNotifier;
+
+      bool device_online;
+
+      
+      
       uint8_t previousbuf[8];    
       uint8_t currentbuf[8];
       volatile uint32_t& previous_buttons;
@@ -121,9 +179,14 @@ namespace Rosegarden
       volatile uint8_t& datawheel;
       volatile uint8_t& status;      
       RosegardenMainWindow    *m_rgGUIApp;
+      RosegardenDocument* m_rgDocument;
+      Composition* m_composition;
       static const uint8_t LCDLength = 20;
       TranzportClient(const TranzportClient&);
-     
+      
+      typedef uint64_t CommandType;
+      std::queue<CommandType> commands;
+      
   };
   
     
