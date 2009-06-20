@@ -138,6 +138,10 @@ protected slots:
     void slotEditPaste();
     void slotEditDelete();
 
+    /// Show or hide rulers
+    void slotToggleChordsRuler();
+    void slotToggleTempoRuler();
+
 protected:
     const SnapGrid *getSnapGrid() const;
 

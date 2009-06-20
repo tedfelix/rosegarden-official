@@ -101,6 +101,27 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 
     m_matrixWidget->slotSetPlayTracking(m_tracking);
     updateWindowTitle();
+
+    // Set initial visibility ...
+    bool view;
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+
+    // ... of chord name ruler ...
+    view = settings.value("Chords ruler shown",
+                          findAction("show_chords_ruler")->isChecked()
+                         ).toBool();
+    findAction("show_chords_ruler")->setChecked(view);
+    m_matrixWidget->setChordNameRulerVisible(view);
+
+    // ... and tempo ruler
+    view = settings.value("Tempo ruler shown",
+                          findAction("show_tempo_ruler")->isChecked()
+                         ).toBool();
+    findAction("show_tempo_ruler")->setChecked(view);
+    m_matrixWidget->setTempoRulerVisible(view);
+
+    settings.endGroup();
 }
 
 NewMatrixView::~NewMatrixView()
@@ -862,6 +883,32 @@ NewMatrixView::slotToggleTracking()
 {
     m_tracking = !m_tracking;
     m_matrixWidget->slotSetPlayTracking(m_tracking);
+}
+
+void
+NewMatrixView::slotToggleChordsRuler()
+{
+    bool view = findAction("show_chords_ruler")->isChecked();
+
+    m_matrixWidget->setChordNameRulerVisible(view);
+
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+    settings.setValue("Chords ruler shown", view);
+    settings.endGroup();
+}
+
+void
+NewMatrixView::slotToggleTempoRuler()
+{
+    bool view = findAction("show_tempo_ruler")->isChecked();
+
+    m_matrixWidget->setTempoRulerVisible(view);
+
+    QSettings settings;
+    settings.beginGroup(MatrixViewConfigGroup);
+    settings.setValue("Tempo ruler shown", view);
+    settings.endGroup();
 }
 
 }

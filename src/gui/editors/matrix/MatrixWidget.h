@@ -92,6 +92,9 @@ public:
     Segment *getCurrentSegment();
     bool segmentsContainNotes() const;
 
+    void setTempoRulerVisible(bool visible);
+    void setChordNameRulerVisible(bool visible);
+
 signals:
     void editTriggerSegment(int);
 

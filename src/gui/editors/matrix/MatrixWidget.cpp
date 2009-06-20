@@ -84,6 +84,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_localMapping(0),
     m_topStandardRuler(0),
     m_bottomStandardRuler(0),
+    m_tempoRuler(0),
+    m_chordNameRuler(0),
     m_layout(0)
 {
     m_layout = new QGridLayout;
@@ -568,6 +570,21 @@ MatrixWidget::slotPointerPositionChanged(timeT t)
         m_view->slotEnsurePositionPointerInView(fromDocument);
     }
 }
+
+void
+MatrixWidget::setTempoRulerVisible(bool visible)
+{
+    if (visible) m_tempoRuler->show();
+    else m_tempoRuler->hide();
+}
+
+void
+MatrixWidget::setChordNameRulerVisible(bool visible)
+{
+    if (visible) m_chordNameRuler->show();
+    else m_chordNameRuler->hide();
+}
+
 
 }
 
