@@ -92,6 +92,16 @@ EventSelection::~EventSelection()
     m_originalSegment.removeObserver(this);
 }
 
+bool EventSelection::operator==(const EventSelection &s)
+{
+    if (&m_originalSegment != &s.m_originalSegment) return false;
+    if (m_beginTime != s.m_beginTime) return false;
+    if (m_endTime != s.m_endTime) return false;
+    if (m_haveRealStartTime != s.m_haveRealStartTime) return false;
+    if (m_segmentEvents != s.m_segmentEvents) return false;
+    return true;
+}
+
 void EventSelection::addObserver(EventSelectionObserver *obs) { 
     m_observers.push_back(obs); 
 }
@@ -189,13 +199,13 @@ EventSelection::getRanges() const
 
     while (j != k) {
 
-        for (j = i; j != k && contains(*j); ++j);
+        for (j = i; j != k && contains(*j); ++j) { }
 
         if (j != i) {
             ranges.push_back(RangeList::value_type(i, j));
 	}
 
-	for (i = j; i != k && !contains(*i); ++i);
+	for (i = j; i != k && !contains(*i); ++i) { }
 	j = i;
     }
 

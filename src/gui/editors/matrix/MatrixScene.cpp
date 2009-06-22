@@ -578,13 +578,15 @@ void
 MatrixScene::setSelection(EventSelection *s,
                           bool preview)
 {
-    if (m_selection) {
-        setSelectionElementStatus(m_selection, false);
-    }
+    if (!m_selection && !s) return;
+    if (m_selection && s && (m_selection == s || *m_selection == *s)) return;
 
-    if (s != m_selection) {
-        delete m_selection;
-        m_selection = s;
+    EventSelection *oldSelection = m_selection;
+    m_selection = s;
+
+    if (oldSelection) {
+        setSelectionElementStatus(oldSelection, false);
+        delete oldSelection;
     }
     
     if (m_selection) {

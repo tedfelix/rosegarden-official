@@ -436,6 +436,14 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
 }
 
 void
+NotationStaff::renderElements(timeT from, timeT to)
+{
+    NotationElementList::iterator i = getViewElementList()->findTime(from);
+    NotationElementList::iterator j = getViewElementList()->findTime(to);
+    renderElements(i, j);
+}
+
+void
 NotationStaff::renderElements(NotationElementList::iterator from,
                               NotationElementList::iterator to)
 {
@@ -947,7 +955,9 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         FitPolicy policy = PretendItFittedAllAlong;
 
-        NOTATION_DEBUG << "renderSingleElement: Inspecting a thingy" << endl;
+        NOTATION_DEBUG << "renderSingleElement: Inspecting something at " << elt->event()->getAbsoluteTime() << endl;
+
+        NOTATION_DEBUG << "NotationStaff::renderSingleElement: Setting selected at " << elt->event()->getAbsoluteTime() << " to " << selected << endl;
 
         if (elt->isNote()) {
 
@@ -1310,8 +1320,6 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         } else {
             elt->removeItem();
         }
-
-        //	NOTATION_DEBUG << "NotationStaff::renderSingleElement: Setting selected at " << elt->getAbsoluteTime() << " to " << selected << endl;
 
     } catch (...) {
         std::cerr << "Event lacks the proper properties: " << std::endl;
@@ -1889,7 +1897,6 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
     }
 
 }
-
 
 void
 NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)

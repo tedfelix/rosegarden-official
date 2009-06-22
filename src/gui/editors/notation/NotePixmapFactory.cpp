@@ -3370,7 +3370,7 @@ NotePixmapFactory::createPixmap(int width, int height)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeItem(QPoint hotspot)
 {
-    NOTATION_DEBUG << "NotePixmapFactory::makeItem(" << hotspot << ")" << endl;
+//    NOTATION_DEBUG << "NotePixmapFactory::makeItem(" << hotspot << ")" << endl;
 
     if (!m_generatedPixmap->isNull()) {
         m_p->end();
@@ -3388,7 +3388,7 @@ NotePixmapFactory::makeItem(QPoint hotspot)
     p->setPixmap(*m_generatedPixmap);
     p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
 
-    NOTATION_DEBUG << "NotePixmapFactory::makeItem: item = " << p << " (scene = " << p->scene() << ")" << endl;
+//    NOTATION_DEBUG << "NotePixmapFactory::makeItem: item = " << p << " (scene = " << p->scene() << ")" << endl;
 
     delete m_generatedPixmap;
 //    delete m_generatedMask; //!!! lose

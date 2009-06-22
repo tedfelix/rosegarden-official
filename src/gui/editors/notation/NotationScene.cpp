@@ -325,11 +325,11 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         }
         if (clefEvent) nme.clef = Clef(*clefEvent);
 
-        std::cerr << "clef = " << nme.clef.getClefType() << " (have = " << (clefEvent != 0) << ")" << std::endl;
+//        std::cerr << "clef = " << nme.clef.getClefType() << " (have = " << (clefEvent != 0) << ")" << std::endl;
 
         if (keyEvent) nme.key = ::Rosegarden::Key(*keyEvent);
 
-        std::cerr << "key = " << nme.key.getName() << " (have = " << (keyEvent != 0) << ")" << std::endl;
+//        std::cerr << "key = " << nme.key.getName() << " (have = " << (keyEvent != 0) << ")" << std::endl;
 
         nme.time = nme.staff->getTimeAtSceneCoords(sx, sy);
         nme.height = nme.staff->getHeightAtSceneCoords(sx, sy);
@@ -416,7 +416,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         nme.exact = true;
     }
     
-
+/*
     NOTATION_DEBUG << "NotationScene::setupMouseEvent: sx = " << sx
                    << ", sy = " << sy
                    << ", modifiers = " << nme.modifiers
@@ -429,6 +429,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                    << ", time = " << nme.time
                    << ", height = " << nme.height
                    << endl;
+*/
 }
 
 void
@@ -1074,20 +1075,22 @@ NotationScene::setSelection(EventSelection *s,
 {
     NOTATION_DEBUG << "NotationScene::setSelection: " << s << endl;
 
-    if (m_selection) {
-        setSelectionElementStatus(m_selection, false);
-    }
+    if (!m_selection && !s) return;
+    if (m_selection && s && (m_selection == s || *m_selection == *s)) return;
 
-    if (s != m_selection) {
-        delete m_selection;
-        m_selection = s;
+    EventSelection *oldSelection = m_selection;
+    m_selection = s;
+
+    if (oldSelection) {
+        setSelectionElementStatus(oldSelection, false);
+        delete oldSelection;
     }
     
     if (m_selection) {
         setSelectionElementStatus(m_selection, true, preview);
     }
 
-    emit selectionChanged(s);
+    emit selectionChanged(m_selection);
     emit selectionChanged();
 }
 
@@ -1156,7 +1159,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
         if (staffi == staff->getViewElementList()->end()) continue;
         
         NotationElement *el = static_cast<NotationElement *>(*staffi);
-        
+
         el->setSelected(set);
 
         if (set && preview) {
@@ -1172,9 +1175,9 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
         }
     }
 
-    RG_DEBUG << "NotationScene::setSelectionElementStatus: from = " << from << ", to = " << to << endl;
-    
-    staff->regenerate(from, to, false);
+    NOTATION_DEBUG << "NotationScene::setSelectionElementStatus: from = " << from << ", to = " << to << endl;
+  
+    staff->renderElements(from, to);
 }
 
 void

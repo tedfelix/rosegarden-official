@@ -62,6 +62,8 @@ public:
 
     virtual ~EventSelection();
 
+    bool operator==(const EventSelection &);
+
     /**
      *
      */

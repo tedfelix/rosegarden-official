@@ -152,9 +152,10 @@ Panner::paintEvent(QPaintEvent *e)
 }
 
 void
-Panner::updateScene(const QList<QRectF> &)
+Panner::updateScene(const QList<QRectF> &rects)
 {
     if (!m_cache.isNull()) m_cache = QPixmap();
+    QGraphicsView::updateScene(rects);
 }
 
 void

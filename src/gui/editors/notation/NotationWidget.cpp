@@ -290,7 +290,7 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 void
 NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 {
-    if (!m_currentTool) return;
+    if (!m_currentTool || m_inMove) return;
     NotationTool::FollowMode mode = m_currentTool->handleMouseMove(e);
     
     if (mode != NotationTool::NoFollow) {

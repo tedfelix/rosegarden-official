@@ -268,14 +268,10 @@ NotationSelector::handleMouseMove(const NotationMouseEvent *e)
     } else {
 
         // Qt rectangle dimensions appear to be 1-based
-        if (w > 0)
-            ++w;
-        else
-            --w;
-        if (h > 0)
-            ++h;
-        else
-            --h;
+        if (w > 0) ++w;
+        else --w;
+        if (h > 0) ++h;
+        else --h;
 
         QPointF p0(m_selectionOrigin);
         QPointF p1(e->sceneX, e->sceneY);
@@ -750,7 +746,7 @@ void NotationSelector::setViewCurrentSelection(bool preview)
             m_selectionToMerge->getSegment() == selection->getSegment()) {
             selection->addFromSelection(m_selectionToMerge);
         } else {
-            return ;
+            return;
         }
     }
 

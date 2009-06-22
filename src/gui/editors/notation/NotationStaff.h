@@ -111,6 +111,8 @@ public:
     virtual void renderElements(NotationElementList::iterator from,
                                 NotationElementList::iterator to);
 
+    virtual void renderElements(timeT from, timeT to);
+
     
     /**
      * Assign suitable coordinates to the elements on the staff,

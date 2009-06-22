@@ -304,7 +304,7 @@ StaffLayout::getHeightOfRow() const
 bool
 StaffLayout::containsSceneCoords(double x, int y) const
 {
-    std::cerr << "StaffLayout::containsSceneCoords(" << x << "," << y << ")" << std::endl;
+//    std::cerr << "StaffLayout::containsSceneCoords(" << x << "," << y << ")" << std::endl;
 
     switch (m_pageMode) {
 
