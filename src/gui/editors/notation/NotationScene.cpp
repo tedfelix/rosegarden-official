@@ -416,7 +416,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         nme.exact = true;
     }
     
-/*
+
     NOTATION_DEBUG << "NotationScene::setupMouseEvent: sx = " << sx
                    << ", sy = " << sy
                    << ", modifiers = " << nme.modifiers
@@ -429,7 +429,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                    << ", time = " << nme.time
                    << ", height = " << nme.height
                    << endl;
-*/
+
 }
 
 void

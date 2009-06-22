@@ -18,6 +18,7 @@
 #include "Panned.h"
 
 #include "misc/Debug.h"
+#include "base/Profiler.h"
 #include "gui/general/GUIPalette.h"
 
 #include <QScrollBar>
@@ -47,10 +48,20 @@ Panned::resizeEvent(QResizeEvent *)
         emit pannedRectChanged(pr);
     }
 }
+
+void
+Panned::paintEvent(QPaintEvent *e)
+{
+    Profiler profiler("Panned::paintEvent");
+
+    QGraphicsView::paintEvent(e);
+}
     
 void
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
+    Profiler profiler("Panned::drawForeground");
+
     QPointF near = mapToScene(0, 0);
     QPointF far = mapToScene(width(), height());
     QSizeF sz(far.x()-near.x(), far.y()-near.y());
@@ -65,11 +76,11 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     }
 
     if (m_pointerVisible && scene()) {
-        QPoint top = mapFromScene(m_pointerTop);
+        QPoint top = mapFromScene(m_pointerTop + sceneRect().topLeft());
         float height = m_pointerHeight;
         if (height == 0.f) height = scene()->height();
         QPoint bottom = mapFromScene
-            (QPointF(m_pointerTop.x(), m_pointerTop.y() + height));
+            (m_pointerTop + sceneRect().topLeft() + QPointF(0, height));
         paint->save();
         paint->setWorldMatrix(QMatrix());
         paint->setPen(QPen(GUIPalette::getColour(GUIPalette::Pointer), 2));
@@ -87,10 +98,23 @@ Panned::slotSetPannedRect(QRectF pr)
 void
 Panned::slotShowPositionPointer(float x) // scene coord; full height
 {
+    if (m_pointerVisible) {
+        QRect oldRect = QRect(mapFromScene(m_pointerTop),
+                              QSize(4, viewport()->height()));
+        oldRect.moveTop(0);
+        oldRect.moveLeft(oldRect.left() - 1);
+        viewport()->update(oldRect);
+        RG_DEBUG << "Panned::slotShowPositionPointer: old rect " << oldRect << endl;
+    }
     m_pointerVisible = true;
     m_pointerTop = QPointF(x, 0);
     m_pointerHeight = 0;
-    update(); //!!! should update old and new pointer areas only, really
+    QRect newRect = QRect(mapFromScene(m_pointerTop),
+                          QSize(4, viewport()->height()));
+    newRect.moveTop(0);
+    newRect.moveLeft(newRect.left() - 1);
+    viewport()->update(newRect);
+    RG_DEBUG << "Panned::slotShowPositionPointer: new rect " << newRect << endl;
 }
 
 void
@@ -99,7 +123,7 @@ Panned::slotShowPositionPointer(QPointF top, float height) // scene coords
     m_pointerVisible = true;
     m_pointerTop = top;
     m_pointerHeight = height;
-    update(); //!!! should update old and new pointer areas only, really
+    viewport()->update(); //!!! should update old and new pointer areas only, as in the previous function 
 }
 
 void
@@ -163,7 +187,7 @@ void
 Panned::slotHidePositionPointer()
 {
     m_pointerVisible = false;
-    update(); //!!! should update old pointer area only, really
+    viewport()->update(); //!!! should update old pointer area only, really
 }
 
 void

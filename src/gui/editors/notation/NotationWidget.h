@@ -60,6 +60,8 @@ public:
     bool isInTripletMode() { return false; }
     bool isInGraceMode() { return false; }
 
+    bool getPlayTracking() const { return m_playTracking; }
+
     NotationToolBox *getToolBox() { return m_toolBox; }
     NotationTool *getCurrentTool() const;
 
@@ -83,6 +85,7 @@ public slots:
     void slotSetMultiPageMode();
     void slotSetFontName(QString);
     void slotSetFontSize(int);
+    void slotSetPlayTracking(bool);
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
@@ -90,6 +93,7 @@ protected slots:
     void slotDispatchMouseMove(const NotationMouseEvent *);
     void slotDispatchMouseDoubleClick(const NotationMouseEvent *);
 
+    void slotPointerPositionChanged(timeT);
     void slotEnsureLastMouseMoveVisible();
 
     void slotZoomInFromPanner();
@@ -100,6 +104,7 @@ private:
     Panned *m_view; // I own this
     Panner *m_hpanner; // I own this
     NotationScene *m_scene; // I own this
+    bool m_playTracking;
     double m_hZoomFactor;
     double m_vZoomFactor;
     ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)

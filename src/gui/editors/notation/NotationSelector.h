@@ -136,7 +136,7 @@ protected:
     /**
      * Look up the staff containing the given notation element
      */
-    NotationStaff *getStaffForElement(NotationElement *elt);
+//!!!    NotationStaff *getStaffForElement(NotationElement *elt);
 
     void drag(int x, int y, bool final);
     void dragFine(int x, int y, bool final);

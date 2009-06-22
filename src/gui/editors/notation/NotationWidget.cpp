@@ -52,6 +52,7 @@ NotationWidget::NotationWidget() :
     m_document(0),
     m_view(0),
     m_scene(0),
+    m_playTracking(true),
     m_hZoomFactor(1),
     m_vZoomFactor(1),
     m_referenceScale(0)
@@ -88,7 +89,7 @@ NotationWidget::NotationWidget() :
             this, SLOT(slotZoomOutFromPanner()));
 
     m_toolBox = new NotationToolBox(this);
-    
+
     //!!! 
     NoteInserter *noteInserter = dynamic_cast<NoteInserter *>
         (m_toolBox->getTool(NoteInserter::ToolName));
@@ -107,6 +108,11 @@ void
 NotationWidget::setSegments(RosegardenDocument *document,
                             std::vector<Segment *> segments)
 {
+    if (m_document) {
+        disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+                   this, SLOT(slotPointerPositionChanged(timeT)));
+    }
+
     m_document = document;
 
     delete m_referenceScale;
@@ -136,6 +142,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
+    
+    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
 }
 
 void
@@ -265,6 +274,44 @@ NotationWidget::slotSetGuitarChordInserter()
 }
 
 void
+NotationWidget::slotSetPlayTracking(bool tracking)
+{
+    m_playTracking = tracking;
+    if (m_playTracking) {
+        m_view->slotEnsurePositionPointerInView(true);
+    }
+}
+
+void
+NotationWidget::slotPointerPositionChanged(timeT t)
+{
+    QObject *s = sender();
+    bool fromDocument = (s == m_document);
+
+    NOTATION_DEBUG << "NotationWidget::slotPointerPositionChanged to " << t << endl;
+
+    if (!m_scene) return;
+
+    double sceneX = m_scene->getRulerScale()->getXForTime(t);
+
+    // Never move the pointer outside the scene (else the scene will grow)
+    double x1 = m_scene->sceneRect().x();
+    double x2 = x1 + m_scene->sceneRect().width();
+
+    if ((sceneX < x1) || (sceneX > x2)) {
+        m_view->slotHidePositionPointer();
+        m_hpanner->slotHidePositionPointer();
+    } else {
+        m_view->slotShowPositionPointer(sceneX);
+        m_hpanner->slotShowPositionPointer(sceneX);
+    }
+
+    if (getPlayTracking() || !fromDocument) {
+        m_view->slotEnsurePositionPointerInView(fromDocument);
+    }
+}
+
+void
 NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 {
     if (e->buttons & Qt::LeftButton) {
@@ -290,15 +337,13 @@ NotationWidget::slotDispatchMousePress(const NotationMouseEvent *e)
 void
 NotationWidget::slotDispatchMouseMove(const NotationMouseEvent *e)
 {
-    if (!m_currentTool || m_inMove) return;
+    if (!m_currentTool) return;
     NotationTool::FollowMode mode = m_currentTool->handleMouseMove(e);
     
     if (mode != NotationTool::NoFollow) {
         m_lastMouseMoveScenePos = QPointF(e->sceneX, e->sceneY);
-        m_inMove = true;
         slotEnsureLastMouseMoveVisible();
         QTimer::singleShot(100, this, SLOT(slotEnsureLastMouseMoveVisible()));
-        m_inMove = false;
     }
 
     /*!!!
@@ -320,6 +365,7 @@ if (getCanvasView()->isTimeForSmoothScroll()) {
 void
 NotationWidget::slotEnsureLastMouseMoveVisible()
 {
+    if (m_inMove) return;
     m_inMove = true;
     QPointF pos = m_lastMouseMoveScenePos;
     if (m_scene) m_scene->constrainToSegmentArea(pos);

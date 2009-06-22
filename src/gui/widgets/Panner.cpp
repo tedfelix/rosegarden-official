@@ -67,7 +67,7 @@ Panner::slotSetPannedRect(QRectF rect)
     RG_DEBUG << "Panner::slotSetPannedRect(" << rect << ")" << endl;
     
     m_pannedRect = rect;
-    update();
+    viewport()->update();
 }
 
 void
@@ -76,7 +76,7 @@ Panner::slotShowPositionPointer(float x) // scene coord; full height
     m_pointerVisible = true;
     m_pointerTop = QPointF(x, 0);
     m_pointerHeight = 0;
-    update(); //!!! should update old and new pointer areas only, really
+    viewport()->update(); //!!! should update old and new pointer areas only, really
 }
 
 void
@@ -85,14 +85,14 @@ Panner::slotShowPositionPointer(QPointF top, float height) // scene coords
     m_pointerVisible = true;
     m_pointerTop = top;
     m_pointerHeight = height;
-    update(); //!!! should update old and new pointer areas only, really
+    viewport()->update(); //!!! should update old and new pointer areas only, really
 }
 
 void
 Panner::slotHidePositionPointer()
 {
     m_pointerVisible = false;
-    update(); //!!! should update old pointer area only, really
+    viewport()->update(); //!!! should update old pointer area only, really
 }
 
 void
@@ -108,7 +108,7 @@ Panner::slotSceneRectChanged(const QRectF &newRect)
     if (!scene()) return; // spurious
     fitInView(newRect, Qt::KeepAspectRatio);
     m_cache = QPixmap();
-    update();
+    viewport()->update();
 }
 
 void
@@ -220,7 +220,7 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     nr.translate(delta);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
-    update();
+    viewport()->update();
 }
 
 void
@@ -236,7 +236,7 @@ Panner::mouseReleaseEvent(QMouseEvent *e)
     }
 
     m_clicked = false;
-    update();
+    viewport()->update();
 }
 
 void
@@ -258,7 +258,7 @@ Panner::moveTo(QPoint p)
     nr.translate(d, 0);
     slotSetPannedRect(nr);
     emit pannedRectChanged(m_pannedRect);
-    update();
+    viewport()->update();
 }
    
 }

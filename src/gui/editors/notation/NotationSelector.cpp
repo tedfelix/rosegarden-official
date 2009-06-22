@@ -215,6 +215,7 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
 void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 {
+    NOTATION_DEBUG << "NotationSelector::handleMouseTripleClick" << endl;
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
@@ -248,7 +249,13 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 NotationSelector::FollowMode
 NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
+    std::cerr << "NotationSelector::handleMouseMove: staff is " 
+              << m_selectedStaff << ", m_updateRect is " << m_updateRect
+              << std::endl;
+
     if (!m_updateRect) return NoFollow;
+
+    if (!m_selectedStaff) m_selectedStaff = e->staff;
 
     int w = int(e->sceneX - m_selectionRect->x());
     int h = int(e->sceneY - m_selectionRect->y());
@@ -752,21 +759,19 @@ void NotationSelector::setViewCurrentSelection(bool preview)
 
     m_scene->setSelection(selection, preview);
 }
-
+/*!!!
 NotationStaff *
 NotationSelector::getStaffForElement(NotationElement *elt)
 {
-#ifdef NOT_JUST_YET
     for (int i = 0; i < m_nParentView->getStaffCount(); ++i) {
         NotationStaff *staff = m_nParentView->getNotationStaff(i);
         if (staff->getSegment().findSingle(elt->event()) !=
                 staff->getSegment().end())
             return staff;
     }
-#endif
     return 0;
 }
-
+*/
 EventSelection *
 NotationSelector::getEventsInSelectionRect()
 {
@@ -774,6 +779,8 @@ NotationSelector::getEventsInSelectionRect()
     // return 0
     //
     if (!m_selectionRect->isVisible()) return 0;
+
+    if (!m_selectedStaff) return 0;
 
     //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;
@@ -788,7 +795,6 @@ NotationSelector::getEventsInSelectionRect()
     QList<QGraphicsItem *> l = m_selectionRect->collidingItems
         (Qt::IntersectsItemShape);
 
-    if (!m_selectedStaff) return 0;
     Segment& segment = m_selectedStaff->getSegment();
 
     // If we selected the whole staff, force that to happen explicitly
