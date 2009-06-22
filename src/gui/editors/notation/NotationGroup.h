@@ -95,10 +95,10 @@ protected:
 private:
     struct Beam
     {                           // if a beam has a line equation y = mx + c,
-        int  gradient;          // -- then this is m*100 (i.e. a percentage)
-        int  startY;            // -- and this is c
-        bool aboveNotes;
-        bool necessary;
+	float gradient;         // -- then this is m*100 (i.e. a percentage)
+        int   startY;           // -- and this is c
+        bool  aboveNotes;
+        bool  necessary;
     };
 
     Beam calculateBeam(NotationStaff &);

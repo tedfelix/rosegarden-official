@@ -754,7 +754,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                                              barThickness, getLineSpacing(),
                                              0, style);
         m_scene->addItem(eline);
-        eline->setPos(xe, y);
+        eline->setPos(xe + .5, y + .5);
 
         eline->setColour(GUIPalette::getColour(GUIPalette::BarLine));
 
@@ -811,7 +811,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                 (0, 0, barThickness, getBarLineHeight());
             m_scene->addItem(rect);
 
-            rect->setPos(x + gridLine * dx, y);
+            rect->setPos(x + gridLine * dx + .5, y + .5);
 
             double currentGrid = gridLines / double(timeSig.getBeatsPerBar());
 
@@ -839,7 +839,7 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                (0, 0, barThickness, m_connectingLineLength);
         m_scene->addItem(rect);
 
-        rect->setPos(x, y);
+        rect->setPos(x + .5, y + .5);
 
         rect->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
         rect->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingLine));
@@ -919,8 +919,7 @@ StaffLayout::resizeStaffLines()
 
     // Remove all the staff lines that precede the start of the staff
 
-    for (i = 0; i < firstRow; ++i)
-        clearStaffLineRow(i);
+    for (i = 0; i < firstRow; ++i) clearStaffLineRow(i);
 
     // now i == firstRow
 
@@ -948,8 +947,7 @@ StaffLayout::resizeStaffLines()
 
     // now i == lastRow + 1
 
-    while (i < (int)m_staffLines.size())
-        clearStaffLineRow(i++);
+    while (i < (int)m_staffLines.size()) clearStaffLineRow(i++);
 }
 
 void
@@ -1007,7 +1005,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         int barThickness = m_resolution / 12 + 1;
         y = getSceneYForTopLine(row);
         QGraphicsRectItem *line = new QGraphicsRectItem
-            (int(x + length), y, barThickness, m_connectingLineLength);
+            (int(x + length) + .5, y + .5, barThickness, m_connectingLineLength);
         m_scene->addItem(line);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
@@ -1045,14 +1043,14 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
         if (m_lineThickness > 1) {
             QGraphicsRectItem *rline = new QGraphicsRectItem
-                (int(x), y, int(length), m_lineThickness);
+                (int(x) + .5, y + .5, int(length), m_lineThickness);
             m_scene->addItem(rline);
             rline->setPen(lineColour);
             rline->setBrush(lineColour);
             line = rline;
         } else {
             QGraphicsLineItem *lline = new QGraphicsLineItem
-                (int(x), y, int(x + length), y);
+                (int(x) + .5, y + .5, int(x + length) + .5, y + .5);
             m_scene->addItem(lline);
             lline->setPen(QPen(lineColour, 0));
             line = lline;

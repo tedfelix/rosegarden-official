@@ -698,7 +698,7 @@ NoteFontMap::checkFile(int size, QString &src) const
     ResourceFinder rf;
 
     QString pixmapFileMixedName =
-        rf.getResourcePath(QString("fonts/%2/%3")
+        rf.getResourcePath(QString("pixmaps/%2/%3")
                            .arg(m_srcDirectory)
                            .arg(size),
                            QString("%1.xpm")
@@ -709,7 +709,7 @@ NoteFontMap::checkFile(int size, QString &src) const
     if (pixmapFileMixedName == "" || !pixmapFileMixedInfo.isReadable()) {
 
         QString pixmapFileLowerName =
-            rf.getResourcePath(QString("fonts/%2/%3")
+            rf.getResourcePath(QString("pixmaps/%2/%3")
                                .arg(m_srcDirectory.toLower())
                                .arg(size),
                                QString("%1.xpm")
@@ -741,8 +741,7 @@ bool
 NoteFontMap::hasInversion(int, CharName charName) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
-    if (i == m_data.end())
-        return false;
+    if (i == m_data.end()) return false;
     return i->second.hasInversion();
 }
 
@@ -750,12 +749,10 @@ bool
 NoteFontMap::getSrc(int size, CharName charName, QString &src) const
 {
     SymbolDataMap::const_iterator i = m_data.find(charName);
-    if (i == m_data.end())
-        return false;
+    if (i == m_data.end()) return false;
 
     src = i->second.getSrc();
-    if (src == "")
-        return false;
+    if (src == "") return false;
     return checkFile(size, src);
 }
 

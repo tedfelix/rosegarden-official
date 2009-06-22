@@ -35,6 +35,7 @@
 
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
+#include "gui/general/IconLoader.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -60,8 +61,10 @@ NotationWidget::NotationWidget() :
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
-    m_view->setRenderHints(QPainter::TextAntialiasing |
+    m_view->setRenderHints(QPainter::Antialiasing |
+                           QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform);
+    m_view->setBackgroundBrush(QBrush(IconLoader().loadPixmap("bg-paper-grey")));
     layout->addWidget(m_view, 0, 0);
 
     m_hpanner = new Panner;

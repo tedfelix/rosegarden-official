@@ -1044,8 +1044,16 @@ NotationScene::layout(NotationStaff *singleStaff,
 
         NotationStaff *staff = m_staffs[i];
 
-        staff->regenerate(startTime, endTime,
-                          !singleStaff || (singleStaff == staff));
+        // Secondary is true if this regeneration was caused by edits
+        // to another staff, and the content of this staff has not
+        // itself changed.
+
+        //!!! This is the opposite of the logic formerly used!  But it
+        //!!! looks right to me... how will this break it? or else
+        //!!! what was broken before?
+
+        bool secondary = (singleStaff && (singleStaff != staff));
+        staff->regenerate(startTime, endTime, secondary);
 
         //!!! bogus
         m_staffs[i]->setPointerPosition(*m_hlayout, 0);

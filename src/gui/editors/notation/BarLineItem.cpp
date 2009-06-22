@@ -65,7 +65,7 @@ BarLineItem::boundingRect() const
     QRectF rectf(x0 - x(),
                  y0 - y(),
                  x1 - x0 + 1,
-                 y1 - y0 + 1);//!!! +/- 0.5? 
+                 y1 - y0 + 1);
     return rectf;
 }
 
@@ -78,7 +78,8 @@ BarLineItem::paint(QPainter *painter,
     int by = 0;
 
     painter->save();
-    painter->setPen(m_colour);
+//    painter->setPen(QPen(m_colour, 0));
+    painter->setPen(Qt::NoPen);
     painter->setBrush(m_colour);
 
     switch (m_style) {

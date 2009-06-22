@@ -255,8 +255,7 @@ protected:
     void makeRoomForTuplingLine(const NotePixmapParameters &params);
     void drawTuplingLine(const NotePixmapParameters &params);
 
-    void drawShallowLine(int x0, int y0, int x1, int y1, int thickness,
-                         bool smooth);
+    void drawShallowLine(float x0, float y0, float x1, float y1, float thickness);
     void drawTie(bool above, int length, int shift);
 
     void drawBracket(int length, bool left, bool curly, int x, int y);

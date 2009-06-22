@@ -1,0 +1,29 @@
+Type1 fonts for Rosegarden generated from the lilypond sources (lilypond-2.1.0.tar.gz).
+The sources can be found here: http://download.linuxaudio.org/lilypond/sources/v2.1/
+
+Build environment: openSUSE-10.2 with the following packages:
+mftrace-1.2.5-13
+potrace-1.7-35
+t1utils-1.26-285
+tetex-3.0-58
+fontforge-20061220-1
+
+It is very important to install potrace, which is optional if you have installed autotrace. If both programs are installed, mftrace uses potrace by default. The type1 fonts generated using autotrace didn't work for me in openSUSE-10.2
+
+In order to generate the fonts yourself from the lilypond source package, edit the file 'stepmake/metafont-rules.make' replacing in the command line '--pfa' by '--formats=pfa'.
+
+The resulting files reside in the directory 'mf/out'. You need to rename three files:
+
+feta20.pfa -> LilyPond-feta-design20.pfa
+feta-nummer10.pfa -> LilyPond-feta-nummer-design10.pfa
+parmesan20.pfa -> LilyPond-parmesan-design20.pfa
+
+The family name has been also edited:
+
+$ grep "FamilyName" *.pfa
+LilyPond-feta-design20.pfa: /FamilyName (LilyPond-feta-rosegarden) readonly def
+LilyPond-feta-nummer-design10.pfa: /FamilyName (LilyPond-feta-nummer-rosegarden) readonly def
+LilyPond-parmesan-design20.pfa: /FamilyName (LilyPond-parmesan-rosegarden) readonly def
+
+Pedro Lopez-Cabanillas <plcl@users.sf.net>
+13/01/2007

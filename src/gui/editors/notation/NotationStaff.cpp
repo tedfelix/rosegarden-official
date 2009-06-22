@@ -72,7 +72,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     ViewSegment(*segment),
     StaffLayout(scene, this, snapGrid, id,
                 normalFactory->getSize(),
-                normalFactory->getSize() / 16 + 1,  // line thickness
+                normalFactory->getStaffLineThickness(),
                 LinearMode, 0, 0,  // pageMode, pageWidth and pageHeight set later
                 0 // row spacing
         ),
@@ -135,6 +135,7 @@ NotationStaff::setNotePixmapFactories(NotePixmapFactory *normal,
     m_notePixmapFactory = normal;
     m_graceNotePixmapFactory = small;
 
+    setResolution(m_notePixmapFactory->getSize());
     setLineThickness(m_notePixmapFactory->getStaffLineThickness());
 }
 

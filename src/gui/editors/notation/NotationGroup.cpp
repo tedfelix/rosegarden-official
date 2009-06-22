@@ -436,10 +436,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
          (extremeHeight >= std::min(initialHeight, finalHeight)));
 
     if (!linear) {
-        if (diff > 2)
-            diff = 1;
-        else
-            diff = 0;
+        if (diff > 2) diff = 1;
+        else diff = 0;
     }
 
     // Now, we need to judge the height of the beam such that the
@@ -455,33 +453,31 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     //in the direction of the gradient, then we should flatten the
     //gradient.  There may be a better heuristic for this.
 
-    int initialX = (int)(*initialNote)->getLayoutX();
-    int finalDX = (int) (*finalNote)->getLayoutX() - initialX;
-    int extremeDX = (int)(*extremeNote)->getLayoutX() - initialX;
+    double initialX = (*initialNote)->getLayoutX();
+    double finalDX = (*finalNote)->getLayoutX() - initialX;
+    double extremeDX = (*extremeNote)->getLayoutX() - initialX;
 
     int spacing = staff.getNotePixmapFactory(isGrace).getLineSpacing();
 
     beam.gradient = 0;
     if (finalDX > 0) {
         do {
-            if (diff == 0)
-                break;
-            else if (diff > 3)
-                diff = 3;
-            else
-                --diff;
+            if (diff == 0) break;
+            else if (diff > 3) diff = 3;
+            else --diff;
             beam.gradient = (diff * spacing * 100) / (finalDX * 2);
         } while (beam.gradient > 18);
     } else {
         beam.gradient = 0;
     }
-    if (initialHeight < finalHeight)
+    if (initialHeight < finalHeight) {
         beam.gradient = -beam.gradient;
+    }
 
-    int finalY = staff.getLayoutYForHeight(finalHeight);
-    int extremeY = staff.getLayoutYForHeight(extremeHeight);
+    double finalY = staff.getLayoutYForHeight(finalHeight);
+    double extremeY = staff.getLayoutYForHeight(extremeHeight);
 
-    int c0 = staff.getLayoutYForHeight(initialHeight), c1, c2;
+    double c0 = staff.getLayoutYForHeight(initialHeight), c1, c2;
     double dgrad = (double)beam.gradient / 100.0;
 
     Equation::solve(Equation::C, extremeY, dgrad, extremeDX, c1);
@@ -490,9 +486,8 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     using std::max;
     using std::min;
     long shortestNoteType = Note::Quaver;
-    if (!(*getShortestElement())->event()->get
-            <Int>(BaseProperties::NOTE_TYPE,
-                  shortestNoteType)) {
+    if (!(*getShortestElement())->event()->get<Int>(BaseProperties::NOTE_TYPE,
+                                                    shortestNoteType)) {
         NOTATION_DEBUG << "NotationGroup::calculateBeam: WARNING: Shortest element has no note-type; should this be possible?" << endl;
         NOTATION_DEBUG << "(Event dump follows)" << endl;
         (*getShortestElement())->event()->dump(std::cerr);
@@ -771,9 +766,9 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 //		prevEl->event()->setMaybe<Int>(BEAM_NEXT_Y, myY);
 
                 prevEl->event()->setMaybe<Int>
-                (m_properties.BEAM_SECTION_WIDTH, secWidth);
+                    (m_properties.BEAM_SECTION_WIDTH, secWidth);
                 prevEl->event()->setMaybe<Int>
-                (m_properties.BEAM_NEXT_BEAM_COUNT, beamCount);
+                    (m_properties.BEAM_NEXT_BEAM_COUNT, beamCount);
 
                 int prevBeamCount =
                     NoteStyleFactory::getStyleForEvent(prevEl->event())->

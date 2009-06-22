@@ -1300,128 +1300,28 @@ NotePixmapFactory::makeRoomForBeams(const NotePixmapParameters &params)
 }
 
 void
-NotePixmapFactory::drawShallowLine(int x0, int y0, int x1, int y1,
-                                   int thickness, bool smooth)
+NotePixmapFactory::drawShallowLine(float x0, float y0, float x1, float y1,
+                                   float thickness)
 {
-    if (!smooth || m_inPrinterMethod || (y0 == y1)) {
+    m_p->painter().save();
+    m_p->painter().setRenderHints(QPainter::Antialiasing);
 
-        if (!m_inPrinterMethod) {
-            if (m_selected)
-                m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::SelectedElement));
-            else
-                m_p->painter().setBrush(QColor(Qt::black));
-        }
-        if (thickness < 4) {
-            for (int i = 0; i < thickness; ++i) {
-                m_p->drawLine(x0, y0 + i, x1, y1 + i);
-            }
-        } else {
-            Profiler profiler("NotePixmapFactory::drawShallowLine(polygon)");
-            Q3PointArray qp(4);
-            qp.setPoint(0, x0, y0);
-            qp.setPoint(1, x0, y0 + thickness);
-            qp.setPoint(2, x1, y1 + thickness);
-            qp.setPoint(3, x1, y1);
-            m_p->drawPolygon(qp);
-        }
-
-        return ;
+    m_p->painter().setPen(Qt::NoPen);
+    if (m_selected) {
+        m_p->painter().setBrush(GUIPalette::getColour(GUIPalette::SelectedElement));
+    } else {
+        m_p->painter().setBrush(Qt::black);
     }
 
-    Profiler profiler("NotePixmapFactory::drawShallowLine(points)");
+    QPoint p[4];
+    p[0] = QPoint(x0 + 0.5, y0 + 0.5);
+    p[1] = QPoint(x1 + 1.5, y1 + 0.5);
+    p[2] = QPoint(x1 + 1.5, y1 + thickness + 1.5);
+    p[3] = QPoint(x0 + 0.5, y0 + thickness + 1.5);
+    m_p->painter().drawPolygon(p, 4);
 
-    int dv = y1 - y0;
-    int dh = x1 - x0;
-
-    static std::vector<QColor> colours, selectedColours;
-    if (colours.size() == 0) {
-        int h, s, v;
-        QColor c = GUIPalette::getColour(GUIPalette::SelectedElement);
-        c.hsv(&h, &s, &v);
-        for (int step = 0; step < 256; step += (step == 0 ? 63 : 64)) {
-            colours.push_back(QColor( -1, 0, step, QColor::Hsv));
-            selectedColours.push_back(QColor(h, 255 - step, v, QColor::Hsv));
-        }
-    }
-
-    int cx = x0, cy = y0;
-
-    int inc = 1;
-
-    if (dv < 0) {
-        dv = -dv;
-        inc = -1;
-    }
-
-    int g = 2 * dv - dh;
-    int dg1 = 2 * (dv - dh);
-    int dg2 = 2 * dv;
-
-    int segment = (dg2 - dg1) / 4;
-
-    while (cx < x1) {
-
-        if (g > 0) {
-            g += dg1;
-            cy += inc;
-        } else {
-            g += dg2;
-        }
-
-        int quartile = segment ? ((dg2 - g) / segment) : 0;
-        if (quartile < 0)
-            quartile = 0;
-        if (quartile > 3)
-            quartile = 3;
-        if (inc > 0)
-            quartile = 4 - quartile;
-        /*
-                NOTATION_DEBUG
-                    << "x = " << cx << ", y = " << cy
-                    << ", g = " << g << ", dg1 = " << dg1 << ", dg2 = " << dg2
-                    << ", seg = " << segment << ", q = " << quartile << endl;
-        */ 
-        // I don't know enough about Qt to be sure of this, but I
-        // suspect this may be some of the most inefficient code ever
-        // written:
-
-        int off = 0;
-
-        if (m_selected) {
-            m_p->painter().setPen(selectedColours[quartile]);
-        } else {
-            m_p->painter().setPen(colours[quartile]);
-        }
-
-        m_p->drawPoint(cx, cy);
-        drawBeamsCount ++;
-
-        if (thickness > 1) {
-            if (m_selected) {
-                m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
-            } else {
-                m_p->painter().setPen(QColor(Qt::black));
-            }
-        }
-
-        while (++off < thickness) {
-            m_p->drawPoint(cx, cy + off);
-            drawBeamsCount ++;
-        }
-
-        if (m_selected) {
-            m_p->painter().setPen(selectedColours[4 - quartile]);
-        } else {
-            m_p->painter().setPen(colours[4 - quartile]);
-        }
-
-        m_p->drawPoint(cx, cy + off);
-        drawBeamsCount ++;
-
-        ++cx;
-    }
-
-    m_p->painter().setPen(QColor(Qt::black));
+    m_p->painter().restore();
+    return;
 }
 
 void
@@ -1443,7 +1343,6 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
 
     int width = params.m_width;
     double grad = params.m_gradient;
-    bool smooth = m_font->isSmooth();
     int spacing = getLineSpacing();
 
     int sign = (params.m_stemGoesUp ? 1 : -1);
@@ -1451,9 +1350,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     if (!params.m_stemGoesUp)
         startY -= thickness;
 
-    if (!smooth)
-        startY -= sign;
-    else if (grad > -0.01 && grad < 0.01)
+    if (grad > -0.01 && grad < 0.01)
         startY -= sign;
 
     if (m_inPrinterMethod) {
@@ -1463,8 +1360,8 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
     for (int j = 0; j < commonBeamCount; ++j) {
         int y = sign * j * spacing;
         drawShallowLine(startX, startY + y, startX + width,
-                        startY + (int)(width*grad) + y,
-                        thickness, smooth);
+                        startY + width*grad + y,
+                        thickness);
         drawBeamsBeamCount ++;
     }
 
@@ -1479,7 +1376,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
             int y = sign * j * spacing;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
-                            thickness, smooth);
+                            thickness);
             drawBeamsBeamCount ++;
         }
     }
@@ -1492,7 +1389,7 @@ NotePixmapFactory::drawBeams(const QPoint &s1,
             int y = sign * j * spacing;
             drawShallowLine(startX, startY + y, startX + partWidth,
                             startY + (int)(partWidth*grad) + y,
-                            thickness, smooth);
+                            thickness);
             drawBeamsBeamCount ++;
         }
     }
@@ -1516,8 +1413,6 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
     if (gap < 1)
         gap = 1;
 
-    bool smooth = m_font->isSmooth();
-
     int width = m_noteBodyWidth * 4 / 5;
     int sign = (params.m_stemGoesUp ? -1 : 1);
 
@@ -1531,7 +1426,7 @@ NotePixmapFactory::drawSlashes(const QPoint &s0,
         int yoff = width / 2;
         drawShallowLine(m_left + s0.x() - width / 2, y + yoff / 2,
                         m_left + s0.x() + width / 2 + getStemThickness(), y - yoff / 2,
-                        thickness, smooth);
+                        thickness);
         y += sign * (thickness + gap);
     }
 }
@@ -1602,11 +1497,9 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     //    NOTATION_DEBUG << "line: (" << startX << "," << startY << ") -> ("
     //			 << endX << "," << endY << ")" << endl;
 
-    bool smooth = m_font->isSmooth();
-
     if (!params.m_tuplingLineFollowsBeam) {
         m_p->drawLine(startX, startY, startX, startY + tickOffset);
-        drawShallowLine(startX, startY, endX, endY, thickness, smooth);
+        drawShallowLine(startX, startY, endX, endY, thickness);
     }
 
     m_p->painter().setFont(m_tupletCountFont);
@@ -1629,7 +1522,7 @@ NotePixmapFactory::drawTuplingLine(const NotePixmapParameters &params)
     //			 << endX << "," << endY << ")" << endl;
 
     if (!params.m_tuplingLineFollowsBeam) {
-        drawShallowLine(startX, startY, endX, endY, thickness, smooth);
+        drawShallowLine(startX, startY, endX, endY, thickness);
         m_p->drawLine(endX, endY, endX, endY + tickOffset);
     }
 }
@@ -2592,16 +2485,14 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 
     int left = 1, right = length - 2 * nbw / 3 + 1;
 
-    bool smooth = m_font->isSmooth();
-
     if (isCrescendo) {
         drawShallowLine(left, height / 2 - 1,
-                        right, height - thickness - 1, thickness, smooth);
-        drawShallowLine(left, height / 2 - 1, right, 0, thickness, smooth);
+                        right, height - thickness - 1, thickness);
+        drawShallowLine(left, height / 2 - 1, right, 0, thickness);
     } else {
-        drawShallowLine(left, 0, right, height / 2 - 1, thickness, smooth);
+        drawShallowLine(left, 0, right, height / 2 - 1, thickness);
         drawShallowLine(left, height - thickness - 1,
-                        right, height / 2 - 1, thickness, smooth);
+                        right, height / 2 - 1, thickness);
     }
 
     m_p->painter().setPen(QColor(Qt::black));
@@ -3471,6 +3362,7 @@ NotePixmapFactory::createPixmap(int width, int height)
 
     m_p->painter().setPen(QColor(Qt::black));
     m_p->painter().setBrush(QColor(Qt::black));
+
 //    m_p->maskPainter().setPen(QColor(Qt::white));
 //    m_p->maskPainter().setBrush(QColor(Qt::white));
 }
