@@ -1024,6 +1024,8 @@ NotationScene::layout(NotationStaff *singleStaff,
         }
     }
 
+    {
+        Profiler profiler("NotationScene::layout: Reset & scan layouts", true);
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
         
         NotationStaff *staff = m_staffs[i];
@@ -1035,6 +1037,7 @@ NotationScene::layout(NotationStaff *singleStaff,
 
         m_hlayout->scanViewSegment(*staff, startTime, endTime);
         m_vlayout->scanViewSegment(*staff, startTime, endTime);
+    }
     }
 
     m_hlayout->finishLayout(startTime, endTime);
@@ -1079,6 +1082,8 @@ NotationScene::layout(NotationStaff *singleStaff,
 
     setSceneRect(QRectF(0, 0, maxWidth, maxHeight));
 
+    {
+        Profiler profiler("NotationScene::layout: Regenerate", true);
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         NotationStaff *staff = m_staffs[i];
@@ -1097,6 +1102,7 @@ NotationScene::layout(NotationStaff *singleStaff,
         //!!! bogus
         m_staffs[i]->setPointerPosition(*m_hlayout, 0);
         m_staffs[i]->setInsertCursorPosition(*m_hlayout, 0);
+    }
     }
 }
 

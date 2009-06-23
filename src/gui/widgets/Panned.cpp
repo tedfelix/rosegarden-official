@@ -162,7 +162,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     // Is x inside the scene? If not do nothing.
     if ((x < x1) || (x > x2)) return;
 
-    std::cerr << "page = " << page << std::endl;
+//    std::cerr << "page = " << page << std::endl;
 
     int value = horizontalScrollBar()->value();
 
