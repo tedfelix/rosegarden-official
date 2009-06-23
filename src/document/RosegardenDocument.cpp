@@ -585,7 +585,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
         /* was sorry */ QMessageBox::warning(0, "", msg);
         return false;
     }
-
+/*!!!
     ProgressDialog progressDlg(tr("Reading file..."),
                                100,
                                (QWidget*)parent());
@@ -595,6 +595,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
 //    progressDlg.setMinimumDuration(500);
     progressDlg.setAutoReset(true); // we're re-using it for the preview generation
+*/
     setAbsFilePath(fileInfo.absFilePath());
 
     QString errMsg;
@@ -604,7 +605,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
     bool okay = GzipFile::readFromFile(filename, fileContents);
     if (!okay) errMsg = tr("Could not open Rosegarden file");
     else {
-        okay = xmlParse(fileContents, errMsg, &progressDlg,
+        okay = xmlParse(fileContents, errMsg, 0,
                         permanent, cancelled);
     }
 
@@ -656,9 +657,12 @@ bool RosegardenDocument::openDocument(const QString& filename,
     //         ++maxTrackId;
     //     }
 
-    // We might need a progress dialog when we generate previews,
-    // reuse the previous one
-    progressDlg.setLabelText(tr("Generating audio previews..."));
+    // We might need a progress dialog when we generate previews
+    ProgressDialog progressDlg(tr("Generating audio previews..."),
+                               100,
+                               (QWidget*)parent());
+    connect(&progressDlg, SIGNAL(canceled()),
+            &m_audioFileManager, SLOT(slotStopPreview()));
 
     // old qt3:
     //connect(&m_audioFileManager, SIGNAL(setValue(int)),
