@@ -380,7 +380,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         int icode = -1;
         bool ok = false;
-		if ( ! code.isEmpty()) {
+        if (!code.isEmpty()) {
             icode = code.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
@@ -393,7 +393,7 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         int iglyph = -1;
         ok = false;
-		if ( ! glyph.isEmpty()) {
+        if (!glyph.isEmpty()) {
             iglyph = glyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
@@ -408,15 +408,14 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = "symbol must have either src, code, or glyph attribute";
             return false;
         }
-		if ( ! src.isEmpty())
-            symbolData.setSrc(src);
+        if (!src.isEmpty()) symbolData.setSrc(src);
 
         QString inversionSrc = attributes.value("inversion-src");
-		if ( ! inversionSrc.isEmpty())
+        if (!inversionSrc.isEmpty())
             symbolData.setInversionSrc(inversionSrc);
 
         QString inversionCode = attributes.value("inversion-code");
-		if ( ! inversionCode.isEmpty()) {
+        if (!inversionCode.isEmpty()) {
             icode = inversionCode.trimmed().toInt(&ok);
             if (!ok || icode < 0) {
                 m_errorString =
@@ -428,7 +427,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString inversionGlyph = attributes.value("inversion-glyph");
-		if ( ! inversionGlyph.isEmpty()) {
+        if (!inversionGlyph.isEmpty()) {
             iglyph = inversionGlyph.trimmed().toInt(&ok);
             if (!ok || iglyph < 0) {
                 m_errorString =
@@ -440,7 +439,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         QString fontId = attributes.value("font-id");
-		if ( ! fontId.isEmpty()) {
+        if (!fontId.isEmpty()) {
             int n = fontId.trimmed().toInt(&ok);
             if (!ok || n < 0) {
                 m_errorString =
@@ -454,8 +453,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         m_data[symbolName.toUpper()] = symbolData;
 
     } else if (lcName == "font-hotspots") {
-    }
-    else if (lcName == "hotspot") {
+    } else if (lcName == "hotspot") {
 
         QString s = attributes.value("name");
         if (s.isEmpty()) {
@@ -618,7 +616,7 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString s = attributes.value("strategy").toLower();
         SystemFont::Strategy strategy = SystemFont::PreferGlyphs;
 
-		if ( ! s.isEmpty()) {
+        if (!s.isEmpty()) {
             if (s == "prefer-glyphs")
                 strategy = SystemFont::PreferGlyphs;
             else if (s == "prefer-codes")

@@ -24,6 +24,7 @@
 #include "SystemFontXft.h"
 
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "gui/general/ResourceFinder.h"
 #include "NoteFontMap.h"
 
@@ -125,7 +126,7 @@ qfont:
 
     QFontInfo info(qfont);
 
-    NOTATION_DEBUG << "SystemFont::loadSystemFont[Qt]: have family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << endl;
+    std::cerr << "SystemFont::loadSystemFont[Qt]: wanted family " << name << ", got family " << info.family() << " (exactMatch " << info.exactMatch() << ")" << std::endl;
 
     //    return info.exactMatch();
 
