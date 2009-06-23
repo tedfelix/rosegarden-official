@@ -45,9 +45,8 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
 
     QFontMetrics metrics(m_font);
     QChar qc(code);
-
-    QPixmap map;
-    map = QPixmap(metrics.width(qc), metrics.height());
+    QRect bounding = metrics.boundingRect(qc);
+    QPixmap map = QPixmap(bounding.size());
     map.fill(Qt::transparent);
 
     QPainter painter;
@@ -59,7 +58,7 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
 		   << code << " for " << charName
 		   << " using QFont" << endl;
 
-    painter.drawText(0, metrics.ascent(), qc);
+    painter.drawText(-bounding.x(), -bounding.y(), qc);
     
     painter.end();
 
