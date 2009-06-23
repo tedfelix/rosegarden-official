@@ -214,7 +214,7 @@ private:
     void layoutAll();
     void layout(NotationStaff *singleStaff, timeT start, timeT end);
     
-    void setSelectionElementStatus(EventSelection *, bool, bool = false);
+    NotationStaff *setSelectionElementStatus(EventSelection *, bool, bool = false);
 };
 
 }

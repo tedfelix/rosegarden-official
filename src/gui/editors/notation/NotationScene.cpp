@@ -35,6 +35,7 @@
 #include "misc/ConfigGroups.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
+#include "base/Profiler.h"
 
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
@@ -296,6 +297,8 @@ void
 NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                                NotationMouseEvent &nme) const
 {
+    Profiler profiler("NotationScene::setupMouseEvent");
+
     double sx = e->scenePos().x();
     int sy = lrint(e->scenePos().y());
 
@@ -996,8 +999,10 @@ void
 NotationScene::layout(NotationStaff *singleStaff,
                       timeT startTime, timeT endTime)
 {
-    m_hlayout->setViewSegmentCount(m_staffs.size());
+    Profiler profiler("NotationScene::layout", true);
+    std::cerr << "NotationScene::layout: from " << startTime << " to " << endTime << std::endl;
 
+    m_hlayout->setViewSegmentCount(m_staffs.size());
 
     if (startTime == endTime) {
 
@@ -1035,11 +1040,44 @@ NotationScene::layout(NotationStaff *singleStaff,
     m_hlayout->finishLayout(startTime, endTime);
     m_vlayout->finishLayout(startTime, endTime);
 
+    double maxWidth = 0.0;
+    int maxHeight = 0;
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         StaffLayout &staff = *m_staffs[i];
         staff.sizeStaff(*m_hlayout);
+
+        if (staff.getTotalWidth() + staff.getX() > maxWidth) {
+            maxWidth = staff.getTotalWidth() + staff.getX() + 1;
+        }
+
+        if (staff.getTotalHeight() + staff.getY() > maxHeight) {
+            maxHeight = staff.getTotalHeight() + staff.getY() + 1;
+        }
     }
+
+    int topMargin = 0, leftMargin = 0;
+    getPageMargins(leftMargin, topMargin);
+
+    int pageWidth = getPageWidth();
+    int pageHeight = getPageHeight();
+
+    if (m_pageMode == StaffLayout::LinearMode) {
+        maxWidth = ((maxWidth / pageWidth) + 1) * pageWidth;
+        if (maxHeight < pageHeight) {
+            maxHeight = pageHeight;
+        }
+    } else {
+        if (maxWidth < pageWidth) {
+            maxWidth = pageWidth;
+        }
+        if (maxHeight < pageHeight + topMargin*2) {
+            maxHeight = pageHeight + topMargin * 2;
+        }
+    }
+
+    setSceneRect(QRectF(0, 0, maxWidth, maxHeight));
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
@@ -1076,19 +1114,50 @@ NotationScene::setSelection(EventSelection *s,
     NOTATION_DEBUG << "NotationScene::setSelection: " << s << endl;
 
     if (!m_selection && !s) return;
-    if (m_selection && s && (m_selection == s || *m_selection == *s)) return;
+    if (m_selection && s && (m_selection == s || *m_selection == *s)) {
+        std::cerr << "(note: selection is unchanged, doing nothing)" << std::endl;
+        return;
+    }
 
     EventSelection *oldSelection = m_selection;
     m_selection = s;
 
+    NotationStaff *oldStaff = 0, *newStaff = 0;
+
     if (oldSelection) {
-        setSelectionElementStatus(oldSelection, false);
-        delete oldSelection;
+        oldStaff = setSelectionElementStatus(oldSelection, false);
     }
     
     if (m_selection) {
-        setSelectionElementStatus(m_selection, true, preview);
+        newStaff = setSelectionElementStatus(m_selection, true, preview);
     }
+
+    if (oldSelection && m_selection && oldStaff && newStaff &&
+        (oldStaff == newStaff)) {
+
+        timeT oldFrom = oldSelection->getStartTime();
+        timeT oldTo = oldSelection->getEndTime();
+        timeT newFrom = m_selection->getStartTime();
+        timeT newTo = m_selection->getEndTime();
+
+        // if the regions overlap, render once
+        if ((oldFrom <= newFrom && oldTo >= newFrom) ||
+            (newFrom <= oldFrom && newTo >= oldFrom)) {
+            newStaff->renderElements(std::min(oldFrom, newFrom),
+                                     std::max(oldTo, newTo));
+        } else {
+            newStaff->renderElements(oldFrom, oldTo);
+            newStaff->renderElements(newFrom, newTo);
+        }
+    } else if (oldSelection && oldStaff) {
+        oldStaff->renderElements(oldSelection->getStartTime(), 
+                                 oldSelection->getEndTime());
+    } else if (m_selection && newStaff) {
+        newStaff->renderElements(m_selection->getStartTime(), 
+                                 m_selection->getEndTime());
+    }        
+
+    delete oldSelection;
 
     emit selectionChanged(m_selection);
     emit selectionChanged();
@@ -1116,12 +1185,12 @@ NotationScene::setSingleSelectedEvent(Segment *seg,
     setSelection(s, preview);
 }
 
-void
+NotationStaff *
 NotationScene::setSelectionElementStatus(EventSelection *s, 
                                          bool set,
                                          bool preview)
 {
-    if (!s) return;
+    if (!s) return 0;
 
     NotationStaff *staff = 0;
 
@@ -1134,7 +1203,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
         }
     }
 
-    if (!staff) return;
+    if (!staff) return 0;
 
     timeT from = 0;
     timeT to = 0;
@@ -1176,8 +1245,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
     }
 
     NOTATION_DEBUG << "NotationScene::setSelectionElementStatus: from = " << from << ", to = " << to << endl;
-  
-    staff->renderElements(from, to);
+    return staff;
 }
 
 void

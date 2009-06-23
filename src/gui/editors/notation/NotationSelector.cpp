@@ -33,6 +33,7 @@
 #include "base/Selection.h"
 #include "base/ViewElement.h"
 #include "base/BaseProperties.h"
+#include "base/Profiler.h"
 
 #include "commands/edit/MoveAcrossSegmentsCommand.h"
 #include "commands/edit/MoveCommand.h"
@@ -781,6 +782,8 @@ NotationSelector::getEventsInSelectionRect()
     if (!m_selectionRect->isVisible()) return 0;
 
     if (!m_selectedStaff) return 0;
+
+    Profiler profiler("NotationSelector::getEventsInSelectionRect");
 
     //    NOTATION_DEBUG << "Selection x,y: " << m_selectionRect->x() << ","
     //                         << m_selectionRect->y() << "; w,h: " << m_selectionRect->width() << "," << m_selectionRect->height() << endl;

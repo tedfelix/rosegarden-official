@@ -256,7 +256,6 @@ MatrixScene::recreateLines()
             addItem(line);
             m_horizontals.push_back(line);
         }
-//        line->setLine(x0 + 0.5, y + 0.5, x1 + 0.5, y + 0.5);
         line->setLine(x0, y, x1, y);
         line->show();
         ++i;
@@ -265,6 +264,8 @@ MatrixScene::recreateLines()
         m_horizontals[i]->hide();
         ++i;
     }
+
+    setSceneRect(QRectF(x0, 0, x1 - x0, 128 * (m_resolution + 1)));
 
     Composition *c = &m_document->getComposition();
 
