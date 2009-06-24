@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QFontMetrics>
 
 
 namespace Rosegarden
@@ -52,10 +53,11 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
     QVBoxLayout *nameBoxLayout = new QVBoxLayout;
     vboxLayout->addWidget(nameBox);
 
-    nameBoxLayout->addWidget(
-        new QLabel(tr("The name is used to identify both the ornament\n"
-                        "and the triggered segment that stores\n"
-                        "the ornament's notes."), nameBox));
+    QLabel *lbl =  new QLabel(tr("<qt>The name is used to identify both the ornament "
+                                 "and the triggered segment that stores "
+                                 "the ornament's notes.</qt>"), nameBox);
+    lbl->setWordWrap(true);                                 
+    nameBoxLayout->addWidget(lbl);
 
     QWidget *hbox = new QWidget;
     QHBoxLayout *hboxLayout = new QHBoxLayout;
@@ -66,6 +68,9 @@ MakeOrnamentDialog::MakeOrnamentDialog(QWidget *parent,
     hboxLayout->addWidget(child_3);
 
     m_name = new LineEdit(defaultName);
+    QFontMetrics metrics(m_name->font());
+    int width30 = metrics.width("123456789012345678901234567890");
+    m_name->setFixedWidth(width30);
     hboxLayout->addWidget(m_name);
     hbox->setLayout(hboxLayout);
 
