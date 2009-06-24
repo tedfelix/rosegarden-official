@@ -62,6 +62,7 @@ protected slots:
     void slotEditDelete();
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
+    void slotEditAddClef();
 
     void slotSetSelectTool();
     void slotSetEraseTool();
@@ -81,6 +82,10 @@ protected slots:
     void slotUpdateMenuStates();
 
     void slotTransformsInterpret();
+
+    void slotMakeOrnament();
+    void slotUseOrnament();
+    void slotRemoveOrnament();
 
 private:
     RosegardenDocument *m_document;

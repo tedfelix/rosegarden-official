@@ -31,16 +31,25 @@
 #include "base/Clipboard.h"
 #include "base/Selection.h"
 #include "base/NotationQuantizer.h"
+#include "base/BaseProperties.h"
 
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
 #include "commands/edit/CutAndCloseCommand.h"
 #include "commands/edit/EraseCommand.h"
 #include "commands/edit/PasteEventsCommand.h"
+#include "commands/edit/InsertTriggerNoteCommand.h"
+#include "commands/edit/SetTriggerCommand.h"
+#include "commands/edit/ClearTriggersCommand.h"
+
 #include "commands/notation/InterpretCommand.h"
+
+#include "commands/segment/PasteToTriggerSegmentCommand.h"
 
 #include "gui/dialogs/PasteNotationDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
+#include "gui/dialogs/MakeOrnamentDialog.h"
+#include "gui/dialogs/UseOrnamentDialog.h"
 
 #include "gui/general/IconLoader.h"
 
@@ -1010,7 +1019,159 @@ NewNotationView::slotTransformsInterpret()
               dialog.getInterpretations()));
     }
 }
-    
+
+void
+NewNotationView::slotMakeOrnament()
+{
+    if (!getSelection())
+        return ;
+
+    EventSelection::eventcontainer &ec =
+        getSelection()->getSegmentEvents();
+
+    int basePitch = -1;
+    int baseVelocity = -1;
+//&&& note styles evidently not implemented yet -- boy did I pick a nice easy
+// one to start on
+//&&&    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
+
+    for (EventSelection::eventcontainer::iterator i =
+             ec.begin(); i != ec.end(); ++i) {
+        if ((*i)->isa(Note::EventType)) {
+            if ((*i)->has(BaseProperties::PITCH)) {
+                basePitch = (*i)->get<Int>(BaseProperties::PITCH);
+//&&&                style = NoteStyleFactory::getStyleForEvent(*i);
+                if (baseVelocity != -1) break;
+            }
+            if ((*i)->has(BaseProperties::VELOCITY)) {
+                baseVelocity = (*i)->get<Int>(BaseProperties::VELOCITY);
+                if (basePitch != -1) break;
+            }
+        }
+    }
+
+    Segment *segment = getCurrentSegment();
+
+    timeT absTime = getSelection()->getStartTime();
+    timeT duration = getSelection()->getTotalDuration();
+    Note note(Note::getNearestNote(duration));
+
+    Track *track =
+        segment->getComposition()->getTrackById(segment->getTrack());
+    QString name;
+    int barNo = segment->getComposition()->getBarNumber(absTime);
+    if (track) {
+        name = QString(tr("Ornament track %1 bar %2").arg(track->getPosition() + 1).arg(barNo + 1));
+    } else {
+        name = QString(tr("Ornament bar %1").arg(barNo + 1));
+    }
+
+    MakeOrnamentDialog dialog(this, name, basePitch);
+    if (dialog.exec() != QDialog::Accepted)
+        return ;
+
+    name = dialog.getName();
+    basePitch = dialog.getBasePitch();
+
+    MacroCommand *command = new MacroCommand(tr("Make Ornament"));
+
+    command->addCommand(new CutCommand
+                        (*getSelection(),
+                         getDocument()->getClipboard()));
+
+    command->addCommand(new PasteToTriggerSegmentCommand
+                        (&getDocument()->getComposition(),
+                         getDocument()->getClipboard(),
+                         name, basePitch));
+
+//&&& Nothing is using NoteStyleFactory yet, or evidently NotePixmapFactory
+// either, and this is all way out of scope for a simple "add the slot back"
+// exercise.  It's a little bit of trouble trying to figure out what this did.
+// I guess we need to take the style from the original note we're replacing and
+// apply it to the new trigger note.  At present, none of the note style whatnot
+// seems to work at all, and I'd consider this a fairly minor thing to be
+// missing, but quite a lot of code was devoted to making
+// it work, and it's too much to just comment out a parameter temporarily and
+// ignore that.  We'll have to shelve the whole command for the time being,
+// until after resurrecting the note style stuff, and/or deciding nobody really
+// cares and getting rid of it.  (It's potentially cool, some fixed styles are
+// exported to LilyPond, and it's generally a real feature that's supposed to be
+// supported, but then it has always had terrible problems nobody has paid any
+// attention to in years, and it has always been functionally pretty worthless
+// in the field.  I could go either way, myself.)
+/*    command->addCommand(new InsertTriggerNoteCommand
+                        (segment, absTime, note, basePitch, baseVelocity,
+                         style->getName(),
+                         getDocument()->getComposition().getNextTriggerSegmentId(),
+                         true,
+                         BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
+                         Marks::NoMark)); //!!!  */
+
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
+NewNotationView::slotUseOrnament()
+{
+    // Take an existing note and match an ornament to it.
+
+    if (!getSelection())
+        return ;
+
+    UseOrnamentDialog dialog(this, &getDocument()->getComposition());
+    if (dialog.exec() != QDialog::Accepted)
+        return ;
+
+    CommandHistory::getInstance()->addCommand(new SetTriggerCommand(
+                                                      *getSelection(),
+                                                      dialog.getId(),
+                                                      true,
+                                                      dialog.getRetune(),
+                                                      dialog.getTimeAdjust(),
+                                                      dialog.getMark(),
+                                                      tr("Use Ornament")));
+}
+
+void
+NewNotationView::slotRemoveOrnament()
+{
+    if (!getSelection())
+        return ;
+
+    CommandHistory::getInstance()->addCommand(new ClearTriggersCommand(
+                                                      *getSelection(),
+                                                      tr("Remove Ornaments")));
+}
+
+void NewNotationView::slotEditAddClef()
+{
+// OH BLOODY HELL, TWO FOR TWO. This one depends on the insertion cursor, which
+// we're removing, and I have no idea how any of that is going to work now.
+//
+// Just commenting it out for now.
+/*    Segment *segment = getCurrentSegment();
+    static Clef lastClef;
+    Clef clef;
+    Rosegarden::Key key;
+    timeT insertionTime = getInsertionTime(clef, key);
+
+    ClefDialog dialog(this, m_notePixmapFactory, lastClef);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        ClefDialog::ConversionType conversion = dialog.getConversionType();
+
+        bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
+        bool shouldTranspose = (conversion == ClefDialog::Transpose);
+
+        addCommandToHistory
+            (new ClefInsertionCommand
+             (segment, insertionTime, dialog.getClef(),
+              shouldChangeOctave, shouldTranspose));
+
+        lastClef = dialog.getClef();
+    } */
+}
 
 }
 
