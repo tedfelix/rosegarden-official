@@ -374,14 +374,13 @@ int main(int argc, char *argv[])
         }
     }
     if (!systemSpecified) {
-        // Set the native graphics system unless the user has
+        // Set the raster graphics system unless the user has
         // explicitly asked for something else on the command line.
         // This should (?) override the option with which Qt was
-        // compiled, if it differs from native.  There are numerous
-        // problems with the raster graphics system in current RG,
-        // which is a pity because it's much faster.
-        RG_DEBUG << "Setting native graphics system for Qt 4.5+" << endl;
-        QApplication::setGraphicsSystem("native");
+        // compiled, if it differs from raster.  The raster renderer
+        // is much faster than the usual default "native" renderer
+        RG_DEBUG << "Setting raster graphics system for Qt 4.5+" << endl;
+        QApplication::setGraphicsSystem("raster");
     }
 #endif
 #endif
