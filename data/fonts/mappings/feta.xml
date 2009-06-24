@@ -127,23 +127,23 @@
 
 <font-hotspots>
         <hotspot name="MUSICAL SYMBOL VOID NOTEHEAD">
-		<scaled x="0.15" y="0.5"/>
+		<scaled x="0.1" y="0.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL NOTEHEAD BLACK">
-		<fixed x="2"/>
+		<fixed x="1"/>
                 <scaled y="0.5"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL COMBINING FLAG-1">
-                <fixed x="1"/>
+                <fixed x="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL COMBINING FLAG-2">
-                <fixed x="1"/>
+                <fixed x="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL COMBINING FLAG-3">
-                <fixed x="1"/>
+                <fixed x="0"/>
         </hotspot>
         <hotspot name="MUSICAL SYMBOL COMBINING FLAG-4">
-                <fixed x="1"/>
+                <fixed x="0"/>
         </hotspot>
         <hotspot name="MUSIC FLAT SIGN">
 		<scaled y="0.74"/>

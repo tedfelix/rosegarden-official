@@ -19,9 +19,8 @@
 // "qtextstream.h must be included before any header file that defines Status"
 #include <QTextStream>
 
-#include "SystemFont.h"
-#include "SystemFontQt.h"
-#include "SystemFontXft.h"
+// "qmetatype.h must be included before any header file that defines Bool"
+#include <QMetaType>
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -34,6 +33,10 @@
 #include <QFileInfo>
 #include <QPixmap>
 #include <QString>
+
+#include "SystemFont.h"
+#include "SystemFontQt.h"
+#include "SystemFontXft.h"
 
 #include <iostream>
 

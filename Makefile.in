@@ -28,7 +28,6 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   @DSSI_CFLAGS@ \
 		   @liblo_CFLAGS@ \
 		   @lrdf_CFLAGS@ \
-		   @Xft_CFLAGS@ \
 		   @fftw3f_CFLAGS@ \
 		   @ENDIANNESS@ \
 		   -D'VERSION="$(VERSION)"' \
@@ -49,7 +48,6 @@ LIBS		:= @QT_LIBS@ \
 		   @DSSI_LIBS@ \
 		   @liblo_LIBS@ \
 		   @lrdf_LIBS@ \
-		   @Xft_LIBS@ \
 		   @fftw3f_LIBS@ \
 		   @LIBS@
 

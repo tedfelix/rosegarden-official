@@ -36,7 +36,6 @@ PKG_CHECK_MODULES([ALSA],[alsa >= 0.9],[HAVES="$HAVES -DHAVE_ALSA"],[])
 PKG_CHECK_MODULES([DSSI],[dssi >= 0.9],[],[])
 PKG_CHECK_MODULES([liblo],[liblo >= 0.7],[],[])
 PKG_CHECK_MODULES([lrdf],[lrdf >= 0.2],[],[])
-PKG_CHECK_MODULES([Xft],[xft >= 2.0],[HAVES="$HAVES -DHAVE_XFT"],[])
 PKG_CHECK_MODULES([fftw3f],[fftw3f >= 3.0.0],[],[])
 
 AC_PATH_PROG([PERL],[perl])
