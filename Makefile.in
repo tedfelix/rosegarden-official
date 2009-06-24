@@ -35,6 +35,12 @@ CXXFLAGS	:= @CXXFLAGS@ \
 		   -D'CODENAME="$(CODENAME)"' \
 		   -Isrc
 
+RCC_CXXFLAGS	:= @QT_CXXFLAGS@ \
+                   @ENDIANNESS@ \
+                   @MINIMAL_CFLAGS@
+
+RCCFLAGS	:= -threshold 0 -compress 9
+
 MOCFLAGS	:= @HAVES@ @ENDIANNESS@
 
 LIBS		:= @QT_LIBS@ \
@@ -89,7 +95,10 @@ rosegarden:	$(OBJECTS)
 	$(MOC) $(MOCFLAGS) $< -o $@
 
 %.cpp: %.qrc
-	$(RCC) $< -o $@
+	$(RCC) $(RCCFLAGS) $< -o $@
+
+data/data.o: data/data.cpp
+	$(CXX) -c $(RCC_CXXFLAGS) $< -o $@
 
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) $< -o $@
