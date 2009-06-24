@@ -924,12 +924,12 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
     try {
         m_notePixmapFactory->setNoteStyle
-        (NoteStyleFactory::getStyleForEvent(elt->event()));
+            (NoteStyleFactory::getStyleForEvent(elt->event()));
 
     } catch (NoteStyleFactory::StyleUnavailable u) {
 
         std::cerr << "WARNING: Note style unavailable: "
-        << u.getMessage() << std::endl;
+                  << u.getMessage() << std::endl;
 
         static bool warned = false;
         if (!warned) {

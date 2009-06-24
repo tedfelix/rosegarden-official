@@ -21,6 +21,7 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
+#include "gui/editors/notation/NoteFontFactory.h"
 
 #include <QProcess>
 #include <QMutex>
@@ -152,14 +153,17 @@ StartupTester::run()
     }
     delete m_proc;
         
+    NoteFontFactory::getFontNames(true);
+
+    // unlock this as the very last thing we do in this thread,
+    // so the parent process knows the thread is completed
     m_lilyPondViewMutex.unlock();
 }
 
 bool
 StartupTester::isReady()
 {
-    while (!m_ready)
-        usleep(10000);
+    while (!m_ready) usleep(10000);
     if (m_projectPackagerMutex.tryLock()) {
         m_projectPackagerMutex.unlock();
     } else {

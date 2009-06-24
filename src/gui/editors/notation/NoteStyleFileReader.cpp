@@ -51,7 +51,7 @@ NoteStyleFileReader::NoteStyleFileReader(QString name) :
     QFileInfo fileInfo(styleFileName);
 
     if (styleFileName == "" || !fileInfo.isReadable()) {
-        throw StyleFileReadFailed(tr("Can't open style file %1").arg(styleFileName));
+        throw StyleFileReadFailed(tr("Can't open style file \"%1\" for style \"%2\"").arg(styleFileName).arg(name));
     }
 
     QFile styleFile(styleFileName);

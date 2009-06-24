@@ -46,6 +46,8 @@ public:
 
     static NoteFont *getFont(QString fontName, int size);
 
+    // This is called with forceRescan from the startup tester thread;
+    // at all other times, the cached results are used
     static std::set<QString> getFontNames(bool forceRescan = false);
     static std::vector<int> getAllSizes(QString fontName); // sorted
     static std::vector<int> getScreenSizes(QString fontName); // sorted

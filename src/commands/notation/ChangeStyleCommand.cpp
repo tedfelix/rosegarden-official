@@ -40,9 +40,9 @@ ChangeStyleCommand::registerCommand(CommandRegistry *r)
     for (std::vector<NoteStyleName>::iterator i = styles.begin();
          i != styles.end(); ++i) {
 
-        QString styleQName(*i);
-        r->registerCommand("style_" + styleQName.toLower(),
-                           new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>());
+        r->registerCommand
+            ("style_" + i->toLower(),
+             new ArgumentAndSelectionCommandBuilder<ChangeStyleCommand>());
     }
 }
 
@@ -50,9 +50,19 @@ NoteStyleName
 ChangeStyleCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     QString pfx = "style_";
+
     if (actionName.startsWith(pfx)) {
+
         QString remainder = actionName.right(actionName.length() - pfx.length());
-        return remainder;
+        std::vector<NoteStyleName> styles = 
+            NoteStyleFactory::getAvailableStyleNames();
+
+        for (std::vector<NoteStyleName>::iterator i = styles.begin();
+             i != styles.end(); ++i) {
+            if (i->toLower() == remainder) {
+                return *i;
+            }
+        }
     }
     return "";
 }

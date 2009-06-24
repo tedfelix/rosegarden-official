@@ -95,6 +95,7 @@
 #include "gui/dialogs/CompositionLengthDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
+#include "gui/dialogs/DialogSuppressor.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
@@ -4350,14 +4351,23 @@ void RosegardenMainWindow::slotTestStartupTester()
         message += tr("</ul>");
 
         awaitDialogClearance();
-        
-        QMessageBox::information
-            (m_view,
-             message,
-             tr("Helper programs not found"),
-             "startup-helpers-missing");
+
+        QString shortMessage = tr("Helper programs not found");
+
+        QMessageBox info(m_view);
+        info.setText(shortMessage);
+        info.setInformativeText(message);
+        info.setStandardButtons(QMessageBox::Ok);
+        info.setDefaultButton(QMessageBox::Ok);
+        info.setIcon(QMessageBox::Warning);
+
+        if (!DialogSuppressor::shouldSuppress
+            (&info, "startuphelpersmissing")) {
+            info.exec();
+        }
     }
 
+    m_startupTester->wait();
     delete m_startupTester;
     m_startupTester = 0;
 }

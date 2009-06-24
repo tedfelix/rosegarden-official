@@ -34,20 +34,27 @@
 #include <QString>
 #include <QStringList>
 #include <algorithm>
-
+#include <QMutex>
 
 namespace Rosegarden
 {
+
+static QMutex *
+mutex()
+{
+    static QMutex m;
+    return &m;
+}
 
 std::set<QString>
 NoteFontFactory::getFontNames(bool forceRescan)
 {
     NOTATION_DEBUG << "NoteFontFactory::getFontNames: forceRescan = " << forceRescan << endl;
 
-    if (forceRescan)
-        m_fontNames.clear();
-    if (!m_fontNames.empty())
-        return m_fontNames;
+    QMutexLocker locker(mutex());
+
+    if (forceRescan) m_fontNames.clear();
+    if (!m_fontNames.empty()) return m_fontNames;
 
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -135,6 +142,8 @@ NoteFontFactory::getScreenSizes(QString fontName)
 NoteFont *
 NoteFontFactory::getFont(QString fontName, int size)
 {
+    QMutexLocker locker(mutex());
+
     std::map<std::pair<QString, int>, NoteFont *>::iterator i =
         m_fonts.find(std::pair<QString, int>(fontName, size));
 
@@ -157,23 +166,19 @@ QString
 NoteFontFactory::getDefaultFontName()
 {
     static QString defaultFont = "";
-    if (defaultFont != "")
-        return defaultFont;
+    if (defaultFont != "") return defaultFont;
 
-    std::set
-        <QString> fontNames = getFontNames();
+    std::set<QString> fontNames = getFontNames();
 
-    if (fontNames.find("Feta") != fontNames.end())
+    if (fontNames.find("Feta") != fontNames.end()) {
         defaultFont = "Feta";
-    else {
+    } else {
         fontNames = getFontNames(true);
-        if (fontNames.find("Feta") != fontNames.end())
+        if (fontNames.find("Feta") != fontNames.end()) {
             defaultFont = "Feta";
-        else if (fontNames.find("Feta Pixmaps") != fontNames.end())
-            defaultFont = "Feta Pixmaps";
-        else if (fontNames.size() > 0)
+        } else if (fontNames.size() > 0) {
             defaultFont = *fontNames.begin();
-        else {
+        } else {
             QString message = tr("Can't obtain a default font -- no fonts found");
             StartupLogo::hideIfStillThere();
             QMessageBox::critical(0, "", message);

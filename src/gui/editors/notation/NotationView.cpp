@@ -20,6 +20,7 @@
 #include "NotationWidget.h"
 #include "NotationScene.h"
 #include "NotationCommandRegistry.h"
+#include "NoteStyleFactory.h"
 #include "NoteFontFactory.h"
 #include "NoteInserter.h"
 #include "RestInserter.h"
@@ -1031,16 +1032,15 @@ NewNotationView::slotMakeOrnament()
 
     int basePitch = -1;
     int baseVelocity = -1;
-//&&& note styles evidently not implemented yet -- boy did I pick a nice easy
-// one to start on
-//&&&    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
+
+    NoteStyle *style = NoteStyleFactory::getStyle(NoteStyleFactory::DefaultStyle);
 
     for (EventSelection::eventcontainer::iterator i =
              ec.begin(); i != ec.end(); ++i) {
         if ((*i)->isa(Note::EventType)) {
             if ((*i)->has(BaseProperties::PITCH)) {
                 basePitch = (*i)->get<Int>(BaseProperties::PITCH);
-//&&&                style = NoteStyleFactory::getStyleForEvent(*i);
+                style = NoteStyleFactory::getStyleForEvent(*i);
                 if (baseVelocity != -1) break;
             }
             if ((*i)->has(BaseProperties::VELOCITY)) {
@@ -1051,6 +1051,7 @@ NewNotationView::slotMakeOrnament()
     }
 
     Segment *segment = getCurrentSegment();
+    if (!segment) return;
 
     timeT absTime = getSelection()->getStartTime();
     timeT duration = getSelection()->getTotalDuration();
@@ -1084,28 +1085,13 @@ NewNotationView::slotMakeOrnament()
                          getDocument()->getClipboard(),
                          name, basePitch));
 
-//&&& Nothing is using NoteStyleFactory yet, or evidently NotePixmapFactory
-// either, and this is all way out of scope for a simple "add the slot back"
-// exercise.  It's a little bit of trouble trying to figure out what this did.
-// I guess we need to take the style from the original note we're replacing and
-// apply it to the new trigger note.  At present, none of the note style whatnot
-// seems to work at all, and I'd consider this a fairly minor thing to be
-// missing, but quite a lot of code was devoted to making
-// it work, and it's too much to just comment out a parameter temporarily and
-// ignore that.  We'll have to shelve the whole command for the time being,
-// until after resurrecting the note style stuff, and/or deciding nobody really
-// cares and getting rid of it.  (It's potentially cool, some fixed styles are
-// exported to LilyPond, and it's generally a real feature that's supposed to be
-// supported, but then it has always had terrible problems nobody has paid any
-// attention to in years, and it has always been functionally pretty worthless
-// in the field.  I could go either way, myself.)
-/*    command->addCommand(new InsertTriggerNoteCommand
-                        (segment, absTime, note, basePitch, baseVelocity,
+    command->addCommand(new InsertTriggerNoteCommand
+                        (*segment, absTime, note, basePitch, baseVelocity,
                          style->getName(),
                          getDocument()->getComposition().getNextTriggerSegmentId(),
                          true,
                          BaseProperties::TRIGGER_SEGMENT_ADJUST_SQUISH,
-                         Marks::NoMark)); //!!!  */
+                         Marks::NoMark));
 
     CommandHistory::getInstance()->addCommand(command);
 }

@@ -74,10 +74,9 @@ NoteStyleFactory::getStyle(NoteStyleName name)
 
         } catch (NoteStyleFileReader::StyleFileReadFailed f) {
             std::cerr
-            << "NoteStyleFactory::getStyle: Style file read failed: "
-            << f.getMessage() << std::endl;
-            throw StyleUnavailable("Style file read failed: " +
-                                   f.getMessage());
+                << "NoteStyleFactory::getStyle: Style file read failed: "
+                << f.getMessage() << std::endl;
+            throw StyleUnavailable("Style file read failed: " + f.getMessage());
         }
 
     } else {
