@@ -1,3 +1,4 @@
+
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -68,6 +69,13 @@ protected slots:
     void slotSetEraseTool();
 
     void slotNoteAction();
+    void slotNoAccidental();
+    void slotFollowAccidental();
+    void slotSharp();
+    void slotFlat();
+    void slotNatural();
+    void slotDoubleSharp();
+    void slotDoubleFlat();
     void slotClefAction();
     void slotText();
     void slotGuitarChord();

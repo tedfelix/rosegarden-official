@@ -76,6 +76,7 @@ public slots:
     void slotSetNoteInserter();
     void slotSetRestInserter();
     void slotSetInsertedNote(Note::Type type, int dots);
+    void slotSetAccidental(Accidental accidental, bool follow);
     void slotSetClefInserter();
     void slotSetInsertedClef(Clef type);
     void slotSetTextInserter();

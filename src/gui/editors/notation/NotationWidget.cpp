@@ -249,6 +249,18 @@ NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
 }
 
 void
+NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
+{
+    // You don't have to be in note insertion mode to change the accidental
+    NoteInserter *ni = dynamic_cast<NoteInserter *>
+        (m_toolBox->getTool(NoteInserter::ToolName));
+    if (ni) {
+        ni->slotSetAccidental(accidental, follow);
+        return;
+    }
+}
+
+void
 NotationWidget::slotSetClefInserter()
 {
     slotSetTool(ClefInserter::ToolName);

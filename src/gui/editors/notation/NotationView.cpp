@@ -68,6 +68,8 @@
 namespace Rosegarden
 {
 
+using namespace Accidentals;
+
 NewNotationView::NewNotationView(RosegardenDocument *doc,
                                  std::vector<Segment *> segments,
                                  QWidget *parent) :
@@ -958,6 +960,48 @@ NewNotationView::slotNoteAction()
     slotUpdateMenuStates();
 
     //!!! todo: set status bar indication
+}
+
+void
+NewNotationView::slotNoAccidental()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(NoAccidental, false);
+}
+
+void
+NewNotationView::slotFollowAccidental()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(NoAccidental, true);
+}
+
+void
+NewNotationView::slotSharp()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(Sharp, false);
+}
+
+void
+NewNotationView::slotFlat()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(Flat, false);
+}
+
+void
+NewNotationView::slotNatural()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(Natural, false);
+}
+
+void
+NewNotationView::slotDoubleSharp()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(DoubleSharp, false);
+}
+
+void
+NewNotationView::slotDoubleFlat()
+{
+    if (m_notationWidget) m_notationWidget->slotSetAccidental(DoubleFlat, false);
 }
 
 void
