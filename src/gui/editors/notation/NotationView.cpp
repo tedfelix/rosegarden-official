@@ -44,6 +44,7 @@
 #include "commands/edit/ClearTriggersCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
+#include "commands/notation/ClefInsertionCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 
@@ -51,6 +52,7 @@
 #include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
+#include "gui/dialogs/ClefDialog.h"
 
 #include "gui/general/IconLoader.h"
 
@@ -1108,14 +1110,14 @@ NewNotationView::slotUseOrnament()
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
-    CommandHistory::getInstance()->addCommand(new SetTriggerCommand(
-                                                      *getSelection(),
-                                                      dialog.getId(),
-                                                      true,
-                                                      dialog.getRetune(),
-                                                      dialog.getTimeAdjust(),
-                                                      dialog.getMark(),
-                                                      tr("Use Ornament")));
+    CommandHistory::getInstance()->addCommand(
+            new SetTriggerCommand(*getSelection(),
+                                  dialog.getId(),
+                                  true,
+                                  dialog.getRetune(),
+                                  dialog.getTimeAdjust(),
+                                  dialog.getMark(),
+                                  tr("Use Ornament")));
 }
 
 void
@@ -1124,24 +1126,21 @@ NewNotationView::slotRemoveOrnament()
     if (!getSelection())
         return ;
 
-    CommandHistory::getInstance()->addCommand(new ClearTriggersCommand(
-                                                      *getSelection(),
-                                                      tr("Remove Ornaments")));
+    CommandHistory::getInstance()->addCommand(
+            new ClearTriggersCommand(*getSelection(),
+                                     tr("Remove Ornaments")));
 }
 
 void NewNotationView::slotEditAddClef()
 {
-// OH BLOODY HELL, TWO FOR TWO. This one depends on the insertion cursor, which
-// we're removing, and I have no idea how any of that is going to work now.
-//
-// Just commenting it out for now.
-/*    Segment *segment = getCurrentSegment();
-    static Clef lastClef;
-    Clef clef;
-    Rosegarden::Key key;
-    timeT insertionTime = getInsertionTime(clef, key);
+    Segment *segment = getCurrentSegment();
+    timeT insertionTime = getInsertionTime();
+    static Clef lastClef = segment->getClefAtTime(insertionTime);
 
-    ClefDialog dialog(this, m_notePixmapFactory, lastClef);
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+
+    ClefDialog dialog(this, scene->getNotePixmapFactory(), lastClef);
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -1150,13 +1149,15 @@ void NewNotationView::slotEditAddClef()
         bool shouldChangeOctave = (conversion != ClefDialog::NoConversion);
         bool shouldTranspose = (conversion == ClefDialog::Transpose);
 
-        addCommandToHistory
-            (new ClefInsertionCommand
-             (segment, insertionTime, dialog.getClef(),
-              shouldChangeOctave, shouldTranspose));
+        CommandHistory::getInstance()->addCommand(
+                new ClefInsertionCommand(*segment,
+                                         insertionTime,
+                                         dialog.getClef(),
+                                         shouldChangeOctave,
+                                         shouldTranspose));
 
         lastClef = dialog.getClef();
-    } */
+    } 
 }
 
 }
