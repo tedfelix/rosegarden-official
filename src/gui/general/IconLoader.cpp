@@ -84,10 +84,13 @@ IconLoader::loadPixmap(QString name)
 QPixmap
 IconLoader::loadPixmap(QString dir, QString name)
 {
+/*
     bool light = false;
     QColor bg = QApplication::palette().window().color();
     if (bg.red() + bg.green() + bg.blue() > 384) light = true;
-    
+*/    
+    bool light = true; // do not invert any icons
+
     if (light) {
         QPixmap pmap(QString("%1/%2").arg(dir).arg(name));
         if (pmap.isNull()) {
