@@ -94,6 +94,34 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
 
     connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
             this, SLOT(slotUpdateMenuStates()));
+
+    // Set initial visibility ...
+    bool visible;
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+
+    // ... of chord name ruler, ...
+    visible = settings.value("Chords ruler shown",
+                          findAction("show_chords_ruler")->isChecked()
+                         ).toBool();
+    findAction("show_chords_ruler")->setChecked(visible);
+    m_notationWidget->setChordNameRulerVisible(visible);
+
+    // ... raw note ruler ...
+    visible = settings.value("Raw note ruler shown",
+                          findAction("show_raw_note_ruler")->isChecked()
+                         ).toBool();
+    findAction("show_raw_note_ruler")->setChecked(visible);
+    m_notationWidget->setRawNoteRulerVisible(visible);
+
+    // ... and tempo ruler
+    visible = settings.value("Tempo ruler shown",
+                          findAction("show_tempo_ruler")->isChecked()
+                         ).toBool();
+    findAction("show_tempo_ruler")->setChecked(visible);
+    m_notationWidget->setTempoRulerVisible(visible);
+
+    settings.endGroup();
 }
 
 NewNotationView::~NewNotationView()
@@ -1202,6 +1230,45 @@ void NewNotationView::slotEditAddClef()
 
         lastClef = dialog.getClef();
     } 
+}
+
+void
+NewNotationView::slotToggleChordsRuler()
+{
+    bool visible = findAction("show_chords_ruler")->isChecked();
+
+    m_notationWidget->setChordNameRulerVisible(visible);
+
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("Chords ruler shown", visible);
+    settings.endGroup();
+}
+
+void
+NewNotationView::slotToggleTempoRuler()
+{
+    bool visible = findAction("show_tempo_ruler")->isChecked();
+
+    m_notationWidget->setTempoRulerVisible(visible);
+
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("Tempo ruler shown", visible);
+    settings.endGroup();
+}
+
+void
+NewNotationView::slotToggleRawNoteRuler()
+{
+    bool visible = findAction("show_raw_note_ruler")->isChecked();
+
+    m_notationWidget->setRawNoteRulerVisible(visible);
+
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("Raw note ruler shown", visible);
+    settings.endGroup();
 }
 
 }

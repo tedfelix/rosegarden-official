@@ -95,6 +95,11 @@ protected slots:
     void slotUseOrnament();
     void slotRemoveOrnament();
 
+    /// Show or hide rulers
+    void slotToggleChordsRuler();
+    void slotToggleRawNoteRuler();
+    void slotToggleTempoRuler();
+
 private:
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;

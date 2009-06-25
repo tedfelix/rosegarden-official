@@ -25,6 +25,8 @@
 #include <QWidget>
 #include <vector>
 
+class QGridLayout;
+
 namespace Rosegarden
 {
 
@@ -38,6 +40,10 @@ class NotationMouseEvent;
 class Panner;
 class Panned;
 class ZoomableRulerScale;
+class StandardRuler;
+class TempoRuler;
+class ChordNameRuler;
+class RawNoteRuler;
 
 class NotationWidget : public QWidget,
                        public SelectionManager
@@ -68,6 +74,10 @@ public:
     void setCanvasCursor(QCursor cursor);
 
     Segment *getCurrentSegment();
+
+    void setTempoRulerVisible(bool visible);
+    void setChordNameRulerVisible(bool visible);
+    void setRawNoteRulerVisible(bool visible);
 
 public slots:
     void slotSetTool(QString name);
@@ -100,6 +110,9 @@ protected slots:
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 
+    void slotHScroll();
+    void slotHScrollBarRangeChanged(int min, int max);
+
 private:
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
@@ -113,6 +126,37 @@ private:
     NotationTool *m_currentTool;
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
+
+    StandardRuler *m_topStandardRuler; // I own this
+    StandardRuler *m_bottomStandardRuler; // I own this
+    TempoRuler *m_tempoRuler; // I own this
+    ChordNameRuler *m_chordNameRuler; // I own this
+    RawNoteRuler *m_rawNoteRuler; // I own this
+
+    QGridLayout *m_layout; // I own this
+
+    /**
+     * Widgets vertical positions inside the main QGridLayout
+     */
+    enum {
+        CHORDNAMERULER_ROW,
+        TEMPORULER_ROW,
+        RAWNOTERULER_ROW,
+        TOPRULER_ROW,
+        PANNED_ROW,
+        BOTTOMRULER_ROW,
+        HSLIDER_ROW,
+        PANNER_ROW
+    };
+
+    /**
+     * Widgets horizontal positions inside the main QGridLayout
+     */
+    enum {
+        HEADER_COL,
+        MAIN_COL
+    };
+
 };
 
 }

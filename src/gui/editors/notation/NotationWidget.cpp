@@ -33,9 +33,16 @@
 
 #include "document/RosegardenDocument.h"
 
+#include "gui/application/RosegardenMainWindow.h"
+
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
 #include "gui/general/IconLoader.h"
+
+#include "gui/rulers/StandardRuler.h"
+#include "gui/rulers/TempoRuler.h"
+#include "gui/rulers/ChordNameRuler.h"
+#include "gui/rulers/RawNoteRuler.h"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -55,10 +62,16 @@ NotationWidget::NotationWidget() :
     m_playTracking(true),
     m_hZoomFactor(1),
     m_vZoomFactor(1),
-    m_referenceScale(0)
+    m_referenceScale(0),
+    m_topStandardRuler(0),
+    m_bottomStandardRuler(0),
+    m_tempoRuler(0),
+    m_chordNameRuler(0),
+    m_rawNoteRuler(0),
+    m_layout(0)
 {
-    QGridLayout *layout = new QGridLayout;
-    setLayout(layout);
+    m_layout = new QGridLayout;
+    setLayout(m_layout);
 
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
@@ -66,7 +79,7 @@ NotationWidget::NotationWidget() :
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform);
     m_view->setBackgroundBrush(QBrush(IconLoader().loadPixmap("bg-paper-grey")));
-    layout->addWidget(m_view, 0, 0);
+    m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
 
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(80);
@@ -74,13 +87,28 @@ NotationWidget::NotationWidget() :
     m_hpanner->setRenderHints(0);
 //    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
 //                              QPainter::SmoothPixmapTransform);
-    layout->addWidget(m_hpanner, 1, 0);
+    m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
+
+    // Rulers being not defined still, they can't be added to m_layout.
+    // This will be done in setSegments().
+
+    // Move the scroll bar from m_view to NotationWidget
+    m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_layout->addWidget(m_view->horizontalScrollBar(),
+                        HSLIDER_ROW, MAIN_COL, 1, 1);
+
+    // Hide or show the horizontal scroll bar when needed
+    connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
+            this, SLOT(slotHScrollBarRangeChanged(int, int)));
 
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_view, SIGNAL(pannedContentsScrolled()),
+            this, SLOT(slotHScroll()));
 
     connect(m_hpanner, SIGNAL(zoomIn()),
             this, SLOT(slotZoomInFromPanner()));
@@ -142,6 +170,51 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
+
+    m_topStandardRuler = new StandardRuler(document,
+                                           m_referenceScale, 0, 25,
+                                           false);
+
+    m_bottomStandardRuler = new StandardRuler(document,
+                                               m_referenceScale, 0, 25,
+                                               true);
+
+    m_tempoRuler = new TempoRuler(m_referenceScale,
+                                  document,
+                                  RosegardenMainWindow::self(),
+                                  0.0,    // xorigin
+                                  24,     // height
+                                  true);  // small
+
+    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
+                                          document,
+                                          segments,
+                                          0.0,     // xorigin
+                                          24);     // height
+
+    m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
+                                      segments[0],
+                                      0.0,
+                                      20);  // why not 24 as other rulers ?
+
+
+    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
+
+// Following lines are needed to have loop selection working in loop ruler,
+// but there is no snap grid in notation ...
+//    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+//    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+
+    m_topStandardRuler->connectRulerToDocPointer(document);
+    m_bottomStandardRuler->connectRulerToDocPointer(document);
+
+    m_tempoRuler->connectSignals();
+
+    m_chordNameRuler->setReady();
     
     connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
@@ -421,6 +494,7 @@ NotationWidget::slotZoomInFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
+    slotHScroll();
 }
 
 void
@@ -432,6 +506,56 @@ NotationWidget::slotZoomOutFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
+    slotHScroll();
+}
+
+void
+NotationWidget::slotHScroll()
+{
+    // Get time of the window left
+    QPointF topLeft = m_view->mapToScene(0, 0);
+
+    // Apply zoom correction
+    int x = topLeft.x() * m_hZoomFactor;
+
+    // Scroll rulers accordingly
+    // ( -20 : only OK when zoom is 1.0. To be refined ...)
+    m_topStandardRuler->slotScrollHoriz(x - 20);
+    m_bottomStandardRuler->slotScrollHoriz(x - 20);
+    m_tempoRuler->slotScrollHoriz(x - 20);
+    m_chordNameRuler->slotScrollHoriz(x - 20);
+    m_rawNoteRuler->slotScrollHoriz(x - 20);
+}
+
+void
+NotationWidget::slotHScrollBarRangeChanged(int min, int max)
+{
+    if (max > min) {
+        m_view->horizontalScrollBar()->show(); 
+    } else {
+        m_view->horizontalScrollBar()->hide();
+    }
+}
+
+void
+NotationWidget::setTempoRulerVisible(bool visible)
+{
+    if (visible) m_tempoRuler->show();
+    else m_tempoRuler->hide();
+}
+
+void
+NotationWidget::setChordNameRulerVisible(bool visible)
+{
+    if (visible) m_chordNameRuler->show();
+    else m_chordNameRuler->hide();
+}
+
+void
+NotationWidget::setRawNoteRulerVisible(bool visible)
+{
+    if (visible) m_rawNoteRuler->show();
+    else m_rawNoteRuler->hide();
 }
 
 }
