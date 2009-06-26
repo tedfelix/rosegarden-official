@@ -669,9 +669,15 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
     if (submasterOuts) {
 
         // one fewer than returned here, because the master has a buss object too
-        if (!createSubmasterOutputs
-                (m_alsaDriver->getMappedStudio()->getObjectCount
-                 (MappedObject::AudioBuss) - 1)) {
+	int count =
+	    m_alsaDriver->getMappedStudio()->getObjectCount
+	    (MappedObject::AudioBuss);
+	if (count == 0) {
+	    audit << "Mapped studio contains no master buss!  Probably a symptom of a serious error" << std::endl;
+	} else {
+	    count = count - 1;
+	}
+        if (!createSubmasterOutputs(count)) {
             m_ok = false;
             audit << "Failed to create submaster outs!" << std::endl;
             return ;
