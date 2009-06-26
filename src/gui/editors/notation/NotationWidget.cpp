@@ -382,7 +382,9 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 
     if (!m_scene) return;
 
-    double sceneX = m_scene->getRulerScale()->getXForTime(t);
+    QPointF p = m_scene->snapTimeToStaffPosition(t);
+    //!!! p will also contain sensible Y (although not 100% sensible yet)
+    double sceneX = p.x();
 
     // Never move the pointer outside the scene (else the scene will grow)
     double x1 = m_scene->sceneRect().x();
@@ -488,6 +490,12 @@ void
 NotationWidget::setSelection(EventSelection *selection, bool preview)
 {
     if (m_scene) m_scene->setSelection(selection, preview);
+}
+
+timeT
+NotationWidget::getInsertionTime() const
+{
+    if (m_scene) return m_scene->getInsertionTime();
 }
 
 void

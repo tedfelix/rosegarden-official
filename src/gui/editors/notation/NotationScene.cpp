@@ -579,6 +579,51 @@ NotationScene::timeSignatureChanged(const Composition *c)
     m_timeSignatureChanged = true;
 }
 
+timeT
+NotationScene::getInsertionTime() const
+{
+    if (!m_document) return 0;
+    return snapTimeToNoteBoundary(m_document->getComposition().getPosition());
+}
+
+QPointF
+NotationScene::snapTimeToStaffPosition(timeT t) const
+{
+    t = snapTimeToNoteBoundary(t);
+    NotationStaff *s = 0;
+    if (m_currentStaff < m_staffs.size()) {
+        s = m_staffs[m_currentStaff];
+    }
+    if (!s || !m_hlayout) return QPointF();
+
+    double x = m_hlayout->getXForTimeByEvent(t);
+
+    StaffLayout::StaffLayoutCoords coords =
+        s->getSceneCoordsForLayoutCoords(x, 0);
+
+    //!!! incorrect Y -- actually we want to return sensible insert
+    //!!! cursor end coords -- might not be best way to handle this,
+    //!!! consider
+    return QPointF(coords.first, coords.second);
+}
+
+timeT
+NotationScene::snapTimeToNoteBoundary(timeT t) const
+{
+    NotationStaff *s = 0;
+    if (m_currentStaff < m_staffs.size()) {
+        s = m_staffs[m_currentStaff];
+    }
+    if (!s) return t;
+
+    ViewElementList *v = s->getViewElementList();
+    ViewElementList::iterator i = v->findNearestTime(t);
+    if (i == v->end()) i = v->begin();
+    if (i == v->end()) return t;
+
+    return (*i)->getViewAbsoluteTime();
+}
+
 void
 NotationScene::checkUpdate()
 {

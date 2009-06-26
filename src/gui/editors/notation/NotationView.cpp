@@ -786,6 +786,13 @@ NewNotationView::setSelection(EventSelection *selection, bool preview)
     if (m_notationWidget) m_notationWidget->setSelection(selection, preview);
 }
 
+timeT
+NewNotationView::getInsertionTime() const
+{
+    if (m_notationWidget) m_notationWidget->getInsertionTime();
+    else return 0;
+}
+
 void
 NewNotationView::slotEditCut()
 {

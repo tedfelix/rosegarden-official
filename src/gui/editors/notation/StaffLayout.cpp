@@ -461,7 +461,8 @@ StaffLayout::getBarExtents(double x, int y) const
     }
 
     // failure
-    return QRect(int(getX() + getMargin()), getSceneYForTopOfStaff(), 4, getHeightOfRow());
+    return QRect(int(getX() + getMargin()), getSceneYForTopOfStaff(),
+                 4, getHeightOfRow());
 }
 
 double

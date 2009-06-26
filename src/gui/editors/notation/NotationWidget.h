@@ -62,6 +62,8 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection* s, bool preview);
 
+    timeT getInsertionTime() const;
+
     bool isInChordMode() { return false; }
     bool isInTripletMode() { return false; }
     bool isInGraceMode() { return false; }

@@ -72,6 +72,11 @@ public:
     virtual EventSelection *getSelection() const { return m_selection; }
     virtual void setSelection(EventSelection* s, bool preview);
 
+    timeT getInsertionTime() const;
+
+    QPointF snapTimeToStaffPosition(timeT t) const;
+    timeT snapTimeToNoteBoundary(timeT t) const;
+
     void setSingleSelectedEvent(NotationStaff *staff,
                                 NotationElement *e,
                                 bool preview);
@@ -109,6 +114,7 @@ public:
 
     bool constrainToSegmentArea(QPointF &scenePos);
 
+    //!!! remove
     void slotSetInsertCursorPosition(timeT position,
                                      bool scroll, bool updateNow) { }
 
