@@ -56,6 +56,18 @@ public:
     virtual void updateViewCaption() { }//!!!
     virtual timeT getInsertionTime() { return 0; }//!!!
 
+signals :
+    void play();
+    void stop();
+    void rewindPlayback();
+    void fastForwardPlayback();
+    void rewindPlaybackToBeginning();
+    void fastForwardPlaybackToEnd();
+    void slotToggleSolo();
+    void slotToggleTracking();
+    void panic();
+
+
 protected slots:
     void slotEditCut();
     void slotEditCopy();

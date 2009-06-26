@@ -98,6 +98,9 @@ public slots:
     void slotSetFontSize(int);
     void slotSetPlayTracking(bool);
 
+protected :
+    virtual void showEvent(QShowEvent * event);
+
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
     void slotDispatchMouseRelease(const NotationMouseEvent *);

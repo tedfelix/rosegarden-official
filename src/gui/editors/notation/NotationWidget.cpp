@@ -209,15 +209,20 @@ NotationWidget::setSegments(RosegardenDocument *document,
 //    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
 //    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
 
+    connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
+    connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
+    
+    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
+            this, SLOT(slotPointerPositionChanged(timeT)));
+
     m_topStandardRuler->connectRulerToDocPointer(document);
     m_bottomStandardRuler->connectRulerToDocPointer(document);
 
     m_tempoRuler->connectSignals();
 
     m_chordNameRuler->setReady();
-    
-    connect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-            this, SLOT(slotPointerPositionChanged(timeT)));
 }
 
 void
@@ -515,16 +520,16 @@ NotationWidget::slotHScroll()
     // Get time of the window left
     QPointF topLeft = m_view->mapToScene(0, 0);
 
-    // Apply zoom correction
-    int x = topLeft.x() * m_hZoomFactor;
+    // Apply zoom correction (Offset of 20 found empirically : probably
+    // some improvments are needed ...)
+    int x = (topLeft.x() - 20) * m_hZoomFactor;
 
     // Scroll rulers accordingly
-    // ( -20 : only OK when zoom is 1.0. To be refined ...)
-    m_topStandardRuler->slotScrollHoriz(x - 20);
-    m_bottomStandardRuler->slotScrollHoriz(x - 20);
-    m_tempoRuler->slotScrollHoriz(x - 20);
-    m_chordNameRuler->slotScrollHoriz(x - 20);
-    m_rawNoteRuler->slotScrollHoriz(x - 20);
+    m_topStandardRuler->slotScrollHoriz(x);
+    m_bottomStandardRuler->slotScrollHoriz(x);
+    m_tempoRuler->slotScrollHoriz(x);
+    m_chordNameRuler->slotScrollHoriz(x);
+    m_rawNoteRuler->slotScrollHoriz(x);
 }
 
 void
@@ -556,6 +561,13 @@ NotationWidget::setRawNoteRulerVisible(bool visible)
 {
     if (visible) m_rawNoteRuler->show();
     else m_rawNoteRuler->hide();
+}
+
+void
+NotationWidget::showEvent(QShowEvent * event)
+{
+    QWidget::showEvent(event);
+    slotHScroll();
 }
 
 }

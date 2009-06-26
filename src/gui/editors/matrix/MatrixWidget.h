@@ -131,6 +131,9 @@ protected slots:
 
     void slotHScrollBarRangeChanged(int min, int max);
 
+protected :
+    virtual void showEvent(QShowEvent * event);
+
 private:
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this

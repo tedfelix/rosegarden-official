@@ -590,6 +590,13 @@ MatrixWidget::setChordNameRulerVisible(bool visible)
     else m_chordNameRuler->hide();
 }
 
+void
+MatrixWidget::showEvent(QShowEvent * event)
+{
+    QWidget::showEvent(event);
+    slotHScroll();
+}
+
 
 }
 
