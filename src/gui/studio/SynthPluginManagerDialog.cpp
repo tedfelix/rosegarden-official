@@ -122,11 +122,12 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 //                 QDialogButtonBox::Apply |
 //                 QDialogButtonBox::RestoreDefaults |
             QDialogButtonBox::Help;
-        //
-        //QDialogButtonBox *
-        m_dialogButtonBox = new QDialogButtonBox ( sbuttons, Qt::Horizontal, this );
-        m_dialogButtonBox->setObjectName ( "dialog_base_button_box" );
-        m_mainLayout->addWidget ( m_dialogButtonBox );
+
+        m_dialogButtonBox = new QDialogButtonBox;
+        m_dialogButtonBox->setObjectName("dialog_base_button_box");
+        m_dialogButtonBox->setStandardButtons(sbuttons);
+        m_dialogButtonBox->setOrientation(Qt::Horizontal);
+        m_mainLayout->addWidget(m_dialogButtonBox);
 
         // fist disable the Apply button
         QPushButton * btApply;
