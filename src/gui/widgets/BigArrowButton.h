@@ -27,15 +27,13 @@ namespace Rosegarden {
 class BigArrowButton : public QPushButton
 {
 public:
-    BigArrowButton( QWidget *parent = 0,
-                    Qt::ArrowType arrow = Qt::RightArrow,
-                    const char* name=0 ) :
-                        QPushButton( "", parent )
+    BigArrowButton(Qt::ArrowType arrow = Qt::RightArrow) :
+                       QPushButton()
     { 
         QIcon icon;
         const char *fileName;
 
-        switch(arrow) {
+        switch (arrow) {
             case Qt::RightArrow :
                 fileName = ":/pixmaps/misc/arrow-right.png";
                 break;
@@ -48,11 +46,12 @@ public:
             case Qt::DownArrow :
                 fileName = ":/pixmaps/misc/arrow-down.png";
                 break;
+            case Qt::NoArrow :
             default :
                 fileName = 0;
         }
 
-        if(fileName){
+        if (fileName) {
             icon.addPixmap(QPixmap(QString::fromUtf8(fileName)),
                                           QIcon::Normal, QIcon::Off);
             setIcon(icon);

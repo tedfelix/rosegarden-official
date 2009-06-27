@@ -320,6 +320,14 @@ QMenu,
     border: 1px solid black;
 }
 
+QMenu::separator
+{
+    height: 2px;
+    background: #AAAAAA;
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
 QMenu::item:enabled,
 #MixerWindow QPushButton QMenu::item:enabled,
 #tempoview QMenu::item:enabled,
@@ -1207,6 +1215,7 @@ QToolButton::!enabled,
 #App QToolButton::!enabled,
 #RosegardenParameterArea QToolButton::!enabled
 {
+    color: #FFFFFF;
     background-color: transparent;
 }
 
@@ -1348,14 +1357,9 @@ QComboBox::!enabled,
 QInputDialog QComboBox::!enabled,
 #RosegardenParameterArea QComboBox::!enabled
 {
+    color: #AAAAAA;
     border: 1px solid #808080;
     border-radius: 3px;
-
-    /* This didn't actually work, and I can live with that.  I set the push
-     * button background to just not change, and both of these simply rely on Qt
-     * to provide the sunken effect for disabled text.  Good enough.
-     */
-   /* background-color: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0, stop:0 #808080, stop:1 #999999); */
 }
 
 QComboBox::enabled:hover,

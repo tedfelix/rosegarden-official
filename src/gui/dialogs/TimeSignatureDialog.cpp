@@ -100,9 +100,9 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     }
     groupBox->setLayout(groupBoxLayout);
 
-    BigArrowButton *numDown = new BigArrowButton( numBox , Qt::LeftArrow);
+    BigArrowButton *numDown = new BigArrowButton(Qt::LeftArrow);
     numBoxLayout->addWidget(numDown);
-    BigArrowButton *denomDown = new BigArrowButton( denomBox , Qt::LeftArrow);
+    BigArrowButton *denomDown = new BigArrowButton(Qt::LeftArrow);
     denomBoxLayout->addWidget(denomDown);
 
     m_numLabel = new QLabel(QString("%1").arg(m_timeSignature.getNumerator()), numBox );
@@ -116,10 +116,10 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_numLabel->setFont(*timeSigFont);
     m_denomLabel->setFont(*timeSigFont);
 
-    BigArrowButton *numUp = new BigArrowButton( numBox , Qt::RightArrow);
+    BigArrowButton *numUp = new BigArrowButton(Qt::RightArrow);
     numBoxLayout->addWidget(numUp);
     numBox->setLayout(numBoxLayout);
-    BigArrowButton *denomUp = new BigArrowButton( denomBox , Qt::RightArrow);
+    BigArrowButton *denomUp = new BigArrowButton(Qt::RightArrow);
     denomBoxLayout->addWidget(denomUp);
     denomBox->setLayout(denomBoxLayout);
 

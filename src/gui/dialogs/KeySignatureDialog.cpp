@@ -105,7 +105,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     keyFrame->setLayout(keyFrameLayout);
 
-    BigArrowButton *keyDown = new BigArrowButton(keyBox, Qt::LeftArrow);
+    BigArrowButton *keyDown = new BigArrowButton(Qt::LeftArrow);
     keyBoxLayout->addWidget(keyDown);
     keyDown->setToolTip(tr("Flatten"));
 
@@ -113,7 +113,7 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     keyBoxLayout->addWidget(m_keyLabel);
     m_keyLabel->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
 
-    BigArrowButton *keyUp = new BigArrowButton(keyBox, Qt::RightArrow);
+    BigArrowButton *keyUp = new BigArrowButton(Qt::RightArrow);
     keyBoxLayout->addWidget(keyUp);
     keyBox->setLayout(keyBoxLayout);
     keyUp->setToolTip(tr("Sharpen"));

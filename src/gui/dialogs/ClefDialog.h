@@ -68,7 +68,7 @@ protected:
     NotePixmapFactory *m_notePixmapFactory;
     Clef m_clef;
     
-    QLabel *m_clefLabel;
+    QLabel *m_clefPixmap;
     QLabel *m_clefNameLabel;
 
     BigArrowButton *m_octaveUp;

@@ -176,7 +176,8 @@ Led::paintEvent(QPaintEvent *)
     // drawing the shadow border at 45° (45*16 = 720).
 
     int angle = -720;
-    color = palette().light();
+    //color = palette().light();
+    color = Qt::white;
 
     for ( int arc = 120; arc < 2880; arc += 240 )
     {

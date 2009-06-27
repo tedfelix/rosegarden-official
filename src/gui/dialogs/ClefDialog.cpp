@@ -46,74 +46,96 @@ ClefDialog::ClefDialog(QWidget *parent,
         m_notePixmapFactory(npf),
         m_clef(defaultClef)
 {
-    //setHelp("nv-signatures-clef");
-
     setModal(true);
     setWindowTitle(tr("Clef"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
     QWidget *vbox = new QWidget(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    metagrid->addWidget(vbox, 0, 0);
+    setLayout(vboxLayout);
 
+    QGroupBox *clefBox = new QGroupBox(tr("Clef"));
+    QVBoxLayout *clefBoxLayout = new QVBoxLayout;
+    clefBox->setLayout(clefBoxLayout);
+    vboxLayout->addWidget(clefBox);
 
-    QGroupBox *clefFrame = new QGroupBox( tr("Clef"), vbox );
-    QVBoxLayout *clefFrameLayout = new QVBoxLayout;
-    vboxLayout->addWidget(clefFrame);
+    // first layer (up button) (laying this out in a steries of stacked hbox and
+    // vbox chunks inside a vbox instead of using a grid because I find it
+    // easier to keep my head straight using this kind of layout)
+    QWidget *topChunk = new QWidget;
+    QHBoxLayout *topChunkLayout = new QHBoxLayout;
+    topChunk->setLayout(topChunkLayout);
 
-    QGroupBox *conversionFrame = new QGroupBox( tr("Existing notes following clef change"), vbox );
-    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
-    vboxLayout->addWidget(conversionFrame);
+    m_octaveUp = new BigArrowButton(Qt::UpArrow);
+    topChunkLayout->addWidget(m_octaveUp);
+    m_octaveUp->setToolTip(tr("Up an Octave"));
+    m_octaveUp->setMaximumWidth(50);
 
-    QWidget *clefBox = new QWidget(clefFrame);
-    QHBoxLayout *clefBoxLayout = new QHBoxLayout;
-    clefFrameLayout->addWidget(clefBox);
+    clefBoxLayout->addWidget(topChunk);
 
-    BigArrowButton *clefDown = new BigArrowButton( clefBox , Qt::LeftArrow);
-    clefBoxLayout->addWidget(clefDown);
+    // second layer (left button, clef pixmap, right button)
+    QWidget *midChunk = new QWidget;
+    QHBoxLayout *midChunkLayout = new QHBoxLayout;
+    midChunk->setLayout(midChunkLayout);
+
+    BigArrowButton *clefDown = new BigArrowButton(Qt::LeftArrow);
+    midChunkLayout->addWidget(clefDown);
     clefDown->setToolTip(tr("Lower clef"));
 
-    QWidget *clefLabelBox = new QWidget(clefBox);
-    QVBoxLayout *clefLabelBoxLayout = new QVBoxLayout;
+    m_clefPixmap = new QLabel;
+    QString localStyle = QString("background: white");
+    m_clefPixmap->setStyleSheet(localStyle);
+    midChunkLayout->addWidget(m_clefPixmap);
 
-    m_octaveUp = new BigArrowButton(clefLabelBox, Qt::UpArrow);
-    clefLabelBoxLayout->addWidget(m_octaveUp);
-    m_octaveUp->setToolTip(tr("Up an Octave"));
-
-    m_clefLabel = new QLabel(tr("Clef"), clefLabelBox);
-	clefLabelBoxLayout->addWidget(m_clefLabel, Qt::AlignHCenter | Qt::AlignVCenter );
-//    m_clefLabel->setAlignment(AlignVCenter | AlignHCenter);
-
-    m_octaveDown = new BigArrowButton(clefLabelBox, Qt::DownArrow);
-    clefLabelBoxLayout->addWidget(m_octaveDown);
-    m_octaveDown->setToolTip( tr("Down an Octave") );
-
-    BigArrowButton *clefUp = new BigArrowButton( clefBox , Qt::RightArrow);
-    clefBoxLayout->addWidget(clefUp);
-    clefBox->setLayout(clefBoxLayout);
+    BigArrowButton *clefUp = new BigArrowButton(Qt::RightArrow);
+    midChunkLayout->addWidget(clefUp);
     clefUp->setToolTip( tr("Higher clef") );
 
-    m_clefNameLabel = new QLabel(tr("Clef"), clefLabelBox);
-	clefLabelBoxLayout->addWidget(m_clefNameLabel, Qt::AlignHCenter | Qt::AlignVCenter );
-	clefLabelBox->setLayout(clefLabelBoxLayout);
-//    m_clefNameLabel->setAlignment(AlignVCenter | AlignHCenter);
+    clefBoxLayout->addWidget(midChunk);
+
+    // lower layer (down arrow)
+    QWidget *lowChunk = new QWidget;
+    QHBoxLayout *lowChunkLayout = new QHBoxLayout;
+    lowChunk->setLayout(lowChunkLayout);
+
+    m_octaveDown = new BigArrowButton(Qt::DownArrow);
+    lowChunkLayout->addWidget(m_octaveDown);
+    m_octaveDown->setToolTip(tr("Down an Octave"));
+    m_octaveDown->setMaximumWidth(50);
+
+    clefBoxLayout->addWidget(lowChunk);
+
+    // sub-bass layer to fix the stubborn alignment problem
+    QWidget *basChunk = new QWidget;
+    QHBoxLayout *basChunkLayout = new QHBoxLayout;
+    basChunk->setLayout(basChunkLayout);
+
+    m_clefNameLabel = new QLabel(tr("Clef"));
+    basChunkLayout->addWidget(m_clefNameLabel);
+    m_clefNameLabel->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
+
+    clefBoxLayout->addWidget(basChunk);
+
+    QGroupBox *conversionFrame = new QGroupBox(tr("Existing notes following clef change"));
+    QVBoxLayout *conversionFrameLayout = new QVBoxLayout;
+    conversionFrame->setLayout(conversionFrameLayout);
+    vboxLayout->addWidget(conversionFrame);
 
     if (showConversionOptions) {
-        m_noConversionButton =
-            new QRadioButton
-            (tr("Maintain current pitches"), conversionFrame);
+        m_noConversionButton = new QRadioButton(tr("Maintain current pitches"));
         conversionFrameLayout->addWidget(m_noConversionButton);
-        m_changeOctaveButton =
-            new QRadioButton
-            (tr("Transpose into appropriate octave"), conversionFrame);
+
+        m_changeOctaveButton = new QRadioButton(tr("Transpose into appropriate octave"));
         conversionFrameLayout->addWidget(m_changeOctaveButton);
+
         m_transposeButton = 0;
 
         //!!! why aren't we offering this option? does it not work? too difficult to describe?
-        //	m_transposeButton =
-        //	    new QRadioButton
-        //	    (tr("Maintain current positions on the staff"), conversionFrame);
+        //
+        // (I have no idea, but I doctored the following commented out code in case we ever
+        // happen to want to ressurect it, although this seems unlikely.)
+        //
+        //m_transposeButton = new QRadioButton(tr("Maintain current positions on the staff"));
+        	
         m_changeOctaveButton->setChecked(true);
     } else {
         m_noConversionButton = 0;
@@ -122,19 +144,20 @@ ClefDialog::ClefDialog(QWidget *parent,
         conversionFrame->hide();
     }
 
-    clefFrame->setLayout(clefFrameLayout);
-    conversionFrame->setLayout(conversionFrameLayout);
-    vbox->setLayout(vboxLayout);
-
+    // hook up the up/down left/right buttons
     QObject::connect(clefUp, SIGNAL(clicked()), this, SLOT(slotClefUp()));
     QObject::connect(clefDown, SIGNAL(clicked()), this, SLOT(slotClefDown()));
     QObject::connect(m_octaveUp, SIGNAL(clicked()), this, SLOT(slotOctaveUp()));
     QObject::connect(m_octaveDown, SIGNAL(clicked()), this, SLOT(slotOctaveDown()));
 
     redrawClefPixmap();
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+
+    // the strip of standard buttons at the bottom, sans the help button,
+    // because I'm pretty much the one who would ever make context sensitive
+    // help work, and I think there's little chance of ever doing that.
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    vboxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
@@ -239,8 +262,9 @@ ClefDialog::slotOctaveDown()
 void
 ClefDialog::redrawClefPixmap()
 {
+    std::cerr << "KABOOM?  Where's the kaboom?  There was supposed to be an earth-shattering " << std::endl;
     QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef);
-    m_clefLabel->setPixmap(pmap);
+    m_clefPixmap->setPixmap(pmap);
 
     QString name;
     int octave = m_clef.getOctaveOffset();
@@ -286,6 +310,7 @@ ClefDialog::redrawClefPixmap()
         name = name.arg(tr("Sub-bass"));
 
     m_clefNameLabel->setText(name);
+    std::cerr << "kaboom. " << std::endl;
 }
 
 }
