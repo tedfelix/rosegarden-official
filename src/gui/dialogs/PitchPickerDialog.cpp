@@ -29,32 +29,33 @@
 namespace Rosegarden
 {
 
+// We keep the parent parameter here, because parents control the location at
+// which a dialog pops up, and they influence style inheritance.
 PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString text) :
         QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Pitch Selector"));
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *vBox = new QWidget(this);
     QVBoxLayout *vBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(vBox, 0, 0);
+    setLayout(vBoxLayout);
 
-
-    QFrame *frame = new QFrame( vBox );
+    QFrame *frame = new QFrame;
     vBoxLayout->addWidget(frame);
-    vBox->setLayout(vBoxLayout);
 
     frame->setContentsMargins(10, 10, 10, 10);
-    QGridLayout *layout = new QGridLayout(frame);
-    layout->setSpacing(5);
+    QGridLayout *frameLayout = new QGridLayout;
+    frameLayout->setSpacing(5);
+    frame->setLayout(frameLayout);
 
-    m_pitch = new PitchChooser(text, frame, initialPitch);
-    layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
+    m_pitch = new PitchChooser(text, frame, initialPitch);         // internal class still needs a parent
+    frameLayout->addWidget(m_pitch, 0, 0, 1, 3, Qt::AlignHCenter); // simplified conversion legacy 0-0+1 == 1; 2-0+1 == 3
+
+    // Since we're stacking this in a VBox, we can just stack the button box on
+    // the bottom layer of the main layout, without any top level grid.
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    vBoxLayout->addWidget(buttonBox);
+
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 }
