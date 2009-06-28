@@ -118,7 +118,7 @@ LilyPondExporter::readConfigVariables(void)
 
     m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
     m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false")) ;
-    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
+    m_fontSize = settings.value("lilyfontsize", 20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
     m_exportLyrics = qStrToBool(settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT)) ;
@@ -669,33 +669,7 @@ LilyPondExporter::write()
     // (not the cleanest output but maybe the most reliable)
 
     // paper/font sizes
-    int font;
-    switch (m_fontSize) {
-    case 0 :
-        font = 11;
-        break;
-    case 1 :
-        font = 13;
-        break;
-    case 2 :
-        font = 16;
-        break;
-    case 3 :
-        font = 19;
-        break;
-    case 4 :
-        font = 20;
-        break;
-    case 5 :
-        font = 23;
-        break;
-    case 6 :
-        font = 26;
-        break;
-    default :
-	font = 20; // if settings problem
-    }
-
+    int font = m_fontSize + FONT_OFFSET;
     str << indent(col) << "#(set-global-staff-size " << font << ")" << std::endl;
 
     // write user-specified paper type as default paper size

@@ -153,9 +153,23 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_lilyFontSize = new QComboBox(frameBasic);
     m_lilyFontSize->setToolTip(tr("<qt>Choose the font size of the score.</qt>"));
-    int sizes[] = { 11, 13, 16, 19, 20, 23, 26 };
-    for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
-        m_lilyFontSize->addItem(tr("%1 pt").arg(sizes[i]));
+    for (unsigned int i = 0; i < 24; i++) {
+        bool recommended = false;
+        unsigned int j = i - 6; // should be a constant as in LilyPondExporter;
+                                // we add this to the index to get point sizes
+                                // from 6 to 30
+        switch (j) {
+            case 11:
+            case 13:
+            case 16:
+            case 19:
+            case 20:
+            case 23:
+            case 26: recommended = true; break;
+            default: recommended = false;
+        }
+        QString fontString = tr("%1 pt %2").arg(i).arg(recommended ? tr("(recommended)") : "");
+        m_lilyFontSize->addItem(fontString);
     }
     layoutBasic->addWidget(m_lilyFontSize, 3, 1);
 

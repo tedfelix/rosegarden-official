@@ -174,13 +174,11 @@ private:
 
     bool m_paperLandscape;
     unsigned int m_fontSize;
-    static const unsigned int FONT_11	= 0;
-    static const unsigned int FONT_13	= 1;
-    static const unsigned int FONT_16	= 2;
-    static const unsigned int FONT_19	= 3;
-    static const unsigned int FONT_20	= 4;
-    static const unsigned int FONT_23	= 5;
-    static const unsigned int FONT_26	= 6;
+
+    /** Combo box index starts at 0, but our minimum font size is 6, so we add 6
+     * to the index to arrive at the real font size for export
+     */
+    static const unsigned int FONT_OFFSET = 6;
 
     unsigned int m_exportLyrics;
     static const unsigned int EXPORT_NO_LYRICS = 0;
