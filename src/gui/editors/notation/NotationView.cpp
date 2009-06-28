@@ -24,9 +24,11 @@
 #include "NoteFontFactory.h"
 #include "NoteInserter.h"
 #include "RestInserter.h"
+#include "NotationSelector.h"
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+
 #include "misc/ConfigGroups.h"
 
 #include "base/Clipboard.h"
@@ -42,6 +44,7 @@
 #include "commands/edit/InsertTriggerNoteCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
+#include "commands/edit/ChangeVelocityCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -54,6 +57,8 @@
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/dialogs/ClefDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
+#include "gui/dialogs/EventFilterDialog.h"
+#include "gui/dialogs/EventParameterDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -69,6 +74,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QTemporaryFile>
+#include <QToolBar>
 
 #include <algorithm>
 
@@ -1014,6 +1020,243 @@ NewNotationView::slotEditGeneralPaste()
     }
 
     settings.endGroup();
+}
+
+void NewNotationView::slotPreviewSelection()
+{
+    if (getSelection())
+        return ;
+
+    getDocument()->slotSetLoop(getSelection()->getStartTime(),
+                               getSelection()->getEndTime());
+}
+
+void NewNotationView::slotClearLoop()
+{
+    getDocument()->slotSetLoop(0, 0);
+}
+
+void NewNotationView::slotClearSelection()
+{
+    // Actually we don't clear the selection immediately: if we're
+    // using some tool other than the select tool, then the first
+    // press switches us back to the select tool.
+
+    NotationSelector *selector = dynamic_cast<NotationSelector *>(m_notationWidget->getCurrentTool());
+
+    if (!selector) {
+        slotSetSelectTool();
+    } else {
+        // was setCurrentSelection(0) and we don't seem to have anything like
+        // that now, so I guess we'll create a new empty selection instead, and
+        // setSelection() to that
+        timeT t = 0;
+        Segment *segment = getCurrentSegment();
+        setSelection(new EventSelection(*segment, t, t));
+    }
+}
+
+void NewNotationView::slotEditSelectFromStart()
+{
+    timeT t = getInsertionTime();
+    Segment *segment = getCurrentSegment();
+    setSelection(new EventSelection(*segment,
+                                    segment->getStartTime(),
+                                    t));
+}
+
+void NewNotationView::slotEditSelectToEnd()
+{
+    timeT t = getInsertionTime();
+    Segment *segment = getCurrentSegment();
+    setSelection(new EventSelection(*segment,
+                                    t,
+                                    segment->getEndMarkerTime()));
+}
+
+void NewNotationView::slotEditSelectWholeStaff()
+{
+    Segment *segment = getCurrentSegment();
+    setSelection(new EventSelection(*segment,
+                                    segment->getStartTime(),
+                                    segment->getEndMarkerTime()));
+}
+
+void NewNotationView::slotFilterSelection()
+{
+    NOTATION_DEBUG << "NewNotationView::slotFilterSelection" << endl;
+
+    Segment *segment = getCurrentSegment();
+    EventSelection *existingSelection = getSelection();
+    if (!segment || !existingSelection)
+        return ;
+
+    EventFilterDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        NOTATION_DEBUG << "slotFilterSelection- accepted" << endl;
+
+        bool haveEvent = false;
+
+        EventSelection *newSelection = new EventSelection(*segment);
+        EventSelection::eventcontainer &ec =
+            existingSelection->getSegmentEvents();
+        for (EventSelection::eventcontainer::iterator i =
+                 ec.begin(); i != ec.end(); ++i) {
+            if (dialog.keepEvent(*i)) {
+                haveEvent = true;
+                newSelection->addEvent(*i);
+            }
+        }
+
+        if (haveEvent)
+            setSelection(newSelection);
+        else
+            setSelection(0);
+    }
+}
+
+void NewNotationView::slotVelocityUp()
+{
+    if (getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Raising velocities..."), this);
+
+    CommandHistory::getInstance()->addCommand(new ChangeVelocityCommand(
+            10, *getSelection()));
+}
+
+void NewNotationView::slotVelocityDown()
+{
+    if (!getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Lowering velocities..."), this);
+
+    CommandHistory::getInstance()->addCommand(new ChangeVelocityCommand(
+            -10, *getSelection()));
+}
+
+int NewNotationView::getVelocityFromSelection()
+{
+    if (!getSelection()) return 0;
+
+    float totalVelocity = 0;
+    int count = 0;
+
+    for (EventSelection::eventcontainer::iterator i =
+             getSelection()->getSegmentEvents().begin();
+         i != getSelection()->getSegmentEvents().end(); ++i) {
+
+        if ((*i)->has(BaseProperties::VELOCITY)) {
+            totalVelocity += (*i)->get<Int>(BaseProperties::VELOCITY);
+            ++count;
+        }
+    }
+
+    if (count > 0) {
+        return (totalVelocity / count) + 0.5;
+    }
+    return 0;
+}
+
+void NewNotationView::slotSetVelocities()
+{
+    if (!getSelection())
+        return ;
+
+    EventParameterDialog dialog(this,
+                                tr("Set Event Velocities"),
+                                BaseProperties::VELOCITY,
+                                getVelocityFromSelection());
+
+    if (dialog.exec() == QDialog::Accepted) {
+        TmpStatusMsg msg(tr("Setting Velocities..."), this);
+        CommandHistory::getInstance()->addCommand(
+                new SelectionPropertyCommand(
+                        getSelection(),
+                        BaseProperties::VELOCITY,
+                        dialog.getPattern(),
+                        dialog.getValue1(),
+                        dialog.getValue2()));
+    }
+}
+
+void NewNotationView::slotToggleToolsToolBar()
+{
+    toggleNamedToolBar("Tools Toolbar");
+}
+
+void NewNotationView::slotToggleNotesToolBar()
+{
+    toggleNamedToolBar("Notes Toolbar");
+}
+
+void NewNotationView::slotToggleRestsToolBar()
+{
+    toggleNamedToolBar("Rests Toolbar");
+}
+
+void NewNotationView::slotToggleAccidentalsToolBar()
+{
+    toggleNamedToolBar("Accidentals Toolbar");
+}
+
+void NewNotationView::slotToggleClefsToolBar()
+{
+    toggleNamedToolBar("Clefs Toolbar");
+}
+
+void NewNotationView::slotToggleMetaToolBar()
+{
+    toggleNamedToolBar("Meta Toolbar");
+}
+
+void NewNotationView::slotToggleMarksToolBar()
+{
+    toggleNamedToolBar("Marks Toolbar");
+}
+
+void NewNotationView::slotToggleGroupToolBar()
+{
+    toggleNamedToolBar("Group Toolbar");
+}
+
+void NewNotationView::slotToggleLayoutToolBar()
+{
+    toggleNamedToolBar("Layout Toolbar");
+}
+
+void NewNotationView::slotToggleTransportToolBar()
+{
+    toggleNamedToolBar("Transport Toolbar");
+}
+
+void NewNotationView::toggleNamedToolBar(const QString& toolBarName, bool* force)
+{
+// 	QToolBar *namedToolBar = toolBar(toolBarName);
+	QToolBar *namedToolBar = findChild<QToolBar*>(toolBarName);
+
+    if (!namedToolBar) {
+        NOTATION_DEBUG << "NewNotationView::toggleNamedToolBar() : toolBar "
+                       << toolBarName << " not found" << endl;
+        return ;
+    }
+
+    if (!force) {
+
+        if (namedToolBar->isVisible())
+            namedToolBar->hide();
+        else
+            namedToolBar->show();
+    } else {
+
+        if (*force)
+            namedToolBar->show();
+        else
+            namedToolBar->hide();
+    }
+
+//     setSettingsDirty();	//&&& not required ?
+
 }
 
 void

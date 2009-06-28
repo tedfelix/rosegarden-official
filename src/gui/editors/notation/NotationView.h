@@ -50,7 +50,7 @@ public:
 
     virtual Segment *getCurrentSegment();
     virtual EventSelection *getSelection() const;
-    virtual void setSelection(EventSelection* s, bool preview);
+    virtual void setSelection(EventSelection* s, bool preview = false);
 
     virtual void initStatusBar() { }//!!!
     virtual void updateViewCaption() { }//!!!
@@ -79,6 +79,17 @@ protected slots:
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
     void slotEditAddClef();
+
+    void slotPreviewSelection();
+    void slotClearLoop();
+    void slotClearSelection();
+    void slotEditSelectFromStart();
+    void slotEditSelectToEnd();
+    void slotEditSelectWholeStaff();
+    void slotFilterSelection();
+    void slotVelocityUp();
+    void slotVelocityDown();
+    void slotSetVelocities();
 
     void slotSetSelectTool();
     void slotSetEraseTool();
@@ -115,12 +126,37 @@ protected slots:
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
 
+    void slotToggleToolsToolBar();
+    void slotToggleNotesToolBar();
+    void slotToggleRestsToolBar();
+    void slotToggleAccidentalsToolBar();
+    void slotToggleClefsToolBar();
+    void slotToggleMetaToolBar();
+    void slotToggleMarksToolBar();
+    void slotToggleGroupToolBar();
+    void slotToggleLayoutToolBar();
+    void slotToggleTransportToolBar();
+
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
      * slotPreviewLilyPond)
      */
     bool exportLilyPondFile(QString url, bool forPreview = false);
+
+    /**
+     * Get the average velocity of the selected notes
+     */
+    int getVelocityFromSelection();
+
+    /**
+     * Helper function to toggle a toolbar given its name
+     * If \a force point to a bool, then the bool's value
+     * is used to show/hide the toolbar.
+     */
+    void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
+
 
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
