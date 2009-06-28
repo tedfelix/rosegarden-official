@@ -70,12 +70,6 @@ signals :
 
 
 protected slots:
-    /**
-     * export a LilyPond file (used by slotPrintLilyPond and
-     * slotPreviewLilyPond)
-     */
-    bool exportLilyPondFile(QString url, bool forPreview = false);
-
     void slotPrintLilyPond();
     void slotPreviewLilyPond();
     void slotEditCut();
@@ -122,6 +116,12 @@ protected slots:
     void slotToggleTempoRuler();
 
 private:
+    /**
+     * export a LilyPond file (used by slotPrintLilyPond and
+     * slotPreviewLilyPond)
+     */
+    bool exportLilyPondFile(QString url, bool forPreview = false);
+
     RosegardenDocument *m_document;
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
