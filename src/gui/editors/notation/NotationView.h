@@ -70,6 +70,14 @@ signals :
 
 
 protected slots:
+    /**
+     * export a LilyPond file (used by slotPrintLilyPond and
+     * slotPreviewLilyPond)
+     */
+    bool exportLilyPondFile(QString url, bool forPreview = false);
+
+    void slotPrintLilyPond();
+    void slotPreviewLilyPond();
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();

@@ -92,7 +92,7 @@ LilyPondExporter::LilyPondExporter(RosegardenMainWindow *parent,
     readConfigVariables();
 }
 
-LilyPondExporter::LilyPondExporter(NotationView *parent,
+LilyPondExporter::LilyPondExporter(NewNotationView *parent,
                                    RosegardenDocument *doc,
                                    std::string fileName) :
         ProgressReporter((QObject *)parent, "lilypondExporter"),
@@ -104,7 +104,7 @@ LilyPondExporter::LilyPondExporter(NotationView *parent,
     m_composition = &m_doc->getComposition();
     m_studio = &m_doc->getStudio();
     m_view = NULL;
-    m_notationView = ((NotationView *)parent);
+    m_notationView = ((NewNotationView *)parent);
 
     readConfigVariables();
 }

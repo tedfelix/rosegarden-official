@@ -53,8 +53,14 @@
 #include "gui/dialogs/MakeOrnamentDialog.h"
 #include "gui/dialogs/UseOrnamentDialog.h"
 #include "gui/dialogs/ClefDialog.h"
+#include "gui/dialogs/LilyPondOptionsDialog.h"
 
 #include "gui/general/IconLoader.h"
+#include "gui/general/LilyPondProcessor.h"
+
+#include "gui/widgets/TmpStatusMsg.h"
+
+#include "document/io/LilyPondExporter.h"
 
 #include <QWidget>
 #include <QAction>
@@ -62,6 +68,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QSettings>
+#include <QTemporaryFile>
 
 #include <algorithm>
 
@@ -139,8 +146,8 @@ NewNotationView::setupActions()
     // "file_save"
     // Created in EditViewBase::setupActions() via creatAction()
 
-    createAction("file_print", SLOT(slotFilePrint()));
-    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
+//    createAction("file_print", SLOT(slotFilePrint()));
+//    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
     createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
 
@@ -705,6 +712,74 @@ NewNotationView::slotUpdateMenuStates()
         leaveActionState("rest_insert_tool_current");
     }
 }
+
+
+bool NewNotationView::exportLilyPondFile(QString file, bool forPreview)
+{
+    QString caption = "", heading = "";
+    if (forPreview) {
+        caption = tr("LilyPond Preview Options");
+        heading = tr("LilyPond preview options");
+    }
+
+    LilyPondOptionsDialog dialog(this, m_doc, caption, heading);
+    if (dialog.exec() != QDialog::Accepted) {
+        return false;
+    }
+
+    LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
+
+    if (!e.write()) {
+        QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        return false;
+    }
+
+    return true;
+}
+
+void NewNotationView::slotPrintLilyPond()
+{
+    TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
+    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
+    file->setAutoRemove(true);
+    if (!file->open()) {
+        //CurrentProgressDialog::freeze();
+        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
+        delete file;
+    }
+    QString filename = file->fileName(); // must call this before close()
+    file->close(); // we just want the filename
+    if (!exportLilyPondFile(filename, true)) {
+        return ;
+    }
+
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
+
+    dialog->exec();
+}
+
+void NewNotationView::slotPreviewLilyPond()
+{
+    TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
+    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
+    file->setAutoRemove(true);
+    if (!file->open()) {
+        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
+        delete file;
+    }
+    QString filename = file->fileName(); // must call this before close()
+    file->close(); // we just want the filename
+    if (!exportLilyPondFile(filename, true)) {
+        return ;
+    }
+
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
+
+    dialog->exec();
+}
+
 
 void
 NewNotationView::slotLinearMode()

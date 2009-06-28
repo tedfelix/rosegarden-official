@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -34,6 +33,7 @@
 #include "base/PropertyName.h"
 #include "base/Segment.h"
 #include "gui/general/ProgressReporter.h"
+#include "gui/editors/notation/NotationView.h"
 #include <fstream>
 #include <set>
 #include <string>
@@ -51,7 +51,7 @@ class Studio;
 class RosegardenMainWindow;
 class RosegardenMainViewWidget;
 class RosegardenDocument;
-class NotationView;
+class NewNotationView;
 class Key;
 class Composition;
 
@@ -81,14 +81,14 @@ public:
 
 public:
     LilyPondExporter(RosegardenMainWindow *parent, RosegardenDocument *, std::string fileName);
-    LilyPondExporter(NotationView *parent, RosegardenDocument *, std::string fileName);
+    LilyPondExporter(NewNotationView *parent, RosegardenDocument *, std::string fileName);
     ~LilyPondExporter();
 
     bool write();
 
 protected:
     RosegardenMainViewWidget *m_view;
-    NotationView *m_notationView;
+    NewNotationView *m_notationView;
     RosegardenDocument *m_doc;
     Composition *m_composition;
     Studio *m_studio;
