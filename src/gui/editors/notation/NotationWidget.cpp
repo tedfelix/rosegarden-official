@@ -223,6 +223,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_tempoRuler->connectSignals();
 
     m_chordNameRuler->setReady();
+
+    //!!! attempt to scroll either to the start or to the current
+    //!!! pointer position, and to the top of the staff... however,
+    //!!! this doesn't work... why not?
+    m_view->ensureVisible(QRectF(0, 0, 1, 1), 0, 0);
+    slotPointerPositionChanged(m_document->getComposition().getPosition());
 }
 
 void
@@ -496,6 +502,7 @@ timeT
 NotationWidget::getInsertionTime() const
 {
     if (m_scene) return m_scene->getInsertionTime();
+    else return 0;
 }
 
 void

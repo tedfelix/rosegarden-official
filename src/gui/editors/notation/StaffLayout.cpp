@@ -67,14 +67,8 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false),
-    m_pointer(new QGraphicsLineItem()),
-    m_insertCursor(new QGraphicsLineItem()),
-    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
-    m_insertCursorTimeValid(false)
+    m_current(false)
 {
-    //!!! need to ensure our own disposal when segment destroyed
-    initCursors();
 }
 
 StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
@@ -98,13 +92,8 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false),
-    m_pointer(new QGraphicsLineItem()),
-    m_insertCursor(new QGraphicsLineItem()),
-    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
-    m_insertCursorTimeValid(false)
+    m_current(false)
 {
-    initCursors();
 }
 
 StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
@@ -129,35 +118,14 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false),
-    m_pointer(new QGraphicsLineItem()),
-    m_insertCursor(new QGraphicsLineItem()),
-    m_insertCursorTime(viewSegment->getSegment().getStartTime()),
-    m_insertCursorTimeValid(false)
+    m_current(false)
 {
-    initCursors();
 }
 
 StaffLayout::~StaffLayout()
 {
     deleteBars();
     for (int i = 0; i < (int)m_staffLines.size(); ++i) clearStaffLineRow(i);
-    delete m_pointer;
-    delete m_insertCursor;
-}
-
-void
-StaffLayout::initCursors()
-{
-    QPen pen(GUIPalette::getColour(GUIPalette::Pointer));
-    pen.setWidth(pointerWidth);
-    m_pointer->setPen(pen);
-
-    pen.setColor(GUIPalette::getColour(GUIPalette::InsertCursor));
-    m_insertCursor->setPen(pen);
-
-    m_scene->addItem(m_pointer);
-    m_scene->addItem(m_insertCursor);
 }
 
 void
@@ -1077,116 +1045,6 @@ void
 StaffLayout::setCurrent(bool current)
 {
     m_current = current;
-    if (m_current) {
-        m_insertCursor->show();
-    } else {
-        m_insertCursor->hide();
-    }
-}
-
-double
-StaffLayout::getLayoutXOfPointer() const
-{
-    double x = m_pointer->x();
-    int row = getRowForSceneCoords(x, int(m_pointer->y()));
-    return getLayoutCoordsForSceneCoords(x, getSceneYForTopLine(row)).first;
-}
-
-void
-StaffLayout::getPointerPosition(double &cx, int &cy) const
-{
-    cx = m_pointer->x();
-    cy = getSceneYForTopOfStaff(getRowForSceneCoords(cx, int(m_pointer->y())));
-}
-
-double
-StaffLayout::getLayoutXOfInsertCursor() const
-{
-    if (!m_current) return -1;
-    double x = m_insertCursor->x();
-    int row = getRowForSceneCoords(x, int(m_insertCursor->y()));
-    return getLayoutCoordsForSceneCoords(x, getSceneYForTopLine(row)).first;
-}
-
-timeT
-StaffLayout::getInsertCursorTime(HorizontalLayoutEngine &layout) const
-{
-    if (m_insertCursorTimeValid) return m_insertCursorTime;
-    return layout.getTimeForX(getLayoutXOfInsertCursor());
-}
-
-void
-StaffLayout::getInsertCursorPosition(double &cx, int &cy) const
-{
-    if (!m_current) {
-        cx = -1;
-        cy = -1;
-        return ;
-    }
-    cx = m_insertCursor->x();
-    cy = getSceneYForTopOfStaff(getRowForSceneCoords(cx, int(m_insertCursor->y())));
-}
-
-void
-StaffLayout::setPointerPosition(double sceneX, int sceneY)
-{
-    int row = getRowForSceneCoords(sceneX, sceneY);
-    sceneY = getSceneYForTopOfStaff(row);
-    m_pointer->setPos(int(sceneX), int(sceneY));
-    m_pointer->setZValue( -30); // behind everything else
-    m_pointer->setLine(0, 0, 0, getHeightOfRow() /* - 1 */);
-    m_pointer->show();
-}
-
-void
-StaffLayout::setPointerPosition(HorizontalLayoutEngine &layout,
-                               timeT time)
-{
-    setPointerPosition(layout.getXForTime(time));
-}
-
-void
-StaffLayout::setPointerPosition(double layoutX)
-{
-    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(layoutX, 0);
-    setPointerPosition(coords.first, coords.second);
-}
-
-void
-StaffLayout::hidePointer()
-{
-    m_pointer->hide();
-}
-
-void
-StaffLayout::setInsertCursorPosition(double sceneX, int sceneY)
-{
-    if (!m_current) return;
-
-    int row = getRowForSceneCoords(sceneX, sceneY);
-    sceneY = getSceneYForTopOfStaff(row);
-    m_insertCursor->setPos(sceneX, sceneY);
-    m_insertCursor->setZValue( -28); // behind everything else except playback pointer
-    m_insertCursor->setLine(0, 0, 0, getHeightOfRow() - 1);
-    m_insertCursor->show();
-    m_insertCursorTimeValid = false;
-}
-
-void
-StaffLayout::setInsertCursorPosition(HorizontalLayoutEngine &layout,
-                                     timeT time)
-{
-    double x = layout.getXForTime(time);
-    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords(x, 0);
-    setInsertCursorPosition(coords.first, coords.second);
-    m_insertCursorTime = time;
-    m_insertCursorTimeValid = true;
-}
-
-void
-StaffLayout::hideInsertCursor()
-{
-    m_insertCursor->hide();
 }
 
 void

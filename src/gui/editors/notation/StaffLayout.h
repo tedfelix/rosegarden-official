@@ -370,77 +370,6 @@ public:
     virtual void setCurrent(bool current);
 
     /**
-     * Move the playback pointer to the layout-X coordinate
-     * corresponding to the given time, and show it.
-     */
-    virtual void setPointerPosition
-    (HorizontalLayoutEngine&, timeT);
-
-    /**
-     * Move the playback pointer to the layout-X coordinate
-     * corresponding to the given scene coordinates, and show it.
-     */
-    virtual void setPointerPosition(double x, int y);
-
-    /**
-     * Move the playback pointer to the given layout-X
-     * coordinate, and show it.
-     */
-    virtual void setPointerPosition(double x);
-
-    /**
-     * Returns the layout-X coordinate corresponding to the current
-     * position of the playback pointer.
-     */
-    virtual double getLayoutXOfPointer() const;
-
-    /**
-     * Returns the scene coordinates of the top of the playback
-     * pointer.
-     */
-    virtual void getPointerPosition(double &x, int &y) const;
-
-    /**
-     * Hide the playback pointer.
-     */
-    virtual void hidePointer();
-
-    /**
-     * Move the insertion cursor to the layout-X coordinate
-     * corresponding to the given time, and show it.
-     */
-    virtual void setInsertCursorPosition(HorizontalLayoutEngine&, timeT);
-
-    /**
-     * Move the insertion cursor to the layout-X coordinate
-     * corresponding to the given scene coordinates, and show it.
-     */
-    virtual void setInsertCursorPosition(double x, int y);
-
-    /**
-     * Returns the layout-X coordinate corresponding to the current
-     * position of the insertion cursor.  Returns -1 if this staff
-     * is not current or there is some other problem.
-     */
-    virtual double getLayoutXOfInsertCursor() const;
-
-    /**
-     * Return the time of the insert cursor.
-     */
-    virtual timeT getInsertCursorTime(HorizontalLayoutEngine&) const;
-
-    /**
-     * Return the scene coordinates of the top of the insert
-     * cursor.
-     */
-    virtual void getInsertCursorPosition(double &x, int &y) const;
-
-    /**
-     * Hide the insert cursor.
-     */
-    virtual void hideInsertCursor();
-
-    /**
      * Query the given horizontal layout object (which is assumed to
      * have just completed its layout procedure) to determine the
      * required extents of the staff and the positions of the bars,
@@ -727,11 +656,6 @@ protected:
     LineRecList m_beatLines;
     LineRecList m_barConnectingLines;
     ItemList m_barNumbers;
-
-    QGraphicsLineItem *m_pointer;
-    QGraphicsLineItem *m_insertCursor;
-    timeT m_insertCursorTime;
-    bool m_insertCursorTimeValid;
 };
 
 

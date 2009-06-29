@@ -1143,10 +1143,6 @@ NotationScene::layout(NotationStaff *singleStaff,
 
         bool secondary = (singleStaff && (singleStaff != staff));
         staff->regenerate(startTime, endTime, secondary);
-
-        //!!! bogus
-        m_staffs[i]->setPointerPosition(*m_hlayout, 0);
-        m_staffs[i]->setInsertCursorPosition(*m_hlayout, 0);
     }
     }
 }

@@ -1741,28 +1741,26 @@ NotePixmapFactory::makeClef(const Clef &clef)
         adjustedOctave++;
 
     QString text = QString("%1").arg(adjustedOctave);
-    QRect rect = m_clefOttavaFontMetrics.boundingRect(text);
+    int th = m_clefOttavaFontMetrics.height();
+    int tw = m_clefOttavaFontMetrics.width(text);
+    int ascent = m_clefOttavaFontMetrics.ascent();
 
-    createPixmap(plain.getWidth(),
-                 plain.getHeight() + rect.height());
+    createPixmap(plain.getWidth(), plain.getHeight() + th);
 
     if (m_selected) {
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
     }
 
-    m_p->drawNoteCharacter(0, oct < 0 ? 0 : rect.height(), plain);
+    m_p->drawNoteCharacter(0, oct < 0 ? 0 : th, plain);
 
     m_p->painter().setFont(m_clefOttavaFont);
-//    if (!m_inPrinterMethod)
-//        m_p->maskPainter().setFont(m_clefOttavaFont);
 
-    m_p->drawText(plain.getWidth() / 2 - rect.width() / 2,
-                  oct < 0 ? plain.getHeight() + rect.height() - 1 :
-                  rect.height(), text);
+    m_p->drawText(plain.getWidth() / 2 - tw / 2,
+                  ascent + (oct < 0 ? plain.getHeight() : 0), text);
 
     m_p->painter().setPen(QColor(Qt::black));
     QPoint hotspot(plain.getHotspot());
-    if (oct > 0) hotspot.setY(hotspot.y() + rect.height());
+    if (oct > 0) hotspot.setY(hotspot.y() + th);
     return makeItem(hotspot);
 }
 
@@ -2095,15 +2093,18 @@ NotePixmapFactory::makeTrackHeaderPixmap(int width, int height, TrackHeader *hea
                 adjustedOctave++;
 
             QString text = QString("%1").arg(adjustedOctave);
-            QRect rect = m_clefOttavaFontMetrics.boundingRect(text);
+            int th = m_clefOttavaFontMetrics.height();
+            int tw = m_clefOttavaFontMetrics.width(text);
+            int ascent = m_clefOttavaFontMetrics.ascent();
 
             m_p->painter().setPen(colour);
 
             m_p->painter().setFont(m_clefOttavaFont);
-            // m_p->maskPainter().setFont(m_clefOttavaFont);
-            int xpos = maxDelta + clefChar.getWidth() / 2 - rect.width() / 2;
-            int ypos = y - clefChar.getHotspot().y() + offset 
-                         + (oct < 0 ? clefChar.getHeight() + rect.height() - 1 : - rect.height() / 3);
+            int xpos = maxDelta + clefChar.getWidth() / 2 - tw / 2;
+            int ypos =
+                y - clefChar.getHotspot().y() + offset 
+                + ascent +
+                (oct < 0 ? clefChar.getHeight() : (-th));
             m_p->drawText(xpos, ypos, text);
         }
 
