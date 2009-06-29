@@ -91,6 +91,12 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
+    // Remove thick black lines beetween rulers and matrix
+    m_layout->setSpacing(0);
+
+    // Remove black margins around the matrix
+    //m_layout->setContentsMargins(0, 0, 0, 0);
+
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
     m_layout->addWidget(m_view, PANNED_ROW, MAIN_COL, 1, 1);
@@ -220,7 +226,10 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     }
 
     m_pitchRuler->setFixedSize(m_pitchRuler->sizeHint());
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width() + 4);
+    //@@@ The 4 pixels have been added empirically in line above to
+    //    show the pitch ruler completely. (The pitch ruler contents was
+    //    horizontally moving with Alt + wheel)
 
     delete m_pianoScene;
     m_pianoScene = new QGraphicsScene();

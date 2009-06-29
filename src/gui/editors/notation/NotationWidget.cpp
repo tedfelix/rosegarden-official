@@ -73,6 +73,12 @@ NotationWidget::NotationWidget() :
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
+    // Remove thick black lines beetween rulers and staves
+    m_layout->setSpacing(0);
+
+    // Remove black margins around the notation
+    //m_layout->setContentsMargins(0, 0, 0, 0);
+
     m_view = new Panned;
     m_view->setBackgroundBrush(Qt::white);
     m_view->setRenderHints(QPainter::Antialiasing |
