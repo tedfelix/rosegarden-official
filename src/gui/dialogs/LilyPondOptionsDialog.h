@@ -67,8 +67,9 @@ protected:
 
     void populateDefaultValues();
 
-    static const unsigned int FONT_OFFSET = 6;
+    static const unsigned int FONT_OFFSET = 6;             // applied to combo index to calculate font size
     static const unsigned int FONT_20 = 20 + FONT_OFFSET;
+    static const unsigned int MAX_POINTS = 67;             // max. 72 pt. font
 
 };
 

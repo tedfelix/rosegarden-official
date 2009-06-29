@@ -233,7 +233,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
-    m_staffSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny for this staff when exporting to LilyPond.  This is as close as we get to enabling you to print parts in cue size</p></qt>"));
+    m_staffSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.</p><p>This is as close as we get to enabling you to print parts in cue size</p></qt>"));
     m_staffSizeCombo->setMinimumWidth(width11);
     m_staffSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
     m_staffSizeCombo->addItem(tr("Small"), StaffTypes::Small);

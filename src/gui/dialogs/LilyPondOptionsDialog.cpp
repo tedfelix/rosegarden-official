@@ -149,11 +149,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutBasic->addLayout(hboxPaper, 2, 1);
 
     layoutBasic->addWidget(new QLabel(
-                          tr("Font size"), frameBasic), 3, 0);
+                          tr("Staff size"), frameBasic), 3, 0);
 
     m_lilyFontSize = new QComboBox(frameBasic);
-    m_lilyFontSize->setToolTip(tr("<qt>Choose the font size of the score.</qt>"));
-    for (unsigned int i = 0; i < 24; i++) {
+    m_lilyFontSize->setToolTip(tr("<qt><p>Choose the staff size of the score.  LilyPond will scale staff contents relative to this size.</p><p>Sizes marked * may provide the best rendering quality.</p></qt>"));
+    for (unsigned int i = 0; i < MAX_POINTS; i++) {
         bool recommended = false;
         int printSize = i + FONT_OFFSET;
         switch (printSize) {
@@ -166,7 +166,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
             case 26: recommended = true; break;
             default: recommended = false;
         }
-        QString fontString = tr("%1 pt %2").arg(printSize).arg(recommended ? tr("(recommended)") : "");
+        QString fontString = tr("%1 pt %2").arg(printSize).arg(recommended ? tr(" *") : "");
         m_lilyFontSize->addItem(fontString);
     }
     layoutBasic->addWidget(m_lilyFontSize, 3, 1);
