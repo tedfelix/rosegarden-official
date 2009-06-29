@@ -1969,7 +1969,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
     int x = 3 * getNoteBodyWidth();
-    m_p->drawPixmap(x, y - clefItem->offset().y(), clefItem->pixmap());
+    m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
@@ -2004,7 +2004,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
 
     int h = clef.getAxisHeight();
     int y = (lw * 3) + ((8 - h) * lw) / 2;
-    m_p->drawPixmap(2 * maxDelta, y - clefItem->offset().y(), clefItem->pixmap());
+    m_p->drawPixmap(2 * maxDelta, y + clefItem->offset().y(), clefItem->pixmap());
 
     for (unsigned int i = 0; i < ah.size(); ++i) {
 
