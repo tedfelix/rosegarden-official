@@ -888,7 +888,7 @@ NewNotationView::setSelection(EventSelection *selection, bool preview)
 timeT
 NewNotationView::getInsertionTime() const
 {
-    if (m_notationWidget) m_notationWidget->getInsertionTime();
+    if (m_notationWidget) return m_notationWidget->getInsertionTime();
     else return 0;
 }
 
@@ -1065,12 +1065,7 @@ void NewNotationView::slotClearSelection()
     if (!selector) {
         slotSetSelectTool();
     } else {
-        // was setCurrentSelection(0) and we don't seem to have anything like
-        // that now, so I guess we'll create a new empty selection instead, and
-        // setSelection() to that
-        timeT t = 0;
-        Segment *segment = getCurrentSegment();
-        setSelection(new EventSelection(*segment, t, t));
+        setSelection(0, false);
     }
 }
 
@@ -1080,7 +1075,8 @@ void NewNotationView::slotEditSelectFromStart()
     Segment *segment = getCurrentSegment();
     setSelection(new EventSelection(*segment,
                                     segment->getStartTime(),
-                                    t));
+                                    t),
+                 false);
 }
 
 void NewNotationView::slotEditSelectToEnd()
@@ -1089,7 +1085,8 @@ void NewNotationView::slotEditSelectToEnd()
     Segment *segment = getCurrentSegment();
     setSelection(new EventSelection(*segment,
                                     t,
-                                    segment->getEndMarkerTime()));
+                                    segment->getEndMarkerTime()),
+                 false);
 }
 
 void NewNotationView::slotEditSelectWholeStaff()
@@ -1097,7 +1094,8 @@ void NewNotationView::slotEditSelectWholeStaff()
     Segment *segment = getCurrentSegment();
     setSelection(new EventSelection(*segment,
                                     segment->getStartTime(),
-                                    segment->getEndMarkerTime()));
+                                    segment->getEndMarkerTime()),
+                 false);
 }
 
 void NewNotationView::slotFilterSelection()
@@ -1126,10 +1124,11 @@ void NewNotationView::slotFilterSelection()
             }
         }
 
-        if (haveEvent)
-            setSelection(newSelection);
-        else
-            setSelection(0);
+        if (haveEvent) {
+            setSelection(newSelection, false);
+        } else {
+            setSelection(0, false);
+        }
     }
 }
 
