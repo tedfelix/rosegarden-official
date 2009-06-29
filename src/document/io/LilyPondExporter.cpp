@@ -118,7 +118,7 @@ LilyPondExporter::readConfigVariables(void)
 
     m_paperSize = settings.value("lilypapersize", PAPER_A4).toUInt() ;
     m_paperLandscape = qStrToBool(settings.value("lilypaperlandscape", "false")) ;
-    m_fontSize = settings.value("lilyfontsize", 20).toUInt() ;
+    m_fontSize = settings.value("lilyfontsize", FONT_20).toUInt() ;
     m_raggedBottom = qStrToBool(settings.value("lilyraggedbottom", "false")) ;
     m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt() ;
     m_exportLyrics = qStrToBool(settings.value("lilylyricshalignment", EXPORT_LYRICS_LEFT)) ;

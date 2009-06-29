@@ -66,6 +66,10 @@ protected:
     HeadersConfigurationPage *m_headersPage;
 
     void populateDefaultValues();
+
+    static const unsigned int FONT_OFFSET = 6;
+    static const unsigned int FONT_20 = 20 + FONT_OFFSET;
+
 };
 
 

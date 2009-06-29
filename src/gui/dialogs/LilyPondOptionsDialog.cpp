@@ -155,10 +155,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyFontSize->setToolTip(tr("<qt>Choose the font size of the score.</qt>"));
     for (unsigned int i = 0; i < 24; i++) {
         bool recommended = false;
-        unsigned int j = i - 6; // should be a constant as in LilyPondExporter;
-                                // we add this to the index to get point sizes
-                                // from 6 to 30
-        switch (j) {
+        int printSize = i + FONT_OFFSET;
+        switch (printSize) {
             case 11:
             case 13:
             case 16:
@@ -168,7 +166,7 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
             case 26: recommended = true; break;
             default: recommended = false;
         }
-        QString fontString = tr("%1 pt %2").arg(i).arg(recommended ? tr("(recommended)") : "");
+        QString fontString = tr("%1 pt %2").arg(printSize).arg(recommended ? tr("(recommended)") : "");
         m_lilyFontSize->addItem(fontString);
     }
     layoutBasic->addWidget(m_lilyFontSize, 3, 1);
@@ -281,7 +279,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     }
     m_lilyPaperSize->setCurrentIndex(settings.value("lilypapersize", defaultPaperSize).toUInt());
     m_lilyPaperLandscape->setChecked(qStrToBool(settings.value("lilypaperlandscape", "false")));
-    m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", 4).toUInt());
+    m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", FONT_20).toUInt());
     m_lilyRaggedBottom->setChecked(qStrToBool(settings.value("lilyraggedbottom", "false")));
     m_lilyChordNamesMode->setChecked(qStrToBool(settings.value("lilychordnamesmode", "false")));
     m_lilyExportLyrics->setCurrentIndex(settings.value("lilyexportlyrics", 1).toUInt());

@@ -179,6 +179,7 @@ private:
      * to the index to arrive at the real font size for export
      */
     static const unsigned int FONT_OFFSET = 6;
+    static const unsigned int FONT_20 = 20 + FONT_OFFSET;
 
     unsigned int m_exportLyrics;
     static const unsigned int EXPORT_NO_LYRICS = 0;
