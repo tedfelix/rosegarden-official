@@ -267,6 +267,7 @@ protected:
 
     void createPixmap(int width, int height);
     QGraphicsPixmapItem *makeItem(QPoint hotspot);
+    QPixmap makePixmap();
 
     enum ColourType {
         PlainColour,

@@ -1977,10 +1977,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
     }
 
     delete clefItem;
-
-    QPixmap pmap(*m_generatedPixmap);
-    delete m_generatedPixmap;
-    return pmap;
+    return makePixmap();
 }
 
 QPixmap
@@ -2025,10 +2022,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
     }
 
     delete clefItem;
-
-    QPixmap pmap(*m_generatedPixmap);
-    delete m_generatedPixmap;
-    return pmap;
+    return makePixmap();
 }
 
 int
@@ -2222,9 +2216,7 @@ NotePixmapFactory::makeTrackHeaderPixmap(int width, int height, TrackHeader *hea
         m_p->drawText(charWidth / 4, lowerTextY, textLine);
     }
 
-    QPixmap pmap(*m_generatedPixmap);
-    delete m_generatedPixmap;
-    return pmap;
+    return makePixmap();
 }
 
 int
@@ -2345,17 +2337,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     delete noteItem;
     delete clefItem;
 
-    //### Is that right ?
-    m_p->painter().end();
-
-    //### Force the mask generation (following arg. true) to have
-    //### a staff and a clef displayed in the pitch chooser widget
-
-//    return makeItem(m_pointZero, true);
-
-    QPixmap pmap(*m_generatedPixmap);
-    delete m_generatedPixmap;
-    return pmap;
+    return makePixmap();
 }
 
 QPixmap
@@ -2422,16 +2404,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     delete noteItem;
     delete clefItem;
 
-    //### Is that right ?
-    m_p->painter().end();
-    
-    //### Force the mask generation (following arg. true) to have
-    //### a staff and a clef displayed in the pitch chooser widget
-//    return makeItem(m_pointZero, true);
-
-    QPixmap pmap(*m_generatedPixmap);
-    delete m_generatedPixmap;
-    return pmap;
+    return makePixmap();
 }
 
 QGraphicsPixmapItem *
@@ -3377,13 +3350,6 @@ NotePixmapFactory::makeItem(QPoint hotspot)
     }
 
     QGraphicsPixmapItem *p = new QGraphicsPixmapItem;
-/*!!!
-    if (generateMask) {
-        p->setMask(PixmapFunctions::generateMask(*p));
-    } else {
-        p->setMask(*m_generatedMask);
-    }
-*/
 
     p->setPixmap(*m_generatedPixmap);
     p->setOffset(QPointF(-hotspot.x(), -hotspot.y()));
@@ -3391,7 +3357,18 @@ NotePixmapFactory::makeItem(QPoint hotspot)
 //    NOTATION_DEBUG << "NotePixmapFactory::makeItem: item = " << p << " (scene = " << p->scene() << ")" << endl;
 
     delete m_generatedPixmap;
-//    delete m_generatedMask; //!!! lose
+    return p;
+}
+
+QPixmap
+NotePixmapFactory::makePixmap()
+{
+    if (!m_generatedPixmap->isNull()) {
+        m_p->end();
+    }
+
+    QPixmap p = *m_generatedPixmap;
+    delete m_generatedPixmap;
     return p;
 }
 
