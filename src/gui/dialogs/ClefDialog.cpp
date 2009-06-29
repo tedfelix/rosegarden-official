@@ -82,7 +82,7 @@ ClefDialog::ClefDialog(QWidget *parent,
     clefDown->setToolTip(tr("Lower clef"));
 
     m_clefPixmap = new QLabel;
-    QString localStyle = QString("background: white");
+    QString localStyle = QString("background: white; color: black;");
     m_clefPixmap->setStyleSheet(localStyle);
     midChunkLayout->addWidget(m_clefPixmap);
 

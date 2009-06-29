@@ -109,9 +109,11 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     keyBoxLayout->addWidget(keyDown);
     keyDown->setToolTip(tr("Flatten"));
 
-    m_keyLabel = new QLabel(tr("Key"), keyBox);
-    keyBoxLayout->addWidget(m_keyLabel);
-    m_keyLabel->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
+    m_keyPixmap = new QLabel;
+    QString localStyle = QString("background: white; color black;");
+    m_keyPixmap->setStyleSheet(localStyle);
+    keyBoxLayout->addWidget(m_keyPixmap);
+    m_keyPixmap->setAlignment( Qt::AlignVCenter | Qt::AlignHCenter);
 
     BigArrowButton *keyUp = new BigArrowButton(Qt::RightArrow);
     keyBoxLayout->addWidget(keyUp);
@@ -133,8 +135,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     redrawKeyPixmap();
     m_explanatoryLabel = explanatoryLabel;
 
-    m_keyLabel->setMinimumWidth(m_keyLabel->pixmap()->width());
-    m_keyLabel->setMinimumHeight(m_keyLabel->pixmap()->height());
+    m_keyPixmap->setMinimumWidth(m_keyPixmap->pixmap()->width());
+    m_keyPixmap->setMinimumHeight(m_keyPixmap->pixmap()->height());
 
     m_yesTransposeButton =
         new QRadioButton(tr("Transpose key according to segment transposition"),
@@ -360,9 +362,9 @@ KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
         QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
-        m_keyLabel->setPixmap(pmap);
+        m_keyPixmap->setPixmap(pmap);
     } else {
-        m_keyLabel->setText(tr("No such key"));
+        m_keyPixmap->setText(tr("No such key"));
     }
 }
 

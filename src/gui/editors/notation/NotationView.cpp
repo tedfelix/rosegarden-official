@@ -35,6 +35,10 @@
 #include "base/Selection.h"
 #include "base/NotationQuantizer.h"
 #include "base/BaseProperties.h"
+#include "base/CompositionTimeSliceAdapter.h"
+#include "base/AnalysisTypes.h"
+#include "base/MidiDevice.h"
+#include "base/MidiTypes.h"
 
 #include "commands/edit/CopyCommand.h"
 #include "commands/edit/CutCommand.h"
@@ -48,8 +52,13 @@
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
+#include "commands/notation/KeyInsertionCommand.h"
+#include "commands/notation/MultiKeyInsertionCommand.h"
+#include "commands/notation/SustainInsertionCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
+#include "commands/segment/SegmentTransposeCommand.h"
+#include "commands/segment/SegmentSyncCommand.h"
 
 #include "gui/dialogs/PasteNotationDialog.h"
 #include "gui/dialogs/InterpretDialog.h"
@@ -59,11 +68,20 @@
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
+#include "gui/dialogs/KeySignatureDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
+#include "gui/general/PresetHandlerDialog.h"
+#include "gui/general/ClefIndex.h"
 
 #include "gui/widgets/TmpStatusMsg.h"
+
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
+
+#include "gui/editors/parameters/TrackParameterBox.h"
 
 #include "document/io/LilyPondExporter.h"
 
@@ -1528,7 +1546,8 @@ NewNotationView::slotRemoveOrnament()
                                      tr("Remove Ornaments")));
 }
 
-void NewNotationView::slotEditAddClef()
+void
+NewNotationView::slotEditAddClef()
 {
     Segment *segment = getCurrentSegment();
     timeT insertionTime = getInsertionTime();
@@ -1555,6 +1574,194 @@ void NewNotationView::slotEditAddClef()
 
         lastClef = dialog.getClef();
     } 
+}
+
+void
+NewNotationView::slotEditAddKeySignature()
+{
+    Segment *segment = getCurrentSegment();
+    timeT insertionTime = getInsertionTime();
+    static Clef clef = segment->getClefAtTime(insertionTime);
+    static Key key = segment->getKeyAtTime(insertionTime);
+
+    //!!! experimental:
+    CompositionTimeSliceAdapter adapter
+        (&getDocument()->getComposition(), insertionTime,
+         getDocument()->getComposition().getDuration());
+    AnalysisHelper helper;
+    key = helper.guessKey(adapter);
+
+    NotationScene *scene = m_notationWidget->getScene();
+    if (!scene) return;
+
+
+    KeySignatureDialog dialog(this,
+                              scene->getNotePixmapFactory(),
+                              clef,
+                              key,
+                              true,
+                              true,
+                              tr("Estimated key signature shown"));
+
+    if (dialog.exec() == QDialog::Accepted &&
+        dialog.isValid()) {
+
+        KeySignatureDialog::ConversionType conversion =
+            dialog.getConversionType();
+
+        bool transposeKey = dialog.shouldBeTransposed();
+        bool applyToAll = dialog.shouldApplyToAll();
+    bool ignorePercussion = dialog.shouldIgnorePercussion();
+
+        if (applyToAll) {
+            CommandHistory::getInstance()->addCommand(
+                    new MultiKeyInsertionCommand(
+                            getDocument(),
+                            insertionTime, dialog.getKey(),
+                            conversion == KeySignatureDialog::Convert,
+                            conversion == KeySignatureDialog::Transpose,
+                            transposeKey,
+                            ignorePercussion));
+        } else {
+            CommandHistory::getInstance()->addCommand(
+                    new KeyInsertionCommand(*segment,
+                                            insertionTime,
+                                            dialog.getKey(),
+                                            conversion == KeySignatureDialog::Convert,
+                                            conversion == KeySignatureDialog::Transpose,
+                                            transposeKey,
+                                            false));
+        }
+    }
+}
+
+void
+NewNotationView::slotEditAddSustain(bool down)
+{
+    Segment *segment = getCurrentSegment();
+    timeT insertionTime = getInsertionTime();
+
+    Studio *studio = &getDocument()->getStudio();
+    Track *track = segment->getComposition()->getTrackById(segment->getTrack());
+
+    if (track) {
+
+        Instrument *instrument = studio->getInstrumentById
+            (track->getInstrument());
+        if (instrument) {
+            MidiDevice *device = dynamic_cast<MidiDevice *>
+                (instrument->getDevice());
+            if (device) {
+                for (ControlList::const_iterator i =
+                         device->getControlParameters().begin();
+                     i != device->getControlParameters().end(); ++i) {
+
+                    if (i->getType() == Controller::EventType &&
+                        (i->getName() == "Sustain" ||
+                         strtoqstr(i->getName()) == tr("Sustain"))) {
+
+                        CommandHistory::getInstance()->addCommand(
+                                new SustainInsertionCommand(*segment, insertionTime, down,
+                                                            i->getControllerValue()));
+                        return ;
+                    }
+                }
+            } else if (instrument->getDevice() &&
+                       instrument->getDevice()->getType() == Device::SoftSynth) {
+                CommandHistory::getInstance()->addCommand(
+                        new SustainInsertionCommand(*segment, insertionTime, down, 64));
+            }
+        }
+    }
+
+    QMessageBox::warning(this, "", tr("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+}
+
+void
+NewNotationView::slotEditAddSustainDown()
+{
+    slotEditAddSustain(true);
+}
+
+void
+NewNotationView::slotEditAddSustainUp()
+{
+    slotEditAddSustain(false);
+}
+
+void
+NewNotationView::slotEditTranspose()
+{
+    IntervalDialog intervalDialog(this, true, true);
+    int ok = intervalDialog.exec();
+    
+    int semitones = intervalDialog.getChromaticDistance();
+    int steps = intervalDialog.getDiatonicDistance();
+
+    if (!ok || (semitones == 0 && steps == 0)) return;
+
+    // TODO combine commands into one 
+    for (int i = 0; i < m_segments.size(); i++)
+    {
+        CommandHistory::getInstance()->addCommand(new SegmentTransposeCommand(
+                *(m_segments[i]), 
+                intervalDialog.getChangeKey(), steps, semitones, 
+                intervalDialog.getTransposeSegmentBack()));
+    }
+
+    // Fix #1885520 (Update track parameter widget when transpose changed from notation)
+    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
+
+    // And update track headers likewise
+//&&& no track headers yet
+//&&&    m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
+}
+
+void
+NewNotationView::slotEditSwitchPreset()
+{
+    PresetHandlerDialog dialog(this, true);
+    
+    if (dialog.exec() != QDialog::Accepted) return;
+    
+    if (dialog.getConvertAllSegments()) {
+        // get all segments for this track and convert them.
+        Composition& comp = getDocument()->getComposition();
+        TrackId selectedTrack = getCurrentSegment()->getTrack();
+
+    // satisfy #1885251 the way that seems most reasonble to me at the
+    // moment, only changing track parameters when acting on all segments on
+    // this track from the notation view 
+    //
+    //!!! This won't be undoable, and I'm not sure if that's seriously
+    // wrong, or just mildly wrong, but I'm betting somebody will tell me
+    // about it if this was inappropriate
+    Track *track = comp.getTrackById(selectedTrack);
+    track->setPresetLabel( qstrtostr(dialog.getName()) );
+    track->setClef(dialog.getClef());
+    track->setTranspose(dialog.getTranspose());
+    track->setLowestPlayable(dialog.getLowRange());
+    track->setHighestPlayable(dialog.getHighRange());
+
+        CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
+                            comp.getSegments(), selectedTrack,
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    } else {
+        CommandHistory::getInstance()->addCommand(new SegmentSyncCommand(
+                            m_segments, 
+                            dialog.getTranspose(), 
+                            dialog.getLowRange(), 
+                            dialog.getHighRange(),
+                            clefIndexToClef(dialog.getClef())));
+    }
+
+    m_doc->slotDocumentModified();
+
+    // Fix #1885520 (Update track parameter widget when preset changed from notation)
+    RosegardenMainWindow::self()->getView()->getTrackParameterBox()->slotUpdateControls(-1);
 }
 
 void

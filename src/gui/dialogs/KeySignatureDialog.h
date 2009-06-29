@@ -89,7 +89,7 @@ protected:
     bool m_valid;
     bool m_ignoreComboChanges;
 
-    QLabel *m_keyLabel;
+    QLabel *m_keyPixmap;
     QComboBox *m_keyCombo;
     QComboBox *m_majorMinorCombo;
     QLabel *m_explanatoryLabel;

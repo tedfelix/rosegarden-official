@@ -79,6 +79,13 @@ protected slots:
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
     void slotEditAddClef();
+    void slotEditAddKeySignature();
+    void slotEditAddSustainDown();
+    void slotEditAddSustainUp();
+    void slotEditAddSustain(bool down);
+    void slotEditTranspose();
+    void slotEditSwitchPreset();
+
 
     void slotPreviewSelection();
     void slotClearLoop();
