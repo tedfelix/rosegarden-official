@@ -24,13 +24,14 @@
 namespace Rosegarden
 {
 
-ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
+//ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(Q3CanvasItemList selectedItems,
+ControlRulerEventEraseCommand::ControlRulerEventEraseCommand(ControlItemList selectedItems,
                                                          Segment &segment,
                                                          Rosegarden::timeT start, Rosegarden::timeT end)
     : BasicCommand(tr("Erase Controller Event(s)"),
                    segment,
                    start,
-                   (start == end) ? start + 10 : end, 
+                   (start == end) ? start + 10 : end,
                    true),
       m_selectedItems(selectedItems)
 {
@@ -42,9 +43,10 @@ void ControlRulerEventEraseCommand::modifySegment()
 {
     Segment &segment(getSegment());
 
-    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+//    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+    for (ControlItemList::iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-            segment.eraseSingle(item->getElementAdapter()->getEvent());
+            segment.eraseSingle(item->getEvent());
     }
 }
 

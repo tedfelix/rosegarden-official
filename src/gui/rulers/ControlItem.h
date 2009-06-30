@@ -15,32 +15,44 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3CanvasRectangle>
-#include <Q3Canvas>
+#ifndef _CONTROLITEM_H
+#define _CONTROLITEM_H
+
+//#include <Q3CanvasRectangle>
+//#include <Q3Canvas>
+#include <QPolygonF>
+class QPainter;
+class QMouseEvent;
+class QWheelEvent;
 
 namespace Rosegarden {
 
+#define MIDI_CONTROL_MAX_VALUE 0x7F // Shouldnt be here
+
 class ControlRuler;
-class ElementAdapter;
-        
-class ControlItem : public Q3CanvasRectangle
+//class ElementAdapter;
+class Event;
+
+class ControlItem : public QPolygonF
 {
 public:
     ControlItem(ControlRuler* controlRuler,
-                ElementAdapter* adapter,
-                int x, int width = DefaultWidth);
+//                ElementAdapter* adapter,
+                Event* event,
+                QPolygonF polygon);
+//                int x, int width = DefaultWidth);
 
     ~ControlItem();
-    
+
     virtual void setValue(long);
     int getValue() const { return m_value; }
 
-    void setWidth(int w)  { setSize(w, height()); }
-    void setHeight(int h) { 
-	setSize(width(), h); 
-	setZ(50.0+(h/2.0));
-    }
-    int getHeight()       { return size().height(); }
+    //void setWidth(int w)  { setSize(w, height()); }
+    //void setHeight(int h) {
+	//setSize(width(), h);
+	//setZ(50.0+(h/2.0));
+    //}
+    //int getHeight()       { return size().height(); }
 
     virtual void draw(QPainter &painter);
 
@@ -50,14 +62,20 @@ public:
     virtual void handleMouseWheel(QWheelEvent *e);
 
     virtual void setSelected(bool yes);
-    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
+    bool isSelected() { return m_selected; }
+    //    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
     virtual void updateFromValue();
 
     /// update value according to height after a user edit
     virtual void updateValue();
 
-    ElementAdapter* getElementAdapter() { return m_elementAdapter; }
+    virtual void update(); ///CJ Don't know what to do here yet
+    virtual void setX(int);
+    virtual void setWidth(int);
+
+//    ElementAdapter* getElementAdapter() { return m_elementAdapter; }
+    Event* getEvent() { return m_event; }
 
 protected:
 
@@ -65,13 +83,21 @@ protected:
 
     long m_value;
     bool m_handlingMouseMove;
-    bool m_highlighted;
+    bool m_selected;
 
     ControlRuler* m_controlRuler;
-    ElementAdapter* m_elementAdapter;
+//    ElementAdapter* m_elementAdapter;
+    Event* m_event;
 
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;
 };
 
+class ControlItemList : public std::list<ControlItem*> {};
+
+//typedef std::list<ControlItem*> ControlItemList;
+//typedef std::list<ControlItem*>::iterator ControlItemListIterator;
+
 }
+
+#endif

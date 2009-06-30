@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -279,6 +279,7 @@ NewMatrixView::setupActions()
     createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("insert_control_ruler_item", SLOT(slotAddControlRuler()));
 }
 
 void
@@ -289,7 +290,7 @@ NewMatrixView::initActionsToolbar()
     QToolBar *actionsToolbar = findToolbar("Actions Toolbar");
 //    QToolBar *actionsToolbar = m_actionsToolBar;
     //actionsToolbar->setLayout(new QHBoxLayout(actionsToolbar));
-    
+
     if (!actionsToolbar) {
         MATRIX_DEBUG << "MatrixView::initActionsToolbar - "
         << "tool bar not found" << endl;
@@ -350,11 +351,11 @@ NewMatrixView::initActionsToolbar()
     vlabel->setIndent(10);
     vlabel->setObjectName("Humbug");
     actionsToolbar->addWidget(vlabel);
-    
+
     m_velocityCombo = new QComboBox(actionsToolbar);
     m_velocityCombo->setStyleSheet(comboStyle);
     actionsToolbar->addWidget(m_velocityCombo);
-    
+
     for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
@@ -397,7 +398,7 @@ NewMatrixView::initZoomToolbar()
                      << "tool bar not found" << endl;
         return ;
     }
-    
+
     std::vector<double> zoomSizes;
     static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9,
               1.0,
@@ -406,7 +407,7 @@ NewMatrixView::initZoomToolbar()
 //    static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
 //              1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     for (int i = 0; i < sizeof(z)/sizeof(z[0]); ++i) zoomSizes.push_back(z[i]);
-    
+
     m_hZoomSlider = new ZoomSlider<double>
         (zoomSizes, -1, Qt::Horizontal, zoomToolbar);
     m_hZoomSlider->setTracking(true);
@@ -896,6 +897,12 @@ NewMatrixView::slotToggleChordsRuler()
     settings.beginGroup(MatrixViewConfigGroup);
     settings.setValue("Chords ruler shown", view);
     settings.endGroup();
+}
+
+void
+NewMatrixView::slotAddControlRuler()
+{
+    m_matrixWidget->slotAddControlRuler();
 }
 
 void

@@ -36,6 +36,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsProxyWidget>
 #include <QWheelEvent>
+#include <QStackedLayout>
 #include <QWidget>
 
 #include "document/RosegardenDocument.h"
@@ -50,6 +51,9 @@
 
 #include "gui/rulers/PitchRuler.h"
 #include "gui/rulers/PercussionPitchRuler.h"
+
+#include "gui/rulers/ControllerEventsRuler.h"
+#include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/StandardRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
@@ -106,15 +110,18 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_pianoView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_layout->addWidget(m_pianoView, PANNED_ROW, HEADER_COL, 1, 1);
 
+    m_controlsWidget = new ControlRulerWidget;
+    m_layout->addWidget(m_controlsWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
+
     m_hpanner = new Panner;
     m_hpanner->setMaximumHeight(50);
     m_hpanner->setBackgroundBrush(Qt::white);
+
     m_hpanner->setOptimizationFlag(QGraphicsView::DontAdjustForAntialiasing, true);
     m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
 
     // Rulers being not defined still, they can't be added to m_layout.
     // This will be done in setSegments().
-
     // Move the scroll bar from m_view to MatrixWidget
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_layout->addWidget(m_view->horizontalScrollBar(),
@@ -130,11 +137,17 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_pianoView, SLOT(slotSetPannedRect(QRectF)));
 
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
+
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_pianoView, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
+            m_controlsWidget, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
@@ -149,6 +162,13 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
 
     m_toolBox = new MatrixToolBox(this);
+
+    MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName));
+    connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
+            m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+
+    connect(this, SIGNAL(toolChanged(QString)),
+            m_controlsWidget, SLOT(slotSetToolName(QString)));
 }
 
 MatrixWidget::~MatrixWidget()
@@ -220,7 +240,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     if (m_drumMode && mapping && !m_localMapping->getMap().empty()) {
         m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
-                                                m_scene->getYResolution()); 
+                                                m_scene->getYResolution());
     } else {
         m_pitchRuler = new PianoKeyboard(0);
     }
@@ -243,6 +263,13 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     QRectF pianoRect = m_pianoScene->sceneRect();
     pianoRect.setHeight(viewRect.height());
     m_pianoScene->setSceneRect(pianoRect);
+
+    m_controlsWidget->setSegments(document, segments);
+    m_controlsWidget->setScene(m_scene);
+
+    // For some reason this doesn't work in the constructor - not looked in detail
+    connect(m_scene, SIGNAL(selectionChanged(EventSelection *)),
+            m_controlsWidget, SLOT(slotSelectionChanged(EventSelection *)));
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale, 0, 25,
@@ -313,7 +340,7 @@ MatrixWidget::getHorizontalZoomFactor() const
 }
 
 void
-MatrixWidget::slotZoomInFromPanner() 
+MatrixWidget::slotZoomInFromPanner()
 {
     m_hZoomFactor /= 1.1;
     m_vZoomFactor /= 1.1;
@@ -327,7 +354,7 @@ MatrixWidget::slotZoomInFromPanner()
 }
 
 void
-MatrixWidget::slotZoomOutFromPanner() 
+MatrixWidget::slotZoomOutFromPanner()
 {
     m_hZoomFactor *= 1.1;
     m_vZoomFactor *= 1.1;
@@ -369,7 +396,7 @@ MatrixWidget::setSelection(EventSelection *s, bool preview)
 {
     if (!m_scene) return;
     m_scene->setSelection(s, preview);
-}    
+}
 
 const SnapGrid *
 MatrixWidget::getSnapGrid() const
@@ -383,7 +410,7 @@ MatrixWidget::slotSetSnap(timeT t)
 {
     if (!m_scene) return;
     m_scene->setSnap(t);
-}    
+}
 
 void
 MatrixWidget::slotSelectAll()
@@ -400,7 +427,7 @@ MatrixWidget::slotClearSelection()
     // press switches us back to the select tool.
 
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
-    
+
     if (!selector) {
         slotSetSelectTool();
     } else {
@@ -463,7 +490,7 @@ MatrixWidget::slotEnsureLastMouseMoveVisible()
     if (m_scene) m_scene->constrainToSegmentArea(pos);
     m_view->ensureVisible(QRectF(pos, pos));
     m_inMove = false;
-}    
+}
 
 void
 MatrixWidget::slotDispatchMouseRelease(const MatrixMouseEvent *e)
@@ -496,6 +523,7 @@ MatrixWidget::slotSetTool(QString name)
     if (m_currentTool) m_currentTool->stow();
     m_currentTool = tool;
     m_currentTool->ready();
+    emit toolChanged(name);
 }
 
 void
@@ -549,10 +577,16 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
 }
 
 void
+MatrixWidget::slotAddControlRuler()
+{
+    m_controlsWidget->slotAddRuler();
+}
+
+void
 MatrixWidget::slotHScrollBarRangeChanged(int min, int max)
 {
     if (max > min) {
-        m_view->horizontalScrollBar()->show(); 
+        m_view->horizontalScrollBar()->show();
     } else {
         m_view->horizontalScrollBar()->hide();
     }

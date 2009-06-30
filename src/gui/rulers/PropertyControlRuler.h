@@ -19,47 +19,48 @@
 #ifndef _RG_PROPERTYCONTROLRULER_H_
 #define _RG_PROPERTYCONTROLRULER_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasLine>
+//#include <Q3Canvas>
+//#include <Q3CanvasLine>
 #include "base/PropertyName.h"
 #include "ControlRuler.h"
 #include <QString>
 #include "base/Event.h"
-#include "base/ViewSegment.h"
+#include "base/Segment.h"
 
 
 class QWidget;
 class QMouseEvent;
 class QContextMenuEvent;
-class Q3CanvasLine;
-class Q3Canvas;
+//class Q3CanvasLine;
+//class Q3Canvas;
 
 
 namespace Rosegarden
 {
 
 class ViewElement;
+class MatrixScene;
+class MatrixViewSegment;
 class Segment;
 class RulerScale;
-class EditViewBase;
+//class EditViewBase;
 
 
 /**
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler : public ControlRuler,
-			     public ViewSegmentObserver
+class PropertyControlRuler :  public ControlRuler
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
-                         ViewSegment*,
-                         RulerScale*,
-                         EditViewBase* parentView,
-                         Q3Canvas*,
-                         QWidget* parent=0, const char* name=0);//, WFlags f=0);
+                        MatrixViewSegment*,
+                        RulerScale*,
+                        QWidget* parent=0, const char* name=0);
 
     virtual ~PropertyControlRuler();
+
+    virtual void paintEvent(QPaintEvent *);
 
     virtual QString getName();
 
@@ -68,45 +69,56 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    void setViewSegment(ViewSegment *);
+    virtual void setViewSegment(MatrixViewSegment *);
 
     // ViewSegmentObserver interface
     virtual void elementAdded(const ViewSegment *, ViewElement*);
+//    virtual void eventAdded(const Segment *, Event *);
     virtual void elementRemoved(const ViewSegment *, ViewElement*);
-    virtual void viewSegmentDeleted(const ViewSegment *);
+//    virtual void eventRemoved(const Segment *, Event *);
+//    virtual void viewSegmentDeleted(const ViewSegment *);
+//    virtual void segmentDeleted(const Segment *);
 
-    virtual void startPropertyLine();
+//    virtual void startPropertyLine();
     virtual void selectAllProperties();
 
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
+    void updateSelection(ViewElementList *);
+    void updateControlItems();
+
+public slots:
+    void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+
 protected:
+//    void addControlItem(Event *);
+    void addControlItem(MatrixElement *);
 
-    virtual void contentsMousePressEvent(QMouseEvent*);
-    virtual void contentsMouseReleaseEvent(QMouseEvent*);
-    virtual void contentsMouseMoveEvent(QMouseEvent*);
-    virtual void contentsContextMenuEvent(QContextMenuEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void contextMenuEvent(QContextMenuEvent*);
 
-    void drawPropertyLine(timeT startTime,
-                          timeT endTime,
-                          int startValue,
-                          int endValue);
+    //void drawPropertyLine(timeT startTime,
+                          //timeT endTime,
+                          //int startValue,
+                          //int endValue);
 
     virtual void init();
-    virtual void drawBackground();
-    virtual void computeViewSegmentOffset();
+//    virtual void drawBackground();
+//    virtual void computeSegmentOffset();
 
     //--------------- Data members ---------------------------------
 
     PropertyName m_propertyName;
-    ViewSegment *m_viewSegment;
+//    Segment *m_segment;
 
-    Q3CanvasLine *m_propertyLine;
-    
-    bool m_propertyLineShowing;
-    int m_propertyLineX;
-    int m_propertyLineY;
+//    Q3CanvasLine *m_propertyLine;
+
+//    bool m_propertyLineShowing;
+//    int m_propertyLineX;
+//    int m_propertyLineY;
 };
 
 

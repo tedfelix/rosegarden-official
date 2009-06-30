@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -27,7 +27,7 @@
 
 namespace Rosegarden
 {
-	
+
 Panned::Panned() :
     m_pointerVisible(false)
 {
@@ -56,7 +56,7 @@ Panned::paintEvent(QPaintEvent *e)
 
     QGraphicsView::paintEvent(e);
 }
-    
+
 void
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
@@ -93,6 +93,8 @@ void
 Panned::slotSetPannedRect(QRectF pr)
 {
     centerOn(pr.center());
+//	setSceneRect(pr);
+//	m_pannedRect = pr;
 }
 
 void
@@ -123,7 +125,7 @@ Panned::slotShowPositionPointer(QPointF top, float height) // scene coords
     m_pointerVisible = true;
     m_pointerTop = top;
     m_pointerHeight = height;
-    viewport()->update(); //!!! should update old and new pointer areas only, as in the previous function 
+    viewport()->update(); //!!! should update old and new pointer areas only, as in the previous function
 }
 
 void
@@ -144,7 +146,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     double leftDist = 0.15;
     double rightDist = 0.20;
 
-    int w = width();                        // View width in pixels    
+    int w = width();                        // View width in pixels
     QRectF r = mapToScene(0, 0, w, 1).boundingRect();
     double ws = r.width();                  // View width in scene units
     double left = r.x();                    // View left x in scene units
@@ -158,7 +160,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     double leftThreshold = left + ws * leftDist;
     double rightThreshold = right - ws * rightDist;
     double delta = x - leftThreshold;
-  
+
     // Is x inside the scene? If not do nothing.
     if ((x < x1) || (x > x2)) return;
 
@@ -177,7 +179,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
 //        std::cerr << "small scroll (x is off right and not paging)" << std::endl;
         value = hMin + (((x - ws * (1.0 - rightDist)) - x1) * (hMax - hMin)) / (length - ws);
     }
-            
+
     if (value < hMin) value = hMin;
     else if (value > hMax) value = hMax;
     horizontalScrollBar()->setValue(value);
@@ -202,7 +204,7 @@ Panned::slotEmulateWheelEvent(QWheelEvent *ev)
 {
     QGraphicsView::wheelEvent(ev);
 }
-    
+
 }
 
 #include "Panned.moc"

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -98,6 +98,8 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     double x0 = scale->getXForTime(time);
     double x1 = scale->getXForTime(time + duration);
     m_width = x1 - x0;
+
+    m_velocity = velocity;
 
     QColor colour;
     if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {

@@ -31,34 +31,36 @@ ControlSelector::ControlSelector(ControlRuler* parent)
 
 void ControlSelector::handleMouseButtonPress(QMouseEvent *e)
 {
-    QPoint p = m_ruler->inverseMapPoint(e->pos());
+//    QPoint p = m_ruler->inverseMapPoint(e->pos());
+    QPoint p = e->pos();
 
     getSelectionRectangle()->setX(p.x());
     getSelectionRectangle()->setY(p.y());
-    getSelectionRectangle()->setSize(0,0);
+    getSelectionRectangle()->setSize(QSize(0,0));
 
-    getSelectionRectangle()->show();
-    m_ruler->canvas()->update();
+//    getSelectionRectangle()->show();
+//    m_ruler->canvas()->update();
 }
 
 void ControlSelector::handleMouseButtonRelease(QMouseEvent*)
 {
-    getSelectionRectangle()->hide();
-    m_ruler->canvas()->update();
+//    getSelectionRectangle()->hide();
+//    m_ruler->canvas()->update();
 }
 
 void ControlSelector::handleMouseMove(QMouseEvent *e, int, int)
 {
-    QPoint p = m_ruler->inverseMapPoint(e->pos());
+//    QPoint p = m_ruler->inverseMapPoint(e->pos());
+    QPoint p = e->pos();
 
     int w = int(p.x() - getSelectionRectangle()->x());
     int h = int(p.y() - getSelectionRectangle()->y());
     if (w > 0) ++w; else --w;
     if (h > 0) ++h; else --h;
 
-    getSelectionRectangle()->setSize(w, h);
+    getSelectionRectangle()->setSize(QSize(w, h));
 
-    m_ruler->canvas()->update();
+//    m_ruler->canvas()->update();
 }
 
 }

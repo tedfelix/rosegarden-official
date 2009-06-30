@@ -15,49 +15,54 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3CanvasItem>
-#include <Q3CanvasItemList>
-#include <Q3CanvasRectangle>
+//#include <Q3CanvasItem>
+//#include <Q3CanvasItemList>
+//#include <Q3CanvasRectangle>
 #include "ControlItem.h"
 #include "ControlRuler.h"
 #include "ElementAdapter.h"
-#include "misc/Debug.h"
+//#include "misc/Debug.h"
 
 namespace Rosegarden {
 
 const unsigned int ControlItem::BorderThickness = 1;
 const unsigned int ControlItem::DefaultWidth    = 20;
 
-ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
-                         int xx, int width)
-    : Q3CanvasRectangle(ruler->canvas()),
-      m_value(0),
-      m_controlRuler(ruler),
-      m_elementAdapter(elementAdapter),
-	m_highlighted(false)
+//ControlItem::ControlItem(ControlRuler* ruler, ElementAdapter* elementAdapter,
+//                         int xx, int width)
+
+    //: Q3CanvasRectangle(ruler->canvas()),
+ControlItem::ControlItem(ControlRuler *controlRuler,
+        Event *event,
+        QPolygonF polygon)
+: QPolygonF(polygon),
+    m_value(0),
+    m_controlRuler(controlRuler),
+//    m_elementAdapter(elementAdapter),
+    m_event(event),
+    m_selected(false)
 {
-    if (width < DefaultWidth/4) {
-        width = DefaultWidth/4; // avoid invisible zero-duration items
-    }
-    setWidth(width);
-    setPen(QPen(QColor(Qt::black), BorderThickness));
-    setBrush(QColor(Qt::blue));
+//    if (width < DefaultWidth/4) {
+//        width = DefaultWidth/4; // avoid invisible zero-duration items
+//    }
+    //setWidth(width);
+    //setPen(QPen(QColor(Qt::black), BorderThickness));
+    //setBrush(QColor(Qt::blue));
 
-    setX(xx);
-    setY(canvas()->height());
-    setZ(50+canvas()->height());
+    //setX(xx);
+    //setY(canvas()->height());
+    //setZ(50+canvas()->height());
 
-    updateFromValue();
-    setEnabled(false);
+    //updateFromValue();
+    //setEnabled(false);
     //RG_DEBUG << "ControlItem x = " << x() << " - y = " << y() << " - width = " << width << endl;
-    show();
+    //show();
 }
 
 ControlItem::~ControlItem()
 {
-    delete m_elementAdapter;
+//    delete m_elementAdapter;
 }
-
 
 void ControlItem::setValue(long v)
 {
@@ -68,45 +73,45 @@ void ControlItem::setValue(long v)
 
 void ControlItem::updateValue()
 {
-    m_elementAdapter->setValue(m_value);
+//    m_elementAdapter->setValue(m_value);
 }
 
 void ControlItem::updateFromValue()
 {
 //    RG_DEBUG << "ControlItem::updateFromValue() : " << this << endl;
 
-    if (m_elementAdapter->getValue(m_value)) {
+//    if (m_elementAdapter->getValue(m_value)) {
 //         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
-        setHeight(m_controlRuler->valueToHeight(m_value));
-    }
+//        setHeight(m_controlRuler->valueToHeight(m_value));
+//    }
 }
 
-typedef std::pair<int, Q3CanvasItem*> ItemPair;
+/*typedef std::pair<int, Q3CanvasItem*> ItemPair;
 struct ItemCmp
 {
     bool operator()(const ItemPair &i1, const ItemPair &i2)
     {
         return i1.first > i2.first;
     }
-};
+};*/
 
 void ControlItem::draw(QPainter &painter)
 {
-    if (!isEnabled())
-        updateFromValue();
-    
+//    if (!isEnabled())
+//        updateFromValue();
+
     //ElementAdapter *ea=getElementAdapter();
    // if(ea && m_controlRuler->isEventSelected(ea->getEvent()))
-    if(m_highlighted)
-	setBrush(Qt::blue);
-    else
-        setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
+//    if(m_highlighted)
+	//setBrush(Qt::blue);
+//    else
+      //  setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
 
-    Q3CanvasRectangle::draw(painter);
-    
+    //Q3CanvasRectangle::draw(painter);
+
     /*
 
-    // Attempt to get overlapping rectangles ordered automatically - 
+    // Attempt to get overlapping rectangles ordered automatically -
     // probably best not to do this here - rwb
 
     // calculate collisions and assign Z values accordingly
@@ -137,7 +142,7 @@ void ControlItem::draw(QPainter &painter)
     }
 
     RG_DEBUG << endl << endl;
-            
+
     canvas()->update();
 
     */
@@ -147,13 +152,13 @@ void ControlItem::draw(QPainter &painter)
 void ControlItem::handleMouseButtonPress(QMouseEvent*)
 {
 //     RG_DEBUG << "ControlItem::handleMouseButtonPress()" << this << endl;
-    setEnabled(true);
+//    setEnabled(true);
 }
 
 void ControlItem::handleMouseButtonRelease(QMouseEvent*)
 {
 //     RG_DEBUG << "ControlItem::handleMouseButtonRelease()"  << this << endl;
-    setEnabled(false);
+//    setEnabled(false);
 }
 
 void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
@@ -163,18 +168,18 @@ void ControlItem::handleMouseMove(QMouseEvent*, int /*deltaX*/, int deltaY)
     // height is always negative
     //
 
-    m_controlRuler->applyTool(x(), deltaY);
+//    m_controlRuler->applyTool(x(), deltaY);
 
-    int absNewHeight = -(getHeight() + deltaY);
+    //int absNewHeight = -(getHeight() + deltaY);
 
     // Make sure height is within bounds
-    if (absNewHeight > ControlRuler::MaxItemHeight)
-        absNewHeight = ControlRuler::MaxItemHeight;
-    else if (absNewHeight < ControlRuler::MinItemHeight)
-        absNewHeight = ControlRuler::MinItemHeight;
-    
-    setHeight(-absNewHeight);
-    setValue(m_controlRuler->heightToValue(getHeight()));
+    //if (absNewHeight > ControlRuler::MaxItemHeight)
+    //    absNewHeight = ControlRuler::MaxItemHeight;
+    //else if (absNewHeight < ControlRuler::MinItemHeight)
+    //    absNewHeight = ControlRuler::MinItemHeight;
+
+    //setHeight(-absNewHeight);
+    //setValue(m_controlRuler->heightToValue(getHeight()));
 }
 
 void ControlItem::handleMouseWheel(QWheelEvent *)
@@ -184,12 +189,25 @@ void ControlItem::handleMouseWheel(QWheelEvent *)
 
 void ControlItem::setSelected(bool s)
 {
-    Q3CanvasItem::setSelected(s);
+    m_selected = s;
+//    Q3CanvasItem::setSelected(s);
 
-    if (s) setPen(QPen(QColor(Qt::red), BorderThickness));
-    else setPen(QPen(QColor(Qt::black), BorderThickness));
+//    if (s) setPen(QPen(QColor(Qt::red), BorderThickness));
+//    else setPen(QPen(QColor(Qt::black), BorderThickness));
 
-    canvas()->update();
+//    canvas()->update();
+}
+
+void ControlItem::update()
+{
+}
+
+void ControlItem::setX(int x)
+{
+}
+
+void ControlItem::setWidth(int width)
+{
 }
 
 }

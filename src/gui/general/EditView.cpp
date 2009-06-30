@@ -780,9 +780,9 @@ EditView::setupActions()
     createAction("jog_right", SLOT(slotJogRight()));
     createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
 // was disabled in kde3 version:
-// createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
+    createAction("show_controller_events_ruler", SLOT(slotShowControllerEventsRuler()));
 // was disabled in kde3 version:
-// createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
+//    createAction("add_control_ruler", SLOT(slotShowPropertyControlRuler()));
     createAction("insert_control_ruler_item", SLOT(slotInsertControlRulerItem()));
     createAction("erase_control_ruler_item", SLOT(slotEraseControlRulerItem()));
     createAction("clear_control_ruler_item", SLOT(slotClearControlRulerItem()));
@@ -1554,26 +1554,25 @@ void EditView::slotShowVelocityControlRuler()
 
 void EditView::slotShowControllerEventsRuler()
 {
+     int index = 0;
 
-    //     int index = 0;
+     ControlRuler* existingRuler = findRuler(propertyName, index);
 
-    //     ControlRuler* existingRuler = findRuler(propertyName, index);
+     if (existingRuler) {
 
-    //     if (existingRuler) {
+         m_controlRulers->setCurrentPage(index);
 
-    //         m_controlRulers->setCurrentPage(index);
+     } else {
 
-    //     } else {
+         ControllerEventsRuler* controlRuler = makeControllerEventRuler();
+         addControlRuler(controlRuler);
+     }
 
-    //         ControllerEventsRuler* controlRuler = makeControllerEventRuler();
-    //         addControlRuler(controlRuler);
-    //     }
+     if (!m_controlRulers->isVisible()) {
+         m_controlRulers->show();
+     }
 
-    //     if (!m_controlRulers->isVisible()) {
-    //         m_controlRulers->show();
-    //     }
-
-    //     updateBottomWidgetGeometry();
+     updateBottomWidgetGeometry();
 }
 
 void EditView::slotShowPropertyControlRuler()
@@ -1620,8 +1619,8 @@ void
 EditView::slotStartControlLineItem()
 {
     ControllerEventsRuler* ruler = dynamic_cast<ControllerEventsRuler*>(getCurrentControlRuler());
-    if (ruler)
-        ruler->startControlLine();
+    //if (ruler)
+        //ruler->startControlLine();
 }
 
 void
@@ -1631,8 +1630,8 @@ EditView::slotDrawPropertyLine()
     PropertyControlRuler* ruler = dynamic_cast<PropertyControlRuler*>
                                   (findRuler(BaseProperties::VELOCITY, index));
 
-    if (ruler)
-        ruler->startPropertyLine();
+//    if (ruler)
+//        ruler->startPropertyLine();
 }
 
 void

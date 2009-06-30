@@ -32,7 +32,7 @@ class Event;
 class MatrixElement : public ViewElement
 {
 public:
-    MatrixElement(MatrixScene *scene, 
+    MatrixElement(MatrixScene *scene,
                   Event *event,
                   bool drum);
     virtual ~MatrixElement();
@@ -41,6 +41,7 @@ public:
     bool isNote() const;
 
     double getWidth() const { return m_width; }
+    double getElementVelocity() { return m_velocity; }
 
     void setSelected(bool selected);
 
@@ -48,7 +49,7 @@ public:
 
     /// Adjust the item to reflect the values of our event
     void reconfigure();
-    
+
     /// Adjust the item to reflect the given values, not those of our event
     void reconfigure(int velocity);
 
@@ -69,6 +70,7 @@ protected:
     bool m_current;
     QGraphicsItem *m_item;
     double m_width;
+    double m_velocity;
 };
 
 

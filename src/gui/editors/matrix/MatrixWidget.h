@@ -26,6 +26,7 @@
 #include <vector>
 
 class QGraphicsScene;
+class QStackedLayout; // To be replaced
 class QGridLayout;
 
 namespace Rosegarden
@@ -45,6 +46,7 @@ class Panned;
 class EventSelection;
 class PitchRuler;
 class MidiKeyMapping;
+class ControlRulerWidget;
 class StandardRuler;
 class TempoRuler;
 class ChordNameRuler;
@@ -63,7 +65,7 @@ public:
     MatrixWidget(bool drumMode);
     virtual ~MatrixWidget();
 
-    void setSegments(RosegardenDocument *document, 
+    void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
 
     MatrixScene *getScene() { return m_scene; }
@@ -97,11 +99,12 @@ public:
 
 signals:
     void editTriggerSegment(int);
+    void toolChanged(QString);
 
 public slots:
     void slotSelectAll();
     void slotClearSelection();
-    
+
     void slotSetTool(QString name);
     void slotSetPaintTool();
     void slotSetEraseTool();
@@ -117,6 +120,8 @@ public slots:
 
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
+
+    void slotAddControlRuler();
 
     void slotHScroll();
 
@@ -153,6 +158,9 @@ private:
     PitchRuler *m_pitchRuler; // I own this
     Panned *m_pianoView; // I own this
     QGraphicsScene *m_pianoScene; // I own this
+
+    ControlRulerWidget *m_controlsWidget; // I own this
+
     MidiKeyMapping *m_localMapping; // I own this
 
     StandardRuler *m_topStandardRuler; // I own this
@@ -171,6 +179,7 @@ private:
         TOPRULER_ROW,
         PANNED_ROW,
         BOTTOMRULER_ROW,
+        CONTROLS_ROW,
         HSLIDER_ROW,
         PANNER_ROW
     };

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,17 +18,17 @@
 #ifndef _RG_CONTROLLEREVENTSRULER_H_
 #define _RG_CONTROLLEREVENTSRULER_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasLine>
+//#include <Q3Canvas>
+//#include <Q3CanvasLine>
 #include "ControlRuler.h"
-#include <QString>
 #include "base/Event.h"
-
+#include "base/Segment.h"
+#include <QString>
 
 class QWidget;
 class QMouseEvent;
-class Q3CanvasLine;
-class Q3Canvas;
+//class Q3CanvasLine;
+//class Q3Canvas;
 
 
 namespace Rosegarden
@@ -38,7 +37,7 @@ namespace Rosegarden
 class Segment;
 class RulerScale;
 class Event;
-class EditViewBase;
+//class EditViewBase;
 class ControlParameter;
 class ControlItem;
 
@@ -49,15 +48,17 @@ class ControlItem;
 class ControllerEventsRuler : public ControlRuler
 {
 public:
-    ControllerEventsRuler(Segment*,
+    ControllerEventsRuler(MatrixViewSegment*,
                           RulerScale*,
-                          EditViewBase* parentView,
-                          Q3Canvas*,
+//                          EditViewBase* parentView,
+//                          Q3Canvas*,
                           QWidget* parent=0,
                           const ControlParameter *controller = 0,
                           const char* name=0 );	//, WFlags f=0);
 
     virtual ~ControllerEventsRuler();
+
+    virtual void paintEvent(QPaintEvent *);
 
     virtual QString getName();
     int getDefaultItemWidth() { return m_defaultItemWidth; }
@@ -65,23 +66,28 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-    void setSegment(Segment *);
+//    virtual void setViewSegment(MatrixViewSegment *);
 
-    /// SegmentObserver interface
-    virtual void eventAdded(const Segment *, Event *);
-    virtual void eventRemoved(const Segment *, Event *);
+    // ViewSegmentObserver interface
+    virtual void elementAdded(const ViewSegment *, ViewElement*);
+//    virtual void eventAdded(const Segment *, Event *);
+    virtual void elementRemoved(const ViewSegment *, ViewElement*);
+//    virtual void eventRemoved(const Segment *, Event *);
+//    virtual void viewSegmentDeleted(const ViewSegment *);
+//    virtual void segmentDeleted(const Segment *);
 
     virtual void insertControllerEvent();
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
-    virtual void startControlLine();
+//    virtual void startControlLine();
 
     ControlParameter* getControlParameter() { return m_controller; }
 
 protected:
 
     virtual void init();
-    virtual void drawBackground();
+
+//    virtual void drawBackground(); Implemented in paintEvent
 
     // Let's override these again here
     //
@@ -100,11 +106,11 @@ protected:
     int                           m_defaultItemWidth;
 
     ControlParameter  *m_controller;
-    Q3CanvasLine                   *m_controlLine;
-    
-    bool                           m_controlLineShowing;
-    int                            m_controlLineX;
-    int                            m_controlLineY;
+//    Q3CanvasLine                   *m_controlLine;
+
+//    bool                           m_controlLineShowing;
+//    int                            m_controlLineX;
+//    int                            m_controlLineY;
 };
 
 

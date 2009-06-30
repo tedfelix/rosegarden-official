@@ -48,7 +48,7 @@ namespace Rosegarden
 {
 
 using namespace BaseProperties;
-	
+
 MatrixScene::MatrixScene() :
     m_widget(0),
     m_document(0),
@@ -92,17 +92,17 @@ MatrixScene::setSegments(RosegardenDocument *document,
 
     m_document = document;
     m_segments = segments;
-    
+
     m_document->getComposition().addObserver(this);
 
     SegmentSelection selection;
     selection.insert(segments.begin(), segments.end());
-    
+
     delete m_snapGrid;
     delete m_scale;
     m_scale = new SegmentsRulerScale(&m_document->getComposition(),
                                      selection,
-                                     0, 
+                                     0,
                                      Note(Note::Shortest).getDuration() / 2.0);
     m_snapGrid = new SnapGrid(m_scale);
 
@@ -130,7 +130,7 @@ MatrixScene::setSegments(RosegardenDocument *document,
             }
         }
     }
-    
+
     m_resolution = 8;
     if (havePercussion) m_resolution = 11;
 
@@ -140,13 +140,13 @@ MatrixScene::setSegments(RosegardenDocument *document,
 
         int snapGridSize = m_segments[i]->getSnapGridSize();
 
-        if (snapGridSize != -1) { 
+        if (snapGridSize != -1) {
             m_snapGrid->setSnapTime(snapGridSize);
             haveSetSnap = true;
         }
 
         bool isPercussion = false;
-        
+
         if (havePercussion) {
             Instrument *instrument =
                 m_document->getStudio().getInstrumentFor(m_segments[i]);
@@ -154,7 +154,7 @@ MatrixScene::setSegments(RosegardenDocument *document,
                 isPercussion = true;
             }
         }
-            
+
         MatrixViewSegment *vs = new MatrixViewSegment(this,
                                                       m_segments[i],
                                                       isPercussion);
@@ -201,6 +201,13 @@ MatrixScene::setCurrentSegment(Segment *s)
               << s << std::endl;
 }
 
+MatrixViewSegment *
+MatrixScene::getCurrentViewSegment()
+{
+    if (m_viewSegments.empty()) return 0;
+    return m_viewSegments[0];
+}
+
 bool
 MatrixScene::segmentsContainNotes() const
 {
@@ -233,7 +240,7 @@ MatrixScene::recreateLines()
             end = m_segments[i]->getEndMarkerTime();
         }
     }
-    
+
 //    double pw = 1.0 / 64.0;
 //    double pw = 0.5;
     double pw = 0;
@@ -343,16 +350,16 @@ MatrixScene::recreatePitchHighlights()
 
     timeT k0 = segment->getStartTime();
     timeT k1 = segment->getStartTime();
-    
+
     int i = 0;
 
     while (k0 < segment->getEndMarkerTime()) {
-        
+
         Rosegarden::Key key = segment->getKeyAtTime(k0);
         if (!segment->getNextKeyTime(k0, k1)) k1 = segment->getEndMarkerTime();
 
         if (k0 == k1) {
-            std::cerr << "WARNING: MatrixScene::recreatePitchHighlights: k0 == k1 == " 
+            std::cerr << "WARNING: MatrixScene::recreatePitchHighlights: k0 == k1 == "
                       << k0 << std::endl;
             break;
         }
@@ -366,7 +373,7 @@ MatrixScene::recreatePitchHighlights()
         int hsteps[hcount];
         hsteps[0] = scale_Cmajor[0]; // tonic
         hsteps[2] = scale_Cmajor[4]; // fifth
-        
+
         if (key.isMinor()) {
             hsteps[1] = scale_Cminor[2]; // minor third
         } else {
@@ -389,7 +396,7 @@ MatrixScene::recreatePitchHighlights()
                     addItem(rect);
                     m_highlights.push_back(rect);
                 }
-                
+
                 if (j == 0) {
                     rect->setBrush(GUIPalette::getColour
                                    (GUIPalette::MatrixTonicHighlight));
@@ -484,7 +491,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                  << ", pitch = " << mme.pitch
                  << endl;
 }
-   
+
 void
 MatrixScene::mousePressEvent(QGraphicsSceneMouseEvent *e)
 {
@@ -589,9 +596,10 @@ MatrixScene::setSelection(EventSelection *s,
         setSelectionElementStatus(oldSelection, false);
         delete oldSelection;
     }
-    
+
     if (m_selection) {
         setSelectionElementStatus(m_selection, true, preview);
+        emit selectionChanged(s);
     }
 }
 
@@ -635,7 +643,7 @@ MatrixScene::selectAll()
 }
 
 void
-MatrixScene::setSelectionElementStatus(EventSelection *s, 
+MatrixScene::setSelectionElementStatus(EventSelection *s,
                                        bool set,
                                        bool preview)
 {
@@ -658,12 +666,12 @@ MatrixScene::setSelectionElementStatus(EventSelection *s,
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;
-        
+
         ViewElementList::iterator vsi = vs->findEvent(e);
         if (vsi == vs->getViewElementList()->end()) continue;
-        
+
         MatrixElement *el = static_cast<MatrixElement *>(*vsi);
-        
+
         el->setSelected(set);
 
         if (set && preview) {
@@ -758,7 +766,7 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
         timeT t0 = m_segments[i]->getStartTime();
         timeT t1 = m_segments[i]->getEndMarkerTime();
         if (i == 0 || t0 < start) start = t0;
-        if (i == 0 || t1 > end) end = t1; 
+        if (i == 0 || t1 > end) end = t1;
     }
     if (t < start) {
         ok = false;
@@ -792,8 +800,8 @@ MatrixScene::playNote(Segment &segment, int pitch, int velocity)
                    RealTime::zeroTime);
 
     StudioControl::sendMappedEvent(mE);
-}    
-    
+}
+
 }
 
 #include "MatrixScene.moc"

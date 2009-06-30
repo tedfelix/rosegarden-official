@@ -46,14 +46,14 @@ class SnapGrid;
  * MatrixViewSegment classes which track segment contents in view
  * objects.
  */
-class MatrixScene : public QGraphicsScene, 
+class MatrixScene : public QGraphicsScene,
                     public CompositionObserver,
                     public SelectionManager
 {
     Q_OBJECT
-    
+
 public:
-    MatrixScene();    
+    MatrixScene();
     ~MatrixScene();
 
     void setMatrixWidget(MatrixWidget *w);
@@ -67,7 +67,7 @@ public:
     virtual EventSelection *getSelection() const { return m_selection; }
     virtual void setSelection(EventSelection* s, bool preview);
     void selectAll();
-    
+
     void setSingleSelectedEvent(MatrixViewSegment *viewSegment,
                                 MatrixElement *e,
                                 bool preview);
@@ -78,6 +78,8 @@ public:
 
     Segment *getCurrentSegment();
     void setCurrentSegment(Segment *);
+
+    MatrixViewSegment *getCurrentViewSegment();
 
     bool segmentsContainNotes() const;
 
@@ -100,12 +102,13 @@ signals:
     void mouseMoved(const MatrixMouseEvent *e);
     void mouseReleased(const MatrixMouseEvent *e);
     void mouseDoubleClicked(const MatrixMouseEvent *e);
-    
+
     void eventRemoved(Event *e);
 
+    void selectionChanged(EventSelection *s);
     void sceneDeleted(); // all segments have been removed
-    
-protected slots:    
+
+protected slots:
     void slotCommandExecuted();
 
 protected:

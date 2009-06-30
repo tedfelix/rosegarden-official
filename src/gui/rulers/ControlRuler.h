@@ -18,26 +18,29 @@
 #ifndef _RG_CONTROLRULER_H_
 #define _RG_CONTROLRULER_H_
 
-#include <Q3Canvas>
-#include <Q3CanvasItemList>
-#include <Q3CanvasRectangle>
+#include <QWidget>
+//#include <Q3Canvas>
+//#include <Q3CanvasItemList>
+//#include <Q3CanvasRectangle>
 #include "base/Segment.h"
 #include "base/Selection.h"
-#include "gui/general/RosegardenCanvasView.h"
+//#include "gui/general/RosegardenCanvasView.h"
+#include "gui/editors/matrix/MatrixViewSegment.h"
 #include <QColor>
 #include <QPoint>
 #include <QString>
 #include <utility>
 
+#include "ControlItem.h"
 
-class QWidget;
+//class QWidget;
 class QMenu;
 class QWheelEvent;
 class QScrollBar;
 class QMouseEvent;
 class QContextMenuEvent;
-class Q3CanvasRectangle;
-class Q3Canvas;
+//class Q3CanvasRectangle;
+//class Q3Canvas;
 
 
 namespace Rosegarden
@@ -45,31 +48,40 @@ namespace Rosegarden
 
 class ControlTool;
 class ControlSelector;
-class ControlItem;
+//class ControlItem;
+//class ControlItemList;
 class Segment;
 class RulerScale;
 class EventSelection;
 class EditViewBase;
 
+//typedef std::list<ControlItem*> ControlItemList;
+//typedef std::list<ControlItem*>::iterator ControlItemListIterator;
 
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
+//class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
+//class ControlRuler : public QWidget, public SegmentObserver, public EventSelectionObserver
+class ControlRuler : public QWidget, public ViewSegmentObserver
 {
     Q_OBJECT
 
     friend class ControlItem;
 
 public:
-    ControlRuler(Segment*,
+    ControlRuler(MatrixViewSegment*,
                  RulerScale*,
-                 EditViewBase* parentView,
-                 Q3Canvas*,
+//                 EditViewBase* parentView,
+//                 Q3Canvas*,
                  QWidget* parent=0); //###  const char name is obsolete, and I'm almost sure WFlags is obsolete too
     virtual ~ControlRuler();
 
     virtual QString getName() = 0;
+
+    virtual QSize sizeHint() { return QSize(1,100); }
+
+    virtual void paintEvent(QPaintEvent *);
 
     int getMaxItemValue() { return m_maxItemValue; }
     void setMaxItemValue(int val) { m_maxItemValue = val; }
@@ -80,19 +92,24 @@ public:
 
     int applyTool(double x, int val);
 
-    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
+//    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
+    QRect* getSelectionRectangle() { return m_selectionRect; }
 
+    virtual void setSegment(Segment *);
+    virtual void setViewSegment(MatrixViewSegment *);
+
+    virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
 
     /// EventSelectionObserver
-    virtual void eventSelected(EventSelection *,Event *);
-    virtual void eventDeselected(EventSelection *,Event *);
-    virtual void eventSelectionDestroyed(EventSelection *);
+//    virtual void eventSelected(EventSelection *,Event *);
+//    virtual void eventDeselected(EventSelection *,Event *);
+//    virtual void eventSelectionDestroyed(EventSelection *);
 
-    void assignEventSelection(EventSelection *);
+//    void assignEventSelection(EventSelection *);
 
     // SegmentObserver interface
-    virtual void segmentDeleted(const Segment *);
+    virtual void viewSegmentDeleted(const ViewSegment *);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
@@ -102,7 +119,7 @@ public:
     void flipForwards();
     void flipBackwards();
 
-    void setMainHorizontalScrollBar(QScrollBar* s ) { m_mainHorizontalScrollBar = s; }
+//    void setMainHorizontalScrollBar(QScrollBar* s ) { m_mainHorizontalScrollBar = s; }
 
 signals:
     void stateChange(const QString&, bool);
@@ -110,20 +127,24 @@ signals:
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar
     virtual void slotUpdate();
-    virtual void slotUpdateElementsHPos();
+//    virtual void slotUpdateElementsHPos();
+    virtual void slotScrollHorizSmallSteps(int);
+    virtual void slotSetPannedRect(QRectF);
+//    virtual void slotSetScale(double);
+    virtual void slotSetToolName(const QString&);
 
 protected:
-    virtual void contentsMousePressEvent(QMouseEvent*);
-    virtual void contentsMouseReleaseEvent(QMouseEvent*);
-    virtual void contentsMouseMoveEvent(QMouseEvent*);
-    virtual void contentsWheelEvent(QWheelEvent*);
-    virtual void contentsContextMenuEvent(QContextMenuEvent*);
+    virtual void mousePressEvent(QMouseEvent*);
+    virtual void mouseReleaseEvent(QMouseEvent*);
+    virtual void mouseMoveEvent(QMouseEvent*);
+    virtual void contextMenuEvent(QContextMenuEvent*);
+    virtual void wheelEvent(QWheelEvent*);
 
-    virtual QScrollBar* getMainHorizontalScrollBar();
+//    virtual QScrollBar* getMainHorizontalScrollBar();
 
-    virtual void computeViewSegmentOffset() {};
+//    virtual void computeViewSegmentOffset() {};
 
-    virtual void layoutItem(ControlItem*);
+//    virtual void layoutItem(ControlItem*);
 
 
 
@@ -131,8 +152,12 @@ protected:
     //
     std::pair<int, int> getZMinMax();
 
-    virtual void init() = 0;
-    virtual void drawBackground() = 0;
+//    virtual void init();
+//virtual void drawBackground() = 0;
+
+    int xMapToWidget(double x) {return (x-m_pannedRect.left())*width()/m_pannedRect.width();};
+    QPolygon mapItemToWidget(QPolygonF*);
+    QPointF mapWidgetToItem(QPoint*);
 
     int valueToHeight(long val);
     long heightToValue(int height);
@@ -146,16 +171,27 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    EditViewBase*               m_parentEditView;
-    QScrollBar*                 m_mainHorizontalScrollBar;
+//    EditViewBase*               m_parentEditView;
+//    QScrollBar*                 m_mainHorizontalScrollBar;
     RulerScale*     m_rulerScale;
-    EventSelection* m_eventSelection,*m_assignedEventSelection;
-    Segment*        m_segment;
+    EventSelection* m_eventSelection; //,*m_assignedEventSelection;
+
+    MatrixScene *m_scene;
+
+    MatrixViewSegment *m_viewSegment;
+    Segment *m_segment;
+
+    ControlItemList m_controlItemList;
 
     ControlItem* m_currentIndex;
-    Q3CanvasItemList m_selectedItems;
+//    Q3CanvasItemList m_selectedItems;
+    ControlItemList m_selectedItems;
 
     ControlTool *m_tool;
+    QString m_currentToolName;
+
+    QRectF m_pannedRect;
+    double m_scale;
 
     int m_maxItemValue;
 
@@ -166,9 +202,11 @@ protected:
     QPoint m_lastEventPos;
     bool m_itemMoved;
 
+    bool m_overItem;
     bool m_selecting;
     ControlSelector* m_selector;
-    Q3CanvasRectangle* m_selectionRect;
+//    Q3CanvasRectangle* m_selectionRect;
+    QRect* m_selectionRect;
 
     QString m_menuName;
     QMenu* 	m_menu;
