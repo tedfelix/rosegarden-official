@@ -37,11 +37,10 @@
 #include "document/CommandHistory.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/widgets/TextFloat.h"
 #include "gui/editors/matrix/MatrixScene.h"
 #include "gui/editors/matrix/MatrixViewSegment.h"
 #include "gui/editors/matrix/MatrixElement.h"
-#include <Q3Canvas>
+#include "gui/widgets/TextFloat.h"
 #include <QColor>
 #include <QPoint>
 #include <QString>
@@ -55,13 +54,9 @@ namespace Rosegarden
 PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
                                            MatrixViewSegment *segment,
                                            RulerScale *rulerScale,
-//                                           EditViewBase *parentView,
-//                                           Q3Canvas *c,
                                            QWidget *parent,
                                            const char *name) :
     ControlRuler(segment, rulerScale,
-//                 parentView,
-//                 c,
                  parent),
     m_propertyName(propertyName)
 //    m_propertyLine(new Q3CanvasLine(canvas())),
@@ -84,19 +79,19 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QBrush brush(QColor(192,192,192),Qt::SolidPattern);
-    QBrush highlightBrush(QColor(127,127,127),Qt::SolidPattern);
+    QBrush brush(Qt::SolidPattern);
 
     QPen highlightPen(GUIPalette::getColour(GUIPalette::SelectedElement),
             2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
     QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
-    painter.setBrush(brush);
     ///TODO Only translate and draw items within the current view area
     RG_DEBUG << "PropertyControlRuler::paintEvent - m_controlItemList.size() = " << m_controlItemList.size();
     for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
         if (~(*it)->isSelected()) {
+            brush.setColor((*it)->getColour().lighter());
+            painter.setBrush(brush);
             painter.setPen(Qt::NoPen);
             painter.drawPolygon(mapItemToWidget(*it));
 
@@ -105,8 +100,9 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
         }
     }
 
-    painter.setBrush(highlightBrush);
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+        brush.setColor(((*it)->getColour()));
+        painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
         painter.drawPolygon(mapItemToWidget(*it));
 

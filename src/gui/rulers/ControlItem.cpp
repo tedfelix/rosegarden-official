@@ -15,9 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-//#include <Q3CanvasItem>
-//#include <Q3CanvasItemList>
-//#include <Q3CanvasRectangle>
 #include "ControlItem.h"
 #include "ControlRuler.h"
 #include "ElementAdapter.h"
@@ -190,6 +187,7 @@ void ControlItem::handleMouseWheel(QWheelEvent *)
 void ControlItem::setSelected(bool s)
 {
     m_selected = s;
+
 //    Q3CanvasItem::setSelected(s);
 
 //    if (s) setPen(QPen(QColor(Qt::red), BorderThickness));

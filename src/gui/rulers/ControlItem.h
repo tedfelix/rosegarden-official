@@ -18,9 +18,8 @@
 #ifndef _CONTROLITEM_H
 #define _CONTROLITEM_H
 
-//#include <Q3CanvasRectangle>
-//#include <Q3Canvas>
 #include <QPolygonF>
+#include <QColor>
 class QPainter;
 class QMouseEvent;
 class QWheelEvent;
@@ -40,12 +39,12 @@ public:
 //                ElementAdapter* adapter,
                 Event* event,
                 QPolygonF polygon);
-//                int x, int width = DefaultWidth);
 
     ~ControlItem();
 
     virtual void setValue(long);
     int getValue() const { return m_value; }
+    QColor getColour() { return m_colour; }
 
     //void setWidth(int w)  { setSize(w, height()); }
     //void setHeight(int h) {
@@ -81,6 +80,7 @@ protected:
 
     //--------------- Data members ---------------------------------
 
+    QColor m_colour;
     long m_value;
     bool m_handlingMouseMove;
     bool m_selected;

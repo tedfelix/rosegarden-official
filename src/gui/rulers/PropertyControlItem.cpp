@@ -18,6 +18,7 @@
 #include "PropertyControlItem.h"
 #include "ControlRuler.h"
 #include "gui/editors/matrix/MatrixElement.h"
+#include "gui/rulers/DefaultVelocityColour.h"
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/PropertyName.h"
@@ -52,6 +53,7 @@ void PropertyControlItem::update()
     long val = 0;
     if (m_propertyname == BaseProperties::VELOCITY) {
         val = (long)m_element->getElementVelocity();
+        m_colour = DefaultVelocityColour::getInstance()->getColour(val);
     } else {
         m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     }
