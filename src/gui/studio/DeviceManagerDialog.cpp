@@ -442,16 +442,6 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
                 // set port text
                 twItem->setText(1, outPort);
 
-//                if (mdev->getDirection() == MidiDevice::Record) {
-//                    // set record en-/disabled
-//                    twItem->setText(1,
-//                                    mdev->isRecording() ? tr("Yes") :
-//                                    tr("No"));
-//                    twItem->setText(2, outPort);
-//                } else {
-//                    twItem->setText(1, outPort);
-//                }
-
                 // save deviceId in data field
                 twItem->setData(0, m_UserRole_DeviceId,
                                 QVariant((int) mdev->getId()));
@@ -478,18 +468,6 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
                     }
                     // update connection-name (port)
                     twItem->setText(1, outPort);
-
-//                    if (mdev->getDirection() == MidiDevice::Record) {
-//                        twItem->setText(1,
-//                                        mdev->isRecording() ? tr("Yes")
-//                                : tr("No"));
-//                        twItem->setText(2, outPort);
-//                    } else {
-//                        RG_DEBUG << "DeviceManagerDialog: twItem->setText(1, "
-//                                 << outPort << ")" << endl;
-//
-//                        twItem->setText(1, outPort);
-//                    }
                 } else {
                     RG_DEBUG <<
                     "Warning: twItem is NULL in DeviceManagerDialog::updateDevicesList() "
@@ -970,19 +948,6 @@ DeviceManagerDialog::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
     mdev = getMidiDeviceOfItem(twItem);
     if (!mdev)
         return;
-
-//    if (col == 1) {         // column: enable recording
-//
-//        if (mdev->isRecording()) {
-//
-//            mdev->setRecording(false);
-//        } else {
-//            mdev->setRecording(true);
-//        }
-//
-//        // update list entry
-//        twItem->setText(1, mdev->isRecording() ? tr("Yes") : tr("No"));
-//    }
 }
 
 
