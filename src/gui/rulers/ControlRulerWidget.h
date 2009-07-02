@@ -53,6 +53,7 @@ public slots:
     void slotAddPropertyRuler(const PropertyName &);
     void slotSetPannedRect(QRectF pr);
     void slotSelectionChanged(EventSelection *);
+    void slotHoveredOverNoteChanged();
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
     void slotSetToolName(const QString &);
 

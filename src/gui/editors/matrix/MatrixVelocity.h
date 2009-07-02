@@ -55,6 +55,9 @@ public:
     virtual void ready();
     virtual void stow();
 
+signals:
+    void hoveredOverNoteChanged();
+
 protected:
     int m_mouseStartY;
     int m_velocityDelta;

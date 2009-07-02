@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2008 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -71,10 +71,10 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_currentViewSegment = e->viewSegment;
     m_currentElement = e->element;
-    
+
     // Get mouse pointer
     m_mouseStartY = e->sceneY;
-    
+
     // Add this element and allow velocity change
     EventSelection *selection = m_scene->getSelection();
 
@@ -87,7 +87,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
         } else {
             newSelection = new EventSelection(m_currentViewSegment->getSegment());
         }
-        
+
         newSelection->addEvent(m_currentElement->event());
         m_scene->setSelection(newSelection, true);
 
@@ -102,18 +102,18 @@ MatrixVelocity::FollowMode
 MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 {
     setBasicContextHelp();
-    
+
     if (!e || !m_currentElement || !m_currentViewSegment) {
         m_mouseStartY = 0;
         return NoFollow;
     }
-    
+
     // Check if left mousebutton is down
     if (!(e->buttons & Qt::LeftButton)) {
         m_mouseStartY = 0;
         return NoFollow;
     }
-        
+
     // Calculate velocity scale factor
     if ((m_mouseStartY - e->sceneY) > m_screenPixelsScale) {
         m_velocityScale = 1.0;
@@ -124,24 +124,24 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
             (double)(m_mouseStartY - e->sceneY) /
             (double)(m_screenPixelsScale * 2);
     }
-    
+
     m_velocityDelta = 128 * m_velocityScale;
-    
+
     /*m_velocityDelta=(m_mouseStartY-(e->pos()).y());
-     
-        if (m_velocityDelta > m_screenPixelsScale) 
+
+        if (m_velocityDelta > m_screenPixelsScale)
         m_velocityDelta=m_screenPixelsScale;
-    else if (m_velocityDelta < -m_screenPixelsScale) 
+    else if (m_velocityDelta < -m_screenPixelsScale)
         m_velocityDelta=-m_screenPixelsScale;
-    
+
     m_velocityScale=1.0+(double)m_velocityDelta/(double)m_screenPixelsScale;
-    
+
     m_velocityDelta*=2.0;
     */
-    
+
     // Preview velocity delta in contexthelp
     setContextHelp(tr("Velocity change: %1").arg(m_velocityDelta));
-	
+
 	// Preview calculated velocity info on element
 	// Dupe from MatrixMover
     EventSelection* selection = m_scene->getSelection();
@@ -170,7 +170,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 //        if (element->event()->has(PITCH)) {
 //            epitch = element->event()->get<Int>(PITCH);
 //        }
-        
+
         int velocity = 64;
         if (element->event()->has(BaseProperties::VELOCITY)) {
             velocity = element->event()->get<Int>(BaseProperties::VELOCITY);
@@ -182,6 +182,9 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
         element->reconfigure(velocity+m_velocityDelta);
         element->setSelected(true);
     }
+
+    emit hoveredOverNoteChanged();
+
 	/** Might be something for the feature
 	EventSelection* selection = m_mParentView->getCurrentSelection();
 	EventSelection::eventcontainer::iterator it = selection->getSegmentEvents().begin();
@@ -211,7 +214,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     EventSelection *selection = m_scene->getSelection();
     if (selection) selection = new EventSelection(*selection);
     else selection = new EventSelection(m_currentViewSegment->getSegment());
-   
+
     if (selection->getAddedEvents() == 0 || m_velocityDelta == 0) {
         delete selection;
         return;

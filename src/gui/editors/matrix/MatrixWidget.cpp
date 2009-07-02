@@ -167,6 +167,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
             m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 
+    MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName));
+    connect(matrixVelocityTool, SIGNAL(hoveredOverNoteChanged()),
+            m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
+
     connect(this, SIGNAL(toolChanged(QString)),
             m_controlsWidget, SLOT(slotSetToolName(QString)));
 }

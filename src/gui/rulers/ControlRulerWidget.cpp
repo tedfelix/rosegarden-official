@@ -203,6 +203,11 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 
 void ControlRulerWidget::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 {
+    slotHoveredOverNoteChanged();
+}
+
+void ControlRulerWidget::slotHoveredOverNoteChanged()
+{
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
