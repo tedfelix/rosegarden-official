@@ -26,8 +26,7 @@ MappedDevice::MappedDevice():
         m_type(Device::Midi),
         m_name("Unconfigured device"),
         m_connection(""),
-        m_direction(MidiDevice::Play),
-        m_recording(false)
+        m_direction(MidiDevice::Play)
 {}
 
 MappedDevice::MappedDevice(DeviceId id,
@@ -39,8 +38,7 @@ MappedDevice::MappedDevice(DeviceId id,
         m_type(type),
         m_name(name),
         m_connection(connection),
-        m_direction(MidiDevice::Play),
-        m_recording(false)
+        m_direction(MidiDevice::Play)
 {}
 
 MappedDevice::~MappedDevice()
@@ -59,7 +57,6 @@ MappedDevice::MappedDevice(const MappedDevice &mD):
     m_name = mD.getName();
     m_connection = mD.getConnection();
     m_direction = mD.getDirection();
-    m_recording = mD.isRecording();
 }
 
 void
@@ -98,7 +95,6 @@ MappedDevice::operator=(const MappedDevice &mD)
     m_name = mD.getName();
     m_connection = mD.getConnection();
     m_direction = mD.getDirection();
-    m_recording = mD.isRecording();
 
     return *this;
 }
@@ -134,7 +130,6 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 	mD->setName( qStrToStrLocal8(name) );
 	mD->setConnection( qStrToStrLocal8(connection) );
     mD->setDirection(MidiDevice::DeviceDirection(direction));
-    mD->setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
 
@@ -179,7 +174,6 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 	mD.setName( qStrToStrLocal8(name) );
 	mD.setConnection( qStrToStrLocal8(connection) );
     mD.setDirection(MidiDevice::DeviceDirection(direction));
-    mD.setRecording((bool)recording);
 
 #ifdef DEBUG_MAPPEDDEVICE
 

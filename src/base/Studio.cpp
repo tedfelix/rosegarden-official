@@ -85,6 +85,12 @@ Studio::addDevice(const std::string &name,
             m_devices.push_back(new AudioDevice(id, name));
             break;
 
+        case Device::SoftSynth:
+            // This was never handled here before, which caused a compiler
+            // warning about the enum not being handled in the switch.  Since
+            // this feature works in spite of doing nothing special for this
+            // case, I have put Device::SoftSynth in as effectively a second
+            // default: to shut up the compiler warning.
         default:
             std::cerr << "Studio::addDevice() - unrecognised device"
                       << endl;

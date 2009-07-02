@@ -23,10 +23,11 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
+#include "sequencer/RosegardenSequencer.h"
+
 #include <QByteArray>
 #include <QDataStream>
 #include <QString>
-#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden

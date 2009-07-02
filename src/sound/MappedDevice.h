@@ -71,10 +71,13 @@ public:
     MidiDevice::DeviceDirection getDirection() const { return m_direction; }
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
     
-    //bool isRecording() const { return m_recording; }
+    bool isRecording() const { return m_recording; }
+
+    /**
+     * DEPRECATED!  We don't need to be able to set this, because the only value
+     * this should ever have is TRUE, also known as YES_DAMMIT!
+     */
     //void setRecording(bool recording) { m_recording = recording; }
-    bool isRecording() const { return true; }
-    void setRecording(bool recording) { m_recording = true; }
 
 protected:
 
@@ -83,7 +86,15 @@ protected:
     std::string                     m_name;
     std::string                     m_connection;
     MidiDevice::DeviceDirection     m_direction;
-    bool                            m_recording;
+
+    /**
+     * This apparently controls the behavior that looked like "Current? [x]" in
+     * Rosegarden Classic.  If false, this recording device will drop incoming
+     * events and ignore them.  We never want this to become false, because we
+     * always want record devices to work, no matter what.  If you don't want to
+     * record from a given available source, don't connect something to it.
+     */
+    static const bool                            m_recording = true;
 };
 
 typedef std::vector<MappedInstrument*>::const_iterator

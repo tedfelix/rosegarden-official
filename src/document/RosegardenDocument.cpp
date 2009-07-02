@@ -2438,14 +2438,12 @@ RosegardenDocument::getMappedDevice(DeviceId id)
         if (md.getType() == Device::Midi) {
 
             device = new MidiDevice(id, md.getName(), md.getDirection());
-            dynamic_cast<MidiDevice *>(device)->setRecording(md.isRecording());
             m_studio.addDevice(device);
 
             RG_DEBUG << "RosegardenDocument::getMappedDevice - "
                      << "adding MIDI Device \""
                      << device->getName() << "\" id = " << id
                      << " direction = " << md.getDirection()
-                     << " recording = " << md.isRecording()
                      << endl;
 
         } else if (md.getType() == Device::SoftSynth) {
@@ -2481,7 +2479,6 @@ RosegardenDocument::getMappedDevice(DeviceId id)
             MidiDevice *midid = dynamic_cast<MidiDevice *>(device);
             if (midid) {
                 midid->setDirection(md.getDirection());
-                midid->setRecording(md.isRecording());
             }
         }
     }
@@ -2489,7 +2486,6 @@ RosegardenDocument::getMappedDevice(DeviceId id)
     std::string connection(md.getConnection());
     RG_DEBUG << "RosegardenDocument::getMappedDevice - got \"" << connection
              << "\", direction " << md.getDirection()
-             << " recording " << md.isRecording()
              << endl;
     device->setConnection(connection);
 
