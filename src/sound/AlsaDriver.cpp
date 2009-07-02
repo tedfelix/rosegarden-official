@@ -4796,15 +4796,15 @@ AlsaDriver::checkForNewClients()
                 j != m_alsaPorts.end(); ++j) {
             if ((*j)->m_client == pair.first &&
                     (*j)->m_port == pair.second) {
-                if ((*i)->getDirection() == MidiDevice::Record) {
-                    bool recState = isRecording(*j);
-                    if (recState != (*i)->isRecording()) {
-                        madeChange = true;
-                        (*i)->setRecording(recState);
-                    }
-                } else {
-                    (*i)->setRecording(false);
-                }
+//                if ((*i)->getDirection() == MidiDevice::Record) {
+//                    bool recState = isRecording(*j);
+//                    if (recState != (*i)->isRecording()) {
+//                        madeChange = true;
+//                        (*i)->setRecording(recState);
+//                    }
+//                } else {
+//                    (*i)->setRecording(false);
+//                }
                 found = true;
                 break;
             }
@@ -4814,7 +4814,7 @@ AlsaDriver::checkForNewClients()
             m_suspendedPortMap[pair] = (*i)->getId();
             m_devicePortMap[(*i)->getId()] = ClientPortPair( -1, -1);
             setConnectionToDevice(**i, "");
-            (*i)->setRecording(false);
+//            (*i)->setRecording(false);
             madeChange = true;
         }
     }
