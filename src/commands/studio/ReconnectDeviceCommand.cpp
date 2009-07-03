@@ -41,9 +41,9 @@ ReconnectDeviceCommand::execute()
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_newConnection));
 
-        SEQMAN_DEBUG << "ReconnectDeviceCommand::execute - "
+        std::cerr << "ReconnectDeviceCommand::execute - "
                      << " reconnected device " << m_deviceId
-                     << " to " << m_newConnection << endl;
+                     << " to " << m_newConnection << std::endl;
     }
 }
 
@@ -56,9 +56,9 @@ ReconnectDeviceCommand::unexecute()
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_oldConnection));
 
-        SEQMAN_DEBUG << "ReconnectDeviceCommand::unexecute - "
+        std::cerr << "ReconnectDeviceCommand::unexecute - "
                      << " reconnected device " << m_deviceId
-                     << " to " << m_oldConnection << endl;
+                     << " to " << m_oldConnection << std::endl;
     }
 }
 

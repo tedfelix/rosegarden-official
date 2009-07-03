@@ -2484,6 +2484,11 @@ RosegardenDocument::getMappedDevice(DeviceId id)
     }
 
     std::string connection(md.getConnection());
+    // RG_DEBUG isn't outputting anything in this file, Rrrrrrrr!!!
+    std::cerr << "RosegardenDocument::getMappedDevice - got \"" << connection
+             << "\", direction " << md.getDirection()
+             << " recording == TRUE of course "
+             << std::endl;
     RG_DEBUG << "RosegardenDocument::getMappedDevice - got \"" << connection
              << "\", direction " << md.getDirection()
              << endl;

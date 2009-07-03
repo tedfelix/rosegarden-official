@@ -569,6 +569,7 @@ TrackParameterBox::populateRecordingDeviceList()
                 if (dev) {
                     if (dev->getDirection() == MidiDevice::Record
                             && dev->isRecording()) {
+                        std::cerr << "recording code is tripping" << std::endl;
                         QString connection = strtoqstr(dev->getConnection());
                         // remove trailing "(duplex)", "(read only)", "(write only)" etc
                         connection.replace(QRegExp("\\s*\\([^)0-9]+\\)\\s*$"), "");

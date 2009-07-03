@@ -653,49 +653,53 @@ AlsaDriver::generateInstruments()
     //
     // The automatic scanning that takes place and finds a newly-started
     // instance of Hydrogen or whatever seems fine though.
-     
-//    AlsaPortList::iterator it = m_alsaPorts.begin();
-//    for (; it != m_alsaPorts.end(); it++) {
-//        if ((*it)->m_client == m_client) {
-//            std::cerr << "(Ignoring own port " << (*it)->m_client
-//            << ":" << (*it)->m_port << ")" << std::endl;
-//            continue;
-//        } else if ((*it)->m_client == 0) {
-//            std::cerr << "(Ignoring system port " << (*it)->m_client
-//            << ":" << (*it)->m_port << ")" << std::endl;
-//            continue;
-//        }
-//
-//        if ((*it)->isWriteable()) {
-//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
-//            if (!device) {
-//#ifdef DEBUG_ALSA
-//                std::cerr << "WARNING: Failed to create play device" << std::endl;
-//#else
-//
-//                ;
-//#endif
-//
-//            } else {
-//                addInstrumentsForDevice(device);
-//                m_devices.push_back(device);
-//            }
-//        }
-//        if ((*it)->isReadable()) {
-//            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
-//            if (!device) {
-//#ifdef DEBUG_ALSA
-//                std::cerr << "WARNING: Failed to create record device" << std::endl;
-//#else
-//
-//                ;
-//#endif
-//
-//            } else {
-//                m_devices.push_back(device);
-//            }
-//        }
-//    } 
+//#define ENABLE_EVIL_CODE 1
+// (no, re-enabling this wretched business did nothing to solve the problem at
+// hand, so let's gleefully dash it against the rocks once more)
+#ifdef ENABLE_EVIL_CODE
+    AlsaPortList::iterator it = m_alsaPorts.begin();
+    for (; it != m_alsaPorts.end(); it++) {
+        if ((*it)->m_client == m_client) {
+            std::cerr << "(Ignoring own port " << (*it)->m_client
+            << ":" << (*it)->m_port << ")" << std::endl;
+            continue;
+        } else if ((*it)->m_client == 0) {
+            std::cerr << "(Ignoring system port " << (*it)->m_client
+            << ":" << (*it)->m_port << ")" << std::endl;
+            continue;
+        }
+
+        if ((*it)->isWriteable()) {
+            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
+            if (!device) {
+#ifdef DEBUG_ALSA
+                std::cerr << "WARNING: Failed to create play device" << std::endl;
+#else
+
+                ;
+#endif
+
+            } else {
+                addInstrumentsForDevice(device);
+                m_devices.push_back(device);
+            }
+        }
+        if ((*it)->isReadable()) {
+            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
+            if (!device) {
+#ifdef DEBUG_ALSA
+                std::cerr << "WARNING: Failed to create record device" << std::endl;
+#else
+
+                ;
+#endif
+
+            } else {
+                m_devices.push_back(device);
+            }
+        }
+    } 
+#endif
 
     // Create a number of soft synth Instruments
     //
@@ -4744,6 +4748,7 @@ AlsaDriver::insertMappedEventForReturn(MappedEvent *mE)
 bool
 AlsaDriver::isRecording(AlsaPortDescription *port)
 {
+    std::cerr << "AlsaDriver::isRecording(), returning: ";
     if (port->isReadable()) {
 
         snd_seq_query_subscribe_t *qSubs;
@@ -4760,13 +4765,15 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
         while (snd_seq_query_port_subscribers(m_midiHandle, qSubs) >= 0) {
             sender_addr = *snd_seq_query_subscribe_get_addr(qSubs);
             if (sender_addr.client == port->m_client &&
-                    sender_addr.port == port->m_port)
+                    sender_addr.port == port->m_port) {
+                std::cerr << "true" << std::endl;
                 return true;
-
+            }
             snd_seq_query_subscribe_set_index(qSubs,
                                               snd_seq_query_subscribe_get_index(qSubs) + 1);
         }
     }
+    std::cerr << "false" << std::endl;
     return false;
 }
 
@@ -4796,15 +4803,16 @@ AlsaDriver::checkForNewClients()
                 j != m_alsaPorts.end(); ++j) {
             if ((*j)->m_client == pair.first &&
                     (*j)->m_port == pair.second) {
-//                if ((*i)->getDirection() == MidiDevice::Record) {
-//                    bool recState = isRecording(*j);
-//                    if (recState != (*i)->isRecording()) {
-//                        madeChange = true;
+                if ((*i)->getDirection() == MidiDevice::Record) {
+                    bool recState = isRecording(*j);
+std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRecording() is " << ((*i)->isRecording() ? "true" : "false") << std::endl;                    
+                    if (recState != (*i)->isRecording()) {
+                        madeChange = true;
 //                        (*i)->setRecording(recState);
-//                    }
-//                } else {
+                    }
+                } else {
 //                    (*i)->setRecording(false);
-//                }
+                }
                 found = true;
                 break;
             }
