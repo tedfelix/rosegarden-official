@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
   Rosegarden
@@ -21,24 +21,26 @@ namespace Rosegarden
 {
 
 MappedDevice::MappedDevice():
-        std::vector<MappedInstrument*>(),
-        m_id(Device::NO_DEVICE),
-        m_type(Device::Midi),
-        m_name("Unconfigured device"),
-        m_connection(""),
-        m_direction(MidiDevice::Play)
+    std::vector<MappedInstrument*>(),
+    m_id(Device::NO_DEVICE),
+    m_type(Device::Midi),
+    m_name("Unconfigured device"),
+    m_connection(""),
+    m_direction(MidiDevice::Play),
+    m_recording(false)
 {}
 
 MappedDevice::MappedDevice(DeviceId id,
                            Device::DeviceType type,
                            std::string name,
                            std::string connection):
-        std::vector<MappedInstrument*>(),
-        m_id(id),
-        m_type(type),
-        m_name(name),
-        m_connection(connection),
-        m_direction(MidiDevice::Play)
+    std::vector<MappedInstrument*>(),
+    m_id(id),
+    m_type(type),
+    m_name(name),
+    m_connection(connection),
+    m_direction(MidiDevice::Play),
+    m_recording(false)
 {}
 
 MappedDevice::~MappedDevice()

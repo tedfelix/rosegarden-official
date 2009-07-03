@@ -45,7 +45,7 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -1077,6 +1077,8 @@ DeviceId
 AlsaDriver::addDevice(Device::DeviceType type,
                       MidiDevice::DeviceDirection direction)
 {
+    std::cerr << "AlsaDriver::addDevice(" << type << "," << direction << ")" << std::endl;
+
     if (type == Device::Midi) {
 
         MappedDevice *device = createMidiDevice(0, direction);
@@ -1091,6 +1093,10 @@ AlsaDriver::addDevice(Device::DeviceType type,
         } else {
             addInstrumentsForDevice(device);
             m_devices.push_back(device);
+
+            if (direction == MidiDevice::Record) {
+                setRecordDevice(device->getId(), true);
+            }
 
             MappedEvent *mE =
                 new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
@@ -1205,7 +1211,7 @@ AlsaDriver::getPortName(ClientPortPair port)
 {
     for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
         if (m_alsaPorts[i]->m_client == port.first &&
-                m_alsaPorts[i]->m_port == port.second) {
+            m_alsaPorts[i]->m_port == port.second) {
             return m_alsaPorts[i]->m_name;
         }
     }
@@ -1223,7 +1229,7 @@ AlsaDriver::getConnections(Device::DeviceType type,
     int count = 0;
     for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
         if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
-                (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+            (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
             ++count;
         }
     }
@@ -1242,7 +1248,7 @@ AlsaDriver::getConnection(Device::DeviceType type,
     AlsaPortList tempList;
     for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
         if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
-                (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
+            (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
             tempList.push_back(m_alsaPorts[j]);
         }
     }
@@ -1268,6 +1274,16 @@ void
 AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                                   const ClientPortPair &pair)
 {
+    std::cerr << "AlsaDriver::setConnectionToDevice: connection "
+              << connection << std::endl;
+
+    if (device.getDirection() == MidiDevice::Record) {
+        // disconnect first
+        setRecordDevice(device.getId(), false);
+    }
+
+    m_devicePortMap[device.getId()] = pair;
+
     QString prevConnection = strtoqstr(device.getConnection());
     device.setConnection(qstrtostr(connection));
 
@@ -1323,9 +1339,11 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
                 }
             }
         }
+    } else { // record device: reconnect
+
+        setRecordDevice(device.getId(), true);
     }
 }
-
 
 
 void AlsaDriver::removeConnection( DeviceId devId, QString connectionName ){
@@ -1383,21 +1401,24 @@ void AlsaDriver::removeConnection( DeviceId devId, QString connectionName ){
     
 }
 
-
-
 void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
     Audit audit;
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
+    std::cerr << "AlsaDriver::setConnection(" << id << "," << connection << ")" << std::endl;
+
     if (port.first != -1 && port.second != -1) {
 
-        m_devicePortMap[id] = port;
+        std::cerr << "found port" << std::endl;
 
         for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
             if (m_devices[i]->getId() == id) {
+
+                std::cerr << "and found device -- connecting" << std::endl;
+
                 setConnectionToDevice(*m_devices[i], connection, port);
 
                 MappedEvent *mE =
@@ -1405,10 +1426,12 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
                                     0, 0);
                 insertMappedEventForReturn(mE);
 
-                break;
+                return;
             }
         }
     }
+
+    std::cerr << "AlsaDriver::setConnection: port or device not found" << std::endl;
 }
 
 void
@@ -1422,8 +1445,6 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
     if (port.first != -1 && port.second != -1) {
 
-        m_devicePortMap[id] = port;
-
         for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
             if (m_devices[i]->getId() == id) {
@@ -1433,7 +1454,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
         }
 
         audit << "AlsaDriver::setPlausibleConnection: exact match available"
-        << std::endl;
+              << std::endl;
         return ;
     }
 
@@ -1534,17 +1555,15 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     // OK, this one will do
 
                     audit << "AlsaDriver::setPlausibleConnection: fuzzy match "
-                    << port->m_name << " available with fitness "
-                    << fitness << std::endl;
-
-                    m_devicePortMap[id] = ClientPortPair(port->m_client, port->m_port);
+                          << port->m_name << " available with fitness "
+                          << fitness << std::endl;
 
                     for (unsigned int i = 0; i < m_devices.size(); ++i) {
 
                         if (m_devices[i]->getId() == id) {
                             setConnectionToDevice(*m_devices[i],
                                                   strtoqstr(port->m_name),
-                                                  m_devicePortMap[id]);
+                                                  ClientPortPair(port->m_client, port->m_port));
 
                             // in this case we don't request a device resync,
                             // because this is only invoked at times such as
@@ -1845,8 +1864,8 @@ AlsaDriver::initialiseMidi()
     // Set the input queue size
     //
     if (snd_seq_set_client_pool_output(m_midiHandle, 2000) < 0 ||
-            snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
-            snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0) {
+        snd_seq_set_client_pool_input(m_midiHandle, 2000) < 0 ||
+        snd_seq_set_client_pool_output_room(m_midiHandle, 2000) < 0) {
 #ifdef DEBUG_ALSA
         std::cerr << "AlsaDriver::initialiseMidi - "
         << "can't modify pool parameters"
@@ -1901,7 +1920,7 @@ AlsaDriver::initialiseMidi()
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "initialiseMidi(): couldn't drain output");
 
     audit << "AlsaDriver::initialiseMidi -  initialised MIDI subsystem"
-    << std::endl << std::endl;
+          << std::endl << std::endl;
 
     return true;
 }
@@ -2535,15 +2554,19 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
 
     // If the input port hasn't connected we shouldn't poll it
     //
-    if (m_midiInputPortConnected == false) {
-        return true;
-    }
+//    if (m_midiInputPortConnected == false) {
+//        return true;
+//    }
 
     RealTime eventTime(0, 0);
+
+    std::cerr << "AlsaDriver::getMappedEventList: looking for events" << std::endl;
 
     snd_seq_event_t *event;
 
     while (snd_seq_event_input(m_midiHandle, &event) > 0) {
+
+        std::cerr << "AlsaDriver::getMappedEventList: found something" << std::endl;
 
         unsigned int channel = (unsigned int)event->data.note.channel;
         unsigned int chanNoteKey = ( channel << 8 ) +
@@ -2566,7 +2589,7 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             deviceId = Device::CONTROL_DEVICE;
         } else {
             for (MappedDeviceList::iterator i = m_devices.begin();
-                    i != m_devices.end(); ++i) {
+                 i != m_devices.end(); ++i) {
                 ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
                 if (((*i)->getDirection() == MidiDevice::Record) &&
                         ( pair.first == event->source.client ) &&
@@ -2789,11 +2812,9 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
 
         case SND_SEQ_EVENT_CLOCK:
 #ifdef DEBUG_ALSA
-
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "got realtime MIDI clock" << std::endl;
+                      << "got realtime MIDI clock" << std::endl;
 #endif
-
             break;
 
         case SND_SEQ_EVENT_START:
@@ -2809,7 +2830,6 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             std::cerr << "AlsaDriver::getMappedEventList - "
             << "START" << std::endl;
 #endif
-
             break;
 
         case SND_SEQ_EVENT_CONTINUE:
@@ -2821,9 +2841,8 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             }
 #ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "CONTINUE" << std::endl;
+                      << "CONTINUE" << std::endl;
 #endif
-
             break;
 
         case SND_SEQ_EVENT_STOP:
@@ -2835,16 +2854,14 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
             }
 #ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "STOP" << std::endl;
+                      << "STOP" << std::endl;
 #endif
-
             break;
 
         case SND_SEQ_EVENT_SONGPOS:
 #ifdef DEBUG_ALSA
-
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "SONG POSITION" << std::endl;
+                      << "SONG POSITION" << std::endl;
 #endif
 
             break;
@@ -2861,20 +2878,18 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
         case SND_SEQ_EVENT_PORT_UNSUBSCRIBED:
             m_portCheckNeeded = true;
 #ifdef DEBUG_ALSA
-
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "got announce event ("
-            << int(event->type) << ")" << std::endl;
+                      << "got announce event ("
+                      << int(event->type) << ")" << std::endl;
 #endif
 
             break;
         case SND_SEQ_EVENT_TICK:
         default:
 #ifdef DEBUG_ALSA
-
             std::cerr << "AlsaDriver::getMappedEventList - "
-            << "got unhandled MIDI event type from ALSA sequencer"
-            << "(" << int(event->type) << ")" << std::endl;
+                      << "got unhandled MIDI event type from ALSA sequencer"
+                      << "(" << int(event->type) << ")" << std::endl;
 #endif
 
             break;
@@ -2886,13 +2901,13 @@ AlsaDriver::getMappedEventList(MappedEventList &composition)
     if (getMTCStatus() == TRANSPORT_SLAVE && isPlaying()) {
 #ifdef MTC_DEBUG
         std::cerr << "seq time is " << getSequencerTime() << ", last MTC receive "
-        << m_mtcLastReceive << ", first time " << m_mtcFirstTime << std::endl;
+                  << m_mtcLastReceive << ", first time " << m_mtcFirstTime << std::endl;
 #endif
 
         if (m_mtcFirstTime == 0) { // have received _some_ MTC quarter-frame info
             RealTime seqTime = getSequencerTime();
             if (m_mtcLastReceive < seqTime &&
-                    seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
+                seqTime - m_mtcLastReceive > RealTime(0, 500000000L)) {
                 ExternalTransport *transport = getExternalTransportControl();
                 if (transport) {
                     transport->transportJump(ExternalTransport::TransportStopAtTime,
@@ -3479,7 +3494,7 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
     std::cerr << "AlsaDriver::processMidiOut(" << sliceStart << "," << sliceEnd
-    << "), " << mC.size() << " events, now is " << now << std::endl;
+              << "), " << mC.size() << " events, now is " << now << std::endl;
 #endif
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
@@ -3550,17 +3565,14 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         processNotesOff(outputTime, now);
 
 #ifdef HAVE_LIBJACK
-
         if (m_jackDriver) {
             size_t frameCount = m_jackDriver->getFramesProcessed();
             size_t elapsed = frameCount - _debug_jack_frame_count;
             RealTime rt = RealTime::frame2RealTime(elapsed, m_jackDriver->getSampleRate());
             rt = rt - getAlsaTime();
 #ifdef DEBUG_PROCESS_MIDI_OUT
-
             std::cerr << "processMidiOut[" << now << "]: JACK time is " << rt << " ahead of ALSA time" << std::endl;
 #endif
-
         }
 #endif
 
@@ -3609,19 +3621,16 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
         if (isControllerOut) {
             channel = (*i)->getRecordedChannel();
 #ifdef DEBUG_ALSA
-
             std::cerr << "processMidiOut() - Event of type " << (int)((*i)->getType()) << " (data1 " << (int)(*i)->getData1() << ", data2 " << (int)(*i)->getData2() << ") for external controller channel " << (int)channel << std::endl;
 #endif
-
         } else if (instrument != 0) {
             channel = instrument->getChannel();
         } else {
 #ifdef DEBUG_ALSA
             std::cerr << "processMidiOut() - No instrument for event of type "
-            << (int)(*i)->getType() << " at " << (*i)->getEventTime()
-            << std::endl;
+                      << (int)(*i)->getType() << " at " << (*i)->getEventTime()
+                      << std::endl;
 #endif
-
             channel = 0;
         }
 
@@ -3817,7 +3826,6 @@ AlsaDriver::processMidiOut(const MappedEventList &mC,
                                  (*i)->getInstrument());
 
 #ifdef DEBUG_ALSA
-
             std::cerr << "Adding NOTE OFF at " << outputStopTime
             << std::endl;
 #endif
@@ -4185,14 +4193,13 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             } else {
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "can't find audio file reference"
-                << std::endl;
+                          << "can't find audio file reference"
+                          << std::endl;
 
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "try reloading the current Rosegarden file"
-                << std::endl;
+                          << "try reloading the current Rosegarden file"
+                          << std::endl;
 #else
-
                 ;
 #endif
 
@@ -4205,7 +4212,6 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
         if ((*i)->getType() == MappedEvent::AudioCancel) {
             cancelAudioFile(*i);
         }
-
 #endif // HAVE_LIBJACK
 
         if ((*i)->getType() == MappedEvent::SystemMIDIClock) {
@@ -4213,10 +4219,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 0:
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden MIDI CLOCK, START and STOP DISABLED"
-                << std::endl;
+                          << "Rosegarden MIDI CLOCK, START and STOP DISABLED"
+                          << std::endl;
 #endif
 
                 setMIDISyncStatus(TRANSPORT_OFF);
@@ -4225,10 +4230,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 1:
                 m_midiClockEnabled = true;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden send MIDI CLOCK, START and STOP ENABLED"
-                << std::endl;
+                          << "Rosegarden send MIDI CLOCK, START and STOP ENABLED"
+                          << std::endl;
 #endif
 
                 setMIDISyncStatus(TRANSPORT_MASTER);
@@ -4237,10 +4241,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 2:
                 m_midiClockEnabled = false;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden accept START and STOP ENABLED"
-                << std::endl;
+                          << "Rosegarden accept START and STOP ENABLED"
+                          << std::endl;
 #endif
 
                 setMIDISyncStatus(TRANSPORT_SLAVE);
@@ -4252,10 +4255,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             if ((*i)->getData1()) {
                 m_midiSyncAutoConnect = true;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden MIDI SYNC AUTO ENABLED"
-                << std::endl;
+                          << "Rosegarden MIDI SYNC AUTO ENABLED"
+                          << std::endl;
 #endif
 
                 for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
@@ -4268,17 +4270,14 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             } else {
                 m_midiSyncAutoConnect = false;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden MIDI SYNC AUTO DISABLED"
-                << std::endl;
+                          << "Rosegarden MIDI SYNC AUTO DISABLED"
+                          << std::endl;
 #endif
-
             }
         }
 
 #ifdef HAVE_LIBJACK
-
         // Set the JACK transport
         if ((*i)->getType() == MappedEvent::SystemJackTransport) {
             bool enabled = false;
@@ -4289,34 +4288,28 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 master = true;
                 enabled = true;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)"
-                << std::endl;
+                          << "Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)"
+                          << std::endl;
 #endif
-
                 break;
 
             case 1:
                 enabled = true;
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden to follow JACK transport"
-                << std::endl;
+                          << "Rosegarden to follow JACK transport"
+                          << std::endl;
 #endif
-
                 break;
 
             case 0:
             default:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden to ignore JACK transport"
-                << std::endl;
+                          << "Rosegarden to ignore JACK transport"
+                          << std::endl;
 #endif
-
                 break;
             }
 
@@ -4332,10 +4325,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             switch ((int)(*i)->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden is MMC MASTER"
-                << std::endl;
+                          << "Rosegarden is MMC MASTER"
+                          << std::endl;
 #endif
 
                 setMMCStatus(TRANSPORT_MASTER);
@@ -4343,22 +4335,19 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
             case 2:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden is MMC SLAVE"
-                << std::endl;
+                          << "Rosegarden is MMC SLAVE"
+                          << std::endl;
 #endif
-
                 setMMCStatus(TRANSPORT_SLAVE);
                 break;
 
             case 0:
             default:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden MMC Transport DISABLED"
-                << std::endl;
+                          << "Rosegarden MMC Transport DISABLED"
+                          << std::endl;
 #endif
 
                 setMMCStatus(TRANSPORT_OFF);
@@ -4370,10 +4359,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             switch ((int)(*i)->getData1()) {
             case 1:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden is MTC MASTER"
-                << std::endl;
+                          << "Rosegarden is MTC MASTER"
+                          << std::endl;
 #endif
 
                 setMTCStatus(TRANSPORT_MASTER);
@@ -4383,10 +4371,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 
             case 2:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden is MTC SLAVE"
-                << std::endl;
+                          << "Rosegarden is MTC SLAVE"
+                          << std::endl;
 #endif
 
                 setMTCStatus(TRANSPORT_SLAVE);
@@ -4396,10 +4383,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
             case 0:
             default:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "Rosegarden MTC Transport DISABLED"
-                << std::endl;
+                          << "Rosegarden MTC Transport DISABLED"
+                          << std::endl;
 #endif
 
                 setMTCStatus(TRANSPORT_OFF);
@@ -4409,8 +4395,7 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
         }
 
         if ((*i)->getType() == MappedEvent::SystemRecordDevice) {
-            DeviceId recordDevice =
-                (DeviceId)((*i)->getData1());
+            DeviceId recordDevice = (DeviceId)((*i)->getData1());
             bool conn = (bool) ((*i)->getData2());
 
             // Unset connections
@@ -4423,8 +4408,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 /* set all record devices */
 #ifdef DEBUG_ALSA
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "set all record devices - not implemented"
-                << std::endl;
+                          << "set all record devices - not implemented"
+                          << std::endl;
 #endif
 
                 /*
@@ -4468,8 +4453,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 #else
 #ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::processEventsOut - "
-            << "MappedEvent::SystemAudioPorts - no audio subsystem"
-            << std::endl;
+                      << "MappedEvent::SystemAudioPorts - no audio subsystem"
+                      << std::endl;
 #endif
 #endif
 
@@ -4487,10 +4472,9 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                 break;
             default:
 #ifdef DEBUG_ALSA
-
                 std::cerr << "AlsaDriver::processEventsOut - "
-                << "MappedEvent::SystemAudioFileFormat - unexpected format number " << format
-                << std::endl;
+                          << "MappedEvent::SystemAudioFileFormat - unexpected format number " << format
+                          << std::endl;
 #endif
 
                 break;
@@ -4498,8 +4482,8 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
 #else
 #ifdef DEBUG_ALSA
             std::cerr << "AlsaDriver::processEventsOut - "
-            << "MappedEvent::SystemAudioFileFormat - no audio subsystem"
-            << std::endl;
+                      << "MappedEvent::SystemAudioFileFormat - no audio subsystem"
+                      << std::endl;
 #endif
 #endif
 
@@ -4525,7 +4509,6 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
     processMidiOut(mC, sliceStart, sliceEnd);
 
 #ifdef HAVE_LIBJACK
-
     if (m_jackDriver) {
         if (haveNewAudio) {
             if (now) {
@@ -4573,12 +4556,10 @@ AlsaDriver::record(RecordStatus recordStatus,
                     bool good = false;
 
 #ifdef DEBUG_ALSA
-
                     std::cerr << "AlsaDriver::record: Requesting new record file \"" << fileName << "\" for instrument " << id << std::endl;
 #endif
 
 #ifdef HAVE_LIBJACK
-
                     if (m_jackDriver &&
                         m_jackDriver->openRecordFile(id, qstrtostr(fileName))) {
                         good = true;
@@ -4602,7 +4583,7 @@ AlsaDriver::record(RecordStatus recordStatus,
 #ifdef DEBUG_ALSA
         else {
             std::cerr << "AlsaDriver::record - unsupported recording mode"
-            << std::endl;
+                      << std::endl;
         }
 #endif
 
@@ -4820,8 +4801,7 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
 
         if (!found) {
             m_suspendedPortMap[pair] = (*i)->getId();
-            m_devicePortMap[(*i)->getId()] = ClientPortPair( -1, -1);
-            setConnectionToDevice(**i, "");
+            setConnectionToDevice(**i, "", ClientPortPair(-1, -1));
 //            (*i)->setRecording(false);
             madeChange = true;
         }
@@ -4867,7 +4847,7 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
                 }
 
                 m_suspendedPortMap.erase(m_suspendedPortMap.find(portPair));
-                m_devicePortMap[id] = portPair;
+//                m_devicePortMap[id] = portPair;
                 madeChange = true;
                 continue;
             }
@@ -4881,8 +4861,8 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
                             (*j)->getConnection() == "" &&
                             (*j)->getDirection() == MidiDevice::Record) {
                         audit << "(Reusing record device " << (*j)->getId()
-                        << ")" << std::endl;
-                        m_devicePortMap[(*j)->getId()] = portPair;
+                              << ")" << std::endl;
+//                        m_devicePortMap[(*j)->getId()] = portPair;
                         setConnectionToDevice(**j, portName);
                         needRecordDevice = false;
                         madeChange = true;
@@ -4901,7 +4881,7 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
                             (*j)->getDirection() == MidiDevice::Play) {
                         audit << "(Reusing play device " << (*j)->getId()
                         << ")" << std::endl;
-                        m_devicePortMap[(*j)->getId()] = portPair;
+//                        m_devicePortMap[(*j)->getId()] = portPair;
                         setConnectionToDevice(**j, portName);
                         needPlayDevice = false;
                         madeChange = true;
@@ -5002,8 +4982,7 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
         } else {
             if (others == 0) {
                 if (j != m_devicePortMap.end()) {
-                    j->second = ClientPortPair( -1, -1);
-                    setConnectionToDevice(**i, "");
+                    setConnectionToDevice(**i, "", ClientPortPair(-1, -1));
                     madeChange = true;
                 }
             } else {
@@ -5011,7 +4990,7 @@ std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRe
                         k != m_alsaPorts.end(); ++k) {
                     if ((*k)->m_client == firstOther.first &&
                             (*k)->m_port == firstOther.second) {
-                        m_devicePortMap[(*i)->getId()] = firstOther;
+//                        m_devicePortMap[(*i)->getId()] = firstOther;
                         setConnectionToDevice(**i, strtoqstr((*k)->m_name),
                                               firstOther);
                         madeChange = true;
@@ -5044,13 +5023,15 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 {
     Audit audit;
 
+    std::cerr << "AlsaDriver::setRecordDevice: device " << id << ", action " << connectAction << std::endl;
+
     // Locate a suitable port
     //
     if (m_devicePortMap.find(id) == m_devicePortMap.end()) {
 #ifdef DEBUG_ALSA
         audit << "AlsaDriver::setRecordDevice - "
-        << "couldn't match device id (" << id << ") to ALSA port"
-        << std::endl;
+              << "couldn't match device id (" << id << ") to ALSA port"
+              << std::endl;
 #endif
 
         return ;
@@ -5058,44 +5039,48 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
 
     ClientPortPair pair = m_devicePortMap[id];
 
+    std::cerr << "AlsaDriver::setRecordDevice: port is " << pair.first << ":" << pair.second << std::endl;
+
     snd_seq_addr_t sender, dest;
     sender.client = pair.first;
     sender.port = pair.second;
 
+    MappedDevice *device = 0;
+
     for (MappedDeviceList::iterator i = m_devices.begin();
             i != m_devices.end(); ++i) {
         if ((*i)->getId() == id) {
-            if ((*i)->getDirection() == MidiDevice::Record) {
-                if ((*i)->isRecording() && connectAction) {
+            device = *i;
+            if (device->getDirection() == MidiDevice::Record) {
+                if (device->isRecording() && connectAction) {
 #ifdef DEBUG_ALSA
                     audit << "AlsaDriver::setRecordDevice - "
-                    << "attempting to subscribe (" << id
-                    << ") already subscribed" << std::endl;
+                          << "attempting to subscribe (" << id
+                          << ") already subscribed" << std::endl;
 #endif
-
                     return ;
                 }
-                if (!(*i)->isRecording() && !connectAction) {
+                if (!device->isRecording() && !connectAction) {
 #ifdef DEBUG_ALSA
                     audit << "AlsaDriver::setRecordDevice - "
-                    << "attempting to unsubscribe (" << id
-                    << ") already unsubscribed" << std::endl;
+                          << "attempting to unsubscribe (" << id
+                          << ") already unsubscribed" << std::endl;
 #endif
-
                     return ;
                 }
             } else {
 #ifdef DEBUG_ALSA
                 audit << "AlsaDriver::setRecordDevice - "
-                << "attempting to set play device (" << id
-                << ") to record device" << std::endl;
+                      << "attempting to set play device (" << id
+                      << ") to record device" << std::endl;
 #endif
-
                 return ;
             }
             break;
         }
     }
+
+    if (!device) return;
 
     snd_seq_port_subscribe_t *subs;
     snd_seq_port_subscribe_alloca(&subs);
@@ -5117,22 +5102,24 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
             // have to flag it internally.
             //
             audit << "AlsaDriver::setRecordDevice - "
-            << int(sender.client) << ":" << int(sender.port)
-            << " failed to subscribe device "
-            << id << " as record port" << std::endl;
+                  << int(sender.client) << ":" << int(sender.port)
+                  << " failed to subscribe device "
+                  << id << " as record port" << std::endl;
         } else {
             m_midiInputPortConnected = true;
             audit << "AlsaDriver::setRecordDevice - "
-            << "successfully subscribed device "
-            << id << " as record port" << std::endl;
+                  << "successfully subscribed device "
+                  << id << " as record port" << std::endl;
+            device->setRecording(true);
         }
     } else {
         if (checkAlsaError(snd_seq_unsubscribe_port(m_midiHandle, subs),
-                           "setRecordDevice - failed to unsubscribe a device") == 0)
+                           "setRecordDevice - failed to unsubscribe a device") == 0) {
             audit << "AlsaDriver::setRecordDevice - "
-            << "successfully unsubscribed device "
-            << id << " as record port" << std::endl;
-
+                  << "successfully unsubscribed device "
+                  << id << " as record port" << std::endl;
+            device->setRecording(false);
+        }
     }
 }
 
@@ -5497,7 +5484,7 @@ AlsaDriver::extractVersion(std::string v, int &major, int &minor, int &subminor,
     minor = atoi(v.substr(pp, sp - pp).c_str());
     pp = sp + 1;
 
-    while (++sp < v.length() && (::isdigit(v[sp]) || v[sp] == '-'));
+    while (++sp < v.length() && (::isdigit(v[sp]) || v[sp] == '-')) { }
     subminor = atoi(v.substr(pp, sp - pp).c_str());
 
     if (sp >= v.length()) goto done;

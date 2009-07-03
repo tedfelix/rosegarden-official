@@ -72,12 +72,7 @@ public:
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
     
     bool isRecording() const { return m_recording; }
-
-    /**
-     * DEPRECATED!  We don't need to be able to set this, because the only value
-     * this should ever have is TRUE, also known as YES_DAMMIT!
-     */
-    //void setRecording(bool recording) { m_recording = recording; }
+    void setRecording(bool recording) { m_recording = recording; }
 
 protected:
 
@@ -94,7 +89,7 @@ protected:
      * always want record devices to work, no matter what.  If you don't want to
      * record from a given available source, don't connect something to it.
      */
-    static const bool                            m_recording = true;
+    bool m_recording;
 };
 
 typedef std::vector<MappedInstrument*>::const_iterator

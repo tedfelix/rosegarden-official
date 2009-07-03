@@ -51,6 +51,8 @@ SequencerThread::run()
 
         bool atLeisure = true;
 
+        std::cerr << "Sequencer status is " << seq.getStatus() << std::endl;
+
         switch (seq.getStatus()) {
 	    
 	case QUIT:

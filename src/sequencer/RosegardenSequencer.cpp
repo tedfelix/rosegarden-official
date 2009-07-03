@@ -1361,10 +1361,14 @@ RosegardenSequencer::sleep(const RealTime &rt)
 void
 RosegardenSequencer::processRecordedMidi()
 {
+    std::cerr << "RosegardenSequencer::processRecordedMidi" << std::endl;
+
     MappedEventList mC;
     m_driver->getMappedEventList(mC);
 
     if (mC.empty()) return;
+
+    std::cerr << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events" << std::endl;
 
     applyFiltering(&mC, ControlBlock::getInstance()->getRecordFilter(), false);
     SequencerDataBlock::getInstance()->addRecordedEvents(&mC);

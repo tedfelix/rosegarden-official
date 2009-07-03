@@ -1898,8 +1898,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
             case MappedEvent::MidiProgramChange:
                 RG_DEBUG << "RosegardenDocument::insertRecordedMidi()"
-                << " - got Program Change (unsupported)"
-                << endl;
+                         << " - got Program Change (unsupported)"
+                         << endl;
                 break;
 
             case MappedEvent::MidiKeyPressure:
@@ -1928,8 +1928,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
             case MappedEvent::MidiNoteOneShot:
                 RG_DEBUG << "RosegardenDocument::insertRecordedMidi() - "
-                << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
-                << endl;
+                         << "GOT UNEXPECTED MappedEvent::MidiNoteOneShot"
+                         << endl;
                 break;
 
                 // Audio control signals - ignore these
@@ -1959,8 +1959,8 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
             // Set the proper start index (if we haven't before)
             //
-            for ( RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
-                    it != m_recordMIDISegments.end(); ++it) {
+            for (RecordingSegmentMap::const_iterator it = m_recordMIDISegments.begin();
+                 it != m_recordMIDISegments.end(); ++it) {
                 Segment *recordMIDISegment = it->second;
                 if (recordMIDISegment->size() == 0) {
                     recordMIDISegment->setStartTime (m_composition.getBarStartForTime(absTime));
@@ -2007,7 +2007,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 void
 RosegardenDocument::updateRecordingMIDISegment()
 {
-    //RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
+    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment" << endl;
 
     if (m_recordMIDISegments.size() == 0) {
         // make this call once to create one
@@ -2016,15 +2016,15 @@ RosegardenDocument::updateRecordingMIDISegment()
             return ; // not recording any MIDI
     }
 
-    //RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment" << endl;
+    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment" << endl;
 
     NoteOnMap tweakedNoteOnEvents;
     for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-            mi != m_noteOnEvents.end(); ++mi)
+         mi != m_noteOnEvents.end(); ++mi)
         for (ChanMap::iterator cm = mi->second.begin();
-                cm != mi->second.end(); ++cm)
+             cm != mi->second.end(); ++cm)
             for (PitchMap::iterator pm = cm->second.begin();
-                    pm != cm->second.end(); ++pm) {
+                 pm != cm->second.end(); ++pm) {
 
                 // anything in the note-on map should be tweaked so as to end
                 // at the recording pointer

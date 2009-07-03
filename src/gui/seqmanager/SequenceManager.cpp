@@ -1519,7 +1519,7 @@ SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
 
             StudioControl::sendMappedEvent(mE);
             SEQMAN_DEBUG << "set MIDI record device to "
-            << recordDevice << endl;
+                         << recordDevice << endl;
         }
     }
 }
