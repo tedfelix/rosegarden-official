@@ -2487,7 +2487,7 @@ RosegardenDocument::getMappedDevice(DeviceId id)
     // RG_DEBUG isn't outputting anything in this file, Rrrrrrrr!!!
     std::cerr << "RosegardenDocument::getMappedDevice - got \"" << connection
              << "\", direction " << md.getDirection()
-             << " recording == TRUE of course "
+             << " recording == " << (md.isRecording() ? "TRUE of course" : "false, UNBELIEVABLE!!!!!")
              << std::endl;
     RG_DEBUG << "RosegardenDocument::getMappedDevice - got \"" << connection
              << "\", direction " << md.getDirection()
