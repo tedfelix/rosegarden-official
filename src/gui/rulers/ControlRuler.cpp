@@ -461,26 +461,31 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
 {
+    QPoint widgetMousePos = e->pos();
+    QPointF mousePos = mapWidgetToItem(&widgetMousePos);
+
     if (e->buttons()==Qt::NoButton)
     {
         // This is a move over event
         // Check whether the mouse is currently over any items
-        QPoint widgetMousePos = e->pos();
-        QPointF mousePos = mapWidgetToItem(&widgetMousePos);
         RG_DEBUG << "ControlRuler::mouseMoveEvent: " << mousePos;
-        for (ControlItemList::iterator it = m_controlItemList.begin();
-                it != m_controlItemList.end(); ++it) {
+        bool isOverItem = false;
+        for (ControlItemList::iterator it = m_selectedItems.begin();
+                it != m_selectedItems.end(); ++it) {
             if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
-                if (!m_overItem) {
+                isOverItem = true;
+            }
+        }
 
-                    setCursor(Qt::OpenHandCursor);
-                    m_overItem = true;
-                }
-            } else {
-                if (m_overItem) {
-                    unsetCursor();
-                    m_overItem = false;
-                }
+        if (!m_overItem) {
+            if (isOverItem) {
+                setCursor(Qt::OpenHandCursor);
+                m_overItem = true;
+            }
+        } else {
+            if (!isOverItem) {
+                unsetCursor();
+                m_overItem = false;
             }
         }
     }
