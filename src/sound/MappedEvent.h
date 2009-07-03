@@ -126,8 +126,7 @@ public:
         SystemMMCTransport       = 1 << 15,
         // Set System Messages and MIDI Clock
         SystemMIDIClock          = 1 << 16,
-        // Set Record device
-        SystemRecordDevice       = 1 << 17,
+        // Set Record device -- no longer used (all input devices are set)
         // Set Metronome device
         SystemMetronomeDevice    = 1 << 18,
         // Set Audio inputs/outputs: data1 num inputs, data2 num submasters

@@ -236,8 +236,6 @@ protected:
     void resetTempoSegmentMapper();
     void resetTimeSigSegmentMapper();
     void checkRefreshStatus();
-    void sendMIDIRecordingDevice(const QString recordDeviceStr);
-    void restoreRecordSubscriptions();
     bool shouldWarnForImpreciseTimer();
     
     //--------------- Data members ---------------------------------

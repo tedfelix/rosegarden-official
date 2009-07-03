@@ -884,24 +884,11 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                                          (int)(*i)->getData2() * 256);
             }
             
-            if ((*i)->getType() ==
-                MappedEvent::SystemUpdateInstruments) {
+            if ((*i)->getType() == MappedEvent::SystemUpdateInstruments) {
+
                 // resync Devices and Instruments
                 //
                 m_doc->syncDevices();
-                
-                /*
-                // replaced with call to restoreRecordSubscriptions()
-                //
-                QSettings settings;
-                settings.beginGroup( SequencerOptionsConfigGroup );
-                
-                QString recordDeviceStr = settings.value("midirecorddevice").toString() ;
-                sendMIDIRecordingDevice(recordDeviceStr);
-                settings.endGroup();
-                // */
-                
-                restoreRecordSubscriptions();
             }
 
             if (m_transportStatus == PLAYING ||
@@ -1505,52 +1492,10 @@ SequenceManager::resetMidiNetwork()
 }
 
 void
-SequenceManager::sendMIDIRecordingDevice(const QString recordDeviceStr)
-{
-
-    if (!recordDeviceStr.isEmpty()) {
-        int recordDevice = recordDeviceStr.toInt();
-
-        if (recordDevice >= 0) {
-            MappedEvent mE(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemRecordDevice,
-                           MidiByte(recordDevice),
-                           MidiByte(true));
-
-            StudioControl::sendMappedEvent(mE);
-            SEQMAN_DEBUG << "set MIDI record device to "
-                         << recordDevice << endl;
-        }
-    }
-}
-
-void
-SequenceManager::restoreRecordSubscriptions()
-{
-    QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
-
-    //QString recordDeviceStr = settings.value("midirecorddevice").toString();
-    QStringList devList = settings.value("midirecorddevice").toStringList();
-
-    for ( QStringList::ConstIterator it = devList.begin();
-            it != devList.end(); ++it) {
-        sendMIDIRecordingDevice(*it);
-    }
-    settings.endGroup();
-}
-
-void
 SequenceManager::reinitialiseSequencerStudio()
 {
     QSettings settings;
     settings.beginGroup( SequencerOptionsConfigGroup );
-
-//     why is this commented out ? should it ?
-//     QString recordDeviceStr = settings.value("midirecorddevice").toString();
-//     sendMIDIRecordingDevice(recordDeviceStr);
-    
-    restoreRecordSubscriptions();
 
     // Toggle JACK audio ports appropriately
     //
