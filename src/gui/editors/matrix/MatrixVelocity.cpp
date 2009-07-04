@@ -122,7 +122,8 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     } else {
         m_velocityScale =
             (double)(m_mouseStartY - e->sceneY) /
-            (double)(m_screenPixelsScale * 2);
+//            (double)(m_screenPixelsScale * 2);
+            (double)(m_screenPixelsScale);
     }
 
     m_velocityDelta = 128 * m_velocityScale;
