@@ -1,5 +1,4 @@
-
-/* -*- c-basic-offset: QMenu indent-tabs-mode: nil -*- vi:set ts=8 sts=QMenu sw=QMenu: */
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -181,6 +180,21 @@ protected:
     QString getPresentationName(Instrument *);
 
     void setButtonMapping(QObject*, TrackId);
+
+    /**
+     * Return a suitable colour for a record LED for the supplied instrument,
+     * based on its type.  If the instrument is invalid, it will return a
+     * neutral color.
+     *
+     * This is a refactoring of several patches of duplicate code, and it adds
+     * sanity checking in the form of returning a bad LED if the instrument is
+     * invalid, or is of an invalid type, as a visual indication of an
+     * underlying problem.  (This may actually prove useful beyond the scope of
+     * the bug I'm tracking.  I think broken instruments may be rather common
+     * when adding and deleting things with the device manager, and this may
+     * help show that up.  Or not.)
+     */
+     QColor getRecordLedColour(Rosegarden::Instrument *ins);
 
     //--------------- Data members ---------------------------------
 

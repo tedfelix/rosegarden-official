@@ -159,6 +159,7 @@ public:
     static const char* const MuteTrackLED;
     static const char* const RecordMIDITrackLED;
     static const char* const RecordAudioTrackLED;
+    static const char* const RecordSoftSynthTrackLED;
 
     static const char* const PlaybackFaderOutline;
     static const char* const RecordFaderOutline;

@@ -371,17 +371,9 @@ TrackButtons::slotUpdateTracks()
             Instrument *ins =
                 m_doc->getStudio().getInstrumentById(track->getInstrument());
 
-            if (ins &&
-                    ins->getType() == Instrument::Audio) {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordAudioTrackLED));
-            } else {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordMIDITrackLED));
-            }
+            m_recordLeds[i]->setColor(getRecordLedColour(ins));
         }
+
     }
 
     // repopulate the buttons
@@ -781,9 +773,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 //                 tempMenu = new QMenu(instrumentPopup);
                 tempMenu = new QAction(instrumentPopup);
                 tempMenu->setIcon( iconSet );
-                tempMenu->setText( iname );	// for QAction
+                tempMenu->setText( iname );    // for QAction
                 tempMenu->setData( QVariant( count ) );
-//                 tempMenu->setTitle( iname );	// for QMenu
+//                 tempMenu->setTitle( iname );    // for QMenu
                 tempMenu->setObjectName( iname + QString(count) );
                 
                 count++;
@@ -834,15 +826,8 @@ TrackButtons::slotInstrumentPopupActivated(int item)
             if (inst->sendsProgramChange())
                 m_trackLabels[m_popupItem]->setAlternativeLabel(strtoqstr(inst->getProgramName()));
 
-            if (inst->getType() == Instrument::Audio) {
-                m_recordLeds[m_popupItem]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordAudioTrackLED));
-            } else {
-                m_recordLeds[m_popupItem]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordMIDITrackLED));
-            }
+            m_recordLeds[m_popupItem]->setColor(getRecordLedColour(inst));
+
         } else
             RG_DEBUG << "slotInstrumentPopupActivated() - can't find item!\n";
     } else
@@ -878,15 +863,8 @@ TrackButtons::changeInstrumentLabel(InstrumentId id, QString label)
             Instrument *ins = m_doc->getStudio().
                               getInstrumentById(track->getInstrument());
 
-            if (ins && ins->getType() == Instrument::Audio) {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordAudioTrackLED));
-            } else {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordMIDITrackLED));
-            }
+            m_recordLeds[i]->setColor(getRecordLedColour(ins));
+
         }
     }
 }
@@ -937,15 +915,7 @@ TrackButtons::slotSynchroniseWithComposition()
 
             setRecordButton(i, comp.isTrackRecording(track->getId()));
 
-            if (ins && ins->getType() == Instrument::Audio) {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordAudioTrackLED));
-            } else {
-                m_recordLeds[i]->setColor
-                (GUIPalette::getColour
-                 (GUIPalette::RecordMIDITrackLED));
-            }
+            m_recordLeds[i]->setColor(getRecordLedColour(ins));
         }
     }
 }
@@ -1139,6 +1109,32 @@ QFrame* TrackButtons::makeButton(Rosegarden::TrackId trackId)
         mute->off();
 
     return trackHBox;
+}
+
+QColor
+TrackButtons::getRecordLedColour(Instrument *ins)
+{
+    if (!ins) return Qt::white;
+
+    switch (ins->getType()) {
+        case Instrument::Audio:
+                std::cerr << "TrackButtons::getRecordLedColour - setting LED to red" << std::endl;
+                return GUIPalette::getColour(GUIPalette::RecordAudioTrackLED);
+
+        case Instrument::SoftSynth:
+                std::cerr << "TrackButtons::getRecordLedColour - setting LED to orange" << std::endl;
+                return GUIPalette::getColour(GUIPalette::RecordSoftSynthTrackLED);
+
+        case Instrument::Midi:
+                std::cerr << "TrackButtons::getRecordLedColour - setting LED to yellow" << std::endl;
+                return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
+                
+        default:
+                std::cerr << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!" 
+                          << std::endl;
+                return Qt::green;
+    }
+
 }
 
 
