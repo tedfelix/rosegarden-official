@@ -21,6 +21,7 @@
     <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Insert" />
   <Separator/>
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
+    <Action name="select_all" text="Select &amp;All Events" shortcut="Ctrl+A" />
     <Action name="clear_selection" text="Clear &amp;Selection" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
   </Menu>
@@ -64,7 +65,7 @@
 
   <Menu name="document">
     <text>&amp;Composition</text>
-    <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
+    <Action name="add_tempo_change" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
   </Menu>
 

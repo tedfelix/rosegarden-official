@@ -25,6 +25,7 @@
 
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
+// #include "document/Command.h"
 #include "document/CommandHistory.h"
 
 #include "gui/dialogs/QuantizeDialog.h"
@@ -44,6 +45,16 @@
 #include "commands/edit/SelectionPropertyCommand.h"
 #include "commands/edit/SetTriggerCommand.h"
 
+#include "commands/edit/InvertCommand.h"
+#include "commands/edit/MoveCommand.h"
+#include "commands/edit/RescaleCommand.h"
+#include "commands/edit/RetrogradeCommand.h"
+#include "commands/edit/RetrogradeInvertCommand.h"
+#include "commands/edit/TransposeCommand.h"
+#include "commands/segment/AddTempoChangeCommand.h"
+#include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
+#include "commands/segment/AddTimeSignatureCommand.h"
+
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
@@ -53,6 +64,14 @@
 #include "base/BaseProperties.h"
 #include "base/SnapGrid.h"
 #include "base/Clipboard.h"
+
+// #include "base/Composition.h"
+#include "base/AnalysisTypes.h"
+#include "base/CompositionTimeSliceAdapter.h"
+#include "gui/dialogs/RescaleDialog.h"
+#include "gui/dialogs/TempoDialog.h"
+#include "gui/dialogs/IntervalDialog.h"
+#include "gui/dialogs/TimeSignatureDialog.h"
 
 #include "gui/general/IconLoader.h"
 
@@ -65,6 +84,7 @@
 #include <QSettings>
 #include <QComboBox>
 #include <QHBoxLayout>
+#include <QInputDialog>
 
 
 namespace Rosegarden
@@ -190,8 +210,9 @@ NewMatrixView::updateWindowTitle()
 void
 NewMatrixView::setupActions()
 {
+    
     setupBaseActions(true);
-
+    
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("draw", SLOT(slotSetPaintTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
@@ -239,7 +260,14 @@ NewMatrixView::setupActions()
     createAction("clear_loop", SLOT(slotClearLoop()));
     createAction("clear_selection", SLOT(slotClearSelection()));
     createAction("filter_selection", SLOT(slotFilterSelection()));
-
+    
+    
+    createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
+    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
+    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("insert_control_ruler_item", SLOT(slotAddControlRuler()));
+    
+    // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     m_snapValues.clear();
     m_snapValues.push_back(SnapGrid::NoSnap);
@@ -276,12 +304,36 @@ NewMatrixView::setupActions()
             createAction(actionName, SLOT(slotSetSnapFromAction()));
         }
     }
-
-    createAction("show_inst_parameters", SLOT(slotDockParametersBack()));
-    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    createAction("insert_control_ruler_item", SLOT(slotAddControlRuler()));
+    
+    
+    
+    // actions formerly located in EditView
+    // --
+    
+    //createInsertPitchActionMenu();
+    
+    createAction("add_tempo_change", SLOT(slotAddTempo()));
+    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
+    createAction("halve_durations", SLOT(slotHalveDurations()));
+    createAction("double_durations", SLOT(slotDoubleDurations()));
+    createAction("rescale", SLOT(slotRescale()));
+    createAction("transpose_up", SLOT(slotTransposeUp()));
+    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
+    createAction("transpose_down", SLOT(slotTransposeDown()));
+    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
+    createAction("general_transpose", SLOT(slotTranspose()));
+    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("invert", SLOT(slotInvert()));
+    createAction("retrograde", SLOT(slotRetrograde()));
+    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));    
+//     createAction("jog_left", SLOT(slotJogLeft()));
+//     createAction("jog_right", SLOT(slotJogRight()));
+//     createAction("show_velocity_control_ruler", SLOT(slotShowVelocityControlRuler()));
+//     createAction("draw_property_line", SLOT(slotDrawPropertyLine()));
+//     createAction("select_all_properties", SLOT(slotSelectAllProperties()));    
+    
 }
+
 
 void
 NewMatrixView::initActionsToolbar()
@@ -944,6 +996,277 @@ NewMatrixView::slotToggleTempoRuler()
     settings.setValue("Tempo ruler shown", view);
     settings.endGroup();
 }
+
+
+
+
+
+// start of code formerly located in EditView.cpp
+// --
+
+
+void NewMatrixView::slotAddTempo()
+{
+    timeT insertionTime = getInsertionTime();
+
+    TempoDialog tempoDlg(this, getDocument());
+
+    connect(&tempoDlg,
+             SIGNAL(changeTempo(timeT,
+                    tempoT,
+                    tempoT,
+                    TempoDialog::TempoDialogAction)),
+                    this,
+                    SIGNAL(changeTempo(timeT,
+                           tempoT,
+                           tempoT,
+                           TempoDialog::TempoDialogAction)));
+
+    tempoDlg.setTempoPosition(insertionTime);
+    tempoDlg.exec();
+}
+
+void NewMatrixView::slotAddTimeSignature()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return ;
+    Composition *composition = segment->getComposition();
+    timeT insertionTime = getInsertionTime();
+
+    TimeSignatureDialog *dialog = 0;
+    int timeSigNo = composition->getTimeSignatureNumberAt(insertionTime);
+
+    if (timeSigNo >= 0) {
+
+        dialog = new TimeSignatureDialog
+                (this, composition, insertionTime,
+                 composition->getTimeSignatureAt(insertionTime));
+
+    } else {
+
+        timeT endTime = composition->getDuration();
+        if (composition->getTimeSignatureCount() > 0) {
+            endTime = composition->getTimeSignatureChange(0).first;
+        }
+
+        CompositionTimeSliceAdapter adapter
+                (composition, insertionTime, endTime);
+        AnalysisHelper helper;
+        TimeSignature timeSig = helper.guessTimeSignature(adapter);
+
+        dialog = new TimeSignatureDialog
+                (this, composition, insertionTime, timeSig, false,
+                 tr("Estimated time signature shown"));
+    }
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+        insertionTime = dialog->getTime();
+
+        if (dialog->shouldNormalizeRests()) {
+
+            CommandHistory::getInstance()->addCommand(new AddTimeSignatureAndNormalizeCommand
+                    (composition, insertionTime,
+                     dialog->getTimeSignature()));
+
+        } else {
+
+            CommandHistory::getInstance()->addCommand(new AddTimeSignatureCommand
+                    (composition, insertionTime,
+                     dialog->getTimeSignature()));
+        }
+    }
+
+    delete dialog;
+}
+
+
+
+void NewMatrixView::slotHalveDurations(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return;
+
+    CommandHistory::getInstance()->addCommand( new RescaleCommand
+                            (*m_currentEventSelection,
+                            m_currentEventSelection->getTotalDuration() / 2,
+                            false)
+                       );
+}
+
+void NewMatrixView::slotDoubleDurations(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return;
+    CommandHistory::getInstance()->addCommand(new RescaleCommand(*m_currentEventSelection,
+                                            m_currentEventSelection->getTotalDuration() * 2,
+                                                    false)
+                       );
+}
+
+void NewMatrixView::slotRescale(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return;
+
+    RescaleDialog dialog(this,
+                            &getDocument()->getComposition(),
+                            m_currentEventSelection->getStartTime(),
+                            m_currentEventSelection->getEndTime() -
+                            m_currentEventSelection->getStartTime(),
+                            true,
+                            true
+                        );
+
+    if (dialog.exec() == QDialog::Accepted) {
+        CommandHistory::getInstance()->addCommand(new RescaleCommand
+                (*m_currentEventSelection,
+                  dialog.getNewDuration(),
+                                        dialog.shouldCloseGap()));
+    }
+}
+
+void NewMatrixView::slotTranspose(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return;
+
+    QSettings settings;
+    settings.beginGroup( EditViewConfigGroup );
+
+    int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInteger
+            (tr("Transpose"),
+             tr("By number of semitones: "),
+                dialogDefault, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    settings.setValue("lasttransposition", semitones);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+            (semitones, *m_currentEventSelection));
+
+    settings.endGroup();
+}
+
+void NewMatrixView::slotDiatonicTranspose()
+{
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return;
+    
+    QSettings settings;
+    settings.beginGroup( EditViewConfigGroup );
+    
+    IntervalDialog intervalDialog(this);
+    int ok = intervalDialog.exec();
+    //int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
+    int semitones = intervalDialog.getChromaticDistance();
+    int steps = intervalDialog.getDiatonicDistance();
+    settings.endGroup();
+    
+    if (!ok || (semitones == 0 && steps == 0)) return;
+    
+    if (intervalDialog.getChangeKey())
+    {
+        std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
+    }
+    else
+    {
+    // Transpose within key
+        //std::cout << "Transposing semitones, steps: " << semitones << ", " << steps << std::endl;
+        CommandHistory::getInstance()->addCommand(new TransposeCommand
+                (semitones, steps, *m_currentEventSelection));
+    }
+}
+
+void NewMatrixView::slotTransposeUp(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotTransposeUpOctave(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand(12, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotTransposeDown(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand( -1, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotTransposeDownOctave(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand( -12, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotInvert(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    
+    int semitones = 0;    
+    CommandHistory::getInstance()->addCommand(new InvertCommand
+            (semitones, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotRetrograde(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+    
+    int semitones = 0;
+    CommandHistory::getInstance()->addCommand(new RetrogradeCommand
+            (semitones, *m_currentEventSelection));
+}
+
+void NewMatrixView::slotRetrogradeInvert(){
+    EventSelection *m_currentEventSelection = getSelection();
+    if (!m_currentEventSelection) return ;
+
+    int semitones = 0;
+    CommandHistory::getInstance()->addCommand(new RetrogradeInvertCommand
+            (semitones, *m_currentEventSelection));
+}
+
+/*
+
+void NewMatrixView::slotJogLeft(){
+    
+    if (!m_currentEventSelection)
+        return ;
+    TmpStatusMsg msg(tr("Jogging left..."), this);
+
+    RG_DEBUG << "NewMatrixView::slotJogLeft" << endl;
+
+    CommandHistory::getInstance()->addCommand(
+        new MoveCommand(*getCurrentSegment(),
+                        -Note(Note::Demisemiquaver).getDuration(),
+                        false,  // don't use notation timings
+                        *m_currentEventSelection));
+}
+
+void NewMatrixView::slotJogRight(){
+    
+    if (!m_currentEventSelection)
+        return ;
+    TmpStatusMsg msg(tr("Jogging right..."), this);
+
+    RG_DEBUG << "NewMatrixView::slotJogRight" << endl;
+
+    CommandHistory::getInstance()->addCommand(
+        new MoveCommand(*getCurrentSegment(),
+                        Note(Note::Demisemiquaver).getDuration(),
+                        false,  // don't use notation timings
+                        *m_currentEventSelection));
+}
+*/
+
+// --
+// end of code formerly located in EditView.cpp
+
+
+
 
 }
 

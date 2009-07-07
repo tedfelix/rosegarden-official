@@ -145,7 +145,40 @@ protected slots:
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
     void slotAddControlRuler();
+    
+        
+    // start of slots, formerly in located in EditView.h (which is obsolete now)
+    // --
+    void slotAddTempo();
+    void slotAddTimeSignature();
+    
+    // rescale
+    void slotHalveDurations();
+    void slotDoubleDurations();
+    void slotRescale();
 
+    // transpose
+    void slotTransposeUp();
+    void slotTransposeUpOctave();
+    void slotTransposeDown();
+    void slotTransposeDownOctave();
+    void slotTranspose();
+    void slotDiatonicTranspose();
+
+    // invert
+    void slotInvert();
+    void slotRetrograde();
+    void slotRetrogradeInvert();
+
+    // jog events
+//     void slotJogLeft();
+//     void slotJogRight();
+    
+    // --
+    // end of slots, formerly in located in EditView.h (which is obsolete now)
+    
+    
+    
 protected:
     const SnapGrid *getSnapGrid() const;
 
