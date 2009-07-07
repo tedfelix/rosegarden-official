@@ -581,6 +581,18 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
 }
 
 void
+MatrixWidget::slotToggleVelocityRuler()
+{
+    m_controlsWidget->slotAddRuler();
+}
+
+void
+MatrixWidget::slotTogglePitchbendRuler()
+{
+    m_controlsWidget->slotAddRuler();
+}
+
+void
 MatrixWidget::slotAddControlRuler()
 {
     m_controlsWidget->slotAddRuler();

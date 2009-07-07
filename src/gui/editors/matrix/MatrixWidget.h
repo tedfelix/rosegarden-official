@@ -121,6 +121,8 @@ public slots:
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 
+    void slotToggleVelocityRuler();
+    void slotTogglePitchbendRuler();
     void slotAddControlRuler();
 
     void slotHScroll();

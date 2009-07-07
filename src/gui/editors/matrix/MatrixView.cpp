@@ -89,6 +89,7 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 
     initActionsToolbar();
     initZoomToolbar();
+    initRulersToolbar();
 
     connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
             this, SIGNAL(editTriggerSegment(int)));
@@ -387,6 +388,20 @@ NewMatrixView::initActionsToolbar()
 
     connect(m_quantizeCombo, SIGNAL(activated(int)),
             this, SLOT(slotQuantizeSelection(int)));
+}
+
+void
+NewMatrixView::initRulersToolbar()
+{
+    QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
+    if (!rulersToolbar) {
+        std::cerr << "MatrixView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
+        return;
+    }
+
+    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
+    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
+    createAction("toggle_velocity_ruler", SLOT(slotAddControlRuler()));
 }
 
 void
@@ -897,6 +912,18 @@ NewMatrixView::slotToggleChordsRuler()
     settings.beginGroup(MatrixViewConfigGroup);
     settings.setValue("Chords ruler shown", view);
     settings.endGroup();
+}
+
+void
+NewMatrixView::slotToggleVelocityRuler()
+{
+    m_matrixWidget->slotToggleVelocityRuler();
+}
+
+void
+NewMatrixView::slotTogglePitchbendRuler()
+{
+    m_matrixWidget->slotTogglePitchbendRuler();
 }
 
 void

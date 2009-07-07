@@ -142,6 +142,8 @@ protected slots:
     void slotToggleChordsRuler();
     void slotToggleTempoRuler();
 
+    void slotToggleVelocityRuler();
+    void slotTogglePitchbendRuler();
     void slotAddControlRuler();
 
 protected:
@@ -168,6 +170,7 @@ private:
     void setupActions();
     void initZoomToolbar();
     void initActionsToolbar();
+    void initRulersToolbar();
 
 };
 
