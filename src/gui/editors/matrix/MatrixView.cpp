@@ -1090,50 +1090,54 @@ void NewMatrixView::slotAddTimeSignature()
 
 
 
-void NewMatrixView::slotHalveDurations(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return;
+void NewMatrixView::slotHalveDurations()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
 
     CommandHistory::getInstance()->addCommand( new RescaleCommand
-                            (*m_currentEventSelection,
-                            m_currentEventSelection->getTotalDuration() / 2,
+                            (*selection,
+                            selection->getTotalDuration() / 2,
                             false)
                        );
 }
 
-void NewMatrixView::slotDoubleDurations(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return;
-    CommandHistory::getInstance()->addCommand(new RescaleCommand(*m_currentEventSelection,
-                                            m_currentEventSelection->getTotalDuration() * 2,
+void NewMatrixView::slotDoubleDurations()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+    CommandHistory::getInstance()->addCommand(new RescaleCommand(*selection,
+                                            selection->getTotalDuration() * 2,
                                                     false)
                        );
 }
 
-void NewMatrixView::slotRescale(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return;
+void NewMatrixView::slotRescale()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
 
     RescaleDialog dialog(this,
                             &getDocument()->getComposition(),
-                            m_currentEventSelection->getStartTime(),
-                            m_currentEventSelection->getEndTime() -
-                            m_currentEventSelection->getStartTime(),
+                            selection->getStartTime(),
+                            selection->getEndTime() -
+                            selection->getStartTime(),
                             true,
                             true
                         );
 
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand(new RescaleCommand
-                (*m_currentEventSelection,
+                (*selection,
                   dialog.getNewDuration(),
                                         dialog.shouldCloseGap()));
     }
 }
 
-void NewMatrixView::slotTranspose(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return;
+void NewMatrixView::slotTranspose()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
 
     QSettings settings;
     settings.beginGroup( EditViewConfigGroup );
@@ -1150,15 +1154,15 @@ void NewMatrixView::slotTranspose(){
     settings.setValue("lasttransposition", semitones);
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
-            (semitones, *m_currentEventSelection));
+            (semitones, *selection));
 
     settings.endGroup();
 }
 
 void NewMatrixView::slotDiatonicTranspose()
 {
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return;
+    EventSelection *selection = getSelection();
+    if (!selection) return;
     
     QSettings settings;
     settings.beginGroup( EditViewConfigGroup );
@@ -1181,66 +1185,73 @@ void NewMatrixView::slotDiatonicTranspose()
     // Transpose within key
         //std::cout << "Transposing semitones, steps: " << semitones << ", " << steps << std::endl;
         CommandHistory::getInstance()->addCommand(new TransposeCommand
-                (semitones, steps, *m_currentEventSelection));
+                (semitones, steps, *selection));
     }
 }
 
-void NewMatrixView::slotTransposeUp(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
-    CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *m_currentEventSelection));
+void NewMatrixView::slotTransposeUp()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *selection));
 }
 
-void NewMatrixView::slotTransposeUpOctave(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
-    CommandHistory::getInstance()->addCommand(new TransposeCommand(12, *m_currentEventSelection));
+void NewMatrixView::slotTransposeUpOctave()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand(12, *selection));
 }
 
-void NewMatrixView::slotTransposeDown(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
-    CommandHistory::getInstance()->addCommand(new TransposeCommand( -1, *m_currentEventSelection));
+void NewMatrixView::slotTransposeDown()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand( -1, *selection));
 }
 
-void NewMatrixView::slotTransposeDownOctave(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
-    CommandHistory::getInstance()->addCommand(new TransposeCommand( -12, *m_currentEventSelection));
+void NewMatrixView::slotTransposeDownOctave()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+    CommandHistory::getInstance()->addCommand(new TransposeCommand( -12, *selection));
 }
 
-void NewMatrixView::slotInvert(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
+void NewMatrixView::slotInvert()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
     
     int semitones = 0;    
     CommandHistory::getInstance()->addCommand(new InvertCommand
-            (semitones, *m_currentEventSelection));
+            (semitones, *selection));
 }
 
-void NewMatrixView::slotRetrograde(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
+void NewMatrixView::slotRetrograde()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
     
     int semitones = 0;
     CommandHistory::getInstance()->addCommand(new RetrogradeCommand
-            (semitones, *m_currentEventSelection));
+            (semitones, *selection));
 }
 
-void NewMatrixView::slotRetrogradeInvert(){
-    EventSelection *m_currentEventSelection = getSelection();
-    if (!m_currentEventSelection) return ;
+void NewMatrixView::slotRetrogradeInvert()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
 
     int semitones = 0;
     CommandHistory::getInstance()->addCommand(new RetrogradeInvertCommand
-            (semitones, *m_currentEventSelection));
+            (semitones, *selection));
 }
 
 /*
 
-void NewMatrixView::slotJogLeft(){
-    
-    if (!m_currentEventSelection)
+void NewMatrixView::slotJogLeft()
+{
+    if (!selection)
         return ;
     TmpStatusMsg msg(tr("Jogging left..."), this);
 
@@ -1250,12 +1261,12 @@ void NewMatrixView::slotJogLeft(){
         new MoveCommand(*getCurrentSegment(),
                         -Note(Note::Demisemiquaver).getDuration(),
                         false,  // don't use notation timings
-                        *m_currentEventSelection));
+                        *selection));
 }
 
-void NewMatrixView::slotJogRight(){
-    
-    if (!m_currentEventSelection)
+void NewMatrixView::slotJogRight()
+{
+    if (!selection)
         return ;
     TmpStatusMsg msg(tr("Jogging right..."), this);
 
@@ -1265,7 +1276,7 @@ void NewMatrixView::slotJogRight(){
         new MoveCommand(*getCurrentSegment(),
                         Note(Note::Demisemiquaver).getDuration(),
                         false,  // don't use notation timings
-                        *m_currentEventSelection));
+                        *selection));
 }
 */
 
