@@ -102,15 +102,15 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     m_matrixWidget = new MatrixWidget(drumMode);
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
-
+    
     setupActions();
-
+    
     createGUI("matrix.rc");
-
+    
     initActionsToolbar();
     initZoomToolbar();
     initRulersToolbar();
-
+    
     connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
             this, SIGNAL(editTriggerSegment(int)));
 
@@ -141,7 +141,9 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
                          ).toBool();
     findAction("show_tempo_ruler")->setChecked(view);
     m_matrixWidget->setTempoRulerVisible(view);
-
+    
+    resize( 1000, 620 );    //!!! fix: remember win size and position
+    
     settings.endGroup();
 }
 
@@ -266,6 +268,11 @@ NewMatrixView::setupActions()
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
     createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
     createAction("insert_control_ruler_item", SLOT(slotAddControlRuler()));
+    
+    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
+    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
+    createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+    
     
     // grid snap values
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();

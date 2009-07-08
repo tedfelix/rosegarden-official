@@ -351,6 +351,15 @@
   <Action name="panic" />
 </ToolBar>
 
+<ToolBar name="Rulers Toolbar">
+  <text>Rulers Toolbar</text>
+  <Action name="toggle_solo" />
+  <Action name="toggle_velocity_ruler" />
+  <Action name="toggle_pitchbend_ruler" />
+  <Action name="add_control_ruler" />
+</ToolBar>
+
+
 <ToolBar name="Actions Toolbar" newline="true">
   <text>Actions Toolbar</text>
   <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
@@ -358,14 +367,6 @@
 
 <ToolBar name="Zoom Toolbar">
   <text>Zoom Toolbar</text>
-</ToolBar>
-
-<ToolBar name="Rulers Toolbar">
-  <text>Rulers Toolbar</text>
-  <Action name="toggle_solo" />
-  <Action name="toggle_velocity_ruler" />
-  <Action name="toggle_pitchbend_ruler" />
-  <Action name="add_control_ruler" />
 </ToolBar>
 
 <Menu noMerge="1" name="controller_events_ruler_menu">
