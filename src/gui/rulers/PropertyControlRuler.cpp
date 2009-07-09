@@ -23,8 +23,6 @@
 #include "PropertyControlRuler.h"
 
 #include "ControlRuler.h"
-#include "ControlTool.h"
-#include "ControlToolBox.h"
 #include "PropertyControlItem.h"
 //#include "ViewElementAdapter.h"
 #include "misc/Debug.h"
@@ -276,18 +274,6 @@ void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEven
 
         item->update();
     }
-}
-
-void PropertyControlRuler::slotSetTool(const QString &matrixtoolname)
-{
-    ///TODO Write mechanism to select correct control tool for the given matrix tool
-    QString controltoolname = "adjuster";
-    ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
-    if (!tool) return;
-    if (m_currentTool) m_currentTool->stow();
-    m_currentTool = tool;
-    m_currentTool->ready();
-//    emit toolChanged(name);
 }
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)

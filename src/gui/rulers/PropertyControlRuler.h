@@ -90,7 +90,6 @@ public:
 
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
-    virtual void slotSetTool(const QString &);
 
 protected:
 //    void addControlItem(Event *);

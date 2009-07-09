@@ -23,11 +23,9 @@
 //#include "base/Segment.h"
 //#include "base/Selection.h"
 //#include "ControlChangeCommand.h"
-#include "ControlMouseEvent.h"
 #include "ControlItem.h"
 #include "ControlSelector.h"
 #include "ControlTool.h"
-#include "ControlToolBox.h"
 #include "DefaultVelocityColour.h"
 //#include "ElementAdapter.h"
 //#include "gui/general/EditViewBase.h"
@@ -39,6 +37,7 @@
 #include <QMainWindow>
 //#include <Q3Canvas>
 #include <QColor>
+#include <QCursor>
 #include <QPoint>
 #include <QPolygonF>
 #include <QPolygon>
@@ -71,7 +70,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
 //        m_assignedEventSelection(0),
         m_eventSelection(0),
         m_currentIndex(0),
-        m_currentTool(0),
+        m_tool(0),
         m_maxItemValue(127),
         m_viewSegmentOffset(0),
         m_currentX(0.0),
@@ -89,7 +88,6 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
 
 ///TODO    connect(this, SIGNAL(stateChange(const QString&, bool)),
       //      m_parentEditView, SLOT(slotStateChanged(const QString&, bool)));
-    m_toolBox = new ControlToolBox(this);
 
     emit stateChange("have_controller_item_selected", false);
 }
@@ -230,8 +228,16 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 //	m_scale = factor;
 //}
 
-void ControlRuler::slotSetTool(const QString &matrixtoolname)
+void ControlRuler::setControlTool(ControlTool* tool)
 {
+    if (m_tool)
+        delete m_tool;
+    m_tool = tool;
+}
+
+void ControlRuler::slotSetToolName(const QString &toolname)
+{
+    m_currentToolName = toolname;
 }
 
 //void ControlRuler::eventSelected(EventSelection *es,Event *e) {
@@ -455,25 +461,34 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
 {
-    if (!m_currentTool)
-        return;
-
-    ControlMouseEvent controlMouseEvent;
     QPoint widgetMousePos = e->pos();
     QPointF mousePos = mapWidgetToItem(&widgetMousePos);
-    controlMouseEvent.time = mousePos.x();
-    controlMouseEvent.value = mousePos.y();
 
-    ///TODO Need to restrict this search to items on display
-    for (ControlItemList::iterator it = m_controlItemList.begin();
-            it != m_controlItemList.end(); ++it) {
-        if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
-            controlMouseEvent.itemList.push_back(*it);
+    if (e->buttons()==Qt::NoButton)
+    {
+        // This is a move over event
+        // Check whether the mouse is currently over any items
+        RG_DEBUG << "ControlRuler::mouseMoveEvent: " << mousePos;
+        bool isOverItem = false;
+        for (ControlItemList::iterator it = m_selectedItems.begin();
+                it != m_selectedItems.end(); ++it) {
+            if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
+                isOverItem = true;
+            }
+        }
+
+        if (!m_overItem) {
+            if (isOverItem) {
+                setCursor(Qt::OpenHandCursor);
+                m_overItem = true;
+            }
+        } else {
+            if (!isOverItem) {
+                unsetCursor();
+                m_overItem = false;
+            }
         }
     }
-
-    m_currentTool->handleMouseMove(&controlMouseEvent);
-
 //    QPoint p = e->pos(); ///CJ Is this ok - inverseMapPoint(e->pos());
 //
 //    int deltaX = p.x() - m_lastEventPos.x(),
@@ -647,12 +662,12 @@ QColor ControlRuler::valueToColour(int max, int val)
     return DefaultVelocityColour::getInstance()->getColour(value);
 }
 
-//int ControlRuler::applyTool(double x, int val)
-//{
-//    if (m_tool)
-//        return (*m_tool)(x, val);
-//    return val;
-//}
+int ControlRuler::applyTool(double x, int val)
+{
+    if (m_tool)
+        return (*m_tool)(x, val);
+    return val;
+}
 
 void ControlRuler::flipForwards()
 {

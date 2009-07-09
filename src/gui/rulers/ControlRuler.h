@@ -47,7 +47,6 @@ namespace Rosegarden
 {
 
 class ControlTool;
-class ControlToolBox;
 class ControlSelector;
 //class ControlItem;
 //class ControlItemList;
@@ -132,7 +131,7 @@ public slots:
     virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
-    virtual void slotSetTool(const QString&);
+    virtual void slotSetToolName(const QString&);
 
 protected:
     virtual void mousePressEvent(QMouseEvent*);
@@ -188,8 +187,7 @@ protected:
 //    Q3CanvasItemList m_selectedItems;
     ControlItemList m_selectedItems;
 
-    ControlTool *m_currentTool;
-    ControlToolBox *m_toolBox;
+    ControlTool *m_tool;
     QString m_currentToolName;
 
     QRectF m_pannedRect;
@@ -204,6 +202,7 @@ protected:
     QPoint m_lastEventPos;
     bool m_itemMoved;
 
+    bool m_overItem;
     bool m_selecting;
     ControlSelector* m_selector;
 //    Q3CanvasRectangle* m_selectionRect;
