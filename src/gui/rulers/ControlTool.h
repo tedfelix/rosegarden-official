@@ -18,13 +18,35 @@
 #ifndef CONTROLTOOL_H_
 #define CONTROLTOOL_H_
 
+#include <QObject>
+#include "gui/general/BaseTool.h"
+
+class QString;
+
 namespace Rosegarden {
 
-class ControlTool
+class ControlRuler;
+class ControlMouseEvent;
+
+class ControlTool : public BaseTool
 {
+    Q_OBJECT
+
 public:
+    ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
     virtual ~ControlTool() {};
-    virtual int operator()(double x, int val) = 0;
+//    virtual int operator()(double x, int val) = 0;
+    virtual void handleLeftButtonPress(const ControlMouseEvent *) {}
+    virtual void handleMidButtonPress(const ControlMouseEvent *) {}
+    virtual void handleRightButtonPress(const ControlMouseEvent *) {}
+    virtual void handleMouseRelease(const ControlMouseEvent *) {}
+    virtual void handleMouseDoubleClick(const ControlMouseEvent *) {}
+    virtual void handleMouseMove(const ControlMouseEvent *) {}
+protected:
+    virtual void createMenu();
+
+    ControlRuler *m_ruler;
+    bool m_overItem;
 };
 
 }

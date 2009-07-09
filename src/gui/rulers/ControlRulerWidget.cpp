@@ -227,7 +227,7 @@ void ControlRulerWidget::slotSetToolName(const QString &toolname)
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
-            (*it)->slotSetToolName(toolname);
+            (*it)->slotSetTool(toolname);
         }
     }
 }
