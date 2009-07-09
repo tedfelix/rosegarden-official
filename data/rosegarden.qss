@@ -1166,6 +1166,42 @@ QToolButton { background-color: red; border: none; } */
 /* We use tool buttons for the TPB collapsing frame texts, eg. "Playback
  * parameters" and for toolbar buttons
  */
+
+QToolButton::menu-indicator
+{
+    subcontrol-origin: padding 10px;
+    subcontrol-position: top right;
+/*    padding: 10px 10px 10px 10px;*/
+}
+
+QToolButton::menu-button
+{ /* the scroll buttons are tool buttons */
+    border-image: url(:pixmaps/style/tab-scroll-button.png) 1;
+    border-width: 1px;
+}
+
+QToolButton::menu-button:hover
+{
+    border-image: url(:pixmaps/style/tab-scroll-button-hover.png) 1;
+    border-width: 1px;
+}
+
+QToolButton::menu-button:!enabled
+{
+    border-image: url(:pixmaps/style/tab-scroll-button-disabled.png) 1;
+    border-width: 1px;
+}
+
+QToolButton::up-arrow
+{ /* the arrow mark in the tool buttons */
+    image: url(:pixmaps/style/arrow-up-small.png);
+}
+
+QToolButton::down-arrow
+{
+    image: url(:pixmaps/style/arrow-down-small.png);
+}
+
 QToolButton,
 QToolButton::enabled,
 #tempoview QToolButton,

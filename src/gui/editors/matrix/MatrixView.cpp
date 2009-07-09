@@ -457,10 +457,6 @@ NewMatrixView::initRulersToolbar()
         std::cerr << "MatrixView::initRulersToolbar() - rulers toolbar not found!" << std::endl;
         return;
     }
-
-    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
-    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
-    createAction("toggle_velocity_ruler", SLOT(slotAddControlRuler()));
 }
 
 void
