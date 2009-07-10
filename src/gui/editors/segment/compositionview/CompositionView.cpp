@@ -604,7 +604,15 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
         } else {
 
             // No existing refresh rect: we only need to handle the
-            // scroll
+            // scroll.  Formerly we dealt with this by copying part of
+            // the pixmap to itself, but that only worked by accident,
+            // and it fails with the raster renderer or on non-X11
+            // platforms.  Use a temporary pixmap instead
+
+            static QPixmap map;
+            if (map.size() != m_segmentsDrawBuffer.size()) {
+                map = QPixmap(m_segmentsDrawBuffer.size());
+            }
 
             if (cx != m_lastBufferRefreshX) {
 
@@ -612,9 +620,14 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 
                 if (dx > -w && dx < w) {
 
-                    QPainter cp(&m_segmentsDrawBuffer);
-                    cp.drawPixmap(dx, 0, m_segmentsDrawBuffer);
-
+                    QPainter cp;
+                    cp.begin(&map);
+                    cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
+                    cp.end();
+                    cp.begin(&m_segmentsDrawBuffer);
+                    cp.drawPixmap(dx, 0, map);
+                    cp.end();
+                    
                     if (dx < 0) {
                         refreshRect |= QRect(cx + w + dx, cy, -dx, h);
                     } else {
@@ -634,8 +647,13 @@ bool CompositionView::checkScrollAndRefreshDrawBuffer(QRect &rect, bool& scroll)
 
                 if (dy > -h && dy < h) {
 
-                    QPainter cp(&m_segmentsDrawBuffer);
-                    cp.drawPixmap(0, dy, m_segmentsDrawBuffer);
+                    QPainter cp;
+                    cp.begin(&map);
+                    cp.drawPixmap(0, 0, m_segmentsDrawBuffer);
+                    cp.end();
+                    cp.begin(&m_segmentsDrawBuffer);
+                    cp.drawPixmap(0, dy, map);
+                    cp.end();
 
                     if (dy < 0) {
                         refreshRect |= QRect(cx, cy + h + dy, w, -dy);
