@@ -536,10 +536,14 @@ void CompositionView::viewportPaintRect(QRect r)
 
         //    RG_DEBUG << "copying from segment to artifacts buffer: " << copyRect << endl;
 
-        bitBlt(&m_artifactsDrawBuffer,
-               copyRect.x(), copyRect.y(),
-               &m_segmentsDrawBuffer,
-               copyRect.x(), copyRect.y(), copyRect.width(), copyRect.height());
+        QPainter ap;
+        ap.begin(&m_artifactsDrawBuffer);
+        ap.drawPixmap(copyRect.x(), copyRect.y(),
+                     m_segmentsDrawBuffer,
+                     copyRect.x(), copyRect.y(),
+                     copyRect.width(), copyRect.height());
+        ap.end();
+
         m_artifactsDrawBufferRefresh |= r;
     }
 
@@ -548,15 +552,21 @@ void CompositionView::viewportPaintRect(QRect r)
         m_artifactsDrawBufferRefresh = QRect();
     }
 
+    QPainter p;
+    p.begin(viewport());
     if (scroll) {
-        bitBlt(viewport(), 0, 0,
-               &m_artifactsDrawBuffer, 0, 0,
-               m_artifactsDrawBuffer.width(), m_artifactsDrawBuffer.height());
+        p.drawPixmap(0, 0, 
+                     m_artifactsDrawBuffer,
+                     0, 0,
+                     m_artifactsDrawBuffer.width(),
+                     m_artifactsDrawBuffer.height());
     } else {
-        bitBlt(viewport(), updateRect.x(), updateRect.y(),
-               &m_artifactsDrawBuffer, updateRect.x(), updateRect.y(),
-               updateRect.width(), updateRect.height());
+        p.drawPixmap(updateRect.x(), updateRect.y(),
+                     m_artifactsDrawBuffer,
+                     updateRect.x(), updateRect.y(),
+                     updateRect.width(), updateRect.height());
     }
+    p.end();
 
     // DEBUG
 
