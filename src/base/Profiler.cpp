@@ -222,8 +222,8 @@ Profiler::end()
 
     m_ended = true;
 }
-
-}
  
 #endif
+
+}
 
