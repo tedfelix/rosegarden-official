@@ -149,41 +149,6 @@ public:
                                   timeT to);
 
     /**
-     * Re-render and position elements as necessary, based on the
-     * given extents and any information obtained from calls to
-     * markChanged().  This provides a render-on-demand mechanism.  If
-     * you are going to use this rendering mechanism, it's generally
-     * wise to avoid explicitly calling
-     * renderElements/positionElements as well.
-     *
-     * Returns true if something needed re-rendering.
-     */
-    virtual bool checkRendered(timeT from,
-                               timeT to);
-
-    /**
-     * Find something between the given times that has not yet been
-     * rendered, and render a small amount of it.  Return true if it
-     * found something to do.  This is to be used as a background work
-     * procedure for rendering not-yet-visible areas of notation.
-     */
-    virtual bool doRenderWork(timeT from,
-                              timeT to);
-
-    /**
-     * Mark a region of staff as changed, for use by the on-demand
-     * rendering mechanism.  If fromBar == toBar == -1, mark the
-     * entire staff as changed (and recover the memory used for its
-     * elements).  Pass movedOnly as true to indicate that elements
-     * have not changed but only been repositioned, for example as a
-     * consequence of a modification on another staff that caused a
-     * relayout.
-     */
-    virtual void markChanged(timeT from = 0,
-                             timeT to = 0,
-                             bool movedOnly = false);
-
-    /**
      * Set a painter as the printer output.  If this painter is
      * non-null, subsequent renderElements calls will only render
      * those elements that cannot be rendered directly to a print
@@ -349,26 +314,6 @@ protected:
     virtual void renderNote(ViewElementList::iterator &);
 
     /**
-     * Return a NotationElementList::iterator pointing to the
-     * start of a bar prior to the given time that doesn't appear
-     * to have been affected by any changes around that time
-     */
-    NotationElementList::iterator findUnchangedBarStart(timeT);
-
-    /**
-     * Return a NotationElementList::iterator pointing to the
-     * end of a bar subsequent to the given time that doesn't appear
-     * to have been affected by any changes around that time
-     */
-    NotationElementList::iterator findUnchangedBarEnd(timeT);
-
-    /**
-     * Return true if the element has a scene item that is already
-     * at the correct coordinates
-     */
-    virtual bool elementNotMoved(NotationElement *);
-
-    /**
      * Return true if the element has a scene item that is already
      * at the correct y-coordinate
      */
@@ -457,12 +402,6 @@ protected:
     QPainter *m_printPainter;
 
     unsigned int m_refreshStatusId;
-    enum BarStatus { UnRendered = 0, Rendered, Positioned };
-    typedef std::map<int, BarStatus> BarStatusMap;
-    BarStatusMap m_status;
-    std::pair<int, int> m_lastRenderCheck;
-    bool m_ready;
-    int m_lastRenderedBar;
 };
 
 

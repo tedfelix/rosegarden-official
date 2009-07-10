@@ -89,9 +89,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
     m_showRanges(true),
     m_showCollisions(true),
     m_printPainter(0),
-    m_refreshStatusId(segment->getNewRefreshStatusId()),
-    m_ready(false),
-    m_lastRenderedBar(0)
+    m_refreshStatusId(segment->getNewRefreshStatusId())
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );
@@ -766,86 +764,6 @@ NotationStaff::truncateClefsAndKeysAt(int x)
             break;
         }
     }
-}
-
-NotationElementList::iterator
-NotationStaff::findUnchangedBarStart(timeT from)
-{
-    NotationElementList *nel = (NotationElementList *)getViewElementList();
-
-    // Track back bar-by-bar until we find one whose start position
-    // hasn't changed
-
-    NotationElementList::iterator beginAt = nel->begin();
-    do {
-        from = getSegment().getComposition()->getBarStartForTime(from - 1);
-        beginAt = nel->findTime(from);
-    } while (beginAt != nel->begin() &&
-             (beginAt == nel->end() || !elementNotMoved(static_cast<NotationElement*>(*beginAt))));
-
-    return beginAt;
-}
-
-NotationElementList::iterator
-NotationStaff::findUnchangedBarEnd(timeT to)
-{
-    NotationElementList *nel = (NotationElementList *)getViewElementList();
-
-    // Track forward to the end, similarly.  Here however it's very
-    // common for all the positions to have changed right up to the
-    // end of the piece; so we save time by assuming that to be the
-    // case if we get more than (arbitrary) 3 changed bars.
-
-    // We also record the start of the bar following the changed
-    // section, for later use.
-
-    NotationElementList::iterator endAt = nel->end();
-
-    int changedBarCount = 0;
-    NotationElementList::iterator candidate = nel->end();
-    do {
-        candidate = nel->findTime(getSegment().getBarEndForTime(to));
-        if (candidate != nel->end()) {
-            to = (*candidate)->getViewAbsoluteTime();
-        }
-        ++changedBarCount;
-    } while (changedBarCount < 4 &&
-             candidate != nel->end() &&
-             !elementShiftedOnly(candidate));
-//             !elementNotMoved(static_cast<NotationElement*>(*candidate)));
-
-    if (changedBarCount < 4)
-        return candidate;
-    else
-        return endAt;
-}
-
-bool
-NotationStaff::elementNotMoved(NotationElement *elt)
-{
-    if (!elt->getItem()) return false;
-
-    StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
-        (elt->getLayoutX(), (int)elt->getLayoutY());
-
-    bool ok =
-        (int)(elt->getSceneX()) == (int)(coords.first) &&
-        (int)(elt->getSceneY()) == (int)(coords.second);
-
-    if (!ok) {
-        NOTATION_DEBUG
-            << "elementNotMoved: elt at " << elt->getViewAbsoluteTime() <<
-            ", ok is " << ok << endl;
-        NOTATION_DEBUG << "(cf " << (int)(elt->getSceneX()) << " vs "
-                       << (int)(coords.first) << ", "
-                       << (int)(elt->getSceneY()) << " vs "
-                       << (int)(coords.second) << ")" << endl;
-    } else {
-        NOTATION_DEBUG << "elementNotMoved: elt at " << elt->getViewAbsoluteTime()
-                       << " is ok" << endl;
-    }
-
-    return ok;
 }
 
 bool
@@ -1898,13 +1816,8 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 
     //!!! NB This does not yet correctly handle clef and key lists!
 
-//    NotationElementList::iterator i = findUnchangedBarStart(from);
-//    NotationElementList::iterator j = findUnchangedBarEnd(to);
-
     NotationElementList::iterator i = getViewElementList()->findTime(from);
     NotationElementList::iterator j = getViewElementList()->findTime(to);
-
-//    if (!secondary) renderElements(i, j);
 
     int resetCount = 0;
     if (!secondary) {
@@ -1938,197 +1851,9 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 }
 
 void
-NotationStaff::markChanged(timeT from, timeT to, bool movedOnly)
-{
-    abort();//!!!
-
-    // first time through this, m_ready is false -- we mark it true
-
-    NOTATION_DEBUG << "NotationStaff::markChanged (" << from << " -> " << to << ") " << movedOnly << endl;
-
-    drawStaffName();//!!!
-
-    if (from == to) {
-
-        m_status.clear();
-
-        if (!movedOnly && m_ready) { // undo all the rendering we've already done
-            for (NotationElementList::iterator i = getViewElementList()->begin();
-                 i != getViewElementList()->end(); ++i) {
-                static_cast<NotationElement *>(*i)->removeItem();
-            }
-
-            m_clefChanges.clear();
-            m_keyChanges.clear();
-        }
-
-        drawStaffName();
-
-    } else {
-
-        Segment *segment = &getSegment();
-        Composition *composition = segment->getComposition();
-
-        NotationElementList::iterator unchanged = findUnchangedBarEnd(to);
-
-        int finalBar;
-        if (unchanged == getViewElementList()->end()) {
-            finalBar = composition->getBarNumber(segment->getEndMarkerTime());
-        } else {
-            finalBar = composition->getBarNumber((*unchanged)->getViewAbsoluteTime());
-        }
-
-        int fromBar = composition->getBarNumber(from);
-        int toBar = composition->getBarNumber(to);
-        if (finalBar < toBar)
-            finalBar = toBar;
-
-        for (int bar = fromBar; bar <= finalBar; ++bar) {
-
-            if (bar > toBar) movedOnly = true;
-
-            NOTATION_DEBUG << "bar " << bar << " status " << m_status[bar] << endl;
-
-            if (bar >= m_lastRenderCheck.first &&
-                bar <= m_lastRenderCheck.second) {
-
-                NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
-
-                if (!movedOnly || m_status[bar] == UnRendered) {
-                    renderElements
-                    (getViewElementList()->findTime(composition->getBarStart(bar)),
-                     getViewElementList()->findTime(composition->getBarEnd(bar)));
-                }
-                positionElements(composition->getBarStart(bar),
-                                 composition->getBarEnd(bar));
-                m_status[bar] = Positioned;
-
-            } else if (!m_ready) {
-                NOTATION_DEBUG << "bar " << bar << " rendering and positioning" << endl;
-
-                // first time through -- we don't need a separate render phase,
-                // only to mark as not yet positioned
-                m_status[bar] = Rendered;
-
-            } else if (movedOnly) {
-                if (m_status[bar] == Positioned) {
-                    NOTATION_DEBUG << "bar " << bar << " marking unpositioned" << endl;
-                    m_status[bar] = Rendered;
-                }
-
-            } else {
-                NOTATION_DEBUG << "bar " << bar << " marking unrendered" << endl;
-
-                m_status[bar] = UnRendered;
-            }
-        }
-    }
-
-    m_ready = true;
-}
-
-void
 NotationStaff::setPrintPainter(QPainter *painter)
 {
     m_printPainter = painter;
-}
-
-bool
-NotationStaff::checkRendered(timeT from, timeT to)
-{
-    abort();//!!!
-
-    if (!m_ready) return false;
-
-    Composition *composition = getSegment().getComposition();
-    if (!composition) {
-        NOTATION_DEBUG << "NotationStaff::checkRendered: warning: segment has no composition -- is my paint event late?" << endl;
-        return false;
-    }
-
-    //    NOTATION_DEBUG << "NotationStaff::checkRendered: " << from << " -> " << to << endl;
-
-    int fromBar = composition->getBarNumber(from);
-    int toBar = composition->getBarNumber(to);
-    bool something = false;
-
-    if (fromBar > toBar) std::swap(fromBar, toBar);
-
-    for (int bar = fromBar; bar <= toBar; ++bar) {
-        //	NOTATION_DEBUG << "NotationStaff::checkRendered: bar " << bar << " status "
-        //		       << m_status[bar] << endl;
-
-        switch (m_status[bar]) {
-
-        case UnRendered:
-            renderElements
-            (getViewElementList()->findTime(composition->getBarStart(bar)),
-             getViewElementList()->findTime(composition->getBarEnd(bar)));
-
-        case Rendered:
-            positionElements
-            (composition->getBarStart(bar),
-             composition->getBarEnd(bar));
-            m_lastRenderedBar = bar;
-
-            something = true;
-
-        case Positioned:
-            break;
-        }
-
-        m_status[bar] = Positioned;
-    }
-
-    m_lastRenderCheck = std::pair<int, int>(fromBar, toBar);
-    return something;
-}
-
-bool
-NotationStaff::doRenderWork(timeT from, timeT to)
-{
-    abort();//!!!
-
-    if (!m_ready) return true;
-    Composition *composition = getSegment().getComposition();
-
-    int fromBar = composition->getBarNumber(from);
-    int toBar = composition->getBarNumber(to);
-
-    if (fromBar > toBar) std::swap(fromBar, toBar);
-
-    for (int bar = fromBar; bar <= toBar; ++bar) {
-
-        switch (m_status[bar]) {
-
-        case UnRendered:
-            renderElements
-            (getViewElementList()->findTime(composition->getBarStart(bar)),
-             getViewElementList()->findTime(composition->getBarEnd(bar)));
-            m_status[bar] = Rendered;
-            return true;
-
-        case Rendered:
-            positionElements
-            (composition->getBarStart(bar),
-             composition->getBarEnd(bar));
-            m_status[bar] = Positioned;
-            m_lastRenderedBar = bar;
-            return true;
-
-        case Positioned:
-            // The bars currently displayed are rendered before the others.
-            // Later, when preceding bars are rendered, truncateClefsAndKeysAt()
-            // is called and possible clefs and/or keys from the bars previously
-            // rendered may be lost. Following code should restore these clefs
-            // and keys in m_clefChanges and m_keyChanges lists.
-            if (bar > m_lastRenderedBar)
-                checkAndCompleteClefsAndKeys(bar);
-            continue;
-        }
-    }
-
-    return false;
 }
 
 void
