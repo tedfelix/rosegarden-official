@@ -162,8 +162,7 @@ void
 NotationElement::reposition(double sceneX, double sceneY)
 {
     m_recentlyRegenerated = false;
-    if (!m_item)
-        return ;
+    if (!m_item) return;
 
     double dx = sceneX - m_item->x();
     double dy = sceneY - m_item->y();

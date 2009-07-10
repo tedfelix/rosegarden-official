@@ -567,9 +567,9 @@ NotationStaff::getProperties() const
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
-    //    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
-    //                         << from << " -> " << to << endl;
-    Profiler profiler("NotationStaff::positionElements");
+    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements()"
+                   << from << " -> " << to << endl;
+    Profiler profiler("NotationStaff::positionElements", true);
 
     // Following 4 lines are a workaround to not have m_clefChanges and
     // m_keyChanges truncated when positionElements() is called with
@@ -627,9 +627,8 @@ NotationStaff::positionElements(timeT from, timeT to)
 
         } else if (el->event()->isa(::Rosegarden::Key::EventType)) {
 
-            m_keyChanges.push_back
-            (KeyChange(int(el->getLayoutX()),
-                       ::Rosegarden::Key(*el->event())));
+            m_keyChanges.push_back(KeyChange(int(el->getLayoutX()),
+                                             ::Rosegarden::Key(*el->event())));
 
             if (!haveCurrentClef) { // need this to know how to present the key
                 currentClef = getSegment().getClefAtTime
@@ -673,9 +672,7 @@ NotationStaff::positionElements(timeT from, timeT to)
                 // or tie is part of the note's item).
 
                 bool spanning = false;
-                (void)(el->event()->get
-                       <Bool>
-                       (properties.BEAMED, spanning));
+                (void)(el->event()->get<Bool>(properties.BEAMED, spanning));
                 if (!spanning) {
                     (void)(el->event()->get
                            <Bool>(BaseProperties::TIED_FORWARD, spanning));
@@ -705,27 +702,26 @@ NotationStaff::positionElements(timeT from, timeT to)
 
         if (!needNewItem) {
             StaffLayoutCoords coords = getSceneCoordsForLayoutCoords
-                                      (el->getLayoutX(), (int)el->getLayoutY());
+                (el->getLayoutX(), (int)el->getLayoutY());
             el->reposition(coords.first, (double)coords.second);
         }
 
         el->setSelected(selected);
 
-        if ((to > from) &&
-                (++elementsPositioned % 300 == 0)) {
+        if ((to > from) && (++elementsPositioned % 300 == 0)) {
             timeT myTime = el->getViewAbsoluteTime();
             emit setValue((myTime - from) * 100 / (to - from));
             throwIfCancelled();
         }
     }
 
-    //    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
-    //		   << from << " -> " << to << ": "
-    //		   << elementsPositioned << " elements positioned, "
-    //		   << elementsRendered << " re-rendered"
-    //		   << endl;
+    NOTATION_DEBUG << "NotationStaff " << this << "::positionElements "
+    		   << from << " -> " << to << ": "
+    		   << elementsPositioned << " elements positioned, "
+    		   << elementsRendered << " re-rendered"
+    		   << endl;
 
-    //    NotePixmapFactory::dumpStats(std::cerr);
+    NotePixmapFactory::dumpStats(std::cerr);
 }
 
 void

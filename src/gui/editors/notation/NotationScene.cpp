@@ -1129,6 +1129,7 @@ NotationScene::layout(NotationStaff *singleStaff,
 
     {
         Profiler profiler("NotationScene::layout: Regenerate", true);
+
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
         NotationStaff *staff = m_staffs[i];
@@ -1137,9 +1138,11 @@ NotationScene::layout(NotationStaff *singleStaff,
         // to another staff, and the content of this staff has not
         // itself changed.
 
-        //!!! This is the opposite of the logic formerly used!  But it
-        //!!! looks right to me... how will this break it? or else
-        //!!! what was broken before?
+        // N.B. This test is exactly the opposite of the one used in
+        // Rosegarden 1.7.x!  I think the prior code was simply wrong
+        // and probably the cause of some refresh errors, but it seems
+        // risky to "fix" it in a dead-end branch; at least here it
+        // will necessarily get some testing.
 
         bool secondary = (singleStaff && (singleStaff != staff));
         staff->regenerate(startTime, endTime, secondary);
