@@ -874,9 +874,9 @@ StaffLayout::resizeStaffLines()
     int lastRow = getRowForLayoutX(m_endLayoutX);
 
     RG_DEBUG << "StaffLayout::resizeStaffLines: firstRow "
-    << firstRow << ", lastRow " << lastRow
-    << " (startLayoutX " << m_startLayoutX
-    << ", endLayoutX " << m_endLayoutX << ")" << endl;
+             << firstRow << ", lastRow " << lastRow
+             << " (startLayoutX " << m_startLayoutX
+             << ", endLayoutX " << m_endLayoutX << ")" << endl;
 
     assert(lastRow >= firstRow);
 
@@ -934,6 +934,8 @@ StaffLayout::clearStaffLineRow(int row)
 void
 StaffLayout::resizeStaffLineRow(int row, double x, double length)
 {
+    Profiler profiler("StaffLayout::resizeStaffLineRow");
+
     //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
     //	     << row << ", x " << x << ", length "
     //	     << length << endl;
@@ -1006,30 +1008,37 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         //                           << x << "," << y << ") to (" << (x+length-1)
         //                           << "," << y << ")" << endl;
 
-        QGraphicsItem *line;
-        delete m_staffLines[row][lineIndex];
-        m_staffLines[row][lineIndex] = 0;
-
         if (m_lineThickness > 1) {
-            QGraphicsRectItem *rline = new QGraphicsRectItem
-                (int(x) + .5, y + .5, int(length), m_lineThickness);
-            m_scene->addItem(rline);
-            rline->setPen(lineColour);
-            rline->setBrush(lineColour);
-            line = rline;
+        
+            QGraphicsRectItem *line = dynamic_cast<QGraphicsRectItem *>
+                (m_staffLines[row][lineIndex]);
+
+            if (!line) {
+                delete m_staffLines[row][lineIndex];
+                m_staffLines[row][lineIndex] = line = new QGraphicsRectItem;
+                line->setPen(QPen(lineColour, 0));
+                line->setBrush(lineColour);
+                m_scene->addItem(line);
+            }
+
+            line->setRect(int(x) + .5, y + .5, int(length), m_lineThickness);
+            line->show();
+
         } else {
-            QGraphicsLineItem *lline = new QGraphicsLineItem
-                (int(x) + .5, y + .5, int(x + length) + .5, y + .5);
-            m_scene->addItem(lline);
-            lline->setPen(QPen(lineColour, 0));
-            line = lline;
+        
+            QGraphicsLineItem *line = dynamic_cast<QGraphicsLineItem *>
+                (m_staffLines[row][lineIndex]);
+
+            if (!line) {
+                delete m_staffLines[row][lineIndex];
+                m_staffLines[row][lineIndex] = line = new QGraphicsLineItem;
+                line->setPen(QPen(lineColour, 0));
+                m_scene->addItem(line);
+            }
+
+            line->setLine(int(x) + .5, y + .5, int(x + length) + .5, y + .5);
+            line->show();
         }
-
-        //      if (j > 0) line->setSignificant(false);
-
-        line->setZValue(z);
-        m_staffLines[row][lineIndex] = line;
-        line->show();
 
         ++lineIndex;
     }

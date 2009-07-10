@@ -419,7 +419,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         nme.exact = true;
     }
     
-
+/*
     NOTATION_DEBUG << "NotationScene::setupMouseEvent: sx = " << sx
                    << ", sy = " << sy
                    << ", modifiers = " << nme.modifiers
@@ -432,7 +432,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                    << ", time = " << nme.time
                    << ", height = " << nme.height
                    << endl;
-
+*/
 }
 
 void
@@ -1128,7 +1128,7 @@ NotationScene::layout(NotationStaff *singleStaff,
     setSceneRect(QRectF(0, 0, maxWidth, maxHeight));
 
     {
-        Profiler profiler("NotationScene::layout: Regenerate", true);
+        Profiler profiler("NotationScene::layout: regeneration", true);
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 

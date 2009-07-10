@@ -317,6 +317,8 @@ NotationStaff::getClefAndKeyAtSceneCoords(double cx, int cy,
     }
 }
 
+/*!!!
+
 ViewElementList::iterator
 NotationStaff::getClosestElementToLayoutX(double x,
         Event *&clef,
@@ -376,6 +378,7 @@ NotationStaff::getClosestElementToLayoutX(double x,
 
     return result;
 }
+*/
 
 ViewElementList::iterator
 NotationStaff::getElementUnderLayoutX(double x,
@@ -564,6 +567,67 @@ NotationStaff::getProperties() const
     return m_notationScene->getProperties();
 }
 
+bool
+NotationStaff::elementNeedsRegenerating(NotationElementList::iterator i)
+{
+    NotationElement *elt = static_cast<NotationElement *>(*i);
+
+    NOTATION_DEBUG << "NotationStaff::elementNeedsRegenerating: ";
+
+    if (!elt->getItem()) {
+        NOTATION_DEBUG << "yes (no item)" << endl;
+        return true;
+    }
+
+    if (isSelected(i) != elt->isSelected()) {
+        NOTATION_DEBUG << "yes (selection status changed)" << endl;
+        return true;
+    }
+
+    if (elt->event()->isa(Indication::EventType)) {
+        // determining whether to redraw an indication is complicated
+        NOTATION_DEBUG << "probably (is indication)" << endl;
+        return !elt->isRecentlyRegenerated();
+    }
+
+    if (!elt->isNote()) {
+        NOTATION_DEBUG << "no (is not note)" << endl;
+        return false;
+    }
+
+    // If the note's y-coordinate has changed, we should redraw it --
+    // its stem direction may have changed, or it may need leger
+    // lines.  This will happen e.g. if the user inserts a new clef;
+    // unfortunately this means inserting clefs is rather slow.
+        
+    if (!elementNotMovedInY(elt)) {
+        NOTATION_DEBUG << "yes (is note, height changed)" << endl;
+        return true;
+    }
+
+    // If the event is a beamed or tied-forward note, then we might
+    // need a new item if the distance from this note to the next has
+    // changed (because the beam or tie is part of the note's item).
+
+    bool spanning = false;
+    (void)(elt->event()->get<Bool>(getProperties().BEAMED, spanning));
+    if (!spanning) {
+        (void)(elt->event()->get<Bool>(BaseProperties::TIED_FORWARD, spanning));
+    }
+    if (!spanning) {
+        NOTATION_DEBUG << "no (is simple note, height unchanged)" << endl;
+        return false;
+    }
+    
+    if (elementShiftedOnly(i)) {
+        NOTATION_DEBUG << "no (is spanning note but only shifted)" << endl;
+        return false;
+    }
+
+    NOTATION_DEBUG << "yes (is spanning note with complex move)" << endl;
+    return true;
+}
+
 void
 NotationStaff::positionElements(timeT from, timeT to)
 {
@@ -612,7 +676,7 @@ NotationStaff::positionElements(timeT from, timeT to)
     bool haveCurrentKey = false;
 
     for (NotationElementList::iterator it = beginAt, nextIt = beginAt;
-            it != endAt; it = nextIt) {
+         it != endAt; it = nextIt) {
 
         NotationElement * el = static_cast<NotationElement*>(*it);
 
@@ -648,47 +712,7 @@ NotationStaff::positionElements(timeT from, timeT to)
         }
 
         bool selected = isSelected(it);
-        bool needNewItem = (selected != el->isSelected());
-
-        if (!el->getItem()) {
-
-            needNewItem = true;
-
-        } else if (el->isNote() && !el->isRecentlyRegenerated()) {
-
-            // If the note's y-coordinate has changed, we should
-            // redraw it -- its stem direction may have changed, or it
-            // may need leger lines.  This will happen e.g. if the
-            // user inserts a new clef; unfortunately this means
-            // inserting clefs is rather slow.
-
-            needNewItem = needNewItem || !elementNotMovedInY(el);
-
-            if (!needNewItem) {
-
-                // If the event is a beamed or tied-forward note, then
-                // we might need a new item if the distance from
-                // this note to the next has changed (because the beam
-                // or tie is part of the note's item).
-
-                bool spanning = false;
-                (void)(el->event()->get<Bool>(properties.BEAMED, spanning));
-                if (!spanning) {
-                    (void)(el->event()->get
-                           <Bool>(BaseProperties::TIED_FORWARD, spanning));
-                }
-
-                if (spanning) {
-                    needNewItem =
-                        (el->getViewAbsoluteTime() < nextBarTime ||
-                         !elementShiftedOnly(it));
-                }
-            }
-
-        } else if (el->event()->isa(Indication::EventType) &&
-                   !el->isRecentlyRegenerated()) {
-            needNewItem = true;
-        }
+        bool needNewItem = elementNeedsRegenerating(it);
 
         if (needNewItem) {
             renderSingleElement(it, currentClef, currentKey, selected);
@@ -787,7 +811,8 @@ NotationStaff::findUnchangedBarEnd(timeT to)
         ++changedBarCount;
     } while (changedBarCount < 4 &&
              candidate != nel->end() &&
-             !elementNotMoved(static_cast<NotationElement*>(*candidate)));
+             !elementShiftedOnly(candidate));
+//             !elementNotMoved(static_cast<NotationElement*>(*candidate)));
 
     if (changedBarCount < 4)
         return candidate;
@@ -833,13 +858,13 @@ NotationStaff::elementNotMovedInY(NotationElement *elt)
 
     bool ok = (int)(elt->getSceneY()) == (int)(coords.second);
 
-    //     if (!ok) {
-    // 	NOTATION_DEBUG
-    // 	    << "elementNotMovedInY: elt at " << elt->getAbsoluteTime() <<
-    // 	    ", ok is " << ok << endl;
-    // 	NOTATION_DEBUG << "(cf " << (int)(elt->getSceneY()) << " vs "
-    // 		  << (int)(coords.second) << ")" << std::endl;
-    //     }
+    if (!ok) {
+     	NOTATION_DEBUG
+     	    << "elementNotMovedInY: elt at " << elt->getViewAbsoluteTime()
+            << ", ok is " << ok << endl;
+     	NOTATION_DEBUG << "(cf " << (int)(elt->getSceneY()) << " vs "
+                       << (int)(coords.second) << ")" << endl;
+    }
     return ok;
 }
 
@@ -850,7 +875,7 @@ NotationStaff::elementShiftedOnly(NotationElementList::iterator i)
     bool ok = false;
 
     for (NotationElementList::iterator j = i;
-            j != getViewElementList()->end(); ++j) {
+         j != getViewElementList()->end(); ++j) {
 
         NotationElement *elt = static_cast<NotationElement*>(*j);
         if (!elt->getItem()) break;
@@ -1862,6 +1887,8 @@ NotationStaff::eventRemoved(const Segment *segment,
 void
 NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 {
+    Profiler profiler("NotationStaff::regenerate", true);
+
     // Secondary is true if this regeneration was caused by edits to
     // another staff, and the content of this staff has not itself
     // changed.
@@ -1871,10 +1898,26 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 
     //!!! NB This does not yet correctly handle clef and key lists!
 
-    NotationElementList::iterator i = findUnchangedBarStart(from);
-    NotationElementList::iterator j = findUnchangedBarEnd(to);
+//    NotationElementList::iterator i = findUnchangedBarStart(from);
+//    NotationElementList::iterator j = findUnchangedBarEnd(to);
 
-    if (!secondary) renderElements(i, j);
+    NotationElementList::iterator i = getViewElementList()->findTime(from);
+    NotationElementList::iterator j = getViewElementList()->findTime(to);
+
+//    if (!secondary) renderElements(i, j);
+
+    int resetCount = 0;
+    if (!secondary) {
+        for (NotationElementList::iterator k = i; k != j; ++k) {
+            if (*k) {
+                static_cast<NotationElement *>(*k)->removeItem();
+                ++resetCount;
+            }
+        }
+    }
+    NOTATION_DEBUG << "NotationStaff::regenerate: explicitly reset items for " << resetCount << " elements" << endl;
+    
+    Profiler profiler2("NotationStaff::regenerate: repositioning", true);
 
     //!!! would be simpler if positionElements could also be called
     //!!! with iterators -- if renderElements/positionElements are

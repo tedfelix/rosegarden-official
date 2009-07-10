@@ -263,10 +263,12 @@ public:
      *
      * Also returns the clef and key in force at the given coordinate.
      */
+/*!!!
     virtual ViewElementList::iterator getClosestElementToLayoutX
     (double x, Event *&clef, Event *&key,
      bool notesAndRestsOnly = false,
      int proximityThreshold = 10);
+*/
 
     /**
      * Find the NotationElement "under" the given layout x-coord,
@@ -383,6 +385,8 @@ protected:
      * first iterator found at a greater time.
      */
     virtual bool elementShiftedOnly(NotationElementList::iterator);
+
+    virtual bool elementNeedsRegenerating(NotationElementList::iterator);
 
     enum FitPolicy {
         PretendItFittedAllAlong = 0,

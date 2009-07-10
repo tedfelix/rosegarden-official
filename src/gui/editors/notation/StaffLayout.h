@@ -437,6 +437,7 @@ public:
      * The default implementation should suit for subclasses that only
      * show a single element per layout X coordinate.
      */
+/*
     virtual ViewElementList::iterator getClosestElementToSceneCoords
     (double x, int y, 
      Event *&clef, Event *&key,
@@ -446,7 +447,7 @@ public:
             (layoutCoords.first, clef, key,
              notesAndRestsOnly, proximityThreshold);
     }
-
+*/
     /**
      * Return an iterator pointing to the nearest view element to the
      * given layout x-coordinate.
@@ -460,11 +461,12 @@ public:
      *
      * Also return the clef and key in force at these coordinates.
      */
+/*
     virtual ViewElementList::iterator getClosestElementToLayoutX
     (double x,
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) = 0;
-
+*/
     /**
      * Return an iterator pointing to the element "under" the given
      * scene coordinates.

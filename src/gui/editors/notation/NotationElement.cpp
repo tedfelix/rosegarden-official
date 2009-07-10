@@ -161,8 +161,10 @@ NotationElement::removeItem()
 void
 NotationElement::reposition(double sceneX, double sceneY)
 {
-    m_recentlyRegenerated = false;
     if (!m_item) return;
+    if (sceneX == m_item->x() && sceneY == m_item->y()) return;
+
+    m_recentlyRegenerated = false;
 
     double dx = sceneX - m_item->x();
     double dy = sceneY - m_item->y();
