@@ -10,7 +10,7 @@
   </Menu>
 
   <Menu name="edit">
-    <text>&amp;Edit</text>
+    <text>E&amp;dit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="Nothing to &amp;undo" icon="undo" shortcut="Ctrl+Z" />
     <Action name="edit_redo" text="Nothing to &amp;redo" icon="redo" shortcut="Ctrl+Shift+Z" />
@@ -110,7 +110,7 @@
   </Menu>
 
   <Menu name="Transforms">
-    <text>Event &amp;modification</text>
+    <text>&amp;Events</text>
     <Menu name="quantize_notes">
       <text>&amp;Quantize</text>
       <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
@@ -149,13 +149,13 @@
     </Menu>
     <Menu name="Convert">
       <text>&amp;Convert</text>
-      <Action name="invert" text="&amp;Invert" />
-      <Action name="retrograde" text="&amp;Retrograde" />
+      <Action name="invert" text="&amp;Invert" shortcut="Shift+Alt+I" />
+      <Action name="retrograde" text="&amp;Retrograde" shortcut="Shift+Alt+R" />
       <Action name="retrograde_invert" text="Re&amp;trograde Invert" />
     </Menu>
   <Separator/>
     <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
-    <Action name="remove_trigger" text="Remove &amp;Triggers..." />
+    <Action name="remove_trigger" text="Remove &amp;Triggers" />
   </Menu>
   
   <Menu name="Tools">
@@ -265,9 +265,9 @@
       <!-- JAS invented "insert_note_lower_octave" name -->
       <Menu name="insert_note_lower_octave">
         <text>&amp;Lower Octave</text>
-        <!-- note by emrum: german keypads have z and y exchanged, so allow both as shortcuts -->
-        <Action name="insert_0_low" text="&amp;I" shortcut="Z Y" />
-        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z Shift+Y" />
+        <!-- note by emrum: german keypads have Z and Y exchanged, so better allow both as shortcuts -->
+        <Action name="insert_0_low" text="&amp;I" shortcut="Z,Y" />
+        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z,Shift+Y" />
       <Separator/>
         <Action name="insert_1_flat_low" text="II &amp;flat" shortcut="Ctrl+Shift+X" />
         <Action name="insert_1_low" text="II" shortcut="X" />

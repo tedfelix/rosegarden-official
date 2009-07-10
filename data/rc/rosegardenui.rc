@@ -126,7 +126,7 @@
   <Menu name="Segments">
     <text>Se&amp;gments</text>
    
-     <Action name="repeat_segment_onoff" text="Repeat selected Seg&amp;ment on/off" shortcut="Shift+R" shortcut-context="application" />
+     <Action name="repeat_segment_onoff" text="Repeat selected Seg&amp;ment on/off" shortcut="Ctrl+Shift+R" shortcut-context="application" />
 
     <Menu name="edit_with">
       <text>Edit &amp;With</text>

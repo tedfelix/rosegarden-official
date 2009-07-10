@@ -1221,6 +1221,7 @@ void NewMatrixView::slotRescale()
 void NewMatrixView::slotTranspose()
 {
     EventSelection *selection = getSelection();
+    if (!selection) std::cout << "Hint: selection is NULL in slotTranpose() " << std::endl;
     if (!selection) return;
 
     QSettings settings;
@@ -1276,6 +1277,7 @@ void NewMatrixView::slotDiatonicTranspose()
 void NewMatrixView::slotTransposeUp()
 {
     EventSelection *selection = getSelection();
+    if (!selection) std::cout << "Hint: selection is NULL in slotTranposeUp() " << std::endl;
     if (!selection) return ;
     CommandHistory::getInstance()->addCommand(new TransposeCommand(1, *selection));
 }
@@ -1303,7 +1305,10 @@ void NewMatrixView::slotTransposeDownOctave()
 
 void NewMatrixView::slotInvert()
 {
+    std::cout << "slotInvert() called" << std::endl;
+    
     EventSelection *selection = getSelection();
+    if (!selection) std::cout << "Hint: selection is NULL in slotInvert() " << std::endl;
     if (!selection) return ;
     
     int semitones = 0;    
