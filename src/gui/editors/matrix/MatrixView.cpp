@@ -144,8 +144,13 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     
     resize( 1000, 620 );    //!!! fix: remember win size and position
     
+    readOptions(); // defined in EditViewBase
+    
     settings.endGroup();
 }
+
+
+
 
 NewMatrixView::~NewMatrixView()
 {
@@ -272,6 +277,89 @@ NewMatrixView::setupActions()
     createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
     createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
     createAction("add_control_ruler", SLOT(slotAddControlRuler()));
+    
+    //!!! fix: some of these may not be working
+    createAction("show_tools_toolbar", SLOT(slot()));
+    createAction("options_show_toolbar", SLOT(slot()));
+    createAction("options_show_statusbar", SLOT(slot()));
+    createAction("options_configure_keybinding", SLOT(slot()));
+    createAction("options_configure_toolbars", SLOT(slot()));
+    //createAction("options_configure", SLOT(slot()));        //!!! fix: memory access error
+    createAction("insert_control_ruler_item", SLOT(slot()));
+    createAction("erase_control_ruler_item", SLOT(slot()));
+    createAction("clear_control_ruler_item", SLOT(slot()));
+    createAction("start_control_line_item", SLOT(slot()));
+    createAction("draw_property_line", SLOT(slot()));    
+    createAction("select_all_properties", SLOT(slot()));
+//     createAction("flip_control_events_forward", SLOT(slot()));
+//     createAction("flip_control_events_back", SLOT(slot()));
+    createAction("help_contents", SLOT(slot()));
+//     createAction("help_whats_this", SLOT(slot()));
+    createAction("tutorial", SLOT(slot()));
+    createAction("guidelines", SLOT(slot()));
+//     createAction("help_show_tip", SLOT(slot()));
+    
+    createAction("language_switch", SLOT(slot()));
+    createAction("help_online", SLOT(slot()));
+//     createAction("language_translate", SLOT(slot()));
+    createAction("help_about_app", SLOT(slot()));
+//     createAction("help_about_qt", SLOT(slot()));
+    
+    
+    createAction("insert_0", SLOT(slot()));
+    createAction("insert_0_sharp", SLOT(slot()));
+    createAction("insert_1_flat", SLOT(slot()));
+    createAction("insert_1", SLOT(slot()));
+    createAction("insert_1_sharp", SLOT(slot()));
+    createAction("insert_2_flat", SLOT(slot()));
+    createAction("insert_2", SLOT(slot()));
+    createAction("insert_3", SLOT(slot()));
+    createAction("insert_3_sharp", SLOT(slot()));
+    createAction("insert_4_flat", SLOT(slot()));
+    createAction("insert_4", SLOT(slot()));
+    createAction("insert_4_sharp", SLOT(slot()));
+    createAction("insert_5_flat", SLOT(slot()));
+    createAction("insert_5", SLOT(slot()));
+    createAction("insert_5_sharp", SLOT(slot()));
+    createAction("insert_6_flat", SLOT(slot()));
+    createAction("insert_6", SLOT(slot()));
+
+    createAction("insert_0_high", SLOT(slot()));
+    createAction("insert_0_sharp_high", SLOT(slot()));
+    createAction("insert_1_flat_high", SLOT(slot()));
+    createAction("insert_1_high", SLOT(slot()));
+    createAction("insert_1_sharp_high", SLOT(slot()));
+    createAction("insert_2_flat_high", SLOT(slot()));
+    createAction("insert_2_high", SLOT(slot()));
+    createAction("insert_3_high", SLOT(slot()));
+    createAction("insert_3_sharp_high", SLOT(slot()));
+    createAction("insert_4_flat_high", SLOT(slot()));
+    createAction("insert_4_high", SLOT(slot()));
+    createAction("insert_4_sharp_high", SLOT(slot()));
+    createAction("insert_5_fla_hight", SLOT(slot()));
+    createAction("insert_5_high", SLOT(slot()));
+    createAction("insert_5_sharp_high", SLOT(slot()));
+    createAction("insert_6_flat_high", SLOT(slot()));
+    createAction("insert_6_high", SLOT(slot()));
+
+    createAction("insert_0_low", SLOT(slot()));
+    createAction("insert_0_sharp_low", SLOT(slot()));
+    createAction("insert_1_flat_low", SLOT(slot()));
+    createAction("insert_1_low", SLOT(slot()));
+    createAction("insert_1_sharp_low", SLOT(slot()));
+    createAction("insert_2_flat_low", SLOT(slot()));
+    createAction("insert_2_low", SLOT(slot()));
+    createAction("insert_3_low", SLOT(slot()));
+    createAction("insert_3_sharp_low", SLOT(slot()));
+    createAction("insert_4_flat_low", SLOT(slot()));
+    createAction("insert_4_low", SLOT(slot()));
+    createAction("insert_4_sharp_low", SLOT(slot()));
+    createAction("insert_5_flat_low", SLOT(slot()));
+    createAction("insert_5_low", SLOT(slot()));
+    createAction("insert_5_sharp_low", SLOT(slot()));
+    createAction("insert_6_flat_low", SLOT(slot()));
+    createAction("insert_6_low", SLOT(slot()));
+
     
     
     // grid snap values

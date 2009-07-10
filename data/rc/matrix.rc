@@ -12,8 +12,8 @@
   <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <Action name="edit_undo" text="Nothing to &amp;undo" icon="undo" shortcut="Ctrl+Z" />
+    <Action name="edit_redo" text="Nothing to &amp;redo" icon="redo" shortcut="Ctrl+Shift+Z" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -22,8 +22,15 @@
   <Separator/>
     <Action name="delete" text="&amp;Delete" shortcut="Delete, Ctrl+D" />
     <Action name="select_all" text="Select &amp;All Events" shortcut="Ctrl+A" />
-    <Action name="clear_selection" text="Clear &amp;Selection" shortcut="Escape" />
+    <Action name="clear_selection" text="C&amp;lear Selection" shortcut="Escape" />
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
+    
+    
+  <Separator/>
+    <Action name="options_configure_keybinding" text="Edit &amp;Shortcuts..." icon="configure_shortcuts" />
+    <Action name="options_configure_toolbars" text="Edit Tool&amp;bars..." icon="configure_toolbars" />
+    <Action name="options_configure" text="Confi&amp;gure Rosegarden..." icon="configure" />
+
   </Menu>
 
   <Menu name="View">
@@ -53,20 +60,37 @@
       <Action name="snap_bar" text="Snap to &amp;Bar" shortcut="5"/>
     </Menu>
   <Separator/>
-    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" />
+    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" checked="true" append="show_merge" />
+    <Action name="show_velocity_control_ruler" text="&amp;Show Velocity Property Ruler" checked="false" />
     <!-- JAS don't see any text associated with "show_controller_evnents_ruler" action -->
-    <Action name="show_controller_events_ruler" />
-<!--    <Action name="add_control_ruler"/> -->
+    <!-- obsolete?: Action name="show_controller_events_ruler" text="Show &amp;Controller Ruler" />
+< ! - -    <Action name="add_control_ruler"/> - - >
     <Menu name="add_control_ruler">
       <text>&amp;Add Event Ruler</text>
-      <!-- JAS custom coded menu -->
+      <! - - JAS custom coded menu - - >
     </Menu>
-  </Menu> 
+    -->
+    
+    
+    
+  <Separator/>
+    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
+    <Menu name="toolbars" append="show_merge">
+      <text>&amp;Toolbars</text>
+      <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
+      <Action name="show_tools_toolbar" text="Show To&amp;ols" checked="true" append="show_merge" />
+      <!-- JAS 'options_show_statusbar' determined by state -->
+      <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
+    </Menu>
+  </Menu> <!-- end of menu View -->
 
   <Menu name="document">
     <text>&amp;Composition</text>
     <Action name="add_tempo_change" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
+  <Separator/>
+  
+  
   </Menu>
 
   <!-- JAS name="Segments" in rosegardenui.rc -->
@@ -86,7 +110,7 @@
   </Menu>
 
   <Menu name="Transforms">
-    <text>Ad&amp;just</text>
+    <text>Event &amp;modification</text>
     <Menu name="quantize_notes">
       <text>&amp;Quantize</text>
       <Action name="quantize" text="&amp;Quantize..." icon="quantize" shortcut="=" />
@@ -133,6 +157,7 @@
     <Action name="trigger_segment" text="Trigger Se&amp;gment..." />
     <Action name="remove_trigger" text="Remove &amp;Triggers..." />
   </Menu>
+  
   <Menu name="Tools">
     <text>&amp;Tools</text>
     <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
@@ -197,7 +222,7 @@
       <Action name="insert_2" text="III" shortcut="D" />
     <Separator/>
       <Action name="insert_3" text="IV" shortcut="F" />
-      <Action name="insert_3_shap" text="IV sha&amp;rp" shortcut="Shift+F" />
+      <Action name="insert_3_sharp" text="IV sha&amp;rp" shortcut="Shift+F" />
     <Separator/>
       <Action name="insert_4_flat" text="&amp;V flat" shortcut="Ctrl+Shift+J" />
       <Action name="insert_4" text="V" shortcut="J" />
@@ -239,9 +264,10 @@
       </Menu>
       <!-- JAS invented "insert_note_lower_octave" name -->
       <Menu name="insert_note_lower_octave">
-        <text>&amp;Upper Octave</text>
-        <Action name="insert_0_low" text="&amp;I" shortcut="Z" />
-        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z" />
+        <text>&amp;Lower Octave</text>
+        <!-- note by emrum: german keypads have z and y exchanged, so allow both as shortcuts -->
+        <Action name="insert_0_low" text="&amp;I" shortcut="Z Y" />
+        <Action name="insert_0_sharp_low" text="I &amp;sharp" shortcut="Shift+Z Shift+Y" />
       <Separator/>
         <Action name="insert_1_flat_low" text="II &amp;flat" shortcut="Ctrl+Shift+X" />
         <Action name="insert_1_low" text="II" shortcut="X" />
@@ -272,6 +298,27 @@
 
   <Menu name="rulers">
     <text>&amp;Rulers</text>
+      <Menu noMerge="1" name="controller_events_ruler_menu">
+          <text>Control Ruler</text>
+          <Action name="insert_control_ruler_item" text="Insert Controler Item" />
+          <Action name="erase_control_ruler_item" text="Erase Selected Items" />
+          <Action name="clear_control_ruler_item" text="Clear Ruler" />
+          <Separator/>
+          <Action name="start_control_line_item" text="Insert Line of Controllers" />
+          <Separator/>
+          <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" /> 
+          <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" /> 
+      </Menu>
+      
+      <Menu noMerge="1" name="property_ruler_menu">
+          <text>Property Ruler</text>
+          <Action name="draw_property_line" text="Draw Property Line" />
+          <Action name="select_all_properties" text="Select All Property Values" />
+          <Separator/>
+          <Action name="flip_property_events_forward" text="Flip Propertyvalue-Bar Forward" shortcut="[" />
+          <Action name="flip_property_events_back" text="Flip Propertyvalue-Bar Backwards" shortcut="]" />
+      </Menu>
+      <Separator/>
     <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" />
     <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" />
     <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
@@ -279,32 +326,14 @@
     <Action name="add_control_ruler" text="Add &amp;Control Ruler..." icon="ruler-controller" checked="false" />
   </Menu>
 
-  <Menu name="settings" append="show_merge">
-    <text>Sett&amp;ings</text>
-    <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
-    <Menu name="toolbars" append="show_merge">
-      <text>&amp;Toolbars</text>
-      <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
-      <!-- JAS "show_tools_toolbar" not showing up in pulldown menu but should -->
-      <Action name="show_tools_toolbar" append="show_merge" />
-      <!-- JAS 'options_show_statusbar' determined by state -->
-      <Action name="options_show_statusbar" text="Hide St&amp;atusbar" append="show_merge" />
-    </Menu>
-  <Separator append="show_merge" />
-    <!-- JAS "show_inst_parameters" is state dependent but not checkable -->
-    <Action name="show_inst_parameters" text="Show &amp;Instrument Parameters" checked="true" append="show_merge" />
-   <Seperator/>
-    <Action name="options_configure_keybinding" text="Configure S&amp;hortcuts..." icon="configure_shortcuts" />
-    <Action name="options_configure_toolbars" text="Configure Tool&amp;bars..." icon="configure_toolbars" />
-    <Action name="options_configure" text="&amp;Configure Rosegarden..." icon="configure" />
-  </Menu>
-
+  
+  
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Action name="help_contents" text="Rosegarden &amp;Handbook" icon="contents" shortcut="F1" />
     <Action name="help_whats_this" text="&amp;What's This?" icon="contexthelp" shortcut="Shift+F1" />
   <Separator/>
-    <Action name="tutorial" text="&amp;Rosegarden tutorial" />
+    <Action name="tutorial" text="&amp;Rosegarden Tutorial" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
     <Action name="help_show_tip" text="Tip of the &amp;Day" icon="idea" />
   <Separator/>
@@ -312,15 +341,19 @@
     <Action name="language_switch" text="Switch application &amp;language..." />
   <Separator/>
     <!-- JAS invented "help_online" action name, and used KDE launch icon: can't fing right one -->
-    <Action name="help_online" text="&amp;Get Help Online" icon="launch" />
+    <Action name="help_online" text="Get Help &amp;Online" icon="launch" />
     <!-- JAS invented "language_translate" action name and used KDE translate icon: can't fiond right one -->
     <Action name="language_translate" text="&amp;Translate This Application" icon="translate" />
   <Separator/> 
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
-    <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
+    <Action name="help_about_qt" text="About &amp;QT" icon="about_kde" />
   </Menu>
 
 </MenuBar>
+
+
+
+
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>
@@ -335,6 +368,7 @@
   <Action name="filter_selection" />
   <Action name="quantize" />
 </ToolBar>
+
 
 <ToolBar name="Transport Toolbar">
   <text>Transport Toolbar</text>
@@ -351,14 +385,17 @@
   <Action name="panic" />
 </ToolBar>
 
+
 <ToolBar name="Actions Toolbar" newline="true">
   <text>Actions Toolbar</text>
   <!-- JAS custom toolbar found at src/gui/editors/matrix/Matrixview.cpp -->
 </ToolBar>
 
+
 <ToolBar name="Zoom Toolbar">
   <text>Zoom Toolbar</text>
 </ToolBar>
+
 
 <ToolBar name="Rulers Toolbar">
   <text>Rulers Toolbar</text>
@@ -367,26 +404,6 @@
   <Action name="add_control_ruler" />
 </ToolBar>
 
-<Menu noMerge="1" name="controller_events_ruler_menu">
-  <text>Control Ruler Actions</text>
-  <Action name="insert_control_ruler_item" text="Insert Item" />
-  <Action name="erase_control_ruler_item" text="Erase Selected Items" />
-  <Action name="clear_control_ruler_item" text="Clear Ruler" />
-<Separator/>
-  <Action name="start_control_line_item" text="Insert Line of Controllers" />
-<Separator/>
-  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" />
-  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" />
-</Menu>
-
-<Menu noMerge="1" name="property_ruler_menu">
-  <text>Property Ruler Actions</text>
-  <Action name="draw_property_line" text="Draw Property Line" />
-  <Action name="select_all_properties" text="Select All Property Values" />
-<Separator/>
-  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="[" />
-  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="]" />
-</Menu>
 
 
 <State name="have_selection">
