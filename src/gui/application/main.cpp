@@ -597,7 +597,7 @@ int main(int argc, char *argv[])
     // See if the settings wants us to load a soundfont
     //
     if (qStrToBool(settings.value("sfxloadenabled", "false"))) {
-        QString sfxLoadPath = settings.value("sfxloadpath", "/bin/sfxload").toString();
+        QString sfxLoadPath = settings.value("sfxloadpath", "/usr/bin/asfxload").toString();
         QString soundFontPath = settings.value("soundfontpath", "").toString();
         QFileInfo sfxLoadInfo(sfxLoadPath), soundFontInfo(soundFontPath);
         if (sfxLoadInfo.isExecutable() && soundFontInfo.isReadable()) {

@@ -58,16 +58,26 @@ PasteToTriggerSegmentCommand::~PasteToTriggerSegmentCommand()
 void
 PasteToTriggerSegmentCommand::execute()
 {
+    std::cerr << "PasteToTriggerSegmentCommand::execute()" << std::endl;
+
     if (m_segment) {
+
+        std::cerr << " - m_segment == TRUE" << std::endl;
 
         m_composition->addTriggerSegment(m_segment, m_id, m_basePitch, m_baseVelocity);
 
     } else {
 
-        if (m_clipboard->isEmpty())
+        std::cerr << " - m_segment == FALSE" << std::endl;
+
+        if (m_clipboard->isEmpty()) {
+            std::cerr << " - Here's your problem.  The clipboard is empty." << std::endl;
             return ;
+        }
 
         m_segment = new Segment();
+
+        std::cerr << " - making a new m_segment" << std::endl;
 
         timeT earliestStartTime = 0;
         timeT latestEndTime = 0;

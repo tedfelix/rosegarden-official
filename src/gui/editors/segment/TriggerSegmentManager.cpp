@@ -58,6 +58,7 @@
 #include <QToolTip>
 #include <QWidget>
 #include <QVBoxLayout>
+#include <QDialogButtonBox>
 
 
 namespace Rosegarden
@@ -65,100 +66,70 @@ namespace Rosegarden
 
 TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
         RosegardenDocument *doc):
-        QMainWindow(parent),	//, "triggereditordialog"),
+        QMainWindow(parent),    //, "triggereditordialog"),
         m_doc(doc),
         m_modified(false)
 {
-	
-	this->setObjectName( "triggereditordialog" );
-	
+    
+    this->setObjectName( "triggereditordialog" );
+    
     QWidget *mainFrame = new QWidget(this);
     QVBoxLayout *mainFrameLayout = new QVBoxLayout;
+    mainFrame->setLayout(mainFrameLayout);
     setCentralWidget(mainFrame);
 
     setWindowTitle(tr("Manage Triggered Segments"));
 
     m_listView = new QTreeWidget( mainFrame );
     mainFrameLayout->addWidget(m_listView);
-	
-	QStringList sl;
-	sl 		<< "Index"
-			<< tr("ID")
-			<< tr("Label")
-			<< tr("Duration")
-			<< tr("Base pitch")
-			<< tr("Base velocity")
-			<< tr("Triggers");
-	
-	m_listView->setColumnCount( 7 );
-	m_listView->setHeaderLabels( sl );
-	
-	/*
-	m_listView->addColumn("Index");
-    m_listView->addColumn(tr("ID"));
-    m_listView->addColumn(tr("Label"));
-    m_listView->addColumn(tr("Duration"));
-    m_listView->addColumn(tr("Base pitch"));
-    m_listView->addColumn(tr("Base velocity"));
-    m_listView->addColumn(tr("Triggers"));
-	*/
-	
-    // Align centrally
-//     for (int i = 0; i < 2; ++i)
-//         m_listView->setColumnAlignment(i, Qt::AlignHCenter);		//&&& note:
-	
-	// NOTE: use QTreeWidgetItem::setTextAlignment( int column, Qt::AlignHCenter ) instead
-	//
-	
-
-    QFrame *btnBox = new QFrame( mainFrame );
+    
+    QStringList sl;
+    sl         << "Index"
+            << tr("ID")
+            << tr("Label")
+            << tr("Duration")
+            << tr("Base pitch")
+            << tr("Base velocity")
+            << tr("Triggers");
+    
+    m_listView->setColumnCount( 7 );
+    m_listView->setHeaderLabels( sl );
+    
+    // Rewrite all the old gobbityblather with a QDialogButtonBox instead, for
+    // consistency and cleanliness
+    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
     mainFrameLayout->addWidget(btnBox);
-    mainFrame->setLayout(mainFrameLayout);
 
-    btnBox->setSizePolicy(
-        QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed));
 
-    QHBoxLayout* layout = new QHBoxLayout(btnBox, 4, 10);
+    //!!! Being able to add an empty triggered segment that can never be edited seems
+    // like a completely useless action to me.  An oversight?
+//    m_addButton = btnBox->addButton(tr("Add"), QDialogButtonBox::ActionRole);
+//    m_addButton->setToolTip(tr("Add a Triggered Segment"));
 
-    m_addButton = new QPushButton(tr("Add"), btnBox);
-    m_deleteButton = new QPushButton(tr("Delete"), btnBox);
-    m_deleteAllButton = new QPushButton(tr("Delete All"), btnBox);
-
-    m_closeButton = new QPushButton(tr("Close"), btnBox);
-
-    m_addButton->setToolTip(tr("Add a Triggered Segment"));
-
+    m_deleteButton = btnBox->addButton(tr("Delete"), QDialogButtonBox::ActionRole);
     m_deleteButton->setToolTip(tr("Delete a Triggered Segment"));
 
+    m_deleteAllButton = btnBox->addButton(tr("Delete All"), QDialogButtonBox::ActionRole);
     m_deleteAllButton->setToolTip(tr("Delete All Triggered Segments"));
 
-    m_closeButton->setToolTip(tr("Close the Triggered Segment Manager"));
 
-    layout->addStretch(10);
-    layout->addWidget(m_addButton);
-    layout->addWidget(m_deleteButton);
-    layout->addWidget(m_deleteAllButton);
-    layout->addSpacing(30);
-
-    layout->addWidget(m_closeButton);
-    layout->addSpacing(5);
-
-    connect(m_addButton, SIGNAL(released()),
-            SLOT(slotAdd()));
+    // Whether accepted or rejected, we always just want to call slotClose()
+    connect(btnBox, SIGNAL(accepted()), this, SLOT(slotClose()));
+    connect(btnBox, SIGNAL(rejected()), this, SLOT(slotClose()));
+    
+//    connect(m_addButton, SIGNAL(released()),
+//            SLOT(slotAdd()));
 
     connect(m_deleteButton, SIGNAL(released()),
             SLOT(slotDelete()));
-
-    connect(m_closeButton, SIGNAL(released()),
-            SLOT(slotClose()));
 
     connect(m_deleteAllButton, SIGNAL(released()),
             SLOT(slotDeleteAll()));
 
     setupActions();
 
-//     CommandHistory::getInstance()->attachView(actionCollection());	//&&&
-	
+//     CommandHistory::getInstance()->attachView(actionCollection());    //&&&
+    
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotUpdate()));
 
@@ -172,14 +143,14 @@ TriggerSegmentManager::TriggerSegmentManager(QWidget *parent,
     //
     m_listView->setAllColumnsShowFocus(true);
 //     m_listView->setSelectionMode(QTreeWidget::Extended);
-	m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
-// 	m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
-	
-//     m_listView->setItemsRenameable(true);	//&&&
+    m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+//     m_listView->setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+//     m_listView->setItemsRenameable(true);    //&&&
 
     initDialog();
 
-//     setAutoSaveSettings(TriggerManagerConfigGroup, true);	//&&&
+//     setAutoSaveSettings(TriggerManagerConfigGroup, true);    //&&&
 
     m_shortcuts = new QShortcut(this);
 }
@@ -188,7 +159,7 @@ TriggerSegmentManager::~TriggerSegmentManager()
 {
     RG_DEBUG << "TriggerSegmentManager::~TriggerSegmentManager" << endl;
 
-//     m_listView->saveLayout(TriggerManagerConfigGroup);	//&&&
+//     m_listView->saveLayout(TriggerManagerConfigGroup);    //&&&
 
 //     if (m_doc)
 //         CommandHistory::getInstance()->detachView(actionCollection());
@@ -269,11 +240,11 @@ TriggerSegmentManager::slotUpdate()
         QString velocity = QString("%1").arg((*it)->getBaseVelocity());
 
         item = new TriggerManagerItem(
-               			m_listView, 
-				  			QStringList() 
-							<< QString("%1").arg(i + 1)
-							<< QString("%1").arg((*it)->getId())
-							<< label << timeString << pitch << velocity << used );
+                           m_listView, 
+                              QStringList() 
+                            << QString("%1").arg(i + 1)
+                            << QString("%1").arg((*it)->getId())
+                            << label << timeString << pitch << velocity << used );
 
         item->setRawDuration(duration);
         item->setId((*it)->getId());
@@ -290,10 +261,10 @@ TriggerSegmentManager::slotUpdate()
         m_listView->addTopLevelItem(item);
 
 //         m_listView->setSelectionMode(QTreeWidget::NoSelection);
-		m_listView->setSelectionMode( QAbstractItemView::NoSelection );
+        m_listView->setSelectionMode( QAbstractItemView::NoSelection );
     } else {
 //         m_listView->setSelectionMode(QTreeWidget::Extended);
-		m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+        m_listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     }
 
@@ -303,14 +274,14 @@ TriggerSegmentManager::slotUpdate()
 void
 TriggerSegmentManager::slotDeleteAll()
 {
-	if (QMessageBox::warning(this, "", tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
+    if (QMessageBox::warning(this, "", tr("This will remove all triggered segments from the whole composition.  Are you sure?"), QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Cancel ) != QMessageBox::Yes )
         return ;
 
     RG_DEBUG << "TriggerSegmentManager::slotDeleteAll" << endl;
     MacroCommand *command = new MacroCommand(tr("Remove all triggered segments"));
 
-// 	QTreeWidgetItem *it = m_listView->firstChild();
-	QTreeWidgetItem *it = m_listView->topLevelItem(0);
+//     QTreeWidgetItem *it = m_listView->firstChild();
+    QTreeWidgetItem *it = m_listView->topLevelItem(0);
 
     do {
 
@@ -325,7 +296,7 @@ TriggerSegmentManager::slotDeleteAll()
                                             item->getId());
         command->addCommand(c);
 
-	} while ( (it = m_listView->itemBelow( it )) );
+    } while ( (it = m_listView->itemBelow( it )) );
 
     addCommandToHistory(command);
 }
@@ -356,8 +327,8 @@ TriggerSegmentManager::slotDelete()
 
     if (item->getUsage() > 0) {
         if (QMessageBox::warning(this, "", tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
-										QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-		   					) != QMessageBox::Yes )
+                                        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
+                               ) != QMessageBox::Yes )
             return ;
     }
 
@@ -390,7 +361,7 @@ TriggerSegmentManager::slotClose()
     RG_DEBUG << "TriggerSegmentManager::slotClose" << endl;
 
 //     if (m_doc)
-//         CommandHistory::getInstance()->detachView(actionCollection());	//&&&
+//         CommandHistory::getInstance()->detachView(actionCollection());    //&&&
     m_doc = 0;
 
     close();
@@ -399,16 +370,6 @@ TriggerSegmentManager::slotClose()
 void
 TriggerSegmentManager::setupActions()
 {
-//     KAction* close = KStandardAction::close(this,
-//                                        SLOT(slotClose()),
-//                                        actionCollection());
-    createAction( "file_close", SLOT(slotClose()) );
-
-    //!!! will not work right -- need to do this after createGUI call or just use hardcoded tr("Close")
-    m_closeButton->setText( findAction("file_close")->text() );
-
-    connect(m_closeButton, SIGNAL(released()), this, SLOT(slotClose()));
-
     createAction("paste_to_trigger_segment", SLOT(slotPasteAsNew()));
 
     QSettings settings;
@@ -476,7 +437,7 @@ void
 TriggerSegmentManager::closeEvent(QCloseEvent *e)
 {
     emit closing();
-	close();
+    close();
 //     KMainWindow::closeEvent(e);
 }
 
@@ -526,7 +487,7 @@ TriggerSegmentManager::makeDurationString(timeT time,
             RealTime rt =
                 m_doc->getComposition().getRealTimeDifference
                 (time, time + duration);
-            //	return QString("%1  ").arg(rt.toString().c_str());
+            //    return QString("%1  ").arg(rt.toString().c_str());
             return QString("%1  ").arg(rt.toText().c_str());
         }
 

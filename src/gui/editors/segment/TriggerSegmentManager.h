@@ -91,7 +91,6 @@ protected:
     //--------------- Data members ---------------------------------
     RosegardenDocument        *m_doc;
 
-    QPushButton             *m_closeButton;
     QPushButton             *m_addButton;
     QPushButton             *m_deleteButton;
     QPushButton             *m_deleteAllButton;
