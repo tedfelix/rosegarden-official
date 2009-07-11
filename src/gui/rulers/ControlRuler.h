@@ -146,8 +146,10 @@ protected:
 //    virtual void computeViewSegmentOffset() {};
 
 //    virtual void layoutItem(ControlItem*);
-
-
+    virtual void addControlItem(ControlItem*);
+    virtual void removeControlItem(const ControlItemList::iterator&);
+    virtual void removeControlItem(ControlItem*);
+    virtual bool isVisible(ControlItem*);
 
     // Stacking of the SegmentItems on the canvas
     //
@@ -183,10 +185,11 @@ protected:
     Segment *m_segment;
 
     ControlItemList m_controlItemList;
+    ControlItemList m_selectedItems;
+    ControlItemList m_visibleItems;
 
     ControlItem* m_currentIndex;
 //    Q3CanvasItemList m_selectedItems;
-    ControlItemList m_selectedItems;
 
     ControlTool *m_currentTool;
     ControlToolBox *m_toolBox;

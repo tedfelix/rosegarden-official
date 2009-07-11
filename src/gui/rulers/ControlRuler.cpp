@@ -121,6 +121,42 @@ void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
+void ControlRuler::addControlItem(ControlItem* item)
+{
+    m_controlItemList.push_back(item);
+    if (isVisible(item)) {
+        m_visibleItems.push_back(item);
+    }
+//    m_controlItemStart.insert(std::pair<double,ControlItemList::iterator>
+//        (item->xStart(),--m_controlItemList.end()));
+//    m_controlItemEnd.insert(std::pair<double,ControlItemList::iterator>
+//        (item->xEnd(),--m_controlItemList.end()));
+}
+
+void ControlRuler::removeControlItem(ControlItem* item)
+{
+    m_controlItemList.remove(item);
+    m_selectedItems.remove(item);
+    m_visibleItems.remove(item);
+    delete item;
+}
+
+void ControlRuler::removeControlItem(const ControlItemList::iterator &it)
+{
+    m_controlItemList.erase(it);
+    m_selectedItems.remove(*it);
+    m_visibleItems.remove(*it);
+    delete (*it);
+}
+
+bool ControlRuler::isVisible(ControlItem* item)
+{
+    if (item->xEnd() > m_pannedRect.left() && item->xStart() < m_pannedRect.right())
+        return true;
+
+    return false;
+}
+
 void ControlRuler::slotUpdate()
 {
     RG_DEBUG << "ControlRuler::slotUpdate()\n";
@@ -221,8 +257,17 @@ QPointF ControlRuler::mapWidgetToItem(QPoint *point)
 
 void ControlRuler::slotSetPannedRect(QRectF pr)
 {
-	RG_DEBUG << "ControlRuler::slotSetPannedRect - " << pr;
 	m_pannedRect = pr;
+	// Create the visible items list
+	///TODO Improve efficiency using xstart and xstop ordered lists of control items
+	m_visibleItems.clear();
+	for (ControlItemList::iterator it = m_controlItemList.begin();
+        it != m_controlItemList.end(); ++it) {
+	    if (isVisible(*it)) {
+	        m_visibleItems.push_back(*it);
+	    }
+	}
+    RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();
 }
 
 //void ControlRuler::slotSetScale(double factor)
@@ -464,9 +509,8 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
     controlMouseEvent.time = mousePos.x();
     controlMouseEvent.value = mousePos.y();
 
-    ///TODO Need to restrict this search to items on display
-    for (ControlItemList::iterator it = m_controlItemList.begin();
-            it != m_controlItemList.end(); ++it) {
+    for (ControlItemList::iterator it = m_visibleItems.begin();
+            it != m_visibleItems.end(); ++it) {
         if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
             controlMouseEvent.itemList.push_back(*it);
         }

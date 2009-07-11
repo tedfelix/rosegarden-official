@@ -65,6 +65,8 @@ void PropertyControlItem::update()
     this->clear();
     *this << newpoly;
 
+    ControlItem::update();
+
     m_controlRuler->update();
 }
 

@@ -88,10 +88,12 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
     QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
-    ///TODO Only translate and draw items within the current view area
-    RG_DEBUG << "PropertyControlRuler::paintEvent - m_controlItemList.size() = " << m_controlItemList.size();
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-        if (~(*it)->isSelected()) {
+    // Use a fast vector list to record selected items that are currently visible so that they
+    //  can be drawn last
+    std::vector<ControlItem*> selectedvector;
+
+    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+        if (!(*it)->isSelected()) {
             brush.setColor((*it)->getColour().lighter());
             painter.setBrush(brush);
             painter.setPen(Qt::NoPen);
@@ -99,10 +101,13 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
 
             painter.setPen(pen);
             painter.drawPolyline(mapItemToWidget(*it));
+        } else {
+            selectedvector.push_back(*it);
         }
     }
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
+    {
         brush.setColor(((*it)->getColour()));
         painter.setBrush(brush);
         painter.setPen(Qt::NoPen);
@@ -144,9 +149,10 @@ void PropertyControlRuler::addControlItem(MatrixElement *el)
     RG_DEBUG << "PropertyControlRuler::addControlItem sizeof(MatrixElement): " << s;
 
     PropertyControlItem *controlItem = new PropertyControlItem(this, getPropertyName(), el, QPolygonF());
-    m_controlItemList.push_back(controlItem);
-
     controlItem->update();
+
+    ControlRuler::addControlItem(controlItem);
+//    m_controlItemList.push_back(controlItem);
 }
 
 //void PropertyControlRuler::addControlItem(Event *event)
@@ -215,6 +221,7 @@ void PropertyControlRuler::updateControlItems()
 
 void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 {
+    // For now, simply clear the selected items list and build it afresh
     PropertyControlItem *item;
 
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
@@ -246,35 +253,38 @@ void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 
 void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 {
-    if (!m_eventSelection) return;
-
-    PropertyControlItem *item;
-
-    for (EventSelection::eventcontainer::iterator it =
-             m_eventSelection->getSegmentEvents().begin();
-         it != m_eventSelection->getSegmentEvents().end(); ++it) {
-
-        MatrixElement *element = 0;
-        ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
-        if (vi != m_viewSegment->getViewElementList()->end()) {
-            element = static_cast<MatrixElement *>(*vi);
-        }
-        if (!element) continue;
-
-        for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-            item = dynamic_cast<PropertyControlItem*>(*it);
-            if (item) {
-                if (item->getElement() == element) {
-                    break;
-                } else {
-                    item = 0;
-                }
-            }
-        }
-
-        if (!item) continue;
-
-        item->update();
+//    if (!m_eventSelection) return;
+//
+//    PropertyControlItem *item;
+//
+//    for (EventSelection::eventcontainer::iterator it =
+//             m_eventSelection->getSegmentEvents().begin();
+//         it != m_eventSelection->getSegmentEvents().end(); ++it) {
+//
+//        MatrixElement *element = 0;
+//        ViewElementList::iterator vi = m_viewSegment->findEvent(*it);
+//        if (vi != m_viewSegment->getViewElementList()->end()) {
+//            element = static_cast<MatrixElement *>(*vi);
+//        }
+//        if (!element) continue;
+//
+//        for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
+//            item = dynamic_cast<PropertyControlItem*>(*it);
+//            if (item) {
+//                if (item->getElement() == element) {
+//                    break;
+//                } else {
+//                    item = 0;
+//                }
+//            }
+//        }
+//
+//        if (!item) continue;
+//
+//        item->update();
+//    }
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+        (*it)->update();
     }
 }
 
@@ -317,9 +327,10 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
     for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
         if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(*it)) {
             if (item->getEvent() == el->event()) {
-                m_controlItemList.erase(it);
-                m_selectedItems.remove(item);
-                delete item;
+//                m_controlItemList.erase(it);
+//                m_selectedItems.remove(item);
+//                delete item;
+                removeControlItem(it);
                 RG_DEBUG << "Control item erased";
                 break;
             }

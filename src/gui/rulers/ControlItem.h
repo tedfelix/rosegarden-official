@@ -55,6 +55,9 @@ public:
 
     virtual void draw(QPainter &painter);
 
+    virtual double xStart() { return m_xstart; }
+    virtual double xEnd() { return m_xend; }
+
     virtual void handleMouseButtonPress(QMouseEvent *e);
     virtual void handleMouseButtonRelease(QMouseEvent *e);
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
@@ -81,6 +84,8 @@ protected:
     //--------------- Data members ---------------------------------
 
     QColor m_colour;
+    double m_xstart;
+    double m_xend;
     long m_value;
     bool m_handlingMouseMove;
     bool m_selected;
