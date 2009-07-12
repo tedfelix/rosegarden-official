@@ -49,6 +49,7 @@ namespace Rosegarden
 class ControlTool;
 class ControlToolBox;
 class ControlSelector;
+class ControlMouseEvent;
 //class ControlItem;
 //class ControlItemList;
 class Segment;
@@ -92,6 +93,7 @@ public:
     void setControlTool(ControlTool*);
 
     int applyTool(double x, int val);
+    ControlItemList *getSelectedItems() { return &m_selectedItems; }
 
 //    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
     QRect* getSelectionRectangle() { return m_selectionRect; }
@@ -140,6 +142,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void contextMenuEvent(QContextMenuEvent*);
     virtual void wheelEvent(QWheelEvent*);
+
+    virtual ControlMouseEvent createControlMouseEvent(QMouseEvent* e);
 
 //    virtual QScrollBar* getMainHorizontalScrollBar();
 

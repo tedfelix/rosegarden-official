@@ -42,8 +42,8 @@ public:
 
     ~ControlItem();
 
-    virtual void setValue(long);
-    int getValue() const { return m_value; }
+    virtual void setValue(float);
+    float getValue() const { return m_value; }
     QColor getColour() { return m_colour; }
 
     //void setWidth(int w)  { setSize(w, height()); }
@@ -86,7 +86,7 @@ protected:
     QColor m_colour;
     double m_xstart;
     double m_xend;
-    long m_value;
+    float m_value;
     bool m_handlingMouseMove;
     bool m_selected;
 

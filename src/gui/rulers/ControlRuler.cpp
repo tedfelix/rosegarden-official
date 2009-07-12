@@ -363,8 +363,33 @@ void ControlRuler::viewSegmentDeleted(const ViewSegment *)
     m_segment = 0;
 }
 
+ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
+{
+    ControlMouseEvent controlMouseEvent;
+    QPoint widgetMousePos = e->pos();
+    QPointF mousePos = mapWidgetToItem(&widgetMousePos);
+    controlMouseEvent.time = mousePos.x();
+    controlMouseEvent.value = mousePos.y();
+
+    for (ControlItemList::iterator it = m_visibleItems.begin();
+            it != m_visibleItems.end(); ++it) {
+        if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
+            controlMouseEvent.itemList.push_back(*it);
+        }
+    }
+
+    controlMouseEvent.buttons = e->buttons();
+
+    return controlMouseEvent;
+}
+
 void ControlRuler::mousePressEvent(QMouseEvent* e)
 {
+    if (!m_currentTool)
+        return;
+
+    ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+    m_currentTool->handleLeftButtonPress(&controlMouseEvent);
 //    if (e->button() != Qt::LeftButton) {
 //        TextFloat::getTextFloat()->hide();
 //        m_selecting = false;
@@ -452,6 +477,11 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 {
+    if (!m_currentTool)
+        return;
+
+    ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+    m_currentTool->handleMouseRelease(&controlMouseEvent);
 //    if (e->button() != Qt::LeftButton) {
 //        TextFloat::getTextFloat()->hide();
 //        m_selecting = false;
@@ -503,19 +533,7 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
     if (!m_currentTool)
         return;
 
-    ControlMouseEvent controlMouseEvent;
-    QPoint widgetMousePos = e->pos();
-    QPointF mousePos = mapWidgetToItem(&widgetMousePos);
-    controlMouseEvent.time = mousePos.x();
-    controlMouseEvent.value = mousePos.y();
-
-    for (ControlItemList::iterator it = m_visibleItems.begin();
-            it != m_visibleItems.end(); ++it) {
-        if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
-            controlMouseEvent.itemList.push_back(*it);
-        }
-    }
-
+    ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     m_currentTool->handleMouseMove(&controlMouseEvent);
 
 //    QPoint p = e->pos(); ///CJ Is this ok - inverseMapPoint(e->pos());

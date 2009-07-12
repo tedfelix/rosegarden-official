@@ -30,10 +30,10 @@ class ControlItem;
 class ControlMouseEvent
 {
 public:
-    ControlItemList itemList; // list of items under the cursor, if any
+    std::vector<ControlItem*> itemList; // list of items under the cursor, if any
 
     timeT time; // un-snapped and un-cropped
-    int value;
+    float value;
 
     Qt::KeyboardModifiers modifiers;
     Qt::MouseButtons buttons;

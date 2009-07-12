@@ -57,8 +57,25 @@ void PropertyControlItem::update()
     } else {
         m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     }
+    m_value = (float) val / MIDI_CONTROL_MAX_VALUE;
 
-    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
+    reconfigure(x0,x1,m_value);
+}
+
+void PropertyControlItem::setValue(float y)
+{
+    if (m_propertyname == BaseProperties::VELOCITY) {
+        m_element->reconfigure(y*MIDI_CONTROL_MAX_VALUE);
+    }
+
+    m_value = y;
+    float x0 = boundingRect().left();
+    float x1 = boundingRect().right();
+    reconfigure(x0,x1,y);
+}
+
+void PropertyControlItem::reconfigure(float x0, float x1, float y)
+{
     QPolygonF newpoly;
     newpoly << QPointF(x0,0) << QPointF(x0,y) << QPointF(x1,y) << QPointF(x1,0);
 //    QPolygonF newpoly(QRectF(x0,0,x1-x0,y));

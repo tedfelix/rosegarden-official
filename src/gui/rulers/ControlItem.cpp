@@ -61,7 +61,7 @@ ControlItem::~ControlItem()
 //    delete m_elementAdapter;
 }
 
-void ControlItem::setValue(long v)
+void ControlItem::setValue(float v)
 {
 //     RG_DEBUG << "ControlItem::setValue(" << v << ") x = " << x() << endl;
 

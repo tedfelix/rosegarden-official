@@ -27,6 +27,7 @@
 //#include "commands/matrix/MatrixInsertionCommand.h"
 //#include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
+#include "ControlItem.h"
 #include "ControlRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
@@ -51,19 +52,57 @@ PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
 void
 PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
 {
+    if (m_overItem) {
+        m_ruler->setCursor(Qt::ClosedHandCursor);
+        m_mouseLastY = e->value;
+    }
 }
 
 void
 PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 {
+    if (e->buttons == Qt::NoButton) {
+        // No button pressed, set cursor style
+        setCursor(e);
+    }
+
+    if ((e->buttons & Qt::LeftButton) && m_overItem) {
+        // A property drag action is in progress
+        float delta = (e->value-m_mouseLastY);
+        m_mouseLastY = e->value;
+        ControlItemList *selected = m_ruler->getSelectedItems();
+        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
+            (*it)->setValue((*it)->getValue()+delta);
+        }
+    }
+}
+
+void
+PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
+{
+    if (m_overItem) {
+        // This is the end of a drag event, reset the cursor to the state that it started
+        m_ruler->setCursor(Qt::PointingHandCursor);
+    }
+
+    // May have moved off the item during a drag so use setCursor to correct its state
+    setCursor(e);
+}
+
+void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
+{
     bool isOverItem = false;
-    if (!e->itemList.empty()) {
-        isOverItem = true;
+    std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
+    for (; it != e->itemList.end(); ++it) {
+        if ((*it)->isSelected()) {
+            isOverItem = true;
+            break;
+        }
     }
 
     if (!m_overItem) {
         if (isOverItem) {
-            m_ruler->setCursor(Qt::OpenHandCursor);
+            m_ruler->setCursor(Qt::PointingHandCursor);
             m_overItem = true;
         }
     } else {
@@ -72,11 +111,6 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
             m_overItem = false;
         }
     }
-}
-
-void
-PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
-{
 }
 
 void PropertyAdjuster::ready()

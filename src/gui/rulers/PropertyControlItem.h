@@ -40,7 +40,10 @@ public:
     virtual void update();
     MatrixElement* getElement() { return m_element; }
 
+    void setValue(float y);
+
 protected:
+    void reconfigure(float x0,float x1,float y);
 
     //--------------- Data members ---------------------------------
     MatrixElement* m_element;
