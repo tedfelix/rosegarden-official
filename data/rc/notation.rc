@@ -435,9 +435,6 @@
 	<Action name="copy_selection_right"/>
 	-->
     <Separator/>
-      <Action name="cursor_to_playback_pointer" text="Cursor to &amp;Playback Pointer" icon="transport-cursor-to-pointer" />
-      <Action name="playback_pointer_to_cursor" text="Playback Pointer to &amp;Cursor" icon="transport-pointer-to-cursor" />
-    <Separator/>
       <Action name="cursor_up_staff" text="Cursor &amp;Up Staff" shortcut="Shift+Up" />
       <Action name="cursor_down_staff" text="Cursor &amp;Down Staff" shortcut="Shift+Down" />
       <Action name="cursor_prior_segment" text="Cursor Pre&amp;vious Segment" shortcut="Alt+PgUp" />
@@ -456,8 +453,6 @@
       <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
       <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
       <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
-      <Action name="playback_pointer_to_cursor" />
-      <Action name="cursor_to_playback_pointer" />
       <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" />
       <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
       <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
@@ -636,8 +631,6 @@
   <Action name="playback_pointer_forward_bar" />
   <Action name="playback_pointer_end" />
   <Action name="stop" />
-  <Action name="playback_pointer_to_cursor" />
-  <Action name="cursor_to_playback_pointer" />
   <Action name="toggle_solo" />
   <Action name="toggle_tracking" />
   <Action name="panic" />
