@@ -40,6 +40,8 @@ class MatrixPainter : public MatrixTool
 
 public:
     virtual void handleLeftButtonPress(const MatrixMouseEvent *);
+    virtual void handleMouseDoubleClick(const MatrixMouseEvent *);
+    virtual void handleMidButtonPress(const MatrixMouseEvent *);
     virtual FollowMode handleMouseMove(const MatrixMouseEvent *);
     virtual void handleMouseRelease(const MatrixMouseEvent *);
 

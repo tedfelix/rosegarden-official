@@ -61,6 +61,69 @@ void MatrixPainter::handleEventRemoved(Event *event)
     }
 }
 
+
+
+void MatrixPainter::handleMidButtonPress(const MatrixMouseEvent *e)
+{
+    // note: middle button == third button (== left+right at the same time)
+    // pass
+}
+
+
+void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
+    /**
+    left double click with PainterTool : deletes MatrixElement
+    **/
+    
+    MATRIX_DEBUG << "MatrixPainter::handleThridButtonPress : pitch = "
+            << e->pitch << ", time : " << e->time << endl;
+    
+    m_currentViewSegment = e->viewSegment;
+    if (!m_currentViewSegment) return;
+
+    // Don't create an overlapping event on the same note on the same channel
+    if (e->element) {
+        //std::cerr << "MatrixPainter::handleLeftButtonPress : overlap with an other matrix element" << std::endl;
+        // In percussion matrix, we delete the existing event rather
+        // than just ignoring it -- this is reasonable as the event
+        // has no meaningful duration, so we can just toggle it on and
+        // off with repeated clicks
+        //if (m_widget->isDrumMode()) {
+        if (e->element->event()) {
+            MatrixEraseCommand *command =
+                    new MatrixEraseCommand(m_currentViewSegment->getSegment(),
+                                           e->element->event());
+            CommandHistory::getInstance()->addCommand(command);
+        }
+        //}
+        delete m_currentElement;
+        m_currentElement = 0;
+        return;
+    }
+    
+    /*
+    // Grid needed for the event duration rounding
+    
+    int velocity = m_widget->getCurrentVelocity();
+    
+    MATRIX_DEBUG << "velocity = " << velocity << endl;
+    
+    m_clickTime = e->snappedLeftTime;
+    
+    Event *ev = new Event(Note::EventType, e->snappedLeftTime, e->snapUnit);
+    ev->set<Int>(BaseProperties::PITCH, e->pitch);
+    ev->set<Int>(BaseProperties::VELOCITY, velocity);
+    
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
+    
+    // preview
+    m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
+    */
+        
+    
+}// end handleMouseDoubleClick()
+
+
 void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     MATRIX_DEBUG << "MatrixPainter::handleLeftButtonPress : pitch = "

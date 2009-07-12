@@ -689,7 +689,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("019");
     int fontHeight = boundsForHeight.height();
-    int textY = fontHeight + 2;
+    //int textY = fontHeight + 2;
+    // bmp text aligns better in temporuler now - is this font dependent?
+    int textY = fontHeight - 3;
 
     double prevEndX = -1000.0;
     double prevTempo = 0.0;
@@ -923,7 +925,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
             prevBpm = bpm;
 
             QRect bounds = m_fontMetrics.boundingRect(tempoString);
-
+            
+            x += 3; // bmp text aligns better in temporuler now - is this font dependent?
+            
             paint.setFont(m_font);
             if (time > 0)
                 x -= bounds.width() / 2;

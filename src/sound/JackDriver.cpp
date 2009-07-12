@@ -209,7 +209,7 @@ JackDriver::initialise(bool reinitialise)
     Audit audit;
     audit << std::endl;
 
-    std::string jackClientName = "rosegarden";
+    std::string jackClientName = "rosegarden09";
 
     // attempt connection to JACK server
     //

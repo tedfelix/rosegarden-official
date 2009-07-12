@@ -158,9 +158,9 @@ SegmentParameterBox::initBox()
                                  "the segments will be bracketed by repeat signs.</p><p><center><img src=\":pixmaps/tooltip/repeats"
                                  ".png\"</img></center></p><br>These can be used in conjunction with special LilyPond export direct"
                                  "ives to create repeats with first and second alternate endings. See rosegardenmusic.com for a tut"
-                                 "orial.</qt>"));
+                                 "orial. [Ctrl+Shift+R] </qt>"));
     //m_repeatValue->setFixedHeight(comboHeight);
-
+    
     // handle state changes
     connect(m_repeatValue, SIGNAL(pressed()), SLOT(slotRepeatPressed()));
 
