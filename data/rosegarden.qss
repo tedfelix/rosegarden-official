@@ -1167,15 +1167,30 @@ QToolButton { background-color: red; border: none; } */
  * parameters" and for toolbar buttons
  */
 
-QToolButton::menu-indicator
+QToolButton[popupMode="1"]
+{    /* only for MenuButtonPopup */
+     padding-right: 5px; /* make way for the popup button */
+}
+
+QToolButton::menu-arrow
 {
-    subcontrol-origin: padding 10px;
-    subcontrol-position: top right;
-/*    padding: 10px 10px 10px 10px;*/
+    image: url(:pixmaps/style/arrow-down-small.png);
+}
+
+QToolButton::menu-arrow:open
+{
+    top: 1px; left: 1px; /* shift it a bit */
 }
 
 QToolButton::menu-button
-{ /* the scroll buttons are tool buttons */
+{
+    background: transparent;
+    border: none;
+}
+
+
+/*QToolButton::menu-button
+{
     border-image: url(:pixmaps/style/tab-scroll-button.png) 1;
     border-width: 1px;
 }
@@ -1190,15 +1205,16 @@ QToolButton::menu-button:!enabled
 {
     border-image: url(:pixmaps/style/tab-scroll-button-disabled.png) 1;
     border-width: 1px;
-}
+}*/
 
 QToolButton::up-arrow
-{ /* the arrow mark in the tool buttons */
+{ 
     image: url(:pixmaps/style/arrow-up-small.png);
 }
 
 QToolButton::down-arrow
 {
+    subcontrol-position: right bottom;
     image: url(:pixmaps/style/arrow-down-small.png);
 }
 
