@@ -153,7 +153,7 @@
     <Separator/>
       <Action name="add_text_mark" text="Add Te&amp;xt Mark..." icon="text-mark" />
     <Separator/>
-      <Action name="remove_marks" text="&amp;Remove All Marks" />
+      <Action name="remove_marks" text="&amp;Remove All Marks"  icon="erase-marks" />
     </Menu>
     <Menu name="ornaments">
       <text>&amp;Ornaments</text>
@@ -728,6 +728,8 @@
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
   <text>Marks Toolbar</text>
+  <Action name="remove_marks" />
+  <Separator/>
   <Action name="add_accent" />
   <Action name="add_tenuto" />
   <Action name="add_staccato" />
