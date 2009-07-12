@@ -934,7 +934,7 @@ QComboBox QAbstractItemView QScrollBar:vertical
 
 QScrollBar::handle:vertical
 {
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #999999, stop:1 #DDDDDD);
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 #DDDDDD, stop:1 #999999);
     min-height: 10px;
 }
 

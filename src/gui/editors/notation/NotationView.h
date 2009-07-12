@@ -170,6 +170,7 @@ private:
     CommandRegistry *m_commandRegistry;
 
     void setupActions();
+    void updateWindowTitle();
 };
 
 }

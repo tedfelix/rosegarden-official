@@ -153,6 +153,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     m_notationWidget->setTempoRulerVisible(visible);
 
     settings.endGroup();
+
+    updateWindowTitle();
 }
 
 NewNotationView::~NewNotationView()
@@ -1492,6 +1494,10 @@ NewNotationView::slotMakeOrnament()
 
     MacroCommand *command = new MacroCommand(tr("Make Ornament"));
 
+    command->addCommand(new CopyCommand
+                        (*getSelection(),
+                         getDocument()->getClipboard()));
+
     command->addCommand(new CutCommand
                         (*getSelection(),
                          getDocument()->getClipboard()));
@@ -1800,6 +1806,36 @@ NewNotationView::slotToggleRawNoteRuler()
     settings.beginGroup(NotationViewConfigGroup);
     settings.setValue("Raw note ruler shown", visible);
     settings.endGroup();
+}
+
+
+void NewNotationView::updateWindowTitle()
+{
+    if (m_segments.size() == 1) {
+
+        TrackId trackId = m_segments[0]->getTrack();
+        Track *track =
+            m_segments[0]->getComposition()->getTrackById(trackId);
+
+        int trackPosition = -1;
+        if (track)
+            trackPosition = track->getPosition();
+        //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
+        setWindowTitle(tr("%1 - Segment Track #%2 - Notation")
+                    .arg(getDocument()->getTitle())
+                    .arg(trackPosition + 1));
+
+    } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
+
+        setWindowTitle(tr("%1 - All Segments - Notation")
+                    .arg(getDocument()->getTitle()));
+
+    } else {
+
+        setWindowTitle(tr("%1 - %n Segment(s) - Notation", "", m_segments.size())
+                    .arg(getDocument()->getTitle()));
+
+    }
 }
 
 }
