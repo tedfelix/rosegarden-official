@@ -370,10 +370,10 @@ ActionFileParser::findToolbar(QString toolbarName, Position position)
         if (mw) {
             Qt::ToolBarArea area = Qt::TopToolBarArea;
             switch (position) {
-            case Top: case Default: break;
-            case Left: area = Qt::LeftToolBarArea; break;
-            case Right: area = Qt::RightToolBarArea; break;
-            case Bottom: area = Qt::BottomToolBarArea; break;
+                case Top: case Default: break;
+                case Left: area = Qt::LeftToolBarArea; break;
+                case Right: area = Qt::RightToolBarArea; break;
+                case Bottom: area = Qt::BottomToolBarArea; break;
             }
             toolbar = new QToolBar(QObject::tr(toolbarName), mw);
             mw->addToolBar(area, toolbar);
@@ -574,10 +574,10 @@ ActionFileParser::addToolbarBreak(Position position)
     if (!mw) return;
     Qt::ToolBarArea area = Qt::TopToolBarArea;
     switch (position) {
-    case Top: case Default: break;
-    case Left: area = Qt::LeftToolBarArea; break;
-    case Right: area = Qt::RightToolBarArea; break;
-    case Bottom: area = Qt::BottomToolBarArea; break;
+        case Top: case Default: break;
+        case Left: area = Qt::LeftToolBarArea; break;
+        case Right: area = Qt::RightToolBarArea; break;
+        case Bottom: area = Qt::BottomToolBarArea; break;
     }
     mw->addToolBarBreak(area);
 }

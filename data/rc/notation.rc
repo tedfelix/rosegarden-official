@@ -667,7 +667,7 @@
   <Action name="grace_mode" />
 </ToolBar>
 
-<ToolBar name="Rests Toolbar" hidden="false" position="left">
+<ToolBar name="Rests Toolbar" hidden="false" position="left" newline="true">
   <text>Rests Toolbar</text>
   <!-- Reference names, but with _ instead of - -->
   <Action name="rest_breve" />
