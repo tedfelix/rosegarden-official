@@ -1808,8 +1808,14 @@ NewNotationView::slotToggleRawNoteRuler()
     settings.endGroup();
 }
 
+void
+NewNotationView::slotToggleTracking()
+{
+    if (m_notationWidget) m_notationWidget->slotTogglePlayTracking();
+}
 
-void NewNotationView::updateWindowTitle()
+void
+NewNotationView::updateWindowTitle()
 {
     if (m_segments.size() == 1) {
 

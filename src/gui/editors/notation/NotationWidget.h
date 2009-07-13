@@ -99,8 +99,9 @@ public slots:
     void slotSetFontName(QString);
     void slotSetFontSize(int);
     void slotSetPlayTracking(bool);
+    void slotTogglePlayTracking();
 
-protected :
+protected:
     virtual void showEvent(QShowEvent * event);
 
 protected slots:

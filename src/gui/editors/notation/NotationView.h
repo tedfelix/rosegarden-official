@@ -57,15 +57,13 @@ public:
 
     virtual timeT getInsertionTime() const;
 
-signals :
+signals:
     void play();
     void stop();
     void rewindPlayback();
     void fastForwardPlayback();
     void rewindPlaybackToBeginning();
     void fastForwardPlaybackToEnd();
-    void slotToggleSolo();
-    void slotToggleTracking();
     void panic();
 
 
@@ -144,6 +142,7 @@ protected slots:
     void slotToggleLayoutToolBar();
     void slotToggleTransportToolBar();
 
+    void slotToggleTracking();
 
 private:
     /**

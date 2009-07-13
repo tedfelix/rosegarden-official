@@ -385,6 +385,12 @@ NotationWidget::slotSetPlayTracking(bool tracking)
 }
 
 void
+NotationWidget::slotTogglePlayTracking()
+{
+    slotSetPlayTracking(!m_playTracking);
+}
+
+void
 NotationWidget::slotPointerPositionChanged(timeT t)
 {
     QObject *s = sender();
