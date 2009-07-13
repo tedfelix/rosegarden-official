@@ -143,11 +143,11 @@ distclean:	clean
 test:
 	echo $(QSOURCES)
 
-dependencies: $(SOURCES) $(HEADERS) Makefile
+dependencies: $(KEYSOURCES) $(HEADERS) Makefile
 	@echo Rebuilding dependencies file...
 	@rm -f $@ 
 	@touch $@
-	@echo $(SOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
+	@echo $(KEYSOURCES) | $(XARGS) -n 100 $(MAKEDEPEND) -f$@ -a -Y -Isrc >/dev/null 2>&1
 	@echo Done
 
 qrc:	locale
