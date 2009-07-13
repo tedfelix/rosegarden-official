@@ -699,26 +699,6 @@
   <Action name="double_flat_accidental" />
 </ToolBar>
 
-<ToolBar name="Group Toolbar" hidden="false" position="right">
-  <text>Group Toolbar</text>
-  <Action name="make_chord" />
-  <Action name="beam" />
-  <Action name="break_group" />
-<Separator/>
-  <Action name="tuplet" />
-  <Action name="simple_tuplet" />
-<!--  <Action name="grace"/> -->
-<Separator/>
-  <Action name="slur" />
-<!--  <Action name="glissando"/> -->
-  <Action name="tie_notes" />
-  <Action name="de_counterpoint" />
-<Separator/>
-  <Action name="crescendo" />
-  <Action name="decrescendo" />
-  <Action name="octave_up" />
-</ToolBar>
-
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
   <text>Marks Toolbar</text>
   <Action name="remove_marks" />
@@ -741,6 +721,26 @@
   <Action name="add_mordent-long" />
   <Action name="add_mordent-long-inverted" />
   <Action name="add_text_mark" />
+</ToolBar>
+
+<ToolBar name="Group Toolbar" hidden="false" position="right" newline="true">
+  <text>Group Toolbar</text>
+  <Action name="make_chord" />
+  <Action name="beam" />
+  <Action name="break_group" />
+<Separator/>
+  <Action name="tuplet" />
+  <Action name="simple_tuplet" />
+<!--  <Action name="grace"/> -->
+<Separator/>
+  <Action name="slur" />
+<!--  <Action name="glissando"/> -->
+  <Action name="tie_notes" />
+  <Action name="de_counterpoint" />
+<Separator/>
+  <Action name="crescendo" />
+  <Action name="decrescendo" />
+  <Action name="octave_up" />
 </ToolBar>
 
 <ToolBar name="Meta Toolbar" newline="true" hidden="true">
