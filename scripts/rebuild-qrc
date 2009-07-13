@@ -27,7 +27,7 @@ cd data||exit 1
 
 writeEntries() {
     echo "  assembling files of type $1..."
-    for f in $(find . -name \*.$1); do
+    for f in $(find . -name \*.$1 | sort); do
         if (svn info $f > /dev/null 2>&1); then
             cat >> $ofile << EOF
 <file>$f</file>
