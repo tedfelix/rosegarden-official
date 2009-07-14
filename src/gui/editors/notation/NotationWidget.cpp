@@ -210,11 +210,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
 
-// Following lines are needed to have loop selection working in loop ruler,
-// but there is no snap grid in notation ...
-//    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-//    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-
     connect(m_topStandardRuler, SIGNAL(dragPointerToPosition(timeT)),
             this, SLOT(slotPointerPositionChanged(timeT)));
     connect(m_bottomStandardRuler, SIGNAL(dragPointerToPosition(timeT)),

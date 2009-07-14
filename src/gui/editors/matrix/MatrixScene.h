@@ -37,6 +37,7 @@ class MatrixElement;
 class MatrixMouseEvent;
 class MatrixViewSegment;
 class RulerScale;
+class ZoomableRulerScale;
 class SnapGrid;
 
 /**
@@ -86,6 +87,7 @@ public:
     int getYResolution() const { return m_resolution; }
 
     const RulerScale *getRulerScale() const { return m_scale; }
+    ZoomableRulerScale *getReferenceScale() { return m_referenceScale; }
     const SnapGrid *getSnapGrid() const { return m_snapGrid; }
 
     void setSnap(timeT);
@@ -129,6 +131,9 @@ private:
     std::vector<MatrixViewSegment *> m_viewSegments; // I own these
 
     RulerScale *m_scale; // I own this (it maps between time and scene x)
+    ZoomableRulerScale *m_referenceScale; // I own this (it refers to m_scale
+                                  // and knows zoom level needed by the loop
+                                  // rulers (which refer to m_snapGrid))
     SnapGrid *m_snapGrid; // I own this
 
     int m_resolution;

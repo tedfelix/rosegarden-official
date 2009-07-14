@@ -53,6 +53,7 @@ MatrixScene::MatrixScene() :
     m_widget(0),
     m_document(0),
     m_scale(0),
+    m_referenceScale(0),
     m_snapGrid(0),
     m_resolution(8),
     m_selection(0),
@@ -73,6 +74,7 @@ MatrixScene::~MatrixScene()
         delete m_viewSegments[i];
     }
     delete m_snapGrid;
+    delete m_referenceScale;
     delete m_scale;
 }
 
@@ -100,11 +102,14 @@ MatrixScene::setSegments(RosegardenDocument *document,
 
     delete m_snapGrid;
     delete m_scale;
+    delete m_referenceScale;
     m_scale = new SegmentsRulerScale(&m_document->getComposition(),
                                      selection,
                                      0,
                                      Note(Note::Shortest).getDuration() / 2.0);
-    m_snapGrid = new SnapGrid(m_scale);
+
+    m_referenceScale = new ZoomableRulerScale(m_scale);
+    m_snapGrid = new SnapGrid(m_referenceScale);
 
     for (unsigned int i = 0; i < m_viewSegments.size(); ++i) {
         delete m_viewSegments[i];

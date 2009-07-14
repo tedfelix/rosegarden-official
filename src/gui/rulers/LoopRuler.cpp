@@ -275,20 +275,8 @@ LoopRuler::drawLoopMarker(QPainter* paint)
 double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mE)
 {
-    // Currently two different properties hold the horizontal zoom factor in
-    // Qt4 port : HZoomable::m_hScaleFactor and ZoomableRulerScale::m_xfactor.
-    // The following code deals with this redundance.
-
-     double zoomX;
-    ZoomableRulerScale *zrs = dynamic_cast<ZoomableRulerScale *>(m_rulerScale);
-    if (zrs) {
-        zoomX = zrs->getXZoomFactor();
-    } else {
-        zoomX = 1.0;
-    }
-
-    double x = mE->pos().x() / getHScaleFactor() / zoomX
-               - m_currentXOffset / zoomX - m_xorigin;
+    double x = mE->pos().x() / getHScaleFactor()
+               - m_currentXOffset - m_xorigin;
     return x;
 }
 
@@ -380,7 +368,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         x = 0;
 
     if (m_loopingMode) {
-        if (m_grid->snapX(x) != m_endLoop) {
+        if (m_loopGrid->snapX(x) != m_endLoop) {
             m_endLoop = m_loopGrid->snapX(x);
             emit dragLoopToPosition(m_endLoop);
             update();

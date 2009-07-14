@@ -153,7 +153,7 @@ private:
     double m_hZoomFactor;
     double m_vZoomFactor;
     int m_currentVelocity;
-    ZoomableRulerScale *m_referenceScale; // I own this (refers to scene scale)
+    ZoomableRulerScale *m_referenceScale; // m_scene own this (refers to scene scale)
     bool m_inMove;
     QPointF m_lastMouseMoveScenePos;
 

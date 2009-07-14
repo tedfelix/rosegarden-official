@@ -193,14 +193,12 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     m_document = document;
 
-    delete m_referenceScale;
-
     delete m_scene;
     m_scene = new MatrixScene();
     m_scene->setMatrixWidget(this);
     m_scene->setSegments(document, segments);
 
-    m_referenceScale = new ZoomableRulerScale(m_scene->getRulerScale());
+    m_referenceScale = m_scene->getReferenceScale();
 
     connect(m_scene, SIGNAL(mousePressed(const MatrixMouseEvent *)),
             this, SLOT(slotDispatchMousePress(const MatrixMouseEvent *)));
@@ -655,7 +653,6 @@ MatrixWidget::showEvent(QShowEvent * event)
     QWidget::showEvent(event);
     slotHScroll();
 }
-
 
 }
 
