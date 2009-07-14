@@ -68,7 +68,11 @@ NotationWidget::NotationWidget() :
     m_tempoRuler(0),
     m_chordNameRuler(0),
     m_rawNoteRuler(0),
-    m_layout(0)
+    m_layout(0),
+    m_linearMode(true),
+    m_tempoRulerIsVisible(false),
+    m_rawNoteRulerIsVisible(false),
+    m_chordNameRulerIsVisible(false)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -249,18 +253,24 @@ void
 NotationWidget::slotSetLinearMode()
 {
     if (m_scene) m_scene->setPageMode(StaffLayout::LinearMode);
+    m_linearMode = true;
+    hideOrShowRulers();
 }
 
 void
 NotationWidget::slotSetContinuousPageMode()
 {
     if (m_scene) m_scene->setPageMode(StaffLayout::ContinuousPageMode);
+    m_linearMode = false;
+    hideOrShowRulers();
 }
 
 void
 NotationWidget::slotSetMultiPageMode()
 {
     if (m_scene) m_scene->setPageMode(StaffLayout::MultiPageMode);
+    m_linearMode = false;
+    hideOrShowRulers();
 }
 
 void
@@ -567,22 +577,43 @@ NotationWidget::slotHScrollBarRangeChanged(int min, int max)
 void
 NotationWidget::setTempoRulerVisible(bool visible)
 {
-    if (visible) m_tempoRuler->show();
+    if (visible && m_linearMode) m_tempoRuler->show();
     else m_tempoRuler->hide();
+    m_tempoRulerIsVisible = visible;
 }
 
 void
 NotationWidget::setChordNameRulerVisible(bool visible)
 {
-    if (visible) m_chordNameRuler->show();
+    if (visible && m_linearMode) m_chordNameRuler->show();
     else m_chordNameRuler->hide();
+    m_chordNameRulerIsVisible = visible;
 }
 
 void
 NotationWidget::setRawNoteRulerVisible(bool visible)
 {
-    if (visible) m_rawNoteRuler->show();
+    if (visible && m_linearMode) m_rawNoteRuler->show();
     else m_rawNoteRuler->hide();
+    m_rawNoteRulerIsVisible = visible;
+}
+
+void
+NotationWidget::hideOrShowRulers()
+{
+    if (m_linearMode) {
+        if (m_tempoRulerIsVisible) m_tempoRuler->show();
+        if (m_rawNoteRulerIsVisible) m_rawNoteRuler->show();
+        if (m_chordNameRulerIsVisible) m_chordNameRuler->show();
+        m_bottomStandardRuler->show();
+        m_topStandardRuler->show();
+    } else {
+        if (m_tempoRulerIsVisible) m_tempoRuler->hide();
+        if (m_rawNoteRulerIsVisible) m_rawNoteRuler->hide();
+        if (m_chordNameRulerIsVisible) m_chordNameRuler->hide();
+        m_bottomStandardRuler->hide();
+        m_topStandardRuler->hide();
+    }
 }
 
 void

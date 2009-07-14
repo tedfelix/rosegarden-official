@@ -126,12 +126,35 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
             this, SLOT(slotUpdateMenuStates()));
 
-    // Set initial visibility ...
+    // Set display configuration
     bool visible;
     QSettings settings;
     settings.beginGroup(NotationViewConfigGroup);
 
-    // ... of chord name ruler, ...
+    // Set initial notation layout mode
+    int layoutMode = settings.value("layoutmode", 0).toInt();
+    switch(layoutMode) {
+        case 0 :
+            findAction("linear_mode")->setChecked(true);
+            findAction("continuous_page_mode")->setChecked(false);
+            findAction("multi_page_mode")->setChecked(false);
+            slotLinearMode();
+        break;
+        case 1 :
+            findAction("linear_mode")->setChecked(false);
+            findAction("continuous_page_mode")->setChecked(true);
+            findAction("multi_page_mode")->setChecked(false);
+            slotContinuousPageMode();
+        break;
+        case 2 : 
+            findAction("linear_mode")->setChecked(false);
+            findAction("continuous_page_mode")->setChecked(false);
+            findAction("multi_page_mode")->setChecked(true);
+            slotMultiPageMode(); 
+        break;
+    }
+
+    // Set initial visibility of chord name ruler, ...
     visible = settings.value("Chords ruler shown",
                           findAction("show_chords_ruler")->isChecked()
                          ).toBool();
@@ -810,8 +833,6 @@ void NewNotationView::slotPreviewLilyPond()
 void
 NewNotationView::slotLinearMode()
 {
-    //!!! would show all rulers here, if we had any
-
     enterActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetLinearMode();
 }
@@ -819,8 +840,6 @@ NewNotationView::slotLinearMode()
 void
 NewNotationView::slotContinuousPageMode()
 {
-    //!!! would hide all rulers here, if we had any
-
     leaveActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetContinuousPageMode();
 }
@@ -828,8 +847,6 @@ NewNotationView::slotContinuousPageMode()
 void
 NewNotationView::slotMultiPageMode()
 {
-    //!!! would hide all rulers here, if we had any
-
     leaveActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
 }

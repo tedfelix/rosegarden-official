@@ -103,6 +103,7 @@ public slots:
 
 protected:
     virtual void showEvent(QShowEvent * event);
+    void hideOrShowRulers();
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
@@ -140,6 +141,11 @@ private:
     RawNoteRuler *m_rawNoteRuler; // I own this
 
     QGridLayout *m_layout; // I own this
+
+    bool m_linearMode;
+    bool m_tempoRulerIsVisible;         // Only valid in linear mode
+    bool m_rawNoteRulerIsVisible;       // Only valid in linear mode
+    bool m_chordNameRulerIsVisible;     // Only valid in linear mode
 
     /**
      * Widgets vertical positions inside the main QGridLayout
