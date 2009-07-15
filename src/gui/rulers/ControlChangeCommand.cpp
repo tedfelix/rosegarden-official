@@ -38,7 +38,7 @@ void ControlChangeCommand::modifySegment()
 //    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
     for (ControlItemList::iterator it = m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
-            item->updateValue();
+            item->updateSegment();
     }
 }
 

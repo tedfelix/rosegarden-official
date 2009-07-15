@@ -64,8 +64,12 @@ void PropertyControlItem::update()
 
 void PropertyControlItem::setValue(float y)
 {
+    if (y > 1.0) y = 1.0;
+    if (y < 0) y = 0;
+
     if (m_propertyname == BaseProperties::VELOCITY) {
         m_element->reconfigure(y*MIDI_CONTROL_MAX_VALUE);
+        m_colour = DefaultVelocityColour::getInstance()->getColour(y*MIDI_CONTROL_MAX_VALUE);
     }
 
     m_value = y;
@@ -85,6 +89,11 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
     ControlItem::update();
 
     m_controlRuler->update();
+}
+
+void PropertyControlItem::updateSegment()
+{
+    m_element->event()->set<Int>(m_propertyname,(int)(m_value*MIDI_CONTROL_MAX_VALUE));
 }
 
 }

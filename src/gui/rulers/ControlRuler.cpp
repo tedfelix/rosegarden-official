@@ -22,7 +22,7 @@
 #include "base/RulerScale.h"
 //#include "base/Segment.h"
 //#include "base/Selection.h"
-//#include "ControlChangeCommand.h"
+#include "ControlChangeCommand.h"
 #include "ControlMouseEvent.h"
 #include "ControlItem.h"
 #include "ControlSelector.h"
@@ -109,12 +109,14 @@ void ControlRuler::setSegment(Segment *segment)
     m_segment = segment;
 
     if (m_eventSelection) delete m_eventSelection;
+
     m_eventSelection = new EventSelection(*segment);
 }
 
 void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
 {
     if (m_viewSegment) m_viewSegment->removeObserver(this);
+
     m_viewSegment = viewSegment;
     m_viewSegment->addObserver(this);
 
@@ -482,6 +484,16 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     m_currentTool->handleMouseRelease(&controlMouseEvent);
+
+    // Add command to history
+    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
+                                    *m_segment,
+                                    m_eventSelection->getStartTime(),
+                                    m_eventSelection->getEndTime());
+
+    RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
+    CommandHistory::getInstance()->addCommand(command);
+
 //    if (e->button() != Qt::LeftButton) {
 //        TextFloat::getTextFloat()->hide();
 //        m_selecting = false;
@@ -649,14 +661,14 @@ void ControlRuler::createMenu()
 void
 ControlRuler::clearSelectedItems()
 {
-////    for (Q3CanvasItemList::Iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        (*it)->setSelected(false);
-//    }
-//    m_selectedItems.clear();
-//
-//    delete m_eventSelection;
-//    m_eventSelection = new EventSelection(*m_segment);
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+        (*it)->setSelected(false);
+    }
+    m_selectedItems.clear();
+
+    if (m_eventSelection) delete m_eventSelection;
+
+    m_eventSelection = new EventSelection(*m_segment);
 }
 
 void ControlRuler::clear()

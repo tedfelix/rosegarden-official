@@ -70,7 +70,7 @@ public:
     virtual void updateFromValue();
 
     /// update value according to height after a user edit
-    virtual void updateValue();
+    virtual void updateSegment();
 
     virtual void update(); ///CJ Don't know what to do here yet
     virtual void setX(int);

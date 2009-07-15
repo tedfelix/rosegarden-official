@@ -221,16 +221,19 @@ void PropertyControlRuler::updateControlItems()
 
 void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 {
+    // Use base class fcn to set each item as not selected, clear the m_selectedItems lsit
+    //  and create a new m_eventSelection member
+    clearSelectedItems();
+
     // For now, simply clear the selected items list and build it afresh
     PropertyControlItem *item;
 
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        item = dynamic_cast <PropertyControlItem *> (*it);
-        if (item) item->setSelected(false);
-    }
-
-    m_selectedItems.clear();
-
+//    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+//        item = dynamic_cast <PropertyControlItem *> (*it);
+//        if (item) item->setSelected(false);
+//    }
+//
+//    m_selectedItems.clear();
     for (ViewElementList::iterator elit = elementList->begin(); elit != elementList->end();elit++) {
         for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
             item = dynamic_cast<PropertyControlItem*>(*it);
@@ -246,6 +249,7 @@ void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 
         item->setSelected(true);
         m_selectedItems.push_back(item);
+        m_eventSelection->addEvent(item->getEvent());
     }
 
     update();

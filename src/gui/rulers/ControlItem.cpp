@@ -68,9 +68,8 @@ void ControlItem::setValue(float v)
     m_value = v;
 }
 
-void ControlItem::updateValue()
+void ControlItem::updateSegment()
 {
-//    m_elementAdapter->setValue(m_value);
 }
 
 void ControlItem::updateFromValue()

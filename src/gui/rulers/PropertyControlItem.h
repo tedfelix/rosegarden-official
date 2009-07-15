@@ -41,6 +41,7 @@ public:
     MatrixElement* getElement() { return m_element; }
 
     void setValue(float y);
+    void updateSegment();
 
 protected:
     void reconfigure(float x0,float x1,float y);
