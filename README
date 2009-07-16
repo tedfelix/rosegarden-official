@@ -19,50 +19,9 @@ has been released yet; if not, please continue on to:
 Build requirements
 ------------------
 
-Rosegarden requires the following runtime libraries and SDKs to compile:
+Please see:
 
-  - Qt 4.3 or later
-  - ALSA 1.0 or later
-  - libjack 0.77 or later
-  - LADSPA 1.1 or later
-  - DSSI 0.9 or later
-  - Xft2 2.1 or later
-  - liblo 0.23 or later (0.23 is newer than 0.7)
-  - liblirc 0.8 or later
-  - FFTW version 3
-  - autoconf
-  - pkg-config
-  - makedepend
-
-
-Runtime requirements
---------------------
-
-In order to be fully functional and provide the optimal user experience,
-Rosegarden requires the following external applications.  We suggest listing
-them as your distro's equivalent of "recommends" level dependencies.  (Yes, this
-is a long list, and yes, we really do use all of these for something.)
-
-  - perl
-  - bash
-  - qsynth AND fluid-soundfont-gm* OR timidity AND freepats*
-  - lilypond
-  - ocular OR acroread OR kpdf OR evince
-  - kprinter OR gtklp OR lpr OR lp
-  - jackd
-  - sox
-  - sndfile-resample
-  - flac
-  - oggdec
-  - mpg321
-  - libxml-twig-perl
-  - qjackctl
-  - DSSI plugins (any your distro carries)
-  - LADSPA plugins (any your distro carries)
-
-  * the key here being that either softsynth should come with an installed
-    soundfont or patchset in order that it can play General MIDI as configured
-    "out of the box"
+http://www.rosegardenmusic.com/wiki/dev:contributing
 
 
 Installation instructions
@@ -98,6 +57,36 @@ The optional [--enable-debug] will build Rosegarden so that it is useful for
 debugging, which can greatly improve our ability to find and correct bugs by
 allowing Rosegarden to produce useful stack traces when it crashes.  WARNING!
 Enabling this option results in an approximately 300 MB rosegarden binary!
+
+
+Runtime requirements
+--------------------
+
+In order to be fully functional and provide the optimal user experience,
+Rosegarden requires the following external applications.  We suggest listing
+them as your distro's equivalent of "recommends" level dependencies.  (Yes, this
+is a long list, and yes, we really do use all of these for something.)
+
+  - perl
+  - bash
+  - qsynth AND fluid-soundfont-gm* OR timidity AND freepats*
+  - lilypond
+  - ocular OR acroread OR kpdf OR evince
+  - kprinter OR gtklp OR lpr OR lp
+  - jackd
+  - sox
+  - sndfile-resample
+  - flac
+  - oggdec
+  - mpg321
+  - libxml-twig-perl
+  - qjackctl
+  - DSSI plugins (any your distro carries)
+  - LADSPA plugins (any your distro carries)
+
+  * the key here being that either softsynth should come with an installed
+    soundfont or patchset in order that it can play General MIDI as configured
+    "out of the box"
 
 
 User documentation
