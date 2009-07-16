@@ -767,12 +767,19 @@ AudioManagerDialog::slotAdd()
     }
 
     // pick the directory from the last URL encountered to save for future
-    // reference (that's why we preserved i outside the for block)
+    // reference, but don't store anything if no URLs were encountered (ie. the
+    // user hit cancel on the file dialog without choosing anything)
     directory = d.canonicalPath();
-    settings.setValue("add_audio_file", directory);
 
-    std::cerr << "AudioManagerDialog::slotAdd() - storing path: "
-              << qstrtostr(directory) << std::endl;
+    if (!urlList.isEmpty()) {
+        settings.setValue("add_audio_file", directory);
+
+        std::cerr << "AudioManagerDialog::slotAdd() - storing path: "
+                  << qstrtostr(directory) << std::endl;
+    } else {
+        std::cerr << "AudioManagerDialog::slotAdd() - URL list was empty.  No files added.  Not storing path."
+                  << std::endl;
+    }
 
     settings.endGroup();
 }
