@@ -1475,6 +1475,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
         const RealTime &startTime,
         const RealTime &endTime)
 {
+    std::cerr << "RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(...) - slot firing as ordered, sir!" << std::endl;
     Composition &comp = getDocument()->getComposition();
 
     AudioSegmentInsertCommand *command =

@@ -48,6 +48,7 @@
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
     <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
   </Menu>
+
 </MenuBar>
 
 <ToolBar name="General Toolbar">
@@ -85,7 +86,7 @@
 <State name="have_audio_insertable">
   <enable>
     <Action name="insert_audio"/>
-  <enable>
+  </enable>
 </State>
 
 </kpartgui>

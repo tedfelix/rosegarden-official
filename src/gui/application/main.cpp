@@ -606,8 +606,12 @@ int main(int argc, char *argv[])
 
             RG_DEBUG << "Starting sfxload : " << sfxLoadPath << " " << soundFontPath << endl;
 
-            QObject::connect(sfxLoadProcess, SIGNAL(processExited(QProcess*)),
-                             &theApp, SLOT(sfxLoadExited(QProcess*)));
+            // NOTE: we used to have a broken connect here to hook to a slot
+            // that never existed.  This omission doesn't seem to have ever
+            // impacted the functioning of this code, since we pre-test at the
+            // head of this if block to see if the elements involved are valid,
+            // and I suppose we just go on blind faith that if the elements are
+            // valid, then the QProcess will work.
 
             sfxLoadProcess->start(sfxLoadPath, (QStringList()) << soundFontPath);
         } else {
