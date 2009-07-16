@@ -32,6 +32,7 @@ Rosegarden requires the following runtime libraries and SDKs to compile:
   - FFTW version 3
   - autoconf
   - pkg-config
+  - makedepend
 
 
 Runtime requirements
@@ -75,7 +76,7 @@ configure script, you must generate one by running:
 Once you have a configure script, ensure that all of your build dependencies
 have been installed, and then run:
 
-    ./configure --prefix=[PREFIX] QTDIR=[QTDIR] [--enable-debug]
+    ./configure [ --prefix=[PREFIX] QTDIR=[QTDIR] [--enable-debug] ]
     make
     make install
 
