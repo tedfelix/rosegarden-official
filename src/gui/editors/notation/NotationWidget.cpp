@@ -405,9 +405,13 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 
     if (!m_scene) return;
 
-    QPointF p = m_scene->snapTimeToStaffPosition(t);
+    QLineF p = m_scene->snapTimeToStaffPosition(t);
+    if (p == QLineF()) return;
+
     //!!! p will also contain sensible Y (although not 100% sensible yet)
-    double sceneX = p.x();
+    double sceneX = p.x1();
+    double sceneY = std::min(p.y1(), p.y2());
+    double height = fabsf(p.y2() - p.y1());
 
     // Never move the pointer outside the scene (else the scene will grow)
     double x1 = m_scene->sceneRect().x();
@@ -417,8 +421,8 @@ NotationWidget::slotPointerPositionChanged(timeT t)
         m_view->slotHidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
-        m_view->slotShowPositionPointer(sceneX);
-        m_hpanner->slotShowPositionPointer(sceneX);
+        m_view->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
+        m_hpanner->slotShowPositionPointer(QPointF(sceneX, sceneY), height);
     }
 
     if (getPlayTracking() || !fromDocument) {

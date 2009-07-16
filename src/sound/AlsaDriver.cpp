@@ -45,8 +45,8 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
-//#define DEBUG_PROCESS_MIDI_OUT 1
+#define DEBUG_ALSA 1
+#define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
 
@@ -2247,6 +2247,8 @@ AlsaDriver::setMIDIClockInterval(RealTime interval)
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::setMIDIClockInterval(" << interval << ")" << endl;
 #endif
+
+    if (m_midiClockInterval == interval) return;
 
     // Reset the value
     //

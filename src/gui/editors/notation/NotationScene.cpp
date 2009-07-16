@@ -295,7 +295,7 @@ NotationScene::getCurrentSegment()
 
 void
 NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
-                               NotationMouseEvent &nme) const
+                               NotationMouseEvent &nme)
 {
     Profiler profiler("NotationScene::setupMouseEvent");
 
@@ -318,6 +318,10 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     // rather than the click time on the staff?
     
     if (nme.staff) {
+
+        for (int i = 0; i < m_staffs.size(); ++i) {
+            if (nme.staff == m_staffs[i]) { m_currentStaff = i; break; }
+        }
 
         Event *clefEvent = 0, *keyEvent = 0;
         NotationElementList::iterator i =
@@ -586,7 +590,7 @@ NotationScene::getInsertionTime() const
     return snapTimeToNoteBoundary(m_document->getComposition().getPosition());
 }
 
-QPointF
+QLineF
 NotationScene::snapTimeToStaffPosition(timeT t) const
 {
     t = snapTimeToNoteBoundary(t);
@@ -594,17 +598,17 @@ NotationScene::snapTimeToStaffPosition(timeT t) const
     if (m_currentStaff < m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
-    if (!s || !m_hlayout) return QPointF();
+    if (!s || !m_hlayout) return QLineF();
 
     double x = m_hlayout->getXForTimeByEvent(t);
 
-    StaffLayout::StaffLayoutCoords coords =
-        s->getSceneCoordsForLayoutCoords(x, 0);
+    StaffLayout::StaffLayoutCoords top =
+        s->getSceneCoordsForLayoutCoords(x, s->getLayoutYForHeight(16));
 
-    //!!! incorrect Y -- actually we want to return sensible insert
-    //!!! cursor end coords -- might not be best way to handle this,
-    //!!! consider
-    return QPointF(coords.first, coords.second);
+    StaffLayout::StaffLayoutCoords bottom =
+        s->getSceneCoordsForLayoutCoords(x, s->getLayoutYForHeight(-8));
+
+    return QLineF(top.first, top.second, bottom.first, bottom.second);
 }
 
 timeT
@@ -1180,6 +1184,13 @@ NotationScene::setSelection(EventSelection *s,
     
     if (m_selection) {
         newStaff = setSelectionElementStatus(m_selection, true, preview);
+    }
+
+    if (newStaff) {
+        for (int i = 0; i < m_staffs.size(); ++i) {
+            if (newStaff == m_staffs[i]) { m_currentStaff = i; break; }
+        }
+        std::cerr << "setSelection: set current staff to " << m_currentStaff << std::endl;
     }
 
     if (oldSelection && m_selection && oldStaff && newStaff &&

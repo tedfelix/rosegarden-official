@@ -74,7 +74,7 @@ public:
 
     timeT getInsertionTime() const;
 
-    QPointF snapTimeToStaffPosition(timeT t) const;
+    QLineF snapTimeToStaffPosition(timeT t) const;
     timeT snapTimeToNoteBoundary(timeT t) const;
 
     void setSingleSelectedEvent(NotationStaff *staff,
@@ -213,7 +213,7 @@ private:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
-    void setupMouseEvent(QGraphicsSceneMouseEvent *, NotationMouseEvent &) const;
+    void setupMouseEvent(QGraphicsSceneMouseEvent *, NotationMouseEvent &);
 
     void checkUpdate();
     void positionStaffs();
