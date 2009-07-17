@@ -503,8 +503,14 @@ AudioManagerDialog::getCurrentSelection()
             ++it) {
         // If we match then return the valid AudioFile
         //
-        if (item->getId() == (*it)->getId())
+        if (item->getId() == (*it)->getId()) {
             return (*it);
+        } else {
+            std::cerr << "AudioManagerDialog::getCurrentSelection() - item->getId() of "
+                      << item->getId() << " does not match (*it)->getId() of "
+                      << (*it)->getId() << " so you are basically screwed.  Sorry about that."
+                      << std::endl;
+        }
     }
 
     std::cerr << "AudioManagerDialog::getCurrentSelection() - we tried so hard, but in the end it was all just bricks in the wall." << std::endl;
@@ -797,6 +803,8 @@ AudioManagerDialog::slotAdd()
 void
 AudioManagerDialog::updateActionState(bool haveSelection)
 {
+    std::cerr << "AudioManagerDialog::updateActionState(" << (haveSelection ? "true" : "false")
+              << ")" << std::endl;
     if (m_doc->getAudioFileManager().begin() ==
             m_doc->getAudioFileManager().end()) {
         leaveActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateReverse
