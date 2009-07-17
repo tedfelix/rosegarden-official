@@ -588,8 +588,7 @@ MatrixScene::handleEventRemoved(Event *e)
 }
 
 void
-MatrixScene::setSelection(EventSelection *s,
-                          bool preview)
+MatrixScene::setSelection(EventSelection *s, bool preview)
 {
     if (!m_selection && !s) return;
     if (m_selection && s && (m_selection == s || *m_selection == *s)) return;
@@ -599,13 +598,15 @@ MatrixScene::setSelection(EventSelection *s,
 
     if (oldSelection) {
         setSelectionElementStatus(oldSelection, false);
-        delete oldSelection;
     }
 
     if (m_selection) {
-        setSelectionElementStatus(m_selection, true, preview);
+        setSelectionElementStatus(m_selection, true);
         emit selectionChanged(s);
     }
+
+    if (preview) previewSelection(m_selection, oldSelection);
+    delete oldSelection;
 }
 
 void
@@ -648,9 +649,7 @@ MatrixScene::selectAll()
 }
 
 void
-MatrixScene::setSelectionElementStatus(EventSelection *s,
-                                       bool set,
-                                       bool preview)
+MatrixScene::setSelectionElementStatus(EventSelection *s, bool set)
 {
     if (!s) return;
 
@@ -676,17 +675,29 @@ MatrixScene::setSelectionElementStatus(EventSelection *s,
         if (vsi == vs->getViewElementList()->end()) continue;
 
         MatrixElement *el = static_cast<MatrixElement *>(*vsi);
-
         el->setSelected(set);
+    }
+}
 
-        if (set && preview) {
-            long pitch;
-            if (e->get<Int>(PITCH, pitch)) {
-                long velocity = -1;
-                (void)(e->get<Int>(VELOCITY, velocity));
-                if (!(e->has(TIED_BACKWARD) && e->get<Bool>(TIED_BACKWARD))) {
-                    playNote(s->getSegment(), pitch, velocity);
-                }
+void
+MatrixScene::previewSelection(EventSelection *s,
+                              EventSelection *oldSelection)
+{
+    if (!s) return;
+
+    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+         i != s->getSegmentEvents().end(); ++i) {
+
+        Event *e = *i;
+        if (oldSelection && oldSelection->contains(e)) continue;
+
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(s->getSegment(), pitch, velocity);
             }
         }
     }
@@ -707,7 +718,7 @@ MatrixScene::updateCurrentSegment()
     }
 
     // changing the current segment may have overridden selection border colours
-    setSelectionElementStatus(m_selection, true, false);
+    setSelectionElementStatus(m_selection, true);
 }
 
 static bool

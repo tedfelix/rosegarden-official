@@ -319,8 +319,10 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     
     if (nme.staff) {
 
-        for (int i = 0; i < m_staffs.size(); ++i) {
-            if (nme.staff == m_staffs[i]) { m_currentStaff = i; break; }
+        if (nme.buttons != Qt::NoButton) {
+            for (int i = 0; i < m_staffs.size(); ++i) {
+                if (nme.staff == m_staffs[i]) { m_currentStaff = i; break; }
+            }
         }
 
         Event *clefEvent = 0, *keyEvent = 0;
@@ -1183,7 +1185,7 @@ NotationScene::setSelection(EventSelection *s,
     }
     
     if (m_selection) {
-        newStaff = setSelectionElementStatus(m_selection, true, preview);
+        newStaff = setSelectionElementStatus(m_selection, true);
     }
 
     if (newStaff) {
@@ -1218,6 +1220,8 @@ NotationScene::setSelection(EventSelection *s,
                                  m_selection->getEndTime());
     }        
 
+    if (preview) previewSelection(m_selection, oldSelection);
+
     delete oldSelection;
 
     emit selectionChanged(m_selection);
@@ -1247,9 +1251,7 @@ NotationScene::setSingleSelectedEvent(Segment *seg,
 }
 
 NotationStaff *
-NotationScene::setSelectionElementStatus(EventSelection *s, 
-                                         bool set,
-                                         bool preview)
+NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 {
     if (!s) return 0;
 
@@ -1266,24 +1268,10 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
 
     if (!staff) return 0;
 
-    timeT from = 0;
-    timeT to = 0;
-    bool first = true;
-
     for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
          i != s->getSegmentEvents().end(); ++i) {
 
         Event *e = *i;
-
-        timeT t = e->getNotationAbsoluteTime();
-        timeT d = e->getNotationDuration();
-        if (first || t < from) {
-            from = t;
-        }
-        if (first || t + d > to) {
-            to = t + d;
-        }
-        first = false;
         
         ViewElementList::iterator staffi = staff->findEvent(e);
         if (staffi == staff->getViewElementList()->end()) continue;
@@ -1291,22 +1279,33 @@ NotationScene::setSelectionElementStatus(EventSelection *s,
         NotationElement *el = static_cast<NotationElement *>(*staffi);
 
         el->setSelected(set);
+    }
 
-        if (set && preview) {
-            long pitch;
-            if (e->get<Int>(BaseProperties::PITCH, pitch)) {
-                long velocity = -1;
-                (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
-                if (!(e->has(BaseProperties::TIED_BACKWARD) &&
-                      e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
-                    playNote(s->getSegment(), pitch, velocity);
-                }
+    return staff;
+}
+
+void
+NotationScene::previewSelection(EventSelection *s,
+                                EventSelection *oldSelection)
+{
+    if (!s) return;
+
+    for (EventSelection::eventcontainer::iterator i = s->getSegmentEvents().begin();
+         i != s->getSegmentEvents().end(); ++i) {
+
+        Event *e = *i;
+        if (oldSelection && oldSelection->contains(e)) continue;
+
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(s->getSegment(), pitch, velocity);
             }
         }
     }
-
-    NOTATION_DEBUG << "NotationScene::setSelectionElementStatus: from = " << from << ", to = " << to << endl;
-    return staff;
 }
 
 void

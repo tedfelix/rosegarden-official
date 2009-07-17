@@ -120,11 +120,6 @@ public:
     virtual void setMappedInstrument(int type, unsigned char channel,
                                      unsigned int id);
 
-    // The sequencer will process the MappedEventList as soon as it
-    // gets the chance.
-    //
-    virtual void processSequencerSlice(MappedEventList mC);
-
     virtual void processMappedEvent(MappedEvent mE);
 
     virtual unsigned int getDevices();
@@ -393,7 +388,13 @@ protected:
     MappedSegmentsMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
-    MappedEventList m_asyncQueue;
+    // m_asyncOutQueue is not a MappedEventList: order of receipt
+    // matters in ordering, timestamp doesn't
+    std::deque<MappedEvent *> m_asyncOutQueue;
+
+    // m_asyncInQueue is a MappedEventList because its events are
+    // properly timestamped and should be ordered thus
+    MappedEventList m_asyncInQueue;
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;

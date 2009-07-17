@@ -220,7 +220,8 @@ private:
     void layoutAll();
     void layout(NotationStaff *singleStaff, timeT start, timeT end);
     
-    NotationStaff *setSelectionElementStatus(EventSelection *, bool, bool = false);
+    NotationStaff *setSelectionElementStatus(EventSelection *, bool set);
+    void previewSelection(EventSelection *, EventSelection *oldSelection);
 };
 
 }

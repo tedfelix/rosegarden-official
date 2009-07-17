@@ -88,11 +88,6 @@ public:
                                      unsigned char channel,
                                      unsigned int id) = 0;
 
-    // The GUI can use this method to process an immediate selection
-    // of MappedEvents (Program Changes, SysExs, async Events etc).
-    //
-    virtual void processSequencerSlice(MappedEventList mC) = 0;
-
     // The proper implementation
     //
     virtual void processMappedEvent(MappedEvent mE) = 0;

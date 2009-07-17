@@ -524,29 +524,13 @@ RosegardenSequencer::setMappedInstrument(int type, unsigned char channel,
 
 }
 
-// Process a MappedEventList sent from Sequencer with
-// immediate effect
-//
-void
-RosegardenSequencer::processSequencerSlice(MappedEventList mC)
-{
-    LOCKED;
-
-    // Use the "now" API
-    //
-    m_driver->processEventsOut(mC);
-}
-
 void
 RosegardenSequencer::processMappedEvent(MappedEvent mE)
 {
-    LOCKED;
-
-    MappedEventList mC;
-    mC.insert(new MappedEvent(mE));
-    SEQUENCER_DEBUG << "processMappedEvent(ev) - sending out single event at time " << mE.getEventTime() << endl;
-
-    m_driver->processEventsOut(mC);
+    QMutexLocker locker(&m_asyncQueueMutex);
+    m_asyncOutQueue.push_back(new MappedEvent(mE));
+    SEQUENCER_DEBUG << "processMappedEvent: Have " << m_asyncOutQueue.size()
+                    << " events in async out queue" << endl;
 }
 
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
@@ -1152,8 +1136,8 @@ MappedEventList
 RosegardenSequencer::pullAsynchronousMidiQueue()
 {
     QMutexLocker locker(&m_asyncQueueMutex);
-    MappedEventList mq = m_asyncQueue;
-    m_asyncQueue = MappedEventList();
+    MappedEventList mq = m_asyncInQueue;
+    m_asyncInQueue = MappedEventList();
     return mq;
 }
 
@@ -1419,25 +1403,38 @@ RosegardenSequencer::processRecordedAudio()
 void
 RosegardenSequencer::processAsynchronousEvents()
 {
+    // outgoing ad-hoc async events
+    std::deque<MappedEvent *> q;
+    m_asyncQueueMutex.lock();
+    if (!m_asyncOutQueue.empty()) {
+        q = m_asyncOutQueue;
+        m_asyncOutQueue.clear();
+        SEQUENCER_DEBUG << "processAsynchronousEvents: Have " << q.size()
+                        << " events in async out queue" << endl;
+    }
+    m_asyncQueueMutex.unlock();
     MappedEventList mC;
+    while (!q.empty()) {
+        mC.insert(q.front());
+        m_driver->processEventsOut(mC);
+        q.pop_front();
+        mC.clear();
+    }
+
+    // incoming ad-hoc async events
     m_driver->getMappedEventList(mC);
-    
-    if (mC.empty()) {
-        m_driver->processPending();
-        return;
-    }
-    
-    QMutexLocker locker(&m_asyncQueueMutex);
-    
-    m_asyncQueue.merge(mC);
-
-    if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
-        applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
-        routeEvents(&mC, true);
+    if (!mC.empty()) {
+        m_asyncQueueMutex.lock();
+        m_asyncInQueue.merge(mC);
+        m_asyncQueueMutex.unlock();
+        if (ControlBlock::getInstance()->isMidiRoutingEnabled()) {
+            applyFiltering(&mC, ControlBlock::getInstance()->getThruFilter(), true);
+            routeEvents(&mC, true);
+        }
     }
 
-    // Process any pending events (Note Offs or Audio) as part of
-    // same procedure.
+    // Process any pending events (Note Offs or Audio) as part of same
+    // procedure.
     //
     m_driver->processPending();
 }

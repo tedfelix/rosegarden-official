@@ -151,7 +151,8 @@ private:
     void recreateLines();
     void recreatePitchHighlights();
     void updateCurrentSegment();
-    void setSelectionElementStatus(EventSelection *, bool, bool = false);
+    void setSelectionElementStatus(EventSelection *, bool set);
+    void previewSelection(EventSelection *, EventSelection *oldSelection);
 };
 
 }

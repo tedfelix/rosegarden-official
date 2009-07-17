@@ -136,6 +136,7 @@ Panned::slotEnsurePositionPointerInView(bool page)
     // scroll horizontally only
 
     double x = m_pointerTop.x();
+    double y = m_pointerTop.y();
 
     //!!! n.b. should probably behave differently if the pointer is
     //!!! not full height
@@ -182,6 +183,12 @@ Panned::slotEnsurePositionPointerInView(bool page)
 
     if (value < hMin) value = hMin;
     else if (value > hMax) value = hMax;
+
+    // before h scroll
+    if (y != 0) {
+        ensureVisible(QRectF(x, y, 1, m_pointerHeight));
+    }
+
     horizontalScrollBar()->setValue(value);
 }
 
