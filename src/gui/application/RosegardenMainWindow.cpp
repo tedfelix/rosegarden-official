@@ -1931,11 +1931,16 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     int right = descriptiveExtension.indexOf(QRegExp("[ ]"),left);
     QString extension = descriptiveExtension.mid(left+1,right-left-1);
 
-    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension = " << extension << endl;
+    const bool isTemplate = (extension == ".rgt");
+
+    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension  = " << extension << endl
+             << "                                                isTemplate = " 
+             << (isTemplate ? "true" : "false" ) << endl;
 
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value("save_file", QDir::homePath()).toString();
+    QString directory = settings.value((isTemplate? "save_file" : "save_template"),
+                                       QDir::homePath()).toString();
 
     // Confirm the overwrite of the file later.
     //
@@ -1983,7 +1988,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     QDir d = QFileInfo(u->path()).dir();
     directory = d.canonicalPath();
-    settings.setValue("save_file", directory);
+    settings.setValue((isTemplate ? "save_file" : "save_template"), directory);
     settings.endGroup();
 
     return name;
