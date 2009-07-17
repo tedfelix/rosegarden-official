@@ -1795,7 +1795,12 @@ void RosegardenMainWindow::slotFileOpen()
             ("ROSEGARDEN", QString("file:%1,%2").arg(examplesDir).arg(recentString));
     }
 
-    QString fname = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath(),
+    settings.endGroup();
+
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("open_file", QDir::homePath()).toString();
+
+    QString fname = QFileDialog::getOpenFileName(this, "Open File", directory,
                     tr("All supported files") + " (*.rg *.RG *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
@@ -1806,6 +1811,11 @@ void RosegardenMainWindow::slotFileOpen()
     if (url.isEmpty()) {
         return ;
     }
+    
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("open_file", directory);
+    settings.endGroup();
 
     if (m_doc && !m_doc->saveIfModified())
         return ;
@@ -1820,7 +1830,11 @@ void RosegardenMainWindow::slotFileOpen()
 
 void RosegardenMainWindow::slotMerge()
 {
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("merge_file", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -1828,6 +1842,10 @@ void RosegardenMainWindow::slotMerge()
         return ;
     }
 
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("merge_file", directory);
+    settings.endGroup();
 
     QString target;
 
@@ -1915,10 +1933,13 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension = " << extension << endl;
 
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("save_file", QDir::homePath()).toString();
 
     // Confirm the overwrite of the file later.
     //
-    QString name = QFileDialog::getSaveFileName(this, tr("Save File"), QDir::currentPath(), descriptiveExtension, 0, QFileDialog::DontConfirmOverwrite); 
+    QString name = QFileDialog::getSaveFileName(this, tr("Save File"), directory, descriptiveExtension, 0, QFileDialog::DontConfirmOverwrite); 
     
     RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : QFileDialog::getSaveFileName returned "
              << name << endl;
@@ -1959,6 +1980,11 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
         if (overwrite != QMessageBox::Yes)
             return "";
     }
+
+    QDir d = QFileInfo(u->path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("save_file", directory);
+    settings.endGroup();
 
     return name;
 }
@@ -3342,13 +3368,22 @@ void RosegardenMainWindow::slotImportProject()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_project", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_project", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3397,13 +3432,22 @@ void RosegardenMainWindow::slotImportMIDI()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open MIDI File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_midi", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_midi", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3423,13 +3467,22 @@ void RosegardenMainWindow::slotImportMIDI()
 
 void RosegardenMainWindow::slotMergeMIDI()
 {
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Merge MIDI File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("merge_midi", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("merge_midi", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3669,13 +3722,22 @@ void RosegardenMainWindow::slotImportRG21()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_relic", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_relic", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3695,13 +3757,22 @@ void RosegardenMainWindow::slotImportRG21()
 
 void RosegardenMainWindow::slotMergeRG21()
 {
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("merge_relic", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_relic", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3776,12 +3847,21 @@ RosegardenMainWindow::slotImportHydrogen()
     if (m_doc && !m_doc->saveIfModified())
         return ;
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_hydrogen", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_hydrogen", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -3801,12 +3881,21 @@ RosegardenMainWindow::slotImportHydrogen()
 
 void RosegardenMainWindow::slotMergeHydrogen()
 {
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), QDir::currentPath(),
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("merge_hydrogen", QDir::homePath()).toString();
+
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
         return ;
     }
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("merge_hydrogen", directory);
+    settings.endGroup();
 
     //&&& KIO used to show a progress dialog of its own; we need to
     //replicate that
@@ -7433,13 +7522,20 @@ RosegardenMainWindow::slotImportStudio()
 {
     RG_DEBUG << "RosegardenMainWindow::slotImportStudio()\n";
 
-    QString studioDir = ResourceFinder().getResourceDir("library");
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Studio from File"), studioDir,
+    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty())
         return ;
+
+    QDir d = QFileInfo(url.path()).dir();
+    directory = d.canonicalPath();
+    settings.setValue("import_studio", directory);
+    settings.endGroup();
 
     QString target;
     FileSource source(url);
