@@ -209,8 +209,8 @@ uninstall:
 	rmdir -p --ignore-fail-on-non-empty $(INSTMIMEXMLDIR)
 	rmdir -p --ignore-fail-on-non-empty $(INSTICONDIR)
 
-Makefile:	configure configure.ac acinclude.m4
-	@echo "*** WARNING: One or more of configure, configure.ac and/or acinclude.m4"
+Makefile:	Makefile.in configure configure.ac acinclude.m4
+	@echo "*** WARNING: One or more of Makefile.in, configure, configure.ac and/or acinclude.m4"
 	@echo "             has been modified since the Makefile was generated; consider"
 	@echo "             running ./configure again"
 
