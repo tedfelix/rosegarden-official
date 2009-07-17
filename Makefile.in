@@ -159,8 +159,10 @@ install:
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
 	$(MKDIR_P) -m 755 $(INSTDATADIR)/examples
 	$(MKDIR_P) -m 755 $(INSTDATADIR)/library
+	$(MKDIR_P) -m 755 $(INSTDATADIR)/templates
 	$(INSTALL) -m 644 data/examples/*.rg $(INSTDATADIR)/examples/
 	$(INSTALL) -m 644 data/library/*.rgd $(INSTDATADIR)/library/
+	$(INSTALL) -m 644 data/templates/*.rgd $(INSTDATADIR)/templates/
 	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
 	$(INSTALL) -m 755 src/helpers/rosegarden-audiofile-importer $(INSTBINDIR)
 	$(INSTALL) -m 755 src/helpers/rosegarden-lilypondview $(INSTBINDIR)

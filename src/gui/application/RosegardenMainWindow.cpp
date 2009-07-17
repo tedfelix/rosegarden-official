@@ -1459,11 +1459,11 @@ void RosegardenMainWindow::slotSaveOptions()
 void RosegardenMainWindow::setupFileDialogSpeedbar()
 {
     QSettings settings;
-    settings.beginGroup("QFileDialog Speedbar");
+    settings.beginGroup("QFileDialog_Speedbar");
 
     RG_DEBUG << "RosegardenMainWindow::setupFileDialogSpeedbar" << endl;
 
-    bool hasSetExamplesItem = qStrToBool(settings.value("Examples Set", "false")) ;
+    bool hasSetExamplesItem = qStrToBool(settings.value("Examples_Set", "false")) ;
 
     RG_DEBUG << "RosegardenMainWindow::setupFileDialogSpeedbar: examples set " << hasSetExamplesItem << endl;
 
@@ -1479,8 +1479,8 @@ void RosegardenMainWindow::setupFileDialogSpeedbar()
 
         RG_DEBUG << "wrote url " << settings.value(QString("URL_%1").arg(n)).toString() << endl;
 
-        settings.setValue("Examples Set", true);
-        settings.setValue("Number of Entries", n + 1);
+        settings.setValue("Examples_Set", true);
+        settings.setValue("Number_of_Entries", n + 1);
         settings.sync();
     }
 
