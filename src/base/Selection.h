@@ -118,6 +118,23 @@ public:
      */
     timeT getTotalDuration() const;
 
+    /**
+     * Return the earliest notation absolute time of any event in the
+     * selection.
+     */
+    timeT getNotationStartTime() const;
+
+    /**
+     * Return the latest notation absolute time plus duration of any
+     * event in the selection.
+     */
+    timeT getNotationEndTime() const;
+
+    /**
+     * Return the total notation duration spanned by the selection.
+     */
+    timeT getTotalNotationDuration() const;
+
     typedef std::vector<std::pair<Segment::iterator,
                                   Segment::iterator> > RangeList;
     /**

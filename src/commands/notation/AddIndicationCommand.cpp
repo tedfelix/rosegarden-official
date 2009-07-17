@@ -110,10 +110,11 @@ AddIndicationCommand::AddIndicationCommand(std::string indicationType,
                                            EventSelection &selection) :
     BasicCommand(getGlobalName(indicationType),
                  selection.getSegment(),
-                 selection.getStartTime(),
-                 selection.getEndTime()),
+                 std::min(selection.getStartTime(), selection.getNotationStartTime()),
+                 std::max(selection.getEndTime(), selection.getNotationEndTime())),
     m_indicationType(indicationType),
-    m_indicationDuration(selection.getEndTime() - selection.getStartTime()),
+    m_indicationStart(selection.getNotationStartTime()),
+    m_indicationDuration(selection.getTotalNotationDuration()),
     m_lastInsertedEvent(0)
 {
     if (!canExecute()) {
@@ -143,7 +144,8 @@ AddIndicationCommand::canExecute()
 
     for (Segment::iterator i = s.begin(); s.isBeforeEndMarker(i); ++i) {
 
-        if ((*i)->getAbsoluteTime() >= getStartTime() + m_indicationDuration) {
+        if ((*i)->getNotationAbsoluteTime() >=
+            m_indicationStart + m_indicationDuration) {
             return true;
         }
 
@@ -152,8 +154,8 @@ AddIndicationCommand::canExecute()
             try {
                 Indication indication(**i);
 
-                if ((*i)->getAbsoluteTime() + indication.getIndicationDuration() <=
-                        getStartTime())
+                if ((*i)->getNotationAbsoluteTime() +
+                    indication.getIndicationDuration() <= m_indicationStart)
                     continue;
 
                 std::string type = indication.getIndicationType();
@@ -161,8 +163,8 @@ AddIndicationCommand::canExecute()
                 if (type == m_indicationType) {
                     // for all indications (including slur), we reject an
                     // exact overlap
-                    if ((*i)->getAbsoluteTime() == getStartTime() &&
-                            indication.getIndicationDuration() == m_indicationDuration) {
+                    if ((*i)->getAbsoluteTime() == m_indicationStart &&
+                        indication.getIndicationDuration() == m_indicationDuration) {
                         return false;
                     }
                 } else if (m_indicationType == Indication::Slur) {
@@ -174,18 +176,16 @@ AddIndicationCommand::canExecute()
                 // an indication of the same "sort"
 
                 if (m_indicationType == Indication::Crescendo ||
-                        m_indicationType == Indication::Decrescendo) {
+                    m_indicationType == Indication::Decrescendo) {
                     if (type == Indication::Crescendo ||
-                            type == Indication::Decrescendo)
-                        return false;
+                        type == Indication::Decrescendo) return false;
                 }
 
                 if (m_indicationType == Indication::QuindicesimaUp ||
-                        m_indicationType == Indication::OttavaUp ||
-                        m_indicationType == Indication::OttavaDown ||
-                        m_indicationType == Indication::QuindicesimaDown) {
-                    if (indication.isOttavaType())
-                        return false;
+                    m_indicationType == Indication::OttavaUp ||
+                    m_indicationType == Indication::OttavaDown ||
+                    m_indicationType == Indication::QuindicesimaDown) {
+                    if (indication.isOttavaType()) return false;
                 }
             } catch (...) {}
         }
@@ -200,14 +200,14 @@ AddIndicationCommand::modifySegment()
     SegmentNotationHelper helper(getSegment());
 
     Indication indication(m_indicationType, m_indicationDuration);
-    Event *e = indication.getAsEvent(getStartTime());
+    Event *e = indication.getAsEvent(m_indicationStart);
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 
     if (indication.isOttavaType()) {
         for (Segment::iterator i = getSegment().findTime(getStartTime());
-                i != getSegment().findTime(getStartTime() + m_indicationDuration);
-                ++i) {
+             i != getSegment().findTime(getStartTime() + m_indicationDuration);
+             ++i) {
             if ((*i)->isa(Note::EventType)) {
                 (*i)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
                                     indication.getOttavaShift());

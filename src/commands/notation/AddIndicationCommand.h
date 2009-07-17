@@ -66,6 +66,7 @@ protected:
     virtual void modifySegment();
 
     std::string m_indicationType;
+    timeT m_indicationStart;
     timeT m_indicationDuration;
     Event *m_lastInsertedEvent;
 };
