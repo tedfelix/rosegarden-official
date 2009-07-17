@@ -46,6 +46,7 @@
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
+#include "gui/widgets/WarningGroupBox.h"
 #include "gui/general/IconLoader.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -100,6 +101,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     setWindowTitle(tr("Audio File Manager"));
     this->setAttribute(Qt::WA_DeleteOnClose);
     setIcon(IconLoader().loadPixmap("window-audio-manager"));
+    setMinimumWidth(800);
 
     QWidget *centralWidget = new QWidget;
     setCentralWidget(centralWidget);
@@ -119,8 +121,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     
     boxLayout->addWidget(m_fileList);
 
-    m_wrongSampleRates = new QLabel(tr("<qt><p>* Some audio files are encoded at a sample rate different from that of the JACK audio server.</p><p>Rosegarden will play them at the correct speed, but they will sound terrible.</p><p>Please consider resampling such files externally, or adjusting the sample rate of the JACK server.</p></qt>"));
-    m_wrongSampleRates->setWordWrap(true);
+    m_wrongSampleRates = new WarningGroupBox;
+    QVBoxLayout *warningBox = new QVBoxLayout;
+    m_wrongSampleRates->setLayout(warningBox);
+    QLabel *warning = new QLabel(tr("<qt><p><img src=\":pixmaps/tooltip/warning.png\"></img> <b>Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.</b></p><p>Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.</p></qt>"));
+    warning->setWordWrap(true);
+    warningBox->addWidget(warning);
 
     boxLayout->addWidget(m_wrongSampleRates);
     m_wrongSampleRates->hide();
@@ -478,14 +484,17 @@ AudioManagerDialog::getCurrentSelection()
     // try and get the selected item
     QList<QTreeWidgetItem *> til= m_fileList->selectedItems();
     if (til.isEmpty()){
+        std::cerr << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail." << std::endl;
         //QMessageBox::warning
         //        (this, tr("Error: Selection is empty!"), 
         //        tr("Please select an audio item in the list!"), QMessageBox::Yes);
         return 0;
     }
     AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
-    if (item == 0)
+    if (item == 0) {
+        std::cerr << "AudioManagerDialog::getCurrentSelection() - item == 0 so we're returning 0 and this game is over. Epic fail." << std::endl;
         return 0;
+    }
 
     std::vector<AudioFile*>::const_iterator it;
 
@@ -498,6 +507,7 @@ AudioManagerDialog::getCurrentSelection()
             return (*it);
     }
 
+    std::cerr << "AudioManagerDialog::getCurrentSelection() - we tried so hard, but in the end it was all just bricks in the wall." << std::endl;
     return 0;
 }
 

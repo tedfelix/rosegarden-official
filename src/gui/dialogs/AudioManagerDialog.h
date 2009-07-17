@@ -20,10 +20,11 @@
 #define _RG_AUDIOMANAGERDIALOG_H_
 
 #include "sound/AudioFile.h"
-#include <QMainWindow>
 #include "misc/ConfigGroups.h"
 #include "gui/general/ActionFileClient.h"
+#include "gui/widgets/WarningGroupBox.h"
 
+#include <QMainWindow>
 
 class QWidget;
 class QTimer;
@@ -178,7 +179,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QTreeWidget        *m_fileList;
-    QLabel           *m_wrongSampleRates;
+    WarningGroupBox    *m_wrongSampleRates;
     RosegardenDocument *m_doc;
 
     QShortcut           *m_shortcuts;
