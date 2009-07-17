@@ -592,14 +592,6 @@ void RosegardenMainWindow::setupActions()
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
 
-    //&&& Connect CommandHistory to the edit menu and toolbar
-    // (looking up the menu & toolbar by name)
-    //!!! NO -- ActionFileParser should do this for us if the actions
-    // are declared in the .rc file.  It isn't working properly atm,
-    // but it needs fixing there, not here
-//    new KToolBarPopupAction(tr("Und&o"), "undo", KStdAccel::shortcut(KStdAccel::Undo), actionCollection(), KStdAction::stdName(KStdAction::Undo));
-//    new KToolBarPopupAction(tr("Re&do"), "redo", KStdAccel::shortcut(KStdAccel::Redo), actionCollection(), KStdAction::stdName(KStdAction::Redo));
-
     createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_tracks_toolbar", SLOT(slotToggleTracksToolBar()));
@@ -1929,16 +1921,26 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
     int right = descriptiveExtension.indexOf(QRegExp("[ ]"),left);
     QString extension = descriptiveExtension.mid(left+1,right-left-1);
 
-    const bool isTemplate = (extension == ".rgt");
+    // keep track of last place used to save, by type of file (this behavior is
+    // quite new and different, and should probably be considered experimental,
+    // although the more I think about the unexpected consequences of this idea
+    // that I didn't think through at the outset, the more I think the idea is
+    // just better than I realized, and this was a great idea)
+    QString path_key = "save_file";
+
+    if (extension == ".rgt")      path_key = "save_template";
+    else if (extension == ".mid") path_key = "export_midi";
+    else if (extension == ".xml") path_key = "export_music_xml";
+    else if (extension == ".ly")  path_key = "export_lilypond";
+    else if (extension == ".csd") path_key = "export_csound";
+    else if (extension == ".mup") path_key = "export_mup";
 
     RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : extension  = " << extension << endl
-             << "                                                isTemplate = " 
-             << (isTemplate ? "true" : "false" ) << endl;
+             << "                                                path key   = " << path_key << endl;
 
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value((isTemplate? "save_file" : "save_template"),
-                                       QDir::homePath()).toString();
+    QString directory = settings.value(path_key, QDir::homePath()).toString();
 
     // Confirm the overwrite of the file later.
     //
@@ -1986,7 +1988,7 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     QDir d = QFileInfo(u->path()).dir();
     directory = d.canonicalPath();
-    settings.setValue((isTemplate ? "save_file" : "save_template"), directory);
+    settings.setValue(path_key, directory);
     settings.endGroup();
 
     return name;
