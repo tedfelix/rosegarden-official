@@ -63,9 +63,10 @@ public:
 
     bool owns(const QObject *object);
 
+    void setFont(QFont);
+
     PluginPushButton        *m_synthButton;
-    std::vector
-        <PluginPushButton*>  m_plugins;
+    std::vector<PluginPushButton*>  m_plugins;
 
     AudioVUMeter            *m_vuMeter;
 

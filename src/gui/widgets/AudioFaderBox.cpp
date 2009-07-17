@@ -303,5 +303,19 @@ AudioFaderBox::slotChannelStateChanged()
     }
 }
 
+void
+AudioFaderBox::setFont(QFont f)
+{
+    m_synthButton->setFont(f);
+    for (int i = 0; i < m_plugins.size(); ++i) m_plugins[i]->setFont(f);
+    m_vuMeter->setFont(f);
+    m_inputLabel->setFont(f);
+    m_outputLabel->setFont(f);
+    m_audioInput->getWidget()->setFont(f);
+    m_audioOutput->getWidget()->setFont(f);
+    m_synthGUIButton->setFont(f);
+}
+
+
 }
 #include "AudioFaderBox.moc"

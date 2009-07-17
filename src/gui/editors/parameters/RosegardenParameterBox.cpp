@@ -19,6 +19,7 @@
 #include "RosegardenParameterBox.h"
 
 #include "RosegardenParameterArea.h"
+#include "misc/Debug.h"
 #include <QTabWidget>
 #include <QFont>
 #include <QFrame>
@@ -47,11 +48,11 @@ RosegardenParameterBox::RosegardenParameterBox(const QString &shortLabel,
 void RosegardenParameterBox::init()
 {
     QFont plainFont;
-    plainFont.setPointSize(plainFont.pointSize() * 95 / 100);
-    if (plainFont.pixelSize() > 14)
-        plainFont.setPixelSize(14);
+    plainFont.setPointSize(plainFont.pointSize() * 90 / 100);
     plainFont.setBold(false);
     m_font = plainFont;
+
+    RG_DEBUG << "RosegardenParameterBox::init: " << this << ": m_font size is " << m_font.pixelSize() << "px (" << m_font.pointSize() << "pt)" << endl;
 
     QFont boldFont;
     boldFont.setPointSize(int(boldFont.pointSize() * 9.5 / 10.0 + 0.5));

@@ -54,6 +54,7 @@
 #include "sound/PluginIdentifier.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
+#include "misc/Debug.h"
 
 #include <QColorDialog>
 #include <QLayout>
@@ -102,7 +103,6 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     int width20 = metrics.width("12345678901234567890");
     int width22 = metrics.width("1234567890123456789012");
     int width25 = metrics.width("1234567890123456789012345");
-    setFont(m_font);
     title_font.setBold(true);
 
     // Set up default expansions for the collapsing elements
@@ -133,6 +133,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     //@@@m_trackLabel->setObjectName("SPECIAL_LABEL");
     m_trackLabel->setAlignment(Qt::AlignCenter);
     //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
+    m_trackLabel->setFont(m_font);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 
     // playback group
@@ -154,18 +155,22 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     //
     //    row++;
     QLabel *devLabel = new QLabel(tr("Device"), m_playbackGroup);
+    devLabel->setFont(m_font);
     groupLayout->addWidget(devLabel, row, 0);
     m_playDevice = new QComboBox(m_playbackGroup);
     m_playDevice->setToolTip(tr("<qt><p>Choose the device this track will use for playback.</p><p>Click <img src=\":pixmaps/toolbar/manage-midi-devices.xpm\"> to connect this device to a useful output if you do not hear sound</p></qt>"));
     m_playDevice->setMinimumWidth(width25);
+    m_playDevice->setFont(m_font);
     groupLayout->addWidget(m_playDevice, row, 1, row- row+1, 2);
 
     // playback instrument
     //
     row++;
     QLabel *insLabel = new QLabel(tr("Instrument"), m_playbackGroup);
+    insLabel->setFont(m_font);
     groupLayout->addWidget(insLabel, row, 0, row- row+1, 1- 0+1);
     m_instrument = new QComboBox(m_playbackGroup);
+    m_instrument->setFont(m_font);
     m_instrument->setToolTip(tr("<qt><p>Choose the instrument this track will use for playback. (Configure the instrument in <b>Instrument Parameters</b>).</p></qt>"));
     m_instrument->setMaxVisibleItems( 16 );
     m_instrument->setMinimumWidth(width22);
@@ -183,6 +188,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     cframe->setWidget(m_recordGroup);
     m_recordGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_recordGroup);
+    groupLayout->setMargin(0);
     groupLayout->setSpacing(2);
 
     // recording group title
@@ -190,8 +196,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     row = 0;
 
     // recording device
-    groupLayout->addWidget(new QLabel(tr("Device"), m_recordGroup), row, 0);
+    QLabel *label = new QLabel(tr("Device"), m_recordGroup);
+    label->setFont(m_font);
+    groupLayout->addWidget(label, row, 0);
     m_recDevice = new QComboBox(m_recordGroup);
+    m_recDevice->setFont(m_font);
     m_recDevice->setToolTip(tr("<qt><p>This track will only record Audio/ MIDI from the selected device, filtering anything else out</p></qt>"));
     m_recDevice->setMinimumWidth(width25);
     groupLayout->addWidget(m_recDevice, row, 1, row- row+1, 2);
@@ -199,8 +208,11 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // recording channel
     //
     row++;
-    groupLayout->addWidget(new QLabel(tr("Channel"), m_recordGroup), row, 0, 1, 2);
+    label = new QLabel(tr("Channel"), m_recordGroup);
+    label->setFont(font);
+    groupLayout->addWidget(label, row, 0, 1, 2);
     m_recChannel = new QComboBox(m_recordGroup);
+    m_recChannel->setFont(m_font);
     m_recChannel->setToolTip(tr("<qt><p>This track will only record Audio/MIDI from the selected channel, filtering anything else out</p></qt>"));
     m_recChannel->setMaxVisibleItems( 17 );
     m_recChannel->setMinimumWidth(width11);
@@ -219,6 +231,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_staffGroup->setContentsMargins(2, 2, 2, 2);
     groupLayout = new QGridLayout(m_staffGroup);
     groupLayout->setSpacing(2);
+    groupLayout->setMargin(0);
     groupLayout->setColumnStretch(1, 1);
 
     row = 0;
@@ -231,8 +244,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // LilyPond documentation has no idea how to do, so we settle for this,
     // which is not as nice, but actually a lot easier to implement.
     m_staffGrpLbl = new QLabel(tr("Notation size:"), m_staffGroup);
+    m_staffGrpLbl->setFont(m_font);
     groupLayout->addWidget(m_staffGrpLbl, row, 0, Qt::AlignLeft);
     m_staffSizeCombo = new QComboBox(m_staffGroup);
+    m_staffSizeCombo->setFont(m_font);
     m_staffSizeCombo->setToolTip(tr("<qt><p>Choose normal, \\small or \\tiny font size for notation elements on this (normal-sized) staff when exporting to LilyPond.</p><p>This is as close as we get to enabling you to print parts in cue size</p></qt>"));
     m_staffSizeCombo->setMinimumWidth(width11);
     m_staffSizeCombo->addItem(tr("Normal"), StaffTypes::Normal);
@@ -245,8 +260,10 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // rendering would be nice in the future!) //!!! 
     row++;
     m_grandStaffLbl = new QLabel(tr("Bracket type:"), m_staffGroup);
+    m_grandStaffLbl->setFont(m_font);
     groupLayout->addWidget(m_grandStaffLbl, row, 0, Qt::AlignLeft);
     m_staffBracketCombo = new QComboBox(m_staffGroup);
+    m_staffBracketCombo->setFont(m_font);
     m_staffBracketCombo->setToolTip(tr("<qt>Bracket staffs in LilyPond<br>(fragile, use with caution)</p><qt>"));
     m_staffBracketCombo->setMinimumWidth(width11);
     m_staffBracketCombo->addItem(tr("-----"), Brackets::None);
@@ -272,30 +289,36 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     m_defaultsGroup->setContentsMargins(3, 3, 3, 3);
     groupLayout = new QGridLayout(m_defaultsGroup);
     groupLayout->setSpacing(2);
+    groupLayout->setMargin(0);
     groupLayout->setColumnStretch(1, 1);
 
     row = 0;
 
     // preset picker
     m_psetLbl = new QLabel(tr("Preset"), m_defaultsGroup);
+    m_psetLbl->setFont(m_font);
     groupLayout->addWidget(m_psetLbl, row, 0, Qt::AlignLeft);
 
     m_presetLbl = new QLabel(tr("<none>"), m_defaultsGroup);
+    m_presetLbl->setFont(m_font);
     m_presetLbl->setObjectName("SPECIAL_LABEL");
     m_presetLbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-    m_presetLbl->setFixedWidth(width20);
-    groupLayout->addWidget(m_presetLbl, row, 1, row- row+1, 3);
+    m_presetLbl->setMinimumWidth(width20);
+    groupLayout->addWidget(m_presetLbl, row, 1, 1, 3);
 
     m_presetButton = new QPushButton(tr("Load"), m_defaultsGroup);
+    m_presetButton->setFont(m_font);
     m_presetButton->setToolTip(tr("<qt><p>Load a segment parameters preset from our comprehensive database of real-world instruments.</p><p>When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use <b>Segments -> Convert notation for</b> in the notation editor.</p></qt>"));
-    groupLayout->addWidget(m_presetButton, row, 4, row- row+1, 5-4+1);
+    groupLayout->addWidget(m_presetButton, row, 4, 1, 2);
 
     // default clef
     //
     row++;
     m_clefLbl = new QLabel(tr("Clef"), m_defaultsGroup);
+    m_clefLbl->setFont(m_font);
     groupLayout->addWidget(m_clefLbl, row, 0, Qt::AlignLeft);
     m_defClef = new QComboBox(m_defaultsGroup);
+    m_defClef->setFont(m_font);
     m_defClef->setToolTip(tr("<qt><p>New segments will be created with this clef inserted at the beginning</p></qt>"));
     m_defClef->setMinimumWidth(width11);
     m_defClef->addItem(tr("treble"), TrebleClef);
@@ -317,13 +340,15 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     /*  clef types in the datbase that are not yet supported must be ignored for
      *  now:
         m_defClef->addItem(tr("two bar"), TwoBarClef); */
-    groupLayout->addWidget(m_defClef, row, 1, row- row+1, 2);
+    groupLayout->addWidget(m_defClef, row, 1, 1, 2);
 
     // default transpose
     //
     m_transpLbl = new QLabel(tr("Transpose"), m_defaultsGroup);
-    groupLayout->addWidget(m_transpLbl, row, 3, row- row+1, 4- 3+1, Qt::AlignRight);
+    m_transpLbl->setFont(m_font);
+    groupLayout->addWidget(m_transpLbl, row, 3, 1, 2, Qt::AlignRight);
     m_defTranspose = new QComboBox(m_defaultsGroup);
+    m_defTranspose->setFont(m_font);
     m_defTranspose->setToolTip(tr("<qt><p>New segments will be created with this transpose property set<p></qt>"));
     connect(m_defTranspose, SIGNAL(activated(int)),
             SLOT(slotTransposeIndexChanged(int)));
@@ -335,26 +360,36 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
             m_defTranspose->setCurrentIndex(m_defTranspose->count() - 1);
     }
 
-    groupLayout->addWidget(m_defTranspose, row, 5, row- row+1, 1);
+    groupLayout->addWidget(m_defTranspose, row, 5, 1, 1);
 
     // highest/lowest playable note
     //
     row++;
     m_rangeLbl = new QLabel(tr("Pitch"), m_defaultsGroup);
-    groupLayout->addWidget(m_rangeLbl, row, 0, row- row+1, 0- 1);
+    m_rangeLbl->setFont(m_font);
+    groupLayout->addWidget(m_rangeLbl, row, 0, Qt::AlignLeft);
 
-    groupLayout->addWidget(new QLabel(tr("Lowest"), m_defaultsGroup), row, 1, Qt::AlignRight);
+    label = new QLabel(tr("Lowest"), m_defaultsGroup);
+    label->setFont(m_font);
+    groupLayout->addWidget(label, row, 1, Qt::AlignRight);
 
     m_lowButton = new QPushButton(tr("---"), m_defaultsGroup);
-    m_lowButton->setMinimumSize(75,0); //### this should be calculated with font metrics or something
+    m_lowButton->setFont(m_font);
     m_lowButton->setToolTip(tr("<qt><p>Choose the lowest suggested playable note, using a staff</p></qt>"));
-    groupLayout->addWidget(m_lowButton, row, 2, row- row+1, 1);
+    groupLayout->addWidget(m_lowButton, row, 2, 1, 1);
+    groupLayout->setColumnStretch(2, 2);
 
-    groupLayout->addWidget(new QLabel(tr("Highest"), m_defaultsGroup), row, 3, Qt::AlignRight);
+    label = new QLabel(tr("Highest"), m_defaultsGroup);
+    label->setFont(m_font);
+    groupLayout->addWidget(label, row, 3, Qt::AlignRight);
 
     m_highButton = new QPushButton(tr("---"), m_defaultsGroup);
+    m_highButton->setFont(m_font);
     m_highButton->setToolTip(tr("<qt><p>Choose the highest suggested playable note, using a staff</p></qt>"));
-    groupLayout->addWidget(m_highButton, row, 4, row- row+1, 5- 4+1);
+    groupLayout->addWidget(m_highButton, row, 4, 1, 2);
+
+//    m_lowButton->setMaximumWidth(width11);
+//    m_highButton->setMaximumWidth(width11);
 
     updateHighLow();
 
@@ -362,12 +397,14 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     //
     row++;
     m_colorLbl = new QLabel(tr("Color"), m_defaultsGroup);
+    m_colorLbl->setFont(m_font);
     groupLayout->addWidget(m_colorLbl, row, 0, Qt::AlignLeft);
     m_defColor = new QComboBox(m_defaultsGroup);
+    m_defColor->setFont(m_font);
     m_defColor->setToolTip(tr("<qt><p>New segments will be created using this color</p></qt>"));
     m_defColor->setEditable(false);
     m_defColor->setMaxVisibleItems(20);
-    groupLayout->addWidget(m_defColor, row, 1, row- row+1, 5);
+    groupLayout->addWidget(m_defColor, row, 1, 1, 5);
 
     // populate combo from doc colors
     slotDocColoursChanged();
@@ -377,8 +414,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Configure the empty final row to accomodate any extra vertical space.
     //
-//    mainLayout->setColStretch(mainLayout->numCols() - 1, 1);
-    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
+//    mainLayout->setRowStretch(mainLayout->rowCount() - 1, 1);
 
     // Connections
     connect( m_playDevice, SIGNAL(activated(int)),

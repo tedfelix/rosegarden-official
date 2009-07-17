@@ -214,7 +214,7 @@ InstrumentParameterBox::useInstrument(Instrument *instrument)
         instrument->getType() == Instrument::SoftSynth) {
 
         m_audioInstrumentParameters->setupForInstrument(getSelectedInstrument());
-		m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
+        m_widgetStack->setCurrentWidget(m_audioInstrumentParameters);
 // 		m_widgetStack->raiseWidget(m_audioInstrumentParameters);
 
     } else { // Midi

@@ -61,6 +61,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
 {
     setObjectName("MIDI Instrument Parameter Panel");
 
+    QFont f;
+    f.setPointSize(f.pointSize() * 90 / 100);
+    f.setBold(false);
+
+    QFontMetrics metrics(f);
+    int width25 = metrics.width("1234567890123456789012345");
+
+    m_instrumentLabel->setFont(f);
+    m_instrumentLabel->setFixedWidth(width25);
+    m_instrumentLabel->setAlignment(Qt::AlignCenter);
+
     setContentsMargins(2, 2, 2, 2);
     m_mainGrid = new QGridLayout(this);
     m_mainGrid->setMargin(0);
@@ -76,6 +87,16 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_programCheckBox = new QCheckBox(this);
     m_variationCheckBox = new QCheckBox(this);
     m_percussionCheckBox = new QCheckBox(this);
+
+    m_connectionLabel->setFont(f);
+    m_bankValue->setFont(f);
+    m_channelValue->setFont(f);
+    m_programValue->setFont(f);
+    m_variationValue->setFont(f);
+    m_bankCheckBox->setFont(f);
+    m_programCheckBox->setFont(f);
+    m_variationCheckBox->setFont(f);
+    m_percussionCheckBox->setFont(f);
 
     //tooltips for all of the above, let's see what happens
     m_bankValue->setToolTip(tr("<qt>Sets the midi bank.</qt>"));
@@ -97,6 +118,12 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     QLabel *channelLabel = new QLabel(tr("Channel out"), this);
     QLabel *percussionLabel = new QLabel(tr("Percussion"), this);
     
+    m_bankLabel->setFont(f);
+    m_variationLabel->setFont(f);
+    m_programLabel->setFont(f);
+    channelLabel->setFont(f);
+    percussionLabel->setFont(f);
+    
     // Ensure a reasonable amount of space in the program dropdowns even
     // if no instrument initially selected
 
@@ -112,7 +139,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
 
     // we still have to use the QFontMetrics here, or a SqueezedLabel will
     // squeeze itself down to 0.
-    QFontMetrics metrics(m_connectionLabel->font());
     int width30 = metrics.width("123456789012345678901234567890");
     m_connectionLabel->setFixedWidth(width30);
     m_connectionLabel->setAlignment(Qt::AlignCenter);
@@ -120,7 +146,9 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     
     QString programTip = tr("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
+    m_evalMidiPrgChgCheckBox->setFont(f);
     m_evalMidiPrgChgLabel = new QLabel(tr("Receive external"), this);
+    m_evalMidiPrgChgLabel->setFont(f);
     m_evalMidiPrgChgLabel->setToolTip(programTip);
     
     m_evalMidiPrgChgCheckBox->setDisabled(false);
@@ -361,6 +389,8 @@ MIDIInstrumentParameterPanel::setupForInstrument(Instrument *instrument)
 void
 MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 {
+    QFont f(font());
+
     if (!m_rotaryFrame) {
         m_rotaryFrame = new QFrame(this);
         m_mainGrid->addWidget(m_rotaryFrame, 8, 0, 1, 3, Qt::AlignHCenter);
@@ -481,6 +511,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
             QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);
+            label->setFont(f);
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "Adding new widget at " << (count / 2) << "," << (count % 2) << endl;
@@ -558,8 +589,7 @@ MIDIInstrumentParameterPanel::slotSelectChannel(int index)
 void
 MIDIInstrumentParameterPanel::populateBankList()
 {
-    if (m_selectedInstrument == 0)
-        return ;
+    if (m_selectedInstrument == 0) return;
 
     m_bankValue->clear();
     m_banks.clear();

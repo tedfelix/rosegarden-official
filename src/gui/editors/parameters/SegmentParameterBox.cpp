@@ -331,6 +331,9 @@ SegmentParameterBox::initBox()
 
     // populate m_colourValue
     slotDocColoursChanged();
+
+    RG_DEBUG << "SegmentParameterBox::SegmentParameterBox: " << this << ": font() size is " << (this->font()).pixelSize() << "px (" << (this->font()).pointSize() << "pt)" << endl;
+
 }
 
 void

@@ -37,11 +37,6 @@ InstrumentParameterPanel::InstrumentParameterPanel(RosegardenDocument *doc,
         m_selectedInstrument(0),
         m_doc(doc)
 {
-    QFontMetrics metrics(m_instrumentLabel->fontMetrics());
-    int width25 = metrics.width("1234567890123456789012345");
-
-    m_instrumentLabel->setFixedWidth(width25);
-    m_instrumentLabel->setAlignment(Qt::AlignCenter);
 }
 
 void
