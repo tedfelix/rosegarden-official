@@ -89,7 +89,7 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
     // Use a fast vector list to record selected items that are currently visible so that they
-    //  can be drawn last
+    //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     std::vector<ControlItem*> selectedvector;
 
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {

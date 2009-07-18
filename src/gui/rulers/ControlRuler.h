@@ -163,6 +163,8 @@ protected:
 //virtual void drawBackground() = 0;
 
     int xMapToWidget(double x) {return (x-m_pannedRect.left())*width()/m_pannedRect.width();};
+    int mapXToWidget(float);
+    int mapYToWidget(float);
     QPolygon mapItemToWidget(QPolygonF*);
     QPointF mapWidgetToItem(QPoint*);
 

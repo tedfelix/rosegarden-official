@@ -65,6 +65,8 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/RulerScale.h"
+#include "base/PropertyName.h"
+#include "base/BaseProperties.h"
 
 namespace Rosegarden
 {
@@ -581,7 +583,7 @@ MatrixWidget::slotSetPlayTracking(bool tracking)
 void
 MatrixWidget::slotToggleVelocityRuler()
 {
-    m_controlsWidget->slotAddRuler();
+    m_controlsWidget->slotTogglePropertyRuler(BaseProperties::VELOCITY);
 }
 
 void

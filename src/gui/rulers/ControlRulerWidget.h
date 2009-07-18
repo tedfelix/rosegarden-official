@@ -20,6 +20,7 @@
 
 #include <QStackedWidget>
 #include "base/Event.h"
+#include "base/ViewElement.h"
 
 namespace Rosegarden
 {
@@ -46,8 +47,10 @@ public:
 
     void setScene(MatrixScene *);
     QString getCurrentToolName() { return m_currentToolName; }
+    void removeRuler(std::list<ControlRuler*>::iterator);
 
 public slots:
+    void slotTogglePropertyRuler(const PropertyName &);
     void slotAddRuler();
     void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);
@@ -66,6 +69,7 @@ protected:
     RulerScale *m_scale;
     QString m_currentToolName;
     QRectF m_pannedRect;
+    ViewElementList m_selectedElements;
 };
 
 }

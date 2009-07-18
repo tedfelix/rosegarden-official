@@ -69,6 +69,7 @@ void PropertyControlItem::setValue(float y)
 
     if (m_propertyname == BaseProperties::VELOCITY) {
         m_element->reconfigure(y*MIDI_CONTROL_MAX_VALUE);
+        m_element->setSelected(true);
         m_colour = DefaultVelocityColour::getInstance()->getColour(y*MIDI_CONTROL_MAX_VALUE);
     }
 

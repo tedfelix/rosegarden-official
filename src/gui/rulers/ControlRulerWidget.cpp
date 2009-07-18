@@ -118,6 +118,30 @@ void ControlRulerWidget::setScene(MatrixScene *scene)
     }
 }
 
+void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyName)
+{
+    PropertyControlRuler *propruler;
+    std::list<ControlRuler*>::iterator it;
+    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
+        propruler = dynamic_cast <PropertyControlRuler*> (*it);
+        if (propruler) {
+            if (propruler->getPropertyName() == propertyName)
+            {
+                removeRuler(it);
+                break;
+            }
+        }
+    }
+    if (it==m_controlRulerList.end()) slotAddPropertyRuler(propertyName);
+}
+
+void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
+{
+    removeWidget(*it);
+    delete (*it);
+    m_controlRulerList.erase(it);
+}
+
 void ControlRulerWidget::slotAddRuler()
 {
     ///TODO Temp code
@@ -145,7 +169,8 @@ void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     MatrixViewSegment *viewSegment = m_scene->getCurrentViewSegment();
     if (!viewSegment) return;
 
-    ControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
+    PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
+    controlruler->updateSelection(&m_selectedElements);
     addWidget(controlruler);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
@@ -174,7 +199,8 @@ void ControlRulerWidget::slotSetPannedRect(QRectF pr)
 
 void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
 {
-    ViewElementList *selectedElements = new ViewElementList();
+//    ViewElementList *selectedElements = new ViewElementList();
+    m_selectedElements.clear();
     ViewSegment *viewSegment = m_scene->getCurrentViewSegment();
 
     for (EventSelection::eventcontainer::iterator it =
@@ -186,7 +212,7 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
             element = static_cast<MatrixElement *>(*vi);
         }
         if (!element) continue;
-        selectedElements->insert(element);
+        m_selectedElements.insert(element);
     }
 
     // Should be dispatched to all PropertyControlRulers
@@ -195,7 +221,7 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
         for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); ++it) {
             PropertyControlRuler *pr = dynamic_cast <PropertyControlRuler *> (*it);
             if (pr) {
-                pr->updateSelection(selectedElements);
+                pr->updateSelection(&m_selectedElements);
             }
         }
     }

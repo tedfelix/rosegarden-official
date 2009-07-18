@@ -186,19 +186,19 @@ void ControlRuler::paintEvent(QPaintEvent *event)
     double xstart = m_rulerScale->getXForTime(m_segment->getStartTime());
     double xend = m_rulerScale->getXForTime(m_segment->getEndTime());
 
-    xstart = xMapToWidget(xstart);
-    xend = xMapToWidget(xend);
+    xstart = mapXToWidget(xstart);
+    xend = mapXToWidget(xend);
 
     RG_DEBUG << "ControlRuler::paintEvent: xstart=" << xstart;
 
     painter.setPen(QColor(127, 127, 127));
-    painter.drawLine(xstart, 0, xend, 0);
-    painter.drawLine(xstart, height() / 2, xend, height() / 2);
-    painter.drawLine(xstart, height() - 1, xend, height() - 1);
+    painter.drawLine(xstart, mapYToWidget(0.0f), xend, mapYToWidget(0.0f));
+    painter.drawLine(xstart, mapYToWidget(0.5f), xend, mapYToWidget(0.5f));
+    painter.drawLine(xstart, mapYToWidget(1.0f), xend, mapYToWidget(1.0f));
 
     painter.setPen(QColor(192, 192, 192));
-    painter.drawLine(xstart, height() / 4, xend, height() / 4);
-    painter.drawLine(xstart, 3*height() / 4, xend, 3*height() / 4);
+    painter.drawLine(xstart, mapYToWidget(0.25f), xend, mapYToWidget(0.25f));
+    painter.drawLine(xstart, mapYToWidget(0.75f), xend, mapYToWidget(0.75f));
 }
 
 void ControlRuler::slotScrollHorizSmallSteps(int step)
@@ -230,6 +230,16 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 ////    canvas()->update();
 //}
 
+int ControlRuler::mapXToWidget(float x)
+{
+    return width()*(x-m_pannedRect.left()) / m_pannedRect.width();
+}
+
+int ControlRuler::mapYToWidget(float y)
+{
+    return (height()-2)*(-y+1.0f)+1;
+}
+
 QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
 {
     double xscale = width() / m_pannedRect.width();
@@ -238,8 +248,8 @@ QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
     QPolygon newpoly;
     QPoint newpoint;
     for (QPolygonF::iterator it = poly->begin(); it != poly->end(); it++) {
-        newpoint.setX(xscale*((*it).x()-m_pannedRect.left()));
-        newpoint.setY(yscale*(-(*it).y()+1.0f));
+        newpoint.setX(mapXToWidget((*it).x()));
+        newpoint.setY(mapYToWidget((*it).y()));
         newpoly.push_back(newpoint);
     }
 
