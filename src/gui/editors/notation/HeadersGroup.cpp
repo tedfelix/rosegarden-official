@@ -18,14 +18,14 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include <limits>
 
 #include "HeadersGroup.h"
 #include "TrackHeader.h"
-#include "NotationView.h"
+#include "NotationWidget.h"
+#include "NotationScene.h"
 #include "NotePixmapFactory.h"
+#include "document/RosegardenDocument.h"
 
 #include <QSize>
 #include <QWidget>
@@ -42,16 +42,19 @@ namespace Rosegarden
 
 
 HeadersGroup::
-HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp) :
-        QWidget(parent),
-        m_notationView(nv),
-        m_composition(comp),
+HeadersGroup(RosegardenDocument *document) :
+        QWidget(0),
+        m_composition(document->getComposition()),
+        m_scene(0),
         m_usedHeight(0),
         m_filler(0),
         m_lastX(INT_MIN),
         m_lastWidth(-1),
-        m_layout( new QVBoxLayout(this) )
+        m_layout(0)
 {
+    m_layout = new QVBoxLayout();
+    m_layout->setSpacing(0);
+    m_layout->setContentsMargins(0, 0, 0, 0);
     setLayout(m_layout);
 }
 
@@ -75,11 +78,65 @@ HeadersGroup::removeAllHeaders()
 void
 HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 {
-    TrackHeader * sh = new TrackHeader(this, trackId, height, ypos);
-    m_layout->addWidget(sh);
-    m_headers.push_back(sh);
-    m_usedHeight += height;
+     StaffHeader *sh = new StaffHeader(this, trackId, height, ypos);
+     m_layout->addWidget(sh);
+     m_headers.push_back(sh);
+     m_usedHeight += height;
 }
+
+void
+HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
+{
+    m_scene = scene;
+    m_widget = widget;
+
+    std::vector<NotationStaff *> *staffs = scene->getStaffs();
+
+    TrackIntMap *trackHeights = scene->getTrackHeights();
+    TrackIntMap *trackCoords = scene->getTrackCoords();
+    int minTrack = scene->getMinTrack();
+    int maxTrack = scene->getMaxTrack();
+
+    // Destroy then recreate all track headers
+    removeAllHeaders();
+
+    if (m_scene->getPageMode() == StaffLayout::LinearMode) {
+        for (int i = minTrack; i <= maxTrack; ++i) {
+            TrackIntMap::iterator hi = trackHeights->find(i);
+            if (hi != trackHeights->end()) {
+                TrackId trackId = m_composition
+                                        .getTrackByPosition(i)->getId();
+                addHeader(trackId, (*trackHeights)[i],
+                          (*trackCoords)[i],
+                          m_widget->getViewLeftX());
+            }
+        }
+
+    // Probably no more useful ...
+    completeToHeight(m_widget->getNotationSceneHeight());
+
+    slotUpdateAllHeaders(m_widget->getViewLeftX(), true);
+
+//             if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
+//                 || (    (m_showHeadersGroup == HeadersGroup::ShowWhenNeeded)
+//                       && (m_headersGroup->getUsedHeight()
+//                               > getCanvasView()->visibleHeight()))) {
+//                 m_headersGroup->slotUpdateAllHeaders(getCanvasLeftX(), 0, true);
+//                 showHeadersGroup();
+// 
+//                 // Disable menu entry when headers are shown
+//                 findAction("show_track_headers")->setEnabled(false);
+//             } else {
+//                 // Enable menu entry when headers are hidden
+//                 findAction("show_track_headers")->setEnabled(true);
+//             }
+    } else {
+//             // Disable menu entry when not in linear mode
+//             findAction("show_track_headers")->setEnabled(false);
+    }
+
+}
+
 
 void
 HeadersGroup::completeToHeight(int height)
@@ -91,17 +148,18 @@ HeadersGroup::completeToHeight(int height)
         }
         m_filler->setFixedHeight(height - m_usedHeight);
     }
-//    setLayout(m_layout);  // May it harm to call setLayout more than once ?
 }
 
 void
-HeadersGroup::slotUpdateAllHeaders(int x, int y, bool force)
+HeadersGroup::slotUpdateAllHeaders(int x, bool force)
 {
     // Minimum header width 
-    int headerMinWidth = m_notationView->getHeadersTopFrameMinWidth();
+    /// TODO : use a real button width got from a real button
+    // 2 buttons (2 x 24) + 2 margins (2 x 4) + buttons spacing (4)
+    int headerMinWidth =  4 + 24 + 4 + 24 + 4;
 
     // Maximum header width (may be overriden by clef and key width)
-    int headerMaxWidth = (m_notationView->getCanvasVisibleWidth() * 10) / 100;
+    int headerMaxWidth = (m_widget->getNotationViewWidth() * 10) / 100;
 
     if ((x != m_lastX) || force) {
         m_lastX = x;
@@ -127,7 +185,7 @@ HeadersGroup::slotUpdateAllHeaders(int x, int y, bool force)
 
         // Pass 2 : redraw the headers when necessary
         for (i=m_headers.begin(); i!=m_headers.end(); i++) {
-            (*i)->updateHeader(neededWidth);
+           (*i)->updateHeader(neededWidth);
         }
 
         if (neededWidth != m_lastWidth) {
@@ -137,8 +195,8 @@ HeadersGroup::slotUpdateAllHeaders(int x, int y, bool force)
             // Suppress vertical white stripes on canvas when headers
             // width changes while scrolling
             /// TODO : Limit "setChanged()" to the useful part of canvas
-            m_notationView->canvas()->setAllChanged();
-            m_notationView->canvas()->update();
+  ///          m_notationView->canvas()->setAllChanged();
+  ///          m_notationView->canvas()->update();
         }
     }
 }
@@ -159,11 +217,28 @@ HeadersGroup::resizeEvent(QResizeEvent * ev)
 {
     // Needed to avoid gray zone at the right of headers
     // when width is decreasing
-    emit headersResized( ev->size().width() );
+    emit headersResized(ev->size().width());
 }
+
+NotationScene *
+HeadersGroup::getScene()
+{
+    return m_scene;
+}
+
+QSize
+HeadersGroup::sizeHint() const
+{
+    return QSize(m_lastWidth, m_usedHeight);
+}
+
+QSize
+HeadersGroup::minimumSizeHint() const
+{
+    return QSize(m_lastWidth, m_usedHeight);
+}
+
 
 }
 #include "HeadersGroup.moc"
-
-#endif
 

@@ -69,7 +69,9 @@ NotationScene::NotationScene() :
     m_leftGutter(20),
     m_currentStaff(0),
     m_compositionRefreshStatusId(0),
-    m_timeSignatureChanged(false)
+    m_timeSignatureChanged(false),
+    m_minTrack(0),
+    m_maxTrack(0)
 {
     QString prefix(QString("NotationScene%1::").arg(instanceCount++));
     m_properties = new NotationProperties(qstrtostr(prefix));
@@ -720,11 +722,11 @@ NotationScene::positionStaffs()
 
     m_printSize = settings.value("printingnotesize", 5).toUInt() ;
 
-    int minTrack = 0, maxTrack = 0;
+    m_minTrack = m_maxTrack = 0;
     bool haveMinTrack = false;
-    typedef std::map<int, int> TrackIntMap;
-    TrackIntMap trackHeights;
-    TrackIntMap trackCoords;
+
+    m_trackHeights.clear();
+    m_trackCoords.clear();
 
     int pageWidth, pageHeight, leftMargin, topMargin;
     pageWidth = getPageWidth();
@@ -823,7 +825,7 @@ NotationScene::positionStaffs()
         accumulatedHeight = 0;
         int maxTrackHeight = 0;
 
-        trackHeights.clear();
+        m_trackHeights.clear();
 
         for (unsigned int i = 0; i < m_staffs.size(); ++i) {
 
@@ -840,9 +842,9 @@ NotationScene::positionStaffs()
 
             int trackPosition = track->getPosition();
 
-            TrackIntMap::iterator hi = trackHeights.find(trackPosition);
-            if (hi == trackHeights.end()) {
-                trackHeights.insert(TrackIntMap::value_type
+            TrackIntMap::iterator hi = m_trackHeights.find(trackPosition);
+            if (hi == m_trackHeights.end()) {
+                m_trackHeights.insert(TrackIntMap::value_type
                                     (trackPosition, height));
             } else if (height > hi->second) {
                 hi->second = height;
@@ -851,19 +853,19 @@ NotationScene::positionStaffs()
             if (height > maxTrackHeight)
                 maxTrackHeight = height;
 
-            if (trackPosition < minTrack || !haveMinTrack) {
-                minTrack = trackPosition;
+            if (trackPosition < m_minTrack || !haveMinTrack) {
+                m_minTrack = trackPosition;
                 haveMinTrack = true;
             }
-            if (trackPosition > maxTrack) {
-                maxTrack = trackPosition;
+            if (trackPosition > m_maxTrack) {
+                m_maxTrack = trackPosition;
             }
         }
 
-        for (int i = minTrack; i <= maxTrack; ++i) {
-            TrackIntMap::iterator hi = trackHeights.find(i);
-            if (hi != trackHeights.end()) {
-                trackCoords[i] = accumulatedHeight;
+        for (int i = m_minTrack; i <= m_maxTrack; ++i) {
+            TrackIntMap::iterator hi = m_trackHeights.find(i);
+            if (hi != m_trackHeights.end()) {
+                m_trackCoords[i] = accumulatedHeight;
                 accumulatedHeight += hi->second;
             }
         }
@@ -973,11 +975,11 @@ NotationScene::positionStaffs()
         m_staffs[i]->setTitleHeight(titleHeight);
         m_staffs[i]->setRowSpacing(accumulatedHeight);
 
-        if (trackPosition < maxTrack) {
-            m_staffs[i]->setConnectingLineLength(trackHeights[trackPosition]);
+        if (trackPosition < m_maxTrack) {
+            m_staffs[i]->setConnectingLineLength(m_trackHeights[trackPosition]);
         }
 
-        if (trackPosition == minTrack &&
+        if (trackPosition == m_minTrack &&
             m_pageMode != StaffLayout::LinearMode) {
             m_staffs[i]->setBarNumbersEvery(5);
         } else {
@@ -985,7 +987,7 @@ NotationScene::positionStaffs()
         }
 
         m_staffs[i]->setX(m_leftGutter);
-        m_staffs[i]->setY(topGutter + trackCoords[trackPosition] + topMargin);
+        m_staffs[i]->setY(topGutter + m_trackCoords[trackPosition] + topMargin);
         m_staffs[i]->setPageWidth(pageWidth - leftMargin * 2);
         m_staffs[i]->setRowsPerPage(rowsPerPage);
         m_staffs[i]->setPageMode(m_pageMode);

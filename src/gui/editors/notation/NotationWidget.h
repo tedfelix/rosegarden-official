@@ -44,6 +44,7 @@ class StandardRuler;
 class TempoRuler;
 class ChordNameRuler;
 class RawNoteRuler;
+class HeadersGroup;
 
 class NotationWidget : public QWidget,
                        public SelectionManager
@@ -80,6 +81,12 @@ public:
     void setTempoRulerVisible(bool visible);
     void setChordNameRulerVisible(bool visible);
     void setRawNoteRulerVisible(bool visible);
+    void setHeadersVisible(bool visible);
+    void toggleHeadersView();
+
+    double getViewLeftX();
+    int getNotationViewWidth();
+    double getNotationSceneHeight();
 
 public slots:
     void slotSetTool(QString name);
@@ -140,12 +147,17 @@ private:
     ChordNameRuler *m_chordNameRuler; // I own this
     RawNoteRuler *m_rawNoteRuler; // I own this
 
+    HeadersGroup *m_headersGroup; // I own this
+    Panned *m_headersView; // I own this
+    QGraphicsScene *m_headersScene; // I own this
+
     QGridLayout *m_layout; // I own this
 
     bool m_linearMode;
     bool m_tempoRulerIsVisible;         // Only valid in linear mode
     bool m_rawNoteRulerIsVisible;       // Only valid in linear mode
     bool m_chordNameRulerIsVisible;     // Only valid in linear mode
+    bool m_headersAreVisible;           // Only valid in linear mode
 
     /**
      * Widgets vertical positions inside the main QGridLayout

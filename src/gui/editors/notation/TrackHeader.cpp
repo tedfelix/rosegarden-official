@@ -18,8 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #include "TrackHeader.h"
 #include "HeadersGroup.h"
 #include "base/Composition.h"
@@ -29,12 +27,12 @@
 #include "base/ColourMap.h"
 #include "base/Track.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/LinedStaff.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 #include "NotePixmapFactory.h"
-#include "NotationView.h"
+#include "NotationScene.h"
 #include "NotationStaff.h"
+//#include "base/StaffExportTypes.h"
 
 #include <map>
 #include <set>
@@ -50,7 +48,10 @@
 #include <QLabel>
 #include <QFrame>
 #include <QString>
-#include <QToolTip>
+#include <QGraphicsPixmapItem>
+#include <QBitmap>
+
+#include <QPainter>
 
 
 namespace Rosegarden
@@ -58,17 +59,19 @@ namespace Rosegarden
 
 
 // Status bits
-const int TrackHeader::SEGMENT_HERE                = 1 << 0;
-const int TrackHeader::SUPERIMPOSED_SEGMENTS       = 1 << 1;
-const int TrackHeader::INCONSISTENT_CLEFS          = 1 << 2;
-const int TrackHeader::INCONSISTENT_KEYS           = 1 << 3;
-const int TrackHeader::INCONSISTENT_LABELS         = 1 << 4;
-const int TrackHeader::INCONSISTENT_TRANSPOSITIONS = 1 << 5;
-const int TrackHeader::BEFORE_FIRST_SEGMENT        = 1 << 6;
+const int StaffHeader::SEGMENT_HERE                = 1 << 0;
+const int StaffHeader::SUPERIMPOSED_SEGMENTS       = 1 << 1;
+const int StaffHeader::INCONSISTENT_CLEFS          = 1 << 2;
+const int StaffHeader::INCONSISTENT_KEYS           = 1 << 3;
+const int StaffHeader::INCONSISTENT_LABELS         = 1 << 4;
+const int StaffHeader::INCONSISTENT_TRANSPOSITIONS = 1 << 5;
+const int StaffHeader::BEFORE_FIRST_SEGMENT        = 1 << 6;
 
 
-TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos) :
-        QLabel(parent),
+StaffHeader::StaffHeader(HeadersGroup *group,
+                         TrackId trackId, int height, int ypos) :
+        QWidget(0),
+        m_headersGroup(group),
         m_track(trackId),
         m_height(height),
         m_ypos(ypos),
@@ -85,20 +88,19 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
         m_label(QString("")),
         m_transpose(0),
         m_status(0),
-        m_current(false)
+        m_current(false),
+        m_clefItem(0),
+        m_keyItem(0)
 {
 
-    m_notationView = static_cast<HeadersGroup *>(parent)->getNotationView();
-
-    setFrameStyle(QFrame::Box | QFrame::Plain);
-    setCurrent(false);
+    m_scene = m_headersGroup->getScene();
+    setCurrent(false); 
 
 
     //
     // Tooltip text creation
 
-    Composition *comp = 
-        static_cast<HeadersGroup *>(parent)->getComposition();
+    Composition *comp = m_headersGroup->getComposition();
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
@@ -151,9 +153,10 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
 
     // Sort segments by position on the track
     SortedSegments segments;
-    for (int i=0; i<m_notationView->getStaffCount(); i++) {
+    std::vector<NotationStaff *> *staffs = m_scene->getStaffs();
+    for (int i=0; i<staffs->size(); i++) {
 
-        NotationStaff * notationStaff = m_notationView->getNotationStaff(i);
+        NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
         TrackId trackId = segment.getTrack();
 
@@ -199,27 +202,169 @@ TrackHeader::TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos)
     ///          lookAtStaff() and not here.
 }
 
-void
-TrackHeader::setCurrent(bool current)
+StaffHeader::~StaffHeader()
 {
-    /// TODO : use colours from GUIPalette
-
-    if (current != m_isCurrent) {
-        m_isCurrent = current;
-        if (current) {
-            setLineWidth(2);
-            setMargin(0);
-            setPaletteForegroundColor(QColor(0, 0, 255));
-        } else {
-            setLineWidth(1);
-            setMargin(1);
-            setPaletteForegroundColor(QColor(0, 0, 0));
-        }
-    }
+    delete m_clefItem;
+    delete m_keyItem;
 }
 
 void
-TrackHeader::transposeValueToName(int transpose, QString &transposeName)
+StaffHeader::paintEvent(QPaintEvent *)
+{
+    QPainter paint(this);
+    paint.fillRect(0, 0, width(), height(), Qt::white);  /// ???
+
+    int wHeight = height();
+    int wWidth = width();
+
+    wHeight -= 4;    // Make room to the label frame :
+                     // 4 = 2 * (margin + lineWidth)
+
+    int lw = m_lineSpacing;
+    int h;
+    QColor colour;
+    int maxDelta = m_maxDelta;
+
+    // Staff Y position inside the whole header
+    int offset = (wHeight - 10 * lw -1) / 2;
+
+    // Draw staff lines
+    paint.setPen(QPen(QColor(Qt::black), m_staffLineThickness));
+    for (h = 0; h <= 8; h += 2) {
+        int y = (lw * 3) + ((8 - h) * lw) / 2;
+        paint.drawLine(maxDelta/2, y + offset, wWidth - maxDelta/2, y + offset);
+    }
+
+    if (isAClefToDraw()) {
+
+        // Draw clef
+        QPixmap clefPixmap = m_clefItem->pixmap();
+
+        // Set color : a quick and very bad hack until I have
+        //             time to look for a better way
+        if (isClefInconsistent()) {
+            clefPixmap.createMaskFromColor(QColor(Qt::black), Qt::MaskInColor);
+            QBitmap mask = clefPixmap.mask();
+            clefPixmap.fill(QColor(Qt::red));
+            clefPixmap.setMask(mask);
+        }
+
+        h = m_clef.getAxisHeight();
+        int y = (lw * 3) + ((8 - h) * lw) / 2;
+        paint.drawPixmap(maxDelta, y + m_clefItem->offset().y() + offset, clefPixmap);
+
+        // Draw key
+        QPixmap keyPixmap = m_keyItem->pixmap();
+        y = lw;   /// Why ???
+        paint.drawPixmap((maxDelta * 3) / 2+ clefPixmap.width(),
+                         y + m_keyItem->offset().y() + offset, keyPixmap);
+
+    }
+
+
+    NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
+    paint.setFont(npf->getTrackHeaderFont());
+
+    QString text;
+    QString textLine;
+
+    int charHeight = npf->getTrackHeaderFontMetrics().height();
+    int charWidth = npf->getTrackHeaderFontMetrics().maxWidth();
+
+    const QString transposeText = getTransposeText();
+    QRect bounds = npf->getTrackHeaderBoldFontMetrics()
+                                   .boundingRect(transposeText);
+    int transposeWidth = bounds.width();
+
+
+    // Write upper text (track name and track label)
+
+    paint.setPen(QColor(Qt::black));
+    text = getUpperText();
+    int numberOfTextLines = getNumberOfTextLines();
+
+    for (int l=1; l<=numberOfTextLines; l++) {
+        int upperTextY = charHeight
+                         + (l - 1) * npf->getTrackHeaderTextLineSpacing();
+        if (l == numberOfTextLines) {
+            int transposeSpace = transposeWidth ? transposeWidth + charWidth / 4 : 0;
+            textLine = npf->getOneLine(text, m_lastWidth - transposeSpace - charWidth / 2);
+            if (!text.isEmpty()) {
+                // String too long : cut it and replace last character with dots
+                int len = textLine.length();
+                if (len > 1) textLine.replace(len - 1, 1, tr("..."));
+            }
+        } else {
+            textLine = npf->getOneLine(text, m_lastWidth - charWidth / 2);
+        }
+        if (textLine.isEmpty()) break;
+        paint.drawText(charWidth / 4, upperTextY, textLine);
+    }
+
+
+    // Write transposition text
+
+    // TODO : use colours from GUIPalette
+    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(Qt::black);
+    paint.setFont(npf->getTrackHeaderBoldFont());
+     // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
+    paint.setPen(colour);
+
+    paint.drawText(m_lastWidth - transposeWidth - charWidth / 4,
+                   charHeight + (numberOfTextLines - 1)
+                                      * npf->getTrackHeaderTextLineSpacing(),
+                   transposeText);
+
+
+     // Write lower text (segment label)
+
+    // TODO : use colours from GUIPalette
+    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(Qt::black);
+    paint.setFont(npf->getTrackHeaderFont());
+
+    paint.setPen(colour);
+    text = getLowerText();
+
+    for (int l=1; l<=numberOfTextLines; l++) {
+        int lowerTextY = wHeight - 4            // -4 : adjust
+            - (numberOfTextLines - l) * npf->getTrackHeaderTextLineSpacing();
+
+        QString textLine = npf->getOneLine(text, m_lastWidth - charWidth / 2);
+        if (textLine.isEmpty()) break;
+
+        if ((l == numberOfTextLines)  && !text.isEmpty()) {
+                // String too long : cut it and replace last character by dots
+                int len = textLine.length();
+                if (len > 1) textLine.replace(len - 1, 1, tr("..."));
+        }
+
+        paint.drawText(charWidth / 4, lowerTextY, textLine);
+    }
+
+}
+
+
+void
+StaffHeader::setCurrent(bool current)
+{
+    /// TODO : use colours from GUIPalette
+
+//     if (current != m_isCurrent) {
+//         m_isCurrent = current;
+//         if (current) {
+//             setLineWidth(2);
+//             setMargin(0);
+//             setPaletteForegroundColor(QColor(0, 0, 255));
+//         } else {
+//             setLineWidth(1);
+//             setMargin(1);
+//             setPaletteForegroundColor(QColor(0, 0, 0));
+//         }
+//     }
+}
+
+void
+StaffHeader::transposeValueToName(int transpose, QString &transposeName)
 {
 
     /// TODO : Should be rewrited using methods from Pitch class
@@ -244,9 +389,9 @@ TrackHeader::transposeValueToName(int transpose, QString &transposeName)
 }
 
 int
-TrackHeader::lookAtStaff(double x, int maxWidth)
+StaffHeader::lookAtStaff(double x, int maxWidth)
 {
-    // Read Clef and Key on canvas at (x, m_ypos + m_height / 2)
+    // Read Clef and Key on scene at (x, m_ypos + m_height / 2)
     // then guess the header needed width and return it
 
     // When walking through the segments :
@@ -265,37 +410,39 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
 
     int staff;
 
-    Composition *comp = 
-        static_cast<HeadersGroup *>(parent())->getComposition();
+    Composition *comp = m_headersGroup->getComposition();
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
+    std::vector<NotationStaff *> *staffs = m_scene->getStaffs();
 
     int status = 0;
     bool current = false;
-    for (int i=0; i<m_notationView->getStaffCount(); i++) {
-        NotationStaff * notationStaff = m_notationView->getNotationStaff(i);
+    for (int i=0; i<staffs->size(); i++) {
+        NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
         TrackId trackId = segment.getTrack();
         if (trackId  == m_track) {
 
             /// TODO : What if a segment has been moved ???
-            timeT xTime = notationStaff->getTimeAtCanvasCoords(x, m_ypos);
+            timeT xTime = notationStaff->getTimeAtSceneCoords(x, m_ypos);
             if (xTime < m_firstSegStartTime) {
                 status |= BEFORE_FIRST_SEGMENT;
                 /// TODO : What if superimposed segments ???
                 m_firstSeg->getFirstClefAndKey(clef, key);
                 label = strtoqstr(m_firstSeg->getLabel());
                 transpose = m_firstSeg->getTranspose();
-                current = current || m_notationView->isCurrentStaff(i);
+//!!!  getCurrentStaffNumber() doesn't exist still
+//!!!                current = current || (m_scene->getCurrentStaffNumber() == i);
                 break;
             }
             timeT segStart = segment.getStartTime();
             timeT segEnd = segment.getEndMarkerTime();
-            current = current || m_notationView->isCurrentStaff(i);
+//!!!  getCurrentStaffNumber() doesn't exist still
+//!!!            current = current || (m_scene->getCurrentStaffNumber() == i);
 
             if ((xTime >= segStart) && (xTime < segEnd)) {
 
-                notationStaff->getClefAndKeyAtCanvasCoords(x,
+                notationStaff->getClefAndKeyAtSceneCoords(x,
                                             m_ypos + m_height / 2, clef, key);
                 label = strtoqstr(segment.getLabel());
                 transpose = segment.getTranspose();
@@ -347,7 +494,7 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     if (m_transpose) m_transposeText = tr(" in %1").arg(noteName);
     else             m_transposeText = QString("");
 
-    NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
+    NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
     int clefAndKeyWidth = npf->getClefAndKeyWidth(m_key, m_clef);
 
     // How many text lines may be written above or under the clef
@@ -355,14 +502,14 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
     m_numberOfTextLines = npf->getTrackHeaderNTL(m_height);
 
     int trackLabelWidth =
-            npf->getTrackHeaderTextWidth(m_upperText + m_transposeText)
+             npf->getTrackHeaderTextWidth(m_upperText + m_transposeText)
                                                         / m_numberOfTextLines;
     int segmentNameWidth =
-            npf->getTrackHeaderTextWidth(m_label) / m_numberOfTextLines;
+             npf->getTrackHeaderTextWidth(m_label) / m_numberOfTextLines;
 
     // Get the max. width from upper text and lower text
     int width = (segmentNameWidth > trackLabelWidth)
-                            ? segmentNameWidth : trackLabelWidth;
+                             ? segmentNameWidth : trackLabelWidth;
 
     // Text width is limited by max header Width
     if (width > maxWidth) width = maxWidth;
@@ -376,8 +523,9 @@ TrackHeader::lookAtStaff(double x, int maxWidth)
 
 
 void
-TrackHeader::updateHeader(int width)
+StaffHeader::updateHeader(int width)
 {
+    if (!m_headersGroup->isVisible()) return;
 
     // Update the header (using given width) if necessary
 
@@ -413,12 +561,20 @@ TrackHeader::updateHeader(int width)
             drawClef = false;
         }
 
-        NotePixmapFactory * npf = m_notationView->getNotePixmapFactory();
-        QPixmap pmap = NotePixmapFactory::toQPixmap(
-                  npf->makeTrackHeaderPixmap(width, m_height, this));
+        NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
-        setPixmap(pmap);
+        delete m_clefItem;
+        m_clefItem = npf->makeClef(m_clef);
+
+        delete m_keyItem;
+        m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major")); 
+
+        m_lineSpacing = npf->getLineSpacing();
+        m_maxDelta = npf->getAccidentalWidth(Accidentals::Sharp);
+        m_staffLineThickness = npf->getStaffLineThickness();
+
         setFixedWidth(width);
+        setFixedHeight(m_height);
 
         // Forced width may differ from localy computed width
         m_lastWidth = width;
@@ -426,10 +582,11 @@ TrackHeader::updateHeader(int width)
 
     // Highlight header if track is the current one
     setCurrent(m_current);
+update();
 }
 
 bool
-TrackHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) const
+StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) const
 {
     // Sort segments by start time, then by end time
     if (s1->getStartTime() < s2->getStartTime()) return true;
@@ -441,4 +598,3 @@ TrackHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
 }
 #include "TrackHeader.moc"
 
-#endif

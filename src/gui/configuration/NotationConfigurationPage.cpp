@@ -154,7 +154,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     connect(m_showTrackHeaders, SIGNAL(activated(int)), this, SLOT(slotModified()));
     m_showTrackHeaders->setEditable(false);
 
-#ifdef NOT_JUST_NOW //!!!
     m_showTrackHeaders->addItem(tr("Never"), HeadersGroup::ShowNever);
     m_showTrackHeaders->addItem(tr("When needed"), HeadersGroup::ShowWhenNeeded);
     m_showTrackHeaders->addItem(tr("Always"), HeadersGroup::ShowAlways);
@@ -163,7 +162,6 @@ NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
     if (HeadersGroup::isValidShowMode(defaultShowTrackHeaders)) {
         m_showTrackHeaders->setCurrentIndex(defaultShowTrackHeaders);
     }
-#endif
 
     m_showTrackHeaders->setToolTip(QString(tr(
         "\"Always\" and \"Never\" mean what they usually mean\n"

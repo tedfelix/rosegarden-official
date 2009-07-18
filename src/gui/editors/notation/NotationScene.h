@@ -46,6 +46,8 @@ class RosegardenDocument;
 class Segment;
 class RulerScale;
 
+typedef std::map<int, int> TrackIntMap;
+
 class NotationScene : public QGraphicsScene,
                       public CompositionObserver,
                       public SelectionManager
@@ -58,6 +60,8 @@ public:
 
     void setNotationWidget(NotationWidget *w);
     void setStaffs(RosegardenDocument *document, std::vector<Segment *> segments);
+
+    std::vector<NotationStaff *> *getStaffs() { return &m_staffs; }
 
     Segment *getCurrentSegment();
 
@@ -123,6 +127,11 @@ public:
     void handleEventRemoved(Event *);
     bool areAnnotationsVisible() { return true; }
     bool areLilyPondDirectivesVisible() { return true; }
+
+    int getMinTrack() { return m_minTrack; }
+    int getMaxTrack() { return m_maxTrack; }
+    TrackIntMap *getTrackHeights() { return &m_trackHeights; }
+    TrackIntMap *getTrackCoords() { return &m_trackCoords; }
 
 signals:
     void mousePressed(const NotationMouseEvent *e);
@@ -222,6 +231,12 @@ private:
     
     NotationStaff *setSelectionElementStatus(EventSelection *, bool set);
     void previewSelection(EventSelection *, EventSelection *oldSelection);
+
+    int m_minTrack;
+    int m_maxTrack;
+
+    TrackIntMap m_trackHeights;
+    TrackIntMap m_trackCoords;
 };
 
 }

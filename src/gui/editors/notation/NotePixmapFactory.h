@@ -36,6 +36,7 @@
 
 class QPainter;
 class QBitmap;
+class QString;
 
 
 namespace Rosegarden
@@ -50,7 +51,7 @@ class NotePixmapParameters;
 class NoteFont;
 class NotePixmapPainter;
 class Clef;
-class TrackHeader;
+class StaffHeader;
 
 /**
  * Generates pixmaps and graphics items for various notation items.
@@ -135,11 +136,6 @@ public:
                                  const Clef &clef);
     QPixmap makeTextPixmap(const Text &text);
 
-#ifdef NOT_JUST_NOW //!!!    
-    QPixmap makeTrackHeaderPixmap(int width, int height,
-                                  TrackHeader *header);
-#endif
-
     // Bounding box and other geometry methods:
 
     int getNoteBodyWidth (Note::Type =
@@ -172,7 +168,6 @@ public:
      */
     int getClefAndKeyWidth(const Key &key, const Clef &clef);
 
-#ifdef NOT_JUST_NOW //!!!
     /**
      * Returns the Number of Text Lines that can be written at top and bottom
      * of a track header.
@@ -197,7 +192,14 @@ public:
      * from "text".
      */
     QString getOneLine(QString &text, int width);
-#endif
+
+    QFont getTrackHeaderFont() { return m_trackHeaderFont; }
+    QFontMetrics getTrackHeaderFontMetrics() { return m_trackHeaderFontMetrics; }
+
+    QFont getTrackHeaderBoldFont() { return m_trackHeaderBoldFont; }
+    QFontMetrics getTrackHeaderBoldFontMetrics() {
+        return m_trackHeaderBoldFontMetrics;
+    }
 
     static void dumpStats(std::ostream &);
 
@@ -205,7 +207,7 @@ public:
     static const char* const defaultSerifFontFamily;
     static const char* const defaultSansSerifFontFamily;
     static const char* const defaultTimeSigFontFamily;
-    
+
 
 protected:
     void init(QString fontName, int size);

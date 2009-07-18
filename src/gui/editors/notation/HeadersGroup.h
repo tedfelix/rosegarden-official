@@ -18,8 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_HEADERSGROUP_H_
 #define _RG_HEADERSGROUP_H_
 
@@ -38,10 +36,11 @@ namespace Rosegarden
 {
 
 
-class NotationView;
+class NotationWidget;
+class NotationScene;
 class Composition;
-class TrackHeader;
-//class QVBoxLayout;
+class StaffHeader;
+class RosegardenDocument;
 
 
 class HeadersGroup : public QWidget
@@ -51,11 +50,13 @@ public:
     /**
      * Create an empty headers group
      */
-    HeadersGroup(QWidget *parent, NotationView * nv, Composition * comp);
+    HeadersGroup(RosegardenDocument *document);
 
     void removeAllHeaders();
 
     void addHeader(int trackId, int height, int ypos, double xcur);
+
+    void setTracks(NotationWidget *widget, NotationScene *scene);
 
     /**
      * Resize a filler at bottom of group to set the headersGroup height
@@ -65,12 +66,12 @@ public:
      */
     void completeToHeight(int height);
 
-    NotationView * getNotationView()
-    { return m_notationView;
-    }
+//     NotationView * getNotationView()
+//     { return m_notationView;
+//     }
 
-    Composition * getComposition()
-    { return m_composition;
+    Composition *getComposition()
+    { return &m_composition;
     }
 
     /**
@@ -104,28 +105,38 @@ public:
         return ((mode >= ShowNever) && (mode <= ShowAlways));
     }
 
+    NotationScene *getScene();
+
+
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
+
+
+
 public slots :
     /**
-     * Called when notation canvas moves.
+     * Called when notation view moves.
+     * Arg x is the scene X coord of the left of the view.
      * Setting force to true forces the headers to be redrawn even 
      * if x has not changed since the last call.
      */
-    void slotUpdateAllHeaders(int x, int y, bool force = false);
+    void slotUpdateAllHeaders(int x, bool force = false);
 
 signals :
     void headersResized(int newWidth);
 
 private:
-    void resizeEvent(QResizeEvent * ev);
+    void resizeEvent(QResizeEvent *ev);
 
-    NotationView * m_notationView;
-    Composition * m_composition;
+    Composition &m_composition;
+    NotationScene *m_scene;
+    NotationWidget *m_widget;
 
-    typedef std::vector<TrackHeader *> TrackHeaderVector;
+    typedef std::vector<StaffHeader *> TrackHeaderVector;
     TrackHeaderVector m_headers;
 
     int m_usedHeight;
-    QLabel * m_filler;
+    QLabel *m_filler;
     int m_lastX;
     int m_lastWidth;
 
@@ -135,5 +146,4 @@ private:
 
 }
 
-#endif
 #endif

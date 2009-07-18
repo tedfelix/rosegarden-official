@@ -18,8 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-#ifdef NOT_JUST_NOW //!!!
-
 #ifndef _RG_TRACKHEADER_H_
 #define _RG_TRACKHEADER_H_
 
@@ -33,17 +31,25 @@
 #include <set>
 
 class QLabel;
+class QPixmap;
+class QGraphicsPixmapItem;
 
 
 namespace Rosegarden
 {
 
-class NotePixmapFactory;
-class NotationView;
+class HeadersGroup;
+class NotationScene;
 class ColourMap;
 class Segment;
 
-class TrackHeader : public QLabel
+// Class rename fron TrackHeader to StaffHeader since paintEvent() method
+// has been added : Qt disliked to have two different StaffHeader::paintEvent()
+// method.
+// TODO : Rename TrackHeader.h and TrackHeader.cpp files to StaffHeader.h and
+//        StaffHeader.cpp
+
+class StaffHeader : public QWidget
 {
     Q_OBJECT
 public:
@@ -52,7 +58,9 @@ public:
      * *parent is the parent widget, height the height of staff and
      * ypos is the staff y position on canvas.
      */
-    TrackHeader(QWidget *parent, TrackId trackId, int height, int ypos);
+    StaffHeader(HeadersGroup *group, TrackId trackId, int height, int ypos);
+
+    ~StaffHeader();
 
     /**
      * Draw a blue line around header when current is true
@@ -152,6 +160,8 @@ public:
         return m_status & INCONSISTENT_TRANSPOSITIONS;
     }
 
+protected :
+virtual void paintEvent(QPaintEvent *);
 
 private :
     /**
@@ -170,10 +180,11 @@ private :
     static const int INCONSISTENT_TRANSPOSITIONS;
     static const int BEFORE_FIRST_SEGMENT;
 
+    HeadersGroup *m_headersGroup;
     TrackId m_track;
     int m_height;
     int m_ypos;
-    NotationView * m_notationView;
+    NotationScene *m_scene;
 
     Clef m_lastClef;
     Rosegarden::Key m_lastKey;
@@ -205,9 +216,14 @@ private :
     // First segment on the track.
     Segment * m_firstSeg;
     timeT m_firstSegStartTime;
+
+    QGraphicsPixmapItem *m_clefItem;
+    QGraphicsPixmapItem *m_keyItem;
+    int m_lineSpacing;
+    int m_maxDelta;
+    int m_staffLineThickness;
 };
 
 }
 
-#endif
 #endif

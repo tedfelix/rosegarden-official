@@ -28,6 +28,7 @@
 #include "NotationSelector.h"
 #include "NotationEraser.h"
 #include "StaffLayout.h"
+#include "HeadersGroup.h"
 
 #include "base/RulerScale.h"
 
@@ -51,6 +52,7 @@
 #include <QGridLayout>
 #include <QScrollBar>
 #include <QTimer>
+#include <QGraphicsProxyWidget>
 
 namespace Rosegarden
 {
@@ -68,11 +70,15 @@ NotationWidget::NotationWidget() :
     m_tempoRuler(0),
     m_chordNameRuler(0),
     m_rawNoteRuler(0),
+    m_headersGroup(0),
+    m_headersView(0),
+    m_headersScene(0),
     m_layout(0),
     m_linearMode(true),
     m_tempoRulerIsVisible(false),
     m_rawNoteRulerIsVisible(false),
-    m_chordNameRulerIsVisible(false)
+    m_chordNameRulerIsVisible(false),
+    m_headersAreVisible(false)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);
@@ -99,13 +105,19 @@ NotationWidget::NotationWidget() :
 //                              QPainter::SmoothPixmapTransform);
     m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
 
+    m_headersView = new Panned;
+    m_headersView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_headersView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    m_layout->addWidget(m_headersView, PANNED_ROW, HEADER_COL, 1, 1);
+
+
     // Rulers being not defined still, they can't be added to m_layout.
     // This will be done in setSegments().
 
     // Move the scroll bar from m_view to NotationWidget
     m_view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     m_layout->addWidget(m_view->horizontalScrollBar(),
-                        HSLIDER_ROW, MAIN_COL, 1, 1);
+                        HSLIDER_ROW, HEADER_COL, 1, 2);
 
     // Hide or show the horizontal scroll bar when needed
     connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
@@ -114,8 +126,14 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
+    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
+            m_headersView, SLOT(slotSetPannedRect(QRectF)));
+
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
+
+    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
+            m_headersView, SLOT(slotSetPannedRect(QRectF)));
 
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
@@ -125,6 +143,9 @@ NotationWidget::NotationWidget() :
 
     connect(m_hpanner, SIGNAL(zoomOut()),
             this, SLOT(slotZoomOutFromPanner()));
+
+    connect(m_headersView, SIGNAL(wheelEventReceived(QWheelEvent *)),
+            m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
 
     m_toolBox = new NotationToolBox(this);
 
@@ -207,6 +228,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                       0.0,
                                       20);  // why not 24 as other rulers ?
 
+    m_headersGroup = new HeadersGroup(m_document);
+    m_headersGroup->setTracks(this, m_scene);
 
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
@@ -228,6 +251,29 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_tempoRuler->connectSignals();
 
     m_chordNameRuler->setReady();
+
+    m_headersGroup->setFixedSize(m_headersGroup->sizeHint());
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width() + 4);
+   ///@@@ The 4 pixels have been added empirically in line above to
+   ///    show the headers completely. (The headers view contents was
+   ///    horizontally moving with Alt + wheel)
+
+    delete m_headersScene;
+    m_headersScene = new QGraphicsScene();
+    QGraphicsProxyWidget *headers = m_headersScene->addWidget(m_headersGroup);
+    m_headersView->setScene(m_headersScene);
+    m_headersView->centerOn(headers);
+
+    m_headersView->setMaximumHeight(m_view->height());
+    m_headersView->setMinimumHeight(0);
+
+    // If headers scene and notation scene don't have the same height
+    // one may shift from the other when scrolling vertically
+    QRectF viewRect = m_scene->sceneRect();
+    QRectF headersRect = m_headersScene->sceneRect();
+    headersRect.setHeight(viewRect.height());
+    m_headersScene->setSceneRect(headersRect);
+
 
     //!!! attempt to scroll either to the start or to the current
     //!!! pointer position, and to the top of the staff... however,
@@ -535,6 +581,9 @@ NotationWidget::slotZoomInFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
+    m_headersView->setMatrix(m);
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
+                                                         * m_vZoomFactor);
     slotHScroll();
 }
 
@@ -547,7 +596,28 @@ NotationWidget::slotZoomOutFromPanner()
     QMatrix m;
     m.scale(m_hZoomFactor, m_vZoomFactor);
     m_view->setMatrix(m);
+    m_headersView->setMatrix(m);
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
+                                                         * m_vZoomFactor);
     slotHScroll();
+}
+
+double
+NotationWidget::getViewLeftX()
+{
+    return m_view->mapToScene(0, 0).x();
+}
+
+int
+NotationWidget::getNotationViewWidth()
+{
+    return m_view->width();
+}
+
+double
+NotationWidget::getNotationSceneHeight()
+{
+    return m_scene->height();
 }
 
 void
@@ -555,10 +625,11 @@ NotationWidget::slotHScroll()
 {
     // Get time of the window left
     QPointF topLeft = m_view->mapToScene(0, 0);
+    double xs = topLeft.x();
 
     // Apply zoom correction (Offset of 20 found empirically : probably
     // some improvments are needed ...)
-    int x = (topLeft.x() - 20) * m_hZoomFactor;
+    int x = (xs - 20) * m_hZoomFactor;
 
     // Scroll rulers accordingly
     m_topStandardRuler->slotScrollHoriz(x);
@@ -566,6 +637,9 @@ NotationWidget::slotHScroll()
     m_tempoRuler->slotScrollHoriz(x);
     m_chordNameRuler->slotScrollHoriz(x);
     m_rawNoteRuler->slotScrollHoriz(x);
+
+    // Update staff headers
+    m_headersGroup->slotUpdateAllHeaders(xs);
 }
 
 void
@@ -603,18 +677,36 @@ NotationWidget::setRawNoteRulerVisible(bool visible)
 }
 
 void
+NotationWidget::setHeadersVisible(bool visible)
+{
+    if (visible && m_linearMode) m_headersView->show();
+    else m_headersView->hide();
+    m_headersAreVisible = visible;
+}
+
+void
+NotationWidget::toggleHeadersView()
+{
+    m_headersAreVisible = !m_headersAreVisible;
+    if (m_headersAreVisible && m_linearMode) m_headersView->show();
+    else m_headersView->hide();
+}
+
+void
 NotationWidget::hideOrShowRulers()
 {
     if (m_linearMode) {
         if (m_tempoRulerIsVisible) m_tempoRuler->show();
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->show();
         if (m_chordNameRulerIsVisible) m_chordNameRuler->show();
+        if (m_headersAreVisible) m_headersView->show();
         m_bottomStandardRuler->show();
         m_topStandardRuler->show();
     } else {
         if (m_tempoRulerIsVisible) m_tempoRuler->hide();
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->hide();
         if (m_chordNameRulerIsVisible) m_chordNameRuler->hide();
+        if (m_headersAreVisible) m_headersView->hide();
         m_bottomStandardRuler->hide();
         m_topStandardRuler->hide();
     }
@@ -626,6 +718,7 @@ NotationWidget::showEvent(QShowEvent * event)
     QWidget::showEvent(event);
     slotHScroll();
 }
+
 
 }
 

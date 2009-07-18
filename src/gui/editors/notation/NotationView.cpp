@@ -25,6 +25,7 @@
 #include "NoteInserter.h"
 #include "RestInserter.h"
 #include "NotationSelector.h"
+#include "HeadersGroup.h"
 
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
@@ -161,19 +162,25 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     findAction("show_chords_ruler")->setChecked(visible);
     m_notationWidget->setChordNameRulerVisible(visible);
 
-    // ... raw note ruler ...
+    // ... raw note ruler, ...
     visible = settings.value("Raw note ruler shown",
                           findAction("show_raw_note_ruler")->isChecked()
                          ).toBool();
     findAction("show_raw_note_ruler")->setChecked(visible);
     m_notationWidget->setRawNoteRulerVisible(visible);
 
-    // ... and tempo ruler
+    // ... tempo ruler ...
     visible = settings.value("Tempo ruler shown",
                           findAction("show_tempo_ruler")->isChecked()
                          ).toBool();
     findAction("show_tempo_ruler")->setChecked(visible);
     m_notationWidget->setTempoRulerVisible(visible);
+
+    // ... and staff headers.
+    visible = settings.value("shownotationheader").toInt()
+              != HeadersGroup::ShowNever;
+        // ShowWhenNeeded and ShowAlways not used yet ...
+    m_notationWidget->setHeadersVisible(visible);
 
     settings.endGroup();
 
@@ -849,6 +856,12 @@ NewNotationView::slotMultiPageMode()
 {
     leaveActionState("linear_mode");
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
+}
+
+void
+NewNotationView::slotShowHeadersGroup()
+{
+    if (m_notationWidget) m_notationWidget->toggleHeadersView();
 }
 
 void

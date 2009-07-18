@@ -115,6 +115,8 @@ protected slots:
     void slotContinuousPageMode();
     void slotMultiPageMode();
 
+    void slotShowHeadersGroup();
+
     void slotChangeFontFromAction();
     void slotChangeFontSizeFromAction();
 
