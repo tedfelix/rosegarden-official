@@ -154,6 +154,7 @@
 #include "gui/widgets/CurrentProgressDialog.h"
 #include "gui/widgets/ProgressBar.h"
 #include "gui/widgets/ProgressDialog.h"
+#include "gui/widgets/FileDialog.h"
 #include "LircClient.h"
 #include "LircCommander.h"
 #include "RosegardenMainViewWidget.h"
@@ -215,7 +216,6 @@
 #include <QAction>
 #include <QUrl>
 #include <QDialog>
-#include <QFileDialog>
 #include <QPrintDialog>
 #include <QColorDialog>
 #include <QFontDialog>
@@ -224,6 +224,7 @@
 
 namespace Rosegarden
 {
+
 
 RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
                                    QObject *startupStatusMessageReceiver) :
@@ -479,7 +480,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     emit startupStatusMessage(tr("Starting..."));
 
-    setupFileDialogSpeedbar();
+    //setupFileDialogSpeedbar();
     readOptions();
 
     // All toolbars should be created before this is called
@@ -1449,7 +1450,7 @@ void RosegardenMainWindow::slotSaveOptions()
 void RosegardenMainWindow::setupFileDialogSpeedbar()
 {
     QSettings settings;
-    settings.beginGroup("QFileDialog_Speedbar");
+    settings.beginGroup("FileDialog_Speedbar");
 
     RG_DEBUG << "RosegardenMainWindow::setupFileDialogSpeedbar" << endl;
 
@@ -1790,7 +1791,7 @@ void RosegardenMainWindow::slotFileOpen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("open_file", QDir::homePath()).toString();
 
-    QString fname = QFileDialog::getOpenFileName(this, "Open File", directory,
+    QString fname = FileDialog::getOpenFileName(this, "Open File", directory,
                     tr("All supported files") + " (*.rg *.RG *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
@@ -1824,7 +1825,7 @@ void RosegardenMainWindow::slotMerge()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_file", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -1944,9 +1945,9 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
 
     // Confirm the overwrite of the file later.
     //
-    QString name = QFileDialog::getSaveFileName(this, tr("Save File"), directory, descriptiveExtension, 0, QFileDialog::DontConfirmOverwrite); 
+    QString name = FileDialog::getSaveFileName(this, tr("Save File"), directory, descriptiveExtension, 0, FileDialog::DontConfirmOverwrite); 
     
-    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : QFileDialog::getSaveFileName returned "
+    RG_DEBUG << "RosegardenMainWindow::getValidWriteFileName() : FileDialog::getSaveFileName returned "
              << name << endl;
 
 
@@ -3377,7 +3378,7 @@ void RosegardenMainWindow::slotImportProject()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_project", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -3441,7 +3442,7 @@ void RosegardenMainWindow::slotImportMIDI()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_midi", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -3476,7 +3477,7 @@ void RosegardenMainWindow::slotMergeMIDI()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_midi", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Merge MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -3731,7 +3732,7 @@ void RosegardenMainWindow::slotImportRG21()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_relic", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -3766,7 +3767,7 @@ void RosegardenMainWindow::slotMergeRG21()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_relic", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", 0, 0);
 
@@ -3856,7 +3857,7 @@ RosegardenMainWindow::slotImportHydrogen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_hydrogen", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
@@ -3890,7 +3891,7 @@ void RosegardenMainWindow::slotMergeHydrogen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_hydrogen", QDir::homePath()).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty()) {
@@ -7531,7 +7532,7 @@ RosegardenMainWindow::slotImportStudio()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
 
-    QUrl url = QFileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
+    QUrl url = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                tr("All files") + " (*)", 0, 0);
 
     if (url.isEmpty())

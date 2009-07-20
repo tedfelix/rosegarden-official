@@ -27,19 +27,28 @@ namespace Rosegarden
 {
 
 
-FileDialog::FileDialog(QWidget *parent) :
-        QFileDialog(parent)
+FileDialog::FileDialog(QWidget *parent,
+                       const QString &caption,
+                       const QString &dir,
+                       const QString &filter) :
+        QFileDialog(parent,
+                    caption,
+                    dir,
+                    filter)
 {
     // Since we're here anyway, there may be a way to style the directory
     // navigation arrows from inside here.  It never worked from the external
     // stylesheet, and I can't even remember what I tried unsuccessfully in the
     // past.
-    
+   
+    // set up the sidebar stuff; the entire purpose of this class 
     QList<QUrl> urls;
 
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))
-          << QUrl::fromLocalFile("~/.local/share/rosegarden/templates")
-          << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MusicLocation));
+         << QUrl::fromLocalFile("~/.local/share/rosegarden/examples")
+         << QUrl::fromLocalFile("~/.local/share/rosegarden/templates")
+         << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MusicLocation))
+         << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
 
     setSidebarUrls(urls);
 
@@ -52,37 +61,84 @@ FileDialog::~FileDialog()
 
 
 QString
-getOpenFilename(QWidget *parent = 0,
-                const QString &caption = QString(),
-                const QString &dir = QString(),
-                const QString &filter = QString(),
-                QString *selectedFilter = 0,
-                QFileDialog::Options options = 0)
+FileDialog::getOpenFileName(QWidget *parent,
+                            const QString &caption,
+                            const QString &dir,
+                            const QString &filter,
+                            QString *selectedFilter,
+                            QFileDialog::Options options)
 {
-//    setWindowTitle(caption);
-//    return "foo";
+    FileDialog dialog(parent, caption, dir, filter);
+
+    if (options)
+        dialog.setOptions(options);
+
+    // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
+    if (selectedFilter)
+        dialog.selectNameFilter(*selectedFilter);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        if (selectedFilter)
+            *selectedFilter = dialog.selectedFilter();
+        return dialog.selectedFiles().value(0);
+    }
+
+    return QString();
 }
 
 
 QStringList
-getOpenFileNames(QWidget *parent = 0,
-                 const QString &caption = QString(),
-                 const QString &dir = QString(),
-                 const QString &filter = QString(),
-                 QString *selectedFilter = 0,
-                 QFileDialog::Options options = 0)
+FileDialog::getOpenFileNames(QWidget *parent,
+                             const QString &caption,
+                             const QString &dir,
+                             const QString &filter,
+                             QString *selectedFilter,
+                             QFileDialog::Options options)
 {
-//    setWindowTitle(caption);
+    FileDialog dialog(parent, caption, dir, filter);
+
+    if (options)
+        dialog.setOptions(options);
+
+    // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
+    if (selectedFilter)
+        dialog.selectNameFilter(*selectedFilter);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        if (selectedFilter)
+            *selectedFilter = dialog.selectedFilter();
+        return dialog.selectedFiles();
+    }
+
+    return QStringList();
 }
 
+
 QString
-getSaveFileName(QWidget *parent = 0,
-                const QString &caption = QString(),
-                const QString &dir = QString(),
-                const QString &filter = QString(),
-                QString *selectedFilter = 0,
-                QFileDialog::Options options = 0)
+FileDialog::getSaveFileName(QWidget *parent,
+                            const QString &caption,
+                            const QString &dir,
+                            const QString &filter,
+                            QString *selectedFilter,
+                            QFileDialog::Options options)
 {
+    FileDialog dialog(parent, caption, dir, filter);
+
+    if (options)
+        dialog.setOptions(options);
+
+    // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    if (selectedFilter)
+        dialog.selectNameFilter(*selectedFilter);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        if (selectedFilter)
+            *selectedFilter = dialog.selectedFilter();
+        return dialog.selectedFiles().value(0);
+    }
+
+    return QString();
 }
 
 
