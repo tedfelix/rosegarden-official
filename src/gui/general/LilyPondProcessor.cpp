@@ -28,6 +28,7 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QMessageBox>
+#include <QDir>
 
 #include <iostream>
 
@@ -36,9 +37,15 @@ namespace Rosegarden
 
 LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename) :
         QDialog(parent),
-        m_mode(mode),
-        m_filename(filename)
+        m_mode(mode)
 {
+    // We have to split the combined filename (eg. "/tmp/rosegarden_tmp_T73123.ly"
+    // into a separate filename and directory component, to hack around a
+    // critical bug I couldn't resolve any other way.
+    int pos = filename.lastIndexOf("/");
+    m_filename = filename.mid(pos + 1, (filename.size() - pos - 1));
+    m_dir = QDir::tempPath(); // OK, we'll just be lazy and not parse it back out of the string
+
     // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
     // iostream is mildly irritating, as QStrings have to be converted, but
     // whatever, I'll figure that out later, or just leave well enough alone)
@@ -108,8 +115,11 @@ LilyPondProcessor::puke(QString error)
 void
 LilyPondProcessor::runConvertLy()
 {
+    std::cerr << "LilyPondProcessor::runConvertLy()" << std::endl;
+
     m_info->setText(tr("Running <b>convert-ly</b>..."));
     m_process = new QProcess;
+    m_process->setWorkingDirectory(m_dir);
     m_process->start("convert-ly", QStringList() << "-e" << m_filename);
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
             this, SLOT(runLilyPond(int, QProcess::ExitStatus)));
@@ -129,7 +139,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
 {
     std::cerr << "LilyPondProcessor::runLilyPond()" << std::endl;
 
-    if (m_process->exitCode() == 0) {
+    if (exitCode == 0) {
         m_info->setText(tr("<b>convert-ly</b> finished..."));
         delete m_process;
     } else {
@@ -139,6 +149,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     m_progress->setValue(50);
 
     m_process = new QProcess;
+    m_process->setWorkingDirectory(m_dir);
     m_info->setText(tr("Running <b>lilypond</b>..."));
     m_process->start("lilypond", QStringList() << "--pdf" << m_filename);
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
@@ -161,6 +172,8 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
 void
 LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 {
+    std::cerr << "LilyPondProcessor::runFinalStage()" << std::endl;
+
     if (exitCode == 0) {
         m_info->setText(tr("<b>lilypond</b> finished..."));
         delete m_process;
@@ -255,6 +268,7 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
             finalProcessor = pdfViewer;
     }
 
+    m_process->setWorkingDirectory(m_dir);
     m_process->start(finalProcessor, QStringList() << pdfName);
     if (m_process->waitForStarted()) {
         QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));

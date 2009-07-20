@@ -58,7 +58,14 @@ public:
      * only need a PDF preview mode and a direct print mode.
      *
      * The filename parameter should be a temporary file set elsewhere and
-     * passed in.
+     * passed in.  Unfortunately, there was a bit of a snag with that.  The
+     * QProcess bits choke when start() is called with a filename that has an
+     * absolute path in it, but the code in RosegardenMainWindow needs to have
+     * an absolute path where the file is going to reside in order for
+     * QTemporaryFile to ensure a safe, non-duplicate filename is created, so we
+     * have to pass the absolute path in and then strip it back out inside here,
+     * using QProcess::setWorkingDirectory() instead.  (This is pretty ugly, but
+     * I'm stumped coming up with a cleaner solution, so damn the torpedoes.)
      */
     static const int Preview   = 1;
     static const int Print     = 2;
@@ -71,6 +78,7 @@ public:
 protected:
     int           m_mode;
     QString       m_filename;
+    QString       m_dir;
     QProgressBar *m_progress;
     QLabel       *m_info;
     QProcess     *m_process;
