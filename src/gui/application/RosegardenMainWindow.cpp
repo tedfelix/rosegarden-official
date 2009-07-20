@@ -4704,78 +4704,61 @@ void RosegardenMainWindow::slotExportLilyPond()
     exportLilyPondFile(fileName);
 }
 
-std::map<QProcess *, QTemporaryFile *> RosegardenMainWindow::m_lilyTempFileMap;
 
-void RosegardenMainWindow::slotPrintLilyPond()
+void
+RosegardenMainWindow::slotPrintLilyPond()
 {
     TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
-    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
+
+    QString filename = getLilyPondTmpFilename();
+    if (filename.isEmpty()) return;
+
+    if (!exportLilyPondFile(filename, true)) {
+        return ;
+    }
+
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
+    dialog->exec();
+}
+
+void
+RosegardenMainWindow::slotPreviewLilyPond()
+{
+    TmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
+
+    QString filename = getLilyPondTmpFilename();
+    if (filename.isEmpty()) return;
+
+    if (!exportLilyPondFile(filename, true)) {
+        return ;
+    }
+
+    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
+    dialog->exec();
+}
+
+QString
+RosegardenMainWindow::getLilyPondTmpFilename()
+{
+    QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
+    std::cerr << "RosegardenMainWindow::getLilyPondTmpName() - using tmp file: " << qstrtostr(mask) << std::endl;
+
+    QTemporaryFile *file = new QTemporaryFile(mask);
     file->setAutoRemove(true);
     if (!file->open()) {
         CurrentProgressDialog::freeze();
         QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
-                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
+                                          "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
+                                       arg(QDir::tempPath()));
         delete file;
+        return QString();
     }
     QString filename = file->fileName(); // must call this before close()
     file->close(); // we just want the filename
-    if (!exportLilyPondFile(filename, true)) {
-        return ;
-    }
-/*    //setup "rosegarden-lilypondview" process
-    QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "--graphical";
-    procArgs << "--print";
-    procArgs << filename;
-    connect(proc, SIGNAL(processExited(QProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
-    m_lilyTempFileMap[proc] = file;
-    proc->start("rosegarden-lilypondview" ,procArgs); //@@@JAS KProcess::NotifyOnExit*/
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
-    if (dialog->exec() != QDialog::Accepted) {
-        return;
-    }
+
+    return filename;
 }
 
-void RosegardenMainWindow::slotPreviewLilyPond()
-{
-    TmpStatusMsg msg(tr("Previewing LilyPond file..."), this);
-    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
-    file->setAutoRemove(true);
-    if (!file->open()) {
-        CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, "", tr("Failed to open a temporary file for LilyPond export."));
-        delete file;
-    }
-    QString filename = file->fileName(); // must call this before close()
-    file->close(); // we just want the filename
-    if (!exportLilyPondFile(filename, true)) {
-        return ;
-    }
-    //setup "rosegarden-lilypondview" process
-    /*QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "--graphical";
-    procArgs << "--pdf";
-    procArgs << filename;
-    connect(proc, SIGNAL(processExited(QProcess *)),
-            this, SLOT(slotLilyPondViewProcessExited(QProcess *)));
-    m_lilyTempFileMap[proc] = file;
-    proc->execute("rosegarden-lilypondview", procArgs);*/
-
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
-    if (dialog->exec() != QDialog::Accepted) {
-        return;
-    }
-}
-
-void RosegardenMainWindow::slotLilyPondViewProcessExited(QProcess *p)
-{
-    delete m_lilyTempFileMap[p];
-    m_lilyTempFileMap.erase(p);
-    delete p;
-}
 
 bool RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
 {

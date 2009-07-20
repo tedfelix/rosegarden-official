@@ -657,7 +657,6 @@ public slots:
      */
     void slotPrintLilyPond();
     void slotPreviewLilyPond();
-    void slotLilyPondViewProcessExited(QProcess *);
 
     /**
      * Let the user enter a MusicXml file to export to
@@ -1536,6 +1535,11 @@ public slots:
     
     void slotOpenDeviceManagerNew();
 private:
+
+    /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
+     * unique
+     */
+    QString getLilyPondTmpFilename();
 
 
     //--------------- Data members ---------------------------------
