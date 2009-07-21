@@ -345,9 +345,17 @@
 
 </MenuBar>
 
-
-
-
+<ToolBar name="General Toolbar">
+    <text>General Toolbar</text>
+    <Action name="file_save"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <Separator/>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+</ToolBar>  
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>

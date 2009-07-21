@@ -106,7 +106,10 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     setupActions();
     
     createGUI("matrix.rc");
-    
+   
+     
+    QToolBar *generalToolbar = findToolbar("General Toolbar");
+
     initActionsToolbar();
     initZoomToolbar();
     initRulersToolbar();
