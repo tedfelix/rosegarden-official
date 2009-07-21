@@ -7,10 +7,8 @@
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
   <Separator/>
-    <Action name="file_print" text="&amp;Print..." icon="fileprint" />
-    <Action name="file_print_preview" text="P&amp;rint preview..." icon="filequickprint" />
-    <Action name="file_print_lilypond" text="Print &amp;with LilyPond..." append="print_merge" />
-    <Action name="file_preview_lilypond" text="Preview with Lil&amp;yPond..." append="print_merge" />
+    <Action name="file_preview_lilypond" text="P&amp;rint preview..." icon="filepreviewlily" />
+    <Action name="file_print_lilypond" text="&amp;Print..." icon="fileprintlily" />
   <Separator/>
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
@@ -610,6 +608,21 @@
     <Action name="help_about_kde" text="About &amp;KDE" icon="about_kde" />
   </Menu>
 </MenuBar>
+
+<ToolBar name="General Toolbar">
+    <text>General Toolbar</text>
+    <Action name="file_save"/>
+    <Separator/>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="edit_paste"/>
+    <Separator/>
+    <Action name="file_preview_lilypond"/>
+    <Action name="file_print_lilypond"/>
+    <Separator/>
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
+</ToolBar>    
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>

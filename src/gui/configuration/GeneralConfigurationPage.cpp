@@ -339,7 +339,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     m_filePrinter = new QComboBox(frame);
     connect(m_filePrinter, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_filePrinter->addItem(tr("KPrinter (KDE)"));
+    m_filePrinter->addItem(tr("KPrinter (KDE3)"));
     m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
     m_filePrinter->addItem(tr("lpr (no GUI)"));
     m_filePrinter->addItem(tr("lp (no GUI)"));
@@ -350,7 +350,10 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
 
     settings.beginGroup(ExternalApplicationsConfigGroup);
     m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", Okular).toUInt());
-    m_filePrinter->setCurrentIndex(settings.value("fileprinter", KPrinter).toUInt());
+
+    // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
+    // to Lpr instead.
+    m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
     settings.endGroup();
 
     ++row;

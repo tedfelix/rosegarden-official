@@ -559,8 +559,8 @@ void RosegardenMainWindow::setupActions()
     createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
     createAction("file_revert", SLOT(slotRevertToSaved()));
     createAction("file_close", SLOT(slotFileClose()));
-    createAction("file_print", SLOT(slotFilePrint()));
-    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
+//    createAction("file_print", SLOT(slotFilePrint()));
+//    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
     createAction("file_quit", SLOT(slotQuit()));
 
     createAction("edit_cut", SLOT(slotEditCut()));
@@ -2082,6 +2082,10 @@ void RosegardenMainWindow::slotFileClose()
 
 void RosegardenMainWindow::slotFilePrint()
 {
+    // Disabled, but left in place in case we ever decide to implement native
+    // printing
+    return;
+
     if (m_doc->getComposition().getNbSegments() == 0) {
         /* was sorry */ QMessageBox::warning(this, "", "Please create some tracks first (until we implement menu state management)");
         return ;
@@ -2094,6 +2098,10 @@ void RosegardenMainWindow::slotFilePrint()
 
 void RosegardenMainWindow::slotFilePrintPreview()
 {
+    // Disabled, but left in place in case we ever decide to implement native
+    // printing
+    return;
+
     if (m_doc->getComposition().getNbSegments() == 0) {
         /* was sorry */ QMessageBox::warning(this, "", "Please create some tracks first (until we implement menu state management)");
         return ;

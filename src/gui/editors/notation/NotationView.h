@@ -133,6 +133,7 @@ protected slots:
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
 
+    void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
     void slotToggleNotesToolBar();
     void slotToggleRestsToolBar();

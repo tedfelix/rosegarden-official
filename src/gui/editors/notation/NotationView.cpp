@@ -202,8 +202,6 @@ NewNotationView::setupActions()
     // "file_save"
     // Created in EditViewBase::setupActions() via creatAction()
 
-//    createAction("file_print", SLOT(slotFilePrint()));
-//    createAction("file_print_preview", SLOT(slotFilePrintPreview()));
     createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
     createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
 
@@ -516,6 +514,7 @@ NewNotationView::setupActions()
     //Actions first appear in "settings" Menubar menu
     //"toolbars" subMenu
     //Where is "options_show_toolbar" created?
+    createAction("show_general_toolbar", SLOT(slotToggleGeneralToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
     createAction("show_notes_toolbar", SLOT(slotToggleNotesToolBar()));
     createAction("show_rests_toolbar", SLOT(slotToggleRestsToolBar()));
@@ -1227,6 +1226,11 @@ void NewNotationView::slotSetVelocities()
                         dialog.getValue1(),
                         dialog.getValue2()));
     }
+}
+
+void NewNotationView::slotToggleGeneralToolBar()
+{
+    toggleNamedToolBar("General Toolbar");
 }
 
 void NewNotationView::slotToggleToolsToolBar()

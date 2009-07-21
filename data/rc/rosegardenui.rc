@@ -49,10 +49,8 @@
     <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
   <Separator/>
-    <Action name="file_print" text="&amp;Print..." icon="fileprint" />
-    <Action name="file_print_preview" text="Prin&amp;t preview..." icon="filequickprint" />
-    <Action name="file_print_lilypond" append="print_merge" text="Print &amp;with Lilypond..." />
-    <Action name="file_preview_lilypond" append="print_merge" text="Preview with Lil&amp;ypond..." />
+    <Action name="file_preview_lilypond" append="print_merge" text="Prin&amp;t preview..." icon="filepreviewlily" />
+    <Action name="file_print_lilypond" append="print_merge" text="&amp;Print..." icon="fileprintlily" />
   <Separator/>
     <Action name="audio_manager" text="Manage A&amp;udio Files" icon="manage-audio-segments" />
   <Separator/>
@@ -264,8 +262,8 @@
   <Action name="file_new"/>
   <Action name="file_open"/>
   <Action name="file_save"/>
-  <Action name="file_print"/>
-  <Action name="file_print_preview"/>
+  <Action name="file_preview_lilypond"/>
+  <Action name="file_print_lilypond"/>
   <Separator/>
   <Action name="edit_toolbar_undo" text="&amp;Nothing to undo" icon="undo"/>
   <Action name="edit_toolbar_redo" text="N&amp;othing to redo" icon="redo"/>
@@ -371,8 +369,6 @@
         </disable>
         <enable>
                 <Action name="file_close"/>
-                <Action name="file_print"/>
-                <Action name="file_print_preview"/>
         </enable>
 </State>
 
@@ -394,12 +390,6 @@
 	</enable>
 </State>
 
-<State name="have_lilypondview">
-	<enable>
-		<Action name="file_preview_lilypond"/>
-	</enable>
-</State>
-
 <State name="have_segments">
         <enable>
                 <Action name="move"/>
@@ -407,8 +397,8 @@
                 <Action name="resize"/>
                 <Action name="split"/>
                 <!-- <Action name="join"/> -->
-                <Action name="file_print"/>
-                <Action name="file_print_preview"/>
+                <Action name="file_print_lilypond"/>
+                <Action name="file_preview_lilypond"/>
         </enable>
 </State>
 
