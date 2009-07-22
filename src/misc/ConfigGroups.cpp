@@ -46,4 +46,5 @@ namespace Rosegarden
     const char* const ExternalApplicationsConfigGroup = "External_Applications";
     const char* const LilyPondExportConfigGroup = "LilyPond_Export";
     const char* const LastUsedPathsConfigGroup = "Last_Used_Paths";
+    const char* const WindowGeometryConfigGroup = "Window_Geometry";
 }

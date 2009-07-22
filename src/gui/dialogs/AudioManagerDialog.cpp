@@ -117,7 +117,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList = new AudioListView(centralWidget); // internal class needs parent (?)
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
     m_fileList->setSelectionBehavior(QAbstractItemView::SelectRows);
-//    m_fileList->setSelectionBehavior(QAbstractItemView::SelectItems);
     
     boxLayout->addWidget(m_fileList);
 
@@ -151,8 +150,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // Set the column names
     //
     //
-    
-    //m_fileList->setHorizontalHeaderItem(0, new QTreeWidgetItem(tr("File")));           // 6    
     QStringList sl;
     
     sl << tr("Name");           // 0
@@ -166,46 +163,12 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_fileList->setColumnCount(7);
     m_fileList->setHeaderItem(new QTreeWidgetItem(sl));
     
-    //m_fileList->sortByColumn (int column=1, Qt::AscendingOrder);
     m_fileList->setSortingEnabled(true);
     
-    /*
-    //&&& table widget - column alignment
-    m_fileList->setColumnAlignment(1, Qt::AlignHCenter);
-    m_fileList->setColumnAlignment(2, Qt::AlignHCenter);
-    m_fileList->setColumnAlignment(3, Qt::AlignHCenter);
-    m_fileList->setColumnAlignment(4, Qt::AlignHCenter);
-    m_fileList->setColumnAlignment(5, Qt::AlignHCenter);
-    
-    */
-    
-//    m_fileList->restoreLayout(m_listViewLayoutName);    // &&&
-
-    // a minimum width for the list box
-    //m_fileList->setMinimumWidth(300);
-
-    // show focus across all columns
-//    m_fileList->setAllColumnsShowFocus(true);
-
-    // show tooltips when columns are partially hidden
-//    m_fileList->setShowToolTips(true);
-
-    
-    
-//     old: 
-//    connect(m_fileList, SIGNAL(selectionChanged(QTreeWidgetItem*)),
-//             SLOT(slotSelectionChanged(QTreeWidgetItem*)));
     //
     // connect selection mechanism
     connect(m_fileList, SIGNAL(itemSelectionChanged()),
             this, SLOT(slotSelectionChanged()));
-    
-    
-    // not really used:
-    //connect(m_fileList, SIGNAL(currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)), this, SLOT(slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous)));
-    
-    
-// //     connect(m_fileList, SIGNAL(itemActivated (QTreeWidgetItem * item, int column)), this, SLOT(slotFileItemActivated()));
     
     
     //### TODO: Fix drag n drop
@@ -229,8 +192,6 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
             this, SLOT(slotCommandExecuted(Command *)));
 
-    //setInitialSize(configDialogSize(AudioManagerDialogConfigGroup));
-
     connect(m_playTimer, SIGNAL(timeout()),
             this, SLOT(slotCancelPlayingAudio()));
 
@@ -245,6 +206,11 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     createGUI("audiomanager.rc"); //@@@ JAS orig. 0
 
     updateActionState(false);
+
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    this->restoreGeometry(settings.value("Audio_File_Manager").toByteArray());
+    settings.endGroup();
 }
 
 
@@ -260,7 +226,10 @@ AudioManagerDialog::~AudioManagerDialog()
     RG_DEBUG << "\n*** AudioManagerDialog::~AudioManagerDialog\n" << endl;
     
 //    m_fileList->saveLayout(m_listViewLayoutName);    //&&&
-    //saveDialogSize(AudioManagerDialogConfigGroup);
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Audio_File_Manager", this->saveGeometry());
+    settings.endGroup();
 }
 
 void
@@ -271,7 +240,6 @@ AudioManagerDialog::slotPopulateFileList()
 
     // Store last selected item if we have one
     //
-   // AudioListItem *selectedItem = dynamic_cast<AudioListItem*>(m_fileList->selectedItem());
     AudioListItem *selectedItem = dynamic_cast<AudioListItem*>(m_fileList->currentItem());
     
     AudioFileId lastId = 0;
@@ -297,11 +265,9 @@ AudioManagerDialog::slotPopulateFileList()
             m_doc->getAudioFileManager().end()) {
         // Turn off selection and report empty list
         //
-        //new AudioListItem(m_fileList, tr("<no audio files>"), 0);
         auItem = new AudioListItem(m_fileList, QStringList(tr("<no audio files>")));
         
         m_fileList->setSelectionMode(QAbstractItemView::NoSelection);
-//        m_fileList->setRootIsDecorated(false);
 
         m_fileList->blockSignals(false);
         updateActionState(false);
@@ -309,7 +275,6 @@ AudioManagerDialog::slotPopulateFileList()
     }
 
     // show tree hierarchy
-//    m_fileList->setRootIsDecorated(true); //&&&
 
     // enable selection
     m_fileList->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -360,7 +325,6 @@ AudioManagerDialog::slotPopulateFileList()
         
         //AudioListItem *item = new AudioListItem(m_fileList, label, (*it)->getId());
         AudioListItem *item = new AudioListItem(m_fileList, QStringList(label)); //, (*it)->getId());
-//        m_fileList->setItem(0, item);
         
         // Duration
         //
@@ -604,8 +568,6 @@ AudioManagerDialog::slotRemove()
     if (item->getSegment()) {
         // Get the next item to highlight
         //
-//        QTreeWidgetItem *newItem = item->itemBelow();
-        //QTreeWidgetItem *newItem = m_fileList->item((item->row()+1), item->column());
         QTreeWidgetItem *newItem = m_fileList->itemBelow(item);
         
         // Or try above
@@ -754,9 +716,9 @@ AudioManagerDialog::slotAdd()
                             tr("All files") + " (*)";
     
     if (RosegardenMainWindow::self()->haveAudioImporter()) {
-    //!!! This list really needs to come from the importer helper program
-    // (which has an option to supply it -- we just haven't recorded it)
-    //
+        //!!! This list really needs to come from the importer helper program
+        // (which has an option to supply it -- we just haven't recorded it)
+        //
         extensionList = tr("Audio files") + " (*.wav *.flac *.ogg *.mp3 *.WAV *.FLAC *.OGG *.MP3)" + ";;" +
                         tr("WAV files") + " (*.wav *.WAV)" + ";;" + 
                         tr("FLAC files") + " (*.flac *.FLAC)" + ";;" +
