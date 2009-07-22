@@ -171,6 +171,13 @@ private:
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
 
+    /** Curiously enough, the window geometry code never fired in the dtor.  I
+     * can only conclude the dtor is never being called for some reason, and
+     * it's probably a memory leak for the command registry object it wants to
+     * delete, but I won't try to work that one out at the moment.  I'll just
+     * implement closeEvent() and whistle right on past that other thing.
+     */
+    void closeEvent(QCloseEvent *event);
     void setupActions();
     void updateWindowTitle();
 };

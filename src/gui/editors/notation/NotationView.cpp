@@ -185,11 +185,33 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     settings.endGroup();
 
     updateWindowTitle();
+
+    // Restore window geometry
+    settings.beginGroup(WindowGeometryConfigGroup);
+    this->restoreGeometry(settings.value("Notation_View").toByteArray());
+    settings.endGroup();
 }
 
 NewNotationView::~NewNotationView()
 {
+    //!!! Odd that the window geometry save bit didn't work in here.  The little
+    // message printed to std::cerr didn't fire, so unless I'm just really
+    // obtuse and illiterate about something, I don't think this dtor ever fires
+    // and we probably have a memory leak.
     delete m_commandRegistry;
+}
+
+void
+NewNotationView::closeEvent(QCloseEvent *event)
+{
+    // Save window geometry
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    std::cerr << "storing window geometry for notation view" << std::endl;
+    settings.setValue("Notation_View", this->saveGeometry());
+    settings.endGroup();
+
+    QWidget::closeEvent(event);
 }
 
 void
