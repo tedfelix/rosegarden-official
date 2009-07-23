@@ -470,43 +470,25 @@ int main(int argc, char *argv[])
     if (newVersion) {
         std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
         settings.setValue("lastversion", VERSION);
+
+        //unbundle examples, templates, library
     }
 
-    // If there is no config setting for the startup window size, set
-    // one now.  But base the default on the appropriate desktop size
-    // (i.e. not the entire desktop, if Xinerama is in use).  This is
-    // obtained from KGlobalSettings::desktopGeometry(), but we can't
-    // give it a meaningful point to measure from at this stage so we
-    // always use the "leftmost" display (point 0,0).
-
-    // The config keys are "Height X" and "Width Y" where X and Y are
-    // the sizes of the available desktop (i.e. the whole shebang if
-    // under Xinerama).  These are obtained from QDesktopWidget.
-
-    settings.endGroup();
-    settings.beginGroup("MainView");
-
-    int windowWidth = 0, windowHeight = 0;
-
-    QDesktopWidget *desktop = theApp.desktop();
-    if (desktop) {
-    QRect totalRect(desktop->screenGeometry());
-    QRect desktopRect = desktop->availableGeometry();
-    QSize startupSize;
-    if (desktopRect.height() <= 800) {
-        startupSize = QSize((desktopRect.width() * 6) / 7,
-                (desktopRect.height() * 6) / 7);
-    } else {
-        startupSize = QSize((desktopRect.width() * 4) / 5,
-                (desktopRect.height() * 4) / 5);
-    }
-    QString widthKey = QString("Width %1").arg(totalRect.width());
-    QString heightKey = QString("Height %1").arg(totalRect.height());
-    windowWidth = settings.value
-        (widthKey, startupSize.width()).toInt();
-    windowHeight = settings.value
-        (heightKey, startupSize.height()).toInt();
-    }
+    // NOTE: We used to have a great heap of code here to calculate a sane
+    // default initial size.  When I made RosegardenMainWindow keep track of its
+    // own geometry, I originally built in a series of locks to allow the old
+    // code here to run one time to establish a known good default, and then
+    // that class took over saving and restoring its own geometry afterwards.
+    //
+    // While testing the locks, I ran several times with the states messed up,
+    // where we tried to restore saved settings when there were none to restore.
+    // The default seemed to be exactly the same as what we had all that
+    // complicated code to set up.  I'm not sure if that code ever did anything
+    // in Qt4, and I think our default initial state is rather sane now.
+    //
+    // If it turns out that it isn't, I think we should set up a sane default in
+    // some less complicated way next time, so either way, I have decided to
+    // ditch all of the code.
 
     settings.endGroup();
     settings.beginGroup(GeneralOptionsConfigGroup);
@@ -530,48 +512,28 @@ int main(int argc, char *argv[])
     //
     RosegardenMainWindow *rosegardengui = 0;
 
-/*&&& worry about this later
-    if (theApp.isSessionRestored()) {
-        RG_DEBUG << "Restoring from session\n";
-
-        // RESTORE(RosegardenMainWindow);
-        int n = 1;
-        while (KMainWindow::canBeRestored(n)) {
-            // memory leak if more than one can be restored?
-            RG_DEBUG << "Restoring from session - restoring theApp #" << n << endl;
-            (rosegardengui = new RosegardenMainWindow)->restore(n);
-            n++;
-        }
-
-    } else {
-*/
-
 #ifndef NO_SOUND
-        theApp.setNoSequencerMode(nosequencer);
+    theApp.setNoSequencerMode(nosequencer);
 #else
-        theApp.setNoSequencerMode(true);
+    theApp.setNoSequencerMode(true);
 #endif // NO_SOUND
 
-        rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
+    rosegardengui = new RosegardenMainWindow(!theApp.noSequencerMode(), startLogo);
 
     rosegardengui->setIsFirstRun(newVersion);
 
-        theApp.setMainWidget(rosegardengui);
+    theApp.setMainWidget(rosegardengui);
 
-    if (windowWidth != 0 && windowHeight != 0) {
-        rosegardengui->resize(windowWidth, windowHeight);
+    rosegardengui->show();
+
+    // raise start logo
+    //
+    if (startLogo) {
+        startLogo->raise();
+        startLogo->setHideEnabled(true);
+        startLogo->repaint();
+        theApp.flushX();
     }
-
-        rosegardengui->show();
-
-        // raise start logo
-        //
-        if (startLogo) {
-            startLogo->raise();
-            startLogo->setHideEnabled(true);
-            startLogo->repaint();
-            theApp.flushX();
-        }
 
     for (int i = 1; i < args.size(); ++i) {
         if (args[i].startsWith("-")) continue;

@@ -111,9 +111,11 @@ public:
      * @see initMenuBar initToolBar
      */
     RosegardenMainWindow(bool useSequencer = true,
-                     QObject *startupStatusMessageReceiver = 0);
+                         QObject *startupStatusMessageReceiver = 0);
 
     virtual ~RosegardenMainWindow();
+
+    void closeEvent(QCloseEvent *event);
 
     /*
      * Get the current copy of the app object
@@ -127,7 +129,7 @@ public:
     
     /**
      * returns a pointer to the current document connected to the
-     * KTMainWindow instance and is used by * the View class to access
+     * QMainWindow instance and is used by * the View class to access
      * the document object's methods
      */ 
     RosegardenDocument *getDocument() const;      

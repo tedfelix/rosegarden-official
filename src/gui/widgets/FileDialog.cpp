@@ -47,8 +47,10 @@ FileDialog::FileDialog(QWidget *parent,
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))
          << QUrl::fromLocalFile("~/.local/share/rosegarden/examples")
          << QUrl::fromLocalFile("~/.local/share/rosegarden/templates")
+         << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation))
          << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MusicLocation))
-         << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation));
+         << QUrl::fromLocalFile("~/rosegarden")
+         ; // closing ; on this line to allow the lines above to be shuffled easily
 
     setSidebarUrls(urls);
 
