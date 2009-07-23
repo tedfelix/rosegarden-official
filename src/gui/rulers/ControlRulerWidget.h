@@ -21,6 +21,7 @@
 #include <QStackedWidget>
 #include "base/Event.h"
 #include "base/ViewElement.h"
+#include "base/MidiDevice.h"
 
 namespace Rosegarden
 {
@@ -51,6 +52,7 @@ public:
 
 public slots:
     void slotTogglePropertyRuler(const PropertyName &);
+    void slotToggleControlRuler(std::string);
     void slotAddRuler();
     void slotAddControlRuler(const ControlParameter &);
     void slotAddPropertyRuler(const PropertyName &);
@@ -62,6 +64,7 @@ public slots:
 
 protected:
     std::list<ControlRuler *> m_controlRulerList;
+    const ControlList *m_controlList;
 
     RosegardenDocument *m_document;
     Segment *m_segment;

@@ -589,7 +589,7 @@ MatrixWidget::slotToggleVelocityRuler()
 void
 MatrixWidget::slotTogglePitchbendRuler()
 {
-    m_controlsWidget->slotAddRuler();
+    m_controlsWidget->slotToggleControlRuler("PitchBend");
 }
 
 void

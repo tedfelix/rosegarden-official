@@ -44,7 +44,8 @@ namespace Rosegarden
 ControlRulerWidget::ControlRulerWidget() :
 m_segment(0),
 m_scene(0),
-m_scale(0)
+m_scale(0),
+m_controlList(0)
 {
 }
 
@@ -67,6 +68,12 @@ void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<S
 
     Instrument *instr = document->getStudio().
                         getInstrumentById(track->getInstrument());
+
+    MidiDevice *device = dynamic_cast <MidiDevice*> (instr->getDevice());
+
+    if (device) {
+        m_controlList = &(device->getControlParameters());
+    }
 
     SegmentSelection selection;
     selection.insert(segments.begin(), segments.end());
@@ -95,17 +102,6 @@ void ControlRulerWidget::setScene(MatrixScene *scene)
 {
     m_scene = scene;
 
-///TEMP CODE
-//    slotAddPropertyRuler(BaseProperties::VELOCITY);
-    //        Controllable *c = dynamic_cast<MidiDevice *>(instr->getDevice());
-    //        const ControlList &list = c->getControlParameters();
-    //        RG_DEBUG << "ControlRulerWidget::setSegments - Device control parameters:";
-    //        for (ControlList::const_iterator it = list.begin();it != list.end(); ++it) {
-    //            if (it->getName() == "Volume")
-    //                slotAddControlRuler(*it);
-    //        }
-///TEMP CODE END
-
     PropertyControlRuler *propertyruler;
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;
@@ -127,12 +123,61 @@ void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyNam
         if (propruler) {
             if (propruler->getPropertyName() == propertyName)
             {
-                removeRuler(it);
+                // We already have a ruler for this property
+                if (currentWidget() != (*it)) {
+                    // It was not on show, so show it
+                    setCurrentWidget(*it);
+                }
+                else {
+                    // It was not on show, so delete it
+                    removeRuler(it);
+                }
                 break;
             }
         }
     }
     if (it==m_controlRulerList.end()) slotAddPropertyRuler(propertyName);
+}
+
+void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
+{
+    if (!m_controlList) return;
+
+    ControlList::const_iterator it;
+    // Check that the device supports a control parameter of this name
+    for (it = m_controlList->begin();
+        it != m_controlList->end(); it++) {
+        if ((*it).getName() == controlName) {
+            break;
+        }
+    }
+
+    // If we found this control name in the list for this device
+    if (it != m_controlList->end()) {
+        // Check whether we already have a control ruler for a control parameter of this name
+        ControllerEventsRuler *eventruler;
+        std::list<ControlRuler*>::iterator jt;
+        for (jt = m_controlRulerList.begin(); jt != m_controlRulerList.end(); jt++) {
+            eventruler = dynamic_cast <ControllerEventsRuler*> (*jt);
+            if (eventruler) {
+                if (eventruler->getControlParameter()->getName() == controlName)
+                {
+                    // We already have a ruler for this control
+                    if (currentWidget() != (*jt)) {
+                        // It was not on show, so show it
+                        setCurrentWidget(*jt);
+                    }
+                    else {
+                        // It was not on show, so delete it
+                        removeRuler(jt);
+                    }
+                    break;
+                }
+            }
+        }
+        // If we don't have a control ruler, make one now
+        if (jt==m_controlRulerList.end()) slotAddControlRuler(*it);
+    }
 }
 
 void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
@@ -158,6 +203,7 @@ void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlPara
 
     ControlRuler *controlruler = new ControllerEventsRuler(viewSegment, m_scale, this, &controlParameter);
     addWidget(controlruler);
+    setCurrentWidget(controlruler);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
 }
@@ -172,6 +218,7 @@ void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
     controlruler->updateSelection(&m_selectedElements);
     addWidget(controlruler);
+    setCurrentWidget(controlruler);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
 }
@@ -184,7 +231,6 @@ void ControlRulerWidget::slotSetPannedRect(QRectF pr)
 
     // Ruler widgets should draw this region (using getTimeForX from the segment) so pass the rectangle on
     // Provided rectangle should be centered on current widget size
-    // No zooming yet. This will confuse things somewhat
     m_pannedRect = pr;
 
     if (m_controlRulerList.size()) {

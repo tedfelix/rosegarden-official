@@ -191,6 +191,8 @@ protected:
     Segment *m_segment;
 
     ControlItemList m_controlItemList;
+    ControlItemMap m_controlItemStartList; // Note this will replace m_controlItemList
+
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 

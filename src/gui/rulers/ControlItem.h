@@ -20,6 +20,7 @@
 
 #include <QPolygonF>
 #include <QColor>
+#include <map>
 class QPainter;
 class QMouseEvent;
 class QWheelEvent;
@@ -98,6 +99,7 @@ protected:
     static const unsigned int DefaultWidth;
 };
 
+class ControlItemMap : public std::multimap<double, ControlItem*> {};
 class ControlItemList : public std::list<ControlItem*> {};
 
 //typedef std::list<ControlItem*> ControlItemList;

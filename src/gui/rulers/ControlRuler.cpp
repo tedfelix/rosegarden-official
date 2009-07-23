@@ -129,8 +129,9 @@ void ControlRuler::addControlItem(ControlItem* item)
     if (isVisible(item)) {
         m_visibleItems.push_back(item);
     }
-//    m_controlItemStart.insert(std::pair<double,ControlItemList::iterator>
-//        (item->xStart(),--m_controlItemList.end()));
+    m_controlItemStartList.insert(std::pair<double,ControlItem *>
+        (item->xStart(),item));
+
 //    m_controlItemEnd.insert(std::pair<double,ControlItemList::iterator>
 //        (item->xEnd(),--m_controlItemList.end()));
 }
