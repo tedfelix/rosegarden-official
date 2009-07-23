@@ -64,6 +64,8 @@ public:
 
     virtual ~NewMatrixView();
 
+    void closeEvent(QCloseEvent *event);
+
     /**
      * Get the velocity currently set in the velocity menu.
      */
@@ -205,6 +207,7 @@ private:
     void initActionsToolbar();
     void initRulersToolbar();
 
+    bool m_drumMode;
 };
 
 }

@@ -96,10 +96,11 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
                  QWidget *parent) :
     EditViewBase(doc, segments, parent),
     m_tracking(true),
-    m_quantizations(BasicQuantizer::getStandardQuantizations())
+    m_quantizations(BasicQuantizer::getStandardQuantizations()),
+    m_drumMode(drumMode)
 {
     m_document = doc;
-    m_matrixWidget = new MatrixWidget(drumMode);
+    m_matrixWidget = new MatrixWidget(m_drumMode);
     setCentralWidget(m_matrixWidget);
     m_matrixWidget->setSegments(doc, segments);
     
@@ -145,18 +146,33 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     findAction("show_tempo_ruler")->setChecked(view);
     m_matrixWidget->setTempoRulerVisible(view);
     
-    resize( 1000, 620 );    //!!! fix: remember win size and position
-    
     readOptions(); // defined in EditViewBase
     
+    settings.endGroup();
+
+    // Restore window geometry
+    settings.beginGroup(WindowGeometryConfigGroup);
+    QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
+    this->restoreGeometry(settings.value(modeStr).toByteArray());
     settings.endGroup();
 }
 
 
-
-
 NewMatrixView::~NewMatrixView()
 {
+}
+
+void
+NewMatrixView::closeEvent(QCloseEvent *event)
+{
+    // Save window geometry
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
+    settings.setValue(modeStr, this->saveGeometry());
+    settings.endGroup();
+
+    QWidget::closeEvent(event);
 }
 
 
