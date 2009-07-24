@@ -125,12 +125,11 @@ void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
 
 void ControlRuler::addControlItem(ControlItem* item)
 {
-    m_controlItemList.push_back(item);
+    m_controlItemMap.insert(std::pair<double,ControlItem *>
+        (item->xStart(),item));
     if (isVisible(item)) {
         m_visibleItems.push_back(item);
     }
-    m_controlItemStartList.insert(std::pair<double,ControlItem *>
-        (item->xStart(),item));
 
 //    m_controlItemEnd.insert(std::pair<double,ControlItemList::iterator>
 //        (item->xEnd(),--m_controlItemList.end()));
@@ -138,18 +137,33 @@ void ControlRuler::addControlItem(ControlItem* item)
 
 void ControlRuler::removeControlItem(ControlItem* item)
 {
-    m_controlItemList.remove(item);
+    // Remove control item by item pointer
+    // No search by Value provided for std::multimap so find items with the requested item's
+    //  xstart position and sweep these for the correct entry
+    double xstart = item->xStart();
+
+    ControlItemMap::iterator it;
+    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
+
+    ret = m_controlItemMap.equal_range(xstart);
+    for (it = ret.first; it != ret.second; it++) {
+        if (it->second == item) break;
+    }
+
+    if (it != m_controlItemMap.end())
+        m_controlItemMap.erase(it);
+
     m_selectedItems.remove(item);
     m_visibleItems.remove(item);
     delete item;
 }
 
-void ControlRuler::removeControlItem(const ControlItemList::iterator &it)
+void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
-    m_controlItemList.erase(it);
-    m_selectedItems.remove(*it);
-    m_visibleItems.remove(*it);
-    delete (*it);
+    m_controlItemMap.erase(it);
+    m_selectedItems.remove(it->second);
+    m_visibleItems.remove(it->second);
+    delete (it->second);
 }
 
 bool ControlRuler::isVisible(ControlItem* item)
@@ -274,10 +288,10 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	// Create the visible items list
 	///TODO Improve efficiency using xstart and xstop ordered lists of control items
 	m_visibleItems.clear();
-	for (ControlItemList::iterator it = m_controlItemList.begin();
-        it != m_controlItemList.end(); ++it) {
-	    if (isVisible(*it)) {
-	        m_visibleItems.push_back(*it);
+	for (ControlItemMap::iterator it = m_controlItemMap.begin();
+        it != m_controlItemMap.end(); ++it) {
+	    if (isVisible(it->second)) {
+	        m_visibleItems.push_back(it->second);
 	    }
 	}
     RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();
@@ -686,14 +700,14 @@ void ControlRuler::clear()
 {
 //    Q3CanvasItemList allItems = canvas()->allItems();
 //    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
-    RG_DEBUG << "ControlRuler::clear - m_controlItemList.size(): " << m_controlItemList.size();
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
+    RG_DEBUG << "ControlRuler::clear - m_controlItemMap.size(): " << m_controlItemMap.size();
+    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+        if (ControlItem *item = dynamic_cast<ControlItem*>(it->second)) {
             RG_DEBUG << "Deleting controlItem";
             delete item;
         }
     }
-    m_controlItemList.clear();
+    m_controlItemMap.clear();
 }
 
 int ControlRuler::valueToHeight(long val)
@@ -746,7 +760,7 @@ void ControlRuler::flipForwards()
 
 //    Q3CanvasItemList l = canvas()->allItems();
 //    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
+//    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
 
         // skip all but rectangles
         ///CJ ??? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
@@ -757,7 +771,7 @@ void ControlRuler::flipForwards()
             //(*it)->setZ(minMax.first);
         //else
             //(*it)->setZ((*it)->z() + 1);
-    }
+//    }
 
     ///CJ ?? canvas()->update();
 }
@@ -769,7 +783,7 @@ void ControlRuler::flipBackwards()
 
 //    Q3CanvasItemList l = canvas()->allItems();
 //    for (Q3CanvasItemList::Iterator it = l.begin(); it != l.end(); ++it) {
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
+    //for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
 
         // skip all but rectangles
         ///CJ ??? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle)
@@ -780,7 +794,7 @@ void ControlRuler::flipBackwards()
             //(*it)->setZ(minMax.second);
         //else
             //(*it)->setZ((*it)->z() - 1);
-    }
+//    }
 
     ///CJ ?? canvas()->update();
 }
@@ -790,12 +804,12 @@ std::pair<int, int> ControlRuler::getZMinMax()
     ///CJ Expect to drop tghis with a better way of ordering bars
 //    Q3CanvasItemList l = canvas()->allItems();
     std::vector<int> zList;
-    for (ControlItemList::iterator it=m_controlItemList.begin(); it!=m_controlItemList.end(); ++it) {
+//    for (ControlItemList::iterator it=m_controlItemList.begin(); it!=m_controlItemList.end(); ++it) {
 
         // skip all but rectangles
         ///CJ ???? if ((*it)->rtti() != Q3CanvasItem::Rtti_Rectangle) continue;
 //        zList.push_back(int((*it)->z()));
-    }
+//    }
 
     std::sort(zList.begin(), zList.end());
 

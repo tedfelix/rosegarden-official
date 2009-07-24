@@ -183,12 +183,7 @@ void PropertyControlRuler::addControlItem(MatrixElement *el)
 void PropertyControlRuler::init()
 {
     // Clear Control Item list
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-        if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(*it)) {
-            delete item;
-        }
-    }
-    m_controlItemList.clear();
+    clear();
 
     if (!m_viewSegment)
         return;
@@ -235,8 +230,8 @@ void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 //
 //    m_selectedItems.clear();
     for (ViewElementList::iterator elit = elementList->begin(); elit != elementList->end();elit++) {
-        for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-            item = dynamic_cast<PropertyControlItem*>(*it);
+        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+            item = dynamic_cast<PropertyControlItem*>(it->second);
             if (item) {
                 if (item->getElement() == (*elit)) {
                     break;
@@ -328,8 +323,8 @@ void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
 void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 {
     RG_DEBUG << "PropertyControlRuler::eventRemoved()";
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-        if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(*it)) {
+    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+        if (PropertyControlItem *item = dynamic_cast<PropertyControlItem*>(it->second)) {
             if (item->getEvent() == el->event()) {
 //                m_controlItemList.erase(it);
 //                m_selectedItems.remove(item);
@@ -471,8 +466,8 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     bool haveItems = false;
 
 //    Q3CanvasItemList::Iterator it = list.begin();
-    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-        if (dynamic_cast<ControlItem*>(*it)) {
+    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+        if (dynamic_cast<ControlItem*>(it->second)) {
             haveItems = true;
             break;
         }

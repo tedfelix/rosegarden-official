@@ -151,7 +151,7 @@ protected:
 
 //    virtual void layoutItem(ControlItem*);
     virtual void addControlItem(ControlItem*);
-    virtual void removeControlItem(const ControlItemList::iterator&);
+    virtual void removeControlItem(const ControlItemMap::iterator&);
     virtual void removeControlItem(ControlItem*);
     virtual bool isVisible(ControlItem*);
 
@@ -190,8 +190,8 @@ protected:
     MatrixViewSegment *m_viewSegment;
     Segment *m_segment;
 
-    ControlItemList m_controlItemList;
-    ControlItemMap m_controlItemStartList; // Note this will replace m_controlItemList
+//    ControlItemList m_controlItemList;
+    ControlItemMap m_controlItemMap; // Note this will replace m_controlItemList
 
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
