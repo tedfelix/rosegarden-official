@@ -46,6 +46,7 @@
 #include <QtGui>
 #include <QPlastiqueStyle>
 #include <QPixmapCache>
+#include <QStringList>
 
 #include <sys/time.h>
 
@@ -471,7 +472,52 @@ int main(int argc, char *argv[])
         std::cerr << "*** This is the first time running this Rosegarden version" << std::endl;
         settings.setValue("lastversion", VERSION);
 
-        //unbundle examples, templates, library
+    }
+
+    
+    // unbundle examples
+    QStringList exampleFiles;
+    exampleFiles << ResourceFinder().getResourceFiles("examples", "rg");
+    for (QStringList::const_iterator i = exampleFiles.begin(); i != exampleFiles.end(); ++i) {
+        QString exampleFile(*i);
+        QString name = QFileInfo(exampleFile).fileName();
+        if (exampleFile.startsWith(":")) {
+            ResourceFinder().unbundleResource("examples", name);
+            exampleFile = ResourceFinder().getResourcePath("examples", name);
+            if (exampleFile.startsWith(":")) { // unbundling failed
+                continue;
+            }
+        }
+    }
+
+    // unbundle templates
+    QStringList templateFiles;
+    templateFiles << ResourceFinder().getResourceFiles("templates", "rgt");
+    for (QStringList::const_iterator i = templateFiles.begin(); i != templateFiles.end(); ++i) {
+        QString templateFile(*i);
+        QString name = QFileInfo(templateFile).fileName();
+        if (templateFile.startsWith(":")) {
+            ResourceFinder().unbundleResource("templates", name);
+            templateFile = ResourceFinder().getResourcePath("templates", name);
+            if (templateFile.startsWith(":")) { // unbundling failed
+                continue;
+            }
+        }
+    }
+
+    // unbundle libraries
+    QStringList libraryFiles;
+    libraryFiles << ResourceFinder().getResourceFiles("library", "rgd");
+    for (QStringList::const_iterator i = libraryFiles.begin(); i != libraryFiles.end(); ++i) {
+        QString libraryFile(*i);
+        QString name = QFileInfo(libraryFile).fileName();
+        if (libraryFile.startsWith(":")) {
+            ResourceFinder().unbundleResource("library", name);
+            libraryFile = ResourceFinder().getResourcePath("library", name);
+            if (libraryFile.startsWith(":")) { // unbundling failed
+                continue;
+            }
+        }
     }
 
     // NOTE: We used to have a great heap of code here to calculate a sane

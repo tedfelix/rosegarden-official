@@ -159,8 +159,6 @@ install:
 	$(MKDIR_P) -m 755 $(INSTBINDIR)
 	$(INSTALL) -m 755 rosegarden $(INSTBINDIR)/rosegarden
 	$(INSTALL) -m 755 src/helpers/rosegarden-audiofile-importer $(INSTBINDIR)
-	$(INSTALL) -m 755 src/helpers/rosegarden-lilypondview $(INSTBINDIR)
-	$(INSTALL) -m 755 src/helpers/rosegarden-project-package $(INSTBINDIR)
 	$(MKDIR_P) -m 755 $(INSTMIME16DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME32DIR)
 	$(MKDIR_P) -m 755 $(INSTMIME64DIR)
@@ -188,8 +186,6 @@ uninstall:
 	rm -rf $(INSTDATADIR)
 	rm -f $(INSTBINDIR)/rosegarden
 	rm -f $(INSTBINDIR)/rosegarden-audiofile-importer
-	rm -f $(INSTBINDIR)/rosegarden-lilypondview
-	rm -f $(INSTBINDIR)/rosegarden-project-package
 	rm -f $(INSTMIME16DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME32DIR)/audio-x-rosegarden*
 	rm -f $(INSTMIME64DIR)/audio-x-rosegarden*

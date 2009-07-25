@@ -110,16 +110,8 @@ void StartupLogo::slotShowStatusMessage(QString message)
 
 void StartupLogo::close()
 {
-    if (!m_wasClosed && isVisible()) {
-
-	if (m_showTip) {
-	    QString tipResource = ResourceFinder().getResourcePath("", "tips");
-	    if (tipResource != "") {
-		RG_DEBUG << "StartupLogo::close: Showing Tips\n";
-//&&&		KTipDialog::showTip(tipResource);
-	    }
-	}
-    }
+    // This used to show the tips file, but we've decided to abandon the tips
+    // file.
 
     QWidget::close();
 }

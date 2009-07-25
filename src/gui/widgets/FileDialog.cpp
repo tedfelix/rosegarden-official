@@ -22,6 +22,8 @@
 #include <QUrl>
 #include <QDesktopServices>
 
+#include "misc/Debug.h"
+
 
 namespace Rosegarden
 {
@@ -44,16 +46,32 @@ FileDialog::FileDialog(QWidget *parent,
     // set up the sidebar stuff; the entire purpose of this class 
     QList<QUrl> urls;
 
+    QString home = QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).path();
+    QString examples = home + "/.local/share/rosegarden/examples";
+    QString templates = home + "/.local/share/rosegarden/templates";
+    QString rosegarden = home + "/rosegarden";
+
+    RG_DEBUG  << "FileDialog::FileDialog(...)" << endl
+              << "     using paths:  examples: " << examples << endl
+              << "                  templates: " << templates << endl
+              << "                 rosegarden: " << rosegarden << endl;
+
     urls << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::HomeLocation))
-         << QUrl::fromLocalFile("~/.local/share/rosegarden/examples")
-         << QUrl::fromLocalFile("~/.local/share/rosegarden/templates")
+         << QUrl::fromLocalFile(examples)
+         << QUrl::fromLocalFile(templates)
          << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation))
          << QUrl::fromLocalFile(QDesktopServices::storageLocation(QDesktopServices::MusicLocation))
-         << QUrl::fromLocalFile("~/rosegarden")
+         << QUrl::fromLocalFile(rosegarden)
          ; // closing ; on this line to allow the lines above to be shuffled easily
 
     setSidebarUrls(urls);
 
+    // I can't seem to do anything about the up/down/left arrows used without
+    // resorting to extreme brute force, and these experiments in changing the
+    // background color were all worse than leaving well enough alone.  Enough
+    // time poured down the well for now.  We'll just leave it.
+//    QString localStyle = "QToolButton { background: #02E2FF }";
+//    setStyleSheet(localStyle);
 }
 
 
