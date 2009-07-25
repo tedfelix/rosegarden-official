@@ -80,6 +80,8 @@ public:
 
     virtual ~EventView();
 
+    void closeEvent(QCloseEvent *event);
+
     virtual bool applyLayout(int staffNo = -1);
 
     virtual void refreshSegment(Segment *segment,

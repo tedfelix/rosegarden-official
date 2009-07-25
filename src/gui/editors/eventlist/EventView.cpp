@@ -15,9 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#include <Q3Canvas>
-#include <Q3CanvasPixmap>
-
 #include "EventView.h"
 #include "EventViewItem.h"
 #include "TrivialVelocityDialog.h"
@@ -287,6 +284,13 @@ EventView::EventView(RosegardenDocument *doc,
     makeInitialSelection(doc->getComposition().getPosition());
 
     slotCompositionStateUpdate();
+
+
+    // Restore window geometry
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    this->restoreGeometry(settings.value("Event_List_View").toByteArray());
+    settings.endGroup();
 }
 
 EventView::~EventView()
@@ -295,6 +299,18 @@ EventView::~EventView()
         RG_DEBUG << "~EventView - removing this observer from " << m_segments[i] << endl;
         m_segments[i]->removeObserver(this);
     }
+}
+
+void
+EventView::closeEvent(QCloseEvent *event)
+{
+    // Save window geometry
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Event_List_View", this->saveGeometry());
+    settings.endGroup();
+
+    QWidget::closeEvent(event);
 }
 
 void
