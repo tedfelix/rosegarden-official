@@ -558,10 +558,6 @@ RosegardenMainWindow::setupActions()
     createAction("edit_copy", SLOT(slotEditCopy()));
     createAction("edit_paste", SLOT(slotEditPaste()));
 
-    //!!! I don't like Save Settings -- I think we should lose it, and
-    // just always save them
-    createAction("options_save_options", SLOT(slotSaveOptions()));
-
     createAction("options_configure", SLOT(slotConfigure()));
 
     createAction("file_import_project", SLOT(slotImportProject()));
@@ -1408,41 +1404,6 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
     return newDoc;
 }
 
-void
-RosegardenMainWindow::slotSaveOptions()
-{
-    RG_DEBUG << "RosegardenMainWindow::slotSaveOptions()\n";
-
-#ifdef SETTING_LOG_DEBUG
-
-    _settingLog(QString("SETTING 2 : transport flap extended = %1").arg(getTransport()->isExpanded()));
-    _settingLog(QString("SETTING 2 : show track labels = %1").arg(findAction("show_tracklabels")->isChecked()));
-#endif
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-
-    settings.setValue("Show Transport", findAction("show_transport")->isChecked());
-    settings.setValue("Expanded Transport", m_transport ? getTransport()->isExpanded() : true);
-    settings.setValue("Show Track labels", findAction("show_tracklabels")->isChecked());
-    settings.setValue("Show Rulers", findAction("show_rulers")->isChecked());
-    settings.setValue("Show Tempo Ruler", findAction("show_tempo_ruler")->isChecked());
-    settings.setValue("Show Chord Name Ruler", findAction("show_chord_name_ruler")->isChecked());
-    settings.setValue("Show Previews", findAction("show_previews")->isChecked());
-    settings.setValue("Show Segment Labels", findAction("show_segment_labels")->isChecked());
-    settings.setValue("Show Parameters", m_dockVisible);
-    settings.setValue("MIDI Thru Routing", findAction("enable_midi_routing")->isChecked());
-
-#ifdef SETTING_LOG_DEBUG
-
-    RG_DEBUG << "SHOW PARAMETERS = " << m_dockVisible << endl;
-#endif
-
-    //     saveMainWindowSettings(RosegardenMainWindow::MainWindowConfigGroup); - no need to, done by KMainWindow
-    settings.sync();
-
-    settings.endGroup();
-}
 
 void
 RosegardenMainWindow::setupFileDialogSpeedbar()
@@ -1666,16 +1627,6 @@ RosegardenMainWindow::queryClose()
 
     return canClose;
 
-}
-
-bool
-RosegardenMainWindow::queryExit()
-{
-    RG_DEBUG << "RosegardenMainWindow::queryExit" << endl;
-    if (m_actionsSetup)
-        slotSaveOptions();
-
-    return true;
 }
 
 void

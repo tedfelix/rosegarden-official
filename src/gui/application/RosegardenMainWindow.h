@@ -417,17 +417,6 @@ protected:
      */
     virtual bool queryClose();
 
-    /**
-     * queryExit is called by KTMainWindow when the last window of the
-     * application is going to be closed during the closeEvent().
-     * Against the default implementation that just returns true, this
-     * calls saveOptions() to save the settings of the last window's
-     * properties.
-     *
-     * @see KTMainWindow#queryExit
-     * @see KTMainWindow#closeEvent
-     */
-    virtual bool queryExit();
 
     /**
      * saves the window properties for each open window during session
@@ -1227,13 +1216,6 @@ public slots:
      */
     void slotToggleRecordCurrentTrack();
     
-    /**
-     * save general Options like all bar positions and status as well
-     * as the geometry and the recent file list to the configuration
-     * file
-     */         
-    void slotSaveOptions();
-
     /**
      * Show the configure dialog
      */
