@@ -28,6 +28,7 @@
 #include <QPoint>
 #include <utility>
 #include "gui/editors/notation/NoteCharacterNames.h"
+#include "gui/general/PixmapFunctions.h"
 
 
 class QPixmap;
@@ -85,12 +86,20 @@ public:
                                CharacterType type = Screen,
                                bool inverted = false);
 
-    /// Returns false if not available
+    /** Returns false if not available, otherwise returns a coloured note
+       character using either a specified hue (H) and minimum value (V), or
+       using full H, S, V if the optional final saturation (S) parameter is
+       specified.  The final parameter is out of place with the HSV scheme in
+       order to make it an optional parameter that doesn't require rewriting old
+       code that expected the oldest scheme.  The new full HSV scheme is
+       required to produce the colour white.
+     */
     bool getCharacterColoured(CharName charName,
                               int hue, int minimum,
                               NoteCharacter &character,
                               CharacterType type = Screen,
-                              bool inverted = false);
+                              bool inverted = false,
+                              int saturation = PixmapFunctions::SaturationNotSpecified);
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
@@ -134,7 +143,8 @@ private:
     /// Returns false + blank pixmap if it can't find the right one
     bool getColouredPixmap(CharName charName, QPixmap &pixmap,
                            int hue, int minimum,
-                           bool inverted = false) const;
+                           bool inverted = false,
+                           int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns false + blank pixmap if it can't find the right one
     bool getShadedPixmap(CharName charName, QPixmap &pixmap,

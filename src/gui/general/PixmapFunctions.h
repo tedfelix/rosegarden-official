@@ -63,8 +63,14 @@ public:
      * Colour a greyscale pixmap with the given hue.
      * minimum specifies the minimum value (in the HSV sense) that
      * will be used for any recoloured pixel.
+     *
+     * The original model using only hue and value is deeply entrenched and
+     * tricky to change, but with only a hue and a value specified, and the
+     * saturation calculated automatically as 255 - the minimum value, how do
+     * you achieve a pure red?  By adding an extra saturation parameter was the
+     * only thing I could think of, and here it is.
      */
-    static QPixmap colourPixmap(const QPixmap &map, int hue, int minimum);
+    static QPixmap colourPixmap(const QPixmap &map, int hue, int minimum, int saturation = SaturationNotSpecified);
 
     /**
      * Make a pixmap grey, or otherwise reduce its intensity.
@@ -92,6 +98,8 @@ public:
     static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
                                  int x, int y,
                                  const QPixmap &source);
+
+    static const int SaturationNotSpecified = -1;
 };
 
 

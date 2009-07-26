@@ -1724,14 +1724,20 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 }
 
 QGraphicsPixmapItem *
-NotePixmapFactory::makeClef(const Clef &clef)
+NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 {
     Profiler profiler("NotePixmapFactory::makeClef");
+
     NoteCharacter plain = getCharacter(m_style->getClefCharName(clef),
-                                       PlainColour, false);
+                                       colourType, false);
 
     int oct = clef.getOctaveOffset();
     if (oct == 0) return plain.makeItem();
+
+    // Since there was an offset, we have additional bits to draw, and must
+    // match up the colour.  This bit is rather hacky, but I decided not to
+    // embark on a little refactoring project to unify all of this colour
+    // management under one consistent umbrella.
 
     // fix #1522784 and use 15 rather than 16 for double octave offset
     int adjustedOctave = (8 * (oct < 0 ? -oct : oct));
@@ -1747,8 +1753,27 @@ NotePixmapFactory::makeClef(const Clef &clef)
 
     createPixmap(plain.getWidth(), plain.getHeight() + th);
 
+    // The selected state is part of the ColourType enum, but it requires fluid
+    // external control, and can't be managed in the same way as more static
+    // colour states.  Thus we have to use m_selected to manage this case.
     if (m_selected) {
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+    } else {
+
+        // the hackiest bit: we have to sync up the colour to the ColourType by
+        // hand, because we know what these enum values really mean, but in a
+        // cleaner world, this code here probably shouldn't have to know those
+        // details.  Oh well.
+        switch (colourType) {
+            case PlainColourLight: m_p->painter().setPen(Qt::white);
+                                   break;
+
+            case ConflictColour:   m_p->painter().setPen(Qt::red);
+                                   break;
+
+            case PlainColour:
+            default:               m_p->painter().setPen(Qt::black);
+        }
     }
 
     m_p->drawNoteCharacter(0, oct < 0 ? 0 : th, plain);
@@ -1758,7 +1783,6 @@ NotePixmapFactory::makeClef(const Clef &clef)
     m_p->drawText(plain.getWidth() / 2 - tw / 2,
                   ascent + (oct < 0 ? plain.getHeight() : 0), text);
 
-    m_p->painter().setPen(QColor(Qt::black));
     QPoint hotspot(plain.getHotspot());
     if (oct > 0) hotspot.setY(hotspot.y() + th);
     return makeItem(hotspot);
@@ -1861,7 +1885,8 @@ NotePixmapFactory::makeMarkMenuPixmap(Mark mark)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeKey(const Key &key,
                            const Clef &clef,
-                           Key previousKey)
+                           Key previousKey,
+                           ColourType colourType)
 {
     Profiler profiler("NotePixmapFactory::makeKeyPixmap");
 
@@ -1883,9 +1908,9 @@ NotePixmapFactory::makeKey(const Key &key,
     NoteCharacter keyCharacter;
     NoteCharacter cancelCharacter;
 
-    keyCharacter = getCharacter(keyCharName, PlainColour, false);
+    keyCharacter = getCharacter(keyCharName, colourType, false);
     if (cancelCount > 0) {
-        cancelCharacter = getCharacter(NoteCharacterNames::NATURAL, PlainColour, false);
+        cancelCharacter = getCharacter(NoteCharacterNames::NATURAL, colourType, false);
     }
 
     int x = 0;
@@ -3219,6 +3244,10 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
         return m_font->getCharacterShaded(name, ch, charType, inverted);
     }
 
+    QColor white = Qt::white;
+    QColor red = Qt::red;
+    int h, s, v;
+
     switch (type) {
 
     case PlainColour:
@@ -3251,6 +3280,22 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
                 GUIPalette::OutRangeNoteHue,
                 GUIPalette::OutRangeNoteMinValue,
                 ch, charType, inverted);
+
+    case PlainColourLight:
+        white.getHsv(&h, &s, &v);
+        return m_font->getCharacterColoured
+               (name,
+                h,
+                v,
+                ch, charType, inverted, s);  
+
+    case ConflictColour:
+        red.getHsv(&h, &s, &v);
+        return m_font->getCharacterColoured
+               (name,
+                h,
+                v,
+                ch, charType, inverted, s);
     }
 
     return m_font->getCharacter(name, ch, charType, inverted);

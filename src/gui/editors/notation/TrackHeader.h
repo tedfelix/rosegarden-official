@@ -222,6 +222,9 @@ private :
     int m_lineSpacing;
     int m_maxDelta;
     int m_staffLineThickness;
+
+    QColor m_foreGround;
+    QColor m_backGround;
 };
 
 }

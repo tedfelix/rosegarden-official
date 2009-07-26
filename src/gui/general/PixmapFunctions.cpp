@@ -79,7 +79,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
 }
 
 QPixmap
-PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
+PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int saturation)
 {
     // assumes pixmap is currently in shades of grey; maps black ->
     // solid colour and greys -> shades of colour
@@ -94,6 +94,11 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
 
         for (int x = 0; x < image.width(); ++x) {
 
+            // NOTE: I can't find a QImage get_the_color_at_this_pixel method
+            // that doesn't destroy the alpha property.  I think this is why
+            // these recolored pixmaps wind up totally opaque.  Saving that
+            // thought for another iteration, after the more immediate problems
+            // are worked out
             QRgb oldPixel = image.pixel(x, y);
             QColor oldColour(oldPixel);
 
@@ -113,8 +118,13 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum)
                 newHue = hue;
             }
 
+            // use the specified saturation, if present; otherwise the old
+            // behaviour of subtracting the minimum value setting from a maximum
+            // saturation of 255
+            int newSaturation = (saturation == SaturationNotSpecified  ? 255 - v : saturation);
+
             QColor newColour(newHue,
-                             255 - v,
+                             newSaturation,
                              v > minimum ? v : minimum,
                              QColor::Hsv);
 

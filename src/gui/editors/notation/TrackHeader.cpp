@@ -90,8 +90,17 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_status(0),
         m_current(false),
         m_clefItem(0),
-        m_keyItem(0)
+        m_keyItem(0),
+        m_foreGround(Qt::white),
+        m_backGround(Qt::black)
+
 {
+    // localStyle (search key)
+    //
+    // If/when we have the option to override the stylesheet, we should tweak
+    // m_foreGround and m_backGround, which are currently hard coded to assume
+    // the stylesheet is in effect.  This may or may not make it into the first
+    // release.
 
     m_scene = m_headersGroup->getScene();
     setCurrent(false); 
@@ -212,7 +221,7 @@ void
 StaffHeader::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
-    paint.fillRect(0, 0, width(), height(), Qt::white);  /// ???
+    paint.fillRect(0, 0, width(), height(), m_backGround);  /// ???
 
     int wHeight = height();
     int wWidth = width();
@@ -229,7 +238,7 @@ StaffHeader::paintEvent(QPaintEvent *)
     int offset = (wHeight - 10 * lw -1) / 2;
 
     // Draw staff lines
-    paint.setPen(QPen(QColor(Qt::black), m_staffLineThickness));
+    paint.setPen(QPen(QColor(m_foreGround), m_staffLineThickness));
     for (h = 0; h <= 8; h += 2) {
         int y = (lw * 3) + ((8 - h) * lw) / 2;
         paint.drawLine(maxDelta/2, y + offset, wWidth - maxDelta/2, y + offset);
@@ -242,12 +251,12 @@ StaffHeader::paintEvent(QPaintEvent *)
 
         // Set color : a quick and very bad hack until I have
         //             time to look for a better way
-        if (isClefInconsistent()) {
-            clefPixmap.createMaskFromColor(QColor(Qt::black), Qt::MaskInColor);
+/*        if (isClefInconsistent()) {
+            clefPixmap.createMaskFromColor(QColor(m_foreGround), Qt::MaskInColor);
             QBitmap mask = clefPixmap.mask();
             clefPixmap.fill(QColor(Qt::red));
             clefPixmap.setMask(mask);
-        }
+        }*/
 
         h = m_clef.getAxisHeight();
         int y = (lw * 3) + ((8 - h) * lw) / 2;
@@ -279,7 +288,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     // Write upper text (track name and track label)
 
-    paint.setPen(QColor(Qt::black));
+    paint.setPen(QColor(m_foreGround));
     text = getUpperText();
     int numberOfTextLines = getNumberOfTextLines();
 
@@ -305,7 +314,7 @@ StaffHeader::paintEvent(QPaintEvent *)
     // Write transposition text
 
     // TODO : use colours from GUIPalette
-    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(Qt::black);
+    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
     paint.setFont(npf->getTrackHeaderBoldFont());
      // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
     paint.setPen(colour);
@@ -319,7 +328,7 @@ StaffHeader::paintEvent(QPaintEvent *)
      // Write lower text (segment label)
 
     // TODO : use colours from GUIPalette
-    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(Qt::black);
+    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
     paint.setFont(npf->getTrackHeaderFont());
 
     paint.setPen(colour);
@@ -551,12 +560,14 @@ StaffHeader::updateHeader(int width)
         m_lastUpperText = m_upperText;
 
         bool drawClef = true;
-        QColor clefColour;
+        //QColor clefColour;
+        NotePixmapFactory::ColourType colourType = NotePixmapFactory::PlainColour;
+
         if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
             if (m_status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
-                clefColour = QColor(Qt::red);
+                colourType = NotePixmapFactory::ConflictColour;
             else
-                clefColour = QColor(Qt::black);
+                colourType = NotePixmapFactory::PlainColourLight;
         } else {
             drawClef = false;
         }
@@ -564,10 +575,10 @@ StaffHeader::updateHeader(int width)
         NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
         delete m_clefItem;
-        m_clefItem = npf->makeClef(m_clef);
+        m_clefItem = npf->makeClef(m_clef, colourType);
 
         delete m_keyItem;
-        m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major")); 
+        m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major"), colourType); 
 
         m_lineSpacing = npf->getLineSpacing();
         m_maxDelta = npf->getAccidentalWidth(Accidentals::Sharp);

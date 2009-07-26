@@ -70,10 +70,53 @@ public:
     QString getFontName() const;
     int getSize() const;
 
+   /**
+    \enum NotePixmapFactory::ColourType
+
+    This enum describes the different colours that may be used to draw
+    notation-related glyphs.  This aspect of drawing is handled through this
+    enum, rather than by specifying a colour explicitly.  If you have some
+    occasion to add more colours for some new purpose, do so through this enum
+    (realising that you have to hook it all up somewhere to make use of the new
+    values defined!)
+
+    \value PlainColour       The default basic Qt::black (hard coded)
+    \value QuantizedColour   Defined in GUIPalette; used when quantized notes are indicated
+    \value HighlightedColour Defined in GUIPalette; used when notes (&c.) are shown in the selected state
+    \value TriggerColour     Defined in GUIPalette; used when trigger notes are indicated
+    \value OutRangeColour    Defined in GUIPalette; used when out-of-range notes are indicated
+    \value PlainColourLight  The default basic Qt::white (hard coded) used when drawing on a black background
+    \Value ConflictColour    Qt::red (hard coded) used by track headers to indicate, eg. a clef conflict
+
+    \sa GUIPalette, TrackParameterBox, PresetHandlerDialog
+    */
+    enum ColourType {
+        PlainColour,
+        QuantizedColour,
+        HighlightedColour,
+        TriggerColour,
+        OutRangeColour,
+        PlainColourLight,
+        ConflictColour
+    };
+
+    /** Used to notify the drawing code that the character is selected, and
+     * should therefore be drawn with a blue foreground
+     */
     void setSelected(bool selected) { m_selected = selected; }
+
+    /** Returns true if the character is in the selected state
+     */
     bool isSelected() const { return m_selected; }
 
+    /** Used to notify the drawing code that the character is shaded, and should
+     * therefore be drawn with a gray foreground.  This is used for "invisible"
+     * items
+     */
     void setShaded(bool shaded) { m_shaded = shaded; }
+
+    /** Returns true if the character is in the shaded (ie. "invisible") state
+     */
     bool isShaded() const { return m_shaded; }
 
     void setNoteStyle(NoteStyle *style) { m_style = style; }
@@ -83,11 +126,19 @@ public:
 
     QGraphicsPixmapItem *makeNote(const NotePixmapParameters &parameters);
     QGraphicsPixmapItem *makeRest(const NotePixmapParameters &parameters);
-    QGraphicsPixmapItem *makeClef(const Clef &clef);
+
+    /** Make a clef pixmap from Clef &clef.  The optional colourType parameter
+     * is used to pass a ColourType through makeClef() into drawCharacter() for
+     * certain special situations requiring external control of the glyph colour
+     * (eg. track headers)
+     */
+    QGraphicsPixmapItem *makeClef(const Clef &clef, const ColourType colourType = PlainColour);
+
     QGraphicsPixmapItem *makeKey(const Key &key,
                                  const Clef &clef,
                                  Key previousKey =
-                                 Key::DefaultKey);
+                                 Key::DefaultKey,
+                                 const ColourType colourType = PlainColour);
     QGraphicsPixmapItem *makeTimeSig(const TimeSignature& sig);
     QGraphicsPixmapItem *makeHairpin(int length, bool isCrescendo);
     QGraphicsPixmapItem *makeSlur(int length, int dy, bool above, bool phrasing);
@@ -270,14 +321,6 @@ protected:
     void createPixmap(int width, int height);
     QGraphicsPixmapItem *makeItem(QPoint hotspot);
     QPixmap makePixmap();
-
-    enum ColourType {
-        PlainColour,
-        QuantizedColour,
-        HighlightedColour,
-        TriggerColour,
-        OutRangeColour
-    };
 
     /// draws selected/shaded status from m_selected/m_shaded:
     NoteCharacter getCharacter(CharName name, ColourType type, bool inverted);

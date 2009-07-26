@@ -349,7 +349,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
 
 bool
 NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
-                            int hue, int minimum, bool inverted) const
+                            int hue, int minimum, bool inverted, int saturation) const
 {
     CharName charName(getNameWithColour(baseCharName, hue));
 
@@ -375,7 +375,7 @@ NoteFont::getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
     }
 
     found = new QPixmap
-        (PixmapFunctions::colourPixmap(basePixmap, hue, minimum));
+        (PixmapFunctions::colourPixmap(basePixmap, hue, minimum, saturation));
     add(charName, inverted, found);
     pixmap = *found;
     return ok;
@@ -528,10 +528,11 @@ NoteFont::getCharacterColoured(CharName charName,
                                int hue, int minimum,
                                NoteCharacter &character,
                                CharacterType type,
-                               bool inverted)
+                               bool inverted,
+                               int saturation)
 {
     QPixmap pixmap;
-    if (!getColouredPixmap(charName, pixmap, hue, minimum, inverted)) {
+    if (!getColouredPixmap(charName, pixmap, hue, minimum, inverted, saturation)) {
         return false;
     }
 
