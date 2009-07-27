@@ -113,13 +113,13 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(tr("Track %1 : \"%2\"")
+    QString toolTipText = QString(tr("<qt>Track %1 : \"%2\"")
                              .arg(trackPos + 1)
                              .arg(strtoqstr(track->getLabel())));
 
     QString preset = strtoqstr(track->getPresetLabel());
     if (preset != QString(""))
-        toolTipText += QString(tr("\nNotate for: %1").arg(preset));
+        toolTipText += QString(tr("<br>Notate for: %1").arg(preset));
 
     QString notationSize = tr("normal");
     switch (track->getStaffSize()) {
@@ -131,7 +131,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
             break;
     }
 
-    QString bracketText = tr("--");
+    QString bracketText = "--";
     switch (track->getStaffBracket()) {
         case Brackets::SquareOn:
             bracketText = "[-";
@@ -156,7 +156,9 @@ StaffHeader::StaffHeader(HeadersGroup *group,
             break;
     }
 
-    toolTipText += QString(tr("\nSize: %1,  Bracket: %2 "))
+    std::cout << "BRACKET TEXT BEFORE MANGLING: " << qstrtostr(bracketText) << std::endl;
+
+    toolTipText += QString(tr("<br>Size: %1,  Bracket: %2 "))
                             .arg(notationSize)
                             .arg(bracketText);
 
@@ -184,20 +186,24 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         if (transpose) {
             QString transposeName;
             transposeValueToName(transpose, transposeName);
-            toolTipText += QString(tr("\nbars [%1-%2] in %3 (tr=%4) : \"%5\""))
+            toolTipText += QString(tr("<br>bars [%1-%2] in %3 (tr=%4) : \"%5\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transposeName)
                                     .arg(transpose)
                                     .arg(strtoqstr((*i)->getLabel()));
         } else {
-            toolTipText += QString(tr("\nbars [%1-%2] (tr=%3) : \"%4\""))
+            toolTipText += QString(tr("<br>bars [%1-%2] (tr=%3) : \"%4\""))
                                     .arg(barStart)
                                     .arg(barEnd)
                                     .arg(transpose)
                                     .arg(strtoqstr((*i)->getLabel()));
         }
     }
+
+    // not translated to spare the translators the pointless effort of copying
+    // and pasting this tag for every language we support
+    toolTipText += "</qt>";
 
     this->setToolTip(toolTipText);
 
