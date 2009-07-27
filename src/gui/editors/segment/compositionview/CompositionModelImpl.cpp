@@ -654,7 +654,10 @@ void CompositionModelImpl::endMarkerTimeChanged(const Composition *, bool)
 
 void CompositionModelImpl::setSelectionRect(const QRect& r)
 {
-    m_selectionRect = r.normalize();
+    m_selectionRect = r.normalized();
+//    if (m_selectionRect.y() < 0) m_selectionRect.setTop(0);
+
+    RG_DEBUG << "setSelectionRect: " << r << " -> " << m_selectionRect << endl;
 
     m_previousTmpSelectedSegments = m_tmpSelectedSegments;
     m_tmpSelectedSegments.clear();
@@ -1102,8 +1105,6 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
     int h = m_grid.getYSnap() - 2;
     int w;
 
-    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << endl;
-
     if (s.isRepeating()) {
         timeT repeatStart = endTime;
         timeT repeatEnd = s.getRepeatEndTime();
@@ -1117,6 +1118,9 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
         //          RG_DEBUG << "CompositionModelImpl::computeSegmentRect : s is NOT repeating"
         //                   << " w = " << w << " (x for time at start is " << m_grid.getRulerScale()->getXForTime(startTime) << ", end is " << m_grid.getRulerScale()->getXForTime(endTime) << ")" << endl;
     }
+
+
+    RG_DEBUG << "CompositionModelImpl::computeSegmentRect: x " << origin.x() << ", y " << origin.y() << " startTime " << startTime << ", endTime " << endTime << ", w " << w << ", h " << h << endl;
 
     CompositionRect cr(origin, QSize(w, h));
     QString label = strtoqstr(s.getLabel());

@@ -269,12 +269,14 @@ void CompositionView::scrollLeft()
 
 void CompositionView::setSelectionRectPos(const QPoint& pos)
 {
+    RG_DEBUG << "setSelectionRectPos(" << pos << ")" << endl;
     m_selectionRect.setRect(pos.x(), pos.y(), 0, 0);
     getModel()->setSelectionRect(m_selectionRect);
 }
 
 void CompositionView::setSelectionRectSize(int w, int h)
 {
+    RG_DEBUG << "setSelectionRectSize(" << w << "," << h << ")" << endl;
     m_selectionRect.setSize(QSize(w, h));
     getModel()->setSelectionRect(m_selectionRect);
 }
@@ -964,7 +966,8 @@ void CompositionView::drawAreaArtifacts(QPainter * p, const QRect& clipRect)
     // Selection Rect
     //
     if (m_drawSelectionRect) {
-        drawRect(m_selectionRect, p, clipRect, false, 0, false);
+        RG_DEBUG << "about to draw selection rect" << endl;
+        drawRect(m_selectionRect.normalized(), p, clipRect, false, 0, false);
     }
 
     //
@@ -1154,6 +1157,9 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     p->save();
 
     QRect rect = r;
+    rect.setSize(rect.size() - QSize(1, 1));                                    
+
+    RG_DEBUG << "drawRect: rect is " << rect << endl;
 
     if (fill) {
         if (isSelected) {
@@ -1181,6 +1187,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
     QRect intersection = rect.intersect(clipRect);
 
     if (clipRect.contains(rect)) {
+        RG_DEBUG << "note: drawing whole rect" << endl;
         p->drawRect(rect);
     } else {
         // draw only what's necessary
@@ -1190,7 +1197,7 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
         int rectTopY = rect.y();
 
         if (rectTopY >= clipRect.y() &&
-                rectTopY <= (clipRect.y() + clipRect.height())) {
+            rectTopY <= (clipRect.y() + clipRect.height() - 1)) {
             // to prevent overflow, in case the original rect is too wide
             // the line would be drawn "backwards"
             p->drawLine(intersection.topLeft(), intersection.topRight());
@@ -1198,19 +1205,20 @@ void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRec
 
         int rectBottomY = rect.y() + rect.height();
         if (rectBottomY >= clipRect.y() &&
-                rectBottomY <= (clipRect.y() + clipRect.height()))
+            rectBottomY < (clipRect.y() + clipRect.height() - 1))
             // to prevent overflow, in case the original rect is too wide
             // the line would be drawn "backwards"
-            p->drawLine(intersection.bottomLeft(), intersection.bottomRight());
+            p->drawLine(intersection.bottomLeft() + QPoint(0, 1),
+                        intersection.bottomRight() + QPoint(0, 1));
 
         int rectLeftX = rect.x();
         if (rectLeftX >= clipRect.x() &&
-                rectLeftX <= (clipRect.x() + clipRect.width()))
+            rectLeftX <= (clipRect.x() + clipRect.width() - 1))
             p->drawLine(rect.topLeft(), rect.bottomLeft());
 
-        unsigned int rectRightX = rect.x() + rect.width(); // make sure we don't overflow
-        if (rectRightX >= unsigned(clipRect.x()) &&
-                rectRightX <= unsigned(clipRect.x() + clipRect.width()))
+        int rectRightX = rect.x() + rect.width(); // make sure we don't overflow
+        if (rectRightX >= clipRect.x() &&
+            rectRightX < clipRect.x() + clipRect.width() - 1)
             p->drawLine(rect.topRight(), rect.bottomRight());
 
     }
