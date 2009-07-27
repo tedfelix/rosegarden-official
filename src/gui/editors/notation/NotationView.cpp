@@ -56,6 +56,7 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 #include "commands/notation/SustainInsertionCommand.h"
+#include "commands/notation/TupletCommand.h"
 
 #include "commands/segment/PasteToTriggerSegmentCommand.h"
 #include "commands/segment/SegmentTransposeCommand.h"
@@ -71,6 +72,7 @@
 #include "gui/dialogs/EventParameterDialog.h"
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
+#include "gui/dialogs/TupletDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -1899,6 +1901,88 @@ NewNotationView::updateWindowTitle()
 
     }
 }
+
+void 
+NewNotationView::slotGroupSimpleTuplet()
+{
+    slotGroupTuplet(true);
+}
+
+void 
+NewNotationView::slotGroupGeneralTuplet()
+{
+    slotGroupTuplet(false);
+}
+
+void 
+NewNotationView::slotGroupTuplet(bool simple)
+{
+    timeT t = 0;
+    timeT unit = 0;
+    int tupled = 2;
+    int untupled = 3;
+    Segment *segment = 0;
+    bool hasTimingAlready = false;
+    EventSelection *selection = getSelection();
+
+    if (selection) {
+        t = selection->getStartTime();
+
+        timeT duration = selection->getTotalDuration();
+        Note::Type unitType = Note::getNearestNote(duration / 3, 0)
+                                                   .getNoteType();
+        unit = Note(unitType).getDuration();
+
+        if (!simple) {
+            TupletDialog dialog(this, unitType, duration);
+            if (dialog.exec() != QDialog::Accepted)
+                return ;
+            unit = Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
+            hasTimingAlready = dialog.hasTimingAlready();
+        }
+
+        segment = &selection->getSegment();
+
+    } else {
+
+        t = getInsertionTime();
+
+        NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+
+        Note::Type unitType;
+
+        if (currentInserter) {
+            unitType = currentInserter->getCurrentNote().getNoteType();
+        } else {
+            unitType = Note::Quaver;
+        }
+
+        unit = Note(unitType).getDuration();
+
+        if (!simple) {
+            TupletDialog dialog(this, unitType);
+            if (dialog.exec() != QDialog::Accepted)
+                return ;
+            unit = Note(dialog.getUnitType()).getDuration();
+            tupled = dialog.getTupledCount();
+            untupled = dialog.getUntupledCount();
+            hasTimingAlready = dialog.hasTimingAlready();
+        }
+
+        segment = getCurrentSegment();
+    }
+
+    CommandHistory::getInstance()->addCommand(new TupletCommand
+                                              (*segment, t, unit, untupled, 
+                                              tupled, hasTimingAlready));
+
+    if (!hasTimingAlready) {
+//        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
+    }
+}
+
 
 }
 

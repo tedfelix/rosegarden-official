@@ -128,6 +128,10 @@ protected slots:
     void slotUseOrnament();
     void slotRemoveOrnament();
 
+    void slotGroupSimpleTuplet();
+    void slotGroupGeneralTuplet();
+    void slotGroupTuplet(bool simple);
+
     /// Show or hide rulers
     void slotToggleChordsRuler();
     void slotToggleRawNoteRuler();
