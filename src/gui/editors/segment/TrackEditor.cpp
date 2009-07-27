@@ -122,7 +122,7 @@ TrackEditor::init(QWidget* rosegardenguiview)
     grid->setMargin(0);
     grid->setSpacing(0);
 
-    int trackLabelWidth = 230;
+    int trackLabelWidth = 200;
     int barButtonsHeight = 25;
     
     m_chordNameRuler = new ChordNameRuler(m_rulerScale,
