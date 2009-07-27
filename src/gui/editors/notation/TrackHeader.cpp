@@ -223,6 +223,16 @@ StaffHeader::~StaffHeader()
 void
 StaffHeader::paintEvent(QPaintEvent *)
 {
+    // avoid common random crash by brute force
+    if (!m_clefItem) {
+        std::cerr << "StaffHeader::paintEvent() - m_clefItem was NULL.  Skipping this paintEvent." << std::endl
+                  << "                            This is a BUG, but it seems fairly harmless to just avoid crashing here and return." << std::endl
+                  << std::endl
+                  << "                            See you next iteration!"  << std::endl;
+       
+        return;
+    }
+        
     QPainter paint(this);
     paint.fillRect(0, 0, width(), height(), m_backGround);  /// ???
 
