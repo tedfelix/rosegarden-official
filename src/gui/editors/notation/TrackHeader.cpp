@@ -32,7 +32,6 @@
 #include "NotePixmapFactory.h"
 #include "NotationScene.h"
 #include "NotationStaff.h"
-//#include "base/StaffExportTypes.h"
 
 #include <map>
 #include <set>
@@ -113,7 +112,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(tr("<qt>Track %1 : \"%2\"")
+    QString toolTipText = QString(tr("<qt><p>Track %1 : \"%2\"")
                              .arg(trackPos + 1)
                              .arg(strtoqstr(track->getLabel())));
 
@@ -155,8 +154,6 @@ StaffHeader::StaffHeader(HeadersGroup *group,
             bracketText = "-]}";
             break;
     }
-
-    std::cout << "BRACKET TEXT BEFORE MANGLING: " << qstrtostr(bracketText) << std::endl;
 
     toolTipText += QString(tr("<br>Size: %1,  Bracket: %2 "))
                             .arg(notationSize)
@@ -203,7 +200,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
     // not translated to spare the translators the pointless effort of copying
     // and pasting this tag for every language we support
-    toolTipText += "</qt>";
+    toolTipText += "</p></qt>";
 
     this->setToolTip(toolTipText);
 
