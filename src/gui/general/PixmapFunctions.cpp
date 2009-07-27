@@ -86,6 +86,9 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
 
     QImage image = map.toImage();
 
+    // save a copy of the original alpha channel
+    QImage alpha = image.alphaChannel();
+
     int s, v;
 
     bool warned = false;
@@ -94,11 +97,6 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
 
         for (int x = 0; x < image.width(); ++x) {
 
-            // NOTE: I can't find a QImage get_the_color_at_this_pixel method
-            // that doesn't destroy the alpha property.  I think this is why
-            // these recolored pixmaps wind up totally opaque.  Saving that
-            // thought for another iteration, after the more immediate problems
-            // are worked out
             QRgb oldPixel = image.pixel(x, y);
             QColor oldColour(oldPixel);
 
@@ -136,6 +134,9 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
             image.setPixel(x, y, newPixel);
         }
     }
+
+    // restore the original alpha channel
+    image.setAlphaChannel(alpha);
 
     QPixmap rmap = QPixmap::fromImage(image);
     if (!map.mask().isNull()) rmap.setMask(map.mask());

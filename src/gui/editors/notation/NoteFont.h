@@ -92,7 +92,7 @@ public:
        specified.  The final parameter is out of place with the HSV scheme in
        order to make it an optional parameter that doesn't require rewriting old
        code that expected the oldest scheme.  The new full HSV scheme is
-       required to produce the colour white.
+       required to produce the full spectrum of colours on demand.
      */
     bool getCharacterColoured(CharName charName,
                               int hue, int minimum,
