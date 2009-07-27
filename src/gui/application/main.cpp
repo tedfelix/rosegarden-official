@@ -446,6 +446,7 @@ int main(int argc, char *argv[])
     }
     theApp.setWindowIcon(icon);
 
+    QSettings settings;
     QString stylepath = ResourceFinder().getResourcePath("", "rosegarden.qss");
     if (stylepath != "") {
         std::cerr << "NOTE: Found stylesheet at \"" << stylepath << "\", applying it" << std::endl;
@@ -453,8 +454,15 @@ int main(int argc, char *argv[])
         if (!file.open(QFile::ReadOnly)) {
             std::cerr << "(Failed to open file)" << std::endl;
         } else {
-            QString styleSheet = QLatin1String(file.readAll());
-            theApp.setStyleSheet(styleSheet);
+            settings.beginGroup(GeneralOptionsConfigGroup);
+            bool Thorn = settings.value("use_thorn_style", true).toBool();
+            if (Thorn) {
+                QString styleSheet = QLatin1String(file.readAll());
+                theApp.setStyleSheet(styleSheet);
+            } else {
+                std::cerr << "Not loading stylesheet per user request.  Caveat emptor." << std::endl;
+            }
+            settings.endGroup();
         }
     }
 
@@ -463,7 +471,6 @@ int main(int argc, char *argv[])
     //
     QObject::connect(&theApp, SIGNAL(lastWindowClosed()), &theApp, SLOT(quit()));
 
-    QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     QString lastVersion = settings.value("lastversion", "").toString();

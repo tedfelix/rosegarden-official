@@ -21,6 +21,9 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
+#include "gui/general/GUIPalette.h"
+#include "misc/ConfigGroups.h"
+
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
@@ -33,6 +36,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -81,8 +85,18 @@ ClefDialog::ClefDialog(QWidget *parent,
     midChunkLayout->addWidget(clefDown);
     clefDown->setToolTip(tr("Lower clef"));
 
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+    
     m_clefPixmap = new QLabel;
-    QString localStyle = QString("background: white; color: black;");
+    // if no stylesheet, force a white background anyway, because the foreground
+    // will be dark, and this used to be bordering on illegible in Classic
+    QString localStyle = (Thorn ? 
+            QString("background: #404040; color: white;")
+                                :
+            QString("background: white; color: black;"));
     m_clefPixmap->setStyleSheet(localStyle);
     midChunkLayout->addWidget(m_clefPixmap);
 
