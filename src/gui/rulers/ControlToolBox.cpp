@@ -20,6 +20,7 @@
 #include "ControlTool.h"
 #include "ControlRuler.h"
 #include "PropertyAdjuster.h"
+#include "ControlPainter.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -41,10 +42,11 @@ ControlToolBox::createTool(QString toolName)
     QString toolNamelc = toolName.toLower();
 
     if (toolNamelc == PropertyAdjuster::ToolName)
-
         tool = new PropertyAdjuster(m_ruler);
-
-    else {
+    else if (toolNamelc == ControlPainter::ToolName)
+        tool = new ControlPainter(m_ruler);
+    else
+    {
         QMessageBox::critical(0, "", QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));
         return 0;

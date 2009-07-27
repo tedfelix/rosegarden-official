@@ -33,7 +33,8 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
         Event *event,
         QPolygonF polygon)
 : QPolygonF(polygon),
-    m_value(0),
+    m_xstart(0),
+    m_y(0),
     m_controlRuler(controlRuler),
 //    m_elementAdapter(elementAdapter),
     m_event(event),
@@ -65,7 +66,7 @@ void ControlItem::setValue(float v)
 {
 //     RG_DEBUG << "ControlItem::setValue(" << v << ") x = " << x() << endl;
 
-    m_value = v;
+    m_y = v;
 }
 
 void ControlItem::updateSegment()
@@ -76,9 +77,9 @@ void ControlItem::updateFromValue()
 {
 //    RG_DEBUG << "ControlItem::updateFromValue() : " << this << endl;
 
-//    if (m_elementAdapter->getValue(m_value)) {
-//         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_value << endl;
-//        setHeight(m_controlRuler->valueToHeight(m_value));
+//    if (m_elementAdapter->getValue(m_y)) {
+//         RG_DEBUG << "ControlItem::updateFromValue() : value = " << m_y << endl;
+//        setHeight(m_controlRuler->valueToHeight(m_y));
 //    }
 }
 
@@ -101,7 +102,7 @@ void ControlItem::draw(QPainter &painter)
 //    if(m_highlighted)
 	//setBrush(Qt::blue);
 //    else
-      //  setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_value));
+      //  setBrush(m_controlRuler->valueToColour(m_controlRuler->getMaxItemValue(), m_y));
 
     //Q3CanvasRectangle::draw(painter);
 

@@ -21,7 +21,9 @@
 
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
-#include "ControlItem.h"
+#include "EventControlItem.h"
+#include "ControlTool.h"
+#include "ControlToolBox.h"
 #include "ControllerEventAdapter.h"
 #include "ControlRulerEventInsertCommand.h"
 #include "ControlRulerEventEraseCommand.h"
@@ -37,6 +39,7 @@
 #include "base/Selection.h"
 #include "commands/edit/EraseCommand.h"
 #include "gui/general/EditViewBase.h"
+#include "gui/general/GUIPalette.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
 #include "document/CommandHistory.h"
@@ -47,7 +50,7 @@
 #include <QString>
 #include <QValidator>
 #include <QWidget>
-
+#include <QPainter>
 
 namespace Rosegarden
 {
@@ -77,20 +80,73 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
         m_controller = 0;
     }
 
+    // This is necessary to run the overloaded method, the base method has already run
+    setViewSegment(segment);
+
     setMenuName("controller_events_ruler_menu");
 //    drawBackground(); Now in paintEvent
-    init();
+//    init();
 
     RG_DEBUG << "ControllerEventsRuler::ControllerEventsRuler - " << controller->getName();
     RG_DEBUG << "Segment from " << segment->getSegment().getStartTime() << " to " << segment->getSegment().getEndTime();
     RG_DEBUG << "Position x = " << rulerScale->getXForTime(segment->getSegment().getStartTime()) << " to " << rulerScale->getXForTime(segment->getSegment().getEndTime());
 }
 
-//void
-//ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
-//{
-//    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
-//
+void ControllerEventsRuler::paintEvent(QPaintEvent *event)
+{
+    ControlRuler::paintEvent(event);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QBrush brush(Qt::SolidPattern);
+
+    QPen highlightPen(GUIPalette::getColour(GUIPalette::SelectedElement),
+            2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+    QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
+            0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+
+    // Use a fast vector list to record selected items that are currently visible so that they
+    //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
+    std::vector<ControlItem*> selectedvector;
+
+    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+        if (!(*it)->isSelected()) {
+            brush.setColor((*it)->getColour().lighter());
+            painter.setBrush(brush);
+            painter.setPen(pen);
+            painter.drawPolygon(mapItemToWidget(*it));
+        } else {
+            selectedvector.push_back(*it);
+        }
+    }
+
+    for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
+    {
+        brush.setColor(((*it)->getColour()));
+        painter.setBrush(brush);
+        painter.setPen(highlightPen);
+        painter.drawPolygon(mapItemToWidget(*it));
+    }
+}
+
+void
+ControllerEventsRuler::setSegment(Segment *segment)
+{
+    if (m_segment) m_segment->removeObserver(this);
+    m_segment = segment;
+    m_segment->addObserver(this);
+    ControlRuler::setSegment(segment);
+    init();
+}
+
+
+void
+ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
+{
+    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
+    setSegment(&segment->getSegment());
+}
 //    m_viewSegment->removeObserver(this);
 //    m_viewSegment = segment;
 //    m_viewSegment->addObserver(this);
@@ -105,13 +161,12 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
 void
 ControllerEventsRuler::init()
 {
-    // Reset range information for this controller type (for the moment
-    // this assumes min is always 0.
-    //
+    // Reset range information for this controller type
     if (!m_controller)
         return;
 
     setMaxItemValue(m_controller->getMax());
+    setMinItemValue(m_controller->getMin());
 
     for (Segment::iterator i = m_segment->begin();
             i != m_segment->end(); ++i) {
@@ -153,11 +208,6 @@ ControllerEventsRuler::init()
 ControllerEventsRuler::~ControllerEventsRuler()
 {}
 
-void ControllerEventsRuler::paintEvent(QPaintEvent *event)
-{
-    ControlRuler::paintEvent(event);
-}
-
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
@@ -179,51 +229,67 @@ QString ControllerEventsRuler::getName()
         return tr("Controller Events");
 }
 
-void ControllerEventsRuler::elementAdded(const ViewSegment *, ViewElement *el)
-{
-
-}
-
-//void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
+//void ControllerEventsRuler::elementAdded(const ViewSegment *, ViewElement *el)
 //{
-//    if (e->getType() != m_controller->getType())
-//        return ;
 //
-//    // Check for specific controller value if we need to
-//    //
-//    if (e->getType() == Controller::EventType) {
-//        try {
-//            if (e->get
-//                    <Int>(Controller::NUMBER) !=
-//                    m_controller->getControllerValue())
-//                return ;
-//        } catch (...) {
-//            return ;
-//        }
-//    }
-//
-//    RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
-//
-//    double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
-//
-//    //int width = getDefaultItemWidth();
-//    int width=m_rulerScale->getXForTime(e->getDuration());
-//
-//
-//    if (m_controller->getType() == PitchBend::EventType)
-//        width /= 4;
-//
-////    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_viewSegmentOffset), width);
 //}
 
-void ControllerEventsRuler::elementRemoved(const ViewSegment *, ViewElement *el)
+bool ControllerEventsRuler::isOnThisRuler(Event *event)
 {
+    bool result = false;
+    if (event->getType() == m_controller->getType()) {
+        if (event->getType() == Controller::EventType) {
+            try {
+                if (event->get<Int>(Controller::NUMBER) ==
+                        m_controller->getControllerValue())
+                    result = true;
+            } catch (...) {
+            }
+        } else {
+            result = true;
+        }
+    }
+    return result;
 }
 
-//void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
+void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
+{
+    if (isOnThisRuler(e)) {
+        addControlItem(e);
+        RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
+    }
+
+    //double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
+
+    //int width = getDefaultItemWidth();
+//    int width=m_rulerScale->getXForTime(e->getDuration());
+//    long val = 0;
+//    if (m_controller->getType() == PitchBend::EventType) {
+//        long lsb, msb;
+//        e->get<Int>(PitchBend::MSB, msb);
+//        e->get<Int>(PitchBend::LSB, lsb);
+//        val = (lsb & 0x7F) + ((msb & 0x7F) << 7);
+//    } else {
+//        e->get<Int>(Controller::VALUE,val);
+//    }
+
+//    float y = (float)(val - m_controller->getMin()) / (float)(m_controller->getMax() - m_controller->getMin());
+
+//    if (m_controller->getType() == PitchBend::EventType)
+//        width /= 4;
+
+//    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_viewSegmentOffset), width);
+}
+
+//void ControllerEventsRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 //{
-//    if (e->getType() != m_controller->getType())
-//        return ;
+//}
+
+void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
+{
+    if (isOnThisRuler(e)) {
+        removeControlItem(e);
+    }
 //
 //    clearSelectedItems();
 //
@@ -239,18 +305,59 @@ void ControllerEventsRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 ////            }
 //        }
 //    }
+}
+
+void ControllerEventsRuler::segmentDeleted(const Segment *)
+{
+    m_segment = 0;
+}
+
+void ControllerEventsRuler::addControlItem(Event *event)
+{
+    EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(event), QPolygonF());
+    controlItem->update();
+
+    ControlRuler::addControlItem(controlItem);
+}
+
+//void ControllerEventsRuler::removeControlItem(Event *event)
+//{
+//    RG_DEBUG << "ControllerEventsRuler::removeControlItem()";
+//    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
+//        if (EventControlItem *item = dynamic_cast<EventControlItem*>(it->second)) {
+//            if (item->getEvent() == event) {
+//    //                m_controlItemList.erase(it);
+//    //                m_selectedItems.remove(item);
+//    //                delete item;
+//                removeControlItem(it);
+//                RG_DEBUG << "Control item erased";
+//                break;
+//            }
+//        }
+//    }
 //}
 
-void ControllerEventsRuler::insertControllerEvent()
+void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 {
-    timeT insertTime = m_rulerScale->getTimeForX(m_lastEventPos.x());
+    ///TODO Write mechanism to select correct control tool for the given matrix tool
+    QString controltoolname = "painter";
+    ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
+    if (!tool) return;
+    if (m_currentTool) m_currentTool->stow();
+    m_currentTool = tool;
+    m_currentTool->ready();
+//    emit toolChanged(name);
+}
 
-
-    // compute initial value from cursor height
-    //
-    //long initialValue = heightToValue(m_lastEventPos.y() - canvas()->height());
-    long initialValue = heightToValue(m_lastEventPos.y() - height());
-
+void ControllerEventsRuler::insertControllerEvent(float x, float y)
+{
+    timeT insertTime = m_rulerScale->getTimeForX(x);
+    //    // compute initial value from cursor height
+//    //
+//    //long initialValue = heightToValue(m_lastEventPos.y() - canvas()->height());
+//    long initialValue = heightToValue(m_lastEventPos.y() - height());
+    long initialValue = YToValue(y);
+//
     RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
     << insertTime
     << " - initial value = " << initialValue
@@ -366,8 +473,8 @@ void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
 void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
 {
 //    if (!m_controlLineShowing) {
-        if (e->button() == Qt::MidButton)
-            insertControllerEvent();
+//        if (e->button() == Qt::MidButton)
+//            insertControllerEvent();
 
         ControlRuler::mouseReleaseEvent(e); // send super
 

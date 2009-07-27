@@ -57,9 +57,9 @@ void PropertyControlItem::update()
     } else {
         m_element->event()->get<Rosegarden::Int>(m_propertyname, val);
     }
-    m_value = (float) val / MIDI_CONTROL_MAX_VALUE;
+    m_y = m_controlRuler->valueToY(val);
 
-    reconfigure(x0,x1,m_value);
+    reconfigure(x0,x1,m_y);
 }
 
 void PropertyControlItem::setValue(float y)
@@ -68,12 +68,13 @@ void PropertyControlItem::setValue(float y)
     if (y < 0) y = 0;
 
     if (m_propertyname == BaseProperties::VELOCITY) {
-        m_element->reconfigure(y*MIDI_CONTROL_MAX_VALUE);
+        m_element->reconfigure(m_controlRuler->YToValue(y));
         m_element->setSelected(true);
-        m_colour = DefaultVelocityColour::getInstance()->getColour(y*MIDI_CONTROL_MAX_VALUE);
+        m_colour = DefaultVelocityColour::getInstance()->getColour(
+                m_controlRuler->YToValue(y));
     }
 
-    m_value = y;
+    m_y = y;
     float x0 = boundingRect().left();
     float x1 = boundingRect().right();
     reconfigure(x0,x1,y);
@@ -94,7 +95,7 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
 
 void PropertyControlItem::updateSegment()
 {
-    m_element->event()->set<Int>(m_propertyname,(int)(m_value*MIDI_CONTROL_MAX_VALUE));
+    m_element->event()->set<Int>(m_propertyname,(int)(m_controlRuler->YToValue(m_y)));
 }
 
 }

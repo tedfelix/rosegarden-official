@@ -15,35 +15,39 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _CONTROL_MOUSE_EVENT_H_
-#define _CONTROL_MOUSE_EVENT_H_
+#ifndef _EVENTCONTROLITEM_H
+#define _EVENTCONTROLITEM_H
 
-#include <QPoint>
+#include "gui/rulers/ControlItem.h"
 
-#include "base/Event.h" // for timeT
+class QPolygon;
 
-namespace Rosegarden
-{
+namespace Rosegarden {
 
-class ControlItem;
+class ControlRuler;
+class ControllerEventAdapter;
 
-class ControlMouseEvent
+class EventControlItem : public ControlItem
 {
 public:
-    std::vector<ControlItem*> itemList; // list of items under the cursor, if any
+    EventControlItem(ControlRuler* controlRuler,
+                ControllerEventAdapter* eventAdapter,
+                QPolygonF polygon);
 
-//    timeT time; // un-snapped and un-cropped
-//    float value;
-    float x;
-    float y;
+    ~EventControlItem();
 
-    Qt::KeyboardModifiers modifiers;
-    Qt::MouseButtons buttons;
+    virtual void update();
 
-    ControlMouseEvent() :
-        itemList(),
-        x(0), y(0),
-        modifiers(0), buttons(0) { }
+    void setValue(float y);
+    void updateSegment();
+
+protected:
+    void reconfigure();
+    void reconfigure(float x,float y);
+
+    //--------------- Data members ---------------------------------
+    ControllerEventAdapter *m_eventAdapter;
+    QPolygon m_symbol;
 };
 
 }

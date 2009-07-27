@@ -44,7 +44,7 @@ public:
     ~ControlItem();
 
     virtual void setValue(float);
-    float getValue() const { return m_value; }
+    float getValue() const { return m_y; }
     QColor getColour() { return m_colour; }
 
     //void setWidth(int w)  { setSize(w, height()); }
@@ -73,7 +73,7 @@ public:
     /// update value according to height after a user edit
     virtual void updateSegment();
 
-    virtual void update(); ///CJ Don't know what to do here yet
+    virtual void update();
     virtual void setX(int);
     virtual void setWidth(int);
 
@@ -87,7 +87,7 @@ protected:
     QColor m_colour;
     double m_xstart;
     double m_xend;
-    float m_value;
+    float m_y;
     bool m_handlingMouseMove;
     bool m_selected;
 

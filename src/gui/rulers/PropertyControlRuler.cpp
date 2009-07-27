@@ -71,7 +71,8 @@ PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
 
     setMenuName("property_ruler_menu");
 //    drawBackground();
-    init();
+//    init();
+    setViewSegment(segment);
 }
 
 void PropertyControlRuler::paintEvent(QPaintEvent *event)
@@ -121,15 +122,19 @@ void PropertyControlRuler::paintEvent(QPaintEvent *event)
 void
 PropertyControlRuler::setViewSegment(MatrixViewSegment *segment)
 {
+    if (m_viewSegment) m_viewSegment->removeObserver(this);
+    m_viewSegment = segment;
+    m_viewSegment->addObserver(this);
     ControlRuler::setViewSegment(segment);
+
     init();
 }
 
 PropertyControlRuler::~PropertyControlRuler()
 {
-//    if (m_viewSegment) {
-//        m_viewSegment->removeObserver(this);
-//    }
+    if (m_viewSegment) {
+        m_viewSegment->removeObserver(this);
+    }
 }
 
 QString PropertyControlRuler::getName()
@@ -221,7 +226,7 @@ void PropertyControlRuler::updateSelection(ViewElementList *elementList)
     clearSelectedItems();
 
     // For now, simply clear the selected items list and build it afresh
-    PropertyControlItem *item;
+    PropertyControlItem *item = 0;
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
 //        item = dynamic_cast <PropertyControlItem *> (*it);
@@ -337,6 +342,12 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
     }
 
     update();
+}
+
+void PropertyControlRuler::viewSegmentDeleted(const ViewSegment *)
+{
+    m_viewSegment = 0;
+    m_segment = 0;
 }
 
 void

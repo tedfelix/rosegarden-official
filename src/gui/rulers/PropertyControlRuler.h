@@ -50,7 +50,7 @@ class RulerScale;
  * PropertyControlRuler : edit a property on events on a staff (only
  * events with a ViewElement attached, mostly notes)
  */
-class PropertyControlRuler :  public ControlRuler
+class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
     PropertyControlRuler(PropertyName propertyName,
@@ -76,7 +76,7 @@ public:
 //    virtual void eventAdded(const Segment *, Event *);
     virtual void elementRemoved(const ViewSegment *, ViewElement*);
 //    virtual void eventRemoved(const Segment *, Event *);
-//    virtual void viewSegmentDeleted(const ViewSegment *);
+    virtual void viewSegmentDeleted(const ViewSegment *);
 //    virtual void segmentDeleted(const Segment *);
 
 //    virtual void startPropertyLine();

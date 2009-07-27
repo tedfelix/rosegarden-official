@@ -32,7 +32,7 @@ bool ControllerEventAdapter::getValue(long& val)
         long msb = 0, lsb = 0;
         m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         m_event->get<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
-        
+
         long value = msb;
         value <<= 7;
         value |= lsb;

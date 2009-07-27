@@ -66,6 +66,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
                            QWidget* parent
 						  ) :
         QWidget(parent),
+        m_segment(0),
         m_viewSegment(0),
         m_rulerScale(rulerScale),
 //        m_assignedEventSelection(0),
@@ -73,6 +74,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
         m_currentIndex(0),
         m_currentTool(0),
         m_maxItemValue(127),
+        m_minItemValue(0),
         m_viewSegmentOffset(0),
         m_currentX(0.0),
         m_itemMoved(false),
@@ -82,7 +84,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
         m_selectionRect(new QRect()),
         m_menu(0)
 {
-    setViewSegment(viewsegment);
+//    setViewSegment(viewsegment);
 
     setFixedHeight(sizeHint().height());
     setMouseTracking(true);
@@ -99,9 +101,9 @@ ControlRuler::~ControlRuler()
 //    if(m_assignedEventSelection)
 //	    m_assignedEventSelection->removeObserver(this);
 //
-    if (m_viewSegment) {
-        m_viewSegment->removeObserver(this);
-    }
+//    if (m_viewSegment) {
+//        m_viewSegment->removeObserver(this);
+//    }
 }
 
 void ControlRuler::setSegment(Segment *segment)
@@ -115,10 +117,10 @@ void ControlRuler::setSegment(Segment *segment)
 
 void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
 {
-    if (m_viewSegment) m_viewSegment->removeObserver(this);
+//    if (m_viewSegment) m_viewSegment->removeObserver(this);
 
     m_viewSegment = viewSegment;
-    m_viewSegment->addObserver(this);
+//    m_viewSegment->addObserver(this);
 
     setSegment(&m_viewSegment->getSegment());
 }
@@ -137,25 +139,36 @@ void ControlRuler::addControlItem(ControlItem* item)
 
 void ControlRuler::removeControlItem(ControlItem* item)
 {
-    // Remove control item by item pointer
-    // No search by Value provided for std::multimap so find items with the requested item's
-    //  xstart position and sweep these for the correct entry
-    double xstart = item->xStart();
+//    // Remove control item by item pointer
+//    // No search by Value provided for std::multimap so find items with the requested item's
+//    //  xstart position and sweep these for the correct entry
+//    double xstart = item->xStart();
+//
+//    ControlItemMap::iterator it;
+//    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
+//
+//    ret = m_controlItemMap.equal_range(xstart);
+//    for (it = ret.first; it != ret.second; it++) {
+//        if (it->second == item) break;
+//    }
+//
+//    if (it != m_controlItemMap.end()) removeControlItem(it);
+    removeControlItem(item->getEvent());
+}
+
+void ControlRuler::removeControlItem(const Event *event)
+{
+    double xstart = event->getAbsoluteTime();
 
     ControlItemMap::iterator it;
     std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
 
     ret = m_controlItemMap.equal_range(xstart);
     for (it = ret.first; it != ret.second; it++) {
-        if (it->second == item) break;
+        if (it->second->getEvent() == event) break;
     }
 
-    if (it != m_controlItemMap.end())
-        m_controlItemMap.erase(it);
-
-    m_selectedItems.remove(item);
-    m_visibleItems.remove(item);
-    delete item;
+    if (it != m_controlItemMap.end()) removeControlItem(it);
 }
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
@@ -273,18 +286,20 @@ QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
 
 QPointF ControlRuler::mapWidgetToItem(QPoint *point)
 {
-    double xscale = (double) m_pannedRect.width() / (double) width();
-    double yscale = 1.0f / (double) height();
+//    double xscale = (double) m_pannedRect.width() / (double) width();
+//    double yscale = 1.0f / (double) height();
 
     QPointF newpoint;
-    newpoint.setX(xscale*(point->x()) + m_pannedRect.left());
-    newpoint.setY(-yscale*(point->y()) + 1.0f);
+    newpoint.setX(m_xScale*(point->x()) + m_pannedRect.left());
+    newpoint.setY(-m_yScale*(point->y()) + 1.0f);
     return newpoint;
 }
 
 void ControlRuler::slotSetPannedRect(QRectF pr)
 {
 	m_pannedRect = pr;
+	m_xScale = (double) m_pannedRect.width() / (double) width();
+	m_yScale = 1.0f / (double) height();
 	// Create the visible items list
 	///TODO Improve efficiency using xstart and xstop ordered lists of control items
 	m_visibleItems.clear();
@@ -384,19 +399,19 @@ void ControlRuler::slotSetTool(const QString &matrixtoolname)
 //    slotUpdate();
 //}
 
-void ControlRuler::viewSegmentDeleted(const ViewSegment *)
-{
-    m_viewSegment = 0;
-    m_segment = 0;
-}
-
+//void ControlRuler::viewSegmentDeleted(const ViewSegment *)
+//{
+//    m_viewSegment = 0;
+//    m_segment = 0;
+//}
+//
 ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
 {
     ControlMouseEvent controlMouseEvent;
     QPoint widgetMousePos = e->pos();
     QPointF mousePos = mapWidgetToItem(&widgetMousePos);
-    controlMouseEvent.time = mousePos.x();
-    controlMouseEvent.value = mousePos.y();
+    controlMouseEvent.x = mousePos.x();
+    controlMouseEvent.y = mousePos.y();
 
     for (ControlItemList::iterator it = m_visibleItems.begin();
             it != m_visibleItems.end(); ++it) {
@@ -710,27 +725,39 @@ void ControlRuler::clear()
     m_controlItemMap.clear();
 }
 
-int ControlRuler::valueToHeight(long val)
+//int ControlRuler::valueToHeight(long val)
+//{
+//    long scaleVal = val * (ItemHeightRange);
+//
+//    int res = -(int(scaleVal / getMaxItemValue()) + MinItemHeight);
+//
+//    //RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
+//    //<< " - scaleVal = " << scaleVal << endl;
+//
+//    return res;
+//}
+float ControlRuler::valueToY(long val)
 {
-    long scaleVal = val * (ItemHeightRange);
-
-    int res = -(int(scaleVal / getMaxItemValue()) + MinItemHeight);
-
-    //RG_DEBUG << "ControlRuler::valueToHeight : val = " << val << " - height = " << res
-    //<< " - scaleVal = " << scaleVal << endl;
-
-    return res;
+    float y = (float)(val-getMinItemValue())
+            /(float)(getMaxItemValue()-getMinItemValue());
+    return y;
 }
 
-long ControlRuler::heightToValue(int h)
+long ControlRuler::YToValue(float y)
 {
-    long val = -h;
-    val -= MinItemHeight;
-    val *= getMaxItemValue();
-    val /= (ItemHeightRange);
-    val = std::min(val, long(getMaxItemValue()));
-    return val;
+    long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
+    return value;
 }
+
+//long ControlRuler::heightToValue(int h)
+//{
+//    long val = -h;
+//    val -= MinItemHeight;
+//    val *= getMaxItemValue();
+//    val /= (ItemHeightRange);
+//    val = std::min(val, long(getMaxItemValue()));
+//    return val;
+//}
 
 QColor ControlRuler::valueToColour(int max, int val)
 {

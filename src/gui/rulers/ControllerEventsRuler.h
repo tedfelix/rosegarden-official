@@ -45,7 +45,7 @@ class ControlItem;
 /**
  * ControllerEventsRuler : edit Controller events
  */
-class ControllerEventsRuler : public ControlRuler
+class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
 public:
     ControllerEventsRuler(MatrixViewSegment*,
@@ -66,26 +66,32 @@ public:
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
     //
-//    virtual void setViewSegment(MatrixViewSegment *);
+    virtual void setViewSegment(MatrixViewSegment *);
+    virtual void setSegment(Segment *);
 
-    // ViewSegmentObserver interface
-    virtual void elementAdded(const ViewSegment *, ViewElement*);
-//    virtual void eventAdded(const Segment *, Event *);
-    virtual void elementRemoved(const ViewSegment *, ViewElement*);
-//    virtual void eventRemoved(const Segment *, Event *);
+    // SegmentObserver interface
+//    virtual void elementAdded(const ViewSegment *, ViewElement*);
+    virtual void eventAdded(const Segment *, Event *);
+//    virtual void elementRemoved(const ViewSegment *, ViewElement*);
+    virtual void eventRemoved(const Segment *, Event *);
 //    virtual void viewSegmentDeleted(const ViewSegment *);
-//    virtual void segmentDeleted(const Segment *);
+    virtual void segmentDeleted(const Segment *);
 
-    virtual void insertControllerEvent();
+    virtual void insertControllerEvent(float,float);
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
 //    virtual void startControlLine();
 
     ControlParameter* getControlParameter() { return m_controller; }
 
+public slots:
+    virtual void slotSetTool(const QString&);
+
 protected:
 
     virtual void init();
+    virtual bool isOnThisRuler(Event *);
+    virtual void addControlItem(Event *);
 
 //    virtual void drawBackground(); Implemented in paintEvent
 

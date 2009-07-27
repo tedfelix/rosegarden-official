@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "PropertyAdjuster.h"
+#include "ControlPainter.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -29,6 +29,7 @@
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
 #include "ControlRuler.h"
+#include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
 #include "misc/Debug.h"
@@ -38,8 +39,8 @@
 namespace Rosegarden
 {
 
-PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
-    ControlTool("", "PropertyAdjuster", parent)
+ControlPainter::ControlPainter(ControlRuler *parent) :
+    ControlTool("", "ControlPainter", parent)
 {
 //    createAction("select", SLOT(slotSelectSelected()));
 //    createAction("draw", SLOT(slotDrawSelected()));
@@ -50,16 +51,22 @@ PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
 }
 
 void
-PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
+ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_overItem) {
         m_ruler->setCursor(Qt::ClosedHandCursor);
         m_mouseLastY = e->y;
     }
+    else {
+        // Make new control event here
+        // This tool should not be applied to a PropertyControlRuler but in case it is
+        ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
+        if (ruler) ruler->insertControllerEvent(e->x,e->y);
+    }
 }
 
 void
-PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
+ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
@@ -68,17 +75,17 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
         // A property drag action is in progress
-        float delta = (e->y-m_mouseLastY);
-        m_mouseLastY = e->y;
-        ControlItemList *selected = m_ruler->getSelectedItems();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            (*it)->setValue((*it)->getValue()+delta);
-        }
+//        float delta = (e->value-m_mouseLastY);
+//        m_mouseLastY = e->value;
+//        ControlItemList *selected = m_ruler->getSelectedItems();
+//        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
+//            (*it)->setValue((*it)->getValue()+delta);
+//        }
     }
 }
 
 void
-PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
+ControlPainter::handleMouseRelease(const ControlMouseEvent *e)
 {
     if (m_overItem) {
         // This is the end of a drag event, reset the cursor to the state that it started
@@ -89,16 +96,11 @@ PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
     setCursor(e);
 }
 
-void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
+void ControlPainter::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
-    std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
-    for (; it != e->itemList.end(); ++it) {
-        if ((*it)->isSelected()) {
-            isOverItem = true;
-            break;
-        }
-    }
+
+    if (e->itemList.size()) isOverItem = true;
 
     if (!m_overItem) {
         if (isOverItem) {
@@ -107,14 +109,16 @@ void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
         }
     } else {
         if (!isOverItem) {
-            m_ruler->unsetCursor();
+            m_ruler->setCursor(Qt::CrossCursor);
             m_overItem = false;
         }
     }
 }
 
-void PropertyAdjuster::ready()
+void ControlPainter::ready()
 {
+    m_ruler->setCursor(Qt::CrossCursor);
+    m_overItem = false;
 //    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 
@@ -122,7 +126,7 @@ void PropertyAdjuster::ready()
 //    setBasicContextHelp();
 }
 
-void PropertyAdjuster::stow()
+void ControlPainter::stow()
 {
 //    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
@@ -146,8 +150,8 @@ void PropertyAdjuster::stow()
 //    }
 //}
 
-const QString PropertyAdjuster::ToolName = "adjuster";
+const QString ControlPainter::ToolName = "painter";
 
 }
 
-#include "PropertyAdjuster.moc"
+#include "ControlPainter.moc"

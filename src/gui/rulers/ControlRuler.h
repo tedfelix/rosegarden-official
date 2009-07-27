@@ -65,7 +65,7 @@ class EditViewBase;
  */
 //class ControlRuler : public RosegardenCanvasView, public SegmentObserver, public EventSelectionObserver
 //class ControlRuler : public QWidget, public SegmentObserver, public EventSelectionObserver
-class ControlRuler : public QWidget, public ViewSegmentObserver
+class ControlRuler : public QWidget //, public ViewSegmentObserver
 {
     Q_OBJECT
 
@@ -85,8 +85,11 @@ public:
 
     virtual void paintEvent(QPaintEvent *);
 
-    int getMaxItemValue() { return m_maxItemValue; }
-    void setMaxItemValue(int val) { m_maxItemValue = val; }
+    long getMaxItemValue() { return m_maxItemValue; }
+    void setMaxItemValue(long val) { m_maxItemValue = val; }
+
+    long getMinItemValue() { return m_minItemValue; }
+    void setMinItemValue(long val) { m_minItemValue = val; }
 
     void clear();
 
@@ -104,6 +107,12 @@ public:
     virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
 
+    float valueToY(long val);
+    long YToValue(float height);
+
+    double getXScale() {return m_xScale; }
+    double getYScale() {return m_yScale; }
+
     /// EventSelectionObserver
 //    virtual void eventSelected(EventSelection *,Event *);
 //    virtual void eventDeselected(EventSelection *,Event *);
@@ -112,7 +121,7 @@ public:
 //    void assignEventSelection(EventSelection *);
 
     // SegmentObserver interface
-    virtual void viewSegmentDeleted(const ViewSegment *);
+//    virtual void viewSegmentDeleted(const ViewSegment *);
 
     static const int DefaultRulerHeight;
     static const int MinItemHeight;
@@ -151,6 +160,7 @@ protected:
 
 //    virtual void layoutItem(ControlItem*);
     virtual void addControlItem(ControlItem*);
+    virtual void removeControlItem(const Event*);
     virtual void removeControlItem(const ControlItemMap::iterator&);
     virtual void removeControlItem(ControlItem*);
     virtual bool isVisible(ControlItem*);
@@ -168,8 +178,6 @@ protected:
     QPolygon mapItemToWidget(QPolygonF*);
     QPointF mapWidgetToItem(QPoint*);
 
-    int valueToHeight(long val);
-    long heightToValue(int height);
     QColor valueToColour(int max, int val);
 
     void clearSelectedItems();
@@ -204,9 +212,11 @@ protected:
     QString m_currentToolName;
 
     QRectF m_pannedRect;
-    double m_scale;
+    double m_xScale;
+    double m_yScale;
 
-    int m_maxItemValue;
+    long m_maxItemValue;
+    long m_minItemValue;
 
     double m_viewSegmentOffset;
 
