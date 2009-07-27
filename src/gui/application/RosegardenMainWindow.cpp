@@ -494,8 +494,8 @@ RosegardenMainWindow::~RosegardenMainWindow()
     RG_DEBUG << "~RosegardenMainWindow()\n";
 
     if (getView() &&
-            getView()->getTrackEditor() &&
-            getView()->getTrackEditor()->getCompositionView()) {
+        getView()->getTrackEditor() &&
+        getView()->getTrackEditor()->getCompositionView()) {
         getView()->getTrackEditor()->getCompositionView()->endAudioPreviewGeneration();
     }
 
@@ -895,11 +895,6 @@ RosegardenMainWindow::initView()
     connect(m_swapView, SIGNAL(toggleSolo(bool)), SLOT(slotToggleSolo(bool)));
 
     m_doc->attachView(m_swapView);
-    
-    // m_mainDockWidget->setWidget(m_swapView);    //&&& later: check dockWidget code
-
-    //@@@ This was commented out... why?
-    setCentralWidget(m_swapView);
 
     setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
     
@@ -1010,7 +1005,7 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
-    delete oldView;
+    setCentralWidget(m_swapView); // this also deletes oldView
 
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
