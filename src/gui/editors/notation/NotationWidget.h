@@ -77,6 +77,7 @@ public:
     void setCanvasCursor(QCursor cursor);
 
     Segment *getCurrentSegment();
+    bool segmentsContainNotes() const;
 
     void setTempoRulerVisible(bool visible);
     void setChordNameRulerVisible(bool visible);

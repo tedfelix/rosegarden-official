@@ -295,6 +295,13 @@ NotationWidget::getCurrentSegment()
     return m_scene->getCurrentSegment();
 }
 
+bool
+NotationWidget::segmentsContainNotes() const
+{
+    if (!m_scene) return false;
+    return m_scene->segmentsContainNotes();
+}
+
 void
 NotationWidget::slotSetLinearMode()
 {

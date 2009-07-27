@@ -65,6 +65,8 @@ public:
 
     Segment *getCurrentSegment();
 
+    bool segmentsContainNotes() const;
+
     //!!! to keep current staff implementation happy:
     bool isInPrintMode() const { return false; }
     NotationHLayout *getHLayout() { return m_hlayout; }

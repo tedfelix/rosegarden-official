@@ -129,6 +129,12 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     connect(m_notationWidget->getScene(), SIGNAL(selectionChanged()),
             this, SLOT(slotUpdateMenuStates()));
 
+    // Default tool is a note inserter; if we have some notes already,
+    // make the selector the default (c.f. MatrixView also).
+    if (m_notationWidget->segmentsContainNotes()) {
+        findAction("select")->trigger();
+    }
+
     // Set display configuration
     bool visible;
     QSettings settings;

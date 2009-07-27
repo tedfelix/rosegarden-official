@@ -118,10 +118,21 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     connect(m_matrixWidget, SIGNAL(editTriggerSegment(int)),
             this, SIGNAL(editTriggerSegment(int)));
 
+    // Toggle the desired tool off and then trigger it on again, to
+    // make sure its signal is called at least once (as would not
+    // happen if the tool was on by default otherwise)
+    QAction *toolAction = 0;
     if (!m_matrixWidget->segmentsContainNotes()) {
-        findAction("draw")->trigger();
+        toolAction = findAction("draw");
     } else {
-        findAction("select")->trigger();
+        toolAction = findAction("select");
+    }
+    if (toolAction) {
+        MATRIX_DEBUG << "initial state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
+        if (toolAction->isChecked()) toolAction->toggle();
+        MATRIX_DEBUG << "newer state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
+        toolAction->trigger();
+        MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked() << endl;
     }
 
     m_matrixWidget->slotSetPlayTracking(m_tracking);
@@ -641,6 +652,7 @@ NewMatrixView::slotSetEraseTool()
 void
 NewMatrixView::slotSetSelectTool()
 {
+    MATRIX_DEBUG << "NewMatrixView::slotSetSelectTool" << endl;
     if (m_matrixWidget) m_matrixWidget->slotSetSelectTool();
 }
 

@@ -295,6 +295,25 @@ NotationScene::getCurrentSegment()
     return 0;
 }
 
+bool
+NotationScene::segmentsContainNotes() const
+{
+    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+
+        const Segment *segment = m_segments[i];
+
+        for (Segment::const_iterator i = segment->begin();
+             segment->isBeforeEndMarker(i); ++i) {
+
+            if (((*i)->getType() == Note::EventType)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 void
 NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
                                NotationMouseEvent &nme)

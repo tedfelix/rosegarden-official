@@ -166,12 +166,16 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_toolBox = new MatrixToolBox(this);
 
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName));
-    connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-            m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+    if (matrixMoverTool) {
+        connect(matrixMoverTool, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
+                m_controlsWidget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
+    }
 
     MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName));
-    connect(matrixVelocityTool, SIGNAL(hoveredOverNoteChanged()),
-            m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
+    if (matrixVelocityTool) {
+        connect(matrixVelocityTool, SIGNAL(hoveredOverNoteChanged()),
+                m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
+    }
 
     connect(this, SIGNAL(toolChanged(QString)),
             m_controlsWidget, SLOT(slotSetToolName(QString)));
@@ -533,6 +537,8 @@ MatrixWidget::slotSetTool(QString name)
 void
 MatrixWidget::slotSetPaintTool()
 {
+    MATRIX_DEBUG << "slotSetPaintTool" << endl;
+    
     slotSetTool(MatrixPainter::ToolName);
 }
 
@@ -545,9 +551,13 @@ MatrixWidget::slotSetEraseTool()
 void
 MatrixWidget::slotSetSelectTool()
 {
+    MATRIX_DEBUG << "slotSetSelectTool" << endl;
+    
     slotSetTool(MatrixSelector::ToolName);
     MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
+        MATRIX_DEBUG << "slotSetSelectTool: selector successfully set" << endl;
+    
         connect(selector, SIGNAL(editTriggerSegment(int)),
                 this, SIGNAL(editTriggerSegment(int)));
     }
