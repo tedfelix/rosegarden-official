@@ -184,7 +184,8 @@ public:
                                    int step);
     QPixmap makeClefDisplayPixmap(const Clef &clef, const ColourType colourType = PlainColour);
     QPixmap makeKeyDisplayPixmap(const Key &key,
-                                 const Clef &clef);
+                                 const Clef &clef,
+                                 const ColourType colourType = PlainColour);
     QPixmap makeTextPixmap(const Text &text);
 
     // Bounding box and other geometry methods:
@@ -318,7 +319,7 @@ protected:
     QGraphicsPixmapItem *makeAnnotation(const Text &text);
     QGraphicsPixmapItem *makeAnnotation(const Text &text, const bool isLilyPondDirective);
 
-    void createPixmap(int width, int height);
+    void createPixmap(int width, int height, const ColourType colourType = PlainColour);
     QGraphicsPixmapItem *makeItem(QPoint hotspot);
     QPixmap makePixmap();
 

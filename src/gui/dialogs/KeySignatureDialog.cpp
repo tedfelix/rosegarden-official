@@ -117,12 +117,12 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
 
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    bool Thorn = settings.value("use_thorn_style", true).toBool();
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
     settings.endGroup();
 
     // if no stylesheet, force a white background anyway, because the foreground
     // will be dark, and this used to be bordering on illegible in Classic
-    QString localStyle = (Thorn ? 
+    QString localStyle = (m_Thorn ? 
             QString("background: #404040; color: white;")
                                 :
             QString("background: white; color: black;"));
@@ -376,7 +376,8 @@ void
 KeySignatureDialog::redrawKeyPixmap()
 {
     if (m_valid) {
-        QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef);
+        NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight : NotePixmapFactory::PlainColour);
+        QPixmap pmap = m_notePixmapFactory->makeKeyDisplayPixmap(m_key, m_clef, ct);
         m_keyPixmap->setPixmap(pmap);
     } else {
         m_keyPixmap->setText(tr("No such key"));

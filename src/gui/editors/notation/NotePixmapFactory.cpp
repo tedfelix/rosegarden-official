@@ -1994,6 +1994,24 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef, ColourType colourType
     int x = 3 * getNoteBodyWidth();
     m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
 
+    // error: ‘QColour’ was not declared in this scope
+    //
+    // Rrrrrrrrrrrrr!!!
+
+    // we'll just use the colourType to figure out what color--yes, I said COLOR,
+    // get over it you stiff-lipped Brits--to draw the lines
+    QColor lines;
+    switch (colourType) {
+        case PlainColourLight:
+            lines = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            lines = Qt::black;
+    }
+
+    m_p->painter().setPen(lines);
+
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
         m_p->drawLine(x / 2, y, m_generatedWidth - x / 2 - 1, y);
@@ -2004,7 +2022,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef, ColourType colourType
 }
 
 QPixmap
-NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
+NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef, ColourType colourType)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
 
@@ -2012,7 +2030,22 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef)
                          NoteCharacterNames::SHARP :
                          NoteCharacterNames::FLAT);
 
-    QGraphicsPixmapItem *clefItem = makeClef(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
+
+    // we'll just use the colourType to figure out what color to draw the lines
+    // and other whatnots
+    QColor whatnots;
+
+    switch (colourType) {
+        case PlainColourLight:
+            whatnots = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            whatnots = Qt::black;
+    }
+
+    m_p->painter().setPen(whatnots);
 
     QPixmap accidentalPixmap(m_font->getCharacter(charName).getPixmap());
     QPoint hotspot(m_font->getHotspot(charName));
@@ -3153,7 +3186,7 @@ NotePixmapFactory::makeAnnotation(const Text &text, const bool isLilyPondDirecti
 }
 
 void
-NotePixmapFactory::createPixmap(int width, int height)
+NotePixmapFactory::createPixmap(int width, int height, ColourType colourType)
 {
     if (width == 0 || height == 0) {
         std::cerr << "NotePixmapFactory::createPixmap: WARNING: invalid size " << width << "x" << height << std::endl;
@@ -3166,23 +3199,25 @@ NotePixmapFactory::createPixmap(int width, int height)
     m_generatedPixmap = new QPixmap(width, height);
     m_generatedPixmap->fill(Qt::transparent);
 
-    static unsigned long total = 0;
-    total += width * height;
-//    NOTATION_DEBUG << "createPixmap: " << width << "x" << height << " (" << (width*height) << " px, " << total << " total)" << endl;
+    QColor whatnots;
 
-    // clear up pixmap and mask
-//    m_generatedPixmap->fill();
-//    m_generatedMask->fill(QColor(Qt::color0));
+    switch (colourType) {
+        case PlainColourLight:
+            whatnots = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            whatnots = Qt::black;
+    }
+
+    m_p->painter().setPen(QColor(whatnots));
+    m_p->painter().setBrush(QColor(whatnots));
+
 
     // initiate painting
     NOTATION_DEBUG << "NotePixmapFactory::createPixmap(" << width << "," << height << "): about to begin painter" << endl;
     m_p->begin(m_generatedPixmap);
 
-    m_p->painter().setPen(QColor(Qt::black));
-    m_p->painter().setBrush(QColor(Qt::black));
-
-//    m_p->maskPainter().setPen(QColor(Qt::white));
-//    m_p->maskPainter().setBrush(QColor(Qt::white));
 }
 
 QGraphicsPixmapItem *

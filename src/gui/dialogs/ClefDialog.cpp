@@ -276,8 +276,6 @@ ClefDialog::slotOctaveDown()
 void
 ClefDialog::redrawClefPixmap()
 {
-    std::cerr << "KABOOM?  Where's the kaboom?  There was supposed to be an earth-shattering " << std::endl;
-
     NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight : NotePixmapFactory::PlainColour);
     QPixmap pmap = m_notePixmapFactory->makeClefDisplayPixmap(m_clef, ct);
     m_clefPixmap->setPixmap(pmap);
@@ -326,7 +324,6 @@ ClefDialog::redrawClefPixmap()
         name = name.arg(tr("Sub-bass"));
 
     m_clefNameLabel->setText(name);
-    std::cerr << "kaboom. " << std::endl;
 }
 
 }
