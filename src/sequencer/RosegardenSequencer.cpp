@@ -1060,11 +1060,10 @@ RosegardenSequencer::segmentModified(MappedSegment *segment)
 {
     if (!segment) return;
 
-    LOCKED;
-
     SEQUENCER_DEBUG << "RosegardenSequencer::segmentModified(" << segment << ")\n";
 
     if (m_transportStatus == PLAYING) {
+        LOCKED;
         m_metaIterator.resetIteratorForSegment(segment);
     }
 }
