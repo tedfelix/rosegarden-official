@@ -1980,9 +1980,9 @@ NotePixmapFactory::makeKey(const Key &key,
 }
 
 QPixmap
-NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef)
+NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef, ColourType colourType)
 {
-    QGraphicsPixmapItem *clefItem = makeClef(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
     int lw = getLineSpacing();
     int width = clefItem->pixmap().width() + 6 * getNoteBodyWidth();

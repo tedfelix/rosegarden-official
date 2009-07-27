@@ -182,7 +182,7 @@ public:
                                    const Clef &clef,
                                    int octave,
                                    int step);
-    QPixmap makeClefDisplayPixmap(const Clef &clef);
+    QPixmap makeClefDisplayPixmap(const Clef &clef, const ColourType colourType = PlainColour);
     QPixmap makeKeyDisplayPixmap(const Key &key,
                                  const Clef &clef);
     QPixmap makeTextPixmap(const Text &text);
