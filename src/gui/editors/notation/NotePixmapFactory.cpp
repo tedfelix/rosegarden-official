@@ -95,9 +95,9 @@ NotePixmapFactory::NotePixmapFactory(QString fontName, int size) :
     m_ottavaFontMetrics(m_ottavaFont),
     m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
     m_clefOttavaFontMetrics(m_ottavaFont),
-    m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+    m_trackHeaderFont(defaultSansSerifFontFamily, 9, QFont::Normal),
     m_trackHeaderFontMetrics(m_trackHeaderFont),
-    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 9, QFont::Bold),
     m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
     m_generatedPixmap(0),
     m_generatedWidth( -1),
@@ -125,9 +125,9 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_ottavaFontMetrics(m_ottavaFont),
     m_clefOttavaFont(defaultSerifFontFamily, 8, QFont::Normal),
     m_clefOttavaFontMetrics(m_ottavaFont),
-    m_trackHeaderFont(defaultSansSerifFontFamily, 10, QFont::Normal),
+    m_trackHeaderFont(defaultSansSerifFontFamily, 9, QFont::Normal),
     m_trackHeaderFontMetrics(m_trackHeaderFont),
-    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 10, QFont::Bold),
+    m_trackHeaderBoldFont(defaultSansSerifFontFamily, 9, QFont::Bold),
     m_trackHeaderBoldFontMetrics(m_trackHeaderBoldFont),
     m_generatedPixmap(0),
     m_generatedWidth( -1),
@@ -246,7 +246,7 @@ NotePixmapFactory::init(QString fontName, int size)
     m_clefOttavaFontMetrics = QFontMetrics(m_clefOttavaFont);
 
     m_trackHeaderFont = settings.value("sansfont", m_trackHeaderFont).toString();
-    m_trackHeaderFont.setPixelSize(12);
+    m_trackHeaderFont.setPixelSize(9);
     m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
 
     m_trackHeaderBoldFont = m_trackHeaderFont;

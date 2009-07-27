@@ -249,15 +249,6 @@ StaffHeader::paintEvent(QPaintEvent *)
         // Draw clef
         QPixmap clefPixmap = m_clefItem->pixmap();
 
-        // Set color : a quick and very bad hack until I have
-        //             time to look for a better way
-/*        if (isClefInconsistent()) {
-            clefPixmap.createMaskFromColor(QColor(m_foreGround), Qt::MaskInColor);
-            QBitmap mask = clefPixmap.mask();
-            clefPixmap.fill(QColor(Qt::red));
-            clefPixmap.setMask(mask);
-        }*/
-
         h = m_clef.getAxisHeight();
         int y = (lw * 3) + ((8 - h) * lw) / 2;
         paint.drawPixmap(maxDelta, y + m_clefItem->offset().y() + offset, clefPixmap);
