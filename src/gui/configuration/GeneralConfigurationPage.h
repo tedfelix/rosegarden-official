@@ -86,7 +86,6 @@ public:
 
 signals:
     void updateAutoSaveInterval(unsigned int);
-    void updateSidebarStyle(unsigned int);
 
 protected slots:
     void slotShowStatus();
@@ -103,17 +102,17 @@ protected:
     RosegardenDocument* m_doc;
 
     QComboBox* m_client;
-    QSpinBox*  m_countIn;
-    QCheckBox* m_toolContextHelp;
-    QCheckBox* m_backgroundTextures;
-    QCheckBox* m_notationBackgroundTextures;
-    QCheckBox* m_matrixBackgroundTextures;
+    QSpinBox  *m_countIn;
+    QCheckBox *m_toolContextHelp;
+    QCheckBox *m_backgroundTextures;
+    QCheckBox *m_notationBackgroundTextures;
+    QCheckBox *m_matrixBackgroundTextures;
     QComboBox *m_autoSave;
-    QComboBox* m_nameStyle;
-    QComboBox* m_sidebarStyle;
-    QComboBox* m_globalStyle;
-    QCheckBox* m_appendLabel;
+    QComboBox *m_nameStyle;
+    QComboBox *m_globalStyle;
+    QCheckBox *m_appendLabel;
     QCheckBox *m_jackTransport;
+    QCheckBox *m_Thorn;
 
     QComboBox *m_pdfViewer;
     QComboBox *m_filePrinter;

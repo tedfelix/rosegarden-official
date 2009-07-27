@@ -227,23 +227,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     layout->setRowMinimumHeight(row, 15);
     ++row;
 
-    layout->addWidget(new QLabel(tr("Side-bar parameter box layout"),
+    layout->addWidget(new QLabel(tr("Use Thorn style"),
                                  frame), row, 0);
 
-    m_sidebarStyle = new QComboBox(frame);
-    connect(m_sidebarStyle, SIGNAL(activated(int)), this, SLOT(slotModified()));
-    m_sidebarStyle->addItem(tr("Vertically stacked"),
-                               RosegardenParameterArea::CLASSIC_STYLE);
-    m_sidebarStyle->addItem(tr("Tabbed"),
-                               RosegardenParameterArea::TAB_BOX_STYLE);
-    m_sidebarStyle->setCurrentIndex(settings.value("sidebarstyle",
-                                   0).toUInt());
-    layout->addWidget(m_sidebarStyle, row, 1, row- row+1, 3);
-
-    //!!! This needs to be removed eventually, and all associated logic cleaned
-    // up, but for now I'm leaving it alone, and just hiding it.
-    m_sidebarStyle->hide();
-
+    m_Thorn = new QCheckBox;
+    connect(m_Thorn, SIGNAL(activated(int)), this, SLOT(slotModified()));
+    layout->addWidget(m_Thorn, row, 1, 1, 3);
+    m_Thorn->setToolTip(tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>"));
+    m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
     ++row;
 
     layout->addWidget(new QLabel(tr("Note name style"),
@@ -254,7 +245,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_nameStyle->addItem(tr("Always use US names (e.g. quarter, 8th)"));
     m_nameStyle->addItem(tr("Localized (where available)"));
     m_nameStyle->setCurrentIndex(settings.value("notenamestyle", Local).toUInt());
-    layout->addWidget(m_nameStyle, row, 1, row- row+1, 3);
+    layout->addWidget(m_nameStyle, row, 1, 1, 3);
     ++row;
 /*
     layout->addWidget(new QLabel(tr("Show tool context help in status bar"), frame), row, 0);
@@ -447,9 +438,8 @@ void GeneralConfigurationPage::apply()
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    int sidebarStyle = m_sidebarStyle->currentIndex();
-    settings.setValue("sidebarstyle", sidebarStyle);
-    emit updateSidebarStyle(sidebarStyle);
+    int Thorn = m_Thorn->isChecked();
+    settings.setValue("use_thorn_style", Thorn);
 
     unsigned int interval = 0;
 

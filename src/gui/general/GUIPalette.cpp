@@ -219,6 +219,8 @@ GUIPalette::GUIPalette()
     m_defaultsMap[RecordFaderOutline] = QColor(0, 250, 225, QColor::Hsv);
 
     m_defaultsMap[PannerOverlay] = QColor(211, 194, 238, QColor::Hsv);
+
+    m_defaultsMap[ThornGroupBoxBackground] = QColor(0x40, 0x40, 0x40);
 }
 
 GUIPalette* GUIPalette::getInstance() 
@@ -353,5 +355,7 @@ GUIPalette* GUIPalette::m_instance = 0;
 // audio file manager (presumes a file derived from the updated autoload.rg
 // that shipped along with this change)
 const int GUIPalette::AudioDefaultIndex = 1;
+
+const char* const GUIPalette::ThornGroupBoxBackground = "thorngroupboxbackground";
 
 }

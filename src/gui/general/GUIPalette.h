@@ -164,9 +164,11 @@ public:
     static const char* const PlaybackFaderOutline;
     static const char* const RecordFaderOutline;
 
-    static const char * const PannerOverlay;
+    static const char* const PannerOverlay;
 
     static const int AudioDefaultIndex;
+
+    static const char* const ThornGroupBoxBackground;
     
 protected:
     GUIPalette();

@@ -39,7 +39,7 @@ class PitchDragLabel : public QWidget
     Q_OBJECT
 public:
     PitchDragLabel(QWidget *parent,
-    	int defaultPitch = 60, bool defaultSharps = true);
+        int defaultPitch = 60, bool defaultSharps = true);
     ~PitchDragLabel();
 
     int getPitch() const { return m_pitch; }
@@ -69,8 +69,8 @@ protected:
     void calculatePixmap() const;
     void calculatePixmap(int pitch, int octave, int step) const;
 
-	/** emits 'pitchChanged' events, both diatonic and chromatic */
-	void emitPitchChange();
+    /** emits 'pitchChanged' events, both diatonic and chromatic */
+    void emitPitchChange();
 
     mutable QPixmap m_pixmap;
 
@@ -80,6 +80,9 @@ protected:
     bool m_clicked;
     
     bool m_usingSharps;
+
+    /** Are we using the Thorn style? */
+    bool m_Thorn;
 
     NotePixmapFactory *m_npf;
 };

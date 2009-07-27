@@ -20,6 +20,8 @@
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "gui/general/GUIPalette.h"
+#include "misc/ConfigGroups.h"
 
 #include <QWheelEvent>
 #include <QMouseEvent>
@@ -27,6 +29,7 @@
 #include <QPixmap>
 #include <QSize>
 #include <QWidget>
+#include <QSettings>
 
 
 namespace Rosegarden
@@ -42,6 +45,11 @@ PitchDragLabel::PitchDragLabel(QWidget *parent,
         m_usingSharps(defaultSharps),
         m_npf(new NotePixmapFactory())
 {
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    m_Thorn = settings.value("use_thorn_style", true).toBool();
+    settings.endGroup();
+
     calculatePixmap();
 }
 
@@ -180,9 +188,12 @@ void
 PitchDragLabel::paintEvent(QPaintEvent *)
 {
     QPainter paint(this);
-    // Just fill the background with Qt::white instead of pulling in something
-    // from GUIPalette (saving that for another day)
-    paint.fillRect(0, 0, width(), height(), Qt::white);
+
+    // use white if not using the Thorn stylesheet, because these widgets always
+    // looked horrible in Classic against random system backgrounds
+    QColor background = (m_Thorn ? GUIPalette::getColour(GUIPalette::ThornGroupBoxBackground) : Qt::white);
+
+    paint.fillRect(0, 0, width(), height(), background);
 
     int x = width() / 2 - m_pixmap.width() / 2;
     if (x < 0)
@@ -193,8 +204,6 @@ PitchDragLabel::paintEvent(QPaintEvent *)
         y = 0;
 
     paint.drawPixmap(x, y, m_pixmap);
-
-
 }
 
 QSize
