@@ -67,12 +67,15 @@ void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<S
         comp.getTrackById(segments[0]->getTrack());
 
     Instrument *instr = document->getStudio().
-                        getInstrumentById(track->getInstrument());
+        getInstrumentById(track->getInstrument());
 
-    MidiDevice *device = dynamic_cast <MidiDevice*> (instr->getDevice());
+    if (instr) {
 
-    if (device) {
-        m_controlList = &(device->getControlParameters());
+        MidiDevice *device = dynamic_cast <MidiDevice*> (instr->getDevice());
+
+        if (device) {
+            m_controlList = &(device->getControlParameters());
+        }
     }
 
     SegmentSelection selection;
