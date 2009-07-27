@@ -2109,6 +2109,20 @@ LilyPondExporter::writeBar(Segment *s,
 
                      } else {
                          str << "r";
+
+                         // a rest CAN have a fermata, and it could have a text
+                         // mark conceivably, so we need to export these
+                         std::vector<Mark> marks(Marks::getMarks(**i));
+                         for (std::vector<Mark>::iterator j = marks.begin(); j != marks.end(); ++j) {
+                             // even at the most optimistic, I doubt we'd ever
+                             // find a way to get a stemUp from a rest, so just
+                             // set this true, because a fermata is the main
+                             // thing we're after, and it will want to go up top
+                             // more often than not
+                            str << composeLilyMark(*j, true);
+                         }
+                         if (marks.size() > 0)
+                         str << " ";
                      }
 		}
 	    
