@@ -28,7 +28,7 @@ namespace Rosegarden
 
 AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
 {
-    QDialog *dialog = new QDialog;
+    QDialog *dialog = new QDialog(parent);
     dialog->setModal(true);
     dialog->setWindowTitle(tr("About Rosegarden"));
     QGridLayout *metagrid = new QGridLayout;
