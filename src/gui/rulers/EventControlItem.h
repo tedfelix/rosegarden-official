@@ -40,9 +40,9 @@ public:
 
     void setValue(float y);
     void updateSegment();
+    void reconfigure();
 
 protected:
-    void reconfigure();
     void reconfigure(float x,float y);
 
     //--------------- Data members ---------------------------------

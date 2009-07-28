@@ -92,6 +92,106 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
     RG_DEBUG << "Position x = " << rulerScale->getXForTime(segment->getSegment().getStartTime()) << " to " << rulerScale->getXForTime(segment->getSegment().getEndTime());
 }
 
+ControllerEventsRuler::~ControllerEventsRuler()
+{}
+
+bool ControllerEventsRuler::isOnThisRuler(Event *event)
+{
+    bool result = false;
+    if (event->getType() == m_controller->getType()) {
+        if (event->getType() == Controller::EventType) {
+            try {
+                if (event->get<Int>(Controller::NUMBER) ==
+                        m_controller->getControllerValue())
+                    result = true;
+            } catch (...) {
+            }
+        } else {
+            result = true;
+        }
+    }
+    return result;
+}
+
+void
+ControllerEventsRuler::setSegment(Segment *segment)
+{
+    if (m_segment) m_segment->removeObserver(this);
+    m_segment = segment;
+    m_segment->addObserver(this);
+    ControlRuler::setSegment(segment);
+    init();
+}
+
+
+void
+ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
+{
+    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
+    setSegment(&segment->getSegment());
+}
+
+void
+ControllerEventsRuler::init()
+{
+    // Reset range information for this controller type
+    if (!m_controller)
+        return;
+
+    setMaxItemValue(m_controller->getMax());
+    setMinItemValue(m_controller->getMin());
+
+    for (Segment::iterator it = m_segment->begin();
+            it != m_segment->end(); it++) {
+        if (isOnThisRuler(*it)) {
+            addControlItem(*it);
+        }
+    }
+
+//        // skip if not the same type of event that we're expecting
+//        //
+//        if (m_controller->getType() != (*i)->getType())
+//            continue;
+//
+//        //int width = getDefaultItemWidth();
+//        int width=m_rulerScale->getXForTime((*i)->getDuration());
+//        RG_DEBUG << "ControllerEventsRuler:init - width = " << width;
+//        //int width = 100;
+//
+//        // Check for specific controller value if we need to
+//        //
+//        if (m_controller->getType() == Controller::EventType) {
+//            try {
+//                if ((*i)->get
+//                        <Int>(Controller::NUMBER)
+//                        != m_controller->getControllerValue())
+//                    continue;
+//            } catch (...) {
+//                continue;
+//            }
+//        } else if (m_controller->getType() == PitchBend::EventType)
+//            width /= 4;
+//
+//        //RG_DEBUG << "ControllerEventsRuler: adding element\n";
+//
+//        double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
+//        RG_DEBUG << "ControllerEventsRuler:init - x = " << x;
+//        //  double x = 0;
+////        new ControlItem(this, new ControllerEventAdapter(*i),
+////                        int(x + m_viewSegmentOffset), width);
+//    }
+}
+
+void ControllerEventsRuler::slotSetPannedRect(QRectF pr)
+{
+    ControlRuler::slotSetPannedRect(pr);
+    EventControlItem *item;
+    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+        item = static_cast <EventControlItem *> (it->second);
+        item->reconfigure();
+    }
+}
+
 void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
@@ -130,84 +230,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     }
 }
 
-void
-ControllerEventsRuler::setSegment(Segment *segment)
-{
-    if (m_segment) m_segment->removeObserver(this);
-    m_segment = segment;
-    m_segment->addObserver(this);
-    ControlRuler::setSegment(segment);
-    init();
-}
-
-
-void
-ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
-{
-    RG_DEBUG << "ControllerEventsRuler::setSegment(" << segment << ")" << endl;
-    setSegment(&segment->getSegment());
-}
-//    m_viewSegment->removeObserver(this);
-//    m_viewSegment = segment;
-//    m_viewSegment->addObserver(this);
-//
-//    while (child(NULL))
-//        delete (child(NULL));
-//
-////    drawBackground();
-//    init();
-//}
-
-void
-ControllerEventsRuler::init()
-{
-    // Reset range information for this controller type
-    if (!m_controller)
-        return;
-
-    setMaxItemValue(m_controller->getMax());
-    setMinItemValue(m_controller->getMin());
-
-    for (Segment::iterator i = m_segment->begin();
-            i != m_segment->end(); ++i) {
-
-        // skip if not the same type of event that we're expecting
-        //
-        if (m_controller->getType() != (*i)->getType())
-            continue;
-
-        //int width = getDefaultItemWidth();
-    	int width=m_rulerScale->getXForTime((*i)->getDuration());
-    	RG_DEBUG << "ControllerEventsRuler:init - width = " << width;
-        //int width = 100;
-
-        // Check for specific controller value if we need to
-        //
-        if (m_controller->getType() == Controller::EventType) {
-            try {
-                if ((*i)->get
-                        <Int>(Controller::NUMBER)
-                        != m_controller->getControllerValue())
-                    continue;
-            } catch (...) {
-                continue;
-            }
-        } else if (m_controller->getType() == PitchBend::EventType)
-            width /= 4;
-
-        //RG_DEBUG << "ControllerEventsRuler: adding element\n";
-
-        double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
-    	RG_DEBUG << "ControllerEventsRuler:init - x = " << x;
-        //  double x = 0;
-//        new ControlItem(this, new ControllerEventAdapter(*i),
-//                        int(x + m_viewSegmentOffset), width);
-    }
-}
-
-ControllerEventsRuler::~ControllerEventsRuler()
-{}
-
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
@@ -227,29 +249,6 @@ QString ControllerEventsRuler::getName()
         return name;
     } else
         return tr("Controller Events");
-}
-
-//void ControllerEventsRuler::elementAdded(const ViewSegment *, ViewElement *el)
-//{
-//
-//}
-
-bool ControllerEventsRuler::isOnThisRuler(Event *event)
-{
-    bool result = false;
-    if (event->getType() == m_controller->getType()) {
-        if (event->getType() == Controller::EventType) {
-            try {
-                if (event->get<Int>(Controller::NUMBER) ==
-                        m_controller->getControllerValue())
-                    result = true;
-            } catch (...) {
-            }
-        } else {
-            result = true;
-        }
-    }
-    return result;
 }
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
@@ -352,12 +351,8 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 void ControllerEventsRuler::insertControllerEvent(float x, float y)
 {
     timeT insertTime = m_rulerScale->getTimeForX(x);
-    //    // compute initial value from cursor height
-//    //
-//    //long initialValue = heightToValue(m_lastEventPos.y() - canvas()->height());
-//    long initialValue = heightToValue(m_lastEventPos.y() - height());
     long initialValue = YToValue(y);
-//
+
     RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
     << insertTime
     << " - initial value = " << initialValue

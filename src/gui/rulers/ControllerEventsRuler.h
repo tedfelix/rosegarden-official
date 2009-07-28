@@ -86,9 +86,9 @@ public:
 
 public slots:
     virtual void slotSetTool(const QString&);
+    virtual void slotSetPannedRect(QRectF pr);
 
 protected:
-
     virtual void init();
     virtual bool isOnThisRuler(Event *);
     virtual void addControlItem(Event *);

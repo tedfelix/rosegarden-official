@@ -75,6 +75,8 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
         m_currentTool(0),
         m_maxItemValue(127),
         m_minItemValue(0),
+        m_xScale(0),
+        m_yScale(0),
         m_viewSegmentOffset(0),
         m_currentX(0.0),
         m_itemMoved(false),
@@ -258,6 +260,7 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 ////    canvas()->update();
 //}
 
+///TODO Use m_xScale, m_yScale for these map functions
 int ControlRuler::mapXToWidget(float x)
 {
     return width()*(x-m_pannedRect.left()) / m_pannedRect.width();
@@ -270,8 +273,8 @@ int ControlRuler::mapYToWidget(float y)
 
 QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
 {
-    double xscale = width() / m_pannedRect.width();
-    double yscale = height();
+//    double xscale = width() / m_pannedRect.width();
+//    double yscale = height();
 
     QPolygon newpoly;
     QPoint newpoint;
