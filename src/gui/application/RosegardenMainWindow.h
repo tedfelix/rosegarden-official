@@ -1324,6 +1324,11 @@ public slots:
     void slotBugGuidelines();
     
     /**
+     * Call the Rosegaden about box.
+     */
+    void slotHelpAbout();
+
+    /**
      * View the trigger segments manager
      */
     void slotManageTriggerSegments();

@@ -88,6 +88,7 @@
 #include "misc/ConfigGroups.h"
 #include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AddTracksDialog.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/AudioPluginDialog.h"
 #include "gui/dialogs/AudioSplitDialog.h"
@@ -579,6 +580,7 @@ RosegardenMainWindow::setupActions()
     createAction("file_show_playlist", SLOT(slotPlayList()));
     createAction("tutorial", SLOT(slotTutorial()));
     createAction("guidelines", SLOT(slotBugGuidelines()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 
     createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
     createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
@@ -7416,6 +7418,12 @@ RosegardenMainWindow::slotBugGuidelines()
 {
     QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
     invokeBrowser(glURL);
+}
+
+void
+RosegardenMainWindow::slotHelpAbout()
+{
+    AboutDialog();
 }
 
 void
