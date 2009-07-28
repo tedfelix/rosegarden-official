@@ -1371,7 +1371,7 @@ void NewMatrixView::slotRetrogradeInvert()
 void
 NewMatrixView::slotHelpAbout()
 {
-    AboutDialog(this);
+    new AboutDialog(this);
 }
 
 /*

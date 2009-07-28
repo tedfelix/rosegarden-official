@@ -28,11 +28,10 @@ namespace Rosegarden
 
 AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
 {
-    QDialog *dialog = new QDialog(parent);
-    dialog->setModal(true);
-    dialog->setWindowTitle(tr("About Rosegarden"));
+    this->setModal(true);
+    this->setWindowTitle(tr("About Rosegarden"));
     QGridLayout *metagrid = new QGridLayout;
-    dialog->setLayout(metagrid);
+    this->setLayout(metagrid);
 
     QWidget *hb = new QWidget;
     QVBoxLayout *mainLayout = new QVBoxLayout;
@@ -61,10 +60,10 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    QObject::connect(buttonBox, SIGNAL(accepted()), dialog, SLOT(accept()));
-    QObject::connect(buttonBox, SIGNAL(rejected()), dialog, SLOT(reject()));
+    QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-    dialog->exec();
+    this->exec();
 }
 }
 #include "AboutDialog.moc"
