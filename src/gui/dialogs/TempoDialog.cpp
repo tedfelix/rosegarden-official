@@ -131,38 +131,24 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     m_timeEditor = 0;
 
     if (timeEditable) {
-		
-		/* declaration of:
-		TimeWidget( QString title,
-		QWidget *parent,
-		Composition *composition, // for bar/beat/msec
-		timeT initialTime,
-		bool editable = true,
-		bool constrainToCompositionDuration = true );
-		*/
-        m_timeEditor = new TimeWidget(tr("Time of tempo change"), vbox, 0, true);	//@@@ FIX !!! 3. param, 
+        m_timeEditor = new TimeWidget
+            (tr("Time of tempo change"),
+             vbox, &m_doc->getComposition(), 0, true);
         vboxLayout->addWidget(m_timeEditor);
         populateTempo();
         return ;
     }
-
 	
-	
-	// group box for scope (area)
-	QGroupBox *scopeGroup = new QGroupBox( tr("Scope"), vbox );
-	vboxLayout->addWidget(scopeGroup);
-    //vbox->setLayout(vboxLayout);	// already done
+    // group box for scope (area)
+    QGroupBox *scopeGroup = new QGroupBox( tr("Scope"), vbox );
+    vboxLayout->addWidget(scopeGroup);
 
-//    new QLabel(scopeBox);
+    QVBoxLayout * scopeBoxLayout = new QVBoxLayout( scopeGroup );
+    scopeBoxLayout->setSpacing(5);
+    scopeBoxLayout->setMargin(5);
 
- 	QVBoxLayout * scopeBoxLayout = new QVBoxLayout( scopeGroup );
-	scopeBoxLayout->setSpacing(5);
-	scopeBoxLayout->setMargin(5);
-// 	vboxLayout->setSpacing(5);
-// 	vboxLayout->setMargin(5);
-
-	QVBoxLayout * currentBoxLayout = scopeBoxLayout;
-	QWidget * currentBox = scopeGroup;
+    QVBoxLayout * currentBoxLayout = scopeBoxLayout;
+    QWidget * currentBox = scopeGroup;
 	
     QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox );
     currentBoxLayout->addWidget(child_15);
