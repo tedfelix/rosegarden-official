@@ -1765,11 +1765,13 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
         // cleaner world, this code here probably shouldn't have to know those
         // details.  Oh well.
         switch (colourType) {
-            case PlainColourLight: m_p->painter().setPen(Qt::white);
-                                   break;
+            case PlainColourLight:
+                m_p->painter().setPen(Qt::white);
+                break;
 
-            case ConflictColour:   m_p->painter().setPen(Qt::red);
-                                   break;
+            case ConflictColour:
+                m_p->painter().setPen(Qt::red);
+                break;
 
             case PlainColour:
             default:               m_p->painter().setPen(Qt::black);
@@ -1813,12 +1815,13 @@ NotePixmapFactory::makeUnknown()
 QPixmap
 NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
 {
-//     QString pixmapDir = KGlobal::dirs()->findResource("appdata", "pixmaps/");
-//     QString fileBase = pixmapDir + "/toolbar/";
-
     //!!! This is not the recommended way to load icons any more, but
     //!!! it should probably stay this way to avoid disturbing things
     //!!! until we can convert away from Q3Canvas
+    //
+    // (He says, although isn't this the bit, in spite of the name, that's
+    // supposed to make the little note pixmaps that get used in combo boxes?
+    // If so, it doesn't work anyway!)
 	
     QString fileBase = ResourceFinder().getResourceDir( "toolbar" );
 	
@@ -2032,22 +2035,9 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef, Colour
 
     QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
-    // we'll just use the colourType to figure out what color to draw the lines
-    // and other whatnots
-    QColor whatnots;
+    NoteCharacter ch(getCharacter(charName, colourType, false));
+    QPixmap accidentalPixmap = ch.getPixmap();
 
-    switch (colourType) {
-        case PlainColourLight:
-            whatnots = Qt::white;    
-            break;
-        case PlainColour:
-        default:
-            whatnots = Qt::black;
-    }
-
-    m_p->painter().setPen(whatnots);
-
-    QPixmap accidentalPixmap(m_font->getCharacter(charName).getPixmap());
     QPoint hotspot(m_font->getHotspot(charName));
 
     int lw = getLineSpacing();
@@ -2071,6 +2061,21 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef, Colour
 
         x += delta;
     }
+
+    // use the colourType to figure out what kuller to draw the lines with
+    QColor kuller;
+
+    switch (colourType) {
+        case PlainColourLight:
+            kuller = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            kuller = Qt::black;
+    }
+
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
 
     for (h = 0; h <= 8; h += 2) {
         y = (lw * 3) + ((8 - h) * lw) / 2;
@@ -3186,7 +3191,7 @@ NotePixmapFactory::makeAnnotation(const Text &text, const bool isLilyPondDirecti
 }
 
 void
-NotePixmapFactory::createPixmap(int width, int height, ColourType colourType)
+NotePixmapFactory::createPixmap(int width, int height)
 {
     if (width == 0 || height == 0) {
         std::cerr << "NotePixmapFactory::createPixmap: WARNING: invalid size " << width << "x" << height << std::endl;
@@ -3198,21 +3203,6 @@ NotePixmapFactory::createPixmap(int width, int height, ColourType colourType)
     m_generatedHeight = height;
     m_generatedPixmap = new QPixmap(width, height);
     m_generatedPixmap->fill(Qt::transparent);
-
-    QColor whatnots;
-
-    switch (colourType) {
-        case PlainColourLight:
-            whatnots = Qt::white;    
-            break;
-        case PlainColour:
-        default:
-            whatnots = Qt::black;
-    }
-
-    m_p->painter().setPen(QColor(whatnots));
-    m_p->painter().setBrush(QColor(whatnots));
-
 
     // initiate painting
     NOTATION_DEBUG << "NotePixmapFactory::createPixmap(" << width << "," << height << "): about to begin painter" << endl;

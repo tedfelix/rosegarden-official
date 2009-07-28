@@ -319,7 +319,7 @@ protected:
     QGraphicsPixmapItem *makeAnnotation(const Text &text);
     QGraphicsPixmapItem *makeAnnotation(const Text &text, const bool isLilyPondDirective);
 
-    void createPixmap(int width, int height, const ColourType colourType = PlainColour);
+    void createPixmap(int width, int height);
     QGraphicsPixmapItem *makeItem(QPoint hotspot);
     QPixmap makePixmap();
 
