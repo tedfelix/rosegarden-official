@@ -11139,7 +11139,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.h" line="63"/>
         <source>%1 minutes %2.%3%4 seconds (%5 units, %6 measures)</source>
-        <translation></translation>
+        <translation>%1 minutes %2.%3%4 seconds (%5 units, %6 bars)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="92"/>
@@ -12266,7 +12266,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="96"/>
         <source>Number of count-in measures when recording</source>
-        <translation></translation>
+        <translation>Number of count-in bars when recording</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="107"/>
@@ -12376,7 +12376,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="255"/>
         <source>Localized (where available)</source>
-        <translation></translation>
+        <translation>Localised (where available)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="269"/>
@@ -14351,7 +14351,7 @@ the ornament&apos;s notes.</source>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="105"/>
         <source>In measure:</source>
-        <translation></translation>
+        <translation>In bar:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="122"/>
@@ -19535,17 +19535,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="317"/>
         <source>at the start of measure %1.</source>
-        <translation></translation>
+        <translation>at the start of bar %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="321"/>
         <source>in the middle of measure %1.</source>
-        <translation></translation>
+        <translation>in the middle of bar %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="340"/>
         <source>        (at %1.%2 s, in measure %3)</source>
-        <translation></translation>
+        <translation>        (at %1.%2 s, in bar %3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="357"/>
@@ -20091,12 +20091,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="161"/>
         <source>Insertion point is at start of measure %1.</source>
-        <translation></translation>
+        <translation>Insertion point is at start of bar %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="165"/>
         <source>Insertion point is in the middle of measure %1.</source>
-        <translation></translation>
+        <translation>Insertion point is in the middle of bar %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="170"/>
@@ -20106,17 +20106,17 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="175"/>
         <source>Start measure %1 here</source>
-        <translation></translation>
+        <translation>Start bar %1 here</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="179"/>
         <source>Change time from start of measure %1</source>
-        <translation></translation>
+        <translation>Change time from start of bar %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="188"/>
         <source>Time change will take effect at the start of measure %1.</source>
-        <translation></translation>
+        <translation>Time change will take effect at the start or bar %1.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="194"/>
@@ -20141,7 +20141,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="216"/>
         <source>Correct the durations of following measures</source>
-        <translation></translation>
+        <translation>Correct the durations of following bars</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="324"/>
@@ -20185,12 +20185,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measures:</source>
-        <translation></translation>
+        <translation>Bars:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="185"/>
         <source>Measure:</source>
-        <translation></translation>
+        <translation>Bar:</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/TimeWidget.cpp" line="204"/>
