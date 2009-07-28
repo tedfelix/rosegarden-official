@@ -57,13 +57,10 @@ MetronomeMapper::MetronomeMapper(RosegardenDocument *doc, MappedSegment *mapped)
         m_doc->getStudio().getMetronomeFromDevice(device);
 
     if (metronome) {
-
         SEQMAN_DEBUG << "MetronomeMapper: have metronome, it's on instrument " << metronome->getInstrument() << endl;
-
         m_metronome = new MidiMetronome(*metronome);
     } else {
-        m_metronome = new MidiMetronome
-                      (SystemInstrumentBase);
+        m_metronome = new MidiMetronome(SystemInstrumentBase);
         SEQMAN_DEBUG << "MetronomeMapper: no metronome for device " << device << endl;
     }
 

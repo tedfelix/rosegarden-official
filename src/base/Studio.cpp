@@ -369,11 +369,13 @@ Studio::getMetronomeFromDevice(DeviceId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
+	std::cerr << "Studio::getMetronomeFromDevice: Having a look at device " << (*it)->getId() << std::endl;
 
+        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
         if (midiDevice && 
             midiDevice->getId() == id &&
             midiDevice->getMetronome()) {
+	    std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a MIDI device" << std::endl;
             return midiDevice->getMetronome();
         }
 
@@ -381,6 +383,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
         if (ssDevice && 
             ssDevice->getId() == id &&
             ssDevice->getMetronome()) {
+	    std::cerr << "Studio::getMetronomeFromDevice(" << id << "): device is a soft synth device" << std::endl;
             return ssDevice->getMetronome();
         }
     }
