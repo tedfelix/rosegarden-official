@@ -238,7 +238,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         mapping = instr->getKeyMapping();
         if (mapping) {
             RG_DEBUG << "MatrixView: Instrument has key mapping: "
-            << mapping->getName() << endl;
+                     << mapping->getName() << endl;
             m_localMapping = new MidiKeyMapping(*mapping);
             m_localMapping->extend();
         } else {
