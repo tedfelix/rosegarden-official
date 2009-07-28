@@ -28,6 +28,7 @@
 // #include "document/Command.h"
 #include "document/CommandHistory.h"
 
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/EventFilterDialog.h"
 #include "gui/dialogs/EventParameterDialog.h"
@@ -332,7 +333,7 @@ NewMatrixView::setupActions()
     createAction("language_switch", SLOT(slot()));
     createAction("help_online", SLOT(slot()));
 //     createAction("language_translate", SLOT(slot()));
-    createAction("help_about_app", SLOT(slot()));
+    createAction("help_about_app", SLOT(slotHelpAbout()));
 //     createAction("help_about_qt", SLOT(slot()));
     
     
@@ -1365,6 +1366,12 @@ void NewMatrixView::slotRetrogradeInvert()
     int semitones = 0;
     CommandHistory::getInstance()->addCommand(new RetrogradeInvertCommand
             (semitones, *selection));
+}
+
+void
+NewMatrixView::slotHelpAbout()
+{
+    AboutDialog();
 }
 
 /*

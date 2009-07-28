@@ -148,6 +148,11 @@ protected slots:
     void slotTogglePitchbendRuler();
     void slotAddControlRuler();
     
+    /**
+     * Call the Rosegaden about box.
+     */
+    void slotHelpAbout();
+
         
     // start of slots, formerly in located in EditView.h (which is obsolete now)
     // --
