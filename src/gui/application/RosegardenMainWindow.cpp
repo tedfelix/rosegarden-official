@@ -7423,7 +7423,7 @@ RosegardenMainWindow::slotBugGuidelines()
 void
 RosegardenMainWindow::slotHelpAbout()
 {
-    AboutDialog();
+    AboutDialog(this);
 }
 
 void

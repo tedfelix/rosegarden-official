@@ -26,7 +26,7 @@
 namespace Rosegarden
 {
 
-AboutDialog::AboutDialog()
+AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
 {
     QDialog *dialog = new QDialog;
     dialog->setModal(true);
