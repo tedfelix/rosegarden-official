@@ -10461,32 +10461,32 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="53"/>
         <source>Color</source>
-        <translation></translation>
+        <translation>Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.h" line="54"/>
         <source>Color Settings</source>
-        <translation></translation>
+        <translation>Colour Settings</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="69"/>
         <source>Add New Color</source>
-        <translation></translation>
+        <translation>Add New Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="73"/>
         <source>Delete Color</source>
-        <translation></translation>
+        <translation>Delete Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="92"/>
         <source>Color Map</source>
-        <translation></translation>
+        <translation>Colour Map</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="127"/>
         <source>New Color Name</source>
-        <translation></translation>
+        <translation>New Colour Name</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="128"/>
@@ -10514,12 +10514,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="58"/>
         <source>Color</source>
-        <translation></translation>
+        <translation>Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="76"/>
         <source>Modify Color Name</source>
-        <translation></translation>
+        <translation>Modify Colour name</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="77"/>
@@ -10529,7 +10529,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/widgets/ColourTable.cpp" line="117"/>
         <source>Default Color</source>
-        <translation></translation>
+        <translation>Default Colour</translation>
     </message>
 </context>
 <context>
@@ -10694,7 +10694,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="107"/>
         <source>Color  </source>
-        <translation></translation>
+        <translation>Colour  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="108"/>
@@ -10798,7 +10798,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="114"/>
         <source>Color:</source>
-        <translation></translation>
+        <translation>Colour:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="118"/>
@@ -15408,7 +15408,7 @@ of others.</source>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="192"/>
         <source>Show notation-quantized notes in a different color</source>
-        <translation></translation>
+        <translation>Show notation-quantized notes in a different colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="203"/>
@@ -18353,12 +18353,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.h" line="47"/>
         <source>Change Segment Color...</source>
-        <translation></translation>
+        <translation>Change Segment Colour...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourCommand.cpp" line="32"/>
         <source>Change Segment Color</source>
-        <translation></translation>
+        <translation>Change Segment Colour</translation>
     </message>
 </context>
 <context>
@@ -18366,12 +18366,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.h" line="47"/>
         <source>Change Segment Color Map...</source>
-        <translation></translation>
+        <translation>Change Segment Colour Map...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentColourMapCommand.cpp" line="33"/>
         <source>Change Segment Color Map</source>
-        <translation></translation>
+        <translation>Change Segment Colour Map</translation>
     </message>
 </context>
 <context>
@@ -18492,7 +18492,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="131"/>
         <source>Color</source>
-        <translation></translation>
+        <translation>Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="146"/>
@@ -18527,7 +18527,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="220"/>
         <source>&lt;qt&gt;&lt;p&gt;Change the color of any selected segments&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Change the colour of any selected segments&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="288"/>
@@ -18548,12 +18548,12 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="403"/>
         <source>Add New Color</source>
-        <translation></translation>
+        <translation>Add New Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="868"/>
         <source>New Color Name</source>
-        <translation></translation>
+        <translation>New Colour Name</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="869"/>
@@ -20750,12 +20750,12 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="364"/>
         <source>Color</source>
-        <translation></translation>
+        <translation>Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="367"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created using this color&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;New segments will be created using this colour&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="547"/>
@@ -20788,12 +20788,12 @@ bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="933"/>
         <source>Add New Color</source>
-        <translation></translation>
+        <translation>Add New Colour</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="959"/>
         <source>New Color Name</source>
-        <translation></translation>
+        <translation>New Colour Name</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="960"/>
