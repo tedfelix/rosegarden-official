@@ -246,7 +246,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         }
     }
 
-    if (m_drumMode && mapping && !m_localMapping->getMap().empty()) {
+    if (mapping && !m_localMapping->getMap().empty()) {
         m_pitchRuler = new PercussionPitchRuler(0, m_localMapping,
                                                 m_scene->getYResolution());
     } else {

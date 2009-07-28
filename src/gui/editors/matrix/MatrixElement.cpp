@@ -112,6 +112,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     double fres(resolution);
 
     if (m_drum) {
+        fres = resolution + 1;
         QGraphicsPolygonItem *item = dynamic_cast<QGraphicsPolygonItem *>(m_item);
         if (!item) {
             delete m_item;

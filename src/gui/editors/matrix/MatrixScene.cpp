@@ -116,28 +116,21 @@ MatrixScene::setSegments(RosegardenDocument *document,
     }
     m_viewSegments.clear();
 
-    //!!! This logic is inherited from the older code, but I'm not
-    //!!! sure about it.  The effect is that we only show percussion
-    //!!! "diamonds" if there is a key mapping present for the
-    //!!! instrument, but it seems to me that surely we should show
-    //!!! percussion diamonds whenever we're asked for a percussion
-    //!!! matrix window (and simply only show the key names if there
-    //!!! is a key mapping).  Consider this
+    // We should show diamonds instead of bars whenever we are in
+    // "drum mode" (i.e. whenever we were invoked using the percussion
+    // matrix menu option instead of the normal matrix one).
+    
+    // The question of whether to show the key names instead of the
+    // piano keyboard is a separate one, handled in MatrixWidget, and
+    // it depends solely on whether a key mapping exists for the
+    // instrument (it is independent of whether this is a percussion
+    // matrix or not).
 
-    bool havePercussion = false;
-
-    if (m_widget && m_widget->isDrumMode()) {
-        for (unsigned int i = 0; i < m_segments.size(); ++i) {
-            Instrument *instrument =
-                m_document->getStudio().getInstrumentFor(m_segments[i]);
-            if (instrument && instrument->getKeyMapping()) {
-                havePercussion = true;
-            }
-        }
-    }
+    bool drumMode = false;
+    if (m_widget) drumMode = m_widget->isDrumMode();
 
     m_resolution = 8;
-    if (havePercussion) m_resolution = 11;
+    if (drumMode) m_resolution = 11;
 
     bool haveSetSnap = false;
 
@@ -150,19 +143,9 @@ MatrixScene::setSegments(RosegardenDocument *document,
             haveSetSnap = true;
         }
 
-        bool isPercussion = false;
-
-        if (havePercussion) {
-            Instrument *instrument =
-                m_document->getStudio().getInstrumentFor(m_segments[i]);
-            if (instrument && instrument->getKeyMapping()) {
-                isPercussion = true;
-            }
-        }
-
         MatrixViewSegment *vs = new MatrixViewSegment(this,
                                                       m_segments[i],
-                                                      isPercussion);
+                                                      drumMode);
         (void)vs->getViewElementList(); // make sure it has been created
         m_viewSegments.push_back(vs);
     }
