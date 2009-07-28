@@ -2160,7 +2160,8 @@ NotePixmapFactory::getOneLine(QString &text, int width)
 
 QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
-                                          bool useSharps)
+                                          bool useSharps,
+                                          ColourType colourType)
 {
     NotationRules rules;
 
@@ -2168,7 +2169,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     Accidental accidental(pitch.getAccidental(useSharps));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
 
-    QGraphicsPixmapItem *clefItem = makeClef(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
@@ -2188,7 +2189,33 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     params.setIsOnLine(h % 2 == 0);
     params.setSelected(m_selected);
 
+    // use the colourType to figure out what kuller to draw the lines and note
+    // with
+    QColor kuller;
+
+    switch (colourType) {
+        case PlainColourLight:
+            kuller = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            kuller = Qt::black;
+    }
+    int hue, saturation, value;
+    kuller.getHsv(&hue, &saturation, &value);
+
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
+
+    // I can't think of any real use for the ability to draw all notation in
+    // white, and given the complexity of adding that ability to all the various
+    // bits and bobs called upon to draw a note, what we're going to do instead
+    // is draw a conventional black note with unaltered bits and bobs, and then
+    // recolour the resulting pixmap for this dialog-oriented display method
+
     QGraphicsPixmapItem *noteItem = makeNote(params);
+    QPixmap colouredNote(PixmapFunctions::colourPixmap(noteItem->pixmap(), hue, value, saturation));
+    noteItem->setPixmap(colouredNote);
 
     int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
@@ -2212,6 +2239,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     y = yoffset + ((8 - h) * lw) / 2;
     m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
 
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
+
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;
         m_p->drawLine(x / 2, y, m_generatedWidth - x / 2, y);
@@ -2225,7 +2255,8 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
 QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
-                                          int octave, int step)
+                                          int octave, int step,
+                                          ColourType colourType)
 {
     NotationRules rules;
 
@@ -2233,7 +2264,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     Accidental accidental = pitch.getDisplayAccidental(Key("C major"));
     NotePixmapParameters params(Note::Crotchet, 0, accidental);
 
-    QGraphicsPixmapItem *clefItem = makeClef(clef);
+    QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
     int lw = getLineSpacing();
     int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
@@ -2255,7 +2286,46 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     params.setIsOnLine(h % 2 == 0);
     params.setSelected(m_selected);
 
+    // use the colourType to figure out what kuller to draw the lines and note
+    // with
+    QColor kuller;
+
+    switch (colourType) {
+        case PlainColourLight:
+            kuller = Qt::white;    
+            break;
+        case PlainColour:
+        default:
+            kuller = Qt::black;
+    }
+    int hue, saturation, value;
+    kuller.getHsv(&hue, &saturation, &value);
+
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
+
+    //!!! NOTE: I started this white on gray notation for dialogs thing on a
+    // whim, and I tore it down bit by bit doing everything else before arriving
+    // here in the "draw the notes" code.  The "draw the notes" code was so
+    // involved to doctor that I sensibly just used the existing code unaltered,
+    // and colored the resulting pixmap.  This suggests that it might be more
+    // consistent to use this approach everywhere else, instead of passing
+    // around an optional ColourType here, but not there, and then again over
+    // here.  It's really a mixed bag which methods got the optional parameter,
+    // and which ones didn't, whittled down bit by bit solving the individual
+    // problems of making notation displayed in dialog contexts draw itself in
+    // white.  Now that I can see the forest for the trees, this annoys me, and
+    // I vow to fix all of this one day soon.  But not today.
+    //!!!
+
+    // I can't think of any real use for the ability to draw all notation in
+    // white, and given the complexity of adding that ability to all the various
+    // bits and bobs called upon to draw a note, what we're going to do instead
+    // is draw a conventional black note with unaltered bits and bobs, and then
+    // recolour the resulting pixmap for this dialog-oriented display method
     QGraphicsPixmapItem *noteItem = makeNote(params);
+    QPixmap colouredNote(PixmapFunctions::colourPixmap(noteItem->pixmap(), hue, value, saturation));
+    noteItem->setPixmap(colouredNote);
 
     int pixmapHeight = lw * 12 + 1;
     int yoffset = lw * 3;
@@ -2278,6 +2348,9 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     x = 3 * getNoteBodyWidth();
     y = yoffset + ((8 - h) * lw) / 2;
     m_p->drawPixmap(x, y + clefItem->offset().y(), clefItem->pixmap());
+
+    m_p->painter().setPen(kuller);
+    m_p->painter().setBrush(kuller);
 
     for (h = 0; h <= 8; h += 2) {
         y = yoffset + ((8 - h) * lw) / 2;

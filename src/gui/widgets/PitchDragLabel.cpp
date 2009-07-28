@@ -231,8 +231,11 @@ PitchDragLabel::calculatePixmap(int pitch, int octave, int step) const
         }
     }
 
+    NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight :
+                                                  NotePixmapFactory::PlainColour);
+
     m_pixmap = m_npf->makePitchDisplayPixmap
-        (m_pitch, Clef(clefType, octaveOffset), octave, step);
+        (m_pitch, Clef(clefType, octaveOffset), octave, step, ct);
 }
 
 void
@@ -254,8 +257,11 @@ PitchDragLabel::calculatePixmap() const
         }
     }
 
+    NotePixmapFactory::ColourType ct = (m_Thorn ? NotePixmapFactory::PlainColourLight :
+                                                  NotePixmapFactory::PlainColour);
+
     m_pixmap = m_npf->makePitchDisplayPixmap
-        (m_pitch, Clef(clefType, octaveOffset), m_usingSharps);
+        (m_pitch, Clef(clefType, octaveOffset), m_usingSharps, ct);
 }
 
 }

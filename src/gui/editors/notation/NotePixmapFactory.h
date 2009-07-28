@@ -177,11 +177,13 @@ public:
 
     QPixmap makePitchDisplayPixmap(int pitch,
                                    const Clef &clef,
-                                   bool useSharps);
+                                   bool useSharps,
+                                   const ColourType = PlainColour);
     QPixmap makePitchDisplayPixmap(int pitch,
                                    const Clef &clef,
                                    int octave,
-                                   int step);
+                                   int step,
+                                   const ColourType = PlainColour);
     QPixmap makeClefDisplayPixmap(const Clef &clef, const ColourType colourType = PlainColour);
     QPixmap makeKeyDisplayPixmap(const Key &key,
                                  const Clef &clef,
