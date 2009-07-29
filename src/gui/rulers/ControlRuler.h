@@ -151,6 +151,7 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent*);
     virtual void contextMenuEvent(QContextMenuEvent*);
     virtual void wheelEvent(QWheelEvent*);
+    virtual void resizeEvent(QResizeEvent *);
 
     virtual ControlMouseEvent createControlMouseEvent(QMouseEvent* e);
 

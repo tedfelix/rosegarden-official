@@ -65,7 +65,8 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
         //: ControlRuler(segment, rulerScale, parentView, c, parent), // name, f),
         //: ControlRuler(segment, rulerScale, parentView, parent), // name, f),
         : ControlRuler(segment, rulerScale, parent), // name, f),
-        m_defaultItemWidth(20)
+        m_defaultItemWidth(20),
+        m_lastDrawnRect(QRectF(0,0,0,0))
 //        m_controlLine(new Q3CanvasLine(canvas())),
 //        m_controlLineShowing(false),
 //        m_controlLineX(0),
@@ -122,7 +123,6 @@ ControllerEventsRuler::setSegment(Segment *segment)
     ControlRuler::setSegment(segment);
     init();
 }
-
 
 void
 ControllerEventsRuler::setViewSegment(MatrixViewSegment *segment)
@@ -185,16 +185,20 @@ ControllerEventsRuler::init()
 void ControllerEventsRuler::slotSetPannedRect(QRectF pr)
 {
     ControlRuler::slotSetPannedRect(pr);
-    EventControlItem *item;
-    for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
-        item = static_cast <EventControlItem *> (it->second);
-        item->reconfigure();
-    }
 }
 
 void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
+
+    if (m_lastDrawnRect != m_pannedRect) {
+        EventControlItem *item;
+        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+            item = static_cast <EventControlItem *> (it->second);
+            item->update();
+        }
+        m_lastDrawnRect = m_pannedRect;
+    }
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);

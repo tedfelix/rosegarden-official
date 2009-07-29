@@ -112,6 +112,7 @@ protected:
     int                           m_defaultItemWidth;
 
     ControlParameter  *m_controller;
+    QRectF m_lastDrawnRect;
 //    Q3CanvasLine                   *m_controlLine;
 
 //    bool                           m_controlLineShowing;

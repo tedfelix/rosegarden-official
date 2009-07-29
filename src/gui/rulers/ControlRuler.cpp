@@ -263,12 +263,12 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 ///TODO Use m_xScale, m_yScale for these map functions
 int ControlRuler::mapXToWidget(float x)
 {
-    return width()*(x-m_pannedRect.left()) / m_pannedRect.width();
+    return (x-m_pannedRect.left()) / m_xScale;
 }
 
 int ControlRuler::mapYToWidget(float y)
 {
-    return (height()-2)*(-y+1.0f)+1;
+    return (-y+1.0f) / m_yScale;
 }
 
 QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
@@ -313,6 +313,14 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	    }
 	}
     RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();
+}
+
+void ControlRuler::resizeEvent(QResizeEvent *)
+{
+    // Note slotSetPannedRect is called (from ControlRulerWidget::slotSetPannedRect)
+    //   on a resize event. However, this call is too early and width() has not been
+    //   updated. This event handler patches that problem. Could be more efficient.
+    slotSetPannedRect(m_pannedRect);
 }
 
 //void ControlRuler::slotSetScale(double factor)
