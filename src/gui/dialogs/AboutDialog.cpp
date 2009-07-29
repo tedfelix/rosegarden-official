@@ -63,8 +63,6 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     metagrid->setRowStretch(0, 10);
     QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-    QObject::connect(label2, SIGNAL(linkActivated(QString)), this,
-        SLOT(slotLinkClicked(QString)));
     this->exec();
 }
 }
