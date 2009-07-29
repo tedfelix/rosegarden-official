@@ -19,8 +19,6 @@
 #include "AboutDialog.h"
 
 #include "gui/general/IconLoader.h"
-#include <QUrl>
-#include <QDesktopServices>
 #include <QGridLayout>
 #include <QLabel>
 #include <QDialogButtonBox>
@@ -56,6 +54,7 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     label2->setText(tr("<p>Copyright 2000-2009 the Rosegarden development team</p><p>Version: %1 &nbsp; Qt version: %2<br>Build key: %3</p><p>Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/resources/authors\">http://www.rosegardenmusic.com/resources/authors</a>.<br>For more information about Rosegarden, visit <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com\">http://www.rosegardenmusic.com</a>.</p><p>License: GNU General Public License Version 2</p>").arg(VERSION).arg(QT_VERSION_STR).arg(BUILDKEY));
     label2->setWordWrap(true);
     label2->setAlignment(Qt::AlignHCenter);
+    label2->setOpenExternalLinks(true);
     mainLayout->addWidget(label2);
     hb->setLayout(mainLayout);
     
@@ -67,11 +66,6 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     QObject::connect(label2, SIGNAL(linkActivated(QString)), this,
         SLOT(slotLinkClicked(QString)));
     this->exec();
-}
-void
-AboutDialog::slotLinkClicked(QString url)
-{
-    QDesktopServices::openUrl(QUrl(url));
 }
 }
 #include "AboutDialog.moc"
