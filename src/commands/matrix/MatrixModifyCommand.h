@@ -33,7 +33,7 @@ class Event;
 
 class MatrixModifyCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MatrixModifyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MatrixModifyCommand)
 
 public:
     MatrixModifyCommand(Segment &segment,

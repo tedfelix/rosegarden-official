@@ -46,7 +46,7 @@ class Composition;
 
 class SegmentSplitTwiceCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSplitTwiceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitTwiceCommand)
 
 public:
     SegmentSplitTwiceCommand(Segment *segment,

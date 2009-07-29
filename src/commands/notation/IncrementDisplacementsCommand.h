@@ -34,7 +34,7 @@ class CommandRegistry;
 
 class IncrementDisplacementsCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(IncrementDisplacementsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::IncrementDisplacementsCommand)
 
 public:
     IncrementDisplacementsCommand(QPoint relative,

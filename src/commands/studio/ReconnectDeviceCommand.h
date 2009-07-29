@@ -36,7 +36,7 @@ class Studio;
 
 class ReconnectDeviceCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ReconnectDeviceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ReconnectDeviceCommand)
 
 public:
     ReconnectDeviceCommand(Studio *studio,

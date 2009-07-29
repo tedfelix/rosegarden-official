@@ -37,7 +37,7 @@ class CommandRegistry;
 /*!!!
 class GraceCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(GraceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::GraceCommand)
 
 public:
     GraceCommand(EventSelection &selection);

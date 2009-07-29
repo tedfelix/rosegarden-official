@@ -38,7 +38,7 @@ class Composition;
 
 class AddTracksCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddTracksCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTracksCommand)
 
 public:
     AddTracksCommand(Composition *composition,

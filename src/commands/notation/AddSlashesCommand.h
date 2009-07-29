@@ -31,7 +31,7 @@ class CommandRegistry;
 
 class AddSlashesCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddSlashesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddSlashesCommand)
 
 public:
     AddSlashesCommand(int number, EventSelection &selection) :

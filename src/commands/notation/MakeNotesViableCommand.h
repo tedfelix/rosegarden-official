@@ -37,7 +37,7 @@ class CommandRegistry;
 /// MakeNotesViable works on a selection or entire segment
 class MakeNotesViableCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MakeNotesViableCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeNotesViableCommand)
 
 public:
     MakeNotesViableCommand(EventSelection &selection) :

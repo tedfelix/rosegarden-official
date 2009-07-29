@@ -44,7 +44,7 @@ class AudioFile;
  */
 class AudioSegmentDistributeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentDistributeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentDistributeCommand)
 
 public:
     AudioSegmentDistributeCommand(Composition *comp,

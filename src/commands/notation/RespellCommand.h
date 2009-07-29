@@ -33,7 +33,7 @@ class CommandRegistry;
 
 class RespellCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RespellCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RespellCommand)
 
 public:
     struct RespellType

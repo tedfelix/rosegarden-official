@@ -34,7 +34,7 @@ class EventSelection;
 
 class AddDotCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddDotCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddDotCommand)
 
 public:
     AddDotCommand(EventSelection &selection, bool notationOnly) :

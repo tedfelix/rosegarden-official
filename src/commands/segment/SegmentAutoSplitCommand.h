@@ -36,7 +36,7 @@ class Composition;
 
 class SegmentAutoSplitCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentAutoSplitCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentAutoSplitCommand)
 
 public:
     SegmentAutoSplitCommand(Segment *segment);

@@ -132,15 +132,15 @@ NotationStrings::getShortNoteName(Note note, bool plural, bool triplet)
     int dots = note.getDots();
 
     static const QString names[] = {
-                                       tr("64th"), tr("32nd"), tr("16th"), tr("8th"),
-                                       tr("quarter"), tr("half"), tr("whole"),
-                                       tr("double whole")
-                                   };
+        tr("64th"), tr("32nd"), tr("16th"), tr("8th"),
+        tr("quarter"), tr("half"), tr("whole"),
+        tr("double whole")
+    };
     static const QString pluralnames[] = {
-                                             tr("64ths"), tr("32nds"), tr("16ths"), tr("8ths"),
-                                             tr("quarters"), tr("halves"), tr("wholes"),
-                                             tr("double wholes")
-                                         };
+        tr("64ths"), tr("32nds"), tr("16ths"), tr("8ths"),
+        tr("quarters"), tr("halves"), tr("wholes"),
+        tr("double wholes")
+    };
 
     if (plural && triplet) {
         return addDots(tr("%1 triplets").arg(names[type]), dots, false, true); // TODO - this is broken because it assumes there's only 1 plural form
@@ -160,13 +160,12 @@ NotationStrings::getReferenceName(Note note, bool isRest)
     int dots = note.getDots();
 
     static const QString names[] = {
-                                       "hemidemisemi", "demisemi", "semiquaver",
-                                       "quaver", "crotchet", "minim", "semibreve", "breve"
-                                   };
+        "hemidemisemi", "demisemi", "semiquaver",
+        "quaver", "crotchet", "minim", "semibreve", "breve"
+    };
 
     QString name(names[type]);
-    if (isRest)
-        name = "rest-" + name;
+    if (isRest) name = "rest-" + name;
     return addDots(name, dots, true, false);
 }
 
@@ -205,23 +204,20 @@ NotationStrings::getNoteForName(QString name)
     Note::Type type;
 
     static const char *names[][4] = {
-                                        { "64th", "sixty-fourth", "hemidemisemi", "hemidemisemiquaver"
-                                        },
-                                        { "32nd", "thirty-second", "demisemi", "demisemiquaver"	},
-                                        { "16th", "sixteenth", "semi", "semiquaver"	},
-                                        { "8th", "eighth", 0, "quaver"	},
-                                        { "quarter", 0, 0, "crotchet", },
-                                        { "half", 0, 0, "minim"	},
-                                        { "whole", 0, 0, "semibreve"	},
-                                        { "double whole", 0, 0, "breve"	}
-                                    };
+        { "64th", "sixty-fourth", "hemidemisemi", "hemidemisemiquaver" },
+        { "32nd", "thirty-second", "demisemi", "demisemiquaver"	},
+        { "16th", "sixteenth", "semi", "semiquaver"	},
+        { "8th", "eighth", 0, "quaver"	},
+        { "quarter", 0, 0, "crotchet", },
+        { "half", 0, 0, "minim"	},
+        { "whole", 0, 0, "semibreve"	},
+        { "double whole", 0, 0, "breve"	}
+    };
 
     for (type = Note::Shortest; type <= Note::Longest; ++type) {
         for (int i = 0; i < 4; ++i) {
-            if (!names[type][i])
-                continue;
-            if (name == names[type][i])
-                return Note(type, dots);
+            if (!names[type][i]) continue;
+            if (name == names[type][i]) return Note(type, dots);
         }
     }
 

@@ -34,7 +34,7 @@ class Event;
 
 class MatrixPercussionInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MatrixPercussionInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MatrixPercussionInsertionCommand)
 
 public:
     MatrixPercussionInsertionCommand(Segment &segment,

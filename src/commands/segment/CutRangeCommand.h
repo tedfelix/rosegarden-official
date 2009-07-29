@@ -34,7 +34,7 @@ class Clipboard;
 
 class CutRangeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CutRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CutRangeCommand)
 
 public:
     CutRangeCommand(Composition *composition,

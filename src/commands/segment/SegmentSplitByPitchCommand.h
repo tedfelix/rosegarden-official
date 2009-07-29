@@ -36,7 +36,7 @@ class Composition;
 
 class SegmentSplitByPitchCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSplitByPitchCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitByPitchCommand)
 
 public:
     enum ClefHandling {

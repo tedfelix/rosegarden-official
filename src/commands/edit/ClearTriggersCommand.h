@@ -33,7 +33,7 @@ class EventSelection;
 
 class ClearTriggersCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ClearTriggersCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ClearTriggersCommand)
 
 public:
     ClearTriggersCommand(EventSelection &selection,

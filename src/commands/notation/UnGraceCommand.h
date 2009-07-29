@@ -34,7 +34,7 @@ class EventSelection;
 
 class UnGraceCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(UnGraceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnGraceCommand)
 
 public:
     UnGraceCommand(EventSelection &selection) :

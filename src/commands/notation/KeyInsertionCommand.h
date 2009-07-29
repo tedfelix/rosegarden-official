@@ -48,7 +48,7 @@ class Event;
 
 class KeyInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(KeyInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::KeyInsertionCommand)
 
 public:
     KeyInsertionCommand(Segment &segment,

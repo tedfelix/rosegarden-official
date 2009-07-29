@@ -36,7 +36,7 @@ class Segment;
  */
 class AudioSegmentResizeFromStartCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentResizeFromStartCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentResizeFromStartCommand)
 
 public:
     AudioSegmentResizeFromStartCommand(Segment *segment,

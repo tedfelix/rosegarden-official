@@ -35,7 +35,7 @@ class EventSelection;
 
 class SetNoteTypeCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetNoteTypeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetNoteTypeCommand)
 
 public:
     SetNoteTypeCommand(EventSelection &selection,

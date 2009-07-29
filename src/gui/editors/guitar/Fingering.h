@@ -32,7 +32,7 @@ namespace Guitar
 
 class Fingering
 {
-    Q_DECLARE_TR_FUNCTIONS(Fingering)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::Fingering)
 
 public:
     friend bool operator<(const Fingering&, const Fingering&);    

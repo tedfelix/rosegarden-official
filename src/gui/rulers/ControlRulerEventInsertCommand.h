@@ -28,7 +28,7 @@ namespace Rosegarden
 
 class ControlRulerEventInsertCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventInsertCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ControlRulerEventInsertCommand)
 
 public:
     ControlRulerEventInsertCommand(const std::string &type, 

@@ -48,7 +48,7 @@ typedef enum
 
 class SelectionPropertyCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SelectionPropertyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)
 
 public:
 

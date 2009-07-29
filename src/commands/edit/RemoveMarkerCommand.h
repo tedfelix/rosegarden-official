@@ -37,7 +37,7 @@ class Composition;
 
 class RemoveMarkerCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveMarkerCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveMarkerCommand)
 
 public:
     RemoveMarkerCommand(Composition *comp,

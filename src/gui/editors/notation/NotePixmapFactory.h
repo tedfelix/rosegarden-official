@@ -59,7 +59,7 @@ class StaffHeader;
 
 class NotePixmapFactory 
 {
-    Q_DECLARE_TR_FUNCTIONS(NotePixmapFactory)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NotePixmapFactory)
 
 public:
     NotePixmapFactory(QString fontName = "", int size = -1);

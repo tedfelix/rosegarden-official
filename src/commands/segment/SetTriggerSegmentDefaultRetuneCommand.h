@@ -33,7 +33,7 @@ class Composition;
 
 class SetTriggerSegmentDefaultRetuneCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentDefaultRetuneCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerSegmentDefaultRetuneCommand)
 
 public:
     SetTriggerSegmentDefaultRetuneCommand(Composition *composition,

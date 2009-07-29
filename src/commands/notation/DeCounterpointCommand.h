@@ -37,7 +37,7 @@ class CommandRegistry;
 
 class DeCounterpointCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(DeCounterpointCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeCounterpointCommand)
 
 public:
     DeCounterpointCommand(EventSelection &selection) :

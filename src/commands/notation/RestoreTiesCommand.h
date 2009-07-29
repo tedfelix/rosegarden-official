@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RestoreTiesCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RestoreTiesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreTiesCommand)
 
 public:
     RestoreTiesCommand(EventSelection &selection) :

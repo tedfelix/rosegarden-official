@@ -33,7 +33,7 @@ namespace Rosegarden
 
 class AddTempoChangeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddTempoChangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTempoChangeCommand)
 
 public:
     AddTempoChangeCommand(Composition *composition,

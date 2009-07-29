@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RemoveFingeringMarksCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveFingeringMarksCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveFingeringMarksCommand)
 
 public:
     RemoveFingeringMarksCommand(EventSelection &selection) :

@@ -35,7 +35,7 @@ class Segment;
 
 class SegmentRescaleCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentRescaleCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRescaleCommand)
 
 public:
     SegmentRescaleCommand(Segment *segment,

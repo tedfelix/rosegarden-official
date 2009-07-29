@@ -40,7 +40,7 @@ class Composition;
 
 class ModifyInstrumentMappingCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyInstrumentMappingCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyInstrumentMappingCommand)
 
 public:
     ModifyInstrumentMappingCommand(RosegardenDocument *doc,

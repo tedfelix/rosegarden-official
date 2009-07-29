@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RemoveMarksCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveMarksCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveMarksCommand)
 
 public:
     RemoveMarksCommand(EventSelection &selection) :

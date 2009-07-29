@@ -36,7 +36,7 @@ class CommandRegistry;
 
 class ChangeStemsCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeStemsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeStemsCommand)
 
 public:
     ChangeStemsCommand(bool up, EventSelection &selection) :

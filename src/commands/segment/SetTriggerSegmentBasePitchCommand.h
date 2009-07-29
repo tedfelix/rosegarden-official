@@ -33,7 +33,7 @@ class Composition;
 
 class SetTriggerSegmentBasePitchCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentBasePitchCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerSegmentBasePitchCommand)
 
 public:
     SetTriggerSegmentBasePitchCommand(Composition *composition,

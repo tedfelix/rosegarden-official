@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class ResetDisplacementsCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ResetDisplacementsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ResetDisplacementsCommand)
 
 public:
     ResetDisplacementsCommand(EventSelection &selection) :

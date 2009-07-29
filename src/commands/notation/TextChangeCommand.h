@@ -34,7 +34,7 @@ class Event;
 
 class TextChangeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(TextChangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TextChangeCommand)
 
 public:
     TextChangeCommand(Segment &segment,

@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class FixNotationQuantizeCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(FixNotationQuantizeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FixNotationQuantizeCommand)
 
 public:
     FixNotationQuantizeCommand(EventSelection &selection) :

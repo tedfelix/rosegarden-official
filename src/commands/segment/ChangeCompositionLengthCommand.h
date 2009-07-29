@@ -36,7 +36,7 @@ class Composition;
 
 class ChangeCompositionLengthCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeCompositionLengthCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeCompositionLengthCommand)
 
 public:
     ChangeCompositionLengthCommand(Composition *composition,

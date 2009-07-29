@@ -33,7 +33,7 @@ class Composition;
 
 class SegmentSplitByRecordingSrcCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSplitByRecordingSrcCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitByRecordingSrcCommand)
 
 public:
     SegmentSplitByRecordingSrcCommand(Segment *segment,

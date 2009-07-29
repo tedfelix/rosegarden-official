@@ -33,7 +33,7 @@ class Composition;
 
 class EraseSegmentsStartingInRangeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(EraseSegmentsStartingInRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseSegmentsStartingInRangeCommand)
 
 public:
     EraseSegmentsStartingInRangeCommand(Composition *composition,

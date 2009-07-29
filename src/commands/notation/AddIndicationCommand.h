@@ -37,7 +37,7 @@ class CommandRegistry;
 
 class AddIndicationCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddIndicationCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddIndicationCommand)
 
 public:
     AddIndicationCommand(std::string indicationType,

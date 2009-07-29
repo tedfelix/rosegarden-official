@@ -41,7 +41,7 @@ class Clipboard;
 
 class PasteSegmentsCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(PasteSegmentsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteSegmentsCommand)
 
 public:
     PasteSegmentsCommand(Composition *composition,

@@ -34,7 +34,7 @@ class ProgressDialog;
 
 class AudioSegmentRescaleCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentRescaleCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentRescaleCommand)
 
 public:
     AudioSegmentRescaleCommand(RosegardenDocument *doc,

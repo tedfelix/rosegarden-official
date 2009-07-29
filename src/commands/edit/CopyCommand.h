@@ -40,7 +40,7 @@ class Clipboard;
 
 class CopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CopyCommand)
 
 public:
     /// Make a CopyCommand that copies events from within a Segment

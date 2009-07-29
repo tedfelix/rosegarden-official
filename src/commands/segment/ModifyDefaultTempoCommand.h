@@ -32,7 +32,7 @@ namespace Rosegarden
 
 class ModifyDefaultTempoCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyDefaultTempoCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDefaultTempoCommand)
 
 public:
     ModifyDefaultTempoCommand(Composition *composition,

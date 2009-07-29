@@ -35,7 +35,7 @@ class Event;
 
 class TextInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(TextInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TextInsertionCommand)
 
 public:
     TextInsertionCommand(Segment &segment,

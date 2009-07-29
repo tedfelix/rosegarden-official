@@ -36,7 +36,7 @@ class EventSelection;
 
 class NormalizeRestsCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(NormalizeRestsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NormalizeRestsCommand)
 
 public:
     NormalizeRestsCommand(Segment &s,

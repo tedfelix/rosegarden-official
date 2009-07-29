@@ -36,7 +36,7 @@ class Segment;
 
 class SegmentJoinCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentJoinCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
 
 public:
     SegmentJoinCommand(SegmentSelection &segments);

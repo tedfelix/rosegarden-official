@@ -38,7 +38,7 @@ class Studio;
 
 class ModifyDeviceCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyDeviceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDeviceCommand)
 
 public:
     // Any of the arguments passed by pointer may be null (except for

@@ -36,7 +36,7 @@ class Segment;
  */
 class SegmentCommandRepeat : public SegmentCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentCommandRepeat)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentCommandRepeat)
 
 public:
     SegmentCommandRepeat(const std::vector<Segment*>&,

@@ -43,7 +43,7 @@ class Composition;
  */
 class OpenOrCloseRangeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(OpenOrCloseRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::OpenOrCloseRangeCommand)
 
 public:
     OpenOrCloseRangeCommand(Composition *composition,

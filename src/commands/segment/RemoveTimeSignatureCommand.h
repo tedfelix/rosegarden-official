@@ -37,7 +37,7 @@ class Composition;
 
 class RemoveTimeSignatureCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveTimeSignatureCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveTimeSignatureCommand)
 
 public:
     RemoveTimeSignatureCommand(Composition *composition,

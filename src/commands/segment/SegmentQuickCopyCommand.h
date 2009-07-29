@@ -35,7 +35,7 @@ class Composition;
 
 class SegmentQuickCopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentQuickCopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentQuickCopyCommand)
 
 public:
     SegmentQuickCopyCommand(Segment *segment);

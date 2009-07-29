@@ -37,7 +37,7 @@ class Event;
 
 class SustainInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SustainInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SustainInsertionCommand)
 
 public:
     SustainInsertionCommand(Segment &segment,

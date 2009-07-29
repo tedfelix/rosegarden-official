@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RestoreStemsCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RestoreStemsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreStemsCommand)
 
 public:
     RestoreStemsCommand(EventSelection &selection) :

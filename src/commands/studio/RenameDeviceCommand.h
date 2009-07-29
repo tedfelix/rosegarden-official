@@ -36,7 +36,7 @@ class Studio;
 
 class RenameDeviceCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RenameDeviceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RenameDeviceCommand)
 
 public:
     RenameDeviceCommand(Studio *studio,

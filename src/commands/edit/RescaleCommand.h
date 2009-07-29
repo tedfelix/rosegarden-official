@@ -35,7 +35,7 @@ class EventSelection;
 
 class RescaleCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RescaleCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RescaleCommand)
 
 public:
     RescaleCommand(EventSelection &selection,

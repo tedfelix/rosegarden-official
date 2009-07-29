@@ -38,7 +38,7 @@ class Clipboard;
  */
 class PasteConductorDataCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(PasteConductorDataCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteConductorDataCommand)
 
 public:
     PasteConductorDataCommand(Composition *composition,

@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class BreakCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(BreakCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BreakCommand)
 
 public:
     BreakCommand(EventSelection &selection) :

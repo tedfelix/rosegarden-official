@@ -34,7 +34,7 @@ class Composition;
 
 class SegmentSingleRepeatToCopyCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSingleRepeatToCopyCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSingleRepeatToCopyCommand)
 
 public:
     SegmentSingleRepeatToCopyCommand(Segment *segment,

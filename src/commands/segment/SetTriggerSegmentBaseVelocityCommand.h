@@ -33,7 +33,7 @@ class Composition;
 
 class SetTriggerSegmentBaseVelocityCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentBaseVelocityCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerSegmentBaseVelocityCommand)
 
 public:
     SetTriggerSegmentBaseVelocityCommand(Composition *composition,

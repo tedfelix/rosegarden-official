@@ -35,7 +35,7 @@ class Event;
 
 class MatrixEraseCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MatrixEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MatrixEraseCommand)
 
 public:
     MatrixEraseCommand(Segment &segment,

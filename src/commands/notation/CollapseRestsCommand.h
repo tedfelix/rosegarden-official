@@ -37,7 +37,7 @@ class CommandRegistry;
 
 class CollapseRestsCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CollapseRestsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseRestsCommand)
 
 public:
     CollapseRestsCommand(Segment &s,

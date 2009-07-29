@@ -36,7 +36,7 @@ class SegmentSelection;
 
 class SegmentSyncClefCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSyncClefCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSyncClefCommand)
 
 public:
     SegmentSyncClefCommand(Segment &segment, const Clef& clef);

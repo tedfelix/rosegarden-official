@@ -34,7 +34,7 @@ class Segment;
 
 class SegmentSplitCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSplitCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSplitCommand)
 
 public:
 

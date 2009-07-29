@@ -36,7 +36,7 @@ class RosegardenDocument;
 
 class SegmentColourMapCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentColourMapCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentColourMapCommand)
 
 public:
     SegmentColourMapCommand(      RosegardenDocument*      doc,

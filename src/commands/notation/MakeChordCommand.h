@@ -31,7 +31,7 @@ class CommandRegistry;
 
 class MakeChordCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MakeChordCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeChordCommand)
 
 public:
     MakeChordCommand(EventSelection &selection) :

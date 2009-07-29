@@ -36,7 +36,7 @@ class Composition;
 
 class DeleteTracksCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(DeleteTracksCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeleteTracksCommand)
 
 public:
     DeleteTracksCommand(Composition *composition,

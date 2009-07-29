@@ -34,7 +34,7 @@ class CommandRegistry;
 
 class MakeAccidentalsCautionaryCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MakeAccidentalsCautionaryCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeAccidentalsCautionaryCommand)
 
 public:
     MakeAccidentalsCautionaryCommand(bool cautionary,

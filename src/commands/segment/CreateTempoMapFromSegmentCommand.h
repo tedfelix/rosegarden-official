@@ -38,7 +38,7 @@ namespace Rosegarden
 
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CreateTempoMapFromSegmentCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand)
 
 public:
     CreateTempoMapFromSegmentCommand(Segment *grooveSegment);

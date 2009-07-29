@@ -36,7 +36,7 @@ class Clipboard;
 
 class MoveAcrossSegmentsCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MoveAcrossSegmentsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MoveAcrossSegmentsCommand)
 
 public:
     MoveAcrossSegmentsCommand(Segment &firstSegment,

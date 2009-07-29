@@ -34,7 +34,7 @@ class EventSelection;
 
 class RetrogradeCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RetrogradeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RetrogradeCommand)
 
 public:
     RetrogradeCommand(int semitones, EventSelection &selection) :

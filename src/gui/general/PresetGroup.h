@@ -53,7 +53,7 @@ namespace Rosegarden
  */
 class PresetGroup : public QXmlDefaultHandler
 {
-    Q_DECLARE_TR_FUNCTIONS(PresetGroup)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PresetGroup)
 
 public:
     /** A typedef used to indicate that reading the file failed */

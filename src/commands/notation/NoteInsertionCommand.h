@@ -35,7 +35,7 @@ class Event;
 
 class NoteInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(NoteInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteInsertionCommand)
 
 public:
     enum AutoBeamMode {

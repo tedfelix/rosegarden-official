@@ -36,7 +36,7 @@ class Segment;
 /// MakeRegionViable works on part of a segment
 class MakeRegionViableCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MakeRegionViableCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MakeRegionViableCommand)
 
 public:
     MakeRegionViableCommand(Segment &segment,

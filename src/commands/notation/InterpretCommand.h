@@ -40,7 +40,7 @@ class Event;
 
 class InterpretCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(InterpretCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::InterpretCommand)
 
 public:
     // bit masks: pass an OR of these to the constructor

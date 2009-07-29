@@ -35,7 +35,7 @@ class Segment;
 
 class TupletCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(TupletCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TupletCommand)
 
 public:
     TupletCommand(Segment &segment,

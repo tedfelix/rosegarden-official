@@ -34,7 +34,7 @@ class EventSelection;
 
 class InvertCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(InvertCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::InvertCommand)
 
 public:
     InvertCommand(int semitones, EventSelection &selection) :

@@ -36,7 +36,7 @@ class Event;
 
 class SetLyricsCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetLyricsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetLyricsCommand)
 
 public:
     SetLyricsCommand(Segment *segment, int verse, QString newLyricData);

@@ -35,7 +35,7 @@ class Event;
 
 class ClefInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ClefInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ClefInsertionCommand)
 
 public:
     ClefInsertionCommand(Segment &segment,

@@ -36,7 +36,7 @@ class Composition;
 
 class RenameTrackCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RenameTrackCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RenameTrackCommand)
 
 public:
     RenameTrackCommand(Composition *composition,

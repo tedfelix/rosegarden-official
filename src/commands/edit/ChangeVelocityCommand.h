@@ -37,7 +37,7 @@ class EventSelection;
     creative. */
 class ChangeVelocityCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeVelocityCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeVelocityCommand)
 
 public:
     ChangeVelocityCommand(int delta, EventSelection &selection,bool rounddelta=true) :

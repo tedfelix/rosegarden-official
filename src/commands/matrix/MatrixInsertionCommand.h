@@ -34,7 +34,7 @@ class Event;
 
 class MatrixInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MatrixInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MatrixInsertionCommand)
 
 public:
     MatrixInsertionCommand(Segment &segment,

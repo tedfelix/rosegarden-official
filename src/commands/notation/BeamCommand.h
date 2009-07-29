@@ -32,7 +32,7 @@ class CommandRegistry;
 
 class BeamCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(BeamCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::BeamCommand)
 
 public:
     BeamCommand(EventSelection &selection) :

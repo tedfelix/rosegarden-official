@@ -28,7 +28,7 @@ namespace Rosegarden {
 
 class NoteStyleFileReader : public QXmlDefaultHandler
 {
-    Q_DECLARE_TR_FUNCTIONS(NoteStyleFileReader)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteStyleFileReader)
 
 public:
     NoteStyleFileReader(NoteStyleName name);

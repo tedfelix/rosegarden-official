@@ -35,7 +35,7 @@ class Composition;
 
 class DeleteTriggerSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(DeleteTriggerSegmentCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeleteTriggerSegmentCommand)
 
 public:
     DeleteTriggerSegmentCommand(RosegardenDocument *doc,

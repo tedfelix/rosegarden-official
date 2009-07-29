@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class TieNotesCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(TieNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TieNotesCommand)
 
 public:
     TieNotesCommand(EventSelection &selection) :

@@ -36,7 +36,7 @@ class CommandRegistry;
 
 class ChangeSlurPositionCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeSlurPositionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeSlurPositionCommand)
 
 public:
     ChangeSlurPositionCommand(bool above, EventSelection &selection) :

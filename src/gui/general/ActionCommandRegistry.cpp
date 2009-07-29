@@ -53,7 +53,7 @@ ActionCommandRegistry::addAction(QString actionName)
 
 class ActionCommandArgumentQuerier : public CommandArgumentQuerier
 {
-    Q_DECLARE_TR_FUNCTIONS(ActionCommandArgumentQuerier)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ActionCommandArgumentQuerier)
 
 public:
     ActionCommandArgumentQuerier(QWidget *widget) : m_widget(widget) { }

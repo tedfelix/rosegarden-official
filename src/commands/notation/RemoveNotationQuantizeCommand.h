@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RemoveNotationQuantizeCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveNotationQuantizeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand)
 
 public:
     RemoveNotationQuantizeCommand(EventSelection &selection) :

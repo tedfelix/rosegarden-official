@@ -42,7 +42,7 @@ class Composition;
 
 class HydrogenXMLHandler : public QXmlDefaultHandler
 {
-    Q_DECLARE_TR_FUNCTIONS(HydrogenXMLHandler)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::HydrogenXMLHandler)
 
 public:
     HydrogenXMLHandler(Composition *comp,

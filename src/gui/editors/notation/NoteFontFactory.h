@@ -36,7 +36,7 @@ class NoteFont;
 
 class NoteFontFactory
 {
-    Q_DECLARE_TR_FUNCTIONS(NoteFontFactory)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NoteFontFactory)
 
 public:
     typedef Exception NoFontsAvailable;

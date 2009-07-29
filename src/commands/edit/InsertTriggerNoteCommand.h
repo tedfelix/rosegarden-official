@@ -37,7 +37,7 @@ class Segment;
 
 class InsertTriggerNoteCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(InsertTriggerNoteCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::InsertTriggerNoteCommand)
 
 public:
     InsertTriggerNoteCommand(Segment &,

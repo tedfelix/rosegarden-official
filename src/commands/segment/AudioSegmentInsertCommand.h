@@ -40,7 +40,7 @@ class AudioFileManager;
 
 class AudioSegmentInsertCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentInsertCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentInsertCommand)
 
 public:
     AudioSegmentInsertCommand(RosegardenDocument *doc,

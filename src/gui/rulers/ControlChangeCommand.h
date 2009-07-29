@@ -35,7 +35,7 @@ namespace Rosegarden {
  */
 class ControlChangeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ControlChangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ControlChangeCommand)
 
 public:
 

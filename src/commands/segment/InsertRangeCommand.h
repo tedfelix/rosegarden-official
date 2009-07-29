@@ -31,7 +31,7 @@ class Composition;
 
 class InsertRangeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(InsertRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::InsertRangeCommand)
 
 public:
     InsertRangeCommand(Composition *composition,

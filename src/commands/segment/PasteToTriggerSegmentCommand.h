@@ -36,7 +36,7 @@ class Clipboard;
 
 class PasteToTriggerSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(PasteToTriggerSegmentCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteToTriggerSegmentCommand)
 
 public:
     /// If basePitch is -1, the first pitch in the selection will be used

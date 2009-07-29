@@ -37,7 +37,7 @@ class Composition;
 
 class RemoveTempoChangeCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveTempoChangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveTempoChangeCommand)
 
 public:
     RemoveTempoChangeCommand(Composition *composition,

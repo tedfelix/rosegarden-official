@@ -40,7 +40,7 @@ class Segment;
 
 class EventEditCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(EventEditCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventEditCommand)
 
 public:
     EventEditCommand(Segment &segment,

@@ -34,7 +34,7 @@ class Segment;
 
 class AudioSegmentSplitCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentSplitCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentSplitCommand)
 
 public:
     AudioSegmentSplitCommand(Segment *segment,

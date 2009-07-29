@@ -35,7 +35,7 @@ class Event;
 
 class GuitarChordInsertionCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(GuitarChordInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::GuitarChordInsertionCommand)
 
 public:
     GuitarChordInsertionCommand(Segment &segment,

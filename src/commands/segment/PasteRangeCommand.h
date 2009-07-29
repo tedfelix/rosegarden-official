@@ -34,7 +34,7 @@ class Clipboard;
 
 class PasteRangeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(PasteRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteRangeCommand)
 
 public:
     PasteRangeCommand(Composition *composition,

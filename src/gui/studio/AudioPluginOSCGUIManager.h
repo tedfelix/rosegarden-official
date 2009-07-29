@@ -42,7 +42,7 @@ class AudioPluginOSCGUI;
 
 class AudioPluginOSCGUIManager
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioPluginOSCGUIManager)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginOSCGUIManager)
 
 public:
     AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);

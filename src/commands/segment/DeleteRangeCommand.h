@@ -34,7 +34,7 @@ class Composition;
 
 class DeleteRangeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(DeleteRangeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::DeleteRangeCommand)
 
 public:
     DeleteRangeCommand(Composition *composition,

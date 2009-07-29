@@ -37,7 +37,7 @@ class AudioFileManager;
 
 class SegmentEraseCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentEraseCommand)
 
 public:
     /// for removing segment normally

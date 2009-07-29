@@ -33,7 +33,7 @@ class CommandRegistry;
 
 class ChangeTiePositionCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeTiePositionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeTiePositionCommand)
 
 public:
     ChangeTiePositionCommand(bool above, EventSelection &selection) :

@@ -40,7 +40,7 @@ class Clipboard;
 
 class PasteEventsCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(PasteEventsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::PasteEventsCommand)
 
 public:
     enum PasteType {

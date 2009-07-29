@@ -37,7 +37,7 @@ class EventSelection;
 
 class EraseCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(EraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
 
 public:
     EraseCommand(EventSelection &selection);

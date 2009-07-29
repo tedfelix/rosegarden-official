@@ -25,6 +25,8 @@
 #include "document/RosegardenDocument.h"
 
 
+#include <QApplication>
+
 namespace Rosegarden
 {
 

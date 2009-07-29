@@ -35,7 +35,7 @@ class EventSelection;
 
 class CollapseNotesCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CollapseNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CollapseNotesCommand)
 
 public:
     CollapseNotesCommand(EventSelection &selection) :

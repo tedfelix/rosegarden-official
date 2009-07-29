@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class AddTextMarkCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddTextMarkCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTextMarkCommand)
 
 public:
     AddTextMarkCommand(std::string text,

@@ -34,7 +34,7 @@ class Studio;
 
 class CreateOrDeleteDeviceCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CreateOrDeleteDeviceCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateOrDeleteDeviceCommand)
 
 public:
     // Creation constructor

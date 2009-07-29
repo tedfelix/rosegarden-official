@@ -35,7 +35,7 @@ class EventSelection;
 
 class SetTriggerCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetTriggerCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerCommand)
 
 public:
     SetTriggerCommand(EventSelection &selection,

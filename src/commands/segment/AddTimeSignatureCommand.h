@@ -36,7 +36,7 @@ class Composition;
 
 class AddTimeSignatureCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddTimeSignatureCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTimeSignatureCommand)
 
 public:
     AddTimeSignatureCommand(Composition *composition,

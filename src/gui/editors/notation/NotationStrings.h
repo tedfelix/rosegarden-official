@@ -39,7 +39,7 @@ namespace Rosegarden
  */
 class NotationStrings
 {
-    Q_DECLARE_TR_FUNCTIONS(NotationStrings)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::NotationStrings)
 
 public:
     NotationStrings();

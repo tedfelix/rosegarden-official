@@ -34,7 +34,7 @@ class EventSelection;
 
 class TransposeCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(TransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::TransposeCommand)
 
 public:
     TransposeCommand(int semitones, EventSelection &selection) :

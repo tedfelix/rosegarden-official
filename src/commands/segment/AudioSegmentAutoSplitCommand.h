@@ -38,7 +38,7 @@ class AudioFileManager;
 
 class AudioSegmentAutoSplitCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AudioSegmentAutoSplitCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentAutoSplitCommand)
 
 public:
     AudioSegmentAutoSplitCommand(RosegardenDocument *doc,

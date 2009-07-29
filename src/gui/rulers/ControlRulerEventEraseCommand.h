@@ -31,7 +31,7 @@ namespace Rosegarden
 
 class ControlRulerEventEraseCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ControlRulerEventEraseCommand)
 
 public:
 

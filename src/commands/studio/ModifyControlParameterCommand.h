@@ -36,7 +36,7 @@ class Studio;
 
 class ModifyControlParameterCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyControlParameterCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyControlParameterCommand)
 
 public:
     ModifyControlParameterCommand(Studio *studio,

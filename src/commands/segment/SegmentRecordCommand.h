@@ -40,7 +40,7 @@ class Composition;
  */
 class SegmentRecordCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentRecordCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentRecordCommand)
 
 public:
     SegmentRecordCommand(Segment *segment);

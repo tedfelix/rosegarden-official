@@ -40,7 +40,7 @@ class Composition;
 
 class ModifyDeviceMappingCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyDeviceMappingCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDeviceMappingCommand)
 
 public:
     ModifyDeviceMappingCommand(RosegardenDocument *doc,

@@ -39,7 +39,7 @@ class Clipboard;
 
 class CutAndCloseCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CutAndCloseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CutAndCloseCommand)
 
 public:
     CutAndCloseCommand(EventSelection &selection,

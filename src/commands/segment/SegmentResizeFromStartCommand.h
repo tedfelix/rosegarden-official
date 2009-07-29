@@ -41,7 +41,7 @@ class Segment;
  */
 class SegmentResizeFromStartCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentResizeFromStartCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentResizeFromStartCommand)
 
 public:
     SegmentResizeFromStartCommand(Segment *segment,

@@ -33,7 +33,7 @@ class SegmentSelection;
 
 class SegmentTransposeCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentTransposeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentTransposeCommand)
 
 public:
     SegmentTransposeCommand(Segment &segment,

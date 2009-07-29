@@ -36,7 +36,7 @@ class SegmentSelection;
 
 class SegmentColourCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentColourCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentColourCommand)
 
 public:
     SegmentColourCommand(SegmentSelection &segments,

@@ -36,7 +36,7 @@ class Studio;
 
 class RemoveControlParameterCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RemoveControlParameterCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveControlParameterCommand)
 
 ;
 public:

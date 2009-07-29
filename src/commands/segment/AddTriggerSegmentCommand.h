@@ -36,7 +36,7 @@ class Composition;
 
 class AddTriggerSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddTriggerSegmentCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddTriggerSegmentCommand)
 
 public:
     AddTriggerSegmentCommand(RosegardenDocument *doc,

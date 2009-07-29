@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class UntieNotesCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(UntieNotesCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UntieNotesCommand)
 
 public:
     UntieNotesCommand(EventSelection &selection) :

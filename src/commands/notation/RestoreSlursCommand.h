@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class RestoreSlursCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(RestoreSlursCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::RestoreSlursCommand)
 
 public:
     RestoreSlursCommand(EventSelection &selection) :

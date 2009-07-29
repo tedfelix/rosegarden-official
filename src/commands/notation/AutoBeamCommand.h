@@ -36,7 +36,7 @@ class CommandRegistry;
 
 class AutoBeamCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AutoBeamCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AutoBeamCommand)
 
 public:
     AutoBeamCommand(EventSelection &selection) :

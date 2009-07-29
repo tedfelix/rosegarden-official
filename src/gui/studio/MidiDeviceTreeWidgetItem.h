@@ -30,7 +30,7 @@ namespace Rosegarden
 
 class MidiDeviceTreeWidgetItem : public QTreeWidgetItem
 {
-    Q_DECLARE_TR_FUNCTIONS(MidiDeviceTreeWidgetItem)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiDeviceTreeWidgetItem)
 
 public:
     // Device

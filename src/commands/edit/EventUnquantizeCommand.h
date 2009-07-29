@@ -36,7 +36,7 @@ class EventSelection;
 
 class EventUnquantizeCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(EventUnquantizeCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::EventUnquantizeCommand)
 public:
     /// Quantizer must be on heap (EventUnquantizeCommand dtor will delete)
     EventUnquantizeCommand(Segment &segment,

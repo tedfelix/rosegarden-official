@@ -36,7 +36,7 @@ class Clipboard;
 
 class CutCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(CutCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CutCommand)
 
 public:
     /// Make a CutCommand that cuts events from within a Segment

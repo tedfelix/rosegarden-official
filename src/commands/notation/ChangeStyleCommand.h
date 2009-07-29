@@ -37,7 +37,7 @@ class CommandRegistry;
 
 class ChangeStyleCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ChangeStyleCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeStyleCommand)
 
 public:
     ChangeStyleCommand(NoteStyleName style,

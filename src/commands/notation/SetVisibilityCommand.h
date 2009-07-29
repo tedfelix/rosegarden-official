@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class SetVisibilityCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetVisibilityCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetVisibilityCommand)
 
 public:
     SetVisibilityCommand(bool visible, EventSelection &selection) :

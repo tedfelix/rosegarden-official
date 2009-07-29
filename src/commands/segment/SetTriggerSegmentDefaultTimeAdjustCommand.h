@@ -34,7 +34,7 @@ class Composition;
 
 class SetTriggerSegmentDefaultTimeAdjustCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SetTriggerSegmentDefaultTimeAdjustCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetTriggerSegmentDefaultTimeAdjustCommand)
 
 public:
     SetTriggerSegmentDefaultTimeAdjustCommand(Composition *composition,

@@ -33,7 +33,7 @@ class CommandRegistry;
 
 class AddMarkCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(AddMarkCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddMarkCommand)
 
 public:
     AddMarkCommand(Mark mark,

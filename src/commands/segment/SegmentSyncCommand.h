@@ -36,7 +36,7 @@ class SegmentSelection;
 
 class SegmentSyncCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentSyncCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSyncCommand)
 
 public:
     SegmentSyncCommand(Segment &segment,

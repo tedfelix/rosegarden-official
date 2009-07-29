@@ -40,7 +40,7 @@ class RosegardenDocument;
 
 class MultiKeyInsertionCommand : public MacroCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(MultiKeyInsertionCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::MultiKeyInsertionCommand)
 
 public:
     

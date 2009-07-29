@@ -36,7 +36,7 @@ class Segment;
 
 class SegmentLabelCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(SegmentLabelCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentLabelCommand)
 
 public:
     SegmentLabelCommand(SegmentSelection &segments,

@@ -35,7 +35,7 @@ class CommandRegistry;
 
 class UnTupletCommand : public BasicSelectionCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(UnTupletCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::UnTupletCommand)
 
 public:
     UnTupletCommand(EventSelection &selection) :

@@ -36,7 +36,7 @@ class Composition;
 
 class ModifyMarkerCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(ModifyMarkerCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyMarkerCommand)
 
 public:
     ModifyMarkerCommand(Composition *comp,
