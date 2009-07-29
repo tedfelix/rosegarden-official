@@ -178,6 +178,7 @@
 #include "TranzportClient.h"
 
 #include <QApplication>
+#include <QDesktopServices>
 #include <QSettings>
 #include <QShortcut>
 #include <QDockWidget>
@@ -7366,58 +7367,18 @@ RosegardenMainWindow::slotPlayListClosed()
     m_playList = 0;
 }
 
-static void
-invokeBrowser(QString url)
-{
-    // This is mostly lifted from Qt Assistant source code
-
-    QProcess *process = new QProcess;
-    QObject::connect(process, SIGNAL(finished(int)), process, SLOT(deleteLater()));
-
-    QStringList args;
-
-#ifdef Q_OS_MAC
-    args.append(url);
-    process->start("open", args);
-#else
-#ifdef Q_OS_WIN32
-
-    QString pf(getenv("ProgramFiles"));
-    QString command = pf + QString("\\Internet Explorer\\IEXPLORE.EXE");
-
-    args.append(url);
-    process->start(command, args);
-
-#else
-#ifdef Q_WS_X11
-    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
-        args.append("exec");
-        args.append(url);
-        process->start("kfmclient", args);
-    } else if (!qgetenv("BROWSER").isEmpty()) {
-        args.append(url);
-        process->start(qgetenv("BROWSER"), args);
-    } else {
-        args.append(url);
-        process->start("firefox", args);
-    }
-#endif
-#endif
-#endif
-}
-
 void
 RosegardenMainWindow::slotTutorial()
 {
     QString tutorialURL = tr("http://www.rosegardenmusic.com/tutorials/en/chapter-0.html");
-    invokeBrowser(tutorialURL);
+    QDesktopServices::openUrl(QUrl(tutorialURL));
 }
 
 void
 RosegardenMainWindow::slotBugGuidelines()
 {
     QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
-    invokeBrowser(glURL);
+     QDesktopServices::openUrl(QUrl(glURL));
 }
 
 void
