@@ -29,6 +29,10 @@ class AboutDialog : public QDialog
 
 public:
     AboutDialog(QWidget *parent = 0);
+
+public slots:
+    void slotLinkClicked(QString);
+
 };
 }
 

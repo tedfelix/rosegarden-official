@@ -19,6 +19,7 @@
 #include "AboutDialog.h"
 
 #include "gui/general/IconLoader.h"
+#include <QProcess>
 #include <QGridLayout>
 #include <QLabel>
 #include <QDialogButtonBox>
@@ -62,8 +63,48 @@ AboutDialog::AboutDialog(QWidget *parent): QDialog(parent, 0)
     metagrid->setRowStretch(0, 10);
     QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
-
+    QObject::connect(label2, SIGNAL(linkActivated(QString)), this,
+        SLOT(slotLinkClicked(QString)));
     this->exec();
+}
+void
+AboutDialog::slotLinkClicked(QString url)
+{
+    // This is mostly lifted from Qt Assistant source code
+
+    QProcess *process = new QProcess;
+    QObject::connect(process, SIGNAL(finished(int)), process, SLOT(deleteLater()));
+
+    QStringList args;
+
+#ifdef Q_OS_MAC
+    args.append(url);
+    process->start("open", args);
+#else
+#ifdef Q_OS_WIN32
+
+    QString pf(getenv("ProgramFiles"));
+    QString command = pf + QString("\\Internet Explorer\\IEXPLORE.EXE");
+
+    args.append(url);
+    process->start(command, args);
+
+#else
+#ifdef Q_WS_X11
+    if (!qgetenv("KDE_FULL_SESSION").isEmpty()) {
+        args.append("exec");
+        args.append(url);
+        process->start("kfmclient", args);
+    } else if (!qgetenv("BROWSER").isEmpty()) {
+        args.append(url);
+        process->start(qgetenv("BROWSER"), args);
+    } else {
+        args.append(url);
+        process->start("firefox", args);
+    }
+#endif
+#endif
+#endif
 }
 }
 #include "AboutDialog.moc"
