@@ -1246,10 +1246,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 skipToNextPlayDevice();
 
                 if (m_device) {
-					if (!nameStr.isEmpty()) {
+                    if (!nameStr.isEmpty()) {
                         m_device->setName(qstrtostr(nameStr));
                     }
-				} else if (!nameStr.isEmpty()) {
+                } else if (!nameStr.isEmpty()) {
                     addMIDIDevice(nameStr, m_createDevices, "play"); // also sets m_device
                 }
             }
@@ -1266,8 +1266,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString connection = atts.value("connection");
-			if ((m_createDevices) && (m_device) &&
-						   !connection.isNull() && (!connection.isEmpty()) ) {
+            if ((m_createDevices) && (m_device) &&
+                !connection.isNull() && (!connection.isEmpty()) ) {
                 setMIDIDeviceConnection(connection);
             }
 
@@ -1285,19 +1285,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     variation = MidiDevice::NoVariations;
                 }
             }
-            MidiDevice *md = dynamic_cast<MidiDevice *>
-                             (m_device);
+            MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
             if (md) {
                 md->setVariationType(variation);
             }
         } else if (type == "softsynth") {
             m_device = getStudio().getDevice(id);
-
             if (m_device && m_device->getType() == Device::SoftSynth)
                 m_device->setName(qstrtostr(nameStr));
         } else if (type == "audio") {
             m_device = getStudio().getDevice(id);
-
             if (m_device && m_device->getType() == Device::Audio)
                 m_device->setName(qstrtostr(nameStr));
         } else {
