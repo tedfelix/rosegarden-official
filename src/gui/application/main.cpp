@@ -30,7 +30,6 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QFile>
-#include <QProcess>
 #include <QTranslator>
 #include <QLocale>
 #include <QLibraryInfo>
