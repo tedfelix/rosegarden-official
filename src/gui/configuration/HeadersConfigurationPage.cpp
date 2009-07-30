@@ -97,7 +97,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     }
 
     unsigned int row = 0, col = 0, width = 1;
-    LineEdit *editHeader = new LineEdit(strtoqstr(header), frameHeaders);
+    LineEdit *editHeader = new LineEdit(headerStr, frameHeaders);
     QString trName;
     if (key == headerDedication) {  
         m_editDedication = editHeader;
