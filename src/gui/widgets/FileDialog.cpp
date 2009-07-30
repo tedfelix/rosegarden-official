@@ -90,8 +90,10 @@ FileDialog::getOpenFileName(QWidget *parent,
 {
     FileDialog dialog(parent, caption, dir, filter);
 
+#if QT_VERSION >= 0x040500
     if (options)
-        dialog.setOptions(options);
+       dialog.setOptions(options);
+#endif
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
@@ -117,8 +119,10 @@ FileDialog::getOpenFileNames(QWidget *parent,
 {
     FileDialog dialog(parent, caption, dir, filter);
 
+#if QT_VERSION >= 0x040500
     if (options)
         dialog.setOptions(options);
+#endif
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
@@ -144,8 +148,10 @@ FileDialog::getSaveFileName(QWidget *parent,
 {
     FileDialog dialog(parent, caption, dir, filter);
 
+#if QT_VERSION >= 0x040500
     if (options)
         dialog.setOptions(options);
+#endif
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     dialog.setAcceptMode(QFileDialog::AcceptSave);
