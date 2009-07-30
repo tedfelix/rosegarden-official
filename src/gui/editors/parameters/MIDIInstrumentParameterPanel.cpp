@@ -98,15 +98,15 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_variationCheckBox->setFont(f);
     m_percussionCheckBox->setFont(f);
 
-    //tooltips for all of the above, let's see what happens
-    m_bankValue->setToolTip(tr("<qt>Sets the midi bank.</qt>"));
-    m_channelValue->setToolTip(tr("<qt>Sets the channel number.</qt>"));
-    m_programValue->setToolTip(tr("<qt>Sets the midi program.</qt>"));
-    QString checkBoxTip = tr("<qt>Check this box to allow you to set the value.</qt>"); 
+    m_bankValue->setToolTip(tr("<qt>Set the MIDI bank from which programs will be selected upon loading a new file or (if so configured) at the start of playback</qt>"));
+    m_channelValue->setToolTip(tr("<qt><p>Set the MIDI channel number.</p><p>Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion</p></qt>"));
+    m_programValue->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p><p>This will be transmitted upon loading a new file and (if Rosegarden is so configured) at the start of playback</p></qt>"));
+    m_variationValue->setToolTip(tr("<qt>Set variations on the program above, if available in the studio</qt>"));
+    QString checkBoxTip = tr("<qt>Enable the control to the right</qt>"); 
     m_bankCheckBox->setToolTip(tr(checkBoxTip));
     m_programCheckBox->setToolTip(tr(checkBoxTip));
     m_variationCheckBox->setToolTip(tr(checkBoxTip));
-    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to access program changes and variations for percussion instruments. It will of course set the channel to percussion.</p></qt>"));
+    m_percussionCheckBox->setToolTip(tr("<qt><p>Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and/or Roland-style drum kits you may have configured in the studio</p></qt>"));
 
     m_bankValue->setMaxVisibleItems(20);
     m_programValue->setMaxVisibleItems(20);
@@ -144,7 +144,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(RosegardenDocument *d
     m_connectionLabel->setAlignment(Qt::AlignCenter);
     
     
-    QString programTip = tr("<qt>use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
+    QString programTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
     m_evalMidiPrgChgCheckBox = new QCheckBox(this); 
     m_evalMidiPrgChgCheckBox->setFont(f);
     m_evalMidiPrgChgLabel = new QLabel(tr("Receive external"), this);
@@ -506,8 +506,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             hbox->setLayout(hboxLayout);
 
             rotary->setKnobColour(knobColour);
-            //Here goes!
-            rotary->setToolTip(tr("<qt><p>Place mouse over rotary control, <b>hold down</b> left mouse button and drag up and down to change value.</p><p>A small blue tooltip shows the value.</p></qt>"));
 
             // Add a label
             QLabel *label = new SqueezedLabel(QObject::tr(strtoqstr(it->getName())), hbox);

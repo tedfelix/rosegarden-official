@@ -92,7 +92,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     deviceBoxLayout->addWidget(new QLabel(tr("Device"), deviceBox), 0, 0);
     m_metronomeDevice = new QComboBox(deviceBox);
-    m_metronomeDevice->setToolTip(tr("<qt>Choose the source of the sound. You can use a midi device if it is connected.</qt>"));
+    m_metronomeDevice->setToolTip(tr("<qt>Choose the device you want to use to play the metronome</qt>"));
     deviceBoxLayout->addWidget(m_metronomeDevice, 0, 1);
 
     DeviceList *devices = doc->getStudio().getDevices();
@@ -123,7 +123,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     deviceBoxLayout->addWidget(new QLabel(tr("Instrument"), deviceBox), 1, 0);
     m_metronomeInstrument = new QComboBox(deviceBox);
-    m_metronomeInstrument->setToolTip(tr("<qt>Choose from the usual midi candidates.</qt>"));
+    m_metronomeInstrument->setToolTip(tr("<qt>Choose the instrument you want to use to play the metronome (typically #10)</qt>"));
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotSetModified()));
     connect(m_metronomeInstrument, SIGNAL(activated(int)), this, SLOT(slotInstrumentChanged(int)));
     deviceBoxLayout->addWidget(m_metronomeInstrument, 1, 1);
@@ -137,7 +137,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     beatBoxLayout->addWidget(new QLabel(tr("Resolution"), beatBox), 0, 0);
     m_metronomeResolution = new QComboBox(beatBox);
-    m_metronomeResolution->setToolTip(tr("<qt>Sets the resolution of the metronome.</qt>"));
+    m_metronomeResolution->setToolTip(tr("<qt>The metronome can sound bars only, bars and beats, or bars, beats and divisions.  The latter mode can be particularly useful for playing in compound time signatures like 12/8.</qt>"));
     m_metronomeResolution->addItem(tr("None"));
     m_metronomeResolution->addItem(tr("Bars only"));
     m_metronomeResolution->addItem(tr("Bars and beats"));
@@ -147,7 +147,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     beatBoxLayout->addWidget(new QLabel(tr("Bar velocity"), beatBox), 1, 0);
     m_metronomeBarVely = new QSpinBox(beatBox);
-    m_metronomeBarVely->setToolTip(tr("<qt>dragons. That's what you get for hiring an amateur musician. Not even a talented amateur.</qt>"));
+    m_metronomeBarVely->setToolTip(tr("<qt>Controls how forcefully the bar division notes will be struck.  (These are typically the loudest of all.)</qt>"));
     m_metronomeBarVely->setMinimum(0);
     m_metronomeBarVely->setMaximum(127);
     connect(m_metronomeBarVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
@@ -155,7 +155,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     beatBoxLayout->addWidget(new QLabel(tr("Beat velocity"), beatBox), 2, 0);
     m_metronomeBeatVely = new QSpinBox(beatBox);
-    m_metronomeBeatVely->setToolTip(tr("<qt>Sets velocity of metronome ticks for main beat of bar.</qt>"));
+    m_metronomeBeatVely->setToolTip(tr("<qt>Controls how forcefully the beat division notes will be struck.  (These are typically more quiet than beat division notes.)</qt>"));
     m_metronomeBeatVely->setMinimum(0);
     m_metronomeBeatVely->setMaximum(127);
     connect(m_metronomeBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
@@ -163,7 +163,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     beatBoxLayout->addWidget(new QLabel(tr("Sub-beat velocity"), beatBox), 3, 0);
     m_metronomeSubBeatVely = new QSpinBox(beatBox);
-    m_metronomeSubBeatVely->setToolTip(tr("<qt>Sets velocity of metronome ticks for non main beats. Yuck!</qt>"));
+    m_metronomeSubBeatVely->setToolTip(tr("<qt>Controls how forcefully the sub-beat division notes will be struck.  (These are typically the most quiet of all, and are not heard unless you are working in compound time.)</qt>"));
     m_metronomeSubBeatVely->setMinimum(0);
     m_metronomeSubBeatVely->setMaximum(127);
     connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
@@ -178,7 +178,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     hbox->setLayout(hboxLayout);
 
     m_metronomePitch = new PitchChooser(tr("Pitch"), vbox , 60);
-    m_metronomePitch->setToolTip(tr("<qt>WCan you believe this! You can even change the pitch of the metronome tick.</qt>"));
+    m_metronomePitch->setToolTip(tr("<qt>It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.</qt>"));
     vboxLayout->addWidget(m_metronomePitch);
     connect(m_metronomePitch, SIGNAL(pitchChanged(int)), this, SLOT(slotPitchChanged(int)));
     connect(m_metronomePitch, SIGNAL(preview(int)), this, SLOT(slotPreviewPitch(int)));

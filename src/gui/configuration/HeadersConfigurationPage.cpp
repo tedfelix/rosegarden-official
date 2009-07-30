@@ -78,10 +78,21 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     for (unsigned int index = 0; index < fixedKeys.size(); index++) {
     std::string key = fixedKeys[index].getName();
     std::string header = "";
+    QString headerStr("");
     for (unsigned int i = 0; i < propertyNames.size(); ++i) {
         std::string property = propertyNames [i];
         if (property == key) {
-        header = metadata.get<String>(property);
+
+            // get the std::string from metadata
+            header = metadata.get<String>(property);
+
+            // use that variable in a QObject::tr().arg() call, which will
+            // return the English in a QString
+            QString text(QObject::tr("%1").arg(strtoqstr(header)));
+
+            // now we can QObject::tr() the QString in step 3 of this convoluted
+            // process
+            headerStr = QObject::tr(text);
         }
     }
 
@@ -203,7 +214,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     m_metadata = new QTableWidget( 2, 2, frameOtherHeaders ); // rows, columns
     m_metadata->setObjectName("StyledTable");
     m_metadata->setAlternatingRowColors(true);
-	
+    
     m_metadata->setHorizontalHeaderItem( 0, new QTableWidgetItem(tr("Name"))  ); // column, item
     m_metadata->setHorizontalHeaderItem( 1, new QTableWidgetItem(tr("Value"))  ); // column, item
 //    m_metadata->setFullWidth(true);

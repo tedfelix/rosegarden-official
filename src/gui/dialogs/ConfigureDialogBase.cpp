@@ -35,71 +35,7 @@
 
 namespace Rosegarden
 {
-/*
-ConfigureDialogBase::ConfigureDialogBase(QWidget *parent,
-        QString label,
-        const char *name):
-        KDialogBase(IconList, !label.isEmpty() ? label : tr("Configure"), Help | Apply | Ok | Cancel,
-                    Ok, parent, name, true) // modal
-*/
-/*ConfigureDialogBase::ConfigureDialogBase( QWidget *parent, QString label, const char *name  ):QDialog(parent)
-//        , QMessageBox::StandardButtons buttons ) :QDialog(parent)
-{
-    
-    this->setAttribute( Qt::WA_DeleteOnClose );
-    
-    this->setWindowTitle( tr("Configure Rosegarden") );
-    this->setObjectName( (name) );
-    
-    QVBoxLayout *dlgLay = new QVBoxLayout( this );
-    this->setLayout( dlgLay );
-    
-    //QTabWidget *
-    m_tabWidget = new QTabWidget( this );
-    // tab-widget, that conains the misc config option pages
-    dlgLay->addWidget( m_tabWidget );
-    
-    
-    // setup dialog buttons
-    //
-    QDialogButtonBox::StandardButtons sbuttons = \
-            QDialogButtonBox::Ok |
-            QDialogButtonBox::Cancel | 
-            QDialogButtonBox::Apply |
-            QDialogButtonBox::RestoreDefaults |
-            QDialogButtonBox::Help;
-    //QDialogButtonBox *
-    m_dialogButtonBox = new QDialogButtonBox( sbuttons, Qt::Horizontal, this );
-    m_dialogButtonBox->setObjectName( "dialog_base_button_box" );
-    dlgLay->addWidget( m_dialogButtonBox );
-    
-    // fist disable the Apply button
-    QPushButton * btApply;
-    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-    btApply->setEnabled( false );
-    
-    
-    // qt4 connctions for QDialogButtonBox:
-    //
-     connect( m_dialogButtonBox, SIGNAL(clicked(QAbstractButton *)),
-             this, SLOT(slotButtonBoxButtonClicked(QAbstractButton *)) );
-//    connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
-//    connect(m_dialogButtonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
-        
-    //// setup dialog buttons OLD CODE:
-    //QWidget *buttWidget = new QWidget( this );
-    //dlgLay->addWidget( buttWidget );
-    
-    //QPushButton *mainWindowlyButt = new QPushButton("Apply");
-    //QPushButton *okButt = new QPushButton("Ok");
-    //QPushButton *cancelButt = new QPushButton("Cancel");
-    
-    //QHBoxLayout *buttLay = new QHBoxLayout( buttWidget );
-    //buttLay->addWidget( applyButt );
-    //buttLay->addWidget( okButt );
-    //buttLay->addWidget( cancelButt );
-    
-}*/
+
 
 ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const char *name  )
 : QDialog(parent)
@@ -113,28 +49,20 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
 
     m_iconWidget = new IconStackedWidget(this);
     dlgLayout->addWidget(m_iconWidget);
-    
-    QWidget *buttonBox = new QWidget(this);
-    QPushButton *helpButton = new QPushButton("Help",buttonBox);
-//    connect(helpButton, SIGNAL(clicked()), this, SLOT(slotHelp()));
-    QPushButton *okButton = new QPushButton("OK",buttonBox);
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
 
-    m_applyButton = new QPushButton("Apply",buttonBox);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply  |
+                                                       QDialogButtonBox::Ok     |
+                                                       QDialogButtonBox::Cancel |
+                                                       QDialogButtonBox::Help);
+    dlgLayout->addWidget(buttonBox);
+
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
+
+    QPushButton *m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
     m_applyButton->setEnabled(false);
     connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
 
-    QPushButton *cancelButton = new QPushButton("Cancel",buttonBox);
-    connect(cancelButton, SIGNAL(clicked()), this, SLOT(slotCancelOrClose()));
-    
-    QHBoxLayout *btnLayout = new QHBoxLayout(buttonBox);
-    btnLayout->addWidget(helpButton);
-    btnLayout->addStretch(1);
-    btnLayout->addWidget(okButton);
-    btnLayout->addWidget(m_applyButton);
-    btnLayout->addWidget(cancelButton);
-    
-    dlgLayout->addWidget(buttonBox);
 }
 
 // ConfigureDialogBase::addPage(const QString& name, const QString& title, const QPixmap& icon, QWidget *page)
@@ -218,25 +146,12 @@ ConfigureDialogBase::slotApply()
             i != m_configurationPages.end(); ++i)
         (*i)->apply();
 
-//    QPushButton * btApply;
-//    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-//    btApply->setEnabled( false );
     m_applyButton->setEnabled(false);
 }
 
 void
 ConfigureDialogBase::slotActivateApply()
 {
-    
-    //QDialogButtonBox *dbb = findChild<QDialogButtonBox *>( "dialog_base_button_box" );
-//    if( ! m_dialogButtonBox ){
-//        std::cerr << "ERROR: QDialogButtonBox is NULL in ConfigureDialogBase::slotActivateApply() " << std::endl;
-//        return;
-//    }
-    
-//    QPushButton * btApply;
-//    btApply = m_dialogButtonBox->button( QDialogButtonBox::Apply );
-//    btApply->setEnabled( true );
     m_applyButton->setEnabled(true);
 }
 
@@ -253,6 +168,7 @@ ConfigureDialogBase::slotCancelOrClose()
 {
     close();
 }
+
 
 }
 #include "ConfigureDialogBase.moc"

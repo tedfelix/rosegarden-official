@@ -167,7 +167,14 @@ SegmentParameterBox::initBox()
     // non-reversing motif style read-only combo
     m_quantizeValue = new QComboBox(this);
     m_quantizeValue->setFont(font);
-    m_quantizeValue->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
+
+    //!!!  I don't think that actually *is* what the quantize combo is for.  Is
+    // it?  Isn't the SPB quantize combo different from the notation view big Q
+    // icon?  I think so, but I have no idea what the SPB actually does.  Never
+    // use it.  Anyway, it's better not to say anything than to say something
+    // that might be wrong, so let's just hide this tooltip and not burden
+    // translators with it until such time as it might get sorted out.
+//    m_quantizeValue->setToolTip(tr("<qt><p>This allows you to choose how you want to quantize the midi notes.This allows you to tidy up human play to make sense of the notes for notation purposes. This gives you visual quantization only, and does not affect the way the midi sounds. </p></qt>"));
     //m_quantizeValue->setFixedHeight(comboHeight);
 
     // handle quantize changes from drop down

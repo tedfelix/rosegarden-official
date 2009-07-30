@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -40,25 +39,20 @@ class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-//	ConfigureDialogBase(QWidget *parent=0,
-//						QString label = 0,
-//	  const char *name=0);
-	ConfigureDialogBase( QWidget *parent=0, QString label = 0, const char *name=0 );
-//	  , QMessageBox::StandardButtons = QMessageBox::Apply|QMessageBox::Ok|QMessageBox::Cancel );
-	
+    ConfigureDialogBase(QWidget *parent = 0, QString label = 0, const char *name = 0);
+    
     //virtual 
-	~ConfigureDialogBase();
+    ~ConfigureDialogBase();
 
     typedef std::vector<ConfigurationPage*> configurationpages;
 
-	void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
-	
-	QTabWidget* m_tabWidget;
-	
+    void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
+    
+    QTabWidget* m_tabWidget;
+    
 protected slots:
-	
-//	virtual void slotButtonBoxButtonClicked(QAbstractButton * button);
-	virtual void accept();
+    
+    virtual void accept();
     virtual void slotApply();
     virtual void slotCancelOrClose();
 
@@ -67,10 +61,10 @@ protected slots:
 protected:
 
     configurationpages m_configurationPages;
-	
-	QPushButton * m_applyButton;
-	QDialogButtonBox *m_dialogButtonBox;
-    IconStackedWidget * m_iconWidget;	
+    
+    QPushButton       *m_applyButton;
+    QDialogButtonBox  *m_dialogButtonBox;
+    IconStackedWidget * m_iconWidget;    
 };
 
 
