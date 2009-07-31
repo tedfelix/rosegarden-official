@@ -53,9 +53,6 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
     m_toggleButton = new QToolButton(this);
     m_toggleButton->setText(label);
     m_toggleButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    // m_toggleButton->setUsesTextLabel(true);
-    // m_toggleButton->setUsesBigPixmap(false);
-          // m_toggleButton->setIconSize(???);
     m_toggleButton->setAutoRaise(true);
 
     QFont font(m_toggleButton->font());
@@ -66,7 +63,7 @@ CollapsingFrame::CollapsingFrame(QString label, QWidget *parent, const char *n) 
 
     connect(m_toggleButton, SIGNAL(clicked()), this, SLOT(toggle()));
 
-    m_layout->addWidget(m_toggleButton, 0, 0, 0- 0+1, 2-0+ 1);
+    m_layout->addWidget(m_toggleButton, 0, 0, 1, 3);
 }
 
 CollapsingFrame::~CollapsingFrame()
@@ -96,7 +93,7 @@ CollapsingFrame::setWidget(QWidget *widget)
     assert(!m_widget);
     m_widget = widget;
     if (m_fill) {
-        m_layout->addWidget(widget, 1, 0, 0+1, 2- 0+1);
+        m_layout->addWidget(widget, 1, 0, 1, 3);
     } else {
         m_layout->addWidget(widget, 1, 1);
     }
@@ -130,7 +127,7 @@ CollapsingFrame::toggle()
         pixmap = IconLoader().loadPixmap("style/arrow-down-small-inverted");
     }
 
-    if (objectName().isEmpty()) {               // name(0)
+    if (!objectName().isEmpty()) {
         QSettings settings;
         settings.beginGroup( "CollapsingFrame" );
 

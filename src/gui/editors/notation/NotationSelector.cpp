@@ -250,11 +250,11 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
 NotationSelector::FollowMode
 NotationSelector::handleMouseMove(const NotationMouseEvent *e)
 {
+    if (!m_updateRect) return NoFollow;
+
     std::cerr << "NotationSelector::handleMouseMove: staff is " 
               << m_selectedStaff << ", m_updateRect is " << m_updateRect
               << std::endl;
-
-    if (!m_updateRect) return NoFollow;
 
     if (!m_selectedStaff) m_selectedStaff = e->staff;
 

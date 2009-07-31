@@ -34,6 +34,7 @@ namespace Rosegarden
 
 class MidiKeyMapTreeWidgetItem : public MidiDeviceTreeWidgetItem
 {
+    Q_OBJECT
 public:
     MidiKeyMapTreeWidgetItem(DeviceId deviceId,
                            QTreeWidgetItem* parent, QString name);

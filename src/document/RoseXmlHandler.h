@@ -56,6 +56,7 @@ class AudioFileManager;
  */
 class RoseXmlHandler : public ProgressReporter, public QXmlDefaultHandler
 {
+    Q_OBJECT
 public:
 
     typedef enum

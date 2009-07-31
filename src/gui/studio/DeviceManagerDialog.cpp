@@ -434,10 +434,14 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
                 // create new entry
                 RG_DEBUG << "DeviceManagerDialog: listEntries does not contain devId " 
                          << devId << endl;
-                twItem =
-                        new QTreeWidgetItem(treeWid,
-                                            QStringList() <<
-                                            strtoqstr(mdev->getName()));
+
+                // translate the name string, if translation is available (ie.
+                // "General MIDI Device")
+                std::string name = mdev->getName();
+                QString nameStr = QObject::tr("%1").arg(strtoqstr(name));
+                nameStr = QObject::tr(nameStr);
+
+                twItem =  new QTreeWidgetItem(treeWid, QStringList() << nameStr);
 
                 // set port text
                 twItem->setText(1, outPort);
@@ -473,7 +477,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
                     "Warning: twItem is NULL in DeviceManagerDialog::updateDevicesList() "
                              << endl;
                 }
-            }       // if contains
+            }           // if contains
 
 
         } else          // other connection-direction, ignore
@@ -481,9 +485,9 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
             // skip
         }
 
-    }                       // end for device
+    }                   // end for device
 
-}                               // end function updateDevicesList()
+}                       // end function updateDevicesList()
 
 
 MidiDevice

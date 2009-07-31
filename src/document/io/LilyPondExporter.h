@@ -75,6 +75,7 @@ const std::string headerTagline = "tagline";
 
 class LilyPondExporter : public ProgressReporter
 {
+    Q_OBJECT
 public:
     typedef std::multiset<Event*, Event::EventCmp> eventstartlist;
     typedef std::multiset<Event*, Event::EventEndCmp> eventendlist;

@@ -24,6 +24,7 @@ namespace Rosegarden {
 
 class PlayListView : public QTreeWidget
 {
+    Q_OBJECT
 public:
     PlayListView(QWidget *parent=0, const char *name=0);
 

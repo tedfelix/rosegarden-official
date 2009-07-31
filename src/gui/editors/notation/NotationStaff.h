@@ -56,6 +56,7 @@ class NotationStaff : public ViewSegment,
                       public StaffLayout,
                       public ProgressReporter //!!! maybe remove if we can make this fast enough
 {
+    Q_OBJECT
 public:
     NotationStaff(NotationScene *, Segment *, SnapGrid *,
                   int id,
