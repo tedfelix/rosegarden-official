@@ -150,8 +150,8 @@ void CompositionModelImpl::makeNotationPreviewRects(RectRanges* npRects, QPoint 
 
     // move iterator forward
     //
-    while (npi->x() < xLim && npi != npEnd)
-        ++npi;
+    rectlist::iterator npii = npi;
+    while (npi->x() < xLim && (++npii) != npEnd) npi = npii;
 
     interval.range.second = npi;
     interval.basePoint.setX(0);
