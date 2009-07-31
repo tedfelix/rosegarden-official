@@ -72,9 +72,8 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     impostor->setLayout(il);
     layout->removeWidget(bb);
     bb->setParent(impostor);
-// "Can't invoke tr() like this:"
-//    QCheckBox *cb = new QCheckBox(impostor->tr("Do not show this warning again"));
-    QCheckBox *cb = new QCheckBox(QObject::tr("Do not show this warning again"));
+    QString errorStr = QObject::tr("Do not show this warning again");
+    QCheckBox *cb = new QCheckBox(errorStr);
     SuppressionTarget *target = new SuppressionTarget(settingsKey);
     target->setParent(cb);
     QObject::connect(cb, SIGNAL(toggled(bool)), target, SLOT(slotSuppressionToggled(bool)));

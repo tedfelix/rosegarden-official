@@ -35,7 +35,6 @@ public:
 class SuppressionTarget : public QObject
 {
     Q_OBJECT
-
 public:
     SuppressionTarget(QString key) : m_key(key) { }
 
