@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_CONTROLSELECTOR_H_
-#define _RG_CONTROLSELECTOR_H_
+#ifndef _RG_CONTROLERASER_H_
+#define _RG_CONTROLERASER_H_
 
 #include "ControlTool.h"
 //#include <QString>
@@ -29,7 +29,7 @@ namespace Rosegarden
 class Event;
 class ControlRuler;
 
-class ControlSelector : public ControlTool
+class ControlEraser : public ControlTool
 {
     Q_OBJECT
 
@@ -58,7 +58,7 @@ protected slots:
 //    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
 
 protected:
-    ControlSelector(ControlRuler *);
+    ControlEraser(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
     float m_mouseStartY;
     float m_mouseLastY;

@@ -86,7 +86,6 @@ public:
 
 public slots:
     virtual void slotSetTool(const QString&);
-    virtual void slotSetPannedRect(QRectF pr);
 
 protected:
     virtual void init();
@@ -97,16 +96,16 @@ protected:
 
     // Let's override these again here
     //
-    virtual void contentsMousePressEvent(QMouseEvent*);
-    virtual void contentsMouseReleaseEvent(QMouseEvent*);
-    virtual void contentsMouseMoveEvent(QMouseEvent*);
+//    virtual void contentsMousePressEvent(QMouseEvent*);
+//    virtual void contentsMouseReleaseEvent(QMouseEvent*);
+//    virtual void contentsMouseMoveEvent(QMouseEvent*);
 
-    virtual void layoutItem(ControlItem*);
+//    virtual void layoutItem(ControlItem*);
 
-    void drawControlLine(timeT startTime,
-                         timeT endTime,
-                         int startValue,
-                         int endValue);
+//    void drawControlLine(timeT startTime,
+//                         timeT endTime,
+//                         int startValue,
+//                         int endValue);
 
     //--------------- Data members ---------------------------------
     int                           m_defaultItemWidth;

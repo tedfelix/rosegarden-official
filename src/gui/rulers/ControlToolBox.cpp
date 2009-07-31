@@ -20,7 +20,9 @@
 #include "ControlTool.h"
 #include "ControlRuler.h"
 #include "PropertyAdjuster.h"
+#include "ControlSelector.h"
 #include "ControlPainter.h"
+#include "ControlEraser.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -45,6 +47,10 @@ ControlToolBox::createTool(QString toolName)
         tool = new PropertyAdjuster(m_ruler);
     else if (toolNamelc == ControlPainter::ToolName)
         tool = new ControlPainter(m_ruler);
+    else if (toolNamelc == ControlEraser::ToolName)
+        tool = new ControlEraser(m_ruler);
+    else if (toolNamelc == ControlSelector::ToolName)
+        tool = new ControlSelector(m_ruler);
     else
     {
         QMessageBox::critical(0, "", QString("ControlToolBox::createTool : unrecognised toolname %1 (%2)")

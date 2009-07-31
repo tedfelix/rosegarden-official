@@ -98,6 +98,7 @@ ControllerEventsRuler::~ControllerEventsRuler()
 
 bool ControllerEventsRuler::isOnThisRuler(Event *event)
 {
+    // Check whether the received event is of the right type/number for this ruler
     bool result = false;
     if (event->getType() == m_controller->getType()) {
         if (event->getType() == Controller::EventType) {
@@ -147,44 +148,6 @@ ControllerEventsRuler::init()
             addControlItem(*it);
         }
     }
-
-//        // skip if not the same type of event that we're expecting
-//        //
-//        if (m_controller->getType() != (*i)->getType())
-//            continue;
-//
-//        //int width = getDefaultItemWidth();
-//        int width=m_rulerScale->getXForTime((*i)->getDuration());
-//        RG_DEBUG << "ControllerEventsRuler:init - width = " << width;
-//        //int width = 100;
-//
-//        // Check for specific controller value if we need to
-//        //
-//        if (m_controller->getType() == Controller::EventType) {
-//            try {
-//                if ((*i)->get
-//                        <Int>(Controller::NUMBER)
-//                        != m_controller->getControllerValue())
-//                    continue;
-//            } catch (...) {
-//                continue;
-//            }
-//        } else if (m_controller->getType() == PitchBend::EventType)
-//            width /= 4;
-//
-//        //RG_DEBUG << "ControllerEventsRuler: adding element\n";
-//
-//        double x = m_rulerScale->getXForTime((*i)->getAbsoluteTime());
-//        RG_DEBUG << "ControllerEventsRuler:init - x = " << x;
-//        //  double x = 0;
-////        new ControlItem(this, new ControllerEventAdapter(*i),
-////                        int(x + m_viewSegmentOffset), width);
-//    }
-}
-
-void ControllerEventsRuler::slotSetPannedRect(QRectF pr)
-{
-    ControlRuler::slotSetPannedRect(pr);
 }
 
 void ControllerEventsRuler::paintEvent(QPaintEvent *event)
@@ -261,32 +224,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
         addControlItem(e);
         RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
     }
-
-    //double x = m_rulerScale->getXForTime(e->getAbsoluteTime());
-
-    //int width = getDefaultItemWidth();
-//    int width=m_rulerScale->getXForTime(e->getDuration());
-//    long val = 0;
-//    if (m_controller->getType() == PitchBend::EventType) {
-//        long lsb, msb;
-//        e->get<Int>(PitchBend::MSB, msb);
-//        e->get<Int>(PitchBend::LSB, lsb);
-//        val = (lsb & 0x7F) + ((msb & 0x7F) << 7);
-//    } else {
-//        e->get<Int>(Controller::VALUE,val);
-//    }
-
-//    float y = (float)(val - m_controller->getMin()) / (float)(m_controller->getMax() - m_controller->getMin());
-
-//    if (m_controller->getType() == PitchBend::EventType)
-//        width /= 4;
-
-//    new ControlItem(this, new ControllerEventAdapter(e), int(x + m_viewSegmentOffset), width);
 }
-
-//void ControllerEventsRuler::elementRemoved(const ViewSegment *, ViewElement *el)
-//{
-//}
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
 {
@@ -342,8 +280,14 @@ void ControllerEventsRuler::addControlItem(Event *event)
 
 void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 {
+    // Possible matrixtoolnames include:
+    // selector, painter, eraser, mover, resizer, velocity
+    QString controltoolname = "selector";
+    if (matrixtoolname == "painter") controltoolname = "painter";
+    if (matrixtoolname == "eraser") controltoolname = "eraser";
     ///TODO Write mechanism to select correct control tool for the given matrix tool
-    QString controltoolname = "painter";
+//    QString controltoolname = "painter";
+
     ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
     if (!tool) return;
     if (m_currentTool) m_currentTool->stow();
@@ -405,30 +349,32 @@ void ControllerEventsRuler::clearControllerEvents()
     EventSelection *es = new EventSelection(*m_segment);
 
     for (Segment::iterator it = m_segment->begin(); it != m_segment->end(); ++it) {
-        if (!(*it)->isa(Controller::EventType))
-            continue;
-        {
-            if (m_controller) // ensure we have only the controller events we want for this ruler
-            {
-                try
-                {
-                    if ((*it)->get
-                            <Int>(Controller::NUMBER)
-                            != m_controller->getControllerValue())
-                        continue;
-                } catch (...)
-                {
-                    continue;
-                }
-
-                es->addEvent(*it);
-            }
+        if (isOnThisRuler(*it)) {
+            es->addEvent(*it);
         }
+//        if (!(*it)->isa(Controller::EventType))
+//            continue;
+//        {
+//            if (m_controller) // ensure we have only the controller events we want for this ruler
+//            {
+//                try
+//                {
+//                    if ((*it)->get
+//                            <Int>(Controller::NUMBER)
+//                            != m_controller->getControllerValue())
+//                        continue;
+//                } catch (...)
+//                {
+//                    continue;
+//                }
+//
+//                es->addEvent(*it);
+//            }
+//        }
     }
 
     EraseCommand *command = new EraseCommand(*es);
     CommandHistory::getInstance()->addCommand(command);
-
 }
 
 //void ControllerEventsRuler::startControlLine()
@@ -436,114 +382,114 @@ void ControllerEventsRuler::clearControllerEvents()
 //    m_controlLineShowing = true;
 //    this->setCursor(Qt::pointingHandCursor);
 //}
-
-void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
-{
-//    if (!m_controlLineShowing) {
-        if (e->button() == Qt::MidButton)
-//            m_lastEventPos = inverseMapPoint(e->pos());
-            m_lastEventPos = e->pos();
-
-        ControlRuler::mousePressEvent(e); // send super
-
-//        return ;
-//    }
-
-    // cancel control line mode
-//    if (e->button() == Qt::RightButton) {
-//        m_controlLineShowing = false;
-//        m_controlLine->hide();
-
-//        this->setCursor(Qt::arrowCursor);
-//        return ;
-//    }
-
-//    if (e->button() == Qt::LeftButton) {
-//        QPoint p = inverseMapPoint(e->pos());
-
-//        m_controlLine->show();
-//        m_controlLineX = p.x();
-//        m_controlLineY = p.y();
-//        m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
-//        canvas()->update();
-//    }
-}
-
-void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
-{
-//    if (!m_controlLineShowing) {
+//
+//void ControllerEventsRuler::contentsMousePressEvent(QMouseEvent *e)
+//{
+////    if (!m_controlLineShowing) {
 //        if (e->button() == Qt::MidButton)
-//            insertControllerEvent();
+////            m_lastEventPos = inverseMapPoint(e->pos());
+//            m_lastEventPos = e->pos();
+//
+//        ControlRuler::mousePressEvent(e); // send super
+//
+////        return ;
+////    }
+//
+//    // cancel control line mode
+////    if (e->button() == Qt::RightButton) {
+////        m_controlLineShowing = false;
+////        m_controlLine->hide();
+//
+////        this->setCursor(Qt::arrowCursor);
+////        return ;
+////    }
+//
+////    if (e->button() == Qt::LeftButton) {
+////        QPoint p = inverseMapPoint(e->pos());
+//
+////        m_controlLine->show();
+////        m_controlLineX = p.x();
+////        m_controlLineY = p.y();
+////        m_controlLine->setPoints(m_controlLineX, m_controlLineY, m_controlLineX, m_controlLineY);
+////        canvas()->update();
+////    }
+//}
+//
+//void ControllerEventsRuler::contentsMouseReleaseEvent(QMouseEvent *e)
+//{
+////    if (!m_controlLineShowing) {
+////        if (e->button() == Qt::MidButton)
+////            insertControllerEvent();
+//
+//        ControlRuler::mouseReleaseEvent(e); // send super
+//
+////        return ;
+////    } else {
+//        //QPoint p = inverseMapPoint(e->pos());
+//
+//        //timeT startTime = m_rulerScale->getTimeForX(m_controlLineX);
+//        //timeT endTime = m_rulerScale->getTimeForX(p.x());
+//
+//        //long startValue = heightToValue(m_controlLineY - canvas()->height());
+//        //long endValue = heightToValue(p.y() - canvas()->height());
+//
+//        //RG_DEBUG << "ControllerEventsRuler::contentsMouseReleaseEvent - "
+//        //<< "starttime = " << startTime
+//        //<< ", endtime = " << endTime
+//        //<< ", startValue = " << startValue
+//        //<< ", endValue = " << endValue
+//        //<< endl;
+//
+//        //drawControlLine(startTime, endTime, startValue, endValue);
+//
+//        //m_controlLineShowing = false;
+//        //m_controlLine->hide();
+//        //this->setCursor(Qt::arrowCursor);
+//        //canvas()->update();
+//    //}
+//}
+//
+//void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
+//{
+////    if (!m_controlLineShowing) {
+//        // Don't send super if we're using the middle button
+//        //
+//        if (e->button() == Qt::MidButton) {
+////            m_lastEventPos = inverseMapPoint(e->pos());
+//            m_lastEventPos = e->pos();
+//            return ;
+//        }
+//
+//        ControlRuler::mouseMoveEvent(e); // send super
+////        return ;
+////    }
+//
+////    QPoint p = inverseMapPoint(e->pos());
+//
+////    m_controlLine->setPoints(m_controlLineX, m_controlLineY, p.x(), p.y());
+////    canvas()->update();
+//
+//}
 
-        ControlRuler::mouseReleaseEvent(e); // send super
-
-//        return ;
-//    } else {
-        //QPoint p = inverseMapPoint(e->pos());
-
-        //timeT startTime = m_rulerScale->getTimeForX(m_controlLineX);
-        //timeT endTime = m_rulerScale->getTimeForX(p.x());
-
-        //long startValue = heightToValue(m_controlLineY - canvas()->height());
-        //long endValue = heightToValue(p.y() - canvas()->height());
-
-        //RG_DEBUG << "ControllerEventsRuler::contentsMouseReleaseEvent - "
-        //<< "starttime = " << startTime
-        //<< ", endtime = " << endTime
-        //<< ", startValue = " << startValue
-        //<< ", endValue = " << endValue
-        //<< endl;
-
-        //drawControlLine(startTime, endTime, startValue, endValue);
-
-        //m_controlLineShowing = false;
-        //m_controlLine->hide();
-        //this->setCursor(Qt::arrowCursor);
-        //canvas()->update();
-    //}
-}
-
-void ControllerEventsRuler::contentsMouseMoveEvent(QMouseEvent *e)
-{
-//    if (!m_controlLineShowing) {
-        // Don't send super if we're using the middle button
-        //
-        if (e->button() == Qt::MidButton) {
-//            m_lastEventPos = inverseMapPoint(e->pos());
-            m_lastEventPos = e->pos();
-            return ;
-        }
-
-        ControlRuler::mouseMoveEvent(e); // send super
-//        return ;
-//    }
-
-//    QPoint p = inverseMapPoint(e->pos());
-
-//    m_controlLine->setPoints(m_controlLineX, m_controlLineY, p.x(), p.y());
-//    canvas()->update();
-
-}
-
-void ControllerEventsRuler::layoutItem(ControlItem* item)
-{
-//    timeT itemTime = item->getElementAdapter()->getTime();
-    timeT itemTime = 0;
-
-    double x = m_rulerScale->getXForTime(itemTime) + m_viewSegmentOffset;
-
-    item->setX(x);
-
-    int width = getDefaultItemWidth(); // TODO: how to scale that ??
-
-    if (m_controller->getType() == PitchBend::EventType)
-        width /= 4;
-
-    item->setWidth(width);
-
-    //RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x
-    //<< " - width = " << width << endl;
-}
+//void ControllerEventsRuler::layoutItem(ControlItem* item)
+//{
+////    timeT itemTime = item->getElementAdapter()->getTime();
+//    timeT itemTime = 0;
+//
+//    double x = m_rulerScale->getXForTime(itemTime) + m_viewSegmentOffset;
+//
+//    item->setX(x);
+//
+//    int width = getDefaultItemWidth(); // TODO: how to scale that ??
+//
+//    if (m_controller->getType() == PitchBend::EventType)
+//        width /= 4;
+//
+//    item->setWidth(width);
+//
+//    //RG_DEBUG << "ControllerEventsRuler::layoutItem ControlItem x = " << x
+//    //<< " - width = " << width << endl;
+//}
 
 //void
 //ControllerEventsRuler::drawControlLine(timeT startTime,

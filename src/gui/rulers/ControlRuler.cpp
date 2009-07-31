@@ -81,7 +81,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
         m_currentX(0.0),
         m_itemMoved(false),
         m_selecting(false),
-        m_selector(new ControlSelector(this)),
+//        m_selector(new ControlSelector(this)),
 //        m_selectionRect(new Q3CanvasRectangle(canvas())),
         m_selectionRect(new QRect()),
         m_menu(0)

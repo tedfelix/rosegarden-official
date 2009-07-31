@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "ControlSelector.h"
+#include "ControlEraser.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -39,8 +39,8 @@
 namespace Rosegarden
 {
 
-ControlSelector::ControlSelector(ControlRuler *parent) :
-    ControlTool("", "ControlSelector", parent)
+ControlEraser::ControlEraser(ControlRuler *parent) :
+    ControlTool("", "ControlEraser", parent)
 {
 //    createAction("select", SLOT(slotSelectSelected()));
 //    createAction("draw", SLOT(slotDrawSelected()));
@@ -51,7 +51,7 @@ ControlSelector::ControlSelector(ControlRuler *parent) :
 }
 
 void
-ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
+ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_overItem) {
         m_ruler->setCursor(Qt::ClosedHandCursor);
@@ -60,7 +60,7 @@ ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
 }
 
 void
-ControlSelector::handleMouseMove(const ControlMouseEvent *e)
+ControlEraser::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
@@ -79,7 +79,7 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 }
 
 void
-ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
+ControlEraser::handleMouseRelease(const ControlMouseEvent *e)
 {
     if (m_overItem) {
         // This is the end of a drag event, reset the cursor to the state that it started
@@ -90,7 +90,7 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
     setCursor(e);
 }
 
-void ControlSelector::setCursor(const ControlMouseEvent *e)
+void ControlEraser::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
 
@@ -109,7 +109,7 @@ void ControlSelector::setCursor(const ControlMouseEvent *e)
     }
 }
 
-void ControlSelector::ready()
+void ControlEraser::ready()
 {
     m_ruler->setCursor(Qt::CrossCursor);
     m_overItem = false;
@@ -120,7 +120,7 @@ void ControlSelector::ready()
 //    setBasicContextHelp();
 }
 
-void ControlSelector::stow()
+void ControlEraser::stow()
 {
 //    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
@@ -144,8 +144,8 @@ void ControlSelector::stow()
 //    }
 //}
 
-const QString ControlSelector::ToolName = "selector";
+const QString ControlEraser::ToolName = "eraser";
 
 }
 
-#include "ControlSelector.moc"
+#include "ControlEraser.moc"
