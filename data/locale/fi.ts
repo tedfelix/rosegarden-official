@@ -8769,6 +8769,7 @@ Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käytt�
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="441"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
@@ -11046,18 +11047,18 @@ Haluatko saattaa muutokset voimaan ennen pankkimuokkaimen sulkemista?</translati
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="787"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="808"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="791"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="812"/>
         <source>New Device</source>
         <translation>Uusi laite</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="901"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="905"/>
         <source>Help for the Midi Devices-Manager Dialog</source>
         <translation>Apu MIDI-laitteiden hallinta -valikolle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="903"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="907"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation>Tämä on Rosegardenin keskitetty yhteyksien hallitsin. Lisää ja yhdistä MIDI-laitteesit täällä!</translation>
     </message>

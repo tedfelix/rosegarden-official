@@ -8773,6 +8773,7 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="441"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
@@ -11050,18 +11051,18 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
 <context>
     <name>Rosegarden::DeviceManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="787"/>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="808"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="791"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="812"/>
         <source>New Device</source>
         <translation>Nouveau périphérique</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="901"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="905"/>
         <source>Help for the Midi Devices-Manager Dialog</source>
         <translation>Aide du dialogue de gestion des périphériques MIDI</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="903"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="907"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation>Ceci est le centre de connexion de Rosegarden. Créer et connecter vos périphériques MIDI ici!</translation>
     </message>
