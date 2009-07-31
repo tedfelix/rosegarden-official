@@ -8777,6 +8777,11 @@ Si vous souhaitez néanmoins effectuer cette opération, envisagez de sélection
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
+        <source>Do not show this warning again</source>
+        <translation type="unfinished">Ne plus afficher cet avertissement</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10895,22 +10900,22 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="240"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="203"/>
         <source>Unsupported Event Type</source>
         <translation>Type d&apos;événement non supporté</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="250"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="213"/>
         <source>Pitch Bend</source>
         <translation type="unfinished">Modifier la hauteur</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="255"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="218"/>
         <source>Controller Events</source>
         <translation>Événements contrôleurs</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="375"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="319"/>
         <source>Controller Event Number</source>
         <translation>Numéro de l&apos;événement contrôleur</translation>
     </message>
@@ -11065,14 +11070,6 @@ Souhaitez vous les enregistrer avant de quitter l&apos;éditeur de banques?</tra
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="907"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation>Ceci est le centre de connexion de Rosegarden. Créer et connecter vos périphériques MIDI ici!</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::DialogSuppressor</name>
-    <message>
-        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
-        <source>Do not show this warning again</source>
-        <translation>Ne plus afficher cet avertissement</translation>
     </message>
 </context>
 <context>

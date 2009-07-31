@@ -8769,6 +8769,11 @@ If you want to paste anyway, consider using one of the other paste types from th
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
+        <source>Do not show this warning again</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10877,22 +10882,22 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="240"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="203"/>
         <source>Unsupported Event Type</source>
         <translation type="unfinished">Toetuseta sündmuse tüüp:</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="250"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="213"/>
         <source>Pitch Bend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="255"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="218"/>
         <source>Controller Events</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="375"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="319"/>
         <source>Controller Event Number</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11046,14 +11051,6 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="907"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::DialogSuppressor</name>
-    <message>
-        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
-        <source>Do not show this warning again</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

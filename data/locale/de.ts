@@ -9152,6 +9152,11 @@ als den eingeschränkten wählen.</translation>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
+        <source>Do not show this warning again</source>
+        <translation>Diese Warnung nicht mehr anzeigen</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -11296,22 +11301,22 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="240"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="203"/>
         <source>Unsupported Event Type</source>
         <translation>Nicht unterstützter Eventtyp</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="250"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="213"/>
         <source>Pitch Bend</source>
         <translation>Pitch Bend</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="255"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="218"/>
         <source>Controller Events</source>
         <translation>Regler Ereignisse</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="375"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="319"/>
         <source>Controller Event Number</source>
         <translation>Regler Ereigniss Nummer</translation>
     </message>
@@ -11468,14 +11473,6 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="907"/>
         <source>This is Rosegardens central connection station. Create and connect your Midi Devices here! </source>
         <translation>Dies ist die zentrale Verbindungseinheit. Legen Sie hier MIDI-Geräte an und stellen Verbindungen her!</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::DialogSuppressor</name>
-    <message>
-        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
-        <source>Do not show this warning again</source>
-        <translation>Diese Warnung nicht mehr anzeigen</translation>
     </message>
 </context>
 <context>

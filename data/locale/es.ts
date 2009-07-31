@@ -8780,6 +8780,11 @@ así lo desea.</translation>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
+    <message>
+        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
+        <source>Do not show this warning again</source>
+        <translation>No mostrar más esta advertencia</translation>
+    </message>
 </context>
 <context>
     <name>Rosegarden::AboutDialog</name>
@@ -10708,12 +10713,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="86"/>
         <source>&lt;no device&gt;</source>
-        <translation type="unfinished">&lt;sin dispositivo&gt;</translation>
+        <translation>&lt;sin dispositivo&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="103"/>
         <source>Description  </source>
-        <translation type="unfinished">Descripción  </translation>
+        <translation>Descripción  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="84"/>
@@ -10763,7 +10768,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="108"/>
         <source>Position on instrument panel</source>
-        <translation type="unfinished">Posición en el panel del instrumento</translation>
+        <translation>Posición en el panel del instrumento</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="135"/>
@@ -10773,13 +10778,13 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="136"/>
         <source>Delete</source>
-        <translation type="unfinished">Borrar</translation>
+        <translation>Borrar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="138"/>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="375"/>
         <source>Close</source>
-        <translation type="unfinished">Cerrar</translation>
+        <translation>Cerrar</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlEditorDialog.cpp" line="140"/>
@@ -10867,12 +10872,12 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="118"/>
         <source>Instrument Parameter Box position:</source>
-        <translation type="unfinished">Posición de la Caja de Parámetros de Instrumento</translation>
+        <translation>Posición de la Caja de Parámetros de Instrumento:</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/ControlParameterEditDialog.cpp" line="190"/>
         <source>&lt;not showing&gt;</source>
-        <translation type="unfinished">&lt;no mostrado&gt;</translation>
+        <translation>&lt;no mostrado&gt;</translation>
     </message>
 </context>
 <context>
@@ -10880,7 +10885,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="31"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Borrar Evento(s) de Controlador(es)</translation>
+        <translation>Borrar Evento(s) de Controlador(es)</translation>
     </message>
 </context>
 <context>
@@ -10894,22 +10899,22 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="240"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="203"/>
         <source>Unsupported Event Type</source>
         <translation type="unfinished">Tipo de Evento no Soportado</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="250"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="213"/>
         <source>Pitch Bend</source>
         <translation type="unfinished">Inflexión de Tono</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="255"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="218"/>
         <source>Controller Events</source>
         <translation type="unfinished">Eventos de Controlador</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="375"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="319"/>
         <source>Controller Event Number</source>
         <translation type="unfinished">Numero de Evento de Controlador</translation>
     </message>
@@ -11067,124 +11072,116 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     </message>
 </context>
 <context>
-    <name>Rosegarden::DialogSuppressor</name>
-    <message>
-        <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
-        <source>Do not show this warning again</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="59"/>
         <source>C</source>
-        <translation type="unfinished">Do</translation>
+        <translation>Do</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="60"/>
         <source>D</source>
-        <translation type="unfinished">Re</translation>
+        <translation>Re</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="61"/>
         <source>E</source>
-        <translation type="unfinished">Mi</translation>
+        <translation>Mi</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="62"/>
         <source>F</source>
-        <translation type="unfinished">Fa</translation>
+        <translation>Fa</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="63"/>
         <source>G</source>
-        <translation type="unfinished">Sol</translation>
+        <translation>Sol</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="64"/>
         <source>A</source>
-        <translation type="unfinished">La</translation>
+        <translation>La</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
-        <translation type="unfinished">Si</translation>
+        <translation>Si</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
         <source>-2</source>
-        <translation type="unfinished">-2</translation>
+        <translation>-2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="71"/>
         <source>-1</source>
-        <translation type="unfinished">-1</translation>
+        <translation>-1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="72"/>
         <source>0</source>
-        <translation type="unfinished">0</translation>
+        <translation>0</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="73"/>
         <source>1</source>
-        <translation type="unfinished">1</translation>
+        <translation>1</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="74"/>
         <source>2</source>
-        <translation type="unfinished">2</translation>
+        <translation>2</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="75"/>
         <source>3</source>
-        <translation type="unfinished">3</translation>
+        <translation>3</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="76"/>
         <source>4</source>
-        <translation type="unfinished">4</translation>
+        <translation>4</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="77"/>
         <source>5</source>
-        <translation type="unfinished">5</translation>
+        <translation>5</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="78"/>
         <source>6</source>
-        <translation type="unfinished">6</translation>
+        <translation>6</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="79"/>
         <source>7</source>
-        <translation type="unfinished">7</translation>
+        <translation>7</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="84"/>
         <source>double flat</source>
-        <translation type="unfinished">doble bemol</translation>
+        <translation>doble bemol</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="85"/>
         <source>flat</source>
-        <translation type="unfinished">bemol</translation>
+        <translation>bemol</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="86"/>
         <source>natural</source>
-        <translation type="unfinished">natural</translation>
+        <translation>natural</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="87"/>
         <source>sharp</source>
-        <translation type="unfinished">sostenido</translation>
+        <translation>sostenido</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="88"/>
         <source>double sharp</source>
-        <translation type="unfinished">doble sostenido</translation>
+        <translation>doble sostenido</translation>
     </message>
 </context>
 <context>
@@ -11192,7 +11189,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="39"/>
         <source>Document Properties</source>
-        <translation type="unfinished">Propiedades del Documento</translation>
+        <translation>Propiedades del documento</translation>
     </message>
 </context>
 <context>
@@ -18033,38 +18030,38 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2908"/>
         <source>Toggle the tools toolbar...</source>
-        <translation type="unfinished">Conmutar la barra de herramientas de herramientas...</translation>
+        <translation>Conmutar la barra de herramientas principal</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2919"/>
         <source>Toggle the tracks toolbar...</source>
-        <translation type="unfinished">Conmutar la barra de herramientas de pistas</translation>
+        <translation>Conmutar la barra de herramientas de pistas</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2930"/>
         <source>Toggle the editor toolbar...</source>
-        <translation type="unfinished">Conmutar la barra de herramientas del editor...</translation>
+        <translation>Conmutar la barra de herramientas del editor...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2941"/>
         <source>Toggle the transport toolbar...</source>
-        <translation type="unfinished">Conmutar la barra de herramientas de transporte...</translation>
+        <translation>Conmutar la barra de herramientas de transporte...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2952"/>
         <source>Toggle the zoom toolbar...</source>
-        <translation type="unfinished">Conmutar la barra de herramientas de ampliación...</translation>
+        <translation>Conmutar la barra de herramientas de ampliación...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2963"/>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="2982"/>
         <source>Toggle the Transport</source>
-        <translation type="unfinished">Conmutar el transporte</translation>
+        <translation>Conmutar el transporte</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3086"/>
         <source>Toggle the statusbar...</source>
-        <translation type="unfinished">Conmutar la barra de estado...</translation>
+        <translation>Conmutar la barra de estado...</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3154"/>
@@ -18072,7 +18069,7 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
 
         Segments-&gt;Collapse Segments.
 </source>
-        <translation type="unfinished">la herramienta de unión no está implementada todavía. En su lugar, por favor seleccione los segmentos que desea unir y use la opción de menú:
+        <translation>la herramienta de unión no está implementada todavía. En su lugar, por favor seleccione los segmentos que desea unir y use la opción de menú:
 
         Segmentos-&gt;Fusionar Segmentos.
 </translation>
@@ -18080,12 +18077,12 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3157"/>
         <source>Join tool not yet implemented</source>
-        <translation type="unfinished">Herramienta de Unión no implementada todavía</translation>
+        <translation>Herramienta de unión no implementada todavía</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3402"/>
         <source>Revert modified document to previous saved version?</source>
-        <translation type="unfinished">¿Volver a la versión anterior del documento modificado?</translation>
+        <translation>¿Volver a la versión anterior del documento modificado?</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3421"/>
