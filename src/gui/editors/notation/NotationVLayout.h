@@ -53,7 +53,7 @@ class Composition;
 class NotationVLayout : public ProgressReporter,
                         public VerticalLayoutEngine
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
                     const NotationProperties &properties,

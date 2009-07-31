@@ -47,7 +47,6 @@ class ControlItem;
  */
 class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
-    Q_OBJECT
 public:
     ControllerEventsRuler(MatrixViewSegment*,
                           RulerScale*,

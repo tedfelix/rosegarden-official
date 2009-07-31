@@ -33,7 +33,7 @@ class RosegardenDocument;
 
 class DocumentConfigureDialog : public ConfigureDialogBase
 {
-    Q_OBJECT
+    //Q_OBJECT
 public:
     DocumentConfigureDialog(RosegardenDocument *doc,
                             QWidget *parent=0,
