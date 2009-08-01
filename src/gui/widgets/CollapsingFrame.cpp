@@ -99,13 +99,13 @@ CollapsingFrame::setWidget(QWidget *widget)
     }
 
     bool expanded = true;
-    if (objectName().isEmpty()) {                   // name(0)
+    if (!objectName().isEmpty()) {
         QSettings settings;
-        settings.beginGroup( "CollapsingFrame" );
-
-        expanded = qStrToBool( settings.value(objectName(), true));
+        settings.beginGroup("Collapsing_Frames");
+        expanded = qStrToBool(settings.value(objectName(), true));
         settings.endGroup();
     }
+
     if (expanded != !m_collapsed)
         toggle();
 }
@@ -129,8 +129,7 @@ CollapsingFrame::toggle()
 
     if (!objectName().isEmpty()) {
         QSettings settings;
-        settings.beginGroup( "CollapsingFrame" );
-
+        settings.beginGroup("Collapsing_Frames" );
         settings.setValue(objectName(), !m_collapsed);
         settings.endGroup();
     }
