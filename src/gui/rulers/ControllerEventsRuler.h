@@ -77,7 +77,8 @@ public:
 //    virtual void viewSegmentDeleted(const ViewSegment *);
     virtual void segmentDeleted(const Segment *);
 
-    virtual void insertControllerEvent(float,float);
+    virtual void addControlItem(float,float);
+    virtual Event * insertControllerEvent(float,float);
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
 //    virtual void startControlLine();
@@ -108,7 +109,7 @@ protected:
 //                         int endValue);
 
     //--------------- Data members ---------------------------------
-    int                           m_defaultItemWidth;
+    int  m_defaultItemWidth;
 
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;

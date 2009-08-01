@@ -18,6 +18,7 @@
 
 #include "EventControlItem.h"
 #include "ControllerEventAdapter.h"
+#include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -38,7 +39,7 @@ EventControlItem::~EventControlItem()
 {
 }
 
-void EventControlItem::update()
+void EventControlItem::updateFromEvent()
 {
     long value = 0;
     m_eventAdapter->getValue(value);
@@ -88,11 +89,15 @@ void EventControlItem::reconfigure(float x, float y)
 
 void EventControlItem::updateSegment()
 {
-//    m_element->event()->set<Int>(m_propertyname,(int)(m_y*MIDI_CONTROL_MAX_VALUE));
-    long value = m_controlRuler->YToValue(m_y);
-    m_eventAdapter->setValue(value);
-    timeT time = m_controlRuler->getRulerScale()->getTimeForX(m_xstart);
-    ///TODO Update segment properly m_eventAdapter->setTime(time);
+    if (!m_eventAdapter->getEvent()) {
+        delete m_eventAdapter;
+        m_eventAdapter = new ControllerEventAdapter(static_cast<ControllerEventsRuler *> (m_controlRuler)->insertControllerEvent(m_xstart, m_y));
+    }
+////    m_element->event()->set<Int>(m_propertyname,(int)(m_y*MIDI_CONTROL_MAX_VALUE));
+//    long value = m_controlRuler->YToValue(m_y);
+//    m_eventAdapter->setValue(value);
+//    timeT time = m_controlRuler->getRulerScale()->getTimeForX(m_xstart);
+//    ///TODO Update segment properly m_eventAdapter->setTime(time);
 }
 
 }

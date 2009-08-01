@@ -22,12 +22,12 @@
 #include "base/RulerScale.h"
 //#include "base/Segment.h"
 //#include "base/Selection.h"
-#include "ControlChangeCommand.h"
 #include "ControlMouseEvent.h"
 #include "ControlItem.h"
 #include "ControlSelector.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
+#include "ControlChangeCommand.h"
 #include "DefaultVelocityColour.h"
 //#include "ElementAdapter.h"
 //#include "gui/general/EditViewBase.h"
@@ -127,8 +127,25 @@ void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
+ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
+{
+    double xstart = event->getAbsoluteTime();
+
+    ControlItemMap::iterator it;
+    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
+
+    ret = m_controlItemMap.equal_range(xstart);
+    for (it = ret.first; it != ret.second; it++) {
+        if (it->second->getEvent() == event) break;
+    }
+
+    return it;
+}
+
 void ControlRuler::addControlItem(ControlItem* item)
 {
+    // Add a ControlItem to the ruler
+    // ControlItem may not have an assigned event but must have x position
     m_controlItemMap.insert(std::pair<double,ControlItem *>
         (item->xStart(),item));
     if (isVisible(item)) {
@@ -160,16 +177,8 @@ void ControlRuler::removeControlItem(ControlItem* item)
 
 void ControlRuler::removeControlItem(const Event *event)
 {
-    double xstart = event->getAbsoluteTime();
-
-    ControlItemMap::iterator it;
-    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
-
-    ret = m_controlItemMap.equal_range(xstart);
-    for (it = ret.first; it != ret.second; it++) {
-        if (it->second->getEvent() == event) break;
-    }
-
+    // Remove the ControlItem matching the received event if one exists
+    ControlItemMap::iterator it = findControlItem(event);
     if (it != m_controlItemMap.end()) removeControlItem(it);
 }
 
@@ -187,6 +196,17 @@ bool ControlRuler::isVisible(ControlItem* item)
         return true;
 
     return false;
+}
+
+void ControlRuler::updateSegment()
+{
+    // Add command to history
+    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
+                                    *m_segment,
+                                    m_eventSelection->getStartTime(),
+                                    m_eventSelection->getEndTime());
+
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void ControlRuler::slotUpdate()
@@ -535,15 +555,6 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
     m_currentTool->handleMouseRelease(&controlMouseEvent);
-
-    // Add command to history
-    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
-                                    *m_segment,
-                                    m_eventSelection->getStartTime(),
-                                    m_eventSelection->getEndTime());
-
-    RG_DEBUG << "ControlRuler::contentsMouseReleaseEvent : adding command\n";
-    CommandHistory::getInstance()->addCommand(command);
 
 //    if (e->button() != Qt::LeftButton) {
 //        TextFloat::getTextFloat()->hide();

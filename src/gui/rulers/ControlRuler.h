@@ -104,6 +104,8 @@ public:
     virtual void setSegment(Segment *);
     virtual void setViewSegment(MatrixViewSegment *);
 
+    void updateSegment();
+
     virtual void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
 
@@ -160,6 +162,7 @@ protected:
 //    virtual void computeViewSegmentOffset() {};
 
 //    virtual void layoutItem(ControlItem*);
+    virtual ControlItemMap::iterator findControlItem(const Event*);
     virtual void addControlItem(ControlItem*);
     virtual void removeControlItem(const Event*);
     virtual void removeControlItem(const ControlItemMap::iterator&);
@@ -183,6 +186,7 @@ protected:
 
     void clearSelectedItems();
     void updateSelection();
+    void addToSelection(ControlItem*);
 
     void setMenuName(QString menuName) { m_menuName = menuName; }
     void createMenu();

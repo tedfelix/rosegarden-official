@@ -400,48 +400,7 @@ PropertyControlRuler::mousePressEvent(QMouseEvent *e)
 void
 PropertyControlRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-    RG_DEBUG << "PropertyControlRuler::mouseReleaseEvent\n";
-
-    /*
-    if (m_propertyLineShowing)
-    {
-        this->setCursor(Qt::arrowCursor);
-        m_propertyLineShowing = false;
-        canvas()->update();
-    }
-    */
-
-//    if (!m_propertyLineShowing) {
-        /*
-        if (e->button() == MidButton)
-            insertControllerEvent();
-            */
-
-        ControlRuler::mouseReleaseEvent(e); // send super
-        //return ;
-    //} else {
-        //QPoint p = inverseMapPoint(e->pos());
-
-        //timeT startTime = m_rulerScale->getTimeForX(m_propertyLineX);
-        //timeT endTime = m_rulerScale->getTimeForX(p.x());
-
-        //long startValue = heightToValue(m_propertyLineY - canvas()->height());
-        //long endValue = heightToValue(p.y() - canvas()->height());
-
-        //RG_DEBUG << "PropertyControlRuler::contentsMouseReleaseEvent - "
-        //<< "starttime = " << startTime
-        //<< ", endtime = " << endTime
-        //<< ", startValue = " << startValue
-        //<< ", endValue = " << endValue
-        //<< endl;
-
-        //drawPropertyLine(startTime, endTime, startValue, endValue);
-
-        //m_propertyLineShowing = false;
-        //m_propertyLine->hide();
-        //this->setCursor(Qt::arrowCursor);
-        //canvas()->update();
-    //}
+    ControlRuler::mouseReleaseEvent(e); // send super
 }
 
 void

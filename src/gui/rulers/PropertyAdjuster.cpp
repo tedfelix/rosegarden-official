@@ -80,6 +80,8 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 void
 PropertyAdjuster::handleMouseRelease(const ControlMouseEvent *e)
 {
+    m_ruler->updateSegment();
+
     if (m_overItem) {
         // This is the end of a drag event, reset the cursor to the state that it started
         m_ruler->setCursor(Qt::PointingHandCursor);

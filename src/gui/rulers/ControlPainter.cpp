@@ -61,7 +61,8 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
         // Make new control event here
         // This tool should not be applied to a PropertyControlRuler but in case it is
         ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
-        if (ruler) ruler->insertControllerEvent(e->x,e->y);
+        //if (ruler) ruler->insertControllerEvent(e->x,e->y);
+        if (ruler) ruler->addControlItem(e->x,e->y);
     }
 }
 

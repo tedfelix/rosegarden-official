@@ -112,6 +112,9 @@ bool ControllerEventsRuler::isOnThisRuler(Event *event)
             result = true;
         }
     }
+    RG_DEBUG << "ControllerEventsRuler::isOnThisRuler - "
+        << "Event type: " << event->getType() << " Controller type: " << m_controller->getType();
+
     return result;
 }
 
@@ -158,7 +161,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         EventControlItem *item;
         for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
             item = static_cast <EventControlItem *> (it->second);
-            item->update();
+            item->updateFromEvent();
         }
         m_lastDrawnRect = m_pannedRect;
     }
@@ -218,18 +221,22 @@ QString ControllerEventsRuler::getName()
         return tr("Controller Events");
 }
 
-void ControllerEventsRuler::eventAdded(const Segment*, Event *e)
+void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 {
-    if (isOnThisRuler(e)) {
-        addControlItem(e);
-        RG_DEBUG << "ControllerEventsRuler::elementAdded()\n";
-    }
+    // Segment observer call that an event has been added
+    // If it should be on this ruler and it isn't already there
+    //  add a ControlItem to display it
+    // Note that ControlPainter will (01/08/09) add events directly
+    //  these should not be replicated by this observer mechanism
+    // Temporary disable this mechanism entirely
+//    if (isOnThisRuler(event) &&
+//            (findControlItem(event)==m_controlItemMap.end())) addControlItem(event);
 }
 
-void ControllerEventsRuler::eventRemoved(const Segment*, Event *e)
+void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 {
-    if (isOnThisRuler(e)) {
-        removeControlItem(e);
+    if (isOnThisRuler(event)) {
+        removeControlItem(event);
     }
 //
 //    clearSelectedItems();
@@ -256,8 +263,18 @@ void ControllerEventsRuler::segmentDeleted(const Segment *)
 void ControllerEventsRuler::addControlItem(Event *event)
 {
     EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(event), QPolygonF());
-    controlItem->update();
+    controlItem->updateFromEvent();
 
+    ControlRuler::addControlItem(controlItem);
+}
+
+void ControllerEventsRuler::addControlItem(float x, float y)
+{
+    // Adds a ControlItem in the absence of an event (used by ControlPainter)
+    EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(0), QPolygonF());
+    controlItem->reconfigure(x,y);
+    controlItem->setSelected(true);
+    m_selectedItems.push_back(controlItem);
     ControlRuler::addControlItem(controlItem);
 }
 
@@ -296,9 +313,12 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 //    emit toolChanged(name);
 }
 
-void ControllerEventsRuler::insertControllerEvent(float x, float y)
+Event *ControllerEventsRuler::insertControllerEvent(float x, float y)
 {
     timeT insertTime = m_rulerScale->getTimeForX(x);
+
+    Event* controllerEvent = new Event(m_controller->getType(), insertTime);
+
     long initialValue = YToValue(y);
 
     RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
@@ -323,12 +343,29 @@ void ControllerEventsRuler::insertControllerEvent(float x, float y)
             number = res.toULong();
     }
 
-    ControlRulerEventInsertCommand* command =
-        new ControlRulerEventInsertCommand(m_controller->getType(),
-                                           insertTime, number,
-                                           initialValue, *m_segment);
+    if (m_controller->getType() == Rosegarden::Controller::EventType)
+    {
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::VALUE, initialValue);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::Controller::NUMBER, number);
+    }
+    else if (m_controller->getType() == Rosegarden::PitchBend::EventType)
+    {
+        // Convert to PitchBend MSB/LSB
+        int lsb = initialValue & 0x7f;
+        int msb = (initialValue >> 7) & 0x7f;
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
+    }
 
-    CommandHistory::getInstance()->addCommand(command);
+    m_segment->insert(controllerEvent);
+
+    return controllerEvent;
+//    ControlRulerEventInsertCommand* command =
+//        new ControlRulerEventInsertCommand(m_controller->getType(),
+//                                           insertTime, number,
+//                                           initialValue, *m_segment);
+//
+//    CommandHistory::getInstance()->addCommand(command);
 }
 
 void ControllerEventsRuler::eraseControllerEvent()

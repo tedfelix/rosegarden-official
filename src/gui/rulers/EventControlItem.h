@@ -36,14 +36,14 @@ public:
 
     ~EventControlItem();
 
-    virtual void update();
+    virtual void updateFromEvent();
 
     void setValue(float y);
     void updateSegment();
     void reconfigure();
+    void reconfigure(float x,float y);
 
 protected:
-    void reconfigure(float x,float y);
 
     //--------------- Data members ---------------------------------
     ControllerEventAdapter *m_eventAdapter;
