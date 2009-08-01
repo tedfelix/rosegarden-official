@@ -334,6 +334,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
     m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
     m_filePrinter->addItem(tr("lpr (no GUI)"));
     m_filePrinter->addItem(tr("lp (no GUI)"));
+    m_filePrinter->addItem(tr("HPLIP (QT4)"));
     m_filePrinter->setToolTip(tr("Used to print generated LilyPond output without previewing it"));
 
     layout->addWidget(m_filePrinter, row, 1, 1, 3);

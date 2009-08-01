@@ -72,7 +72,8 @@ public:
         KPrinter,
         GtkLP,
         Lpr,
-        Lp
+        Lp,
+        HPLIP
     };
 
     GeneralConfigurationPage(RosegardenDocument *doc,

@@ -224,6 +224,7 @@ ProjectPackager::runFinalStage(int exitCode, QProcess::ExitStatus)
         case 1: filePrinter = "gtklp";    break;
         case 2: filePrinter = "lpr";      break;
         case 3: filePrinter = "lp";       break;
+        case 4: filePrinter = "hp-print"; break;
         default: filePrinter = "lpr";     break;
     }
 
