@@ -158,6 +158,11 @@ private:
      */
     bool exportLilyPondFile(QString url, bool forPreview = false);
 
+    /** 
+     * Use QTemporaryFile to obtain a tmp filename that is guaranteed to be unique.
+     */
+    QString getLilyPondTmpFilename();
+
     /**
      * Get the average velocity of the selected notes
      */

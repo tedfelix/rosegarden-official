@@ -91,6 +91,7 @@
 #include <QWidget>
 #include <QAction>
 #include <QActionGroup>
+#include <QDir>
 #include <QMenu>
 #include <QMessageBox>
 #include <QSettings>
@@ -825,16 +826,11 @@ bool NewNotationView::exportLilyPondFile(QString file, bool forPreview)
 void NewNotationView::slotPrintLilyPond()
 {
     TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
-    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
-    file->setAutoRemove(true);
-    if (!file->open()) {
-        //CurrentProgressDialog::freeze();
-        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
-                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
-        delete file;
-    }
-    QString filename = file->fileName(); // must call this before close()
-    file->close(); // we just want the filename
+
+    QString filename = getLilyPondTmpFilename();
+
+    if (filename.isEmpty()) return;
+
     if (!exportLilyPondFile(filename, true)) {
         return ;
     }
@@ -846,16 +842,12 @@ void NewNotationView::slotPrintLilyPond()
 
 void NewNotationView::slotPreviewLilyPond()
 {
-    TmpStatusMsg msg(tr("Printing with LilyPond..."), this);
-    QTemporaryFile *file = new QTemporaryFile("XXXXXX.ly");
-    file->setAutoRemove(true);
-    if (!file->open()) {
-        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
-                                          "<p>This probably means you have run out of disk space on <pre>/tmp</pre></p></qt>"));
-        delete file;
-    }
-    QString filename = file->fileName(); // must call this before close()
-    file->close(); // we just want the filename
+    TmpStatusMsg msg(tr("Previewing with LilyPond..."), this);
+
+    QString filename = getLilyPondTmpFilename();
+
+    if (filename.isEmpty()) return;
+
     if (!exportLilyPondFile(filename, true)) {
         return ;
     }
@@ -863,6 +855,30 @@ void NewNotationView::slotPreviewLilyPond()
     LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
 
     dialog->exec();
+}
+
+QString
+NewNotationView::getLilyPondTmpFilename()
+{
+    QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
+    std::cerr << "RosegardenMainWindow::getLilyPondTmpName() - using tmp file: " << qstrtostr(mask) << std::endl;
+
+    QTemporaryFile *file = new QTemporaryFile(mask);
+    file->setAutoRemove(true);
+    if (!file->open()) {
+        // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NewNotationView:: are nearly in sync.
+        // However, the following line is NOT commented out in RosegardenMainWindow::getLilyPondTmpFilename()
+        // CurrentProgressDialog::freeze();
+        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                                          "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
+                                       arg(QDir::tempPath()));
+        delete file;
+        return QString();
+    }
+    QString filename = file->fileName(); // must call this before close()
+    file->close(); // we just want the filename
+
+    return filename;
 }
 
 

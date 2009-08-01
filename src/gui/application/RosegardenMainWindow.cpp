@@ -4810,6 +4810,8 @@ RosegardenMainWindow::getLilyPondTmpFilename()
     QTemporaryFile *file = new QTemporaryFile(mask);
     file->setAutoRemove(true);
     if (!file->open()) {
+        // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NewNotationView:: are nearly in sync.
+        // However, the following line is commented out in NewNotationView::getLilyPondTmpFilename()
         CurrentProgressDialog::freeze();
         QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
