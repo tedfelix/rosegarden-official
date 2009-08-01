@@ -843,10 +843,13 @@ RosegardenMainWindow::initStatusBar()
 //              AlignLeft | AlignVCenter);
 
     m_progressBar = new ProgressBar(100, true, statusBar());
-    //    m_progressBar()->setMinimumWidth(100);
     m_progressBar->setFixedWidth(60);
     m_progressBar->setFixedHeight(18);
-//    m_progressBar->setTextEnabled(false);  //&&&
+    QFont font = m_progressBar->font();
+    font.setPixelSize(10);
+    m_progressBar->setFont(font);
+                
+    m_progressBar->setTextVisible(false);
     statusBar()->addPermanentWidget(m_progressBar);
     
     
@@ -4213,10 +4216,8 @@ RosegardenMainWindow::slotUpdateCPUMeter(bool playing)
 
         if (m_progressBar) {
             if (!modified) {
-                //m_progressBar->setTextEnabled(true);
                 m_progressBar->setTextVisible(true);
-                m_progressBar->setFormat("CPU%p%");
-                
+                m_progressBar->setFormat("CPU %p%");
             }
             m_progressBar->setValue(count);
         }

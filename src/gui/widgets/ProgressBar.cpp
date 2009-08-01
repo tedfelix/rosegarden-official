@@ -30,14 +30,15 @@ namespace Rosegarden
 ProgressBar::ProgressBar(int totalSteps,
                          bool /*useDelay*/,
                          QWidget *creator,
-                         const char *name
-//                          WFlags f
-						) :
+                         const char *name) :
 						QProgressBar(creator)
 //@@@ QProgressBar is quite different from KProgressWhateverWeReplaced, and its
 // ctor takes only QProgressBar ( QWidget * parent = 0 ).  I think chucking
 // "creator" in here is right, but who knows.
 {
+    QString localStyle("color: black");
+    setStyleSheet(localStyle);
+
     // We need some totally rewritten guts here. There's a LOT more to this than
     // just swapping KWhateverWeReplaced for a QT4 method that has practically
     // nothing in common with either its QT3 or KDE3 ancestors.
