@@ -115,6 +115,8 @@ public:
     double getXScale() {return m_xScale; }
     double getYScale() {return m_yScale; }
 
+    void clearSelectedItems();
+    void addToSelection(ControlItem*);
     /// EventSelectionObserver
 //    virtual void eventSelected(EventSelection *,Event *);
 //    virtual void eventDeselected(EventSelection *,Event *);
@@ -184,9 +186,7 @@ protected:
 
     QColor valueToColour(int max, int val);
 
-    void clearSelectedItems();
     void updateSelection();
-    void addToSelection(ControlItem*);
 
     void setMenuName(QString menuName) { m_menuName = menuName; }
     void createMenu();

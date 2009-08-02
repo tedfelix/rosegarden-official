@@ -231,6 +231,8 @@ void ControlRuler::updateSegment()
                                     end);
 
     CommandHistory::getInstance()->addCommand(command);
+
+    updateSelection();
 }
 
 void ControlRuler::slotUpdate()
@@ -686,8 +688,8 @@ ControlRuler::wheelEvent(QWheelEvent *e)
     ///CJ ?? Q3CanvasView::contentsWheelEvent(e);
 }
 
-void ControlRuler::updateSelection()
-{
+//void ControlRuler::updateSelection()
+//{
 //    clearSelectedItems();
 //
 //    bool haveSelectedItems = false;
@@ -710,7 +712,7 @@ void ControlRuler::updateSelection()
 //    }
 //
 //    emit stateChange("have_controller_item_selected", haveSelectedItems);
-}
+//}
 
 void ControlRuler::contextMenuEvent(QContextMenuEvent* e)
 {
@@ -755,6 +757,23 @@ ControlRuler::clearSelectedItems()
     if (m_eventSelection) delete m_eventSelection;
 
     m_eventSelection = new EventSelection(*m_segment);
+}
+
+void ControlRuler::updateSelection()
+{
+    if (m_eventSelection) delete m_eventSelection;
+    m_eventSelection = new EventSelection(*m_segment);
+
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
+        m_eventSelection->addEvent((*it)->getEvent());
+    }
+}
+
+void ControlRuler::addToSelection(ControlItem *item)
+{
+    m_selectedItems.push_back(item);
+    item->setSelected(true);
+    m_eventSelection->addEvent(item->getEvent());
 }
 
 void ControlRuler::clear()
