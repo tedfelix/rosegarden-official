@@ -35,6 +35,7 @@
 #include "document/CommandHistory.h"
 //#include "gui/widgets/TextFloat.h"
 #include <algorithm>
+#include <cfloat>
 
 #include <QMainWindow>
 //#include <Q3Canvas>
@@ -129,7 +130,7 @@ void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
 
 ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 {
-    double xstart = event->getAbsoluteTime();
+    double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
 
     ControlItemMap::iterator it;
     std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
@@ -200,11 +201,34 @@ bool ControlRuler::isVisible(ControlItem* item)
 
 void ControlRuler::updateSegment()
 {
+    // Bring the segment up to date with the ControlRuler's items
+    // Either run through the ruler's EventSelection, updating from each item
+    //  or, if there isn't one, go through m_selectedItems
+    timeT start,end;
+
+    if (m_eventSelection->getAddedEvents()==0) {
+        // We do not have a valid set of selected events to update
+        if (m_selectedItems.size() == 0) {
+            // There are no selected items, nothing to update
+            return;
+        }
+        float xmin=FLT_MAX,xmax=-1.0;
+        for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
+            if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
+            if ((*it)->xEnd() > xmax) xmax = (*it)->xEnd();
+        }
+        start = getRulerScale()->getTimeForX(xmin);
+        end = getRulerScale()->getTimeForX(xmax);
+    } else {
+        start = m_eventSelection->getStartTime();
+        end = m_eventSelection->getEndTime();
+    }
+
     // Add command to history
     ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
                                     *m_segment,
-                                    m_eventSelection->getStartTime(),
-                                    m_eventSelection->getEndTime());
+                                    start,
+                                    end);
 
     CommandHistory::getInstance()->addCommand(command);
 }

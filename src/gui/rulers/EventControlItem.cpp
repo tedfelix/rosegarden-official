@@ -39,6 +39,14 @@ EventControlItem::~EventControlItem()
 {
 }
 
+void EventControlItem::setEvent(Event* event)
+{
+    m_event = event;
+    if (m_eventAdapter) delete m_eventAdapter;
+
+    m_eventAdapter = new ControllerEventAdapter(event);
+}
+
 void EventControlItem::updateFromEvent()
 {
     long value = 0;
@@ -80,6 +88,7 @@ void EventControlItem::reconfigure(float x, float y)
         *this << QPointF(x+it->x()*xscale,y+it->y()*yscale);
     }
     m_xstart = x;
+    m_xend = x;
     m_y = y;
 
     ControlItem::update();
@@ -89,9 +98,8 @@ void EventControlItem::reconfigure(float x, float y)
 
 void EventControlItem::updateSegment()
 {
-    if (!m_eventAdapter->getEvent()) {
-        delete m_eventAdapter;
-        m_eventAdapter = new ControllerEventAdapter(static_cast<ControllerEventsRuler *> (m_controlRuler)->insertControllerEvent(m_xstart, m_y));
+    if (!getEvent()) {
+        setEvent(static_cast<ControllerEventsRuler *> (m_controlRuler)->insertControllerEvent(m_xstart, m_y));
     }
 ////    m_element->event()->set<Int>(m_propertyname,(int)(m_y*MIDI_CONTROL_MAX_VALUE));
 //    long value = m_controlRuler->YToValue(m_y);

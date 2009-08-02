@@ -113,6 +113,7 @@ protected:
 
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;
+    bool m_addingEvent;
 //    Q3CanvasLine                   *m_controlLine;
 
 //    bool                           m_controlLineShowing;

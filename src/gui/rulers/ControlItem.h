@@ -78,7 +78,7 @@ public:
     virtual void setWidth(int);
 
 //    ElementAdapter* getElementAdapter() { return m_elementAdapter; }
-    Event* getEvent() { return m_event; }
+    virtual Event* getEvent() { return m_event; }
 
 protected:
 

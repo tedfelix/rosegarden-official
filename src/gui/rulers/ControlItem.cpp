@@ -198,9 +198,6 @@ void ControlItem::setSelected(bool s)
 
 void ControlItem::update()
 {
-    // Record the extent of the item (polygon) during update for speed
-    m_xstart = boundingRect().left();
-    m_xend = boundingRect().right();
 }
 
 void ControlItem::setX(int x)

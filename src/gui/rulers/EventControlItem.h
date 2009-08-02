@@ -44,6 +44,7 @@ public:
     void reconfigure(float x,float y);
 
 protected:
+    void setEvent(Event*);
 
     //--------------- Data members ---------------------------------
     ControllerEventAdapter *m_eventAdapter;

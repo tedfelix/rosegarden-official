@@ -88,7 +88,9 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
     this->clear();
     *this << newpoly;
 
-    ControlItem::update();
+    // Record the extent of the item (polygon) during update for speed
+    m_xstart = boundingRect().left();
+    m_xend = boundingRect().right();
 
     m_controlRuler->update();
 }

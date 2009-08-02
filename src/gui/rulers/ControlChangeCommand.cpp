@@ -26,7 +26,8 @@ namespace Rosegarden {
 ControlChangeCommand::ControlChangeCommand(ControlItemList selectedItems,
                                            Segment &segment,
                                            Rosegarden::timeT start, Rosegarden::timeT end)
-    : BasicCommand(tr("Control Change"), segment, start, end, true),
+    : BasicCommand(tr("Control Change"), segment,
+            start, (start==end)?start+10:end, true),
       m_selectedItems(selectedItems)
 {
     RG_DEBUG << "ControlChangeCommand : from " << start << " to " << end << endl;

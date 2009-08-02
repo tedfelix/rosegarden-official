@@ -62,7 +62,9 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
         // This tool should not be applied to a PropertyControlRuler but in case it is
         ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
         //if (ruler) ruler->insertControllerEvent(e->x,e->y);
-        if (ruler) ruler->addControlItem(e->x,e->y);
+        if (ruler) {
+            ruler->addControlItem(e->x,e->y);
+        }
     }
 }
 
@@ -95,6 +97,8 @@ ControlPainter::handleMouseRelease(const ControlMouseEvent *e)
 
     // May have moved off the item during a drag so use setCursor to correct its state
     setCursor(e);
+
+    m_ruler->updateSegment();
 }
 
 void ControlPainter::setCursor(const ControlMouseEvent *e)

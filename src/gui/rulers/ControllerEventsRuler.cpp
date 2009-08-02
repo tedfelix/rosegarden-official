@@ -66,7 +66,8 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
         //: ControlRuler(segment, rulerScale, parentView, parent), // name, f),
         : ControlRuler(segment, rulerScale, parent), // name, f),
         m_defaultItemWidth(20),
-        m_lastDrawnRect(QRectF(0,0,0,0))
+        m_lastDrawnRect(QRectF(0,0,0,0)),
+        m_addingEvent(false)
 //        m_controlLine(new Q3CanvasLine(canvas())),
 //        m_controlLineShowing(false),
 //        m_controlLineX(0),
@@ -228,15 +229,15 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
     //  add a ControlItem to display it
     // Note that ControlPainter will (01/08/09) add events directly
     //  these should not be replicated by this observer mechanism
-    // Temporary disable this mechanism entirely
-//    if (isOnThisRuler(event) &&
-//            (findControlItem(event)==m_controlItemMap.end())) addControlItem(event);
+    if (isOnThisRuler(event) &&
+            !m_addingEvent) addControlItem(event);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 {
     if (isOnThisRuler(event)) {
         removeControlItem(event);
+        update();
     }
 //
 //    clearSelectedItems();
@@ -271,6 +272,7 @@ void ControllerEventsRuler::addControlItem(Event *event)
 void ControllerEventsRuler::addControlItem(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
+    clearSelectedItems();
     EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(0), QPolygonF());
     controlItem->reconfigure(x,y);
     controlItem->setSelected(true);
@@ -357,7 +359,9 @@ Event *ControllerEventsRuler::insertControllerEvent(float x, float y)
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
 
+    m_addingEvent = true;
     m_segment->insert(controllerEvent);
+    m_addingEvent = false;
 
     return controllerEvent;
 //    ControlRulerEventInsertCommand* command =
