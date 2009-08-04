@@ -170,7 +170,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
-    QBrush brush(Qt::SolidPattern);
+    QBrush brush(GUIPalette::getColour(GUIPalette::ControlItem),Qt::SolidPattern);
 
     QPen highlightPen(GUIPalette::getColour(GUIPalette::SelectedElement),
             2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
@@ -183,7 +183,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
         if (!(*it)->isSelected()) {
-            brush.setColor((*it)->getColour().lighter());
             painter.setBrush(brush);
             painter.setPen(pen);
             painter.drawPolygon(mapItemToWidget(*it));
@@ -194,7 +193,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
     {
-        brush.setColor(((*it)->getColour()));
         painter.setBrush(brush);
         painter.setPen(highlightPen);
         painter.drawPolygon(mapItemToWidget(*it));
@@ -235,25 +233,16 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
 {
+    // Segment observer notification of a removed event
+    // Could be an erase action on the ruler or an undo/redo event
+
+    // Old code did this ... not sure why
+    //    clearSelectedItems();
+    //
     if (isOnThisRuler(event)) {
         removeControlItem(event);
         update();
     }
-//
-//    clearSelectedItems();
-//
-////    Q3CanvasItemList allItems = canvas()->allItems();
-//
-////    for (Q3CanvasItemList::Iterator it = allItems.begin(); it != allItems.end(); ++it) {
-//    for (ControlItemList::iterator it = m_controlItemList.begin(); it != m_controlItemList.end(); ++it) {
-//        if (ControlItem *item = dynamic_cast<ControlItem*>(*it)) {
-////            ControllerEventAdapter * adapter = dynamic_cast<ControllerEventAdapter*>(item->getElementAdapter());
-////            if (adapter->getEvent() == e) {
-////                delete item;
-////                break;
-////            }
-//        }
-//    }
 }
 
 void ControllerEventsRuler::segmentDeleted(const Segment *)

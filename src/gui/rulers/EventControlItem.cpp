@@ -32,7 +32,7 @@ EventControlItem::EventControlItem(ControlRuler *controlRuler,
     : ControlItem(controlRuler,eventAdapter->getEvent(),polygon),
     m_eventAdapter(eventAdapter)
 {
-    m_symbol << QPoint(-10,0) << QPoint(0,-10) << QPoint(10,0) << QPoint(0,10);
+    m_symbol << QPoint(-5,0) << QPoint(0,-5) << QPoint(5,0) << QPoint(0,5);
 }
 
 EventControlItem::~EventControlItem()

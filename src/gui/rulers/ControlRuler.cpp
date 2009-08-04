@@ -309,12 +309,12 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 ///TODO Use m_xScale, m_yScale for these map functions
 int ControlRuler::mapXToWidget(float x)
 {
-    return (x-m_pannedRect.left()) / m_xScale;
+    return (0.5+(x-m_pannedRect.left()) / m_xScale);
 }
 
 int ControlRuler::mapYToWidget(float y)
 {
-    return (-y+1.0f) / m_yScale;
+    return (0.5+(-y+1.0f) / m_yScale);
 }
 
 QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)

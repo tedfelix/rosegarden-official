@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2009 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -33,16 +33,16 @@ QColor GUIPalette::getColour(const char* const colourName)
     QSettings config;
     config.beginGroup(ColoursConfigGroup);
 
-    //@@@ I'm not really sure what this used to do.  It doesn't make sense. 
+    //@@@ I'm not really sure what this used to do.  It doesn't make sense.
     //
     // First we getInstance() (of what?  I'm a linguist, not a programmer)
     // m_defaultsMap[colourName] and then we use this QColor as a key in
     // KConfig::readColorEntry() which used to be (3.5 API)
     //
-    // QColor KConfigBase::readColorEntry (const QString &pKey, 
+    // QColor KConfigBase::readColorEntry (const QString &pKey,
     //                                     const QColor *pDefault = 0L)
     //
-    // where pKey   The key to search for. 
+    // where pKey   The key to search for.
     //   pDefault   A default value (null QColor by default) returned if the key
     //              was not found or if the value cannot be interpreted.
     //
@@ -165,6 +165,7 @@ GUIPalette::GUIPalette()
     //m_defaultsMap[MovementGuide] = QColor(255, 189, 89);
     m_defaultsMap[SelectionRectangle] = QColor(103, 128, 211);
     m_defaultsMap[SelectedElement] = QColor(0, 54, 232);
+    m_defaultsMap[ControlItem] = QColor(210, 202, 138);
 
     //@@@  I decided to shut up these compiler warnings about unused variables.
     // They look like simple cruft to me.
@@ -223,7 +224,7 @@ GUIPalette::GUIPalette()
     m_defaultsMap[ThornGroupBoxBackground] = QColor(0x40, 0x40, 0x40);
 }
 
-GUIPalette* GUIPalette::getInstance() 
+GUIPalette* GUIPalette::getInstance()
 {
     if (!m_instance) m_instance = new GUIPalette();
     return m_instance;
@@ -297,6 +298,7 @@ const char* const GUIPalette::TrackDivider = "trackdivider";
 const char* const GUIPalette::MovementGuide = "movementguide";
 const char* const GUIPalette::SelectionRectangle = "selectionrectangle";
 const char* const GUIPalette::SelectedElement = "selectedelement";
+const char* const GUIPalette::ControlItem = "controlitem";
 
 const int GUIPalette::SelectedElementHue = 225;
 const int GUIPalette::SelectedElementMinValue = 220;
@@ -347,7 +349,7 @@ const char* const GUIPalette::PlaybackFaderOutline = "playbackfaderoutline";
 const char* const GUIPalette::RecordFaderOutline = "recordfaderoutline";
 
 const char* const GUIPalette::PannerOverlay = "panneroverlay";
- 
+
 GUIPalette* GUIPalette::m_instance = 0;
 
 // defines which index in the document's colourmap should be used as the color

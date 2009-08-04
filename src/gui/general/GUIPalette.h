@@ -32,14 +32,14 @@ namespace Rosegarden
 
 /**
  * Definitions of colours to be used throughout the Rosegarden GUI.
- * 
+ *
  * They're in this file not so much to allow them to be easily
  * changed, as to ensure a certain amount of consistency between
  * colours for different functions that might end up being seen
  * at the same time.
  */
 
-class GUIPalette 
+class GUIPalette
 {
 public:
     static QColor getColour(const char* const colourName);
@@ -115,6 +115,7 @@ public:
     static const char* const MovementGuide;
     static const char* const SelectionRectangle;
     static const char* const SelectedElement;
+    static const char* const ControlItem;
 
     static const int SelectedElementHue;
     static const int SelectedElementMinValue;
@@ -169,7 +170,7 @@ public:
     static const int AudioDefaultIndex;
 
     static const char* const ThornGroupBoxBackground;
-    
+
 protected:
     GUIPalette();
     QColor getDefaultColour(const char* const colourName);
@@ -179,10 +180,10 @@ protected:
     static GUIPalette* m_instance;
 
     typedef std::map<const char* const, QColor> colourmap;
-    
+
     colourmap m_defaultsMap;
 };
- 
+
 
 
 }
