@@ -37,7 +37,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="486"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Click the device name to change it. Select a device here and connect it to an ALSA MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Hier kann ein neues Wiedergabegerät angelegt werden. Durch anklicken des Gerätenamens kann dieser geändert werden. Durch anklicken eines Ports auf der rechten Seite kann ein Gerät ausgewählt und mit einem ALSA MIDI Ausgang verbunden werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="489"/>
@@ -164,7 +164,7 @@
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.h" line="557"/>
         <source>&lt;qt&gt;&lt;p&gt;Available ALSA MIDI inputs for any hardware MIDI inputs detected by your distribution&apos;s hardware autodetection, plus any ALSA MIDI software that exposes output ports, such as VMPK&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Verfügbare ALSA MIDI Eingänge, die von der automatischen Hardware-Erkennung der Distribution erkannt wurden und zusätzlich alle Ausgänge, die von ALSA MIDI Software, wie z.B. VMPK, bereitgestellt werden&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -556,7 +556,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="104"/>
         <source>&amp;Delete Event</source>
-        <translation type="unfinished">&amp;Event löschen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Event &amp;löschen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="105"/>
@@ -567,7 +568,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="106"/>
         <source>&amp;Advanced Event Editor</source>
-        <translation type="unfinished">Erweiterter Event-Editor</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Er&amp;weiterter Event-Editor</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="107"/>
@@ -729,7 +731,7 @@
         <location filename="../QMenuStrings.cpp" line="1038"/>
         <source>&amp;Configure Rosegarden...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">&amp;Rosegarden konfigurieren...</translation>
+        <translation>&amp;Rosegarden konfigurieren...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="137"/>
@@ -861,12 +863,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="202"/>
         <source>Sna&amp;p to 1/16</source>
-        <translation type="unfinished">Einrasten bei 1/1&amp;6</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Einrasten bei 1/1&amp;6</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="203"/>
         <source>Snap t&amp;o 1/12</source>
-        <translation type="unfinished">Einrasten bei 1/1&amp;2</translation>
+        <translation>Einrasten &amp;bei 1/12</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="204"/>
@@ -904,7 +907,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="210"/>
         <source>Snap to &amp;Bar</source>
-        <translation type="unfinished">Auf &amp;Takt einrasten</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Auf Ta&amp;kt einrasten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="212"/>
@@ -963,7 +967,7 @@
         <location filename="../QMenuStrings.cpp" line="226"/>
         <source>Set Segment Start &amp;Time...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Segment Anfangszei&amp;ten setzen</translation>
+        <translation>Segment Anfangszei&amp;ten setzen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="227"/>
@@ -1029,14 +1033,15 @@
         <location filename="../QMenuStrings.cpp" line="236"/>
         <location filename="../QMenuStrings.cpp" line="617"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">Anschlagstärke er&amp;höhen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Anschlagstärke er&amp;höhen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="237"/>
         <location filename="../QMenuStrings.cpp" line="618"/>
         <source>&amp;Reduce Velocity</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Anschlagstä&amp;rke verringern </translation>
+        <translation>Anschlagstärke ve&amp;rringern </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="238"/>
@@ -1054,7 +1059,7 @@
         <location filename="../QMenuStrings.cpp" line="240"/>
         <source>Resc&amp;ale</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>m&amp;aßstäblich neu ändern</translation>
+        <translation>M&amp;aßstäblich neu ändern</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="241"/>
@@ -1095,7 +1100,8 @@
         <location filename="../QMenuStrings.cpp" line="246"/>
         <location filename="../QMenuStrings.cpp" line="607"/>
         <source>&amp;Down a Semitone</source>
-        <translation type="unfinished">Halbton a&amp;bwärts</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Halbton a&amp;bwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="247"/>
@@ -1143,7 +1149,8 @@
         <location filename="../QMenuStrings.cpp" line="253"/>
         <location filename="../QMenuStrings.cpp" line="614"/>
         <source>&amp;Retrograde</source>
-        <translation type="unfinished">&amp;Zeitlich spiegeln (retro)</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Zeitlich spiegeln (retro)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="254"/>
@@ -1212,38 +1219,43 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="264"/>
         <source>&amp;Velocity</source>
-        <translation type="unfinished">Anschlag&amp;stärke</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Ans&amp;chlagstärke</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="265"/>
         <location filename="../QMenuStrings.cpp" line="684"/>
         <source>Local &amp;Cursor</source>
-        <translation type="unfinished">Lokaler &amp;Zeiger</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Lokaler &amp;Zeiger</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="266"/>
         <location filename="../QMenuStrings.cpp" line="685"/>
         <source>Cursor &amp;Back</source>
-        <translation type="unfinished">Cursor &amp;zurück</translation>
+        <translatorcomment>amp  ok</translatorcomment>
+        <translation>Cursor &amp;zurück</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="267"/>
         <location filename="../QMenuStrings.cpp" line="686"/>
         <source>Cursor &amp;Forward</source>
-        <translation type="unfinished">Cursor &amp;vorwärts</translation>
+        <translatorcomment>amp  ok</translatorcomment>
+        <translation>Cursor &amp;vorwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="268"/>
         <location filename="../QMenuStrings.cpp" line="687"/>
         <source>C&amp;ursor Back Bar</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>C&amp;ursor Takt zurück</translation>
+        <translation>Cursor Takt z&amp;urück</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="269"/>
         <location filename="../QMenuStrings.cpp" line="688"/>
         <source>Cursor For&amp;ward Bar</source>
-        <translation type="unfinished">Cursor Ta&amp;kt vorwärts</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Cursor Takt v&amp;orwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="270"/>
@@ -1264,26 +1276,28 @@
         <location filename="../QMenuStrings.cpp" line="691"/>
         <source>Cursor back and Se&amp;lect</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Cursor zurück und au&amp;swählen</translation>
+        <translation>Cursor zurück und auswäh&amp;len</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="273"/>
         <location filename="../QMenuStrings.cpp" line="692"/>
         <source>Cursor Forward and &amp;Select</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Cursor vorwärt&amp;s und auswählen</translation>
+        <translation>Cursor vorwärt&amp;s und auswählen  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="274"/>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <source>Set Loop &amp;to Selection</source>
-        <translation type="unfinished">Schleife auswählen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>S&amp;chleife auswählen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="275"/>
         <location filename="../QMenuStrings.cpp" line="694"/>
         <source>Clear L&amp;oop</source>
-        <translation type="unfinished">Schleife l&amp;öschen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Schleife l&amp;öschen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="276"/>
@@ -1403,7 +1417,8 @@
         <location filename="../QMenuStrings.cpp" line="729"/>
         <location filename="../QMenuStrings.cpp" line="747"/>
         <source>I &amp;sharp</source>
-        <translation type="unfinished">I Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>I &amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="289"/>
@@ -1413,7 +1428,8 @@
         <location filename="../QMenuStrings.cpp" line="730"/>
         <location filename="../QMenuStrings.cpp" line="748"/>
         <source>II &amp;flat</source>
-        <translation type="unfinished">II B</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>II &amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="290"/>
@@ -1433,7 +1449,8 @@
         <location filename="../QMenuStrings.cpp" line="732"/>
         <location filename="../QMenuStrings.cpp" line="750"/>
         <source>II sh&amp;arp</source>
-        <translation type="unfinished">II Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>II &amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="292"/>
@@ -1443,7 +1460,7 @@
         <location filename="../QMenuStrings.cpp" line="733"/>
         <location filename="../QMenuStrings.cpp" line="751"/>
         <source>III flat</source>
-        <translation type="unfinished">III B</translation>
+        <translation>III b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="293"/>
@@ -1473,7 +1490,8 @@
         <location filename="../QMenuStrings.cpp" line="736"/>
         <location filename="../QMenuStrings.cpp" line="754"/>
         <source>IV sha&amp;rp</source>
-        <translation type="unfinished">IV Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>IV &amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="296"/>
@@ -1484,7 +1502,7 @@
         <location filename="../QMenuStrings.cpp" line="755"/>
         <source>&amp;V flat</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;V B</translation>
+        <translation>V &amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="297"/>
@@ -1504,7 +1522,8 @@
         <location filename="../QMenuStrings.cpp" line="739"/>
         <location filename="../QMenuStrings.cpp" line="757"/>
         <source>V s&amp;harp</source>
-        <translation type="unfinished">V Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>V &amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="299"/>
@@ -1514,7 +1533,8 @@
         <location filename="../QMenuStrings.cpp" line="740"/>
         <location filename="../QMenuStrings.cpp" line="758"/>
         <source>VI fla&amp;t</source>
-        <translation type="unfinished">VI B</translation>
+        <translatorcomment>amp ok, trotz Überschneidung</translatorcomment>
+        <translation>VI &amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="300"/>
@@ -1534,7 +1554,8 @@
         <location filename="../QMenuStrings.cpp" line="742"/>
         <location filename="../QMenuStrings.cpp" line="760"/>
         <source>VI shar&amp;p</source>
-        <translation type="unfinished">VI Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>VI &amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="302"/>
@@ -1544,7 +1565,7 @@
         <location filename="../QMenuStrings.cpp" line="743"/>
         <location filename="../QMenuStrings.cpp" line="761"/>
         <source>VII flat</source>
-        <translation type="unfinished">VII B</translation>
+        <translation>VII b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="303"/>
@@ -1560,19 +1581,22 @@
         <location filename="../QMenuStrings.cpp" line="304"/>
         <location filename="../QMenuStrings.cpp" line="727"/>
         <source>&amp;Upper Octave</source>
-        <translation type="unfinished">Obere Oktave</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Obere Oktave</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="340"/>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>C&amp;hord Insert Mode</source>
-        <translation type="unfinished">A&amp;kkord-Einfügemodus</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>A&amp;kkord-Einfügemodus</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="341"/>
         <location filename="../QMenuStrings.cpp" line="767"/>
         <source>Ste&amp;p Recording</source>
-        <translation type="unfinished">Schritt&amp;weise Aufnahme</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Schritt&amp;weise Aufnahme</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="215"/>
@@ -1588,7 +1612,7 @@
         <location filename="../QMenuStrings.cpp" line="982"/>
         <source>&amp;Rulers</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">L&amp;ineale anzeigen</translation>
+        <translation>L&amp;ineale anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="189"/>
@@ -1936,7 +1960,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="462"/>
         <source>C&amp;ut and Close</source>
-        <translation type="unfinished">Sch&amp;neiden und Schließen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Schneiden &amp;und Schließen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="463"/>
@@ -1952,14 +1977,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="465"/>
         <source>&amp;Move to Staff Above</source>
-        <translatorcomment>staff == stuff?? XXX</translatorcomment>
-        <translation type="unfinished">Zu&amp;m Zeug nach oben bewegen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Zu&amp;m Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="466"/>
         <source>Move to Staff &amp;Below</source>
-        <translatorcomment>staff == stuff?? XXX</translatorcomment>
-        <translation type="unfinished">Zum Zeug nach unten &amp;bewegen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Notensystem unterhalb schie&amp;ben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="467"/>
@@ -1976,12 +2001,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="469"/>
         <source>Select Whole St&amp;aff</source>
-        <translation>Das komplette S&amp;ystem auswählen</translation>
+        <translation>Das komplette Notens&amp;ystem auswählen  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="470"/>
         <source>Clear Select&amp;ion</source>
-        <translation type="unfinished">Auswahl löschen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Aus&amp;wahl löschen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="473"/>
@@ -1992,12 +2018,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="474"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished">&amp;Größe</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Größe</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="475"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished">&amp;Abstände</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Abstände</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="476"/>
@@ -2020,17 +2048,20 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="479"/>
         <source>&amp;Continuous Page Layout</source>
-        <translation type="unfinished">&amp;Seitenlayout</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Fortlaufendes Seitenlayout</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="480"/>
         <source>&amp;Multiple Page Layout</source>
-        <translation type="unfinished">&amp;Seitenlayout</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Seitenlayout für mehrere Seiten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="481"/>
         <source>Open L&amp;yric Editor</source>
-        <translation type="unfinished">&amp;Texteditor öffnen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Texteditor öffnen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="483"/>
@@ -2040,7 +2071,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="484"/>
         <source>Show &amp;Track Headers</source>
-        <translation type="unfinished">Zeige Spur Anfang</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Zeige Spur Anfang</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="492"/>
@@ -2058,7 +2090,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="494"/>
         <source>Add &amp;Key Change...</source>
-        <translation type="unfinished">&amp;Tonartveränderung hinzufügen...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Tonartveränderung hinzufügen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="495"/>
@@ -2082,12 +2115,13 @@
         <location filename="../QMenuStrings.cpp" line="499"/>
         <source>Transpose by &amp;Inverval...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Durch &amp;Interval transponieren</translation>
+        <translation>Durch &amp;Interval transponieren...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="500"/>
         <source>&amp;Convert Notation for...</source>
-        <translation type="unfinished">Umwandeln der Notation für ...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Umwandeln der Notation für ...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="501"/>
@@ -2152,7 +2186,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="511"/>
         <source>Add Trill &amp;with Line</source>
-        <translation type="unfinished">Triller mit Linie hinzufügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Triller mit Linie hin&amp;zufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="512"/>
@@ -2163,7 +2198,7 @@
         <location filename="../QMenuStrings.cpp" line="513"/>
         <source>Add &amp;Turn</source>
         <translatorcomment>??</translatorcomment>
-        <translation type="unfinished">Doppelschlag hinzufügen</translation>
+        <translation>&amp;Doppelschlag hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="514"/>
@@ -2197,7 +2232,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="519"/>
         <source>Add &amp;Down-Bow</source>
-        <translation type="unfinished">Abstrich hinzufügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>A&amp;bstrich hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="520"/>
@@ -2218,12 +2254,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="523"/>
         <source>&amp;Ornaments</source>
-        <translation type="unfinished">Verzierungen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Ver&amp;zierungen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="524"/>
         <source>Trigger &amp;Ornament...</source>
-        <translation type="unfinished">Trigger Verzierung...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Trigger Verzierung...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="525"/>
@@ -2234,7 +2272,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="526"/>
         <source>Ma&amp;ke Ornament...</source>
-        <translation type="unfinished">Verzierungen erzuegen...</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Verzierungen er&amp;zeugen...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="527"/>
@@ -2367,7 +2406,8 @@
         <location filename="../QMenuStrings.cpp" line="549"/>
         <location filename="../QMenuStrings.cpp" line="669"/>
         <source>&amp;Accidentals</source>
-        <translation type="unfinished">&amp;Vorzeichen</translation>
+        <translatorcomment>amp  ok</translatorcomment>
+        <translation>&amp;Vorzeichen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="550"/>
@@ -2379,12 +2419,13 @@
         <location filename="../QMenuStrings.cpp" line="551"/>
         <source>Respell with Dou&amp;ble Flat</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Mit Doppel-&amp;B neu schreiben</translation>
+        <translation>Mit Doppel-&amp;b neu schreiben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="552"/>
         <source>Respell with &amp;Flat</source>
-        <translation type="unfinished">Mit B neu schreiben</translation>
+        <translatorcomment>amp ok, auch bei bb</translatorcomment>
+        <translation>Mit &amp;b neu schreiben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="553"/>
@@ -2395,12 +2436,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="554"/>
         <source>Respell with &amp;Sharp</source>
-        <translation type="unfinished">Mit Kreuz neu schreiben</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Mit Kreuz neu s&amp;chreiben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="555"/>
         <source>Respell with Do&amp;uble Sharp</source>
-        <translation type="unfinished">Mit Doppel-Kreuz neu schreiben</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Mit Doppel-Kre&amp;uz neu schreiben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="556"/>
@@ -2411,7 +2454,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="557"/>
         <source>Cancel C&amp;autionary Accidentals</source>
-        <translation type="unfinished">Entferne Sicherheits-Vorzeichen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Entferne Sicherheits-&amp;Vorzeichen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="558"/>
@@ -2422,7 +2466,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="559"/>
         <source>Stem &amp;Down</source>
-        <translation type="unfinished">Notenhals abwärts</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Notenhals a&amp;bwärts</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="560"/>
@@ -2433,12 +2478,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="561"/>
         <source>&amp;Phrase</source>
-        <translation type="unfinished">&amp;Satz (phrase)</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Sa&amp;tz (phrase)</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="562"/>
         <source>&amp;Make Chord</source>
-        <translation type="unfinished">Akkord erzeugen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>A&amp;kkord erzeugen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="563"/>
@@ -2455,13 +2502,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="565"/>
         <source>&amp;Unbeam</source>
-        <translation type="unfinished">Balken &amp;entfernen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Balken e&amp;ntfernen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="566"/>
         <source>Tupl&amp;et...</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Tuol&amp;e</translation>
+        <translation>Tuol&amp;e...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="567"/>
@@ -2478,19 +2526,20 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="569"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished">&amp;Bogen hinzufügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Bindebo&amp;gen hinzufügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="570"/>
         <source>Add P&amp;hrasing Slur</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>P&amp;hrasierungsbogen hinzufügen</translation>
+        <translation>P&amp;hrasierungsbogen hinzufügen  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="571"/>
         <source>Slur &amp;Position</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Position des Bindebogen</translation>
+        <translation>&amp;Position des Bindebogens</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="572"/>
@@ -2502,47 +2551,49 @@
         <location filename="../QMenuStrings.cpp" line="573"/>
         <source>Slur &amp;Above</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>lBogen oberh&amp;alb</translation>
+        <translation>Bindebogen oberh&amp;alb</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="574"/>
         <source>Slur &amp;Below</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Bogen unterhal&amp;b</translation>
+        <translation>Bindebogen unterhal&amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="575"/>
         <source>T&amp;ie</source>
-        <translation type="unfinished">Festmachen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Festmachen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="576"/>
         <source>&amp;Untie</source>
-        <translation type="unfinished">Lösen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Lösen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="577"/>
         <source>Tie &amp;Position</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Position des Bindebogens</translation>
+        <translation>&amp;Position der Ligatur</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="578"/>
         <source>&amp;Restore Tie Position</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Be&amp;rechneten Haltebogen wiederherstellen</translation>
+        <translation>Be&amp;rechnete Ligatur wiederherstellen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="579"/>
         <source>Tie &amp;Above</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Bogen oberh&amp;alb</translation>
+        <translation>Ligatur oberh&amp;alb</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="580"/>
         <source>Tie &amp;Below</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Bogen unterhal&amp;b</translation>
+        <translation>Ligatur unterhal&amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="581"/>
@@ -2571,12 +2622,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="585"/>
         <source>Add Octave &amp;Up</source>
-        <translation type="unfinished">Oktave höher einfügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Oktave &amp;höher einfügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="586"/>
         <source>Add Octave &amp;Down</source>
-        <translation type="unfinished">Oktave tiefer einfügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Oktave &amp;tiefer einfügen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="587"/>
@@ -2598,7 +2651,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="591"/>
         <source>&amp;Collapse Rests</source>
-        <translation type="unfinished">Pausen &amp;zusammenfassen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Pausen &amp;zusammenfassen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="592"/>
@@ -2616,17 +2670,19 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="595"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translation type="unfinished">Überlappende Akkorde aufteilen und verbinden</translation>
+        <translation>Überlappende A&amp;kkorde aufteilen und verbinden</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="598"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">Darstellungsquantisierung korrigieren</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Darstellungsquantisierung &amp;korrigieren</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="599"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Darstellungsquantisierung entfernen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Darstellungsquantisierung &amp;entfernen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="600"/>
@@ -2666,7 +2722,7 @@
         <location filename="../QMenuStrings.cpp" line="621"/>
         <source>&amp;Restore Positions</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Be&amp;rechnete Positionen wiederherstellen</translation>
+        <translation>&amp;Berechnete Positionen wiederherstellen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="622"/>
@@ -2677,17 +2733,20 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="623"/>
         <source>&amp;Push Right</source>
-        <translation type="unfinished">Nach rechts schieben</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Nach &amp;rechts schieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="624"/>
         <source>Push &amp;Up</source>
-        <translation type="unfinished">Nach oben schieben</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Nach &amp;oben schieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="625"/>
         <source>Push &amp;Down</source>
-        <translation type="unfinished">Nach unten schieben</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Nach &amp;unten schieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="626"/>
@@ -2705,18 +2764,20 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="629"/>
         <source>&amp;Visibility</source>
-        <translation type="unfinished">Sichtbarkeit</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Sicht&amp;barkeit</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="630"/>
         <source>Make &amp;Invisible</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Mache uns&amp;ichtbar</translation>
+        <translation>&amp;Unsichtbar machen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="631"/>
         <source>Make &amp;Visible</source>
-        <translation type="unfinished">Sichtbar machen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Sichtbar machen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="636"/>
@@ -2727,7 +2788,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="637"/>
         <source>&amp;Whole Note</source>
-        <translation type="unfinished">Ganze Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Ganze Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="638"/>
@@ -2738,7 +2800,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="639"/>
         <source>&amp;Quarter Note</source>
-        <translation type="unfinished">Viertelnote</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Viertelnote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="640"/>
@@ -2749,22 +2812,26 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="641"/>
         <source>&amp;Sixteenth note</source>
-        <translation type="unfinished">16tel-Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;16tel-Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="642"/>
         <source>&amp;Thirty-Second Note</source>
-        <translation type="unfinished">32tel-Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;32tel-Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
         <source>Sixty-&amp;Fourth Note</source>
-        <translation type="unfinished">64tel-Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;64tel-Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="644"/>
         <source>D&amp;otted Whole Note</source>
-        <translation type="unfinished">Punktierte ganze Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte ganze N&amp;ote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="645"/>
@@ -2775,22 +2842,25 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="646"/>
         <source>Dotted Q&amp;uarter Note</source>
-        <translation type="unfinished">Punktierte Viertelnote</translation>
+        <translation>Punktierte V&amp;iertelnote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="647"/>
         <source>Dotted E&amp;ighth Note</source>
-        <translation type="unfinished">Punktierte 8tel Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte A&amp;chtelnote</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="648"/>
         <source>Dotted Si&amp;xteenth Note</source>
-        <translation type="unfinished">Punktierte 16tel Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte 16&amp;tel Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="649"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
-        <translation type="unfinished">Punktierte 32tel Note</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte 3&amp;2tel Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="650"/>
@@ -2807,7 +2877,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="652"/>
         <source>&amp;Rests</source>
-        <translation type="unfinished">&amp;Pausen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Pausen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="653"/>
@@ -2818,7 +2889,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="654"/>
         <source>&amp;Whole Rest</source>
-        <translation type="unfinished">Ganze Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Ganze Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="655"/>
@@ -2829,7 +2901,8 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="656"/>
         <source>&amp;Quarter Rest</source>
-        <translation type="unfinished">Viertelpause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Viertelpause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="657"/>
@@ -2840,50 +2913,56 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="658"/>
         <source>&amp;Sixteenth Rest</source>
-        <translation type="unfinished">16tel-Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;16tel-Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="659"/>
         <source>&amp;Thirty-Second Rest</source>
-        <translation type="unfinished">32tel-Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;32tel-Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="660"/>
         <source>Sixty-&amp;Fourth Rest</source>
-        <translation type="unfinished">64tel-Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;64tel-Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="661"/>
         <source>D&amp;otted Whole Rest</source>
-        <translation type="unfinished">Punktierte ganze Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte ganze P&amp;ause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="662"/>
         <source>Dotted Half &amp;Rest</source>
-        <translation type="unfinished">Punktierte halbe Pause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte halbe Pa&amp;use</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="663"/>
         <source>Dotted Q&amp;uarter Rest</source>
-        <translation type="unfinished">Punktierte Viertelpause</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Punktierte V&amp;iertelpause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="664"/>
         <source>Dotted E&amp;ighth Rest</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Punktierte &amp;8tel Pause</translation>
+        <translation>Punktierte A&amp;chtelpause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="665"/>
         <source>Dotted Si&amp;xteenth Rest</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Punktierte &amp;16tel Pause</translation>
+        <translation>Punktierte 16&amp;tel Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="666"/>
         <source>Dotted Thirt&amp;y-Second Rest</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Punktierte &amp;32tel Pause</translation>
+        <translation>Punktierte 3&amp;2tel Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="668"/>
@@ -2906,12 +2985,14 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="672"/>
         <source>&amp;Sharp</source>
-        <translation type="unfinished">&amp;Kreuz</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Kreuz</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="673"/>
         <source>F&amp;lat</source>
-        <translation type="unfinished">b</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;b</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="674"/>
@@ -2928,17 +3009,20 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="676"/>
         <source>D&amp;ouble Flat</source>
-        <translation type="unfinished">bb</translation>
+        <translatorcomment>amp ok (trotz überschneidung mit einfachem b)</translatorcomment>
+        <translation>&amp;bb</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="677"/>
         <source>&amp;Clefs</source>
-        <translation type="unfinished">&amp;Schlüssel</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>S&amp;chlüssel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="678"/>
         <source>&amp;Treble Clef</source>
-        <translation type="unfinished">&amp;Violinschlüssel</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Violinschlüssel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="679"/>
@@ -2950,7 +3034,7 @@
         <location filename="../QMenuStrings.cpp" line="680"/>
         <source>Te&amp;nor Clef</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Te&amp;norschlüssel</translation>
+        <translation>&amp;Tenorschlüssel</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="681"/>
@@ -2974,22 +3058,25 @@
         <location filename="../QMenuStrings.cpp" line="695"/>
         <source>Cursor &amp;Up Staff</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>C&amp;ursor ein System nach oben</translation>
+        <translation>Cursor ein Notensystem nach &amp;oben  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="696"/>
         <source>Cursor &amp;Down Staff</source>
-        <translation type="unfinished">Cursor ein System nach &amp;unten</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Cursor ein Notensystem nach un&amp;ten  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="697"/>
         <source>Cursor Pre&amp;vious Segment</source>
-        <translation type="unfinished">Cursor zum &amp;vorherigen Segment</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Cursor zum &amp;vorherigen Segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="698"/>
         <source>Cursor Ne&amp;xt Segment</source>
-        <translation type="unfinished">Cursor zum nächs&amp;ten Segment</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Cursor zum &amp;nächsten Segment</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="709"/>
@@ -3001,7 +3088,8 @@
         <location filename="../QMenuStrings.cpp" line="322"/>
         <location filename="../QMenuStrings.cpp" line="745"/>
         <source>&amp;Lower Octave</source>
-        <translation type="unfinished">&amp;Untere Oktave</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Untere Oktave</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="763"/>
@@ -3012,7 +3100,7 @@
         <location filename="../QMenuStrings.cpp" line="765"/>
         <source>Triplet Insert Mo&amp;de</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">Eingabemo&amp;dus für Triolen</translation>
+        <translation>Eingabemo&amp;dus für Triolen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="766"/>
@@ -3043,7 +3131,7 @@
         <location filename="../QMenuStrings.cpp" line="774"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>&amp;Vorzeichen-Werkzeugleiste anzeigen</translation>
+        <translation>Vor&amp;zeichen-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="775"/>
@@ -3092,12 +3180,13 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="784"/>
         <source>Show Ra&amp;w Note Ruler</source>
-        <translation type="unfinished">&amp;Rohnotenlineal zeigen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Rohnotenlineal anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="786"/>
         <source>Show &amp;Annotations</source>
-        <translation type="unfinished">&amp;Bemerkungen zeigen</translation>
+        <translation type="unfinished">&amp;Bemerkungen anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="787"/>
@@ -3183,12 +3272,12 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="833"/>
         <source>Move to Staff Above</source>
-        <translation type="unfinished">Zum Liniensystem oberhalb verschieben</translation>
+        <translation>Zum Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="834"/>
         <source>Move to Staff Below</source>
-        <translation type="unfinished">Zum Liniensystem unterhalb verschieben</translation>
+        <translation>Zum Notensystem unterhalb verschieben</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
@@ -3379,7 +3468,7 @@
         <location filename="../QMenuStrings.cpp" line="877"/>
         <source>Re&amp;vert</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>r&amp;ückgängig machen  </translation>
+        <translation>R&amp;ückgängig machen  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="878"/>
@@ -3571,7 +3660,7 @@
         <location filename="../QMenuStrings.cpp" line="929"/>
         <source>Repe&amp;at Last Quantize</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">Letzte Qu&amp;antisierung wiederholen  </translation>
+        <translation>Letzte Qu&amp;antisierung wiederholen  </translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="931"/>
@@ -3737,7 +3826,7 @@
         <location filename="../QMenuStrings.cpp" line="976"/>
         <source>Show Main &amp;Toolbar</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">&amp;Haupt-Werkzeugleiste anzeigen</translation>
+        <translation>&amp;Haupt-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="978"/>
@@ -3790,7 +3879,7 @@
     <message>
         <location filename="../QMenuStrings.cpp" line="920"/>
         <source>Toggle Repeat</source>
-        <translation type="unfinished"></translation>
+        <translation>Wiederholung umschalten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="985"/>
@@ -3802,7 +3891,7 @@
         <location filename="../QMenuStrings.cpp" line="986"/>
         <source>Show Tra&amp;nsport</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation type="unfinished">&amp;Bedienfeld anzeigen</translation>
+        <translation>&amp;Bedienfeld anzeigen</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="987"/>
@@ -6161,7 +6250,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="125"/>
         <source>Lead 5 (charang)</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="126"/>
@@ -6744,7 +6833,7 @@ als den eingeschränkten wählen.</translation>
         <location filename="../AutoloadStrings.cpp" line="304"/>
         <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonhöhenänderung</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
@@ -6793,7 +6882,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="254"/>
         <source>Low Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute große Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="255"/>
@@ -6803,7 +6892,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="256"/>
         <source>High Floor Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute große Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="257"/>
@@ -6813,7 +6902,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="258"/>
         <source>Low Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="259"/>
@@ -6823,12 +6912,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="260"/>
         <source>Low-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute mittlere Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="261"/>
         <source>Hi-Mid Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute mittlere Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="262"/>
@@ -6838,7 +6927,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="263"/>
         <source>High Tom</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute Tom</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="264"/>
@@ -6883,47 +6972,47 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="273"/>
         <source>Hi Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute Bongo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="274"/>
         <source>Low Bongo</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute Bongo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="275"/>
         <source>Mute Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Gedämpfte laute Conga</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="276"/>
         <source>Open Hi Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Offene laute Conga</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="277"/>
         <source>Low Conga</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute Conga</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="278"/>
         <source>High Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute Timbale</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="279"/>
         <source>Low Timbale</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute Timbale</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="280"/>
         <source>High Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Laute Agogo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="281"/>
         <source>Low Agogo</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblaute Agogo</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="284"/>
@@ -6938,32 +7027,32 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="286"/>
         <source>Short Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurze Guiro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="287"/>
         <source>Long Guiro</source>
-        <translation type="unfinished"></translation>
+        <translation>Lange Guiro</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="289"/>
         <source>Hi Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Lauter Hohlzblock</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="290"/>
         <source>Low Wood Block</source>
-        <translation type="unfinished"></translation>
+        <translation>Halblauter Holzblock</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="291"/>
         <source>Mute Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Gedämpfte Cuica</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="292"/>
         <source>Open Cuica</source>
-        <translation type="unfinished"></translation>
+        <translation>Offene Cuica</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="293"/>
@@ -6973,7 +7062,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="294"/>
         <source>Open Triangle</source>
-        <translation type="unfinished"></translation>
+        <translation>Offene Triangel</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="295"/>
@@ -7053,7 +7142,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="319"/>
         <source>DodgerBlue</source>
-        <translation type="unfinished"></translation>
+        <translation>schwarzblau</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="320"/>
@@ -7178,7 +7267,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="344"/>
         <source>LawnGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>grasgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="345"/>
@@ -7193,7 +7282,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="347"/>
         <source>MediumSpringGreen</source>
-        <translation type="unfinished"></translation>
+        <translation>Mittleres Frühlingsgrün</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="348"/>
@@ -7218,7 +7307,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="352"/>
         <source>OliveDrab</source>
-        <translation type="unfinished"></translation>
+        <translation>oliv sandfarben</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="353"/>
@@ -7283,7 +7372,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="365"/>
         <source>SaddleBrown</source>
-        <translation type="unfinished"></translation>
+        <translation>sattelbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="366"/>
@@ -7328,7 +7417,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="374"/>
         <source>firebrick</source>
-        <translation type="unfinished"></translation>
+        <translation>schamott</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="375"/>
@@ -7393,7 +7482,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="387"/>
         <source>DeepPink</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes Pink</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="388"/>
@@ -7413,7 +7502,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="391"/>
         <source>maroon</source>
-        <translation type="unfinished"></translation>
+        <translation>kastanienbraun</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="392"/>
@@ -7463,12 +7552,12 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="401"/>
         <source>BlueViolet</source>
-        <translation type="unfinished"></translation>
+        <translation>blau violett</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="402"/>
         <source>purple</source>
-        <translation type="unfinished"></translation>
+        <translation>purpur</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="403"/>
@@ -7803,22 +7892,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="469"/>
         <source>DodgerBlue1</source>
-        <translation type="unfinished"></translation>
+        <translation>schwarzblau 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="470"/>
         <source>DodgerBlue2</source>
-        <translation type="unfinished"></translation>
+        <translation>schwarzblau 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="471"/>
         <source>DodgerBlue3</source>
-        <translation type="unfinished"></translation>
+        <translation>schwarzblau 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="472"/>
         <source>DodgerBlue4</source>
-        <translation type="unfinished"></translation>
+        <translation>schwarzblau 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="473"/>
@@ -8223,22 +8312,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="553"/>
         <source>OliveDrab1</source>
-        <translation type="unfinished"></translation>
+        <translation>oliv sandfarben 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="554"/>
         <source>OliveDrab2</source>
-        <translation type="unfinished"></translation>
+        <translation>oliv sandfarben 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="555"/>
         <source>OliveDrab3</source>
-        <translation type="unfinished"></translation>
+        <translation>oliv sandfarben 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="556"/>
         <source>OliveDrab4</source>
-        <translation type="unfinished"></translation>
+        <translation>oliv sandfarben 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="557"/>
@@ -8543,22 +8632,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="617"/>
         <source>firebrick1</source>
-        <translation type="unfinished"></translation>
+        <translation>schamott 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="618"/>
         <source>firebrick2</source>
-        <translation type="unfinished"></translation>
+        <translation>schamott 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="619"/>
         <source>firebrick3</source>
-        <translation type="unfinished"></translation>
+        <translation>schamott 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="620"/>
         <source>firebrick4</source>
-        <translation type="unfinished"></translation>
+        <translation>schamott 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="621"/>
@@ -8743,22 +8832,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="657"/>
         <source>DeepPink1</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes Pink 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="658"/>
         <source>DeepPink2</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes Pink 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="659"/>
         <source>DeepPink3</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes Pink 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="660"/>
         <source>DeepPink4</source>
-        <translation type="unfinished"></translation>
+        <translation>tiefes Pink 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="661"/>
@@ -8843,22 +8932,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="677"/>
         <source>maroon1</source>
-        <translation type="unfinished"></translation>
+        <translation>kastanienbraun 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="678"/>
         <source>maroon2</source>
-        <translation type="unfinished"></translation>
+        <translation>kastanienbraun 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="679"/>
         <source>maroon3</source>
-        <translation type="unfinished"></translation>
+        <translation>kastanienbraun 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="680"/>
         <source>maroon4</source>
-        <translation type="unfinished"></translation>
+        <translation>kastanienbraun 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="681"/>
@@ -8983,22 +9072,22 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="705"/>
         <source>purple1</source>
-        <translation type="unfinished"></translation>
+        <translation>purpur 1</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="706"/>
         <source>purple2</source>
-        <translation type="unfinished"></translation>
+        <translation>purpur 2</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="707"/>
         <source>purple3</source>
-        <translation type="unfinished"></translation>
+        <translation>purpur 3</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="708"/>
         <source>purple4</source>
-        <translation type="unfinished"></translation>
+        <translation>purpur 4</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="709"/>
@@ -9083,7 +9172,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../AutoloadStrings.cpp" line="725"/>
         <source>generalmap</source>
-        <translation type="unfinished"></translation>
+        <translation>allgemein</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="726"/>
@@ -9150,7 +9239,7 @@ als den eingeschränkten wählen.</translation>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="91"/>
         <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="441"/>
         <source>%1</source>
-        <translation type="unfinished">%1</translation>
+        <translation>%1</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/DialogSuppressor.cpp" line="75"/>
@@ -9163,17 +9252,17 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="32"/>
         <source>About Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation>Über Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="48"/>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;Ein Squenzer und Editor für musikalische Notation&lt;/h3&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="54"/>
         <source>&lt;p&gt;Copyright 2000-2009 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Build key: %3&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;For more information about Rosegarden, visit &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Copyright 2000-2009 Das Rosgarden Entwicklungs Team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; Qt version: %2&lt;br&gt;Schlüssel: %3&lt;/p&gt;&lt;p&gt;Rosegarden wurde von einem Team von Freiwilligen entwickelt. Eine Liste der Beteiligten ist unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt; zu sehen. &lt;br&gt;Weitere Informationen über Rosegarden sind unter &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt; erhältlich.&lt;/p&gt;&lt;p&gt;Lizenz: GNU General Public License Version 2&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -9197,7 +9286,8 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/studio/AddControlParameterCommand.h" line="56"/>
         <source>&amp;Add Control Parameter</source>
-        <translation type="unfinished">Control Parameter hinzufügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Control P&amp;arameter hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -9205,7 +9295,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/edit/AddDotCommand.h" line="47"/>
         <source>&amp;Add Dot</source>
-        <translation type="unfinished">Punktierung hinzufügen</translation>
+        <translation>Punktierung hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -9241,7 +9331,7 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="223"/>
         <source>Add S&amp;lur</source>
-        <translation type="unfinished">&amp;Bogen hinzufügen</translation>
+        <translation type="unfinished">&amp;Bindebogen hinzufügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="225"/>
@@ -9256,12 +9346,14 @@ als den eingeschränkten wählen.</translation>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="229"/>
         <source>Add Octave &amp;Up</source>
-        <translation type="unfinished">Octave höher einfügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Octave &amp;höher einfügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="231"/>
         <source>Add Octave &amp;Down</source>
-        <translation type="unfinished">Octave tiefer einfügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Octave &amp;tiefer einfügen</translation>
     </message>
     <message>
         <location filename="../../src/commands/notation/AddIndicationCommand.cpp" line="233"/>
@@ -10697,7 +10789,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/segment/ChangeCompositionLengthCommand.h" line="48"/>
         <source>Change &amp;Composition Start and End...</source>
-        <translation type="unfinished">Anfang und Ende der Komposition ändern...</translation>
+        <translation type="unfinished">Anfang und Ende der &amp;Komposition ändern...</translation>
     </message>
 </context>
 <context>
@@ -10758,12 +10850,14 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="48"/>
         <source>&amp;Increase Velocity</source>
-        <translation type="unfinished">Anschlagstärke er&amp;höhen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Anschlagstärke er&amp;höhen</translation>
     </message>
     <message>
         <location filename="../../src/commands/edit/ChangeVelocityCommand.h" line="49"/>
         <source>&amp;Reduce Velocity</source>
-        <translation type="unfinished">Anschlagstärke &amp;verringern </translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Anschlagstärke ve&amp;rringern </translation>
     </message>
 </context>
 <context>
@@ -11424,7 +11518,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/commands/notation/DeCounterpointCommand.h" line="51"/>
         <source>Split-and-Tie Overlapping &amp;Chords</source>
-        <translation type="unfinished">Überlappende Akkorde aufteilen und verbinden</translation>
+        <translation type="unfinished">Überlappende A&amp;kkorde aufteilen und verbinden</translation>
     </message>
 </context>
 <context>
@@ -11510,7 +11604,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="65"/>
         <source>B</source>
-        <translation type="unfinished">H</translation>
+        <translation>H</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="70"/>
@@ -11565,12 +11659,12 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="84"/>
         <source>double flat</source>
-        <translation type="unfinished">Doppel-b</translation>
+        <translation>B</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="85"/>
         <source>flat</source>
-        <translation type="unfinished">b (flat)</translation>
+        <translation>b</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="86"/>
@@ -11805,7 +11899,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1284"/>
         <source>%1 flat</source>
-        <translation type="unfinished">%1 b</translation>
+        <translation>%1 b</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1285"/>
@@ -11815,7 +11909,8 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1299"/>
         <source>&amp;Insert Note</source>
-        <translation type="unfinished">Note &amp;einfügen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Note e&amp;infügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1306"/>
@@ -11845,7 +11940,7 @@ Möchten Sie die Änderungen vor dem verlassen des Bank-Editors anwenden?</trans
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1700"/>
         <source>Rescaling...</source>
-        <translation type="unfinished">&amp;Reskalieren...</translation>
+        <translation>Reskalieren...</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/EditView.cpp" line="1720"/>
@@ -12073,7 +12168,7 @@ Das Löschen benötigter Eigenschaften kann unerwartetes Verhalten hervorrufen.<
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="523"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished">Löschen</translation>
+        <translation type="unfinished">&amp;Löschen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="552"/>
@@ -12426,7 +12521,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="270"/>
         <source>Velocity  </source>
-        <translation>Anschlagstärke</translation>
+        <translation>Anschlagstärke  </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="271"/>
@@ -12678,7 +12773,8 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/commands/notation/FixNotationQuantizeCommand.h" line="45"/>
         <source>Fi&amp;x Notation Quantization</source>
-        <translation type="unfinished">Darstellungsquantisierung korrigieren</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Darstellungsquantisierung &amp;korrigieren</translation>
     </message>
 </context>
 <context>
@@ -12727,7 +12823,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="83"/>
         <source>Double-click opens segment in</source>
-        <translation type="unfinished">Default-Editor (bei Doppelklick auf ein Segment)</translation>
+        <translation>Doppelklick öffnet Segment in</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="88"/>
@@ -12832,12 +12928,12 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="230"/>
         <source>Use Thorn style</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutze Thorn-Stil</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="236"/>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Wenn der Haken gesetzt ist, wird Rosegarden den Thorn-Stil benutzen. Anderenfalls werden die normalen System-Einstellungen verwendet, sobald Rosegarden das nächste mal startet.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="240"/>
@@ -12922,7 +13018,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="333"/>
         <source>KPrinter (KDE3)</source>
-        <translation type="unfinished"></translation>
+        <translation>KPrinter (KDE3)</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="334"/>
@@ -13087,7 +13183,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="121"/>
         <source>Poet</source>
-        <translation type="unfinished">Presto</translation>
+        <translation>Poet</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="125"/>
@@ -13394,7 +13490,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="194"/>
         <source>Merge banks</source>
-        <translation type="unfinished">Bänke zusammenfügen</translation>
+        <translation>Bänke zusammenfügen</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ImportDeviceDialog.cpp" line="198"/>
@@ -14123,12 +14219,12 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="212"/>
         <source>&lt;qt&gt;Check to export Rosegarden beamings to your score.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Haken setzen, damit Rosegarden die Notenhälse in die Partitur exportiert.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="217"/>
         <source>Export track staff brackets</source>
-        <translation type="unfinished"></translation>
+        <translation>Exportiere die Klammer des Notensystems dieser Spur</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="202"/>
@@ -14261,7 +14357,7 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="162"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;lilypond&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;lilypond&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von eineam fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="178"/>
@@ -14276,12 +14372,12 @@ Wollen Sie stattdessen
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="196"/>
         <source>&lt;qt&gt;&lt;p&gt;You opted to export Rosegarden&apos;s beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden&apos;s) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es wurde ausgewählt, dass Rosegarden die Notenhälse exportiert und LilyPond konnte die Datei nicht verarbeiten. Es ist wahrscheinlich, dass bei der Bearbeitung der Datei versteckte Eigenschaften der Notenhälse mit Ereignissen verbunden wurden, die nicht dazu passen und LilyPond zum scheitern veruteilten. Die bevorzugte Lösung wäre es, die Notenhälse LilyPond zu überlassen (dessen automatische Erzeugung von Notenhälsen besser als bei Rosegarden funktioniert) und diese Option zu deaktivieren. Eine weitere Möglichkeit wäre es alle Notenhälse zu entfernen und dann per Hand wieder mit Rosegarden zu erzeugen. Die erste Lösung ist aber wahrscheinlch die beste.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="200"/>
         <source>&lt;qt&gt;&lt;p&gt;You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you&apos;ve selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Es wurde ausgewählt, dass Rosegarden das Klammern im Notensystem exportiert werden und LilyPond konnte die Datei nicht verarbeiten. Unglücklicherweise ist diese nützliche Funktion sehr brüchig. Bitte gehen Sie zurück und stellen sicher, dass alle ausgewählten Klammern einen Sinn ergeben. Insbesondere verschachtelte Klammern sollten sorgfältig beachtet werden. Außerdem stellen Sie bitte sicher, dass bei der Arbeit mit ausgewählten Spuren die Klammern in dieser Auswahl einen Sinn ergeben, wenn Sie aus dem Zusammenhang genommen werden. Falls Sie irgendwelche Zweifel habe, schalten Sie bitte den Export von Gruppenklammen im Notensystem aus und prüfen ob LilyPond danach erfolgreich arbeiten kann.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="203"/>
@@ -14512,32 +14608,32 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="101"/>
         <source>&lt;qt&gt;Set the MIDI bank from which programs will be selected upon loading a new file or (if so configured) at the start of playback&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;MIDI Bank bestimmen, von der Programme beim Laden von neuen Files oder (falls Rosegarden so konfiguriert wurde) beim Start der Wiedergabe, ausgewählt werden.&lt;/qt&gt;&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="102"/>
         <source>&lt;qt&gt;&lt;p&gt;Set the MIDI channel number.&lt;/p&gt;&lt;p&gt;Before changing this, consider switching to a different instrument instead.  Instruments #1 through #16 match MIDI channels 1 through 16 by default.  You may change this relationship using this control if you wish, but this can lead to confusion&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;MIDI Kanalnummer bestimmen.&lt;/p&gt;&lt;p&gt;Bevor dies geändert wird, ziehen Sie in Betracht zu einem anderen Instrument zu wechseln.  DIe Instrumente #1 bis #16 stimmen standardmäßig mit den Kanälen 1 bis 16 überein.  Wenn Sie möchten, können Sie diese Beziehung hier ändern. Dies könnte aber zu Verwirrung führen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="103"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;p&gt;This will be transmitted upon loading a new file and (if Rosegarden is so configured) at the start of playback&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;MIDI Programm oder &amp;quot;patch&amp;quot; bestimmen&lt;/p&gt;&lt;p&gt;Dies wird beim Laden eines neuer neuen Datei und (falls Rosegarden so konfiguriert ist) beim Start der Wiedergabe übertragen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="104"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Bestimme Variationen des obigen Programmes, falls sie im Studio verfügbar sind&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="105"/>
         <source>&lt;qt&gt;Enable the control to the right&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Regler auf der rechten Seite aktivieren&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="109"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and/or Roland-style drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Haken setzen, um Rosegarden mittzuteilen, dass es sich um ein Perkussion-Instrument handelt.  Dies erlaubt es auf sämtliche Perkussion Tabellen und/oder Schlagzeuge im Roland-Stil, die im Studio konfiguriert wurden, zuzugreifen&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="115"/>
@@ -14567,7 +14663,7 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="147"/>
         <source>&lt;qt&gt;Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Nutze Programmänderungen von externen Quellen um diese Regler zu verändern (nur für die gerade aktive Spur) [Shift + P]&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="150"/>
@@ -14612,7 +14708,7 @@ verursacht.</translation>
         <location filename="../../src/commands/notation/MakeNotesViableCommand.h" line="51"/>
         <source>Tie Notes at &amp;Barlines</source>
         <translatorcomment>amp ok</translatorcomment>
-        <translation>Noten an Taktstrichen ver&amp;binden etc.</translation>
+        <translation>Noten an Taktstrichen ver&amp;binden</translation>
     </message>
 </context>
 <context>
@@ -14737,12 +14833,12 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="95"/>
         <source>&lt;qt&gt;Choose the device you want to use to play the metronome&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Gerät auswählen, auf dem das Metronom ausgegeben werden soll&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="126"/>
         <source>&lt;qt&gt;Choose the instrument you want to use to play the metronome (typically #10)&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Instrument auswählen, mit dem das Metronom gespielt werden soll (typischwerweise #10)&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="140"/>
@@ -14757,6 +14853,7 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="158"/>
         <source>&lt;qt&gt;Controls how forcefully the beat division notes will be struck.  (These are typically more quiet than beat division notes.)&lt;/qt&gt;</source>
+        <translatorcomment>??? zweimal beat division notes</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -14767,7 +14864,7 @@ verursacht.</translation>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="181"/>
         <source>&lt;qt&gt;It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Normalerweise wird ein Perkussion-Instrument als Metronom benutzt, so dass die Tonhöhe festlegt, welche Art von Trommel bei jedem Schlag ertönt. Für jeden Taktschlag und Zwischentaktschlag können unterschiedliche Tonhöhen konfiguriert werden.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="187"/>
@@ -15455,13 +15552,13 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="66"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="111"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Channel Pressure</translation>
+        <translation>Channel Pressure</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="67"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="112"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Pitch Bend</translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="68"/>
@@ -15473,7 +15570,7 @@ Doppel-Klick öffnet den Marker Editor.</translation>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="69"/>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="114"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">System Exclusive</translation>
+        <translation>System Exclusive</translation>
     </message>
     <message>
         <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="104"/>
@@ -15782,17 +15879,17 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1183"/>
         <source>Estimated time signature shown</source>
-        <translation type="unfinished">Ermittelte Taktart wird angezeigt</translation>
+        <translation>Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1266"/>
         <source>Transpose</source>
-        <translation type="unfinished">Transponieren</translation>
+        <translation>Transponieren</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1267"/>
         <source>By number of semitones: </source>
-        <translation type="unfinished">Anzahl der Halbtöne, um die transponiert werden soll:</translation>
+        <translation>Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
 </context>
 <context>
@@ -15939,17 +16036,17 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1894"/>
         <source>%1 - Segment Track #%2 - Notation</source>
-        <translation type="unfinished">%1 - Segment Spur #%2 - Notation</translation>
+        <translation>%1 - Segment Spur #%2 - Notation</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1900"/>
         <source>%1 - All Segments - Notation</source>
-        <translation type="unfinished">%1 - Alle Segmente - Notation</translation>
+        <translation>%1 - Alle Segmente - Notation</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1905"/>
         <source>%1 - %n Segment(s) - Notation</source>
-        <translation type="unfinished">
+        <translation>
             <numerusform>%1 - %n Segment - Notation</numerusform>
             <numerusform>%1 - %n Segmente - Notation</numerusform>
         </translation>
@@ -16068,7 +16165,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="223"/>
         <source>Highlight superimposed notes with a halo effect</source>
-        <translation type="unfinished"></translation>
+        <translation>Überlagerte Noten werden mit einem Halo-Effekt hervorgehoben</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="237"/>
@@ -16218,12 +16315,12 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="530"/>
         <source>Font size for single-staff views</source>
-        <translation>Fontgröße für Ansichten mit einem System</translation>
+        <translation>Fontgröße für Ansichten mit einem Notensystem</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="539"/>
         <source>Font size for multi-staff views</source>
-        <translation>Fontgröße für Ansichten mit mehreren Systemen</translation>
+        <translation>Fontgröße für Ansichten mit mehreren Notensystemen</translation>
     </message>
     <message>
         <location filename="../../src/gui/configuration/NotationConfigurationPage.cpp" line="548"/>
@@ -16261,17 +16358,17 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="454"/>
         <source>Rendering staff %1...</source>
-        <translation>System %1 wird dargestellt...</translation>
+        <translation>Notensystem %1 wird dargestellt...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="517"/>
         <source>Rendering notes on staff %1...</source>
-        <translation>System %1 wird dargestellt...</translation>
+        <translation>Notensystem %1 wird dargestellt...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="646"/>
         <source>Positioning staff %1...</source>
-        <translation>System %1 wird positioniert...</translation>
+        <translation>Notensystem %1 wird positioniert...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="1181"/>
@@ -16379,7 +16476,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="84"/>
         <source>double whole notes</source>
-        <translation>Doppelte Ganze Noten</translation>
+        <translation>Doppelte ganze Noten</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationStrings.cpp" line="88"/>
@@ -16515,12 +16612,13 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1630"/>
         <source>Si&amp;ze</source>
-        <translation type="unfinished">&amp;Größe</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>&amp;Größe</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1638"/>
         <source>S&amp;pacing</source>
-        <translation type="unfinished">&amp;Abstände</translation>
+        <translation>&amp;Abstände</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="1663"/>
@@ -16575,12 +16673,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2244"/>
         <source>Laying out staff %1...</source>
-        <translation>System %1 wird angeordnet...</translation>
+        <translation>Notensystem %1 wird angeordnet...</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2253"/>
         <source>Reconciling staffs...</source>
-        <translation>Systeme werden ausgerichtet...</translation>
+        <translation>Notensysteme werden ausgerichtet...</translation>
     </message>
     <message numerus="yes">
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="2483"/>
@@ -16778,12 +16876,12 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4167"/>
         <source>Move Events to Staff Above</source>
-        <translation>Events auf obere Notation verschieben</translation>
+        <translation>Events auf Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4195"/>
         <source>Move Events to Staff TicksBelow</source>
-        <translation>Events auf untere Notation verschieben</translation>
+        <translation>Events auf Notensystem unterhalb verschieben</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4307"/>
@@ -17325,7 +17423,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="114"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;convert-ly&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;convert-ly&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;convert-ly&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;convert-ly&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von fatalen Fehlern wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="127"/>
@@ -17350,7 +17448,7 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/gui/general/ProjectPackager.cpp" line="145"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;lilypond&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;lilypond&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von eineam fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -17650,7 +17748,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/notation/RemoveNotationQuantizeCommand.h" line="45"/>
         <source>Remo&amp;ve Notation Quantization</source>
-        <translation type="unfinished">Darstellungsquantisierung entfernen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Darstellungsquantisierung &amp;entfernen</translation>
     </message>
 </context>
 <context>
@@ -17790,7 +17889,8 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
     <message>
         <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="45"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation type="unfinished">Er&amp;rechnete Bindebögen wiederherstellen</translation>
+        <translatorcomment>amp ok</translatorcomment>
+        <translation>Er&amp;rechnete Bindebögen wiederherstellen</translation>
     </message>
 </context>
 <context>
@@ -20070,27 +20170,27 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="115"/>
         <source>&lt;qt&gt;&lt;p&gt;Track %1 : &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Spur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="121"/>
         <source>&lt;br&gt;Notate for: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;notieren für: %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="158"/>
         <source>&lt;br&gt;Size: %1,  Bracket: %2 </source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Größe: %1,  Klammer: %2 </translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="186"/>
         <source>&lt;br&gt;bars [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Takte [%1-%2] in %3 (tr=%4) : &quot;%5&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="193"/>
         <source>&lt;br&gt;bars [%1-%2] (tr=%3) : &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;br&gt;Takte [%1-%2] (tr=%3) : &quot;%4&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="308"/>
@@ -21083,7 +21183,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="88"/>
         <source>&lt;qt&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Klicken und einen beliebigen Mausknopf festhalten um diese Spur einem Instrument zuzuordnen.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="221"/>
