@@ -65,6 +65,11 @@ public:
     SequenceManager(TransportDialog *transport);
     ~SequenceManager();
 
+    /** Used to transmit the type of sequencer warning, so the WarningWidget
+     * knows which icon to manipulate
+     */
+    //typedef enum { Midi, Audio, Timer } WarningType;
+
     /**
      * Replaces the internal document
      */
@@ -204,14 +209,17 @@ public slots:
     void update();
 
 signals:
-    void signalSelectProgramNoSend(int,int,int);
+    void signalSelectProgramNoSend(int, int, int);
     void setValue(int);
     void incrementProgress(int);
 
     void insertableNoteOnReceived(int pitch, int velocity);
     void insertableNoteOffReceived(int pitch, int velocity);
     void controllerDeviceEventReceived(MappedEvent *ev);
-    
+
+    /// signal RosegardenMainWindow to display a warning on the WarningWidget
+    void sendWarning(int type, QString text, QString informativeText);
+
 protected slots:
     void slotCountdownTimerTimeout();
 
@@ -293,6 +301,7 @@ protected:
     timeT                      m_lastTransportStartPosition;
 
     int                        m_sampleRate;
+
 };
 
 

@@ -46,6 +46,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/DialogSuppressor.h"
 #include "gui/widgets/CurrentProgressDialog.h"
+#include "gui/widgets/WarningWidget.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "MetronomeMapper.h"
 #include "SegmentMapperFactory.h"
@@ -999,11 +1000,11 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         switch ((*i)->getData1()) {
 
                         case MappedEvent::FailureDiscUnderrun:
-                            message = tr("Failed to read audio data from disc in time to service the audio subsystem.");
+                            message = tr("Failed to read audio data from disk in time to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureDiscOverrun:
-                            message = tr("Failed to write audio data to disc fast enough to service the audio subsystem.");
+                            message = tr("Failed to write audio data to disk fast enough to service the audio subsystem.");
                             break;
 
                         case MappedEvent::FailureBussMixUnderrun:
@@ -1050,9 +1051,12 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     }
                 }
             } else {
-                StartupLogo::hideIfStillThere();
+//                StartupLogo::hideIfStillThere();
 
                 if ((*i)->getType() == MappedEvent::SystemFailure) {
+
+                    QString text(tr("<h3>System timer resolution is too low!</h3>"));
+                    QString informativeText("");
 
                     if ((*i)->getData1() == MappedEvent::FailureJackRestartFailed) {
 
@@ -1061,7 +1065,10 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             tr("The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.\nPlease restart Rosegarden to continue working with audio.\nQuitting other running applications may improve Rosegarden's performance."));
 
                     } else if ((*i)->getData1() == MappedEvent::FailureJackRestart) {
-
+                        //!!! Does this attempt to restart the "audio service"
+                        // EVER work?  I don't think I've ever seen that work.
+                        // When this is gone, it's gone, and time to restart.
+                        // But let's not change the translated message.
                         QMessageBox::critical(
                             RosegardenMainWindow::self(), "",
                             tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
@@ -1071,10 +1078,10 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                         std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
 
-                        StartupLogo::hideIfStillThere();
-                        CurrentProgressDialog::freeze();
-
-                        RosegardenMainWindow::self()->awaitDialogClearance();
+//                        StartupLogo::hideIfStillThere();
+//                        CurrentProgressDialog::freeze();
+//
+//                        RosegardenMainWindow::self()->awaitDialogClearance();
 
                         // This is to avoid us ever showing the same
                         // dialog more than once during a single run
@@ -1083,36 +1090,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         static bool showTimerWarning = true;
 
                         if (showTimerWarning) {
-
-                            QMessageBox info(RosegardenMainWindow::self());
-                            info.setText(tr("<h3>System timer resolution is too low</h3>"));
-                            info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>"));
-                            info.setStandardButtons(QMessageBox::Ok);
-                            info.setDefaultButton(QMessageBox::Ok);
-                            info.setIcon(QMessageBox::Warning);
-
-                            if (!DialogSuppressor::shouldSuppress
-                                (&info, "inadequatetimerresolution")) {
-
-                                info.exec();
-
-                                if (DialogSuppressor::isSuppressed
-                                    ("inadequatetimerresolution")) {
-                                    
-                                    QMessageBox::information(RosegardenMainWindow::self(),
-                                                             "",
-                                                             tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
-                                                             QMessageBox::Ok,
-                                                             QMessageBox::Ok);
-                                }
-
-                            } else {
-                                // so these will show up when users
-                                // paste their debug stream reports,
-                                // and we'll have a clue what might be
-                                // wrong
-                                std::cerr << "TIMER WARNING squelched per user request.  Bad timing condition still exists." << std::endl;
-                            }
+                            informativeText =tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>");
 
                             // whatever, don't show again during this run
                             showTimerWarning = false;
@@ -1123,13 +1101,13 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
                                shouldWarnForImpreciseTimer()) {
 
-                        std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available" << std::endl;
+                        std::cerr << "Rosegarden: WARNING: No accurate sequencer timer available (and kernel is new enough for RTC addendum)" << std::endl;
 
-                        StartupLogo::hideIfStillThere();
-                        CurrentProgressDialog::freeze();
-
-                        RosegardenMainWindow::self()->awaitDialogClearance();
-
+//                        StartupLogo::hideIfStillThere();
+//                        CurrentProgressDialog::freeze();
+//
+//                        RosegardenMainWindow::self()->awaitDialogClearance();
+                        
                         // This is to avoid us ever showing the same
                         // dialog more than once during a single run
                         // of the program -- it's quite separate from
@@ -1137,43 +1115,20 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         static bool showAltTimerWarning = true;
 
                         if (showAltTimerWarning) {
-                            QMessageBox info(RosegardenMainWindow::self());
-                            info.setText(tr("<h3>System timer resolution is too low</h3>"));
-                            info.setInformativeText(tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>"));
-                            info.setStandardButtons(QMessageBox::Ok);
-                            info.setDefaultButton(QMessageBox::Ok);
-                            info.setIcon(QMessageBox::Warning);
-
-                            if (!DialogSuppressor::shouldSuppress
-                                (&info, "inadequatetimerresolutiontryrtc")) {
-
-                                info.exec();
-
-                                if (DialogSuppressor::isSuppressed
-                                    ("inadequatetimerresolutiontryrtc")) {
-
-                                    QMessageBox::information(RosegardenMainWindow::self(),
-                                                             "",
-                                                             tr("This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system."),
-                                                             QMessageBox::Ok,
-                                                             QMessageBox::Ok);
-                                }
-
-                            } else {
-                                // so these will show up when users
-                                // paste their debug stream reports,
-                                // and we'll have a clue what might be
-                                // wrong
-                                std::cerr << "TIMER WARNING (suggesting RTC) squelched per user request.  Bad timing condition still exists." << std::endl;
-                            }
+                            informativeText = tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>");
 
                             // whatever, don't show again during this run
                             showAltTimerWarning = false;
                         }
 
-                        CurrentProgressDialog::thaw();
-                    }
-                }
+                        // if we got some informative text, shoot it out to the
+                        // warning widget queue
+                        if (informativeText != "")
+                            emit sendWarning(WarningWidget::Timer, text, informativeText);
+
+//                        CurrentProgressDialog::thaw();
+                    } 
+                } 
             }
         }
     }
@@ -1219,6 +1174,9 @@ SequenceManager::fastForwardToEnd()
 void
 SequenceManager::setLoop(const timeT &lhs, const timeT &rhs)
 {
+    //!!!  So who disabled the following, why?  Are loops with JACK transport
+    // sync no longer hideously broken?
+    //
     // do not set a loop if JACK transport sync is enabled, because this is
     // completely broken, and apparently broken due to a limitation of JACK
     // transport itself.  #1240039 - DMM
@@ -1264,66 +1222,37 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     StartupLogo::hideIfStillThere();
     CurrentProgressDialog::freeze();
 
-    QString text = "";
+    QString text("");
+    QString informativeText("");
 
     if (m_soundDriverStatus == NO_DRIVER) {
-        text = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"alsaconf\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
+        text = tr("<h3>Sequencer engine unavailable!</h3>");
+        informativeText = tr("<p>Both MIDI and Audio subsystems have failed to initialize.</p><p>If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.</p>");
     } else if (!(m_soundDriverStatus & MIDI_OK)) {
-        text = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
-
-        // removed obsolete warning about the sequencer version not matching the
-        // GUI version, as they are all one and the same now for all intents and
-        // purposes
-
+        text = tr("<h3>MIDI sequencing unavailable!</h3>");
+        informativeText = tr("<p>The MIDI subsystem has failed to initialize.</p><p>You may continue without the sequencer, but we suggest closing Rosegarden, running \"modprobe snd-seq-midi\" as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use \"rosegarden --nosequencer\" to avoid seeing this error in the future.</p>");
     }
 
     if (text != "") {
-        RosegardenMainWindow::self()->awaitDialogClearance();
-        QMessageBox::critical(RosegardenMainWindow::self(), "",
-                           tr("<h3>Sequencer startup failed</h3>%1").arg(text));
-        CurrentProgressDialog::thaw();
+        emit sendWarning(WarningWidget::Midi, text, informativeText);
         return;
-    }
+    } 
 
 #ifdef HAVE_LIBJACK
 
     if (!(m_soundDriverStatus & AUDIO_OK)) {
-        RosegardenMainWindow::self()->awaitDialogClearance();
-
         // This is to avoid us ever showing the same dialog more than
         // once during a single run of the program -- it's quite
         // separate from the suppression function
         static bool showJackWarning = true;
 
         if (showJackWarning) {
-            QMessageBox info(RosegardenMainWindow::self());
-            info.setText(tr("<h3>Failed to connect to JACK</h3>"));
-            info.setInformativeText(tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.</p><p>If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.</p>"));
-            info.setStandardButtons(QMessageBox::Ok);
-            info.setDefaultButton(QMessageBox::Ok);
-            info.setIcon(QMessageBox::Warning);
-
-            if (!DialogSuppressor::shouldSuppress
-                (&info, "failedtoconnecttojack")) {
-
-                info.exec();
-
-                if (DialogSuppressor::isSuppressed("failedtoconnecttojack")) {
-
-                    QMessageBox::information(RosegardenMainWindow::self(),
-                                             "",
-                                             tr("This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently."),
-                                             QMessageBox::Ok,
-                                             QMessageBox::Ok);
-                }
-            } else {
-                // so these will show up when users paste their
-                // debug stream reports, and we'll have a clue what
-                // might be wrong
-                std::cerr << "JACK WARNING squelched per user request" << std::endl;
-            }
-            showJackWarning = false;
-        }
+            text = tr("<h3>Audio sequencing and synth plugins unavailable!</h3>");
+            informativeText = tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.</p><p>If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.</p><p> Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.</p>");
+            emit sendWarning(WarningWidget::Audio, text, informativeText);
+            
+            showJackWarning = false; 
+        } 
     }
 #endif
     CurrentProgressDialog::thaw();

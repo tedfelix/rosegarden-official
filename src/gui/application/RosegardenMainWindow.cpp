@@ -140,6 +140,7 @@
 #include "gui/general/ProjectPackager.h"
 #include "gui/widgets/StartupLogo.h"
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/WarningWidget.h"
 #include "gui/seqmanager/MidiFilterDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/studio/AudioMixerWindow.h"
@@ -395,6 +396,12 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_seqManager = new SequenceManager(getTransport());
     m_seqManager->setDocument(m_doc);
 
+    connect(m_seqManager,
+            SIGNAL(sendWarning(int, QString, QString)),
+            this,
+            SLOT(slotDisplayWarning(int, QString, QString)));
+
+
     if (m_useSequencer) {
         // Check the sound driver status and warn the user of any
         // problems.  This warning has to happen early, in case it
@@ -420,8 +427,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     if (m_seqManager->getSoundDriverStatus() & AUDIO_OK) {
         slotStateChanged("got_audio", true);
+//        m_warningWidget->setAudioWarning(false);
     } else {
         slotStateChanged("got_audio", false);
+//        m_warningWidget->setAudioWarning(true);
     }
 
     // If we're restarting the gui then make sure any transient
@@ -851,22 +860,16 @@ RosegardenMainWindow::initStatusBar()
                 
     m_progressBar->setTextVisible(false);
     statusBar()->addPermanentWidget(m_progressBar);
-    
-    
-    /* init toolbar */
-    /****************/
-    
-    //### Main toolbar seems to appear twice. Commenting out the empty one.
-    // addToolBar(Qt::TopToolBarArea, new QToolBar("Main Toolbar"));
+
+    // status warning widget replaces a glob of annoying startup dialogs
+    m_warningWidget = new WarningWidget();
+    statusBar()->addPermanentWidget(m_warningWidget);
+    statusBar()->setContentsMargins(0, 0, 0, 0);
 }
 
 void
 RosegardenMainWindow::initView()
 {
-    ////////////////////////////////////////////////////////////////////
-    // create the main widget here that is managed by KTMainWindow's view-region and
-    // connect the widget to your document to display document contents.
-
     RG_DEBUG << "RosegardenMainWindow::initView()" << endl;
 
     Composition &comp = m_doc->getComposition();
@@ -903,15 +906,6 @@ RosegardenMainWindow::initView()
     m_doc->attachView(m_swapView);
 
     setWindowTitle(tr("%1 - %2").arg(m_doc->getTitle()).arg(qApp->applicationName()));
-    
-    /*
-    // if we wanted to apply a qt4-qss stylesheet in code:
-    //
-    QFile qss("data/rosegarden.qss");
-    qss.open(QFile::ReadOnly);
-    qApp->setStyleSheet(qss.readAll());
-    qss.close();
-    // */
     
     // Transport setup
     //
@@ -7869,9 +7863,42 @@ RosegardenMainWindow::slotJumpToQuickMarker()
     m_doc->jumpToQuickMarker();
 }
 
-void RosegardenMainWindow::slotOpenDeviceManagerNew()
+void
+RosegardenMainWindow::slotOpenDeviceManagerNew()
 {
 }
+
+void
+RosegardenMainWindow::slotDisplayWarning(int type,
+                                         QString text,
+                                         QString informativeText)
+{
+    std::cerr << "MAIN WINDOW DISPLAY WARNING:  type " << type
+              << " text" << qstrtostr(text) << std::endl;
+
+// I'll need a hack way to make it look like my system isn't broken, for
+// screenshots, even though in reality Ubuntu 9.04 is totally hopeless
+//#define PEACHY_HACK
+#ifdef PEACHY_HACK
+    return;
+#endif
+
+    // queue up the message, which trips the warning icon in so doing
+    m_warningWidget->queueMessage(text, informativeText);
+
+    // set up the error state for the appropriate icon...  this should probably
+    // be managed some other way, but that's organic growth for you
+    switch (type) {
+        case WarningWidget::Midi: m_warningWidget->setMidiWarning(true); break;
+        case WarningWidget::Audio: m_warningWidget->setAudioWarning(true); break;
+        case WarningWidget::Timer: m_warningWidget->setTimerWarning(true); break;
+        case WarningWidget::Other:
+        default: break;
+    }
+
+}
+
+
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = 0;
 

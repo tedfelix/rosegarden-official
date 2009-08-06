@@ -1,0 +1,32 @@
+#!/bin/bash
+#
+# newclass
+#
+# Copyright (c) 2009  D. Michael McIntyre <rosegarden.trumpeter@gmail.com>
+# Released under the GPL
+#
+# REQUIRES: having your butt plonked in a rosegarden/ directory
+#
+#
+# PURPOSE: to automate copying the template files out to make a new class from
+# scratch
+#
+
+cpp=$1.cpp
+h=$1.h
+name=$(basename $1)
+NAME=$(echo $name | gawk '{print toupper($0)}')
+
+cp -v templates/template.cpp $cpp
+
+cp -v templates/template.h $h
+
+replace TEMPLATE $NAME $cpp
+replace TEMPLATE $NAME $h
+
+replace Template $name $cpp
+replace Template $name $h
+
+svn add $cpp $h
+
+exit 0
