@@ -372,14 +372,15 @@
     <Menu noMerge="1" name="RestTools">
       <text>&amp;Rests</text>
 	    <!-- Reference names, but with _ instead of - -->
-      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" shortcut="5" checked="false" group="tools_note" />
-      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" shortcut="1" checked="false" group="tools_note" />
-      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" shortcut="2" checked="false" group="tools_note" />
-      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" shortcut="4" checked="false" group="tools_note" />
-      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" shortcut="8" checked="false" group="tools_note" />
-      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" shortcut="6" checked="false" group="tools_note" />
-      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" shortcut="3" checked="false" group="tools_note" />
-      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" shortcut="0" checked="false" group="tools_note" />
+            <!-- Cannot define here the same shortcut="5" for notes and rest because otherwise the shortcut definitions are ambiguous. -->
+      <Action name="rest_breve" text="&amp;Double Whole Rest" icon="rest-breve" checked="false" group="tools_note" />
+      <Action name="rest_semibreve" text="&amp;Whole Rest" icon="rest-semibreve" checked="false" group="tools_note" />
+      <Action name="rest_minim" text="&amp;Half Rest" icon="rest-minim" checked="false" group="tools_note" />
+      <Action name="rest_crotchet" text="&amp;Quarter Rest" icon="rest-crotchet" checked="false" group="tools_note" />
+      <Action name="rest_quaver" text="&amp;Eighth Rest" icon="rest-quaver" checked="false" group="tools_note" />
+      <Action name="rest_semiquaver" text="&amp;Sixteenth Rest" icon="rest-semiquaver" checked="false" group="tools_note" />
+      <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" checked="false" group="tools_note" />
+      <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" checked="false" group="tools_note" />
     <Separator/>
       <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="tools_note" />
       <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="tools_note" />
