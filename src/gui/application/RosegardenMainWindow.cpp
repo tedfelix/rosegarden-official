@@ -456,7 +456,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
 
     emit startupStatusMessage(tr("Starting..."));
 
-    //setupFileDialogSpeedbar();
     readOptions();
 
     // All toolbars should be created before this is called
@@ -1397,39 +1396,6 @@ RosegardenMainWindow::createDocumentFromRGFile(QString filePath)
     }
 
     return newDoc;
-}
-
-
-void
-RosegardenMainWindow::setupFileDialogSpeedbar()
-{
-    QSettings settings;
-    settings.beginGroup("FileDialog_Speedbar");
-
-    RG_DEBUG << "RosegardenMainWindow::setupFileDialogSpeedbar" << endl;
-
-    bool hasSetExamplesItem = qStrToBool(settings.value("Examples_Set", "false")) ;
-
-    RG_DEBUG << "RosegardenMainWindow::setupFileDialogSpeedbar: examples set " << hasSetExamplesItem << endl;
-
-    if (!hasSetExamplesItem) {
-
-        unsigned int n = settings.value("Number of Entries", 0).toUInt() ;
-
-        settings.setValue(QString("Description_%1").arg(n), tr("Example Files"));
-        settings.setValue(QString("IconGroup_%1").arg(n), 4);
-        settings.setValue(QString("Icon_%1").arg(n), "folder");
-        settings.setValue(QString("URL_%1").arg(n),
-                          ResourceFinder().getResourceDir("examples"));
-
-        RG_DEBUG << "wrote url " << settings.value(QString("URL_%1").arg(n)).toString() << endl;
-
-        settings.setValue("Examples_Set", true);
-        settings.setValue("Number_of_Entries", n + 1);
-        settings.sync();
-    }
-
-    settings.endGroup();
 }
 
 void

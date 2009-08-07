@@ -73,6 +73,8 @@ WarningDialog::addWarning(Message message)
     informativeText->setWordWrap(true);
     layout->addWidget(informativeText);
 
+    informativeText->setOpenExternalLinks(true);
+
     m_tabWidget->addTab(tab, m_warningIcon, "");
 }
 
