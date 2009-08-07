@@ -48,7 +48,7 @@ WarningDialog::WarningDialog() : QDialog()
 
     m_warningIcon = IconLoader().load("warning");
 
-    setWindowTitle(tr("Runtime Problems Detected"));
+    setWindowTitle(tr("Performance Problems Detected"));
     setWindowIcon(m_warningIcon);
 }
 

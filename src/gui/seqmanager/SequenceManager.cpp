@@ -1090,7 +1090,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         static bool showTimerWarning = true;
 
                         if (showTimerWarning) {
-                            informativeText =tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for instructions.</p>");
+                            informativeText =tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for instructions.</p>");
 
                             // whatever, don't show again during this run
                             showTimerWarning = false;
@@ -1115,7 +1115,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         static bool showAltTimerWarning = true;
 
                         if (showAltTimerWarning) {
-                            informativeText = tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See <a style=\"color:gold\"  href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">http://www.rosegardenmusic.com/wiki/low-latency_kernels</a> for notes about this.</p>");
+                            informativeText = tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the <a style=\"color:gold\"  href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for notes about this.</p>");
 
                             // whatever, don't show again during this run
                             showAltTimerWarning = false;
