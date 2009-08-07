@@ -63,6 +63,7 @@ WarningDialog::addWarning(Message message)
 
     QWidget *tab = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout;
+    layout->setAlignment(Qt::AlignTop);
     tab->setLayout(layout);
 
     QLabel *text = new QLabel(message.first);

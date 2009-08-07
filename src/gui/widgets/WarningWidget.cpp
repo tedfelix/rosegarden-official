@@ -37,6 +37,11 @@ WarningWidget::WarningWidget() :
 {
     std::cerr << "WarningWidget()" << std::endl;
 
+    // try to solve the parent problem without installing new ctor parameters;
+    // note that setting this as the parent causes the dialog to cram itself
+    // directly into the warning widget itself
+    m_warningDialog->setParent(dynamic_cast<QWidget*>(this->parent()));
+
     setContentsMargins(0, 0, 0, 0);
     
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
@@ -129,12 +134,10 @@ WarningWidget::displayMessageQueue()
 {
     std::cerr << "WarningWidget::displayMessageQueue()" << std::endl;
 
-//    m_warningDialog->exec();
-
     while (!m_queue.isEmpty()) {
         std::cerr << " - emptying queue..." << std::endl;
         m_warningDialog->addWarning(m_queue.dequeue());
-    }    
+    }
     m_warningDialog->show();
 }
 

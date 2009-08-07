@@ -7794,22 +7794,9 @@ RosegardenMainWindow::awaitDialogClearance()
 void
 RosegardenMainWindow::slotNewerVersionAvailable(QString v)
 {
-    //### DISABLE THIS FOR NOW, BECAUSE IT IS IRRITATING THE PISS OUT OF ME
-    //HAVING TO CLICK ON THIS USELESS DIALOG EVERY TIME I RUN THIS THING!
-    //
-    return;
-    //
-    
-    if (m_firstRun) return;
-    StartupLogo::hideIfStillThere();
-    CurrentProgressDialog::freeze();
-    awaitDialogClearance();
-    QMessageBox::information
-            (this, tr("Newer version available"),
-         tr("<h3>Newer version available</h3><p>A newer version of Rosegarden may be available.<br>Please consult the <a href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>").arg("version-%1-available-show").arg(v));
-       //  QMessageBox::AllowLink);
-    
-    CurrentProgressDialog::thaw();
+    QString text(tr("<h3>Newer version available</h3>"));
+    QString informativeText(tr("<p>You are using version %1.  Version %2 is now available.</p><p>Please consult the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/getting/\">Rosegarden website</a> for more information.</p>").arg(VERSION).arg(v));
+    slotDisplayWarning(WarningWidget::Other, text, informativeText);
 }
 
 void
