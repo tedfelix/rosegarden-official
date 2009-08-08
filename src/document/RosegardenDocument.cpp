@@ -198,9 +198,9 @@ void RosegardenDocument::detachEditView(EditViewBase *view)
 
 void RosegardenDocument::deleteEditViews()
 {
-    // enabled auto-deletion : edit views will be deleted
-    
-    //m_editViewList.setAutoDelete(true);    //@@@ removed QList.setAutoDelete(), so it does compile
+    for (int i = 0; i < m_editViewList.size(); ++i) {
+        delete m_editViewList[i];
+    }
     m_editViewList.clear();
 }
 
