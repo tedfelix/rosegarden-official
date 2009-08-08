@@ -78,7 +78,8 @@ NotationWidget::NotationWidget() :
     m_tempoRulerIsVisible(false),
     m_rawNoteRulerIsVisible(false),
     m_chordNameRulerIsVisible(false),
-    m_headersAreVisible(false)
+    m_headersAreVisible(false),
+    m_tripletMode(false)
 {
     m_layout = new QGridLayout;
     setLayout(m_layout);

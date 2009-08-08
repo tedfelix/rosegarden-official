@@ -131,6 +131,7 @@ protected slots:
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
+    void slotUpdateInsertModeStatus();
 
     /// Show or hide rulers
     void slotToggleChordsRuler();
@@ -189,6 +190,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void setupActions();
     void updateWindowTitle();
+    bool isInTripletMode();
 };
 
 }
