@@ -539,7 +539,7 @@ NewNotationView::setupActions()
 
     createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("triplet_mode", SLOT(slotUpdateInsertModeStatus()));
-    findAction("triplet_mode")->setCheckable(true);
+//    findAction("triplet_mode")->setCheckable(true);
     createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
 
