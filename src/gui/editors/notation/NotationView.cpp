@@ -446,7 +446,31 @@ NewNotationView::setupActions()
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
 
-    //"NoteTools" subMenu
+//!!! not implemented yet
+    createAction("switch_from_note_to_rest", SLOT(slotSwitchFromNoteToRest()));
+//!!! not implemented yet
+    createAction("switch_from_rest_to_note", SLOT(slotSwitchFromRestToNote()));
+
+    // Menu uses now "Switch to Notes", "Switch to Rests" and "Durations".
+    createAction("duration_breve", SLOT(slotNoteAction()));
+    createAction("duration_semibreve", SLOT(slotNoteAction()));
+    createAction("duration_minim", SLOT(slotNoteAction()));
+    createAction("duration_crotchet", SLOT(slotNoteAction()));
+    createAction("duration_quaver", SLOT(slotNoteAction()));
+    createAction("duration_semiquaver", SLOT(slotNoteAction()));
+    createAction("duration_demisemi", SLOT(slotNoteAction()));
+    createAction("duration_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("duration_dotted_breve", SLOT(slotNoteAction()));
+    createAction("duration_dotted_semibreve", SLOT(slotNoteAction()));
+    createAction("duration_dotted_minim", SLOT(slotNoteAction()));
+    createAction("duration_dotted_crotchet", SLOT(slotNoteAction()));
+    createAction("duration_dotted_quaver", SLOT(slotNoteAction()));
+    createAction("duration_dotted_semiquaver", SLOT(slotNoteAction()));
+    createAction("duration_dotted_demisemi", SLOT(slotNoteAction()));
+    createAction("duration_dotted_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("toggle_dot", SLOT(slotToggleDot()));
+
+    //"NoteTool" subMenu
     //NEED to create action methods
     createAction("breve", SLOT(slotNoteAction()));
     createAction("semibreve", SLOT(slotNoteAction()));
@@ -464,9 +488,6 @@ NewNotationView::setupActions()
     createAction("dotted_semiquaver", SLOT(slotNoteAction()));
     createAction("dotted_demisemi", SLOT(slotNoteAction()));
     createAction("dotted_hemidemisemi", SLOT(slotNoteAction()));
-    createAction("toggle_dot", SLOT(slotToggleDot()));
-//!!! not implemented yet    createAction("switch_from_note_to_rest", SLOT(slotSwitchFromNoteToRest()));
-//    createAction("switch_from_rest_to_note", SLOT(slotSwitchFromRestToNote()));
 
     //"RestTool" subMenu
     //NEED to create action methods
@@ -1383,6 +1404,32 @@ NewNotationView::slotNoteAction()
     bool rest = false;
     int dots = 0;
 
+    if (name.startsWith("duration_")) {
+        findAction(name)->setChecked(true);
+        name = name.replace("duration_", "");
+        if (m_notationWidget) {
+            if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
+                NOTATION_DEBUG << "Have rest inserter " << endl;
+                rest = true;
+                if (name.startsWith("dotted_")) {
+                    name = name.replace("dotted_", "dotted_rest_");
+                } else {
+                    name = QString("rest_%1").arg(name);
+                }
+            } else if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
+                NOTATION_DEBUG << "Have note inserter " << endl;
+                rest = false;
+            } else {
+                NOTATION_DEBUG << "Have neither inserter " << endl;
+                NOTATION_DEBUG << "Select note inserter, which is default " << endl;
+                rest = false;
+            }
+        }
+    }
+    // Try to check correct item in Duration menu. (does not work)
+    findAction(QString("duration_%1").arg(name))->setChecked(true);
+    // Check correct item in Notes or Rests Toolbars. (work)
+    findAction(name)->setChecked(true);
     if (name.startsWith("dotted_")) {
         dots = 1;
         name = name.replace("dotted_", "");
