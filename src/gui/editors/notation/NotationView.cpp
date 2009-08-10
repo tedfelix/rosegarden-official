@@ -446,10 +446,8 @@ NewNotationView::setupActions()
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
 
-//!!! not implemented yet
-    createAction("switch_from_note_to_rest", SLOT(slotSwitchFromNoteToRest()));
-//!!! not implemented yet
-    createAction("switch_from_rest_to_note", SLOT(slotSwitchFromRestToNote()));
+    createAction("switch_to_rests", SLOT(slotSwitchToRests()));
+    createAction("switch_to_notes", SLOT(slotSwitchToNotes()));
 
     // Menu uses now "Switch to Notes", "Switch to Rests" and "Durations".
     createAction("duration_breve", SLOT(slotNoteAction()));
@@ -1395,6 +1393,86 @@ NewNotationView::slotSetEraseTool()
 }    
 
 void
+NewNotationView::slotSwitchToNotes()
+{
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+
+    Note::Type unitType = Note::Crotchet;
+    int dots = 0;
+    QString name;
+
+    if (currentInserter) {
+        unitType = currentInserter->getCurrentNote().getNoteType();
+        dots = currentInserter->getCurrentNote().getDots();
+    }
+
+    if (m_notationWidget) {
+        m_notationWidget->slotSetNoteInserter();
+        m_notationWidget->slotSetInsertedNote(unitType, dots);
+    }
+
+    if (unitType == Note::Breve) name = QString("breve");
+    else if (unitType == Note::Semibreve) name = QString("semibreve");
+    else if (unitType == Note::Minim) name = QString("minim");
+    else if (unitType == Note::Crotchet) name = QString("crotchet");
+    else if (unitType == Note::Quaver) name = QString("quaver");
+    else if (unitType == Note::Semiquaver) name = QString("semiquaver");
+    else if (unitType == Note::Demisemiquaver) name = QString("demisemi");
+    else if (unitType == Note::Hemidemisemiquaver) name = QString("hemidemisemi");
+
+    if (dots > 0) {
+        name = QString("dotted_%1").arg(name);
+    } else {
+        name = QString("%1").arg(name);
+    }
+
+    findAction(QString("duration_%1").arg(name))->setChecked(true);
+    findAction(name)->setChecked(true);
+
+    slotUpdateMenuStates();
+}
+
+void
+NewNotationView::slotSwitchToRests()
+{
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+
+    Note::Type unitType = Note::Crotchet;
+    int dots = 0;
+    QString name;
+
+    if (currentInserter) {
+        unitType = currentInserter->getCurrentNote().getNoteType();
+        dots = currentInserter->getCurrentNote().getDots();
+    }
+
+    if (m_notationWidget) {
+        m_notationWidget->slotSetRestInserter();
+        m_notationWidget->slotSetInsertedNote(unitType, dots);
+    }
+
+    if (unitType == Note::Breve) name = QString("breve");
+    else if (unitType == Note::Semibreve) name = QString("semibreve");
+    else if (unitType == Note::Minim) name = QString("minim");
+    else if (unitType == Note::Crotchet) name = QString("crotchet");
+    else if (unitType == Note::Quaver) name = QString("quaver");
+    else if (unitType == Note::Semiquaver) name = QString("semiquaver");
+    else if (unitType == Note::Demisemiquaver) name = QString("demisemi");
+    else if (unitType == Note::Hemidemisemiquaver) name = QString("hemidemisemi");
+
+    if (dots > 0) {
+        name = QString("dotted_rest_%1").arg(name);
+    } else {
+        name = QString("rest_%1").arg(name);
+    }
+
+    findAction(QString("duration_%1").arg(name))->setChecked(true);
+    findAction(name)->setChecked(true);
+
+    slotUpdateMenuStates();
+}
+
+void
 NewNotationView::slotNoteAction()
 {
     QObject *s = sender();
@@ -1426,9 +1504,7 @@ NewNotationView::slotNoteAction()
             }
         }
     }
-    // Try to check correct item in Duration menu. (does not work)
     findAction(QString("duration_%1").arg(name))->setChecked(true);
-    // Check correct item in Notes or Rests Toolbars. (work)
     findAction(name)->setChecked(true);
     if (name.startsWith("dotted_")) {
         dots = 1;

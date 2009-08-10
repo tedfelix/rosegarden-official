@@ -99,6 +99,8 @@ protected slots:
     void slotSetSelectTool();
     void slotSetEraseTool();
 
+    void slotSwitchToNotes();
+    void slotSwitchToRests();
     void slotNoteAction();
     void slotNoAccidental();
     void slotFollowAccidental();

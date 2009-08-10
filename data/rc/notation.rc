@@ -348,8 +348,8 @@
     <!-- Will need to handle F3 specially in the code: it switches to "the last used inserter", whether note, rest or whatever -->
     <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_note" checked="false" />
     <!-- <Menu noMerge="1" name="NoteTools"> -->
-    <Action name="switch_from_rest_to_note" text="Switch from Rest to &amp;Note" shortcut="Y" />
-    <Action name="switch_from_note_to_rest" text="Switch from Note to &amp;Rest" shortcut="Shift+Y"/>
+    <Action name="switch_to_notes" text="Switch to &amp;Notes" shortcut="Y" />
+    <Action name="switch_to_rests" text="Switch to &amp;Rests" shortcut="Shift+Y"/>
     <Menu noMerge="1" name="DurationTools">
       <text>&amp;Durations</text>
 	    <!-- Reference names, but with _ instead of - -->
@@ -822,14 +822,14 @@
   <enable>
     <Action name="insert_rest"/>
     <Action name="insert_note_actionmenu"/>
-    <Action name="switch_from_note_to_rest"/>
+    <Action name="switch_to_rests"/>
   </enable>
 </State>
 
 <State name="rest_insert_tool_current">
   <enable>
     <Action name="insert_rest"/>
-    <Action name="switch_from_rest_to_note"/>
+    <Action name="switch_to_notes"/>
   </enable>
 </State>
 
