@@ -187,12 +187,8 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     m_directionShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_directionShortcutCombo);
-    // note, the "  ," is a breath mark; the extra spaces are a cheap hack to
-    // try to improve the probability of Rosegarden drawing the blasted thing
-    // where it's supposed to go, without the need to micro-diddle each and
-    // every bliffin' one.  (Micro-diddling is not exportable to LilyPond
-    // either, is it?  I rather doubt it.)
-    m_directionShortcutCombo->addItem(tr("  ,"));
+    // fake breath mark removed - it was just an ordinary canned text, so there
+    // are no long-term consequences for removing this one
     m_directionShortcutCombo->addItem(tr("D.C. al Fine"));
     m_directionShortcutCombo->addItem(tr("D.S. al Fine"));
     m_directionShortcutCombo->addItem(tr("Fine"));
@@ -206,7 +202,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 
     m_localDirectionShortcutCombo = new QComboBox;
     m_optionWidget->addWidget(m_localDirectionShortcutCombo);
-    m_localDirectionShortcutCombo->addItem(tr("shortcut."));
+    m_localDirectionShortcutCombo->addItem(tr("accel."));
     m_localDirectionShortcutCombo->addItem(tr("ritard."));
     m_localDirectionShortcutCombo->addItem(tr("ralletando"));
     m_localDirectionShortcutCombo->addItem(tr("a tempo"));
@@ -281,8 +277,12 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // not tr()able, because the directive exporter currently depends on the
     // textual contents of these strings, not some more abstract associated
     // type label
-    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
-    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Coda));
+
+// Remove DEPRECATED items from appearing in the future, though we have to
+// support them on the business end for all eternity and beyond
+//    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
+//    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Coda));
+    
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate1));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate2));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDouble));
@@ -290,6 +290,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDot));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Gliss));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Arpeggio));
+    // never implemented:
     //    m_lilyPondDirectiveCombo->addItem(Text::ArpeggioUp);
     //    m_lilyPondDirectiveCombo->addItem(Text::ArpeggioDn);
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Tiny));

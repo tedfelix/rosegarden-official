@@ -835,8 +835,8 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilyPondDirective = "lilypond_directive";
 
 // special LilyPond directives
-const std::string Text::Segno       = "Segno";  
-const std::string Text::Coda        = "Coda";
+const std::string Text::Segno       = "Segno"; // DEPRECATED 
+const std::string Text::Coda        = "Coda";  // DEPRECATED
 const std::string Text::Alternate1  = "Alt1 ->";
 const std::string Text::Alternate2  = "Alt2 ->";
 const std::string Text::BarDouble   = "|| ->";  
@@ -2448,7 +2448,7 @@ const std::string Symbol::EventType = "symbol";
 const int Symbol::EventSubOrdering = -70;
 const PropertyName Symbol::SymbolTypePropertyName = "type";
 
-// text styles
+// symbol styles
 const std::string Symbol::UnspecifiedType   = "unspecified";
 const std::string Symbol::Segno             = "segno";
 const std::string Symbol::Coda              = "coda";
