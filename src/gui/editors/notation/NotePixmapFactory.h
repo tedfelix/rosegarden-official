@@ -134,6 +134,12 @@ public:
      */
     QGraphicsPixmapItem *makeClef(const Clef &clef, const ColourType colourType = PlainColour);
 
+    /** Make a symbol pixmap from Symbol &symbol.
+     *
+     * \sa makeClef
+     */
+    QGraphicsPixmapItem *makeSymbol(const Symbol &symbol, const ColourType colourType = PlainColour);
+
     QGraphicsPixmapItem *makeKey(const Key &key,
                                  const Clef &clef,
                                  Key previousKey =

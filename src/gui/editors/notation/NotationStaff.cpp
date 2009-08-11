@@ -958,6 +958,11 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
             NOTATION_DEBUG << "renderSingleElement: It's a clef" << endl;
             item = m_notePixmapFactory->makeClef(Clef(*elt->event()));
 
+        } else if (elt->event()->isa(Symbol::EventType)) {
+
+            NOTATION_DEBUG << "renderSingleElement: It's a symbol" << endl;
+            item = m_notePixmapFactory->makeSymbol(Symbol(*elt->event()));
+
         } else if (elt->event()->isa(::Rosegarden::Key::EventType)) {
 
             ::Rosegarden::Key key(*elt->event());

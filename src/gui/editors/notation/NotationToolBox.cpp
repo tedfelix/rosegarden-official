@@ -62,6 +62,10 @@ NotationToolBox::createTool(QString toolName)
 
         tool = new ClefInserter(m_widget);
 
+    else if (toolNamelc == SymbolInserter::ToolName)
+
+        tool = new SymbolInserter(m_widget);
+
     else if (toolNamelc == TextInserter::ToolName)
 
         tool = new TextInserter(m_widget);
@@ -69,10 +73,6 @@ NotationToolBox::createTool(QString toolName)
     else if (toolNamelc == GuitarChordInserter::ToolName)
 
         tool = new GuitarChordInserter(m_widget);
-
-//    else if (toolNamelc == LilyPondDirectiveInserter::ToolName)
-
-//        tool = new LilyPondDirectiveInserter(m_widget);
 
     else if (toolNamelc == NotationEraser::ToolName)
 

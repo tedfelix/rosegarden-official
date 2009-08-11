@@ -105,6 +105,10 @@ extern const CharName DIGIT_SEVEN;
 extern const CharName DIGIT_EIGHT;
 extern const CharName DIGIT_NINE;
 
+extern const CharName SEGNO;
+extern const CharName CODA;
+extern const CharName BREATH_MARK;
+
 extern const CharName UNKNOWN;
 }
 

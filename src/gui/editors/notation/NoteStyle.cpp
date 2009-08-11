@@ -309,6 +309,21 @@ NoteStyle::getClefCharName(const Clef &clef)
 }
 
 CharName
+NoteStyle::getSymbolCharName(const Symbol &symbol)
+{
+    std::string symbolType(symbol.getSymbolType());
+
+    if (symbolType == Symbol::Segno)
+        return NoteCharacterNames::SEGNO;
+    else if (symbolType == Symbol::Coda)
+        return NoteCharacterNames::CODA;
+    else if (symbolType == Symbol::Breath)
+        return NoteCharacterNames::BREATH_MARK;
+    else
+        return NoteCharacterNames::UNKNOWN;
+}
+
+CharName
 NoteStyle::getRestCharName(Note::Type type, bool restOutsideStave)
 {
     switch (type) {

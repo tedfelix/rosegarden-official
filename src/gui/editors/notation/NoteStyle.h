@@ -76,6 +76,7 @@ public:
     CharName getAccidentalCharName(const Accidental &);
     CharName getMarkCharName(const Mark &);
     CharName getClefCharName(const Clef &);
+    CharName getSymbolCharName(const Symbol &);
     CharName getTimeSignatureDigitName(int digit);
     CharName getSomeCharName(QString thing);
 

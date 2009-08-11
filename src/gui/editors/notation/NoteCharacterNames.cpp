@@ -110,6 +110,11 @@ const CharName DIGIT_SEVEN = "DIGIT SEVEN";
 const CharName DIGIT_EIGHT = "DIGIT EIGHT";
 const CharName DIGIT_NINE = "DIGIT NINE";
 
+const CharName SEGNO = "MUSICAL SYMBOL SEGNO";
+const CharName CODA = "MUSICAL SYMBOL CODA";
+const CharName BREATH_MARK = "MUSICAL SYMBOL BREATH_MARK";
+
+
 const CharName UNKNOWN = "__UNKNOWN__";
 
 }
