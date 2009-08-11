@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cmath>
 #include "NotePixmapFactory.h"
+
 #include "misc/Debug.h"
 #include "base/NotationRules.h"
 #include "misc/Strings.h"
@@ -62,6 +62,7 @@
 #include <QString>
 #include <QMatrix>
 
+#include <cmath>
 
 
 namespace Rosegarden

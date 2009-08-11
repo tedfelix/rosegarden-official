@@ -1,5 +1,4 @@
-// -*- c-basic-offset: 4 -*-
-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*-  vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -37,6 +36,7 @@
  *   Note
  *   TimeSignature
  *   AccidentalTable
+ *   Symbol
  *
  * The classes in this file are _not_ actually used for storing
  * events.  Events are always stored in Event objects (see Event.h).
@@ -652,10 +652,8 @@ private:
     timeT m_duration;
 };
 
-
-
 /**
- * Definitions for use in the text Event type.
+ * Definitions for use in the Text event type
  */
 
 class Text
@@ -1356,6 +1354,47 @@ private:
 };
 
  
+/** Definitions for use in the Symbol event type
+ *
+ * A Symbol has no duration, and the things it represents will probably always
+ * be no-ops that are never interpreted by the sequencer or MIDI export engines
+ *
+ * \author D. Michael McIntyre
+ */
+class Symbol
+{
+public:
+    static const std::string EventType;
+    static const int EventSubOrdering;
+    static const PropertyName SymbolTypePropertyName;
+
+    /**
+     * Symbol types
+     */
+    static const std::string UnspecifiedType;
+    static const std::string Segno;
+    static const std::string Coda;
+    static const std::string Breath;;
+
+    Symbol(const Event &e)
+        /* throw (Event::NoData, Event::BadType) */;
+    Symbol(const std::string &symbolType = UnspecifiedType);
+    Symbol(const Symbol &);
+    Symbol &operator=(const Symbol &);
+    ~Symbol ();
+
+    std::string getSymbolType() const { return m_type; }
+
+    static bool isSymbolOfType(Event *, std::string type);
+
+    /// Returned event is on heap; caller takes responsibility for ownership
+    Event *getAsEvent(timeT absoluteTime) const;
+
+private:
+    std::string m_type;
+};
+
+
 }
 
 

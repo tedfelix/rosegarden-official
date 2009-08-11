@@ -1,5 +1,4 @@
-// -*- c-basic-offset: 4 -*-
-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -14,20 +13,16 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cstdio> // needed for sprintf()
 #include "NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
+
 #include <iostream>
 #include <cstdlib> // for atoi
 #include <limits.h> // for SHRT_MIN
 #include <cassert>
-
-#if (__GNUC__ < 3)
-#include <strstream>
-#else
 #include <sstream>
-#endif
+#include <cstdio> // needed for sprintf()
 
 //dmm This will make everything excruciatingly slow if defined:
 //#define DEBUG_PITCH
@@ -2442,6 +2437,75 @@ void
 AccidentalTable::newClef(const Clef &clef)
 {
     m_clef = clef;
+}
+
+
+//////////////////////////////////////////////////////////////////////
+// Symbol
+//////////////////////////////////////////////////////////////////////
+
+const std::string Symbol::EventType = "symbol";
+const int Symbol::EventSubOrdering = -70;
+const PropertyName Symbol::SymbolTypePropertyName = "type";
+
+// text styles
+const std::string Symbol::UnspecifiedType   = "unspecified";
+const std::string Symbol::Segno             = "segno";
+const std::string Symbol::Coda              = "coda";
+const std::string Symbol::Breath            = "breath";
+
+
+Symbol::Symbol(const Event &e)
+{
+    if (e.getType() != EventType) {
+        throw Event::BadType("Symbol model event", EventType, e.getType());
+    }
+
+    m_type = Symbol::UnspecifiedType;
+
+    e.get<String>(SymbolTypePropertyName, m_type);
+}
+
+Symbol::Symbol(const std::string &type) :
+    m_type(type)
+{
+    // nothing else
+}
+
+Symbol::Symbol(const Symbol &t) :
+    m_type(t.m_type)
+{
+    // nothing else
+}
+
+Symbol &
+Symbol::operator=(const Symbol &t)
+{
+    if (&t != this) {
+	m_type = t.m_type;
+    }
+    return *this;
+}
+
+Symbol::~Symbol()
+{ 
+    // nothing
+}
+
+bool
+Symbol::isSymbolOfType(Event *e, std::string type)
+{
+    return (e->isa(EventType) &&
+            e->has(SymbolTypePropertyName) &&
+            e->get<String>(SymbolTypePropertyName) == type);
+}
+
+Event *
+Symbol::getAsEvent(timeT absoluteTime) const
+{
+    Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
+    e->set<String>(SymbolTypePropertyName, m_type);
+    return e;
 }
 
 
