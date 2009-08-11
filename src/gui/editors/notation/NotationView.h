@@ -149,10 +149,26 @@ protected slots:
     void slotToggleMetaToolBar();
     void slotToggleMarksToolBar();
     void slotToggleGroupToolBar();
+    void slotToggleSymbolsToolBar();
     void slotToggleLayoutToolBar();
     void slotToggleTransportToolBar();
 
     void slotToggleTracking();
+
+    /**
+     * Insert a segno Symbol
+     */
+    void slotAddSegno();
+
+    /** 
+     * Insert a coda Symbol
+     */
+    void slotAddCoda();
+
+    /**
+     * Insert a breath mark Symbol
+     */
+    void slotAddBreath();
 
 private:
     /**

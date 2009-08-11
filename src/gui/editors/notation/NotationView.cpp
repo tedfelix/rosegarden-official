@@ -524,6 +524,11 @@ NewNotationView::setupActions()
     createAction("text", SLOT(slotText()));
     createAction("guitarchord", SLOT(slotGuitarChord()));
 
+    // "Symbols" (sub)Menu
+    createAction("add_segno", SLOT(slotAddSegno()));
+    createAction("add_coda", SLOT(slotAddCoda()));
+    createAction("add_breath", SLOT(slotAddBreath()));
+
     //JAS "Move" subMenu
     createAction("cursor_back", SLOT(slotStepBackward()));
     createAction("cursor_forward", SLOT(slotStepForward()));
@@ -573,6 +578,7 @@ NewNotationView::setupActions()
     createAction("show_clefs_toolbar", SLOT(slotToggleClefsToolBar()));
     createAction("show_marks_toolbar", SLOT(slotToggleMarksToolBar()));
     createAction("show_group_toolbar", SLOT(slotToggleGroupToolBar()));
+    createAction("show_symbol_toolbar", SLOT(slotToggleSymbolsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
     createAction("show_meta_toolbar", SLOT(slotToggleMetaToolBar()));
@@ -1337,6 +1343,11 @@ void NewNotationView::slotToggleMarksToolBar()
 void NewNotationView::slotToggleGroupToolBar()
 {
     toggleNamedToolBar("Group Toolbar");
+}
+
+void NewNotationView::slotToggleSymbolsToolBar()
+{
+    toggleNamedToolBar("Symbols Toolbar");
 }
 
 void NewNotationView::slotToggleLayoutToolBar()
@@ -2176,6 +2187,22 @@ NewNotationView::isInGraceMode()
 {
     QAction* tac = findAction("grace_mode");
     return tac->isChecked();
+}
+
+void
+NewNotationView::slotAddCoda()
+{
+    std::cerr << "Adding a coda!  Nothing to do here yet." << std::endl;
+}
+
+void
+NewNotationView::slotAddSegno()
+{
+}
+
+void
+NewNotationView::slotAddBreath()
+{
 }
 
 }

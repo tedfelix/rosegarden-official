@@ -77,7 +77,7 @@
     <!-- JAS deviated from RG.svn since menu items are duplicated in "toolbars" submenu -->
     <Menu name="toolbars" append="show_merge">
       <text>&amp;Toolbars</text>
-      <Action name="options_show_toolbar" text="Show &amp;Toolbar" checked="true" append="show_merge" />
+      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
       <Action name="show_tools_toolbar" text="Show To&amp;ols" checked="true" append="show_merge" />
       <!-- JAS 'options_show_statusbar' determined by state -->
       <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
