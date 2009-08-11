@@ -33,6 +33,7 @@
 class QLabel;
 class QPixmap;
 class QGraphicsPixmapItem;
+class QString;
 
 
 namespace Rosegarden
@@ -160,8 +161,12 @@ public:
         return m_status & INCONSISTENT_TRANSPOSITIONS;
     }
 
+signals :
+    void showToolTip(QString toolTipText);
+
 protected :
-virtual void paintEvent(QPaintEvent *);
+    virtual void paintEvent(QPaintEvent *);
+    virtual bool event(QEvent *event);
 
 private :
     /**
@@ -225,6 +230,8 @@ private :
 
     QColor m_foreGround;
     QColor m_backGround;
+
+    QString m_toolTipText;
 };
 
 }

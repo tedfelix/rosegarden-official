@@ -53,6 +53,7 @@
 #include <QScrollBar>
 #include <QTimer>
 #include <QGraphicsProxyWidget>
+#include <QToolTip>
 
 namespace Rosegarden
 {
@@ -267,7 +268,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_headersView->setScene(m_headersScene);
     m_headersView->centerOn(headers);
 
-    m_headersView->setMaximumHeight(m_view->height());
     m_headersView->setMinimumHeight(0);
 
     // If headers scene and notation scene don't have the same height
@@ -727,6 +727,12 @@ NotationWidget::showEvent(QShowEvent * event)
 {
     QWidget::showEvent(event);
     slotHScroll();
+}
+
+void
+NotationWidget::slotShowHeaderToolTip(QString toolTipText)
+{
+    QToolTip::showText(QCursor::pos(), toolTipText, this);
 }
 
 

@@ -35,6 +35,7 @@
 #include <QLabel>
 #include <QEvent>
 #include <QResizeEvent>
+#include <QString>
 
 
 namespace Rosegarden
@@ -63,6 +64,8 @@ HeadersGroup::removeAllHeaders()
 {
     TrackHeaderVector::iterator i;
     for (i=m_headers.begin(); i!=m_headers.end(); i++) {
+        disconnect(*i, SIGNAL(showToolTip(QString)),
+                   m_widget, SLOT(slotShowHeaderToolTip(QString)));
         delete *i;
     }
     m_headers.erase(m_headers.begin(), m_headers.end());
@@ -78,10 +81,13 @@ HeadersGroup::removeAllHeaders()
 void
 HeadersGroup::addHeader(int trackId, int height, int ypos, double xcur)
 {
-     StaffHeader *sh = new StaffHeader(this, trackId, height, ypos);
-     m_layout->addWidget(sh);
-     m_headers.push_back(sh);
-     m_usedHeight += height;
+    StaffHeader *sh = new StaffHeader(this, trackId, height, ypos);
+    m_layout->addWidget(sh);
+    m_headers.push_back(sh);
+    m_usedHeight += height;
+
+    connect(sh, SIGNAL(showToolTip(QString)),
+            m_widget, SLOT(slotShowHeaderToolTip(QString)));
 }
 
 void
@@ -212,13 +218,13 @@ HeadersGroup::setCurrent(TrackId trackId)
                     (*i)->setCurrent((*i)->getId() == trackId);
 }
 
-void
-HeadersGroup::resizeEvent(QResizeEvent * ev)
-{
-    // Needed to avoid gray zone at the right of headers
-    // when width is decreasing
-    emit headersResized(ev->size().width());
-}
+// void
+// HeadersGroup::resizeEvent(QResizeEvent * ev)
+// {
+//     // Needed to avoid gray zone at the right of headers
+//     // when width is decreasing
+//     emit headersResized(ev->size().width());
+// }
 
 NotationScene *
 HeadersGroup::getScene()
@@ -237,7 +243,6 @@ HeadersGroup::minimumSizeHint() const
 {
     return QSize(m_lastWidth, m_usedHeight);
 }
-
 
 }
 #include "HeadersGroup.moc"

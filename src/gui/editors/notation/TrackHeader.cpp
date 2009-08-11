@@ -49,6 +49,7 @@
 #include <QString>
 #include <QGraphicsPixmapItem>
 #include <QBitmap>
+#include <QEvent>
 
 #include <QPainter>
 
@@ -91,7 +92,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_clefItem(0),
         m_keyItem(0),
         m_foreGround(Qt::white),
-        m_backGround(Qt::black)
+        m_backGround(Qt::black),
+        m_toolTipText(QString(""))
 
 {
     // localStyle (search key)
@@ -112,7 +114,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     Track *track = comp->getTrackById(m_track);
     int trackPos = comp->getTrackPositionById(m_track);
 
-    QString toolTipText = QString(tr("<qt><p>Track %1 : \"%2\"")
+    QString toolTipText = QString(tr("Track %1 : \"%2\"")
                              .arg(trackPos + 1)
                              .arg(strtoqstr(track->getLabel())));
 
@@ -200,9 +202,20 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
     // not translated to spare the translators the pointless effort of copying
     // and pasting this tag for every language we support
-    toolTipText += "</p></qt>";
+    m_toolTipText = "<qt><p>" + toolTipText + "</p></qt>";
 
-    this->setToolTip(toolTipText);
+    // With Qt3  "this->setToolTip(m_toolTipText);"  would have been
+    // called here.
+    // This is no more well working with the new Qt4 RG implementation because
+    // the StaffHeader widget is now embedded in a QGraphicsScene :
+    //   - The tool tip would be clipped by the QGraphicsView
+    //   - The tool tip would be zoomed whith the scene.
+    //
+    // Now the showToolTip signal, carrying the tool tip text, is emitted
+    // from the staff header main event handler when a tool tip event occurs.
+    // This signal is connected to NotationWidget::slotShowHeaderToolTip()
+    // from the headers group. The notation widget displays the tool tip,
+    // without clipping nor resizing it, when it receives this signal.
 
     m_firstSeg = *segments.begin();
     m_firstSegStartTime = m_firstSeg->getStartTime();
@@ -608,6 +621,16 @@ StaffHeader::SegmentCmp::operator()(const Segment * s1, const Segment * s2) cons
     if (s1->getStartTime() > s2->getStartTime()) return false;
     if (s1->getEndMarkerTime() < s2->getEndMarkerTime()) return true;
     return false;
+}
+
+bool
+StaffHeader::event(QEvent *event)
+{
+    if (event->type() == QEvent::ToolTip) {
+        emit(showToolTip(m_toolTipText));
+        return true;
+    }
+    return QWidget::event(event);
 }
 
 }

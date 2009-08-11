@@ -26,6 +26,7 @@
 #include <vector>
 
 class QGridLayout;
+class QString;
 
 namespace Rosegarden
 {
@@ -131,6 +132,8 @@ protected slots:
 
     void slotHScroll();
     void slotHScrollBarRangeChanged(int min, int max);
+
+    void slotShowHeaderToolTip(QString toolTipText);
 
 private:
     RosegardenDocument *m_document; // I do not own this
