@@ -172,7 +172,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(
     ++row;
 
     layout->addWidget(new QLabel(tr("Path to 'asfxload' or 'sfxload' command"), frame), row, 0);
-    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/bin/sfxload").toString() , frame);
+    m_sfxLoadPath = new LineEdit(settings.value("sfxloadpath", "/usr/bin/asfxload").toString() , frame);
     layout->addWidget(m_sfxLoadPath, row, 1, row- row+1, 2);
     m_sfxLoadChoose = new QPushButton("Choose...", frame);
     layout->addWidget(m_sfxLoadChoose, row, 3);
