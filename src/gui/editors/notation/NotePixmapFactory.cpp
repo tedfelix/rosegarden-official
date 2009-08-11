@@ -1718,6 +1718,18 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
         drawLegerLines(params);
     }
 
+    // a rest can have a text mark or a fermata; we permit this, so we should
+    // draw this (fixes ancient bug report)
+    if (params.m_marks.size() > 0) {
+        std::cerr << "Groundbreaking.  We're drawing a fermata on a rest!  Or maybe a text mark!" << std::endl;
+        // this next bit is the bit that isn't working yet...  we have a mark,
+        // we find it, add it to restParams in NotationStaff, its m_marks.size()
+        // is 1, it's passed here there and everywhere to wind up at this next
+        // bit, which calls NoteFont looking for a FERMATA symbol, but never
+        // draws the thing so far.
+        drawMarks(false, params, 10);
+    }
+
     if (painter) {
         painter->restore();
     }

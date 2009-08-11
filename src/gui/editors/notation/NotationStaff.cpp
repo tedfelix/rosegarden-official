@@ -904,6 +904,17 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
         } else if (elt->isRest()) {
 
+            // rests can have marks
+            int markCount = 0;
+            if (elt->event()->has(BaseProperties::MARK_COUNT))
+                markCount = elt->event()->get<Int>(BaseProperties::MARK_COUNT);
+
+            if (markCount) {
+                std::cerr << "NotationStaff: Houston, we have a rest, and it has marks.  A fermata mayhap?" << std::endl;
+                restParams.setMarks(Marks::getMarks(*elt->event()));
+                std::cerr << "    marks size: " << restParams.m_marks.size() << std::endl;
+            }
+
             bool ignoreRest = false;
             // NotationHLayout sets this property if it finds the rest
             // in the middle of a chord -- Quantizer still sometimes gets

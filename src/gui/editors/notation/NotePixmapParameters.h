@@ -96,6 +96,7 @@ public:
 
 private:
     friend class NotePixmapFactory;
+    friend class NotationStaff;
 
     //--------------- Data members ---------------------------------
 
