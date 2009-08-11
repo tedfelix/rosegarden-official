@@ -24,6 +24,7 @@
 #include "ClefInserter.h"
 #include "TextInserter.h"
 #include "GuitarChordInserter.h"
+#include "SymbolInserter.h"
 #include "NotationMouseEvent.h"
 #include "NotationSelector.h"
 #include "NotationEraser.h"
@@ -736,7 +737,20 @@ NotationWidget::slotShowHeaderToolTip(QString toolTipText)
 }
 
 
+void
+NotationWidget::slotSetSymbolInserter()
+{
+    slotSetTool(SymbolInserter::ToolName);
+}
+
+void
+NotationWidget::slotSetInsertedSymbol(Symbol type)
+{
+    SymbolInserter *ci = dynamic_cast<SymbolInserter *>(m_currentTool);
+    if (ci) ci->slotSetSymbol(type);
+}
+
+
 }
 
 #include "NotationWidget.moc"
-

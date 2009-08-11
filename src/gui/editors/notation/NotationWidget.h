@@ -113,6 +113,8 @@ public slots:
     void slotSetFontSize(int);
     void slotSetPlayTracking(bool);
     void slotTogglePlayTracking();
+    void slotSetSymbolInserter();
+    void slotSetInsertedSymbol(Symbol type);
 
 protected:
     virtual void showEvent(QShowEvent * event);

@@ -270,6 +270,12 @@ public:
     iterator insertClef(timeT absoluteTime, Clef clef);
 
     /**
+     * Insert a symbol.
+     * Returns iterator pointing to symbol.
+     */
+    iterator insertSymbol(timeT absoluteTime, Symbol symbol);
+
+    /**
      * Insert a key.
      * Returns iterator pointing to key.
      */

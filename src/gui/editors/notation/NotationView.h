@@ -156,19 +156,9 @@ protected slots:
     void slotToggleTracking();
 
     /**
-     * Insert a segno Symbol
+     * Insert a Symbol
      */
-    void slotAddSegno();
-
-    /** 
-     * Insert a coda Symbol
-     */
-    void slotAddCoda();
-
-    /**
-     * Insert a breath mark Symbol
-     */
-    void slotAddBreath();
+    void slotSymbolAction();
 
 private:
     /**

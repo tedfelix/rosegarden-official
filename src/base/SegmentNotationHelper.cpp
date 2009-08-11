@@ -1080,6 +1080,13 @@ SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
 
 
 Segment::iterator
+SegmentNotationHelper::insertSymbol(timeT absoluteTime, Symbol symbol)
+{
+    return insert(symbol.getAsEvent(absoluteTime));
+}
+
+
+Segment::iterator
 SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
 {
     return insert(key.getAsEvent(absoluteTime));

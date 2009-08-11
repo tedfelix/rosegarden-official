@@ -25,6 +25,7 @@
 #include "ClefInserter.h"
 #include "TextInserter.h"
 #include "GuitarChordInserter.h"
+#include "SymbolInserter.h"
 #include "NotationEraser.h"
 #include "NotationSelector.h"
 #include "NotationScene.h"

@@ -525,9 +525,9 @@ NewNotationView::setupActions()
     createAction("guitarchord", SLOT(slotGuitarChord()));
 
     // "Symbols" (sub)Menu
-    createAction("add_segno", SLOT(slotAddSegno()));
-    createAction("add_coda", SLOT(slotAddCoda()));
-    createAction("add_breath", SLOT(slotAddBreath()));
+    createAction("add_segno", SLOT(slotSymbolAction()));
+    createAction("add_coda", SLOT(slotSymbolAction()));
+    createAction("add_breath", SLOT(slotSymbolAction()));
 
     //JAS "Move" subMenu
     createAction("cursor_back", SLOT(slotStepBackward()));
@@ -2152,7 +2152,8 @@ NewNotationView::slotUpdateInsertModeStatus()
     m_notationWidget->setTripletMode(isInTripletMode());
     m_notationWidget->setGraceMode(isInGraceMode());
 
-// We don't have a status bar yet. Do we ever have?
+// We don't have a status bar yet, but somebody needs to bring it back across
+// and uncomment all these various status messages here and throughout
 //    if (isInTripletMode()) {
 //        message = tr("%1 %2").arg(message).arg(tripletMessage);
 //    }
@@ -2190,20 +2191,23 @@ NewNotationView::isInGraceMode()
 }
 
 void
-NewNotationView::slotAddCoda()
+NewNotationView::slotSymbolAction()
 {
-    std::cerr << "Adding a coda!  Nothing to do here yet." << std::endl;
+    QObject *s = sender();
+    QString n = s->objectName();
+
+    Symbol type = Symbol::Segno;
+
+    if (n == "add_segno") type = Symbol::Segno;
+    else if (n == "add_coda") type = Symbol::Coda;
+    else if (n == "add_breath") type = Symbol::Breath;
+
+    if (!m_notationWidget) return;
+    m_notationWidget->slotSetSymbolInserter();
+    m_notationWidget->slotSetInsertedSymbol(type);
+    slotUpdateMenuStates();
 }
 
-void
-NewNotationView::slotAddSegno()
-{
-}
-
-void
-NewNotationView::slotAddBreath()
-{
-}
 
 }
 
