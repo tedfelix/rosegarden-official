@@ -2137,15 +2137,14 @@ NewNotationView::slotUpdateInsertModeStatus()
     QString graceMessage = tr("Grace");
     QString message;
 
+    m_notationWidget->setChordMode(isInChordMode());
+    m_notationWidget->setTripletMode(isInTripletMode());
+    m_notationWidget->setGraceMode(isInGraceMode());
+
 // We don't have a status bar yet. Do we ever have?
-    if (isInTripletMode()) {
-        m_notationWidget->setTripletMode();
+//    if (isInTripletMode()) {
 //        message = tr("%1 %2").arg(message).arg(tripletMessage);
-    }
-    else
-    {
-        m_notationWidget->setTripletMode(false);
-    }
+//    }
 //
 //    if (isInChordMode()) {
 //        message = tr("%1 %2").arg(message).arg(chordMessage);
@@ -2159,9 +2158,23 @@ NewNotationView::slotUpdateInsertModeStatus()
 }
 
 bool
+NewNotationView::isInChordMode()
+{
+    QAction* tac = findAction("chord_mode");
+    return tac->isChecked();
+}
+
+bool
 NewNotationView::isInTripletMode()
 {
     QAction* tac = findAction("triplet_mode");
+    return tac->isChecked();
+}
+
+bool
+NewNotationView::isInGraceMode()
+{
+    QAction* tac = findAction("grace_mode");
     return tac->isChecked();
 }
 

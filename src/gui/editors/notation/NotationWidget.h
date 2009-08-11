@@ -65,11 +65,13 @@ public:
 
     timeT getInsertionTime() const;
 
-    bool isInChordMode() { return false; }
+    bool isInChordMode() { return m_chordMode; }
     bool isInTripletMode() { return m_tripletMode; }
-    bool isInGraceMode() { return false; }
+    bool isInGraceMode() { return m_graceMode; }
 
+    void setChordMode(bool state = true) { m_chordMode = state; }
     void setTripletMode(bool state = true) { m_tripletMode = state;}
+    void setGraceMode(bool state = true) { m_graceMode = state; }
 
     bool getPlayTracking() const { return m_playTracking; }
 
@@ -162,8 +164,9 @@ private:
     bool m_chordNameRulerIsVisible;     // Only valid in linear mode
     bool m_headersAreVisible;           // Only valid in linear mode
 
+    bool m_chordMode;
     bool m_tripletMode;
-
+    bool m_graceMode;
     /**
      * Widgets vertical positions inside the main QGridLayout
      */

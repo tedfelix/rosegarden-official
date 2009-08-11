@@ -192,7 +192,9 @@ private:
     void closeEvent(QCloseEvent *event);
     void setupActions();
     void updateWindowTitle();
+    bool isInChordMode();
     bool isInTripletMode();
+    bool isInGraceMode();
 };
 
 }
