@@ -41,6 +41,8 @@ void ControlChangeCommand::modifySegment()
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             item->updateSegment();
     }
+
+    ///@TODO As this method can now add events, we need to use Normalise rests
 }
 
 }

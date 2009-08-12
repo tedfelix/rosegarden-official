@@ -67,7 +67,7 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
         : ControlRuler(segment, rulerScale, parent), // name, f),
         m_defaultItemWidth(20),
         m_lastDrawnRect(QRectF(0,0,0,0)),
-        m_addingEvent(false)
+        m_moddingSegment(false)
 //        m_controlLine(new Q3CanvasLine(canvas())),
 //        m_controlLineShowing(false),
 //        m_controlLineX(0),
@@ -227,8 +227,7 @@ void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
     //  add a ControlItem to display it
     // Note that ControlPainter will (01/08/09) add events directly
     //  these should not be replicated by this observer mechanism
-    if (isOnThisRuler(event) &&
-            !m_addingEvent) addControlItem(event);
+    if (isOnThisRuler(event) && !m_moddingSegment) addControlItem(event);
 }
 
 void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
@@ -239,7 +238,7 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
     // Old code did this ... not sure why
     //    clearSelectedItems();
     //
-    if (isOnThisRuler(event)) {
+    if (isOnThisRuler(event) && !m_moddingSegment) {
         removeControlItem(event);
         update();
     }
@@ -293,6 +292,7 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
     QString controltoolname = "selector";
     if (matrixtoolname == "painter") controltoolname = "painter";
     if (matrixtoolname == "eraser") controltoolname = "eraser";
+    if (matrixtoolname == "velocity") controltoolname = "adjuster";
     ///TODO Write mechanism to select correct control tool for the given matrix tool
 //    QString controltoolname = "painter";
 
@@ -304,7 +304,7 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
 //    emit toolChanged(name);
 }
 
-Event *ControllerEventsRuler::insertControllerEvent(float x, float y)
+Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
     timeT insertTime = m_rulerScale->getTimeForX(x);
 
@@ -348,9 +348,9 @@ Event *ControllerEventsRuler::insertControllerEvent(float x, float y)
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
 
-    m_addingEvent = true;
+    m_moddingSegment = true;
     m_segment->insert(controllerEvent);
-    m_addingEvent = false;
+    m_moddingSegment = false;
 
     return controllerEvent;
 //    ControlRulerEventInsertCommand* command =
@@ -359,6 +359,13 @@ Event *ControllerEventsRuler::insertControllerEvent(float x, float y)
 //                                           initialValue, *m_segment);
 //
 //    CommandHistory::getInstance()->addCommand(command);
+}
+
+void ControllerEventsRuler::eraseEvent(Event *event)
+{
+    m_moddingSegment = true;
+    m_segment->eraseSingle(event);
+    m_moddingSegment = false;
 }
 
 void ControllerEventsRuler::eraseControllerEvent()

@@ -29,6 +29,7 @@
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
 #include "ControlRuler.h"
+#include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
 #include "misc/Debug.h"
@@ -47,15 +48,31 @@ PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
 //    createAction("resize", SLOT(slotResizeSelected()));
 //
 //    createMenu();
+    if (dynamic_cast<ControllerEventsRuler *> (parent)) m_canSelect = true;
+    else m_canSelect = false;
 }
 
 void
 PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
 {
+    if (m_canSelect) {
+        if (e->itemList.size()) {
+            ControlItem *item = *(e->itemList.begin());
+            if (item->isSelected()) {
+
+            } else {
+                m_ruler->clearSelectedItems();
+                m_ruler->addToSelection(item);
+            }
+        }
+    }
+
     if (m_overItem) {
         m_ruler->setCursor(Qt::ClosedHandCursor);
         m_mouseLastY = e->y;
     }
+
+    m_ruler->update();
 }
 
 void
@@ -96,7 +113,7 @@ void PropertyAdjuster::setCursor(const ControlMouseEvent *e)
     bool isOverItem = false;
     std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
     for (; it != e->itemList.end(); ++it) {
-        if ((*it)->isSelected()) {
+        if ((*it)->isSelected() || m_canSelect) {
             isOverItem = true;
             break;
         }

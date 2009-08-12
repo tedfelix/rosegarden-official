@@ -98,9 +98,16 @@ void EventControlItem::reconfigure(float x, float y)
 
 void EventControlItem::updateSegment()
 {
-    if (!getEvent()) {
-        setEvent(static_cast<ControllerEventsRuler *> (m_controlRuler)->insertControllerEvent(m_xstart, m_y));
+    // This implementation for code simplicity - it is not efficient for control modification but I don't think this matters
+    // If this item already has an event, erase it
+    ControllerEventsRuler *ruler = static_cast<ControllerEventsRuler *> (m_controlRuler);
+
+    if (m_event) {
+        ruler->eraseEvent(m_event);
     }
+    // Make a new event
+    setEvent(ruler->insertEvent(m_xstart, m_y));
+
 ////    m_element->event()->set<Int>(m_propertyname,(int)(m_y*MIDI_CONTROL_MAX_VALUE));
 //    long value = m_controlRuler->YToValue(m_y);
 //    m_eventAdapter->setValue(value);

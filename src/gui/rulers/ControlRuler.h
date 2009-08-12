@@ -103,6 +103,7 @@ public:
 
     virtual void setSegment(Segment *);
     virtual void setViewSegment(MatrixViewSegment *);
+    Segment* getSegment() { return m_segment; }
 
     void updateSegment();
 

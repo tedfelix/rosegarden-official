@@ -78,7 +78,8 @@ public:
     virtual void segmentDeleted(const Segment *);
 
     virtual void addControlItem(float,float);
-    virtual Event * insertControllerEvent(float,float);
+    virtual Event * insertEvent(float,float);
+    virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
     virtual void clearControllerEvents();
 //    virtual void startControlLine();
@@ -113,7 +114,7 @@ protected:
 
     ControlParameter  *m_controller;
     QRectF m_lastDrawnRect;
-    bool m_addingEvent;
+    bool m_moddingSegment;
 //    Q3CanvasLine                   *m_controlLine;
 
 //    bool                           m_controlLineShowing;

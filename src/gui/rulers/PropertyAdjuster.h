@@ -62,6 +62,7 @@ protected:
     void setCursor(const ControlMouseEvent *);
     float m_mouseStartY;
     float m_mouseLastY;
+    bool m_canSelect;
 };
 
 }

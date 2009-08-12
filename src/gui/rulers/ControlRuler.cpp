@@ -20,6 +20,8 @@
 #include "base/Event.h"
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
+#include "document/Command.h"
+#include "commands/notation/NormalizeRestsCommand.h"
 //#include "base/Segment.h"
 //#include "base/Selection.h"
 #include "ControlMouseEvent.h"
@@ -202,9 +204,30 @@ bool ControlRuler::isVisible(ControlItem* item)
 void ControlRuler::updateSegment()
 {
     // Bring the segment up to date with the ControlRuler's items
+    // A number of different actions take place here:
+    // 1) m_eventSelection is empty
+    // 2) m_eventSelection has events
+    //      a) Events in the selection have been modified in value only
+    //      b) Events in the selection have moved in time
+    //
     // Either run through the ruler's EventSelection, updating from each item
     //  or, if there isn't one, go through m_selectedItems
     timeT start,end;
+    bool segmentModified = false;
+
+    QString commandLabel = "Adjust control/property";
+
+    MacroCommand *macro = new MacroCommand(commandLabel);
+
+    float xmin=FLT_MAX,xmax=-1.0;
+
+    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
+        if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
+        if ((*it)->xEnd() > xmax) xmax = (*it)->xEnd();
+    }
+
+    start = getRulerScale()->getTimeForX(xmin);
+    end = getRulerScale()->getTimeForX(xmax);
 
     if (m_eventSelection->getAddedEvents()==0) {
         // We do not have a valid set of selected events to update
@@ -212,25 +235,38 @@ void ControlRuler::updateSegment()
             // There are no selected items, nothing to update
             return;
         }
-        float xmin=FLT_MAX,xmax=-1.0;
-        for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
-            if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
-            if ((*it)->xEnd() > xmax) xmax = (*it)->xEnd();
-        }
-        start = getRulerScale()->getTimeForX(xmin);
-        end = getRulerScale()->getTimeForX(xmax);
+
+        // Events will be added by the controlItem->updateSegment methods
+        commandLabel = "Add control";
+        macro->setName(commandLabel);
+
+        segmentModified = true;
     } else {
-        start = m_eventSelection->getStartTime();
-        end = m_eventSelection->getEndTime();
+        // Check for movement in time here and delete events if necessary
+        if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime())
+        {
+            commandLabel = "Move control";
+            macro->setName(commandLabel);
+
+            // Get the limits of the change for undo
+            start = std::min(start,m_eventSelection->getStartTime());
+            end = std::max(end,m_eventSelection->getEndTime());
+
+            segmentModified = true;
+        }
     }
 
-    // Add command to history
-    ControlChangeCommand* command = new ControlChangeCommand(m_selectedItems,
+    // Add change command to macro
+    macro->addCommand(new ControlChangeCommand(m_selectedItems,
                                     *m_segment,
                                     start,
-                                    end);
+                                    end));
 
-    CommandHistory::getInstance()->addCommand(command);
+    macro->addCommand(new NormalizeRestsCommand(*m_segment,
+                                                start,
+                                                end));
+
+    CommandHistory::getInstance()->addCommand(macro);
 
     updateSelection();
 }

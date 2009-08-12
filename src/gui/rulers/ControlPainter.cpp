@@ -53,9 +53,14 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
 void
 ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    if (m_overItem) {
-        m_ruler->setCursor(Qt::ClosedHandCursor);
-        m_mouseLastY = e->y;
+    if (e->itemList.size()) {
+        ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
+        std::vector <ControlItem*>::const_iterator it = e->itemList.begin();
+        ruler->clearSelectedItems();
+        ruler->addToSelection(*it);
+        ruler->eraseControllerEvent();
+
+        m_ruler->setCursor(Qt::CrossCursor);
     }
     else {
         // Make new control event here
@@ -98,6 +103,7 @@ ControlPainter::handleMouseRelease(const ControlMouseEvent *e)
     // May have moved off the item during a drag so use setCursor to correct its state
     setCursor(e);
 
+    // Bring the segment up to date with the control ruler (this will add a new event if necessary)
     m_ruler->updateSegment();
 }
 
