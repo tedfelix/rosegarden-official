@@ -121,7 +121,9 @@
 	<symbol	name="DIGIT SIX"   font-id="1" code="54"/>
 	<symbol	name="DIGIT SEVEN" font-id="1" code="55"/>
 	<symbol	name="DIGIT EIGHT" font-id="1" code="56"/>
-	<symbol	name="DIGIT NINE"  font-id="1" code="57"/>
+        <symbol	name="DIGIT NINE"  font-id="1" code="57"/>
+
+        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="225" glyph="156"/>
 
 </font-symbol-map>
 
