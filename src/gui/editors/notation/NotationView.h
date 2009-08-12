@@ -105,6 +105,7 @@ protected slots:
     void slotInsertRest();
     void slotSwitchToNotes();
     void slotSwitchToRests();
+    void slotToggleDot(); 
     void slotNoteAction();
     void slotNoAccidental();
     void slotFollowAccidental();

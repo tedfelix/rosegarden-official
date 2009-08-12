@@ -22,6 +22,7 @@
 #include "NotationCommandRegistry.h"
 #include "NoteStyleFactory.h"
 #include "NoteFontFactory.h"
+#include "NotationStrings.h"
 #include "NoteInserter.h"
 #include "RestInserter.h"
 #include "NotationSelector.h"
@@ -499,14 +500,14 @@ NewNotationView::setupActions()
     createAction("rest_semiquaver", SLOT(slotNoteAction()));
     createAction("rest_demisemi", SLOT(slotNoteAction()));
     createAction("rest_hemidemisemi", SLOT(slotNoteAction()));
-    createAction("dotted_rest_breve", SLOT(slotNoteAction()));
-    createAction("dotted_rest_semibreve", SLOT(slotNoteAction()));
-    createAction("dotted_rest_minim", SLOT(slotNoteAction()));
-    createAction("dotted_rest_crotchet", SLOT(slotNoteAction()));
-    createAction("dotted_rest_quaver", SLOT(slotNoteAction()));
-    createAction("dotted_rest_semiquaver", SLOT(slotNoteAction()));
-    createAction("dotted_rest_demisemi", SLOT(slotNoteAction()));
-    createAction("dotted_rest_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("rest_dotted_breve", SLOT(slotNoteAction()));
+    createAction("rest_dotted_semibreve", SLOT(slotNoteAction()));
+    createAction("rest_dotted_minim", SLOT(slotNoteAction()));
+    createAction("rest_dotted_crotchet", SLOT(slotNoteAction()));
+    createAction("rest_dotted_quaver", SLOT(slotNoteAction()));
+    createAction("rest_dotted_semiquaver", SLOT(slotNoteAction()));
+    createAction("rest_dotted_demisemi", SLOT(slotNoteAction()));
+    createAction("rest_dotted_hemidemisemi", SLOT(slotNoteAction()));
 
     //"Accidentals" submenu
     createAction("no_accidental", SLOT(slotNoAccidental()));
@@ -1412,7 +1413,6 @@ NewNotationView::slotSwitchToNotes()
 
     Note::Type unitType = Note::Crotchet;
     int dots = 0;
-    QString name;
 
     if (currentInserter) {
         unitType = currentInserter->getCurrentNote().getNoteType();
@@ -1424,23 +1424,38 @@ NewNotationView::slotSwitchToNotes()
         m_notationWidget->slotSetInsertedNote(unitType, dots);
     }
 
-    if (unitType == Note::Breve) name = QString("breve");
-    else if (unitType == Note::Semibreve) name = QString("semibreve");
-    else if (unitType == Note::Minim) name = QString("minim");
-    else if (unitType == Note::Crotchet) name = QString("crotchet");
-    else if (unitType == Note::Quaver) name = QString("quaver");
-    else if (unitType == Note::Semiquaver) name = QString("semiquaver");
-    else if (unitType == Note::Demisemiquaver) name = QString("demisemi");
-    else if (unitType == Note::Hemidemisemiquaver) name = QString("hemidemisemi");
+    QString actionName(NotationStrings::getReferenceName(Note(unitType,dots)));
+    actionName.replace(QRegExp("-"), "_");
 
-    if (dots > 0) {
-        name = QString("dotted_%1").arg(name);
-    } else {
-        name = QString("%1").arg(name);
+    findAction(QString("duration_%1").arg(actionName))->setChecked(true);
+    findAction(actionName)->setChecked(true);
+
+    slotUpdateMenuStates();
+}
+
+void
+NewNotationView::slotSwitchToRests()
+{
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+
+    Note::Type unitType = Note::Crotchet;
+    int dots = 0;
+
+    if (currentInserter) {
+        unitType = currentInserter->getCurrentNote().getNoteType();
+        dots = currentInserter->getCurrentNote().getDots();
     }
 
-    findAction(QString("duration_%1").arg(name))->setChecked(true);
-    findAction(name)->setChecked(true);
+    if (m_notationWidget) {
+        m_notationWidget->slotSetRestInserter();
+        m_notationWidget->slotSetInsertedNote(unitType, dots);
+    }
+
+    QString actionName(NotationStrings::getReferenceName(Note(unitType,dots)));
+    actionName.replace(QRegExp("-"), "_");
+
+    findAction(QString("duration_%1").arg(actionName))->setChecked(true);
+    findAction(QString("rest_%1").arg(actionName))->setChecked(true);
 
     slotUpdateMenuStates();
 }
@@ -1489,7 +1504,7 @@ NewNotationView::getPitchFromNoteInsertAction(QString name,
         int scalePitch = name.toInt();
 
         if (scalePitch < 0 || scalePitch > 7) {
-            NOTATION_DEBUG << "EditView::getPitchFromNoteInsertAction: pitch "
+            NOTATION_DEBUG << "NotationView::getPitchFromNoteInsertAction: pitch "
             << scalePitch << " out of range, using 0" << endl;
             scalePitch = 0;
         }
@@ -1583,47 +1598,34 @@ void NewNotationView::slotInsertRest()
                                 0, Accidentals::NoAccidental, true);
 }
 
-
-
 void
-NewNotationView::slotSwitchToRests()
+NewNotationView::slotToggleDot()
 {
-    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
-
-    Note::Type unitType = Note::Crotchet;
-    int dots = 0;
-    QString name;
-
-    if (currentInserter) {
-        unitType = currentInserter->getCurrentNote().getNoteType();
-        dots = currentInserter->getCurrentNote().getDots();
-    }
-
     if (m_notationWidget) {
-        m_notationWidget->slotSetRestInserter();
-        m_notationWidget->slotSetInsertedNote(unitType, dots);
+        NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+        if (!currentInserter) {
+            /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
+            return ;
+        }
+        Note note = currentInserter->getCurrentNote();
+
+        Note::Type noteType = note.getNoteType();
+        int noteDots = (note.getDots() ? 0 : 1);
+
+        QString actionName(NotationStrings::getReferenceName(Note(noteType,noteDots)));
+        actionName.replace(QRegExp("-"), "_");
+
+        findAction(QString("duration_%1").arg(actionName))->setChecked(true);
+
+        if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
+            findAction(QString("rest_%1").arg(actionName))->setChecked(true);
+            m_notationWidget->slotSetRestInserter();
+        } else {
+            findAction(actionName)->setChecked(true);
+            m_notationWidget->slotSetNoteInserter();
+        }
+        m_notationWidget->slotSetInsertedNote(noteType, noteDots);
     }
-
-    if (unitType == Note::Breve) name = QString("breve");
-    else if (unitType == Note::Semibreve) name = QString("semibreve");
-    else if (unitType == Note::Minim) name = QString("minim");
-    else if (unitType == Note::Crotchet) name = QString("crotchet");
-    else if (unitType == Note::Quaver) name = QString("quaver");
-    else if (unitType == Note::Semiquaver) name = QString("semiquaver");
-    else if (unitType == Note::Demisemiquaver) name = QString("demisemi");
-    else if (unitType == Note::Hemidemisemiquaver) name = QString("hemidemisemi");
-
-    if (dots > 0) {
-        findAction(QString("duration_dotted_%1").arg(name))->setChecked(true);
-        name = QString("dotted_rest_%1").arg(name);
-    } else {
-        findAction(QString("duration_%1").arg(name))->setChecked(true);
-        name = QString("rest_%1").arg(name);
-    }
-
-    findAction(name)->setChecked(true);
-
-    slotUpdateMenuStates();
 }
 
 void
@@ -1637,17 +1639,14 @@ NewNotationView::slotNoteAction()
     int dots = 0;
 
     if (name.startsWith("duration_")) {
+        // duration change
         findAction(name)->setChecked(true);
         name = name.replace("duration_", "");
         if (m_notationWidget) {
             if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
                 NOTATION_DEBUG << "Have rest inserter " << endl;
                 rest = true;
-                if (name.startsWith("dotted_")) {
-                    name = name.replace("dotted_", "dotted_rest_");
-                } else {
-                    name = QString("rest_%1").arg(name);
-                }
+                name = QString("rest_%1").arg(name);
             } else if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
                 NOTATION_DEBUG << "Have note inserter " << endl;
                 rest = false;
@@ -1658,15 +1657,14 @@ NewNotationView::slotNoteAction()
             }
         }
     }
-    findAction(QString("duration_%1").arg(name))->setChecked(true);
     findAction(name)->setChecked(true);
-    if (name.startsWith("dotted_")) {
-        dots = 1;
-        name = name.replace("dotted_", "");
-    }
     if (name.startsWith("rest_")) {
         rest = true;
         name = name.replace("rest_", "");
+    }
+    if (name.startsWith("dotted_")) {
+        dots = 1;
+        name = name.replace("dotted_", "");
     }
 
     if (name == "breve") type = Note::Breve;

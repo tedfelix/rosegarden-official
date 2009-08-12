@@ -376,7 +376,7 @@
       <Action name="duration_dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" checked="false" group="tools_duration" />
       <Action name="duration_dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="tools_duration" />
     <Separator/>
-      <Action name="toggle_dot" text="To&amp;ggle Dot" />
+      <Action name="toggle_dot" text="To&amp;ggle Dot" shortcut="period" />
     </Menu>
     <!-- <Menu noMerge="1" name="NoteTools"> -->
       <!-- <text>&amp;Notes</text> -->
@@ -412,12 +412,12 @@
       <!-- <Action name="rest_demisemi" text="&amp;Thirty-Second Rest" icon="rest-demisemi" checked="false" group="tools_note" /> -->
       <!-- <Action name="rest_hemidemisemi" text="Sixty-&amp;Fourth Rest" icon="rest-hemidemisemi" checked="false" group="tools_note" /> -->
     <!-- <Separator/> -->
-      <!-- <Action name="dotted_rest_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="tools_note" /> -->
-      <!-- <Action name="dotted_rest_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="tools_note" /> -->
-      <!-- <Action name="dotted_rest_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" checked="false" group="tools_note" /> -->
-      <!-- <Action name="dotted_rest_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" checked="false" group="tools_note" /> -->
-      <!-- <Action name="dotted_rest_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" checked="false" group="tools_note" /> -->
-      <!-- <Action name="dotted_rest_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_semibreve" text="D&amp;otted Whole Rest" icon="dotted-rest-semibreve" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_minim" text="Dotted Half &amp;Rest" icon="dotted-rest-minim" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_crotchet" text="Dotted Q&amp;uarter Rest" icon="dotted-rest-crotchet" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_quaver" text="Dotted E&amp;ighth Rest" icon="dotted-rest-quaver" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_semiquaver" text="Dotted Si&amp;xteenth Rest" icon="dotted-rest-semiquaver" checked="false" group="tools_note" /> -->
+      <!-- <Action name="rest_dotted_demisemi" text="Dotted Thirt&amp;y-Second Rest" icon="dotted-rest-demisemi" checked="false" group="tools_note" /> -->
     <!-- <Separator/> -->
       <!-- <Action name="toggle_dot" text="To&amp;ggle Dot" /> -->
     <!-- </Menu> -->
@@ -722,12 +722,12 @@ appear by default -->
   <Action name="rest_demisemi" icon="rest-demisemi" checked="false" group="tools_note" />
   <Action name="rest_hemidemisemi" icon="rest-hemidemisemi" checked="false" group="tools_note" />
 <Separator/>
-  <Action name="dotted_rest_semibreve" icon="dotted-rest-semibreve" checked="false" group="tools_note" />
-  <Action name="dotted_rest_minim" icon="dotted-rest-minim" checked="false" group="tools_note" />
-  <Action name="dotted_rest_crotchet" icon="dotted-rest-crotchet" checked="false" group="tools_note" />
-  <Action name="dotted_rest_quaver" icon="dotted-rest-quaver" checked="false" group="tools_note" />
-  <Action name="dotted_rest_semiquaver" icon="dotted-rest-semiquaver" checked="false" group="tools_note" />
-  <Action name="dotted_rest_demisemi" icon="dotted-rest-demisemi" checked="false" group="tools_note" />
+  <Action name="rest_dotted_semibreve" icon="dotted-rest-semibreve" checked="false" group="tools_note" />
+  <Action name="rest_dotted_minim" icon="dotted-rest-minim" checked="false" group="tools_note" />
+  <Action name="rest_dotted_crotchet" icon="dotted-rest-crotchet" checked="false" group="tools_note" />
+  <Action name="rest_dotted_quaver" icon="dotted-rest-quaver" checked="false" group="tools_note" />
+  <Action name="rest_dotted_semiquaver" icon="dotted-rest-semiquaver" checked="false" group="tools_note" />
+  <Action name="rest_dotted_demisemi" icon="dotted-rest-demisemi" checked="false" group="tools_note" />
 </ToolBar>
 
 <ToolBar name="Clefs Toolbar" hidden="false" position="left" newline="true">
