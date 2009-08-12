@@ -35,6 +35,8 @@
 #include "base/Clipboard.h"
 #include "base/Selection.h"
 #include "base/NotationQuantizer.h"
+#include "base/NotationTypes.h"
+#include "base/NotationRules.h"
 #include "base/BaseProperties.h"
 #include "base/CompositionTimeSliceAdapter.h"
 #include "base/AnalysisTypes.h"
@@ -1443,6 +1445,146 @@ NewNotationView::slotSwitchToNotes()
     slotUpdateMenuStates();
 }
 
+int
+NewNotationView::getPitchFromNoteInsertAction(QString name,
+                                              Accidental &accidental,
+                                              const Clef &clef,
+                                              const Rosegarden::Key &key)
+{
+    using namespace Accidentals;
+
+    accidental = NoAccidental;
+
+    if (name.left(7) == "insert_") {
+
+        name = name.right(name.length() - 7);
+
+        int modify = 0;
+        int octave = 0;
+
+        if (name.right(5) == "_high") {
+
+            octave = 1;
+            name = name.left(name.length() - 5);
+
+        } else if (name.right(4) == "_low") {
+
+            octave = -1;
+            name = name.left(name.length() - 4);
+        }
+
+        if (name.right(6) == "_sharp") {
+
+            modify = 1;
+            accidental = Sharp;
+            name = name.left(name.length() - 6);
+
+        } else if (name.right(5) == "_flat") {
+
+            modify = -1;
+            accidental = Flat;
+            name = name.left(name.length() - 5);
+        }
+
+        int scalePitch = name.toInt();
+
+        if (scalePitch < 0 || scalePitch > 7) {
+            NOTATION_DEBUG << "EditView::getPitchFromNoteInsertAction: pitch "
+            << scalePitch << " out of range, using 0" << endl;
+            scalePitch = 0;
+        }
+
+        //
+        // Note: middle-C is in octave 5 + octaveBase (default = -2) = 3 (hjj)
+        //
+        int clefOctave = 3 + octave + clef.getOctave();
+
+        //
+        // Keep the distance (clef position)-(1st note of scale) between 0...6
+        //
+        int clefHeightFromC = 2 + clef.getAxisHeight() - clef.getPitchOffset();
+        int firstScaleNoteHeightFromC = ( key.isSharp() ?
+                steps_Cmajor_with_sharps[key.getTonicPitch()] :
+                steps_Cmajor_with_flats[key.getTonicPitch()] );
+
+        int octaveAdjust = clefHeightFromC - firstScaleNoteHeightFromC;
+        octaveAdjust=(octaveAdjust-((77+octaveAdjust)%7))/ 7; // (x-mod(x,7))/7
+
+        Pitch pitch
+        (scalePitch, clefOctave + octaveAdjust, key, accidental);
+        return pitch.getPerformancePitch();
+
+    } else {
+
+        throw Exception("Not an insert action",
+                        __FILE__, __LINE__);
+    }
+}
+
+void NewNotationView::slotInsertNoteFromAction()
+{
+    const QObject *s = sender();
+    QString name = s->objectName();
+
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+    if (!currentInserter) {
+        /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
+        return ;
+    }
+
+    int pitch = 0;
+    Accidental accidental =
+        Accidentals::NoAccidental;
+
+    timeT insertionTime = getInsertionTime();
+    static Rosegarden::Key key = segment->getKeyAtTime(insertionTime);
+    static Clef clef = segment->getClefAtTime(insertionTime);
+
+    try {
+
+        pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
+
+    } catch (...) {
+
+        /* was sorry */ QMessageBox::warning
+            (this,"",  tr("Unknown note insert action %1").arg(name));
+        return ;
+    }
+
+    TmpStatusMsg msg(tr("Inserting note"), this);
+
+    NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    currentInserter->insertNote(*segment, insertionTime, pitch, accidental);
+}
+
+void NewNotationView::slotInsertRest()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+    
+    timeT insertionTime = getInsertionTime();
+
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+    if (!currentInserter) {
+        /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
+        return ;
+    }
+
+    if (! dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool()) ) {
+        slotSwitchToRests();
+        currentInserter = dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool());
+    }
+
+    currentInserter->insertNote(*segment, insertionTime,
+                                0, Accidentals::NoAccidental, true);
+}
+
+
+
 void
 NewNotationView::slotSwitchToRests()
 {
@@ -1472,12 +1614,13 @@ NewNotationView::slotSwitchToRests()
     else if (unitType == Note::Hemidemisemiquaver) name = QString("hemidemisemi");
 
     if (dots > 0) {
+        findAction(QString("duration_dotted_%1").arg(name))->setChecked(true);
         name = QString("dotted_rest_%1").arg(name);
     } else {
+        findAction(QString("duration_%1").arg(name))->setChecked(true);
         name = QString("rest_%1").arg(name);
     }
 
-    findAction(QString("duration_%1").arg(name))->setChecked(true);
     findAction(name)->setChecked(true);
 
     slotUpdateMenuStates();

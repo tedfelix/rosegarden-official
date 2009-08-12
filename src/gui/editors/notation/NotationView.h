@@ -25,6 +25,7 @@
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
+#include "base/NotationTypes.h"
 
 class QWidget;
 
@@ -99,6 +100,9 @@ protected slots:
     void slotSetSelectTool();
     void slotSetEraseTool();
 
+
+    void slotInsertNoteFromAction();
+    void slotInsertRest();
     void slotSwitchToNotes();
     void slotSwitchToRests();
     void slotNoteAction();
@@ -176,6 +180,12 @@ private:
      * Get the average velocity of the selected notes
      */
     int getVelocityFromSelection();
+
+
+    int getPitchFromNoteInsertAction(QString name,
+                                     Accidental &accidental,
+                                     const Clef &clef,
+                                     const Rosegarden::Key &key);
 
     /**
      * Helper function to toggle a toolbar given its name
