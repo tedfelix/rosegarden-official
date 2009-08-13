@@ -53,6 +53,7 @@
 #include "commands/edit/SetTriggerCommand.h"
 #include "commands/edit/ClearTriggersCommand.h"
 #include "commands/edit/ChangeVelocityCommand.h"
+#include "commands/edit/RescaleCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -76,6 +77,7 @@
 #include "gui/dialogs/KeySignatureDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TupletDialog.h"
+#include "gui/dialogs/RescaleDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -2347,6 +2349,56 @@ NewNotationView::slotSymbolAction()
     m_notationWidget->slotSetSymbolInserter();
     m_notationWidget->slotSetInsertedSymbol(type);
     slotUpdateMenuStates();
+}
+
+void
+NewNotationView::slotHalveDurations()
+{
+    if (!getSelection())
+        return ;
+
+    TmpStatusMsg msg(tr("Halving durations..."), this);
+
+    CommandHistory::getInstance()->addCommand(new RescaleCommand(*getSelection(),
+                                              getSelection()->getTotalDuration() / 2,
+                                              false));
+}
+
+void
+NewNotationView::slotDoubleDurations()
+{
+    if (!getSelection())
+        return ;
+
+    TmpStatusMsg msg(tr("Doubling durations..."), this);
+
+    CommandHistory::getInstance()->addCommand(new RescaleCommand(*getSelection(),
+                                              getSelection()->getTotalDuration() * 2,
+                                              false));
+}
+
+void
+NewNotationView::slotRescale()
+{
+    if (!getSelection())
+        return ;
+
+    RescaleDialog dialog
+    (this,
+     &getDocument()->getComposition(),
+     getSelection()->getStartTime(),
+     getSelection()->getEndTime() -
+     getSelection()->getStartTime(),
+     true,
+     true);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        TmpStatusMsg msg(tr("Rescaling..."), this);
+        CommandHistory::getInstance()->addCommand(new RescaleCommand
+                                                  (*getSelection(),
+                                                  dialog.getNewDuration(),
+                                                  dialog.shouldCloseGap()));
+    }
 }
 
 

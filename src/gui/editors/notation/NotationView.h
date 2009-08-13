@@ -139,6 +139,9 @@ protected slots:
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
     void slotUpdateInsertModeStatus();
+    void slotHalveDurations();
+    void slotDoubleDurations();
+    void slotRescale();
 
     /// Show or hide rulers
     void slotToggleChordsRuler();
