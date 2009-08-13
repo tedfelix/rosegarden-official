@@ -376,7 +376,7 @@
       <Action name="duration_dotted_semiquaver" text="Dotted Si&amp;xteenth Note" icon="dotted-semiquaver" checked="false" group="tools_duration" />
       <Action name="duration_dotted_demisemi" text="Dotted Thirt&amp;y-Second Note" icon="dotted-demisemi" checked="false" group="tools_duration" />
     <Separator/>
-      <Action name="toggle_dot" text="To&amp;ggle Dot" shortcut="period" />
+      <Action name="toggle_dot" text="To&amp;ggle Dot" shortcut="Period" />
     </Menu>
     <!-- <Menu noMerge="1" name="NoteTools"> -->
       <!-- <text>&amp;Notes</text> -->

@@ -1636,7 +1636,6 @@ NewNotationView::slotNoteAction()
     QObject *s = sender();
     QString name = s->objectName();
 
-    Note::Type type = Note::Crotchet;
     bool rest = false;
     int dots = 0;
 
@@ -1647,18 +1646,16 @@ NewNotationView::slotNoteAction()
         if (m_notationWidget) {
             if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
                 NOTATION_DEBUG << "Have rest inserter " << endl;
-                rest = true;
                 name = QString("rest_%1").arg(name);
             } else if (dynamic_cast<NoteInserter *>(m_notationWidget->getCurrentTool())) {
                 NOTATION_DEBUG << "Have note inserter " << endl;
-                rest = false;
             } else {
                 NOTATION_DEBUG << "Have neither inserter " << endl;
                 NOTATION_DEBUG << "Select note inserter, which is default " << endl;
-                rest = false;
             }
         }
     }
+    // toolbar change
     findAction(name)->setChecked(true);
     if (name.startsWith("rest_")) {
         rest = true;
@@ -1669,15 +1666,7 @@ NewNotationView::slotNoteAction()
         name = name.replace("dotted_", "");
     }
 
-    if (name == "breve") type = Note::Breve;
-    else if (name == "semibreve") type = Note::Semibreve;
-    else if (name == "minim") type = Note::Minim;
-    else if (name == "crotchet") type = Note::Crotchet;
-    else if (name == "quaver") type = Note::Quaver;
-    else if (name == "semiquaver") type = Note::Semiquaver;
-    else if (name == "demisemi") type = Note::Demisemiquaver;
-    else if (name == "hemidemisemi") type = Note::Hemidemisemiquaver;
-
+    Note::Type type(NotationStrings::getNoteForName(name).getNoteType());
     if (m_notationWidget) {
         if (rest) {
             m_notationWidget->slotSetRestInserter();
