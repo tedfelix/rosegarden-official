@@ -1628,6 +1628,8 @@ NewNotationView::slotToggleDot()
         }
         m_notationWidget->slotSetInsertedNote(noteType, noteDots);
     }
+
+    slotUpdateMenuStates();
 }
 
 void
@@ -1635,13 +1637,13 @@ NewNotationView::slotNoteAction()
 {
     QObject *s = sender();
     QString name = s->objectName();
+    QString durationMenuName;
+    QString noteToolbarName;
 
     bool rest = false;
     int dots = 0;
 
     if (name.startsWith("duration_")) {
-        // duration change
-        findAction(name)->setChecked(true);
         name = name.replace("duration_", "");
         if (m_notationWidget) {
             if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
@@ -1655,12 +1657,14 @@ NewNotationView::slotNoteAction()
             }
         }
     }
-    // toolbar change
-    findAction(name)->setChecked(true);
+
+    noteToolbarName = name;
     if (name.startsWith("rest_")) {
         rest = true;
         name = name.replace("rest_", "");
     }
+
+    durationMenuName = QString("duration_%1").arg(name);
     if (name.startsWith("dotted_")) {
         dots = 1;
         name = name.replace("dotted_", "");
@@ -1676,6 +1680,9 @@ NewNotationView::slotNoteAction()
         m_notationWidget->slotSetInsertedNote(type, dots);
     }
     
+    findAction(noteToolbarName)->setChecked(true);
+    findAction(durationMenuName)->setChecked(true);
+
     slotUpdateMenuStates();
 
     //!!! todo: set status bar indication
