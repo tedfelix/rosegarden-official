@@ -1610,6 +1610,8 @@ NewNotationView::slotToggleDot()
             return ;
         }
         Note note = currentInserter->getCurrentNote();
+        QString durationMenuName;
+        QString noteToolbarName;
 
         Note::Type noteType = note.getNoteType();
         int noteDots = (note.getDots() ? 0 : 1);
@@ -1617,19 +1619,23 @@ NewNotationView::slotToggleDot()
         QString actionName(NotationStrings::getReferenceName(Note(noteType,noteDots)));
         actionName.replace(QRegExp("-"), "_");
 
-        findAction(QString("duration_%1").arg(actionName))->setChecked(true);
+        durationMenuName = QString("duration_%1").arg(actionName);
 
         if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
-            findAction(QString("rest_%1").arg(actionName))->setChecked(true);
+            // ensure that rest_ preface the note duration
+            noteToolbarName = QString("rest_%1").arg(actionName.replace("rest_",""));
             m_notationWidget->slotSetRestInserter();
         } else {
-            findAction(actionName)->setChecked(true);
+            noteToolbarName = actionName;
             m_notationWidget->slotSetNoteInserter();
         }
         m_notationWidget->slotSetInsertedNote(noteType, noteDots);
-    }
 
-    slotUpdateMenuStates();
+        findAction(noteToolbarName)->setChecked(true);
+        findAction(durationMenuName)->setChecked(true);
+
+        slotUpdateMenuStates();
+    }
 }
 
 void
