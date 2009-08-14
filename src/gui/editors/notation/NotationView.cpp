@@ -1512,24 +1512,26 @@ NewNotationView::getPitchFromNoteInsertAction(QString name,
             scalePitch = 0;
         }
 
-        //
-        // Note: middle-C is in octave 5 + octaveBase (default = -2) = 3 (hjj)
-        //
-        int clefOctave = 3 + octave + clef.getOctave();
+        // Constructor: Pitch(heightOnStaff, clef, key, accidental = Accidentals::NoAccidental)
+        Pitch clefPitch(clef.getAxisHeight(), clef, key);
 
-        //
-        // Keep the distance (clef position)-(1st note of scale) between 0...6
-        //
-        int clefHeightFromC = 2 + clef.getAxisHeight() - clef.getPitchOffset();
-        int firstScaleNoteHeightFromC = ( key.isSharp() ?
-                steps_Cmajor_with_sharps[key.getTonicPitch()] :
-                steps_Cmajor_with_flats[key.getTonicPitch()] );
+        int pitchOctave = clefPitch.getOctave() + octave;
 
-        int octaveAdjust = clefHeightFromC - firstScaleNoteHeightFromC;
-        octaveAdjust=(octaveAdjust-((77+octaveAdjust)%7))/ 7; // (x-mod(x,7))/7
+        std::cerr << "NewNotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
+        // We want still to make sure that when (i) octave = 0,
+        //  (ii) one of the noteInScale = 0..6 is
+        //  (iii) at the same heightOnStaff than the heightOnStaff of the key.
 
-        Pitch pitch
-        (scalePitch, clefOctave + octaveAdjust, key, accidental);
+        // Constructor: Pitch(noteInScale, octave, key, accidental = Accidental::NoAccidental)
+        Pitch lowestPitch(0, clefPitch.getOctave(), key);
+        int heightToAdjust = (clefPitch.getHeightOnStaff(clef, key) - lowestPitch.getHeightOnStaff(clef, key));
+        for (; heightToAdjust < 0; heightToAdjust += 7) pitchOctave++;
+        for (; heightToAdjust > 6; heightToAdjust -= 7) pitchOctave--;
+
+        std::cerr << "NewNotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)" << std::endl;
+
+        // Constructor: Pitch(noteInScale, octave, key, accidental)
+        Pitch pitch(scalePitch, pitchOctave, key, accidental);
         return pitch.getPerformancePitch();
 
     } else {
