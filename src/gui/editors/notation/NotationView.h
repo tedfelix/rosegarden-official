@@ -142,6 +142,10 @@ protected slots:
     void slotHalveDurations();
     void slotDoubleDurations();
     void slotRescale();
+    void slotTransposeUp();
+    void slotTransposeDown();
+    void slotTransposeUpOctave();
+    void slotTransposeDownOctave();
 
     /// Show or hide rulers
     void slotToggleChordsRuler();

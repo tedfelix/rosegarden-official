@@ -54,6 +54,7 @@
 #include "commands/edit/ClearTriggersCommand.h"
 #include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/RescaleCommand.h"
+#include "commands/edit/TransposeCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -2401,6 +2402,50 @@ NewNotationView::slotRescale()
                                                   dialog.getNewDuration(),
                                                   dialog.shouldCloseGap()));
     }
+}
+
+void
+NewNotationView::slotTransposeUp()
+{
+    if (!getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Transposing up one semitone..."), this);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+                                              (1, *getSelection()));
+}
+
+void
+NewNotationView::slotTransposeDown()
+{
+    if (!getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Transposing down one semitone..."), this);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+                                              ( -1, *getSelection()));
+}
+
+void
+NewNotationView::slotTransposeUpOctave()
+{
+    if (!getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Transposing up one octave..."), this);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+                                              (12, *getSelection()));
+}
+
+void
+NewNotationView::slotTransposeDownOctave()
+{
+    if (!getSelection())
+        return ;
+    TmpStatusMsg msg(tr("Transposing down one octave..."), this);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+                                              ( -12, *getSelection()));
 }
 
 
