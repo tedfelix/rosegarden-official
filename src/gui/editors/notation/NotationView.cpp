@@ -1512,25 +1512,24 @@ NewNotationView::getPitchFromNoteInsertAction(QString name,
             scalePitch = 0;
         }
 
-        // Constructor: Pitch(heightOnStaff, clef, key, accidental = Accidentals::NoAccidental)
-        Pitch clefPitch(clef.getAxisHeight(), clef, key);
+        Pitch clefPitch(clef.getAxisHeight(), clef, key, NoAccidental);
 
         int pitchOctave = clefPitch.getOctave() + octave;
 
         std::cerr << "NewNotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
+
         // We want still to make sure that when (i) octave = 0,
         //  (ii) one of the noteInScale = 0..6 is
         //  (iii) at the same heightOnStaff than the heightOnStaff of the key.
+        int lowestNoteInScale = 0;
+        Pitch lowestPitch(lowestNoteInScale, clefPitch.getOctave(), key, NoAccidental);
 
-        // Constructor: Pitch(noteInScale, octave, key, accidental = Accidental::NoAccidental)
-        Pitch lowestPitch(0, clefPitch.getOctave(), key);
         int heightToAdjust = (clefPitch.getHeightOnStaff(clef, key) - lowestPitch.getHeightOnStaff(clef, key));
         for (; heightToAdjust < 0; heightToAdjust += 7) pitchOctave++;
         for (; heightToAdjust > 6; heightToAdjust -= 7) pitchOctave--;
 
         std::cerr << "NewNotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << " (adjusted)" << std::endl;
 
-        // Constructor: Pitch(noteInScale, octave, key, accidental)
         Pitch pitch(scalePitch, pitchOctave, key, accidental);
         return pitch.getPerformancePitch();
 
