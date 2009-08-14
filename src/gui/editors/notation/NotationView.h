@@ -146,6 +146,7 @@ protected slots:
     void slotTransposeDown();
     void slotTransposeUpOctave();
     void slotTransposeDownOctave();
+    void slotDiatonicTranspose();
 
     /// Show or hide rulers
     void slotToggleChordsRuler();
