@@ -2359,8 +2359,6 @@ NewNotationView::slotHalveDurations()
 {
     if (!getSelection()) return ;
 
-    TmpStatusMsg msg(tr("Halving durations..."), this);
-
     CommandHistory::getInstance()->addCommand(new RescaleCommand(*getSelection(),
                                               getSelection()->getTotalDuration() / 2,
                                               false));
@@ -2370,8 +2368,6 @@ void
 NewNotationView::slotDoubleDurations()
 {
     if (!getSelection()) return ;
-
-    TmpStatusMsg msg(tr("Doubling durations..."), this);
 
     CommandHistory::getInstance()->addCommand(new RescaleCommand(*getSelection(),
                                               getSelection()->getTotalDuration() * 2,
@@ -2393,7 +2389,6 @@ NewNotationView::slotRescale()
      true);
 
     if (dialog.exec() == QDialog::Accepted) {
-        TmpStatusMsg msg(tr("Rescaling..."), this);
         CommandHistory::getInstance()->addCommand(new RescaleCommand
                                                   (*getSelection(),
                                                   dialog.getNewDuration(),
@@ -2405,7 +2400,6 @@ void
 NewNotationView::slotTransposeUp()
 {
     if (!getSelection()) return ;
-    TmpStatusMsg msg(tr("Transposing up one semitone..."), this);
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
                                               (1, *getSelection()));
@@ -2415,7 +2409,6 @@ void
 NewNotationView::slotTransposeDown()
 {
     if (!getSelection()) return ;
-    TmpStatusMsg msg(tr("Transposing down one semitone..."), this);
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
                                               ( -1, *getSelection()));
@@ -2425,7 +2418,6 @@ void
 NewNotationView::slotTransposeUpOctave()
 {
     if (!getSelection()) return ;
-    TmpStatusMsg msg(tr("Transposing up one octave..."), this);
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
                                               (12, *getSelection()));
@@ -2435,7 +2427,6 @@ void
 NewNotationView::slotTransposeDownOctave()
 {
     if (!getSelection()) return ;
-    TmpStatusMsg msg(tr("Transposing down one octave..."), this);
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
                                               ( -12, *getSelection()));
@@ -2458,7 +2449,6 @@ NewNotationView::slotDiatonicTranspose()
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
-    TmpStatusMsg msg(tr("Transposing..."), this);
     if (intervalDialog.getChangeKey())
     {
         std::cout << "Transposing changing keys is not currently supported on selections" << std::endl;
