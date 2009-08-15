@@ -356,6 +356,19 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
                 el->setLayoutY(staff.getLayoutYForHeight
                                (Clef(*el->event()).getAxisHeight()));
 
+            } else if (el->event()->isa(Rosegarden::Symbol::EventType)) {
+                //!!! Presently all symbols are above the staff only, at a fixed
+                // height.  I've never seen a segno or coda anywhere else.
+                // Breath marks might benefit from the ability to draw them up
+                // or draw them down, or even draw them at an arbitrary Y, but
+                // let's not get into any of that just now.
+                //
+                // The figure 19 is totally arbitrary, based on comparing the
+                // results against a "D. C. al Fine" text, to get these to
+                // display at approximately the same height.  Please feel free
+                // to refine this first stab.
+                el->setLayoutY(staff.getLayoutYForHeight(19 + displacedY));
+
             } else if (el->event()->isa(Rosegarden::Key::EventType)) {
 
                 el->setLayoutY(staff.getLayoutYForHeight(12));
@@ -368,14 +381,18 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
                 if (type == Text::Dynamic ||
                         type == Text::LocalDirection ||
                         type == Text::UnspecifiedType) {
+                    // below the staff
                     el->setLayoutY(staff.getLayoutYForHeight(-7) + displacedY);
                 } else if (type == Text::Lyric) {
                     long verse = 0;
+                    // verses even further below the statff
                     el->event()->get<Int>(Text::LyricVersePropertyName, verse);
                     el->setLayoutY(staff.getLayoutYForHeight(-10 - 3 * verse) + displacedY);
                 } else if (type == Text::Annotation) {
+                    // annotations way below the staff
                     el->setLayoutY(staff.getLayoutYForHeight(-13) + displacedY);
                 } else {
+                    // every other text well above the staff
                     el->setLayoutY(staff.getLayoutYForHeight(22) + displacedY);
                 }
 
