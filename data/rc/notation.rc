@@ -841,17 +841,21 @@ appear by default -->
 </Menu>
 
 <State name="note_insert_tool_current">
+  <disable>
+    <Action name="switch_to_notes"/>
+  </disable>
   <enable>
     <Action name="insert_rest"/>
     <Action name="insert_note_actionmenu"/>
-    <Action name="switch_to_rests"/>
   </enable>
 </State>
 
 <State name="rest_insert_tool_current">
+  <disable>
+    <Action name="switch_to_rests"/>
+  </disable>
   <enable>
     <Action name="insert_rest"/>
-    <Action name="switch_to_notes"/>
   </enable>
 </State>
 
