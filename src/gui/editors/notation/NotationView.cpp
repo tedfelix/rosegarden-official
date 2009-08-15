@@ -670,6 +670,7 @@ NewNotationView::setupActions()
         createAction(QString("insert_6%1").arg(octaveSuffix),
                      SLOT(slotInsertNoteFromAction()));
     }
+    createAction(QString("insert_rest"),SLOT(slotInsertRest()));
 
     std::set<QString> fs(NoteFontFactory::getFontNames());
     std::vector<QString> f(fs.begin(), fs.end());
@@ -1610,10 +1611,14 @@ void NewNotationView::slotInsertRest()
     if (! dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool()) ) {
         slotSwitchToRests();
         currentInserter = dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool());
+        currentInserter->insertNote(*segment, insertionTime,
+                                    0, Accidentals::NoAccidental, true);
+        // If Notes Toolbar was selected, continue inserting notes
+        slotSwitchToNotes();
+    } else {
+        currentInserter->insertNote(*segment, insertionTime,
+                                    0, Accidentals::NoAccidental, true);
     }
-
-    currentInserter->insertNote(*segment, insertionTime,
-                                0, Accidentals::NoAccidental, true);
 }
 
 void
