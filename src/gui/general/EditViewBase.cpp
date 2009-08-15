@@ -105,9 +105,6 @@ void EditViewBase::slotConfigure()
     ConfigureDialog *configDlg =
         new ConfigureDialog(getDocument(), this);
 
-//     configDlg->showPage(getConfigDialogPageIndex());
-	configDlg->m_tabWidget->setCurrentIndex( getConfigDialogPageIndex() );
-	
     configDlg->show();
 }
 

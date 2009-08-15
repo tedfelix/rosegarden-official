@@ -98,44 +98,9 @@ void ConfigureDialogBase::addPage(const QString& name, const QString& title, con
     m_iconWidget->addPage(name, titledPage, icon);
 }
 
-//QWidget* ConfigureDialogBase::addPage( const QString& iconLabel, const QString& label, const QIcon& icon ){
-    ///**     add a configuration options tab to the tabWidget ; return the tab-page <QWidget*>  */
-    //QWidget *page = new QWidget();
-    //if( ! m_tabWidget ){
-        //std::cerr << "ERROR: m_tabWidget is NULL in ConfigureDialogBase::addPage " << std::endl;
-        //return 0;
-    //}
-    //m_tabWidget->addTab( page, icon, label );
-    //return page;
-//}
 
 ConfigureDialogBase::~ConfigureDialogBase()
 {}
-
-
-//void ConfigureDialogBase::slotButtonBoxButtonClicked(QAbstractButton * button){
-    
-    //QDialogButtonBox::ButtonRole bRole = m_dialogButtonBox->buttonRole( button );
-    
-    //if( bRole == QDialogButtonBox::ApplyRole ){
-        //slotApply();
-////        close();
-    //}
-    //else if( bRole == QDialogButtonBox::AcceptRole ){
-        //accept();
-    //}
-    //else if( bRole == QDialogButtonBox::HelpRole ){
-////         slotHelp();
-    //}
-    //else if( bRole == QDialogButtonBox::ResetRole ){
-////         slotRestoreDefaults();
-    //}else{
-        //// cancel
-        ////### do we need to reset/restore anything here, before closing the conf dialog ?
-        //slotCancelOrClose();
-        ////close();
-    //}
-//}
 
 
 void

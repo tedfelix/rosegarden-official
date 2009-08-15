@@ -48,8 +48,6 @@ public:
 
     void addPage( const QString& name, const QString& title, const QPixmap& icon, QWidget *page );
     
-    QTabWidget* m_tabWidget;
-    
 protected slots:
     
     virtual void accept();
