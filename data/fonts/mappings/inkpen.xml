@@ -106,7 +106,11 @@
 	<symbol	name="DIGIT SIX"   font-id="0" code="54" glyph="18"/>
 	<symbol	name="DIGIT SEVEN" font-id="0" code="55" glyph="19"/>
 	<symbol	name="DIGIT EIGHT" font-id="0" code="56" glyph="20"/>
-	<symbol	name="DIGIT NINE"  font-id="0" code="57" glyph="21"/>
+        <symbol	name="DIGIT NINE"  font-id="0" code="57" glyph="21"/>
+
+        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="115"/>
+        <symbol name="MUSICAL SYMBOL CODA" font-id="0" code="114"/>
+        <symbol name="MUSICAL SYMBOL BREATH_MARK" font-id="0" code="62"/>
 </font-symbol-map>
 
 <font-hotspots>
