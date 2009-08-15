@@ -55,6 +55,9 @@
 #include "commands/edit/ChangeVelocityCommand.h"
 #include "commands/edit/RescaleCommand.h"
 #include "commands/edit/TransposeCommand.h"
+#include "commands/edit/InvertCommand.h"
+#include "commands/edit/RetrogradeCommand.h"
+#include "commands/edit/RetrogradeInvertCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -2462,6 +2465,39 @@ NewNotationView::slotDiatonicTranspose()
                                                   (semitones, steps,
                                                   *getSelection()));
     }
+}
+
+void
+NewNotationView::slotInvert()
+{
+    if (!getSelection()) return;
+
+    int semitones = 0;
+
+    CommandHistory::getInstance()->addCommand(new InvertCommand
+                                              (semitones, *getSelection()));
+}
+
+void
+NewNotationView::slotRetrograde()
+{
+    if (!getSelection()) return;
+
+    int semitones = 0;
+
+    CommandHistory::getInstance()->addCommand(new RetrogradeCommand
+                                              (semitones, *getSelection()));
+}
+
+void
+NewNotationView::slotRetrogradeInvert()
+{
+    if (!getSelection()) return;
+
+    int semitones = 0;
+
+    CommandHistory::getInstance()->addCommand(new RetrogradeInvertCommand
+                                              (semitones, *getSelection()));
 }
 
 
