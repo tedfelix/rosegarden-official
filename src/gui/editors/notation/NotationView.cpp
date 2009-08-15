@@ -1520,6 +1520,7 @@ NewNotationView::getPitchFromNoteInsertAction(QString name,
 
         int pitchOctave = clefPitch.getOctave() + octave;
 
+        std::cerr << "NewNotationView::getPitchFromNoteInsertAction: clef = " << clef.getClefType() << ", octaveoffset = " << clef.getOctaveOffset() << std::endl;
         std::cerr << "NewNotationView::getPitchFromNoteInsertAction: octave = " << pitchOctave << std::endl;
 
         // We want still to make sure that when (i) octave = 0,
@@ -1567,6 +1568,8 @@ void NewNotationView::slotInsertNoteFromAction()
     static Clef clef = segment->getClefAtTime(insertionTime);
 
     try {
+
+        std::cerr << "NewNotationView::slotInsertNoteFromAction: clef = " << clef.getClefType() << ", octaveoffset = " << clef.getOctaveOffset() << std::endl;
 
         pitch = getPitchFromNoteInsertAction(name, accidental, clef, key);
 
