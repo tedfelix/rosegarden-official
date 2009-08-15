@@ -1257,7 +1257,7 @@ void NewMatrixView::slotTranspose()
     if (!selection) return;
 
     QSettings settings;
-    settings.beginGroup( EditViewConfigGroup );
+    settings.beginGroup(MatrixViewConfigGroup);
 
     int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
 
@@ -1282,7 +1282,7 @@ void NewMatrixView::slotDiatonicTranspose()
     if (!selection) return;
     
     QSettings settings;
-    settings.beginGroup( EditViewConfigGroup );
+    settings.beginGroup(MatrixViewConfigGroup);
     
     IntervalDialog intervalDialog(this);
     int ok = intervalDialog.exec();

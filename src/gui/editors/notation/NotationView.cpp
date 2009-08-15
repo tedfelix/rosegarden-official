@@ -106,6 +106,7 @@
 #include <QSettings>
 #include <QTemporaryFile>
 #include <QToolBar>
+#include <QInputDialog>
 
 #include <algorithm>
 
@@ -2434,6 +2435,34 @@ NewNotationView::slotTransposeDownOctave()
 
     CommandHistory::getInstance()->addCommand(new TransposeCommand
                                               ( -12, *getSelection()));
+}
+
+void
+NewNotationView::slotTranspose()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) std::cout << "Hint: selection is NULL in slotTranpose() " <<
+ std::endl;
+    if (!selection) return;
+
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+
+    int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
+
+    bool ok = false;
+    int semitones = QInputDialog::getInteger
+            (tr("Transpose"),
+             tr("By number of semitones: "),
+                dialogDefault, -127, 127, 1, &ok, this);
+    if (!ok || semitones == 0) return;
+
+    settings.setValue("lasttransposition", semitones);
+
+    CommandHistory::getInstance()->addCommand(new TransposeCommand
+            (semitones, *selection));
+
+    settings.endGroup();
 }
 
 void

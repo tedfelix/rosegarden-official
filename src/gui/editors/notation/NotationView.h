@@ -146,7 +146,7 @@ protected slots:
     void slotTransposeDown();
     void slotTransposeUpOctave();
     void slotTransposeDownOctave();
-// Missing slotTranspose here. Probably need to create new dialog?
+    void slotTranspose();
     void slotDiatonicTranspose();
     void slotInvert();
     void slotRetrograde();
