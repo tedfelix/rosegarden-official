@@ -59,7 +59,7 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, QString label, const c
     connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
     connect(buttonBox, SIGNAL(rejected()), this, SLOT(slotCancelOrClose()));
 
-    QPushButton *m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
+    m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
     m_applyButton->setEnabled(false);
     connect(m_applyButton, SIGNAL(clicked()), this, SLOT(slotApply()));
 

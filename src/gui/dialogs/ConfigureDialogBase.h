@@ -62,7 +62,7 @@ protected:
     
     QPushButton       *m_applyButton;
     QDialogButtonBox  *m_dialogButtonBox;
-    IconStackedWidget * m_iconWidget;    
+    IconStackedWidget *m_iconWidget;    
 };
 
 
