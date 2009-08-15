@@ -108,7 +108,9 @@
 	<symbol	name="DIGIT EIGHT" font-id="0" code="56" glyph="27"/>
         <symbol	name="DIGIT NINE"  font-id="0" code="57" glyph="28"/>
 
-        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="240" glyph="222"/>
+        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="37"/>
+        <symbol name="MUSICAL SYMBOL CODA" font-id="0" code="222"/>
+        <symbol name="MUSICAL SYMBOL BREATH_MARK" font-id="0" code="44"/>
 </font-symbol-map>
 
 <font-hotspots>
