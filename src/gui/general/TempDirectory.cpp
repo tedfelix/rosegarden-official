@@ -28,6 +28,8 @@
 
 #include <signal.h>
 
+#include "misc/ConfigGroups.h"
+
 namespace Rosegarden
 {
 
@@ -82,7 +84,7 @@ TempDirectory::getPath()
     if (m_tmpdir != "") return m_tmpdir;
 
     QSettings settings;
-    settings.beginGroup("TempDirectory");
+    settings.beginGroup(TempDirectoryConfigGroup);
     QString rgDirParent = settings.value("create-in", "$HOME").toString();
     settings.endGroup();
 

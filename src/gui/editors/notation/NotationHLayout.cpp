@@ -19,6 +19,7 @@
 #include "NotationHLayout.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/ConfigGroups.h"
 #include <QApplication>
 
 #include "base/Composition.h"
@@ -70,7 +71,7 @@ NotationHLayout::NotationHLayout(Composition *c, NotePixmapFactory *npf,
     //    NOTATION_DEBUG << "NotationHLayout::NotationHLayout()" << endl;
 
     QSettings settings;
-    settings.beginGroup( "Notation Options" );
+    settings.beginGroup(NotationOptionsConfigGroup);
 
     m_keySigCancelMode = settings.value("keysigcancelmode", 1).toInt() ;
     settings.endGroup();
@@ -252,7 +253,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime, timeT endT
     NOTATION_DEBUG << "ottava shift at start:" << ottavaShift << ", ottavaEnd " << ottavaEnd << endl;
 
     QSettings settings;
-    settings.beginGroup( "Notation Options" );
+    settings.beginGroup(NotationOptionsConfigGroup);
 
     int accOctaveMode = settings.value("accidentaloctavemode", 1).toInt() ;
     AccidentalTable::OctaveType octaveType =
@@ -1264,7 +1265,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime)
     int startBar = getComposition()->getBarNumber(startTime);
 
     QSettings settings;
-    settings.beginGroup( "Notation Options" );
+    settings.beginGroup(NotationOptionsConfigGroup);
 
     bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
     settings.endGroup();

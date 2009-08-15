@@ -188,7 +188,7 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //@@@ QSettings settings ; // was: confq4
     //@@@ QString groupTemp = settings.group();
     QSettings settings;
-    settings.beginGroup("CollapsingFrame");
+    settings.beginGroup(CollapsingFrameConfigGroup);
 
     bool expanded = qStrToBool(settings.value("nonprintableheaders", "false")) ;
     settings.setValue("nonprintableheaders", expanded);

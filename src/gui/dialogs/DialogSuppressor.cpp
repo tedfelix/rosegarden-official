@@ -26,6 +26,7 @@
 #include <QLabel>
 
 #include <iostream>
+#include "misc/ConfigGroups.h"
 
 namespace Rosegarden
 {
@@ -41,7 +42,7 @@ SuppressionTarget::slotSuppressionToggled(bool on)
     std::cerr << "checked = " << on << std::endl;
 
     QSettings settings;
-    settings.beginGroup("DialogSuppressor");
+    settings.beginGroup(DialogSuppressorConfigGroup);
     settings.setValue(m_key, on);
     settings.endGroup();
 }
@@ -92,7 +93,7 @@ bool
 DialogSuppressor::isSuppressed(QString settingsKey)
 {
     QSettings settings;
-    settings.beginGroup("DialogSuppressor");
+    settings.beginGroup(DialogSuppressorConfigGroup);
     bool suppress = settings.value(settingsKey, false).toBool();
     settings.endGroup();
     return suppress;

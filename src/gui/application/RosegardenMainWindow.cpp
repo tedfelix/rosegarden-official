@@ -1701,7 +1701,7 @@ RosegardenMainWindow::slotFileOpen()
         // program before.  Default to the examples directory.
                           
         QString examplesDir = ResourceFinder().getResourceDir("examples");
-        settings.beginGroup("Recent Dirs");
+        settings.beginGroup(RecentDirsConfigGroup);
 
         QString recentString = settings.value("ROSEGARDEN", "").toString() ;
         settings.setValue

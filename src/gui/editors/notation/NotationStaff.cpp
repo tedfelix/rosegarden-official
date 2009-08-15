@@ -852,7 +852,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
         if (m_printPainter)
             return ;
         QSettings settings;
-        settings.beginGroup( "Notation Options" );
+        settings.beginGroup( NotationOptionsConfigGroup );
 
         bool showInvisibles = qStrToBool( settings.value("showinvisibles", "true" ) ) ;
         settings.endGroup();

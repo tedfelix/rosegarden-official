@@ -18,6 +18,7 @@
 
 #include "CollapsingFrame.h"
 #include "misc/Strings.h"
+#include "misc/ConfigGroups.h"
 #include "gui/general/IconLoader.h"
 
 #include <QApplication>
@@ -101,7 +102,7 @@ CollapsingFrame::setWidget(QWidget *widget)
     bool expanded = true;
     if (!objectName().isEmpty()) {
         QSettings settings;
-        settings.beginGroup("Collapsing_Frames");
+        settings.beginGroup(CollapsingFrameConfigGroup);
         expanded = qStrToBool(settings.value(objectName(), true));
         settings.endGroup();
     }
@@ -129,7 +130,7 @@ CollapsingFrame::toggle()
 
     if (!objectName().isEmpty()) {
         QSettings settings;
-        settings.beginGroup("Collapsing_Frames" );
+        settings.beginGroup(CollapsingFrameConfigGroup);
         settings.setValue(objectName(), !m_collapsed);
         settings.endGroup();
     }

@@ -47,4 +47,10 @@ namespace Rosegarden
     const char* const LilyPondExportConfigGroup = "LilyPond_Export";
     const char* const LastUsedPathsConfigGroup = "Last_Used_Paths";
     const char* const WindowGeometryConfigGroup = "Window_Geometry";
+    const char* const TempDirectoryConfigGroup = "TempDirectory";
+    const char* const NotationOptionsConfigGroup = "Notation_Options";
+    const char* const DialogSuppressorConfigGroup = "DialogSuppressor";
+    const char* const RecentDirsConfigGroup = "RecentDirs";
+    const char* const CollapsingFrameConfigGroup = "CollapsingFrame";
+
 }

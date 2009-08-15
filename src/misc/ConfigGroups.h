@@ -50,6 +50,11 @@ namespace Rosegarden
     extern const char* const LilyPondExportConfigGroup;
     extern const char* const LastUsedPathsConfigGroup;
     extern const char* const WindowGeometryConfigGroup;
+    extern const char* const TempDirectoryConfigGroup;
+    extern const char* const NotationOptionsConfigGroup;
+    extern const char* const DialogSuppressorConfigGroup;
+    extern const char* const RecentDirsConfigGroup;
+    extern const char* const CollapsingFrameConfigGroup;
 }
 
 #endif

@@ -107,7 +107,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
 
     // Set up default expansions for the collapsing elements
     QSettings settings;
-    settings.beginGroup( "CollapsingFrame" );
+    settings.beginGroup(CollapsingFrameConfigGroup);
 
     bool expanded = qStrToBool( settings.value("trackparametersplayback", "true" ) ) ;
     settings.setValue("trackparametersplayback", expanded);
