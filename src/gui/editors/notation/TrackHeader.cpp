@@ -65,7 +65,8 @@ const int StaffHeader::INCONSISTENT_CLEFS          = 1 << 2;
 const int StaffHeader::INCONSISTENT_KEYS           = 1 << 3;
 const int StaffHeader::INCONSISTENT_LABELS         = 1 << 4;
 const int StaffHeader::INCONSISTENT_TRANSPOSITIONS = 1 << 5;
-const int StaffHeader::BEFORE_FIRST_SEGMENT        = 1 << 6;
+const int StaffHeader::INCONSISTENT_COLOURS        = 1 << 6;
+const int StaffHeader::BEFORE_FIRST_SEGMENT        = 1 << 7;
 
 
 StaffHeader::StaffHeader(HeadersGroup *group,
@@ -93,7 +94,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_keyItem(0),
         m_foreGround(Qt::white),
         m_backGround(Qt::black),
-        m_toolTipText(QString(""))
+        m_toolTipText(QString("")),
+        m_colourIndex(0)
 
 {
     // localStyle (search key)
@@ -225,6 +227,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     /// not detected).
     ///   TODO : Look for the first segment(s) in
     ///          lookAtStaff() and not here.
+
 }
 
 StaffHeader::~StaffHeader()
@@ -242,7 +245,7 @@ StaffHeader::paintEvent(QPaintEvent *)
                   << "                            This is a BUG, but it seems fairly harmless to just avoid crashing here and return." << std::endl
                   << std::endl
                   << "                            See you next iteration!"  << std::endl;
-       
+
         return;
     }
         
@@ -433,6 +436,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     Rosegarden::Key key, key0, key1 = Rosegarden::Key("C major");
     QString label = QString(""), label0, label1 = QString("");
     int transpose = 0, transpose0, transpose1 = 0;
+    unsigned int colourIndex = 0, colourIndex0;
 
     int staff;
 
@@ -457,6 +461,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                 m_firstSeg->getFirstClefAndKey(clef, key);
                 label = strtoqstr(m_firstSeg->getLabel());
                 transpose = m_firstSeg->getTranspose();
+                colourIndex = m_firstSeg->getColourIndex();
 //!!!  getCurrentStaffNumber() doesn't exist still
 //!!!                current = current || (m_scene->getCurrentStaffNumber() == i);
                 break;
@@ -472,6 +477,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                                             m_ypos + m_height / 2, clef, key);
                 label = strtoqstr(segment.getLabel());
                 transpose = segment.getTranspose();
+                colourIndex = segment.getColourIndex();
 
                 if (status & SEGMENT_HERE) {
                     status |= SUPERIMPOSED_SEGMENTS;
@@ -483,6 +489,8 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                         status |= INCONSISTENT_LABELS;
                     if (transpose != transpose0)
                         status |= INCONSISTENT_TRANSPOSITIONS;
+                    if (colourIndex != colourIndex0)
+                        status |= INCONSISTENT_COLOURS;
                 } else {
                     status |= SEGMENT_HERE;
                 }
@@ -499,6 +507,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
                 key0 = key;
                 label0 = label;
                 transpose0 = transpose;
+                colourIndex0 = colourIndex;
             }                                                // if(xTime...)
         }                                                // if(trackId...)
     }
@@ -509,6 +518,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     m_label = (status & INCONSISTENT_LABELS) ? label1 : label;
     m_transpose = (status & INCONSISTENT_TRANSPOSITIONS) ? transpose1 : transpose;
     m_current = current;
+    m_colourIndex = colourIndex;
     m_status = status;
 
     QString noteName;
@@ -581,19 +591,35 @@ StaffHeader::updateHeader(int width)
         NotePixmapFactory::ColourType colourType = NotePixmapFactory::PlainColour;
 
         if (m_status & (SEGMENT_HERE | BEFORE_FIRST_SEGMENT)) {
-            if (m_status & (INCONSISTENT_CLEFS | INCONSISTENT_KEYS))
-                colourType = NotePixmapFactory::ConflictColour;
-            else
-                colourType = NotePixmapFactory::PlainColourLight;
+
         } else {
-            drawClef = false;
+            drawClef = false;   ///!!! drawClef is never used
         }
 
         NotePixmapFactory * npf = m_scene->getNotePixmapFactory();
 
+        // Get background colour from colour index
+        m_backGround = GUIPalette::convertColour(m_headersGroup->getComposition()
+                            ->getSegmentColourMap().getColourByIndex(m_colourIndex));
+
+        // Select foreground colour (black or white) to get the better
+        // visibility
+        int intensity = qGray(m_backGround.rgb());
+        if (intensity > 127) {
+            m_foreGround = Qt::black;
+            m_foreGroundType = NotePixmapFactory::PlainColour;
+        } else {
+            m_foreGround = Qt::white;
+            m_foreGroundType = NotePixmapFactory::PlainColourLight;
+        }
+
+        colourType = (m_status & INCONSISTENT_CLEFS) ?
+                         NotePixmapFactory::ConflictColour : m_foreGroundType;
         delete m_clefItem;
         m_clefItem = npf->makeClef(m_clef, colourType);
 
+        colourType = (m_status & INCONSISTENT_KEYS) ?
+                         NotePixmapFactory::ConflictColour : m_foreGroundType;
         delete m_keyItem;
         m_keyItem = npf->makeKey(m_key, m_clef, Rosegarden::Key("C major"), colourType); 
 
@@ -610,7 +636,8 @@ StaffHeader::updateHeader(int width)
 
     // Highlight header if track is the current one
     setCurrent(m_current);
-update();
+
+    update();
 }
 
 bool

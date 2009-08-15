@@ -122,12 +122,10 @@ public slots :
      */
     void slotUpdateAllHeaders(int x, bool force = false);
 
-// signals :
-//     void headersResized(int newWidth);
+signals :
+    void headersResized(int newWidth);
 
-private:
-//     void resizeEvent(QResizeEvent *ev);
-
+private :
     Composition &m_composition;
     NotationScene *m_scene;
     NotationWidget *m_widget;

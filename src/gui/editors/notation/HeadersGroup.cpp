@@ -118,9 +118,6 @@ HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
             }
         }
 
-    // Probably no more useful ...
-    completeToHeight(m_widget->getNotationSceneHeight());
-
     slotUpdateAllHeaders(m_widget->getViewLeftX(), true);
 
 //             if (    (m_showHeadersGroup == HeadersGroup::ShowAlways)
@@ -198,6 +195,8 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
             setFixedWidth(neededWidth);
             m_lastWidth = neededWidth;
 
+            emit headersResized(m_lastWidth);
+
             // Suppress vertical white stripes on canvas when headers
             // width changes while scrolling
             /// TODO : Limit "setChanged()" to the useful part of canvas
@@ -217,14 +216,6 @@ HeadersGroup::setCurrent(TrackId trackId)
     for (i=m_headers.begin(); i!=m_headers.end(); i++)
                     (*i)->setCurrent((*i)->getId() == trackId);
 }
-
-// void
-// HeadersGroup::resizeEvent(QResizeEvent * ev)
-// {
-//     // Needed to avoid gray zone at the right of headers
-//     // when width is decreasing
-//     emit headersResized(ev->size().width());
-// }
 
 NotationScene *
 HeadersGroup::getScene()

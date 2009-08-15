@@ -75,6 +75,7 @@ NotationWidget::NotationWidget() :
     m_headersGroup(0),
     m_headersView(0),
     m_headersScene(0),
+    m_headersProxy(0),
     m_layout(0),
     m_linearMode(true),
     m_tempoRulerIsVisible(false),
@@ -108,7 +109,7 @@ NotationWidget::NotationWidget() :
     m_hpanner->setRenderHints(0);
 //    m_hpanner->setRenderHints(QPainter::TextAntialiasing |
 //                              QPainter::SmoothPixmapTransform);
-    m_layout->addWidget(m_hpanner, PANNER_ROW, MAIN_COL, 1, 1);
+    m_layout->addWidget(m_hpanner, PANNER_ROW, HEADER_COL, 1, 2);
 
     m_headersView = new Panned;
     m_headersView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -233,6 +234,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                       0.0,
                                       20);  // why not 24 as other rulers ?
 
+    if (m_headersGroup) disconnect(m_headersGroup, SIGNAL(headersResized(int)),
+                                   this, SLOT(slotHeadersResized(int)));
     m_headersGroup = new HeadersGroup(m_document);
     m_headersGroup->setTracks(this, m_scene);
 
@@ -258,16 +261,13 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_chordNameRuler->setReady();
 
     m_headersGroup->setFixedSize(m_headersGroup->sizeHint());
-    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width() + 4);
-   ///@@@ The 4 pixels have been added empirically in line above to
-   ///    show the headers completely. (The headers view contents was
-   ///    horizontally moving with Alt + wheel)
+    m_headersView->setFixedWidth(m_headersGroup->sizeHint().width());
 
     delete m_headersScene;
     m_headersScene = new QGraphicsScene();
-    QGraphicsProxyWidget *headers = m_headersScene->addWidget(m_headersGroup);
+    m_headersProxy = m_headersScene->addWidget(m_headersGroup);
     m_headersView->setScene(m_headersScene);
-    m_headersView->centerOn(headers);
+    m_headersView->centerOn(m_headersProxy);
 
     m_headersView->setMinimumHeight(0);
 
@@ -277,6 +277,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
     QRectF headersRect = m_headersScene->sceneRect();
     headersRect.setHeight(viewRect.height());
     m_headersScene->setSceneRect(headersRect);
+
+    connect(m_headersGroup, SIGNAL(headersResized(int)),
+            this, SLOT(slotHeadersResized(int)));
 
 
     //!!! attempt to scroll either to the start or to the current
@@ -594,7 +597,8 @@ NotationWidget::slotZoomInFromPanner()
     m_view->setMatrix(m);
     m_headersView->setMatrix(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
-                                                         * m_vZoomFactor);
+                                                         * m_hZoomFactor);
+    adjustHeadersHorizontalPos();
     slotHScroll();
 }
 
@@ -609,8 +613,72 @@ NotationWidget::slotZoomOutFromPanner()
     m_view->setMatrix(m);
     m_headersView->setMatrix(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
-                                                         * m_vZoomFactor);
+                                                         * m_hZoomFactor);
+    adjustHeadersHorizontalPos();
     slotHScroll();
+}
+
+void
+NotationWidget::adjustHeadersHorizontalPos()
+{
+// Sometimes, after a zoom change, the headers are no more horizontally
+// aligned with the headers view.
+// The following code is an attempt to reposition the headers in the view.
+// Actually it doesn't succeed always (ie. with stormy-riders).
+
+
+//std::cerr << "\nXproxy0=" << m_headersProxy->scenePos().x() << "\n";
+
+
+    double x = m_headersView->mapToScene(0, 0).x();
+//std::cerr << " x0=" << x << "\n";
+
+    // First trial
+    if ((x > 1) || (x < -1)) {
+        QRectF view = m_headersView->sceneRect();
+        view.moveLeft(0.0);
+        m_headersView->setSceneRect(view);
+        x = m_headersView->mapToScene(0, 0).x();
+    }
+//std::cerr << "x1=" << x << "\n";
+
+    // Second trial. Why isn't the first iteration always sufficient ?
+    // Number of iterations is limited to 3.
+    int n = 1;
+    while ((x > 1) || (x < -1)) {
+//std::cerr << "n=" << n << " xt2=" << x << "\n";
+        QRectF view = m_headersView->sceneRect();
+        view.translate(-x, 0);
+        m_headersView->setSceneRect(view);
+        x = m_headersView->mapToScene(0, 0).x();
+        if (n++ > 3) break;
+    }
+
+//std::cerr << "x2=" << x << "\n";
+
+    // Third trial.
+    // If precedent trial doesn't succeed, try again with a coefficient...
+    // Number of iterations is limited to 6.    int m = 1;
+    int m = 1;
+    while ((x > 1) || (x < -1)) {
+//std::cerr << "m=" << m << " xt3=" << x << "\n";
+        QRectF view = m_headersView->sceneRect();
+        view.translate(-x * 0.477, 0);
+        m_headersView->setSceneRect(view);
+        x = m_headersView->mapToScene(0, 0).x();
+        if (m++ > 6) break;
+    }
+
+//std::cerr << "x3=" << x << "\n";
+
+    // Probably totally useless here.
+    m_headersView->update();
+
+    // Now, sometimes, although x is null or almost null, the headers are
+    // not fully visible !!??
+
+//std::cerr << "Xproxy1=" << m_headersProxy->scenePos().x() << "\n";
+
 }
 
 double
@@ -736,6 +804,13 @@ NotationWidget::slotShowHeaderToolTip(QString toolTipText)
     QToolTip::showText(QCursor::pos(), toolTipText, this);
 }
 
+void
+NotationWidget::slotHeadersResized(int width)
+{
+    // Set headers view width to accomodate headers width.   
+    m_headersView->setFixedWidth(
+        m_headersGroup->sizeHint().width() * m_hZoomFactor);
+}
 
 void
 NotationWidget::slotSetSymbolInserter()

@@ -18,11 +18,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef _RG_TRACKHEADER_H_
-#define _RG_TRACKHEADER_H_
+#ifndef _RG_STAFFHEADER_H_
+#define _RG_STAFFHEADER_H_
 
 #include "base/NotationTypes.h"
 #include "base/Track.h"
+#include "NotePixmapFactory.h"
 
 #include <QSize>
 #include <QWidget>
@@ -183,6 +184,7 @@ private :
     static const int INCONSISTENT_KEYS;
     static const int INCONSISTENT_LABELS;
     static const int INCONSISTENT_TRANSPOSITIONS;
+    static const int INCONSISTENT_COLOURS;
     static const int BEFORE_FIRST_SEGMENT;
 
     HeadersGroup *m_headersGroup;
@@ -230,8 +232,12 @@ private :
 
     QColor m_foreGround;
     QColor m_backGround;
+    NotePixmapFactory::ColourType m_foreGroundType;
 
     QString m_toolTipText;
+
+    unsigned int m_colourIndex;
+    QColor m_colour;
 };
 
 }
