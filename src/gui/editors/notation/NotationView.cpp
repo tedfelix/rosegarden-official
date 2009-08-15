@@ -58,6 +58,7 @@
 #include "commands/edit/InvertCommand.h"
 #include "commands/edit/RetrogradeCommand.h"
 #include "commands/edit/RetrogradeInvertCommand.h"
+#include "commands/edit/MoveCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -2530,6 +2531,36 @@ NewNotationView::slotRetrogradeInvert()
 
     CommandHistory::getInstance()->addCommand(new RetrogradeInvertCommand
                                               (semitones, *getSelection()));
+}
+
+void
+NewNotationView::slotJogLeft()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+
+    RG_DEBUG << "NewNotationView::slotJogLeft" << endl;
+
+    CommandHistory::getInstance()->addCommand(new MoveCommand
+                                              (*getCurrentSegment(),
+                                              -Note(Note::Demisemiquaver).getDuration(),
+                                              false,  // don't use notation timings
+                                              *selection));
+}
+
+void
+NewNotationView::slotJogRight()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return ;
+
+    RG_DEBUG << "NewNotationView::slotJogRight"<< endl;
+
+    CommandHistory::getInstance()->addCommand(new MoveCommand
+                                              (*getCurrentSegment(),
+                                              Note(Note::Demisemiquaver).getDuration(),
+                                              false,  // don't use notation timings
+                                              *selection));
 }
 
 

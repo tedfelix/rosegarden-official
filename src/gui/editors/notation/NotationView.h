@@ -151,6 +151,8 @@ protected slots:
     void slotInvert();
     void slotRetrograde();
     void slotRetrogradeInvert();
+    void slotJogLeft();
+    void slotJogRight();
 
     /// Show or hide rulers
     void slotToggleChordsRuler();
