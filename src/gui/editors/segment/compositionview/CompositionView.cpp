@@ -1066,21 +1066,6 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
 {
     // draw segment label
     //
-#ifdef NOT_DEFINED
-    if (!r.getLabel().isEmpty() /* && !r.isSelected() */)
-    {
-        p->save();
-        p->setPen(GUIPalette::getColour(GUIPalette::SegmentLabel));
-        p->setBrush(white);
-        QRect textRect(r);
-        textRect.setX(textRect.x() + 3);
-        QString label = " " + r.getLabel() + " ";
-        QRect textBoundingRect = p->boundingRect(textRect, Qt::AlignLeft | Qt::AlignVCenter, label);
-        p->drawRect(textBoundingRect & r);
-        p->drawText(textRect, Qt::AlignLeft | Qt::AlignVCenter, label);
-        p->restore();
-    }
-#else
     if (!r.getLabel().isEmpty()) {
 
         p->save();
@@ -1101,13 +1086,19 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         int y = labelRect.y();
 
         QBrush brush = r.getBrush();
-        QColor surroundColour = brush.color().light(110);
+        QColor surroundColor = brush.color();
 
-        int h, s, v;
-        surroundColour.hsv(&h, &s, &v);
-        if (v < 150)
-            surroundColour.setHsv(h, s, 225);
-        p->setPen(surroundColour);
+        // use the why the hell didn't I think of this Yves method to figure
+        // whether to draw the outline in black or white
+        int intensity = qGray(surroundColor.rgb());
+
+        if (intensity < 127) {
+            surroundColor = Qt::black;
+        } else {
+            surroundColor = Qt::white;
+        }
+
+        p->setPen(surroundColor);
 
         for (int i = 0; i < 9; ++i) {
 
@@ -1136,13 +1127,13 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         labelRect.setX(x);
         labelRect.setY(y);
 
-        p->setPen(GUIPalette::getColour
-                  (GUIPalette::SegmentLabel));
+        // use the opposite color to draw the label itself
+        p->setPen((surroundColor == Qt::white ? Qt::black : Qt::white));
+
         p->drawText(labelRect,
                     Qt::AlignLeft | Qt::AlignVCenter, r.getLabel());
         p->restore();
     }
-#endif
 }
 
 void CompositionView::drawRect(const QRect& r, QPainter *p, const QRect& clipRect,

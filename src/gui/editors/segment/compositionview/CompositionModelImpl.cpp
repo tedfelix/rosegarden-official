@@ -400,29 +400,13 @@ QColor CompositionModelImpl::computeSegmentPreviewColor(const Segment* segment)
 {
     // compute the preview color so it's as visible as possible over the segment's color
     QColor segColor = GUIPalette::convertColour(m_composition.getSegmentColourMap().getColourByIndex(segment->getColourIndex()));
-    int h, s, v;
-    segColor.hsv(&h, &s, &v);
 
-    // colors with saturation lower than value should be pastel tints, and
-    // they get a value of 0; yellow and green hues close to the dead center
-    // point for that hue were taking a value of 255 with the (s < v)
-    // formula, so I added an extra hack to force hues in those two narrow
-    // ranges toward black.  Black always looks good, while white washes out
-    // badly against intense yellow, and doesn't look very good against
-    // intense green either...  hacky, but this produces pleasant results against
-    // every bizarre extreme of color I could cook up to throw at it, plus
-    // (the real reason for all this convoluted fiddling, it does all that while keeping
-    // white against bright reds and blues, which looks better than black)
-    if ( ((((h > 57) && (h < 66)) || ((h > 93) && (h < 131))) && (s > 127) && (v > 127) ) ||
-            (s < v) ) {
-        v = 0;
+    int intensity = qGray(segColor.rgb());
+    if (intensity > 127) {
+        segColor = Qt::black;
     } else {
-        v = 255;
+        segColor = Qt::white;
     }
-    s = 31;
-    h += 180;
-
-    segColor.setHsv(h, s, v);
 
     return segColor;
 }
