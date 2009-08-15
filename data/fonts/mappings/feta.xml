@@ -123,9 +123,9 @@
 	<symbol	name="DIGIT EIGHT" font-id="1" code="56"/>
         <symbol	name="DIGIT NINE"  font-id="1" code="57"/>
 
-        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="225" glyph="111"/>
-        <symbol name="MUSICAL SYMBOL CODA" font-id="0" code="225" glyph="112"/>
-        <symbol name="MUSICAL SYMBOL BREATH_MARK" font-id="0" code="225" glyph="114"/>
+        <symbol name="MUSICAL SYMBOL SEGNO" font-id="0" code="106" glyph="0"/>
+        <symbol name="MUSICAL SYMBOL CODA" font-id="0" code="107" glyph="0"/>
+        <symbol name="MUSICAL SYMBOL BREATH_MARK" font-id="0" code="109" glyph="0"/>
 
 </font-symbol-map>
 
