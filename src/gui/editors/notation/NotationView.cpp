@@ -1420,7 +1420,10 @@ NewNotationView::slotSwitchToNotes()
 {
     NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
 
-    Note::Type unitType = Note::Crotchet;
+    // The default unitType is taken from the denominator of the time signature:
+    //   e.g. 4/4 -> 1/4, 6/8 -> 1/8, 2/2 -> 1/2.
+    TimeSignature sig = getDocument()->getComposition().getTimeSignatureAt(getInsertionTime());
+    Note::Type unitType = sig.getUnit(); // was: Note::Crotchet;
     int dots = 0;
 
     if (currentInserter) {
@@ -1447,7 +1450,10 @@ NewNotationView::slotSwitchToRests()
 {
     NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
 
-    Note::Type unitType = Note::Crotchet;
+    // The default unitType is taken from the denominator of the time signature:
+    //   e.g. 4/4 -> 1/4, 6/8 -> 1/8, 2/2 -> 1/2.
+    TimeSignature sig = getDocument()->getComposition().getTimeSignatureAt(getInsertionTime());
+    Note::Type unitType = sig.getUnit(); // was: Note::Crotchet;
     int dots = 0;
 
     if (currentInserter) {
@@ -1559,8 +1565,10 @@ void NewNotationView::slotInsertNoteFromAction()
     if (!segment) return;
 
     if (! dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool())) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
-        return ;
+        // If no duration has been selected, use the default duration.
+        slotSwitchToNotes();
+        // /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
+        // return ;
     }
 
     bool wasRestInserter = false;
@@ -1615,24 +1623,28 @@ void NewNotationView::slotInsertRest()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
     
-    timeT insertionTime = getInsertionTime();
-
-    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
-    if (!currentInserter) {
-        /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
-        return ;
+    if (! dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool())) {
+        // If no duration has been selected, use the default duration.
+        slotSwitchToRests();
+        // /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
+        // return ;
     }
 
+    bool wasNoteInserter = false;
     if (! dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool()) ) {
+        wasNoteInserter = true;
         slotSwitchToRests();
-        currentInserter = dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool());
-        currentInserter->insertNote(*segment, insertionTime,
-                                    0, Accidentals::NoAccidental, true);
+    }
+
+    timeT insertionTime = getInsertionTime();
+
+    RestInserter *currentInserter = dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool());
+    currentInserter->insertNote(*segment, insertionTime,
+                                0, Accidentals::NoAccidental, true);
+
+    if (wasNoteInserter) {
         // If Notes Toolbar was selected, continue inserting notes
         slotSwitchToNotes();
-    } else {
-        currentInserter->insertNote(*segment, insertionTime,
-                                    0, Accidentals::NoAccidental, true);
     }
 }
 
