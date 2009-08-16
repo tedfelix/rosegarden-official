@@ -751,9 +751,9 @@ appear by default -->
 
 <ToolBar name="Symbols Toolbar" hidden="false" position="left">
   <text>Symbols Toolbar</text>
-  <Action name="add_segno" text="Add &amp;Segno" />
-  <Action name="add_coda" text="Add &amp;Coda" />
-  <Action name="add_breath" text="Add &amp;Breath mark" />
+  <Action name="add_segno" text="Add &amp;Segno" checked="false" group="tools_note" />
+  <Action name="add_coda" text="Add &amp;Coda" checked="false" group="tools_note" />
+  <Action name="add_breath" text="Add &amp;Breath mark" checked="false" group="tools_note" />
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
