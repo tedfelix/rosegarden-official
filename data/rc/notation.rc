@@ -845,7 +845,6 @@ appear by default -->
     <Action name="switch_to_notes"/>
   </disable>
   <enable>
-    <Action name="insert_rest"/>
     <Action name="insert_note_actionmenu"/>
   </enable>
 </State>
@@ -854,9 +853,6 @@ appear by default -->
   <disable>
     <Action name="switch_to_rests"/>
   </disable>
-  <enable>
-    <Action name="insert_rest"/>
-  </enable>
 </State>
 
 <State name="have_selection">
