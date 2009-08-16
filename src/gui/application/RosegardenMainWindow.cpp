@@ -1714,7 +1714,7 @@ RosegardenMainWindow::slotFileOpen()
     QString directory = settings.value("open_file", QDir::homePath()).toString();
 
     QString fname = FileDialog::getOpenFileName(this, "Open File", directory,
-                    tr("All supported files") + " (*.rg *.RG *.mid *.MID *.midi *.MIDI)" + ";;" +
+                    tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("All files") + " (*)", 0, 0);
