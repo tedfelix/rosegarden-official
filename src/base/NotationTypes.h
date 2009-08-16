@@ -685,8 +685,8 @@ public:
     /**
      * Special LilyPond directives
      */
-    static const std::string Segno;       // print segno here
-    static const std::string Coda;        // print coda sign here
+    static const std::string FakeSegno;   // print segno here
+    static const std::string FakeCoda;    // print coda sign here
     static const std::string Alternate1;  // first alternative ending
     static const std::string Alternate2;  // second alternative ending
     static const std::string BarDouble;   // next barline is double

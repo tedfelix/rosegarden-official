@@ -1729,7 +1729,8 @@ LilyPondExporter::writeBar(Segment *s,
         QString endGroupBeamingsStr = "";
 
         if ((*i)->isa(Note::EventType) || (*i)->isa(Note::EventRestType) ||
-                (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType)) {
+                (*i)->isa(Clef::EventType) || (*i)->isa(Rosegarden::Key::EventType) ||
+                (*i)->isa(Symbol::EventType)) {
 
             long newGroupId = -1;
             if ((*i)->get
@@ -1843,7 +1844,20 @@ LilyPondExporter::writeBar(Segment *s,
 
         bool needsSlashRest = false;
 
-        if ((*i)->isa(Note::EventType)) {
+        // symbols have no duration, so handle these ahead of anything else
+        if ((*i)->isa(Symbol::EventType)) {
+
+            Symbol symbol(**i);
+
+            if (symbol.getSymbolType() == Symbol::Segno) {
+              str << "^\\markup { \\musicglyph #\"scripts.segno\" } ";
+            } else if (symbol.getSymbolType() == Symbol::Coda) {
+              str << "^\\markup { \\musicglyph #\"scripts.coda\" } ";
+            } else if (symbol.getSymbolType() == Symbol::Breath) {
+              str << "\\breathe ";
+            }
+
+        } else if ((*i)->isa(Note::EventType)) {
 
             Chord chord(*s, i, m_composition->getNotationQuantizer());
             Event *e = *chord.getInitialNote();
@@ -2454,9 +2468,9 @@ LilyPondExporter::handleDirective(const Event *textEvent,
 
     if (text.getTextType() == Text::LilyPondDirective) {
         std::string directive = text.getText();
-        if (directive == Text::Segno) {
+        if (directive == Text::FakeSegno) {
             lilyText += "^\\markup { \\musicglyph #\"scripts.segno\" } ";
-        } else if (directive == Text::Coda) {
+        } else if (directive == Text::FakeCoda) {
             lilyText += "^\\markup { \\musicglyph #\"scripts.coda\" } ";
         } else if (directive == Text::Alternate1) {
             nextBarIsAlt1 = true;

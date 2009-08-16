@@ -1811,69 +1811,7 @@ NotePixmapFactory::makeSymbol(const Symbol &symbol, const ColourType colourType)
 
     NoteCharacter plain = getCharacter(m_style->getSymbolCharName(symbol),
                                        colourType, false);
-    // (this was the no octave offset shenanigans case before...  let's try it)
     return plain.makeItem();
-
-
-    // INTERESTING: does plain.makeItem() take the selected state into account?
-    // If not, then a plain clef with no extra garbage would never show selected
-    // properly, would it?
-    //
-    //
-    /*
-
-    if (oct == 0) return plain.makeItem();
-
-
-    // fix #1522784 and use 15 rather than 16 for double octave offset
-    int adjustedOctave = (8 * (oct < 0 ? -oct : oct));
-    if (adjustedOctave > 8)
-        adjustedOctave--;
-    else if (adjustedOctave < 8)
-        adjustedOctave++;
-
-    QString text = QString("%1").arg(adjustedOctave);
-    int th = m_symbolOttavaFontMetrics.height();
-    int tw = m_symbolOttavaFontMetrics.width(text);
-    int ascent = m_symbolOttavaFontMetrics.ascent();
-
-    createPixmap(plain.getWidth(), plain.getHeight() + th);
-
-    // The selected state is part of the ColourType enum, but it requires fluid
-    // external control, and can't be managed in the same way as more static
-    // colour states.  Thus we have to use m_selected to manage this case.
-    if (m_selected) {
-        m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
-    } else {
-
-        // the hackiest bit: we have to sync up the colour to the ColourType by
-        // hand, because we know what these enum values really mean, but in a
-        // cleaner world, this code here probably shouldn't have to know those
-        // details.  Oh well.
-        switch (colourType) {
-            case PlainColourLight:
-                m_p->painter().setPen(Qt::white);
-                break;
-
-            case ConflictColour:
-                m_p->painter().setPen(Qt::red);
-                break;
-
-            case PlainColour:
-            default:               m_p->painter().setPen(Qt::black);
-        }
-    }
-
-    m_p->drawNoteCharacter(0, oct < 0 ? 0 : th, plain);
-
-    m_p->painter().setFont(m_symbolOttavaFont);
-
-    m_p->drawText(plain.getWidth() / 2 - tw / 2,
-                  ascent + (oct < 0 ? plain.getHeight() : 0), text);
-
-    QPoint hotspot(plain.getHotspot());
-    if (oct > 0) hotspot.setY(hotspot.y() + th);
-    return makeItem(hotspot);  /* */
 }
 
 QGraphicsPixmapItem *

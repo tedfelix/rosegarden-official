@@ -835,8 +835,8 @@ const std::string Text::Annotation        = "annotation";
 const std::string Text::LilyPondDirective = "lilypond_directive";
 
 // special LilyPond directives
-const std::string Text::Segno       = "Segno"; // DEPRECATED 
-const std::string Text::Coda        = "Coda";  // DEPRECATED
+const std::string Text::FakeSegno   = "Segno"; // DEPRECATED 
+const std::string Text::FakeCoda    = "Coda";  // DEPRECATED
 const std::string Text::Alternate1  = "Alt1 ->";
 const std::string Text::Alternate2  = "Alt2 ->";
 const std::string Text::BarDouble   = "|| ->";  
@@ -930,8 +930,8 @@ Text::getLilyPondDirectives()
 
     v.push_back(Alternate1);
     v.push_back(Alternate2);
-    v.push_back(Segno);
-    v.push_back(Coda);
+    v.push_back(FakeSegno);
+    v.push_back(FakeCoda);
     v.push_back(BarDouble);  
     v.push_back(BarEnd);     
     v.push_back(BarDot);     
