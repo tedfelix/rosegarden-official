@@ -449,8 +449,10 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
         mme.snappedRightTime = mme.time;
         mme.snapUnit = Note(Note::Shortest).getDuration();
     } else {
-        mme.snappedLeftTime = m_snapGrid->snapX(sx, SnapGrid::SnapLeft);
-        mme.snappedRightTime = m_snapGrid->snapX(sx, SnapGrid::SnapRight);
+//        mme.snappedLeftTime = m_snapGrid->snapX(sx, SnapGrid::SnapLeft);
+//        mme.snappedRightTime = m_snapGrid->snapX(sx, SnapGrid::SnapRight);
+        mme.snappedLeftTime = m_snapGrid->snapTime(mme.time, SnapGrid::SnapLeft);
+        mme.snappedRightTime = m_snapGrid->snapTime(mme.time, SnapGrid::SnapRight);
         mme.snapUnit = m_snapGrid->getSnapTime(sx);
     }
 
