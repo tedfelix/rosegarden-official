@@ -1558,11 +1558,21 @@ void NewNotationView::slotInsertNoteFromAction()
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
-    if (!currentInserter) {
+    if (! dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool())) {
         /* was sorry */ QMessageBox::warning(this, "", tr("No note duration selected"));
         return ;
     }
+
+    bool wasRestInserter = false;
+    if (dynamic_cast<RestInserter *> (m_notationWidget->getCurrentTool()) ) {
+        // When keyboard was used for inserting a note, use
+        //  (i)  keys "QWERUIO", "ASDJFKL" and "ZCXVBNM" for inserting notes and
+        //  (ii) key "P" for inserting rests.
+        // Therefore, switch here temporarily for inserting Notes.
+        wasRestInserter = true;
+        slotSwitchToNotes();
+    }
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
 
     int pitch = 0;
     Accidental accidental =
@@ -1593,6 +1603,11 @@ void NewNotationView::slotInsertNoteFromAction()
     NOTATION_DEBUG << "Inserting note at pitch " << pitch << endl;
 
     currentInserter->insertNote(*segment, insertionTime, pitch, accidental);
+
+    if (wasRestInserter) {
+        // Switch back to inserting Rests, if rests were selected.
+        slotSwitchToRests();
+    }
 }
 
 void NewNotationView::slotInsertRest()
