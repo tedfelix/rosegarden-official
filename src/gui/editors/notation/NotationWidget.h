@@ -27,6 +27,7 @@
 
 class QGridLayout;
 class QString;
+class QGraphicsScene;
 
 namespace Rosegarden
 {
@@ -162,7 +163,6 @@ private:
     HeadersGroup *m_headersGroup; // I own this
     Panned *m_headersView; // I own this
     QGraphicsScene *m_headersScene; // I own this
-    QGraphicsProxyWidget *m_headersProxy; // I own this
 
     QGridLayout *m_layout; // I own this
 

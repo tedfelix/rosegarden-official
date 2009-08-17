@@ -75,7 +75,6 @@ NotationWidget::NotationWidget() :
     m_headersGroup(0),
     m_headersView(0),
     m_headersScene(0),
-    m_headersProxy(0),
     m_layout(0),
     m_linearMode(true),
     m_tempoRulerIsVisible(false),
@@ -265,9 +264,9 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     delete m_headersScene;
     m_headersScene = new QGraphicsScene();
-    m_headersProxy = m_headersScene->addWidget(m_headersGroup);
+    QGraphicsProxyWidget *headersProxy = m_headersScene->addWidget(m_headersGroup);
     m_headersView->setScene(m_headersScene);
-    m_headersView->centerOn(m_headersProxy);
+    m_headersView->centerOn(headersProxy);
 
     m_headersView->setMinimumHeight(0);
 
