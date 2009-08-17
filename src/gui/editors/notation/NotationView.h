@@ -159,6 +159,9 @@ protected slots:
     void slotToggleRawNoteRuler();
     void slotToggleTempoRuler();
 
+    void slotAddTempo();
+    void slotAddTimeSignature();
+
     void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
     void slotToggleNotesToolBar();

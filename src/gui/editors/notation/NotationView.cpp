@@ -59,6 +59,9 @@
 #include "commands/edit/RetrogradeCommand.h"
 #include "commands/edit/RetrogradeInvertCommand.h"
 #include "commands/edit/MoveCommand.h"
+#include "commands/segment/AddTempoChangeCommand.h"
+#include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
+#include "commands/segment/AddTimeSignatureCommand.h"
 
 #include "commands/notation/InterpretCommand.h"
 #include "commands/notation/ClefInsertionCommand.h"
@@ -83,6 +86,8 @@
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
+#include "gui/dialogs/TempoDialog.h"
+#include "gui/dialogs/TimeSignatureDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -2202,6 +2207,88 @@ NewNotationView::slotToggleTempoRuler()
     settings.setValue("Tempo ruler shown", visible);
     settings.endGroup();
 }
+
+// start of code formerly located in EditView.cpp
+// --
+
+void NewNotationView::slotAddTempo()
+{
+    timeT insertionTime = getInsertionTime();
+
+    TempoDialog tempoDlg(this, getDocument());
+
+    connect(&tempoDlg,
+             SIGNAL(changeTempo(timeT,
+                    tempoT,
+                    tempoT,
+                    TempoDialog::TempoDialogAction)),
+                    this,
+                    SIGNAL(changeTempo(timeT,
+                           tempoT,
+                           tempoT,
+                           TempoDialog::TempoDialogAction)));
+
+    tempoDlg.setTempoPosition(insertionTime);
+    tempoDlg.exec();
+}
+
+void NewNotationView::slotAddTimeSignature()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment)
+        return ;
+    Composition *composition = segment->getComposition();
+    timeT insertionTime = getInsertionTime();
+
+    TimeSignatureDialog *dialog = 0;
+    int timeSigNo = composition->getTimeSignatureNumberAt(insertionTime);
+
+    if (timeSigNo >= 0) {
+
+        dialog = new TimeSignatureDialog
+                (this, composition, insertionTime,
+                 composition->getTimeSignatureAt(insertionTime));
+
+    } else {
+
+        timeT endTime = composition->getDuration();
+        if (composition->getTimeSignatureCount() > 0) {
+            endTime = composition->getTimeSignatureChange(0).first;
+        }
+
+        CompositionTimeSliceAdapter adapter
+                (composition, insertionTime, endTime);
+        AnalysisHelper helper;
+        TimeSignature timeSig = helper.guessTimeSignature(adapter);
+
+        dialog = new TimeSignatureDialog
+                (this, composition, insertionTime, timeSig, false,
+                 tr("Estimated time signature shown"));
+    }
+
+    if (dialog->exec() == QDialog::Accepted) {
+
+        insertionTime = dialog->getTime();
+
+        if (dialog->shouldNormalizeRests()) {
+
+            CommandHistory::getInstance()->addCommand(new AddTimeSignatureAndNormalizeCommand
+                    (composition, insertionTime,
+                     dialog->getTimeSignature()));
+
+        } else {
+
+            CommandHistory::getInstance()->addCommand(new AddTimeSignatureCommand
+                    (composition, insertionTime,
+                     dialog->getTimeSignature()));
+        }
+    }
+
+    delete dialog;
+}
+
+
+
 
 void
 NewNotationView::slotToggleRawNoteRuler()
