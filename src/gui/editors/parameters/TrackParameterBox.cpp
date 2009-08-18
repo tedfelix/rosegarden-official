@@ -105,7 +105,12 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     int width25 = metrics.width("1234567890123456789012345");
     title_font.setBold(true);
 
-    // Set up default expansions for the collapsing elements
+    // Set up default expansions for the collapsing elements.  These
+    // CollapsingFrame objects keep track of their own settings per object name
+    // internally.  We have this delightful bit of nonsense looking code to
+    // "initialize" all of this from the outside.  It's impressively ghastly,
+    // but having realized its purpose, I've decided to leave well enough alone.
+    //
     QSettings settings;
     settings.beginGroup(CollapsingFrameConfigGroup);
 
@@ -130,9 +135,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
     // track label
     //
     m_trackLabel = new SqueezedLabel (tr("<untitled>"), this );
-    //@@@m_trackLabel->setObjectName("SPECIAL_LABEL");
     m_trackLabel->setAlignment(Qt::AlignCenter);
-    //mainLayout->addWidget(m_trackLabel, 0, 0, 0- 0+1, 5- 1, Qt::AlignCenter);
     m_trackLabel->setFont(m_font);
     mainLayout->addWidget(m_trackLabel, 0, 0);
 

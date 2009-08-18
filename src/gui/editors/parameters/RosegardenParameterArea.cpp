@@ -60,20 +60,22 @@ RosegardenParameterArea::RosegardenParameterArea(
         
     m_classic->setLayout(m_classicLayout);
     
-    //m_scrollArea->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     // Setting vertical ScrollBarAlwaysOn resolves initial sizing problem
-    m_scrollArea->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    m_scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    // alleviate a number of really bad problems in the TPB and IPB by allowing
+    // QScrollArea to resize as necessary.  This was done to solve the problem
+    // of CollapsingFrame widgets not having enough room to be shown when
+    // expanded, but I expect it also solves the "more than n controllers,
+    // everything is hopelessly jammed together" problem too.  For cheap.
+    // (Too bad this fix is the last place I looked after a couple lost hours.)
+    m_scrollArea->setWidgetResizable(true);
     
     // add 2 wigets as stacked widgets
     // Install the classic-style VBox widget in the widget-stack.
     addWidget(m_scrollArea);//, CLASSIC_STYLE);    //&&& 
 
-    // Install the widget that implements the tab-style to the widget-stack.
-//    addWidget(m_tabBox); //, TAB_BOX_STYLE);
-    
     setCurrentWidget( m_scrollArea );
-    
-    //m_scrollArea->setVisible( true );
 }
 
 void RosegardenParameterArea::addRosegardenParameterBox(
@@ -117,15 +119,6 @@ void RosegardenParameterArea::addRosegardenParameterBox(
     m_classicLayout->addWidget(m_spacing);
     m_classicLayout->setStretchFactor(m_spacing, 100);
 
-    // Add the parameter box to the current container of the displayed
-    // widgets, unless the current container has been set up yet.
-
-//    if (m_active)
-//        moveWidget(0, m_active, b);
-
-    // Queue a redisplay of the parameter area, to incorporate the new box.
-
-//     update();
 }
 
 void RosegardenParameterArea::setScrollAreaWidget()

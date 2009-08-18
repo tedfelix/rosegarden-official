@@ -183,10 +183,8 @@ HeadersConfigurationPage::HeadersConfigurationPage(QWidget *parent,
     //
 
     // set default expansion to false for this group -- what a faff
-
-    //@@@ JAS next 2 lines not needed. Commented out
-    //@@@ QSettings settings ; // was: confq4
-    //@@@ QString groupTemp = settings.group();
+    // (see note in TrackParameterBox.cpp for an explanation of this baffling
+    // but necessary code)
     QSettings settings;
     settings.beginGroup(CollapsingFrameConfigGroup);
 
