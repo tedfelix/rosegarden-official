@@ -224,7 +224,7 @@
   <Menu name="Phrase">
     <text>&amp;Phrase</text>
     <!-- JAS need icon name for action 'make_chord' -->
-    <Action name="make_chord" text="&amp;Make Chord" icon="chord" />
+    <Action name="make_chord" text="&amp;Make Chord" icon="group-chord" />
   <Separator/>
     <Action name="beam" text="&amp;Beam Group" icon="group-beam" shortcut="Ctrl+B" />
     <Action name="auto_beam" text="&amp;Auto-Beam" />
@@ -576,7 +576,7 @@
   <Action name="insert_chord_mode"/>
   -->
 
-    <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="group-chord" shortcut="H" checked="false" />
+    <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="chord" shortcut="H" checked="false" />
     <Action name="triplet_mode" text="Triplet Insert Mo&amp;de" icon="triplet" shortcut="G" checked="false" />
     <Action name="grace_mode" text="Grace Insert &amp;Mode" icon="group-grace" checked="false"/>
   <Separator/>

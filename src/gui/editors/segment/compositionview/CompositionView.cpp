@@ -1085,19 +1085,28 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         int x = labelRect.x() + p->fontMetrics().width('x');
         int y = labelRect.y();
 
+        // get the segment color as the foundation for drawing the surrounding
+        // "halo" to ensure contrast against any preview dashes that happen to
+        // be present right under the label
         QBrush brush = r.getBrush();
-        QColor surroundColor = brush.color();
 
-        // use the why the hell didn't I think of this Yves method to figure
-        // whether to draw the outline in black or white
+        // figure out the intensity of this base color, Yves style
+        QColor surroundColor = brush.color();
         int intensity = qGray(surroundColor.rgb());
 
+        bool lightSurround = false;
+
+        // straight black or white as originally rewritten was too stark, so we
+        // go back to using lighter() against the base color, and this time we
+        // use darker() against the base color too
         if (intensity < 127) {
-            surroundColor = Qt::black;
+            surroundColor = surroundColor.darker(100);
         } else {
-            surroundColor = Qt::white;
+            surroundColor = surroundColor.lighter(100);
+            lightSurround = true;
         }
 
+        // draw the "halo" effect
         p->setPen(surroundColor);
 
         for (int i = 0; i < 9; ++i) {
@@ -1127,8 +1136,8 @@ void CompositionView::drawCompRectLabel(const CompositionRect& r, QPainter *p, c
         labelRect.setX(x);
         labelRect.setY(y);
 
-        // use the opposite color to draw the label itself
-        p->setPen((surroundColor == Qt::white ? Qt::black : Qt::white));
+        // use black on light halo, white on dark halo for the text itself
+        p->setPen((lightSurround ? Qt::black : Qt::white));
 
         p->drawText(labelRect,
                     Qt::AlignLeft | Qt::AlignVCenter, r.getLabel());
