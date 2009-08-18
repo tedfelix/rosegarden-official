@@ -1071,7 +1071,7 @@ CompositionRect CompositionModelImpl::computeSegmentRect(const Segment& s, bool 
                 // this doesn't work in the general case (if there's another segment on the same track for instance),
                 // it's better to simply recompute all the marks
                 //                 CompositionRect::repeatmarks repeatMarks = cachedCR.getRepeatMarks();
-                //                 for(unsigned int i = 0; i < repeatMarks.size(); ++i) {
+                //                 for(size_t i = 0; i < repeatMarks.size(); ++i) {
                 //                     repeatMarks[i] += deltaX;
                 //                 }
                 //                 cachedCR.setRepeatMarks(repeatMarks);

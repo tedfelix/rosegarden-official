@@ -42,7 +42,7 @@ SegmentColourCommand::~SegmentColourCommand()
 void
 SegmentColourCommand::execute()
 {
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+    for (size_t i = 0; i < m_segments.size(); ++i) {
         m_oldColourIndexes.push_back(m_segments[i]->getColourIndex());
         m_segments[i]->setColourIndex(m_newColourIndex);
     }
@@ -51,7 +51,7 @@ SegmentColourCommand::execute()
 void
 SegmentColourCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_segments.size(); ++i)
+    for (size_t i = 0; i < m_segments.size(); ++i)
         m_segments[i]->setColourIndex(m_oldColourIndexes[i]);
 }
 

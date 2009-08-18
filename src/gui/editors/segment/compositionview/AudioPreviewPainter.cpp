@@ -92,7 +92,7 @@ void AudioPreviewPainter::paintPreviewImage()
         return;
     }
 
-    int samplePoints = values.size() / (channels * (showMinima ? 2 : 1));
+    int samplePoints = int(values.size()) / (channels * (showMinima ? 2 : 1));
     float h1, h2, l1 = 0, l2 = 0;
     double sampleScaleFactor = samplePoints / double(m_rect.getBaseWidth());
     m_sliceNb = 0;
@@ -178,7 +178,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
         if (position < 0) continue;
 
-        if (position >= values.size() - channels) {
+        if (position >= int(values.size()) - channels) {
             finalizeCurrentSlice();
             break;
         }

@@ -386,7 +386,7 @@ BankEditorDialog::initDialog()
     // then calls populateDeviceItem() to create bank-TreeWidgetItems (level: topLevelItem-child)
     for (it = devices->begin(); it != devices->end(); ++it) {
         devx = *it;
-//     for ( i=0; i < devices->size(); i++ ){
+//     for ( i=0; i < int(devices->size()); i++ ){
 //         devx = devices->at( i );
         
         if (devx->getType() == Device::Midi) {
@@ -551,7 +551,7 @@ BankEditorDialog::updateDialog()
 
     }
 
-    for (unsigned int i = 0; i < itemsToDelete.size(); ++i)
+    for (size_t i = 0; i < itemsToDelete.size(); ++i)
         delete itemsToDelete[i];
 
     m_treeWidget->sortItems(0, Qt::AscendingOrder);    // column, order  // sort by device (column 0)
@@ -569,7 +569,7 @@ BankEditorDialog::setCurrentDevice(DeviceId device)
     MidiDeviceTreeWidgetItem* deviceItem;
     
     cnt = m_treeWidget->topLevelItemCount();
-    for( i=0; i<cnt; i++ ){
+    for( i = 0; i < cnt; i++ ){
         twItem = m_treeWidget->topLevelItem( i );
         deviceItem = dynamic_cast<MidiDeviceTreeWidgetItem *>(twItem);
         if (deviceItem && deviceItem->getDeviceId() == device) {
@@ -589,7 +589,7 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
 
     BankList banks = midiDevice->getBanks();
     // add banks for this device
-    for (unsigned int i = 0; i < banks.size(); ++i) {
+    for (size_t i = 0; i < banks.size(); ++i) {
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding "
         << itemName << " - " << strtoqstr(banks[i].getName())
         << endl;
@@ -600,7 +600,7 @@ BankEditorDialog::populateDeviceItem(QTreeWidgetItem* deviceItem, MidiDevice* mi
     }
 
     const KeyMappingList &mappings = midiDevice->getKeyMappings();
-    for (unsigned int i = 0; i < mappings.size(); ++i) {
+    for (size_t i = 0; i < mappings.size(); ++i) {
         RG_DEBUG << "BankEditorDialog::populateDeviceItem - adding key mapping "
         << itemName << " - " << strtoqstr(mappings[i].getName())
         << endl;
@@ -625,7 +625,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
 
     // add missing banks for this device
     //
-    for (unsigned int i = 0; i < banks.size(); ++i) {
+    for (size_t i = 0; i < banks.size(); ++i) {
         if (deviceItemHasBank(deviceItem, i))
             continue;
 
@@ -640,7 +640,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
     
     int cnt, i, n;
     
-    cnt = keymaps.size();
+    cnt = int(keymaps.size());
     for ( i = 0; i < cnt; ++i) {
 
 //         QTreeWidgetItem *child = deviceItem->firstChild();
@@ -704,7 +704,7 @@ BankEditorDialog::updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem)
         n += 1;
     }
 
-    for (unsigned int i = 0; i < childrenToDelete.size(); ++i)
+    for (size_t i = 0; i < childrenToDelete.size(); ++i)
         delete childrenToDelete[i];
 }
 
@@ -985,7 +985,7 @@ BankEditorDialog::slotApply()
                                           (m_treeWidget->currentItem());
         if (keyItem) {
             KeyMappingList kml(device->getKeyMappings());
-            for (unsigned int i = 0; i < kml.size(); ++i) {
+            for (size_t i = 0; i < kml.size(); ++i) {
                 if (kml[i].getName() == qstrtostr(keyItem->getName())) {
                     kml[i] = m_keyMappingEditor->getMapping();
                     break;

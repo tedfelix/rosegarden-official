@@ -46,7 +46,7 @@ SegmentJoinCommand::SegmentJoinCommand(SegmentSelection &
 SegmentJoinCommand::~SegmentJoinCommand()
 {
     if (m_detached) {
-        for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+        for (size_t i = 0; i < m_oldSegments.size(); ++i) {
             delete m_oldSegments[i];
         }
     } else {
@@ -73,8 +73,8 @@ SegmentJoinCommand::execute()
 
         // Find out the leftmost segment
         timeT t0 = m_oldSegments[0]->getStartTime();
-        unsigned int i0 = 0;
-        for (unsigned int i = 1; i < m_oldSegments.size(); ++i) {
+        size_t i0 = 0;
+        for (size_t i = 1; i < m_oldSegments.size(); ++i) {
             timeT t = m_oldSegments[i]->getStartTime();
             if (t < t0) {
                 t0 = t;
@@ -88,7 +88,7 @@ SegmentJoinCommand::execute()
 
         // that duplicated segment i0; now do the rest
 
-        for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+        for (size_t i = 0; i < m_oldSegments.size(); ++i) {
 
             if (i == i0) continue; // Don't add twice the first old segment
 
@@ -162,7 +162,7 @@ SegmentJoinCommand::execute()
         m_newSegment->normalizeRests(overlapStart, overlapEnd);
     }
 
-    for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+    for (size_t i = 0; i < m_oldSegments.size(); ++i) {
         composition->detachSegment(m_oldSegments[i]);
     }
 
@@ -172,7 +172,7 @@ SegmentJoinCommand::execute()
 void
 SegmentJoinCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_oldSegments.size(); ++i) {
+    for (size_t i = 0; i < m_oldSegments.size(); ++i) {
         m_newSegment->getComposition()->addSegment(m_oldSegments[i]);
     }
 

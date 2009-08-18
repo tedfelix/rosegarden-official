@@ -205,7 +205,7 @@ MappedSegmentsMetaIterator::removeSegment(MappedSegment *ms)
 void
 MappedSegmentsMetaIterator::clear()
 {
-    for (unsigned int i = 0; i < m_iterators.size(); ++i) {
+    for (size_t i = 0; i < m_iterators.size(); ++i) {
         delete m_iterators[i];
     }
 
@@ -316,7 +316,7 @@ MappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
 
     // keep track of the segments which still have valid events
     std::vector<bool> validSegments;
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+    for (size_t i = 0; i < m_segments.size(); ++i) {
         validSegments.push_back(true);
     }
 
@@ -325,7 +325,7 @@ MappedSegmentsMetaIterator::fillCompositionWithEventsUntil(bool /*firstFetch*/,
     do {
         foundOneEvent = false;
 
-        for (unsigned int i = 0; i < m_iterators.size(); ++i) {
+        for (size_t i = 0; i < m_iterators.size(); ++i) {
 
             MappedSegment::iterator *iter = m_iterators[i];
 

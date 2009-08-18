@@ -315,7 +315,7 @@ AudioBussMixer::AudioBussMixer(SoundDriver *driver,
 
 AudioBussMixer::~AudioBussMixer()
 {
-    for (unsigned int i = 0; i < m_processBuffers.size(); ++i) {
+    for (size_t i = 0; i < m_processBuffers.size(); ++i) {
         delete[] m_processBuffers[i];
     }
 }
@@ -1378,7 +1378,7 @@ AudioInstrumentMixer::generateBuffers()
         if (channels > maxChannels)
             maxChannels = channels;
 
-        bool replaceBuffers = (rec.buffers.size() > channels);
+        bool replaceBuffers = (rec.buffers.size() > (size_t)channels);
 
         if (!replaceBuffers) {
             for (size_t i = 0; i < rec.buffers.size(); ++i) {
@@ -1396,7 +1396,7 @@ AudioInstrumentMixer::generateBuffers()
             rec.buffers.clear();
         }
 
-        while (rec.buffers.size() < channels) {
+        while (rec.buffers.size() < (size_t)channels) {
 
             // All our ringbuffers are set up for two readers: the
             // buss mix thread and the main process thread for
@@ -1429,18 +1429,18 @@ AudioInstrumentMixer::generateBuffers()
         busses = std::max(busses, m_bussMixer->getBussCount());
     for (int i = 0; i < busses; ++i) {
         PluginList &list = m_plugins[i + 1];
-        while (list.size() < Instrument::PLUGIN_COUNT) {
+        while ((unsigned int)list.size() < Instrument::PLUGIN_COUNT) {
             list.push_back(0);
         }
     }
 
-    while (m_processBuffers.size() > maxChannels) {
+    while ((unsigned int)m_processBuffers.size() > maxChannels) {
         std::vector<sample_t *>::iterator bi = m_processBuffers.end();
         --bi;
         delete[] *bi;
         m_processBuffers.erase(bi);
     }
-    while (m_processBuffers.size() < maxChannels) {
+    while ((unsigned int)m_processBuffers.size() < maxChannels) {
         m_processBuffers.push_back(new sample_t[m_blockSize]);
     }
 }
@@ -1696,10 +1696,10 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #endif
 
     unsigned int channels = rec.channels;
-    if (channels > rec.buffers.size())
-        channels = rec.buffers.size();
-    if (channels > m_processBuffers.size())
-        channels = m_processBuffers.size();
+    if (channels > (unsigned int)rec.buffers.size())
+        channels = (unsigned int)rec.buffers.size();
+    if (channels > (unsigned int)m_processBuffers.size())
+        channels = (unsigned int)m_processBuffers.size();
     if (channels == 0) {
 #ifdef DEBUG_MIXER
         if ((id % 100) == 0)

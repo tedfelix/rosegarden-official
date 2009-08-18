@@ -114,7 +114,7 @@ CompositionTimeSliceAdapter::fill(iterator &i, bool atEnd) const
     // The segment iterators should all point to events starting at or
     // after m_begin (if atEnd false) or at or before m_end (if atEnd true).
 
-    for (unsigned int k = 0; k < m_segmentList.size(); ++k) {
+    for (size_t k = 0; k < m_segmentList.size(); ++k) {
 	Segment::iterator j = m_segmentList[k]->findTime(atEnd ? m_end : m_begin);
 	i.m_segmentItrList.push_back(j);
     }
@@ -165,9 +165,9 @@ CompositionTimeSliceAdapter::iterator::operator++()
     }
 
     Event *e = 0;
-    unsigned int pos = 0;
+    size_t pos = 0;
 
-    for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
+    for (size_t i = 0; i < m_a->m_segmentList.size(); ++i) {
 
 	if (!m_a->m_segmentList[i]->isBeforeEndMarker(m_segmentItrList[i])) continue;
 
@@ -214,7 +214,7 @@ CompositionTimeSliceAdapter::iterator::operator--()
     // m_curEvent.  Then to fill m_curEvent we need to find the next
     // greatest event back that is not itself m_curEvent.
 
-    for (unsigned int i = 0; i < m_a->m_segmentList.size(); ++i) {
+    for (size_t i = 0; i < m_a->m_segmentList.size(); ++i) {
 
 	if (m_segmentItrList[i] == m_a->m_segmentList[i]->begin()) continue;
 

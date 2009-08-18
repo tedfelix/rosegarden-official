@@ -1496,7 +1496,7 @@ MidiFile::convertToMidi(Composition &comp)
     // fix for bug#
     Composition::markercontainer marks = comp.getMarkers();
 
-    for (unsigned int i = 0; i < marks.size(); i++) {
+    for (size_t i = 0; i < marks.size(); i++) {
         midiEventAbsoluteTime = marks[i]->getTime() * m_timingDivision
                                 / crotchetDuration;
 
@@ -2025,7 +2025,7 @@ MidiFile::writeTrack(std::ofstream* midiFile, TrackId trackNumber)
     //
     string trackBuffer;
 
-	long progressTotal = m_midiComposition[trackNumber].size();
+	long progressTotal = (long)m_midiComposition[trackNumber].size();
 	long progressCount = 0;
 
     for (midiEvent = m_midiComposition[trackNumber].begin();

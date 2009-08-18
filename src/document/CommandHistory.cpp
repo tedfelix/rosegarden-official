@@ -405,14 +405,14 @@ void
 CommandHistory::documentSaved()
 {
     closeBundle();
-    m_savedAt = m_undoStack.size();
+    m_savedAt = (int)m_undoStack.size();
 }
 
 void
 CommandHistory::clipCommands()
 {
     if ((int)m_undoStack.size() > m_undoLimit) {
-	m_savedAt -= (m_undoStack.size() - m_undoLimit);
+	m_savedAt -= (int(m_undoStack.size()) - m_undoLimit);
     }
 
     clipStack(m_undoStack, m_undoLimit);

@@ -226,7 +226,7 @@ PasteEventsCommand::modifySegment()
             destination->erase(destination->findTime(pasteTime),
                                destination->end());
 
-            for (unsigned int i = 0; i < copies.size(); ++i) {
+            for (size_t i = 0; i < copies.size(); ++i) {
                 destination->insert(copies[i]);
                 m_pastedEvents.addEvent(copies[i]);
             }

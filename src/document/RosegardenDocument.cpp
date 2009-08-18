@@ -198,7 +198,7 @@ void RosegardenDocument::detachEditView(EditViewBase *view)
 
 void RosegardenDocument::deleteEditViews()
 {
-    for (int i = 0; i < m_editViewList.size(); ++i) {
+    for (int i = 0; i < int(m_editViewList.size()); ++i) {
         delete m_editViewList[i];
     }
     m_editViewList.clear();
@@ -227,7 +227,7 @@ const QString& RosegardenDocument::getTitle() const
 void RosegardenDocument::slotUpdateAllViews(RosegardenMainViewWidget *sender)
 {
     RG_DEBUG << "RosegardenDocument::slotUpdateAllViews" << endl;
-    for (int i=0; i < m_viewList.size(); ++i ){
+    for (int i = 0; i < int(m_viewList.size()); ++i ){
         if (m_viewList.at(i) != sender) {
             // try to fix another crash, though I don't really understand
             // exactly what m_viewList is, etc.
@@ -840,7 +840,7 @@ void RosegardenDocument::initialiseStudio()
 
     std::vector<PluginContainer *> pluginContainers;
 
-    for (unsigned int i = 0; i < busses.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)busses.size(); ++i) {
 
         // first one is master
         MappedObjectId mappedId =
@@ -865,7 +865,7 @@ void RosegardenDocument::initialiseStudio()
         pluginContainers.push_back(busses[i]);
     }
 
-    for (unsigned int i = 0; i < recordIns.size(); ++i) {
+    for (size_t i = 0; i < recordIns.size(); ++i) {
 
         MappedObjectId mappedId =
             StudioControl::createStudioObject(
@@ -935,7 +935,7 @@ void RosegardenDocument::initialiseStudio()
             // then handle the output connection
             //
             BussId outputBuss = (*it)->getAudioOutput();
-            if (outputBuss < busses.size()) {
+            if (outputBuss < (unsigned int)busses.size()) {
                 MappedObjectId bmi = busses[outputBuss]->getMappedId();
 
                 if (bmi > 0) {
@@ -1264,13 +1264,13 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     long totalEvents = 0;
     for (Composition::iterator segitr = m_composition.begin();
             segitr != m_composition.end(); ++segitr) {
-        totalEvents += (*segitr)->size();
+        totalEvents += (long)(*segitr)->size();
     }
 
     for (Composition::triggersegmentcontaineriterator ci =
                 m_composition.getTriggerSegments().begin();
             ci != m_composition.getTriggerSegments().end(); ++ci) {
-        totalEvents += (*ci)->getSegment()->size();
+        totalEvents += (long)(*ci)->getSegment()->size();
     }
 
     // output all elements
@@ -1793,7 +1793,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
         // process all the incoming MappedEvents
         //
-        int lenx = m_viewList.size();
+        int lenx = int(m_viewList.size());
         RosegardenMainViewWidget *v;
         int k = 0;
         for (i = mC.begin(); i != mC.end(); ++i) {
@@ -2194,7 +2194,7 @@ RosegardenDocument::stopRecordingMidi()
         }
     }
 
-    for (unsigned int i = 0; i < toErase.size(); ++i) {
+    for (size_t i = 0; i < toErase.size(); ++i) {
         m_recordMIDISegments.erase(toErase[i]);
     }
 
@@ -2394,7 +2394,7 @@ RosegardenDocument::syncDevices()
         labels = TrackLabel::ShowTrack;
 
     RosegardenMainViewWidget *w;
-    int lenx = m_viewList.size();
+    int lenx = int(m_viewList.size());
     
 //    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
     for ( int i=0; i<lenx; i++ ) {

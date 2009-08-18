@@ -111,7 +111,7 @@ RetrogradeInvertCommand::modifySegment()
 
     Segment &segment(m_selection->getSegment());
 
-    for (unsigned int j = 0; j < toErase.size(); ++j) {
+    for (size_t j = 0; j < toErase.size(); ++j) {
         Segment::iterator jtr(segment.findSingle(toErase[j]));
         if (jtr != segment.end()) {
             RG_DEBUG << "found event " << j << endl;
@@ -121,7 +121,7 @@ RetrogradeInvertCommand::modifySegment()
         }
     }
 
-    for (unsigned int j = 0; j < toInsert.size(); ++j) {
+    for (size_t j = 0; j < toInsert.size(); ++j) {
 
         Segment::iterator jtr = segment.end();
 

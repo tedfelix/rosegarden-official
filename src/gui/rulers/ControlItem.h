@@ -52,7 +52,7 @@ public:
 	//setSize(width(), h);
 	//setZ(50.0+(h/2.0));
     //}
-    //int getHeight()       { return size().height(); }
+    //unsigned int getHeight()       { return size().height(); }
 
     virtual void draw(QPainter &painter);
 

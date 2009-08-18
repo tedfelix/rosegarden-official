@@ -132,7 +132,7 @@ JackDriver::~JackDriver()
         << std::endl;
 #endif
 
-        for (unsigned int i = 0; i < m_inputPorts.size(); ++i) {
+        for (size_t i = 0; i < m_inputPorts.size(); ++i) {
 #ifdef DEBUG_JACK_DRIVER
             std::cerr << "unregistering input " << i << std::endl;
 #endif
@@ -144,7 +144,7 @@ JackDriver::~JackDriver()
             }
         }
 
-        for (unsigned int i = 0; i < m_outputSubmasters.size(); ++i) {
+        for (size_t i = 0; i < m_outputSubmasters.size(); ++i) {
 #ifdef DEBUG_JACK_DRIVER
             std::cerr << "unregistering output sub " << i << std::endl;
 #endif
@@ -155,7 +155,7 @@ JackDriver::~JackDriver()
             }
         }
 
-        for (unsigned int i = 0; i < m_outputMonitors.size(); ++i) {
+        for (size_t i = 0; i < m_outputMonitors.size(); ++i) {
 #ifdef DEBUG_JACK_DRIVER
             std::cerr << "unregistering output mon " << i << std::endl;
 #endif
@@ -166,7 +166,7 @@ JackDriver::~JackDriver()
             }
         }
 
-        for (unsigned int i = 0; i < m_outputMasters.size(); ++i) {
+        for (size_t i = 0; i < m_outputMasters.size(); ++i) {
 #ifdef DEBUG_JACK_DRIVER
             std::cerr << "unregistering output master " << i << std::endl;
 #endif
@@ -491,7 +491,7 @@ JackDriver::createFaderOutputs(int audioPairs, int synthPairs)
         return false;
 
     int pairs = audioPairs + synthPairs;
-    int pairsNow = m_outputInstruments.size() / 2;
+    int pairsNow = int(m_outputInstruments.size()) / 2;
     if (pairs == pairsNow)
         return true;
 
@@ -547,7 +547,7 @@ JackDriver::createSubmasterOutputs(int pairs)
     if (!m_client)
         return false;
 
-    int pairsNow = m_outputSubmasters.size() / 2;
+    int pairsNow = int(m_outputSubmasters.size()) / 2;
     if (pairs == pairsNow)
         return true;
 
@@ -593,7 +593,7 @@ JackDriver::createRecordInputs(int pairs)
     if (!m_client)
         return false;
 
-    int pairsNow = m_inputPorts.size() / 2;
+    int pairsNow = int(m_inputPorts.size()) / 2;
     if (pairs == pairsNow)
         return true;
 
@@ -1267,14 +1267,14 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
     if (buffer)
         memset(buffer, 0, nframes * sizeof(sample_t));
 
-    for (unsigned int i = 0; i < m_outputSubmasters.size(); ++i) {
+    for (size_t i = 0; i < m_outputSubmasters.size(); ++i) {
         buffer = static_cast<sample_t *>
                  (jack_port_get_buffer(m_outputSubmasters[i], nframes));
         if (buffer)
             memset(buffer, 0, nframes * sizeof(sample_t));
     }
 
-    for (unsigned int i = 0; i < m_outputInstruments.size(); ++i) {
+    for (size_t i = 0; i < m_outputInstruments.size(); ++i) {
         buffer = static_cast<sample_t *>
                  (jack_port_get_buffer(m_outputInstruments[i], nframes));
         if (buffer)

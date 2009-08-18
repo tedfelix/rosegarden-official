@@ -36,7 +36,7 @@ void
 AddFingeringMarkCommand::registerCommand(CommandRegistry *r)
 {
     std::vector<std::string> fingerings(getStandardFingerings());
-    for (int i = 0; i < fingerings.size(); ++i) {
+    for (size_t i = 0; i < fingerings.size(); ++i) {
         std::string fingering = fingerings[i];
         r->registerCommand
             (getActionName(fingering),

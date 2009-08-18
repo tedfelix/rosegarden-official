@@ -98,7 +98,7 @@ public:
 
     // Return file size
     //
-    unsigned int getSize() const { return m_fileSize; }
+    size_t getSize() const { return m_fileSize; }
 
     void resetStream() { m_inFile->seekg(0); m_inFile->clear(); }
 
@@ -136,7 +136,7 @@ protected:
     bool           m_loseBuffer; // do we need to dump the read buffer
                                  // and re-fill it?
 
-    unsigned int   m_fileSize;
+    size_t         m_fileSize;
 
 };
 

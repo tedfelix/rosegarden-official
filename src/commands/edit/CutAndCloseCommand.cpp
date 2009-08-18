@@ -92,7 +92,7 @@ CutAndCloseCommand::CloseCommand::execute()
         }
     }
 
-    for (unsigned int i = 0; i < events.size(); ++i) {
+    for (size_t i = 0; i < events.size(); ++i) {
         m_segment->insert(events[i]);
     }
 
@@ -141,7 +141,7 @@ CutAndCloseCommand::CloseCommand::unexecute()
         i = j;
     }
 
-    for (unsigned int i = 0; i < events.size(); ++i) {
+    for (size_t i = 0; i < events.size(); ++i) {
         m_segment->insert(events[i]);
     }
 

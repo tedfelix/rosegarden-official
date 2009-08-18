@@ -166,7 +166,7 @@ TrackButtons::populateButtons()
     Instrument *ins = 0;
     Track *track;
 
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
         track = m_doc->getComposition().getTrackByPosition(i);
 
         if (track) {
@@ -242,7 +242,7 @@ TrackButtons::removeButtons(unsigned int position)
     << "deleting track button at position "
     << position << endl;
 
-    if (position >= m_trackHBoxes.size()) {
+    if (position >= (unsigned int)m_trackHBoxes.size()) {
         RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
         return ;
     }
@@ -301,7 +301,7 @@ TrackButtons::slotUpdateTracks()
 
     // Set height
     //
-    for (unsigned int i = 0; i < m_trackHBoxes.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackHBoxes.size(); ++i) {
 
         track = comp.getTrackByPosition(i);
 
@@ -331,7 +331,7 @@ TrackButtons::slotUpdateTracks()
 
     // Renumber all the labels
     //
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
         track = comp.getTrackByPosition(i);
 
         if (track) {
@@ -360,7 +360,7 @@ TrackButtons::slotUpdateTracks()
 
     // Set record status and colour
     // 
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
 
         track = comp.getTrackByPosition(i);
 
@@ -489,7 +489,7 @@ TrackButtons::getHighlightedTracks()
 {
     std::vector<int> retList;
 
-    for (unsigned int i = 0; i < m_trackLabels.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackLabels.size(); ++i) {
         if (m_trackLabels[i]->isSelected())
             retList.push_back(i);
     }
@@ -515,7 +515,7 @@ TrackButtons::slotSetTrackMeter(float value, int position)
     //Studio &studio = m_doc->getStudio();
     //Track *track;
 
-    for (unsigned int i = 0; i < m_trackMeters.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackMeters.size(); ++i) {
         if (i == ((unsigned int)position)) {
             m_trackMeters[i]->setLevel(value);
             return ;
@@ -531,7 +531,7 @@ TrackButtons::slotSetMetersByInstrument(float value,
     //Studio &studio = m_doc->getStudio();
     Track *track;
 
-    for (unsigned int i = 0; i < m_trackMeters.size(); ++i) {
+    for (unsigned int i = 0; i < (unsigned int)m_trackMeters.size(); ++i) {
         track = comp.getTrackByPosition(i);
 
         if (track != 0 && track->getInstrument() == id) {

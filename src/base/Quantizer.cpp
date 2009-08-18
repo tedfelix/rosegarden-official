@@ -123,7 +123,7 @@ Quantizer::quantize(EventSelection *selection)
     }
 
     // Push the new events to the selection
-    for (int i = 0; i < m_toInsert.size(); ++i) {
+    for (int i = 0; i < int(m_toInsert.size()); ++i) {
 	selection->addEvent(m_toInsert[i]);
     }
 
@@ -443,12 +443,12 @@ Quantizer::makePropertyNames()
 void
 Quantizer::insertNewEvents(Segment *s) const
 {
-    unsigned int sz = m_toInsert.size();
+    size_t sz = m_toInsert.size();
 
     timeT minTime = m_normalizeRegion.first,
 	  maxTime = m_normalizeRegion.second;
 
-    for (unsigned int i = 0; i < sz; ++i) {
+    for (size_t i = 0; i < sz; ++i) {
 
 	timeT myTime = m_toInsert[i]->getAbsoluteTime();
 	timeT myDur  = m_toInsert[i]->getDuration();

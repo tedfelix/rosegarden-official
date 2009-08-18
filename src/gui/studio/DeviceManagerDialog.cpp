@@ -396,7 +396,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
 
     
     // fill the midiDevices list
-    cnt = devices->size();
+    cnt = int(devices->size());
     //
     for (i = 0; i < cnt; i++) {
         device = devices->at(i);
@@ -413,7 +413,7 @@ DeviceManagerDialog::updateDevicesList(DeviceList * devices,
     }
 
 
-    cnt = midiDevices.size();
+    cnt = int(midiDevices.size());
     //
     for (i = 0; i < cnt; i++) {
 
@@ -513,7 +513,7 @@ MidiDevice
     DeviceList *devices;
 
     devices = m_studio->getDevices();
-    cnt = devices->size();
+    cnt = int(devices->size());
 
     // search in the device list for deviceName
     for (i = 0; i < cnt; i++) {

@@ -42,7 +42,7 @@ SegmentChangeQuantizationCommand::~SegmentChangeQuantizationCommand()
 void
 SegmentChangeQuantizationCommand::execute()
 {
-    for (unsigned int i = 0; i < m_records.size(); ++i) {
+    for (size_t i = 0; i < m_records.size(); ++i) {
 
         SegmentRec &rec = m_records[i];
 
@@ -65,7 +65,7 @@ SegmentChangeQuantizationCommand::execute()
 void
 SegmentChangeQuantizationCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_records.size(); ++i) {
+    for (size_t i = 0; i < m_records.size(); ++i) {
 
         SegmentRec &rec = m_records[i];
 

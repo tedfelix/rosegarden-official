@@ -230,7 +230,7 @@ BasicQuantizer::getUnitFor(Event *e)
     // m_quantizations is in descending order of duration;
     // stop when we reach one that divides into the note's time
     
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
+    for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
 	if (absTime % m_standardQuantizations[i] == 0) {
 	    myQuantizeUnit = m_standardQuantizations[i];
 	    break;

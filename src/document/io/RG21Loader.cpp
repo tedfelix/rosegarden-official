@@ -176,8 +176,8 @@ bool RG21Loader::parseChordItem()
 
         if (marks.size() > 0) {
             noteEvent->set
-            <Int>(MARK_COUNT, marks.size());
-            for (unsigned int j = 0; j < marks.size(); ++j) {
+            <Int>(MARK_COUNT, int(marks.size()));
+            for (unsigned int j = 0; j < (unsigned int)marks.size(); ++j) {
                 noteEvent->set
                 <String>(getMarkPropertyName(j), marks[j]);
             }
@@ -502,10 +502,10 @@ void RG21Loader::closeGroup()
             }
         }
 
-        for (unsigned int i = 0; i < toInsert.size(); ++i) {
+        for (size_t i = 0; i < toInsert.size(); ++i) {
             m_currentSegment->insert(toInsert[i]);
         }
-        for (unsigned int i = 0; i < toErase.size(); ++i) {
+        for (size_t i = 0; i < toErase.size(); ++i) {
             m_currentSegment->erase(toErase[i]);
         }
 

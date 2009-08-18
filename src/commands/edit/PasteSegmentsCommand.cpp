@@ -47,7 +47,7 @@ PasteSegmentsCommand::PasteSegmentsCommand(Composition *composition,
 PasteSegmentsCommand::~PasteSegmentsCommand()
 {
     if (m_detached) {
-        for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+        for (size_t i = 0; i < m_addedSegments.size(); ++i) {
             delete m_addedSegments[i];
         }
     }
@@ -60,7 +60,7 @@ PasteSegmentsCommand::execute()
 {
     if (m_addedSegments.size() > 0) {
         // been here before
-        for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+        for (size_t i = 0; i < m_addedSegments.size(); ++i) {
             m_composition->addSegment(m_addedSegments[i]);
         }
         return ;
@@ -137,7 +137,7 @@ PasteSegmentsCommand::execute()
 void
 PasteSegmentsCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_addedSegments.size(); ++i) {
+    for (size_t i = 0; i < m_addedSegments.size(); ++i) {
         m_composition->detachSegment(m_addedSegments[i]);
     }
     m_detached = true;

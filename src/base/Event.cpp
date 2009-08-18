@@ -247,7 +247,7 @@ Event::toXmlString(timeT expectedTime)
 	out << "<property name=\""
 	    << XmlExportable::encode(i->getName()) << "\" ";
 	string type = getPropertyTypeAsString(*i);
-	for (unsigned int j = 0; j < type.size(); ++j) {
+	for (size_t j = 0; j < type.size(); ++j) {
 	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
 	}
 
@@ -271,7 +271,7 @@ Event::toXmlString(timeT expectedTime)
 	out << "<nproperty name=\""
 	    << XmlExportable::encode(s) << "\" ";
 	string type = getPropertyTypeAsString(*i);
-	for (unsigned int j = 0; j < type.size(); ++j) {
+	for (size_t j = 0; j < type.size(); ++j) {
 	    type[j] = (isupper(type[j]) ? tolower(type[j]) : type[j]);
 	}
 	out << type << "=\""

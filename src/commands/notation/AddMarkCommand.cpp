@@ -88,7 +88,7 @@ AddMarkCommand::registerCommand(CommandRegistry *r)
 {
     std::vector<Mark> marks(Marks::getStandardMarks());
 
-    for (int i = 0; i < marks.size(); ++i) {
+    for (size_t i = 0; i < marks.size(); ++i) {
         Mark mark = marks[i];
         r->registerCommand
             (getActionName(mark),

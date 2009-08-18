@@ -233,7 +233,7 @@ Segment::setStartTime(timeT t)
     if (m_composition) m_composition->setSegmentStartTime(this, t);
     else m_startTime = t;
 
-    for (int i = 0; i < events.size(); ++i) {
+    for (int i = 0; i < int(events.size()); ++i) {
 	insert(events[i]);
     }
 
@@ -345,7 +345,7 @@ Segment::getRawEndMarkerTime() const
 void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
-    for(unsigned int i = 0; i < m_refreshStatusArray.size(); ++i)
+    for(size_t i = 0; i < m_refreshStatusArray.size(); ++i)
         m_refreshStatusArray.getRefreshStatus(i).push(startTime, endTime);
 }
 
@@ -798,7 +798,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     timeT duration;
 
-    for (unsigned int gi = 0; gi < gaps.size(); ++gi) {
+    for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
 #ifdef DEBUG_NORMALIZE_RESTS
 	cerr << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second) << endl;

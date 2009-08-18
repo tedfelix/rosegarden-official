@@ -230,10 +230,10 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
 
     cleanup();
 
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i)
         delete m_controlPortsIn[i].second;
 
-    for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i)
+    for (size_t i = 0; i < m_controlPortsOut.size(); ++i)
         delete m_controlPortsOut[i].second;
 
     m_controlPortsIn.clear();
@@ -306,14 +306,14 @@ LADSPAPluginInstance::connectPorts()
     for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
             hi != m_instanceHandles.end(); ++hi) {
 
-        for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i) {
+        for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
             m_descriptor->connect_port(*hi,
                                        m_audioPortsIn[i],
                                        (LADSPA_Data *)m_inputBuffers[inbuf]);
             ++inbuf;
         }
 
-        for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i) {
+        for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
             m_descriptor->connect_port(*hi,
                                        m_audioPortsOut[i],
                                        (LADSPA_Data *)m_outputBuffers[outbuf]);
@@ -326,13 +326,13 @@ LADSPAPluginInstance::connectPorts()
         // do have to be connected as the plugin can't know if they're
         // not and will write to them anyway).
 
-        for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+        for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
             m_descriptor->connect_port(*hi,
                                        m_controlPortsIn[i].first,
                                        m_controlPortsIn[i].second);
         }
 
-        for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i) {
+        for (size_t i = 0; i < m_controlPortsOut.size(); ++i) {
             m_descriptor->connect_port(*hi,
                                        m_controlPortsOut[i].first,
                                        m_controlPortsOut[i].second);
@@ -343,7 +343,7 @@ LADSPAPluginInstance::connectPorts()
 void
 LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 {
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {
             LADSPAPluginFactory *f = dynamic_cast<LADSPAPluginFactory *>(m_factory);
             if (f) {
@@ -362,7 +362,7 @@ LADSPAPluginInstance::setPortValue(unsigned int portNumber, float value)
 float
 LADSPAPluginInstance::getPortValue(unsigned int portNumber)
 {
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {
             return (*m_controlPortsIn[i].second);
         }

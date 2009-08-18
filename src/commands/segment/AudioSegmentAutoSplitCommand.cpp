@@ -61,7 +61,7 @@ AudioSegmentAutoSplitCommand::~AudioSegmentAutoSplitCommand()
     if (m_detached) {
         delete m_segment;
     } else {
-        for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+        for (size_t i = 0; i < m_newSegments.size(); ++i) {
             delete m_newSegments[i];
         }
     }
@@ -158,7 +158,7 @@ AudioSegmentAutoSplitCommand::execute()
 
     RG_DEBUG << "AudioSegmentAutoSplitCommand::execute: have " << m_newSegments.size() << " new segments" << endl;
 
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+    for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->addSegment(m_newSegments[i]);
     }
 
@@ -172,7 +172,7 @@ AudioSegmentAutoSplitCommand::execute()
 void
 AudioSegmentAutoSplitCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+    for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->detachSegment(m_newSegments[i]);
     }
     if (m_newSegments.size() > 0) { // otherwise it was never detached

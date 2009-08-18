@@ -567,7 +567,7 @@ Accidental Key::getAccidentalAtHeight(int height, const Clef &clef) const
 {
     checkAccidentalHeights();
     height = canonicalHeight(height);
-    for (unsigned int i = 0; i < m_accidentalHeights->size(); ++i) {
+    for (size_t i = 0; i < m_accidentalHeights->size(); ++i) {
         if (height ==static_cast<int>(canonicalHeight((*m_accidentalHeights)[i] +
                                                      clef.getPitchOffset()))) {
             return isSharp() ? Sharp : Flat;

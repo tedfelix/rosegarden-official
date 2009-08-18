@@ -53,7 +53,7 @@ SegmentAutoSplitCommand::~SegmentAutoSplitCommand()
     if (m_detached) {
         delete m_segment;
     } else {
-        for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+        for (size_t i = 0; i < m_newSegments.size(); ++i) {
             delete m_newSegments[i];
         }
     }
@@ -135,7 +135,7 @@ SegmentAutoSplitCommand::execute()
             lastSoundTime = std::max(lastSoundTime, myTime + (*i)->getDuration());
         }
 
-        for (unsigned int split = 0; split <= splitPoints.size(); ++split) {
+        for (size_t split = 0; split <= splitPoints.size(); ++split) {
 
             Segment *newSegment = new Segment();
             newSegment->setTrack(m_segment->getTrack());
@@ -180,7 +180,7 @@ SegmentAutoSplitCommand::execute()
     }
 
     m_composition->detachSegment(m_segment);
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+    for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->addSegment(m_newSegments[i]);
     }
     m_detached = true;
@@ -189,7 +189,7 @@ SegmentAutoSplitCommand::execute()
 void
 SegmentAutoSplitCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i) {
+    for (size_t i = 0; i < m_newSegments.size(); ++i) {
         m_composition->detachSegment(m_newSegments[i]);
     }
     m_composition->addSegment(m_segment);

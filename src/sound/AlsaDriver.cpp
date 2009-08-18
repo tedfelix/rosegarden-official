@@ -1030,7 +1030,7 @@ AlsaDriver::getSpareDeviceId()
 {
     std::set
         <DeviceId> ids;
-    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+    for (size_t i = 0; i < m_devices.size(); ++i) {
         ids.insert(m_devices[i]->getId());
     }
 
@@ -1182,7 +1182,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
     checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
                    "renameDevice");
 
-    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+    for (size_t i = 0; i < m_devices.size(); ++i) {
         if (m_devices[i]->getId() == id) {
             m_devices[i]->setName(qstrtostr(newName));
             break;
@@ -1195,7 +1195,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 ClientPortPair
 AlsaDriver::getPortByName(std::string name)
 {
-    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+    for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
         if (m_alsaPorts[i]->m_name == name) {
             return ClientPortPair(m_alsaPorts[i]->m_client,
                                   m_alsaPorts[i]->m_port);
@@ -1207,7 +1207,7 @@ AlsaDriver::getPortByName(std::string name)
 std::string
 AlsaDriver::getPortName(ClientPortPair port)
 {
-    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+    for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
         if (m_alsaPorts[i]->m_client == port.first &&
             m_alsaPorts[i]->m_port == port.second) {
             return m_alsaPorts[i]->m_name;
@@ -1225,7 +1225,7 @@ AlsaDriver::getConnections(Device::DeviceType type,
         return 0;
 
     int count = 0;
-    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+    for (size_t j = 0; j < m_alsaPorts.size(); ++j) {
         if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
             (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
             ++count;
@@ -1244,14 +1244,14 @@ AlsaDriver::getConnection(Device::DeviceType type,
         return "";
 
     AlsaPortList tempList;
-    for (unsigned int j = 0; j < m_alsaPorts.size(); ++j) {
+    for (size_t j = 0; j < m_alsaPorts.size(); ++j) {
         if ((direction == MidiDevice::Play && m_alsaPorts[j]->isWriteable()) ||
             (direction == MidiDevice::Record && m_alsaPorts[j]->isReadable())) {
             tempList.push_back(m_alsaPorts[j]);
         }
     }
 
-    if (connectionNo < tempList.size()) {
+    if (connectionNo < (unsigned int)tempList.size()) {
         return strtoqstr(tempList[connectionNo]->m_name);
     }
 
@@ -1417,7 +1417,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
         std::cerr << "found port" << std::endl;
 #endif
 
-        for (unsigned int i = 0; i < m_devices.size(); ++i) {
+        for (size_t i = 0; i < m_devices.size(); ++i) {
 
             if (m_devices[i]->getId() == id) {
 #ifdef DEBUG_ALSA
@@ -1451,7 +1451,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
     if (port.first != -1 && port.second != -1) {
 
-        for (unsigned int i = 0; i < m_devices.size(); ++i) {
+        for (size_t i = 0; i < m_devices.size(); ++i) {
 
             if (m_devices[i]->getId() == id) {
                 setConnectionToDevice(*m_devices[i], idealConnection, port);
@@ -1509,7 +1509,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     (testNumbers << 2) +
                     (testUsed << 1) + 1;
 
-                for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
+                for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
 
                     AlsaPortDescription *port = m_alsaPorts[i];
 
@@ -1564,7 +1564,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                           << port->m_name << " available with fitness "
                           << fitness << std::endl;
 
-                    for (unsigned int i = 0; i < m_devices.size(); ++i) {
+                    for (size_t i = 0; i < m_devices.size(); ++i) {
 
                         if (m_devices[i]->getId() == id) {
                             setConnectionToDevice(*m_devices[i],
@@ -1675,7 +1675,7 @@ AlsaDriver::checkTimerSync(size_t frames)
 unsigned int
 AlsaDriver::getTimers()
 {
-    return m_timers.size() + 1; // one extra for auto
+    return (unsigned int)m_timers.size() + 1; // one extra for auto
 }
 
 QString
@@ -1730,7 +1730,7 @@ AlsaDriver::setCurrentTimer(QString timer)
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to control queue");
     m_alsaPlayStartTime = RealTime::zeroTime;
 
-    for (unsigned int i = 0; i < m_timers.size(); ++i) {
+    for (size_t i = 0; i < m_timers.size(); ++i) {
         if (m_timers[i].name == name) {
 
             snd_seq_queue_timer_t *timer;
@@ -4502,12 +4502,12 @@ AlsaDriver::record(RecordStatus recordStatus,
 
         if (armedInstruments) {
 
-            for (unsigned int i = 0; i < armedInstruments->size(); ++i) {
+            for (size_t i = 0; i < armedInstruments->size(); ++i) {
 
                 InstrumentId id = (*armedInstruments)[i];
 
                 m_recordingInstruments.insert(id);
-                if (!audioFileNames || (audioCount >= audioFileNames->size())) {
+                if (!audioFileNames || (audioCount >= (unsigned int)audioFileNames->size())) {
                     continue;
                 }
 

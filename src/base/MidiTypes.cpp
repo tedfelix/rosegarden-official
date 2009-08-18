@@ -260,7 +260,7 @@ SystemExclusive::toHex(std::string r)
 {
     static char hexchars[] = "0123456789ABCDEF";
     std::string h;
-    for (unsigned int i = 0; i < r.size(); ++i) {
+    for (size_t i = 0; i < r.size(); ++i) {
 	if (i > 0) h += ' ';
 	unsigned char b = (unsigned char)r[i];
 	h += hexchars[(b / 16) % 16];
@@ -276,11 +276,11 @@ SystemExclusive::toRaw(std::string rh)
     std::string h;
 
     // remove whitespace
-    for (unsigned int i = 0; i < rh.size(); ++i) {
+    for (size_t i = 0; i < rh.size(); ++i) {
 	if (!isspace(rh[i])) h += rh[i];
     }
 
-    for (unsigned int i = 0; i < h.size()/2; ++i) {
+    for (size_t i = 0; i < h.size()/2; ++i) {
 	unsigned char b = toRawNibble(h[2*i]) * 16 + toRawNibble(h[2*i+1]);
 	r += b;
     }

@@ -351,7 +351,7 @@ Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
 	}
 	simultaneous.insert(*i);
 	ends.insert(std::multimap<timeT, Segment *>::value_type(t1, *i));
-	int current = simultaneous.size();
+	int current = int(simultaneous.size());
 	if (current > maximum) maximum = current;
     }
 
@@ -833,7 +833,7 @@ Composition::getTimeSignatureAtAux(timeT t) const
 int
 Composition::getTimeSignatureCount() const
 {
-    return m_timeSigSegment.size();
+    return int(m_timeSigSegment.size());
 }
 
 int
@@ -986,7 +986,7 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 int
 Composition::getTempoChangeCount() const
 {
-    return m_tempoSegment.size();
+    return int(m_tempoSegment.size());
 }
 
 int
@@ -1015,7 +1015,7 @@ Composition::getTempoRamping(int n, bool calculate) const
     bool ramped = (target >= 0);
     if (target == 0) {
 	if (calculate) {
-	    if (m_tempoSegment.size() > n+1) {
+	    if (int(m_tempoSegment.size()) > n+1) {
 		target = m_tempoSegment[n+1]->get<Int>(TempoProperty);
 	    }
 	}

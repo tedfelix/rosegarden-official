@@ -627,7 +627,7 @@ LilyPondExporter::write()
 
         bool userTagline = false;
 
-        for (unsigned int index = 0; index < propertyNames.size(); ++index) {
+        for (size_t index = 0; index < propertyNames.size(); ++index) {
             std::string property = propertyNames [index];
             if (property == headerDedication || property == headerTitle ||
                     property == headerSubtitle || property == headerSubsubtitle ||

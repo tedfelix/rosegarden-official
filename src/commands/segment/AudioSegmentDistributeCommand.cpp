@@ -63,7 +63,7 @@ AudioSegmentDistributeCommand::~AudioSegmentDistributeCommand()
             delete *i;
         }
     } else {
-        for (unsigned int i = 0; i < m_newSegments.size(); ++i)
+        for (size_t i = 0; i < m_newSegments.size(); ++i)
             delete m_newSegments[i];
     }
 }
@@ -126,7 +126,7 @@ AudioSegmentDistributeCommand::execute()
     if (!addNew && m_newSegments.size()) {
         // Reattach new segments
         //
-        for (unsigned int i = 0; i < m_newSegments.size(); ++i)
+        for (size_t i = 0; i < m_newSegments.size(); ++i)
             m_composition->addSegment(m_newSegments[i]);
     }
 
@@ -136,7 +136,7 @@ AudioSegmentDistributeCommand::execute()
 void
 AudioSegmentDistributeCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_newSegments.size(); ++i)
+    for (size_t i = 0; i < m_newSegments.size(); ++i)
         m_composition->detachSegment(m_newSegments[i]);
 
     for (SegmentSelection::iterator it = m_selection.begin();

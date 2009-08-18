@@ -45,7 +45,7 @@ AddTracksCommand::AddTracksCommand(Composition *composition,
 AddTracksCommand::~AddTracksCommand()
 {
     if (m_detached) {
-        for (unsigned int i = 0; i < m_newTracks.size(); ++i)
+        for (size_t i = 0; i < m_newTracks.size(); ++i)
             delete m_newTracks[i];
     }
 }
@@ -56,7 +56,7 @@ void AddTracksCommand::execute()
     //
     if (m_detached) {
 
-        for (unsigned int i = 0; i < m_newTracks.size(); i++) {
+        for (size_t i = 0; i < m_newTracks.size(); i++) {
             m_composition->addTrack(m_newTracks[i]);
         }
 
@@ -113,7 +113,7 @@ void AddTracksCommand::execute()
 
 void AddTracksCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_newTracks.size(); i++) {
+    for (size_t i = 0; i < m_newTracks.size(); i++) {
         m_composition->detachTrack(m_newTracks[i]);
     }
 

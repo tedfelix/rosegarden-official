@@ -442,7 +442,7 @@ MappedStudio::getObjectCount(MappedObjectType type)
     GET_LOCK;
 
     MappedObjectCategory &category = m_objects[type];
-    count = category.size();
+    count = (unsigned int)category.size();
 
     RELEASE_LOCK;
 

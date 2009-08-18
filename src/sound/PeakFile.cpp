@@ -67,7 +67,7 @@ PeakFile::open()
     // Set the file size
     //
     QFileInfo info(QString(m_fileName.c_str()));
-    m_fileSize = info.size();
+    m_fileSize = (size_t)info.size(); // cast from qint64
 
     // If we're already open then don't open again
     //
@@ -503,8 +503,8 @@ PeakFile::writePeaks(unsigned short /*updatePercentage*/,
         m_format = 2; // write 16-bit PCM instead
 
     // for the progress dialog
-    unsigned int apprxTotalBytes = m_audioFile->getSize();
-    unsigned int byteCount = 0;
+    size_t apprxTotalBytes = m_audioFile->getSize();
+    size_t byteCount = 0;
 
     for (int i = 0; i < channels; i++)
         channelPeaks.push_back(std::pair<int, int>());

@@ -156,7 +156,7 @@ MidiProgramsEditor::clearAll()
 {
     blockAllSignals(true);
 
-    for (unsigned int i = 0; i < m_names.size(); ++i)
+    for (size_t i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
     setTitle(tr("Bank and Program details"));
@@ -223,7 +223,7 @@ MidiProgramsEditor::populate(QTreeWidgetItem* item)
     bool haveKeyMappings = m_currentBank->isPercussion()
                            && (m_device->getKeyMappings().size() > 0);
 
-    for (unsigned int i = 0; i < m_names.size(); i++) {
+    for (unsigned int i = 0; i < (unsigned int)m_names.size(); i++) {
 
         m_names[i]->clear();
         getEntryButton(i)->setEnabled(haveKeyMappings);
@@ -482,10 +482,10 @@ MidiProgramsEditor::slotEntryButtonPressed()
     QAction *a = menu->addAction(tr("<no key mapping>"));
     a->setObjectName("0");
 
-    for (unsigned int i = 0; i < kml.size(); ++i) {
+    for (size_t i = 0; i < kml.size(); ++i) {
         a = menu->addAction(strtoqstr(kml[i].getName()));
         a->setObjectName(QString("%1").arg(i+1));
-        if (currentMapping && (kml[i] == *currentMapping)) currentEntry = i + 1;
+        if (currentMapping && (kml[i] == *currentMapping)) currentEntry = int(i + 1);
     }
 
     connect(menu, SIGNAL(triggered(QAction *)),

@@ -63,7 +63,7 @@ EraseCommand::modifySegment()
         toErase.push_back(*i);
     }
 
-    for (unsigned int j = 0; j < toErase.size(); ++j) {
+    for (size_t j = 0; j < toErase.size(); ++j) {
         getSegment().eraseSingle(toErase[j]);
     }
 

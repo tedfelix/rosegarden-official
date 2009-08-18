@@ -1822,10 +1822,10 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
 	}
     }
 
-    for (unsigned int ei = 0; ei < erasable.size(); ++ei)
+    for (size_t ei = 0; ei < erasable.size(); ++ei)
 	segment().erase(erasable[ei]);
 
-    for (unsigned int ii = 0; ii < insertable.size(); ++ii)
+    for (size_t ii = 0; ii < insertable.size(); ++ii)
 	segment().insert(insertable[ii]);
 }
 

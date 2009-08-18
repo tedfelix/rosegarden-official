@@ -269,7 +269,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
 unsigned int
 SoundDriver::getDevices()
 {
-    return m_devices.size();
+    return (unsigned int)m_devices.size();
 }
 
 MappedDevice

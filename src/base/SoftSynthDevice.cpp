@@ -106,7 +106,7 @@ SoftSynthDevice::checkControlList()
 const ControlParameter *
 SoftSynthDevice::getControlParameter(int index) const
 {
-    if (index >= 0 && ((unsigned int)index) < m_controlList.size())
+    if (index >= 0 && ((unsigned int)index) < ((unsigned int)m_controlList.size()))
         return &m_controlList[index];
     return 0;
 }

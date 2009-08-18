@@ -73,7 +73,7 @@ AudioPluginManager::Enumerator::run()
         PluginFactory::enumerateAllPlugins(rawPlugins);
     }
 
-    unsigned int i = 0;
+    size_t i = 0;
 
     while (i < rawPlugins.size()) {
 

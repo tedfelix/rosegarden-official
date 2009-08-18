@@ -105,7 +105,7 @@ AudioPluginInstance::toXmlString()
 
     plugin << ">" << std::endl;
 
-    for (unsigned int i = 0; i < m_ports.size(); i++)
+    for (size_t i = 0; i < m_ports.size(); i++)
     {
         plugin << "                <port id=\""
                << m_ports[i]->number

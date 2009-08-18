@@ -88,7 +88,7 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
 {
     std::vector<std::string> standardIndications = getStandardIndications();
     
-    for (int i = 0; i < standardIndications.size(); ++i) {
+    for (size_t i = 0; i < standardIndications.size(); ++i) {
         r->registerCommand
             (actionNames[i],
              new ArgumentAndSelectionCommandBuilder<AddIndicationCommand>());
@@ -100,7 +100,7 @@ AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 {
     std::vector<std::string> standardIndications = getStandardIndications();
     
-    for (int i = 0; i < standardIndications.size(); ++i) {
+    for (size_t i = 0; i < standardIndications.size(); ++i) {
         if (actionName == actionNames[i]) return standardIndications[i];
     }
     throw CommandCancelled();

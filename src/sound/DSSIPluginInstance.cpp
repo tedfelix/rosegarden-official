@@ -204,8 +204,8 @@ DSSIPluginInstance::getLatency()
 
     if (m_latencyPort) {
         if (!m_run) {
-            for (int i = 0; i < getAudioInputCount(); ++i) {
-                for (int j = 0; j < m_blockSize; ++j) {
+            for (unsigned int i = 0; i < getAudioInputCount(); ++i) {
+                for (unsigned int j = 0; j < m_blockSize; ++j) {
                     m_inputBuffers[i][j] = 0.f;
                 }
             }
@@ -350,10 +350,10 @@ DSSIPluginInstance::~DSSIPluginInstance()
 
     cleanup();
 
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i)
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i)
         delete m_controlPortsIn[i].second;
 
-    for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i)
+    for (size_t i = 0; i < m_controlPortsOut.size(); ++i)
         delete m_controlPortsOut[i].second;
 
     m_controlPortsIn.clear();
@@ -652,7 +652,7 @@ DSSIPluginInstance::connectPorts()
 
     int inbuf = 0, outbuf = 0;
 
-    for (unsigned int i = 0; i < m_audioPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         m_descriptor->LADSPA_Plugin->connect_port
         (m_instanceHandle,
          m_audioPortsIn[i],
@@ -660,7 +660,7 @@ DSSIPluginInstance::connectPorts()
         ++inbuf;
     }
 
-    for (unsigned int i = 0; i < m_audioPortsOut.size(); ++i) {
+    for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
         m_descriptor->LADSPA_Plugin->connect_port
         (m_instanceHandle,
          m_audioPortsOut[i],
@@ -668,14 +668,14 @@ DSSIPluginInstance::connectPorts()
         ++outbuf;
     }
 
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         m_descriptor->LADSPA_Plugin->connect_port
         (m_instanceHandle,
          m_controlPortsIn[i].first,
          m_controlPortsIn[i].second);
     }
 
-    for (unsigned int i = 0; i < m_controlPortsOut.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsOut.size(); ++i) {
         m_descriptor->LADSPA_Plugin->connect_port
         (m_instanceHandle,
          m_controlPortsOut[i].first,
@@ -690,7 +690,7 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
     std::cerr << "DSSIPluginInstance[" << this << "]::setPortValue(" << portNumber << ") to " << value << std::endl;
 #endif
 
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {
             LADSPAPluginFactory *f = dynamic_cast<LADSPAPluginFactory *>(m_factory);
             if (f) {
@@ -750,7 +750,7 @@ DSSIPluginInstance::getPortValue(unsigned int portNumber)
     std::cerr << "DSSIPluginInstance::getPortValue(" << portNumber << ")" << std::endl;
 #endif
 
-    for (unsigned int i = 0; i < m_controlPortsIn.size(); ++i) {
+    for (size_t i = 0; i < m_controlPortsIn.size(); ++i) {
         if (m_controlPortsIn[i].first == portNumber) {
             return (*m_controlPortsIn[i].second);
         }

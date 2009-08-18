@@ -148,11 +148,11 @@ SegmentSplitCommand::execute()
         }
     }
 
-    for (int i = 0; i < toErase.size(); ++i) {
+    for (size_t i = 0; i < toErase.size(); ++i) {
         m_newSegmentA->eraseSingle(toErase[i]);
         delete toErase[i];
     }
-    for (int i = 0; i < toInsert.size(); ++i) {
+    for (size_t i = 0; i < toInsert.size(); ++i) {
         m_newSegmentA->insert(toInsert[i]);
     }
 

@@ -641,7 +641,7 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             return ;
 
         // nowhere to display synth plugin info yet
-        if (index >= rec.m_plugins.size())
+        if (index >= int(rec.m_plugins.size()))
             return ;
 
         if (plugin == -1) {
@@ -691,12 +691,12 @@ AudioMixerWindow::slotPluginSelected(InstrumentId id,
             }
 
         }
-    } else if (id > 0 && id <= m_submasters.size()) {
+    } else if (id > 0 && id <= (unsigned int)m_submasters.size()) {
 
         FaderRec &rec = m_submasters[id - 1];
         if (!rec.m_populated || !rec.m_pluginBox)
             return ;
-        if (index >= rec.m_plugins.size())
+        if (index >= int(rec.m_plugins.size()))
             return ;
 
         if (plugin == -1) {
@@ -840,7 +840,7 @@ AudioMixerWindow::updatePluginButtons(int id)
     } else {
 
         BussList busses = m_studio->getBusses();
-        if (busses.size() > id) {
+        if (int(busses.size()) > id) {
             container = busses[id];
         }
         rec = &m_submasters[id - 1];
@@ -850,7 +850,7 @@ AudioMixerWindow::updatePluginButtons(int id)
 
     if (rec && container) {
 
-        for (unsigned int i = 0; i < rec->m_plugins.size(); i++) {
+        for (size_t i = 0; i < rec->m_plugins.size(); i++) {
 
             bool used = false;
             bool bypass = false;

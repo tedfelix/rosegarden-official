@@ -253,13 +253,13 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
     SynthPluginManagerDialog::updatePlugin ( InstrumentId id, int plugin ){
         if ( id < SoftSynthInstrumentBase )
             return ;
-        int row = id - SoftSynthInstrumentBase;
+        size_t row = size_t(id - SoftSynthInstrumentBase);
         if ( row >= m_synthCombos.size() )
             return ;
 
         QComboBox *comboBox = m_synthCombos[row];
 
-        for ( unsigned int i = 0; i < m_synthPlugins.size(); ++i ){
+        for ( size_t i = 0; i < m_synthPlugins.size(); ++i ){
             if ( m_synthPlugins[i] == plugin ){
                 blockSignals ( true );
                 comboBox->setCurrentIndex ( i );
@@ -291,9 +291,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         int instrumentNo = -1;
 
-        for ( unsigned int i = 0; i < m_guiButtons.size(); ++i ){
+        for ( size_t i = 0; i < m_guiButtons.size(); ++i ){
             if ( s == m_guiButtons[i] )
-                instrumentNo = i;
+                instrumentNo = int(i);
         }
 
         if ( instrumentNo == -1 ){
@@ -313,9 +313,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         int instrumentNo = -1;
 
-        for ( unsigned int i = 0; i < m_controlsButtons.size(); ++i ){
+        for ( size_t i = 0; i < m_controlsButtons.size(); ++i ){
             if ( s == m_controlsButtons[i] )
-                instrumentNo = i;
+                instrumentNo = int(i);
         }
 
         if ( instrumentNo == -1 ){
@@ -339,9 +339,9 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
 
         int instrumentNo = -1;
 
-        for ( unsigned int i = 0; i < m_synthCombos.size(); ++i ){
+        for ( size_t i = 0; i < m_synthCombos.size(); ++i ){
             if ( s == m_synthCombos[i] )
-                instrumentNo = i;
+                instrumentNo = int(i);
         }
 
         if ( instrumentNo == -1 ){
@@ -401,7 +401,7 @@ SynthPluginManagerDialog::SynthPluginManagerDialog(QWidget *parent,
             }
         }
 
-        if ( instrumentNo < m_guiButtons.size() ){
+        if ( instrumentNo < int(m_guiButtons.size()) ){
         m_guiButtons[instrumentNo]->setEnabled
             ( m_guiManager->hasGUI
               ( id, Instrument::SYNTH_PLUGIN_POSITION ) );

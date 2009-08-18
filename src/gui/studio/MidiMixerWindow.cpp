@@ -136,7 +136,7 @@ MidiMixerWindow::setupTabs()
             mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
 
             // control labels
-            for (unsigned int i = 0; i < controls.size(); ++i) {
+            for (size_t i = 0; i < controls.size(); ++i) {
                 label = new QLabel(strtoqstr(controls[i].getName()), m_tabFrame);
                 mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
             }
@@ -172,7 +172,7 @@ MidiMixerWindow::setupTabs()
 
                 // Add the controls
                 //
-                for (unsigned int i = 0; i < controls.size(); ++i) {
+                for (size_t i = 0; i < controls.size(); ++i) {
                     QColor knobColour = QColor(Qt::white);
 
                     if (controls[i].getColourIndex() > 0) {
@@ -327,7 +327,7 @@ void
 MidiMixerWindow::slotControllerChanged(float value)
 {
     const QObject *s = sender();
-    unsigned int i = 0, j = 0;
+    size_t i = 0, j = 0;
 
     for (i = 0; i < m_faders.size(); ++i) {
         for (j = 0; j < m_faders[i]->m_controllerRotaries.size(); ++j) {
@@ -440,7 +440,7 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 
                     // Set all controllers for this Instrument
                     //
-                    for (unsigned int i = 0; i < controls.size(); ++i) {
+                    for (size_t i = 0; i < controls.size(); ++i) {
                         float value = 0.0;
 
                         m_faders[count]->m_controllerRotaries[i].second->blockSignals(true);
@@ -496,7 +496,7 @@ MidiMixerWindow::slotUpdateInstrument(InstrumentId id)
 void
 MidiMixerWindow::updateMeters()
 {
-    for (unsigned int i = 0; i != m_faders.size(); ++i) {
+    for (size_t i = 0; i != m_faders.size(); ++i) {
         LevelInfo info;
         if (!SequencerDataBlock::getInstance()->
             getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {

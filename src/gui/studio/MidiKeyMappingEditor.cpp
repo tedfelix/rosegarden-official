@@ -68,7 +68,7 @@ MidiKeyMappingEditor::clearAll()
 {
     blockAllSignals(true);
 
-    for (unsigned int i = 0; i < m_names.size(); ++i)
+    for (size_t i = 0; i < m_names.size(); ++i)
         m_names[i]->clear();
 
     setTitle(tr("Key Mapping details"));

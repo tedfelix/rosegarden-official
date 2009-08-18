@@ -240,7 +240,7 @@ MetronomeMapper::calculateSize()
 
     settings.endGroup();
 
-    return size;
+    return int(size);
 }
 
 int

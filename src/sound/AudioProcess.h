@@ -116,7 +116,7 @@ public:
      * Busses are currently always stereo.
      */
     RingBuffer<sample_t> *getRingBuffer(int buss, unsigned int channel) {
-        if (channel < m_bufferMap[buss].buffers.size()) {
+        if (channel < (unsigned int)m_bufferMap[buss].buffers.size()) {
             return m_bufferMap[buss].buffers[channel];
         } else {
             return 0;
@@ -265,7 +265,7 @@ public:
      * these buffers.
      */
     RingBuffer<sample_t, 2> *getRingBuffer(InstrumentId id, unsigned int channel) {
-        if (channel < m_bufferMap[id].buffers.size()) {
+        if (channel < (unsigned int)m_bufferMap[id].buffers.size()) {
             return m_bufferMap[id].buffers[channel];
         } else {
             return 0;

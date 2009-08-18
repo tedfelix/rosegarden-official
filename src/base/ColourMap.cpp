@@ -225,10 +225,10 @@ ColourMap::operator=(const ColourMap& input)
     return *this;
 }
 
-int
+unsigned int
 ColourMap::size() const
 {
-    return m_map.size();
+    return (unsigned int)m_map.size();
 }
 
 std::string

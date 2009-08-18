@@ -121,7 +121,7 @@ public:
 
     ColourMap& operator=(const ColourMap& input);
 
-    int size() const;
+    unsigned int size() const;
 
 private:
     RCMap m_map;

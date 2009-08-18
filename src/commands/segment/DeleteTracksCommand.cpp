@@ -38,10 +38,10 @@ DeleteTracksCommand::DeleteTracksCommand(Composition *composition,
 DeleteTracksCommand::~DeleteTracksCommand()
 {
     if (m_detached) {
-        for (unsigned int i = 0; i < m_oldTracks.size(); ++i)
+        for (size_t i = 0; i < m_oldTracks.size(); ++i)
             delete m_oldTracks[i];
 
-        for (unsigned int i = 0; i < m_oldSegments.size(); ++i)
+        for (size_t i = 0; i < m_oldSegments.size(); ++i)
             delete m_oldSegments[i];
 
         m_oldTracks.clear();
@@ -67,7 +67,7 @@ void DeleteTracksCommand::execute()
     Composition::trackcontainer
     &tracks = m_composition->getTracks();
 
-    for (unsigned int i = 0; i < m_tracks.size(); ++i) {
+    for (size_t i = 0; i < m_tracks.size(); ++i) {
         // detach segments and store tracks somewhere
         track = m_composition->getTrackById(m_tracks[i]);
 
@@ -145,7 +145,7 @@ void DeleteTracksCommand::unexecute()
         m_composition->addTrack(*otIt);
     }
 
-    for (unsigned int i = 0; i < m_oldSegments.size(); ++i)
+    for (size_t i = 0; i < m_oldSegments.size(); ++i)
         m_composition->addSegment(m_oldSegments[i]);
 
     m_detached = false;

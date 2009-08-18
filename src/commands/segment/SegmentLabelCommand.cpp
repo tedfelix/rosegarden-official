@@ -48,7 +48,7 @@ SegmentLabelCommand::execute()
     if (m_labels.size() == 0)
         addLabels = true;
 
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+    for (size_t i = 0; i < m_segments.size(); ++i) {
         if (addLabels)
             m_labels.push_back(strtoqstr(m_segments[i]->getLabel()));
 
@@ -59,7 +59,7 @@ SegmentLabelCommand::execute()
 void
 SegmentLabelCommand::unexecute()
 {
-    for (unsigned int i = 0; i < m_segments.size(); ++i)
+    for (size_t i = 0; i < m_segments.size(); ++i)
         m_segments[i]->setLabel(qstrtostr(m_labels[i]));
 }
 

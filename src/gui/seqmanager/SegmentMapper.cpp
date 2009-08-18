@@ -364,7 +364,7 @@ int
 SegmentMapper::addSize(int size, Segment *s)
 {
     int repeatCount = getSegmentRepeatCount();
-    return size + (repeatCount + 1) * s->size();
+    return size + (repeatCount + 1) * int(s->size());
 }
 
 int
@@ -372,7 +372,7 @@ SegmentMapper::calculateSize()
 {
     if (!m_segment) return 0;
     int repeatCount = getSegmentRepeatCount();
-    return (repeatCount + 1) * m_segment->size();
+    return (repeatCount + 1) * int(m_segment->size());
 }
 
 }

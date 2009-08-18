@@ -510,7 +510,7 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
     QVector<QRect> rects = e->region().rects();
 
-    for (unsigned int i = 0; i < rects.size(); ++i) {
+    for (size_t i = 0; i < rects.size(); ++i) {
         viewportPaintRect(rects[i]);
     }
 }
@@ -895,7 +895,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
         drawBasePoint = rectToFill.topLeft();
         rectToFill.moveBy( -basePoint.x(), -basePoint.y());
         int firstPixmapIdx = (r.x() - basePoint.x()) / AudioPreviewPainter::tileWidth();
-        if (firstPixmapIdx >= api->pixmap.size()) {
+        if (firstPixmapIdx >= int(api->pixmap.size())) {
             //             RG_DEBUG << "CompositionView::drawAreaAudioPreviews : WARNING - miscomputed pixmap array : r.x = "
             //                      << r.x() << " - basePoint.x = " << basePoint.x() << " - firstPixmapIdx = " << firstPixmapIdx
             //                      << endl;
@@ -932,7 +932,7 @@ void CompositionView::drawAreaAudioPreviews(QPainter * p, const QRect& clipRect)
                          Qt::ColorOnly | Qt::ThresholdDither | Qt::AvoidDither);
 
             ++idx;
-            if (idx >= api->pixmap.size())
+            if (idx >= int(api->pixmap.size()))
                 break;
             drawBasePoint.setX(drawBasePoint.x() + localRect.width());
             x += localRect.width();
@@ -1039,9 +1039,9 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         // now draw the 'repeat' marks
         //
         p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
-        int penWidth = std::max((unsigned int)r.getPen().width(), 1u);
+        int penWidth = int(std::max((unsigned int)r.getPen().width(), 1u));
 
-        for (unsigned int i = 0; i < repeatMarks.size(); ++i) {
+        for (size_t i = 0; i < repeatMarks.size(); ++i) {
             int pos = repeatMarks[i];
             if (pos > clipRect.right())
                 break;

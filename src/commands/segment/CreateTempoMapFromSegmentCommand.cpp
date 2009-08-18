@@ -128,7 +128,7 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 
     timeT quarter = Note(Note::Crotchet).getDuration();
 
-    for (int beat = 1; beat < beatTimeTs.size(); ++beat) {
+    for (size_t beat = 1; beat < beatTimeTs.size(); ++beat) {
 
         timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat - 1];
         RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat - 1];

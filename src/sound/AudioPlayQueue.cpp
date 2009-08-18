@@ -84,7 +84,7 @@ AudioPlayQueue::addScheduled(PlayableAudioFile *file)
     InstrumentId instrument = file->getInstrument();
     unsigned int index = instrumentId2Index(instrument);
 
-    while (m_instrumentIndex.size() <= index) {
+    while ((unsigned int)m_instrumentIndex.size() <= index) {
         m_instrumentIndex.push_back(ReverseFileMap());
     }
 
@@ -295,7 +295,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
     RealTime sliceEnd = sliceStart + sliceDuration;
 
     unsigned int index = instrumentId2Index(instrumentId);
-    if (index >= m_instrumentIndex.size()) {
+    if (index >= (unsigned int)m_instrumentIndex.size()) {
         goto unscheduled; // nothing scheduled here
     }
 
@@ -442,7 +442,7 @@ AudioPlayQueue::haveFilesForInstrument(InstrumentId instrumentId) const
 
     unsigned int index = instrumentId2Index(instrumentId);
 
-    if (index < m_instrumentIndex.size() &&
+    if (index < (unsigned int)m_instrumentIndex.size() &&
             !m_instrumentIndex[index].empty()) {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
         std::cerr << " yes (scheduled)" << std::endl;
