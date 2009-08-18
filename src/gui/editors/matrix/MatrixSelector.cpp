@@ -250,7 +250,7 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
             return;
         }
 
-        if (e->buttons & Qt::ShiftButton) { // advanced edit
+        if (e->modifiers & Qt::ShiftModifier) { // advanced edit
 
             EventEditDialog dialog
                 (m_widget, *m_clickedElement->event(), true);
