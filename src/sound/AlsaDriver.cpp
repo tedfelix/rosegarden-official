@@ -1564,10 +1564,10 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                           << port->m_name << " available with fitness "
                           << fitness << std::endl;
 
-                    for (size_t i = 0; i < m_devices.size(); ++i) {
+                    for (size_t j = 0; j < m_devices.size(); ++j) {
 
-                        if (m_devices[i]->getId() == id) {
-                            setConnectionToDevice(*m_devices[i],
+                        if (m_devices[j]->getId() == id) {
+                            setConnectionToDevice(*m_devices[j],
                                                   strtoqstr(port->m_name),
                                                   ClientPortPair(port->m_client, port->m_port));
 
