@@ -808,7 +808,7 @@ RosegardenMainWindow::initZoomToolbar()
     static double factors[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
                                 1.0, 1.5, 2.5, 5.0, 10.0 , 20.0 };
 
-    for (unsigned int i = 0; i < sizeof(factors) / sizeof(factors[0]); ++i) {
+    for (size_t i = 0; i < sizeof(factors) / sizeof(factors[0]); ++i) {
         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
     }
 
@@ -3517,7 +3517,7 @@ RosegardenMainWindow::guessTextCodec(std::string text)
 {
     QTextCodec *codec = 0;
 
-    for (int c = 0; c < text.length(); ++c) {
+    for (int c = 0; c < int(text.length()); ++c) {
         if (text[c] & 0x80) {
 
             CurrentProgressDialog::freeze();

@@ -62,7 +62,7 @@ double strtodouble(const std::string &s)
 {
     int dp = 0;
     int sign = 1;
-    unsigned int i = 0;  //@@@
+    size_t i = 0;  //@@@
     double result = 0.0;
     size_t len = s.length();
 

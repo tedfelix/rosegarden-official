@@ -207,7 +207,7 @@ MidiDevice::generateDefaultControllers()
         { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
     };
 
-    for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
+    for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 
         Rosegarden::ControlParameter con(controls[i][0],
                                          controls[i][1],

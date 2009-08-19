@@ -150,7 +150,7 @@ void PropertyControlRuler::addControlItem(MatrixElement *el)
 //    el->event()->get<Rosegarden::Int>(getPropertyName(), val);
 //    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
 
-    int s = sizeof(MatrixElement);
+    size_t s = sizeof(MatrixElement);
     RG_DEBUG << "PropertyControlRuler::addControlItem sizeof(MatrixElement): " << s;
 
     PropertyControlItem *controlItem = new PropertyControlItem(this, getPropertyName(), el, QPolygonF());

@@ -50,11 +50,11 @@ int main(int argc, char **argv)
 
     cout << "Testing valid strings -- should be no errors here" << endl;
 
-    for (int i = 0; i < sizeof(valid)/sizeof(valid[0]); ++i) {
+    for (size_t i = 0; i < sizeof(valid)/sizeof(valid[0]); ++i) {
 	string encoded = XmlExportable::encode(valid[i]);
 	if (encoded != valid[i]) {
 	    cerr << "Encoding failed:" << endl;
-	    for (int j = 0; j < valid[i].length(); ++j) {
+	    for (size_t j = 0; j < valid[i].length(); ++j) {
 		cerr << (char)valid[i][j] << " ("
 		     << binary(valid[i][j]) << ")" << endl;
 	    }
@@ -64,11 +64,11 @@ int main(int argc, char **argv)
 
     cout << "Testing escapable strings -- should be no errors here" << endl;
 
-    for (int i = 0; i < sizeof(escapable)/sizeof(escapable[0]); ++i) {
+    for (size_t i = 0; i < sizeof(escapable)/sizeof(escapable[0]); ++i) {
 	string encoded = XmlExportable::encode(escapable[i]);
 	if (encoded == escapable[i]) {
 	    cerr << "Escaping failed:" << endl;
-	    for (int j = 0; j < escapable[i].length(); ++j) {
+	    for (size_t j = 0; j < escapable[i].length(); ++j) {
 		cerr << (char)escapable[i][j] << " ("
 		     << binary(escapable[i][j]) << ")" << endl;
 	    }
@@ -80,11 +80,11 @@ int main(int argc, char **argv)
 	 << (sizeof(invalid)/sizeof(invalid[0]))
 	 << " errors here (but no fatal ones)" << endl;
 
-    for (int i = 0; i < sizeof(invalid)/sizeof(invalid[0]); ++i) {
+    for (size_t i = 0; i < sizeof(invalid)/sizeof(invalid[0]); ++i) {
 	string encoded = XmlExportable::encode(invalid[i]);
 	if (encoded == invalid[i]) {
 	    cerr << "Encoding succeeded but should have failed:" << endl;
-	    for (int j = 0; j < invalid[i].length(); ++j) {
+	    for (size_t j = 0; j < invalid[i].length(); ++j) {
 		cerr << (char)invalid[i][j] << " ("
 		     << binary(invalid[i][j]) << ")" << endl;
 	    }

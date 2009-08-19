@@ -2934,7 +2934,7 @@ NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
 
             createPixmap(width, height);
 
-            for (unsigned int i = 0; i < numS.length(); ++i) {
+            for (int i = 0; i < numS.length(); ++i) {
                 int x = width - (width - numW) / 2 - (i + 1) * character.getWidth();
                 int y = height / 4 - (character.getHeight() / 2);
                 NoteCharacter charCharacter = getCharacter
@@ -2944,7 +2944,7 @@ NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
                 numerator /= 10;
             }
 
-            for (unsigned int i = 0; i < denomS.length(); ++i) {
+            for (int i = 0; i < denomS.length(); ++i) {
                 int x = width - (width - denomW) / 2 - (i + 1) * character.getWidth();
                 int y = height - height / 4 - (character.getHeight() / 2);
                 NoteCharacter charCharacter = getCharacter

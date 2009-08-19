@@ -56,7 +56,7 @@ std::string XmlExportable::encode(const std::string &s0)
 	    if (mblen > 0) {
 
 		// does multibyte contain a valid sequence?
-		unsigned int length = 
+		size_t length = 
 		    (!(multibyte[0] & 0x20)) ? 2 :
 		    (!(multibyte[0] & 0x10)) ? 3 :
 		    (!(multibyte[0] & 0x08)) ? 4 :
@@ -156,7 +156,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
     if (mblen > 0) {
 	// does multibyte contain a valid sequence?
-	unsigned int length = 
+	size_t length = 
 	    (!(multibyte[0] & 0x20)) ? 2 :
 	    (!(multibyte[0] & 0x10)) ? 3 :
 	    (!(multibyte[0] & 0x08)) ? 4 :

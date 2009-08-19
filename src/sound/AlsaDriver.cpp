@@ -573,7 +573,7 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
                 // If no space is found then we try to match the whole string
                 //
                 if (firstSpace < 0)
-                    firstSpace = fullClientName.length();
+                    firstSpace = int(fullClientName.length());
 
                 if (firstSpace > 0 &&
                         int(fullPortName.length()) >= firstSpace &&
@@ -4133,16 +4133,16 @@ AlsaDriver::processEventsOut(const MappedEventList &mC,
                     continue;
                 }
 
-                unsigned int channels = fader->getPropertyList(
+                int channels = fader->getPropertyList(
                                             MappedAudioFader::Channels)[0].toInt();
 
                 RealTime bufferLength = getAudioReadBufferLength();
-                int bufferFrames = RealTime::realTime2Frame
+                size_t bufferFrames = (size_t)RealTime::realTime2Frame
                                    (bufferLength, m_jackDriver->getSampleRate());
-                if (bufferFrames % m_jackDriver->getBufferSize()) {
-                    bufferFrames /= m_jackDriver->getBufferSize();
+                if (bufferFrames % size_t(m_jackDriver->getBufferSize())) {
+                    bufferFrames /= size_t(m_jackDriver->getBufferSize());
                     bufferFrames ++;
-                    bufferFrames *= m_jackDriver->getBufferSize();
+                    bufferFrames *= size_t(m_jackDriver->getBufferSize());
                 }
 
                 //#define DEBUG_PLAYING_AUDIO

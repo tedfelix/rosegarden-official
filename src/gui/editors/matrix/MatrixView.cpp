@@ -595,7 +595,7 @@ NewMatrixView::initZoomToolbar()
                           3.5, 5.0, 7.0, 10.0, 20.0 };
 //    static double z[] = { 0.025, 0.05, 0.1, 0.2, 0.5,
 //              1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
-    for (int i = 0; i < sizeof(z)/sizeof(z[0]); ++i) zoomSizes.push_back(z[i]);
+    for (size_t i = 0; i < sizeof(z)/sizeof(z[0]); ++i) zoomSizes.push_back(z[i]);
 
     m_hZoomSlider = new ZoomSlider<double>
         (zoomSizes, -1, Qt::Horizontal, zoomToolbar);

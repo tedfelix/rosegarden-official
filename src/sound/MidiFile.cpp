@@ -1623,7 +1623,7 @@ MidiFile::convertToMidi(Composition &comp)
 		    (new MidiEvent(0, MIDI_CTRL_CHANGE | midiChannel,
 				   MIDI_CONTROLLER_PAN, instr->getPan()));
 
-		for (int i = 0; i < sizeof(controllers)/sizeof(controllers[0]); ++i) {
+		for (size_t i = 0; i < sizeof(controllers)/sizeof(controllers[0]); ++i) {
 		    try {
 			mtrack.push_back
 			    (new MidiEvent

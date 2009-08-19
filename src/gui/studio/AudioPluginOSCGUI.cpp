@@ -107,7 +107,7 @@ AudioPluginOSCGUI::getGUIFilePath(QString identifier)
     // in order of preference:
     const char *suffixes[] = { "_rg", "_kde", "_qt", "_gtk2", "_gtk", "_x11", "_gui"
                              };
-    int nsuffixes = sizeof(suffixes) / sizeof(suffixes[0]);
+    int nsuffixes = int(sizeof(suffixes) / sizeof(suffixes[0]));
 
     for (int k = 0; k <= nsuffixes; ++k) {
 

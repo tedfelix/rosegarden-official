@@ -435,7 +435,7 @@ int main(int argc, char *argv[])
 
     QIcon icon;
     int sizes[] = { 16, 22, 24, 32, 48, 64, 128 };
-    for (unsigned int i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
+    for (size_t i = 0; i < sizeof(sizes)/sizeof(sizes[0]); ++i) {
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader().loadPixmap(name);
         if (!pixmap.isNull()) {

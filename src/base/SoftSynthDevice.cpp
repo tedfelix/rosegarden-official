@@ -87,7 +87,7 @@ SoftSynthDevice::checkControlList()
 
     if (m_controlList.empty()) {
 	
-	for (unsigned int i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
+	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 
 	    Rosegarden::ControlParameter con(controls[i][0],
 					     controls[i][1],

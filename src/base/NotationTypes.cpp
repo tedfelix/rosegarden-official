@@ -64,7 +64,7 @@ namespace Accidentals
 
         static AccidentalList v;
         if (v.size() == 0) {
-            for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+            for (size_t i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
                 v.push_back(a[i]);
         }
         return v;
@@ -249,7 +249,7 @@ namespace Marks
 
         static std::vector<Mark> v;
         if (v.size() == 0) {
-            for (unsigned int i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
+            for (size_t i = 0; i < sizeof(a)/sizeof(a[0]); ++i)
                 v.push_back(a[i]);
         }
         return v;

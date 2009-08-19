@@ -2150,7 +2150,7 @@ MatrixView::initZoomToolbar()
                                 1.0, 1.5, 2.5, 5.0, 10.0, 20.0 };
     // Zoom labels
     //
-    for (unsigned int i = 0; i < sizeof(factors) / sizeof(factors[0]); ++i) {
+    for (size_t i = 0; i < sizeof(factors) / sizeof(factors[0]); ++i) {
 //         zoomSizes.push_back(duration44 / (defaultBarWidth44 * factors[i]));
 
 //         zoomSizes.push_back(factors[i] / 2); // GROSS HACK - see in matrixstaff.h - BREAKS MATRIX VIEW, see bug 1000595

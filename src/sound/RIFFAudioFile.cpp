@@ -208,7 +208,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
     // Ok, we're past all the header information in the data chunk.
     // Now, how much do we scan forward?
     //
-    size_t totalFrames = RealTime::realTime2Frame(time, m_sampleRate);
+    size_t totalFrames = size_t(RealTime::realTime2Frame(time, m_sampleRate));
 
     unsigned int totalBytes = totalFrames * m_bytesPerFrame;
 

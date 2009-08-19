@@ -136,7 +136,7 @@ protected:
     void generateBuffers();
 
     AudioInstrumentMixer   *m_instrumentMixer;
-    unsigned int            m_blockSize;
+    size_t                  m_blockSize;
     int                     m_bussCount;
 
     std::vector<sample_t *> m_processBuffers;
@@ -290,7 +290,7 @@ protected:
 
     AudioFileReader  *m_fileReader;
     AudioBussMixer   *m_bussMixer;
-    unsigned int      m_blockSize;
+    size_t            m_blockSize;
 
     // The plugin data structures will all be pre-sized and so of
     // fixed size during normal run time; this will allow us to add

@@ -344,11 +344,11 @@ AudioBussMixer::generateBuffers()
     std::cerr << "AudioBussMixer::generateBuffers: have " << m_bussCount << " busses" << std::endl;
 #endif
 
-    int bufferSamples = m_blockSize;
+    size_t bufferSamples = m_blockSize;
 
     if (!m_driver->getLowLatencyMode()) {
         RealTime bufferLength = m_driver->getAudioMixBufferLength();
-        int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+        size_t bufferSamples = (size_t)RealTime::realTime2Frame(bufferLength, m_sampleRate);
         bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
     }
 
@@ -562,7 +562,7 @@ AudioBussMixer::processBlocks()
         processedInstruments[i] = false;
     }
 
-    int minBlocks = 0;
+    size_t minBlocks = 0;
     bool haveMinBlocks = false;
 
     for (int buss = 0; buss < m_bussCount; ++buss) {
@@ -631,7 +631,7 @@ AudioBussMixer::processBlocks()
                 break;
         }
 
-        int blocks = minSpace / m_blockSize;
+        size_t blocks = minSpace / m_blockSize;
         if (!haveMinBlocks || (blocks < minBlocks)) {
             minBlocks = blocks;
             haveMinBlocks = true;
@@ -642,7 +642,7 @@ AudioBussMixer::processBlocks()
             std::cerr << "AudioBussMixer::processBlocks: doing " << blocks << " blocks at block size " << m_blockSize << std::endl;
 #endif
 
-        for (int block = 0; block < blocks; ++block) {
+        for (size_t block = 0; block < blocks; ++block) {
 
             memset(m_processBuffers[0], 0, m_blockSize * sizeof(sample_t));
             memset(m_processBuffers[1], 0, m_blockSize * sizeof(sample_t));
@@ -947,7 +947,7 @@ AudioInstrumentMixer::setPlugin(InstrumentId id, int position, QString identifie
 
         PluginList &list = m_plugins[id];
 
-        if (position < Instrument::PLUGIN_COUNT) {
+        if (position < int(Instrument::PLUGIN_COUNT)) {
             while (position >= (int)list.size()) {
                 list.push_back(0);
             }
@@ -1330,11 +1330,11 @@ AudioInstrumentMixer::generateBuffers()
 
     unsigned int maxChannels = 0;
 
-    int bufferSamples = m_blockSize;
+    size_t bufferSamples = m_blockSize;
 
     if (!m_driver->getLowLatencyMode()) {
         RealTime bufferLength = m_driver->getAudioMixBufferLength();
-        int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+        size_t bufferSamples = (size_t)RealTime::realTime2Frame(bufferLength, m_sampleRate);
         bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
 #ifdef DEBUG_MIXER
 
@@ -1848,11 +1848,11 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
             PlayableAudioFile *file = playing[fileNo];
 
-            size_t offset = 0;
-            size_t blockSize = m_blockSize;
+            int offset = 0;
+            int blockSize = (int)m_blockSize;
 
             if (file->getStartTime() > bufferTime) {
-                offset = RealTime::realTime2Frame
+                offset = (int)RealTime::realTime2Frame
                          (file->getStartTime() - bufferTime, m_sampleRate);
                 if (offset < blockSize)
                     blockSize -= offset;
@@ -2089,7 +2089,7 @@ AudioFileReader::fillBuffers(const RealTime &currentTime)
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
 
     RealTime bufferLength = m_driver->getAudioReadBufferLength();
-    int bufferFrames = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+    int bufferFrames = (int)RealTime::realTime2Frame(bufferLength, m_sampleRate);
 
     int poolSize = queue->getMaxBuffersRequired() * 2 + 4;
     PlayableAudioFile::setRingBufferPoolSizes(poolSize, bufferFrames);
@@ -2247,7 +2247,7 @@ AudioFileWriter::openRecordFile(InstrumentId id,
     MappedAudioFader *fader = m_driver->getMappedStudio()->getAudioFader(id);
 
     RealTime bufferLength = m_driver->getAudioWriteBufferLength();
-    int bufferSamples = RealTime::realTime2Frame(bufferLength, m_sampleRate);
+    size_t bufferSamples = (size_t)RealTime::realTime2Frame(bufferLength, m_sampleRate);
     bufferSamples = ((bufferSamples / 1024) + 1) * 1024;
 
     if (fader) {

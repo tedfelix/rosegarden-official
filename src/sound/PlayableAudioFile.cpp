@@ -389,7 +389,7 @@ PlayableAudioFile::initialise(size_t bufferSize, size_t smallFileSize)
     } else {
         m_fileEnded = false;
         m_currentScanPoint = m_startIndex;
-	m_smallFileScanFrame = RealTime::realTime2Frame
+	m_smallFileScanFrame = (size_t)RealTime::realTime2Frame
 	    (m_currentScanPoint, m_audioFile->getSampleRate());
     }
 
@@ -454,7 +454,7 @@ PlayableAudioFile::scanTo(const RealTime &time)
     if (m_isSmallFile) {
 
 	m_currentScanPoint = time;
-	m_smallFileScanFrame = RealTime::realTime2Frame
+	m_smallFileScanFrame = (size_t)RealTime::realTime2Frame
 	    (time, m_audioFile->getSampleRate());
 #ifdef DEBUG_PLAYABLE_READ
 	std::cerr << "... maps to frame " << m_smallFileScanFrame << std::endl;
@@ -785,7 +785,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 	scanTime = m_startIndex + currentTime - m_startTime;
     }
 
-    //    size_t scanFrames = RealTime::realTime2Frame
+    //    size_t scanFrames = (size_t)RealTime::realTime2Frame
     //	(scanTime,
     //	 m_isSmallFile ? m_targetSampleRate : m_audioFile->getSampleRate());
 
@@ -863,7 +863,7 @@ PlayableAudioFile::updateBuffers()
 	if (block <= RealTime::zeroTime)
 	    nframes = 0;
 	else
-	    nframes = RealTime::realTime2Frame(block, m_targetSampleRate);
+	    nframes = (size_t)RealTime::realTime2Frame(block, m_targetSampleRate);
 	m_fileEnded = true;
     }
 
@@ -940,9 +940,9 @@ PlayableAudioFile::updateBuffers()
 	  if (m_currentScanPoint < m_startIndex + m_fadeInTime) {
                                   
 	  size_t fadeSamples =
-	  RealTime::realTime2Frame(m_fadeInTime, getTargetSampleRate());
+	  (size_t)RealTime::realTime2Frame(m_fadeInTime, getTargetSampleRate());
 	  size_t originSamples =
-	  RealTime::realTime2Frame(m_currentScanPoint - m_startIndex,
+	  (size_t)RealTime::realTime2Frame(m_currentScanPoint - m_startIndex, // is x - y strictly non-negative?
 	  getTargetSampleRate());
                                   
 	  for (size_t i = 0; i < nframes; ++i) {
@@ -960,10 +960,10 @@ PlayableAudioFile::updateBuffers()
 	  m_startIndex + m_duration - m_fadeOutTime) {
                                  		
 	  size_t fadeSamples =
-	  RealTime::realTime2Frame(m_fadeOutTime, getTargetSampleRate());
+	  (size_t)RealTime::realTime2Frame(m_fadeOutTime, getTargetSampleRate());
 	  size_t originSamples = // counting from end
-	  RealTime::realTime2Frame
-	  (m_startIndex + m_duration - m_currentScanPoint,
+	  (size_t)RealTime::realTime2Frame
+	  (m_startIndex + m_duration - m_currentScanPoint, // is x - y strictly non-negative?
 	  getTargetSampleRate());
                                   
 	  for (size_t i = 0; i < nframes; ++i) {

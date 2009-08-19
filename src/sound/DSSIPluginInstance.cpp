@@ -650,7 +650,7 @@ DSSIPluginInstance::connectPorts()
     assert(sizeof(LADSPA_Data) == sizeof(float));
     assert(sizeof(sample_t) == sizeof(float));
 
-    int inbuf = 0, outbuf = 0;
+    size_t inbuf = 0, outbuf = 0;
 
     for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
         m_descriptor->LADSPA_Plugin->connect_port
@@ -923,7 +923,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
 
         int frameOffset = 0;
         if (evTime > blockTime) {
-            frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+            frameOffset = (int)RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
         }
 
 #ifdef DEBUG_DSSI_PROCESS
@@ -937,7 +937,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
         if (frameOffset < 0)
             frameOffset = 0;
 
-        ev->time.tick = frameOffset;
+        ev->time.tick = (unsigned int)frameOffset;
         m_eventBuffer.skip(1);
 
         if (ev->type == SND_SEQ_EVENT_CONTROLLER) {
@@ -1106,7 +1106,7 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 
             int frameOffset = 0;
             if (evTime > blockTime) {
-                frameOffset = RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
+                frameOffset = (int)RealTime::realTime2Frame(evTime - blockTime, m_sampleRate);
             }
 
 #ifdef DEBUG_DSSI_PROCESS
@@ -1119,7 +1119,7 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
             if (frameOffset < 0)
                 frameOffset = 0;
 
-            ev->time.tick = frameOffset;
+            ev->time.tick = (unsigned int)frameOffset;
             instance->m_eventBuffer.skip(1);
 
             if (ev->type == SND_SEQ_EVENT_CONTROLLER) {

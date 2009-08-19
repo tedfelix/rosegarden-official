@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 #ifdef TEST_WIDE_STRING
 	basic_string<wchar_t> widestring(L"This is a test");
 	widestring += L" of wide character strings";
-	for (unsigned int i = 0; i < widestring.length(); ++i) {
+	for (size_t i = 0; i < widestring.length(); ++i) {
 	    if (widestring[i] == L'w' ||
 		widestring[i] == L'c') {
 		widestring[i] = toupper(widestring[i]);
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 	     << (widestring.length() * sizeof(widestring[0]))
 	     << endl;
 	cout << "Characters are: ";
-	for (unsigned int i = 0; i < widestring.length(); ++i) {
+	for (size_t i = 0; i < widestring.length(); ++i) {
 	    cout << widestring[i];
 	    if (i < widestring.length()-1) cout << " ";
 	    else cout << endl;

@@ -193,7 +193,7 @@ std::string
 AudioFileManager::getShortFilename(const std::string &fileName)
 {
     std::string rS = fileName;
-    unsigned int pos = rS.find_last_of("/");
+    size_t pos = rS.find_last_of("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
         rS = rS.substr(pos + 1, rS.length());
@@ -207,7 +207,7 @@ std::string
 AudioFileManager::getDirectory(const std::string &path)
 {
     std::string rS = path;
-    unsigned int pos = rS.find_last_of("/");
+    size_t pos = rS.find_last_of("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
         rS = rS.substr(0, pos + 1);

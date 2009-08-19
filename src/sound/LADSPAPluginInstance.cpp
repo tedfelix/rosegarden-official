@@ -301,7 +301,7 @@ LADSPAPluginInstance::connectPorts()
     assert(sizeof(LADSPA_Data) == sizeof(float));
     assert(sizeof(sample_t) == sizeof(float));
 
-    int inbuf = 0, outbuf = 0;
+    size_t inbuf = 0, outbuf = 0;
 
     for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
             hi != m_instanceHandles.end(); ++hi) {

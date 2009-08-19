@@ -248,13 +248,13 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
         "audacity"
     };
 
-    for (unsigned int i = 0;
+    for (size_t i = 0;
          i < sizeof(candidates)/sizeof(candidates[0]) && result == "";
          i++) {
 
         QString n(candidates[i]);
 
-        for (int j = 0;
+        for (size_t j = 0;
              j < pathList.size() && result == "";
              j++) {
 

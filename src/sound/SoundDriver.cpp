@@ -106,7 +106,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                 continue;
             }
 
-            unsigned int channels = fader->getPropertyList(
+            int channels = fader->getPropertyList(
                                         MappedAudioFader::Channels)[0].toInt();
 
             //#define DEBUG_PLAYING_AUDIO
@@ -116,8 +116,8 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
 #endif
 
             RealTime bufferLength = getAudioReadBufferLength();
-            int bufferFrames = RealTime::realTime2Frame
-                               (bufferLength, getSampleRate());
+            size_t bufferFrames = (size_t)RealTime::realTime2Frame
+                                  (bufferLength, getSampleRate());
 
             PlayableAudioFile *paf = 0;
 
@@ -128,9 +128,9 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
                                             i->getAudioStartMarker(),
                                             i->getDuration(),
                                             bufferFrames,
-                                            getSmallFileSize() * 1024,
+                                            size_t(getSmallFileSize()) * 1024,
                                             channels,
-                                            getSampleRate());
+                                            int(getSampleRate()));
             } catch (...) {
                 continue;
             }

@@ -215,7 +215,7 @@ void
 SoundFile::putBytes(std::ofstream *file,
                     const std::string oS)
 {
-    for (unsigned int i = 0; i < oS.length(); i++)
+    for (size_t i = 0; i < oS.length(); i++)
         *file << (FileByte) oS[i];
 }
 
@@ -231,7 +231,7 @@ std::string
 SoundFile::getShortFilename() const
 {
     std::string rS = m_fileName;
-    unsigned int pos = rS.find_last_of("/");
+    size_t pos = rS.find_last_of("/");
 
     if (pos > 0 && ( pos + 1 ) < rS.length())
         rS = rS.substr(pos + 1, rS.length());
@@ -247,7 +247,7 @@ SoundFile::getIntegerFromLittleEndian(const std::string &s)
 {
     int r = 0;
 
-    for (unsigned int i = 0; i < s.length(); i++) {
+    for (size_t i = 0; i < s.length(); i++) {
         r += (int)(((FileByte)s[i]) << (i * 8));
     }
 

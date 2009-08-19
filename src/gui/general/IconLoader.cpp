@@ -114,8 +114,8 @@ IconLoader::loadPixmap(QString dir, QString name)
     }
     if (pmap.isNull()) return pmap;
 
-    for (int i = 0; i < sizeof(autoInvertExceptions)/
-                        sizeof(autoInvertExceptions[0]); ++i) {
+    for (size_t i = 0; i < sizeof(autoInvertExceptions)/
+                           sizeof(autoInvertExceptions[0]); ++i) {
         if (autoInvertExceptions[i] == name) {
             return pmap;
         }

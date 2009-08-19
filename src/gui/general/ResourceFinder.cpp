@@ -70,7 +70,7 @@ ResourceFinder::getSystemResourcePrefixList()
     if (rosegarden) {
         list << rosegarden;
     } else {
-        for (unsigned int i = 0; i < sizeof(prefixes)/sizeof(prefixes[0]); ++i) {
+        for (size_t i = 0; i < sizeof(prefixes)/sizeof(prefixes[0]); ++i) {
             list << QString("%1/%2").arg(prefixes[i]).arg(appname);
         }
     }
