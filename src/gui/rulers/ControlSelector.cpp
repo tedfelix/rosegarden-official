@@ -35,6 +35,7 @@
 #include "misc/Debug.h"
 
 #include <QCursor>
+#include <QRectF>
 
 namespace Rosegarden
 {
@@ -53,10 +54,30 @@ ControlSelector::ControlSelector(ControlRuler *parent) :
 void
 ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    if (m_overItem) {
-        m_ruler->setCursor(Qt::ClosedHandCursor);
-        m_mouseLastY = e->y;
+    if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+        // No add to selection modifiers so clear the current selection
+        m_ruler->clearSelectedItems();
     }
+
+    if (m_overItem) {
+        // Add any items directly under mouse to the selection
+        for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
+            if ((*it)->isSelected()) {
+                m_ruler->removeFromSelection(*it);
+            } else {
+                m_ruler->addToSelection(*it);
+            }
+        }
+    } else {
+        // Start selection rectangle
+        m_ruler->setSelectionRect(new QRectF(e->x,e->y,0.0,0.0));
+
+        // Clear the added items list because we have yet to add any
+        m_addedItems.clear();
+    }
+    m_mouseLastY = e->y;
+
+    m_ruler->update();
 }
 
 void
@@ -67,8 +88,39 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
         setCursor(e);
     }
 
+    QRectF *pRectF = m_ruler->getSelectionRectangle();
+    if (pRectF) {
+        // Selection drag is in progress
+        // Clear the list of items that this tool has added
+        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
+            (*it)->setSelected(false);
+        }
+        m_addedItems.clear();
+
+        // Update selection rectangle
+        pRectF->setBottomRight(QPointF(e->x,e->y));
+
+        // Find items within the range of the new rectangle
+        ControlItemMap::iterator itmin =
+            m_ruler->findControlItem(std::min(pRectF->left(),
+                pRectF->right()));
+        ControlItemMap::iterator itmax =
+            m_ruler->findControlItem(std::max(pRectF->left(),
+                pRectF->right()));
+
+        // Add them if they're within the rectangle
+        for (ControlItemMap::iterator it = itmin; it != itmax; it++) {
+            if (pRectF->contains(it->second->boundingRect().center())) {
+                m_addedItems.push_back(it->second);
+                it->second->setSelected(true);
+            }
+        }
+
+    }
+
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A property drag action is in progress
+        // A drag action is in progress
+        m_ruler->setCursor(Qt::ClosedHandCursor);
 //        float delta = (e->value-m_mouseLastY);
 //        m_mouseLastY = e->value;
 //        ControlItemList *selected = m_ruler->getSelectedItems();
@@ -76,11 +128,25 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 //            (*it)->setValue((*it)->getValue()+delta);
 //        }
     }
+
+    m_ruler->update();
 }
 
 void
 ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
 {
+    QRectF *pRectF = m_ruler->getSelectionRectangle();
+    if (pRectF) {
+        // Selection drag is now complete
+        delete pRectF;
+        m_ruler->setSelectionRect(0);
+
+        // Add the selected items to the current selection
+        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); it++) {
+            m_ruler->addToSelection(*it);
+        }
+    }
+
     if (m_overItem) {
         // This is the end of a drag event, reset the cursor to the state that it started
         m_ruler->setCursor(Qt::PointingHandCursor);
@@ -88,6 +154,8 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
 
     // May have moved off the item during a drag so use setCursor to correct its state
     setCursor(e);
+
+    m_ruler->update();
 }
 
 void ControlSelector::setCursor(const ControlMouseEvent *e)

@@ -95,7 +95,9 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
 }
 
 ControllerEventsRuler::~ControllerEventsRuler()
-{}
+{
+    if (m_segment) m_segment->removeObserver(this);
+}
 
 bool ControllerEventsRuler::isOnThisRuler(Event *event)
 {
@@ -172,8 +174,8 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     QBrush brush(GUIPalette::getColour(GUIPalette::ControlItem),Qt::SolidPattern);
 
-    QPen highlightPen(GUIPalette::getColour(GUIPalette::SelectedElement),
-            2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+//    QPen highlightPen(GUIPalette::getColour(GUIPalette::SelectedElement),
+//            2, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
     QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
@@ -181,21 +183,32 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     std::vector<ControlItem*> selectedvector;
 
+    painter.setBrush(brush);
+    painter.setPen(pen);
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
         if (!(*it)->isSelected()) {
-            painter.setBrush(brush);
-            painter.setPen(pen);
             painter.drawPolygon(mapItemToWidget(*it));
         } else {
             selectedvector.push_back(*it);
         }
     }
 
+//    painter.setBrush(brush);
+    pen.setColor(GUIPalette::getColour(GUIPalette::SelectedElement));
+    pen.setWidthF(2.0);
+    painter.setPen(pen);
     for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
     {
-        painter.setBrush(brush);
-        painter.setPen(highlightPen);
         painter.drawPolygon(mapItemToWidget(*it));
+    }
+
+    if (m_selectionRect) {
+        pen.setColor(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+        pen.setWidthF(0.5);
+        painter.setPen(pen);
+        brush.setStyle(Qt::NoBrush);
+        painter.setBrush(brush);
+        painter.drawRect(mapItemToWidget(m_selectionRect));
     }
 }
 

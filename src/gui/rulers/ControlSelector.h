@@ -21,7 +21,10 @@
 #include "ControlTool.h"
 //#include <QString>
 //#include "base/Event.h"
+#include "ControlItem.h"
 
+
+class QRectF;
 
 namespace Rosegarden
 {
@@ -62,6 +65,8 @@ protected:
     void setCursor(const ControlMouseEvent *);
     float m_mouseStartY;
     float m_mouseLastY;
+    QRectF *m_selectionRect;
+    ControlItemList m_addedItems;
 };
 
 }

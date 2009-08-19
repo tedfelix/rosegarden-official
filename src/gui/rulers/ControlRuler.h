@@ -99,7 +99,8 @@ public:
     ControlItemList *getSelectedItems() { return &m_selectedItems; }
 
 //    Q3CanvasRectangle* getSelectionRectangle() { return m_selectionRect; }
-    QRect* getSelectionRectangle() { return m_selectionRect; }
+    QRectF* getSelectionRectangle() { return m_selectionRect; }
+    void setSelectionRect(QRectF *rect) { m_selectionRect = rect; }
 
     virtual void setSegment(Segment *);
     virtual void setViewSegment(MatrixViewSegment *);
@@ -118,6 +119,10 @@ public:
 
     void clearSelectedItems();
     void addToSelection(ControlItem*);
+    void removeFromSelection(ControlItem*);
+
+    virtual ControlItemMap::iterator findControlItem(float x);
+
     /// EventSelectionObserver
 //    virtual void eventSelected(EventSelection *,Event *);
 //    virtual void eventDeselected(EventSelection *,Event *);
@@ -182,6 +187,7 @@ protected:
     int xMapToWidget(double x) {return (x-m_pannedRect.left())*width()/m_pannedRect.width();};
     int mapXToWidget(float);
     int mapYToWidget(float);
+    QRect mapItemToWidget(QRectF*);
     QPolygon mapItemToWidget(QPolygonF*);
     QPointF mapWidgetToItem(QPoint*);
 
@@ -234,7 +240,7 @@ protected:
     bool m_selecting;
     ControlSelector* m_selector;
 //    Q3CanvasRectangle* m_selectionRect;
-    QRect* m_selectionRect;
+    QRectF* m_selectionRect;
 
     QString m_menuName;
     QMenu* 	m_menu;

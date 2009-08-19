@@ -61,7 +61,10 @@ PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
             if (item->isSelected()) {
 
             } else {
-                m_ruler->clearSelectedItems();
+                if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+                    m_ruler->clearSelectedItems();
+                }
+
                 m_ruler->addToSelection(item);
             }
         }

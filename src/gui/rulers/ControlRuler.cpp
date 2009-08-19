@@ -86,7 +86,7 @@ ControlRuler::ControlRuler(MatrixViewSegment *viewsegment,
         m_selecting(false),
 //        m_selector(new ControlSelector(this)),
 //        m_selectionRect(new Q3CanvasRectangle(canvas())),
-        m_selectionRect(new QRect()),
+        m_selectionRect(0),
         m_menu(0)
 {
 //    setViewSegment(viewsegment);
@@ -130,6 +130,12 @@ void ControlRuler::setViewSegment(MatrixViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
+ControlItemMap::iterator ControlRuler::findControlItem(float x)
+{
+    ControlItemMap::iterator it;
+    it = m_controlItemMap.upper_bound(x);
+}
+
 ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 {
     double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
@@ -140,6 +146,11 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
     ret = m_controlItemMap.equal_range(xstart);
     for (it = ret.first; it != ret.second; it++) {
         if (it->second->getEvent() == event) break;
+    }
+
+    ///@TODO equal_range (above) is not behaving as expected - sort it out
+    if (it != m_controlItemMap.end() && it->second->getEvent() != event) {
+        it = m_controlItemMap.end();
     }
 
     return it;
@@ -182,7 +193,11 @@ void ControlRuler::removeControlItem(const Event *event)
 {
     // Remove the ControlItem matching the received event if one exists
     ControlItemMap::iterator it = findControlItem(event);
-    if (it != m_controlItemMap.end()) removeControlItem(it);
+
+    if (it != m_controlItemMap.end()) {
+        RG_DEBUG << "removeControlItem at x = " << it->first;
+        removeControlItem(it);
+    }
 }
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
@@ -262,6 +277,7 @@ void ControlRuler::updateSegment()
                                     start,
                                     end));
 
+    ///@TODO NormalizeRests needs attention - changes segment end time when it shouldn't
     macro->addCommand(new NormalizeRestsCommand(*m_segment,
                                                 start,
                                                 end));
@@ -351,6 +367,16 @@ int ControlRuler::mapXToWidget(float x)
 int ControlRuler::mapYToWidget(float y)
 {
     return (0.5+(-y+1.0f) / m_yScale);
+}
+
+QRect ControlRuler::mapItemToWidget(QRectF *rect)
+{
+    QRect newrect;
+
+    newrect.setTopLeft(QPoint(mapXToWidget(rect->left()),mapYToWidget(rect->top())));
+    newrect.setBottomRight(QPoint(mapXToWidget(rect->right()),mapYToWidget(rect->bottom())));
+
+    return newrect;
 }
 
 QPolygon ControlRuler::mapItemToWidget(QPolygonF *poly)
@@ -514,6 +540,7 @@ ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
     }
 
     controlMouseEvent.buttons = e->buttons();
+    controlMouseEvent.modifiers = e->modifiers();
 
     return controlMouseEvent;
 }
@@ -810,6 +837,13 @@ void ControlRuler::addToSelection(ControlItem *item)
     m_selectedItems.push_back(item);
     item->setSelected(true);
     m_eventSelection->addEvent(item->getEvent());
+}
+
+void ControlRuler::removeFromSelection(ControlItem*item)
+{
+    m_selectedItems.remove(item);
+    item->setSelected(false);
+    m_eventSelection->removeEvent(item->getEvent());
 }
 
 void ControlRuler::clear()

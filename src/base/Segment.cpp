@@ -26,13 +26,13 @@
 #include <cstdio>
 #include <typeinfo>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::cerr;
 using std::endl;
 using std::string;
 
-//#define DEBUG_NORMALIZE_RESTS 1    
+//#define DEBUG_NORMALIZE_RESTS 1
 
 static int _runtimeSegmentId = 0;
 
@@ -216,7 +216,7 @@ Segment::setStartTime(timeT t)
     // quantizer (which is why we're not allowed)
 
     // still, this is rather unsatisfactory
-    
+
     FastVector<Event *> events;
 
     for (iterator i = begin(); i != end(); ++i) {
@@ -305,7 +305,7 @@ Segment::setEndTime(timeT t)
     }
 }
 
-Segment::iterator 
+Segment::iterator
 Segment::getEndMarker()
 {
     if (m_endMarkerTime) {
@@ -317,7 +317,7 @@ Segment::getEndMarker()
 
 bool
 Segment::isBeforeEndMarker(const_iterator i) const
-{ 
+{
     if (i == end()) return false;
 
     timeT absTime = (*i)->getAbsoluteTime();
@@ -468,14 +468,14 @@ Segment::eraseSingle(Event* e)
 
         erase(elPos);
         return true;
-            
+
     } else return false;
-    
+
 }
 
 
 Segment::iterator
-Segment::findSingle(Event* e) 
+Segment::findSingle(Event* e)
 {
     iterator res = end();
 
@@ -670,7 +670,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     iterator scooter = ia;
     while (scooter-- != begin()) {
 //	if ((*scooter)->isa(Note::EventRestType)) { //!!! experimental
-	if ((*scooter)->getDuration() > 0) { 
+	if ((*scooter)->getDuration() > 0) {
 	    if ((*scooter)->getNotationAbsoluteTime() +
 		(*scooter)->getNotationDuration() !=
 		startTime) {
@@ -716,7 +716,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     timeT lastNoteStarts = startTime;
     timeT lastNoteEnds = startTime;
-    
+
     // Re-find this, as it might have been erased
     ia = findNearestTime(startTime);
 
@@ -822,7 +822,7 @@ void Segment::getTimeSlice(timeT absoluteTime, iterator &start, iterator &end)
     // No, this won't work -- we need to include things that don't
     // compare equal because they have different suborderings, as long
     // as they have the same times
-  
+
 //    std::pair<iterator, iterator> res = equal_range(&dummy);
 
 //    start = res.first;
@@ -899,7 +899,7 @@ Segment::setDelay(timeT delay)
 {
     m_delay = delay;
     if (m_composition) {
-        // don't updateRefreshStatuses() - affects playback only 
+        // don't updateRefreshStatuses() - affects playback only
         m_composition->notifySegmentEventsTimingChanged(this, delay, RealTime::zeroTime);
     }
 }
@@ -909,7 +909,7 @@ Segment::setRealTimeDelay(RealTime delay)
 {
     m_realTimeDelay = delay;
     if (m_composition) {
-        // don't updateRefreshStatuses() - affects playback only 
+        // don't updateRefreshStatuses() - affects playback only
         m_composition->notifySegmentEventsTimingChanged(this, 0, delay);
     }
 }
@@ -919,7 +919,7 @@ Segment::setTranspose(int transpose)
 {
     m_transpose = transpose;
     if (m_composition) {
-        // don't updateRefreshStatuses() - affects playback only 
+        // don't updateRefreshStatuses() - affects playback only
         m_composition->notifySegmentTransposeChanged(this, transpose);
     }
 }
@@ -983,7 +983,7 @@ Segment::setFadeOutTime(const RealTime &time)
 void
 Segment::setLabel(const std::string &label)
 {
-    m_label = label; 
+    m_label = label;
     if (m_composition) m_composition->updateRefreshStatuses();
     notifyAppearanceChange();
 }
@@ -1182,12 +1182,12 @@ Segment::notifyAdd(Event *e) const
     }
 }
 
- 
+
 void
 Segment::notifyRemove(Event *e) const
 {
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
-	ClefKeyList::iterator i; 
+	ClefKeyList::iterator i;
 	for (i = m_clefKeyList->find(e); i != m_clefKeyList->end(); ++i) {
             // fix for bug#1485643 (crash erasing a duplicated key signature)
             if ((*i) == e) {
@@ -1196,13 +1196,13 @@ Segment::notifyRemove(Event *e) const
             }
 	}
     }
-    
+
     for (ObserverSet::const_iterator i = m_observers.begin();
 	 i != m_observers.end(); ++i) {
 	(*i)->eventRemoved(this, e);
     }
 }
- 
+
 
 void
 Segment::notifyAppearanceChange() const
@@ -1224,7 +1224,7 @@ Segment::notifyStartChanged(timeT newTime)
 	m_composition->notifySegmentStartChanged(this, newTime);
     }
 }
-    
+
 
 void
 Segment::notifyEndMarkerChange(bool shorten)
@@ -1270,7 +1270,7 @@ Segment::addEventRuler(const std::string &type, int controllerValue, bool active
     m_eventRulerList.push_back(new EventRuler(type, controllerValue, active));
 }
 
-bool 
+bool
 Segment::deleteEventRuler(const std::string &type, int controllerValue)
 {
     EventRulerListIterator it;
@@ -1304,7 +1304,7 @@ Segment::getEventRuler(const std::string &type, int controllerValue)
 SegmentHelper::~SegmentHelper() { }
 
 
-void 
+void
 SegmentRefreshStatus::push(timeT from, timeT to)
 {
     if (!needsRefresh()) { // don't do anything subtle - just erase the old data
@@ -1326,5 +1326,5 @@ SegmentRefreshStatus::push(timeT from, timeT to)
 
 
 
- 
+
 }
