@@ -34,7 +34,7 @@ Panned::Panned() :
 }
 
 void
-Panned::resizeEvent(QResizeEvent *)
+Panned::resizeEvent(QResizeEvent *ev)
 {
     QPointF near = mapToScene(0, 0);
     QPointF far = mapToScene(width(), height());
@@ -47,6 +47,8 @@ Panned::resizeEvent(QResizeEvent *)
         m_pannedRect = pr;
         emit pannedRectChanged(pr);
     }
+
+    QGraphicsView::resizeEvent(ev);
 }
 
 void
