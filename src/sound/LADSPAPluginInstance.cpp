@@ -173,8 +173,8 @@ LADSPAPluginInstance::getLatency()
 {
     if (m_latencyPort) {
         if (!m_run) {
-            for (int i = 0; i < getAudioInputCount(); ++i) {
-                for (int j = 0; j < m_blockSize; ++j) {
+            for (size_t i = 0; i < getAudioInputCount(); ++i) {
+                for (size_t j = 0; j < m_blockSize; ++j) {
                     m_inputBuffers[i][j] = 0.f;
                 }
             }
@@ -274,7 +274,7 @@ LADSPAPluginInstance::instantiate(unsigned long sampleRate)
         return ;
     }
 
-    for (int i = 0; i < m_instanceCount; ++i) {
+    for (size_t i = 0; i < m_instanceCount; ++i) {
         m_instanceHandles.push_back
         (m_descriptor->instantiate(m_descriptor, sampleRate));
     }

@@ -254,7 +254,7 @@ AudioConfigurationPage::getBestAvailableAudioEditor()
 
         QString n(candidates[i]);
 
-        for (size_t j = 0;
+        for (int j = 0;
              j < pathList.size() && result == "";
              j++) {
 

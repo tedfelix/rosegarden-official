@@ -194,7 +194,7 @@ void
 IdentifyTextCodecDialog::slotCodecSelected(int i)
 {
 //    std::cerr << "codec index = " << i << std::endl;
-    if (i < 0 || i >= m_codecs.size()) return;
+    if (i < 0 || i >= (int)m_codecs.size()) return;
     std::string name = m_codecs[i];
 //    std::cerr << "codecs: ";
 //    for (int j = 0; j < m_codecs.size(); ++j) std::cerr << m_codecs[j] << " ";

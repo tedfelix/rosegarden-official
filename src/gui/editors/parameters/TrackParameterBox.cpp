@@ -92,7 +92,7 @@ TrackParameterBox::TrackParameterBox(RosegardenDocument *doc,
                                  m_doc(doc),
                                  m_highestPlayable(127),
                                  m_lowestPlayable(0),
-                                 m_selectedTrackId(NO_TRACK)
+                                 m_selectedTrackId((int)NO_TRACK)
 {
     setObjectName("Track Parameter Box");
 
@@ -561,10 +561,10 @@ TrackParameterBox::populateRecordingDeviceList()
 {
     RG_DEBUG << "TrackParameterBox::populateRecordingDeviceList()\n";
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -692,10 +692,10 @@ TrackParameterBox::slotUpdateControls(int /*dummy*/)
     slotPlaybackDeviceChanged( -1);
     slotInstrumentChanged( -1);
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -720,7 +720,7 @@ void
 TrackParameterBox::trackDeleted(const Composition *comp, TrackId id)
 {
     std::cerr << "TrackParameterBox::trackDeleted(" << id << "), selected is " << m_selectedTrackId << std::endl;
-    if (id == m_selectedTrackId) slotSelectedTrackChanged();
+    if ((int)id == m_selectedTrackId) slotSelectedTrackChanged();
 }
 
 void
@@ -729,7 +729,7 @@ TrackParameterBox::slotSelectedTrackChanged()
     RG_DEBUG << "TrackParameterBox::slotSelectedTrackChanged()\n";
     Composition &comp = m_doc->getComposition();
     TrackId newTrack = comp.getSelectedTrack();
-    if ( newTrack != m_selectedTrackId ) {
+    if ( (int)newTrack != m_selectedTrackId ) {
         m_presetLbl->setEnabled(true);
         m_selectedTrackId = newTrack;
         slotSelectedTrackNameChanged();
@@ -741,10 +741,10 @@ void
 TrackParameterBox::slotSelectedTrackNameChanged()
 {
     RG_DEBUG << "TrackParameterBox::sotSelectedTrackNameChanged()\n";
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -764,7 +764,7 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
     RG_DEBUG << "TrackParameterBox::slotPlaybackDeviceChanged(" << index << ")\n";
     DeviceId devId;
     if (index == -1) {
-        if (m_selectedTrackId == NO_TRACK) return ;
+        if (m_selectedTrackId == (int)NO_TRACK) return ;
         Composition &comp = m_doc->getComposition();
         Track *trk = comp.getTrackById(m_selectedTrackId);
         if (!trk)
@@ -842,10 +842,10 @@ void
 TrackParameterBox::slotRecordingDeviceChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotRecordingDeviceChanged(" << index << ")" << endl;
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -864,10 +864,10 @@ void
 TrackParameterBox::slotRecordingChannelChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotRecordingChannelChanged(" << index << ")" << endl;
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -900,10 +900,10 @@ void
 TrackParameterBox::slotClefChanged(int clef)
 {
     RG_DEBUG << "TrackParameterBox::slotClefChanged(" << clef << ")" << endl;
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
     Track *trk = comp.getTrackById(m_selectedTrackId);
@@ -915,10 +915,10 @@ void
 TrackParameterBox::slotTransposeChanged(int transpose)
 {
     RG_DEBUG << "TrackParameterBox::slotTransposeChanged(" << transpose << ")" << endl;
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
     Track *trk = comp.getTrackById(m_selectedTrackId);
@@ -980,10 +980,10 @@ TrackParameterBox::slotColorChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::slotColorChanged(" << index << ")" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
     Track *trk = comp.getTrackById(m_selectedTrackId);
@@ -1024,10 +1024,10 @@ TrackParameterBox::slotHighestPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotHighestPressed()" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -1046,10 +1046,10 @@ TrackParameterBox::slotLowestPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotLowestPressed()" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -1068,10 +1068,10 @@ TrackParameterBox::slotPresetPressed()
 {
     RG_DEBUG << "TrackParameterBox::slotPresetPressed()" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -1124,10 +1124,10 @@ TrackParameterBox::slotStaffSizeChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffSizeChanged()" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 
@@ -1142,10 +1142,10 @@ TrackParameterBox::slotStaffBracketChanged(int index)
 {
     RG_DEBUG << "TrackParameterBox::sotStaffBracketChanged()" << endl;
 
-    if (m_selectedTrackId == NO_TRACK) return;
+    if (m_selectedTrackId == (int)NO_TRACK) return;
     Composition &comp = m_doc->getComposition();
     if (!comp.haveTrack(m_selectedTrackId)) {
-        m_selectedTrackId = NO_TRACK;
+        m_selectedTrackId = (int)NO_TRACK;
         return;
     }
 

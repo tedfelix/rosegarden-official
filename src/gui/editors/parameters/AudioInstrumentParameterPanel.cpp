@@ -259,7 +259,7 @@ AudioInstrumentParameterPanel::setButtonColour(
 
     PluginPushButton *button = 0;
 
-    if (pluginIndex == Instrument::SYNTH_PLUGIN_POSITION) {
+    if (pluginIndex == int(Instrument::SYNTH_PLUGIN_POSITION)) {
         button = m_audioFader->m_synthButton;
     } else {
         button = m_audioFader->m_plugins[pluginIndex];

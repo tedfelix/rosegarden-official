@@ -576,7 +576,7 @@ AudioTimeStretcher::isTransient()
 //        count > m_prevTransientScore * 1.2) {
     if (count > m_prevTransientScore &&
         count > m_transientThreshold &&
-        count - m_prevTransientScore > m_wlen / 20) {
+        int(count) - m_prevTransientScore > int(m_wlen) / 20) {
         isTransient = true;
 
 #ifdef DEBUG_AUDIO_TIME_STRETCHER

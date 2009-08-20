@@ -225,7 +225,7 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 
     StaffLayout *s = 0;
 
-    if (m_currentStaff < m_staffs.size()) {
+    if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
 
@@ -287,7 +287,7 @@ NotationScene::getCurrentSegment()
 {
     NotationStaff *s = 0;
 
-    if (m_currentStaff < m_staffs.size()) {
+    if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
 
@@ -341,7 +341,7 @@ NotationScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     if (nme.staff) {
 
         if (nme.buttons != Qt::NoButton) {
-            for (int i = 0; i < m_staffs.size(); ++i) {
+            for (size_t i = 0; i < m_staffs.size(); ++i) {
                 if (nme.staff == m_staffs[i]) { m_currentStaff = i; break; }
             }
         }
@@ -618,7 +618,7 @@ NotationScene::snapTimeToStaffPosition(timeT t) const
 {
     t = snapTimeToNoteBoundary(t);
     NotationStaff *s = 0;
-    if (m_currentStaff < m_staffs.size()) {
+    if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
     if (!s || !m_hlayout) return QLineF();
@@ -638,7 +638,7 @@ timeT
 NotationScene::snapTimeToNoteBoundary(timeT t) const
 {
     NotationStaff *s = 0;
-    if (m_currentStaff < m_staffs.size()) {
+    if (m_currentStaff < (int)m_staffs.size()) {
         s = m_staffs[m_currentStaff];
     }
     if (!s) return t;
@@ -1210,7 +1210,7 @@ NotationScene::setSelection(EventSelection *s,
     }
 
     if (newStaff) {
-        for (int i = 0; i < m_staffs.size(); ++i) {
+        for (int i = 0; i < (int)m_staffs.size(); ++i) {
             if (newStaff == m_staffs[i]) { m_currentStaff = i; break; }
         }
         std::cerr << "setSelection: set current staff to " << m_currentStaff << std::endl;

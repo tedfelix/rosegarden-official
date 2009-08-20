@@ -204,7 +204,7 @@ ControlBlock::getInstrumentForEvent(unsigned int dev, unsigned int chan)
             if (((m_trackInfo[i].deviceFilter == Device::ALL_DEVICES) ||
 		 (m_trackInfo[i].deviceFilter == dev)) &&
 		((m_trackInfo[i].channelFilter == -1) ||
-		 (m_trackInfo[i].channelFilter == chan)))
+		 (m_trackInfo[i].channelFilter == int(chan))))
                 return m_trackInfo[i].instrumentId;
         }
     }

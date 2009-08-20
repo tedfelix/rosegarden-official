@@ -225,7 +225,7 @@ WAVAudioFile::decode(const unsigned char *ubuf,
 
     // Now deal with any excess target channels
 
-    for (int ch = sourceChannels; ch < targetChannels; ++ch) {
+    for (size_t ch = sourceChannels; ch < targetChannels; ++ch) {
         if (ch == 1 && targetChannels == 2) {
             // copy mono to stereo
             if (!adding) {

@@ -166,7 +166,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // Sort segments by position on the track
     SortedSegments segments;
     std::vector<NotationStaff *> *staffs = m_scene->getStaffs();
-    for (int i=0; i<staffs->size(); i++) {
+    for (size_t i = 0; i < staffs->size(); i++) {
 
         NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
@@ -438,7 +438,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     int transpose = 0, transpose0, transpose1 = 0;
     unsigned int colourIndex = 0, colourIndex0;
 
-    int staff;
+    size_t staff;
 
     Composition *comp = m_headersGroup->getComposition();
     Track *track = comp->getTrackById(m_track);
@@ -447,7 +447,7 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
 
     int status = 0;
     bool current = false;
-    for (int i=0; i<staffs->size(); i++) {
+    for (size_t i = 0; i < staffs->size(); i++) {
         NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
         TrackId trackId = segment.getTrack();

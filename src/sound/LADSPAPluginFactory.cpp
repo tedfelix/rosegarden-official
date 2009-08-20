@@ -719,8 +719,8 @@ LADSPAPluginFactory::discoverPlugins(QString soName)
 
                 if (def_uri && defs) {
 
-                    for (int j = 0; j < defs->count; j++) {
-                        if (defs->items[j].pid == controlPortNumber) {
+                    for (unsigned int j = 0; j < defs->count; j++) {
+                        if (defs->items[j].pid == (unsigned long)controlPortNumber) {
                             //			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << descriptor->PortNames[i] << std::endl;
                             m_portDefaults[descriptor->UniqueID][i] =
                                 defs->items[j].value;
@@ -800,7 +800,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
     lrdf_uris *uris = lrdf_get_instances(ba.data());
 
     if (uris != NULL) {
-        for (int i = 0; i < uris->count; ++i) {
+        for (unsigned int i = 0; i < uris->count; ++i) {
             m_taxonomy[lrdf_get_uid(uris->items[i])] = base;
         }
         lrdf_free_uris(uris);
@@ -809,7 +809,7 @@ LADSPAPluginFactory::generateTaxonomy(QString uri, QString base)
     uris = lrdf_get_subclasses(ba.data());
 
     if (uris != NULL) {
-        for (int i = 0; i < uris->count; ++i) {
+        for (unsigned int i = 0; i < uris->count; ++i) {
             char *label = lrdf_get_label(uris->items[i]);
             generateTaxonomy(uris->items[i],
                              base + QString(base.length() > 0 ? " > " : "")

@@ -349,8 +349,8 @@ DSSIPluginFactory::discoverPlugins(QString soName)
 
                 if (def_uri && defs) {
 
-                    for (int j = 0; j < defs->count; j++) {
-                        if (defs->items[j].pid == controlPortNumber) {
+                    for (unsigned int j = 0; j < defs->count; j++) {
+                        if (defs->items[j].pid == (unsigned long)controlPortNumber) {
                             //			    std::cerr << "Default for this port (" << defs->items[j].pid << ", " << defs->items[j].label << ") is " << defs->items[j].value << "; applying this to port number " << i << " with name " << ladspaDescriptor->PortNames[i] << std::endl;
                             m_portDefaults[ladspaDescriptor->UniqueID][i] =
                                 defs->items[j].value;

@@ -222,7 +222,7 @@ SoundDriver::cancelAudioFile(MappedEvent *mE)
             // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
             //        and mE->getAudioID() of type int.
             if (file->getInstrument() == mE->getInstrument() &&
-                    int(file->getAudioFile()->getId() == mE->getAudioID())) {
+                    int(file->getAudioFile()->getId()) == mE->getAudioID()) {
                 file->cancel();
             }
         } else {

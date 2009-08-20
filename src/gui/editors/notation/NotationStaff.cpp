@@ -300,7 +300,7 @@ NotationStaff::getClefAndKeyAtSceneCoords(double cx, int cy,
                                            ::Rosegarden::Key &key) const
 {
     StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(cx, cy);
-    int i;
+    size_t i;
 
     for (i = 0; i < m_clefChanges.size(); ++i) {
         if (m_clefChanges[i].first > layoutCoords.first)
@@ -1894,7 +1894,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
             // Is this clef already in m_clefChanges list ?
             int xClef = int((*it)->getLayoutX());
             bool found = false;
-            for (int i = 0; i < m_clefChanges.size(); ++i) {
+            for (size_t i = 0; i < m_clefChanges.size(); ++i) {
                 if (    (m_clefChanges[i].first == xClef)
                     && (m_clefChanges[i].second == clef)) {
                     found = true;
@@ -1914,7 +1914,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
             // Is this key already in m_keyChanges list ?
             int xKey = int((*it)->getLayoutX());
             bool found = false;
-            for (int i = 0; i < m_keyChanges.size(); ++i) {
+            for (size_t i = 0; i < m_keyChanges.size(); ++i) {
                 if (    (m_keyChanges[i].first == xKey)
                     && (m_keyChanges[i].second == key)) {
                     found = true;

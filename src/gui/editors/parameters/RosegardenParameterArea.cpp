@@ -230,7 +230,7 @@ void RosegardenParameterArea::moveWidget(QWidget *old_container,
     // configuration.
 
     if (new_container == m_classic) {
-        int index = 0;
+        size_t index = 0;
         while (index < m_parameterBoxes.size()) {
             if (box == m_parameterBoxes[index])
                 break;

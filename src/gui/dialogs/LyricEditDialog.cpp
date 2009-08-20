@@ -208,7 +208,7 @@ LyricEditDialog::unparse()
 
     m_skeleton = fragment;
     m_texts.clear();
-    for (size_t v = 0; v < m_verseCount; ++v) {
+    for (int v = 0; v < m_verseCount; ++v) {
         m_texts.push_back(fragment);
         haveLyric[v] = false;
     }
@@ -251,13 +251,13 @@ LyricEditDialog::unparse()
             fragment += QString("\n[%1] ").arg(myBarNo + 1);
 
             m_skeleton += fragment;
-            for (size_t v = 0; v < m_verseCount; ++v) m_texts[v] += fragment;
+            for (int v = 0; v < m_verseCount; ++v) m_texts[v] += fragment;
         }
 
         if (isNote) {
             if ((myTime > lastTime) || firstNote) {
                 m_skeleton += " .";
-                for (size_t v = 0; v < m_verseCount; ++v) {
+                for (int v = 0; v < m_verseCount; ++v) {
                     if (!haveLyric[v]) m_texts[v] += " .";
                     haveLyric[v] = false;
                 }

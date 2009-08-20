@@ -584,11 +584,11 @@ SegmentParameterBox::populateBoxFromSegments()
         // Highest/Lowest playable
         //
         if (it == m_segments.begin()) {
-            myHigh = (*it)->getHighestPlayable();
-            myLow = (*it)->getLowestPlayable();
+            myHigh = (unsigned int)(*it)->getHighestPlayable();
+            myLow = (unsigned int)(*it)->getLowestPlayable();
         } else {
-            if (myHigh != (*it)->getHighestPlayable() ||
-                myLow != (*it)->getLowestPlayable()) {
+            if (myHigh != (unsigned int)(*it)->getHighestPlayable() ||
+                myLow != (unsigned int)(*it)->getLowestPlayable()) {
                 highlow = All;
             }
         }
@@ -854,7 +854,7 @@ SegmentParameterBox::slotColourSelected(int value)
 
         ColourTable::ColourList::const_iterator pos;
         for (pos = m_colourList.begin(); pos != m_colourList.end(); ++pos) {
-            if (pos->second == value) {
+            if (int(pos->second) == value) {
                 temp = pos->first;
                 break;
             }

@@ -919,7 +919,7 @@ PlayableAudioFile::updateBuffers()
 
     } else {
 
-	while (m_targetChannels > m_workBuffers.size()) {
+	while (m_targetChannels > (int)m_workBuffers.size()) {
 	    m_workBuffers.push_back(new sample_t[m_workBufferSize]);
 	}
     }

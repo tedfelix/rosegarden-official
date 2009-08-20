@@ -814,7 +814,7 @@ PeakFile::getPreview(const RealTime &startTime,
                     // Get peak value from the cached string if
                     // the value is valid.
                     //
-                    if (charNum + charLength <= m_peakCache.length()) {
+                    if (charNum + charLength <= (int)m_peakCache.length()) {
                         peakData = m_peakCache.substr(charNum, charLength);
 #ifdef DEBUG_PEAKFILE
 

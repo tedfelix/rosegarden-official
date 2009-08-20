@@ -5936,7 +5936,7 @@ QVector<QString>
 RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &recordInstruments)
 {
     QVector<QString> qv;
-    for (unsigned int i = 0; i < recordInstruments.size(); ++i) {
+    for (int i = 0; i < recordInstruments.size(); ++i) {
         AudioFile *aF = 0;
         try {
             aF = m_doc->getAudioFileManager().createRecordingAudioFile();

@@ -2345,7 +2345,9 @@ RosegardenDocument::syncDevices()
 
     // Start up the sequencer
     //
+/*
     int timeout = 60;
+*/
 
     if (!isSequencerRunning()) return;
 

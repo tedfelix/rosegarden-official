@@ -181,7 +181,7 @@ FingeringBox::getFretNumber(const QPoint& pos)
 {
     unsigned int fretNum = 0;
 
-    if(true || pos.y() > m_noteSymbols.getTopBorder(maximumHeight())) {
+    if(true || pos.y() > int(m_noteSymbols.getTopBorder(maximumHeight()))) {
         // If fret position is below the top line of the guitar chord image.
         PositionPair result = m_noteSymbols.getFretNumber(maximumWidth(),
                                                           pos.y(),

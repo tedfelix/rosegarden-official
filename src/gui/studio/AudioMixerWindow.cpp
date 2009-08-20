@@ -1351,7 +1351,7 @@ AudioMixerWindow::slotControllerDeviceEventReceived(MappedEvent *e,
     MidiByte controller = e->getData1();
     MidiByte value = e->getData2();
 
-    int count = 0;
+    unsigned int count = 0;
     for (FaderMap::iterator i = m_faders.begin(); i != m_faders.end(); ++i) {
 
         if (count < channel) {

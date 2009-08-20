@@ -510,7 +510,7 @@ void CompositionView::viewportPaintEvent(QPaintEvent* e)
 
     QVector<QRect> rects = e->region().rects();
 
-    for (size_t i = 0; i < rects.size(); ++i) {
+    for (int i = 0; i < rects.size(); ++i) {
         viewportPaintRect(rects[i]);
     }
 }
@@ -1041,7 +1041,7 @@ void CompositionView::drawCompRect(const CompositionRect& r, QPainter *p, const 
         p->setPen(CompositionColourCache::getInstance()->RepeatSegmentBorder);
         int penWidth = int(std::max((unsigned int)r.getPen().width(), 1u));
 
-        for (size_t i = 0; i < repeatMarks.size(); ++i) {
+        for (int i = 0; i < repeatMarks.size(); ++i) {
             int pos = repeatMarks[i];
             if (pos > clipRect.right())
                 break;

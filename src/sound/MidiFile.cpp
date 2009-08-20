@@ -807,7 +807,7 @@ MidiFile::convertToRosegarden(Composition &composition, ConversionType type)
     divisor /= g;
 
     timeT maxRawTime = LONG_MAX;
-    if (multiplier > divisor)
+    if ((long)multiplier > (long)divisor)
         maxRawTime = (maxRawTime / multiplier) * divisor;
 
     bool haveTimeSignatures = false;

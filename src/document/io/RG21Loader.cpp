@@ -226,7 +226,7 @@ bool RG21Loader::parseText()
         return false;
 
     std::string s;
-    for (unsigned int i = 1; i < m_tokens.count(); ++i) {
+    for (int i = 1; i < m_tokens.count(); ++i) {
         if (i > 1)
             s += " ";
         s += qstrtostr(m_tokens[i]);

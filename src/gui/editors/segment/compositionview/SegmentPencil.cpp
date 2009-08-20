@@ -109,7 +109,7 @@ void SegmentPencil::handleMouseButtonPress(QMouseEvent *e)
 
     // Don't do anything if the user clicked beyond the track buttons
     //
-    if (trackPosition >= m_doc->getComposition().getNbTracks())
+    if (trackPosition >= (int)m_doc->getComposition().getNbTracks())
         return ;
 
     Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
@@ -269,7 +269,7 @@ void SegmentPencil::setContextHelpFor(QPoint p)
 {
     int trackPosition = m_canvas->grid().getYBin(p.y());
 
-    if (trackPosition < m_doc->getComposition().getNbTracks()) {
+    if (trackPosition < (int)m_doc->getComposition().getNbTracks()) {
         Track *t = m_doc->getComposition().getTrackByPosition(trackPosition);
         if (t) {
             InstrumentId id = t->getInstrument();

@@ -973,7 +973,7 @@ AudioPluginDialog::slotPaste()
         for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
              i != m_pluginWidgets.end(); ++i) {
 
-            if (count < clipboard->m_controlValues.size()) {
+            if (count < (int)clipboard->m_controlValues.size()) {
                 (*i)->setValue(clipboard->m_controlValues[count], true);
             }
             ++count;

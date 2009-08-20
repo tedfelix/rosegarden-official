@@ -170,7 +170,7 @@ Segment *
 MatrixScene::getCurrentSegment()
 {
     if (m_segments.empty()) return 0;
-    if (m_currentSegmentIndex >= m_segments.size()) {
+    if (m_currentSegmentIndex >= int(m_segments.size())) {
         m_currentSegmentIndex = int(m_segments.size()) - 1;
     }
     return m_segments[m_currentSegmentIndex];
@@ -241,7 +241,7 @@ MatrixScene::recreateLines()
     while (i < 127) {
         int y = (i + 1) * (m_resolution + 1);
         QGraphicsLineItem *line;
-        if (i < m_horizontals.size()) {
+        if (i < (int)m_horizontals.size()) {
             line = m_horizontals[i];
         } else {
             line = new QGraphicsLineItem;
@@ -255,7 +255,7 @@ MatrixScene::recreateLines()
         line->show();
         ++i;
     }
-    while (i < m_horizontals.size()) {
+    while (i < (int)m_horizontals.size()) {
         m_horizontals[i]->hide();
         ++i;
     }
@@ -298,7 +298,7 @@ MatrixScene::recreateLines()
 
             QGraphicsLineItem *line;
 
-            if (i < m_verticals.size()) {
+            if (i < (int)m_verticals.size()) {
                 line = m_verticals[i];
             } else {
                 line = new QGraphicsLineItem;
@@ -322,7 +322,7 @@ MatrixScene::recreateLines()
             if (bar == lastbar) break; // only the bar line, no grid lines here
         }
     }
-    while (i < m_verticals.size()) {
+    while (i < (int)m_verticals.size()) {
         m_verticals[i]->hide();
         ++i;
     }
@@ -375,7 +375,7 @@ MatrixScene::recreatePitchHighlights()
 
                 QGraphicsRectItem *rect;
 
-                if (i < m_highlights.size()) {
+                if (i < (int)m_highlights.size()) {
                     rect = m_highlights[i];
                 } else {
                     rect = new QGraphicsRectItem;
@@ -406,7 +406,7 @@ MatrixScene::recreatePitchHighlights()
 
         k0 = k1;
     }
-    while (i < m_highlights.size()) {
+    while (i < (int)m_highlights.size()) {
         m_highlights[i]->hide();
         ++i;
     }
@@ -691,7 +691,7 @@ MatrixScene::previewSelection(EventSelection *s,
 void
 MatrixScene::updateCurrentSegment()
 {
-    for (int i = 0; i < m_viewSegments.size(); ++i) {
+    for (int i = 0; i < (int)m_viewSegments.size(); ++i) {
         bool current = (i == m_currentSegmentIndex);
         ViewElementList *vel = m_viewSegments[i]->getViewElementList();
         for (ViewElementList::const_iterator j = vel->begin();

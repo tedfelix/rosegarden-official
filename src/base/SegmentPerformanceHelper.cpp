@@ -454,7 +454,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool host, iterator i,
 	if (count == 0) count = 1; // should not happen
 
 	d = graceNoteDuration / count;
-	t = hostNoteEarliestTime + d * index;
+	t = graceNoteTime + d * index;
     }
 
     return true;

@@ -255,7 +255,7 @@ SegmentSelector::handleMouseButtonRelease(QMouseEvent *e)
 
                 if (trackPos < 0) {
                     trackPos = 0;
-                } else if (trackPos >= comp.getNbTracks()) {
+                } else if (trackPos >= (int)comp.getNbTracks()) {
                     trackPos = comp.getNbTracks() - 1;
                 }
 
@@ -433,7 +433,7 @@ SegmentSelector::handleMouseMove(QMouseEvent *e)
 
             if (trackPos < 0) {
                 trackPos = 0;
-            } else if (trackPos >= comp.getNbTracks()) {
+            } else if (trackPos >= (int)comp.getNbTracks()) {
                 trackPos = comp.getNbTracks() - 1;
             }
 

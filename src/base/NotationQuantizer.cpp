@@ -1017,7 +1017,9 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
 {
     Profiler *profiler = new Profiler("NotationQuantizer::Impl::quantizeRange");
 
+/*
     clock_t start = clock();
+*/
     int events = 0, notes = 0, passes = 0;
     int setGood = 0, setBad = 0;
     

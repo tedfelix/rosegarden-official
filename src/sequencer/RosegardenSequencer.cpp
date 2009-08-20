@@ -296,7 +296,7 @@ RosegardenSequencer::record(const RealTime &time,
             RosegardenMainWindow::self()->getArmedInstruments();
 
         QVector<InstrumentId> audioInstruments;
-        for (unsigned int i = 0; i < armedInstruments.size(); ++i) {
+        for (int i = 0; i < armedInstruments.size(); ++i) {
             if (armedInstruments[i] >= AudioInstrumentBase &&
                 armedInstruments[i] < MidiInstrumentBase) {
                 audioInstruments.push_back(armedInstruments[i]);

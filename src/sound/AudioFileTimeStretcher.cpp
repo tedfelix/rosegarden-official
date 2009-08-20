@@ -108,7 +108,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
     
     std::vector<float *> dbfs;
     for (int c = 0; c < ch; ++c) {
-        dbfs.push_back((float *)alloca((ibs > padding ? ibs : padding)
+        dbfs.push_back((float *)alloca((ibs > int(padding) ? size_t(ibs) : padding)
                                        * sizeof(float)));
     }
     
@@ -157,7 +157,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
 
         if (!inputExhausted) {
             thisRead = sourceFile->getSampleFrames(&streamIn, ebf, ibs);
-            if (thisRead < ibs) inputExhausted = true;
+            if (int(thisRead) < ibs) inputExhausted = true;
         }
             
         if (thisRead == 0) {
@@ -190,7 +190,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
         while (available > 0) {
                 
             unsigned int count = available;
-            if (count > obs) count = obs;
+            if (count > (unsigned int)obs) count = (unsigned int)obs;
 
             if (padding > 0) {
                 if (count <= padding) {
@@ -209,7 +209,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             stretcher.getOutput(obfs, count);
                 
             char *encodePointer = oebf;
-            for (int i = 0; i < count; ++i) {
+            for (unsigned int i = 0; i < count; ++i) {
                 for (int c = 0; c < ch; ++c) {
                     float sample = obfs[c][i];
                     *(float *)encodePointer = sample;
@@ -218,7 +218,7 @@ AudioFileTimeStretcher::getStretchedAudioFile(AudioFileId source,
             }
                 
             if (totalOut < expectedOut &&
-                totalOut + count > expectedOut) {
+                totalOut + int(count) > expectedOut) {
                 count = expectedOut - totalOut;
             }
 

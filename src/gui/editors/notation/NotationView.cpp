@@ -2137,7 +2137,7 @@ NewNotationView::slotEditTranspose()
     if (!ok || (semitones == 0 && steps == 0)) return;
 
     // TODO combine commands into one 
-    for (int i = 0; i < m_segments.size(); i++)
+    for (size_t i = 0; i < m_segments.size(); i++)
     {
         CommandHistory::getInstance()->addCommand(new SegmentTransposeCommand(
                 *(m_segments[i]), 

@@ -178,7 +178,7 @@ void AudioPreviewPainter::paintPreviewImage()
 
         if (position < 0) continue;
 
-        if (position >= int(values.size()) - channels) {
+        if (position >= int(values.size()) - int(channels)) {
             finalizeCurrentSlice();
             break;
         }

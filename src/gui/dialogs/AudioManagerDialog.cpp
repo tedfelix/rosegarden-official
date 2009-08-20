@@ -359,7 +359,7 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Sample rate
         //
-        if (m_sampleRate != 0 && (*it)->getSampleRate() != m_sampleRate) {
+        if (m_sampleRate != 0 && int((*it)->getSampleRate()) != m_sampleRate) {
             sRate.sprintf("%.1f KHz *", float((*it)->getSampleRate()) / 1000.0);
             wrongSampleRates = true;
         } else {
@@ -939,7 +939,7 @@ AudioManagerDialog::slotDeleteUnused()
                 return ;
             }
 
-            for (int i = 0; i < names.size(); ++i) {
+            for (unsigned int i = 0; i < names.size(); ++i) {
                 std::cerr << i << ": " << names[i] << std::endl;
                 QFile file(names[i]);
                 if (!file.remove()) {

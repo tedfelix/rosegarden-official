@@ -36,7 +36,7 @@ MappedEvent::MappedEvent(InstrumentId id,
                          const Event &e,
                          const RealTime &eventTime,
                          const RealTime &duration):
-        m_trackId(NO_TRACK),
+        m_trackId((int)NO_TRACK),
         m_instrument(id),
         m_type(MidiNote),
         m_data1(0),

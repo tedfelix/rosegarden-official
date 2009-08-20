@@ -106,7 +106,7 @@ NoteCharacter::draw(QPainter *painter, int x, int y) const
 
         NoteCharacterDrawRep a(m_rep->size());
 
-        for (unsigned int i = 0; i < m_rep->size(); ++i) {
+        for (int i = 0; i < m_rep->size(); ++i) {
             QPoint p(m_rep->point(i));
             a.setPoint(i, p.x() + x, p.y() + y);
         }
