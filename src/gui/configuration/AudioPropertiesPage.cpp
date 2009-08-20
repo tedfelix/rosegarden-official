@@ -43,6 +43,8 @@
 #include <QWidget>
 #include <QLayout>
 
+#include <stdint.h>
+
 #ifndef WIN32
 #include <sys/statvfs.h>
 #endif

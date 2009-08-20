@@ -26,6 +26,7 @@
 #include <QObject>
 
 #include <queue>
+#include <stdint.h>
 
 class QSocketNotifier;
 
