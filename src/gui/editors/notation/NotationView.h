@@ -129,6 +129,7 @@ protected slots:
 
     void slotUpdateMenuStates();
 
+    void slotTransformsQuantize();
     void slotTransformsInterpret();
 
     void slotMakeOrnament();

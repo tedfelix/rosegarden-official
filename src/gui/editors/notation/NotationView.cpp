@@ -59,6 +59,7 @@
 #include "commands/edit/RetrogradeCommand.h"
 #include "commands/edit/RetrogradeInvertCommand.h"
 #include "commands/edit/MoveCommand.h"
+#include "commands/edit/EventQuantizeCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
@@ -88,6 +89,7 @@
 #include "gui/dialogs/RescaleDialog.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
+#include "gui/dialogs/QuantizeDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -1834,6 +1836,22 @@ NewNotationView::slotGuitarChord()
     if (!m_notationWidget) return;
     m_notationWidget->slotSetGuitarChordInserter();
     slotUpdateMenuStates();
+}
+
+void
+NewNotationView::slotTransformsQuantize()
+{
+    EventSelection *selection = getSelection();
+    if (!selection) return;
+
+    QuantizeDialog dialog(this, true);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        CommandHistory::getInstance()->addCommand
+             (new EventQuantizeCommand
+              (*selection,
+               dialog.getQuantizer()));
+    }
 }
 
 void
