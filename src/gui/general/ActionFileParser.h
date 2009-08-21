@@ -73,6 +73,7 @@ protected:
     bool setActionText(QString actionName, QString text);
     bool setActionIcon(QString actionName, QString icon);
     bool setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext);
+    bool setActionToolTip(QString actionName, QString tooltip);
     bool setActionGroup(QString actionName, QString group);
     bool setActionChecked(QString actionName, bool);
 
@@ -108,6 +109,8 @@ protected:
     StateMap m_stateEnableMap;
     StateMap m_stateDisableMap;
     void setEnabled(QAction *, bool);
+
+    ActionSet m_tooltipSet;
 
     QObject *m_actionOwner;
     bool m_inMenuBar;

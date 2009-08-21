@@ -162,6 +162,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
         QString icon = atts.value("icon");
         QString shortcut = atts.value("shortcut");
         QString shortcutContext = atts.value("shortcut-context");
+        QString tooltip = atts.value("tooltip");
         QString group = atts.value("group");
         QString checked = atts.value("checked");
 
@@ -169,6 +170,7 @@ ActionFileParser::startElement(const QString& namespaceURI,
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
         if (shortcut != "") setActionShortcut(actionName, shortcut, shortcutContext.toLower() == "application");
+        if (tooltip != "") setActionToolTip(actionName, tooltip);
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
                                             checked.toLower() == "true");
@@ -447,6 +449,18 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
 }
 
 bool
+ActionFileParser::setActionToolTip(QString actionName, QString tooltip)
+{
+    if (actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
+    if (!action) return false;
+    action->setToolTip(tooltip);
+    m_tooltipSet.insert(action);
+    return true;
+}
+
+bool
 ActionFileParser::setActionGroup(QString actionName, QString groupName)
 {
     if (actionName == "" || groupName == "") return false;
@@ -542,6 +556,23 @@ ActionFileParser::setToolbarText(QString name, QString text)
     return true;
 }
 
+// This function cribbed from gui/kernel/qaction.cpp in Qt 4.5
+static QString
+strippedText(QString s)
+{
+    s.remove(QString::fromLatin1("..."));
+    int i = 0;
+    while (i < s.size()) {
+        ++i;
+        if (s.at(i-1) != QLatin1Char('&'))
+            continue;
+        if (i < s.size() && s.at(i) == QLatin1Char('&'))
+            ++i;
+        s.remove(i-1,1);
+    }
+    return s.trimmed();
+};
+
 bool
 ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
 {
@@ -553,6 +584,18 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     QToolBar *toolbar = findToolbar(toolbarName, Default);
     if (!toolbar) return false;
     toolbar->addAction(action);
+    if (action->shortcut() != QKeySequence()) {
+        // Avoid setting an automatic tooltip if an explicit one has
+        // been provided via setActionToolTip earlier.  We need to
+        // remember this ourselves, as action->toolTip() will return a
+        // Qt-generated automatic default if we haven't set it
+        if (m_tooltipSet.find(action) == m_tooltipSet.end()) {
+            QString tooltip = QObject::tr("%1 (%2)")
+                .arg(strippedText(action->text()))
+                .arg(action->shortcut().toString());
+            action->setToolTip(tooltip);
+        }
+    }
     return true;
 }
 
