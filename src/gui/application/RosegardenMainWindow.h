@@ -27,8 +27,6 @@
 #include "sound/Midi.h"
 #include "gui/general/ActionFileClient.h"
 #include "gui/studio/DeviceManagerDialogUi.h"
-#include "gui/widgets/WarningWidget.h"
-//#include "gui/seqmanager/SequenceManager.h"
 
 #include <QDockWidget>
 #include <QString>
@@ -91,6 +89,7 @@ class AudioMixerWindow;
 class AudioManagerDialog;
 class SequencerThread;
 class TranzportClient;
+class WarningWidget;
     
 /**
   * The base class for the main Rosegarden application window.  This

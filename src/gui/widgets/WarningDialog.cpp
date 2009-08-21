@@ -32,10 +32,9 @@ namespace Rosegarden
 {
 
 
-WarningDialog::WarningDialog() : QDialog()
+WarningDialog::WarningDialog(QWidget *parent) : 
+    QDialog(parent)
 {
-    std::cerr << "WarningDialog::WarningDialog()" << std::endl;
-
     QVBoxLayout *layout = new QVBoxLayout;
     setLayout(layout);
 
@@ -59,8 +58,6 @@ WarningDialog::~WarningDialog()
 void
 WarningDialog::addWarning(Message message)
 {
-    std::cerr << "WarningDialog::addWarning()" << std::endl;
-
     QWidget *tab = new QWidget;
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setAlignment(Qt::AlignTop);

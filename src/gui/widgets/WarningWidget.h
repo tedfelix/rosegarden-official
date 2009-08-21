@@ -57,7 +57,7 @@ public:
      * MIDI, audio, and the system timer are all functioning correctly.  This
      * widget is intended to be displayed on the status bar in the main window.
      */
-    WarningWidget();
+    WarningWidget(QWidget *parent = 0);
     ~WarningWidget();
 
     void setMidiWarning(const bool status);
@@ -69,8 +69,6 @@ public:
      * clicks the warning icon
      */
     void queueMessage(const QString text, const QString informativeText);
-
-    QSize sizeHint();
 
     /** We'll build the message queue out of these for convenience, so both the
      * text and informative text can be tossed about as one unit

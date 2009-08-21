@@ -19,6 +19,7 @@
 
 #include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QWidget>
 #include <QLabel>
@@ -29,24 +30,19 @@
 namespace Rosegarden
 {
 
-WarningWidget::WarningWidget() :
-        QWidget(),
-        m_text(""),
-        m_informativeText(""),
-        m_warningDialog(new WarningDialog())
+WarningWidget::WarningWidget(QWidget *parent) :
+    QWidget(parent),
+    m_text(""),
+    m_informativeText(""),
+    m_warningDialog(new WarningDialog(parent))
 {
-    std::cerr << "WarningWidget()" << std::endl;
-
-    // try to solve the parent problem without installing new ctor parameters;
-    // note that setting this as the parent causes the dialog to cram itself
-    // directly into the warning widget itself
-    m_warningDialog->setParent(dynamic_cast<QWidget*>(this->parent()));
-
     setContentsMargins(0, 0, 0, 0);
     
     setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
     QHBoxLayout *layout = new QHBoxLayout();
     setLayout(layout);
+    layout->setMargin(0);
+    layout->setSpacing(2);
 
     m_midiIcon = new QLabel();
     layout->addWidget(m_midiIcon);
@@ -119,9 +115,8 @@ WarningWidget::setTimerWarning(const bool status)
 void
 WarningWidget::queueMessage(const QString text, const QString informativeText)
 {
-    std::cerr << "WarningWidget::queuetMessage(" << qstrtostr(text)
-              << ", " << qstrtostr(informativeText)
-              << ")" << std::endl;
+    RG_DEBUG << "WarningWidget::queueMessage(" << text
+             << ", " << informativeText << ")" << endl;
     m_warningButton->show();
 
     Message message(text, informativeText);
@@ -132,20 +127,11 @@ WarningWidget::queueMessage(const QString text, const QString informativeText)
 void
 WarningWidget::displayMessageQueue()
 {
-    std::cerr << "WarningWidget::displayMessageQueue()" << std::endl;
-
     while (!m_queue.isEmpty()) {
         std::cerr << " - emptying queue..." << std::endl;
         m_warningDialog->addWarning(m_queue.dequeue());
     }
     m_warningDialog->show();
-}
-
-// seems to be worthless, but I'll leave it in case I have new inspiration later
-QSize
-WarningWidget::sizeHint()
-{
-    return QSize(128, 16);
 }
 
 // NOTES:

@@ -861,7 +861,8 @@ RosegardenMainWindow::initStatusBar()
     statusBar()->addPermanentWidget(m_progressBar);
 
     // status warning widget replaces a glob of annoying startup dialogs
-    m_warningWidget = new WarningWidget();
+    m_warningWidget = new WarningWidget(this);
+
     statusBar()->addPermanentWidget(m_warningWidget);
     statusBar()->setContentsMargins(0, 0, 0, 0);
 }
