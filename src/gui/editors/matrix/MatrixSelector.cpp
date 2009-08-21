@@ -234,33 +234,33 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
 void
 MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
 {
-    m_clickedElement = e->element;
+    // Don't use m_clickedElement here, as it's reset to 0 on mouse
+    // release, which occurs before our dialog completes (and we need
+    // to know the element after that)
+    MatrixElement *element = e->element;
 
     MatrixViewSegment *vs = e->viewSegment;
     if (!vs) return;
 
-    if (m_clickedElement) {
+    if (element) {
 
-        if (m_clickedElement->event()->isa(Note::EventType) &&
-            m_clickedElement->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
+        if (element->event()->isa(Note::EventType) &&
+            element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
 
-            int id = m_clickedElement->event()->get<Int>
-                (BaseProperties::TRIGGER_SEGMENT_ID);
+            int id = element->event()->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID);
             emit editTriggerSegment(id);
             return;
         }
 
         if (e->modifiers & Qt::ShiftModifier) { // advanced edit
 
-            EventEditDialog dialog
-                (m_widget, *m_clickedElement->event(), true);
+            EventEditDialog dialog(m_widget, *element->event(), true);
 
             if (dialog.exec() == QDialog::Accepted &&
                 dialog.isModified()) {
 
                 EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(),
-                     m_clickedElement->event(),
+                    (vs->getSegment(), element->event(),
                      dialog.getEvent());
 
                 CommandHistory::getInstance()->addCommand(command);
@@ -269,16 +269,13 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
         } else {
 
             SimpleEventEditDialog dialog
-                (m_widget, m_scene->getDocument(),
-                 *m_clickedElement->event(), false);
+                (m_widget, m_scene->getDocument(), *element->event(), false);
 
             if (dialog.exec() == QDialog::Accepted &&
                 dialog.isModified()) {
 
                 EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(),
-                     m_clickedElement->event(),
-                     dialog.getEvent());
+                    (vs->getSegment(), element->event(), dialog.getEvent());
 
                 CommandHistory::getInstance()->addCommand(command);
             }

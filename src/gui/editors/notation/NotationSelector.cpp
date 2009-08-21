@@ -182,7 +182,6 @@ void NotationSelector::slotClickTimeout()
 void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 {
     NOTATION_DEBUG << "NotationSelector::handleMouseDoubleClick" << endl;
-    m_clickedElement = e->element;
 
     NotationStaff *staff = e->staff;
     if (!staff) return;
@@ -190,9 +189,9 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
 
     bool advanced = (e->buttons & Qt::ShiftButton);
 
-    if (m_clickedElement) {
+    if (e->element) {
 
-        emit editElement(staff, m_clickedElement, advanced);
+        emit editElement(staff, e->element, advanced);
 
     } else {
 
@@ -220,13 +219,11 @@ void NotationSelector::handleMouseTripleClick(const NotationMouseEvent *e)
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
-    m_clickedElement = e->element;
-
     NotationStaff *staff = e->staff;
     if (!staff) return;
     m_selectedStaff = staff;
 
-    if (m_clickedElement) {
+    if (e->element) {
 
         // should be safe, as we've already set m_justSelectedBar false
         handleLeftButtonPress(e);

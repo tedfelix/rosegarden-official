@@ -41,9 +41,7 @@ AudioPluginManager::AudioPluginManager() :
     m_sampleRate(0),
     m_enumerator(this)
 {
-//    std::cerr << "AudioPluginManager[" << this << "]::AudioPluginManager - "
-//    	      << "trace is ";
-//    std::cerr << kdBacktrace() << std::endl;
+    RG_DEBUG << "AudioPluginManager::AudioPluginManager" << endl;
 
     // Clear the plugin clipboard
     //
@@ -52,6 +50,8 @@ AudioPluginManager::AudioPluginManager() :
     m_pluginClipboard.m_controlValues.clear();
     
     m_enumerator.start();
+
+    RG_DEBUG << "AudioPluginManager::AudioPluginManager done" << endl;
 }
 
 AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
