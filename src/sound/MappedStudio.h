@@ -91,16 +91,16 @@ public:
 
     // Only relevant to objects that have string properties
     // 
-    virtual bool getProperty(const MappedObjectProperty &/* property */,
-                             QString &/* value */) { return false; }
+    virtual bool getStringProperty(const MappedObjectProperty &/* property */,
+                                   QString &/* value */) { return false; }
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) = 0;
 
     // Only relevant to objects that have string properties
     // 
-    virtual void setProperty(const MappedObjectProperty &/* property */,
-                             QString /* value */) { }
+    virtual void setStringProperty(const MappedObjectProperty &/* property */,
+                                   QString /* value */) { }
 
     // Only relevant to objects that have list properties
     //
@@ -457,14 +457,14 @@ public:
     virtual bool getProperty(const MappedObjectProperty &property,
                              MappedObjectValue &value);
 
-    virtual bool getProperty(const MappedObjectProperty &property,
-                             QString &value);
+    virtual bool getStringProperty(const MappedObjectProperty &property,
+                                   QString &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    virtual void setProperty(const MappedObjectProperty &property,
-                             QString value);
+    virtual void setStringProperty(const MappedObjectProperty &property,
+                                   QString value);
 
     virtual void setPropertyList(const MappedObjectProperty &,
                                  const MappedObjectPropertyList &);
@@ -515,14 +515,14 @@ public:
     virtual bool getProperty(const MappedObjectProperty &property,
                              MappedObjectValue &value);
 
-    virtual bool getProperty(const MappedObjectProperty &property,
-                             QString &value);
+    virtual bool getStringProperty(const MappedObjectProperty &property,
+                                   QString &value);
 
     virtual void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value);
 
-    virtual void setProperty(const MappedObjectProperty &property,
-                             QString value);
+    virtual void setStringProperty(const MappedObjectProperty &property,
+                                   QString value);
 
     void setValue(MappedObjectValue value);
     MappedObjectValue getValue() const;

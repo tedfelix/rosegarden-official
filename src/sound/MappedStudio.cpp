@@ -1282,8 +1282,8 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
 }
 
 bool
-MappedPluginSlot::getProperty(const MappedObjectProperty &property,
-                              QString &value)
+MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
+                                    QString &value)
 {
     if (property == Identifier) {
         value = m_identifier;
@@ -1375,8 +1375,8 @@ MappedPluginSlot::setProperty(const MappedObjectProperty &property,
 }
 
 void
-MappedPluginSlot::setProperty(const MappedObjectProperty &property,
-                              QString value)
+MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
+                                    QString value)
 {
     if (property == Identifier) {
 
@@ -1599,8 +1599,8 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
 }
 
 bool
-MappedPluginPort::getProperty(const MappedObjectProperty &property,
-                              QString &value)
+MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
+                                    QString &value)
 {
     if (property == Name) {
         value = m_name;
@@ -1692,8 +1692,8 @@ MappedPluginPort::setProperty(const MappedObjectProperty &property,
 
 
 void
-MappedPluginPort::setProperty(const MappedObjectProperty &property,
-                              QString value)
+MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
+                                    QString value)
 {
     if (property == Name) {
         m_name = value;

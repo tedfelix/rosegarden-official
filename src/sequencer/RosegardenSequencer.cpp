@@ -734,21 +734,18 @@ RosegardenSequencer::setMappedProperties(const MappedObjectIdList &ids,
 
 void
 RosegardenSequencer::setMappedProperty(int id,
-        const QString &property,
-        const QString &value)
+                                       const QString &property,
+                                       const QString &value)
 {
     LOCKED;
 
-
     SEQUENCER_DEBUG << "setProperty: id = " << id
-    << " : property = \"" << property << "\""
-    << ", value = " << value << endl;
-
+                    << " : property = \"" << property << "\""
+                    << ", value = " << value << endl;
 
     MappedObject *object = m_studio->getObjectById(id);
 
-    if (object)
-        object->setProperty(property, value);
+    if (object) object->setStringProperty(property, value);
 }
 
 QString
@@ -810,7 +807,7 @@ RosegardenSequencer::getPropertyList(int id,
     }
 
     SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
-    << " items" << endl;
+                    << " items" << endl;
 
     return list;
 }

@@ -103,12 +103,12 @@ DSSIPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot
 
     if (descriptor) {
 
-        slot.setProperty(MappedPluginSlot::Label, descriptor->Label);
-        slot.setProperty(MappedPluginSlot::PluginName, descriptor->Name);
-        slot.setProperty(MappedPluginSlot::Author, descriptor->Maker);
-        slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
+        slot.setStringProperty(MappedPluginSlot::Label, descriptor->Label);
+        slot.setStringProperty(MappedPluginSlot::PluginName, descriptor->Name);
+        slot.setStringProperty(MappedPluginSlot::Author, descriptor->Maker);
+        slot.setStringProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
         slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
-        slot.setProperty(MappedPluginSlot::Category, m_taxonomy[descriptor->UniqueID]);
+        slot.setStringProperty(MappedPluginSlot::Category, m_taxonomy[descriptor->UniqueID]);
 
         slot.destroyChildren();
 
@@ -131,8 +131,8 @@ DSSIPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot
                 port->setParent(&slot);
 
                 port->setProperty(MappedPluginPort::PortNumber, i);
-                port->setProperty(MappedPluginPort::Name,
-                                  descriptor->PortNames[i]);
+                port->setStringProperty(MappedPluginPort::Name,
+                                        descriptor->PortNames[i]);
                 port->setProperty(MappedPluginPort::Maximum,
                                   getPortMaximum(descriptor, i));
                 port->setProperty(MappedPluginPort::Minimum,

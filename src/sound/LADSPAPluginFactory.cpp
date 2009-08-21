@@ -131,27 +131,27 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
 
     if (descriptor) {
 
-        slot.setProperty(MappedPluginSlot::Label, descriptor->Label);
-        slot.setProperty(MappedPluginSlot::PluginName, descriptor->Name);
-        slot.setProperty(MappedPluginSlot::Author, descriptor->Maker);
-        slot.setProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
+        slot.setStringProperty(MappedPluginSlot::Label, descriptor->Label);
+        slot.setStringProperty(MappedPluginSlot::PluginName, descriptor->Name);
+        slot.setStringProperty(MappedPluginSlot::Author, descriptor->Maker);
+        slot.setStringProperty(MappedPluginSlot::Copyright, descriptor->Copyright);
         slot.setProperty(MappedPluginSlot::PortCount, descriptor->PortCount);
 
         if (m_taxonomy.find(descriptor->UniqueID) != m_taxonomy.end() &&
                 m_taxonomy[descriptor->UniqueID] != "") {
             //		std::cerr << "LADSPAPluginFactory: cat for " << identifier<< " found in taxonomy as " << m_taxonomy[descriptor->UniqueID] << std::endl;
-            slot.setProperty(MappedPluginSlot::Category,
-                             m_taxonomy[descriptor->UniqueID]);
+            slot.setStringProperty(MappedPluginSlot::Category,
+				   m_taxonomy[descriptor->UniqueID]);
 
         } else if (m_fallbackCategories.find(identifier) !=
                    m_fallbackCategories.end()) {
             //		std::cerr << "LADSPAPluginFactory: cat for " << identifier  <<" found in fallbacks as " << m_fallbackCategories[identifier] << std::endl;
-            slot.setProperty(MappedPluginSlot::Category,
-                             m_fallbackCategories[identifier]);
+            slot.setStringProperty(MappedPluginSlot::Category,
+				   m_fallbackCategories[identifier]);
 
         } else {
             //		std::cerr << "LADSPAPluginFactory: cat for " << identifier << " not found (despite having " << m_fallbackCategories.size() << " fallbacks)" << std::endl;
-            slot.setProperty(MappedPluginSlot::Category, "");
+            slot.setStringProperty(MappedPluginSlot::Category, "");
         }
 
         slot.destroyChildren();
@@ -175,8 +175,8 @@ LADSPAPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &sl
                 port->setParent(&slot);
 
                 port->setProperty(MappedPluginPort::PortNumber, i);
-                port->setProperty(MappedPluginPort::Name,
-                                  descriptor->PortNames[i]);
+                port->setStringProperty(MappedPluginPort::Name,
+					descriptor->PortNames[i]);
                 port->setProperty(MappedPluginPort::Maximum,
                                   getPortMaximum(descriptor, i));
                 port->setProperty(MappedPluginPort::Minimum,
