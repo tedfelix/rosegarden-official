@@ -43,7 +43,7 @@ void ControlRulerEventEraseCommand::modifySegment()
 {
     Segment &segment(getSegment());
 
-//    for (Q3CanvasItemList::Iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
+    // This command expects the SegmentObserver mechanism to delete the associated items
     for (ControlItemList::iterator it=m_selectedItems.begin(); it!=m_selectedItems.end(); ++it) {
         if (ControlItem *item = dynamic_cast<ControlItem*>(*it))
             segment.eraseSingle(item->getEvent());

@@ -134,6 +134,7 @@ ControlItemMap::iterator ControlRuler::findControlItem(float x)
 {
     ControlItemMap::iterator it;
     it = m_controlItemMap.upper_bound(x);
+    return it;
 }
 
 ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
@@ -143,15 +144,16 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
     ControlItemMap::iterator it;
     std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
 
-    ret = m_controlItemMap.equal_range(xstart);
-    for (it = ret.first; it != ret.second; it++) {
+//    ret = m_controlItemMap.equal_range(xstart);
+//    for (it = ret.first; it != ret.second; it++) {
+    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
         if (it->second->getEvent() == event) break;
     }
 
     ///@TODO equal_range (above) is not behaving as expected - sort it out
-    if (it != m_controlItemMap.end() && it->second->getEvent() != event) {
-        it = m_controlItemMap.end();
-    }
+//    if (it != m_controlItemMap.end() && it->second->getEvent() != event) {
+//        it = m_controlItemMap.end();
+//    }
 
     return it;
 }
@@ -234,15 +236,25 @@ void ControlRuler::updateSegment()
 
     MacroCommand *macro = new MacroCommand(commandLabel);
 
+    // Find the extent of the selected items
     float xmin=FLT_MAX,xmax=-1.0;
+
+    // EventSelection::addEvent adds timeT(1) to its extentt for zero duration events so need to mimic this here
+    timeT durationAdd = 0;
 
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); it++) {
         if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
-        if ((*it)->xEnd() > xmax) xmax = (*it)->xEnd();
+        if ((*it)->xEnd() > xmax) {
+            xmax = (*it)->xEnd();
+            if ((*it)->xEnd() == (*it)->xStart())
+                durationAdd = 1;
+            else
+                durationAdd = 0;
+        }
     }
 
     start = getRulerScale()->getTimeForX(xmin);
-    end = getRulerScale()->getTimeForX(xmax);
+    end = getRulerScale()->getTimeForX(xmax)+durationAdd;
 
     if (m_eventSelection->getAddedEvents()==0) {
         // We do not have a valid set of selected events to update
@@ -272,6 +284,8 @@ void ControlRuler::updateSegment()
     }
 
     // Add change command to macro
+    // ControlChangeCommand calls each selected items updateSegment method
+    // Note that updateSegment deletes and renews the event whether it has moved or not
     macro->addCommand(new ControlChangeCommand(m_selectedItems,
                                     *m_segment,
                                     start,

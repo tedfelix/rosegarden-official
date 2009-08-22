@@ -65,6 +65,7 @@ protected:
     void setCursor(const ControlMouseEvent *);
     float m_mouseStartY;
     float m_mouseLastY;
+    float m_mouseLastX;
     QRectF *m_selectionRect;
     ControlItemList m_addedItems;
 };

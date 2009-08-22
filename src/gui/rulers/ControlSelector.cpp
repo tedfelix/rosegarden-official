@@ -28,6 +28,7 @@
 //#include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
+#include "EventControlItem.h"
 #include "ControlRuler.h"
 #include "ControllerEventsRuler.h"
 #include "ControlTool.h"
@@ -54,28 +55,35 @@ ControlSelector::ControlSelector(ControlRuler *parent) :
 void
 ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
-        // No add to selection modifiers so clear the current selection
-        m_ruler->clearSelectedItems();
-    }
-
-    if (m_overItem) {
-        // Add any items directly under mouse to the selection
-        for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
-            if ((*it)->isSelected()) {
+    if (e->itemList.size()) {
+        //for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
+        std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
+        if ((*it)->isSelected()) {
+            if (e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))
                 m_ruler->removeFromSelection(*it);
-            } else {
-                m_ruler->addToSelection(*it);
+        } else {
+            if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+                // No add to selection modifiers so clear the current selection
+                m_ruler->clearSelectedItems();
             }
+
+            m_ruler->addToSelection(*it);
         }
     } else {
+        if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+            // No add to selection modifiers so clear the current selection
+            m_ruler->clearSelectedItems();
+        }
+
         // Start selection rectangle
         m_ruler->setSelectionRect(new QRectF(e->x,e->y,0.0,0.0));
 
         // Clear the added items list because we have yet to add any
         m_addedItems.clear();
     }
+
     m_mouseLastY = e->y;
+    m_mouseLastX = e->x;
 
     m_ruler->update();
 }
@@ -121,12 +129,18 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
         // A drag action is in progress
         m_ruler->setCursor(Qt::ClosedHandCursor);
-//        float delta = (e->value-m_mouseLastY);
-//        m_mouseLastY = e->value;
-//        ControlItemList *selected = m_ruler->getSelectedItems();
-//        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-//            (*it)->setValue((*it)->getValue()+delta);
-//        }
+
+        float deltaX = (e->x-m_mouseLastX);
+        float deltaY = (e->y-m_mouseLastY);
+        m_mouseLastX = e->x;
+        m_mouseLastY = e->y;
+
+        EventControlItem *item;
+        ControlItemList *selected = m_ruler->getSelectedItems();
+        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
+            item = dynamic_cast <EventControlItem*> (*it);
+            if (item) item->reconfigure(item->xStart()+deltaX,item->getValue()+deltaY);
+        }
     }
 
     m_ruler->update();
@@ -148,7 +162,11 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
     }
 
     if (m_overItem) {
-        // This is the end of a drag event, reset the cursor to the state that it started
+        // This is the end of a drag event
+        // Update the segment to reflect changes
+        m_ruler->updateSegment();
+
+        // Reset the cursor to the state that it started
         m_ruler->setCursor(Qt::PointingHandCursor);
     }
 

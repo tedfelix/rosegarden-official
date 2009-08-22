@@ -385,6 +385,7 @@ void ControllerEventsRuler::eraseControllerEvent()
 {
     RG_DEBUG << "ControllerEventsRuler::eraseControllerEvent() : deleting selected events\n";
 
+    // This command uses the SegmentObserver mechanism to bring the control item list up to date
     ControlRulerEventEraseCommand* command =
         new ControlRulerEventEraseCommand(m_selectedItems,
                                         *m_segment,
