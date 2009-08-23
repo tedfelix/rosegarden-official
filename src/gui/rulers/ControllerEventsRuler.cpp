@@ -96,6 +96,7 @@ ControllerEventsRuler::ControllerEventsRuler(MatrixViewSegment *segment,
 
 ControllerEventsRuler::~ControllerEventsRuler()
 {
+    RG_DEBUG << "ControllerEventsRuler::~ControllerEventsRuler()";
     if (m_segment) m_segment->removeObserver(this);
 }
 

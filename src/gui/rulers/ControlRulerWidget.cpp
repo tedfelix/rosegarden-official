@@ -51,10 +51,10 @@ m_controlList(0)
 
 ControlRulerWidget::~ControlRulerWidget()
 {
-    std::list<ControlRuler*>::iterator it;
-    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
-        removeRuler(it);
-    }
+//    std::list<ControlRuler*>::iterator it;
+//    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
+//        removeRuler(it);
+//    }
 }
 
 void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
@@ -136,7 +136,7 @@ void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyNam
                     setCurrentWidget(*it);
                 }
                 else {
-                    // It was not on show, so delete it
+                    // It was on show, so delete it
                     removeRuler(it);
                 }
                 break;
