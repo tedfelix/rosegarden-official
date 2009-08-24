@@ -500,10 +500,14 @@ NewNotationView::setupActions()
     // to draw a lot of fancy icons for disabled durations, we have this dummy
     // filler to keep spacing the same across all toolbars, and there have to be
     // four of them at that...  blah.
-    createAction("dummy_1", SLOT());
-    createAction("dummy_2", SLOT());
-    createAction("dummy_3", SLOT());
-    createAction("dummy_4", SLOT());
+    QAction * dummyAction = createAction("dummy_1", SLOT());
+    dummyAction->setEnabled(false);
+    dummyAction = createAction("dummy_2", SLOT());
+    dummyAction->setEnabled(false);
+    dummyAction = createAction("dummy_3", SLOT());
+    dummyAction->setEnabled(false);
+    dummyAction = createAction("dummy_4", SLOT());
+    dummyAction->setEnabled(false);
 
     createAction("toggle_dot", SLOT(slotToggleDot()));
 
