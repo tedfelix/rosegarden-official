@@ -596,15 +596,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	notifyStartChanged(m_startTime);
     }
 
-    //!!! Need to remove the rests then relocate the start time
-    // and get the notation end time for the nearest note before that
-    // (?)
-
-    //!!! We need to insert rests at fictitious unquantized times that
-    //are broadly correct, so as to maintain ordering of notes and
-    //rests in the unquantized segment.  The quantized times should go
-    //in notation-prefix properties.
-
     // Preliminary: If there are any time signature changes between
     // the start and end times, consider separately each of the sections
     // they divide the range up into.
@@ -626,10 +617,16 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	}
     }
 
-    // First stage: erase all existing non-tupleted rests in this range.
+    // First stage: erase all existing non-tupleted rests in this
+    // range and establish the proper extents for the time range in
+    // which rests may need to be re-filled.  Only note, text, and
+    // existing rest events can form a boundary for the range.  (Other
+    // events, such as controllers, may appear at any time including
+    // times that are not reasonable to quantize rest positions or
+    // durations to.)
 
     timeT segmentEndTime = m_endTime;
-
+    
     iterator ia = findNearestTime(startTime);
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
@@ -639,12 +636,24 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	fillWithRests(startTime, endTime);
 	return;
     } else {
+	while (!((*ia)->isa(Note::EventType) ||
+		 (*ia)->isa(Text::EventType) ||
+		 (*ia)->isa(Note::EventRestType))) {
+	    if (ia == begin()) break;
+	    --ia;
+	}
 	if (startTime > (*ia)->getNotationAbsoluteTime()) {
 	    startTime = (*ia)->getNotationAbsoluteTime();
 	}
     }
 
     iterator ib = findTime(endTime);
+    while (ib != end()) {
+	if ((*ib)->isa(Note::EventType) ||
+	    (*ib)->isa(Text::EventType) ||
+	    (*ib)->isa(Note::EventRestType)) break;
+	++ib;
+    }
     if (ib == end()) {
 	if (ib != begin()) {
 	    --ib;
@@ -662,14 +671,13 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     }
 
     // If there's a rest preceding the start time, with no notes
-    // between us and it, and if it doesn't have precisely the
-    // right duration, then we need to normalize it too
-
-    //!!! needs modification for new scheme
+    // between us and it, and if it doesn't have precisely the right
+    // duration, then we need to normalize it too.  (This should be
+    // fairly harmless, all it can do wrong is extend the region of
+    // interest too far and make us work too hard)
 
     iterator scooter = ia;
     while (scooter-- != begin()) {
-//	if ((*scooter)->isa(Note::EventRestType)) { //!!! experimental
 	if ((*scooter)->getDuration() > 0) {
 	    if ((*scooter)->getNotationAbsoluteTime() +
 		(*scooter)->getNotationDuration() !=
@@ -681,10 +689,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 		ia = scooter;
 	    }
 	    break;
-/*!!!
-	} else if ((*scooter)->getDuration() > 0) {
-	    break;
-*/
 	}
     }
 
@@ -703,6 +707,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     // and the end of the segment, if they were all rests.  Check.
 
     if (endTime < segmentEndTime && m_endTime < segmentEndTime) {
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: new end time " << m_endTime << " is earlier than previous segment end time " << segmentEndTime << ", extending our working end time again" << endl;
+#endif
 	endTime = segmentEndTime;
     }
 
@@ -724,22 +731,14 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	// already have good lastNoteStarts, lastNoteEnds
 	ia = begin();
     } else {
+	while (!((*ia)->isa(Note::EventType) ||
+		 (*ia)->isa(Text::EventType) ||
+		 (*ia)->isa(Note::EventRestType))) {
+	    if (ia == begin()) break;
+	    --ia;
+	}
 	lastNoteStarts = (*ia)->getNotationAbsoluteTime();
 	lastNoteEnds = lastNoteStarts;
-    }
-
-    if (ib != end()) {
-	//!!! This and related code really need to get a quantized
-	// absolute time of a note event that has the same unquantized
-	// time as ib, not necessarily of ib itself... or else the
-	// quantizer needs to set the quantized times of all non-note
-	// events that happen at the same unquantized time as a note
-	// event to the same as that of the note event... yeah, that's
-	// probably the right thing
-	endTime = (*ib)->getNotationAbsoluteTime();
-
-	// was this just a nasty hack?
-	++ib;
     }
 
     iterator i = ia;
@@ -782,6 +781,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 	*/
 
 	if (thisNoteStarts > lastNoteEnds) {
+#ifdef DEBUG_NORMALIZE_RESTS
+	    cerr << "normalizeRests: found gap between note/text/rest events from " << lastNoteEnds << " to " << thisNoteStarts << endl;
+#endif
 	    gaps.push_back(std::pair<timeT, timeT>
 			   (lastNoteEnds,
 			    thisNoteStarts - lastNoteEnds));
@@ -792,6 +794,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     }
 
     if (endTime > lastNoteEnds) {
+#ifdef DEBUG_NORMALIZE_RESTS
+	cerr << "normalizeRests: need to fill up gap from last note/text/rest event end at " << lastNoteEnds << " to normalize end time at " << endTime << endl;
+#endif
 	gaps.push_back(std::pair<timeT, timeT>
 		       (lastNoteEnds, endTime - lastNoteEnds));
     }
