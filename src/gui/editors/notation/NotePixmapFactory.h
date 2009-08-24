@@ -175,10 +175,8 @@ public:
 
     // Other support methods for producing pixmaps for other contexts:
 
-    static QPixmap makeToolbarPixmap(const char *name,
-                                            bool menuSize = false);
-    static QPixmap makeNoteMenuPixmap(timeT duration,
-                                             timeT &errorReturn);
+    static QPixmap makeToolbarPixmap(QString name, bool menuSize = false);
+    static QPixmap makeNoteMenuPixmap(timeT duration, timeT &errorReturn);
     static QPixmap makeMarkMenuPixmap(Mark);
 
     QPixmap makePitchDisplayPixmap(int pitch,

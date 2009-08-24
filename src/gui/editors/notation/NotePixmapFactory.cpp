@@ -32,6 +32,7 @@
 #include "gui/general/PixmapFunctions.h"
 #include "gui/general/Spline.h"
 #include "gui/general/ResourceFinder.h"
+#include "gui/general/IconLoader.h"
 #include "gui/widgets/StartupLogo.h"
 #include "NotationStrings.h"
 #include "NotationView.h"
@@ -1837,30 +1838,13 @@ NotePixmapFactory::makeUnknown()
 }
 
 QPixmap
-NotePixmapFactory::makeToolbarPixmap(const char *name, bool menuSize)
+NotePixmapFactory::makeToolbarPixmap(QString name, bool menuSize)
 {
-    //!!! This is not the recommended way to load icons any more, but
-    //!!! it should probably stay this way to avoid disturbing things
-    //!!! until we can convert away from Q3Canvas
-    //
-    // (He says, although isn't this the bit, in spite of the name, that's
-    // supposed to make the little note pixmaps that get used in combo boxes?
-    // If so, it doesn't work anyway!)
-	
-    QString fileBase = ResourceFinder().getResourceDir( "toolbar" );
-	
-    if (menuSize) fileBase += "menu-";
-    fileBase += name;
-    if (QFile(fileBase + ".png").exists()) {
-        return QPixmap(fileBase + ".png");
-    } else if (QFile(fileBase + ".xpm").exists()) {
-        return QPixmap(fileBase + ".xpm");
-    } else if (menuSize) {
-        return makeToolbarPixmap(name, false);
-    } else {
-        // this will fail, but we don't want to return a null pointer
-        return QPixmap(fileBase + ".png");
+    if (menuSize && !name.startsWith("menu-")) {
+        QPixmap menuMap = makeToolbarPixmap("menu-" + name, false);
+        if (!menuMap.isNull()) return menuMap;
     }
+    return IconLoader().loadPixmap(name);
 }
 
 QPixmap
