@@ -69,11 +69,21 @@ public:
 
     static const QString ToolName;
 
+    /** Hacky, but at least this way the calling code doesn't need to know so
+     * many internal details.  In practice, the alternate ctor is only called by
+     * RestInserter with a "menu name" of "RestInserter."  This function returns
+     * which of our ctors was called, which effectively tells the calling code
+     * whether this is a NoteInserter for inserting notes, or a NoteInserter for
+     * inserting rests.  It's all really a bit of a fuster cluck, but I didn't
+     * build the fuster cluck, I just made it even worse.  Yay me!
+     */
+    bool isaRestInserter() { return m_isaRestInserter; };
+
 public slots:
     /// Set the type of note (quaver, breve...) which will be inserted
     void slotSetNote(Note::Type);
 
-    /// Set the nb of dots the inserted note will have
+    /// Set the number of dots the inserted note will have
     void slotSetDots(unsigned int dots);
  
     /// Set the accidental for the notes which will be inserted
@@ -138,6 +148,7 @@ protected:
     Accidental m_accidental;
     Accidental m_lastAccidental;
     bool m_followAccidental;
+    bool m_isaRestInserter;
 
     static const char* m_actionsAccidental[][4];
 };

@@ -58,6 +58,15 @@ public:
 
     virtual timeT getInsertionTime() const;
 
+    /** The DurationMonobar needs to know how to convolute itself somehow to morph into
+     * what used to be separate toolbars in a cleaner and simpler world
+     */
+    typedef enum { InsertingNotes,
+                   InsertingDottedNotes,
+                   InsertingRests,
+                   InsertingDottedRests
+                 } DurationMonobarModeType;
+
 signals:
     void play();
     void stop();
@@ -103,9 +112,34 @@ protected slots:
 
     void slotInsertNoteFromAction();
     void slotInsertRest();
+
+    /** Call either slotSwitchToNotes() or slotSwitchToRests() depending on
+     * calling context
+     */
+    void slotToggleNotesRests();
     void slotSwitchToNotes();
     void slotSwitchToRests();
+
+    /** The logic tangle to try to set the monobar per switching on the mode
+     * would be brutal, so morphDurationMonobar will only show things, relying on this
+     * to have hidden everything beforehand.  It's ugly, but at least this
+     * avoids a complete spaghetti bowl of if then whether logic.
+     */
+    void hideAllDurationMonobarActions();
+
+    /** Contort the DurationMonobar with a long and complicated series of hide and
+     * show operations that pretty much make my stomach churn.
+     *
+     * \p mode is one of InsertingNotes, InsertingDottedNotes, InsertingRests,
+     * etc. (see the typedef DurationMonobarModeType for a complete list)
+     */
+    void morphDurationMonobar(const DurationMonobarModeType mode);
+
+    /** Switch between dotted and plain variations on the current note or rest
+     * duration being inserted (by whatever means insertion is ocurring)
+     */
     void slotToggleDot(); 
+
     void slotNoteAction();
     void slotNoAccidental();
     void slotFollowAccidental();
@@ -169,7 +203,6 @@ protected slots:
     void slotToggleRestsToolBar();
     void slotToggleAccidentalsToolBar();
     void slotToggleClefsToolBar();
-    void slotToggleMetaToolBar();
     void slotToggleMarksToolBar();
     void slotToggleGroupToolBar();
     void slotToggleSymbolsToolBar();

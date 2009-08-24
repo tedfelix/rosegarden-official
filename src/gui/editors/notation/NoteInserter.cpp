@@ -60,7 +60,8 @@ NoteInserter::NoteInserter(NotationWidget* widget) :
     m_autoBeam(true),
     m_accidental(Accidentals::NoAccidental),
     m_lastAccidental(Accidentals::NoAccidental),
-    m_followAccidental(false)
+    m_followAccidental(false),
+    m_isaRestInserter(false) // this ctor isn't used by RestInserter, so this can't be true
 {
     QIcon icon;
 
@@ -103,7 +104,10 @@ NoteInserter::NoteInserter(QString rcFileName, QString menuName,
     m_clickHappened(false),
     m_accidental(Accidentals::NoAccidental),
     m_lastAccidental(Accidentals::NoAccidental),
-    m_followAccidental(false)
+    m_followAccidental(false),
+    m_isaRestInserter(menuName == "RestInserter") // we'll only return true if we were really called by RestInserter,
+                                                  // which always sets that string thus when calling us (rubbish code FTW!)
+
 {
     // Constructor used by subclass (e.g. RestInserter)
 

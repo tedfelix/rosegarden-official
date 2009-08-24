@@ -36,7 +36,7 @@ public:
     static const QString ToolName;
 
 public slots:
-    /// Set the nb of dots the inserted rest will have
+    /// Set the number of dots the inserted rest will have
     void slotSetDots(unsigned int dots);
 
 protected:

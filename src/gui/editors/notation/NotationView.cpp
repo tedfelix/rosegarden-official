@@ -154,6 +154,9 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
         findAction("select")->trigger();
     }
 
+    //  Either way, start off with plain durations as the visible notes toolbar
+    morphDurationMonobar(InsertingNotes);
+
     // Set display configuration
     bool visible;
     QSettings settings;
@@ -464,8 +467,16 @@ NewNotationView::setupActions()
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("erase", SLOT(slotSetEraseTool()));
 
+    // These actions do as their names imply, and in this case, the toggle will
+    // call one or the other of these
     createAction("switch_to_rests", SLOT(slotSwitchToRests()));
     createAction("switch_to_notes", SLOT(slotSwitchToNotes()));
+
+    // These actions always just pass straight to the toggle, and rely on the
+    // calling context to deliver the result implied in the action name, which
+    // isn't actually guaranteed otherwise
+    createAction("switch_dots_on", SLOT(slotToggleDot()));
+    createAction("switch_dots_off", SLOT(slotToggleDot()));
 
     // Menu uses now "Switch to Notes", "Switch to Rests" and "Durations".
     createAction("duration_breve", SLOT(slotNoteAction()));
@@ -484,7 +495,22 @@ NewNotationView::setupActions()
     createAction("duration_dotted_semiquaver", SLOT(slotNoteAction()));
     createAction("duration_dotted_demisemi", SLOT(slotNoteAction()));
     createAction("duration_dotted_hemidemisemi", SLOT(slotNoteAction()));
+
+    // since we can't create toolbars with disabled icons, and to avoid having
+    // to draw a lot of fancy icons for disabled durations, we have this dummy
+    // filler to keep spacing the same across all toolbars, and there have to be
+    // four of them at that...  blah.
+    createAction("dummy_1", SLOT());
+    createAction("dummy_2", SLOT());
+    createAction("dummy_3", SLOT());
+    createAction("dummy_4", SLOT());
+
     createAction("toggle_dot", SLOT(slotToggleDot()));
+
+    // Determines which switch_to slot to call, based on some hackery inserted
+    // into NoteInserter to figure out from outside if it's a NoteInserter
+    // inserting notes or a NoteInserter inserting rests
+    createAction("toggle_notes_rests", SLOT(slotToggleNotesRests()));
 
     //"NoteTool" subMenu
     //NEED to create action methods
@@ -599,7 +625,6 @@ NewNotationView::setupActions()
     createAction("show_symbol_toolbar", SLOT(slotToggleSymbolsToolBar()));
     createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
     createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
-    createAction("show_meta_toolbar", SLOT(slotToggleMetaToolBar()));
 
     //"rulers" subMenu
     createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
@@ -1349,11 +1374,6 @@ void NewNotationView::slotToggleClefsToolBar()
     toggleNamedToolBar("Clefs Toolbar");
 }
 
-void NewNotationView::slotToggleMetaToolBar()
-{
-    toggleNamedToolBar("Meta Toolbar");
-}
-
 void NewNotationView::slotToggleMarksToolBar()
 {
     toggleNamedToolBar("Marks Toolbar");
@@ -1423,6 +1443,20 @@ NewNotationView::slotSetEraseTool()
 }    
 
 void
+NewNotationView::slotToggleNotesRests()
+{
+    NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
+
+    // O fuster cluck, thou art so verily untidy
+    if (currentInserter) {
+        if (currentInserter->isaRestInserter())
+            slotSwitchToNotes();
+        else
+            slotSwitchToRests();
+    }
+}
+
+void
 NewNotationView::slotSwitchToNotes()
 {
     NoteInserter *currentInserter = dynamic_cast<NoteInserter *> (m_notationWidget->getCurrentTool());
@@ -1441,6 +1475,18 @@ NewNotationView::slotSwitchToNotes()
     if (m_notationWidget) {
         m_notationWidget->slotSetNoteInserter();
         m_notationWidget->slotSetInsertedNote(unitType, dots);
+    }
+
+    // morph the DurationMonobar
+    switch (dots) {
+    case 0: morphDurationMonobar(InsertingNotes);
+            break;
+    case 1: morphDurationMonobar(InsertingDottedNotes);
+            break;
+
+    //case 2: morphDurationMonobar(InsertingDoubleDottedNotes);
+
+    default: morphDurationMonobar(InsertingNotes);
     }
 
     QString actionName(NotationStrings::getReferenceName(Note(unitType,dots)));
@@ -1473,6 +1519,18 @@ NewNotationView::slotSwitchToRests()
         m_notationWidget->slotSetInsertedNote(unitType, dots);
     }
 
+    // morph the DurationMonobar
+    switch (dots) {
+    case 0: morphDurationMonobar(InsertingRests);
+            break;
+    case 1: morphDurationMonobar(InsertingDottedRests);
+            break;
+
+    //case 2: morphDurationMonobar(InsertingDoubleDottedRests);
+
+    default: morphDurationMonobar(InsertingRests);
+    }
+
     QString actionName(NotationStrings::getReferenceName(Note(unitType,dots)));
     actionName.replace(QRegExp("-"), "_");
 
@@ -1480,6 +1538,168 @@ NewNotationView::slotSwitchToRests()
     findAction(QString("rest_%1").arg(actionName))->setChecked(true);
 
     slotUpdateMenuStates();
+}
+
+void
+NewNotationView::hideAllDurationMonobarActions()
+{
+    // This makes me nausous with how much it needs to know about the .rc file
+    // to work, but this is what we have to do.
+
+    // controlling bits
+    findAction("switch_to_notes")->setVisible(false);
+    findAction("switch_to_rests")->setVisible(false);
+    findAction("switch_dots_on")->setVisible(false);
+    findAction("switch_dots_off")->setVisible(false);
+    // was Notes Toolbar
+    findAction("breve")->setVisible(false);
+    findAction("semibreve")->setVisible(false);
+    findAction("minim")->setVisible(false);
+    findAction("crotchet")->setVisible(false);
+    findAction("quaver")->setVisible(false);
+    findAction("semiquaver")->setVisible(false);
+    findAction("demisemi")->setVisible(false);
+    findAction("hemidemisemi")->setVisible(false);
+    // was Dotted Notes Toolbar
+    findAction("dummy_1")->setVisible(false);
+    findAction("dotted_semibreve")->setVisible(false);
+    findAction("dotted_minim")->setVisible(false);
+    findAction("dotted_crotchet")->setVisible(false);
+    findAction("dotted_quaver")->setVisible(false);
+    findAction("dotted_semiquaver")->setVisible(false);
+    findAction("dotted_demisemi")->setVisible(false);
+    findAction("dummy_2")->setVisible(false);
+    // was Rests Toolbar
+    findAction("rest_breve")->setVisible(false);
+    findAction("rest_semibreve")->setVisible(false);
+    findAction("rest_minim")->setVisible(false);
+    findAction("rest_crotchet")->setVisible(false);
+    findAction("rest_quaver")->setVisible(false);
+    findAction("rest_semiquaver")->setVisible(false);
+    findAction("rest_demisemi")->setVisible(false);
+    findAction("rest_hemidemisemi")->setVisible(false);
+    // was Dotted Rests Toolbar
+    findAction("dummy_3")->setVisible(false);
+    findAction("rest_dotted_semibreve")->setVisible(false);
+    findAction("rest_dotted_minim")->setVisible(false);
+    findAction("rest_dotted_crotchet")->setVisible(false);
+    findAction("rest_dotted_quaver")->setVisible(false);
+    findAction("rest_dotted_semiquaver")->setVisible(false);
+    findAction("rest_dotted_demisemi")->setVisible(false);
+    findAction("dummy_4")->setVisible(false);
+    // trailing bits (don't hide these, but disable them, so they can be enabled
+    // later if they are relevant to the version of the tool palette we're
+    // displaying now--this could have been done in the rc file with action
+    // states, but since we have all this code strewn everywhere anyway, just do
+    // it here)
+    findAction("chord_mode")->setEnabled(false);
+    findAction("triplet_mode")->setEnabled(false);
+    findAction("grace_mode")->setEnabled(false);
+}
+
+void
+NewNotationView::morphDurationMonobar(DurationMonobarModeType mode)
+{
+    std::string modeStr;
+    switch (mode) {
+
+    case InsertingNotes: modeStr = "Notes Toolbar"; break;
+    case InsertingDottedNotes: modeStr = "Dotted Notes Toolbar"; break;
+    case InsertingRests: modeStr = "Rests Toolbar"; break;
+    case InsertingDottedRests: modeStr = "Dotted Rests Toolbar"; break;
+    default: modeStr = "WTF?  This won't be pretty.";
+
+    }
+    std::cerr << "NewNotationView::morphDurationMonobar: morphing to " << modeStr << std::endl;
+
+    // Gadzooks, now the chaos truly begins.  We start off with 43 lines of
+    // ->hide() calls wrapped in a secondary function for clarity
+    hideAllDurationMonobarActions();
+
+    // Then we have to switch things back on per mode in a big messy switch
+    // statement wrapped around an alternate expression of the same 43 lines
+    switch (mode) {
+
+    case InsertingNotes:
+        // controlling bits
+        findAction("switch_to_rests")->setVisible(true);
+        findAction("switch_dots_on")->setVisible(true);
+        // was Notes Toolbar
+        findAction("breve")->setVisible(true);
+        findAction("semibreve")->setVisible(true);
+        findAction("minim")->setVisible(true);
+        findAction("crotchet")->setVisible(true);
+        findAction("quaver")->setVisible(true);
+        findAction("semiquaver")->setVisible(true);
+        findAction("demisemi")->setVisible(true);
+        findAction("hemidemisemi")->setVisible(true);
+        // trailing bits
+        findAction("chord_mode")->setEnabled(true);
+        findAction("triplet_mode")->setEnabled(true);
+        findAction("grace_mode")->setEnabled(true);
+        break;
+
+   case InsertingDottedNotes:
+        // controlling bits
+        findAction("switch_to_rests")->setVisible(true);
+        findAction("switch_dots_off")->setVisible(true);
+        // was Dotted Notes Toolbar
+        findAction("dummy_1")->setVisible(true);
+        findAction("dotted_semibreve")->setVisible(true);
+        findAction("dotted_minim")->setVisible(true);
+        findAction("dotted_crotchet")->setVisible(true);
+        findAction("dotted_quaver")->setVisible(true);
+        findAction("dotted_semiquaver")->setVisible(true);
+        findAction("dotted_demisemi")->setVisible(true);
+        findAction("dummy_2")->setVisible(true);
+        // trailing bits
+        findAction("chord_mode")->setEnabled(true);
+        findAction("triplet_mode")->setEnabled(true);
+        findAction("grace_mode")->setEnabled(true);
+        break;
+
+    case InsertingRests:
+        // controlling bits
+        findAction("switch_to_notes")->setVisible(true);
+        findAction("switch_dots_on")->setVisible(true);
+        // was Rests Toolbar
+        findAction("rest_breve")->setVisible(true);
+        findAction("rest_semibreve")->setVisible(true);
+        findAction("rest_minim")->setVisible(true);
+        findAction("rest_crotchet")->setVisible(true);
+        findAction("rest_quaver")->setVisible(true);
+        findAction("rest_semiquaver")->setVisible(true);
+        findAction("rest_demisemi")->setVisible(true);
+        findAction("rest_hemidemisemi")->setVisible(true);
+        // trailing bits (no meaning for rests)
+        findAction("chord_mode")->setEnabled(false);
+        findAction("triplet_mode")->setEnabled(false);
+        findAction("grace_mode")->setEnabled(false);
+        break;
+
+    case InsertingDottedRests:
+        // controlling bits
+        findAction("switch_to_notes")->setVisible(true);
+        findAction("switch_dots_off")->setVisible(true);
+        // was Dotted Rests Toolbar
+        findAction("dummy_3")->setVisible(true);
+        findAction("rest_dotted_semibreve")->setVisible(true);
+        findAction("rest_dotted_minim")->setVisible(true);
+        findAction("rest_dotted_crotchet")->setVisible(true);
+        findAction("rest_dotted_quaver")->setVisible(true);
+        findAction("rest_dotted_semiquaver")->setVisible(true);
+        findAction("rest_dotted_demisemi")->setVisible(true);
+        findAction("dummy_4")->setVisible(true);
+        // trailing bits (no meaning for rests)
+        findAction("chord_mode")->setEnabled(false);
+        findAction("triplet_mode")->setEnabled(false);
+        findAction("grace_mode")->setEnabled(false);
+        break;
+
+    default:
+        std::cerr << "NewNotationView::morphDurationMonobar:  Damn, well, I guess the DurationMonobar just winked out of existence.  Oh well."  << std::endl;
+
+    }
 }
 
 int
@@ -1676,16 +1896,26 @@ NewNotationView::slotToggleDot()
 
         durationMenuName = QString("duration_%1").arg(actionName);
 
+        DurationMonobarModeType currentMode = InsertingNotes;
+
         if (dynamic_cast<RestInserter *>(m_notationWidget->getCurrentTool())) {
             // ensure that rest_ preface the note duration
             noteToolbarName = QString("rest_%1").arg(actionName.replace("rest_",""));
             m_notationWidget->slotSetRestInserter();
+            currentMode = InsertingRests;
         } else {
             noteToolbarName = actionName;
             m_notationWidget->slotSetNoteInserter();
         }
         m_notationWidget->slotSetInsertedNote(noteType, noteDots);
 
+        // morph the monobar using a logic chain that would make the Barilla
+        // pasta company proud
+        if (currentMode == InsertingNotes) currentMode = (noteDots ? InsertingDottedNotes : InsertingNotes);
+        else currentMode = (noteDots ? InsertingDottedRests : InsertingRests);
+
+        morphDurationMonobar(currentMode);
+            
         findAction(noteToolbarName)->setChecked(true);
         findAction(durationMenuName)->setChecked(true);
 
@@ -1733,12 +1963,14 @@ NewNotationView::slotNoteAction()
 
     Note::Type type(NotationStrings::getNoteForName(name).getNoteType());
     if (m_notationWidget) {
+        m_notationWidget->slotSetInsertedNote(type, dots);
         if (rest) {
             m_notationWidget->slotSetRestInserter();
+            slotSwitchToRests();
         } else {
             m_notationWidget->slotSetNoteInserter();
+            slotSwitchToNotes();
         }
-        m_notationWidget->slotSetInsertedNote(type, dots);
     }
     
     findAction(noteToolbarName)->setChecked(true);
