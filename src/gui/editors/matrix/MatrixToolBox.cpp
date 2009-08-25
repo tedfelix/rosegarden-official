@@ -26,6 +26,7 @@
 #include "MatrixResizer.h"
 #include "MatrixScene.h"
 #include "MatrixVelocity.h"
+#include "misc/Debug.h"
 
 #include <QString>
 #include <QMessageBox>
@@ -38,6 +39,11 @@ MatrixToolBox::MatrixToolBox(MatrixWidget *parent) :
     m_widget(parent),
     m_scene(0)
 {
+}
+
+MatrixToolBox::~MatrixToolBox()
+{
+    RG_DEBUG << "MatrixToolBox::~MatrixToolBox()";
 }
 
 BaseTool *

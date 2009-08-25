@@ -291,11 +291,6 @@ void ControlRuler::updateSegment()
                                     start,
                                     end));
 
-    ///@TODO NormalizeRests needs attention - changes segment end time when it shouldn't
-    macro->addCommand(new NormalizeRestsCommand(*m_segment,
-                                                start,
-                                                end));
-
     CommandHistory::getInstance()->addCommand(macro);
 
     updateSelection();

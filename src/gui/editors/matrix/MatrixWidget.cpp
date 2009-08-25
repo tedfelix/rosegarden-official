@@ -183,9 +183,11 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 MatrixWidget::~MatrixWidget()
 {
+    RG_DEBUG << "MatrixWidget::~MatrixWidget() - start";
     delete m_scene;
     delete m_pianoScene;
     delete m_localMapping;
+    RG_DEBUG << "MatrixWidget::~MatrixWidget() - end";
 }
 
 void

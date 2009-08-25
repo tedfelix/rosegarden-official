@@ -46,6 +46,8 @@ EditViewBase::EditViewBase(RosegardenDocument *doc,
     m_configDialogPageIndex(0),
     m_shortcuts(0)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     m_doc->attachEditView(this);
 
     connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),

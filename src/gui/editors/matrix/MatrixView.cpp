@@ -172,6 +172,7 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
 
 NewMatrixView::~NewMatrixView()
 {
+    RG_DEBUG << "NewMatrixView::~NewMatrixView()";
 }
 
 void

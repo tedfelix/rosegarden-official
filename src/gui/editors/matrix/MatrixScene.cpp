@@ -65,6 +65,8 @@ MatrixScene::MatrixScene() :
 
 MatrixScene::~MatrixScene()
 {
+    RG_DEBUG << "MatrixScene::~MatrixScene() - start";
+    
     if (m_document) {
         if (!isCompositionDeleted()) { // implemented in CompositionObserver
             m_document->getComposition().removeObserver(this);
@@ -76,6 +78,8 @@ MatrixScene::~MatrixScene()
     delete m_snapGrid;
     delete m_referenceScale;
     delete m_scale;
+
+    RG_DEBUG << "MatrixScene::~MatrixScene() - end";
 }
 
 void
