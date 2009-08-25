@@ -55,6 +55,7 @@ ControlRulerWidget::~ControlRulerWidget()
 //    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
 //        removeRuler(it);
 //    }
+    m_selectedElements.clear();
 }
 
 void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
