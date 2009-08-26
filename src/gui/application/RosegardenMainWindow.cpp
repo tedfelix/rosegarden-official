@@ -1005,7 +1005,8 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = 0;
 
-    setCentralWidget(m_swapView); // this also deletes oldView
+    setCentralWidget(m_swapView); // this also deletes oldView _but_ only on closure
+    delete oldView;
 
     // set the highlighted track
     m_view->slotSelectTrackSegments(comp.getSelectedTrack());
