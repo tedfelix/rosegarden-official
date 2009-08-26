@@ -215,6 +215,8 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_section(NoSection),
     m_device(0),
     m_deviceRunningId(Device::NO_DEVICE),
+    m_deviceInstrumentBase(MidiInstrumentBase),
+    m_deviceReadInstrumentBase(0),
     m_msb(0),
     m_lsb(0),
     m_instrument(0),
@@ -1241,21 +1243,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 direction == "" ||
                 direction == "play") { // ignore inputs
 
-                // This will leave m_device set only if there is a
-                // valid play midi device to modify:
-                skipToNextPlayDevice();
-
-                if (m_device) {
-                    if (!nameStr.isEmpty()) {
-                        m_device->setName(qstrtostr(nameStr));
-                    }
-                } else if (!nameStr.isEmpty()) {
+                if (!nameStr.isEmpty()) {
                     addMIDIDevice(nameStr, m_createDevices, "play"); // also sets m_device
                 }
             }
             
             
-            if (direction == "record" ){
+            if (direction == "record") {
                 if (m_device) {
                     if (!nameStr.isEmpty()) {
                         m_device->setName(qstrtostr(nameStr));
@@ -1290,13 +1284,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 md->setVariationType(variation);
             }
         } else if (type == "softsynth") {
-            m_device = getStudio().getDevice(id);
-            if (m_device && m_device->getType() == Device::SoftSynth)
+            m_device = getStudio().getSoftSynthDevice();
+            if (m_device && m_device->getType() == Device::SoftSynth) {
                 m_device->setName(qstrtostr(nameStr));
+                m_deviceRunningId = m_device->getId();
+                m_deviceInstrumentBase = SoftSynthInstrumentBase;
+                m_deviceReadInstrumentBase = 0;
+            }
         } else if (type == "audio") {
-            m_device = getStudio().getDevice(id);
-            if (m_device && m_device->getType() == Device::Audio)
+            m_device = getStudio().getAudioDevice();
+            if (m_device && m_device->getType() == Device::Audio) {
                 m_device->setName(qstrtostr(nameStr));
+                m_deviceRunningId = m_device->getId();
+                m_deviceInstrumentBase = AudioInstrumentBase;
+                m_deviceReadInstrumentBase = 0;
+            }
         } else {
             m_errorString = "Found unknown Device type";
             return false;
@@ -1619,7 +1621,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_instrument) {
             if (m_instrument->getType() == Instrument::Audio ||
-                    m_instrument->getType() == Instrument::SoftSynth) {
+                m_instrument->getType() == Instrument::SoftSynth) {
                 // Backward compatibility: "volume" was in a 0-127
                 // range and we now store "level" (float dB) instead.
                 // Note that we have no such compatibility for
@@ -1628,7 +1630,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     std::cerr << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
                 m_deprecation = true;
                 m_instrument->setLevel
-                (AudioLevel::multiplier_to_dB(float(value) / 100.0));
+                    (AudioLevel::multiplier_to_dB(float(value) / 100.0));
             } else {
                 m_instrument->setVolume(value);
                 m_instrument->setSendVolume(true);
@@ -1834,8 +1836,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             (m_device->getType() == Device::Midi ||
              m_device->getType() == Device::SoftSynth)) {
 
-            InstrumentId instrument =
-                atts.value("instrument").toInt();
+            // We will map this to an "actual" instrument ID at the
+            // end, when we do the same for the track->instrument
+            // references
+            InstrumentId instrument = atts.value("instrument").toInt();
 
             MidiMetronome metronome(instrument);
 
@@ -1883,7 +1887,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         m_section = InInstrument;
 
-        InstrumentId id = atts.value("id").toInt();
+        InstrumentId id = mapToActualInstrument(atts.value("id").toInt());
+
         std::string stringType = qstrtostr(atts.value("type"));
         Instrument::InstrumentType type;
 
@@ -1903,6 +1908,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //
         Instrument *instrument = getStudio().getInstrumentById(id);
 
+        RG_DEBUG << "Found Instrument in document: mapped actual id " << id << " to instrument " << instrument << endl;
+
         // If we've got an instrument and the types match then
         // we use it from now on.
         //
@@ -1911,8 +1918,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
             // We can also get the channel from this tag
             //
-            MidiByte channel =
-                (MidiByte)atts.value("channel").toInt();
+            MidiByte channel = (MidiByte)atts.value("channel").toInt();
             m_instrument->setMidiChannel(channel);
         }
 
@@ -2112,7 +2118,39 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
 
     if (lcName == "rosegarden-data") {
 
-        getComposition().updateTriggerSegmentReferences();
+        Composition &comp = getComposition();
+
+        // Remap all the instrument IDs in track and metronome objects
+        // from "file" to "actual" IDs.  See discussion in
+        // mapToActualInstrument() below.
+
+        for (Composition::trackcontainer::iterator i = comp.getTracks().begin();
+             i != comp.getTracks().end(); ++i) {
+            InstrumentId iid = i->second->getInstrument();
+            InstrumentId aid = mapToActualInstrument(iid);
+            RG_DEBUG << "RoseXmlHandler: mapping instrument " << iid
+                     << " to " << aid << " for track " << i->first << endl;
+            i->second->setInstrument(aid);
+        }
+
+        Studio &studio = getStudio();
+        for (DeviceList::iterator i = studio.getDevices()->begin();
+             i != studio.getDevices()->end(); ++i) {
+            MidiMetronome mm(0);
+            MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
+            SoftSynthDevice *sd = dynamic_cast<SoftSynthDevice *>(*i);
+            if (md && md->getMetronome()) mm = *md->getMetronome();
+            else if (sd && sd->getMetronome()) mm = *sd->getMetronome();
+            else continue;
+            InstrumentId iid = mm.getInstrument();
+            InstrumentId aid = mapToActualInstrument(iid);
+            RG_DEBUG << "RoseXmlHandler: mapping instrument " << iid
+                     << " to " << aid << " for metronome" << endl;
+            if (md) md->setMetronome(mm);
+            else if (sd) sd->setMetronome(mm);
+        }
+
+        comp.updateTriggerSegmentReferences();
 
     } else if (lcName == "event") {
 
@@ -2267,7 +2305,7 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
 }
 
 void
-RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir )
+RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir)
 {
     /**
     *   params:
@@ -2280,49 +2318,121 @@ RoseXmlHandler::addMIDIDevice(QString name, bool createAtSequencer, QString dir 
     
     MidiDevice::DeviceDirection devDir;
     
-    if( dir=="play" ){
+    if (dir == "play") {
         devDir = MidiDevice::Play;
-    }else if( dir=="record" ){
+    } else if (dir == "record") {
         devDir = MidiDevice::Record;
-    }else{
-        SEQMAN_DEBUG << "Error: Device direction invalid   in RoseXmlHandler::addMIDIDevice() " << endl;
+    } else {
+        std::cerr << "Error: Device direction \"" << dir
+                  << "\" invalid in RoseXmlHandler::addMIDIDevice()" << std::endl;
         return;
     }
 
+    InstrumentId instrumentBase;
+    deviceId = getStudio().getSpareDeviceId(instrumentBase);
+
     if (createAtSequencer) {
-
-        deviceId = RosegardenSequencer::getInstance()->
-            addDevice(Device::Midi, devDir ); //MidiDevice::Play);
-
-        if (deviceId == Device::NO_DEVICE) {
+        if (!RosegardenSequencer::getInstance()->
+            addDevice(Device::Midi, deviceId, instrumentBase, devDir)) {
             SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
                          << "sequencer addDevice failed" << endl;
             return;
         }
 
         SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
-                     << " added device " << deviceId << endl;
-
-    } else {
-        // Generate a new device id at the base Studio side only.
-        // This may not correspond to any given device id at the
-        // sequencer side.  We should _never_ do this in a document
-        // that's actually intended to be retained for use, only
-        // in temporary documents for device import etc.
-        int tempId = -1;
-        for (DeviceListIterator i = getStudio().getDevices()->begin();
-                i != getStudio().getDevices()->end(); ++i) {
-            if (int((*i)->getId()) > tempId)
-                tempId = int((*i)->getId());
-        }
-        deviceId = tempId + 1;
+                     << " added device " << deviceId
+                     << " with instrument base " << instrumentBase
+                     << " at sequencer" << endl;
     }
 
-    // add the device, so we can name it and set our pointer to it --
-    // instruments will be sync'd later in the natural course of things
-    getStudio().addDevice(qstrtostr(name), deviceId, Device::Midi);
+    getStudio().addDevice(qstrtostr(name), deviceId,
+                          instrumentBase, Device::Midi);
     m_device = getStudio().getDevice(deviceId);
+    if (m_device) {
+        MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+        if (md) md->setDirection(devDir);
+    }
+
+    SEQMAN_DEBUG << "RoseXmlHandler::addMIDIDevice - "
+                 << " added device " << deviceId
+                 << " with instrument base " << instrumentBase
+                 << " in studio" << endl;
+
     m_deviceRunningId = deviceId;
+    m_deviceInstrumentBase = instrumentBase;
+    m_deviceReadInstrumentBase = 0;
+}
+
+InstrumentId
+RoseXmlHandler::mapToActualInstrument(InstrumentId oldId)
+{
+    /*
+      When we read a device from the file, we want to be able to add
+      it to the studio and the sequencer immediately.  But to do so,
+      we (now) need to be able to provide a base instrument number for
+      the device.  We can make up a plausible one (we know what type
+      of device it is, and that's the main determining factor) but we
+      can't know for sure whether it's the same one as used in the
+      file until we have continued and read the first instrument
+      definition in the device.
+
+      Device and instrument numbers in the file have always been
+      problematic in other ways as well.  Rosegarden actually never
+      used the device numbers loaded from the file (we always made up
+      a new device number for each device as we read it) and it was
+      theoretically possible for the instrument definitions to end up
+      attached to different devices from the ones they were hung onto
+      in the file (because of the way we sometimes re-used instruments
+      that already existed in the studio).
+
+      Our new approach is to assume that we will _never_ believe the
+      device or instrument numbers found in the file, except for the
+      purposes of resolving internal references within the file.  (The
+      main examples of these are track -> instrument mappings outside
+      of the studio definition, and metronome -> instrument mappings
+      within a device.)  Instead, we assign a new device ID to each
+      device based on its type and the available spare IDs; we assign
+      a new instrument ID to each instrument based on the device type;
+      and we maintain a map from "file" to "actual" instrument IDs as
+      we go along, using this to resolve the track -> instrument and
+      metronome -> instrument references at the end of the file (see
+      the endElement method for rosegarden-data element).
+    */
+
+    /*
+      This function is first called for any given instrument when
+      first reading that instrument's definition in the context of a
+      device definition.  So we know that if the instrument is not in
+      the map already, then m_deviceInstrumentBase must contain a
+      valid instrument base ID that was set when we added the device.
+
+      To map from the number we just read, we subtract
+      m_deviceReadInstrumentBase (if it exists; otherwise we set it as
+      this is the first instrument for this device) and add
+      m_deviceInstrumentBase.
+    */
+
+    if (m_actualInstrumentIdMap.find(oldId) != m_actualInstrumentIdMap.end()) {
+        return m_actualInstrumentIdMap[oldId];
+    }
+
+    InstrumentId id = oldId;
+
+    // here be dark wartortles
+
+    if (m_deviceReadInstrumentBase == 0 || id < m_deviceReadInstrumentBase) {
+        m_deviceReadInstrumentBase = id;
+    }
+    id = id - m_deviceReadInstrumentBase;
+    id = id + m_deviceInstrumentBase;
+
+    RG_DEBUG << "RoseXmlHandler::mapToActualInstrument: instrument " << oldId
+             << ", dev read base " << m_deviceReadInstrumentBase
+             << ", dev base " << m_deviceInstrumentBase << " -> " << id << endl;
+
+    m_actualInstrumentIdMap[oldId] = id;
+
+    return id;
 }
 
 void
@@ -2333,12 +2443,11 @@ RoseXmlHandler::skipToNextPlayDevice()
     for (DeviceList::iterator i = getStudio().getDevices()->begin();
             i != getStudio().getDevices()->end(); ++i) {
 
-        MidiDevice *md =
-            dynamic_cast<MidiDevice *>(*i);
+        MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
         if (md && md->getDirection() == MidiDevice::Play) {
             if (m_deviceRunningId == Device::NO_DEVICE ||
-                    md->getId() > m_deviceRunningId) {
+                md->getId() > m_deviceRunningId) {
 
                 SEQMAN_DEBUG << "RoseXmlHandler::skipToNextPlayDevice: found next device: id " << md->getId() << endl;
 

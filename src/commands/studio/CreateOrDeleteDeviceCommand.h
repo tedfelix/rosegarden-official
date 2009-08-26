@@ -50,6 +50,7 @@ public:
         m_direction(direction),
         m_connection(connection),
         m_deviceId(Device::NO_DEVICE),
+        m_baseInstrumentId(MidiInstrumentBase),
         m_deviceCreated(false) { }
 
     // Deletion constructor
@@ -70,6 +71,7 @@ protected:
     MidiDevice::DeviceDirection m_direction;
     std::string m_connection;
     DeviceId m_deviceId;
+    InstrumentId m_baseInstrumentId;
     bool m_deviceCreated;
 };
 

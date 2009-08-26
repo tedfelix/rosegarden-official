@@ -68,8 +68,8 @@ RELEASEFLAGS="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
 MINIMAL_CFLAGS="$RELEASEFLAGS"
 
 if test "x$GCC" = "xyes"; then
-	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1"
-	RELEASEFLAGS="$RELEASEFLAGS -g0 -O2 -Wall"
+	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1 -g -pipe"
+	RELEASEFLAGS="$RELEASEFLAGS -g0 -O2 -Wall -pipe"
 	MINIMAL_CFLAGS="$MINIMAL_CFLAGS -g0 -O0"
 fi
 

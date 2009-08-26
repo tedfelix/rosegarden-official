@@ -889,7 +889,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                 // resync Devices and Instruments
                 //
-                m_doc->syncDevices();
+//!DEVPUSH                m_doc->syncDevices();
             }
 
             if (m_transportStatus == PLAYING ||

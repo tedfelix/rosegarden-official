@@ -97,12 +97,13 @@ public:
     // devices were deleted, which you will recognise because
     // getMappedDevice(id) will return a device with id NO_DEVICE
     //
+/*!DEVPUSH
     virtual unsigned int getDevices() = 0;
 
     // Return device by number
     //
     virtual MappedDevice getMappedDevice(unsigned int id) = 0;
-
+*/
     // Query whether the driver implements device reconnection.
     // Returns a non-zero value if the addDevice, removeDevice,
     // getConnections, getConnection and setConnection methods
@@ -116,8 +117,10 @@ public:
     // currently ignored for non-MIDI devices.
     // Do not use this unless canReconnect(type) returned true.
     //
-    virtual unsigned int addDevice(Device::DeviceType type,
-                                   MidiDevice::DeviceDirection direction) = 0;
+    virtual bool addDevice(Device::DeviceType type,
+                           DeviceId id,
+                           InstrumentId baseInstrumentId,
+                           MidiDevice::DeviceDirection direction) = 0;
 
     // Remove the device of the given id.
     // Ignored if driver does not permit changing the number of devices
@@ -125,6 +128,11 @@ public:
     // type of the supplied device).
     //
     virtual void removeDevice(unsigned int id) = 0;
+
+    // Remove all of the devices (of types that can be added or removed).
+    // Ignored if driver does not permit changing the number of devices
+    //
+    virtual void removeAllDevices() = 0;
 
     // Rename the given device.
     // Ignored if the driver does not permit this operation.

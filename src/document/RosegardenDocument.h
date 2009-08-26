@@ -326,13 +326,15 @@ public:
     /*
     * Sync device information with sequencer
     */
-    void syncDevices();
+    void checkSequencerTimer();
 
     /*
      * Get a MappedDevice from the sequencer and add the
      * results to our Studio
      */
+/*!DEVPUSH
     void getMappedDevice(DeviceId id);
+*/
 
     void addRecordMIDISegment(TrackId);
     void addRecordAudioSegment(InstrumentId, AudioFileId);

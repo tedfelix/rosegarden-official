@@ -265,7 +265,7 @@ SoundDriver::setMappedInstrument(MappedInstrument *mI)
     << "id = " << mI->getId() << std::endl;
 
 }
-
+/*!DEVPUSH
 unsigned int
 SoundDriver::getDevices()
 {
@@ -302,6 +302,7 @@ SoundDriver::getMappedDevice(DeviceId id)
 
     return retDevice;
 }
+*/
 
 
 

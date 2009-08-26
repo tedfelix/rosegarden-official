@@ -22,6 +22,7 @@
 #include "Instrument.h"
 
 #include "base/Segment.h"
+#include "misc/Strings.h"
 #include "Track.h"
 #include "Composition.h"
 
@@ -50,6 +51,16 @@ Studio::Studio() :
 
     // And we always create one audio record in
     m_recordIns.push_back(new RecordIn());
+
+    // And we always have one audio and one soft-synth device, whose
+    // IDs match the base instrument numbers (for no good reason
+    // except easy identifiability)
+    addDevice(tr("Audio").toUtf8().data(),
+	      AudioInstrumentBase, AudioInstrumentBase,
+	      Device::Audio);
+    addDevice(tr("Synth plugin").toUtf8().data(),
+	      SoftSynthInstrumentBase, SoftSynthInstrumentBase,
+	      Device::SoftSynth);
 }
 
 Studio::~Studio()
@@ -73,49 +84,97 @@ Studio::~Studio()
 void
 Studio::addDevice(const std::string &name,
                   DeviceId id,
+		  InstrumentId baseInstrumentId,
                   Device::DeviceType type)
 {
-    switch(type)
-    {
+    Device *d = 0;
+    int count = 16;
+    Instrument::InstrumentType itype;
+
+    switch (type) {
+
         case Device::Midi:
-            m_devices.push_back(new MidiDevice(id, name, MidiDevice::Play));
+            d = new MidiDevice(id, name, MidiDevice::Play);
+	    itype = Instrument::Midi;
             break;
 
         case Device::Audio:
-            m_devices.push_back(new AudioDevice(id, name));
+            d = new AudioDevice(id, name);
+	    count = AudioInstrumentCount;
+	    itype = Instrument::Audio;
             break;
 
         case Device::SoftSynth:
-            // This was never handled here before, which caused a compiler
-            // warning about the enum not being handled in the switch.  Since
-            // this feature works in spite of doing nothing special for this
-            // case, I have put Device::SoftSynth in as effectively a second
-            // default: to shut up the compiler warning.
+            d = new SoftSynthDevice(id, name);
+	    count = SoftSynthInstrumentCount;
+	    itype = Instrument::SoftSynth;
+            break;
+
         default:
             std::cerr << "Studio::addDevice() - unrecognised device"
                       << endl;
-            break;
+            return;
     }
-}
 
-void
-Studio::addDevice(Device *device)
-{
-    m_devices.push_back(device);
+    m_devices.push_back(d);
+    
+    InstrumentId iid = baseInstrumentId;
+
+    for (int i = 0; i < count; ++i) {
+	bool perc = false;
+	if (itype == Instrument::Midi && i == 9) perc = true;
+	Instrument *instrument = new Instrument
+	    (iid, itype,
+	     qstrtostr(QString("%1 #%2%3").arg(name.c_str())
+		       .arg(i+1).arg(perc ? "[D]" : "")), i, d);
+	d->addInstrument(instrument);
+	++iid;
+    }
 }
 
 void
 Studio::removeDevice(DeviceId id)
 {
     DeviceListIterator it;
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
-    {
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
 	if ((*it)->getId() == id) {
 	    delete *it;
 	    m_devices.erase(it);
 	    return;
 	}
     }
+}
+
+DeviceId
+Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
+{
+    InstrumentId highestMidiInstrumentId = MidiInstrumentBase;
+    bool foundInstrument = false;
+
+    std::set<DeviceId> ids;
+    DeviceListIterator it;
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+	ids.insert((*it)->getId());
+	if ((*it)->getType() == Device::Midi) {
+	    InstrumentList il = (*it)->getAllInstruments();
+	    for (int i = 0; i < il.size(); ++i) {
+		if (il[i]->getId() > highestMidiInstrumentId) {
+		    highestMidiInstrumentId = il[i]->getId();
+		    foundInstrument = true;
+		}
+	    }
+	}
+    }
+
+    if (!foundInstrument) {
+	baseInstrumentId = MidiInstrumentBase;
+    } else {
+	baseInstrumentId = ((highestMidiInstrumentId / 128) + 1) * 128;
+    }
+
+    DeviceId id = 0;
+    while (ids.find(id) != ids.end()) ++id;
+    return id;
 }
 
 InstrumentList
@@ -587,7 +646,7 @@ Studio::clearRecordIns()
     m_recordIns.push_back(new RecordIn());
 }
 
-Device*
+Device *
 Studio::getDevice(DeviceId id)
 {
     //cerr << "Studio[" << this << "]::getDevice(" << id << ")... ";
@@ -606,6 +665,30 @@ Studio::getDevice(DeviceId id)
     }
 
     //cerr << ". Not found" << endl;
+
+    return 0;
+}
+
+Device *
+Studio::getAudioDevice()
+{
+    std::vector<Device*>::iterator it;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+	if ((*it)->getType() == Device::Audio) return *it;
+    }
+
+    return 0;
+}
+
+Device *
+Studio::getSoftSynthDevice()
+{
+    std::vector<Device*>::iterator it;
+
+    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+	if ((*it)->getType() == Device::SoftSynth) return *it;
+    }
 
     return 0;
 }

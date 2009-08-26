@@ -277,7 +277,7 @@ public:
 
     RealTime getStartPosition() const { return m_playStartPosition; }
     RecordStatus getRecordStatus() const { return m_recordStatus; }
-
+/*!DEVPUSH
     // Return a MappedDevice full of the Instrument mappings
     // that the driver has discovered.  The gui can then use
     // this list (complete with names) to generate its proper
@@ -288,14 +288,17 @@ public:
     // Return the number of devices we've found
     //
     unsigned int getDevices();
-
+*/
     virtual bool canReconnect(Device::DeviceType) { return false; }
 
-    virtual DeviceId addDevice(Device::DeviceType,
-                               MidiDevice::DeviceDirection) {
-        return Device::NO_DEVICE;
+    virtual bool addDevice(Device::DeviceType,
+                           DeviceId id,
+                           InstrumentId baseInstrumentId,
+                           MidiDevice::DeviceDirection) {
+        return false;
     }
     virtual void removeDevice(DeviceId) { }
+    virtual void removeAllDevices() { }
     virtual void renameDevice(DeviceId, QString) { }
 
     virtual unsigned int getConnections(Device::DeviceType,
@@ -304,7 +307,6 @@ public:
                                   MidiDevice::DeviceDirection,
                                   unsigned int) { return ""; }
     virtual void setConnection(DeviceId, QString) { }
-    virtual void removeConnection( DeviceId, QString connectionName ) { };  // implemented in AlsaDriver.cpp
     virtual void setPlausibleConnection(DeviceId id, QString c) { setConnection(id, c); }
 
     virtual unsigned int getTimers() { return 0; }
@@ -427,7 +429,7 @@ protected:
     virtual void processMidiOut(const MappedEventList &mC,
                                 const RealTime &sliceStart,
                                 const RealTime &sliceEnd) = 0;
-    virtual void generateInstruments() = 0;
+    virtual void generateFixedInstruments() = 0;
 
     // Audio
     //

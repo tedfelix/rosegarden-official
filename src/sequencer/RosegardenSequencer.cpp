@@ -533,6 +533,7 @@ RosegardenSequencer::processMappedEvent(MappedEvent mE)
                     << " events in async out queue" << endl;
 }
 
+/*!DEVPUSH
 // Get the MappedDevice (DCOP wrapped vector of MappedInstruments)
 //
 MappedDevice
@@ -550,7 +551,7 @@ RosegardenSequencer::getDevices()
 
     return m_driver->getDevices();
 }
-
+*/
 int
 RosegardenSequencer::canReconnect(Device::DeviceType type)
 {
@@ -559,13 +560,15 @@ RosegardenSequencer::canReconnect(Device::DeviceType type)
     return m_driver->canReconnect(type);
 }
 
-unsigned int
+bool
 RosegardenSequencer::addDevice(Device::DeviceType type,
+                               DeviceId id,
+                               InstrumentId baseInstrumentId,
                                MidiDevice::DeviceDirection direction)
 {
     LOCKED;
 
-    return m_driver->addDevice(type, direction);
+    return m_driver->addDevice(type, id, baseInstrumentId, direction);
 }
 
 void
@@ -574,6 +577,14 @@ RosegardenSequencer::removeDevice(unsigned int deviceId)
     LOCKED;
 
     m_driver->removeDevice(deviceId);
+}
+
+void
+RosegardenSequencer::removeAllDevices()
+{
+    LOCKED;
+
+    m_driver->removeAllDevices();
 }
 
 void
@@ -613,14 +624,14 @@ RosegardenSequencer::setConnection(unsigned int deviceId,
 }
 
 
-
+/*!DEVPUSH
 void RosegardenSequencer::removeConnection(unsigned int deviceId, QString connection)
 {
     LOCKED;
     
     m_driver->removeConnection(deviceId, connection);
 }
-
+*/
 
 void
 RosegardenSequencer::setPlausibleConnection(unsigned int deviceId,

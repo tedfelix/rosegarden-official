@@ -630,8 +630,8 @@ DeviceManagerDialog::updateCheckStatesOfPortsList(QTreeWidget *treeWid_ports,
 
 
 void
-DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice * mdev,
-                                           QString portName)
+DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice *mdev,
+                                             QString portName)
 {
     RG_DEBUG << "DeviceManagerDialog::connectMidiDeviceToPort(" << mdev->getId()
              << ", " << portName << ")" << endl;
@@ -657,33 +657,33 @@ DeviceManagerDialog::connectMidiDeviceToPort(MidiDevice * mdev,
 
     if (outPort != portName) {  // then: port changed
         if ((portName == "") || (portName == m_noPortName)) {   // disconnect
-            CommandHistory::getInstance()->addCommand(new
-                                                      ReconnectDeviceCommand
-                                                                (m_studio, devId,
-                                                                ""));
+            RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
+                     << " devId " << devId << " (disconnecting)" << endl;
+
+            CommandHistory::getInstance()->addCommand
+                (new ReconnectDeviceCommand(m_studio, devId, ""));
             
             // note: 
             // seq->removeConnection() (in sequencer/RosegardenSequencer.cpp) 
             // calls SoundDriver->removeConnection(), (in sound/SoundDriver.cpp) 
             // which is implemented in the subclass sound/AlsaDriver.cpp
             // 
-            seq->removeConnection( mdev->getId(), strtoqstr(mdev->getConnection()) );
+//            seq->removeConnection( mdev->getId(), strtoqstr(mdev->getConnection()) );
             // mdev->getDirection()
-            mdev->setConnection("");
+//!DEVPUSH            mdev->setConnection("");
             //### FIXME ports are being disconnected now. Still buggy ? Verify !
             
         } else {    // re-connect
             RG_DEBUG << "DeviceManagerDialog: portName: " << portName 
                      << " devId " << devId << endl;
 
-            CommandHistory::getInstance()->addCommand(
-                                                   new ReconnectDeviceCommand (
-                                                           m_studio, devId,
-                                                           qstrtostr (portName)));
+            CommandHistory::getInstance()->addCommand
+                (new ReconnectDeviceCommand(m_studio, devId,
+                                            qstrtostr(portName)));
 
             // ah HAH!  here was the culprit preventing the various intended
-            // updates from working correctly                                                           
-            mdev->setConnection(qstrtostr(portName));
+            // updates from working correctly
+//!DEVPUSH            mdev->setConnection(qstrtostr(portName));
         }
     }
 }
@@ -932,13 +932,11 @@ DeviceManagerDialog::slotDeviceItemChanged(QTreeWidgetItem * twItem,
     devName = twItem->text(0);
 
     if (devName != strtoqstr(mdev->getName())) {
-        CommandHistory::getInstance()->addCommand(new RenameDeviceCommand(m_studio,
-                                                                          mdev->getId(),
-                                                                          qstrtostr
-                                                                          (devName)));
+        CommandHistory::getInstance()->addCommand
+            (new RenameDeviceCommand(m_studio, mdev->getId(),
+                                     qstrtostr(devName)));
         emit sigDeviceNameChanged(mdev->getId());
     }
-
 }
 
 
@@ -956,6 +954,7 @@ DeviceManagerDialog::slotRecordDevicesListItemClicked(QTreeWidgetItem * twItem,
 
 
 
+//!DEVPUSH Need to do this when a new document is loaded
 void DeviceManagerDialog::slotResyncDevicesReceived(){
     /**
     // devicesResyncd is emitted by RosegardenDocument::syncDevices(),

@@ -40,6 +40,7 @@ ReconnectDeviceCommand::execute()
         m_oldConnection = device->getConnection();
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_newConnection));
+        device->setConnection(m_newConnection);
 
         std::cerr << "ReconnectDeviceCommand::execute - "
                      << " reconnected device " << m_deviceId
@@ -55,6 +56,7 @@ ReconnectDeviceCommand::unexecute()
     if (device) {
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_oldConnection));
+        device->setConnection(m_oldConnection);
 
         std::cerr << "ReconnectDeviceCommand::unexecute - "
                      << " reconnected device " << m_deviceId

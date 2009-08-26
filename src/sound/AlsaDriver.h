@@ -323,9 +323,12 @@ public:
 
     virtual bool canReconnect(Device::DeviceType type);
 
-    virtual DeviceId addDevice(Device::DeviceType type,
-                               MidiDevice::DeviceDirection direction);
+    virtual bool addDevice(Device::DeviceType type,
+                           DeviceId id,
+                           InstrumentId baseInstrumentId,
+                           MidiDevice::DeviceDirection direction);
     virtual void removeDevice(DeviceId id);
+    virtual void removeAllDevices();
     virtual void renameDevice(DeviceId id, QString name);
 
     // Get available connections per device
@@ -336,7 +339,6 @@ public:
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo);
     virtual void setConnection(DeviceId deviceId, QString connection);
-    virtual void removeConnection( DeviceId, QString connectionName );  // overrides defin. in SoundDriver.h
     virtual void setPlausibleConnection(DeviceId deviceId, QString connection);
 
     virtual unsigned int getTimers();
@@ -374,6 +376,8 @@ public:
 protected:
     typedef std::vector<AlsaPortDescription *> AlsaPortList;
 
+    void clearDevices();
+
     ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
     int getOutputPortForMappedInstrument(InstrumentId id);
@@ -384,13 +388,13 @@ protected:
      * return the new ports (not previously in m_alsaPorts) through it
      */
     virtual void generatePortList(AlsaPortList *newPorts = 0);
-    virtual void generateInstruments();
+    virtual void generateFixedInstruments();
 
     virtual void generateTimerList();
     virtual std::string getAutoTimer(bool &wantTimerChecks);
 
-    void addInstrumentsForDevice(MappedDevice *device);
-    MappedDevice *createMidiDevice(AlsaPortDescription *,
+    void addInstrumentsForDevice(MappedDevice *device, InstrumentId base);
+    MappedDevice *createMidiDevice(DeviceId deviceId,
                                    MidiDevice::DeviceDirection);
 
     virtual void processMidiOut(const MappedEventList &mC,
@@ -490,13 +494,8 @@ private:
     typedef std::map<DeviceId, ClientPortPair> DevicePortMap;
     DevicePortMap m_devicePortMap;
 
-    typedef std::map<ClientPortPair, DeviceId> PortDeviceMap;
-    PortDeviceMap m_suspendedPortMap;
-
     std::string getPortName(ClientPortPair port);
     ClientPortPair getPortByName(std::string name);
-
-    DeviceId getSpareDeviceId();
 
     struct AlsaTimerInfo {
         int clas;

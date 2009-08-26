@@ -1173,7 +1173,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     connect(m_doc, SIGNAL(devicesResyncd()),
             this, SLOT(slotDocumentDevicesResyncd()));
 
-    m_doc->syncDevices();
+    m_doc->checkSequencerTimer();
     m_doc->clearModifiedStatus();
 
     if (newDocument->getStudio().haveMidiDevices()) {
@@ -4505,9 +4505,7 @@ RosegardenMainWindow::launchSequencer()
     connect(m_sequencerThread, SIGNAL(finished()), this, SLOT(slotSequencerExited()));
     m_sequencerThread->start();
 
-    // Sync current devices with the sequencer
-    //
-    if (m_doc) m_doc->syncDevices();
+    if (m_doc) m_doc->checkSequencerTimer();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
@@ -4521,6 +4519,7 @@ RosegardenMainWindow::launchSequencer()
 void
 RosegardenMainWindow::slotDocumentDevicesResyncd()
 {
+    //!DEVPUSH how to replace this?
     m_sequencerCheckedIn = true;
     m_trackParameterBox->populateDeviceLists();
 }
@@ -5071,8 +5070,7 @@ RosegardenMainWindow::slotSetLoop(timeT lhs, timeT rhs)
 void
 RosegardenMainWindow::alive()
 {
-    if (m_doc)
-        m_doc->syncDevices();
+    if (m_doc) m_doc->checkSequencerTimer();
 
     if (m_doc && m_doc->getStudio().haveMidiDevices()) {
         enterActionState("got_midi_devices"); //@@@ JAS orig. 0
@@ -7581,18 +7579,19 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
     //        newStudio.addDevice("", i, Device::Midi);
     //    }
 
+    //!DEVPUSH review this
+
     if (doc->openDocument(file, true)) { // true because we actually
         // do want to create devices
         // on the sequencer here
 
         MacroCommand *command = new MacroCommand(tr("Import Studio"));
-        doc->syncDevices();
 
         // We actually only copy across MIDI play devices... for now
         std::vector<DeviceId> midiPlayDevices;
 
         for (DeviceList::const_iterator i =
-                    oldStudio.begin(); i != oldStudio.end(); ++i) {
+                 oldStudio.begin(); i != oldStudio.end(); ++i) {
 
             MidiDevice *md =
                 dynamic_cast<MidiDevice *>(*i);
@@ -7646,7 +7645,6 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         oldStudio.setMIDIRecordFilter(newStudio.getMIDIRecordFilter());
 
         CommandHistory::getInstance()->addCommand(command);
-        m_doc->syncDevices();
         m_doc->initialiseStudio(); // The other document will have reset it
     }
 

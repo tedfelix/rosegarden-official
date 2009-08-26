@@ -45,7 +45,7 @@
 #include <pthread.h>
 
 
-//#define DEBUG_ALSA 1
+#define DEBUG_ALSA 1
 //#define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -175,6 +175,8 @@ AlsaDriver::shutdown()
     }
 
     DataBlockRepository::clear();
+
+    clearDevices();
 
     m_haveShutdown = true;
 }
@@ -485,6 +487,10 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
 
 
 
+/* generatePortList: called from initialiseMidi and
+ * checkForNewClients.  This just polls ALSA ports and should continue
+ * to be called regularly. */
+
 void
 AlsaDriver::generatePortList(AlsaPortList *newPorts)
 {
@@ -518,27 +524,27 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
             continue;
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0) {
+
             int client = snd_seq_port_info_get_client(pinfo);
             int port = snd_seq_port_info_get_port(pinfo);
             unsigned int clientType = snd_seq_client_info_get_type(cinfo);
             unsigned int portType = snd_seq_port_info_get_type(pinfo);
             unsigned int capability = snd_seq_port_info_get_capability(pinfo);
 
-
             if ((((capability & writeCap) == writeCap) ||
-                    ((capability & readCap) == readCap)) &&
-                    ((capability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
+                 ((capability & readCap) == readCap)) &&
+                ((capability & SND_SEQ_PORT_CAP_NO_EXPORT) == 0)) {
                 audit << "    "
-                << client << ","
-                << port << " - ("
-                << snd_seq_client_info_get_name(cinfo) << ", "
-                << snd_seq_port_info_get_name(pinfo) << ")";
+                      << client << ","
+                      << port << " - ("
+                      << snd_seq_client_info_get_name(cinfo) << ", "
+                      << snd_seq_port_info_get_name(pinfo) << ")";
 
                 PortDirection direction;
 
                 if ((capability & SND_SEQ_PORT_CAP_DUPLEX) ||
-                        ((capability & SND_SEQ_PORT_CAP_WRITE) &&
-                         (capability & SND_SEQ_PORT_CAP_READ))) {
+                    ((capability & SND_SEQ_PORT_CAP_WRITE) &&
+                     (capability & SND_SEQ_PORT_CAP_READ))) {
                     direction = Duplex;
                     audit << "\t\t\t(DUPLEX)";
                 } else if (capability & SND_SEQ_PORT_CAP_WRITE) {
@@ -630,359 +636,95 @@ AlsaDriver::generatePortList(AlsaPortList *newPorts)
 
 
 void
-AlsaDriver::generateInstruments()
+AlsaDriver::generateFixedInstruments()
 {
-    // Reset these before each Instrument hunt
-    //
-    int audioCount = 0;
-    getAudioInstrumentNumbers(m_audioRunningId, audioCount);
-    m_midiRunningId = MidiInstrumentBase;
-
-    // Clear these
-    //
-    m_instruments.clear();
-    m_devices.clear();
-    m_devicePortMap.clear();
-    m_suspendedPortMap.clear();
-
-    // Do NOT scan all the ports and create new devices for all of them.  This makes
-    // it impossible for a user to delete any devices they don't want to use for
-    // anything, and it's time for that irritation to end once and for all.
-    // Absolutely.  Now that I've worked with the results, there is no question
-    // that this needs to go away now.
-    //
-    // The automatic scanning that takes place and finds a newly-started
-    // instance of Hydrogen or whatever seems fine though.
-//#define ENABLE_EVIL_CODE 1
-// (no, re-enabling this wretched business did nothing to solve the problem at
-// hand, so let's gleefully dash it against the rocks once more)
-#ifdef ENABLE_EVIL_CODE
-    AlsaPortList::iterator it = m_alsaPorts.begin();
-    for (; it != m_alsaPorts.end(); it++) {
-        if ((*it)->m_client == m_client) {
-            std::cerr << "(Ignoring own port " << (*it)->m_client
-                      << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        } else if ((*it)->m_client == 0) {
-            std::cerr << "(Ignoring system port " << (*it)->m_client
-                      << ":" << (*it)->m_port << ")" << std::endl;
-            continue;
-        }
-
-        if ((*it)->isWriteable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Play);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create play device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                addInstrumentsForDevice(device);
-                m_devices.push_back(device);
-            }
-        }
-        if ((*it)->isReadable()) {
-            MappedDevice *device = createMidiDevice(*it, MidiDevice::Record);
-            if (!device) {
-#ifdef DEBUG_ALSA
-                std::cerr << "WARNING: Failed to create record device" << std::endl;
-#else
-
-                ;
-#endif
-
-            } else {
-                m_devices.push_back(device);
-            }
-        }
-    } 
-#endif
-
     // Create a number of soft synth Instruments
     //
-    {
-        MappedInstrument *instr;
-        char number[100];
-        InstrumentId first;
-        int count;
-        getSoftSynthInstrumentNumbers(first, count);
+    MappedInstrument *instr;
+    char number[100];
+    InstrumentId first;
+    int count;
+    getSoftSynthInstrumentNumbers(first, count);
+    
+    // soft-synth device takes id to match first soft-synth instrument
+    // number, for easy identification & consistency with GUI
+    DeviceId ssiDeviceId = first;
 
-        DeviceId ssiDeviceId = getSpareDeviceId();
+    for (int i = 0; i < count; ++i) {
+        sprintf(number, " #%d", i + 1);
+        std::string name = "Synth plugin" + std::string(number);
+        instr = new MappedInstrument(Instrument::SoftSynth,
+                                     i,
+                                     first + i,
+                                     name,
+                                     ssiDeviceId);
+        m_instruments.push_back(instr);
 
-        if (m_driverStatus & AUDIO_OK) {
-            for (int i = 0; i < count; ++i) {
-                sprintf(number, " #%d", i + 1);
-                std::string name = "Synth plugin" + std::string(number);
-                instr = new MappedInstrument(Instrument::SoftSynth,
-                                             i,
-                                             first + i,
-                                             name,
-                                             ssiDeviceId);
-                m_instruments.push_back(instr);
-
-                m_studio->createObject(MappedObject::AudioFader,
-                                       first + i);
-            }
-
-            MappedDevice *device =
-                new MappedDevice(ssiDeviceId,
-                                 Device::SoftSynth,
-                                 "Synth plugin",
-                                 "Soft synth connection");
-            m_devices.push_back(device);
-        }
+        m_studio->createObject(MappedObject::AudioFader,
+                               first + i);
     }
 
-#ifdef HAVE_LIBJACK
+    MappedDevice *device =
+        new MappedDevice(ssiDeviceId,
+                         Device::SoftSynth,
+                         "Synth plugin",
+                         "Soft synth connection");
+    m_devices.push_back(device);
 
     // Create a number of audio Instruments - these are just
     // logical Instruments anyway and so we can create as
-    // many as we like and then use them as Tracks.
+    // many as we like and then use them for Tracks.
     //
-    {
-        MappedInstrument *instr;
-        char number[100];
-        std::string audioName;
+    // Note that unlike in earlier versions of Rosegarden, we always
+    // have exactly one soft synth device and one audio device (even
+    // if audio output is not actually working, the device is still
+    // present).
+    //
+    std::string audioName;
+    getAudioInstrumentNumbers(first, count);
 
-        DeviceId audioDeviceId = getSpareDeviceId();
-
-        if (m_driverStatus & AUDIO_OK)
-        {
-            for (int channel = 0; channel < audioCount; ++channel) {
-                sprintf(number, " #%d", channel + 1);
-                audioName = "Audio" + std::string(number);
-                instr = new MappedInstrument(Instrument::Audio,
-                                             channel,
-                                             m_audioRunningId,
-                                             audioName,
-                                             audioDeviceId);
-                m_instruments.push_back(instr);
-
-                // Create a fader with a matching id - this is the starting
-                // point for all audio faders.
-                //
-                m_studio->createObject(MappedObject::AudioFader,
-                                       m_audioRunningId);
-
-                /*
-                std::cerr  << "AlsaDriver::generateInstruments - "
-                           << "added audio fader (id=" << m_audioRunningId
-                           << ")" << std::endl;
-                           */
-
-                m_audioRunningId++;
-            }
-
-            // Create audio device
-            //
-            MappedDevice *device =
-                new MappedDevice(audioDeviceId,
-                                 Device::Audio,
-                                 "Audio",
-                                 "Audio connection");
-            m_devices.push_back(device);
-        }
+    // audio device takes id to match first audio instrument
+    // number, for easy identification & consistency with GUI
+    DeviceId audioDeviceId = first;
+    
+    for (int i = 0; i < count; ++i) {
+        sprintf(number, " #%d", i + 1);
+        audioName = "Audio" + std::string(number);
+        instr = new MappedInstrument(Instrument::Audio,
+                                     i,
+                                     first + i,
+                                     audioName,
+                                     audioDeviceId);
+        m_instruments.push_back(instr);
+        
+        // Create a fader with a matching id - this is the starting
+        // point for all audio faders.
+        //
+        m_studio->createObject(MappedObject::AudioFader, first + i);
     }
-#endif
-
+    
+    // Create audio device
+    //
+    device =
+        new MappedDevice(audioDeviceId,
+                         Device::Audio,
+                         "Audio",
+                         "Audio connection");
+    m_devices.push_back(device);
 }
 
 MappedDevice *
-AlsaDriver::createMidiDevice(AlsaPortDescription *port,
+AlsaDriver::createMidiDevice(DeviceId deviceId,
                              MidiDevice::DeviceDirection reqDirection)
 {
-    char deviceName[100];
-    std::string connectionName("");
-    Audit audit;
-
-    static int unknownCounter;
-
-    static int counters[3][2]; // [system/hardware/software][out/in]
-    const int UNKNOWN = -1, SYSTEM = 0, HARDWARE = 1, SOFTWARE = 2;
-    static const char *firstNames[4][2] = {
-        { "MIDI output system device", "MIDI input system device" },
-        { "MIDI external device", "MIDI hardware input device" },
-        { "MIDI software device", "MIDI software input" }
-    };
-    static const char *countedNames[4][2] = {
-        { "MIDI output system device %d", "MIDI input system device %d" },
-        { "MIDI external device %d", "MIDI hardware input device %d" },
-        { "MIDI software device %d", "MIDI software input %d" }
-    };
-
-    static int specificCounters[2];
-    static const char *specificNames[2] = {
-        "MIDI soundcard synth", "MIDI soft synth",
-    };
-    static const char *specificCountedNames[2] = {
-        "MIDI soundcard synth %d", "MIDI soft synth %d",
-    };
-
-    DeviceId deviceId = getSpareDeviceId();
-
-    if (port) {
-
-        if (reqDirection == MidiDevice::Record && !port->isReadable())
-            return 0;
-        if (reqDirection == MidiDevice::Play && !port->isWriteable())
-            return 0;
-
-        int category = UNKNOWN;
-        bool noConnect = false;
-	bool isSynth = false;
-	bool synthKnown = false;
-
-        if (port->m_client < 16) {
-
-            category = SYSTEM;
-            noConnect = true;
-	    isSynth = false;
-	    synthKnown = true;
-
-	} else {
-
-#ifdef SND_SEQ_PORT_TYPE_HARDWARE
-	    if (port->m_portType & SND_SEQ_PORT_TYPE_HARDWARE) {
-		category = HARDWARE;
-	    }
-#endif
-#ifdef SND_SEQ_PORT_TYPE_SOFTWARE
-	    if (port->m_portType & SND_SEQ_PORT_TYPE_SOFTWARE) {
-		category = SOFTWARE;
-	    }
-#endif	    
-#ifdef SND_SEQ_PORT_TYPE_SYNTHESIZER
-	    if (port->m_portType & SND_SEQ_PORT_TYPE_SYNTHESIZER) {
-		isSynth = true;
-		synthKnown = true;
-	    }
-#endif	    
-#ifdef SND_SEQ_PORT_TYPE_APPLICATION
-	    if (port->m_portType & SND_SEQ_PORT_TYPE_APPLICATION) {
-		category = SOFTWARE;
-		isSynth = false;
-		synthKnown = true;
-	    }
-#endif	    
-
-	    if (category == UNKNOWN) {
-
-		if (port->m_client < 64) {
-
-		    if (versionIsAtLeast(getAlsaModuleVersionString(),
-					 1, 0, 11)) {
-
-			category = HARDWARE;
-
-		    } else {
-
-			category = SYSTEM;
-			noConnect = true;
-		    }
-
-		} else if (port->m_client < 128) {
-
-		    category = HARDWARE;
-		    
-		} else {
-		    
-		    category = SOFTWARE;
-		}
-	    }
-	}
-
-        bool haveName = false;
-
-        if (!synthKnown) {
-
-	    if (category != SYSTEM && reqDirection == MidiDevice::Play) {
-
-		// We assume GM/GS/XG/MT32 devices are synths.
-
-		bool isSynth = (port->m_portType &
-				(SND_SEQ_PORT_TYPE_MIDI_GM |
-				 SND_SEQ_PORT_TYPE_MIDI_GS |
-				 SND_SEQ_PORT_TYPE_MIDI_XG |
-				 SND_SEQ_PORT_TYPE_MIDI_MT32));
-
-		if (!isSynth &&
-                    (port->m_name.find("ynth") < port->m_name.length()))
-		    isSynth = true;
-		if (!isSynth &&
-                    (port->m_name.find("nstrument") < port->m_name.length()))
-		    isSynth = true;
-		if (!isSynth &&
-                    (port->m_name.find("VSTi") < port->m_name.length()))
-		    isSynth = true;
-
-	    } else {
-		isSynth = false;
-	    }
-	}
-
-	if (isSynth) {
-	    int clientType = (category == SOFTWARE) ? 1 : 0;
-	    if (specificCounters[clientType] == 0) {
-		sprintf(deviceName, specificNames[clientType]);
-		++specificCounters[clientType];
-	    } else {
-		sprintf(deviceName,
-			specificCountedNames[clientType],
-			++specificCounters[clientType]);
-	    }
-	    haveName = true;
-        }
-
-        if (!haveName) {
-            if (counters[category][reqDirection] == 0) {
-                sprintf(deviceName, firstNames[category][reqDirection]);
-                ++counters[category][reqDirection];
-            } else {
-                sprintf(deviceName,
-                        countedNames[category][reqDirection],
-                        ++counters[category][reqDirection]);
-            }
-        }
-
-        if (!noConnect) {
-            m_devicePortMap[deviceId] = ClientPortPair(port->m_client,
-                                        port->m_port);
-            connectionName = port->m_name;
-        }
-
-        audit << "Creating device " << deviceId << " in "
-              << (reqDirection == MidiDevice::Play ? "Play" : "Record")
-              << " mode for connection " << port->m_name
-              << (noConnect ? " (not connecting)" : "")
-              << "\nDefault device name for this device is "
-              << deviceName << std::endl;
-
-    } else { // !port
-
-        sprintf(deviceName, "Anonymous MIDI device %d", ++unknownCounter);
-
-        audit << "Creating device " << deviceId << " in "
-              << (reqDirection == MidiDevice::Play ? "Play" : "Record")
-              << " mode -- no connection available "
-              << "\nDefault device name for this device is "
-              << deviceName << std::endl;
-    }
+    std::string connectionName = "";
+    const char *deviceName = "unnamed";
 
     if (reqDirection == MidiDevice::Play) {
 
-        QString portName;
-
-        if (QString(deviceName).startsWith("Anonymous MIDI device ")) {
-            portName = QString("out %1")
-                       .arg(m_outputPorts.size() + 1);
-        } else {
-            portName = QString("out %1 - %2")
-                       .arg(m_outputPorts.size() + 1)
-                       .arg(deviceName);
-        }
+        QString portName = QString("out %1 - %2")
+            .arg(m_outputPorts.size() + 1)
+            .arg(deviceName);
 
         int outputPort = checkAlsaError(snd_seq_create_simple_port
                                         (m_midiHandle,
@@ -997,23 +739,6 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
             std::cerr << "CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId << std::endl;
 
             m_outputPorts[deviceId] = outputPort;
-
-            if (port) {
-                if (connectionName != "") {
-                    std::cerr << "Connecting my port " << outputPort << " to " << port->m_client << ":" << port->m_port << " on initialisation" << std::endl;
-                    snd_seq_connect_to(m_midiHandle,
-                                       outputPort,
-                                       port->m_client,
-                                       port->m_port);
-                    if (m_midiSyncAutoConnect) {
-                        snd_seq_connect_to(m_midiHandle,
-                                           m_syncOutputPort,
-                                           port->m_client,
-                                           port->m_port);
-                    }
-                }
-                std::cerr << "done" << std::endl;
-            }
         }
     }
 
@@ -1025,45 +750,25 @@ AlsaDriver::createMidiDevice(AlsaPortDescription *port,
     return device;
 }
 
-DeviceId
-AlsaDriver::getSpareDeviceId()
-{
-    std::set
-        <DeviceId> ids;
-    for (size_t i = 0; i < m_devices.size(); ++i) {
-        ids.insert(m_devices[i]->getId());
-    }
-
-    DeviceId id = 0;
-    while (ids.find(id) != ids.end())
-        ++id;
-    return id;
-}
-
 void
-AlsaDriver::addInstrumentsForDevice(MappedDevice *device)
+AlsaDriver::addInstrumentsForDevice(MappedDevice *device, InstrumentId base)
 {
     std::string channelName;
     char number[100];
 
     for (int channel = 0; channel < 16; ++channel) {
-        // Create MappedInstrument for export to GUI
-        //
+
         // name is just number, derive rest from device at gui
         sprintf(number, "#%d", channel + 1);
         channelName = std::string(number);
 
-        if (channel == 9)
-            channelName = std::string("#10[D]");
-        MappedInstrument *instr = new MappedInstrument(Instrument::Midi,
-                                  channel,
-                                  m_midiRunningId++,
-                                  channelName,
-                                  device->getId());
+        if (channel == 9) channelName = std::string("#10[D]");
+
+        MappedInstrument *instr = new MappedInstrument
+            (Instrument::Midi, channel, base++, channelName, device->getId());
         m_instruments.push_back(instr);
     }
 }
-
 
 bool
 AlsaDriver::canReconnect(Device::DeviceType type)
@@ -1071,41 +776,53 @@ AlsaDriver::canReconnect(Device::DeviceType type)
     return (type == Device::Midi);
 }
 
-DeviceId
+void
+AlsaDriver::clearDevices()
+{
+    for (size_t i = 0; i < m_instruments.size(); ++i) {
+        delete m_instruments[i];
+    }
+    m_instruments.clear();
+
+    for (size_t i = 0; i < m_devices.size(); ++i) {
+        delete m_devices[i];
+    }
+    m_devices.clear();
+
+    m_devicePortMap.clear();
+}
+
+bool
 AlsaDriver::addDevice(Device::DeviceType type,
+                      DeviceId deviceId,
+                      InstrumentId baseInstrumentId,
                       MidiDevice::DeviceDirection direction)
 {
     std::cerr << "AlsaDriver::addDevice(" << type << "," << direction << ")" << std::endl;
 
     if (type == Device::Midi) {
 
-        MappedDevice *device = createMidiDevice(0, direction);
+        MappedDevice *device = createMidiDevice(deviceId, direction);
         if (!device) {
 #ifdef DEBUG_ALSA
             std::cerr << "WARNING: Device creation failed" << std::endl;
 #else
-
             ;
 #endif
 
         } else {
-            addInstrumentsForDevice(device);
+            addInstrumentsForDevice(device, baseInstrumentId);
             m_devices.push_back(device);
 
             if (direction == MidiDevice::Record) {
                 setRecordDevice(device->getId(), true);
             }
 
-            MappedEvent *mE =
-                new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-                                0, 0);
-            insertMappedEventForReturn(mE);
-
-            return device->getId();
+            return true;
         }
     }
 
-    return Device::NO_DEVICE;
+    return false;
 }
 
 void
@@ -1122,7 +839,7 @@ AlsaDriver::removeDevice(DeviceId id)
     m_outputPorts.erase(i1);
 
     for (MappedDeviceList::iterator i = m_devices.end();
-            i != m_devices.begin(); ) {
+         i != m_devices.begin(); ) {
 
         --i;
 
@@ -1133,7 +850,7 @@ AlsaDriver::removeDevice(DeviceId id)
     }
 
     for (MappedInstrumentList::iterator i = m_instruments.end();
-            i != m_instruments.begin(); ) {
+         i != m_instruments.begin(); ) {
 
         --i;
 
@@ -1142,11 +859,19 @@ AlsaDriver::removeDevice(DeviceId id)
             m_instruments.erase(i);
         }
     }
+}
 
-    MappedEvent *mE =
-        new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-                        0, 0);
-    insertMappedEventForReturn(mE);
+void
+AlsaDriver::removeAllDevices()
+{
+    while (!m_outputPorts.empty()) {
+        checkAlsaError(snd_seq_delete_port(m_midiHandle,
+                                           m_outputPorts.begin()->second),
+                       "removeAllDevices");
+        m_outputPorts.erase(m_outputPorts.begin());
+    }
+
+    clearDevices();
 }
 
 void
@@ -1167,12 +892,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
     int sep = oldName.find(" - ");
 
     QString newName;
-
-    if (name.startsWith("Anonymous MIDI device ")) {
-        if (sep < 0)
-            sep = 0;
-        newName = oldName.left(sep);
-    } else if (sep < 0) {
+    if (sep < 0) {
         newName = oldName + " - " + name;
     } else {
         newName = oldName.left(sep + 3) + name;
@@ -1215,7 +935,6 @@ AlsaDriver::getPortName(ClientPortPair port)
     }
     return "";
 }
-
 
 unsigned int
 AlsaDriver::getConnections(Device::DeviceType type,
@@ -1345,76 +1064,25 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
     }
 }
 
-
-void AlsaDriver::removeConnection( DeviceId devId, QString connectionName ){
-    
-    // FIXME: something may be wrong/missing in this function
-    //
-    int err;
-    
-    //RG_DEBUG << "      " << endl;
-    std::cerr << "Entering: AlsaDriver::removeConnection( devId:" << devId << ", conn:" << connectionName << " ) " << std::endl;
-    
-    DeviceIntMap::iterator j = m_outputPorts.find( devId );
-    
-    int n = 0;
-    while( j != m_outputPorts.end() ){
-        n++;
-        ClientPortPair cpPair;  // note: ClientPortPair is defined in AlsaPort.h as std::pair of <int,int>
-        cpPair = getPortByName( qstrtostr(connectionName));
-    
-        std::cerr << "Key01 - n:"<<n<< ", j->first:"<<j->first<< ", j->second:"<<j->second<< "   in AlsaDriver::removeConnection() " << std::endl;
-        
-        // disconnect
-        //
-        // alsa-doc:
-        // err = snd_seq_disconnect_from( seq, my_receive_port, src_client, src_port  ); // snd_seq_t*, int,int,int
-        // err = snd_seq_disconnect_to( seq, my_send_port, dest_client, dest_port  ); // snd_seq_t*, int,int,int
-        //
-        // note: cpPair.first is the clientId, cpPair.second is the portId
-        err = snd_seq_disconnect_to( m_midiHandle, j->second, cpPair.first, cpPair.second  );
-        if( err != 0 ){
-            std::cerr << "Warning: First try to disconnect failed   in AlsaDriver::removeConnection() " <<  std::endl;
-            
-            // try the second version:
-            if( err != 0 ){
-                err = snd_seq_disconnect_from( m_midiHandle, j->second, cpPair.first, cpPair.second  );
-                std::cerr << "Warning: Could not disconnect midiport   in AlsaDriver::removeConnection() " << std::endl;
-            }
-        }
-        
-        j++;
-    }// end while(j)
-    
-    
-    //### hm.. is this the right thing to do..?
-    m_devicePortMap[devId] = ClientPortPair( -1, -1 );
-    
-    /*
-    for (unsigned int i = 0; i < m_alsaPorts.size(); ++i) {
-        if (m_alsaPorts[i]->m_name == qstrtostr(connectionName)) {
-            m_alsaPorts[i]->m_client = -1;
-            m_alsaPorts[i]->m_port = -1;
-        }
-    }
-    */
-    
-}
-
 void
 AlsaDriver::setConnection(DeviceId id, QString connection)
 {
     Audit audit;
+
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::setConnection(" << id << "," << connection << ")" << std::endl;
 #endif
 
-    if (port.first != -1 && port.second != -1) {
+    if ((connection == "") || (port.first != -1 && port.second != -1)) {
 
 #ifdef DEBUG_ALSA
-        std::cerr << "found port" << std::endl;
+        if (connection == "") {
+            std::cerr << "empty connection, disconnecting" << std::endl;
+        } else {
+            std::cerr << "found port" << std::endl;
+        }
 #endif
 
         for (size_t i = 0; i < m_devices.size(); ++i) {
@@ -1425,12 +1093,6 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
 #endif
 
                 setConnectionToDevice(*m_devices[i], connection, port);
-
-                MappedEvent *mE =
-                    new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-                                    0, 0);
-                insertMappedEventForReturn(mE);
-
                 return;
             }
         }
@@ -1447,7 +1109,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
     ClientPortPair port(getPortByName(qstrtostr(idealConnection)));
 
     audit << "AlsaDriver::setPlausibleConnection: connection like "
-    << idealConnection << " requested for device " << id << std::endl;
+          << idealConnection << " requested for device " << id << std::endl;
 
     if (port.first != -1 && port.second != -1) {
 
@@ -1477,15 +1139,13 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
     int client = -1;
     int colon = idealConnection.find(":");
-    if (colon >= 0)
-        client = idealConnection.left(colon).toInt();
+    if (colon >= 0) client = idealConnection.left(colon).toInt();
 
     int portNo = -1;
     if (client > 0) {
         QString remainder = idealConnection.mid(colon + 1);
         int space = remainder.find(" ");
-        if (space >= 0)
-            portNo = remainder.left(space).toInt();
+        if (space >= 0) portNo = remainder.left(space).toInt();
     }
 
     int firstSpace = idealConnection.find(" ");
@@ -1513,6 +1173,11 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
 
                     AlsaPortDescription *port = m_alsaPorts[i];
 
+                    if (port->m_client < 16) {
+                        // system port: never use
+                        continue;
+                    }
+
                     if (client > 0) {
 
                         if (port->m_client / 64 != client / 64)
@@ -1531,11 +1196,9 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                             // multi-port soundcard) and the client
                             // otherwise.
                             if (portNo > 0) {
-                                if (port->m_port != portNo)
-                                    continue;
+                                if (port->m_port != portNo) continue;
                             } else {
-                                if (port->m_client != client)
-                                    continue;
+                                if (port->m_client != client) continue;
                             }
                         }
                     }
@@ -1547,15 +1210,14 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
                     if (testUsed) {
                         bool used = false;
                         for (DevicePortMap::iterator dpmi = m_devicePortMap.begin();
-                                dpmi != m_devicePortMap.end(); ++dpmi) {
+                             dpmi != m_devicePortMap.end(); ++dpmi) {
                             if (dpmi->second.first == port->m_client &&
-                                    dpmi->second.second == port->m_port) {
+                                dpmi->second.second == port->m_port) {
                                 used = true;
                                 break;
                             }
                         }
-                        if (used)
-                            continue;
+                        if (used) continue;
                     }
 
                     // OK, this one will do
@@ -1585,7 +1247,7 @@ AlsaDriver::setPlausibleConnection(DeviceId id, QString idealConnection)
     }
 
     audit << "AlsaDriver::setPlausibleConnection: nothing suitable available"
-    << std::endl;
+          << std::endl;
 }
 
 
@@ -1904,7 +1566,7 @@ AlsaDriver::initialiseMidi()
     getSystemInfo();
 
     generatePortList();
-    generateInstruments();
+    generateFixedInstruments();
 
     // Modify status with MIDI success
     //
@@ -4727,251 +4389,10 @@ AlsaDriver::checkForNewClients()
     Audit audit;
     bool madeChange = false;
 
-    if (!m_portCheckNeeded)
-        return false;
+    if (!m_portCheckNeeded) return false;
 
     AlsaPortList newPorts;
     generatePortList(&newPorts); // updates m_alsaPorts, returns new ports as well
-
-    // If any devices have connections that no longer exist,
-    // clear those connections and stick them in the suspended
-    // port map in case they come back online later.
-
-    for (MappedDeviceList::iterator i = m_devices.begin();
-            i != m_devices.end(); ++i) {
-
-        ClientPortPair pair(m_devicePortMap[(*i)->getId()]);
-
-        bool found = false;
-        for (AlsaPortList::iterator j = m_alsaPorts.begin();
-                j != m_alsaPorts.end(); ++j) {
-            if ((*j)->m_client == pair.first &&
-                    (*j)->m_port == pair.second) {
-                if ((*i)->getDirection() == MidiDevice::Record) {
-                    bool recState = isRecording(*j);
-std::cerr << "recState is " << (recState ? "true" : "false") << " and (*i)->isRecording() is " << ((*i)->isRecording() ? "true" : "false") << std::endl;                    
-                    if (recState != (*i)->isRecording()) {
-                        madeChange = true;
-//                        (*i)->setRecording(recState);
-                    }
-                } else {
-//                    (*i)->setRecording(false);
-                }
-                found = true;
-                break;
-            }
-        }
-
-        if (!found) {
-            m_suspendedPortMap[pair] = (*i)->getId();
-            setConnectionToDevice(**i, "", ClientPortPair(-1, -1));
-//            (*i)->setRecording(false);
-            madeChange = true;
-        }
-    }
-
-    // If we've increased the number of connections, we need
-    // to assign the new connections to existing devices that
-    // have none, where possible, and create new devices for
-    // any left over.
-
-    if (newPorts.size() > 0) {
-
-        audit << "New ports:" << std::endl;
-
-        for (AlsaPortList::iterator i = newPorts.begin();
-                i != newPorts.end(); ++i) {
-
-            if ((*i)->m_client == m_client) {
-                audit << "(Ignoring own port " << (*i)->m_client << ":" << (*i)->m_port << ")" << std::endl;
-                continue;
-            } else if ((*i)->m_client == 0) {
-                audit << "(Ignoring system port " << (*i)->m_client << ":" << (*i)->m_port << ")" << std::endl;
-                continue;
-            }
-
-            audit << (*i)->m_name << std::endl;
-
-            QString portName = strtoqstr((*i)->m_name);
-            ClientPortPair portPair = ClientPortPair((*i)->m_client,
-                                      (*i)->m_port);
-
-            if (m_suspendedPortMap.find(portPair) != m_suspendedPortMap.end()) {
-
-                DeviceId id = m_suspendedPortMap[portPair];
-
-                audit << "(Reusing suspended device " << id << ")" << std::endl;
-
-                for (MappedDeviceList::iterator j = m_devices.begin();
-                        j != m_devices.end(); ++j) {
-                    if ((*j)->getId() == id) {
-                        setConnectionToDevice(**j, portName);
-                    }
-                }
-
-                m_suspendedPortMap.erase(m_suspendedPortMap.find(portPair));
-//                m_devicePortMap[id] = portPair;
-                madeChange = true;
-                continue;
-            }
-
-            bool needPlayDevice = true, needRecordDevice = true;
-
-            if ((*i)->isReadable()) {
-                for (MappedDeviceList::iterator j = m_devices.begin();
-                        j != m_devices.end(); ++j) {
-                    if ((*j)->getType() == Device::Midi &&
-                            (*j)->getConnection() == "" &&
-                            (*j)->getDirection() == MidiDevice::Record) {
-                        audit << "(Reusing record device " << (*j)->getId()
-                              << ")" << std::endl;
-//                        m_devicePortMap[(*j)->getId()] = portPair;
-                        setConnectionToDevice(**j, portName);
-                        needRecordDevice = false;
-                        madeChange = true;
-                        break;
-                    }
-                }
-            } else {
-                needRecordDevice = false;
-            }
-
-            if ((*i)->isWriteable()) {
-                for (MappedDeviceList::iterator j = m_devices.begin();
-                        j != m_devices.end(); ++j) {
-                    if ((*j)->getType() == Device::Midi &&
-                            (*j)->getConnection() == "" &&
-                            (*j)->getDirection() == MidiDevice::Play) {
-                        audit << "(Reusing play device " << (*j)->getId()
-                        << ")" << std::endl;
-//                        m_devicePortMap[(*j)->getId()] = portPair;
-                        setConnectionToDevice(**j, portName);
-                        needPlayDevice = false;
-                        madeChange = true;
-                        break;
-                    }
-                }
-            } else {
-                needPlayDevice = false;
-            }
-
-            if (needRecordDevice) {
-                MappedDevice *device = createMidiDevice(*i, MidiDevice::Record);
-                if (!device) {
-#ifdef DEBUG_ALSA
-                    std::cerr << "WARNING: Failed to create record device" << std::endl;
-#else
-
-                    ;
-#endif
-
-                } else {
-                    audit << "(Created new record device " << device->getId() << ")" << std::endl;
-                    addInstrumentsForDevice(device);
-                    m_devices.push_back(device);
-                    madeChange = true;
-                }
-            }
-
-            if (needPlayDevice) {
-                MappedDevice *device = createMidiDevice(*i, MidiDevice::Play);
-                if (!device) {
-#ifdef DEBUG_ALSA
-                    std::cerr << "WARNING: Failed to create play device" << std::endl;
-#else
-
-                    ;
-#endif
-
-                } else {
-                    audit << "(Created new play device " << device->getId() << ")" << std::endl;
-                    addInstrumentsForDevice(device);
-                    m_devices.push_back(device);
-                    madeChange = true;
-                }
-            }
-        }
-    }
-
-    // If one of our ports is connected to a single other port and
-    // it isn't the one we thought, we should update our connection
-
-    for (MappedDeviceList::iterator i = m_devices.begin();
-            i != m_devices.end(); ++i) {
-
-        DevicePortMap::iterator j = m_devicePortMap.find((*i)->getId());
-
-        snd_seq_addr_t addr;
-        addr.client = m_client;
-
-        DeviceIntMap::iterator ii = m_outputPorts.find((*i)->getId());
-        if (ii == m_outputPorts.end())
-            continue;
-        addr.port = ii->second;
-
-        snd_seq_query_subscribe_t *subs;
-        snd_seq_query_subscribe_alloca(&subs);
-        snd_seq_query_subscribe_set_root(subs, &addr);
-        snd_seq_query_subscribe_set_index(subs, 0);
-
-        bool haveOurs = false;
-        int others = 0;
-        ClientPortPair firstOther;
-
-        while (!snd_seq_query_port_subscribers(m_midiHandle, subs)) {
-
-            const snd_seq_addr_t *otherEnd =
-                snd_seq_query_subscribe_get_addr(subs);
-
-            if (!otherEnd)
-                continue;
-
-            if (j != m_devicePortMap.end() &&
-                    otherEnd->client == j->second.first &&
-                    otherEnd->port == j->second.second) {
-                haveOurs = true;
-            } else {
-                ++others;
-                firstOther = ClientPortPair(otherEnd->client, otherEnd->port);
-            }
-
-            snd_seq_query_subscribe_set_index
-            (subs, snd_seq_query_subscribe_get_index(subs) + 1);
-        }
-
-        if (haveOurs) { // leave our own connection alone, and stop worrying
-            continue;
-
-        } else {
-            if (others == 0) {
-                if (j != m_devicePortMap.end()) {
-                    setConnectionToDevice(**i, "", ClientPortPair(-1, -1));
-                    madeChange = true;
-                }
-            } else {
-                for (AlsaPortList::iterator k = m_alsaPorts.begin();
-                        k != m_alsaPorts.end(); ++k) {
-                    if ((*k)->m_client == firstOther.first &&
-                            (*k)->m_port == firstOther.second) {
-//                        m_devicePortMap[(*i)->getId()] = firstOther;
-                        setConnectionToDevice(**i, strtoqstr((*k)->m_name),
-                                              firstOther);
-                        madeChange = true;
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
-    if (madeChange) {
-        MappedEvent *mE =
-            new MappedEvent(0, MappedEvent::SystemUpdateInstruments,
-                            0, 0);
-        // send completion event
-        insertMappedEventForReturn(mE);
-    }
-
     m_portCheckNeeded = false;
 
     return true;

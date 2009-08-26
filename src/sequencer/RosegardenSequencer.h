@@ -121,14 +121,17 @@ public:
                                      unsigned int id);
 
     virtual void processMappedEvent(MappedEvent mE);
-
+/*!DEVPUSH
     virtual unsigned int getDevices();
     virtual MappedDevice getMappedDevice(unsigned int id);
-
+*/
     virtual int canReconnect(Device::DeviceType deviceType);
-    virtual unsigned int addDevice(Device::DeviceType type,
-                                   MidiDevice::DeviceDirection direction);
+    virtual bool addDevice(Device::DeviceType type,
+                           DeviceId id,
+                           InstrumentId baseInstrumentId,
+                           MidiDevice::DeviceDirection direction);
     virtual void removeDevice(unsigned int id);
+    virtual void removeAllDevices();
     virtual void renameDevice(unsigned int id, QString name);
     virtual unsigned int getConnections(Device::DeviceType type,
                                         MidiDevice::DeviceDirection direction);
@@ -137,7 +140,7 @@ public:
                                   unsigned int connectionNo);
     virtual void setConnection(unsigned int deviceId,
                                QString connection);
-    virtual void removeConnection(unsigned int deviceId, QString connection);
+/*!DEVPUSH    virtual void removeConnection(unsigned int deviceId, QString connection); */
     virtual void setPlausibleConnection(unsigned int deviceId,
                                         QString idealConnection);
     

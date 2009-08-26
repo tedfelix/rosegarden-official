@@ -18,9 +18,11 @@
 
 #include "RenameDeviceCommand.h"
 
+#include "misc/Strings.h"
 #include "base/Device.h"
 #include "base/Studio.h"
 #include <QString>
+#include "sequencer/RosegardenSequencer.h"
 
 
 namespace Rosegarden
@@ -30,8 +32,10 @@ void
 RenameDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
-    if (m_oldName == "")
-        m_oldName = device->getName();
+    if (!device) return;
+    if (m_oldName == "") m_oldName = device->getName();
+    RosegardenSequencer::getInstance()->renameDevice
+        (m_deviceId, strtoqstr(m_name));
     device->setName(m_name);
 }
 
@@ -39,7 +43,10 @@ void
 RenameDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_deviceId);
+    if (!device) return;
     device->setName(m_oldName);
+    RosegardenSequencer::getInstance()->renameDevice
+        (m_deviceId, strtoqstr(m_oldName));
 }
 
 }

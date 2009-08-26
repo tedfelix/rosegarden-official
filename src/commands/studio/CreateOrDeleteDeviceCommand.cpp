@@ -34,11 +34,11 @@ namespace Rosegarden
 {
 
 CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
-        DeviceId id) :
-        NamedCommand(getGlobalName(true)),
-        m_studio(studio),
-        m_deviceId(id),
-        m_deviceCreated(true)
+                                                         DeviceId id) :
+    NamedCommand(getGlobalName(true)),
+    m_studio(studio),
+    m_deviceId(id),
+    m_deviceCreated(true)
 {
     Device *device = m_studio->getDevice(m_deviceId);
 
@@ -46,14 +46,12 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
         m_name = device->getName();
         m_type = device->getType();
         m_direction = MidiDevice::Play;
-        MidiDevice *md =
-            dynamic_cast<MidiDevice *>(device);
-        if (md)
-            m_direction = md->getDirection();
+        MidiDevice *md = dynamic_cast<MidiDevice *>(device);
+        if (md) m_direction = md->getDirection();
         m_connection = device->getConnection();
     } else {
         RG_DEBUG << "CreateOrDeleteDeviceCommand: No such device as "
-        << m_deviceId << endl;
+                 << m_deviceId << endl;
     }
 }
 
@@ -62,22 +60,28 @@ CreateOrDeleteDeviceCommand::execute()
 {
     if (!m_deviceCreated) {
 
+        //!DEVPUSH: Not ideal; we probably just want to add it to the studio (and then trigger a re-push) rather than add it twice to studio and sequencer
+
         // Create
 
         // don't want to do this again on undo even if it fails -- only on redo
         m_deviceCreated = true;
 
-        m_deviceId = RosegardenSequencer::getInstance()->
-            addDevice(m_type, m_direction);
+        m_deviceId = m_studio->getSpareDeviceId(m_baseInstrumentId);
 
-        if (m_deviceId == Device::NO_DEVICE) {
+        bool success = RosegardenSequencer::getInstance()->
+            addDevice(m_type, m_deviceId, m_baseInstrumentId, m_direction);
+
+        if (!success) {
             SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
                          << "sequencer addDevice failed" << endl;
             return ;
         }
 
         SEQMAN_DEBUG << "CreateDeviceCommand::execute - "
-                     << " added device " << m_deviceId << endl;
+                     << " added device " << m_deviceId
+                     << " with base instrument id " << m_baseInstrumentId
+                     << endl;
 
         RosegardenSequencer::getInstance()->setConnection
             (m_deviceId, strtoqstr(m_connection));
@@ -86,9 +90,7 @@ CreateOrDeleteDeviceCommand::execute()
                      << " reconnected device " << m_deviceId
                      << " to " << m_connection << endl;
 
-        // Add the device to the Studio now, so that we can name it --
-        // otherwise the name will be lost
-        m_studio->addDevice(m_name, m_deviceId, m_type);
+        m_studio->addDevice(m_name, m_deviceId, m_baseInstrumentId, m_type);
         Device *device = m_studio->getDevice(m_deviceId);
         if (device) {
             MidiDevice *md = dynamic_cast<MidiDevice *>(device);

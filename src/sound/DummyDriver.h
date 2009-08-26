@@ -149,7 +149,7 @@ public:
 protected:
     virtual void processMidiOut(const MappedEventList & /*mC*/,
                                 const RealTime &, const RealTime &) { }
-    virtual void generateInstruments()  { }
+    virtual void generateFixedInstruments()  { }
 
 };
 

@@ -200,9 +200,9 @@ uninstall:
 	rmdir -p --ignore-fail-on-non-empty $(INSTICONDIR)
 
 Makefile:	Makefile.in configure configure.ac acinclude.m4
-	@echo "*** WARNING: One or more of Makefile.in, configure, configure.ac and/or acinclude.m4"
-	@echo "             has been modified since the Makefile was generated; consider"
-	@echo "             running ./configure again"
+	@echo "*** WARNING: One or more of Makefile.in, configure, configure.ac and/or"
+	@echo "             acinclude.m4 has been modified since the Makefile was generated;"
+	@echo "             consider running ./configure again"
 
 configure:	configure.ac acinclude.m4
 	sh ./bootstrap.sh

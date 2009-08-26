@@ -126,6 +126,7 @@ protected:
     void setMIDIDeviceConnection(QString connection);
     void setMIDIDeviceName(QString name);
     void skipToNextPlayDevice();
+    InstrumentId mapToActualInstrument(InstrumentId id);
 
     //--------------- Data members ---------------------------------
 
@@ -156,6 +157,9 @@ protected:
     RosegardenFileSection             m_section;
     Device                           *m_device;
     DeviceId                          m_deviceRunningId;
+    InstrumentId                      m_deviceInstrumentBase;
+    InstrumentId                      m_deviceReadInstrumentBase;
+    std::map<InstrumentId, InstrumentId> m_actualInstrumentIdMap;
     bool                              m_percussion;
     MidiByte                          m_msb;
     MidiByte                          m_lsb;

@@ -18,6 +18,8 @@
 #include "base/AudioPluginInstance.h"
 #include "base/AudioLevel.h"
 
+#include <cassert>
+
 #if (__GNUC__ < 3)
 #include <strstream>
 #define stringstream strstream
@@ -138,6 +140,8 @@ Instrument::Instrument(InstrumentId id,
     m_audioInputChannel(0),
     m_audioOutput(0)
 {
+    assert(m_id >= AudioInstrumentBase);//!DEVPUSH
+
     if (it == Audio || it == SoftSynth)
     {
         // In an audio instrument we use the m_channel attribute to
@@ -182,6 +186,8 @@ Instrument::Instrument(InstrumentId id,
     m_audioInputChannel(0),
     m_audioOutput(0)
 {
+    assert(m_id >= AudioInstrumentBase);//!DEVPUSH
+
     // Add a number of plugin place holders (unassigned)
     //
     if (it == Audio || it == SoftSynth)

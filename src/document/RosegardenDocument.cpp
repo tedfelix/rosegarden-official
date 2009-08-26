@@ -126,7 +126,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
         m_autoSavePeriod(0),
         m_beingDestroyed(false)
 {
-    syncDevices();
+    checkSequencerTimer();
 
 //### FIX-qt4-removed: 
 //    m_viewList.setAutoDelete(false);
@@ -627,11 +627,11 @@ bool RosegardenDocument::openDocument(const QString& filename,
     }
 
     RG_DEBUG << "RosegardenDocument::openDocument() end - "
-    << "m_composition : " << &m_composition
-    << " - m_composition->getNbSegments() : "
-    << m_composition.getNbSegments()
-    << " - m_composition->getDuration() : "
-    << m_composition.getDuration() << endl;
+             << "m_composition : " << &m_composition
+             << " - m_composition->getNbSegments() : "
+             << m_composition.getNbSegments()
+             << " - m_composition->getDuration() : "
+             << m_composition.getDuration() << endl;
 
     if (m_composition.begin() != m_composition.end()) {
         RG_DEBUG << "First segment starts at " << (*m_composition.begin())->getStartTime() << endl;
@@ -699,7 +699,7 @@ bool RosegardenDocument::openDocument(const QString& filename,
 
 void
 RosegardenDocument::mergeDocument(RosegardenDocument *doc,
-                                int options)
+                                  int options)
 {
     MacroCommand *command = new MacroCommand(tr("Merge"));
 
@@ -818,7 +818,7 @@ void RosegardenDocument::initialiseStudio()
     Profiler profiler("initialiseStudio", true);
 
     RG_DEBUG << "RosegardenDocument::initialiseStudio - "
-    << "clearing down and initialising" << endl;
+             << "clearing down and initialising" << endl;
 
     clearStudio();
 
@@ -975,7 +975,7 @@ void RosegardenDocument::initialiseStudio()
     }
 
     for (std::vector<PluginContainer *>::iterator pci =
-                pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
+             pluginContainers.begin(); pci != pluginContainers.end(); ++pci) {
 
         // Initialise all the plugins for this Instrument or Buss
 
@@ -1586,10 +1586,12 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
     unsigned int elementCount = 0;
     for (int i = 0; i < fileContents.length() - 1; ++i) {
-    if (fileContents[i] == '<' && fileContents[i+1] != '/') {
-        ++elementCount;
+        if (fileContents[i] == '<' && fileContents[i+1] != '/') {
+            ++elementCount;
+        }
     }
-    }
+
+    if (permanent) RosegardenSequencer::getInstance()->removeAllDevices();
 
     RoseXmlHandler handler(this, elementCount, permanent);
 
@@ -2339,20 +2341,14 @@ RosegardenDocument::setLoop(timeT t0, timeT t1)
 }
 
 void
-RosegardenDocument::syncDevices()
+RosegardenDocument::checkSequencerTimer()
 {
-    Profiler profiler("RosegardenDocument::syncDevices", true);
-
-    // Start up the sequencer
-    //
-/*
-    int timeout = 60;
-*/
+    Profiler profiler("RosegardenDocument::checkSequencerTimer", true);
 
     if (!isSequencerRunning()) return;
 
-    // Set the default timer first.  We only do this first time and
-    // when changed in the configuration dialog.
+    // Set the default timer.  We only do this first time and when
+    // changed in the configuration dialog.
     static bool setTimer = false;
     if (!setTimer) {
         QSettings settings;
@@ -2363,166 +2359,6 @@ RosegardenDocument::syncDevices()
         setCurrentTimer(currentTimer);
         setTimer = true;
         settings.endGroup();
-    }
-
-    unsigned int devices = RosegardenSequencer::getInstance()->getDevices();
-
-    RG_DEBUG << "RosegardenDocument::syncDevices - devices = "
-             << devices << endl;
-
-    
-    for (unsigned int i = 0; i < devices; i++) {
-
-        RG_DEBUG << "RosegardenDocument::syncDevices - i = "
-                 << i << endl;
-
-        getMappedDevice(i);
-    }
-    
-    
-    RG_DEBUG << "RosegardenDocument::syncDevices - "
-             << "Sequencer alive - Instruments synced" << endl;
-
-    // Force update of view on current track selection
-    //
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    bool opt = qStrToBool( settings.value("Show Track labels", "true" ) ) ;
-    settings.endGroup();
-
-    TrackLabel::InstrumentTrackLabels labels = TrackLabel::ShowInstrument;
-    if (opt)
-        labels = TrackLabel::ShowTrack;
-
-    RosegardenMainViewWidget *w;
-    int lenx = int(m_viewList.size());
-    
-//    for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
-    for ( int i=0; i<lenx; i++ ) {
-        w = m_viewList.value( i );
-        w->slotSelectTrackSegments(m_composition.getSelectedTrack());
-        w->getTrackEditor()->getTrackButtons()->changeTrackInstrumentLabels(labels);
-    }
-
-    emit devicesResyncd();
-}
-
-void
-RosegardenDocument::getMappedDevice(DeviceId id)
-{
-    MappedDevice md = RosegardenSequencer::getInstance()->getMappedDevice(id);
-
-    // See if we've got this device already
-    //
-    Device *device = m_studio.getDevice(id);
-
-    if (md.getId() == Device::NO_DEVICE) {
-        if (device) m_studio.removeDevice(id);
-        return;
-    }
-
-    if (md.size() == 0) {
-        // no instruments is OK for a record device
-        if (md.getType() != Device::Midi ||
-            md.getDirection() != MidiDevice::Record) {
-
-            RG_DEBUG << "RosegardenDocument::getMappedDevice() - "
-                     << "no instruments found" << endl;
-            if (device) m_studio.removeDevice(id);
-            return;
-        }
-    }
-
-    bool hadDeviceAlready = (device != 0);
-
-    if (!hadDeviceAlready) {
-        if (md.getType() == Device::Midi) {
-
-            device = new MidiDevice(id, md.getName(), md.getDirection());
-            m_studio.addDevice(device);
-
-            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
-                     << "adding MIDI Device \""
-                     << device->getName() << "\" id = " << id
-                     << " direction = " << md.getDirection()
-                     << endl;
-
-        } else if (md.getType() == Device::SoftSynth) {
-
-            device = new SoftSynthDevice(id, md.getName());
-            m_studio.addDevice(device);
-
-            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
-                     << "adding soft synth Device \""
-                     << device->getName() << "\" id = " << id << endl;
-
-        } else if (md.getType() == Device::Audio) {
-
-            device = new AudioDevice(id, md.getName());
-            m_studio.addDevice(device);
-
-            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
-                     << "adding audio Device \""
-                     << device->getName() << "\" id = " << id << endl;
-
-        } else {
-            RG_DEBUG << "RosegardenDocument::getMappedDevice - "
-                     << "unknown device - \"" << md.getName()
-                     << "\" (type = "
-                     << md.getType() << ")\n";
-            return;
-        }
-    }
-
-    if (hadDeviceAlready) {
-        // direction might have changed
-        if (md.getType() == Device::Midi) {
-            MidiDevice *midid = dynamic_cast<MidiDevice *>(device);
-            if (midid) {
-                midid->setDirection(md.getDirection());
-            }
-        }
-    }
-
-    std::string connection(md.getConnection());
-    // RG_DEBUG isn't outputting anything in this file, Rrrrrrrr!!!
-    std::cerr << "RosegardenDocument::getMappedDevice - got \"" << connection
-             << "\", direction " << md.getDirection()
-             << " recording == " << (md.isRecording() ? "TRUE of course" : "false, UNBELIEVABLE!!!!!")
-             << std::endl;
-    RG_DEBUG << "RosegardenDocument::getMappedDevice - got \"" << connection
-             << "\", direction " << md.getDirection()
-             << endl;
-    device->setConnection(connection);
-
-    Instrument *instrument;
-    MappedDeviceIterator it;
-
-    InstrumentList existingInstrs(device->getAllInstruments());
-
-    for (it = md.begin(); it != md.end(); it++) {
-        InstrumentId instrumentId = (*it)->getId();
-
-        bool haveInstrument = false;
-        for (InstrumentList::iterator iit = existingInstrs.begin();
-                iit != existingInstrs.end(); ++iit) {
-
-            if ((*iit)->getId() == instrumentId) {
-                haveInstrument = true;
-                break;
-            }
-        }
-
-        if (!haveInstrument) {
-            RG_DEBUG << "RosegardenDocument::getMappedDevice: new instr " << (*it)->getId() << endl;
-            instrument = new Instrument((*it)->getId(),
-                                        (*it)->getType(),
-                                        (*it)->getName(),
-                                        (*it)->getChannel(),
-                                        device);
-            device->addInstrument(instrument);
-        }
     }
 }
 

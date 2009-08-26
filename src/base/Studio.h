@@ -22,6 +22,7 @@
 #include "MidiProgram.h"
 #include "MidiMetronome.h"
 #include "ControlParameter.h"
+#include <QCoreApplication>
 
 // The Studio is where Midi and Audio devices live.  We can query
 // them for a list of Instruments, connect them together or to
@@ -52,6 +53,7 @@ class Track;
 
 class Studio : public XmlExportable
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::Studio)
 
 public:
     Studio();
@@ -64,14 +66,14 @@ public:
 
     void addDevice(const std::string &name,
                    DeviceId id,
+		   InstrumentId baseInstrumentId,
                    Device::DeviceType type);
-    void addDevice(Device *device);
 
     void removeDevice(DeviceId id);
 
+    DeviceId getSpareDeviceId(InstrumentId &baseInstrumentId);
+
     // Return the combined instrument list from all devices
-    // for all and presentation Instrument (Presentation is
-    // just a subset of All).
     //
     InstrumentList getAllInstruments();
     InstrumentList getPresentationInstruments();
@@ -150,7 +152,15 @@ public:
 
     // Get a device by ID
     //
-    Device* getDevice(DeviceId id);
+    Device *getDevice(DeviceId id);
+
+    // Get device of audio type (there is only one)
+    //
+    Device *getAudioDevice();
+
+    // Get device of soft synth type (there is only one)
+    //
+    Device *getSoftSynthDevice();
 
     bool haveMidiDevices() const;
 
