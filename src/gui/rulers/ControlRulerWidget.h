@@ -72,7 +72,7 @@ protected:
     RulerScale *m_scale;
     QString m_currentToolName;
     QRectF m_pannedRect;
-    ViewElementList m_selectedElements;
+    std::vector <ViewElement*> m_selectedElements;
 };
 
 }

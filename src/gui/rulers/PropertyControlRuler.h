@@ -85,7 +85,7 @@ public:
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
-    void updateSelection(ViewElementList *);
+    void updateSelection(std::vector<ViewElement*>*);
     void updateControlItems();
 
 public slots:

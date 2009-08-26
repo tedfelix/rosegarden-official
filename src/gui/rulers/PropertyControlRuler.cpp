@@ -219,7 +219,7 @@ void PropertyControlRuler::updateControlItems()
     }
 }
 
-void PropertyControlRuler::updateSelection(ViewElementList *elementList)
+void PropertyControlRuler::updateSelection(std::vector <ViewElement*> *elementList)
 {
     // Use base class fcn to set each item as not selected, clear the m_selectedItems lsit
     //  and create a new m_eventSelection member
@@ -234,7 +234,7 @@ void PropertyControlRuler::updateSelection(ViewElementList *elementList)
 //    }
 //
 //    m_selectedItems.clear();
-    for (ViewElementList::iterator elit = elementList->begin(); elit != elementList->end();elit++) {
+    for (std::vector<ViewElement*>::iterator elit = elementList->begin(); elit != elementList->end();elit++) {
         for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
             item = dynamic_cast<PropertyControlItem*>(it->second);
             if (item) {

@@ -51,11 +51,6 @@ m_controlList(0)
 
 ControlRulerWidget::~ControlRulerWidget()
 {
-//    std::list<ControlRuler*>::iterator it;
-//    for (it = m_controlRulerList.begin(); it != m_controlRulerList.end(); it++) {
-//        removeRuler(it);
-//    }
-    m_selectedElements.clear();
 }
 
 void ControlRulerWidget::setSegments(RosegardenDocument *document, std::vector<Segment *> segments)
@@ -266,7 +261,7 @@ void ControlRulerWidget::slotSelectionChanged(EventSelection *s)
             element = static_cast<MatrixElement *>(*vi);
         }
         if (!element) continue;
-        m_selectedElements.insert(element);
+        m_selectedElements.push_back(element);
     }
 
     // Should be dispatched to all PropertyControlRulers
