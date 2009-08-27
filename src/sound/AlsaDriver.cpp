@@ -145,8 +145,10 @@ AlsaDriver::shutdown()
 #ifdef DEBUG_ALSA
     std::cerr << "AlsaDriver::~AlsaDriver - shutting down" << std::endl;
 #endif
-
-    processNotesOff(getAlsaTime(), true, true);
+    
+    if (m_midiHandle) {
+        processNotesOff(getAlsaTime(), true, true);
+    }
 
 #ifdef HAVE_LIBJACK
     delete m_jackDriver;
