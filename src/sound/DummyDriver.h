@@ -43,7 +43,7 @@ public:
     
     virtual RealTime getSequencerTime() { return RealTime(0, 0);}
 
-    virtual bool getMappedEventList(MappedEventList &) { }
+    virtual bool getMappedEventList(MappedEventList &) { return true; }
 
     virtual void processEventsOut(const MappedEventList & /*mC*/) { }
 
