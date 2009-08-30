@@ -4801,7 +4801,9 @@ AlsaDriver::getAlsaModuleVersionString()
 
     if (v) {
 	char buf[256];
-	fgets(buf, 256, v);
+        if (fgets(buf, 256, v) == NULL) {
+            return "(unknown)"; /* check fgets result */
+        }
 	fclose(v);
 
 	std::string vs(buf);
@@ -4829,7 +4831,9 @@ AlsaDriver::getKernelVersionString()
 
     if (v) {
 	char buf[256];
-	fgets(buf, 256, v);
+        if (fgets(buf, 256, v) == NULL) {
+            return "(unknown)"; /* check fgets result */
+        }
 	fclose(v);
 
 	std::string vs(buf);
