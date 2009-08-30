@@ -42,10 +42,10 @@ AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),
     m_newSegment(0),
-    m_fid(-1),
     m_timesGiven(false),
     m_startTime(0),
     m_endMarkerTime(0),
+    m_fid(-1),
     m_ratio(ratio),
     m_detached(false)
 {
@@ -62,10 +62,10 @@ AudioSegmentRescaleCommand::AudioSegmentRescaleCommand(RosegardenDocument *doc,
     m_stretcher(new AudioFileTimeStretcher(m_afm)),
     m_segment(s),
     m_newSegment(0),
-    m_fid(-1),
     m_timesGiven(true),
     m_startTime(st),
     m_endMarkerTime(emt),
+    m_fid(-1),
     m_ratio(ratio),
     m_detached(false)
 {

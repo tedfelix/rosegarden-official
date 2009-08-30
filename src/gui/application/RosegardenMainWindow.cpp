@@ -263,14 +263,14 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_playTimer(new QTimer(static_cast<QObject *>(this))),
     m_stopTimer(new QTimer(static_cast<QObject *>(this))),
     m_startupTester(0),
+    m_firstRun(false),
+    m_haveAudioImporter(false),
+    m_parameterArea(0),
 #ifdef HAVE_LIRC
     m_lircClient(0),
     m_lircCommander(0),
 #endif
     m_tranzport(0),
-    m_firstRun(false),
-    m_haveAudioImporter(false),
-    m_parameterArea(0),
     m_devicesManagerNew(0)
 {
     setObjectName("App");

@@ -28,8 +28,8 @@ namespace Rosegarden
 
 SegmentChangeTransposeCommand::SegmentChangeTransposeCommand(int unit, Segment *segment) :
         NamedCommand(getGlobalName(unit)),
-        m_unit(unit),
-        m_segment(segment)
+        m_segment(segment),
+        m_unit(unit)
 {
     // nothing
 }

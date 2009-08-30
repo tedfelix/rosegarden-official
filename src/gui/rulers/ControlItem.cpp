@@ -35,10 +35,10 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
 : QPolygonF(polygon),
     m_xstart(0),
     m_y(0),
+    m_selected(false),
     m_controlRuler(controlRuler),
 //    m_elementAdapter(elementAdapter),
-    m_event(event),
-    m_selected(false)
+    m_event(event)
 {
 //    if (width < DefaultWidth/4) {
 //        width = DefaultWidth/4; // avoid invisible zero-duration items

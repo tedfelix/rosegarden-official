@@ -28,9 +28,9 @@ namespace Rosegarden
 
 SegmentChangePlayableRangeCommand::SegmentChangePlayableRangeCommand(int low, int high, Segment *segment) :
         NamedCommand(getGlobalName(low, high)),
+        m_segment(segment),
         m_lowestPlayableNote(low),
-        m_highestPlayableNote(high),
-        m_segment(segment)
+        m_highestPlayableNote(high)
 {
     // nothing
 }

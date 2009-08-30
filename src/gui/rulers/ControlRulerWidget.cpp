@@ -42,10 +42,10 @@ namespace Rosegarden
 {
 
 ControlRulerWidget::ControlRulerWidget() :
+m_controlList(0),
 m_segment(0),
 m_scene(0),
-m_scale(0),
-m_controlList(0)
+m_scale(0)
 {
 }
 
