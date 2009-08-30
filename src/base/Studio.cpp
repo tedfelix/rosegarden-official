@@ -157,7 +157,7 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
 	ids.insert((*it)->getId());
 	if ((*it)->getType() == Device::Midi) {
 	    InstrumentList il = (*it)->getAllInstruments();
-	    for (int i = 0; i < il.size(); ++i) {
+	    for (size_t i = 0; i < il.size(); ++i) {
 		if (il[i]->getId() > highestMidiInstrumentId) {
 		    highestMidiInstrumentId = il[i]->getId();
 		    foundInstrument = true;
