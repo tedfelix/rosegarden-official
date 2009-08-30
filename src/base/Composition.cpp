@@ -369,8 +369,6 @@ Composition::getSegmentVoiceIndex(const Segment *segment) const
     std::set<int> used;
     std::multimap<timeT, Segment *> ends;
 
-    int maximum = 0;
-
     for (const_iterator i = begin(); i != end(); ++i) {
 	if ((*i)->getTrack() != track) continue;
 	timeT t0 = (*i)->getStartTime();
