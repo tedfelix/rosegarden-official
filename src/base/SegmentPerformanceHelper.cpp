@@ -83,7 +83,9 @@ SegmentPerformanceHelper::getTiedNotes(iterator i)
     else if (!tiedForward) return c;
 
     for (;;) {
-	while (++j != end() && !(*j)->isa(Note::EventType));
+	while (++j != end() && !(*j)->isa(Note::EventType)) {
+            // explicit braces around empty while statement to quiet warning
+        };
         if (j == end()) return c;
 
         e = *j;
