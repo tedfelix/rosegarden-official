@@ -2196,7 +2196,18 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
                         ((*nOE)->getMessageType() == MIDI_NOTE_OFF ||
                          ((*nOE)->getMessageType() == MIDI_NOTE_ON &&
                           (*nOE)->getVelocity() == 0x00))) {
-                    (*mE)->setDuration((*nOE)->getTime() - (*mE)->getTime());
+                    timeT noteDuration = ((*nOE)->getTime() - (*mE)->getTime());
+
+                    // Some MIDI files floating around in the real world
+                    // apparently have NOTE ON followed immediately by NOTE OFF
+                    // on percussion tracks.  Instead of setting the duration to
+                    // 0 in this case, which has no meaning, set it to 1.
+                    if (noteDuration == 0) {
+                        std::cerr << "MidiFile::consolidateNoteOffEvents() - detected MIDI note duration of 0.  Using duration of 1.  Touch wood."
+                                  << std::endl;
+                        noteDuration = 1;
+                    }
+                    (*mE)->setDuration(noteDuration);
 
                     delete *nOE;
                     m_midiComposition[track].erase(nOE);
@@ -2212,6 +2223,7 @@ MidiFile::consolidateNoteOffEvents(TrackId track)
             if (noteOffFound == false) {
                 --nOE; // avoid crash due to nOE == track.end()
                 (*mE)->setDuration((*nOE)->getTime() - (*mE)->getTime());
+
             }
         }
     }
