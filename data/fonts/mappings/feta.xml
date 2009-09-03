@@ -87,6 +87,12 @@
                 font-id="0" code="87" inversion-code="88" glyph="55" inversion-glyph="56"/>
 	<symbol name="MUSICAL SYMBOL COMBINING MARCATO"
                 font-id="0" code="92" inversion-code="93" glyph="60" inversion-glyph="61"/>
+	<symbol name="MUSICAL SYMBOL COMBINING OPEN"
+                font-id="0" code="94"/>
+	<symbol name="MUSICAL SYMBOL COMBINING STOPPED"
+                font-id="0" code="95"/>
+	<symbol name="MUSICAL SYMBOL COMBINING HARMONIC"
+                font-id="0" code="105"/>
 	<symbol name="MUSICAL SYMBOL FERMATA"
 	        font-id="0" code="76" inversion-code="77" glyph="44" inversion-glyph="45"/>
 	<symbol name="MUSICAL SYMBOL TR" font-id="0" code="100" glyph="68"/>

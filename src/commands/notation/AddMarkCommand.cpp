@@ -59,6 +59,12 @@ AddMarkCommand::getGlobalName(Mark markType)
         m = tr("&Staccatissimo");
     else if (markType == Marks::Marcato)
         m = tr("&Marcato");
+    else if (markType == Marks::Open)
+        m = tr("&Open");
+    else if (markType == Marks::Stopped)
+        m = tr("&Stopped");
+    else if (markType == Marks::Harmonic)
+        m = tr("&Harmonic");
     else if (markType == Marks::Pause)
         m = tr("&Pause");
     else if (markType == Marks::UpBow)

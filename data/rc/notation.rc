@@ -140,6 +140,8 @@
       <Action name="add_staccato" text="Add Sta&amp;ccato" icon="staccato" />
       <Action name="add_staccatissimo" text="Add &amp;Staccatissimo" icon="staccatissimo" />
       <Action name="add_marcato" text="Add &amp;Marcato" icon="marcato" />
+      <Action name="add_open" text="Add &amp;Open" icon="open"/>
+      <Action name="add_stopped" text="Add &amp;Stopped" icon="stopped"/>
       <Action name="add_text_sf" text="Add S&amp;forzando" icon="sf" />
       <Action name="add_text_rf" text="Add R&amp;inforzando" icon="rf" />
     <Separator/>
@@ -154,6 +156,7 @@
     <Separator/>
       <Action name="add_up-bow" text="Add &amp;Up-Bow" icon="up-bow" />
       <Action name="add_down-bow" text="Add &amp;Down-Bow" icon="down-bow" />
+      <Action name="add_harmonic" text="Add &amp;Harmonic" icon="harmonic" />
       <Action name="add_pause" text="Add &amp;Pause" icon="pause" />
     <Separator/>
       <Action name="add_text_mark" text="Add Te&amp;xt Mark..." icon="text-mark" />
@@ -721,6 +724,8 @@
   <Action name="add_staccato" />
   <Action name="add_staccatissimo" />
   <Action name="add_marcato" />
+  <Action name="add_open" />
+  <Action name="add_stopped" />
   <Action name="add_text_sf" />
   <Action name="add_text_rf" />
   <Action name="add_trill" />
@@ -729,6 +734,7 @@
   <Action name="add_pause" />
   <Action name="add_up-bow" />
   <Action name="add_down-bow" />
+  <Action name="add_harmonic" />
   <Action name="add_mordent" />
   <Action name="add_mordent-inverted" />
   <Action name="add_mordent-long" />
@@ -898,6 +904,8 @@
     <Action name="add_staccato"/>
     <Action name="add_staccatissimo"/>
     <Action name="add_marcato"/>
+    <Action name="add_open"/>
+    <Action name="add_stopped"/>
     <Action name="add_text_sf"/>
     <Action name="add_text_rf"/>
     <Action name="add_trill"/>
@@ -907,6 +915,7 @@
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>
     <Action name="add_down-bow"/>
+    <Action name="add_harmonic"/>
     <Action name="add_mordent"/>
     <Action name="add_mordent-inverted"/>
     <Action name="add_mordent-long"/>

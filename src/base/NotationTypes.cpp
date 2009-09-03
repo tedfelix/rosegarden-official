@@ -104,6 +104,9 @@ namespace Marks
     const Mark Staccato = "staccato";
     const Mark Staccatissimo = "staccatissimo";
     const Mark Marcato = "marcato";
+    const Mark Open = "open";
+    const Mark Stopped = "stopped";
+    const Mark Harmonic = "harmonic";
     const Mark Sforzando = getTextMark("sf");
     const Mark Rinforzando = getTextMark("rf");
     const Mark Trill = "trill";
@@ -241,10 +244,10 @@ namespace Marks
     std::vector<Mark> getStandardMarks() {
 
         static Mark a[] = {
-            NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato,
-            Sforzando, Rinforzando, Trill, LongTrill, TrillLine,
-	    Turn, Pause, UpBow, DownBow,
-	    Mordent, MordentInverted, MordentLong, MordentLongInverted
+            NoMark, Accent, Tenuto, Staccato, Staccatissimo, Marcato, Open,
+            Stopped, Harmonic, Sforzando, Rinforzando, Trill, LongTrill,
+            TrillLine, Turn, Pause, UpBow, DownBow, Mordent, MordentInverted,
+            MordentLong, MordentLongInverted
         };
 
         static std::vector<Mark> v;

@@ -268,6 +268,10 @@ NoteStyle::getMarkCharName(const Mark &mark)
         return NoteCharacterNames::STACCATISSIMO;
     else if (mark == Marks::Marcato)
         return NoteCharacterNames::MARCATO;
+    else if (mark == Marks::Open)
+        return NoteCharacterNames::OPEN;
+    else if (mark == Marks::Stopped)
+        return NoteCharacterNames::STOPPED;
     else if (mark == Marks::Trill)
         return NoteCharacterNames::TRILL;
     else if (mark == Marks::LongTrill)
@@ -282,6 +286,8 @@ NoteStyle::getMarkCharName(const Mark &mark)
         return NoteCharacterNames::UP_BOW;
     else if (mark == Marks::DownBow)
         return NoteCharacterNames::DOWN_BOW;
+    else if (mark == Marks::Harmonic)
+        return NoteCharacterNames::HARMONIC;
     else if (mark == Marks::Mordent)
         return NoteCharacterNames::MORDENT;
     else if (mark == Marks::MordentInverted)

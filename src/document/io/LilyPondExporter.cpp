@@ -470,6 +470,12 @@ LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
             outStr += "\\staccatissimo";
         } else if (eventMark == Marks::Marcato) {
             outStr += "\\marcato";
+        } else if (eventMark == Marks::Open) {
+            outStr += "\\open";
+        } else if (eventMark == Marks::Stopped) {
+            outStr += "\\stopped";
+        } else if (eventMark == Marks::Harmonic) {
+            outStr += "\\flageolet"; // flageolets are violin harmonics, apparently
         } else if (eventMark == Marks::Trill) {
             outStr += "\\trill";
         } else if (eventMark == Marks::LongTrill) {

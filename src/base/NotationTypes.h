@@ -145,6 +145,10 @@ namespace Marks //!!! This would be better as a class, these days
     extern const Mark Staccato;       // "."
     extern const Mark Staccatissimo;  // "'"
     extern const Mark Marcato;        // "^"
+    extern const Mark Open;           // "o"
+    extern const Mark Stopped;        // "+"
+    extern const Mark Harmonic;       // "°"
+
     extern const Mark Sforzando;      // "sf"
     extern const Mark Rinforzando;    // "rf"
 

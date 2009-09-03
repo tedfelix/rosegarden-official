@@ -90,8 +90,19 @@ public:
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
 
+    /** Return a list of normal marks that draw either above or below the note
+     * head, opposite the stem direction
+     */
     std::vector<Mark> getNormalMarks() const;
+
+    /** Return a list of marks that must always be drawn above the note, even if
+     * this means drawing above the stem too
+     */
     std::vector<Mark> getAboveMarks() const; // bowings, pause etc
+
+    // While I'm in here, it seems to me there's something or other that should
+    // always be drawn *below* the note, and we get it wrong, and/or there are
+    // some things we treat as normal marks and shouldn't.  Hrm.
 
 
 private:

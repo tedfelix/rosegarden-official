@@ -96,6 +96,9 @@ NotePixmapParameters::getNormalMarks() const
         if (*mi == Marks::Pause ||
                 *mi == Marks::UpBow ||
                 *mi == Marks::DownBow ||
+                *mi == Marks::Open ||
+                *mi == Marks::Stopped ||
+                *mi == Marks::Harmonic ||
                 *mi == Marks::Trill ||
                 *mi == Marks::LongTrill ||
                 *mi == Marks::TrillLine ||
@@ -130,6 +133,9 @@ NotePixmapParameters::getAboveMarks() const
         if (*mi == Marks::Pause ||
                 *mi == Marks::UpBow ||
                 *mi == Marks::DownBow ||
+                *mi == Marks::Open ||
+                *mi == Marks::Stopped ||
+                *mi == Marks::Harmonic ||
                 *mi == Marks::Trill ||
                 *mi == Marks::LongTrill ||
                 *mi == Marks::TrillLine ||

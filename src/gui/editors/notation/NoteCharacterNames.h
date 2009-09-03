@@ -73,12 +73,15 @@ extern const CharName TENUTO;
 extern const CharName STACCATO;
 extern const CharName STACCATISSIMO;
 extern const CharName MARCATO;
+extern const CharName OPEN;
+extern const CharName STOPPED;
 extern const CharName FERMATA;
 extern const CharName TRILL;
 extern const CharName TRILL_LINE;
 extern const CharName TURN;
 extern const CharName UP_BOW;
 extern const CharName DOWN_BOW;
+extern const CharName HARMONIC;
 
 extern const CharName MORDENT;
 extern const CharName MORDENT_INVERTED;
