@@ -46,7 +46,7 @@ NotationTool::NotationTool(NotationWidget *widget) :
 NotationTool::~NotationTool()
 {
     NOTATION_DEBUG << "NotationTool::~NotationTool()" << endl;
-    delete m_menu;
+//    delete m_menu;
 }
 
 void
