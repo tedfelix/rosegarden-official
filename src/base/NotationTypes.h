@@ -616,6 +616,8 @@ public:
     static const std::string OttavaDown;
     static const std::string QuindicesimaDown;
 
+    static const std::string TrillLine;
+
     Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Indication(const std::string &s, timeT indicationDuration)

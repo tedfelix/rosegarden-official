@@ -748,6 +748,7 @@ const std::string Indication::QuindicesimaUp = "ottava2up";
 const std::string Indication::OttavaUp = "ottavaup";
 const std::string Indication::OttavaDown = "ottavadown";
 const std::string Indication::QuindicesimaDown = "ottava2down";
+const std::string Indication::TrillLine = "trill-line";
 
 Indication::Indication(const Event &e)
 {
@@ -805,7 +806,8 @@ Indication::isValid(const std::string &s) const
     return
 	(s == Slur || s == PhrasingSlur ||
 	 s == Crescendo || s == Decrescendo ||
-	 s == Glissando ||
+	 s == Glissando || // we have a stub for a glissando already?!
+         s == TrillLine ||
 	 s == QuindicesimaUp || s == OttavaUp ||
 	 s == OttavaDown || s == QuindicesimaDown);
 }
