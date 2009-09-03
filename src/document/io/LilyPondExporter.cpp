@@ -490,6 +490,14 @@ LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
             outStr += "\\upbow";
         } else if (eventMark == Marks::DownBow) {
             outStr += "\\downbow";
+        } else if (eventMark == Marks::Mordent) {
+            outStr += "\\mordent";
+        } else if (eventMark == Marks::MordentInverted) {
+            outStr += "\\prall";
+        } else if (eventMark == Marks::MordentLong) {
+            outStr += "\\prallmordent";
+        } else if (eventMark == Marks::MordentLongInverted) {
+            outStr += "\\prallprall";
         } else {
             outStr = "";
             std::cerr << "LilyPondExporter::composeLilyMark() - unhandled mark:  "

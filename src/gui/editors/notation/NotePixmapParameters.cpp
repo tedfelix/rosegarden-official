@@ -103,6 +103,10 @@ NotePixmapParameters::getNormalMarks() const
                 *mi == Marks::LongTrill ||
                 *mi == Marks::TrillLine ||
                 *mi == Marks::Turn ||
+                *mi == Marks::Mordent ||
+                *mi == Marks::MordentInverted ||
+                *mi == Marks::MordentLong ||
+                *mi == Marks::MordentLongInverted ||
                 Marks::isFingeringMark(*mi))
             continue;
 
@@ -139,6 +143,10 @@ NotePixmapParameters::getAboveMarks() const
                 *mi == Marks::Trill ||
                 *mi == Marks::LongTrill ||
                 *mi == Marks::TrillLine ||
+                *mi == Marks::Mordent ||
+                *mi == Marks::MordentInverted ||
+                *mi == Marks::MordentLong ||
+                *mi == Marks::MordentLongInverted ||
                 *mi == Marks::Turn) {
             marks.push_back(*mi);
         }
