@@ -2671,6 +2671,7 @@ NewNotationView::slotGroupTuplet(bool simple)
 
     if (!hasTimingAlready) {
 //        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
+        m_document->slotSetPointerPosition(t + (unit * tupled));
     }
 }
 
