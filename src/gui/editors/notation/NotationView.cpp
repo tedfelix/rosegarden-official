@@ -1130,6 +1130,7 @@ NewNotationView::slotEditPaste()
         CommandHistory::getInstance()->addCommand(command);
         setSelection(new EventSelection(command->getPastedEvents()), false);
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
+        m_document->slotSetPointerPosition(endTime);
     }
 
     settings.endGroup();
