@@ -1893,14 +1893,6 @@ NewNotationView::slotToggleDot()
         QString noteToolbarName;
 
         Note::Type noteType = note.getNoteType();
-        if (noteType == Note::Breve) {
-            /* was sorry */ QMessageBox::warning(this, "", tr("There is dotted version of double whole note. Use ties for longer notes."));
-            return ;
-        }
-        if (noteType == Note::Hemidemisemiquaver) {
-            /* was sorry */ QMessageBox::warning(this, "", tr("There is dotted version of the shortest, sixty-fourth note."));
-            return ;
-        }
         int noteDots = (note.getDots() ? 0 : 1);
 
         QString actionName(NotationStrings::getReferenceName(Note(noteType,noteDots)));
