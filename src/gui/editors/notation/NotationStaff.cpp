@@ -1104,6 +1104,10 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                         item = m_notePixmapFactory->makeHairpin
                             (length, indicationType == Indication::Crescendo);
                     }
+                } else if (indicationType == Indication::TrillLine) {
+
+                    // skip m_printPainter as it is no longer relevant
+                    item = m_notePixmapFactory->makeTrillLine(length);
 
                 } else if (indicationType == Indication::Slur ||
                            indicationType == Indication::PhrasingSlur) {

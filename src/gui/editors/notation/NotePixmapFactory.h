@@ -155,6 +155,7 @@ public:
     QGraphicsPixmapItem *makeText(const Text &text);
     QGraphicsPixmapItem *makeGuitarChord(const Guitar::Fingering &fingering,
                                        int x, int y);
+    QGraphicsPixmapItem *makeTrillLine(int length);
 
     QGraphicsPixmapItem *makeNoteHalo(const NotePixmapParameters &parameters);
 
@@ -284,6 +285,7 @@ protected:
                        QPainter *painter, int x, int y);
     void drawTextAux(const Text &text,
                      QPainter *painter, int x, int y);
+    void drawTrillLineAux(int length, QPainter *painter, int x, int y);
 
     int getStemLength(const NotePixmapParameters &) const;
 

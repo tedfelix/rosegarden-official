@@ -2774,6 +2774,55 @@ NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
     }
 }
 
+QGraphicsPixmapItem *
+NotePixmapFactory::makeTrillLine(int length)
+{
+    drawTrillLineAux(length, 0, 0, 0);
+    return makeItem(QPoint(0, m_generatedHeight / 2));
+}
+
+void
+NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
+{
+    int nbh = getNoteBodyHeight();
+    int nbw = getNoteBodyWidth();
+
+    int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
+    int thickness = getStaffLineThickness() * 3 / 2;
+
+    //    NOTATION_DEBUG << "NotePixmapFactory::makeTrillLinePixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
+
+    if (height < nbh)
+        height = nbh;
+    if (height > nbh*2)
+        height = nbh * 2;
+
+    height += thickness - 1;
+
+    if (painter) {
+        painter->save();
+        m_p->beginExternal(painter);
+        painter->translate(x, y - height / 2);
+    } else {
+        createPixmap(length, height);
+    }
+
+    if (m_selected) {
+        m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
+    }
+
+    int left = 1, right = length - 2 * nbw / 3 + 1;
+
+    drawShallowLine(left, height,
+                    right, height - thickness - 1, thickness);
+
+    m_p->painter().setPen(QColor(Qt::black));
+
+    if (painter) {
+        painter->restore();
+    }
+}
+
 void
 NotePixmapFactory::drawBracket(int length, bool left, bool curly, int x, int y)
 {
