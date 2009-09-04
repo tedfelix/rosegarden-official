@@ -2789,7 +2789,6 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
 
     int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
     int thickness = getStaffLineThickness() * 3 / 2;
-    thickness *= 2;
 
     //    NOTATION_DEBUG << "NotePixmapFactory::makeTrillLinePixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
 
@@ -2815,11 +2814,11 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
     int left = 1, right = length - 2 * nbw / 3 + 1;
 
     for (int X = left; X <= right; X += 10) {
-        drawShallowLine(X, height + 3, X + 6, height - 3, thickness);
+        drawShallowLine(X, height + 3, X + 5, height - 3, thickness);
     }
 
     for (int X = left + 5; X <= right; X += 10) {
-        drawShallowLine(X, height - 3, X + 6, height + 3, thickness);
+        drawShallowLine(X, height - 3, X + 5, height + 3, thickness * 2);
     }
 
     m_p->painter().setPen(QColor(Qt::black));
