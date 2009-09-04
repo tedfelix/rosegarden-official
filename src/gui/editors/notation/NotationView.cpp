@@ -1186,6 +1186,7 @@ NewNotationView::slotEditGeneralPaste()
             setSelection(new EventSelection(*segment, insertionTime, endTime),
                          false);
 //!!!            slotSetInsertCursorPosition(endTime, true, false);
+            m_document->slotSetPointerPosition(endTime);
         }
     }
 
