@@ -122,7 +122,6 @@ public slots:
 protected:
     virtual void showEvent(QShowEvent * event);
     void hideOrShowRulers();
-    void adjustHeadersHorizontalPos();
 
 protected slots:
     void slotDispatchMousePress(const NotationMouseEvent *);
@@ -141,6 +140,11 @@ protected slots:
 
     void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
+    void slotAdjustHeadersHorizontalPos(bool last);
+    void slotCloseHeaders();
+
+signals :
+    void adjustNeeded(bool last);
 
 private:
     RosegardenDocument *m_document; // I do not own this
@@ -165,6 +169,7 @@ private:
     HeadersGroup *m_headersGroup; // I own this
     Panned *m_headersView; // I own this
     QGraphicsScene *m_headersScene; // I own this
+    QWidget *m_headersButtons; // I own this
 
     QGridLayout *m_layout; // I own this
 

@@ -55,6 +55,7 @@
 #include <QTimer>
 #include <QGraphicsProxyWidget>
 #include <QToolTip>
+#include <QPushButton>
 
 namespace Rosegarden
 {
@@ -124,6 +125,24 @@ NotationWidget::NotationWidget() :
     m_layout->addWidget(m_view->horizontalScrollBar(),
                         HSLIDER_ROW, HEADER_COL, 1, 2);
 
+    // Headers close button
+    QPushButton *headersCloseButton = new QPushButton;
+    headersCloseButton->setIcon(QIcon(":/pixmaps/misc/close.xpm"));
+    headersCloseButton->setContentsMargins(0, 0, 0, 0);
+    connect(headersCloseButton, SIGNAL(clicked(bool)),
+            this, SLOT(slotCloseHeaders()));
+
+    // Insert the button in a layout to see it on the right
+    QHBoxLayout *buttonsLayout = new QHBoxLayout;
+    buttonsLayout->addStretch(20);
+    ///!!! buttonsLayout->addWidget(headersCloseButton);
+    ///       Almost ready, but needs some work still...
+
+    // Put the layout above the headers
+    m_headersButtons = new QWidget;
+    m_headersButtons->setLayout(buttonsLayout);
+    m_layout->addWidget(m_headersButtons, TOPRULER_ROW, HEADER_COL, 1, 1);
+
     // Hide or show the horizontal scroll bar when needed
     connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
             this, SLOT(slotHScrollBarRangeChanged(int, int)));
@@ -131,14 +150,11 @@ NotationWidget::NotationWidget() :
     connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
             m_hpanner, SLOT(slotSetPannedRect(QRectF)));
 
-    connect(m_view, SIGNAL(pannedRectChanged(QRectF)),
-            m_headersView, SLOT(slotSetPannedRect(QRectF)));
-
     connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
             m_view, SLOT(slotSetPannedRect(QRectF)));
 
-    connect(m_hpanner, SIGNAL(pannedRectChanged(QRectF)),
-            m_headersView, SLOT(slotSetPannedRect(QRectF)));
+    connect(m_hpanner, SIGNAL(pannerChanged(QRectF)),
+             m_headersView, SLOT(slotAdjustVertPannedRectPos(QRectF)));
 
     connect(m_view, SIGNAL(pannedContentsScrolled()),
             this, SLOT(slotHScroll()));
@@ -151,6 +167,10 @@ NotationWidget::NotationWidget() :
 
     connect(m_headersView, SIGNAL(wheelEventReceived(QWheelEvent *)),
             m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
+
+    connect(this, SIGNAL(adjustNeeded(bool)),
+            this, SLOT(slotAdjustHeadersHorizontalPos(bool)),
+            Qt::QueuedConnection);
 
     m_toolBox = new NotationToolBox(this);
 
@@ -597,7 +617,6 @@ NotationWidget::slotZoomInFromPanner()
     m_headersView->setMatrix(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
                                                          * m_hZoomFactor);
-    adjustHeadersHorizontalPos();
     slotHScroll();
 }
 
@@ -613,23 +632,44 @@ NotationWidget::slotZoomOutFromPanner()
     m_headersView->setMatrix(m);
     m_headersView->setFixedWidth(m_headersGroup->sizeHint().width()
                                                          * m_hZoomFactor);
-    adjustHeadersHorizontalPos();
     slotHScroll();
 }
 
 void
-NotationWidget::adjustHeadersHorizontalPos()
+NotationWidget::slotAdjustHeadersHorizontalPos(bool last)
 {
 // Sometimes, after a zoom change, the headers are no more horizontally
 // aligned with the headers view.
 // The following code is an attempt to reposition the headers in the view.
 // Actually it doesn't succeed always (ie. with stormy-riders).
 
+// Workaround :
+//   - 1) The old method adjustHeadersHorizontalPos() is changed into a slot
+//        called when the new signal adjustNeeded() is emitted.
+//        This slot is connected with a Qt::QueuedConnection type connection
+//        to delay as much as possible its execution.
+//    -2) The headers refresh problem occurs each time the x0 (or xinit)
+//        value defined below is <= 0 : When such a situation occurs, the slot
+//        is calls itself again. Usually, the second call works.
+//        The slot arg. "last" has been added to avoid an infinite
+//        loop if x0 is never > 0.
+//
+// I don't like this code which is really a workaround. Just now I don't
+// know the true cause of the problem. (When zoom factor is decreased, x0 is
+// > 0 sometimes and < 0 some other times : why ?)
+// This slot always works when it is called after some delay, but it fails
+// sometimes when it is called without any delay.
+//
+//  Maybe another solution would be to use a timer to call the slot.
+//  But what should be the delay ? Should it depend on the machine where
+//  RG run ? Or on the Qt version ?
+//  The previous solution seems better.
 
 //std::cerr << "\nXproxy0=" << m_headersProxy->scenePos().x() << "\n";
 
+    double xinit;
 
-    double x = m_headersView->mapToScene(0, 0).x();
+    double x = xinit = m_headersView->mapToScene(0, 0).x();
 //std::cerr << " x0=" << x << "\n";
 
     // First trial
@@ -678,6 +718,11 @@ NotationWidget::adjustHeadersHorizontalPos()
 
 //std::cerr << "Xproxy1=" << m_headersProxy->scenePos().x() << "\n";
 
+    // Call again the current slot if we have some reason to think it
+    // did not succeed and if it has been called in the current context
+    // only once.
+    // (See comment at the beginning of the slotAdjustHeadersHorizontalPos.)
+    if (!last && xinit < 0.001) emit adjustNeeded(true);
 }
 
 double
@@ -718,6 +763,8 @@ NotationWidget::slotHScroll()
 
     // Update staff headers
     m_headersGroup->slotUpdateAllHeaders(xs);
+
+    emit adjustNeeded(false);
 }
 
 void
@@ -757,8 +804,13 @@ NotationWidget::setRawNoteRulerVisible(bool visible)
 void
 NotationWidget::setHeadersVisible(bool visible)
 {
-    if (visible && m_linearMode) m_headersView->show();
-    else m_headersView->hide();
+    if (visible && m_linearMode) {
+        m_headersView->show();
+        m_headersButtons->show();
+    } else {
+        m_headersView->hide();
+        m_headersButtons->hide();
+    }
     m_headersAreVisible = visible;
 }
 
@@ -766,8 +818,19 @@ void
 NotationWidget::toggleHeadersView()
 {
     m_headersAreVisible = !m_headersAreVisible;
-    if (m_headersAreVisible && m_linearMode) m_headersView->show();
-    else m_headersView->hide();
+    if (m_headersAreVisible && m_linearMode) {
+        m_headersView->show();
+        m_headersButtons->show();
+    } else {
+        m_headersView->hide();
+        m_headersButtons->hide();
+    }
+}
+
+void
+NotationWidget::slotCloseHeaders()
+{
+    setHeadersVisible(false);
 }
 
 void
@@ -829,7 +892,6 @@ NotationWidget::setPointerPosition(timeT t)
 {
     m_document->slotSetPointerPosition(t);
 }
-
 
 }
 

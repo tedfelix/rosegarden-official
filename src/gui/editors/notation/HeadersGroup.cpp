@@ -96,7 +96,7 @@ HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
     m_scene = scene;
     m_widget = widget;
 
-    std::vector<NotationStaff *> *staffs = scene->getStaffs();
+    // std::vector<NotationStaff *> *staffs = scene->getStaffs();
 
     TrackIntMap *trackHeights = scene->getTrackHeights();
     TrackIntMap *trackCoords = scene->getTrackCoords();

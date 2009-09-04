@@ -435,8 +435,8 @@ StaffHeader::lookAtStaff(double x, int maxWidth)
     Clef clef, clef0;
     Rosegarden::Key key, key0, key1 = Rosegarden::Key("C major");
     QString label = QString(""), label0, label1 = QString("");
-    int transpose = 0, transpose0, transpose1 = 0;
-    unsigned int colourIndex = 0, colourIndex0;
+    int transpose = 0, transpose0 = 0, transpose1 = 0;
+    unsigned int colourIndex = 0, colourIndex0 = 0;
 
     size_t staff;
 

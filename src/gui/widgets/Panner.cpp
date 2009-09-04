@@ -149,6 +149,8 @@ Panner::paintEvent(QPaintEvent *e)
 
     RG_DEBUG << "draw polygon: " << mapFromScene(m_pannedRect) << endl;
     paint.end();
+
+    emit pannerChanged(m_pannedRect);
 }
 
 void

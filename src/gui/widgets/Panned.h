@@ -40,6 +40,7 @@ signals:
 
 public slots:
     void slotSetPannedRect(QRectF);
+    void slotAdjustVertPannedRectPos(QRectF);
     void slotEmulateWheelEvent(QWheelEvent *ev);
 
     void slotShowPositionPointer(float x); // scene coord; full height

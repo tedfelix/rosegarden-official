@@ -35,6 +35,7 @@ public:
 
 signals:
     void pannedRectChanged(QRectF);
+    void pannerChanged(QRectF);
     void zoomIn();
     void zoomOut();
 
