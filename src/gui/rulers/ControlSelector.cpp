@@ -139,7 +139,7 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
         ControlItemList *selected = m_ruler->getSelectedItems();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             item = dynamic_cast <EventControlItem*> (*it);
-            if (item) item->reconfigure(item->xStart()+deltaX,item->getValue()+deltaY);
+            if (item) item->reconfigure(item->xStart()+deltaX,item->y()+deltaY);
         }
     }
 

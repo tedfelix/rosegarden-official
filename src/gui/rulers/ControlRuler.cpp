@@ -158,18 +158,44 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
     return it;
 }
 
+ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
+{
+    // Basic loop through until I get the equal_range thing working properly
+    ControlItemMap::iterator it;
+    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+        if (it->second == item) break;
+    }
+    return it;
+}
+
 void ControlRuler::addControlItem(ControlItem* item)
 {
     // Add a ControlItem to the ruler
     // ControlItem may not have an assigned event but must have x position
-    m_controlItemMap.insert(std::pair<double,ControlItem *>
-        (item->xStart(),item));
-    if (isVisible(item)) {
-        m_visibleItems.push_back(item);
-    }
+    ControlItemMap::iterator it = m_controlItemMap.insert(std::pair<double,ControlItem*> (item->xStart(),item));
+    addCheckVisibleLimits(it);    
+    if (it->second->isSelected()) m_selectedItems.push_back(it->second);
 
 //    m_controlItemEnd.insert(std::pair<double,ControlItemList::iterator>
 //        (item->xEnd(),--m_controlItemList.end()));
+}
+
+void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
+{
+    ControlItem *item = it->second;
+    
+    if (isVisible(item)) {
+        m_visibleItems.push_back(item);
+        if (m_firstVisibleItem == m_controlItemMap.end() || 
+                item->xStart() < m_firstVisibleItem->second->xStart()) {
+            m_firstVisibleItem = it;
+        }
+        
+        if (m_lastVisibleItem == m_controlItemMap.end() ||
+                item->xStart() > m_lastVisibleItem->second->xStart()) {
+            m_lastVisibleItem = it;
+        }
+    }    
 }
 
 void ControlRuler::removeControlItem(ControlItem* item)
@@ -179,16 +205,9 @@ void ControlRuler::removeControlItem(ControlItem* item)
 //    //  xstart position and sweep these for the correct entry
 //    double xstart = item->xStart();
 //
-//    ControlItemMap::iterator it;
-//    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
-//
-//    ret = m_controlItemMap.equal_range(xstart);
-//    for (it = ret.first; it != ret.second; it++) {
-//        if (it->second == item) break;
-//    }
-//
-//    if (it != m_controlItemMap.end()) removeControlItem(it);
-    removeControlItem(item->getEvent());
+    ControlItemMap::iterator it = findControlItem(item);
+
+    if (it != m_controlItemMap.end()) removeControlItem(it);
 }
 
 void ControlRuler::removeControlItem(const Event *event)
@@ -204,10 +223,57 @@ void ControlRuler::removeControlItem(const Event *event)
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
+    RG_DEBUG << "removeControlItem: iterator->item: " << (long) it->second;
+    RG_DEBUG << "m_selectedItems.front(): " << (long) m_selectedItems.front();
+    
+    if (it->second->isSelected()) m_selectedItems.remove(it->second);
+    removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
-    m_selectedItems.remove(it->second);
-    m_visibleItems.remove(it->second);
-    delete (it->second);
+}
+
+void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
+{
+    if (isVisible(it->second)) { 
+        m_visibleItems.remove(it->second);
+        
+        // If necessary, correct the first and lastVisibleItem iterators 
+        if (it == m_firstVisibleItem) {
+            m_firstVisibleItem++;
+            if (m_firstVisibleItem != m_controlItemMap.end() &&
+                    !isVisible(m_firstVisibleItem->second))
+                m_firstVisibleItem = m_controlItemMap.end();
+        }
+        
+        if (it == m_lastVisibleItem) {
+            if (it != m_controlItemMap.begin()) {
+                m_lastVisibleItem--;
+                if (!isVisible(m_lastVisibleItem->second)) m_lastVisibleItem = m_controlItemMap.end();
+            }
+            else m_lastVisibleItem = m_controlItemMap.end();
+        }
+    }
+}
+
+void ControlRuler::eraseControlItem(const Event *event)
+{
+    ControlItemMap::iterator it = findControlItem(event);
+    if (it != m_controlItemMap.end()) eraseControlItem(it);
+}
+
+void ControlRuler::eraseControlItem(const ControlItemMap::iterator &it)
+{
+    ControlItem *item = it->second;
+    removeControlItem(it);
+    delete item;
+}
+
+void ControlRuler::moveItem(ControlItem* item)
+{
+    ControlItemMap::iterator it = findControlItem(item);
+    removeCheckVisibleLimits(it);
+    m_controlItemMap.erase(it);
+    it = static_cast <ControlItemMap::iterator> (m_controlItemMap.insert(std::pair<double,ControlItem*> (item->xStart(),item)));
+    addCheckVisibleLimits(it);
 }
 
 bool ControlRuler::isVisible(ControlItem* item)
@@ -420,15 +486,34 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	m_pannedRect = pr;
 	m_xScale = (double) m_pannedRect.width() / (double) width();
 	m_yScale = 1.0f / (double) height();
+
 	// Create the visible items list
 	///TODO Improve efficiency using xstart and xstop ordered lists of control items
 	m_visibleItems.clear();
-	for (ControlItemMap::iterator it = m_controlItemMap.begin();
-        it != m_controlItemMap.end(); ++it) {
+	bool anyVisibleYet = false;
+	ControlItemMap::iterator it;
+	for (it = m_controlItemMap.begin();it != m_controlItemMap.end(); ++it) {
 	    if (isVisible(it->second)) {
+	        if (!anyVisibleYet) {
+	            m_firstVisibleItem = it;
+	            anyVisibleYet = true;
+	        }
+	            
 	        m_visibleItems.push_back(it->second);
+	    } else {
+	        if (anyVisibleYet) {
+	            break;
+	        }
 	    }
 	}
+	
+    if (anyVisibleYet) {
+        m_lastVisibleItem = it;
+    } else {
+        m_firstVisibleItem = m_controlItemMap.end();
+        m_lastVisibleItem = m_controlItemMap.end();
+	}
+	
     RG_DEBUG << "ControlRuler::slotSetPannedRect - visible items: " << m_visibleItems.size();
 }
 

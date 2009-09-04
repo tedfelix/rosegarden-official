@@ -44,7 +44,7 @@ public:
     ~ControlItem();
 
     virtual void setValue(float);
-    float getValue() const { return m_y; }
+    float y() const { return m_y; }
     QColor getColour() { return m_colour; }
 
     //void setWidth(int w)  { setSize(w, height()); }

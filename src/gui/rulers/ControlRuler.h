@@ -122,6 +122,7 @@ public:
     void removeFromSelection(ControlItem*);
 
     virtual ControlItemMap::iterator findControlItem(float x);
+    virtual void moveItem(ControlItem*);
 
     /// EventSelectionObserver
 //    virtual void eventSelected(EventSelection *,Event *);
@@ -170,11 +171,16 @@ protected:
 //    virtual void computeViewSegmentOffset() {};
 
 //    virtual void layoutItem(ControlItem*);
+    virtual ControlItemMap::iterator findControlItem(const ControlItem*);
     virtual ControlItemMap::iterator findControlItem(const Event*);
     virtual void addControlItem(ControlItem*);
+    virtual void addCheckVisibleLimits(ControlItemMap::iterator);
+    virtual void removeControlItem(ControlItem*);
     virtual void removeControlItem(const Event*);
     virtual void removeControlItem(const ControlItemMap::iterator&);
-    virtual void removeControlItem(ControlItem*);
+    virtual void removeCheckVisibleLimits(const ControlItemMap::iterator&);
+    virtual void eraseControlItem(const Event*);
+    virtual void eraseControlItem(const ControlItemMap::iterator&);
     virtual bool isVisible(ControlItem*);
 
     // Stacking of the SegmentItems on the canvas
@@ -211,8 +217,16 @@ protected:
     Segment *m_segment;
 
 //    ControlItemList m_controlItemList;
-    ControlItemMap m_controlItemMap; // Note this will replace m_controlItemList
-
+    ControlItemMap m_controlItemMap;
+    
+    // Iterators to the first visible and (just past) the last visible item
+    // NB these iterators are only really useful for zero duration items as the
+    //   interval is determined by start position and will omit items that start
+    //   to the left of the screen but end on screen. For this reason, the
+    //   m_visibleItems list all includes items that are actually visible.
+    ControlItemMap::iterator m_firstVisibleItem;
+    ControlItemMap::iterator m_lastVisibleItem;
+    
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 

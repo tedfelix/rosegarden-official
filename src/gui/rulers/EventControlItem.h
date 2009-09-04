@@ -38,7 +38,7 @@ public:
 
     virtual void updateFromEvent();
 
-    void setValue(float y);
+    void setY(float y);
     void updateSegment();
     void reconfigure();
     void reconfigure(float x,float y);

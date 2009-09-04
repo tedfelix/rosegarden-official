@@ -170,6 +170,11 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         m_lastDrawnRect = m_pannedRect;
     }
 
+    if (m_firstVisibleItem == m_controlItemMap.end()) {
+        // There are no visible items
+        return;
+    }
+
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
@@ -180,12 +185,35 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
             0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
 
+    painter.setBrush(brush);
+    painter.setPen(pen);
+
+    float lastX, lastY;
+    lastX = m_pannedRect.left();
+    if (m_firstVisibleItem != m_controlItemMap.begin()) {
+        ControlItemMap::iterator it = m_firstVisibleItem;
+        it--;
+        EventControlItem *item = static_cast<EventControlItem*> (it->second);
+        lastY = item->y();
+    } else {
+        lastY = valueToY(m_controller->getDefault());
+    }
+    
+    for (ControlItemMap::iterator it = m_firstVisibleItem;
+        it != m_lastVisibleItem; it++) {
+        EventControlItem *item = static_cast<EventControlItem*> (it->second);
+        painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
+                mapXToWidget(item->xStart()),mapYToWidget(lastY));
+        painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
+                mapXToWidget(item->xStart()),mapYToWidget(item->y()));
+        lastX = item->xStart();
+        lastY = item->y(); 
+    }
+    
     // Use a fast vector list to record selected items that are currently visible so that they
     //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     std::vector<ControlItem*> selectedvector;
 
-    painter.setBrush(brush);
-    painter.setPen(pen);
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
         if (!(*it)->isSelected()) {
             painter.drawPolygon(mapItemToWidget(*it));
@@ -253,7 +281,7 @@ void ControllerEventsRuler::eventRemoved(const Segment*, Event *event)
     //    clearSelectedItems();
     //
     if (isOnThisRuler(event) && !m_moddingSegment) {
-        removeControlItem(event);
+        eraseControlItem(event);
         update();
     }
 }
@@ -275,11 +303,14 @@ void ControllerEventsRuler::addControlItem(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
     clearSelectedItems();
-    EventControlItem *controlItem = new EventControlItem(this, new ControllerEventAdapter(0), QPolygonF());
-    controlItem->reconfigure(x,y);
-    controlItem->setSelected(true);
-    m_selectedItems.push_back(controlItem);
-    ControlRuler::addControlItem(controlItem);
+    EventControlItem *item = new EventControlItem(this, new ControllerEventAdapter(0), QPolygonF());
+    item->reconfigure(x,y);
+    item->setSelected(true);
+//    m_selectedItems.push_back(item);
+//    if (isVisible(item)) {
+//        m_visibleItems.push_back(item);
+//    }
+    ControlRuler::addControlItem(item);
 }
 
 //void ControllerEventsRuler::removeControlItem(Event *event)

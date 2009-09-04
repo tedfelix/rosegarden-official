@@ -89,8 +89,16 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
     *this << newpoly;
 
     // Record the extent of the item (polygon) during update for speed
-    m_xstart = boundingRect().left();
     m_xend = boundingRect().right();
+    // If this is a true reconfigure (and not part of an item creation)
+    // m_xstart will be positive or zero and we should move it in the
+    // ControlItemMap
+    if (m_xstart != -1.0 && m_xstart != boundingRect().left()) {
+        m_xstart = boundingRect().left();
+        m_controlRuler->moveItem(this);
+    } else {
+        m_xstart = boundingRect().left();
+    }
 
     m_controlRuler->update();
 }

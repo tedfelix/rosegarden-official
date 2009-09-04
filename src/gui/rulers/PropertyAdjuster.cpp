@@ -92,7 +92,7 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
         m_mouseLastY = e->y;
         ControlItemList *selected = m_ruler->getSelectedItems();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            (*it)->setValue((*it)->getValue()+delta);
+            (*it)->setValue((*it)->y()+delta);
         }
     }
 }

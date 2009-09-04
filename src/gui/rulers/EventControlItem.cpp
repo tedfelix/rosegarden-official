@@ -56,7 +56,7 @@ void EventControlItem::updateFromEvent()
             m_controlRuler->valueToY(value));
 }
 
-void EventControlItem::setValue(float y)
+void EventControlItem::setY(float y)
 {
     if (y > 1.0) y = 1.0;
     if (y < 0) y = 0;
@@ -87,10 +87,19 @@ void EventControlItem::reconfigure(float x, float y)
     {
         *this << QPointF(x+it->x()*xscale,y+it->y()*yscale);
     }
-    m_xstart = x;
+
     m_xend = x;
     m_y = y;
-
+    // If this is a true reconfigure (and not part of an item creation)
+    // m_xstart will be positive or zero and we need to move it in the
+    // ControlItemMap
+    if (m_xstart != -1.0 && m_xstart != x) {
+        m_xstart = x;
+        m_controlRuler->moveItem(this);
+    } else {
+        m_xstart = x;
+    }
+    
     ControlItem::update();
 
     m_controlRuler->update();

@@ -33,7 +33,7 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
         Event *event,
         QPolygonF polygon)
 : QPolygonF(polygon),
-    m_xstart(0),
+    m_xstart(-1.0),
     m_y(0),
     m_selected(false),
     m_controlRuler(controlRuler),

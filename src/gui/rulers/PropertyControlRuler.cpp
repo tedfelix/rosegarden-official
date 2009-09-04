@@ -215,6 +215,7 @@ void PropertyControlRuler::updateControlItems()
     PropertyControlItem *item;
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         item = dynamic_cast <PropertyControlItem *> (*it);
+        // Must not modify m_selectedItems in here!!
         if (item) item->update();
     }
 }
@@ -334,7 +335,7 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 //                m_controlItemList.erase(it);
 //                m_selectedItems.remove(item);
 //                delete item;
-                removeControlItem(it);
+                eraseControlItem(it);
                 RG_DEBUG << "Control item erased";
                 break;
             }
