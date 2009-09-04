@@ -185,6 +185,14 @@ NoteInserter::handleMouseRelease(const NotationMouseEvent *e)
     if (lastInsertedEvent) {
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
+
+        if (m_widget->isInChordMode()){
+            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime());
+
+        } else {
+            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime() +
+                                         lastInsertedEvent->getDuration());
+        }
 /*!!!
         if (m_widget->isInChordMode()) {
             m_widget->slotSetInsertCursorAndRecentre
@@ -223,18 +231,22 @@ NoteInserter::insertNote(Segment &segment, timeT insertionTime,
 
         m_scene->setSingleSelectedEvent(&segment, lastInsertedEvent, false);
 
-        if (m_widget->isInChordMode()) {
-            if (m_scene) {
-                m_scene->slotSetInsertCursorPosition
-                    (lastInsertedEvent->getAbsoluteTime(), true, false);
-            }
-        } else {
-            if (m_scene) {
-                m_scene->slotSetInsertCursorPosition
-                    (lastInsertedEvent->getAbsoluteTime() +
-                     lastInsertedEvent->getDuration(), true, false);
-            }
+        if (!m_widget->isInChordMode()){
+            m_widget->setPointerPosition(lastInsertedEvent->getAbsoluteTime()
+                                         +lastInsertedEvent->getDuration());
         }
+//        if (m_widget->isInChordMode()) {
+//            if (m_scene) {
+//                m_scene->slotSetInsertCursorPosition
+//                    (lastInsertedEvent->getAbsoluteTime(), true, false);
+//            }
+//        } else {
+//            if (m_scene) {
+//                m_scene->slotSetInsertCursorPosition
+//                    (lastInsertedEvent->getAbsoluteTime() +
+//                     lastInsertedEvent->getDuration(), true, false);
+//            }
+//        }
     }
 
     if (!suppressPreview) {

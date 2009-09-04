@@ -824,6 +824,12 @@ NotationWidget::slotSetInsertedSymbol(Symbol type)
     if (ci) ci->slotSetSymbol(type);
 }
 
+void
+NotationWidget::setPointerPosition(timeT t)
+{
+    m_document->slotSetPointerPosition(t);
+}
+
 
 }
 

@@ -95,6 +95,8 @@ public:
     int getNotationViewWidth();
     double getNotationSceneHeight();
 
+    void setPointerPosition(timeT);
+
 public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();
