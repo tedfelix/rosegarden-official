@@ -2945,6 +2945,43 @@ NewNotationView::slotJogRight()
                                               *selection));
 }
 
+void
+NewNotationView::slotStepBackward()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment->findTime(time);
+
+    while (i != segment->begin() &&
+           (i == segment->end() || (*i)->getNotationAbsoluteTime() >= time)){
+        --i;
+    }
+
+    if (i != segment->end()){
+        m_document->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+    }
+}
+
+void
+NewNotationView::slotStepForward()
+{
+    Segment *segment = getCurrentSegment();
+    if (!segment) return;
+
+    timeT time = getInsertionTime();
+    Segment::iterator i = segment->findTime(time);
+
+    while (i != segment->end() && (*i)->getNotationAbsoluteTime() <= time) ++i;
+
+    if (i == segment->end()){
+        m_document->slotSetPointerPosition(segment->getEndMarkerTime());
+    } else {
+        m_document->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+    }
+}
+
 
 }
 

@@ -189,6 +189,9 @@ protected slots:
     void slotJogLeft();
     void slotJogRight();
 
+    void slotStepBackward();
+    void slotStepForward();
+
     /// Show or hide rulers
     void slotToggleChordsRuler();
     void slotToggleRawNoteRuler();
