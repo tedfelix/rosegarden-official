@@ -188,27 +188,37 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     painter.setBrush(brush);
     painter.setPen(pen);
 
+    ControlItemMap::iterator mapIt;
     float lastX, lastY;
-    lastX = m_pannedRect.left();
+    lastX = m_rulerScale->getXForTime(m_segment->getStartTime());
     if (m_firstVisibleItem != m_controlItemMap.begin()) {
-        ControlItemMap::iterator it = m_firstVisibleItem;
-        it--;
-        EventControlItem *item = static_cast<EventControlItem*> (it->second);
+        mapIt = m_firstVisibleItem;
+        mapIt--;
+        EventControlItem *item = static_cast<EventControlItem*> (mapIt->second);
         lastY = item->y();
     } else {
         lastY = valueToY(m_controller->getDefault());
     }
     
-    for (ControlItemMap::iterator it = m_firstVisibleItem;
-        it != m_lastVisibleItem; it++) {
-        EventControlItem *item = static_cast<EventControlItem*> (it->second);
+    mapIt = m_firstVisibleItem;
+    while (mapIt != m_controlItemMap.end()) {
+        EventControlItem *item = static_cast<EventControlItem*> (mapIt->second);
         painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
                 mapXToWidget(item->xStart()),mapYToWidget(lastY));
         painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
                 mapXToWidget(item->xStart()),mapYToWidget(item->y()));
         lastX = item->xStart();
-        lastY = item->y(); 
+        lastY = item->y();
+        if (mapIt == m_lastVisibleItem) {
+            mapIt = m_controlItemMap.end();
+        } else {
+            mapIt++;
+        }
     }
+    
+    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
+            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())),
+            mapYToWidget(lastY));
     
     // Use a fast vector list to record selected items that are currently visible so that they
     //  can be drawn last - can't use m_selectedItems as this covers all selected, visible or not

@@ -182,6 +182,9 @@ void ControlRuler::addControlItem(ControlItem* item)
 
 void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
 {
+    // Referenced item is has just been added to m_controlItemMap
+    // If it is visible, add it to the list and correct first/last
+    // visible item iterators
     ControlItem *item = it->second;
     
     if (isVisible(item)) {
@@ -190,12 +193,13 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
                 item->xStart() < m_firstVisibleItem->second->xStart()) {
             m_firstVisibleItem = it;
         }
-        
+
         if (m_lastVisibleItem == m_controlItemMap.end() ||
                 item->xStart() > m_lastVisibleItem->second->xStart()) {
+            // This item is the last visible, set m_lastVisibleItem to it
             m_lastVisibleItem = it;
         }
-    }    
+    }
 }
 
 void ControlRuler::removeControlItem(ControlItem* item)
@@ -233,6 +237,9 @@ void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 
 void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
 {
+    // Referenced item is being removed from m_controlItemMap
+    // If it was visible, remove it from the list and correct first/last
+    // visible item iterators
     if (isVisible(it->second)) { 
         m_visibleItems.remove(it->second);
         
@@ -269,6 +276,9 @@ void ControlRuler::eraseControlItem(const ControlItemMap::iterator &it)
 
 void ControlRuler::moveItem(ControlItem* item)
 {
+    // Move the item within m_controlItemMap
+    // Need to check changes in visibility
+    // DO NOT change isSelected or m_selectedItems as this is used to loop this
     ControlItemMap::iterator it = findControlItem(item);
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
@@ -500,6 +510,7 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	        }
 	            
 	        m_visibleItems.push_back(it->second);
+	        m_lastVisibleItem = it;
 	    } else {
 	        if (anyVisibleYet) {
 	            break;
@@ -507,9 +518,7 @@ void ControlRuler::slotSetPannedRect(QRectF pr)
 	    }
 	}
 	
-    if (anyVisibleYet) {
-        m_lastVisibleItem = it;
-    } else {
+    if (!anyVisibleYet) {
         m_firstVisibleItem = m_controlItemMap.end();
         m_lastVisibleItem = m_controlItemMap.end();
 	}

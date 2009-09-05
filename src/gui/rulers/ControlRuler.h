@@ -216,10 +216,9 @@ protected:
     MatrixViewSegment *m_viewSegment;
     Segment *m_segment;
 
-//    ControlItemList m_controlItemList;
     ControlItemMap m_controlItemMap;
     
-    // Iterators to the first visible and (just past) the last visible item
+    // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
     //   to the left of the screen but end on screen. For this reason, the
