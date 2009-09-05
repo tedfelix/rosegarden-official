@@ -587,8 +587,9 @@ NewNotationView::setupActions()
     createAction("preview_selection", SLOT(slotPreviewSelection()));
     createAction("clear_loop", SLOT(slotClearLoop()));
 
-    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
-    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
+// Not needed anymore, because we have only one pointer/cursor now.
+//    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
+//    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
     createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
     createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
     createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
