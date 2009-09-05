@@ -414,6 +414,10 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT)
                     } else {
                         el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
                     }
+
+                    if (indicationType == Indication::TrillLine)
+                        // just draw them way above the staff for now
+                        el->setLayoutY(staff.getLayoutYForHeight(15) + displacedY);
                 } catch (...) {
                     el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
                 }

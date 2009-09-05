@@ -212,6 +212,8 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
             } else if (i.getIndicationType() == Indication::QuindicesimaDown) {
                 // #(set-octavation -2) ... #(set-octavation 0)
                 str << "#(set-octavation -2) ";
+            } else if (i.getIndicationType() == Indication::TrillLine) {
+                str << "\\startTrillSpan ";
             }
 
         } catch (Event::BadType) {
@@ -351,6 +353,8 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
                 } else if (i.getIndicationType() == Indication::Crescendo ||
                            i.getIndicationType() == Indication::Decrescendo) {
                     str << "\\! ";
+                } else if (i.getIndicationType() == Indication::TrillLine) {
+                    str << "\\stopTrillSpan ";
                 }
 
                 postEventsInProgress.erase(k);
