@@ -118,13 +118,6 @@ protected:
 
 protected slots:
     // RMB menu slots
-    void slotNoAccidental();
-    void slotFollowAccidental();
-    void slotSharp();
-    void slotFlat();
-    void slotNatural();
-    void slotDoubleSharp();
-    void slotDoubleFlat();
     void slotToggleDot();
     void slotToggleAutoBeam();
 

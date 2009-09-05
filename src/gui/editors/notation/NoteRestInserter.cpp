@@ -677,41 +677,6 @@ void NoteRestInserter::slotSetAccidental(Accidental accidental,
     m_followAccidental = follow;
 }
 
-void NoteRestInserter::slotNoAccidental()
-{
-    invokeInParentView("no_accidental");
-}
-
-void NoteRestInserter::slotFollowAccidental()
-{
-    invokeInParentView("follow_accidental");
-}
-
-void NoteRestInserter::slotSharp()
-{
-    invokeInParentView("sharp_accidental");
-}
-
-void NoteRestInserter::slotFlat()
-{
-    invokeInParentView("flat_accidental");
-}
-
-void NoteRestInserter::slotNatural()
-{
-    invokeInParentView("natural_accidental");
-}
-
-void NoteRestInserter::slotDoubleSharp()
-{
-    invokeInParentView("double_sharp_accidental");
-}
-
-void NoteRestInserter::slotDoubleFlat()
-{
-    invokeInParentView("double_flat_accidental");
-}
-
 void NoteRestInserter::slotToggleDot()
 {
     QObject *s = sender();
