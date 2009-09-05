@@ -209,6 +209,7 @@ void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlPara
     setCurrentWidget(controlruler);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
+    slotSetToolName(m_currentToolName);
 }
 
 void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
@@ -298,6 +299,7 @@ void ControlRulerWidget::slotHoveredOverNoteChanged()
 
 void ControlRulerWidget::slotSetToolName(const QString &toolname)
 {
+    m_currentToolName = toolname;
     // Should be dispatched to all PropertyControlRulers
     if (m_controlRulerList.size()) {
         std::list<ControlRuler *>::iterator it;

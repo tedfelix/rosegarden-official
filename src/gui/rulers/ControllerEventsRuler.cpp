@@ -348,8 +348,6 @@ void ControllerEventsRuler::slotSetTool(const QString &matrixtoolname)
     if (matrixtoolname == "painter") controltoolname = "painter";
     if (matrixtoolname == "eraser") controltoolname = "eraser";
     if (matrixtoolname == "velocity") controltoolname = "adjuster";
-    ///TODO Write mechanism to select correct control tool for the given matrix tool
-//    QString controltoolname = "painter";
 
     ControlTool *tool = dynamic_cast<ControlTool *>(m_toolBox->getTool(controltoolname));
     if (!tool) return;
