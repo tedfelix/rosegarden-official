@@ -4,7 +4,7 @@
 
 <Menu name="NotationEraser">
   <Action name="select" text="Switch to Select Tool" icon="select" />
-  <Action name="insert" text="Switch to Inserting Tool" icon="menu-crotchet" />
+  <Action name="insert" text="Switch to Inserting Tool" icon="pencil" />
 <Separator/>
   <Action name="toggle_rest_collapse" text="Collapse Rests After Erase" checked="false" />
 </Menu>

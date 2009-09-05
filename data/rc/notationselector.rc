@@ -3,7 +3,7 @@
 <kpartgui name="Rosegarden::NotationTool" version="1230">
 
 <Menu noMerge="1" name="NotationSelector">
-  <Action name="insert" text="Switch to Insert Tool" icon="menu-crotchet" />
+  <Action name="insert" text="Switch to Insert Tool" icon="pencil" />
   <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
 <Separator />
 <!--  <Action name="collapse_rests" /> -->

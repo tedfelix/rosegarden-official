@@ -124,7 +124,7 @@
   <Menu name="Segments">
     <text>Se&amp;gments</text>
    
-     <Action name="repeat_segment_onoff" text="Toggle Repeat" shortcut="Ctrl+Shift+R" shortcut-context="application" />
+    <Action name="repeat_segment_onoff" text="Toggle Repeat" shortcut="Ctrl+Shift+R" shortcut-context="application" />
 
     <Menu name="edit_with">
       <text>Edit &amp;With</text>
@@ -362,142 +362,142 @@
 </Menu>
 
 <State name="new_file">
-        <disable>
-                <Action name="file_revert"/>
-        </disable>
-        <enable>
-                <Action name="file_close"/>
-        </enable>
+  <disable>
+    <Action name="file_revert"/>
+  </disable>
+  <enable>
+    <Action name="file_close"/>
+  </enable>
 </State>
 
 <State name="new_file_modified">
-        <enable>
-        </enable>
+  <enable>
+  </enable>
 </State>
 
 <State name="saved_file_modified">
-        <enable>
-                <Action name="file_revert"/>
-        </enable>
+  <enable>
+    <Action name="file_revert"/>
+  </enable>
 </State>
 
 <State name="have_project_packager">
-	<enable>
-		<Action name="file_import_project"/>
-		<Action name="file_export_project"/>
-	</enable>
+  <enable>
+    <Action name="file_import_project"/>
+	<Action name="file_export_project"/>
+  </enable>
 </State>
 
 <State name="have_segments">
-        <enable>
-                <Action name="move"/>
-                <Action name="erase"/>
-                <Action name="resize"/>
-                <Action name="split"/>
+  <enable>
+    <Action name="move"/>
+    <Action name="erase"/>
+    <Action name="resize"/>
+    <Action name="split"/>
                 <!-- <Action name="join"/> -->
-                <Action name="file_print_lilypond"/>
-                <Action name="file_preview_lilypond"/>
-        </enable>
+    <Action name="file_print_lilypond"/>
+    <Action name="file_preview_lilypond"/>
+  </enable>
 </State>
 
 <State name="have_selection">
-     <enable>
-        <Action name="edit_cut"/>
-        <Action name="edit_copy"/>
-        <Action name="delete"/>
-        <Action name="edit_default"/>
-        <Action name="edit_matrix"/>
-        <Action name="edit_percussion_matrix"/>
-        <Action name="edit_notation"/>
-        <Action name="edit_event_list"/>
-        <Action name="quantize_selection"/>
-        <Action name="repeat_quantize"/>
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
+    <Action name="edit_default"/>
+    <Action name="edit_matrix"/>
+    <Action name="edit_percussion_matrix"/>
+    <Action name="edit_notation"/>
+    <Action name="edit_event_list"/>
+    <Action name="quantize_selection"/>
+    <Action name="repeat_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
-        <Action name="rescale"/>
-        <Action name="jog_left"/>
-        <Action name="jog_right"/>
-        <Action name="auto_split"/>
-        <Action name="split_by_pitch"/>
-        <Action name="split_by_recording"/>
-        <Action name="split_at_time"/>
-        <Action name="join_segments"/>
-        <Action name="relabel_segment"/>
-        <Action name="transpose"/>
-        <Action name="set_segment_start"/>
-        <Action name="set_segment_duration"/>
-        <Action name="collapse"/>
-        <Action name="set_tempo_to_segment_length"/>
-        <Action name="repeats_to_real_copies"/>
-        <Action name="groove_quantize"/>
-     </enable>
+    <Action name="rescale"/>
+    <Action name="jog_left"/>
+    <Action name="jog_right"/>
+    <Action name="auto_split"/>
+    <Action name="split_by_pitch"/>
+    <Action name="split_by_recording"/>
+    <Action name="split_at_time"/>
+    <Action name="join_segments"/>
+    <Action name="relabel_segment"/>
+    <Action name="transpose"/>
+    <Action name="set_segment_start"/>
+    <Action name="set_segment_duration"/>
+    <Action name="collapse"/>
+    <Action name="set_tempo_to_segment_length"/>
+    <Action name="repeats_to_real_copies"/>
+    <Action name="groove_quantize"/>
+  </enable>
 </State>
 
 <State name="have_clipboard">
-     <enable>
-        <Action name="edit_paste"/>
-        <Action name="paste_range"/>
-     </enable>
+  <enable>
+    <Action name="edit_paste"/>
+    <Action name="paste_range"/>
+  </enable>
 </State>
 
 <State name="audio_segment_selected">
-     <enable>
-        <Action name="set_tempo_to_segment_length"/>
-     </enable>
-      <disable>
-        <Action name="edit_notation"/>
-        <Action name="edit_matrix"/>
-        <Action name="edit_percussion_matrix"/>
-        <Action name="edit_event_list"/>
-        <Action name="quantize_selection"/>
-        <Action name="repeat_quantize"/>
+  <enable>
+    <Action name="set_tempo_to_segment_length"/>
+  </enable>
+  <disable>
+    <Action name="edit_notation"/>
+    <Action name="edit_matrix"/>
+    <Action name="edit_percussion_matrix"/>
+    <Action name="edit_event_list"/>
+    <Action name="quantize_selection"/>
+    <Action name="repeat_quantize"/>
 <!--        <Action name="rescale"/> -->
-        <Action name="split_by_pitch"/>
-        <Action name="split_by_recording"/>
-        <Action name="join_segments"/>
-        <Action name="collapse"/>
-        <Action name="repeats_to_real_copies"/>
-        <Action name="groove_quantize"/>
-     </disable>
+    <Action name="split_by_pitch"/>
+    <Action name="split_by_recording"/>
+    <Action name="join_segments"/>
+    <Action name="collapse"/>
+    <Action name="repeats_to_real_copies"/>
+    <Action name="groove_quantize"/>
+  </disable>
 </State>
 
 <State name="got_midi_devices">
-     <enable>
-       <Action name="modify_banks"/>
-       <Action name="remap_instruments"/>
-       <Action name="midi_mixer"/>
-     </enable>
+  <enable>
+    <Action name="modify_banks"/>
+    <Action name="remap_instruments"/>
+    <Action name="midi_mixer"/>
+  </enable>
 </State>
 
 <State name="got_audio">
-     <enable>
-	<Action name="audio_manager"/>
+  <enable>
+    <Action name="audio_manager"/>
 	<Action name="audio_mixer"/>
-     </enable>
+  </enable>
 </State>
 
 <State name="sequencer_running">
-     <enable>
-       <Action name="rewindtobeginning" />
-       <Action name="rewind" />
-       <Action name="play" />
-       <Action name="fast_forward" />
-       <Action name="fastforwardtoend" />
-       <Action name="stop" />
-       <Action name="record" />
-       <Action name="recordtoggle" />
-     </enable>
+  <enable>
+    <Action name="rewindtobeginning" />
+    <Action name="rewind" />
+    <Action name="play" />
+    <Action name="fast_forward" />
+    <Action name="fastforwardtoend" />
+    <Action name="stop" />
+    <Action name="record" />
+    <Action name="recordtoggle" />
+  </enable>
 </State>
 
 <State name="not_playing">
-     <enable>
-     </enable>
+  <enable>
+  </enable>
 </State>
 
 <State name="have_range">
-    <enable>
-	 <Action name="cut_range"/>
-	 <Action name="copy_range"/>
-    </enable>
+  <enable>
+    <Action name="cut_range"/>
+	<Action name="copy_range"/>
+  </enable>
 </State>
 
 </kpartgui>

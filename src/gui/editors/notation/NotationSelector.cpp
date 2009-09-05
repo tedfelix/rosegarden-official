@@ -684,7 +684,7 @@ void NotationSelector::slotHideSelection()
 
 void NotationSelector::slotInsertSelected()
 {
-    //!!!??? m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void NotationSelector::slotEraseSelected()

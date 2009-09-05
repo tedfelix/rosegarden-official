@@ -1,0 +1,43 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+
+<kpartgui name="Rosegarden::NotationTool" version="1230">
+
+<Menu noMerge="1" name="NoteRestInserter">
+  <Action name="select" text="Switch to Select Tool" icon="select" />
+  <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
+<Separator/>
+  <Action name="switch_to_notes" text="Switch To &amp;Notes" icon="switch-to-notes" />
+  <Action name="switch_to_rests" text="Switch To &amp;Rests" icon="switch-to-rests" />
+  <Action name="switch_dots_on" text="To&amp;ggle Dot On" icon="switch-dots-on" />
+  <Action name="switch_dots_off" text="To&amp;ggle Dot Off" icon="switch-dots-off" />
+<Separator/>
+  <Action name="toggle_auto_beam" text="Auto-Beam when appropriate" checked="true" />
+<Separator/>
+  <Action name="no_accidental" text="No Accidental" icon="accidental-none" checked="true" group="accidentals" />
+  <Action name="follow_accidental" text="Follow Previous Accidental" icon="accidental-follow" checked="false" group="accidentals" />
+  <Action name="sharp_accidental" text="Sharp" icon="accidental-sharp" checked="false" group="accidentals" />
+  <Action name="flat_accidental" text="Flat" icon="accidental-flat" checked="false" group="accidentals" />
+  <Action name="natural_accidental" text="Natural" icon="accidental-natural" checked="false" group="accidentals" />
+  <Action name="double_sharp_accidental" text="Double Sharp" icon="accidental-doublesharp" checked="false" group="accidentals" />
+  <Action name="double_flat_accidental" text="Double Flat" icon="accidental-doubleflat" checked="false" group="accidentals" />
+</Menu>
+
+<State name="in_note_mode" >
+  <visible>
+      <Action name="switch_to_rests" />
+  </visible>
+  <invisible>
+      <Action name="switch_to_notes" />
+  </invisible>
+</State>
+
+<State name="in_dot_mode" >
+  <visible>
+      <Action name="switch_dots_off" />
+  </visible>
+  <invisible>
+      <Action name="switch_dots_on" />
+  </invisible>
+</State>
+
+</kpartgui>

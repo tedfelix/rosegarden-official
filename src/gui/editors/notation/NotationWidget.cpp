@@ -19,8 +19,7 @@
 
 #include "NotationScene.h"
 #include "NotationToolBox.h"
-#include "NoteInserter.h"
-#include "RestInserter.h"
+#include "NoteRestInserter.h"
 #include "ClefInserter.h"
 #include "TextInserter.h"
 #include "GuitarChordInserter.h"
@@ -175,11 +174,9 @@ NotationWidget::NotationWidget() :
     m_toolBox = new NotationToolBox(this);
 
     //!!! 
-    NoteInserter *noteInserter = dynamic_cast<NoteInserter *>
-        (m_toolBox->getTool(NoteInserter::ToolName));
-    noteInserter->slotSetNote(Note::Crotchet);
-    noteInserter->slotSetDots(0);
-    m_currentTool = noteInserter;
+    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
+        (m_toolBox->getTool(NoteRestInserter::ToolName));
+    m_currentTool = noteRestInserter;
     m_currentTool->ready();
 }
 
@@ -393,31 +390,39 @@ NotationWidget::slotSetSelectTool()
 }
 
 void
+NotationWidget::slotSetNoteRestInserter()
+{
+    slotSetTool(NoteRestInserter::ToolName);
+}
+
+void
 NotationWidget::slotSetNoteInserter()
 {
-    slotSetTool(NoteInserter::ToolName);
+    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
+        (m_toolBox->getTool(NoteRestInserter::ToolName));
+    noteRestInserter->setToRestInserter(false); // set to insert notes.
+
+    slotSetTool(NoteRestInserter::ToolName);
 }
 
 void
 NotationWidget::slotSetRestInserter()
 {
-    slotSetTool(RestInserter::ToolName);
+    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
+        (m_toolBox->getTool(NoteRestInserter::ToolName));
+    noteRestInserter->setToRestInserter(true); // set to insert notes.
+
+    slotSetTool(NoteRestInserter::ToolName);
 }
 
 void
 NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
 {
-    NoteInserter *ni = dynamic_cast<NoteInserter *>(m_currentTool);
+    NoteRestInserter *ni = dynamic_cast<NoteRestInserter *>(m_currentTool);
     if (ni) {
+        
         ni->slotSetNote(type);
         ni->slotSetDots(dots);
-        return;
-    }
-
-    RestInserter *ri = dynamic_cast<RestInserter *>(m_currentTool);
-    if (ri) {
-        ri->slotSetNote(type);
-        ri->slotSetDots(dots);
         return;
     }
 }
@@ -426,8 +431,8 @@ void
 NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
 {
     // You don't have to be in note insertion mode to change the accidental
-    NoteInserter *ni = dynamic_cast<NoteInserter *>
-        (m_toolBox->getTool(NoteInserter::ToolName));
+    NoteRestInserter *ni = dynamic_cast<NoteRestInserter *>
+        (m_toolBox->getTool(NoteRestInserter::ToolName));
     if (ni) {
         ni->slotSetAccidental(accidental, follow);
         return;

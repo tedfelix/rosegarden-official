@@ -81,7 +81,7 @@ NotationEraser::slotToggleRestCollapse()
 void
 NotationEraser::slotInsertSelected()
 {
-//!!!    m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void

@@ -43,6 +43,8 @@ ActionFileParser::ActionFileParser(QObject *actionOwner) :
     m_inText(false),
     m_inEnable(false),
     m_inDisable(false),
+    m_inVisible(false),
+    m_inInvisible(false),
     m_lastToolbarPosition(Top)
 {
 }
@@ -150,12 +152,18 @@ ActionFileParser::startElement(const QString& namespaceURI,
 
         QString actionName = atts.value("name");
         if (actionName == "") {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): No action name provided in action element" << std::endl;
+            std::cerr << "WARNING: ActionFileParser::startElement(" 
+                << m_currentFile << "): No action name provided in action element"
+                << std::endl;
         }
 
         if (m_currentMenus.empty() && m_currentToolbar == "" &&
-            (m_currentState == "" || (!m_inEnable && !m_inDisable))) {
-            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Action \"" << actionName << "\" appears outside (valid) menu, toolbar or state enable/disable element" << std::endl;
+            (m_currentState == "" || (!m_inEnable && !m_inDisable
+            && !m_inVisible && !m_inInvisible))) {
+            std::cerr << "WARNING: ActionFileParser::startElement("
+                << m_currentFile << "): Action \"" << actionName
+                << "\" appears outside (valid) menu, toolbar or state "
+                << "enable/disable/visible/invisible element" << std::endl;
         }
 
         QString text = atts.value("text");
@@ -169,18 +177,24 @@ ActionFileParser::startElement(const QString& namespaceURI,
         //!!! return values
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
-        if (shortcut != "") setActionShortcut(actionName, shortcut, shortcutContext.toLower() == "application");
+        if (shortcut != "") setActionShortcut(actionName, shortcut,
+            shortcutContext.toLower() == "application");
         if (tooltip != "") setActionToolTip(actionName, tooltip);
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
-                                            checked.toLower() == "true");
+            checked.toLower() == "true");
         
-        // this can appear in menu, toolbar, state/enable, state/disable
+        // this can appear in menu, toolbar, state/enable, state/disable,
+        // state/visible, state/invisible
 
         if (m_inEnable) {
             enableActionInState(m_currentState, actionName);
         } else if (m_inDisable) {
             disableActionInState(m_currentState, actionName);
+        } else if (m_inVisible) {
+            toVisibleActionInState(m_currentState, actionName);
+        } else if (m_inInvisible) {
+            toInvisibleActionInState(m_currentState, actionName);
         } else if (!m_currentMenus.empty()) {
             addActionToMenu(m_currentMenus.last(), actionName);
         } else if (m_currentToolbar != "") {
@@ -214,6 +228,20 @@ ActionFileParser::startElement(const QString& namespaceURI,
             std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Disable element appears outside state element" << std::endl;
         } else {
             m_inDisable = true;
+        }
+    } else if (name == "visible") {
+
+        if (m_currentState == "") {
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Visible element appears outside state element" << std::endl;
+        } else {
+            m_inVisible = true;
+        }
+    } else if (name == "invisible") {
+
+        if (m_currentState == "") {
+            std::cerr << "WARNING: ActionFileParser::startElement(" << m_currentFile << "): Invisible element appears outside state element" << std::endl;
+        } else {
+            m_inInvisible = true;
         }
     }
 
@@ -262,6 +290,14 @@ ActionFileParser::endElement(const QString& namespaceURI,
     } else if (name == "disable") {
         
         m_inDisable = false;
+
+    } else if (name == "visible") {
+        
+        m_inVisible = false;
+
+    } else if (name == "invisible") {
+        
+        m_inInvisible = false;
     }
         
     return true;
@@ -681,6 +717,30 @@ ActionFileParser::disableMenuInState(QString stateName, QString menuName)
     return true;
 }
 
+bool
+ActionFileParser::toVisibleActionInState(QString stateName, QString actionName)
+{
+    if (stateName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
+    if (!action) return false;
+    m_stateVisibleMap[stateName].insert(action);
+    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    return true;
+}
+
+bool
+ActionFileParser::toInvisibleActionInState(QString stateName, QString actionName)
+{
+    if (stateName == "" || actionName == "") return false;
+    QAction *action = findAction(actionName);
+    if (!action) action = findStandardAction(actionName);
+    if (!action) return false;
+    m_stateInvisibleMap[stateName].insert(action);
+    connect(action, SIGNAL(destroyed()), this, SLOT(slotObjectDestroyed()));
+    return true;
+}
+
 void
 ActionFileParser::setEnabled(QAction *a, bool e)
 {
@@ -688,12 +748,26 @@ ActionFileParser::setEnabled(QAction *a, bool e)
 }
 
 void
+ActionFileParser::setVisible(QAction *a, bool e)
+{
+    if (a) a->setVisible(e);
+}
+
+void
 ActionFileParser::enterActionState(QString stateName)
 {
     Profiler p("ActionFileParser::enterActionState");
+    for (ActionSet::iterator i = m_stateInvisibleMap[stateName].begin();
+         i != m_stateInvisibleMap[stateName].end(); ++i) {
+        setVisible(*i, false);
+    }
     for (ActionSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
+    }
+    for (ActionSet::iterator i = m_stateVisibleMap[stateName].begin();
+         i != m_stateVisibleMap[stateName].end(); ++i) {
+        setVisible(*i, true);
     }
     for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
@@ -708,6 +782,14 @@ ActionFileParser::leaveActionState(QString stateName)
     for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
+    }
+    for (ActionSet::iterator i = m_stateVisibleMap[stateName].begin();
+         i != m_stateVisibleMap[stateName].end(); ++i) {
+        setVisible(*i, false);
+    }
+    for (ActionSet::iterator i = m_stateInvisibleMap[stateName].begin();
+         i != m_stateInvisibleMap[stateName].end(); ++i) {
+        setVisible(*i, true);
     }
     for (ActionSet::iterator i = m_stateDisableMap[stateName].begin();
          i != m_stateDisableMap[stateName].end(); ++i) {
@@ -729,6 +811,16 @@ ActionFileParser::slotObjectDestroyed()
 
     for (StateMap::iterator i = m_stateDisableMap.begin();
          i != m_stateDisableMap.end(); ++i) {
+        i->erase(a);
+
+    }
+    for (StateMap::iterator i = m_stateVisibleMap.begin();
+         i != m_stateVisibleMap.end(); ++i) {
+        i->erase(a);
+
+    }
+    for (StateMap::iterator i = m_stateInvisibleMap.begin();
+         i != m_stateInvisibleMap.end(); ++i) {
         i->erase(a);
     }
 }

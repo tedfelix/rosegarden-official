@@ -58,15 +58,6 @@ public:
 
     virtual timeT getInsertionTime() const;
 
-    /** The DurationMonobar needs to know how to convolute itself somehow to morph into
-     * what used to be separate toolbars in a cleaner and simpler world
-     */
-    typedef enum { InsertingNotes,
-                   InsertingDottedNotes,
-                   InsertingRests,
-                   InsertingDottedRests
-                 } DurationMonobarModeType;
-
 signals:
     void play();
     void stop();
@@ -108,7 +99,12 @@ protected slots:
 
     void slotSetSelectTool();
     void slotSetEraseTool();
-
+    
+    /**
+     * Restore NoteRestInserter as the current tool and recall its
+     * state information.
+     */
+    void slotSetNoteRestInserter();
 
     void slotInsertNoteFromAction();
     void slotInsertRest();
@@ -116,30 +112,27 @@ protected slots:
     /** Call either slotSwitchToNotes() or slotSwitchToRests() depending on
      * calling context
      */
-    void slotToggleNotesRests();
+
+    /**
+     * Switch the NoteRestInserter to Note Insertion mode and update the gui.
+     */
     void slotSwitchToNotes();
+
+
+    /**
+     * Switch the NoteRestInserter to Rest Insertion mode and update the gui.
+     */
     void slotSwitchToRests();
 
-    /** The logic tangle to try to set the monobar per switching on the mode
-     * would be brutal, so morphDurationMonobar will only show things, relying on this
-     * to have hidden everything beforehand.  It's ugly, but at least this
-     * avoids a complete spaghetti bowl of if then whether logic.
-     */
-    void hideAllDurationMonobarActions();
-
-    /** Contort the DurationMonobar with a long and complicated series of hide and
-     * show operations that pretty much make my stomach churn.
-     *
-     * \p mode is one of InsertingNotes, InsertingDottedNotes, InsertingRests,
-     * etc. (see the typedef DurationMonobarModeType for a complete list)
-     */
-    void morphDurationMonobar(const DurationMonobarModeType mode);
-
-    /** Switch between dotted and plain variations on the current note or rest
+    /**
+     * Switch between dotted and plain variations on the current note or rest
      * duration being inserted (by whatever means insertion is ocurring)
      */
     void slotToggleDot(); 
 
+    /**
+     * Process calls to insert a notes.
+     */
     void slotNoteAction();
     void slotNoAccidental();
     void slotFollowAccidental();
@@ -202,8 +195,7 @@ protected slots:
 
     void slotToggleGeneralToolBar();
     void slotToggleToolsToolBar();
-    void slotToggleNotesToolBar();
-    void slotToggleRestsToolBar();
+    void slotToggleDurationToolBar();
     void slotToggleAccidentalsToolBar();
     void slotToggleClefsToolBar();
     void slotToggleMarksToolBar();
@@ -250,10 +242,33 @@ private:
     void toggleNamedToolBar(const QString& toolBarName, bool* force = 0);
 
 
-    RosegardenDocument *m_document;
-    NotationWidget *m_notationWidget;
-    CommandRegistry *m_commandRegistry;
+    /**
+     * The DurationMonobar needs to know how to convolute itself somehow to
+     * morph into what used to be separate toolbars in a cleaner and simpler
+     * world.
+     */
+    typedef enum { InsertingNotes,
+                   InsertingDottedNotes,
+                   InsertingRests,
+                   InsertingDottedRests
+                 } DurationMonobarModeType;
 
+    /**
+     * Contort the DurationMonobar with a long and complicated series of hide and
+     * show operations that pretty much make my stomach churn.
+     *
+     * \p mode is one of InsertingNotes, InsertingDottedNotes, InsertingRests,
+     * etc. (see the typedef DurationMonobarModeType for a complete list)
+     */
+    void morphDurationMonobar();
+
+    /**
+     * Initialize NoteRestInserter and Duration Tooolbar.
+     * This is done here since we are certain to have access
+     * to the getdocument() and the TimeSignature.
+     */
+     void initializeNoteRestInserter();
+     
     /** Curiously enough, the window geometry code never fired in the dtor.  I
      * can only conclude the dtor is never being called for some reason, and
      * it's probably a memory leak for the command registry object it wants to
@@ -266,6 +281,12 @@ private:
     bool isInChordMode();
     bool isInTripletMode();
     bool isInGraceMode();
+
+    RosegardenDocument *m_document;
+    NotationWidget *m_notationWidget;
+    CommandRegistry *m_commandRegistry;
+    DurationMonobarModeType m_durationMode;  // Stores morph state.
+
 };
 
 }

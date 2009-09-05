@@ -43,7 +43,7 @@ SymbolInserter::SymbolInserter(NotationWidget *widget) :
 void
 SymbolInserter::slotNotesSelected()
 {
-//!!!    m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void

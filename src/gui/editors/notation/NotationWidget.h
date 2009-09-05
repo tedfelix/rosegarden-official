@@ -101,6 +101,7 @@ public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();
     void slotSetEraseTool();
+    void slotSetNoteRestInserter();
     void slotSetNoteInserter();
     void slotSetRestInserter();
     void slotSetInsertedNote(Note::Type type, int dots);

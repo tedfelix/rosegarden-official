@@ -43,7 +43,7 @@ ClefInserter::ClefInserter(NotationWidget *widget) :
 void
 ClefInserter::slotNotesSelected()
 {
-//!!!    m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void

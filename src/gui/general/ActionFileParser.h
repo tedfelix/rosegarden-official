@@ -91,6 +91,16 @@ protected:
     bool enableActionInState(QString stateName, QString actionName);
     bool disableActionInState(QString stateName, QString actionName);
 
+    /**
+     * Set the action as visible for state.
+     */
+    bool toVisibleActionInState(QString stateName, QString actionName);
+
+    /**
+     * Set the action as invisible for state.
+     */
+    bool toInvisibleActionInState(QString stateName, QString actionName);
+
     bool enableMenuInState(QString stateName, QString menuName);
     bool disableMenuInState(QString stateName, QString menuName);
 
@@ -106,9 +116,24 @@ protected:
 
     typedef std::set<QAction *> ActionSet;
     typedef QMap<QString, ActionSet> StateMap;
+    // Map of enable(d) items when entering action state.
     StateMap m_stateEnableMap;
+    // Map of disable(d) items when entering action state.
     StateMap m_stateDisableMap;
+    // Map of visible items when entering action state.
+    StateMap m_stateVisibleMap;
+    // Map of invisible items when entering action state.
+    StateMap m_stateInvisibleMap;
+
+    /**
+     * Null safe settter for QAction->enable(bool).
+     */
     void setEnabled(QAction *, bool);
+
+    /**
+     * Null safe settter for QAction->setVisibe(bool).
+     */
+    void setVisible(QAction *, bool);
 
     ActionSet m_tooltipSet;
 
@@ -117,6 +142,8 @@ protected:
     bool m_inText;
     bool m_inEnable;
     bool m_inDisable;
+    bool m_inVisible;  // Are we inside a State/visible tag?
+    bool m_inInvisible;  // Are we inside a State/invisible tag?
     QStringList m_currentMenus;
     QString m_currentToolbar;
     QString m_currentState;

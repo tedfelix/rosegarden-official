@@ -48,7 +48,7 @@ GuitarChordInserter::GuitarChordInserter(NotationWidget *widget) :
 void
 GuitarChordInserter::slotNotesSelected()
 {
-//!!!    m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void

@@ -45,7 +45,7 @@ TextInserter::TextInserter(NotationWidget *widget) :
 void
 TextInserter::slotNotesSelected()
 {
-//!!!    m_nParentView->slotLastNoteAction();
+    invokeInParentView("draw");
 }
 
 void

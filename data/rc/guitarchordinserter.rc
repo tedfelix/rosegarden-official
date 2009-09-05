@@ -4,7 +4,7 @@
 
 <Menu noMerge="1" name="GuitarChordInserter">
   <Action name="select" text="Switch to Select Tool" icon="select" />
-  <Action name="notes" text="Switch to Inserting Notes" icon="menu-crotchet" />
+  <Action name="notes" text="Switch to Inserting Notes" icon="pencil" />
   <Action name="erase" text="Switch to Erase Tool" icon="eraser" />
 </Menu>
 
