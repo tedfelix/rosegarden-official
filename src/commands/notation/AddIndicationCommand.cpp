@@ -245,7 +245,7 @@ AddIndicationCommand::getGlobalName(std::string indicationType)
     } else if (indicationType == Indication::Glissando) {
         return tr("Add &Glissando");
     } else if (indicationType == Indication::TrillLine) {
-        return tr("Add Tri&ll Line");
+        return tr("Add Tri&ll With Line");
     }
 
     QString n = tr("Add &%1%2").arg((char)toupper(indicationType[0])).arg(strtoqstr(indicationType.substr(1)));

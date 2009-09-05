@@ -913,10 +913,8 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
             if (*i != Marks::TrillLine) {
 
-                NoteCharacter character
-                (getCharacter
-                 (m_style->getMarkCharName(*i), PlainColour,
-                  false));
+                NoteCharacter character(getCharacter(m_style->getMarkCharName(*i),
+                                        PlainColour, false));
 
                 x -= character.getWidth() / 2;
                 y -= character.getHeight();
@@ -930,10 +928,8 @@ NotePixmapFactory::drawMarks(bool isStemmed,
 
             } else {
 
-                NoteCharacter character
-                (getCharacter
-                 (m_style->getMarkCharName(Marks::Trill), PlainColour,
-                  false));
+                NoteCharacter character(getCharacter(m_style->getMarkCharName(
+                                        Marks::Trill), PlainColour, false));
                 y -= character.getHeight() / 2;
                 dy += character.getHeight() + gap;
             }
@@ -2784,21 +2780,19 @@ NotePixmapFactory::makeTrillLine(int length)
 void
 NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
 {
-    int nbh = getNoteBodyHeight();
-    int nbw = getNoteBodyWidth();
+    // arbitrary gap calculation from elsewhere
+    int gap = m_noteBodyHeight / 5 + 1;
 
-    int height = (int)(((double)nbh / (double)(nbw * 40)) * length) + nbh;
-    int thickness = getStaffLineThickness() * 3 / 2;
+    // make a character for the tr bit first, so we can use its height
+    NoteCharacter character(getCharacter(m_style->getMarkCharName(Marks::Trill),
+                                         PlainColour, false));
+    int height = character.getHeight();
 
-    //    NOTATION_DEBUG << "NotePixmapFactory::makeTrillLinePixmap: mapped length " << length << " to height " << height << " (nbh = " << nbh << ", nbw = " << nbw << ")" << endl;
-
-    if (height < nbh)
-        height = nbh;
-    if (height > nbh*2)
-        height = nbh * 2;
-
-    height += thickness - 1;
-
+    // create a pixmap of a suitable width and height to contain our tr /\/\
+    //
+    // I think the "if (painter)" bit is a block-copied hold-over that shouldn't
+    // be necessary in new code, but I'm not completely sure.  A lot of my
+    // drawing-related code is still lucky guesswork more than method
     if (painter) {
         painter->save();
         m_p->beginExternal(painter);
@@ -2811,14 +2805,30 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
         m_p->painter().setPen(GUIPalette::getColour(GUIPalette::SelectedElement));
     }
 
-    int left = 1, right = length - 2 * nbw / 3 + 1;
+    // draw the tr
+    m_p->drawNoteCharacter(x, y, character);
+    // increment x so we start drawing after the tr; 3 is an arbitrary figure
+    // that seems about right, but I'm only testing with one font at one size
+    x += character.getWidth() + gap;
+    
+ 
+    // make a character for the /\/\/\/ bit, and keep drawing it at spaced
+    // increments until one glyph width just before running out of space, to
+    // avoid clipping the last glyph
+    NoteCharacter extension;
+    if (getCharacter(NoteCharacterNames::TRILL_LINE, extension,
+                     PlainColour, false)) {
+        x += extension.getHotspot().x();
 
-    for (int X = left; X <= right; X += 10) {
-        drawShallowLine(X, height + 3, X + 5, height - 3, thickness);
-    }
+        // align the /\/\ bit with the center of the tr bit; assumes the tr bit
+        // is always taller
+        y = ((character.getHeight() - extension.getHeight()) / 2 );
 
-    for (int X = left + 5; X <= right; X += 10) {
-        drawShallowLine(X, height - 3, X + 5, height + 3, thickness * 2);
+        while (x < (length - extension.getWidth())) {
+            x -= extension.getHotspot().x();
+            m_p->drawNoteCharacter(x, y, extension);
+            x += extension.getWidth();
+        }
     }
 
     m_p->painter().setPen(QColor(Qt::black));

@@ -146,8 +146,7 @@
       <Action name="add_text_rf" text="Add R&amp;inforzando" icon="rf" />
     <Separator/>
       <Action name="add_trill" text="Add Tri&amp;ll" icon="trill" />
-<!--      <Action name="add_long-trill" text="Add Trill &amp;with Line" icon="trill-with-squiggle" /> -->
-<!--      <Action name="add_trill-line" text="Add Trill Line" icon="squiggle" /> -->
+      <!-- trill with line removed, because the mark is virtually useless; use the new indication instead -->
       <Action name="add_turn" text="Add &amp;Turn" icon="turn" />
       <Action name="add_mordent" text="Add M&amp;ordent" icon="mordent" />
       <Action name="add_mordent-inverted" text="Add I&amp;nverted Mordent" icon="inverted-mordent" />
@@ -266,7 +265,7 @@
     <Action name="crescendo" text="Add &amp;Crescendo" icon="group-crescendo" shortcut="&lt;" />
     <Action name="decrescendo" text="Add &amp;Decescendo" icon="group-decrescendo" shortcut="&gt;" />
   <Separator/>
-    <Action name="trill_line" text="Add Trill &amp;Line" icon="trill-line" />
+    <Action name="trill_line" text="Add Trill With &amp;Line" icon="trill-line" />
   <Separator/>
     <Menu name="octaves">
       <text>&amp;Octaves</text>
@@ -731,7 +730,7 @@
   <Action name="add_text_sf" />
   <Action name="add_text_rf" />
   <Action name="add_trill" />
-<!--  <Action name="add_long-trill" /> -->
+   <!-- trill with line removed, because the mark is virtually useless; use the new indication instead -->
   <Action name="add_turn" />
   <Action name="add_pause" />
   <Action name="add_up-bow" />
@@ -912,8 +911,7 @@
     <Action name="add_text_sf"/>
     <Action name="add_text_rf"/>
     <Action name="add_trill"/>
-<!--    <Action name="add_long-trill"/> -->
-<!--    <Action name="add_trill-line"/> -->
+    <Action name="trill_line"/> <!-- the new indication version -->
     <Action name="add_turn"/>
     <Action name="add_pause"/>
     <Action name="add_up-bow"/>
