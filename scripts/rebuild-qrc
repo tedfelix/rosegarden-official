@@ -27,15 +27,28 @@ cd data||exit 1
 
 writeEntries() {
     echo "  assembling files of type $1..."
-    for f in $(find . -name \*.$1 | sort); do
-        if (svn info $f > /dev/null 2>&1); then
+    # Do we really need a build dependency on the versioning system (svn or git-svn)?
+    if (svn info > /dev/null 2>&1); then
+        for f in $(find . -name \*.$1 | sort); do
+            if (svn info $f > /dev/null 2>&1); then
+                cat >> $ofile << EOF
+<file>$f</file>
+EOF
+            else 
+                not_added="$f $not_added"
+            fi
+        done
+    elif (git --no-pager log --max-count=1 > /dev/null 2>&1); then
+        for f in $(find . -name \*.$1 | sort); do
+            if (git --no-pager log --max-count=1 $f > /dev/null 2>&1); then
             cat >> $ofile << EOF
 <file>$f</file>
 EOF
-        else
-            not_added="$f $not_added"
-        fi
-    done
+            else
+                not_added="$f $not_added"
+            fi
+        done
+    fi
 }
 
 cat > $ofile << EOF
