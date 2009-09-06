@@ -294,6 +294,16 @@ bool ControlRuler::isVisible(ControlItem* item)
     return false;
 }
 
+float ControlRuler::getXMax()
+{
+    return (std::min(m_rulerScale->getXForTime(m_segment->getEndTime()), m_pannedRect.right()));
+}
+
+float ControlRuler::getXMin()
+{
+    return (std::max(m_rulerScale->getXForTime(m_segment->getStartTime()), m_pannedRect.left()));
+}
+
 void ControlRuler::updateSegment()
 {
     // Bring the segment up to date with the ControlRuler's items

@@ -56,6 +56,8 @@ void
 ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (e->itemList.size()) {
+        m_ruler->setCursor(Qt::ClosedHandCursor);
+
         //for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
         std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
         if ((*it)->isSelected()) {
@@ -127,9 +129,7 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
     }
 
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A drag action is in progress
-        m_ruler->setCursor(Qt::ClosedHandCursor);
-
+        // A drag action is in progress        
         float deltaX = (e->x-m_mouseLastX);
         float deltaY = (e->y-m_mouseLastY);
         m_mouseLastX = e->x;
@@ -139,7 +139,13 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
         ControlItemList *selected = m_ruler->getSelectedItems();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             item = dynamic_cast <EventControlItem*> (*it);
-            if (item) item->reconfigure(item->xStart()+deltaX,item->y()+deltaY);
+            float x = item->xStart()+deltaX;
+            x = std::max(x,m_ruler->getXMin());
+            x = std::min(x,m_ruler->getXMax());
+            float y = item->y()+deltaY;
+            y = std::max(y,0.0f);
+            y = std::min(y,1.0f);
+            if (item) item->reconfigure(x,y);
         }
     }
 
@@ -167,7 +173,7 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
         m_ruler->updateSegment();
 
         // Reset the cursor to the state that it started
-        m_ruler->setCursor(Qt::PointingHandCursor);
+        m_ruler->setCursor(Qt::OpenHandCursor);
     }
 
     // May have moved off the item during a drag so use setCursor to correct its state
@@ -184,12 +190,12 @@ void ControlSelector::setCursor(const ControlMouseEvent *e)
 
     if (!m_overItem) {
         if (isOverItem) {
-            m_ruler->setCursor(Qt::PointingHandCursor);
+            m_ruler->setCursor(Qt::OpenHandCursor);
             m_overItem = true;
         }
     } else {
         if (!isOverItem) {
-            m_ruler->setCursor(Qt::CrossCursor);
+            m_ruler->setCursor(Qt::ArrowCursor);
             m_overItem = false;
         }
     }
@@ -197,7 +203,7 @@ void ControlSelector::setCursor(const ControlMouseEvent *e)
 
 void ControlSelector::ready()
 {
-    m_ruler->setCursor(Qt::CrossCursor);
+    m_ruler->setCursor(Qt::ArrowCursor);
     m_overItem = false;
 //    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
 //            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));

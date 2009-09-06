@@ -116,7 +116,9 @@ public:
 
     double getXScale() {return m_xScale; }
     double getYScale() {return m_yScale; }
-
+    float getXMax();
+    float getXMin();
+    
     void clearSelectedItems();
     void addToSelection(ControlItem*);
     void removeFromSelection(ControlItem*);

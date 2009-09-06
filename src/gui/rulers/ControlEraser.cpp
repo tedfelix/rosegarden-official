@@ -117,7 +117,7 @@ void ControlEraser::setCursor(const ControlMouseEvent *e)
         }
     } else {
         if (!isOverItem) {
-            m_ruler->setCursor(Qt::CrossCursor);
+            m_ruler->setCursor(Qt::ArrowCursor);
             m_overItem = false;
         }
     }
