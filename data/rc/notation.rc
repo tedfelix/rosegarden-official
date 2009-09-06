@@ -219,7 +219,7 @@
     </Menu>
   <Separator/>
     <Action name="stems_up" text="Stem &amp;Up" shortcut="Ctrl+PgUp" />
-    <Action name="stems_down" text="Stem &amp;Down" shortcut="Ctrl+PgDowm" />
+    <Action name="stems_down" text="Stem &amp;Down" shortcut="Ctrl+PgDown" />
     <Action name="restore_stems" text="&amp;Restore Stems" />
   </Menu>
 
