@@ -34,7 +34,7 @@ writeEntries() {
                 cat >> $ofile << EOF
 <file>$f</file>
 EOF
-            else 
+            else
                 not_added="$f $not_added"
             fi
         done
