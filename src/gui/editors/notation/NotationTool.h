@@ -45,7 +45,7 @@ class NotationScene;
  *
  * A NotationTool can have a menu, normally activated through a right
  * mouse button click. This menu is defined in an XML file, see
- * NoteInserter and noteinserter.rc for an example.
+ * NoteRestInserter and noterestinserter.rc for an example.
  *
  * This class is a "semi-singleton", that is, only one instance per
  * NotationView window is created. This is because menu creation is
