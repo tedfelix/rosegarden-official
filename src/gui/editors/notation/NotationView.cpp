@@ -512,7 +512,6 @@ NewNotationView::setupActions()
     // filler to keep spacing the same across all toolbars, and there have to
     // two of them
     createAction("dummy_1", SLOT());
-    createAction("dummy_2", SLOT());
 
     //"NoteTool" subMenu
     //NEED to create action methods
@@ -1979,22 +1978,31 @@ NewNotationView::manageAccidentalAction(QString actionName)
      NOTATION_DEBUG << "NewNotationView::manageAccidentalAction: enter. "
          << "actionName = " << actionName << "." << endl;
 
-    //Manage exclusive group setting since group->isExclusive() == false.
+    // Manage exclusive group setting since group->isExclusive() == false.
     QAction *currentAction = findAction(actionName);
-    //Force the current button to be pressed
+    // Force the current button to be pressed
     currentAction->setChecked(true);
     if (m_accidentalPressed != currentAction) {
         m_accidentalPressed->setChecked(false);
         m_accidentalPressed = currentAction;
     }
 
+    // Set The Note / Rest Inserter Tool as curretn tool if needed.
     if (m_notationWidget) {
         NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
         if (!currentInserter) {
             slotSetNoteRestInserter();
+            
+            // re-fetch tool for analysis.
+            currentInserter = dynamic_cast<NoteRestInserter *>
+            (m_notationWidget->getCurrentTool());
+        }
+        if (currentInserter->isaRestInserter()) {
+            slotSwitchToNotes();
         }
     }
+    
 }
 
 void
