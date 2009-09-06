@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QAction>
+#include <QActionGroup>
 #include <QMenu>
 #include <QToolBar>
 
@@ -109,6 +110,26 @@ ActionFileClient::leaveActionState(QString stateName)
     // be a QObject and so cannot receive destroyed() signal from
     // objects... proper structure needed
     if (m_actionFileParser) m_actionFileParser->leaveActionState(stateName);
+}
+
+QActionGroup *
+ActionFileClient::findGroup(QString groupName)
+{
+    QObject *obj = dynamic_cast<QObject *>(this);
+    if (!obj) {
+        std::cerr << "ERROR: ActionFileClient::findGroup: ActionFileClient subclass is not a QObject" << std::endl;
+        return 0;
+    }
+    QWidget *widget = dynamic_cast<QWidget *>(this);
+    QActionGroup *g = 0;
+    if (widget) {
+        g = obj->findChild<QActionGroup *>(groupName);
+        if (!g) {
+            std::cerr << "WARNING: ActionFileClient(\"" << obj->objectName()
+                      << "\")::findGroup: No such action-group as \"" << groupName << "\"" << std::endl;
+        }
+    }
+    return g;
 }
 
 QMenu *

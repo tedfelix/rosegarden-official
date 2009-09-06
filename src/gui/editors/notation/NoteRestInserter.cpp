@@ -101,7 +101,7 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
 NoteRestInserter::NoteRestInserter(QString rcFileName, QString menuName,
                            NotationWidget* widget) :
     NotationTool(rcFileName, menuName, widget),
-    m_noteType(Note::Quaver),  //Using initializeNoteRestInserter to override.
+    m_noteType(Note::Quaver),  //OverRide value with NotationView::initializeNoteRestInserter.
     m_noteDots(0),
     m_autoBeam(false),
     m_clickHappened(false),

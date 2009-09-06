@@ -107,17 +107,12 @@ protected slots:
     void slotSetNoteRestInserter();
 
     void slotInsertNoteFromAction();
-    void slotInsertRest();
-
-    /** Call either slotSwitchToNotes() or slotSwitchToRests() depending on
-     * calling context
-     */
+    void slotInsertRestFromAction();
 
     /**
      * Switch the NoteRestInserter to Note Insertion mode and update the gui.
      */
     void slotSwitchToNotes();
-
 
     /**
      * Switch the NoteRestInserter to Rest Insertion mode and update the gui.
@@ -269,6 +264,13 @@ private:
      */
      void initializeNoteRestInserter();
      
+    /**
+     * Manage the setting of the accidental modes.
+     * Function enforces exclusive state of buttons and triggers
+     * SetNoteRestInserter if not currently in Note/Rest mode.
+     */
+     void manageAccidentalAction(QString actionName);
+
     /** Curiously enough, the window geometry code never fired in the dtor.  I
      * can only conclude the dtor is never being called for some reason, and
      * it's probably a memory leak for the command registry object it wants to
@@ -286,7 +288,8 @@ private:
     NotationWidget *m_notationWidget;
     CommandRegistry *m_commandRegistry;
     DurationMonobarModeType m_durationMode;  // Stores morph state.
-
+    QAction *m_durationPressed;  //Store the last duration button pressed.
+    QAction *m_accidentalPressed;  //Store the last accidental button pressed.
 };
 
 }

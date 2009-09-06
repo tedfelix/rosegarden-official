@@ -21,6 +21,7 @@
 #include <QString>
 
 class QAction;
+class QActionGroup;
 class QMenu;
 class QToolBar;
 class QObject;
@@ -40,6 +41,13 @@ public:
      * findAction("action_name")->setChecked(true); is acceptable.
      */
     virtual QAction *findAction(QString actionName);
+
+    /**
+     * Find an group of the given name.  If it does not exist,
+     * this will currently return a null pointer -- beware the
+     * inconsistency with the other methods here!
+     */
+    virtual QActionGroup *findGroup(QString groupName);
     virtual void enterActionState(QString stateName);
     virtual void leaveActionState(QString stateName);
 

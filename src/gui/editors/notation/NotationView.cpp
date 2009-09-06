@@ -560,7 +560,7 @@ NewNotationView::setupActions()
     createAction("natural_accidental", SLOT(slotNatural()));
     createAction("double_sharp_accidental", SLOT(slotDoubleSharp()));
     createAction("double_flat_accidental", SLOT(slotDoubleFlat()));
-
+    
     //JAS "Clefs" subMenu
     createAction("treble_clef", SLOT(slotClefAction()));
     createAction("alto_clef", SLOT(slotClefAction()));
@@ -701,7 +701,7 @@ NewNotationView::setupActions()
         createAction(QString("insert_6%1").arg(octaveSuffix),
                      SLOT(slotInsertNoteFromAction()));
     }
-    createAction(QString("insert_rest"),SLOT(slotInsertRest()));
+    createAction(QString("insert_rest"),SLOT(slotInsertRestFromAction()));
 
     std::set<QString> fs(NoteFontFactory::getFontNames());
     std::vector<QString> f(fs.begin(), fs.end());
@@ -1468,10 +1468,22 @@ NewNotationView::slotSwitchToNotes()
         m_notationWidget->slotSetNoteInserter();
     }
 
-    //Must set duration_ shortcuts to false to allow repressing
-    //This fixes bug when in rest mode a eq. duration shortcut is pressed
+    //Must set duration_ shortcuts to false to fix bug when in rest mode
+    // and a duration shortcut key is pressed (or selected from dur. menu).
     findAction(QString("duration_%1").arg(actionName))->setChecked(false);
-    findAction(actionName)->setChecked(true);
+    QAction *currentAction = findAction(actionName);
+    currentAction->setChecked(true);
+    
+    // This code and last line above used to maintain exclusive state
+    // of the Duration Toolbar so we can reactivate the NoteRestInserter
+    // even when from a pressed button on the bar.
+    
+    // Now un-select previous pressed button pressed
+    if (currentAction != m_durationPressed) {
+        m_durationPressed->setChecked(false);
+        m_durationPressed = currentAction;
+    }
+
     morphDurationMonobar();
 
     slotUpdateMenuStates();
@@ -1503,10 +1515,28 @@ NewNotationView::slotSwitchToRests()
         m_notationWidget->slotSetRestInserter();
     }
 
-    //Must set duration_ shortcuts to false to allow repressing
-    //This fixes bug when in rest mode a eq. duration shortcut is pressed
+    //Must set duration_ shortcuts to false to fix bug when in rest mode
+    // and a duration shortcut key is pressed (or selected from dur. menu).
     findAction(QString("duration_%1").arg(actionName))->setChecked(false);
     findAction(QString("rest_%1").arg(actionName))->setChecked(true);
+
+
+    //Must set duration_ shortcuts to false to fix bug when in rest mode
+    // and a duration shortcut key is pressed (or selected from dur. menu).
+    findAction(QString("duration_%1").arg(actionName))->setChecked(false);
+    QAction *currentAction = findAction(QString("rest_%1").arg(actionName));
+    currentAction->setChecked(true);
+    
+    // This code and last line above used to maintain exclusive state
+    // of the Duration Toolbar so we can reactivate the NoteRestInserter
+    // even when from a pressed button on the bar.
+    
+    // Now un-select previous pressed button pressed
+    if (currentAction != m_durationPressed) {
+        m_durationPressed->setChecked(false);
+        m_durationPressed = currentAction;
+    }
+
     morphDurationMonobar();
 
     slotUpdateMenuStates();
@@ -1645,11 +1675,28 @@ NewNotationView::initializeNoteRestInserter()
     leaveActionState("rest_0_dot_mode");
     leaveActionState("rest_1_dot_mode");
     
-    // Counting on a InsertingRests to be stored in m_durationMode
-    // which it was passed in the constructor.  This will
+    //Change exclusive settings so we can retrigger Duration Toolbar
+    //actions when button needed is pressed.
+    //exclusive state maintianed via slotSwitchToRests() / slotSwitchToNotes().
+    findGroup("duration_toolbar")->setExclusive(false);
+
+
+    // Initialize the m_durationPressed so we don't have to null check elswhere.
+    m_durationPressed = findAction(QString("duration_%1").arg(actionName));
+
+    // Counting on a InsertingRests to be stored in NoteRestInserter::
+    // m_durationMode which it was passed in the constructor.  This will
     // ensure morphDurationMonobar always fires correctly since
     // a duration_ shortcut is always tied to the note palette.
-    findAction(QString("duration_%1").arg(actionName))->trigger();
+    m_durationPressed->trigger();
+
+    //Change exclusive settings so we can retrigger Accidental Toolbar
+    //actions when button needed is pressed.
+    //exclusive state maintianed via manageAccidentalAction().
+    findGroup("accidentals")->setExclusive(false);
+
+    // Initialize the m_durationPressed so we don't have to null check elswhere.
+    m_accidentalPressed = findAction("no_accidental");
 }
 
 int
@@ -1790,7 +1837,7 @@ void NewNotationView::slotInsertNoteFromAction()
     }
 }
 
-void NewNotationView::slotInsertRest()
+void NewNotationView::slotInsertRestFromAction()
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
@@ -1927,44 +1974,103 @@ NewNotationView::slotNoteAction()
 }
 
 void
+NewNotationView::manageAccidentalAction(QString actionName)
+{
+     NOTATION_DEBUG << "NewNotationView::manageAccidentalAction: enter. "
+         << "actionName = " << actionName << "." << endl;
+
+    //Manage exclusive group setting since group->isExclusive() == false.
+    QAction *currentAction = findAction(actionName);
+    //Force the current button to be pressed
+    currentAction->setChecked(true);
+    if (m_accidentalPressed != currentAction) {
+        m_accidentalPressed->setChecked(false);
+        m_accidentalPressed = currentAction;
+    }
+
+    if (m_notationWidget) {
+        NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
+            (m_notationWidget->getCurrentTool());
+        if (!currentInserter) {
+            slotSetNoteRestInserter();
+        }
+    }
+}
+
+void
 NewNotationView::slotNoAccidental()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(NoAccidental, false);
 }
 
 void
 NewNotationView::slotFollowAccidental()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(NoAccidental, true);
 }
 
 void
 NewNotationView::slotSharp()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(Sharp, false);
 }
 
 void
 NewNotationView::slotFlat()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(Flat, false);
 }
 
 void
 NewNotationView::slotNatural()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(Natural, false);
 }
 
 void
 NewNotationView::slotDoubleSharp()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(DoubleSharp, false);
 }
 
 void
 NewNotationView::slotDoubleFlat()
 {
+    QObject *s = sender();
+    QString name = s->objectName();
+    
+    manageAccidentalAction(name);
+    
     if (m_notationWidget) m_notationWidget->slotSetAccidental(DoubleFlat, false);
 }
 
