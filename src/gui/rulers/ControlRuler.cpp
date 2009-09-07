@@ -991,7 +991,7 @@ float ControlRuler::valueToY(long val)
     return y;
 }
 
-long ControlRuler::YToValue(float y)
+long ControlRuler::yToValue(float y)
 {
     long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
     return value;

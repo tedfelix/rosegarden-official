@@ -68,10 +68,10 @@ void PropertyControlItem::setValue(float y)
     if (y < 0) y = 0;
 
     if (m_propertyname == BaseProperties::VELOCITY) {
-        m_element->reconfigure(m_controlRuler->YToValue(y));
+        m_element->reconfigure(m_controlRuler->yToValue(y));
         m_element->setSelected(true);
         m_colour = DefaultVelocityColour::getInstance()->getColour(
-                m_controlRuler->YToValue(y));
+                m_controlRuler->yToValue(y));
     }
 
     m_y = y;
@@ -105,7 +105,7 @@ void PropertyControlItem::reconfigure(float x0, float x1, float y)
 
 void PropertyControlItem::updateSegment()
 {
-    m_element->event()->set<Int>(m_propertyname,(int)(m_controlRuler->YToValue(m_y)));
+    m_element->event()->set<Int>(m_propertyname,(int)(m_controlRuler->yToValue(m_y)));
 }
 
 }

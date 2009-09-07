@@ -236,9 +236,21 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     pen.setColor(GUIPalette::getColour(GUIPalette::SelectedElement));
     pen.setWidthF(2.0);
     painter.setPen(pen);
+    QFontMetrics fontMetrics(painter.font());
+    QString str;
+    int fontHeight = fontMetrics.height();
+    int fontOffset = fontMetrics.width('+');
+    
     for (std::vector<ControlItem*>::iterator it = selectedvector.begin(); it != selectedvector.end(); ++it)
     {
+        // Draw the marker
         painter.drawPolygon(mapItemToWidget(*it));
+        
+        // For selected items, draw the value in text alongside the marker
+        // By preference, this should sit on top of the new line that represents this value change
+        str = QString::number(yToValue((*it)->y()));
+        painter.drawText(mapXToWidget((*it)->xStart())+0.4*fontOffset,
+                std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight)),str);
     }
 
     if (m_selectionRect) {
@@ -363,7 +375,7 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
 
-    long initialValue = YToValue(y);
+    long initialValue = yToValue(y);
 
     RG_DEBUG << "ControllerEventsRuler::insertControllerEvent() : inserting event at "
     << insertTime

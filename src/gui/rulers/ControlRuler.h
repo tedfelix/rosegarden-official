@@ -112,7 +112,7 @@ public:
     RulerScale* getRulerScale() { return m_rulerScale; }
 
     float valueToY(long val);
-    long YToValue(float height);
+    long yToValue(float height);
 
     double getXScale() {return m_xScale; }
     double getYScale() {return m_yScale; }
