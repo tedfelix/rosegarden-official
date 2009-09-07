@@ -27,6 +27,7 @@ cd data||exit 1
 
 writeEntries() {
     echo "  assembling files of type $1..."
+    # Do we really need a build dependency on the versioning system (svn or git-svn)?
     if (svn info > /dev/null 2>&1); then
         for f in $(find . -name \*.$1 | sort); do
             if (svn info $f > /dev/null 2>&1); then
@@ -46,14 +47,6 @@ EOF
             else
                 not_added="$f $not_added"
             fi
-        done
-    else
-        # If there is no version control in the directory, then it is not
-        # necessary to check that files are being version controlled.
-        for f in $(find . -name \*.$1 | sort); do
-            cat >> $ofile << EOF
-<file>$f</file>
-EOF
         done
     fi
 }
