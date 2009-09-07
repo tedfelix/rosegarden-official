@@ -127,6 +127,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
                                  QWidget *parent) :
     EditViewBase(doc, segments, parent),
     m_document(doc),
+    m_durationPressed(0),
+    m_accidentalPressed(0),
     m_durationMode(InsertingRests) //Fool morphDurationToolbar during first call
 {
     m_notationWidget = new NotationWidget();
