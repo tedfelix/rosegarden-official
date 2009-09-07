@@ -238,10 +238,17 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_mainDockWidget(0),
     m_dockLeft(0),
     m_doc(0),
+    m_recentFiles(0),
     m_sequencerThread(0),
     m_sequencerCheckedIn(false),
+#ifdef HAVE_LIBJACK
+    m_jackProcess(0),
+#endif
+    m_progressBar(0),
     m_zoomSlider(0),
     m_seqManager(0),
+    m_zoomLabel(0),
+    m_statusBarLabel1(0),
     m_transport(0),
     m_audioManagerDialog(0),
     m_originatingJump(false),
@@ -271,7 +278,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_lircCommander(0),
 #endif
     m_tranzport(0),
-    m_devicesManagerNew(0)
+    m_devicesManagerNew(0),
+    m_warningWidget(0)
 {
     setObjectName("App");
     m_myself = this;
@@ -5416,7 +5424,7 @@ RosegardenMainWindow::slotEditToolbars()
 void
 RosegardenMainWindow::slotUpdateToolbars()
 {
-    createGUI("rosegardenui.rc");
+//    createGUI("rosegardenui.rc");
     findAction("show_stock_toolbar")->setChecked(!(findToolbar("Main Toolbar")->isHidden()));
 }
 
