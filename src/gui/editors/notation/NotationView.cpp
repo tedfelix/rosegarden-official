@@ -579,10 +579,16 @@ NewNotationView::setupActions()
     //JAS "Move" subMenu
     createAction("cursor_back", SLOT(slotStepBackward()));
     createAction("cursor_forward", SLOT(slotStepForward()));
-    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
-    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
-    createAction("cursor_start", SLOT(slotJumpToStart()));
-    createAction("cursor_end", SLOT(slotJumpToEnd()));
+//   Do we really need 2 submenus for cursor/pointer?
+//    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
+//    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
+//    createAction("cursor_start", SLOT(slotJumpToStart()));
+//    createAction("cursor_end", SLOT(slotJumpToEnd()));
+    createAction("cursor_back_bar", SIGNAL(rewindPlayback()));
+    createAction("cursor_forward_bar", SIGNAL(fastForwardPlayback()));
+    createAction("cursor_start", SIGNAL(rewindPlaybackToBeginning()));
+    createAction("cursor_end", SIGNAL(fastForwardPlaybackToEnd()));
+    
     createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
     createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
     createAction("preview_selection", SLOT(slotPreviewSelection()));
