@@ -1677,7 +1677,7 @@ RosegardenMainWindow::openURL(const QUrl& url)
 
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -1723,7 +1723,7 @@ RosegardenMainWindow::slotFileOpen()
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("open_file", QDir::homePath()).toString();
 
-    QString fname = FileDialog::getOpenFileName(this, "Open File", directory,
+    QString fname = FileDialog::getOpenFileName(this, tr("Open File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP *.mid *.MID *.midi *.MIDI)" + ";;" +
                     tr("Rosegarden files") + " (*.rg *.RG *.rgp *.RGP *.rgt *.RGT)" + ";;" +
                     tr("MIDI files") + " (*.mid *.MID *.midi *.MIDI)" + ";;" +
@@ -1778,7 +1778,7 @@ RosegardenMainWindow::slotMerge()
 
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return;
     }
 
@@ -3410,7 +3410,7 @@ RosegardenMainWindow::slotImportProject()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
     source.waitForData();
@@ -3476,7 +3476,7 @@ RosegardenMainWindow::slotImportMIDI()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3512,7 +3512,7 @@ RosegardenMainWindow::slotMergeMIDI()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3768,7 +3768,7 @@ RosegardenMainWindow::slotImportRG21()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3804,7 +3804,7 @@ RosegardenMainWindow::slotMergeRG21()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3893,7 +3893,7 @@ RosegardenMainWindow::slotImportHydrogen()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -3928,7 +3928,7 @@ RosegardenMainWindow::slotMergeHydrogen()
     QString tmpfile;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
@@ -7563,7 +7563,7 @@ RosegardenMainWindow::slotImportStudio()
     QString target;
     FileSource source(url);
     if (!source.isAvailable()) {
-        QMessageBox::critical(this, "", tr("Cannot download file %1").arg(url.toString()));
+        QMessageBox::critical(this, "", tr("Cannot open file %1").arg(url.toString()));
         return ;
     }
 
