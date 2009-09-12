@@ -68,7 +68,8 @@ RELEASEFLAGS="-DNDEBUG -DBUILD_RELEASE -DNO_TIMING"
 MINIMAL_CFLAGS="$RELEASEFLAGS"
 
 if test "x$GCC" = "xyes"; then
-	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1 -g -pipe"
+#	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O1 -g -pipe"
+	DEBUGFLAGS="$DEBUGFLAGS -Wall -Woverloaded-virtual -Wextra -Wformat-nonliteral -Wformat-security -Winit-self -Wswitch-enum -O0 -g -pipe"
 	RELEASEFLAGS="$RELEASEFLAGS -g0 -O2 -Wall -pipe"
 	MINIMAL_CFLAGS="$MINIMAL_CFLAGS -g0 -O0"
 fi
@@ -76,7 +77,8 @@ fi
 BUILDFLAGS="$RELEASEFLAGS"
 AC_ARG_ENABLE(debug, [AS_HELP_STRING([--enable-debug],[enable debug support [default=no]])],[AC_MSG_NOTICE([enabling debug build])
 BUILDFLAGS="$DEBUGFLAGS"])
-CXXFLAGS="$CXXFLAGS $BUILDFLAGS"
+#CXXFLAGS="$CXXFLAGS $BUILDFLAGS"
+CXXFLAGS="$BUILDFLAGS"
 
 AC_SUBST(PERL)
 AC_SUBST(XARGS)

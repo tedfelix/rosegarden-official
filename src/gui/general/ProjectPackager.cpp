@@ -17,8 +17,16 @@
 
 #include "ProjectPackager.h"
 
+#include "document/RosegardenDocument.h"
+#include "base/Composition.h"
+#include "base/Track.h"
 #include "gui/general/IconLoader.h"
+#include "gui/widgets/FileDialog.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Strings.h"
+#include "sound/AudioFile.h"
+#include "sound/AudioFileManager.h"
+#include "document/GzipFile.h"
 
 #include <QDialog>
 #include <QProcess>
@@ -28,21 +36,37 @@
 #include <QLabel>
 #include <QProgressBar>
 #include <QMessageBox>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QDirIterator>
+#include <QSet>
 
 #include <iostream>
+
+// NOTE: we're using std::cout everywhere in here for the moment.  It's easy to
+// swap later to std::cerr, and for the time being this is convenient, because
+// we can ./rosegarden > /dev/null to ignore everything except these messages
+// we're generating in here.
 
 namespace Rosegarden
 {
 
-ProjectPackager::ProjectPackager(QWidget *parent, int mode, QString filename) :
+
+ProjectPackager::ProjectPackager(QWidget *parent, RosegardenDocument *document,  int mode, QString filename) :
         QDialog(parent),
+        m_doc(document),
         m_mode(mode),
-        m_filename(filename)
+        m_filename(filename),
+        m_trueFilename(filename),
+        m_packTmpDirName("fatal error"),
+        m_packDataDirName("fatal error")
+
 {
     // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
     // iostream is mildly irritating, as QStrings have to be converted, but
     // whatever, I'll figure that out later, or just leave well enough alone)
-    std::cerr << "ProjectPackager::ProjectPackager():  mode: " << mode << " m_filename: " << m_filename.toStdString() << std::endl;
+    std::cout << "ProjectPackager::ProjectPackager():  mode: " << mode << " m_filename: " << m_filename.toStdString() << std::endl;
 
     this->setModal(false);
 
@@ -73,12 +97,29 @@ ProjectPackager::ProjectPackager(QWidget *parent, int mode, QString filename) :
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);
     connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
-    layout->addWidget(ok, 3, 1); 
+    layout->addWidget(ok, 3, 1);
 
-    switch (mode) {
-        case ProjectPackager::Unpack:  runPack();    break;
-        case ProjectPackager::Pack:    runUnpack();  break;
-    }
+    sanityCheck();
+}
+
+QString
+ProjectPackager::getTrueFilename()
+{
+    // get the path from the original m_filename, which is wherever the unpacked
+    // .rgp file sat on disk, eg. /home/melvin/Documents/
+    QFileInfo origFI(m_filename);
+    QString dirname = origFI.path();
+
+    std::cout << "ProjectPackager::getTrueFilename() - directory component is: " << dirname.toStdString() << std::endl;
+
+    // get the filename component from the true m_trueFilename discovered while
+    // unpacking the .rgp + extension (eg. foo.rgp yields bar.rg here)
+    QFileInfo trueFI(m_trueFilename);
+    QString basename = QString("%1.%2").arg(trueFI.baseName()).arg(trueFI.completeSuffix());
+
+    std::cout << "                                          name component is: " << basename.toStdString() << std::endl;
+
+    return QString("%1/%2").arg(dirname).arg(basename);
 }
 
 void
@@ -99,171 +140,781 @@ ProjectPackager::puke(QString error)
 }
 
 void
-ProjectPackager::runPack()
+ProjectPackager::rmTmpDir()
 {
-    m_info->setText(tr("Running <b>convert-ly</b>..."));
+    std::cout << "ProjectPackager - rmTmpDir() removing " << m_packTmpDirName.toStdString() << std::endl;
+    QDir d;
+    if (d.exists(m_packTmpDirName)) {
+        QProcess rm;
+        rm.start("rm", QStringList() << "-rf" << m_packTmpDirName);
+        rm.waitForStarted();
+        std::cout << "process started: rm -rf " << qstrtostr(m_packTmpDirName) << std::endl;
+        rm.waitForFinished();
+    }
+
+// Bleargh, bollocks to this!  Using a QDirIterator is the right way to handle
+// the possibility of there being extra unexpected subdirectories full of files,
+// but there are sort order issues and all manner of other ills.  While we live
+// on Linux, let's just say the hell with it and do an rm -rf
+//
+//    if (dir.exists()) {
+//        // first find and remove all the files
+//        QDirIterator fi(dir.path(), QDir::Files, QDirIterator::Subdirectories);
+//        while (fi.hasNext()) {
+//            std::cout << "rm " << fi.next().toStdString() << (QFile::remove(fi.next()) ? "OK" : "FAILED") << std::endl;
+//        }
+//
+//        // then clean up the empty directories
+//        QDirIterator di(dir.path(), QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+//        while (di.hasNext()) {
+//            QDir d;
+//            std::cout << "rmdir: " << di.next().toStdString() << (d.remove(di.next()) ? "OK" : "FAILED") << std::endl;
+//        }
+//    }
+}
+
+void
+ProjectPackager::reject()
+{
+    std::cout << "User pressed cancel" << std::endl;
+    rmTmpDir();
+    QDialog::reject();
+}
+
+QStringList
+ProjectPackager::getAudioFiles()
+{
+    QStringList list;
+
+    // get the Composition from the document, so we can iterate through it
+    Composition *comp = &m_doc->getComposition();
+
+    // We don't particularly care about tracks here, so just iterate through the
+    // entire Composition to find the audio segments and get the associated
+    // file IDs from which to obtain a list of actual files.  This could
+    // conceivably pick up audio segments that are residing on MIDI tracks and
+    // wouldn't otherwise be functional, but the important thing is to never
+    // miss a single file that has any chance of being worth preserving.
+    for (Composition::iterator i = comp->begin(); i != comp->end(); ++i) {
+        if ((*i)->getType() == Segment::Audio) {
+
+            AudioFileManager *manager = &m_doc->getAudioFileManager();
+
+            unsigned int id = (*i)->getAudioFileId();
+
+            AudioFile *file = manager->getAudioFile(id);
+
+            // some polite sanity checking to avoid possible crashes
+            if (!file) continue;
+
+            list << strtoqstr(file->getName());
+        }
+    }
+
+    // QStringList::removeDuplicates() would have been easy, but it's only in Qt
+    // 4.5.0 and up.  So here's the algorithm from Qt 4.5.0, courtesy of (and
+    // originally Copyright 2009) Nokia
+
+    QStringList *that = &list;
+
+    int n = that->size();
+    int j = 0;
+    QSet<QString> seen;
+    seen.reserve(n);
+    for (int i = 0; i < n; ++i) {
+        const QString &s = that->at(i);
+        if (seen.contains(s))
+            continue;
+        seen.insert(s);
+        if (j != i)
+            (*that)[j] = s;
+        ++j;
+    }
+    if (n != j)
+        that->erase(that->begin() + j, that->end());
+//    return n - j;
+
+    return list;
+}
+
+QStringList
+ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const QString newPath)
+{
+    QStringList list;
+
+    // read the input file
+    QString inText;
+
+    bool readOK = GzipFile::readFromFile(fileToModify, inText);
+    if (!readOK) {
+        puke(tr("<qt><pUnable to read %1.</p><p>Processing aborted.</p></qt>").arg(fileToModify));
+        return QStringList();
+    }
+
+    // the input stream
+    QTextStream inStream(&inText, QIODevice::ReadOnly);
+
+    // the output stream
+    QString outText;
+    QTextStream outStream(&outText, QIODevice::WriteOnly);
+    outStream.setEncoding(QTextStream::UnicodeUTF8);
+
+
+    // synth plugin XML:
+    //
+    //  <synth identifier="dssi:/usr/lib/dssi/fluidsynth-dssi.so:FluidSynth-DSSI" bypassed="false" >
+    //       <configure key="__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey" value="/home/michael/rosegarden/"/>
+    //       <configure key="load" value="/home/michael/data/soundfonts/PC51f.sf2"/>
+    //  </synth>    
+    QString pluginAudioPathKey("<configure key=\"__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey\" value=\"");
+    QString pluginAudioDataKey("<configure key=\"load\" value=\"");
+
+    // audio path XML:
+    //
+    //  <audiofiles>
+    //       <audioPath value="~/rosegarden/"/>
+    //  </audiofiles>
+    QString audioPathKey("<audioPath value=\"");
+
+    QString valueTagEndKey("\"/>");
+    
+
+    // process the input line by line and stream it all back out, making any
+    // necessary modifications along the way
+    QString line;
+
+    do {
+
+        line = inStream.readLine(1000);
+
+        if (line.contains(pluginAudioPathKey)) {
+            int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
+            int e = line.indexOf(valueTagEndKey);
+
+            // extract the substring
+            QString extract = line.mid(s, e - s);
+            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
+
+            // alter the path component
+            QFileInfo fi(extract);
+            extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
+
+            // construct a new line around the altered substring
+            extract.prepend(pluginAudioPathKey);
+            extract.append(valueTagEndKey);
+
+            std::cout << "old line: " << line.toStdString() << std::endl;
+
+            line = extract;
+
+            std::cout << "new line: " << line.toStdString() << std::endl; 
+
+        } else if (line.contains(pluginAudioDataKey)) {
+
+            // note that "plugin audio data" is a bit of a misnomer, as this
+            // could contain a soundfont or who knows what else; they're handled
+            // the same way regardless, as "extra files" to add to the package
+
+            int s = line.indexOf(pluginAudioDataKey) + pluginAudioDataKey.length();
+            int e = line.indexOf(valueTagEndKey);
+
+            QString extract = line.mid(s, e - s);
+            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
+
+            // save the extracted path to the list of extra files (and this is
+            // the one part of these three block copied implementations that
+            // differs significantly--really should refactor this into some
+            // function, but I decided just not to bother)
+            list << extract;
+
+            // alter the path component (note that we added extract to files
+            // BEFORE changing its path)
+            QFileInfo fi(extract);
+            extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
+
+            // construct a new line around the altered substring
+            extract.prepend(pluginAudioDataKey);
+            extract.append(valueTagEndKey);
+
+            std::cout << "old line: " << line.toStdString() << std::endl;
+
+            line = extract;
+
+            std::cout << "new line: " << line.toStdString() << std::endl; 
+
+        } else if (line.contains(audioPathKey)) {
+
+            int s = line.indexOf(audioPathKey) + audioPathKey.length();
+            int e = line.indexOf(valueTagEndKey);
+
+            QString extract = line.mid(s, e - s);
+            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
+
+            // alter the path component
+            QFileInfo fi(extract);
+            extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
+
+            // construct a new line around the altered substring
+            extract.prepend(audioPathKey);
+            extract.append(valueTagEndKey);
+
+            std::cout << "old line: " << line.toStdString() << std::endl;
+
+            line = extract;
+
+            std::cout << "new line: " << line.toStdString() << std::endl; 
+        }
+
+        outStream << line << endl;
+
+    } while (!inStream.atEnd());
+
+
+    // write the modified data to the output file
+    QString ofileName = QString("%1.tmp").arg(fileToModify);
+    bool writeOK = GzipFile::writeToFile(ofileName, outText);
+    if (!writeOK) {
+        puke(tr("<qt><pUnable to write %1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        return QStringList();
+    }
+
+    // swap the .tmp modified copy back to the original filename
+    QFile::remove(fileToModify);
+    QFile::copy(ofileName, fileToModify);
+    QFile::remove(ofileName);
+
+//    std::cout << "cp " << ofileName.toStdString() << " " << fileToModify.toStdString() << std::endl;
+//    QMessageBox::information(this,"", "Go look at files in progress while the script pauses", QMessageBox::Ok, QMessageBox::Ok);
+
+    return list;
+}
+
+
+// to avoid problems, we check for flac, which is an integral part of the process.
+// we also use tar, but we can safely assume that tar exists.
+void
+ProjectPackager::sanityCheck() {
     m_process = new QProcess;
-    m_process->start("convert-ly", QStringList() << "-e" << m_filename);
+    m_process->start("flac", QStringList() << "--help");
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runUnpack(int, QProcess::ExitStatus)));
+            this, SLOT(runPackUnpack(int, QProcess::ExitStatus)));
 
     // wait up to 30 seconds for process to start
-    if (m_process->waitForStarted()) {
-        m_info->setText(tr("<b>convert-ly</b> started..."));
-    } else {
-        puke(tr("<qt><p>Could not run <b>convert-ly</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"convert-ly\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a href=\"mailto:rosegarden-user@lists.sourceforge.net\">rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
-    }
-
-    m_progress->setValue(25);
-}
-
-void
-ProjectPackager::runUnpack()
-{
-    std::cerr << "ProjectPackager::runUnpack()" << std::endl;
-    return;
-
-    if (m_process->exitCode() == 0) {
-        m_info->setText(tr("<b>convert-ly</b> finished..."));
-        delete m_process;
-    } else {
-        puke(tr("<qt><p>Ran <b>convert-ly</b> successfully, but it terminated with errors.</p><p>Processing terminated due to fatal errors.</p></qt>"));
-    }
-
-    m_progress->setValue(50);
-
-    m_process = new QProcess;
-    m_info->setText(tr("Running <b>lilypond</b>..."));
-    m_process->start("lilypond", QStringList() << "--pdf" << m_filename);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runFinalStage(int, QProcess::ExitStatus)));
-            
-
-    if (m_process->waitForStarted()) {
-        m_info->setText(tr("<b>lilypond</b> started..."));
-    } else {
-        puke(tr("<qt><p>Could not run <b>lilypond</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"lilypond\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a href=\"mailto:rosegarden-user@lists.sourceforge.net>rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
-    }
-
-    // go into Knight Rider mode when chewing on LilyPond, because it can take
-    // an eternity, but I don't really want to re-create all the text stream
-    // monitoring and guessing code that's easy to do in a script and hell to do
-    // in real code
-    m_progress->setMaximum(0);
-}
-/*
-void
-ProjectPackager::runFinalStage(int exitCode, QProcess::ExitStatus)
-{
-    if (exitCode == 0) {
-        m_info->setText(tr("<b>lilypond</b> finished..."));
-        delete m_process;
-    } else {
-
-        // read preferences from last export from QSettings to offer clues what
-        // failed
-        QSettings settings;
-        settings.beginGroup(LilyPondExportConfigGroup);
-        bool exportedBeams = settings.value("lilyexportbeamings", false).toBool();
-        bool exportedBrackets = settings.value("lilyexportstaffbrackets", false).toBool();
-        settings.endGroup();
-
-        std::cerr << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false") << std::endl
-                  << " exportedBrackets == " << (exportedBrackets ? "true" : "false") << std::endl;
-
-        QString vomitus = QString(tr("<qt><p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>"));
-
-        if (exportedBeams) {
-            vomitus += QString(tr("<p>You opted to export Rosegarden's beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden's) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosgarden.  Leaving the beaming up to LilyPond is probaby the best solution.</p>"));
-        }
-
-        if (exportedBrackets) {
-            vomitus += QString(tr("<p>You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you've selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.</p>"));
-        }
-
-        vomitus += QString(tr("<p>Processing terminated due to fatal errors.</p></qt>"));
-
-        puke(vomitus);
-
-        // puke doesn't actually work, so we have to return in order to avoid
-        // further processing
+    m_info->setText(tr("Checking for flac..."));
+    if (!m_process->waitForStarted()) {
+        puke(tr("Couldn't start sanity check."));
         return;
     }
 
-    QString pdfName = m_filename.replace(".ly", ".pdf");
+    m_progress->setValue(10);
+}
 
-    // retrieve user preferences from QSettings
-    QSettings settings;
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    int pdfViewerIndex = settings.value("pdfviewer", 0).toUInt();
-    int filePrinterIndex = settings.value("fileprinter", 0).toUInt();
-    settings.endGroup();
-
-    QString pdfViewer, filePrinter;
-
-    // assumes the PDF viewer is available in the PATH; no provision is made for
-    // the user to specify the location of any of these explicitly, and I'd like
-    // to avoid having to go to that length if at all possible, in order to
-    // reduce complexity both in code and on the user side of the configuration
-    // page (I guess arguably the configuration page shouldn't exist, and we
-    // should just try things sequentially until something works, but it gets
-    // into real headaches trying to guess what someone would prefer based on
-    // what desktop they're running, and anyway specifying explicitly avoids the
-    // reason why my copy of acroread is normally chmod -x so the script
-    // ancestor of this class wouldn't pick it up against my wishes)
-    switch (pdfViewerIndex) {
-        case 0: pdfViewer = "okular";   break;
-        case 1: pdfViewer = "evince";   break;
-        case 2: pdfViewer = "acroread"; break;
-        case 3: pdfViewer = "kpdf"; 
-        default: pdfViewer = "kpdf"; // just because I'm still currently on KDE3
+void
+ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
+    if( exitCode == 0) {
+       delete m_process;
+    } else {
+        puke(tr("<qt><p>The <b>flac</b> command was not found.</p><p>FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called \"flac\".</p>"));
+        return;
     }
 
-    switch (filePrinterIndex) {
-        case 0: filePrinter = "kprinter"; break;
-        case 1: filePrinter = "gtklp";    break;
-        case 2: filePrinter = "lpr";      break;
-        case 3: filePrinter = "lp";       break;
-        case 4: filePrinter = "hp-print"; break;
-        default: filePrinter = "lpr";     break;
+    switch (m_mode) {
+        case ProjectPackager::Unpack:  runUnpack(); break;
+        case ProjectPackager::Pack:    runPack();   break;
+    }
+}
+
+///////////////////////////
+//                       //
+//  PACKING OPERATIONS   //
+//                       //
+///////////////////////////
+void
+ProjectPackager::runPack()
+{
+    m_info->setText(tr("Packing project..."));
+
+    // go into spinner mode
+    m_progress->setMaximum(0);
+
+    QStringList audioFiles = getAudioFiles();
+
+    // get the audio path from the Document via the AudioFileManager (eg.
+    // "/home/jsmith/rosegarden" )  (note that Rosegarden stores such things
+    // internally as std::strings for obscure legacy reasons)
+    AudioFileManager *manager = &m_doc->getAudioFileManager();
+    QString audioPath = strtoqstr(manager->getAudioPath());
+
+    // the base tmp directory where we'll assemble all the files
+    m_packTmpDirName = QString("%1/rosegarden-project-packager-tmp").arg(QDir::homePath());
+
+    // the data directory where audio and other files will go
+    QFileInfo fi(m_filename);
+    m_packDataDirName = fi.baseName();
+
+    std::cout << "using tmp data directory: " << m_packTmpDirName.toStdString() << "/" << m_packDataDirName.toStdString() << std::endl;
+
+    QDir tmpDir(m_packTmpDirName);
+
+    // get the original filename saved by RosegardenMainWindow and the name of
+    // the new one we'll be including in the bundle (name isn't changing, path
+    // component changes from one to the other)
+    // QFileInfo::baseName() given /tmp/foo/bar/rat.rgp returns rat
+    //
+    // m_filename comes in already having an .rgp extension, but the file
+    // was saved .rg
+    QString oldName = QString("%1/%2.rg").arg(fi.path()).arg(fi.baseName());
+    QString newName = QString("%1/%2.rg").arg(m_packTmpDirName).arg(fi.baseName());
+
+    // if the tmp directory already exists, just hose it
+    rmTmpDir();
+
+    // make the temporary working directory
+    if (tmpDir.mkdir(m_packTmpDirName)) {
+
+    } else {
+        puke(tr("<qt>Could not create temporary working directory.<br>Processing aborted!</qt>"));
+        return;
     }
 
-    // So why didn't I just manipulate finalProcessor in the first place?
-    // Because I just thought of that, but don't feel like refactoring all of
-    // this yet again.  Oh well.
-    QString finalProcessor;
+    m_info->setText(tr("Copying audio files..."));
+
+    // leave spinner mode
+    m_progress->setMaximum(100);
+    m_progress->setValue(0);
+
+    // count total audio files
+    int af = 0;
+    QStringList::const_iterator si;
+    for (si = audioFiles.constBegin(); si != audioFiles.constEnd(); ++si)
+        af++;
+    int afStep = 100 / af;
+
+    // make the data subdir
+    tmpDir.mkdir(m_packDataDirName);    
+
+    // copy the audio files (do not remove the originals!)
+    af = 0;
+    for (si = audioFiles.constBegin(); si != audioFiles.constEnd(); ++si) {
+    
+        QString srcFile = QString("%1/%2").arg(audioPath).arg(*si);
+        QString srcFilePk = QString("%1.pk").arg(srcFile);
+        QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(*si);
+        QString dstFilePk = QString("%1.pk").arg(dstFile);
+
+        std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
+        std::cout << "cp " << srcFile.toStdString() << " " << dstFilePk.toStdString() << std::endl;
+        QFile::copy(srcFile, dstFile);
+        QFile::copy(srcFilePk, dstFilePk);
+
+        m_progress->setValue(afStep * ++af);
+    }
+
+    // deal with adding any extra files
+    QStringList extraFiles;
+
+    // first, if the composition includes synth plugins, there may be assorted
+    // random audio files, soundfonts, and who knows what else in use by these
+    // plugins
+    //
+    // obtain a list of these files, and rewrite the XML to update the referring
+    // path from its original source to point to our bundled copy instead
+    QString newPath = QString("%1/%2").arg(m_packTmpDirName).arg(m_packDataDirName);
+    extraFiles = getPluginFilesAndRewriteXML(oldName, newPath);
+
+    // If we do the above here and add it to extraFiles then if the user has any
+    // other extra files to add by hand, it all processes out the same way with
+    // no extra bundling code required (unless we want to flac any random extra
+    // .wav files, and I say no, let's not get that complicated)
+
+    // Copy the modified .rg file to the working tmp dir
+    std::cout << "cp " << oldName.toStdString() << " " << newName.toStdString() << std::endl;
+
+    // copy m_filename(.rgp) as $tmp/m_filename.rg
+    QFile::copy(oldName, newName);
+
+    QMessageBox::StandardButton reply = QMessageBox::information(this,
+            tr("Rosegarden"),
+            tr("<qt><p>Rosegarden can add any number of extra files you may desire to a project package.  For example, you may wish to include an explanatory text file, a soundfont, a bank definition for ZynAddSubFX, or perhaps some cover art.</p><p>Would you like to include any additional files?</p></qt>"),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+    while (reply == QMessageBox::Yes) {
+
+        // it would take some trouble to make the last used paths thing work
+        // here, where we're building a list of files from potentially anywhere,
+        // so we'll just use the open_file path as it was last set elsewhere,
+        // and leave it at that until somebody complains
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        QString directory = settings.value("open_file", QDir::homePath()).toString();
+        settings.endGroup();
+
+        // must iterate over a copy of the QStringList returned by
+        // (Q)FileDialog::getOpenFileNames for some reason
+        //
+        // NOTE: This still doesn't work.  I can only add one filename.
+        // Something broken in the subclass of QFileDialog?  Bad code?  I'm just
+        // leaving it unresolved for now. One file at a time at least satisfies
+        // the bare minimum requirements
+        QStringList files =  FileDialog::getOpenFileNames(this, "Open File", directory, tr("All files") + " (*)", 0, 0);
+        extraFiles << files;
+       
+        //!!!  It would be nice to show the list of files already chosen and
+        // added, in some nice little accumulator list widget, but this would
+        // require doing something more complicated than using QMessageBox
+        // static convenience functions, and it's probably just not worth it
+        reply =  QMessageBox::information(this,
+                tr("Rosegarden"),
+                tr("<qt><p>Would you like to include any additional files?</p></qt>"),
+                QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+    }
+
+    m_info->setText(tr("Copying plugin data and extra files..."));
+
+    // reset progress bar
+    m_progress->setValue(0);
+
+    // count total audio files
+    int ef = 0;
+    for (si = extraFiles.constBegin(); si != extraFiles.constEnd(); ++si)
+        ef++;
+    int efStep = 100 / af;
+
+    // copy the extra files (do not remove the originals!)
+    // (iterator previously declared)
+    ef = 0;
+    for (si = extraFiles.constBegin(); si != extraFiles.constEnd(); ++si) {
+    
+        // each QStringList item from the FileDialog will include the full path
+        QString srcFile = (*si);
+
+        // so we cut it up to swap the source dir for the dest dir while leaving
+        // the complete filename stuck on the end
+        QFileInfo efi(*si);
+        QString basename = QString("%1.%2").arg(efi.baseName()).arg(efi.completeSuffix());
+        QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(basename);
+
+        std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
+        QFile::copy(srcFile, dstFile);
+
+        m_progress->setValue(efStep * ++ef);
+    }
+
+    // and now we have everything discovered, uncovered, added, smothered,
+    // scattered and splattered, and we're ready to pack the flac files and
+    // get the hell out of here!
+    startFlacEncoder(audioFiles);
+}
+
+void
+ProjectPackager::startFlacEncoder(QStringList files)
+{
+    m_info->setText(tr("Packing project..."));
+
+    // (we could do some kind of QProcess monitoring, but I'm feeling lazy at
+    // the moment and this will at least make us look busy while we chew)
+    // go into spinner mode
+    m_progress->setMaximum(0);
+
+    // we can't do a oneliner bash script straight out of a QProcess command
+    // line, so we'll have to create a purpose built script and run that
+    QString scriptName("/tmp/rosegarden-flac-encoder-backend");
+    m_script.setName(scriptName);
+
+    // remove any lingering copy from a previous run
+    if (m_script.exists()) m_script.remove();
+
+    if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        puke(tr("<qt>Unable to write to temporary backend processing script %1.<br>Processing aborted.</qt>"));
+        return;
+    }
+    
+    // build the script
+    QTextStream out(&m_script);
+    out << "# This script was generated by Rosegarden to combine multiple external processing"      << endl
+        << "# operations so they could be managed by a single QProcess.  If you find this script"   << endl
+        << "# it is likely that something has gone terribly wrong. See http://rosegardenmusic.com" << endl;
+
+    QStringList::const_iterator si;
+    int errorPoint = 1;
+    for (si = files.constBegin(); si != files.constEnd(); ++si) {
+        QString o = QString("%1/%2").arg(m_packDataDirName).arg(*si);
+
+        // default flac behavior is to encode
+        //
+        // we'll eschew anything fancy or pretty in this disposable script and
+        // just write a command on each line, terminating with an || exit n
+        // which can be used to figure out at which point processing broke, for
+        // cheap and easy error reporting without a lot of fancy stream wiring
+        out << "flac " << o << " && rm \"" << o << "\" || exit " << errorPoint << endl;
+        errorPoint++;
+    }
+
+    // Throw tar on the ass end of this script and save an extra processing step
+    //
+    // first cheap trick, m_packDataDirName.rg is our boy and we know it
+    QString rgFile = QString("%1.rg").arg(m_packDataDirName);
+
+    // second cheap trick, don't make a tarball in tmpdir and move it, just
+    // write it at m_filename and shazam, nuke the tmpdir behind us and peace out
+    out << "tar czf \"" << m_filename << "\" " << rgFile.toLocal8Bit() << " " <<  m_packDataDirName.toLocal8Bit() <<  "/ || exit " << errorPoint++ << endl;
+
+    m_script.close();
+
+    // run the assembled script
+    m_process = new QProcess;
+    m_process->setWorkingDirectory(m_packTmpDirName);
+    m_process->start("bash", QStringList() << scriptName);
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(finishPack(int, QProcess::ExitStatus)));
+}
+
+void
+ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
+    std::cout << "ProjectPackager::finishPack - exit code: " << exitCode << std::endl;
+
+    if (exitCode == 0) {
+        delete m_process;
+    } else {
+        puke(tr("<qt>Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.<br>Processing aborted.</qt>").arg(exitCode).arg(m_script.fileName()));
+        return;
+    }
+
+    m_script.remove();
+    
+    // remove the original file which is now safely in a package
+    //
+    // Well.  Oops.  No, m_filename is the .rgp version, so we need to remove
+    // the .rg file that is now safely in a package, which was saved by
+    // RosegardenMainWindow at the start of all this
+    QFileInfo fi(m_filename);
+    QString dirname = fi.path();
+    QString basename = QString("%1/%2.rg").arg(dirname).arg(fi.baseName());
+    QFile::remove(basename);
+
+    rmTmpDir();
+    accept();
+    exitCode++; // break point
+}
+
+
+///////////////////////////
+//                       //
+// UNPACKING OPERATIONS  //
+//                       //
+///////////////////////////
+void
+ProjectPackager::runUnpack()
+{
+    std::cout << "ProjectPackager::runUnpack() - unpacking " << qstrtostr(m_filename) << std::endl;
+    m_info->setText(tr("Unpacking project..."));
+
+    // go into spinner mode, and we'll just leave it there for the duration of
+    // the unpack too, because the operations are either too fast or too hard to
+    // divide into discrete steps, and I'm bored with progress bars
+    m_progress->setMaximum(0);
 
     m_process = new QProcess;
 
-    switch (m_mode) {
-        case ProjectPackager::Print:
-            m_info->setText(tr("Printing %1...").arg(pdfName));
-            finalProcessor = filePrinter;
-            break;
+    // We can't assume foo.rgp actually contains foo.rg, it could
+    // contain bar.rg and bar/ if the user was evil, and users tend to be.
+    //
+    // So while there are other ways to get here, Ilan had already written all
+    // of this code to process a text file, and we'll just go that route.
+    QString ofile("/tmp/rosegarden-project-package-filelist");
 
-        // just default to preview (I always use preview anyway, as I never
-        // trust the results for a direct print without previewing them first,
-        // and in fact the direct print option seems somewhat dubious to me)
-        case ProjectPackager::Preview:
-        default:
-            m_info->setText(tr("Previewing %1...").arg(pdfName));
-            finalProcessor = pdfViewer;
-    }
+    // merge stdout and sterr for laziness of debugging (any errors in here mean
+    // bad news)
+    m_process->setProcessChannelMode(QProcess::MergedChannels);
 
-    m_process->start(finalProcessor, QStringList() << pdfName);
-    if (m_process->waitForStarted()) {
-        QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));
+    // equivalent of [command] > ofile
+    m_process->setStandardOutputFile(ofile, QIODevice::Truncate);
+
+    // This is a very fast operation, just listing the files in a tarball
+    // straight to a file on disk without involving a terminal, so we
+    // will do this one as a waitForFinished() and risk blocking here
+    //
+    // (note that QProcess apparently handles escaping any spaces &c. in
+    // m_filename here)
+    m_process->start("tar", QStringList() << "tf" << m_filename);
+    m_process->waitForStarted();
+    std::cout << "process started: tar tf " << qstrtostr(m_filename) << std::endl;
+    m_process->waitForFinished();
+
+    if (m_process->exitCode() == 0) {
+       delete m_process;
     } else {
-        QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Settings -> Configure Rosegarden -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).arg(finalProcessor).arg(
-                (m_mode == ProjectPackager::Print ? tr("file printer") : tr("PDF viewer")));
-        puke(t);
+        puke(tr("<qt>Unable to obtain list of files using tar.  Process exited with status code %1</qt>").arg(m_process->exitCode()));
+        return;
     }
 
-    m_progress->setMaximum(100);
-    m_progress->setValue(100);
+    QFile contents(ofile);
 
+    if (!contents.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        puke(tr("<qt>Unable to read to temporary file list.<br>Processing aborted.</qt>"));
+        return;
+    }
+
+    QTextStream in1(&contents);
+    QString line;
+    QStringList files;
+
+    // rude but effective hack, the primary and interesting .rg file in the
+    // package is always the first one listed, so we grab that and avoid trouble
+    // in the event the user was idiotic enough to include other .rg files as
+    // extra files in the package data dir
+    bool haveRG = false;
+
+    while (true) {
+        line = in1.readLine(1000);
+        if (line.isEmpty()) break;
+        if (line.find(".flac", 0) > 0) {
+            files << line;
+            std::cout << "Discovered for decoding: " <<  line.toStdString() << std::endl;
+        } else if ((line.find(".rg", 0) > 0) && !haveRG) {
+            m_trueFilename = line;
+            std::cout << "Discovered true filename: " << m_trueFilename.toStdString() << std::endl;
+            haveRG = true;
+        }
+
+    }
+    contents.remove();
+
+    QString completeTrueFilename = getTrueFilename();
+
+    QFileInfo fi(completeTrueFilename);
+    if (fi.exists()) {
+        QMessageBox::StandardButton reply =  QMessageBox::warning(this,
+                tr("Rosegarden"),
+                tr("<qt><p>It appears that you have already unpacked this project package.</p><p>Would you like to load %1 now?</p></qt>").arg(completeTrueFilename),
+                QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Cancel);
+
+        if (reply == QMessageBox::Ok) {
+            // If they choose Ok, we'll accept() here to abort processing and
+            // tell RosegardenMainWindow to load m_trueFilename
+            accept();
+        } else {
+            reject();
+        }
+     } else {
+         startFlacDecoder(files);
+     }
+}
+
+
+void
+ProjectPackager::startFlacDecoder(QStringList files)
+{
+    // we can't do a oneliner bash script straight out of a QProcess command
+    // line, so we'll have to create a purpose built script and run that
+    QString scriptName("/tmp/rosegarden-flac-decoder-backend");
+    m_script.setName(scriptName);
+
+    // remove any lingering copy from a previous run
+    if (m_script.exists()) m_script.remove();
+
+    if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        puke(tr("<qt>Unable to write to temporary backend processing script %1.<br>Processing aborted.</qt>").arg(scriptName));
+        return;
+    }
+
+    QTextStream out(&m_script);
+    out << "# This script was generated by Rosegarden to combine multiple external processing"      << endl
+        << "# operations so they could be managed by a single QProcess.  If you find this script"   << endl
+        << "# it is likely that something has gone terribly wrong. See http://rosegardenmusic.com" << endl;
+
+    int errorPoint = 1;
+
+    // The working directory must be the key to why tar is not failing, but
+    // failing to do anything detectable.  Let's cut apart m_filename...
+    QFileInfo fi(m_filename);
+    QString dirname = fi.path();
+    QString basename = QString("%1.%2").arg(fi.baseName()).arg(fi.completeSuffix());
+
+    // There were mysterious stupid problems running tar xf in a separate
+    // QProcess step, so screw it, let's just throw it into this script!
+    out << "tar xzf \"" << basename << "\" || exit " << errorPoint++ << endl;
+
+    QStringList::const_iterator si;
+    for (si = files.constBegin(); si != files.constEnd(); ++si) {
+        std::string o1 = (*si).toLocal8Bit().constData();
+
+        // the file strings are things like xxx.wav.rgp.flac
+        // without specifying the output file they will turn into xxx.wav.rgp.wav
+        // thus it is best to specify the output as xxx.wav
+        //
+        // files from new project packages have rg-23324234.flac files, files
+        // from old project packages have rg-2343242.wav.rgp.flac files, so we
+        // want a robust solution to this one... QFileInfo::baseName() should
+        // get it
+        QFileInfo fi(strtoqstr(o1));
+        QString o2 = QString("%1/%2.wav").arg(fi.path()).arg(fi.baseName());
+
+        // we'll eschew anything fancy or pretty in this disposable script and
+        // just write a command on each line, terminating with an || exit n
+        // which can be used to figure out at which point processing broke, for
+        // cheap and easy error reporting without a lot of fancy stream wiring
+        //
+        // (let's just try escaping spaces &c. with surrounding " and see if
+        // that is good enough)
+        out << "flac -d \"" <<  o1 << "\" -o \"" << o2.toLocal8Bit() << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
+        errorPoint++;
+    }
+
+    m_script.close();
+
+    // run the assembled script
+    m_process = new QProcess;
+
+    // set to the working directory extracted from m_filename above, as this is
+    // was apparently the reason why tar always failed to do anything
+    m_process->setWorkingDirectory(dirname);
+    m_process->start("bash", QStringList() << scriptName);
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(finishUnpack(int, QProcess::ExitStatus)));
+
+    // wait up to 30 seconds for process to start
+    m_info->setText(tr("Decoding audio files..."));
+    if (!m_process->waitForStarted()) {
+        puke(tr("<qt>Could not start backend processing script %1.</qt>").arg(scriptName));
+        return;
+    }
+}
+
+
+// Finish up, and then hack the document audio path, the audio path associated
+// with any plugins, and the path to any data the plugins refer to, so these
+// will all be pointing at where the file resides now that we have unpacked it,
+// and we leave nothing to chance.
+//
+// NOTE: along the way we're taking a typical audio path like "~/rosegarden" and
+// writing out something hard coded for the "~".  We assume users in other
+// locations will be working with the .rgp file, and we'll adapt it to their
+// surroundings when they unpack it in those surroundings.  Also, the plugin
+// audio path was already hard coded to "/home/$(whoami)/wherever" anyway.
+void
+ProjectPackager::finishUnpack(int exitCode, QProcess::ExitStatus) {
+    std::cout << "ProjectPackager::finishUnpack - exit code: " << exitCode << std::endl;
+
+    if (exitCode == 0) {
+        delete m_process;
+    } else {
+        puke(tr("<qt>Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.<br>Processing aborted.</qt>").arg(exitCode).arg(m_script.fileName()));
+        return;
+    }
+
+    // we don't care about the extra files here in upack, so we just ignore the
+    // list it returns
+    QFileInfo fi(m_filename);
+    QString newPath = QString("%1/%2").arg(fi.path()).arg(fi.baseName());
+    QString oldName = QString("%1.rg").arg(newPath);
+    getPluginFilesAndRewriteXML(oldName, newPath);
+
+    m_script.remove();
     accept();
-} */
+    exitCode++; // break point
+}
+
 
 }
 

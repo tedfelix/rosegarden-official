@@ -3422,29 +3422,15 @@ RosegardenMainWindow::slotImportProject()
 void
 RosegardenMainWindow::importProject(QString filePath)
 {
-    //setup "rosegarden-project-package" process
-    QProcess *proc = new QProcess;
-    QStringList procArgs;
-    procArgs << "--unpack";
-    procArgs << filePath;
-
-    StartupLogo::hideIfStillThere();
-    proc->execute("rosegarden-project-package", procArgs);
-
-    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
-        CurrentProgressDialog::freeze();
-        /* was sorry */ QMessageBox::warning(this, filePath, tr("Failed to import project file \"%1\""));
-        CurrentProgressDialog::thaw();
-        delete proc;
-        return ;
+    // Launch the project packager script-in-a-dialog in Unpack mode:
+    ProjectPackager *dialog = new ProjectPackager(this, m_doc, ProjectPackager::Unpack, filePath);
+    if (dialog->exec() != QDialog::Accepted) {
+        return;
     }
 
-    delete proc;
-
-    QString rgFile = filePath;
-    rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
-    rgFile.replace(QRegExp(".rgp$"), ".rg");
-    openURL(rgFile);
+    // open the true filename contained within and extracted from the package (foo.rgp might have
+    // contained bar.rg)
+    openURL(dialog->getTrueFilename());
 }
 
 void
@@ -4368,7 +4354,9 @@ RosegardenMainWindow::slotToggleTracking()
 
 void
 RosegardenMainWindow::slotTestStartupTester()
-{
+{   
+    return;
+
     RG_DEBUG << "RosegardenMainWindow::slotTestStartupTester" << endl;
 
     if (!m_startupTester) {
@@ -4572,6 +4560,11 @@ RosegardenMainWindow::slotExportProject()
     rgFile.replace(QRegExp(".rg.rgp$"), ".rg");
     rgFile.replace(QRegExp(".rgp$"), ".rg");
 
+    // I have a ton of weird files and suspect problems with this, but maybe
+    // not:
+    std::cout << "getValidWriteFileName() returned " << fileName.toStdString() << std::endl;
+    std::cout << "                         rgFile: " << fileName.toStdString() << std::endl;
+
     CurrentProgressDialog::freeze();
 
     QString errMsg;
@@ -4582,28 +4575,11 @@ RosegardenMainWindow::slotExportProject()
         return ;
     }
 
-    //setup "rosegarden-project-package" process
-    ProjectPackager *dialog = new ProjectPackager(this, ProjectPackager::Pack, fileName);
+    // Launch the project packager script-in-a-dialog in Pack mode:
+    ProjectPackager *dialog = new ProjectPackager(this, m_doc, ProjectPackager::Pack, fileName);
     if (dialog->exec() != QDialog::Accepted) {
         return;
     }
-
-//    QProcess *proc = new QProcess;
-//    QStringList procArgs;
-//    procArgs << "--pack";
-//    procArgs << rgFile;
-//    procArgs << fileName;
-//
-//    proc->execute("rosegarden-project-package", procArgs);
-//
-//    if ((proc->exitStatus() != QProcess::NormalExit) || proc->exitCode()) {
-//        /* was sorry */ QMessageBox::warning(this, "", tr("Failed to export to project file \"%1\"").arg(fileName));
-//        CurrentProgressDialog::thaw();
-//        delete proc;
-//      return ;
-//    }
-
-//    delete proc;
 }
 
 void
@@ -6857,12 +6833,11 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
         if (inst->isAssigned()) {
             RG_DEBUG << "RosegardenMainWindow::slotPluginSelected - "
             << " setting identifier for mapper id " << inst->getMappedId()
-            << " to " << inst->getIdentifier() << endl;
+            << " to " << strtoqstr(inst->getIdentifier()) << endl;
 
-            StudioControl::setStudioObjectProperty
-            (inst->getMappedId(),
-             MappedPluginSlot::Identifier,
-             strtoqstr(inst->getIdentifier()));
+            StudioControl::setStudioObjectProperty(inst->getMappedId(),
+                                                   MappedPluginSlot::Identifier,
+                                                   strtoqstr(inst->getIdentifier()));
         } else {
             // create a studio object at the sequencer
             MappedObjectId newId =
@@ -6870,7 +6845,7 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
                 (MappedObject::PluginSlot);
 
             RG_DEBUG << "RosegardenMainWindow::slotPluginSelected - "
-            << " new MappedObjectId = " << newId << endl;
+                     << " new MappedObjectId = " << newId << endl;
 
             // set the new Mapped ID and that this instance
             // is assigned
@@ -7081,9 +7056,9 @@ RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
     }
 
     RG_DEBUG << "RosegardenMainWindow::slotChangePluginProgram - "
-    << "setting plugin program ("
-    << inst->getMappedId() << ") from " << inst->getProgram()
-    << " to " << program << endl;
+             << "setting plugin program ("
+             << inst->getMappedId() << ") from " << strtoqstr(inst->getProgram())
+             << " to " << program << endl;
 
     inst->setProgram(qstrtostr(program));
 
