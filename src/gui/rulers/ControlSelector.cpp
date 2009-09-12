@@ -38,6 +38,10 @@
 #include <QCursor>
 #include <QRectF>
 
+#include <cmath>
+
+#define CONTROL_SMALL_DISTANCE 10
+
 namespace Rosegarden
 {
 
@@ -61,18 +65,24 @@ ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
         //for (std::vector<ControlItem*>::const_iterator it = e->itemList.begin(); it != e->itemList.end(); it++) {
         std::vector<ControlItem*>::const_iterator it = e->itemList.begin();
         if ((*it)->isSelected()) {
-            if (e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))
+            if (e->modifiers & (Qt::ShiftModifier))
                 m_ruler->removeFromSelection(*it);
         } else {
-            if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+            if (!(e->modifiers & (Qt::ShiftModifier))) {
                 // No add to selection modifiers so clear the current selection
                 m_ruler->clearSelectedItems();
             }
 
             m_ruler->addToSelection(*it);
         }
+        
+        m_startPointList.clear();
+        ControlItemList *selected = m_ruler->getSelectedItems();
+        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); it++) {
+            m_startPointList.push_back(QPointF((*it)->xStart(),(*it)->y()));
+        }
     } else {
-        if (!(e->modifiers & (Qt::ShiftModifier | Qt::ControlModifier))) {
+        if (!(e->modifiers & (Qt::ShiftModifier))) {
             // No add to selection modifiers so clear the current selection
             m_ruler->clearSelectedItems();
         }
@@ -84,9 +94,11 @@ ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
         m_addedItems.clear();
     }
 
-    m_mouseLastY = e->y;
-    m_mouseLastX = e->x;
-
+    m_mouseStartX = e->x;
+    m_mouseStartY = e->y;
+    m_lastDScreenX = 0.0f;
+    m_lastDScreenY = 0.0f;
+    
     m_ruler->update();
 }
 
@@ -130,22 +142,49 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
         // A drag action is in progress        
-        float deltaX = (e->x-m_mouseLastX);
-        float deltaY = (e->y-m_mouseLastY);
-        m_mouseLastX = e->x;
-        m_mouseLastY = e->y;
+        float deltaX = (e->x-m_mouseStartX);
+        float deltaY = (e->y-m_mouseStartY);
 
+        float dScreenX = deltaX/m_ruler->getXScale();
+        float dScreenY = deltaY/m_ruler->getYScale();        
+
+        if (e->modifiers & Qt::ControlModifier) {
+            // If the control key is held down, restrict movement to either horizontal or vertical
+            //    depending on the direction the item has been moved
+            
+            // For small displacements from the starting position, use the direction of this movement
+            //    rather than the actual displacement - makes dragging through the original position
+            //    less likely to switch constraint axis
+            if ((fabs(dScreenX) < CONTROL_SMALL_DISTANCE) && (fabs(dScreenY) < CONTROL_SMALL_DISTANCE)) {
+                dScreenX = dScreenX-m_lastDScreenX;
+                dScreenY = dScreenY-m_lastDScreenY;
+            }
+        
+            if (fabs(dScreenX) > fabs(dScreenY)) {
+                deltaY = 0;
+            } else {
+                deltaX = 0;
+            }
+        }
+        
+        m_lastDScreenX = dScreenX;
+        m_lastDScreenY = dScreenY;
+        
         EventControlItem *item;
         ControlItemList *selected = m_ruler->getSelectedItems();
+        std::vector<QPointF>::iterator pIt = m_startPointList.begin();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
             item = dynamic_cast <EventControlItem*> (*it);
-            float x = item->xStart()+deltaX;
+//            float x = item->xStart()+deltaX;
+            float x = pIt->x()+deltaX;
             x = std::max(x,m_ruler->getXMin());
             x = std::min(x,m_ruler->getXMax());
-            float y = item->y()+deltaY;
+//            float y = item->y()+deltaY;
+            float y = pIt->y()+deltaY;
             y = std::max(y,0.0f);
             y = std::min(y,1.0f);
             if (item) item->reconfigure(x,y);
+            pIt++;
         }
     }
 

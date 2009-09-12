@@ -25,6 +25,7 @@
 
 
 class QRectF;
+class QPoint;
 
 namespace Rosegarden
 {
@@ -63,11 +64,13 @@ protected slots:
 protected:
     ControlSelector(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
+    float m_mouseStartX;
     float m_mouseStartY;
-    float m_mouseLastY;
-    float m_mouseLastX;
+    float m_lastDScreenX;
+    float m_lastDScreenY;
     QRectF *m_selectionRect;
     ControlItemList m_addedItems;
+    std::vector <QPointF> m_startPointList;
 };
 
 }

@@ -453,7 +453,6 @@ void ControlRuler::slotScrollHorizSmallSteps(int step)
 ////    canvas()->update();
 //}
 
-///TODO Use m_xScale, m_yScale for these map functions
 int ControlRuler::mapXToWidget(float x)
 {
     return (0.5+(x-m_pannedRect.left()) / m_xScale);
