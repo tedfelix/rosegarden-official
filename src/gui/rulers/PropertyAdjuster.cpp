@@ -78,7 +78,7 @@ PropertyAdjuster::handleLeftButtonPress(const ControlMouseEvent *e)
     m_ruler->update();
 }
 
-void
+ControlTool::FollowMode
 PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {

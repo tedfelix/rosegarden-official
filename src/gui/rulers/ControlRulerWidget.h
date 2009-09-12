@@ -61,7 +61,11 @@ public slots:
     void slotHoveredOverNoteChanged();
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
     void slotSetToolName(const QString &);
+    void slotDragScroll(timeT);
 
+signals:
+    void dragScroll(timeT);
+    
 protected:
     std::list<ControlRuler *> m_controlRulerList;
     const ControlList *m_controlList;

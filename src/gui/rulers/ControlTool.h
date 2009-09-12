@@ -33,6 +33,12 @@ class ControlTool : public BaseTool
     Q_OBJECT
 
 public:
+    enum FollowMode {
+        NoFollow = 0x0,
+        FollowHorizontal = 0x1,
+        FollowVertical = 0x2
+    };
+
     ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
     virtual ~ControlTool() {};
 //    virtual int operator()(double x, int val) = 0;
@@ -41,7 +47,8 @@ public:
     virtual void handleRightButtonPress(const ControlMouseEvent *) {}
     virtual void handleMouseRelease(const ControlMouseEvent *) {}
     virtual void handleMouseDoubleClick(const ControlMouseEvent *) {}
-    virtual void handleMouseMove(const ControlMouseEvent *) {}
+    virtual FollowMode handleMouseMove(const ControlMouseEvent *) {}
+
 protected:
     virtual void createMenu();
 

@@ -240,24 +240,24 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
     // Referenced item is being removed from m_controlItemMap
     // If it was visible, remove it from the list and correct first/last
     // visible item iterators
-    if (isVisible(it->second)) { 
-        m_visibleItems.remove(it->second);
-        
-        // If necessary, correct the first and lastVisibleItem iterators 
-        if (it == m_firstVisibleItem) {
-            m_firstVisibleItem++;
-            if (m_firstVisibleItem != m_controlItemMap.end() &&
-                    !isVisible(m_firstVisibleItem->second))
-                m_firstVisibleItem = m_controlItemMap.end();
+    // Note, we can't check if it _was_ visible. It may have just become invisible
+    // Try to remove from list and check iterators.
+    m_visibleItems.remove(it->second);
+    
+    // If necessary, correct the first and lastVisibleItem iterators 
+    if (it == m_firstVisibleItem) {
+        m_firstVisibleItem++;
+        if (m_firstVisibleItem != m_controlItemMap.end() &&
+                !isVisible(m_firstVisibleItem->second))
+            m_firstVisibleItem = m_controlItemMap.end();
+    }
+    
+    if (it == m_lastVisibleItem) {
+        if (it != m_controlItemMap.begin()) {
+            m_lastVisibleItem--;
+            if (!isVisible(m_lastVisibleItem->second)) m_lastVisibleItem = m_controlItemMap.end();
         }
-        
-        if (it == m_lastVisibleItem) {
-            if (it != m_controlItemMap.begin()) {
-                m_lastVisibleItem--;
-                if (!isVisible(m_lastVisibleItem->second)) m_lastVisibleItem = m_controlItemMap.end();
-            }
-            else m_lastVisibleItem = m_controlItemMap.end();
-        }
+        else m_lastVisibleItem = m_controlItemMap.end();
     }
 }
 
@@ -296,12 +296,14 @@ bool ControlRuler::isVisible(ControlItem* item)
 
 float ControlRuler::getXMax()
 {
-    return (std::min(m_rulerScale->getXForTime(m_segment->getEndTime()), m_pannedRect.right()));
+    return (m_rulerScale->getXForTime(m_segment->getEndTime()));
+//    return (std::min(m_rulerScale->getXForTime(m_segment->getEndTime()), m_pannedRect.right()));
 }
 
 float ControlRuler::getXMin()
 {
-    return (std::max(m_rulerScale->getXForTime(m_segment->getStartTime()), m_pannedRect.left()));
+    return (m_rulerScale->getXForTime(m_segment->getStartTime()));
+//    return (std::max(m_rulerScale->getXForTime(m_segment->getStartTime()), m_pannedRect.left()));
 }
 
 void ControlRuler::updateSegment()
@@ -809,8 +811,11 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
         return;
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
-    m_currentTool->handleMouseMove(&controlMouseEvent);
+    ControlTool::FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
 
+    if (mode != ControlTool::NoFollow) {
+        emit dragScroll(m_rulerScale->getTimeForX(controlMouseEvent.x));
+    }
 //    QPoint p = e->pos(); ///CJ Is this ok - inverseMapPoint(e->pos());
 //
 //    int deltaX = p.x() - m_lastEventPos.x(),

@@ -126,6 +126,7 @@ public slots:
     void slotAddControlRuler();
 
     void slotHScroll();
+    void slotEnsureTimeVisible(timeT);
 
 protected slots:
     void slotDispatchMousePress(const MatrixMouseEvent *);

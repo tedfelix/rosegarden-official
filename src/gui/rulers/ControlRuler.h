@@ -148,6 +148,7 @@ public:
 
 signals:
     void stateChange(const QString&, bool);
+    void dragScroll(timeT);
 
 public slots:
     /// override RosegardenCanvasView - we don't want to change the main hscrollbar

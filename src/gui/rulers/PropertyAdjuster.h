@@ -37,7 +37,7 @@ class PropertyAdjuster : public ControlTool
 
 public:
     virtual void handleLeftButtonPress(const ControlMouseEvent *);
-    virtual void handleMouseMove(const ControlMouseEvent *);
+    virtual ControlTool::FollowMode handleMouseMove(const ControlMouseEvent *);
     virtual void handleMouseRelease(const ControlMouseEvent *);
 
     /**

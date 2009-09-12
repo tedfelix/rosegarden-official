@@ -205,6 +205,8 @@ void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlPara
     if (!viewSegment) return;
 
     ControlRuler *controlruler = new ControllerEventsRuler(viewSegment, m_scale, this, &controlParameter);
+    connect(controlruler,SIGNAL(dragScroll(timeT)),
+            this,SLOT(slotDragScroll(timeT)));
     addWidget(controlruler);
     setCurrentWidget(controlruler);
     m_controlRulerList.push_back(controlruler);
@@ -245,6 +247,11 @@ void ControlRulerWidget::slotSetPannedRect(QRectF pr)
     }
 
     update();
+}
+
+void ControlRulerWidget::slotDragScroll(timeT t)
+{
+    emit dragScroll(t);
 }
 
 void ControlRulerWidget::slotSelectionChanged(EventSelection *s)

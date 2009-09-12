@@ -161,14 +161,15 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
 
-    if (m_lastDrawnRect != m_pannedRect) {
-        EventControlItem *item;
-        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
-            item = static_cast <EventControlItem *> (it->second);
-            item->updateFromEvent();
-        }
-        m_lastDrawnRect = m_pannedRect;
-    }
+// Can't remember what this was for ...
+//    if (m_lastDrawnRect != m_pannedRect) {
+//        EventControlItem *item;
+//        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+//            item = static_cast <EventControlItem *> (it->second);
+//            item->updateFromEvent();
+//        }
+//        m_lastDrawnRect = m_pannedRect;
+//    }
 
     if (m_firstVisibleItem == m_controlItemMap.end()) {
         // There are no visible items

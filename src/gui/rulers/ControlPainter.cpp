@@ -73,7 +73,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
     }
 }
 
-void
+ControlTool::FollowMode
 ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 {
     if (e->buttons == Qt::NoButton) {
@@ -90,6 +90,8 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 //            (*it)->setValue((*it)->getValue()+delta);
 //        }
     }
+    
+    return NoFollow;
 }
 
 void

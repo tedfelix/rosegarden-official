@@ -163,6 +163,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_pianoView, SIGNAL(wheelEventReceived(QWheelEvent *)),
             m_view, SLOT(slotEmulateWheelEvent(QWheelEvent *)));
 
+    connect(m_controlsWidget, SIGNAL(dragScroll(timeT)),
+            this, SLOT(slotEnsureTimeVisible(timeT)));
+    
     m_toolBox = new MatrixToolBox(this);
 
     MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName));
@@ -497,6 +500,17 @@ MatrixWidget::slotEnsureLastMouseMoveVisible()
 {
     m_inMove = true;
     QPointF pos = m_lastMouseMoveScenePos;
+    if (m_scene) m_scene->constrainToSegmentArea(pos);
+    m_view->ensureVisible(QRectF(pos, pos));
+    m_inMove = false;
+}
+
+void
+MatrixWidget::slotEnsureTimeVisible(timeT t)
+{
+    m_inMove = true;
+    QPointF pos = m_view->mapToScene(0,m_view->height()/2);
+    pos.setX(m_scene->getRulerScale()->getXForTime(t));
     if (m_scene) m_scene->constrainToSegmentArea(pos);
     m_view->ensureVisible(QRectF(pos, pos));
     m_inMove = false;
