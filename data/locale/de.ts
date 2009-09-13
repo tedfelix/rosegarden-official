@@ -2258,15 +2258,6 @@
         <translation>Tri&amp;ller hinzufügen</translation>
     </message>
     <message>
-        <source>Add Trill &amp;with Line</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Triller mit Linie hin&amp;zufügen</translation>
-    </message>
-    <message>
-        <source>Add Trill Line</source>
-        <translation type="obsolete">Triller Linie hinzufügen</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="517"/>
         <source>Add &amp;Turn</source>
         <translatorcomment>??</translatorcomment>
@@ -2925,11 +2916,6 @@
         <translation>Punktierte ganze N&amp;ote</translation>
     </message>
     <message>
-        <source>Dotted Half &amp;Note</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte halbe &amp;Note</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <source>Dotted Q&amp;uarter Note</source>
         <translation>Punktierte V&amp;iertelnote</translation>
@@ -2951,95 +2937,6 @@
         <source>Dotted Thirt&amp;y-Second Note</source>
         <translatorcomment>amp ok</translatorcomment>
         <translation>Punktierte 3&amp;2tel Note</translation>
-    </message>
-    <message>
-        <source>To&amp;ggle Dot</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierun&amp;g umschalten</translation>
-    </message>
-    <message>
-        <source>Switch from &amp;Rest to Note</source>
-        <translation type="obsolete">Wechsel von Pause zu Note</translation>
-    </message>
-    <message>
-        <source>&amp;Rests</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Pausen</translation>
-    </message>
-    <message>
-        <source>&amp;Double Whole Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Doppelte ganze Pause</translation>
-    </message>
-    <message>
-        <source>&amp;Whole Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Ganze Pause</translation>
-    </message>
-    <message>
-        <source>&amp;Half Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Halbe Pause</translation>
-    </message>
-    <message>
-        <source>&amp;Quarter Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Viertelpause</translation>
-    </message>
-    <message>
-        <source>&amp;Eighth Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Acht&amp;elpause</translation>
-    </message>
-    <message>
-        <source>&amp;Sixteenth Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;16tel-Pause</translation>
-    </message>
-    <message>
-        <source>&amp;Thirty-Second Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;32tel-Pause</translation>
-    </message>
-    <message>
-        <source>Sixty-&amp;Fourth Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;64tel-Pause</translation>
-    </message>
-    <message>
-        <source>D&amp;otted Whole Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte ganze P&amp;ause</translation>
-    </message>
-    <message>
-        <source>Dotted Half &amp;Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte halbe Pa&amp;use</translation>
-    </message>
-    <message>
-        <source>Dotted Q&amp;uarter Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte V&amp;iertelpause</translation>
-    </message>
-    <message>
-        <source>Dotted E&amp;ighth Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte A&amp;chtelpause</translation>
-    </message>
-    <message>
-        <source>Dotted Si&amp;xteenth Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte 16&amp;tel Pause</translation>
-    </message>
-    <message>
-        <source>Dotted Thirt&amp;y-Second Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Punktierte 3&amp;2tel Pause</translation>
-    </message>
-    <message>
-        <source>Switch from &amp;Note to Rest</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Wechsel von &amp;Note zu Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
@@ -3187,16 +3084,6 @@
         <translation>&amp;Werkzeug-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
-        <source>Show &amp;Notes Toolbar</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">&amp;Noten-Werkzeugleiste anzeigen</translation>
-    </message>
-    <message>
-        <source>Show &amp;Rest Toolbar</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">Pausen-We&amp;rkzeugleiste anzeigen</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translatorcomment>amp ok</translatorcomment>
@@ -3234,11 +3121,6 @@
         <translation>&amp;Layout-Werkzeugleiste anzeigen</translation>
     </message>
     <message>
-        <source>Show M&amp;eta Toolbar</source>
-        <translatorcomment>amp ok</translatorcomment>
-        <translation type="obsolete">M&amp;eta-Werkzeugleiste anzeigen</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
         <source>Show Cho&amp;rd Name Ruler</source>
@@ -3263,14 +3145,6 @@
         <translation>Zeige Lily&amp;Pond Anweisungen</translation>
     </message>
     <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">Noten-Werkzeugleiste</translation>
-    </message>
-    <message>
-        <source>Rests Toolbar</source>
-        <translation type="obsolete">Pausen-Werkzeugleiste</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="796"/>
         <source>Clefs Toolbar</source>
         <translation>Schlüssel-Werkzeugleiste</translation>
@@ -3289,10 +3163,6 @@
         <location filename="../QMenuStrings.cpp" line="802"/>
         <source>Marks Toolbar</source>
         <translation>Vortragszeichen-Werkzeugleiste</translation>
-    </message>
-    <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">Meta-Werkzeugleiste</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
@@ -3355,17 +3225,9 @@
         <translation>Mache sichtbar</translation>
     </message>
     <message>
-        <source>Switch to Inserting Rests</source>
-        <translation type="obsolete">Zum EInfügen von Pausen wechseln</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Automatisch mit Balken wo angemessen</translation>
-    </message>
-    <message>
-        <source>Dotted Note</source>
-        <translation type="obsolete">punktierte Note</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
@@ -3401,10 +3263,6 @@
         <location filename="../QMenuStrings.cpp" line="842"/>
         <source>Double Flat</source>
         <translation>Doppel B</translation>
-    </message>
-    <message>
-        <source>Dotted Rest</source>
-        <translation type="obsolete">Punktierte Pause</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="844"/>
@@ -4072,7 +3930,6 @@
         <translation>Als neues getriggertes &amp;Segment einfügen  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1075"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4046"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -14425,10 +14282,6 @@ Wollen Sie stattdessen
         <translation>&lt;b&gt;convert -ly&lt;/b&gt; gestartet...</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;convert-ly&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;convert-ly&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="143"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
         <translation>&lt;b&gt;convert-ly&lt;/b&gt; beendet...</translation>
@@ -14447,10 +14300,6 @@ Wollen Sie stattdessen
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; gestartet...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;lilypond&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;lilypond&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von eineam fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
@@ -16037,10 +15886,6 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
         <translation>Drucken mit LilyPond...</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;/tmp&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Öffnen einer temporären Datei für den Export von LilyPond Daten fehlgeschlagen.&lt;/p&gt;&lt;p&gt;Dies bedeutet möglicherweise, daß kein Platz mehr auf der Festplatte im Verzeichnis &lt;pre&gt;/tmp&lt;/pre&gt; vorhanden ist&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="913"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
@@ -16061,115 +15906,134 @@ möglicherweise auch Andere von Ihren Anpassungen profitieren können.</translat
         <translation>Unbekannte Fontgrößenaktion: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Mehrere Segments können nicht in eins eingefügt werden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1121"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1176"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1194"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Kein Einfügen an diesem Punkt möglich.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1139"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
+Not enough space was found.
+If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
+        <translation type="unfinished">Das eingeschränkte Einfügen erfordert ausreichend leeren Platz (Pausen) an der 
+Einfügeposition, um alle einzufügenden Events aufzunehmen.
+Es wurde nicht ausreichend Platz gefunden.
+Wenn Sie trotzdem einfügen wollen, sollten Sie einen der anderen Einfügemodi aus dem 
+&quot;Einfügen...&quot;-Menü in Betracht ziehen. Sie können dort auch einen anderen Standard-Einfügemodus 
+als den eingeschränkten wählen.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1149"/>
         <source>Clipboard is empty</source>
         <translation>Die Zwischenablage ist leer</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1153"/>
         <source>Inserting clipboard contents...</source>
         <translation>Inhalt der Zwischenablage einfügen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Raising velocities...</source>
         <translation>Anschlagstärke erhöhen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
         <source>Lowering velocities...</source>
         <translation>Anschlagstärke verringern...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Set Event Velocities</source>
         <translation>Anschlagstärke der Events setzen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1368"/>
         <source>Setting Velocities...</source>
         <translation>Anschlagstärke setzen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1866"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Unbekannte Noten-Einfügeaktion %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1870"/>
         <source>Inserting note</source>
         <translation type="unfinished">Note einfügen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2245"/>
         <source>Ornament track %1 bar %2</source>
         <translation>Verzierung auf Spur %1 Takt %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2247"/>
         <source>Ornament bar %1</source>
         <translation>Verzierung in Takt %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2225"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2257"/>
         <source>Make Ornament</source>
         <translation>Verzierung hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2270"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2302"/>
         <source>Use Ornament</source>
         <translation>Verzierung verwenden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2281"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2313"/>
         <source>Remove Ornaments</source>
         <translation>Verzierungen entfernen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2371"/>
         <source>Estimated key signature shown</source>
         <translation>Ermittelte Tonart wird angezeigt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2396"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2428"/>
         <source>Sustain</source>
         <translation>Halten</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2444"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation>Für dieses Gerät ist kein Sustain-Controller definiert.
 Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Hauptfenster.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2583"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2615"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Ermittelte Taktart wird angezeigt</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2642"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - Notation</source>
         <translation>%1 - Segment Spur #%2 - Notation</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2680"/>
         <source>%1 - All Segments - Notation</source>
         <translation>%1 - Alle Segmente - Notation</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2685"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation>
             <numerusform>%1 - %n Segment - Notation</numerusform>
@@ -16177,27 +16041,27 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2745"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2777"/>
         <source>Triplet</source>
         <translation type="unfinished">Triole</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2746"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>Chord</source>
         <translation type="unfinished">Akkord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2747"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2779"/>
         <source>Grace</source>
         <translation type="unfinished">Vorschlag</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2935"/>
         <source>Transpose</source>
         <translation type="unfinished">Transponieren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2904"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2936"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Anzahl der Halbtöne, um die transponiert werden soll:</translation>
     </message>
@@ -17674,38 +17538,6 @@ Bitte überprüfen Sie die Einstellungen im Verwalte MIDI Geräte Dialog im Haup
         <source>&lt;qt&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
-        <translation type="obsolete">Start von &lt;b&gt;convert -ly&lt;/b&gt;...</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
-        <translation type="obsolete">&lt;b&gt;convert -ly&lt;/b&gt; gestartet...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;convert-ly&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;convert-ly&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von fatalen Fehlern wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
-        <translation type="obsolete">&lt;b&gt;convert-ly&lt;/b&gt; beendet...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;convert-ly&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;&lt;b&gt;convert-ly&lt;/b&gt; erfolgreich gestartet, wurde aber mit Fehlern beendet&lt;/p&gt;&lt;p&gt;Ausführung auf Grund von fatalen Fehlern abgebrochen&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="obsolete">Start von &lt;b&gt;lilypond&lt;/b&gt;...</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="obsolete">&lt;b&gt;lilypond&lt;/b&gt; gestartet...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Kann &lt;b&gt;lilypond&lt;/b&gt; nicht ausführen!&lt;/p&gt;&lt;p&gt;Bitte LilyPond installieren und sicherstellen, daß sich die Programme &quot;convert-ly&quot; und &quot;lilypond&quot; im aktuellen Pfad befinden. Beim Ausführen von &lt;b&gt;Befehl ausführen&lt;/b&gt; (tyypischerweise &lt;b&gt;Alt+F2&lt;/b&gt;) und der Eingabe von &quot;lilypond&quot; in der Box, sollte der Fehler &quot;Kommando nicht gefunden&quot; nicht erscheinen. Falls dies ohne Fehlermeldung funktioniert aber trotzdem diese Meldung erscheint, bitte weitere Hilfe bei &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; erbeten.&lt;/p&gt;&lt;p&gt;Auf Grund von eineam fatalen Fehler wurde die Verarbeitung abgebrochen.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::PropertyViewRuler</name>
@@ -18538,10 +18370,6 @@ Do you want to open it instead ?</source>
 Wollen Sie diese stattdessen öffnen?</translation>
     </message>
     <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Beispiel Dateien</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1504"/>
         <source>Untitled</source>
         <translation>Unbetitelt</translation>
@@ -18578,10 +18406,6 @@ Fehler war: %2</translation>
 %1</source>
         <translation>Formal falsche URL
 %1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Kann Datei %1 nicht herunterladen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
@@ -18911,10 +18735,6 @@ Segmente-&gt;Segmente zusammenfassen.
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7781"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Import der Projektdatei &quot;%1&quot; fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
@@ -19326,14 +19146,6 @@ Fehler: %2</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7572"/>
         <source>Import Studio</source>
         <translation>Studio importieren</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Eine neuere Version ist verfügbar</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Neue Version erhältlich !&lt;/h3&gt;&lt;p&gt;Eine neuere Version von Rosegarden ist offenbar erhältlich. &lt;br&gt;Bitte besuchen Sie die &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden Website&lt;/a&gt; für mehr Information.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -19998,14 +19810,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
-        <translation type="obsolete">Audiodaten konnten nicht an das Audio Subsystem weiterleitet werden, da sie nicht schnell genug von der Festplatte gelesen wurden.</translation>
-    </message>
-    <message>
-        <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
-        <translation type="obsolete">Audiodaten konnten nicht vom Audio Subsystem angenommen werden, da sie nicht schnell genug auf die Festplatte geschrieben wurden.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Das Audio Mixer Subsystem kommt nicht mit (ist zu langsam).</translation>
@@ -20021,45 +19825,9 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>Unbekannter Sequenzer Fehlermodus!</translation>
     </message>
     <message>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Die Auflösung des System Timers ist zu gering&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Rosegarden war nicht in der Lage einen hochauflösenden Zeitgeber für ausreichenden MIDI Durchsatz zu finden.&lt;/p&gt;&lt;p&gt;Dies könnte bedeuten, daß Sie ein Linux System benutzen, bei dem die Auflösung des Kernel Timers zu gering eingestellt ist.  Bitte kontaktieren Sie den Hersteller Ihrer Linux Distibution für nähere Informationen.&lt;/p&gt;&lt;p&gt;Manche Linux Distributionen  bieten schon geeignete Kernel (low latency kernel) an. Nähere Informationen sind unter &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; erhältlich.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>This warning will not be displayed in the future.  Be advised that you have disabled the warning, but you may experience MIDI timing problems until you correct the underlying fault in your system.</source>
-        <translation type="obsolete">Diese Warnung wird zukünftig nicht mehr angezeigt.  Trotzdem können noch solange Probleme mit dem MIDI Zeitablauf auftreten, bis der zugrundeliegende Fehler im System beseitigt wurde.</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Rosegarden war nicht in der Lage einen hochauflösenden Zeitgeber für ausreichenden MIDI Durchsatz zu finden.&lt;/p&gt;&lt;p&gt;Dies könnte bedeuten, daß Sie ein Linux System benutzen, bei dem die Auflösung des Kernel Timers zu gering eingestellt ist.  Bitte kontaktieren Sie den Hersteller Ihrer Linux Distibution für nähere Informationen.&lt;/p&gt;&lt;p&gt;Manche Linux Distributionen  bieten schon geeignete Kernel (low latency kernel) an. Nähere Informationen sind unter &lt;a href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;http://www.rosegardenmusic.com/wiki/low-latency_kernels&lt;/a&gt; erhältlich.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Failed to connect to JACK&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Es kann keine Verbindung zu JACK aufgebaut werden&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK Audio Server verbinden.  Dies bedeutet wahrscheinlich, dass der JACK Server nicht läuft.&lt;/p&gt;&lt;p&gt;Falls Sie Audio Dateien abspielen oder aufnehmen oder Plugins benutzen möchten, sollten Sie Rosegarden beenden, und den JACK Server vor dem Neustart von Rosegarden starten.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>This warning will not be displayed in the future.  Please be careful, because if you load a file that contains audio segments or plugin data and then save it while JACK is not running, the audio segments and/or plugin data will be lost permanently.</source>
-        <translation type="obsolete">Diese Warnung wird in Zukunft nicht mehr angezeigt. Bitte seien Sie vorsichtig. Falls Sie eine Datei mit Audio-Segmenten oder Plugin-Daten laden und dann wieder abspeichern, wenn JACK nicht läuft, sind die Audio-Segment und/oder Plugin-Daten unwiderruflich verloren.</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Sowohl das MIDI als auch das Audio-System konnten nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Sie können ohne Sequenzer fortfahren, aber wir empfehlen Rosegarden zu schließen, &quot;alsaconf&quot; als Nutzer root laufen zu lassen und Rosegarden wieder zu starten. Falls Sie diese Nachricht nicht mehr sehen möchten und Rosegarden absichtlich ohne Sequenzer starten möchten, verwenden Sie &quot;rosegarden --nosequencer&quot;.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Das MIDI System konnte nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Sie können ohne den Sequenzer fortfahren, aber wir empfehlen Rosegarden zu schließen, &quot;modprobe snd-seq-midi&quot; als Nutzer root  auszuführen und Rosegarden wieder zu starten. Falls Sie diesen Fehler nicht mehr sehen möchten und Rosegarden absichtlich ohne Sequenzer starten möchten, benutzen Sie &quot;rosegarden --nosequencer&quot;.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">&lt;h3&gt;Sequenzerstart fehlgeschlagen:&lt;/h3&gt; %1</translation>
     </message>
 </context>
 <context>
@@ -20470,10 +20238,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="133"/>
         <source>tiny</source>
         <translation>winzig</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Track %1 : &quot;%2&quot;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Spur %1 : &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/TrackHeader.cpp" line="119"/>
@@ -21012,10 +20776,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <translation>Richtung:  </translation>
     </message>
     <message>
-        <source>  ,</source>
-        <translation type="obsolete">  ,</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="192"/>
         <source>D.C. al Fine</source>
         <translation>D.C. al Fine</translation>
@@ -21049,10 +20809,6 @@ Das Beenden anderer laufender Anwendung könnte u.U. die Leistung von Rosegarden
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="200"/>
         <source>Local Direction:  </source>
         <translation>Lokale Richtung:  </translation>
-    </message>
-    <message>
-        <source>shortcut.</source>
-        <translation type="obsolete">Abkürzung.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="205"/>

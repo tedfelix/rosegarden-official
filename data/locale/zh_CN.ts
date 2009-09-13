@@ -2535,10 +2535,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Rests</source>
-        <translation type="obsolete">休止符(&amp;R)</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
         <source>&amp;No Accidental</source>
         <translation type="unfinished"></translation>
@@ -2661,10 +2657,6 @@
         <translation type="unfinished">显示工具工具栏(&amp;O)</translation>
     </message>
     <message>
-        <source>Show &amp;Notes Toolbar</source>
-        <translation type="obsolete">显示音符工具栏(&amp;N)</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation type="unfinished">显示临时记号工具栏(&amp;A)</translation>
@@ -2696,10 +2688,6 @@
         <translation type="unfinished">显示布局工具栏(&amp;L)</translation>
     </message>
     <message>
-        <source>Show M&amp;eta Toolbar</source>
-        <translation type="obsolete">显示休止符工具栏(&amp;R)</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
         <source>Show Cho&amp;rd Name Ruler</source>
@@ -2719,14 +2707,6 @@
         <location filename="../QMenuStrings.cpp" line="777"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">音符工具栏</translation>
-    </message>
-    <message>
-        <source>Rests Toolbar</source>
-        <translation type="obsolete">休止符工具栏</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="796"/>
@@ -2849,10 +2829,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">元(数据)工具栏</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <source>Layout Toolbar</source>
         <translation type="unfinished">布局工具栏</translation>
@@ -2911,10 +2887,6 @@
         <location filename="../QMenuStrings.cpp" line="828"/>
         <source>Make Visible</source>
         <translation type="unfinished">使音符生效(&amp;V)</translation>
-    </message>
-    <message>
-        <source>Switch to Inserting Rests</source>
-        <translation type="obsolete">切换到插入休止符</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
@@ -3526,7 +3498,6 @@
         <translation type="unfinished">粘贴为新的触发片段(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1075"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4046"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -15402,141 +15373,155 @@ of others.</source>
         <translation type="unfinished">未知的字体大小行为 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">无法将多个小节粘贴入一个文件</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1121"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1176"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1194"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">玫瑰园</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">无法粘贴到这点。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1139"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
+Not enough space was found.
+If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1149"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">剪贴板是空的</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1153"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">正在插入剪贴板内容...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">正在提升力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">正在降低力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">设定事件力度</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1368"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">正在设定力度...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1866"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">未知的音符插入行为 %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1870"/>
         <source>Inserting note</source>
         <translation type="unfinished">正在插入音符</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2245"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2247"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">小节(&amp;M)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2225"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2257"/>
         <source>Make Ornament</source>
         <translation type="unfinished">制作修饰符</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2270"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2302"/>
         <source>Use Ornament</source>
         <translation type="unfinished">使用修饰符</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2281"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2313"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">删除所有标记(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2371"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">估计的基调标记显示为</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2396"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2428"/>
         <source>Sustain</source>
         <translation type="unfinished">持续</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2444"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2583"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2615"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">估计的时间标记显示为</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2642"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - Notation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2680"/>
         <source>%1 - All Segments - Notation</source>
         <translation type="unfinished">音长</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2685"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2745"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2777"/>
         <source>Triplet</source>
         <translation type="unfinished">三连音</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2746"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>Chord</source>
         <translation type="unfinished">和弦</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2747"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2779"/>
         <source>Grace</source>
         <translation type="unfinished">取消装饰音(&amp;R)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2935"/>
         <source>Transpose</source>
         <translation type="unfinished">变调</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2904"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2936"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">输入要变调的半音数字：</translation>
     </message>
@@ -17808,10 +17793,6 @@ Do you want to open it instead ?</source>
 您是否要改为打开它呢？</translation>
     </message>
     <message>
-        <source>Example Files</source>
-        <translation type="obsolete">示例</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1504"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
@@ -17847,10 +17828,6 @@ Error was : %2</source>
 %1</source>
         <translation type="unfinished">不正确的 URL
 %1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">无法下载文件 %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
@@ -18577,10 +18554,6 @@ Error was : %2</source>
         <source>Import Studio</source>
         <translation type="unfinished">导出音频文件</translation>
     </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">本地化的(如果可用的话)</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::Rotary</name>
@@ -19252,10 +19225,6 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">音序发生器状态：</translation>
     </message>
 </context>
 <context>

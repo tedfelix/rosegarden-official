@@ -2535,10 +2535,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Rests</source>
-        <translation type="obsolete">&amp;Rusten</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
         <source>&amp;No Accidental</source>
         <translation type="unfinished"></translation>
@@ -2661,10 +2657,6 @@
         <translation type="unfinished">Toon &amp;hulpmiddelen-werkbalk</translation>
     </message>
     <message>
-        <source>Show &amp;Notes Toolbar</source>
-        <translation type="obsolete">Toon &amp;notenwerkbalk</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation type="unfinished">Toon &amp;voortekens-werkbalk</translation>
@@ -2696,10 +2688,6 @@
         <translation type="unfinished">Toon &amp;layoutwerkbalk</translation>
     </message>
     <message>
-        <source>Show M&amp;eta Toolbar</source>
-        <translation type="obsolete">Toon &amp;meta-werkbalk</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
         <source>Show Cho&amp;rd Name Ruler</source>
@@ -2719,14 +2707,6 @@
         <location filename="../QMenuStrings.cpp" line="777"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation type="unfinished">Toon Lily&amp;Pond-directieven</translation>
-    </message>
-    <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">Notenwerkbalk</translation>
-    </message>
-    <message>
-        <source>Rests Toolbar</source>
-        <translation type="obsolete">Rustenwerkbalk</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="796"/>
@@ -2849,10 +2829,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">Meta-werkbalk</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <source>Layout Toolbar</source>
         <translation type="unfinished">Layout-werkbalk</translation>
@@ -2911,10 +2887,6 @@
         <location filename="../QMenuStrings.cpp" line="828"/>
         <source>Make Visible</source>
         <translation type="unfinished">Maak Zichtbaar</translation>
-    </message>
-    <message>
-        <source>Switch to Inserting Rests</source>
-        <translation type="obsolete">Wissel naar Invoegen Rusten</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
@@ -3526,7 +3498,6 @@
         <translation type="unfinished">&amp;Plak als nieuw getriggerd segment</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1075"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4046"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -15418,115 +15389,129 @@ zodat ook anderen ervan kunnen profiteren.</translation>
         <translation type="unfinished">Onbekende lettertype grootte actie %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">Kan niet meerdere Segmenten in elkaar plakken</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1121"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1176"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1194"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">Kan niet plakken op dit punt.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1139"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
+Not enough space was found.
+If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
+        <translation type="unfinished">Bij &quot;invoegen met restricties&quot; moet er genoeg lege ruimte zijn (met alleen rusten) op de inplak-plaats om alle in te plakken gebeurtenissen te kunnen bevatten. &lt;br&gt;Er is niet genoeg ruimte gevonden. &lt;br&gt; Als u toch hier wilt plakken, gebruik dan een van de andere plak-types uit de optie &quot;Plakken...&quot; in het menu Bewerken. u kunt desgewenst het standaard-plaktype wijzigen naar iets anders dan &quot;met restricties&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1149"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Klembord is leeg</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1153"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Invoegen van klembord inhoud...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Verhogen snelheden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">Verlagen snelheden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Stel Gebeurtenis Snelheden In</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1368"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">Instellen Snelheden...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1866"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Noot-invoegactie %1 onbekend</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1870"/>
         <source>Inserting note</source>
         <translation type="unfinished">Noot invoegen...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2245"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">Versiering spoor %1 maat %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2247"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Versiering maat %1  </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2225"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2257"/>
         <source>Make Ornament</source>
         <translation type="unfinished">Maak versiering</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2270"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2302"/>
         <source>Use Ornament</source>
         <translation type="unfinished">Gebruik versiering</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2281"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2313"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">Verwijder versieringen</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2371"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Geschatte maatsoort wordt getoond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2396"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2428"/>
         <source>Sustain</source>
         <translation type="unfinished">Sustain</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2444"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">Er is geen sustain-controller gedefinieerd voor dit apparaat.
 Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer MIDI-apparaten&apos; in het hoofdvenster.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2583"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2615"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Geschatte maatsoort getoond</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2642"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - Notation</source>
         <translation type="unfinished">%1 - Segmentspoor #%2 - Notatie</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2680"/>
         <source>%1 - All Segments - Notation</source>
         <translation type="unfinished">%1 - Alle Segmenten - Notatie</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2685"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15534,27 +15519,27 @@ Controleer of het apparaat juist is geconfigureerd in het dialoog &apos;Beheer M
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2745"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2777"/>
         <source>Triplet</source>
         <translation type="unfinished">Triool</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2746"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>Chord</source>
         <translation type="unfinished">Akkoord</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2747"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2779"/>
         <source>Grace</source>
         <translation type="unfinished">Voorslag</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2935"/>
         <source>Transpose</source>
         <translation type="unfinished">Transponeren</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2904"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2936"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Per aantal halve toonsafstanden:</translation>
     </message>
@@ -17841,10 +17826,6 @@ Do you want to open it instead ?</source>
 Wilt u dit bestand openen in plaats van het origineel?</translation>
     </message>
     <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Voorbeeldbestanden</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1504"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
@@ -17880,10 +17861,6 @@ Error was : %2</source>
 %1</source>
         <translation type="unfinished">Ongeldige URL
 %1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Kan bestand %1 niet downloaden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
@@ -18212,10 +18189,6 @@ Segmenten-&gt;Samenvoegen.
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7781"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Import van projectbestand &quot;%1&quot; mislukt</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
@@ -18624,14 +18597,6 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7572"/>
         <source>Import Studio</source>
         <translation type="unfinished">Importeer studio</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Nieuwere versie beschikbaar</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Nieuwere versie beschikbaar&lt;/h3&gt;&lt;p&gt;Een nieuwere versie van Rosegarden is beschikbaar.&lt;br&gt; Kijk op de &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; voor meer informatie.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -19293,14 +19258,6 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
-        <translation type="obsolete">Kon audio-data niet op tijd van disk lezen om het audio-subsysteem te bedienen.</translation>
-    </message>
-    <message>
-        <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
-        <translation type="obsolete">Kon audio-data niet snel genoeg naar disk schrijven om het audio-subsysteem te bedienen.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">Het audio-mixing-subsysteem houdt het tempo niet bij.</translation>
@@ -19316,17 +19273,9 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
         <translation type="unfinished">Sequencer: onbekende probleem-modus!</translation>
     </message>
     <message>
-        <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;MIDI- noch Audio-deelsysteem zijn succesvol geïnitialiseerd.&lt;/p&gt;&lt;p&gt;U kunt zonder sequencer doorwerken, maar wij bevelen aan Rosegarden af te sluiten, &quot;alsaconf&quot; als root uit te voeren, en Rosegarden opnieuw op te starten.  Als u Rosegarden bewust zonder sequencer wilt gebruiken, gebruik dan &quot;rosegarden --nosequencer&quot; om deze melding niet meer te hoeven zien.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;MIDI-deelsysteem is niet succesvol geïnitialiseerd.&lt;/p&gt;&lt;p&gt;U kunt zonder sequencer doorwerken, maar wij bevelen aan Rosegarden af te sluiten, &quot;modprobe snd-seq-midi&quot; als root uit te voeren, en Rosegarden opnieuw opte starten.  Als u Rosegarden bewust zonder sequencer wilt gebruiken, gebruik dan &quot;rosegarden --nosequencer&quot; om deze melding niet meer te hoeven zien.&lt;/p&gt; </translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">&lt;h3&gt;Sequencer opstarten mislukt&lt;/h3&gt;%1</translation>
     </message>
 </context>
 <context>
@@ -20266,10 +20215,6 @@ Andere lopende applicaties afsluiten kan de werking van Rosegarden verbeteren.</
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="185"/>
         <source>Direction:  </source>
         <translation type="unfinished">Richting:  </translation>
-    </message>
-    <message>
-        <source>  ,</source>
-        <translation type="obsolete">  ,</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="192"/>

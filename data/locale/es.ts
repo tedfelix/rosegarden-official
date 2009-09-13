@@ -1125,14 +1125,14 @@
         <location filename="../QMenuStrings.cpp" line="249"/>
         <location filename="../QMenuStrings.cpp" line="616"/>
         <source>&amp;Transpose by Semitones...</source>
-        <translation type="unfinished">Transporte por semitonos...</translation>
+        <translation>&amp;Transporte por semitonos...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="250"/>
         <location filename="../QMenuStrings.cpp" line="617"/>
         <location filename="../QMenuStrings.cpp" line="920"/>
         <source>Transpose by &amp;Interval...</source>
-        <translation type="unfinished">Transporte por intervalo...</translation>
+        <translation>Transporte por &amp;intervalo...</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="251"/>
@@ -2537,10 +2537,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Rests</source>
-        <translation type="obsolete">&amp;Silencios</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
         <source>&amp;No Accidental</source>
         <translation type="unfinished"></translation>
@@ -2663,10 +2659,6 @@
         <translation type="unfinished">M&amp;ostrar barra de herramientas de Herramientas</translation>
     </message>
     <message>
-        <source>Show &amp;Notes Toolbar</source>
-        <translation type="obsolete">Mostrar barra de herramientas de &amp;Notas</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation type="unfinished">Mostrar barra de herramientas de &amp;Alteraciones</translation>
@@ -2698,10 +2690,6 @@
         <translation type="unfinished">Mostrar barra de herramientas de &amp;Formato</translation>
     </message>
     <message>
-        <source>Show M&amp;eta Toolbar</source>
-        <translation type="obsolete">Mostrar barra de herramientas M&amp;eta</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
         <source>Show Cho&amp;rd Name Ruler</source>
@@ -2721,14 +2709,6 @@
         <location filename="../QMenuStrings.cpp" line="777"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation type="unfinished">Mostrar Directivos para &amp;LilyPond</translation>
-    </message>
-    <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">Barra de Herramientas de Notas</translation>
-    </message>
-    <message>
-        <source>Rests Toolbar</source>
-        <translation type="obsolete">Barra de Herramientas de Silencios</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="796"/>
@@ -2851,10 +2831,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">Meta-Barra de Herramientas</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <source>Layout Toolbar</source>
         <translation type="unfinished">Barra de Herramientas de Formato</translation>
@@ -2913,10 +2889,6 @@
         <location filename="../QMenuStrings.cpp" line="828"/>
         <source>Make Visible</source>
         <translation type="unfinished">Hacer visible</translation>
-    </message>
-    <message>
-        <source>Switch to Inserting Rests</source>
-        <translation type="obsolete">Cambiar a inserción de silencios</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
@@ -3528,12 +3500,11 @@
         <translation type="unfinished">Pegar como Nuevo &amp;Segmento Activado</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1075"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4046"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
 If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
-        <translation type="unfinished">El tipo de pegado Restringido requiere suficiente
+        <translation>El tipo de pegado Restringido requiere suficiente
 espacio en la posición de pegado (conteniendo
 únicamente silencios) para albergar todos los eventos 
 que van a ser pegados.
@@ -15431,115 +15402,138 @@ puede ser valioso comunicarlo al bibliotecario para beneficio de otros.</transla
         <translation type="unfinished">Acción de tamaño de tipografía desconocido %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation type="unfinished">No es posible pegar múltiples segmentos en uno</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1121"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1176"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1194"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation type="unfinished">No se puede pegar en este punto.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1139"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
+Not enough space was found.
+If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
+        <translation>El tipo de pegado Restringido requiere suficiente
+espacio en la posición de pegado (conteniendo
+únicamente silencios) para albergar todos los eventos 
+que van a ser pegados.
+No se ha encontrado espacio suficiente.
+Si quiere pegar de todas formas, considere el uso de
+uno de los otros tipos de pegado en la opción &quot;Pegar...&quot;
+del menú edición. También puede cambiar el tipo de
+pegado por defecto a otro distinto del Restringido si
+así lo desea.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1149"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Portapapeles vacío</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1153"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Insertando el contenido del portapapeles...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Subiendo velocidades...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">Bajando velocidades...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Establecer Velocidades de los Eventos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1368"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">Estableciendo Velocidades...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1866"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Acción de insertar nota desconocida: %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1870"/>
         <source>Inserting note</source>
         <translation type="unfinished">Insertando nota</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2245"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">Pista de ornamento %1 compás %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2247"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Ornamento compás %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2225"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2257"/>
         <source>Make Ornament</source>
         <translation type="unfinished">Crear Ornamento</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2270"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2302"/>
         <source>Use Ornament</source>
         <translation type="unfinished">Usar Ornamento</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2281"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2313"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">Eliminar Ornamentos</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2371"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Se muestra la armadura estimada</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2396"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2428"/>
         <source>Sustain</source>
         <translation type="unfinished">Sostenido</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2444"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">No hay un controlador de Sustain definido para este dispositivo.
 Por favor, asegúrese de que está correctamente configurado en el cuadro de diálogo &quot;Gestionar Dispositivos MIDI&quot;. </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2583"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2615"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Se muestra la estimación de la medida del compás</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2642"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - Notation</source>
         <translation type="unfinished">%1 - Segmento Pista #%2 - Partitura</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2680"/>
         <source>%1 - All Segments - Notation</source>
         <translation type="unfinished">%1 - Todos los segmentos - Partitura</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2685"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -15547,27 +15541,27 @@ Por favor, asegúrese de que está correctamente configurado en el cuadro de di�
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2745"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2777"/>
         <source>Triplet</source>
         <translation type="unfinished">Tresillo</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2746"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>Chord</source>
         <translation type="unfinished"> Acorde</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2747"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2779"/>
         <source>Grace</source>
         <translation type="unfinished">Apoyatura</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2935"/>
         <source>Transpose</source>
         <translation type="unfinished">Transportar</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2904"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2936"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Por número de semitonos: </translation>
     </message>
@@ -17857,10 +17851,6 @@ Do you want to open it instead ?</source>
 ¿Quiere abrirlo en lugar del original?</translation>
     </message>
     <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Archivos de Ejemplo</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1504"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
@@ -17896,10 +17886,6 @@ Error was : %2</source>
 %1</source>
         <translation type="unfinished">Formato erróneo de URL
 %1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">No puedo descargar archivo %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
@@ -18228,10 +18214,6 @@ Usted debe establecer el directorio de archivos de audio en un directorio válid
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7781"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Fallo al importar archivo de proyecto &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
@@ -18640,14 +18622,6 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7572"/>
         <source>Import Studio</source>
         <translation type="unfinished">Importar Estudio</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Versión más actualizada disponible</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Versión más actualizada disponible&lt;/h3&gt;&lt;p&gt;Puede que una versión más actualizada de Rosegarden esté disponible.&lt;br&gt;Favor de consultar el &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;web de Rosegarden&lt;/a&gt; para ver más información.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -19309,14 +19283,6 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
-        <translation type="obsolete">Fallo leyendo datos de audio desde disco a tiempo para servir el subsistema de audio.</translation>
-    </message>
-    <message>
-        <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
-        <translation type="obsolete">Fallo escribiendo datos de audio en disco suficientemente rápido para servir el subsistema de audio.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">El subsistema de mezclador de audio está fallando.</translation>
@@ -19332,17 +19298,9 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <translation type="unfinished">Fallo desconocido del secuenciador!</translation>
     </message>
     <message>
-        <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Los subsistemas MIDI y Audio han fallado en su inicialización.&lt;/p&gt; &lt;p&gt;Usted puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, y ejecute &quot;alsaconf&quot; como usuario administrador, reiniciando Rosegarden de nuevo. Si desea utilizar Rosegarden sin secuenciador, entonces puede ejecutar  &quot;rosegarden --nosequencer&quot; para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation type="unfinished">&lt;p&gt;El subsistema MIDI ha fallado en su inicialización.&lt;/p&gt;&lt;p&gt; Usted puede continuar sin el secuenciador, pero sugerimos que cierre Rosegarden, ejecute &quot;modprobe snd-seq-midi&quot; como usuario administrador, y reinicie Rosegarden de nuevo. Si desea utilizar Rosegarden sin el secuenciador, entonces ejecute &quot;rosegarden --nosequencer&quot; para evitar la aparición de este mensaje de error en el futuro.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">&lt;h3&gt;La inicialización del secuenciador ha fallado&lt;/h3&gt; %1</translation>
     </message>
 </context>
 <context>
@@ -20282,10 +20240,6 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="185"/>
         <source>Direction:  </source>
         <translation type="unfinished">Dirección:</translation>
-    </message>
-    <message>
-        <source>  ,</source>
-        <translation type="obsolete">  ,</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="192"/>

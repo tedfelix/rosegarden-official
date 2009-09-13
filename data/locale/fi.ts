@@ -1921,14 +1921,6 @@
         <translation>Lisää li&amp;verre</translation>
     </message>
     <message>
-        <source>Add Trill &amp;with Line</source>
-        <translation type="obsolete">Lisää liverre v&amp;iivalla</translation>
-    </message>
-    <message>
-        <source>Add Trill Line</source>
-        <translation type="obsolete">Lisää liverreviiva</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="517"/>
         <source>Add &amp;Turn</source>
         <translation>Lisää &amp;kierros</translation>
@@ -2481,10 +2473,6 @@
         <translation>P&amp;isteellinen kokonuotti</translation>
     </message>
     <message>
-        <source>Dotted Half &amp;Note</source>
-        <translation type="obsolete">Pi&amp;steellinen puolinuotti</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="693"/>
         <source>Dotted Q&amp;uarter Note</source>
         <translation>Pisteellinen ne&amp;ljäsosanuotti</translation>
@@ -2503,74 +2491,6 @@
         <location filename="../QMenuStrings.cpp" line="696"/>
         <source>Dotted Thirt&amp;y-Second Note</source>
         <translation>Pisteelinen 3&amp;2.osanuotti</translation>
-    </message>
-    <message>
-        <source>Switch from &amp;Rest to Note</source>
-        <translation type="obsolete">Vaihda &amp;tauosta nuotiksi</translation>
-    </message>
-    <message>
-        <source>&amp;Rests</source>
-        <translation type="obsolete">&amp;Tauot</translation>
-    </message>
-    <message>
-        <source>&amp;Double Whole Rest</source>
-        <translation type="obsolete">K&amp;aksoiskokotauko</translation>
-    </message>
-    <message>
-        <source>&amp;Whole Rest</source>
-        <translation type="obsolete">&amp;Kokotauko</translation>
-    </message>
-    <message>
-        <source>&amp;Half Rest</source>
-        <translation type="obsolete">&amp;Puolitauko</translation>
-    </message>
-    <message>
-        <source>&amp;Quarter Rest</source>
-        <translation type="obsolete">&amp;Neljännestauko</translation>
-    </message>
-    <message>
-        <source>&amp;Eighth Rest</source>
-        <translation type="obsolete">Ka&amp;hdeksasosatauko</translation>
-    </message>
-    <message>
-        <source>&amp;Sixteenth Rest</source>
-        <translation type="obsolete">K&amp;uudestoistaosatauko</translation>
-    </message>
-    <message>
-        <source>&amp;Thirty-Second Rest</source>
-        <translation type="obsolete">&amp;32.-osatauko</translation>
-    </message>
-    <message>
-        <source>Sixty-&amp;Fourth Rest</source>
-        <translation type="obsolete">&amp;64.-osatauko</translation>
-    </message>
-    <message>
-        <source>D&amp;otted Whole Rest</source>
-        <translation type="obsolete">P&amp;isteellinen kokotauko</translation>
-    </message>
-    <message>
-        <source>Dotted Half &amp;Rest</source>
-        <translation type="obsolete">Pi&amp;steellinen puolitauko</translation>
-    </message>
-    <message>
-        <source>Dotted Q&amp;uarter Rest</source>
-        <translation type="obsolete">Pisteellinen ne&amp;ljäsosatauko</translation>
-    </message>
-    <message>
-        <source>Dotted E&amp;ighth Rest</source>
-        <translation type="obsolete">Pisteellinen kah&amp;deksasosatauko</translation>
-    </message>
-    <message>
-        <source>Dotted Si&amp;xteenth Rest</source>
-        <translation type="obsolete">Pisteellinen kuudest&amp;oistaosatauko</translation>
-    </message>
-    <message>
-        <source>Dotted Thirt&amp;y-Second Rest</source>
-        <translation type="obsolete">Pisteelinen 3&amp;2.osatauko</translation>
-    </message>
-    <message>
-        <source>Switch from &amp;Note to Rest</source>
-        <translation type="obsolete">Vaihda &amp;nuotista tauoksi</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="643"/>
@@ -2690,14 +2610,6 @@
         <translation>Näytä T&amp;yökalut -työkalupalkki</translation>
     </message>
     <message>
-        <source>Show &amp;Notes Toolbar</source>
-        <translation type="obsolete">Näytä &amp;Nuotit -työkalupalkki</translation>
-    </message>
-    <message>
-        <source>Show &amp;Rest Toolbar</source>
-        <translation type="obsolete">Näytä &amp;Tauot -työkalupalkki</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="764"/>
         <source>Show &amp;Accidentals Toolbar</source>
         <translation>Näytä &amp;Etumerkit -työkalupalkki</translation>
@@ -2729,10 +2641,6 @@
         <translation>Näytä As&amp;ettelu -työkalupalkki</translation>
     </message>
     <message>
-        <source>Show M&amp;eta Toolbar</source>
-        <translation type="obsolete">Näytä Meta -ty&amp;ökalupalkki</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="773"/>
         <location filename="../QMenuStrings.cpp" line="974"/>
         <source>Show Cho&amp;rd Name Ruler</source>
@@ -2747,14 +2655,6 @@
         <location filename="../QMenuStrings.cpp" line="777"/>
         <source>Show Lily&amp;Pond Directives</source>
         <translation>Näytä &amp;LilyPond-käskyt</translation>
-    </message>
-    <message>
-        <source>Notes Toolbar</source>
-        <translation type="obsolete">Nuotit -työkalupalkki</translation>
-    </message>
-    <message>
-        <source>Rests Toolbar</source>
-        <translation type="obsolete">Tauot -työkalupalkki</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="796"/>
@@ -2877,10 +2777,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Meta Toolbar</source>
-        <translation type="obsolete">Meta -työkalupalkki</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="804"/>
         <source>Layout Toolbar</source>
         <translation>Taitto -työkalupalkki</translation>
@@ -2936,17 +2832,9 @@
         <translation>Tee näkyväksi</translation>
     </message>
     <message>
-        <source>Switch to Inserting Rests</source>
-        <translation type="obsolete">Vaihda taukojen syöttöön</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="835"/>
         <source>Auto-Beam when appropriate</source>
         <translation>Palkita nuotit soveltuvin osin</translation>
-    </message>
-    <message>
-        <source>Dotted Note</source>
-        <translation type="obsolete">Pisteellinen nuotti</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="836"/>
@@ -2982,10 +2870,6 @@
         <location filename="../QMenuStrings.cpp" line="842"/>
         <source>Double Flat</source>
         <translation>Kaksoisalennus</translation>
-    </message>
-    <message>
-        <source>Dotted Rest</source>
-        <translation type="obsolete">Pisteellinen tauko</translation>
     </message>
     <message>
         <location filename="../QMenuStrings.cpp" line="844"/>
@@ -3561,10 +3445,6 @@
         <translation>&amp;Palauta kaarien sijainnit</translation>
     </message>
     <message>
-        <source>To&amp;ggle Dot</source>
-        <translation type="obsolete">Kytke (pois) &amp;piste</translation>
-    </message>
-    <message>
         <location filename="../QMenuStrings.cpp" line="651"/>
         <source>&amp;Treble Clef</source>
         <translation>&amp;Diskanttiavain</translation>
@@ -3620,7 +3500,6 @@
         <translation>&amp;Hyppää pikakirjanmerkin kohdalle</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1075"/>
         <location filename="../../src/gui/editors/notation/OldNotationView.cpp" line="4046"/>
         <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
 Not enough space was found.
@@ -13911,10 +13790,6 @@ sen sijaan?</translation>
         <translation>&lt;b&gt;convert-ly&lt;/b&gt; aloitettiin...</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;convert-ly&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="143"/>
         <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
         <translation>&lt;b&gt;convert-ly&lt;/b&gt; päättyi...</translation>
@@ -13933,10 +13808,6 @@ sen sijaan?</translation>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="160"/>
         <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
         <translation>&lt;b&gt;lilypond&lt;/b&gt; aloitettiin...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;lilypond&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="131"/>
@@ -15510,10 +15381,6 @@ hyödyttämään muitakin.</translation>
         <translation type="unfinished">Tulosta LilyPondilla...</translation>
     </message>
     <message>
-        <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;/tmp&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Väliaikaistiedostot avaaminen LilyPond-vientiä varten epäonnistui.&lt;/p&gt;&lt;p&gt;Tämä todennäköisesti tarkoittaa sitä, että tila loppui hakemistosta &lt;pre&gt;/tmp&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="913"/>
         <source>Previewing with LilyPond...</source>
         <translation type="unfinished"></translation>
@@ -15534,115 +15401,131 @@ hyödyttämään muitakin.</translation>
         <translation type="unfinished">Tuntematon kirjasinkokotoiminto %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1094"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1082"/>
         <source>Can&apos;t paste multiple Segments into one</source>
         <translation>Ei voitu liittää useita osia yhdeksi</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1121"/>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1176"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1117"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1194"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1119"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1196"/>
         <source>Couldn&apos;t paste at this point.</source>
         <translation>Ei voitu liittää tähän paikkaan.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1139"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1120"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1197"/>
+        <source>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.
+Not enough space was found.
+If you want to paste anyway, consider using one of the other paste types from the &quot;Paste...&quot; option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</source>
+        <translation type="unfinished">Rajoitettu liittämistyyppi vaatii liitäntäpaikan kohdalla riittävästi tyhjää tilaa (jossa on vain taukoja), jotta kaikki tapahtumat voitaisiin liittää.
+Tyhjää tilaa ei löytynyt riittävästi.
+Jos haluat littää tästä huolimatta, harkitse toisen liitäntätyypin käyttöä &quot;Muokkaa&quot;-valikon &quot;Liitä...&quot;-valinnasta.  Voit myös halutessasi vaihtaa oletusliitäntätyypin myös joksikin muuksi kuin Rajoitettu.</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1149"/>
         <source>Clipboard is empty</source>
         <translation>Leikepöytä on tyhjä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1143"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1153"/>
         <source>Inserting clipboard contents...</source>
         <translation>Syötetään leikepöydän tietoja...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1286"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1318"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Voimakkuuksien nosto...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1296"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1328"/>
         <source>Lowering velocities...</source>
         <translation type="unfinished">Voimakkuuksien lasku...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1331"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1363"/>
         <source>Set Event Velocities</source>
         <translation type="unfinished">Aseta tapahtumien voimakkuudet</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1336"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1368"/>
         <source>Setting Velocities...</source>
         <translation type="unfinished">Aseta voimakkuudet...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1834"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1866"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Tuntematon nuotinsyöttötapahtuma %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1838"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="1870"/>
         <source>Inserting note</source>
         <translation type="unfinished">Nuotin syöttö</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2213"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2245"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">Koru raidalla %1 tahdissa %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2215"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2247"/>
         <source>Ornament bar %1</source>
         <translation type="unfinished">Koru tahdissa %1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2225"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2257"/>
         <source>Make Ornament</source>
         <translation type="unfinished">Tee koru</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2270"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2302"/>
         <source>Use Ornament</source>
         <translation type="unfinished">Käytä korua</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2281"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2313"/>
         <source>Remove Ornaments</source>
         <translation type="unfinished">Poista korukuviot</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2339"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2371"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Näytetty arvioitu sävellajimerkintä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2396"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2428"/>
         <source>Sustain</source>
         <translation type="unfinished">Pedaali</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2412"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2444"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
         <translation type="unfinished">Tälle laitteelle ei oltu määritelty pedaalin ohjainta.
 Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse MIDI-laitteita -valikossa.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2583"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2615"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Näytetään arvioitu tahtilaji</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2642"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2674"/>
         <source>%1 - Segment Track #%2 - Notation</source>
         <translation type="unfinished">%1 - osa raita #%2 - Nuotinnus</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2648"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2680"/>
         <source>%1 - All Segments - Notation</source>
         <translation type="unfinished">%1 - kaikki osat - Nuotinnus</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2653"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2685"/>
         <source>%1 - %n Segment(s) - Notation</source>
         <translation type="unfinished">
             <numerusform>%1 - %n osa - Nuotinnus</numerusform>
@@ -15650,27 +15533,27 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2745"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2777"/>
         <source>Triplet</source>
         <translation type="unfinished">Tripletti</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2746"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2778"/>
         <source>Chord</source>
         <translation type="unfinished">Sointu</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2747"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2779"/>
         <source>Grace</source>
         <translation type="unfinished">Grave</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2903"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2935"/>
         <source>Transpose</source>
         <translation type="unfinished">Siirrä</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2904"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="2936"/>
         <source>By number of semitones: </source>
         <translation type="unfinished">Puolisävelten määrällä: </translation>
     </message>
@@ -17143,38 +17026,6 @@ Ole hyvä ja varmista, että laite on määritetty oikein pääikkunan Hallitse 
         <source>&lt;qt&gt;Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with &quot;exit %1&quot; may be useful for diagnostic purposes.&lt;br&gt;Processing aborted.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Running &lt;b&gt;convert-ly&lt;/b&gt;...</source>
-        <translation type="obsolete">Ajetaan &lt;b&gt;convert-ly&lt;/b&gt;...</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;convert-ly&lt;/b&gt; started...</source>
-        <translation type="obsolete">&lt;b&gt;convert-ly&lt;/b&gt; aloitettiin...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;convert-ly&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;convert-ly&lt;/b&gt; finished...</source>
-        <translation type="obsolete">&lt;b&gt;convert-ly&lt;/b&gt; päättyi...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Ran &lt;b&gt;convert-ly&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ajettiin &lt;b&gt;convert-ly&lt;/b&gt; onnistuneesti, mutta suoritus päättyi virheisiin.&lt;/p&gt;&lt;p&gt;Suoritus keskeytyi vakaviin virheisiin.&lt;p&gt;&lt;/qt&gt;</translation>
-    </message>
-    <message>
-        <source>Running &lt;b&gt;lilypond&lt;/b&gt;...</source>
-        <translation type="obsolete">Ajetaan &lt;b&gt;lilypond&lt;/b&gt;...</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;lilypond&lt;/b&gt; started...</source>
-        <translation type="obsolete">&lt;b&gt;lilypond&lt;/b&gt; käynnistettiin...</translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="obsolete">&lt;qt&gt;&lt;p&gt;Ei voitu ajaa &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Ole hyvä ja asenna LilyPond sekä varmista, että &quot;convert-ly&quot; ja &quot;lilypond&quot; -komennot ovat saatavilla hakupolussasi.  Jos ajat &lt;b&gt;Suorita komento&lt;/b&gt; (yleensä &lt;b&gt;Alt+F2&lt;/b&gt;) ja kirjoitat &quot;lilypond&quot; laatikkoon, sinun tulisa saada &quot;komentoa ei löydy&quot; - virhe. Jos voit tehdä sen ilman virhettä, mutta silti näet tämän virheilmoituksen, ole hyvä ja ota yhteyttä osoitteeseen &lt;a href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; lisäselvityksiä varten.&lt;/p&gt;&lt;p&gt;Käsittely keskeytyi vakavien virheiden takia.&lt;/p&gt;&lt;/qt&gt;</translation>
-    </message>
 </context>
 <context>
     <name>Rosegarden::PropertyViewRuler</name>
@@ -17991,10 +17842,6 @@ Do you want to open it instead ?</source>
 Haluatko avata sen tämän asemesta?</translation>
     </message>
     <message>
-        <source>Example Files</source>
-        <translation type="obsolete">Esimerkkitiedostot</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1504"/>
         <source>Untitled</source>
         <translation>Ei nimeä</translation>
@@ -18030,10 +17877,6 @@ Error was : %2</source>
 %1</source>
         <translation>Vääränmuotoin URL
 %1</translation>
-    </message>
-    <message>
-        <source>Cannot download file %1</source>
-        <translation type="obsolete">Ei voida ladata tiedostoa %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="1700"/>
@@ -18362,10 +18205,6 @@ Haluatko asettaa sen nyt?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7781"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Failed to import project file &quot;%1&quot;</source>
-        <translation type="obsolete">Projektitiedoston &quot;%1&quot; tuonti ei onnistunut</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="3446"/>
@@ -18774,14 +18613,6 @@ Error was : %2</source>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7572"/>
         <source>Import Studio</source>
         <translation>Tuo studio</translation>
-    </message>
-    <message>
-        <source>Newer version available</source>
-        <translation type="obsolete">Uudempi versio saatavilla</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Newer version available&lt;/h3&gt;&lt;p&gt;A newer version of Rosegarden may be available.&lt;br&gt;Please consult the &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Uudempi versio saatavilla&lt;/h3&gt;&lt;p&gt;Uudempi Rosegardenin versio voi olla saatavilla.&lt;br&gt;Ole hyvä ja katso lisätietoja &lt;a href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegardenin nettisivulta&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -19443,14 +19274,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Failed to read audio data from disc in time to service the audio subsystem.</source>
-        <translation type="obsolete">Äänitietojen lukeminen ajantasaisesti ääni-alijärjestelmää varten epäonnistui.</translation>
-    </message>
-    <message>
-        <source>Failed to write audio data to disc fast enough to service the audio subsystem.</source>
-        <translation type="obsolete">Ei pystytty kirjoittamaan levylle äänitietoja niin nopeasti kuin ääni-alijärjestelmä vaatisi.</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1011"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>Äänisekoitin -alijärjestelmä ei pysy pystyssä.</translation>
@@ -19466,29 +19289,9 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>Tuntematon sekvensserin virhetila!</translation>
     </message>
     <message>
-        <source>&lt;h3&gt;System timer resolution is too low&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Järjestelmän ajastimen erottelukyky on liian alhainen&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Failed to connect to JACK&lt;/h3&gt;</source>
-        <translation type="obsolete">&lt;h3&gt;Kytkeytyminen JACK -palvelimeen epäonnistui&lt;/h3&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means the JACK server is not running.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, you should exit Rosegarden and start the JACK server before running Rosegarden again.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Rosegarden ei voinut kytkeytyä JACK -äänipalvelimeen. Tämä todennäköisesti tarkoittaa JACK -palvelin ei ole käynnissä.&lt;/p&gt;&lt;p&gt;Jos haluat toistaa tai äänittää äänitiedostoja tai käyttää lisäosia, sinun tulee sammuttaa Rosegarden ja käynnistää JACK -palvelin ennen kuin käynnistät Rosegardenin uudelleen.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;alsaconf&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Sekä MIDI että Ääni -alijärjestelmien alustaminen epäonnistui.&lt;/p&gt;&lt;p&gt;Voit jatkaa ilman sekvensseriä, mutta suosittelen Rosegardenin sulkemista, käskyn&quot;alsaconf&quot; ajamista pääkäyttäjänä ja Rosegardenin käynnistämistä uudelleen. Jos haluat nimenomaan olla käyttämättä sekvensseriä, käytä &quot;rosegarden --nosequencer&quot; välttääksesi jatkossa tämän virheilmoituksen näkemisen.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="1233"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;MIDI-alijärjestelmän alustaminen epäonnistui.&lt;/p&gt;&lt;p&gt;Voit jatkaa ilman sekvensseriä, mutta suosittelen Rosegardenin sulkemista, käskyn&quot;modprobe snd-seq-midi&quot; ajamista pääkäyttäjänä ja Rosegardenin käynnistämistä uudelleen. Jos haluat nimenomaan olla käyttämättä sekvensseriä, käytä &quot;rosegarden --nosequencer&quot; välttääksesi jatkossa tämän virheilmoituksen näkemisen.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;h3&gt;Sequencer startup failed&lt;/h3&gt;%1</source>
-        <translation type="obsolete">&lt;h3&gt;Sekvensserin käynnistys ei onnistunut&lt;/h3&gt;%1</translation>
     </message>
 </context>
 <context>
@@ -20430,10 +20233,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <translation>Suunta:  </translation>
     </message>
     <message>
-        <source>  ,</source>
-        <translation type="obsolete">  ,</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="192"/>
         <source>D.C. al Fine</source>
         <translation>D.C. al Fine</translation>
@@ -20467,10 +20266,6 @@ Toisten ohjelmien lopettaminen saattaa parantaa Rosegardenin suorituskykyä.</tr
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="200"/>
         <source>Local Direction:  </source>
         <translation>Paikallinen suunta:  </translation>
-    </message>
-    <message>
-        <source>shortcut.</source>
-        <translation type="obsolete">lyhin</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="205"/>
