@@ -201,6 +201,15 @@ protected slots:
 
     void slotToggleTracking();
 
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    /// Note-on or note-off received asynchronously -- as above
+    void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
+
     /**
      * Insert a Symbol
      */

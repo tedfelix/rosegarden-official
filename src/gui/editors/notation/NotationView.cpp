@@ -3075,6 +3075,147 @@ NewNotationView::slotStepForward()
     }
 }
 
+void
+NewNotationView::slotInsertableNoteOnReceived(int pitch, int velocity)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOnReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, true);
+}
+
+void
+NewNotationView::slotInsertableNoteOffReceived(int pitch, int velocity)
+{
+    NOTATION_DEBUG << "NotationView::slotInsertableNoteOffReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, false);
+}
+
+void
+NewNotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+{
+    //!!! Problematic.  Ideally we wouldn't insert events into windows
+    //that weren't actually visible, otherwise all hell could break
+    //loose (metaphorically speaking, I should probably add).  I did
+    //think of checking isActiveWindow() and returning if the current
+    //window wasn't active, but that will prevent anyone from
+    //step-recording from e.g. vkeybd, which cannot be used without
+    //losing focus (and thus active-ness) from the Rosegarden window.
+
+    //!!! I know -- we'll keep track of which edit view (or main view,
+    //or mixer, etc) is active, and we'll only allow insertion into
+    //the most recently activated.  How about that?
+
+    /* was toggle */
+//      QAction *action = dynamic_cast<QAction*>
+//         (actionCollection()->action("toggle_step_by_step"));
+        QAction *action = findAction("toggle_step_by_step");
+    if (!action) {
+        NOTATION_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (!action->isChecked())
+        return ;
+
+    Segment *segment = getCurrentSegment();
+
+    NoteRestInserter *noteInserter = dynamic_cast<NoteRestInserter *>
+                                     (m_notationWidget->getCurrentTool());
+    if (!noteInserter) {
+        static bool showingError = false;
+        if (showingError)
+            return ;
+        showingError = true;
+        /* was sorry */ QMessageBox::warning(this, "", tr("Can't insert note: No note duration selected"));
+        showingError = false;
+        return ;
+    }
+
+//    if (m_inPaintEvent) {
+//        NOTATION_DEBUG << "NotationView::slotInsertableNoteEventReceived: in paint event already" << endl;
+//        if (noteOn) {
+//            m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+//        }
+//        return ;
+//    }
+
+    // If the segment is transposed, we want to take that into
+    // account.  But the note has already been played back to the user
+    // at its untransposed pitch, because that's done by the MIDI THRU
+    // code in the sequencer which has no way to know whether a note
+    // was intended for step recording.  So rather than adjust the
+    // pitch for playback according to the transpose setting, we have
+    // to adjust the stored pitch in the opposite direction.
+
+    pitch -= segment->getTranspose();
+
+    //    TmpStatusMsg msg(tr("Inserting note"), this);
+
+    // We need to ensure that multiple notes hit at once come out as
+    // chords, without imposing the interpretation that overlapping
+    // notes are always chords and without getting too involved with
+    // the actual absolute times of the notes (this is still step
+    // editing, not proper recording).
+
+    // First, if we're in chord mode, there's no problem.
+
+    static int numberOfNotesOn = 0;
+    static timeT insertionTime = getInsertionTime();
+    static time_t lastInsertionTime = 0;
+
+    if (isInChordMode()) {
+        if (!noteOn)
+            return ;
+        NOTATION_DEBUG << "Inserting note in chord at pitch " << pitch << endl;
+        noteInserter->insertNote(*segment, getInsertionTime(), pitch,
+                                 Accidentals::NoAccidental,
+                                 true);
+
+    } else {
+
+        if (!noteOn) {
+            numberOfNotesOn--;
+        } else if (noteOn) {
+            // Rules:
+            //
+            // * If no other note event has turned up within half a
+            //   second, insert this note and advance.
+            //
+            // * Relatedly, if this note is within half a second of
+            //   the previous one, they're chords.  Insert the previous
+            //   one, don't advance, and use the same rules for this.
+            //
+            // * If a note event turns up before that time has elapsed,
+            //   we need to wait for the note-off events: if the second
+            //   note happened less than half way through the first,
+            //   it's a chord.
+            //
+            // We haven't implemented these yet... For now:
+            //
+            // Rules (hjj):
+            //
+            // * The overlapping notes are always included in to a chord.
+            //   This is the most convenient for step inserting of chords.
+            //
+            // * The timer resets the numberOfNotesOn, if noteOff signals were
+            //   drop out for some reason (which has not been encountered yet).
+
+            time_t now;
+            time (&now);
+            double elapsed = difftime(now, lastInsertionTime);
+            time (&lastInsertionTime);
+
+            if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
+                numberOfNotesOn = 0;
+                insertionTime = getInsertionTime();
+            }
+            numberOfNotesOn++;
+
+            noteInserter->insertNote(*segment, insertionTime, pitch,
+                                     Accidentals::NoAccidental,
+                                     true);
+        }
+    }
+}
+
 
 }
 
