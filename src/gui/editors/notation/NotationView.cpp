@@ -1072,18 +1072,6 @@ NewNotationView::slotEditCutAndClose()
         (new CutAndCloseCommand(*selection, m_document->getClipboard()));
 }
 
-static const QString RESTRICTED_PASTE_FAILED_DESCRIPTION = QObject::tr(
-                      "The Restricted paste type requires enough empty " \
-                      "space (containing only rests) at the paste position " \
-                      "to hold all of the events to be pasted.\n" \
-                      "Not enough space was found.\n" \
-                      "If you want to paste anyway, consider using one of " \
-                      "the other paste types from the \"Paste...\" option " \
-                      "on the Edit menu.  You can also change the default " \
-                      "paste type to something other than Restricted if " \
-                      "you wish."
-    );
-
 void
 NewNotationView::slotEditPaste()
 {
@@ -1116,9 +1104,31 @@ NewNotationView::slotEditPaste()
         (*segment, clipboard, insertionTime, defaultType);
 
     if (!command->isPossible()) {
-        QMessageBox::warning	//@@@ detailedError
-            (this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
-             tr("Couldn't paste at this point.") );
+        // NOTES: To get a reasonable presentation of the standard and detailed
+        // text, we have to build up our own QMessageBox
+        //
+        // The old RESTRICTED_PASTE_DESCRIPTION was removed because it was
+        // impossible to get the translation, which had to be done in the
+        // QObject::tr() context, to work in this context here.  Qt is really
+        // quirky that way.  Instead, I'm just block copying all of this now
+        // that I've reworked it.  Is this copy you're looking at the original,
+        // or the copy?  Only I know for sure, and I'll never tell!  Bwa haha!
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(tr("Rosegarden"));
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText(tr("Couldn't paste at this point."));
+        msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \                    
+                                     "space (containing only rests) at the paste position " \
+                                     "to hold all of the events to be pasted.\n" \
+                                     "Not enough space was found.\n" \
+                                     "If you want to paste anyway, consider using one of " \
+                                     "the other paste types from the \"Paste...\" option " \
+                                     "on the Edit menu.  You can also change the default " \
+                                     "paste type to something other than Restricted if " \
+                                     "you wish."));                      
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setDefaultButton(QMessageBox::Ok);
+        msgBox.exec();
         delete command;
     } else {
         CommandHistory::getInstance()->addCommand(command);
@@ -1171,9 +1181,31 @@ NewNotationView::slotEditGeneralPaste()
             (*segment, clipboard, insertionTime, type);
 
         if (!command->isPossible()) {
-            QMessageBox::warning	//detailedError
-                (this, RESTRICTED_PASTE_FAILED_DESCRIPTION, 
-                 tr("Couldn't paste at this point.") );
+            // NOTES: To get a reasonable presentation of the standard and detailed
+            // text, we have to build up our own QMessageBox
+            //
+            // The old RESTRICTED_PASTE_DESCRIPTION was removed because it was
+            // impossible to get the translation, which had to be done in the
+            // QObject::tr() context, to work in this context here.  Qt is really
+            // quirky that way.  Instead, I'm just block copying all of this now
+            // that I've reworked it.  Is this copy you're looking at the original,
+            // or the copy?  Only I know for sure, and I'll never tell!  Bwa haha!
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(tr("Rosegarden"));
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(tr("Couldn't paste at this point."));
+            msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \                    
+                                         "space (containing only rests) at the paste position " \
+                                         "to hold all of the events to be pasted.\n" \
+                                         "Not enough space was found.\n" \
+                                         "If you want to paste anyway, consider using one of " \
+                                         "the other paste types from the \"Paste...\" option " \
+                                         "on the Edit menu.  You can also change the default " \
+                                         "paste type to something other than Restricted if " \
+                                         "you wish."));                      
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            msgBox.exec();
             delete command;
         } else {
             CommandHistory::getInstance()->addCommand(command);
