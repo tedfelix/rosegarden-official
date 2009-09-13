@@ -884,7 +884,7 @@ bool NewNotationView::exportLilyPondFile(QString file, bool forPreview)
     LilyPondExporter e(this, m_doc, std::string(QFile::encodeName(file)));
 
     if (!e.write()) {
-        QMessageBox::warning(this, "", tr("Export failed.  The file could not be opened for writing."));
+        QMessageBox::warning(this, tr("Rosegarden"), tr("Export failed.  The file could not be opened for writing."));
         return false;
     }
 
@@ -937,7 +937,8 @@ NewNotationView::getLilyPondTmpFilename()
         // getLilyPondTmpFilename() in RosegardenMainWindow:: and in NewNotationView:: are nearly in sync.
         // However, the following line is NOT commented out in RosegardenMainWindow::getLilyPondTmpFilename()
         // CurrentProgressDialog::freeze();
-        QMessageBox::warning(this, "", tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+        QMessageBox::warning(this, tr("Rosegarden"),
+                                       tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
                                        arg(QDir::tempPath()));
         delete file;
@@ -987,7 +988,7 @@ NewNotationView::slotChangeFontFromAction()
         if (m_notationWidget) m_notationWidget->slotSetFontName(name);
     } else {
         QMessageBox::warning
-            (this, "", tr("Unknown font action %1").arg(name));
+            (this, tr("Rosegarden"), tr("Unknown font action %1").arg(name));
     }
 }
 
@@ -1007,7 +1008,7 @@ NewNotationView::slotChangeFontSizeFromAction()
         } 
     }
     QMessageBox::warning
-        (this, "", tr("Unknown font size action %1").arg(name));
+        (this, tr("Rosegarden"), tr("Unknown font size action %1").arg(name));
 }
 
 Segment *
@@ -1862,8 +1863,8 @@ void NewNotationView::slotInsertNoteFromAction()
 
             } catch (...) {
 
-                /* was sorry */ QMessageBox::warning
-                    (this,"",  tr("Unknown note insert action %1").arg(name));
+                QMessageBox::warning
+                    (this, tr("Rosegarden"),  tr("Unknown note insert action %1").arg(name));
                 return ;
             }
 
@@ -1914,8 +1915,6 @@ NewNotationView::slotToggleDot()
         NoteRestInserter *currentInserter = dynamic_cast<NoteRestInserter *>
             (m_notationWidget->getCurrentTool());
         if (!currentInserter) {
-            /* was sorry QMessageBox::warning(this, "", tr("No note duration selected"));
-            */
             NOTATION_DEBUG << "NewNotationView::slotToggleDot : expected "
                 << "NoteRestInserter as current tool.  Silent exit."
                 << endl;       
@@ -1932,7 +1931,7 @@ NewNotationView::slotToggleDot()
             // toggling the +. button when the shortest note was pressed.
             // RG does not render dotted versions of its shortest duration
             // and rounds it up to the next duration.
-            // Following Rg's lead on this makes the inteface feel off since
+            // Following RG's lead on this makes the inteface feel off since
             // This moves the toggle to the next longest duration without
             // switching the pallete to dots.
             // So just leave the duration alone and don't toggle the dot
@@ -2441,7 +2440,7 @@ NewNotationView::slotEditAddSustain(bool down)
         }
     }
 
-    QMessageBox::warning(this, "", tr("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
+    QMessageBox::warning(this, tr("Rosegarden"), tr("There is no sustain controller defined for this device.\nPlease ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window."));
 }
 
 void
