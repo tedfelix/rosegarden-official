@@ -577,26 +577,11 @@ NewNotationView::setupActions()
     createAction("add_breath", SLOT(slotSymbolAction()));
 
     //JAS "Move" subMenu
-    createAction("cursor_back", SLOT(slotStepBackward()));
-    createAction("cursor_forward", SLOT(slotStepForward()));
-//   Do we really need 2 submenus for cursor/pointer?
-//    createAction("cursor_back_bar", SLOT(slotJumpBackward()));
-//    createAction("cursor_forward_bar", SLOT(slotJumpForward()));
-//    createAction("cursor_start", SLOT(slotJumpToStart()));
-//    createAction("cursor_end", SLOT(slotJumpToEnd()));
-    createAction("cursor_back_bar", SIGNAL(rewindPlayback()));
-    createAction("cursor_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("cursor_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("cursor_end", SIGNAL(fastForwardPlaybackToEnd()));
-    
     createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
     createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
     createAction("preview_selection", SLOT(slotPreviewSelection()));
     createAction("clear_loop", SLOT(slotClearLoop()));
 
-// Not needed anymore, because we have only one pointer/cursor now.
-//    createAction("cursor_to_playback_pointer", SLOT(slotJumpCursorToPlayback()));
-//    createAction("playback_pointer_to_cursor", SLOT(slotJumpPlaybackToCursor()));
     createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
     createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
     createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
@@ -605,6 +590,8 @@ NewNotationView::setupActions()
     //"Transport" subMenu
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
+    createAction("cursor_back", SLOT(slotStepBackward()));
+    createAction("cursor_forward", SLOT(slotStepForward()));    
     createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
     createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
     createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));

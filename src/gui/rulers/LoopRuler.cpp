@@ -84,9 +84,7 @@ LoopRuler::LoopRuler(RosegardenDocument *doc,
     m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     m_loopGrid->setSnapTime(SnapGrid::SnapToBeat);
 
-    this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range"
-                        "for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to  "
-                        "start playback.</p></qt>"));
+    this->setToolTip(tr("<qt><p>Click and drag to move the playback pointer.</p><p>Shift-click and drag to set a range for looping or editing.</p><p>Shift-click to clear the loop or range.</p><p>Double-click to start playback.</p></qt>"));
 }
 
 LoopRuler::~LoopRuler()

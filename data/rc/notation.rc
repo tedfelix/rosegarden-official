@@ -379,48 +379,33 @@
     <Action name="text" text="&amp;Text" icon="text" checked="false" group="tools_note" shortcut="F8" />
     <Action name="guitarchord" text="&amp;Guitar Chord" checked="false" group="tools_note" icon="guitarchord" shortcut="F9" />
   <Separator/>
-    <Menu name="Move">
-      <text>Local &amp;Cursor</text>
-      <Action name="cursor_back" text="Cursor &amp;Back" shortcut="Left" />
-      <Action name="cursor_forward" text="Cursor &amp;Forward" shortcut="Right" />
-      <Action name="cursor_back_bar" text="C&amp;ursor Back Bar" shortcut="Ctrl+Left" />
-      <Action name="cursor_forward_bar" text="Cursor For&amp;ward Bar" shortcut="Ctrl+Right" />
-      <Action name="cursor_start" text="Cursor to St&amp;art" />
-      <Action name="cursor_end" text="Cursor to &amp;End" shortcut="Ctrl+E" />
+    <Menu name="Navigation">
+      <text>&amp;Navigation</text>
     <Separator/>
       <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" shortcut="Shift+Left" />
       <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" shortcut="Shift+Right" />
       <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
       <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
-	<!-- not implemented yet
-	<Separator/>
-	<Action name="move_selection_left"/>
-	<Action name="move_selection_right"/>
-	<Action name="copy_selection_left"/>
-	<Action name="copy_selection_right"/>
-	-->
     <Separator/>
-      <Action name="cursor_up_staff" text="Cursor &amp;Up Staff" shortcut="Shift+Up" />
-      <Action name="cursor_down_staff" text="Cursor &amp;Down Staff" shortcut="Shift+Down" />
-      <Action name="cursor_prior_segment" text="Cursor Pre&amp;vious Segment" shortcut="Alt+PgUp" />
-      <Action name="cursor_next_segment" text="Cursor Ne&amp;xt Segment" shortcut="Alt+PgDown" />
+      <Action name="cursor_up_staff" text="Next Staff &amp;Up" shortcut="Alt+Up" />
+      <Action name="cursor_down_staff" text="Next Staff &amp;Down" shortcut="Alt+Down" />
+      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" shortcut="Alt+PgUp" />
+      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     </Menu>
     <Menu name="Transport">
       <text>T&amp;ransport</text>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
-      <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" />
-      <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" /> 
-      <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
-      <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
-      <Action name="toggle_solo" text="S&amp;olo" icon="transport-solo" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
-      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
+      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" /> 
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" tooltip="Rewind" icon="transport-rewind" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" tooltip="Fast Forward" icon="transport-ffwd" /> 
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
+      <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" />
+      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" tooltip="Scroll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" tooltip="Panic! (Ctrl+Alt+P)" shortcut="Alt+Ctrl+P" />
     </Menu>
   <Separator/>
     <Menu noMerge="1" name="DurationTools">
@@ -631,7 +616,9 @@
   <text>Transport Toolbar</text>
   <Action name="playback_pointer_start" />
   <Action name="playback_pointer_back_bar" />
+  <Action name="cursor_back" />
   <Action name="play" />
+  <Action name="cursor_forward" />
   <Action name="playback_pointer_forward_bar" />
   <Action name="playback_pointer_end" />
   <Action name="stop" />
@@ -769,27 +756,6 @@
   <Action name="multi_page_mode" />
 <!-- the remainder filled at runtime -->
 </ToolBar>
-
-<Menu noMerge="1" name="controller_events_ruler_menu">
-  <text>Control Ruler Actions</text>
-  <Action name="insert_control_ruler_item" text="Insert Item" />
-  <Action name="erase_control_ruler_item" text="Erase Selected Items" />
-  <Action name="clear_control_ruler_item" text="Clear Ruler" />
-<Separator/>
-  <Action name="start_control_line_item" text="Insert Line of Controllers" />
-<Separator/>
-  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="]" />
-  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="[" />
-</Menu>
-
-<Menu noMerge="1" name="property_ruler_menu">
-  <text>Property Ruler Actions</text>
-  <Action name="draw_property_line" text="Draw Property Line" />
-  <Action name="select_all_properties" text="Select All Property Values" />
-<Separator/>
-  <Action name="flip_control_events_forward" text="Flip Forward" shortcut="[" />
-  <Action name="flip_control_events_back" text="Flip Backwards" shortcut="]" />
-</Menu>
 
 <State name="note_rest_tool_current">
   <enable>
