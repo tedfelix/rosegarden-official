@@ -246,12 +246,19 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     {
         // Draw the marker
         painter.drawPolygon(mapItemToWidget(*it));
-        
+
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
         str = QString::number(yToValue((*it)->y()));
-        painter.drawText(mapXToWidget((*it)->xStart())+0.4*fontOffset,
-                std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight)),str);
+        int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
+        int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
+        
+        painter.setPen(QPen(Qt::NoPen));
+        painter.setBrush(QBrush(Qt::white));
+        painter.drawRect(QRect(x,y+2,fontMetrics.width(str),-(fontMetrics.height()-2)));
+        painter.setPen(pen);
+        painter.setBrush(brush);
+        painter.drawText(x,y,str);
     }
 
     if (m_selectionRect) {
