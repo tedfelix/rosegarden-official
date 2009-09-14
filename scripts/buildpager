@@ -9,14 +9,21 @@ getinput() {
     echo -ne '\r        \r' 1>&2
     echo $c
 }
-( make "$@" 2>&1 ; echo $? > "${outcodefile}" ) | (
+if [ -z "$MAKE" ]; then
+    if gmake --version 2>/dev/null | grep GNU >/dev/null; then
+	MAKE=gmake
+    else
+	MAKE=make
+    fi
+fi
+( "$MAKE" "$@" 2>&1 ; echo $? > "${outcodefile}" ) | (
     count=0
     bad=""
     runon=""
     while IFS='' read line; do
-	if [[ "$line" =~ 'error: ' ]] || [[ "$line" =~ ': undefined ' ]]; then
+	if [[ "$line" =~ 'rror: ' ]] || [[ "$line" =~ ': undefined ' ]]; then
 	    bad=yes
-	    b=${line#*:[0-9]*:}
+	    b=${line#*[: ][0-9]*:}
 	    a=${line%${b}}
 	    line="\033[01;37;44m$a\033[00m$b"
 	fi
