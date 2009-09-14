@@ -488,7 +488,7 @@ ProjectPackager::runPack()
     QStringList::const_iterator si;
     for (si = audioFiles.constBegin(); si != audioFiles.constEnd(); ++si)
         af++;
-    int afStep = 100 / af;
+    int afStep = ((af == 0) ? 1 : (100 / af));
 
     // make the data subdir
     tmpDir.mkdir(m_packDataDirName);    
@@ -578,7 +578,7 @@ ProjectPackager::runPack()
     int ef = 0;
     for (si = extraFiles.constBegin(); si != extraFiles.constEnd(); ++si)
         ef++;
-    int efStep = 100 / af;
+    int efStep = ((ef == 0) ? 1 : (100 / ef));
 
     // copy the extra files (do not remove the originals!)
     // (iterator previously declared)
