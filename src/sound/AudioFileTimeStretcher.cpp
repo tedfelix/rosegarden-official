@@ -26,6 +26,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <alloca.h>
+
 namespace Rosegarden {
 
 

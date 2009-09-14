@@ -254,7 +254,8 @@ ChordLabel::checkMap()
 
             m_chordMap.insert
             (
-                std::pair<int, ChordData>
+//                std::pair<int, ChordData>
+		ChordMap::value_type
                 (
                     (basicChordMasks[i] << j | basicChordMasks[i] >> (12-j))
                     & ((1<<12) - 1),

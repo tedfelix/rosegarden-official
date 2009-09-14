@@ -50,7 +50,7 @@ PropertyDefn<P>::parse(std::string)
 
 template <PropertyType P>
 std::string 
-PropertyDefn<P>::unparse(PropertyDefn<P>::basic_type)
+PropertyDefn<P>::unparse(typename PropertyDefn<P>::basic_type)
 {
     throw(0);
     return "";

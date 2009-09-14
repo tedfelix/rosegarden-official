@@ -646,13 +646,16 @@ NotationConfigurationPage::slotPopulateFontCombo(bool rescan)
     }
 
     std::set<QString> fs(NoteFontFactory::getFontNames(rescan));
-    std::vector<QString> f(fs.begin(), fs.end());
+    std::vector<QString> f;
+    for (std::set<QString>::const_iterator i = fs.begin(); i != fs.end(); ++i) {
+        f.push_back(*i);
+    }
     std::sort(f.begin(), f.end());
 
     m_untranslatedFont.clear();
     m_font->clear();
 
-    for (std::vector<QString>::iterator i = f.begin(); i != f.end(); ++i) {
+    for (std::vector<QString>::const_iterator i = f.begin(); i != f.end(); ++i) {
         QString s(*i);
         m_untranslatedFont.append(s);
         m_font->addItem(s);

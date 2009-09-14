@@ -26,14 +26,10 @@
 #include <algorithm>
 #include <cmath>
 #include <typeinfo>
+#include <iterator>
 #include <limits.h>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 using std::cerr;
 using std::endl;
@@ -52,6 +48,7 @@ const std::string Composition::TempoEventType = "tempo";
 const PropertyName Composition::TempoProperty = "Tempo";
 const PropertyName Composition::TargetTempoProperty = "TargetTempo";
 const PropertyName Composition::TempoTimestampProperty = "TimestampSec";
+
 
 
 bool
@@ -751,6 +748,18 @@ Composition::getBarRange(int n) const
 
     return std::pair<timeT, timeT>(start, finish);
 }
+
+
+#ifdef _RWSTD_NO_CLASS_PARTIAL_SPEC
+  template <class itr> inline int distance(itr first, itr last)
+  {
+    int n = 0;
+    distance(first, last, n);
+    return n;
+  }
+#else
+  using std::distance;
+#endif
     
 
 int
@@ -767,7 +776,7 @@ Composition::addTimeSignature(timeT t, TimeSignature timeSig)
     updateRefreshStatuses();
     notifyTimeSignatureChanged();
 
-    return std::distance(m_timeSigSegment.begin(), i);
+    return distance(m_timeSigSegment.begin(), i);
 }
 
 TimeSignature
@@ -839,7 +848,7 @@ Composition::getTimeSignatureNumberAt(timeT t) const
 {
     ReferenceSegment::iterator i = getTimeSignatureAtAux(t);
     if (i == m_timeSigSegment.end()) return -1;
-    else return std::distance(m_timeSigSegment.begin(), i);
+    else return distance(m_timeSigSegment.begin(), i);
 }
 
 std::pair<timeT, TimeSignature>
@@ -978,7 +987,7 @@ Composition::addTempoAtTime(timeT time, tempoT tempo, tempoT targetTempo)
 #endif
     notifyTempoChanged();
 
-    return std::distance(m_tempoSegment.begin(), i);
+    return distance(m_tempoSegment.begin(), i);
 }
 
 int
@@ -992,7 +1001,7 @@ Composition::getTempoChangeNumberAt(timeT t) const
 {
     ReferenceSegment::iterator i = m_tempoSegment.findNearestTime(t);
     if (i == m_tempoSegment.end()) return -1;
-    else return std::distance(m_tempoSegment.begin(), i);
+    else return distance(m_tempoSegment.begin(), i);
 }
 
 std::pair<timeT, tempoT>
@@ -1865,13 +1874,7 @@ std::string Composition::toXmlString()
         composition << (*mIt)->toXmlString();
     }
     composition << "</markers>" << endl;
-                
-
-#if (__GNUC__ < 3)
-    composition << "</composition>" << std::ends;
-#else
     composition << "</composition>";
-#endif
 
     return composition.str();
 }
@@ -2206,7 +2209,8 @@ Composition::dump(std::ostream& out, bool) const
 {
     out << "Composition segments : " << endl;
 
-    for(iterator i = begin(); i != end(); ++i) {
+    for (const_iterator i = begin(); i != end(); ++i) {
+
         Segment* s = *i;
 
         out << "Segment start : " << s->getStartTime() << " - end : " << s->getEndMarkerTime()

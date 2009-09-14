@@ -74,7 +74,7 @@ CompositionModelImpl::CompositionModelImpl(Composition& compo,
 
     setTrackHeights();
 
-    const Composition::segmentcontainer& segments = m_composition.getSegments();
+    Composition::segmentcontainer& segments = m_composition.getSegments();
     Composition::segmentcontainer::iterator segEnd = segments.end();
 
     for (Composition::segmentcontainer::iterator i = segments.begin();
@@ -92,7 +92,7 @@ CompositionModelImpl::~CompositionModelImpl()
 
         m_composition.removeObserver(this);
 
-        const Composition::segmentcontainer& segments = m_composition.getSegments();
+        Composition::segmentcontainer& segments = m_composition.getSegments();
         Composition::segmentcontainer::iterator segEnd = segments.end();
 
         for (Composition::segmentcontainer::iterator i = segments.begin();
@@ -313,9 +313,9 @@ void CompositionModelImpl::clearPreviewCache()
     }
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    Composition::segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
             i != segEnd; ++i) {
 
         if ((*i)->getType() == Segment::Audio) {
@@ -341,8 +341,8 @@ void CompositionModelImpl::updatePreviewCacheForNotationSegment(const Segment* s
         if (instrument && instrument->isPercussion()) isPercussion = true;
     }
 
-    for (Segment::iterator i = segment->begin();
-            i != segment->end(); ++i) {
+    for (Segment::const_iterator i = segment->begin();
+         i != segment->end(); ++i) {
 
         long pitch = 0;
         if (!(*i)->isa(Note::EventType) ||
@@ -486,12 +486,12 @@ void CompositionModelImpl::slotInstrumentParametersChanged(InstrumentId id)
 {
     std::cerr << "CompositionModelImpl::slotInstrumentParametersChanged()\n";
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    Composition::segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segEnd; ++i) {
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+         i != segEnd; ++i) {
 
-        Segment* s = *i;
+        const Segment* s = *i;
         TrackId trackId = s->getTrack();
         Track *track = getComposition().getTrackById(trackId);
 
@@ -647,17 +647,17 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
     m_tmpSelectedSegments.clear();
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    Composition::segmentcontainer::const_iterator segEnd = segments.end();
 
     QRect updateRect = m_selectionRect;
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segEnd; ++i) {
-
-        Segment* s = *i;
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+         i != segEnd; ++i) {
+        
+        const Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(m_selectionRect)) {
-            m_tmpSelectedSegments.insert(s);
+            m_tmpSelectedSegments.insert(const_cast<Segment *>(s));
             updateRect |= sr;
         }
     }
@@ -680,12 +680,12 @@ void CompositionModelImpl::setSelectionRect(const QRect& r)
 void CompositionModelImpl::finalizeSelectionRect()
 {
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    Composition::segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segEnd; ++i) {
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+         i != segEnd; ++i) {
 
-        Segment* s = *i;
+        const Segment* s = *i;
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.intersects(m_selectionRect)) {
             setSelected(s);
@@ -771,15 +771,16 @@ CompositionModel::itemcontainer CompositionModelImpl::getItemsAt(const QPoint& p
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segments.end(); ++i) {
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+         i != segments.end(); ++i) {
 
-        Segment* s = *i;
+        const Segment* s = *i;
 
         CompositionRect sr = computeSegmentRect(*s);
         if (sr.contains(point)) {
             //            RG_DEBUG << "CompositionModelImpl::getItemsAt() adding " << sr << " for segment " << s << endl;
-            CompositionItem item(new CompositionItemImpl(*s, sr));
+            CompositionItem item(new CompositionItemImpl(*const_cast<Segment *>(s),
+                                                         sr));
             unsigned int z = computeZForSegment(s);
             //            RG_DEBUG << "CompositionModelImpl::getItemsAt() z = " << z << endl;
             item->setZ(z);
@@ -1154,14 +1155,14 @@ const CompositionModel::rectcontainer& CompositionModelImpl::getRectanglesIn(con
     // 	     << (dynamic_cast<SimpleRulerScale *>(m_grid.getRulerScale()))->getUnitsPerPixel() << endl;
 
     const Composition::segmentcontainer& segments = m_composition.getSegments();
-    Composition::segmentcontainer::iterator segEnd = segments.end();
+    Composition::segmentcontainer::const_iterator segEnd = segments.end();
 
-    for (Composition::segmentcontainer::iterator i = segments.begin();
-            i != segEnd; ++i) {
+    for (Composition::segmentcontainer::const_iterator i = segments.begin();
+         i != segEnd; ++i) {
 
         // 	RG_DEBUG << "CompositionModelImpl::getRectanglesIn: Composition contains segment " << *i << " (" << (*i)->getStartTime() << "->" << (*i)->getEndTime() << ")"<<  endl;
-
-        Segment* s = *i;
+        
+        const Segment* s = *i;
 
         if (isMoving(s))
             continue;

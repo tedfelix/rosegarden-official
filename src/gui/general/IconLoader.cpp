@@ -25,40 +25,6 @@
 namespace Rosegarden
 {
 
-static const char *autoInvertExceptions[] = {
-    // These are the icons that look OK in their default colours, even
-    // in a colour scheme with a black background.  (They may also be
-    // icons that would look worse if we tried to auto-invert them.)
-    // If we have icons that look bad when auto-inverted but that are
-    // not suitable for use without being inverted, we'll need to
-    // supply inverted versions -- the loader will load xx_inverse.png
-    // in preference to xx.png if a dark background is found.)
-
-/*!!!
-    "fileclose",
-    "filenew-22",
-    "filenew",
-    "fileopen-22",
-    "fileopen",
-    "fileopenaudio",
-    "fileopensession",
-    "filesave-22",
-    "filesave",
-    "filesaveas-22",
-    "filesaveas",
-    "help",
-    "editcut",
-    "editcopy",
-    "editpaste",
-    "editdelete",
-    "exit",
-    "zoom-fit",
-    "zoom-in",
-    "zoom-out",
-    "zoom"
-*/
-};
-
 QIcon
 IconLoader::load(QString name)
 {
@@ -113,13 +79,6 @@ IconLoader::loadPixmap(QString dir, QString name)
         }
     }
     if (pmap.isNull()) return pmap;
-
-    for (size_t i = 0; i < sizeof(autoInvertExceptions)/
-                           sizeof(autoInvertExceptions[0]); ++i) {
-        if (autoInvertExceptions[i] == name) {
-            return pmap;
-        }
-    }
 
     // No suitable inverted icon found for black background; try to
     // auto-invert the default one

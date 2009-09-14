@@ -47,7 +47,7 @@ public:
     virtual void handleRightButtonPress(const ControlMouseEvent *) {}
     virtual void handleMouseRelease(const ControlMouseEvent *) {}
     virtual void handleMouseDoubleClick(const ControlMouseEvent *) {}
-    virtual FollowMode handleMouseMove(const ControlMouseEvent *) {}
+    virtual FollowMode handleMouseMove(const ControlMouseEvent *) { return NoFollow; }
 
 protected:
     virtual void createMenu();

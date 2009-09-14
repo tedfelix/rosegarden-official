@@ -366,15 +366,7 @@ RIFFAudioFile::readFormatChunk()
 
     // Look for the RIFF identifier and bomb out if we don't find it
     //
-#if (__GNUC__ < 3)
-
-    if (hS.compare(AUDIO_RIFF_ID, 0, 4) != 0)
-#else
-
-    if (hS.compare(0, 4, AUDIO_RIFF_ID) != 0)
-#endif
-
-    {
+    if (hS.compare(0, 4, AUDIO_RIFF_ID) != 0) {
 #ifdef DEBUG_RIFF
         std::cerr << "RIFFAudioFile::readFormatChunk - "
         << "can't find RIFF identifier\n";
@@ -385,14 +377,7 @@ RIFFAudioFile::readFormatChunk()
 
     // Look for the WAV identifier
     //
-#if (__GNUC__ < 3)
-    if (hS.compare(AUDIO_WAVE_ID, 8, 4) != 0)
-#else
-
-    if (hS.compare(8, 4, AUDIO_WAVE_ID) != 0)
-#endif
-
-    {
+    if (hS.compare(8, 4, AUDIO_WAVE_ID) != 0) {
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find WAV identifier\n";
 #endif
@@ -405,14 +390,7 @@ RIFFAudioFile::readFormatChunk()
     // this is the only place we check for it because I'm lazy.
     //
     //
-#if (__GNUC__ < 3)
-    if (hS.compare(AUDIO_FORMAT_ID, 12, 4) != 0)
-#else
-
-    if (hS.compare(12, 4, AUDIO_FORMAT_ID) != 0)
-#endif
-
-    {
+    if (hS.compare(12, 4, AUDIO_FORMAT_ID) != 0) {
 #ifdef DEBUG_RIFF
         std::cerr << "Can't find FORMAT identifier\n";
 #endif
@@ -598,32 +576,14 @@ RIFFAudioFile::identifySubType(const std::string &filename)
 
     // Test for BWF first because it's an extension of a plain WAV
     //
-#if (__GNUC__ < 3)
-
-    if (hS.compare(AUDIO_RIFF_ID, 0, 4) == 0 &&
-            hS.compare(AUDIO_WAVE_ID, 8, 4) == 0 &&
-            hS.compare(AUDIO_BWF_ID, 12, 4) == 0)
-#else
-
     if (hS.compare(0, 4, AUDIO_RIFF_ID) == 0 &&
             hS.compare(8, 4, AUDIO_WAVE_ID) == 0 &&
-            hS.compare(12, 4, AUDIO_BWF_ID) == 0)
-#endif
-
-    {
+            hS.compare(12, 4, AUDIO_BWF_ID) == 0) {
         type = BWF;
     }
     // Now for a WAV
-#if (__GNUC__ < 3)
-    else if (hS.compare(AUDIO_RIFF_ID, 0, 4) == 0 &&
-             hS.compare(AUDIO_WAVE_ID, 8, 4) == 0)
-#else
-
     else if (hS.compare(0, 4, AUDIO_RIFF_ID) == 0 &&
-             hS.compare(8, 4, AUDIO_WAVE_ID) == 0)
-#endif
-
-    {
+             hS.compare(8, 4, AUDIO_WAVE_ID) == 0) {
         type = WAV;
     } else
         type = UNKNOWN;

@@ -172,7 +172,7 @@ void ControlRuler::addControlItem(ControlItem* item)
 {
     // Add a ControlItem to the ruler
     // ControlItem may not have an assigned event but must have x position
-    ControlItemMap::iterator it = m_controlItemMap.insert(std::pair<double,ControlItem*> (item->xStart(),item));
+    ControlItemMap::iterator it = m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item));
     addCheckVisibleLimits(it);    
     if (it->second->isSelected()) m_selectedItems.push_back(it->second);
 
@@ -282,7 +282,7 @@ void ControlRuler::moveItem(ControlItem* item)
     ControlItemMap::iterator it = findControlItem(item);
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
-    it = static_cast <ControlItemMap::iterator> (m_controlItemMap.insert(std::pair<double,ControlItem*> (item->xStart(),item)));
+    it = static_cast <ControlItemMap::iterator> (m_controlItemMap.insert(ControlItemMap::value_type(item->xStart(),item)));
     addCheckVisibleLimits(it);
 }
 

@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*- /*
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
   Rosegarden
   A sequencer and musical notation editor.
@@ -110,15 +111,7 @@ PeakFile::parseHeader()
     //
     std::string header = getBytes(128);
 
-#if (__GNUC__ < 3)
-
-    if (header.compare(AUDIO_BWF_PEAK_ID, 0, 4) != 0)
-#else
-
-    if (header.compare(0, 4, AUDIO_BWF_PEAK_ID) != 0)
-#endif
-
-    {
+    if (header.compare(0, 4, AUDIO_BWF_PEAK_ID) != 0) {
         throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't find LEVL identifier"));
     }
 

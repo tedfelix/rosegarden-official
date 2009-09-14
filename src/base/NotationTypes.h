@@ -1380,7 +1380,7 @@ public:
     static const std::string UnspecifiedType;
     static const std::string Segno;
     static const std::string Coda;
-    static const std::string Breath;;
+    static const std::string Breath;
 
     Symbol(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;

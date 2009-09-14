@@ -13,12 +13,7 @@
     COPYING included with this distribution for more information.
 */
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 #include "ControlParameter.h"
 #include "base/MidiTypes.h"
@@ -126,11 +121,7 @@ ControlParameter::toXmlString()
             << "\" colourindex=\"" << m_colourIndex
             << "\" ipbposition=\"" << m_ipbPosition;
 
-#if (__GNUC__ < 3)
-    control << "\"/>" << endl << std::ends;
-#else
     control << "\"/>" << std::endl;
-#endif
 
     return control.str();
 }

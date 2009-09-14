@@ -34,7 +34,7 @@ using std::ios;
 struct Chunk
 {
     char id[4];
-    u_int32_t size;
+    uint32_t size;
 
     Chunk(ifstream *, bool idOnly = false);
     bool isa(std::string s);
@@ -140,7 +140,7 @@ SF2PatchExtractor::read(string fileName)
             for (int i = 0; i < presets; ++i) {
 
                 char name[21];
-                u_int16_t bank, program;
+                uint16_t bank, program;
 
                 file->read((char *)name, 20);
                 name[20] = '\0';

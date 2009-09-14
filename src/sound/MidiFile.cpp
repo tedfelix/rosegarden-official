@@ -39,12 +39,7 @@
 
 //#define MIDI_DEBUG 1
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 //#include <kmainWindow.h>
 
@@ -293,15 +288,7 @@ MidiFile::skipToNextTrack(ifstream *midiFile)
     while (!midiFile->eof() && (m_decrementCount == false )) {
         buffer = getMidiBytes(midiFile, 4);
 
-#if (__GNUC__ < 3)
-
-        if (buffer.compare(MIDI_TRACK_HEADER, 0, 4) == 0)
-#else
-
-        if (buffer.compare(0, 4, MIDI_TRACK_HEADER) == 0)
-#endif
-
-        {
+        if (buffer.compare(0, 4, MIDI_TRACK_HEADER) == 0) {
             m_trackByteCount = midiBytesToLong(getMidiBytes(midiFile, 4));
             m_decrementCount = true;
         }
@@ -426,20 +413,12 @@ MidiFile::parseHeader(const string &midiHeader)
         return (false);
     }
 
-#if (__GNUC__ < 3)
-    if (midiHeader.compare(MIDI_FILE_HEADER, 0, 4) != 0)
-#else
-
-    if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0)
-#endif
-
-    {
+    if (midiHeader.compare(0, 4, MIDI_FILE_HEADER) != 0) {
 #ifdef MIDI_DEBUG
         std::cerr << "MidiFile::parseHeader()"
         << "- file header not found or malformed"
         << endl;
 #endif
-
         return (false);
     }
 

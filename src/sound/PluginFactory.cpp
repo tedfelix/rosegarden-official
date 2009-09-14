@@ -21,6 +21,7 @@
 #include "DSSIPluginFactory.h"
 
 #include <iostream>
+#include <locale.h>
 
 namespace Rosegarden
 {

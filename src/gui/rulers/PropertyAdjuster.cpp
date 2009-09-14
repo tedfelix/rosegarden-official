@@ -95,6 +95,8 @@ PropertyAdjuster::handleMouseMove(const ControlMouseEvent *e)
             (*it)->setValue((*it)->y()+delta);
         }
     }
+
+    return NoFollow;
 }
 
 void

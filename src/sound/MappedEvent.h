@@ -191,8 +191,8 @@ public:
         // A necessary ALSA call has returned an error code
         FailureALSACallFailed    = 10,
         // Using a timer that has too low a resolution, but RTC might work
-        WarningImpreciseTimerTryRTC = 11,
-    } FailureCode;      
+        WarningImpreciseTimerTryRTC = 11
+    } FailureCode;
 
     MappedEvent(): m_trackId((int)NO_TRACK),
                    m_instrument(0),

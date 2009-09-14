@@ -33,6 +33,9 @@
 #include <QString>
 #include <QThread>
 
+#include <unistd.h>
+
+
 
 namespace Rosegarden
 {

@@ -28,8 +28,10 @@
 #include "base/NotationQuantizer.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
+
 #include <QString>
 
+#include <vector>
 
 namespace Rosegarden
 {
@@ -181,7 +183,7 @@ SegmentSplitByPitchCommand::unexecute()
 
 int
 SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
-        int lastSplitPitch)
+                                            int lastSplitPitch)
 {
     typedef std::set<int>::iterator PitchItr;
     std::set<int> pitches;
@@ -198,7 +200,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
 
     Chord c0(*m_segment, i, quantizer);
     std::vector<int> c0p(c0.getPitches());
-    pitches.insert<std::vector<int>::iterator>(c0p.begin(), c0p.end());
+    pitches.insert(c0p.begin(), c0p.end());
 
     myLowest = c0p[0];
     myHighest = c0p[c0p.size() - 1];
@@ -210,7 +212,7 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i,
 
         Chord c1(*m_segment, j, quantizer);
         std::vector<int> c1p(c1.getPitches());
-        pitches.insert<std::vector<int>::iterator>(c1p.begin(), c1p.end());
+        pitches.insert(c1p.begin(), c1p.end());
 
         prevLowest = c1p[0];
         prevHighest = c1p[c1p.size() - 1];

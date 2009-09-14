@@ -698,7 +698,10 @@ NewNotationView::setupActions()
     createAction(QString("insert_rest"),SLOT(slotInsertRestFromAction()));
 
     std::set<QString> fs(NoteFontFactory::getFontNames());
-    std::vector<QString> f(fs.begin(), fs.end());
+    std::vector<QString> f;
+    for (std::set<QString>::const_iterator i = fs.begin(); i != fs.end(); ++i) {
+        f.push_back(*i);
+    }
     std::sort(f.begin(), f.end());
 
     // Custom Note Font Menu creator
@@ -1105,7 +1108,7 @@ NewNotationView::slotEditPaste()
         msgBox.setWindowTitle(tr("Rosegarden"));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Couldn't paste at this point."));
-        msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \                    
+        msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \
                                      "space (containing only rests) at the paste position " \
                                      "to hold all of the events to be pasted.\n" \
                                      "Not enough space was found.\n" \
@@ -1182,7 +1185,7 @@ NewNotationView::slotEditGeneralPaste()
             msgBox.setWindowTitle(tr("Rosegarden"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Couldn't paste at this point."));
-            msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \                    
+            msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \
                                          "space (containing only rests) at the paste position " \
                                          "to hold all of the events to be pasted.\n" \
                                          "Not enough space was found.\n" \

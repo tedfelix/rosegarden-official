@@ -831,7 +831,7 @@ LilyPondExporter::write()
 
         for (int i = 0; i < tempoCount; ++i) {
 
-            std::pair<timeT, long> tempoChange =
+            std::pair<timeT, tempoT> tempoChange =
                 m_composition->getTempoChange(i);
 
             timeT tempoChangeTime = tempoChange.first;

@@ -48,7 +48,7 @@ namespace Rosegarden
 typedef enum
 {
     RECORD_OFF,
-    RECORD_ON,
+    RECORD_ON
 } RecordStatus;
 
 

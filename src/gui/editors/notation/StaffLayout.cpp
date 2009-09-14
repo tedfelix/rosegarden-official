@@ -405,7 +405,7 @@ StaffLayout::getBarExtents(double x, int y) const
 {
     int row = getRowForSceneCoords(x, y);
 
-    for (BarLineList::iterator i = m_barLines.begin();
+    for (BarLineList::const_iterator i = m_barLines.begin();
          i != m_barLines.end(); ++i) {
 
         BarLineItem *line = *i;
@@ -418,7 +418,7 @@ StaffLayout::getBarExtents(double x, int y) const
         if (line->x() <= x) continue;
         if (i == m_barLines.begin()) continue;
 
-        BarLineList::iterator j = i;
+        BarLineList::const_iterator j = i;
         --j;
         BarLineItem *prevline = *j;
 

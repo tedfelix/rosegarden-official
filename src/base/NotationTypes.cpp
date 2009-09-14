@@ -473,18 +473,10 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
         }
     }
 
-#if (__GNUC__ < 3)
-    std::ostrstream os;
-#else
     std::ostringstream os;
-#endif
 
     os << "No " << (isMinor ? "minor" : "major") << " key with "
        << accidentalCount << (isSharp ? " sharp(s)" : " flat(s)");
-
-#if (__GNUC__ < 3)
-    os << std::ends;
-#endif
 
     throw BadKeySpec(os.str());
 }
@@ -506,18 +498,10 @@ Key::Key(int tonicPitch, bool isMinor) :
         }
     }
 
-#if (__GNUC__ < 3)
-    std::ostrstream os;
-#else
     std::ostringstream os;
-#endif
 
     os << "No " << (isMinor ? "minor" : "major") << " key with tonic pitch "
        << tonicPitch;
-
-#if (__GNUC__ < 3)
-    os << std::ends;
-#endif
 
     throw BadKeySpec(os.str());
 }
@@ -558,7 +542,7 @@ Key::KeyList Key::getKeys(bool minor)
     return result;
 }
 
-Key::Key Key::transpose(int pitchDelta, int heightDelta)
+Key Key::transpose(int pitchDelta, int heightDelta)
 {
     Pitch tonic(getTonicPitch());
     Pitch newTonic = tonic.transpose(*this, pitchDelta, heightDelta);

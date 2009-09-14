@@ -86,8 +86,7 @@ public:
 
 private:
     class iterator_base : public
-
-#if defined(_STL_1997_) || (__GNUC__ > 2)
+#if defined(_STL_1997_) || (__GNUC__ > 2) || (__SUNPRO_CC)
     std::iterator<std::random_access_iterator_tag, T, difference_type>
 #else
 #if defined(__STL_USE_NAMESPACES)
@@ -129,17 +128,17 @@ private:
             return (m_v != i.m_v || m_i != i.m_i);
         }
 
-        iterator_base &operator+=(FastVector<T>::difference_type i) {
+        iterator_base &operator+=(typename FastVector<T>::difference_type i) {
             m_i += i; return *this;
         }
-        iterator_base &operator-=(FastVector<T>::difference_type i) {
+        iterator_base &operator-=(typename FastVector<T>::difference_type i) {
             m_i -= i; return *this;
         }
 
-        iterator_base operator+(FastVector<T>::difference_type i) const {
+        iterator_base operator+(typename FastVector<T>::difference_type i) const {
             iterator_base n(*this); n += i; return n;
         }
-        iterator_base operator-(FastVector<T>::difference_type i) const {
+        iterator_base operator-(typename FastVector<T>::difference_type i) const {
             iterator_base n(*this); n -= i; return n;
         }
 
@@ -533,7 +532,7 @@ void FastVector<T>::insert(size_type index, const T&t)
 template <class T>
 template <class InputIterator>
 typename FastVector<T>::iterator FastVector<T>::insert
-(const FastVector<T>::iterator &p, InputIterator &i, InputIterator &j)
+(const typename FastVector<T>::iterator &p, InputIterator &i, InputIterator &j)
 {
     size_type n = p.m_i;
     while (i != j) {
@@ -545,7 +544,7 @@ typename FastVector<T>::iterator FastVector<T>::insert
 
 template <class T>
 typename FastVector<T>::iterator FastVector<T>::erase
-(const FastVector<T>::iterator &i, const FastVector<T>::iterator &j)
+(const typename FastVector<T>::iterator &i, const typename FastVector<T>::iterator &j)
 {
     assert(i.m_v == this && j.m_v == this && j.m_i >= i.m_i);
     for (size_type k = i.m_i; k < j.m_i; ++k) remove(i.m_i);

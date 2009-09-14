@@ -23,6 +23,7 @@
 #include <QColor>
 
 #include <map>
+#include <string>
 
 
 namespace Rosegarden
@@ -179,7 +180,7 @@ protected:
     static GUIPalette* getInstance();
     static GUIPalette* m_instance;
 
-    typedef std::map<const char* const, QColor> colourmap;
+    typedef std::map<std::string, QColor> colourmap;
 
     colourmap m_defaultsMap;
 };

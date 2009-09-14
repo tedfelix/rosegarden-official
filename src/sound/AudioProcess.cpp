@@ -31,6 +31,8 @@
 
 #include <cmath>
 
+#include <alloca.h>
+
 //#define DEBUG_THREAD_CREATE_DESTROY 1
 //#define DEBUG_BUSS_MIXER 1
 //#define DEBUG_MIXER 1

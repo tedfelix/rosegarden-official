@@ -33,6 +33,10 @@
 static int __extant_ringbuffers = 0;
 #endif
 
+#ifdef sun
+#define MLOCK_TAKES_CHAR_PTR 1
+#endif
+
 namespace Rosegarden {
 
 /**
@@ -207,7 +211,11 @@ RingBuffer<T, N>::~RingBuffer()
 #endif
 
     if (m_mlocked) {
+#ifdef MLOCK_TAKES_CHAR_PTR
+        ::munlock((char *)m_buffer, m_size * sizeof(T));
+#else
         ::munlock((void *)m_buffer, m_size * sizeof(T));
+#endif
     }
     delete[] m_buffer;
 
@@ -236,7 +244,11 @@ RingBuffer<T, N>::resize(size_t newSize)
     m_scavenger.scavenge();
 
     if (m_mlocked) {
+#ifdef MLOCK_TAKES_CHAR_PTR
+        ::munlock((char *)m_buffer, m_size * sizeof(T));
+#else
         ::munlock((void *)m_buffer, m_size * sizeof(T));
+#endif
     }
 
     m_scavenger.claim(new ScavengerArrayWrapper<T>(m_buffer));
@@ -246,7 +258,11 @@ RingBuffer<T, N>::resize(size_t newSize)
     m_size = newSize + 1;
 
     if (m_mlocked) {
+#ifdef MLOCK_TAKES_CHAR_PTR
+        if (::mlock((char *)m_buffer, m_size * sizeof(T))) {
+#else
         if (::mlock((void *)m_buffer, m_size * sizeof(T))) {
+#endif
             m_mlocked = false;
         }
     }
@@ -256,7 +272,11 @@ template <typename T, int N>
 bool
 RingBuffer<T, N>::mlock()
 {
+#ifdef MLOCK_TAKES_CHAR_PTR
+    if (::mlock((char *)m_buffer, m_size * sizeof(T))) return false;
+#else
     if (::mlock((void *)m_buffer, m_size * sizeof(T))) return false;
+#endif
     m_mlocked = true;
     return true;
 }
@@ -265,7 +285,11 @@ template <typename T, int N>
 bool
 RingBuffer<T, N>::munlock()
 {
+#ifdef MLOCK_TAKES_CHAR_PTR
+    if (::munlock((char *)m_buffer, m_size * sizeof(T))) return false;
+#else
     if (::munlock((void *)m_buffer, m_size * sizeof(T))) return false;
+#endif
     m_mlocked = false;
     return true;
 }

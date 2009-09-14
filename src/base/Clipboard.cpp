@@ -343,7 +343,7 @@ Clipboard::getBaseTime() const
 
     timeT t = 0;
 
-    for (iterator i = begin(); i != end(); ++i) {
+    for (const_iterator i = begin(); i != end(); ++i) {
 	if (i == begin() || (*i)->getStartTime() < t) {
 	    t = (*i)->getStartTime();
 	}

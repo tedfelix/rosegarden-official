@@ -17,6 +17,7 @@
 #define ROSEDEBUG_H
 
 #include <QDebug>
+#include <QTextStream>
 #include <string>
 
 namespace Rosegarden {
@@ -54,6 +55,8 @@ public:
 
     template <typename T>
     inline RGNoDebug &operator<<(const T &) { return *this; }
+
+    inline RGNoDebug &operator<<(QTextStreamFunction) { return *this; }
 };
 
 #define RG_DEBUG        RGNoDebug()
