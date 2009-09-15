@@ -386,6 +386,14 @@ int main(int argc, char *argv[])
 #endif
 
     RosegardenApplication theApp(argc, argv);
+    
+    // enable to load resources from rcc file (if not compiled in)
+#ifdef RESOURCE_FILE_NOT_COMPILED_IN
+    std::cerr << "Loading resource file ./data/data.rcc..." << std::endl;
+    if (!QResource::registerResource("./data/data.rcc")) {
+        std::cerr << "Failed to register resource file!" << std::endl;
+    }
+#endif
 
     std::cerr << "System Locale: " << QLocale::system().name() << std::endl;
     std::cerr << "Qt translations path: " << QLibraryInfo::location(QLibraryInfo::TranslationsPath) << std::endl;
