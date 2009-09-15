@@ -1,4 +1,4 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
@@ -19,12 +19,7 @@
 #include <string>
 #include <iostream>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 // A staggeringly simple-minded audit trail implementation.
 
@@ -36,9 +31,6 @@ public:
     Audit() { }
 
     virtual ~Audit() {
-#if (__GNUC__ < 3)
-        *this << std::ends;
-#endif
         std::cerr << str();
         m_audit += str();
     }

@@ -21,12 +21,7 @@
 #include <cstdlib>
 
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 
 namespace Rosegarden
@@ -172,11 +167,7 @@ SoftSynthDevice::toXmlString()
     }
 
     ssiDevice << "    </device>"
-#if (__GNUC__ < 3)
-                << std::endl << std::ends;
-#else
                 << std::endl;
-#endif
 
     return ssiDevice.str();
 }

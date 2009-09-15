@@ -17,12 +17,7 @@
 #include "Marker.h"
 #include "misc/Debug.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 namespace Rosegarden
 {
@@ -38,9 +33,6 @@ Marker::toXmlString()
            << "\" name=\"" << encode(m_name)
            << "\" description=\"" << encode(m_description)
            << "\"/>" << std::endl;
-#if (__GNUC__ < 3)
-    marker << std::ends;
-#endif
 
     return marker.str();
 }

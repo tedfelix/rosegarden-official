@@ -275,7 +275,7 @@ void RosegardenMainViewWidget::print(Composition* p, bool previewOnly)
 #endif
 }
 
-void RosegardenMainViewWidget::selectTool(const QString toolName)
+void RosegardenMainViewWidget::selectTool(QString toolName)
 {
     m_trackEditor->getCompositionView()->slotSetTool(toolName);
 }

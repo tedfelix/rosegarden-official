@@ -1,4 +1,5 @@
-// -*- c-indentation-style:"stroustrup" c-basic-offset: 4 -*-
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -28,14 +29,11 @@ SoundDriverFactory::createDriver(MappedStudio *studio)
 {
     SoundDriver *driver = 0;
     bool initialised = false;
-#ifdef NO_SOUND
 
-    driver = new DummyDriver(studio);
-#else
 #ifdef HAVE_ALSA
-
     driver = new AlsaDriver(studio);
-#endif
+#else
+    driver = new DummyDriver(studio);
 #endif
 
     initialised = driver->initialise();

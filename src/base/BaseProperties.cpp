@@ -14,12 +14,7 @@
 #include "base/BaseProperties.h"
 #include <vector>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 namespace Rosegarden
 {
@@ -66,11 +61,7 @@ PropertyName getMarkPropertyName(int markNo)
 
     std::stringstream markPropertyName;
 
-#if (__GNUC__ < 3)
-    markPropertyName << "mark" << (markNo + 1) << std::ends;
-#else
     markPropertyName << "mark" << (markNo + 1);
-#endif
 
     return markPropertyName.str();
 }

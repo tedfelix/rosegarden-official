@@ -284,9 +284,11 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     setObjectName("App");
     m_myself = this;
     
-    
     // enable to load resources from rcc file (if not compiled in)
-    //QResource::registerResource("./data/data.rcc");
+#ifdef RESOURCE_FILE_NOT_COMPILED_IN
+    std::cerr << "Loading resource file ./data/data.rcc..." << std::endl;
+    QResource::registerResource("./data/data.rcc");
+#endif
     
     if (startupStatusMessageReceiver) {
         QObject::connect(this, SIGNAL(startupStatusMessage(QString)),

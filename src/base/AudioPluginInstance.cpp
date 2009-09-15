@@ -18,12 +18,7 @@
 #include <iostream>
 #include <cstring>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 namespace Rosegarden
 {
@@ -75,9 +70,6 @@ AudioPluginInstance::toXmlString()
 
     if (m_assigned == false)
     {
-#if (__GNUC__ < 3)
-        plugin << std::ends;
-#endif
         return plugin.str();
     }
     
@@ -128,11 +120,7 @@ AudioPluginInstance::toXmlString()
 	plugin << "            </plugin>";
     }
 
-#if (__GNUC__ < 3)
-    plugin << std::endl << std::ends;
-#else
     plugin << std::endl;
-#endif
 
     return plugin.str();
 }

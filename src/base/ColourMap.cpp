@@ -19,12 +19,7 @@
 
 #include <string>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 #include "ColourMap.h"
 #include "XmlExportable.h"
@@ -51,7 +46,7 @@ ColourMap::~ColourMap()
 }
 
 bool
-ColourMap::deleteItemByIndex(const unsigned int item_num)
+ColourMap::deleteItemByIndex(unsigned int item_num)
 {
     // We explicitly refuse to delete the default colour
     if (item_num == 0) 
@@ -68,7 +63,7 @@ ColourMap::deleteItemByIndex(const unsigned int item_num)
 }
 
 Colour
-ColourMap::getColourByIndex(const unsigned int item_num) const
+ColourMap::getColourByIndex(unsigned int item_num) const
 {
     // Iterate over the m_map and if we find a match, return the
     // Colour.  If we don't match, return the default colour.  m_map
@@ -85,7 +80,7 @@ ColourMap::getColourByIndex(const unsigned int item_num) const
 }
 
 std::string
-ColourMap::getNameByIndex(const unsigned int item_num) const
+ColourMap::getNameByIndex(unsigned int item_num) const
 {
     // Iterate over the m_map and if we find a match, return the name.
     // If we don't match, return the default colour's name.  m_map was
@@ -102,7 +97,7 @@ ColourMap::getNameByIndex(const unsigned int item_num) const
 }
 
 bool
-ColourMap::addItem(const Colour colour, const std::string name)
+ColourMap::addItem(Colour colour, std::string name)
 {
     // If we want to limit the number of colours, here's the place to do it
     unsigned int highest=0;
@@ -122,7 +117,7 @@ ColourMap::addItem(const Colour colour, const std::string name)
 
 // WARNING: This version of addItem is only for use by rosexmlhandler.cpp
 bool
-ColourMap::addItem(const Colour colour, const std::string name, const unsigned int id)
+ColourMap::addItem(Colour colour, std::string name, unsigned int id)
 {
     m_map[id] = make_pair(colour, name);
 
@@ -130,7 +125,7 @@ ColourMap::addItem(const Colour colour, const std::string name, const unsigned i
 }
 
 bool
-ColourMap::modifyNameByIndex(const unsigned int item_num, const std::string name)
+ColourMap::modifyNameByIndex(unsigned int item_num, std::string name)
 {
     // We don't allow a name to be given to the default colour
     if (item_num == 0)
@@ -148,7 +143,7 @@ ColourMap::modifyNameByIndex(const unsigned int item_num, const std::string name
 }
 
 bool
-ColourMap::modifyColourByIndex(const unsigned int item_num, const Colour colour)
+ColourMap::modifyColourByIndex(unsigned int item_num, Colour colour)
 {
     for (RCMap::iterator position = m_map.begin(); position != m_map.end(); ++position)
         if (position->first == item_num)
@@ -162,7 +157,7 @@ ColourMap::modifyColourByIndex(const unsigned int item_num, const Colour colour)
 }
 
 bool
-ColourMap::swapItems(const unsigned int item_1, const unsigned int item_2)
+ColourMap::swapItems(unsigned int item_1, unsigned int item_2)
 {
     // It would make no difference but we return false because 
     //  we haven't altered the iterator (see docs in ColourMap.h)
@@ -246,11 +241,7 @@ ColourMap::toXmlString(std::string name) const
                << "\" " << pos->second.first.dataToXmlString() << "/>" << std::endl;
     }
 
-#if (__GNUC__ < 3)
-    output << "        </colourmap>" << std::endl << std::ends;
-#else
     output << "        </colourmap>" << std::endl;
-#endif
 
 
     return output.str();

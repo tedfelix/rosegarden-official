@@ -19,12 +19,7 @@
 #include "Event.h"
 #include "XmlExportable.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 namespace Rosegarden 
 {
@@ -280,10 +275,6 @@ Event::toXmlString(timeT expectedTime)
     }
   
     out << "</event>";
-
-#if (__GNUC__ < 3)
-    out << std::ends;
-#endif
 
     return out.str();
 }

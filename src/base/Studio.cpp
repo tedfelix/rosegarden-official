@@ -26,12 +26,7 @@
 #include "Track.h"
 #include "Composition.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 using std::cerr;
 using std::endl;
@@ -409,11 +404,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices)
 
     studio << endl << endl;
 
-#if (__GNUC__ < 3)
-    studio << "</studio>" << endl << std::ends;
-#else
     studio << "</studio>" << endl;
-#endif
 
     return studio.str();
 }

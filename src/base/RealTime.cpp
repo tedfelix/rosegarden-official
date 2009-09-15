@@ -15,12 +15,7 @@
 
 #include <iostream>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 #include "RealTime.h"
 #include "sys/time.h"
@@ -101,10 +96,6 @@ RealTime::toString(bool align) const
     std::stringstream out;
     out << *this;
     
-#if (__GNUC__ < 3)
-    out << std::ends;
-#endif
-
     std::string s = out.str();
 
     if (!align && *this >= RealTime::zeroTime) {
@@ -158,10 +149,6 @@ RealTime::toText(bool fixedDp) const
 	out << ".000";
     }
 	
-#if (__GNUC__ < 3)
-    out << std::ends;
-#endif
-
     std::string s = out.str();
 
     return s;

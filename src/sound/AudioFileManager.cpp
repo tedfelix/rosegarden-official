@@ -26,12 +26,7 @@
 #include <pthread.h>
 #include <signal.h>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 #include <QApplication>
 #include <QMessageBox>
@@ -910,13 +905,7 @@ AudioFileManager::toXmlString()
 
     audioFiles << "</audiofiles>" << std::endl;
 
-#if (__GNUC__ < 3)
-
-    audioFiles << std::ends;
-#else
-
     audioFiles << std::endl;
-#endif
 
     return audioFiles.str();
 }

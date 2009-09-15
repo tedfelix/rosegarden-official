@@ -19,12 +19,7 @@
 
 #include "Colour.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 namespace Rosegarden 
 {
@@ -38,7 +33,7 @@ Colour::Colour()
     m_b = 0;
 }
 
-Colour::Colour(const unsigned int red, const unsigned int green, const unsigned int blue)
+Colour::Colour(unsigned int red, unsigned int green, unsigned int blue)
 {
     this->setColour(red, green, blue);
 }
@@ -63,7 +58,7 @@ Colour::operator= (const Colour& input)
 }
 
 void
-Colour::setColour(const unsigned int red, const unsigned int green, const unsigned int blue)
+Colour::setColour(unsigned int red, unsigned int green, unsigned int blue)
 {
     (red<=255)   ? m_r=red   : m_r=0;
     (green<=255) ? m_g=green : m_g=0;
@@ -97,19 +92,19 @@ Colour::getGreen() const
 }
 
 void
-Colour::setRed(const unsigned int red)
+Colour::setRed(unsigned int red)
 {
     (red<=255) ? m_r=red : m_r=0;
 }
 
 void
-Colour::setBlue(const unsigned int blue)
+Colour::setBlue(unsigned int blue)
 {
     (blue<=255) ? m_b=blue: m_b=0;
 }
 
 void
-Colour::setGreen(const unsigned int green)
+Colour::setGreen(unsigned int green)
 {
     (green<=255) ? m_g=green : m_g=0;
 }
@@ -129,11 +124,7 @@ Colour::toXmlString() const
     output << "<colour red=\"" << m_r
            << "\" green=\"" << m_g
            << "\" blue=\"" << m_b
-#if (__GNUC__ < 3)
-           << "\"/>" << std::endl << std::ends;
-#else
            << "\"/>" << std::endl;
-#endif
 
     return output.str();
 }
@@ -145,11 +136,7 @@ Colour::dataToXmlString() const
     output << "red=\"" << m_r
            << "\" green=\"" << m_g
            << "\" blue=\"" << m_b
-#if (__GNUC__ < 3)
-           << "\"" << std::ends;
-#else
            << "\"";
-#endif
 
     return output.str();
 }

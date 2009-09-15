@@ -20,13 +20,8 @@
 
 #include <cassert>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
 #include <cstdio>
-#endif
 
 
 namespace Rosegarden
@@ -411,9 +406,6 @@ Instrument::toXmlString()
     //
     if (m_id < AudioInstrumentBase)
     {
-#if (__GNUC__ < 3)
-        instrument << std::ends;
-#endif
         return instrument.str();
     } 
 
@@ -493,11 +485,7 @@ Instrument::toXmlString()
     }
         
     instrument << "        </instrument>" << std::endl
-#if (__GNUC__ < 3)
-               << std::endl << std::ends;
-#else
                << std::endl;
-#endif
 
     return instrument.str();
 
@@ -600,10 +588,6 @@ Buss::toXmlString()
     }
 
     buss << "    </buss>" << std::endl;
-
-#if (__GNUC__ < 3)
-    buss << std::ends;
-#endif
 
     return buss.str();
 }

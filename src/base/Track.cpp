@@ -17,12 +17,7 @@
 #include <iostream>
 #include <cstdio>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 #include "Composition.h"
 #include "StaffExportTypes.h"
@@ -179,12 +174,7 @@ std::string Track::toXmlString()
 
     track << " staffSize=\"" << m_staffSize << "\"";
     track << " staffBracket=\"" << m_staffBracket << "\"";
-
-#if (__GNUC__ < 3)
-    track << "/>"<< std::ends;
-#else
     track << "/>";
-#endif
 
     return track.str();
 

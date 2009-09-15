@@ -23,12 +23,7 @@
 #include <iostream>
 #include <set>
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 
 namespace Rosegarden
@@ -519,11 +514,7 @@ MidiDevice::toXmlString()
 	midiDevice << "        </keymapping>\n";
     }
 
-#if (__GNUC__ < 3)
-    midiDevice << "    </device>" << std::endl << std::ends;
-#else
     midiDevice << "    </device>" << std::endl;
-#endif
 
     return midiDevice.str();
 }

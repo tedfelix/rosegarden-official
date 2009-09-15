@@ -25,12 +25,7 @@
 
 #include "Configuration.h"
 
-#if (__GNUC__ < 3)
-#include <strstream>
-#define stringstream strstream
-#else
 #include <sstream>
-#endif
 
 
 namespace Rosegarden
@@ -91,11 +86,7 @@ Configuration::toXmlString()
 	       << encode(get<String>(i->first)) << "\"/>" << endl;
     }
 
-#if (__GNUC__ < 3)
-    config << endl << std::ends;
-#else
     config << endl;
-#endif
 
     return config.str();
 }
@@ -212,11 +203,7 @@ DocumentConfiguration::toXmlString()
 
     config << "</configuration>" << endl;
 
-#if (__GNUC__ < 3)
-    config << endl << std::ends;
-#else
     config << endl;
-#endif
 
     return config.str();
 }

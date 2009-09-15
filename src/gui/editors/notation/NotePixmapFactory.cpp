@@ -1893,7 +1893,7 @@ QGraphicsPixmapItem *
 NotePixmapFactory::makeKey(const Key &key,
                            const Clef &clef,
                            Key previousKey,
-                           ColourType colourType)
+                           const ColourType colourType)
 {
     Profiler profiler("NotePixmapFactory::makeKeyPixmap");
 
@@ -1987,7 +1987,8 @@ NotePixmapFactory::makeKey(const Key &key,
 }
 
 QPixmap
-NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef, ColourType colourType)
+NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef,
+                                         const ColourType colourType)
 {
     QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
@@ -2029,7 +2030,8 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef, ColourType colourType
 }
 
 QPixmap
-NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef, ColourType colourType)
+NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef,
+                                        const ColourType colourType)
 {
     std::vector<int> ah = key.getAccidentalHeights(clef);
 
@@ -2165,7 +2167,7 @@ NotePixmapFactory::getOneLine(QString &text, int width)
 QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
                                           bool useSharps,
-                                          ColourType colourType)
+                                          const ColourType colourType)
 {
     NotationRules rules;
 
@@ -2260,7 +2262,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 QPixmap
 NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
                                           int octave, int step,
-                                          ColourType colourType)
+                                          const ColourType colourType)
 {
     NotationRules rules;
 
