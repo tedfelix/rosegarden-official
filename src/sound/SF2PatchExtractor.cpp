@@ -19,6 +19,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <stdint.h>
 #include <sys/types.h>
 
 namespace Rosegarden
