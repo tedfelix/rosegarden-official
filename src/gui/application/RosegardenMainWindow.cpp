@@ -489,9 +489,10 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
         m_tranzport = 0;        
         RG_DEBUG << e.getMessage().c_str() <<endl;        
     }
-    
-    leaveActionState("have_project_packager"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    leaveActionState("have_lilypondview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+
+    enterActionState("have_project_packager");
+    enterActionState("have_lilypondview");
+
     QTimer::singleShot(1000, this, SLOT(slotTestStartupTester()));
 
     settings.endGroup();
@@ -4351,8 +4352,6 @@ RosegardenMainWindow::slotToggleTracking()
 void
 RosegardenMainWindow::slotTestStartupTester()
 {   
-    return;
-
     RG_DEBUG << "RosegardenMainWindow::slotTestStartupTester" << endl;
 
     if (!m_startupTester) {
@@ -4373,47 +4372,6 @@ RosegardenMainWindow::slotTestStartupTester()
     QStringList allMissing;
 
     QStringList missing;
-    bool have = m_startupTester->haveProjectPackager(&missing);
-
-    if (have) { //@@@ JAS orig ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse
-        enterActionState("have_project_packager");
-    } else {
-        leaveActionState("have_project_packager");
-
-        missingFeatures.push_back(tr("Export and import of Rosegarden Project files"));
-        if (missing.count() == 0) {
-            allMissing.push_back(tr("The Rosegarden Project Packager helper script"));
-        } else {
-            for (int i = 0; i < missing.count(); ++i) {
-//                if (missingFeatures.count() > 1) {
-                    allMissing.push_back(tr("%1 - for project file support").arg(missing[i]));
-//                } else {
-//                    allMissing.push_back(missing[i]);
-//                }
-            }
-        }
-    }
-
-    have = m_startupTester->haveLilyPondView(&missing);
-
-    if (have) { //@@@ JAS orig ? KXMLGUIClient::StateNoReverse : KXMLGUIClient::StateReverse
-        enterActionState("have_lilypondview");
-    } else {
-        leaveActionState("have_lilypondview");
-
-        missingFeatures.push_back(tr("Notation previews through LilyPond"));
-        if (missing.count() == 0) {
-            allMissing.push_back(tr("The Rosegarden LilyPondView helper script"));
-        } else {
-            for (int i = 0; i < missing.count(); ++i) {
-                if (missingFeatures.count() > 1) {
-                    allMissing.push_back(tr("%1 - for LilyPond preview support").arg(missing[i]));
-                } else {
-                    allMissing.push_back(missing[i]);
-                }
-            }
-        }
-    }
 
 #ifdef HAVE_LIBJACK
     if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {

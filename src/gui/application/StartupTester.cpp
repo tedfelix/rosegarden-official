@@ -34,8 +34,6 @@ namespace Rosegarden
 
 StartupTester::StartupTester() :
     m_ready(false),
-    m_haveProjectPackager(false),
-    m_haveLilyPondView(false),
     m_haveAudioFileImporter(false)
 {
     QHttp *http = new QHttp();
@@ -55,10 +53,7 @@ StartupTester::~StartupTester()
 void
 StartupTester::run()
 {
-///CJ - Can't see the need for Mutex here
-///CJ - Appears to be used as a completed flag in isReady()
-    m_projectPackagerMutex.lock();
-    m_lilyPondViewMutex.lock();
+    m_runningMutex.lock();
     m_audioFileImporterMutex.lock();
     m_ready = true;
 
@@ -96,81 +91,19 @@ StartupTester::run()
     procArgs = QStringList();
     m_audioFileImporterMutex.unlock();
 
-    //setup "rosegarden-project-package" process
-    m_proc = new QProcess;
-    m_stdoutBuffer = "";
-//    QObject::connect(proc, SIGNAL(receivedStdout(QProcess *, char *, int)),
-    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
-                     this, SLOT(stdoutReceived()));
-    procArgs << "--conftest";
-//    m_proc->execute("rosegarden-project-package", procArgs);
-    m_proc->start("rosegarden-project-package", procArgs);
-    m_proc->waitForFinished();
-
-    // Wait for stdout to be processed by stdoutReceived
-    while(m_proc->bytesAvailable() > 0)
-        usleep(10000);
-
-    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
-        m_haveProjectPackager = false;
-        // rosegarden-project-package ran but exited with an error code
-        RG_DEBUG << "StartupTester - No project packager available" << endl;
-        m_haveProjectPackager = false;
-        parseStdoutBuffer(m_projectPackagerMissing);
-    } else {
-        RG_DEBUG << "StartupTester - Project packager OK" << endl;
-        m_haveProjectPackager = true;
-    }
-    delete m_proc;
-    procArgs = QStringList();
-    m_projectPackagerMutex.unlock();
-
-    //setup "rosegarden-lilypondview" process
-    m_proc = new QProcess();
-    m_stdoutBuffer = "";
-    QObject::connect(m_proc, SIGNAL(readyReadStandardOutput()),
-                     this, SLOT(stdoutReceived()));
-    procArgs << "--version";
-    m_proc->start("lilypond", procArgs);
-    m_proc->waitForFinished();
-
-    // Wait for stdout to be processed by stdoutReceived
-    while(m_proc->bytesAvailable() > 0)
-        usleep(10000);
-
-    if ((m_proc->exitStatus() != QProcess::NormalExit) || m_proc->exitCode()) {
-        RG_DEBUG << "StartupTester - No lilypond available" << endl;
-        m_haveLilyPondView = false;
-        parseStdoutBuffer(m_lilyPondViewMissing);
-    } else {
-        RG_DEBUG << "StartupTester - lilypond OK" << endl;
-        m_haveLilyPondView = true;
-        QRegExp re("LilyPond ([^\n]*)");
-        if (re.search(m_stdoutBuffer) != -1) {
-            LilyPondOptionsDialog::setDefaultLilyPondVersion(re.cap(1));
-            RG_DEBUG << "StartupTester using LilyPond version: " << re.cap(1) << endl;
-        }
-    }
-    delete m_proc;
-        
     NoteFontFactory::getFontNames(true);
 
     // unlock this as the very last thing we do in this thread,
     // so the parent process knows the thread is completed
-    m_lilyPondViewMutex.unlock();
+    m_runningMutex.unlock();
 }
 
 bool
 StartupTester::isReady()
 {
     while (!m_ready) usleep(10000);
-    if (m_projectPackagerMutex.tryLock()) {
-        m_projectPackagerMutex.unlock();
-    } else {
-        return false;
-    }
-    if (m_lilyPondViewMutex.tryLock()) {
-        m_lilyPondViewMutex.unlock();
+    if (m_runningMutex.tryLock()) {
+        m_runningMutex.unlock();
     } else {
         return false;
     }
@@ -190,26 +123,6 @@ StartupTester::parseStdoutBuffer(QStringList &target)
     if (re.search(m_stdoutBuffer) != -1) {
         target = QStringList::split(", ", re.cap(1));
     }
-}
-
-bool
-StartupTester::haveProjectPackager(QStringList *missing)
-{
-    while (!m_ready)
-        usleep(10000);
-    QMutexLocker locker(&m_projectPackagerMutex);
-    if (missing) *missing = m_projectPackagerMissing;
-    return m_haveProjectPackager;
-}
-
-bool
-StartupTester::haveLilyPondView(QStringList *missing)
-{
-    while (!m_ready)
-        usleep(10000);
-    QMutexLocker locker(&m_lilyPondViewMutex);
-    if (missing) *missing = m_lilyPondViewMissing;
-    return m_haveLilyPondView;
 }
 
 bool
