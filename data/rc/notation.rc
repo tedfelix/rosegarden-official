@@ -550,7 +550,7 @@
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
       <Action name="show_chords_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
-      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="true" append="show_merge" />
+      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="false" append="show_merge" />
       <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
     </Menu>
   <Separator append="show_merge" />
