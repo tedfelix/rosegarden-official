@@ -96,6 +96,7 @@
 #include "gui/general/ClefIndex.h"
 
 #include "gui/widgets/TmpStatusMsg.h"
+#include "gui/widgets/ProgressBar.h"
 
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -114,6 +115,8 @@
 #include <QTemporaryFile>
 #include <QToolBar>
 #include <QInputDialog>
+#include <QStatusBar>
+#include <QProgressBar>
 
 #include <algorithm>
 
@@ -227,6 +230,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     m_notationWidget->setHeadersVisible(visible);
 
     settings.endGroup();
+
+    initStatusBar();
 
     updateWindowTitle();
 
@@ -855,6 +860,53 @@ NewNotationView::slotUpdateMenuStates()
         NOTATION_DEBUG << "Do note have NoteRestInserter " << endl;
         leaveActionState("note_rest_tool_current");
     }
+}
+
+void
+NewNotationView::initStatusBar()
+{
+    QStatusBar* sb = statusBar();
+
+    m_hoveredOverNoteName = new QLabel(sb);
+    m_hoveredOverNoteName->setMinimumWidth(32);
+    sb->addWidget(m_hoveredOverNoteName);
+
+    m_hoveredOverAbsoluteTime = new QLabel(sb);
+    m_hoveredOverAbsoluteTime->setMinimumWidth(160);
+    sb->addWidget(m_hoveredOverAbsoluteTime);
+
+    QWidget *hbox = new QWidget(sb);
+    QHBoxLayout *hboxLayout = new QHBoxLayout;
+    hbox->setLayout(hboxLayout);
+
+    m_currentNotePixmap = new QLabel(hbox);
+    m_currentNotePixmap->setMinimumWidth(20);
+    hboxLayout->addWidget(m_currentNotePixmap);
+
+    m_insertModeLabel = new QLabel(hbox);
+    hboxLayout->addWidget(m_insertModeLabel);
+
+    m_annotationsLabel = new QLabel(hbox);
+    hboxLayout->addWidget(m_annotationsLabel);
+
+    m_lilyPondDirectivesLabel = new QLabel(hbox);
+    hboxLayout->addWidget(m_lilyPondDirectivesLabel);
+
+    sb->addWidget(hbox);
+
+    sb->showMessage(TmpStatusMsg::getDefaultMsg(), TmpStatusMsg::getDefaultId());
+	
+    m_selectionCounter = new QLabel(sb);
+    sb->addWidget(m_selectionCounter);
+
+    m_progressBar = new ProgressBar(100, true, sb);
+    m_progressBar->setMinimumWidth(100);
+    m_progressBar->setMaximumWidth(100);
+
+    sb->addPermanentWidget(m_progressBar);
+    sb->setContentsMargins(0, 0, 0, 0);
+
+    sb->showMessage("This is a test of the emergency broadcast system. This is only a test.");
 }
 
 
@@ -2549,7 +2601,8 @@ NewNotationView::slotToggleTempoRuler()
 // start of code formerly located in EditView.cpp
 // --
 
-void NewNotationView::slotAddTempo()
+void
+NewNotationView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
@@ -2570,7 +2623,8 @@ void NewNotationView::slotAddTempo()
     tempoDlg.exec();
 }
 
-void NewNotationView::slotAddTimeSignature()
+void
+NewNotationView::slotAddTimeSignature()
 {
     Segment *segment = getCurrentSegment();
     if (!segment)
@@ -2624,9 +2678,6 @@ void NewNotationView::slotAddTimeSignature()
 
     delete dialog;
 }
-
-
-
 
 void
 NewNotationView::slotToggleRawNoteRuler()

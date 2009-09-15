@@ -23,11 +23,8 @@
 #include <string>
 
 
-
-
 namespace Rosegarden
 {
-
 
 
 /**
@@ -36,7 +33,7 @@ namespace Rosegarden
  * the file.
  *
  * If you add something here, remember to add the definition to
- * notationproperties.cpp as well...
+ * NotationProperties.cpp as well...
  */
 
 class NotationProperties
@@ -80,7 +77,7 @@ public:
     const PropertyName REST_TOO_SHORT;
     const PropertyName REST_OUTSIDE_STAVE;
 
-    // Set in applyBeam in notationsets.cpp:
+    // Set in applyBeam in NotationSets.cpp:
 
     const PropertyName BEAM_GRADIENT;
     const PropertyName BEAM_SECTION_WIDTH;

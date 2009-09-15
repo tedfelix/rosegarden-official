@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,13 +18,16 @@
 #ifndef _RG_NEW_NOTATION_VIEW_H_
 #define _RG_NEW_NOTATION_VIEW_H_
 
-#include <vector>
-#include <QMainWindow>
-
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
+#include "gui/widgets/ProgressBar.h"
 #include "base/NotationTypes.h"
+
+#include <QMainWindow>
+#include <QLabel>
+
+#include <vector>
 
 class QWidget;
 
@@ -53,7 +55,7 @@ public:
     virtual EventSelection *getSelection() const;
     virtual void setSelection(EventSelection* s, bool preview = false);
 
-    virtual void initStatusBar() { }//!!!
+    virtual void initStatusBar();
     virtual void updateViewCaption() { }//!!!
 
     virtual timeT getInsertionTime() const;
@@ -299,6 +301,32 @@ private:
     DurationMonobarModeType m_durationMode;  // Stores morph state.
     QAction *m_durationPressed;  //Store the last duration button pressed.
     QAction *m_accidentalPressed;  //Store the last accidental button pressed.
+
+//    NotationProperties m_properties;
+
+    /// Displayed in the status bar, shows number of events selected
+    QLabel *m_selectionCounter;
+
+    /// Displayed in the status bar, shows insertion mode
+    QLabel *m_insertModeLabel;
+
+    /// Displayed in the status bar, shows when annotations are hidden
+    QLabel *m_annotationsLabel;
+
+    /// Displayed in the status bar, shows when LilyPond directives are hidden
+    QLabel *m_lilyPondDirectivesLabel;
+
+    /// Displayed in the status bar, shows value() of current operation
+    ProgressBar *m_progressBar;
+
+    /// Displayed in the status bar, holds the pixmap of the current note
+    QLabel* m_currentNotePixmap;
+
+    /// Displayed in the status bar, shows the pitch the cursor is at
+    QLabel* m_hoveredOverNoteName;
+
+    /// Displayed in the status bar, shows the absolute time the cursor is at
+    QLabel* m_hoveredOverAbsoluteTime;
 };
 
 }
