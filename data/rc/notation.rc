@@ -382,15 +382,15 @@
     <Menu name="Navigation">
       <text>&amp;Navigation</text>
     <Separator/>
-      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" shortcut="Shift+Left" />
-      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" shortcut="Shift+Right" />
-      <Action name="preview_selection" text="Set Loop &amp;to Selection" shortcut="Chrt+;" />
-      <Action name="clear_loop" text="Clear L&amp;oop" shortcut="Ctrl+:" />
+      <Action name="extend_selection_backward" text="Cursor back and Se&amp;lect" icon="select-backward" shortcut="Shift+Left" />
+      <Action name="extend_selection_forward" text="Cursor Forward and &amp;Select" icon="select-forward" shortcut="Shift+Right" />
+      <Action name="preview_selection" text="Set Loop &amp;to Selection" icon="selection-to-loop" shortcut="Chrt+;" />
+      <Action name="clear_loop" text="Clear L&amp;oop" icon="clear-loop" shortcut="Ctrl+:" />
     <Separator/>
-      <Action name="cursor_up_staff" text="Next Staff &amp;Up" shortcut="Alt+Up" />
-      <Action name="cursor_down_staff" text="Next Staff &amp;Down" shortcut="Alt+Down" />
-      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" shortcut="Alt+PgUp" />
-      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
+      <Action name="cursor_up_staff" text="Next Staff &amp;Up" icon="up-staff" shortcut="Alt+Up" />
+      <Action name="cursor_down_staff" text="Next Staff &amp;Down" icon="down-staff" shortcut="Alt+Down" />
+      <Action name="cursor_prior_segment" text="Pre&amp;vious Segment" icon="next-segment" shortcut="Alt+PgUp" />
+      <Action name="cursor_next_segment" text="Ne&amp;xt Segment" icon="previous-segment" shortcut="Alt+PgDown" />
     </Menu>
     <Menu name="Transport">
       <text>T&amp;ransport</text>
@@ -550,7 +550,7 @@
     <Menu name="rulers" append="show_merge">
       <text>&amp;Rulers</text>
       <Action name="show_chords_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
-      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="false" append="show_merge" />
+      <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="true" append="show_merge" />
       <Action name="show_tempo_ruler" text="Show &amp;Tempo Ruler" checked="true" append="show_merge" />
     </Menu>
   <Separator append="show_merge" />
