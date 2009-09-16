@@ -289,7 +289,8 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     do {
 
         line = inStream.readLine(1000);
-        std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
+        // don't flood the console
+        if(c<20) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
 
         // Ilan Tal is the only one who has experienced this problem so far.
         // For him, QTextStream::readLine() fails to see the end of the lines,
@@ -302,7 +303,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         // We'll try to do what we can with the files list, but won't rewrite
         // the XML to update the paths.  We'll go ahead and assemble the altered
         // copy, but if the next line tests true, we won't swap it in.
-        PANIC = (line.size() > 900);
+        if(line.size() > 900) PANIC = true;
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
