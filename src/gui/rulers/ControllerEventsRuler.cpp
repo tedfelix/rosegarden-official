@@ -161,17 +161,20 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
 
-// Can't remember what this was for ...
-//    if (m_lastDrawnRect != m_pannedRect) {
-//        EventControlItem *item;
-//        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
-//            item = static_cast <EventControlItem *> (it->second);
-//            item->updateFromEvent();
-//        }
-//        m_lastDrawnRect = m_pannedRect;
-//    }
+    // If this is the first time we've drawn this view,
+    //  reconfigure all items to make sure their icons
+    //  come out the right size
+    if (m_lastDrawnRect != m_pannedRect) {
+        EventControlItem *item;
+        for (ControlItemMap::iterator it = m_controlItemMap.begin(); it != m_controlItemMap.end(); it++) {
+            item = static_cast <EventControlItem *> (it->second);
+            item->reconfigure();
+        }
+        m_lastDrawnRect = m_pannedRect;
+    }
 
     if (m_firstVisibleItem == m_controlItemMap.end()) {
+        ///@TODO Draw a line irrespective of whether an item is visible
         // There are no visible items
         return;
     }
@@ -249,7 +252,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
         // For selected items, draw the value in text alongside the marker
         // By preference, this should sit on top of the new line that represents this value change
-        str = QString::number(yToValue((*it)->y()));
+        str = QString::number(yToValue((*it)->y())-m_controller->getDefault());
         int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
         int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
         
