@@ -283,9 +283,12 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // necessary modifications along the way
     QString line;
 
+    int c = 0;
+
     do {
 
         line = inStream.readLine(1000);
+        std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
