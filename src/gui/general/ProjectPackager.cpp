@@ -285,7 +285,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
     do {
 
-        line = inStream.readLine(0);
+        line = inStream.readLine(1000);
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
