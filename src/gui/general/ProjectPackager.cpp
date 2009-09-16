@@ -284,11 +284,25 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     QString line;
 
     int c = 0;
+    bool PANIC = false;
 
     do {
 
         line = inStream.readLine(1000);
         std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
+
+        // Ilan Tal is the only one who has experienced this problem so far.
+        // For him, QTextStream::readLine() fails to see the end of the lines,
+        // and it always reads no less than 1000 characters each time.  This
+        // results in complete corruption of the .rg file.
+        //
+        // We can't figure this one out, but since at least one person
+        // experiences this problem, we need to failsafe around it.  If we find
+        // a line longer than 900 characters, the buffer is surely corrupt.
+        // We'll try to do what we can with the files list, but won't rewrite
+        // the XML to update the paths.  We'll go ahead and assemble the altered
+        // copy, but if the next line tests true, we won't swap it in.
+        PANIC = (line.size() > 900);
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
@@ -381,10 +395,16 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         return QStringList();
     }
 
-    // swap the .tmp modified copy back to the original filename
-    QFile::remove(fileToModify);
-    QFile::copy(ofileName, fileToModify);
-    QFile::remove(ofileName);
+    // swap the .tmp modified copy back to the original filename, unless we
+    // detected a corrupt line buffer earlier, in which case we leave the
+    // original file alone
+    if (!PANIC) {
+        QFile::remove(fileToModify);
+        QFile::copy(ofileName, fileToModify);
+        QFile::remove(ofileName);
+    } else {
+        std::cout << "Corrupt Qt detected. This seems to be a BUG in Qt.  QTextStream::readLine() is not performing as advertised." << std::endl;
+    }
 
 //    std::cout << "cp " << ofileName.toStdString() << " " << fileToModify.toStdString() << std::endl;
 //    QMessageBox::information(this,"", "Go look at files in progress while the script pauses", QMessageBox::Ok, QMessageBox::Ok);
