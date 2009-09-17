@@ -3258,6 +3258,42 @@ NewNotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool n
 }
 
 
+
+void
+NewNotationView::slotHoveredOverNoteChanged(const QString &noteName)
+{
+    m_hoveredOverNoteName->setText(QString(" ") + noteName);
+}
+
+void
+NewNotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
+{
+    timeT t = time;
+    RealTime rt =
+        getDocument()->getComposition().getElapsedRealTime(t);
+    long ms = rt.msec();
+
+    int bar, beat, fraction, remainder;
+    getDocument()->getComposition().getMusicalTimeForAbsoluteTime
+        (t, bar, beat, fraction, remainder);
+
+    //    QString message;
+    //    QString format("%ld (%ld.%03lds)");
+    //    format = tr("Time: %1").arg(format);
+    //    message.sprintf(format, t, rt.sec, ms);
+
+    QString message = tr("Time: %1 (%2.%3s)")
+         .arg(QString("%1-%2-%3-%4")
+             .arg(QString("%1").arg(bar + 1).rightJustified(3, '0'))
+             .arg(QString("%1").arg(beat).rightJustified(2, '0'))
+             .arg(QString("%1").arg(fraction).rightJustified(2, '0'))
+             .arg(QString("%1").arg(remainder).rightJustified(2, '0')))
+         .arg(rt.sec)
+         .arg(QString("%1").arg(ms).rightJustified(3, '0'));
+
+    m_hoveredOverAbsoluteTime->setText(message);
+}
+
 }
 
 #include "NotationView.moc"

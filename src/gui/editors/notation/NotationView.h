@@ -217,6 +217,22 @@ protected slots:
      */
     void slotSymbolAction();
 
+    /**
+     * Called when the mouse cursor moves over a different height on
+     * the staff
+     *
+     * @see NotationCanvasView#hoveredOverNoteChange()
+     */
+    void slotHoveredOverNoteChanged(const QString&);
+
+    /**
+     * Called when the mouse cursor moves over a note which is at a
+     * different time on the staff
+     *
+     * @see NotationCanvasView#hoveredOverAbsoluteTimeChange()
+     */
+    void slotHoveredOverAbsoluteTimeChanged(unsigned int);
+
 private:
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
