@@ -290,7 +290,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
         line = inStream.readLine(1000);
         // don't flood the console
-        if(c<20) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
+        if (c < 20) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
 
         // Ilan Tal is the only one who has experienced this problem so far.
         // For him, QTextStream::readLine() fails to see the end of the lines,
@@ -303,7 +303,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         // We'll try to do what we can with the files list, but won't rewrite
         // the XML to update the paths.  We'll go ahead and assemble the altered
         // copy, but if the next line tests true, we won't swap it in.
-        if(line.size() > 900) PANIC = true;
+        if (line.size() > 900) PANIC = true;
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
@@ -407,15 +407,12 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         std::cout << "Corrupt Qt detected. This seems to be a BUG in Qt.  QTextStream::readLine() is not performing as advertised." << std::endl;
     }
 
-//    std::cout << "cp " << ofileName.toStdString() << " " << fileToModify.toStdString() << std::endl;
-//    QMessageBox::information(this,"", "Go look at files in progress while the script pauses", QMessageBox::Ok, QMessageBox::Ok);
-
     return list;
 }
 
 
 // to avoid problems, we check for flac, which is an integral part of the process.
-// we also use tar, but we can safely assume that tar exists.
+// we also use tar, but we can safely assume that tar exists
 void
 ProjectPackager::sanityCheck() {
     m_process = new QProcess;
