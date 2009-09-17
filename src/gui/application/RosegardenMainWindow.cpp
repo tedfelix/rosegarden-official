@@ -281,6 +281,8 @@ RosegardenMainWindow::RosegardenMainWindow(bool useSequencer,
     m_devicesManagerNew(0),
     m_warningWidget(0)
 {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setObjectName("App");
     m_myself = this;
     
