@@ -315,6 +315,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             // alter the path component
             QFileInfo fi(extract);
             extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
+            std::cout << "EXTRACT = " << qstrtostr(extract) << std::endl;
 
             // construct a new line around the altered substring
             extract.prepend(pluginAudioPathKey);
@@ -369,7 +370,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
             // alter the path component
             QFileInfo fi(extract);
-            extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
+            extract = QString("%1/%2").arg(newPath).arg(fi.baseName());
 
             // construct a new line around the altered substring
             extract.prepend(audioPathKey);
@@ -404,31 +405,56 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 }
 
 
-// to avoid problems, we check for flac, which is an integral part of the process.
-// we also use tar, but we can safely assume that tar exists
+// check for flac and wavpack on every run, rather than doing this as part of
+// Rosegarden's startup tester.
+//
+// we also use tar, gzip, and bash, but these very commonly exist on Linux, and
+// we'll deal with those whenever we're looking at a broader audience than just
+// Linux
 void
 ProjectPackager::sanityCheck() {
+    // check for flac
     m_process = new QProcess;
     m_process->start("flac", QStringList() << "--help");
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runPackUnpack(int, QProcess::ExitStatus)));
 
-    // wait up to 30 seconds for process to start
+    // highest compression; can't cope with our default IEEE 32-bit floating
+    // point (type 3) wav files
     m_info->setText(tr("Checking for flac..."));
     if (!m_process->waitForStarted()) {
-        puke(tr("Couldn't start sanity check."));
+        puke(tr("<qt><p>The <b>flac</b> command was not found.</p><p>FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called \"flac\".</p>"));
         return;
     }
+    // should only have to wait less than a second, so go ahead and block
+    m_process->waitForFinished();
+    delete m_process;
 
-    m_progress->setValue(10);
+    // second highest compression, comparable availability, does not require
+    // pre-conversion to a FLAC-compatible format which would make the trip
+    // through the project packager a one-way transformation for the original
+    // files (even if the difference is trivial, I'd rather not do anything
+    // permanent without an "are you sure" process, and we don't want to ask
+    // questions, we want to just do something sensible by default)
+    m_process = new QProcess;
+    m_process->start("wavpack", QStringList() << "--help");
+
+    m_info->setText(tr("Checking for wavpack..."));
+    if (!m_process->waitForStarted()) {
+        puke(tr("<qt><p>The <b>wavpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as a package called \"wavpack\".</p>"));
+        return;
+    }
+    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
+            this, SLOT(runPackUnpack(int, QProcess::ExitStatus)));
 }
 
 void
 ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
-    if( exitCode == 0) {
+    if (exitCode == 0) {
        delete m_process;
     } else {
-        puke(tr("<qt><p>The <b>flac</b> command was not found.</p><p>FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called \"flac\".</p>"));
+        // if the last sanity check step didn't start, it won't have exited 0
+        // either, so I don't think there's anything we need to say in a warning
+        // here, because we should never reach this point in the code
+        std::cout << "ProjectPackager::runPackUnpack() - If you see this message, this is a BUG!" << std::endl;
         return;
     }
 
@@ -862,7 +888,7 @@ ProjectPackager::startFlacDecoder(QStringList files)
         // want a robust solution to this one... QFileInfo::baseName() should
         // get it
         QFileInfo fi(o1);
-        QString o2 = QString("%1/%2.wav").arg(fi.path()).arg(fi.baseName());
+        QString o2 = o1.replace(QRegExp("flac"), "wav");
 
         // we'll eschew anything fancy or pretty in this disposable script and
         // just write a command on each line, terminating with an || exit n
