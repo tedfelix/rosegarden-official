@@ -251,14 +251,28 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         return QStringList();
     }
 
+    // the pre-process input stream
+    QString preText = inText;
+    QTextStream preIn(&preText, QIODevice::ReadOnly);
+
+    // the pre-process output steram
+    QString postText;
+    QTextStream preOut(&postText, QIODevice::WriteOnly);
+
+    // insert \n between tags
+    do {
+        QString l = preIn.readLine();
+        l.replace(QRegExp("><"), ">\n<");
+        preOut << l << endl;
+    } while (!preIn.atEnd());
+
     // the input stream
-    QTextStream inStream(&inText, QIODevice::ReadOnly);
+    QTextStream inStream(&postText, QIODevice::ReadOnly);
 
     // the output stream
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
     outStream.setEncoding(QTextStream::UnicodeUTF8);
-
 
     // synth plugin XML:
     //
@@ -277,33 +291,18 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     QString audioPathKey("<audioPath value=\"");
 
     QString valueTagEndKey("\"/>");
-    
 
     // process the input line by line and stream it all back out, making any
     // necessary modifications along the way
     QString line;
 
     int c = 0;
-    bool PANIC = false;
 
     do {
 
-        line = inStream.readLine(1000);
+        line = inStream.readLine();
         // don't flood the console
         if (c < 20) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
-
-        // Ilan Tal is the only one who has experienced this problem so far.
-        // For him, QTextStream::readLine() fails to see the end of the lines,
-        // and it always reads no less than 1000 characters each time.  This
-        // results in complete corruption of the .rg file.
-        //
-        // We can't figure this one out, but since at least one person
-        // experiences this problem, we need to failsafe around it.  If we find
-        // a line longer than 900 characters, the buffer is surely corrupt.
-        // We'll try to do what we can with the files list, but won't rewrite
-        // the XML to update the paths.  We'll go ahead and assemble the altered
-        // copy, but if the next line tests true, we won't swap it in.
-        if (line.size() > 900) PANIC = true;
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
@@ -396,16 +395,10 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         return QStringList();
     }
 
-    // swap the .tmp modified copy back to the original filename, unless we
-    // detected a corrupt line buffer earlier, in which case we leave the
-    // original file alone
-    if (!PANIC) {
-        QFile::remove(fileToModify);
-        QFile::copy(ofileName, fileToModify);
-        QFile::remove(ofileName);
-    } else {
-        std::cout << "Corrupt Qt detected. This seems to be a BUG in Qt.  QTextStream::readLine() is not performing as advertised." << std::endl;
-    }
+    // swap the .tmp modified copy back to the original filename
+    QFile::remove(fileToModify);
+    QFile::copy(ofileName, fileToModify);
+    QFile::remove(ofileName);
 
     return list;
 }
@@ -858,7 +851,7 @@ ProjectPackager::startFlacDecoder(QStringList files)
 
     QStringList::const_iterator si;
     for (si = files.constBegin(); si != files.constEnd(); ++si) {
-        std::string o1 = (*si).toLocal8Bit().constData();
+        QString o1 = (*si);
 
         // the file strings are things like xxx.wav.rgp.flac
         // without specifying the output file they will turn into xxx.wav.rgp.wav
@@ -868,7 +861,7 @@ ProjectPackager::startFlacDecoder(QStringList files)
         // from old project packages have rg-2343242.wav.rgp.flac files, so we
         // want a robust solution to this one... QFileInfo::baseName() should
         // get it
-        QFileInfo fi(strtoqstr(o1));
+        QFileInfo fi(o1);
         QString o2 = QString("%1/%2.wav").arg(fi.path()).arg(fi.baseName());
 
         // we'll eschew anything fancy or pretty in this disposable script and
@@ -878,7 +871,7 @@ ProjectPackager::startFlacDecoder(QStringList files)
         //
         // (let's just try escaping spaces &c. with surrounding " and see if
         // that is good enough)
-        out << "flac -d \"" <<  o1 << "\" -o \"" << o2.toLocal8Bit() << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
+        out << "flac -d \"" <<  o1 << "\" -o \"" << o2 << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
         errorPoint++;
     }
 
