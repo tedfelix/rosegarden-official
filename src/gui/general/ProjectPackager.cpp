@@ -439,7 +439,18 @@ ProjectPackager::sanityCheck() {
 
     m_info->setText(tr("Checking for wavpack..."));
     if (!m_process->waitForStarted()) {
-        puke(tr("<qt><p>The <b>wavpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as a package called \"wavpack\".</p>"));
+        puke(tr("<qt><p>The <b>wavpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called \"wavpack\".</p>"));
+        return;
+    }
+    m_process->waitForFinished();
+    delete m_process;
+
+    m_process = new QProcess;
+    m_process->start("wvunpack", QStringList() << "--help");
+
+    m_info->setText(tr("Checking for wvunpack..."));
+    if (!m_process->waitForStarted()) {
+        puke(tr("<qt><p>The <b>wvunpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called \"wavpack\".</p>"));
         return;
     }
     connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
@@ -641,13 +652,13 @@ ProjectPackager::runPack()
     }
 
     // and now we have everything discovered, uncovered, added, smothered,
-    // scattered and splattered, and we're ready to pack the flac files and
+    // scattered and splattered, and we're ready to pack the files and
     // get the hell out of here!
-    startFlacEncoder(audioFiles);
+    startAudioEncoder(audioFiles);
 }
 
 void
-ProjectPackager::startFlacEncoder(QStringList files)
+ProjectPackager::startAudioEncoder(QStringList files)
 {
     m_info->setText(tr("Packing project..."));
 
@@ -797,7 +808,7 @@ ProjectPackager::runUnpack()
 
     QTextStream in1(&contents);
     QString line;
-    QStringList files;
+    QStringList flacFiles, wavpackFiles;
 
     // rude but effective hack, the primary and interesting .rg file in the
     // package is always the first one listed, so we grab that and avoid trouble
@@ -808,9 +819,16 @@ ProjectPackager::runUnpack()
     while (true) {
         line = in1.readLine(1000);
         if (line.isEmpty()) break;
+        // find .flac (FLAC) files
         if (line.find(".flac", 0) > 0) {
-            files << line;
-            std::cout << "Discovered for decoding: " <<  line.toStdString() << std::endl;
+            flacFiles << line;
+            std::cout << "Discovered FLAC for decoding:    " <<  line.toStdString() << std::endl;
+        // find .wv (WavPack) files
+        } else if (line.find(".wv", 0) > 0) {
+            wavpackFiles << line;
+            std::cout << "Discovered WavPack for decoding: " <<  line.toStdString() << std::endl;
+        // find the true name of the .rg file contained in the package (foo.rgp
+        // contains bar.rg and bar/)
         } else if ((line.find(".rg", 0) > 0) && !haveRG) {
             m_trueFilename = line;
             std::cout << "Discovered true filename: " << m_trueFilename.toStdString() << std::endl;
@@ -837,13 +855,13 @@ ProjectPackager::runUnpack()
             reject();
         }
      } else {
-         startFlacDecoder(files);
+         startAudioDecoder(flacFiles, wavpackFiles);
      }
 }
 
 
 void
-ProjectPackager::startFlacDecoder(QStringList files)
+ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFiles)
 {
     // we can't do a oneliner bash script straight out of a QProcess command
     // line, so we'll have to create a purpose built script and run that
@@ -875,8 +893,9 @@ ProjectPackager::startFlacDecoder(QStringList files)
     // QProcess step, so screw it, let's just throw it into this script!
     out << "tar xzf \"" << basename << "\" || exit " << errorPoint++ << endl;
 
+    // Decode FLAC files
     QStringList::const_iterator si;
-    for (si = files.constBegin(); si != files.constEnd(); ++si) {
+    for (si = flacFiles.constBegin(); si != flacFiles.constEnd(); ++si) {
         QString o1 = (*si);
 
         // the file strings are things like xxx.wav.rgp.flac
@@ -900,6 +919,12 @@ ProjectPackager::startFlacDecoder(QStringList files)
         out << "flac -d \"" <<  o1 << "\" -o \"" << o2 << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
         errorPoint++;
     }
+
+    // Decode WavPack files
+    //
+    // [code goes here]
+    //
+    //
 
     m_script.close();
 

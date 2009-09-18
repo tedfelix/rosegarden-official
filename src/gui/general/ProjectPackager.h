@@ -150,7 +150,7 @@ protected slots:
 
     void runPack();
 
-    /** Assemble the various flac encoding operations into one backend script to
+    /** Assemble the various encoding operations into one backend script to
      * operate from a single QProcess, so this chewing can take place without
      * blocking the GUI.  Since it's possible to track the total number of
      * files, and what file out of n we're on, we should work out some nice way
@@ -161,9 +161,13 @@ protected slots:
      * fucker at the end of the encoder script and cut out a million lines of
      * extra code.
      */
-    void startFlacEncoder(QStringList files);
+    void startAudioEncoder(QStringList files);
 
     /** Final pack stage
+     *
+     * 1. Correct audio and plugin data paths
+     *
+     * 2. Clean up
      */
     void finishPack(int exitCode, QProcess::ExitStatus);
 
@@ -182,10 +186,21 @@ protected slots:
       * 1. Actually unpack the tarball (tar xzf)
       *
       * 2. Decode the .flac files and remove them
+      *
+      * 3. Decode the .wv files and remove them
+      *
+      * (Files coming in via two separate variables because of the organic way
+      * all of this was assembled.  We could figure out the file type in
+      * startAudioDecoder() itself, but the code was already there to make this
+      * determination upstream, so just use that going in)
       */
-    void startFlacDecoder(QStringList files);
+    void startAudioDecoder(QStringList flacFiles, QStringList wavpackFiles);
 
     /** Final unpack stage
+     *
+     * 1. Correct audio and plugin data paths
+     *
+     * 2. Clean up
      */
     void finishUnpack(int exitCode, QProcess::ExitStatus);
 };
