@@ -246,7 +246,8 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     // the result, so we have to strip them out of the XML too
     //
     // ARGH!!!
-    QStringList usedAudioFiles = getAudioFiles();
+    QStringList usedAudioFiles;
+    if (m_mode == ProjectPackager::Pack) usedAudioFiles = getAudioFiles();
 
     QStringList list;
 
