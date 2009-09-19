@@ -178,6 +178,7 @@ protected slots:
     void slotRetrogradeInvert();
     void slotJogLeft();
     void slotJogRight();
+    void slotEditLyrics();
 
     void slotStepBackward();
     void slotStepForward();

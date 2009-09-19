@@ -59,6 +59,7 @@
 #include "commands/edit/RetrogradeInvertCommand.h"
 #include "commands/edit/MoveCommand.h"
 #include "commands/edit/EventQuantizeCommand.h"
+#include "commands/edit/SetLyricsCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
@@ -89,6 +90,7 @@
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
+#include "gui/dialogs/LyricEditDialog.h"
 
 #include "gui/general/IconLoader.h"
 #include "gui/general/LilyPondProcessor.h"
@@ -3257,6 +3259,53 @@ NewNotationView::slotInsertableNoteEventReceived(int pitch, int velocity, bool n
     }
 }
 
+void
+NewNotationView::slotEditLyrics()
+{
+    Segment *segment = getCurrentSegment();
+    int oldVerseCount = 1;
+    
+    // The loop below is identical with the one in LyricEditDialog::countVerses() 
+    // Maybe countVerses() should be moved to a Segment manipulating class ? (hjj)
+    for (Segment::iterator i = segment->begin();
+         segment->isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->isa(Text::EventType)) {
+
+            std::string textType;
+            if ((*i)->get<String>(Text::TextTypePropertyName, textType) &&
+                textType == Text::Lyric) {
+
+                long verse = 0;
+                (*i)->get<Int>(Text::LyricVersePropertyName, verse);
+
+                if (verse >= oldVerseCount) oldVerseCount = verse + 1;
+            }
+        }
+    }
+
+    LyricEditDialog dialog(this, segment);
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        MacroCommand *macro = new MacroCommand
+            (SetLyricsCommand::getGlobalName());
+
+        for (int i = 0; i < dialog.getVerseCount(); ++i) {
+            SetLyricsCommand *command = new SetLyricsCommand
+                (segment, i, dialog.getLyricData(i));
+            macro->addCommand(command);
+        }
+        for (int i = dialog.getVerseCount(); i < oldVerseCount; ++i) {
+            // (hjj) verse count decreased, delete extra verses.
+            SetLyricsCommand *command = new SetLyricsCommand
+                (segment, i, QString(""));
+            macro->addCommand(command);
+        }
+
+        CommandHistory::getInstance()->addCommand(macro);
+    }
+}
 
 
 void
