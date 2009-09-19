@@ -4415,17 +4415,23 @@ RosegardenMainWindow::slotTestStartupTester()
 
         QString shortMessage = tr("Helper programs not found");
 
-        QMessageBox info(m_view);
-        info.setText(shortMessage);
-        info.setInformativeText(message);
-        info.setStandardButtons(QMessageBox::Ok);
-        info.setDefaultButton(QMessageBox::Ok);
-        info.setIcon(QMessageBox::Warning);
+//        QMessageBox info(m_view);
+//        info.setText(shortMessage);
+//        info.setInformativeText(message);
+//        info.setStandardButtons(QMessageBox::Ok);
+//        info.setDefaultButton(QMessageBox::Ok);
+//        info.setIcon(QMessageBox::Warning);
+//
+//        if (!DialogSuppressor::shouldSuppress
+//            (&info, "startuphelpersmissing")) {
+//            info.exec();
+//        }
 
-        if (!DialogSuppressor::shouldSuppress
-            (&info, "startuphelpersmissing")) {
-            info.exec();
-        }
+        // Looks like Thorn will have to keep the startup test for
+        // audiofile-importer around indefinitely, and so we need to move that
+        // irritating @#@^@#^ dialog into the warning widget, and get it out of
+        // my face before I punch it right in the nose.        
+        m_warningWidget->queueMessage(shortMessage, message);
     }
 
     m_startupTester->wait();

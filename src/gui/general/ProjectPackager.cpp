@@ -240,6 +240,14 @@ ProjectPackager::getAudioFiles()
 QStringList
 ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const QString newPath)
 {
+    // yet another miserable wrinkle in this whole wretched thing: we
+    // automatically ignore audio files not actually used by segments, but
+    // Rosegarden wants to hunt for the missing (but useless) files when we load
+    // the result, so we have to strip them out of the XML too
+    //
+    // ARGH!!!
+    QStringList usedAudioFiles = getAudioFiles();
+
     QStringList list;
 
     // read the input file
@@ -290,6 +298,10 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     //  </audiofiles>
     QString audioPathKey("<audioPath value=\"");
 
+    // audio file XML:
+    //  <audio id="4" file="rg-20071210-214212-5.wav" label="rg-20071210-214212-5.wav"/>
+    QString audioFileKey("<audio id=\"");
+
     QString valueTagEndKey("\"/>");
 
     // process the input line by line and stream it all back out, making any
@@ -302,7 +314,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
         line = inStream.readLine();
         // don't flood the console
-        if (c < 20) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
+        if (c < 10) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
 
         if (line.contains(pluginAudioPathKey)) {
             int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
@@ -366,6 +378,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             int e = line.indexOf(valueTagEndKey);
 
             QString extract = line.mid(s, e - s);
+            std::cout << "Found audio path" << std::endl;
             std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
 
             // alter the path component
@@ -381,6 +394,30 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
             line = extract;
 
             std::cout << "new line: " << line.toStdString() << std::endl; 
+
+        } else if (line.contains(audioFileKey) && 
+                m_mode == ProjectPackager::Pack) {
+            // sigh... more and more brittle, on the pack, but only the PACK
+            // step, we have to strip the unused audio files out of the XML,
+            // since we're not including them
+
+            QString beginFileKey("file=\"");
+            QString endFileKey("\" label");
+
+            int s = line.indexOf(beginFileKey) + beginFileKey.length();
+            int e = line.indexOf(endFileKey);
+
+            QString extract = line.mid(s, e - s);
+
+            // if the extracted (yes, sigh, sigh loudly) filename does not match
+            // one in our list of useful files, do not write this line (at least
+            // we don't have to track and renumber the audiofile ids to restart
+            // at 0 and fill gaps; I tested for this hacking RG files by hand,
+            // and we seem to have dodged that bullet, at least, for once)
+            if (!usedAudioFiles.contains(extract)) {
+                std::cout << "Removed junk audio file: " << extract.toStdString() << std::endl;
+                continue;
+            }
         }
 
         outStream << line << endl;
@@ -459,15 +496,13 @@ ProjectPackager::sanityCheck() {
 
 void
 ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
-    if (exitCode == 0) {
-       delete m_process;
-    } else {
-        // if the last sanity check step didn't start, it won't have exited 0
-        // either, so I don't think there's anything we need to say in a warning
-        // here, because we should never reach this point in the code
-        std::cout << "ProjectPackager::runPackUnpack() - If you see this message, this is a BUG!" << std::endl;
-        return;
-    }
+
+    // We won't get here unless waitForStarted() worked, and if the last command
+    // we tested existed, that's good enough.  Ignore the error code.  (It
+    // happens that wvunpack --help returns error code 1.  Odd, but not
+    // important so long as the damn thing started.)
+    std::cout << "ProjectPackager::runPackUnpack() - sanity check passed, last process exited " << exitCode << std::endl;
+    delete m_process;
 
     switch (m_mode) {
         case ProjectPackager::Unpack:  runUnpack(); break;
@@ -691,13 +726,11 @@ ProjectPackager::startAudioEncoder(QStringList files)
     for (si = files.constBegin(); si != files.constEnd(); ++si) {
         QString o = QString("%1/%2").arg(m_packDataDirName).arg(*si);
 
-        // default flac behavior is to encode
-        //
         // we'll eschew anything fancy or pretty in this disposable script and
         // just write a command on each line, terminating with an || exit n
         // which can be used to figure out at which point processing broke, for
         // cheap and easy error reporting without a lot of fancy stream wiring
-        out << "flac " << o << " && rm \"" << o << "\" || exit " << errorPoint << endl;
+        out << "wavpack -d \"" << o << "\" || exit " << errorPoint << endl;
         errorPoint++;
     }
 
@@ -921,10 +954,13 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
     }
 
     // Decode WavPack files
-    //
-    // [code goes here]
-    //
-    //
+    for (si = wavpackFiles.constBegin(); si != wavpackFiles.constEnd(); ++si) {
+        QString o = (*si);
+
+        // NOTE: wvunpack -d means "delete the file if successful" not "decode"
+        out << "wvunpack -d \"" <<  o << "\" || exit " << errorPoint << endl;
+        errorPoint++;
+    }
 
     m_script.close();
 
@@ -964,12 +1000,13 @@ ProjectPackager::finishUnpack(int exitCode, QProcess::ExitStatus) {
     if (exitCode == 0) {
         delete m_process;
     } else {
-        puke(tr("<qt>Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.<br>Processing aborted.</qt>").arg(exitCode).arg(m_script.fileName()));
+        puke(tr("<qt><p>Extracting and decoding files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p><p>Processing aborted.</p></qt>").arg(exitCode).arg(m_script.fileName()));
         return;
     }
 
-    // we don't care about the extra files here in upack, so we just ignore the
-    // list it returns
+    // we don't need to do anything with the extra files in the unpack step, so
+    // we ignore the list returned (tar already extracted the files, and they're
+    // there)
     QFileInfo fi(m_filename);
     QString newPath = QString("%1/%2").arg(fi.path()).arg(fi.baseName());
     QString oldName = QString("%1.rg").arg(newPath);
