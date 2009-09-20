@@ -79,6 +79,8 @@ public:
     void setLabel(const std::string &label) { m_label = label; }
     std::string getLabel() const { return m_label; }
 
+    /// NOTE: I inherit getFilename() from SoundFile
+
     /// Used for waveform interpolation at a point
     ///
     float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }

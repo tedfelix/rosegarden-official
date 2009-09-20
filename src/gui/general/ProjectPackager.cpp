@@ -207,10 +207,7 @@ ProjectPackager::getAudioFiles()
             // some polite sanity checking to avoid possible crashes
             if (!file) continue;
 
-            std::cout << "REALITY CHECK: AudioFile::getLabel() returned: " << file->getLabel() << std::endl;
-            std::cout << "                          getPeakFilename() returned: " << file->getPeakFilename() << std::endl;
-
-            list << strtoqstr(file->getLabel());
+            list << strtoqstr(file->getFilename());
         }
     }
 
@@ -537,12 +534,6 @@ ProjectPackager::runPack()
 
     QStringList audioFiles = getAudioFiles();
 
-    // get the audio path from the Document via the AudioFileManager (eg.
-    // "/home/jsmith/rosegarden" )  (note that Rosegarden stores such things
-    // internally as std::strings for obscure legacy reasons)
-    AudioFileManager *manager = &m_doc->getAudioFileManager();
-    QString audioPath = strtoqstr(manager->getAudioPath());
-
     // the base tmp directory where we'll assemble all the files
     m_packTmpDirName = QString("%1/rosegarden-project-packager-tmp").arg(QDir::homePath());
 
@@ -594,10 +585,17 @@ ProjectPackager::runPack()
     // copy the audio files (do not remove the originals!)
     af = 0;
     for (si = audioFiles.constBegin(); si != audioFiles.constEnd(); ++si) {
-    
-        QString srcFile = QString("%1/%2").arg(audioPath).arg(*si);
+
+        // comes in with full path and filename
+        QString srcFile = (*si);
         QString srcFilePk = QString("%1.pk").arg(srcFile);
-        QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(*si);
+
+        // needs the filename split away from the path, so we can replace the
+        // path with the new one
+        QFileInfo fi(*si);
+        QString filename = QString("%1.%2").arg(fi.baseName()).arg(fi.completeSuffix());
+
+        QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(filename);
         QString dstFilePk = QString("%1.pk").arg(dstFile);
 
         std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
@@ -607,10 +605,21 @@ ProjectPackager::runPack()
             return;
         }
 
-        if (!QFile::copy(srcFilePk, dstFilePk)) {
-            puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFilePk).arg(dstFilePk));
-            return;
-        }
+        // Try to copy the .wav.pk file derived from transforming the name of
+        // the .wav file.  We don't trap the fail condition for this one and
+        // allow it to fail silently without complaining or aborting.  If the
+        // .wav.pk files are missing, they will be generated again as needed.
+        //
+        // Legacy .rgp files ship with improperly named .wav.pk files, from
+        // a bug in the original rosegarden-project-package script.  You'd wind
+        // up with an .rgp that contained, for example:
+        //
+        //   emergence-rg-0014.wav.pk
+        //   RG-AUDIO-0014.wav.pk
+        //
+        // That is why this version of the project packager doesn't screw around
+        // with the original filenames!
+        QFile::copy(srcFilePk, dstFilePk);
 
         m_progress->setValue(afStep * ++af);
     }
@@ -749,7 +758,9 @@ ProjectPackager::startAudioEncoder(QStringList files)
     QStringList::const_iterator si;
     int errorPoint = 1;
     for (si = files.constBegin(); si != files.constEnd(); ++si) {
-        QString o = QString("%1/%2").arg(m_packDataDirName).arg(*si);
+        QFileInfo fi(*si);
+        QString filename = QString("%1.%2").arg(fi.baseName()).arg(fi.completeSuffix());
+        QString o = QString("%1/%2").arg(m_packDataDirName).arg(filename);
 
         // we'll eschew anything fancy or pretty in this disposable script and
         // just write a command on each line, terminating with an || exit n
