@@ -746,8 +746,11 @@ LilyPondExporter::write()
     }
     timeT compositionStartTime = (*i)->getStartTime();
     timeT compositionEndTime = (*i)->getEndMarkerTime();
+    // there is something amiss with the compiler since in CompositionTimeSliceAdapter
+    // getTrack() returns an integer and not unsigned. A minus value is used for an
+    // illegal flag, so the test has meaning. I will simply cast it. Ilan.
     for (; i != m_composition->end(); ++i) {
-        if (compositionStartTime > (*i)->getStartTime() && (*i)->getTrack() >= 0) {
+        if (compositionStartTime > (*i)->getStartTime() && (int)(*i)->getTrack() >= 0) {
             compositionStartTime = (*i)->getStartTime();
         }
         if (compositionEndTime < (*i)->getEndMarkerTime()) {
