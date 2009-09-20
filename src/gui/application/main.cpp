@@ -62,8 +62,15 @@ The base library holds all of the fundamental "music handling"
 structures, of which the primary ones are Event, Segment, Track,
 Instrument and Composition.  It also contains a selection of utility
 and helper classes of a kind that is not specific to any particular
-GUI.  Everything here is part of the Rosegarden namespace, and there
-are no dependencies on KDE or Qt (although it uses the STL heavily).
+GUI.
+
+This design came about at a time when Rosegarden had been through several
+toolkit experiments, and did not want to chain itself to any one GUI toolkit.
+We wanted to be able to take the core of Rosegarden and build a new application
+around it simply and easily, and so the base library is built around the STL,
+and Qt and KDE classes were not allowed here.  In practice, we and Qt share the
+same fate now, and we have been allowing Qt classes in the base library whenever
+that represented the most pragmatic and expedient solution to a problem.
  
 The keyword for the basic structures in use is "flexibility".  Our
 Event objects can be extended arbitrarily for the convenience of GUI
@@ -129,14 +136,14 @@ disastrous side-effects.
     Composition.
  
  
-See also docs/data_struct/units.txt for an explanation of the units we
-use for time and pitch values.  See docs/discussion/names.txt for some
-name-related discussion.  See docs/code/creating_events.txt for an
-explanation of how to create new Events and add properties to them.
+See also http://rosegardenmusic.com/wiki/dev:units.txt for an explanation of the
+units we use for time and pitch values.  See
+http://rosegardenmusic.com/wiki/dev:creating_events.txt for an explanation of
+how to create new Events and add properties to them.
  
 The base directory also contains various music-related helper classes:
  
- - The NotationTypes.[Ch] files contain classes that help with
+ - The NotationTypes.[c|h] files contain classes that help with
     creating and manipulating events.  It's very important to realise
     that these classes are not the events themselves: although there
     is a Note class in this file, and a TimeSignature class, and Clef
@@ -155,7 +162,7 @@ The base directory also contains various music-related helper classes:
     the name of the property that defines the key change, and a set
     of the valid strings for key changes.
  
- - BaseProperties.[Ch] contains a set of "standard"-ish Event
+ - BaseProperties.[c|h] contains a set of "standard"-ish Event
     property names that are not basic enough to go in NotationTypes.
  
  - \link SegmentNotationHelper SegmentNotationHelper\endlink
@@ -180,19 +187,23 @@ The base directory also contains various music-related helper classes:
  
 \section gui GUI
  
-The GUI directory builds into a KDE/Qt application. Like most KDE
-applications, it follows a document/view model. The document (class
-RosegardenDocument, which wraps a Composition) can have several views
+The GUI directory builds into a Qt application that follows a document/view model. The document (class
+RosegardenDocument, which wraps a Composition (along with several other related classes)) can have several views
 (class RosegardenMainViewWidget), although at the moment only a single one is
 used.
  
-This view is the TrackEditor, which shows all the Composition's
-Segments organized in Tracks. Each Segment can be edited in two ways:
-notation (score) or matrix (piano roll).
- 
-All editor views are derived from EditView. An EditView is the class
+This view is the TrackEditor, which shows all the Composition's Segments
+organized in Tracks. Each Segment can be edited in several ways, as notation, on
+a piano roll matrix, or via the raw event list.
+
+All editor views are derived from EditViewBase. EditViewBase is the class
 dealing with the edition per se of the events. It uses several
 components:
+
+\remarks LayoutEngine no longer seems to be relevant.  The following
+documentation needs to be updated by someone who really understands how
+everything works on the far side of the Thorn restructuring.  Readers
+should understand this documentation might not reflect reality very well. 
  
  - Layout classes, horizontal and vertical: these are the classes
     which determine the x and y coordinates of the graphic items
@@ -206,18 +217,21 @@ components:
  - Toolbox, which is a simple string => tool map.
  
  - Commands, which are the fundamental implementations of editing
-    operations (both menu functions and tool operations) subclassed
-    from KDE's Command and used for undo and redo.
+    operations (both menu functions and tool operations).  Originally a 
+    KDE subclass, these are our own implementation now, likely
+    borrowed from Sonic Visualiser.
  
- - a canvas view.  Although this isn't a part of the EditView's
-    definition, both of the existing edit views (notation and matrix)
-    use one, because they both use a Q3Canvas to represent data.
+ - a QGraphicsScene and QGraphicsView, no longer actually from a shared base
+   class, I don't think
  
  - LinedStaff, a staff with lines.  Like the canvas view, this isn't
-    part of the EditView definition, but both views use one.
+    part of the EditView definition, but both views use one. (Probably
+    different implementations now, and no longer shared.  Author not sure.)
  
  
 There are currently two editor views:
+
+\remarks some of this is still true, some of it isn't
  
  - NotationView, with accompanying classes NotationHLayout,
     NotationVLayout, NotationStaff, and all the classes in the
@@ -261,12 +275,6 @@ layout classes, applying them when appropriate.
  
 \section sequencer Sequencer
  
-The sequencer directory also builds into a KDE/Qt application, but one
-which doesn't have a gui.  The Sequencer can be started automatically
-by the main Rosegarden GUI or manually if testing - it's sometimes
-more convenient to do the latter as the Sequencer needs to be connected
-up to the underlying sound system every time it is started.
- 
 The Sequencer interfaces directly with \link AlsaDriver ALSA\endlink
 and provides MIDI "play" and "record" ports which can be connected to
 other MIDI clients (MIDI IN and OUT hardware ports or ALSA synth devices)
@@ -294,9 +302,7 @@ The Sequencer makes use of two libraries libRosegardenSequencer
 and libRosegardenSound:
  
  - libRosegardenSequencer holds everything pertinent to sequencing
-   for Rosegarden including the
-   Sequencer class itself.  This library is only linked into the
-   Rosegarden Sequencer.
+   for Rosegarden including the Sequencer class itself.
  
  - libRosegardenSound holds the MidiFile class (writing and reading
    MIDI files) and the MappedEvent and MappedEventList classes (the
