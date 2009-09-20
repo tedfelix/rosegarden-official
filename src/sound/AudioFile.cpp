@@ -20,12 +20,12 @@ namespace Rosegarden
 {
 
 AudioFile::AudioFile(unsigned int id,
-                     const std::string &name,
+                     const std::string &label,
                      const std::string &fileName):
         SoundFile(fileName),
         m_type(UNKNOWN),
         m_id(id),
-        m_name(name),
+        m_label(label),
         m_bitsPerSample(0),
         m_sampleRate(0),
         m_channels(0),
@@ -41,7 +41,7 @@ AudioFile::AudioFile(const std::string &fileName,
         SoundFile(fileName),
         m_type(UNKNOWN),
         m_id(0),
-        m_name(""),
+        m_label(""),
         m_bitsPerSample(bitsPerSample),
         m_sampleRate(sampleRate),
         m_channels(channels),

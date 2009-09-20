@@ -899,7 +899,7 @@ AudioFileManager::toXmlString()
         << "\" file=\""
         << fileName
         << "\" label=\""
-        << encode((*it)->getName())
+        << encode((*it)->getLabel())
         << "\"/>" << std::endl;
     }
 
@@ -1178,7 +1178,7 @@ AudioFileManager::print()
 
     std::vector<AudioFile*>::iterator it;
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
-        std::cout << (*it)->getId() << " : " << (*it)->getName()
+        std::cout << (*it)->getId() << " : " << (*it)->getLabel()
         << " : \"" << (*it)->getFilename() << "\"" << std::endl;
     }
 #endif

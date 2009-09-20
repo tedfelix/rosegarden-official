@@ -979,11 +979,11 @@ AudioManagerDialog::slotRename()
                           tr("Change Audio File label"),
                           tr("Enter new label"), 
                           LineEdit::Normal, 
-                          QString(audioFile->getName().c_str()),
+                          QString(audioFile->getLabel().c_str()),
                           &ok);
 
     if (ok && !newText.isEmpty())
-        audioFile->setName(qstrtostr(newText));
+        audioFile->setLabel(qstrtostr(newText));
 
     slotPopulateFileList();
 }

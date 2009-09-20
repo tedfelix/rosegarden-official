@@ -128,8 +128,8 @@ ProjectPackager::puke(QString error)
     m_progress->setMaximum(100);
     m_progress->hide();
 
-    m_info->setText(tr("Fatal error.  Processing aborted."));
-    QMessageBox::critical(this, tr("Rosegarden - Fatal processing error!"), error, QMessageBox::Ok, QMessageBox::Ok);
+    m_info->setText(tr("<qt><p>Fatal error.</p><p>Processing aborted.</p></qt>"));
+    QMessageBox::critical(this, tr("Rosegarden - Fatal Processing Error"), error, QMessageBox::Ok, QMessageBox::Ok);
 
     // abort processing after a fatal error, so calls to puke() abort the whole
     // process in its tracks
@@ -207,7 +207,10 @@ ProjectPackager::getAudioFiles()
             // some polite sanity checking to avoid possible crashes
             if (!file) continue;
 
-            list << strtoqstr(file->getName());
+            std::cout << "REALITY CHECK: AudioFile::getLabel() returned: " << file->getLabel() << std::endl;
+            std::cout << "                          getPeakFilename() returned: " << file->getPeakFilename() << std::endl;
+
+            list << strtoqstr(file->getLabel());
         }
     }
 
@@ -301,7 +304,11 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
     // audio file XML:
     //  <audio id="4" file="rg-20071210-214212-5.wav" label="rg-20071210-214212-5.wav"/>
-    QString audioFileKey("<audio id=\"");
+    //  -or-
+    //  <audio file="asdfasdf" id="0" label="asdfasdf"/>
+    //
+    //  only common thread is "audio "
+    QString audioFileKey("<audio ");
 
     QString valueTagEndKey("\"/>");
 
@@ -318,19 +325,11 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
         if (c < 10) std::cout << "LINE: " << ++c << " BUFFER SIZE: " << line.size() << std::endl;
 
         if (line.contains(pluginAudioPathKey)) {
-            int s = line.indexOf(pluginAudioPathKey) + pluginAudioPathKey.length();
-            int e = line.indexOf(valueTagEndKey);
+            std::cout << "rewriting plugin audio path tag..." << std::endl;
 
-            // extract the substring
-            QString extract = line.mid(s, e - s);
-            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
-
-            // alter the path component
-            QFileInfo fi(extract);
-            extract = QString("%1/%2.%3").arg(newPath).arg(fi.baseName()).arg(fi.completeSuffix());
-            std::cout << "EXTRACT = " << qstrtostr(extract) << std::endl;
-
-            // construct a new line around the altered substring
+            // we don't care what the old path was at all, this was the bug;
+            // just write the new path straight up
+            QString extract = newPath;
             extract.prepend(pluginAudioPathKey);
             extract.append(valueTagEndKey);
 
@@ -338,13 +337,14 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl; 
+            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
 
         } else if (line.contains(pluginAudioDataKey)) {
 
             // note that "plugin audio data" is a bit of a misnomer, as this
             // could contain a soundfont or who knows what else; they're handled
             // the same way regardless, as "extra files" to add to the package
+            std::cout << "rewriting the path for a plugin data item..." << std::endl;
 
             int s = line.indexOf(pluginAudioDataKey) + pluginAudioDataKey.length();
             int e = line.indexOf(valueTagEndKey);
@@ -371,22 +371,16 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl; 
+            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
 
         } else if (line.contains(audioPathKey)) {
 
-            int s = line.indexOf(audioPathKey) + audioPathKey.length();
-            int e = line.indexOf(valueTagEndKey);
+            std::cout << "rewriting document audio path..." << std::endl;
 
-            QString extract = line.mid(s, e - s);
-            std::cout << "Found audio path" << std::endl;
-            std::cout << "extracted value string:  value=\"" << extract.toStdString() << "\"" << std::endl;
-
-            // alter the path component
-            QFileInfo fi(extract);
-            extract = QString("%1/%2").arg(newPath).arg(fi.baseName());
-
-            // construct a new line around the altered substring
+            // we don't care what the old path was at all, this was the bug;
+            // just write the new path straight up
+            //
+            QString extract = newPath;
             extract.prepend(audioPathKey);
             extract.append(valueTagEndKey);
 
@@ -394,29 +388,34 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
 
             line = extract;
 
-            std::cout << "new line: " << line.toStdString() << std::endl; 
+            std::cout << "new line: " << line.toStdString() << std::endl << std::endl;
 
         } else if (line.contains(audioFileKey) && 
                 m_mode == ProjectPackager::Pack) {
             // sigh... more and more brittle, on the pack, but only the PACK
             // step, we have to strip the unused audio files out of the XML,
             // since we're not including them
+            //
+            // RG doesn't write the tags in the same order (I have files with
+            // the tags in different orders) so all we can do is iterate through
+            // the list of used files and see if this line contains that string
+            // somewhere, and if so, keep it, else ditch it
 
-            QString beginFileKey("file=\"");
-            QString endFileKey("\" label");
+            QStringList::const_iterator si;
+            bool keep = false;
+            for (si = usedAudioFiles.constBegin(); si != usedAudioFiles.constEnd(); ++si) {
+                std::cout << "\"" << line.toStdString() << "\" contains? \"" << (*si).toStdString() << "\"" << std::endl
+                          << "Qt says " << (line.contains(*si) ? "yes" : "no") << std::endl << std::endl;
 
-            int s = line.indexOf(beginFileKey) + beginFileKey.length();
-            int e = line.indexOf(endFileKey);
+                if (line.contains(*si)) {
+                    keep = true;
+                    continue;
+                }
+            }
 
-            QString extract = line.mid(s, e - s);
-
-            // if the extracted (yes, sigh, sigh loudly) filename does not match
-            // one in our list of useful files, do not write this line (at least
-            // we don't have to track and renumber the audiofile ids to restart
-            // at 0 and fill gaps; I tested for this hacking RG files by hand,
-            // and we seem to have dodged that bullet, at least, for once)
-            if (!usedAudioFiles.contains(extract)) {
-                std::cout << "Removed junk audio file: " << extract.toStdString() << std::endl;
+            if (!keep) {
+                std::cout << "Removed the following line referring to unused audio file: " << std::endl
+                          << "  " << line.toStdString() << std::endl;
                 continue;
             }
         }
@@ -430,14 +429,24 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     QString ofileName = QString("%1.tmp").arg(fileToModify);
     bool writeOK = GzipFile::writeToFile(ofileName, outText);
     if (!writeOK) {
-        puke(tr("<qt><pUnable to write %1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        puke(tr("<qt><pCould not write<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
         return QStringList();
     }
 
     // swap the .tmp modified copy back to the original filename
-    QFile::remove(fileToModify);
-    QFile::copy(ofileName, fileToModify);
-    QFile::remove(ofileName);
+    if (!QFile::remove(fileToModify)) {
+        puke(tr("<qt>Could not remove<br>%1<br><br>Processing aborted.</qt>").arg(fileToModify));
+        return QStringList();
+    }
+
+    if (!QFile::copy(ofileName, fileToModify)) {
+        puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(ofileName).arg(fileToModify));
+        return QStringList();
+    }
+    if (!QFile::remove(ofileName)) {
+        puke(tr("<qt><pCould not remove<br>%1.</p><p>Processing aborted.</p></qt>").arg(ofileName));
+        return QStringList();
+    }
 
     return list;
 }
@@ -519,6 +528,8 @@ ProjectPackager::runPackUnpack(int exitCode, QProcess::ExitStatus) {
 void
 ProjectPackager::runPack()
 {
+    std::cout << "ProjectPackager::runPack()" << std::endl;
+
     m_info->setText(tr("Packing project..."));
 
     // go into spinner mode
@@ -560,7 +571,7 @@ ProjectPackager::runPack()
     if (tmpDir.mkdir(m_packTmpDirName)) {
 
     } else {
-        puke(tr("<qt>Could not create temporary working directory.<br>Processing aborted!</qt>"));
+        puke(tr("<qt><p>Could not create temporary working directory.</p><p>Processing aborted.</p></qt>"));
         return;
     }
 
@@ -590,9 +601,16 @@ ProjectPackager::runPack()
         QString dstFilePk = QString("%1.pk").arg(dstFile);
 
         std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
-        std::cout << "cp " << srcFile.toStdString() << " " << dstFilePk.toStdString() << std::endl;
-        QFile::copy(srcFile, dstFile);
-        QFile::copy(srcFilePk, dstFilePk);
+        std::cout << "cp " << srcFilePk.toStdString() << " " << dstFilePk.toStdString() << std::endl;
+        if (!QFile::copy(srcFile, dstFile)) {
+            puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFile).arg(dstFile));
+            return;
+        }
+
+        if (!QFile::copy(srcFilePk, dstFilePk)) {
+            puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFilePk).arg(dstFilePk));
+            return;
+        }
 
         m_progress->setValue(afStep * ++af);
     }
@@ -618,7 +636,10 @@ ProjectPackager::runPack()
     std::cout << "cp " << oldName.toStdString() << " " << newName.toStdString() << std::endl;
 
     // copy m_filename(.rgp) as $tmp/m_filename.rg
-    QFile::copy(oldName, newName);
+    if (!QFile::copy(oldName, newName)) {
+        puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(oldName).arg(newName));
+        return;
+    }
 
     QMessageBox::StandardButton reply = QMessageBox::information(this,
             tr("Rosegarden"),
@@ -682,7 +703,10 @@ ProjectPackager::runPack()
         QString dstFile = QString("%1/%2/%3").arg(m_packTmpDirName).arg(m_packDataDirName).arg(basename);
 
         std::cout << "cp " << srcFile.toStdString() << " " << dstFile.toStdString() << std::endl;
-        QFile::copy(srcFile, dstFile);
+        if (!QFile::copy(srcFile, dstFile)) {
+            puke(tr("<qt>Could not copy<br>%1<br>  to<br>%2<br><br>Processing aborted.</qt>").arg(srcFile).arg(dstFile));
+            return;
+        }
 
         m_progress->setValue(efStep * ++ef);
     }
@@ -705,14 +729,14 @@ ProjectPackager::startAudioEncoder(QStringList files)
 
     // we can't do a oneliner bash script straight out of a QProcess command
     // line, so we'll have to create a purpose built script and run that
-    QString scriptName("/tmp/rosegarden-flac-encoder-backend");
+    QString scriptName("/tmp/rosegarden-audio-encoder-backend");
     m_script.setName(scriptName);
 
     // remove any lingering copy from a previous run
     if (m_script.exists()) m_script.remove();
 
     if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        puke(tr("<qt>Unable to write to temporary backend processing script %1.<br>Processing aborted.</qt>"));
+        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p><p>Processing aborted.</p></qt>"));
         return;
     }
     
@@ -761,7 +785,7 @@ ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
     if (exitCode == 0) {
         delete m_process;
     } else {
-        puke(tr("<qt>Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.<br>Processing aborted.</qt>").arg(exitCode).arg(m_script.fileName()));
+        puke(tr("<qt><p>Encoding and compressing files failed with exit status %1. Checking %2 for the line that ends with \"exit %1\" may be useful for diagnostic purposes.</p><p>Processing aborted.</p></qt>").arg(exitCode).arg(m_script.fileName()));
         return;
     }
 
@@ -775,7 +799,10 @@ ProjectPackager::finishPack(int exitCode, QProcess::ExitStatus) {
     QFileInfo fi(m_filename);
     QString dirname = fi.path();
     QString basename = QString("%1/%2.rg").arg(dirname).arg(fi.baseName());
-    QFile::remove(basename);
+    if (!QFile::remove(basename)) {
+        puke(tr("<qt>Could not remove<br>%1<br><br>Processing aborted.</qt>").arg(basename));
+        return;
+    }
 
     rmTmpDir();
     accept();
@@ -829,14 +856,14 @@ ProjectPackager::runUnpack()
     if (m_process->exitCode() == 0) {
        delete m_process;
     } else {
-        puke(tr("<qt>Unable to obtain list of files using tar.  Process exited with status code %1</qt>").arg(m_process->exitCode()));
+        puke(tr("<qt><p>Unable to obtain list of files using tar.</p><p>Process exited with status code %1</p></qt>").arg(m_process->exitCode()));
         return;
     }
 
     QFile contents(ofile);
 
     if (!contents.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        puke(tr("<qt>Unable to read to temporary file list.<br>Processing aborted.</qt>"));
+        puke(tr("<qt><p>Unable to read to temporary file list.</p><p>Processing aborted.</p></qt>"));
         return;
     }
 
@@ -899,14 +926,14 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
 {
     // we can't do a oneliner bash script straight out of a QProcess command
     // line, so we'll have to create a purpose built script and run that
-    QString scriptName("/tmp/rosegarden-flac-decoder-backend");
+    QString scriptName("/tmp/rosegarden-audio-decoder-backend");
     m_script.setName(scriptName);
 
     // remove any lingering copy from a previous run
     if (m_script.exists()) m_script.remove();
 
     if (!m_script.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        puke(tr("<qt>Unable to write to temporary backend processing script %1.<br>Processing aborted.</qt>").arg(scriptName));
+        puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p><p>Processing aborted.</p></qt>").arg(scriptName));
         return;
     }
 
@@ -941,7 +968,7 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
         // want a robust solution to this one... QFileInfo::baseName() should
         // get it
         QFileInfo fi(o1);
-        QString o2 = o1.replace(QRegExp("flac"), "wav");
+        QString o2 = QString("%1/%2.wav").arg(fi.path()).arg(fi.baseName());
 
         // we'll eschew anything fancy or pretty in this disposable script and
         // just write a command on each line, terminating with an || exit n
@@ -950,6 +977,7 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
         //
         // (let's just try escaping spaces &c. with surrounding " and see if
         // that is good enough)
+        std::cout << "flad -d " << o1.toStdString() << " -o " << o2.toStdString() << std::endl;
         out << "flac -d \"" <<  o1 << "\" -o \"" << o2 << "\" && rm \"" << o1 <<  "\" || exit " << errorPoint << endl;
         errorPoint++;
     }
