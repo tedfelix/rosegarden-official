@@ -308,9 +308,18 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     // Write upper text (track name and track label)
 
+    int numberOfTextLines = getNumberOfTextLines();
+
+    if (isTransposeInconsistent()) {
+        int upperTextY = charHeight
+                         + numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
+        QColor warningBackGround = m_foreGround == Qt::white ?
+                                                       Qt::black : Qt::white;
+        paint.fillRect(0, 0, width(), upperTextY, warningBackGround);
+    }
+
     paint.setPen(QColor(m_foreGround));
     text = getUpperText();
-    int numberOfTextLines = getNumberOfTextLines();
 
     for (int l=1; l<=numberOfTextLines; l++) {
         int upperTextY = charHeight
@@ -346,6 +355,13 @@ StaffHeader::paintEvent(QPaintEvent *)
 
 
      // Write lower text (segment label)
+
+    if (isLabelInconsistent()) {
+        int lowerTextY = wHeight - 4            // -4 : adjust
+            - numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
+        QColor warningBackGround = m_foreGround == Qt::white ? Qt::black : Qt::white;
+        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
+    }
 
     // TODO : use colours from GUIPalette
     colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
