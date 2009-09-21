@@ -18,10 +18,13 @@
 #ifndef _RG_CONTROLRULERWIDGET_H_
 #define _RG_CONTROLRULERWIDGET_H_
 
-#include <QStackedWidget>
+#include <QWidget>
 #include "base/Event.h"
 #include "base/ViewElement.h"
 #include "base/MidiDevice.h"
+
+class QStackedWidget;
+class QTabBar;
 
 namespace Rosegarden
 {
@@ -35,7 +38,7 @@ class PropertyName;
 class MatrixScene;
 class EventSelection;
 
-class ControlRulerWidget : public QStackedWidget //, Observer
+class ControlRulerWidget : public QWidget //, Observer
 {
 Q_OBJECT
 
@@ -67,6 +70,9 @@ signals:
     void dragScroll(timeT);
     
 protected:
+    QStackedWidget *m_stackedWidget;
+    QTabBar *m_tabBar;
+    
     std::list<ControlRuler *> m_controlRulerList;
     const ControlList *m_controlList;
 
@@ -77,8 +83,9 @@ protected:
     QString m_currentToolName;
     QRectF m_pannedRect;
     std::vector <ViewElement*> m_selectedElements;
+    
+    void addRuler(ControlRuler *, QString);
 };
-
 }
 
 #endif

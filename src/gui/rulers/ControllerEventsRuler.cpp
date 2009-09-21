@@ -173,12 +173,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         m_lastDrawnRect = m_pannedRect;
     }
 
-    if (m_firstVisibleItem == m_controlItemMap.end()) {
-        ///@TODO Draw a line irrespective of whether an item is visible
-        // There are no visible items
-        return;
-    }
-
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
@@ -191,6 +185,16 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     painter.setBrush(brush);
     painter.setPen(pen);
+
+    QString str;
+//    str = QString::fromStdString(m_controller->getName());
+//    painter.drawText(10,20,str.toUpper());
+    
+    if (m_firstVisibleItem == m_controlItemMap.end()) {
+        ///@TODO Draw a line irrespective of whether an item is visible
+        // There are no visible items
+        return;
+    }
 
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
@@ -241,7 +245,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     pen.setWidthF(2.0);
     painter.setPen(pen);
     QFontMetrics fontMetrics(painter.font());
-    QString str;
     int fontHeight = fontMetrics.height();
     int fontOffset = fontMetrics.width('+');
     

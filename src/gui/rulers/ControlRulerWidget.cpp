@@ -36,6 +36,8 @@
 
 #include "misc/Debug.h"
 
+#include <QVBoxLayout>
+#include <QTabBar>
 #include <QStackedWidget>
 
 namespace Rosegarden
@@ -47,6 +49,23 @@ m_segment(0),
 m_scene(0),
 m_scale(0)
 {
+    m_tabBar = new QTabBar;
+    m_tabBar->setDrawBase(false);
+    m_tabBar->setShape(QTabBar::RoundedSouth);
+
+    m_stackedWidget = new QStackedWidget;
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->setMargin(0);
+    layout->setSpacing(0);
+
+    layout->addWidget(m_stackedWidget);
+    layout->addWidget(m_tabBar);
+
+    this->setLayout(layout);
+    
+    connect(m_tabBar,SIGNAL(currentChanged(int)),
+            m_stackedWidget,SLOT(setCurrentIndex(int)));
 }
 
 ControlRulerWidget::~ControlRulerWidget()
@@ -127,9 +146,10 @@ void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyNam
             if (propruler->getPropertyName() == propertyName)
             {
                 // We already have a ruler for this property
-                if (currentWidget() != (*it)) {
+                if (m_stackedWidget->currentWidget() != (*it)) {
                     // It was not on show, so show it
-                    setCurrentWidget(*it);
+                    m_tabBar->setCurrentTab(m_stackedWidget->indexOf(*it));
+//                    m_stackedWidget->setCurrentWidget(*it);
                 }
                 else {
                     // It was on show, so delete it
@@ -166,9 +186,10 @@ void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
                 if (eventruler->getControlParameter()->getName() == controlName)
                 {
                     // We already have a ruler for this control
-                    if (currentWidget() != (*jt)) {
+                    if (m_stackedWidget->currentWidget() != (*jt)) {
                         // It was not on show, so show it
-                        setCurrentWidget(*jt);
+                        m_tabBar->setCurrentTab(m_stackedWidget->indexOf(*jt));
+//                        m_stackedWidget->setCurrentWidget(*jt);
                     }
                     else {
                         // It was not on show, so delete it
@@ -185,9 +206,20 @@ void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
 
 void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
 {
-    removeWidget(*it);
+    int index = m_stackedWidget->indexOf(*it);
+    m_stackedWidget->removeWidget(*it);
+    m_tabBar->removeTab(index);
     delete (*it);
     m_controlRulerList.erase(it);
+}
+
+void ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
+{
+    m_stackedWidget->addWidget(controlruler);
+    int index = m_tabBar->addTab(name.toUpper());
+    m_tabBar->setCurrentTab(index);
+    m_controlRulerList.push_back(controlruler);
+    controlruler->slotSetPannedRect(m_pannedRect);
 }
 
 void ControlRulerWidget::slotAddRuler()
@@ -207,10 +239,9 @@ void ControlRulerWidget::slotAddControlRuler(const ControlParameter &controlPara
     ControlRuler *controlruler = new ControllerEventsRuler(viewSegment, m_scale, this, &controlParameter);
     connect(controlruler,SIGNAL(dragScroll(timeT)),
             this,SLOT(slotDragScroll(timeT)));
-    addWidget(controlruler);
-    setCurrentWidget(controlruler);
-    m_controlRulerList.push_back(controlruler);
-    controlruler->slotSetPannedRect(m_pannedRect);
+
+    addRuler(controlruler,QString::fromStdString(controlParameter.getName()));
+    
     slotSetToolName(m_currentToolName);
 }
 
@@ -223,10 +254,8 @@ void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
 
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
     controlruler->updateSelection(&m_selectedElements);
-    addWidget(controlruler);
-    setCurrentWidget(controlruler);
-    m_controlRulerList.push_back(controlruler);
-    controlruler->slotSetPannedRect(m_pannedRect);
+
+    addRuler(controlruler,QString::fromStdString(propertyName.getName()));
 }
 
 void ControlRulerWidget::slotSetPannedRect(QRectF pr)
