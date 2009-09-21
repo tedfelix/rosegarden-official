@@ -73,7 +73,7 @@ class ConfigurationXmlSubHandler : public XmlSubHandler
 {
 public:
     ConfigurationXmlSubHandler(const QString &elementName,
-			       Rosegarden::Configuration *configuration);
+                   Rosegarden::Configuration *configuration);
     
     virtual bool startElement(const QString& namespaceURI,
                               const QString& localName,
@@ -97,7 +97,7 @@ public:
 };
 
 ConfigurationXmlSubHandler::ConfigurationXmlSubHandler(const QString &elementName,
-						       Rosegarden::Configuration *configuration)
+                               Rosegarden::Configuration *configuration)
     : m_configuration(configuration),
       m_elementName(elementName)
 {
@@ -111,14 +111,14 @@ bool ConfigurationXmlSubHandler::startElement(const QString&, const QString&,
     m_propertyType = atts.value("type");
 
     if (m_propertyName == "property") {
-	// handle alternative encoding for properties with arbitrary names
-	m_propertyName = atts.value("name");
-	QString value = atts.value("value");
-	if (!value.isEmpty()) {
-	    m_propertyType = "String";
-	    m_configuration->set<String>(qstrtostr(m_propertyName),
-					 qstrtostr(value));
-	}
+    // handle alternative encoding for properties with arbitrary names
+    m_propertyName = atts.value("name");
+    QString value = atts.value("value");
+    if (!value.isEmpty()) {
+        m_propertyType = "String";
+        m_configuration->set<String>(qstrtostr(m_propertyName),
+                     qstrtostr(value));
+    }
     }
 
     return true;
@@ -168,10 +168,10 @@ bool ConfigurationXmlSubHandler::characters(const QString& chars)
     }
 
     if (m_propertyType.isEmpty() ||
-	m_propertyType == "String") {
+    m_propertyType == "String") {
         
         m_configuration->set<Rosegarden::String>(qstrtostr(m_propertyName),
-						 qstrtostr(ch));
+                         qstrtostr(ch));
 
         return true;
     }
@@ -749,11 +749,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // to default values in the ctor, so they don't need to be initialized
         // here
         
-	QString presetLabelStr = atts.value("defaultLabel");
-	if (!labelStr.isEmpty()) {
-	    track->setPresetLabel( qstrtostr(presetLabelStr) );
-	}	
-	
+    QString presetLabelStr = atts.value("defaultLabel");
+    if (!labelStr.isEmpty()) {
+        track->setPresetLabel( qstrtostr(presetLabelStr) );
+    }    
+    
         QString clefStr = atts.value("defaultClef");
         if (!clefStr.isEmpty()) {
             track->setClef(clefStr.toInt());
@@ -779,15 +779,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             track->setLowestPlayable(lowplayStr.toInt());
         }
 
-	QString staffSizeStr = atts.value("staffSize");
-	if (!staffSizeStr.isEmpty()) {
-	    track->setStaffSize(staffSizeStr.toInt());
-	}
+    QString staffSizeStr = atts.value("staffSize");
+    if (!staffSizeStr.isEmpty()) {
+        track->setStaffSize(staffSizeStr.toInt());
+    }
 
-	QString staffBracketStr = atts.value("staffBracket");
-	if (!staffBracketStr.isEmpty()) {
-	    track->setStaffBracket(staffBracketStr.toInt());
-	}
+    QString staffBracketStr = atts.value("staffBracket");
+    if (!staffBracketStr.isEmpty()) {
+        track->setStaffBracket(staffBracketStr.toInt());
+    }
 
         getComposition().addTrack(track);
 
@@ -1012,14 +1012,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // value for the AudioPath.
             //
             QString thing;
-			//KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
-			//KURL url = QFileDialog.directory()
-			QString url = QFileDialog::getExistingDirectory(0, tr("Open Directory"),
-										"/home", QFileDialog::ShowDirsOnly
-												| QFileDialog::DontResolveSymlinks);			
-			
-			getAudioFileManager().setAudioPath( qstrtostr(url) );
-			
+            //KURL url = QFileDialog::getStartURL(QString(":WAVS"), thing);  // kde3
+            //KURL url = QFileDialog.directory()
+            QString url = QFileDialog::getExistingDirectory(0, tr("Open Directory"),
+                                        "/home", QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);            
+            
+            getAudioFileManager().setAudioPath( qstrtostr(url) );
+            
             /*
             RG_DEBUG << "ATTEMPTING TO FIND IN PATH = " 
                 << url.path() << endl;
@@ -1047,9 +1047,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
                 do {
 
-					//FileLocateDialog fL((RosegardenMainWindow *)m_doc->parent(),
-					FileLocateDialog fL((QWidget *)m_doc->parent(),
-												 file,
+                    //FileLocateDialog fL((RosegardenMainWindow *)m_doc->parent(),
+                    FileLocateDialog fL((QWidget *)m_doc->parent(),
+                                        file,
                                         QString(getAudioFileManager().getAudioPath().c_str()));
                     int result = fL.exec();
 
@@ -1450,8 +1450,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             //!!! ach no, we can't give this warning -- we might be in a <device> elt
             // but have no sequencer support, for example.  we need a separate m_inDevice
             // flag
-            //	    m_deprecation = true;
-            //	    std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
+            //        m_deprecation = true;
+            //        std::cerr << "WARNING: This Rosegarden file uses a deprecated control parameter structure.  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions" << std::endl;
 
         } else if (m_device->getType() == Device::Midi) {
 
