@@ -54,7 +54,7 @@
 #include <QTimer>
 #include <QGraphicsProxyWidget>
 #include <QToolTip>
-#include <QPushButton>
+#include <QToolButton>
 
 namespace Rosegarden
 {
@@ -124,23 +124,24 @@ NotationWidget::NotationWidget() :
     m_layout->addWidget(m_view->horizontalScrollBar(),
                         HSLIDER_ROW, HEADER_COL, 1, 2);
 
-    // Headers close button
-    QPushButton *headersCloseButton = new QPushButton;
-    headersCloseButton->setIcon(QIcon(":/pixmaps/misc/close.xpm"));
-    headersCloseButton->setContentsMargins(0, 0, 0, 0);
+
+    // Create the headers close button
+    QToolButton *headersCloseButton = new QToolButton;
+    headersCloseButton->setIcon(QIcon(":/pixmaps/misc/white_close.png"));
+    headersCloseButton->setIconSize(QSize(8, 8));
     connect(headersCloseButton, SIGNAL(clicked(bool)),
             this, SLOT(slotCloseHeaders()));
 
-    // Insert the button in a layout to see it on the right
+    // Insert the button in a layout to push it on the right
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     buttonsLayout->addStretch(20);
-    ///!!! buttonsLayout->addWidget(headersCloseButton);
-    ///       Almost ready, but needs some work still...
+    buttonsLayout->addWidget(headersCloseButton);
 
-    // Put the layout above the headers
+    // Put the layout inside a widget and the widget above the headers
     m_headersButtons = new QWidget;
     m_headersButtons->setLayout(buttonsLayout);
     m_layout->addWidget(m_headersButtons, TOPRULER_ROW, HEADER_COL, 1, 1);
+
 
     // Hide or show the horizontal scroll bar when needed
     connect(m_view->horizontalScrollBar(), SIGNAL(rangeChanged(int, int)),
