@@ -265,6 +265,10 @@ void RosegardenDocument::slotDocumentRestored()
 {
     RG_DEBUG << "RosegardenDocument::slotDocumentRestored()\n";
     setModified(false);
+
+    // if we hit the bottom of the undo stack, emit this so the modified flag
+    // will be cleared from assorted title bars
+    emit documentModified(false);
 }
 
 void
