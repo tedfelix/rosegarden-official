@@ -31,16 +31,14 @@ namespace Rosegarden
 {
 
 TabbedConfigurationPage::TabbedConfigurationPage(RosegardenDocument *doc,
-                                                 QWidget *parent,
-                                                 const char *name)
-    : ConfigurationPage(doc, parent, name)
+                                                 QWidget *parent)
+    : ConfigurationPage(doc, parent)
 {
     init();
 }
 
-TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent,
-                                                 const char *name)
-    : ConfigurationPage(parent, name)
+TabbedConfigurationPage::TabbedConfigurationPage(QWidget *parent)
+    : ConfigurationPage(parent)
 {
     init();
 }

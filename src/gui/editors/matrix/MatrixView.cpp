@@ -192,6 +192,7 @@ NewMatrixView::closeEvent(QCloseEvent *event)
 void
 NewMatrixView::updateWindowTitle()
 {
+    QString indicator = (m_document->isModified() ? "*" : "");
     // Set client label
     //
     QString view = tr("Matrix");
@@ -222,25 +223,27 @@ NewMatrixView::updateWindowTitle()
             trkLabel = QString(" \"%1\" ").arg(trkLabel);
         }
 
-        setWindowTitle(tr("%1 - Segment%2Track%3#%4 - %5")
-                    .arg(getDocument()->getTitle())
-                    .arg(segLabel)
-                    .arg(trkLabel)
-                    .arg(trackPosition + 1)
-                    .arg(view));
+        setWindowTitle(tr("%1%2 - Segment%3Track%4#%5 - %6")
+                      .arg(indicator)
+                      .arg(getDocument()->getTitle())
+                      .arg(segLabel)
+                      .arg(trkLabel)
+                      .arg(trackPosition + 1)
+                      .arg(view));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setWindowTitle(tr("%1 - All Segments - %2")
-                    .arg(getDocument()->getTitle())
-                    .arg(view));
+        setWindowTitle(tr("%1%2 - All Segments - %3")
+                      .arg(indicator)
+                      .arg(getDocument()->getTitle())
+                      .arg(view));
 
     } else {
 
-        setWindowTitle(tr("%1 - %n Segment(s) - %2", "",
-                        m_segments.size())
-                    .arg(getDocument()->getTitle())
-                    .arg(view));
+        setWindowTitle(tr("%1%2 - %n Segment(s) - %3", "", m_segments.size())
+                      .arg(indicator)
+                      .arg(getDocument()->getTitle())
+                      .arg(view));
     }
 
     setIcon(IconLoader().loadPixmap("window-matrix"));

@@ -59,9 +59,8 @@
 namespace Rosegarden
 {
 
-NotationConfigurationPage::NotationConfigurationPage(QWidget *parent,
-        const char *name) :
-        TabbedConfigurationPage(parent, name)
+NotationConfigurationPage::NotationConfigurationPage(QWidget *parent) :
+        TabbedConfigurationPage(parent)
 {
     QSettings settings;
     settings.beginGroup( NotationViewConfigGroup );

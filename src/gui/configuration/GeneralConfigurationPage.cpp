@@ -53,8 +53,8 @@ namespace Rosegarden
 {
 
 GeneralConfigurationPage::GeneralConfigurationPage(RosegardenDocument *doc,
-        QWidget *parent, const char *name)
-        : TabbedConfigurationPage(parent, name),
+        QWidget *parent)
+        : TabbedConfigurationPage(parent),
         m_doc(doc),
         m_client(0),
         m_countIn(0),

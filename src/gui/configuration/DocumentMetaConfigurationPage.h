@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -43,8 +42,7 @@ class DocumentMetaConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    DocumentMetaConfigurationPage(RosegardenDocument *doc,
-                                  QWidget *parent = 0, const char *name = 0);
+    DocumentMetaConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
     virtual void apply();
 
     static QString iconLabel() { return tr("About"); }

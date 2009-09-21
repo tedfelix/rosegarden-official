@@ -62,17 +62,14 @@ namespace Rosegarden
 
 AudioConfigurationPage::AudioConfigurationPage(
     RosegardenDocument *doc,
-    QWidget *parent,
-    const char *name):
-    TabbedConfigurationPage(parent, name),
+    QWidget *parent):
+    TabbedConfigurationPage(parent),
     m_externalAudioEditorPath(0)
 {
     // set the document in the super class
     m_doc = doc;
 
     QSettings settings;
-    //@@@ next line not needed. Commented out.
-    //@@@ settings.beginGroup( SequencerOptionsConfigGroup );
 
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -44,8 +43,7 @@ class LatencyConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    LatencyConfigurationPage(RosegardenDocument *doc,
-                             QWidget *parent=0, const char *name=0);
+    LatencyConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
 
     virtual void apply();
 

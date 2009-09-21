@@ -236,6 +236,8 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     initStatusBar();
 
     updateWindowTitle();
+    connect(m_document, SIGNAL(documentModified(bool)),
+            this, SLOT(updateWindowTitle(bool)));
 
     // Restore window geometry
     settings.beginGroup(WindowGeometryConfigGroup);
@@ -1162,15 +1164,7 @@ NewNotationView::slotEditPaste()
         msgBox.setWindowTitle(tr("Rosegarden"));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Couldn't paste at this point."));
-        msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \
-                                     "space (containing only rests) at the paste position " \
-                                     "to hold all of the events to be pasted.\n" \
-                                     "Not enough space was found.\n" \
-                                     "If you want to paste anyway, consider using one of " \
-                                     "the other paste types from the \"Paste...\" option " \
-                                     "on the Edit menu.  You can also change the default " \
-                                     "paste type to something other than Restricted if " \
-                                     "you wish."));                      
+        msgBox.setInformativeText(tr("<qt><p>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.</p><p>Not enough space was found.</p><p>If you want to paste anyway, consider using one of the other paste types from the <b>Paste...</b> option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</p></qt>"));                      
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setDefaultButton(QMessageBox::Ok);
         msgBox.exec();
@@ -1239,15 +1233,7 @@ NewNotationView::slotEditGeneralPaste()
             msgBox.setWindowTitle(tr("Rosegarden"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Couldn't paste at this point."));
-            msgBox.setInformativeText(tr("The Restricted paste type requires enough empty " \
-                                         "space (containing only rests) at the paste position " \
-                                         "to hold all of the events to be pasted.\n" \
-                                         "Not enough space was found.\n" \
-                                         "If you want to paste anyway, consider using one of " \
-                                         "the other paste types from the \"Paste...\" option " \
-                                         "on the Edit menu.  You can also change the default " \
-                                         "paste type to something other than Restricted if " \
-                                         "you wish."));                      
+            msgBox.setInformativeText(tr("<qt><p>The Restricted paste type requires enough empty space (containing only rests) at the paste position to hold all of the events to be pasted.</p><p>Not enough space was found.</p><p>If you want to paste anyway, consider using one of the other paste types from the <b>Paste...</b> option on the Edit menu.  You can also change the default paste type to something other than Restricted if you wish.</p></qt>"));                      
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setDefaultButton(QMessageBox::Ok);
             msgBox.exec();
@@ -2701,8 +2687,11 @@ NewNotationView::slotToggleTracking()
 }
 
 void
-NewNotationView::updateWindowTitle()
+NewNotationView::updateWindowTitle(bool m)
 {
+    //QString indicator = (m_document->isModified() ? "*" : "");
+    QString indicator = (m ? "*" : "");
+
     if (m_segments.size() == 1) {
 
         TrackId trackId = m_segments[0]->getTrack();
@@ -2713,18 +2702,21 @@ NewNotationView::updateWindowTitle()
         if (track)
             trackPosition = track->getPosition();
         //	std::cout << std::endl << std::endl << std::endl << "DEBUG TITLE BAR: " << getDocument()->getTitle() << std::endl << std::endl << std::endl;
-        setWindowTitle(tr("%1 - Segment Track #%2 - Notation")
-                    .arg(getDocument()->getTitle())
-                    .arg(trackPosition + 1));
+        setWindowTitle(tr("%1%2 - Segment Track #%3 - Notation")
+                      .arg(indicator)
+                      .arg(getDocument()->getTitle())
+                      .arg(trackPosition + 1));
 
     } else if (m_segments.size() == getDocument()->getComposition().getNbSegments()) {
 
-        setWindowTitle(tr("%1 - All Segments - Notation")
-                    .arg(getDocument()->getTitle()));
+        setWindowTitle(tr("%1%2 - All Segments - Notation")
+                      .arg(indicator)
+                      .arg(getDocument()->getTitle()));
 
     } else {
 
-        setWindowTitle(tr("%1 - %n Segment(s) - Notation", "", m_segments.size())
+        setWindowTitle(tr("%1%2 - %n Segment(s) - Notation", "", m_segments.size())
+                    .arg(indicator)
                     .arg(getDocument()->getTitle()));
 
     }

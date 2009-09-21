@@ -84,9 +84,8 @@ public:
 };
 
 DocumentMetaConfigurationPage::DocumentMetaConfigurationPage(RosegardenDocument *doc,
-        QWidget *parent,
-        const char *name) :
-        TabbedConfigurationPage(doc, parent, name)
+        QWidget *parent) :
+        TabbedConfigurationPage(doc, parent)
 {
     m_headersPage = new HeadersConfigurationPage(this, doc);
     addTab(m_headersPage, tr("Headers"));

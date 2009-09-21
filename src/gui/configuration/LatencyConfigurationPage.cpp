@@ -37,9 +37,8 @@ namespace Rosegarden
 {
 
 LatencyConfigurationPage::LatencyConfigurationPage(RosegardenDocument *doc,
-        QWidget *parent,
-        const char *name)
-        : TabbedConfigurationPage(doc, parent, name)
+        QWidget *parent)
+        : TabbedConfigurationPage(doc, parent)
 {
 #ifdef NOT_DEFINED
 #ifdef HAVE_LIBJACK

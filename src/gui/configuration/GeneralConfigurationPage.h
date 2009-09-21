@@ -76,8 +76,7 @@ public:
         HPLIP
     };
 
-    GeneralConfigurationPage(RosegardenDocument *doc,
-                             QWidget *parent=0, const char *name=0);
+    GeneralConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
 
     virtual void apply();
 

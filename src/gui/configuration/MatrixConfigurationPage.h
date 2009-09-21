@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -39,7 +38,7 @@ class MatrixConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MatrixConfigurationPage(QWidget *parent = 0, const char *name=0);
+    MatrixConfigurationPage(QWidget *parent = 0);
 
     virtual void apply();
 

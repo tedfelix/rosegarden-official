@@ -47,8 +47,7 @@ class AudioConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 public:
     AudioConfigurationPage(RosegardenDocument *doc,
-                               QWidget *parent=0,
-                               const char *name=0);
+                               QWidget *parent = 0);
 
     virtual void apply();
 

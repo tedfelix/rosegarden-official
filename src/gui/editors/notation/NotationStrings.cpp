@@ -234,8 +234,7 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
     bool triplet = false;
     errorReturn = 0;
 
-    if (duration == 0)
-        return "0";
+    if (duration == 0) return "0";
 
     if (nearestNote.getDuration() != duration) {
         Note tripletNote = Note::getNearestNote(duration * 3 / 2);
@@ -288,6 +287,9 @@ NotationStrings::makeNoteMenuLabel(timeT duration,
         // Already internationalised, if appropriate
         return noteName;
     }
+
+    // "control reached end of non-void function" warning:
+    return "0";
 }
 
 }

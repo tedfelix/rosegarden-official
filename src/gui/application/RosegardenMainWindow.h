@@ -506,6 +506,12 @@ signals:
 
 public slots:
 
+    /** Update the title bar to prepend a * to the document title when the
+     * document is modified. (I thought we already did this ages ago, but
+     * apparenty not.)
+     */
+    void slotUpdateTitle();
+
     /**
      * open a URL - used for Dn'D
      *

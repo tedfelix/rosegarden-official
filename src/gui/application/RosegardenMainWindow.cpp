@@ -1631,6 +1631,14 @@ RosegardenMainWindow::slotFileNew()
 }
 
 void
+RosegardenMainWindow::slotUpdateTitle()
+{
+    QString caption = qApp->applicationName();
+    QString indicator = (m_doc->isModified() ? "*" : "");
+    setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
+}
+
+void
 RosegardenMainWindow::slotOpenDroppedURL(QString url)
 {
     ProgressDialog::processEvents(); // or else we get a crash because the
@@ -5659,6 +5667,11 @@ RosegardenMainWindow::slotDocumentModified(bool m)
         slotStateChanged("new_file_modified", m);
     }
 
+    RG_DEBUG << "RosegardenMainWindow::slotDocumentModified: actual modified status (should be "
+             << (m ? "true" : "false") << " is " << (m_doc->isModified() ? "true" : "false")
+             << (m == m_doc->isModified() ? " [OK]" : " [BUG!!!]")
+             << endl;
+    slotUpdateTitle();
 }
 
 void

@@ -35,9 +35,8 @@
 namespace Rosegarden
 {
 
-MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent,
-        const char *name) :
-        TabbedConfigurationPage(parent, name)
+MatrixConfigurationPage::MatrixConfigurationPage(QWidget *parent) :
+        TabbedConfigurationPage(parent)
 {
     QFrame *frame = new QFrame(m_tabWidget);
     frame->setContentsMargins(10, 10, 10, 10);

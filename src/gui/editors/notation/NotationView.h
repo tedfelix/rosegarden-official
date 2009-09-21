@@ -56,9 +56,12 @@ public:
     virtual void setSelection(EventSelection* s, bool preview = false);
 
     virtual void initStatusBar();
-    virtual void updateViewCaption() { }//!!!
-
     virtual timeT getInsertionTime() const;
+
+    /** This turns out to be cruft that is rather annoying to eliminate.  We
+     * don't use this for anything, and provide an empty implementation.
+     */
+    virtual void updateViewCaption() { }
 
 signals:
     void play();
@@ -71,8 +74,16 @@ signals:
 
 
 protected slots:
+    /// Update the window title during setup, and when document modified status
+    /// changes
+    void updateWindowTitle(bool m = false);
+
+    /// Print with LilyPond (and lpr or the like)
     void slotPrintLilyPond();
+
+    /// Preview with LilyPond (via Okular or the like)
     void slotPreviewLilyPond();
+
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
@@ -307,7 +318,6 @@ private:
      */
     void closeEvent(QCloseEvent *event);
     void setupActions();
-    void updateWindowTitle();
     bool isInChordMode();
     bool isInTripletMode();
     bool isInGraceMode();

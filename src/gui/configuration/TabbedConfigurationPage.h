@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -41,10 +40,9 @@ class TabbedConfigurationPage : public ConfigurationPage
     Q_OBJECT
 
 public:
-    TabbedConfigurationPage(RosegardenDocument *doc,
-                            QWidget *parent=0, const char *name=0);
+    TabbedConfigurationPage(RosegardenDocument *doc, QWidget *parent = 0);
 
-    TabbedConfigurationPage(QWidget *parent=0, const char *name=0);
+    TabbedConfigurationPage(QWidget *parent = 0);
 
     static QString iconName() { return "misc"; }
     

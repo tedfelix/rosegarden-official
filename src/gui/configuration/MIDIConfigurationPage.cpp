@@ -62,9 +62,8 @@ namespace Rosegarden
 
 MIDIConfigurationPage::MIDIConfigurationPage(
     RosegardenDocument *doc,
-    QWidget *parent,
-    const char *name):
-        TabbedConfigurationPage(parent, name),
+    QWidget *parent):
+        TabbedConfigurationPage(parent),
         m_midiPitchOctave(0)
 {
 //    RG_DEBUG << "MIDI CONFIGURATION PAGE CTOR" << endl;

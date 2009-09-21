@@ -26,9 +26,6 @@
 #include "sound/AudioFileManager.h"
 #include "TabbedConfigurationPage.h"
 
-//#include <kdiskfreesp.h>
-//#include <kdiskfreespace.h>	// note: a kde4 include
-
 #include <QSettings>
 #include <QFileDialog>
 #include <QFile>
@@ -54,10 +51,8 @@
 namespace Rosegarden
 {
 
-AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,
-        QWidget *parent,
-        const char *name)
-        : TabbedConfigurationPage(doc, parent, name)
+AudioPropertiesPage::AudioPropertiesPage(RosegardenDocument *doc,  QWidget *parent)
+        : TabbedConfigurationPage(doc, parent)
 {
     AudioFileManager &afm = doc->getAudioFileManager();
 

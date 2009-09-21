@@ -1119,15 +1119,15 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 
     switch (ins->getType()) {
         case Instrument::Audio:
-                std::cerr << "TrackButtons::getRecordLedColour - setting LED to red" << std::endl;
+//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to red" << std::endl;
                 return GUIPalette::getColour(GUIPalette::RecordAudioTrackLED);
 
         case Instrument::SoftSynth:
-                std::cerr << "TrackButtons::getRecordLedColour - setting LED to orange" << std::endl;
+//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to orange" << std::endl;
                 return GUIPalette::getColour(GUIPalette::RecordSoftSynthTrackLED);
 
         case Instrument::Midi:
-                std::cerr << "TrackButtons::getRecordLedColour - setting LED to yellow" << std::endl;
+//                std::cerr << "TrackButtons::getRecordLedColour - setting LED to yellow" << std::endl;
                 return GUIPalette::getColour(GUIPalette::RecordMIDITrackLED);
                 
         default:
