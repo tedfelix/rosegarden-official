@@ -2689,7 +2689,6 @@ NewNotationView::slotToggleTracking()
 void
 NewNotationView::updateWindowTitle(bool m)
 {
-    //QString indicator = (m_document->isModified() ? "*" : "");
     QString indicator = (m ? "*" : "");
 
     if (m_segments.size() == 1) {

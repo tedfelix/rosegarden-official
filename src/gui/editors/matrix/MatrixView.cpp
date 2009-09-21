@@ -137,7 +137,10 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     }
 
     m_matrixWidget->slotSetPlayTracking(m_tracking);
+
     updateWindowTitle();
+    connect(m_document, SIGNAL(documentModified(bool)),
+            this, SLOT(updateWindowTitle(bool)));
 
     // Set initial visibility ...
     bool view;
@@ -190,9 +193,9 @@ NewMatrixView::closeEvent(QCloseEvent *event)
 
 
 void
-NewMatrixView::updateWindowTitle()
+NewMatrixView::updateWindowTitle(bool m)
 {
-    QString indicator = (m_document->isModified() ? "*" : "");
+    QString indicator = (m ? "*" : "");
     // Set client label
     //
     QString view = tr("Matrix");

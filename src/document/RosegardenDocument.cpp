@@ -248,6 +248,7 @@ void RosegardenDocument::clearModifiedStatus()
 {
     setModified(false);
     setAutoSaved(true);
+    RG_DEBUG << "RosegardenDocument EMITTING documentModified(false)" << endl;
     emit documentModified(false);
 }
 
@@ -256,6 +257,7 @@ void RosegardenDocument::slotDocumentModified()
     RG_DEBUG << "RosegardenDocument::slotDocumentModified()" << endl;
     setModified(true);
     setAutoSaved(false);
+    RG_DEBUG << "RosegardenDocument EMITTING documentModified(true)" << endl;
     emit documentModified(true);
 }
 

@@ -184,7 +184,11 @@ protected slots:
     // --
     // end of slots, formerly in located in EditView.h (which is obsolete now)
     
-    
+   
+    /** Update the window title.  If m is true (normally comes from a signal)
+     * display a * at the extreme left of the title to indicate modified status
+     */ 
+    void updateWindowTitle(bool m = false);
     
 protected:
     const SnapGrid *getSnapGrid() const;
@@ -206,7 +210,6 @@ private:
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;
 
-    void updateWindowTitle();
     void setupActions();
     void initZoomToolbar();
     void initActionsToolbar();

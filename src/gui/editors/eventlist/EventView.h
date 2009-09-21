@@ -154,7 +154,15 @@ protected slots:
     void slotTriggerTimeAdjustChanged(int);
     void slotTriggerRetuneChanged();
 
+    /// slot connected to signal RosegardenDocument::setModified(bool)
+    void updateWindowTitle(bool m = false);
+
 protected:
+
+    /// virtual function inherited from the base class, this implementation just
+    /// calls updateWindowTitle() and avoids a refactoring job, even though
+    /// updateViewCaption is superfluous
+    virtual void updateViewCaption();
 
     virtual void readOptions();
     void makeInitialSelection(timeT);
@@ -163,8 +171,6 @@ protected:
                                timeT duration, int timeMode);
     virtual Segment *getCurrentSegment();
 
-    virtual void updateViewCaption();
-
     //--------------- Data members ---------------------------------
 
     bool         m_isTriggerSegment;
@@ -172,28 +178,28 @@ protected:
     QLabel      *m_triggerPitch;
     QLabel      *m_triggerVelocity;
 
-    QTreeWidget   *m_eventList;
+    QTreeWidget *m_eventList;
     int          m_eventFilter;
 
     static int   m_lastSetEventFilter;
 
     QGroupBox   *m_filterGroup;
-    QCheckBox      *m_noteCheckBox;
-    QCheckBox      *m_textCheckBox;
-    QCheckBox      *m_sysExCheckBox;
-    QCheckBox      *m_programCheckBox;
-    QCheckBox      *m_controllerCheckBox;
-    QCheckBox      *m_restCheckBox;
-    QCheckBox      *m_pitchBendCheckBox;
-    QCheckBox      *m_keyPressureCheckBox;
-    QCheckBox      *m_channelPressureCheckBox;
-    QCheckBox      *m_indicationCheckBox;
-    QCheckBox      *m_otherCheckBox;
+    QCheckBox   *m_noteCheckBox;
+    QCheckBox   *m_textCheckBox;
+    QCheckBox   *m_sysExCheckBox;
+    QCheckBox   *m_programCheckBox;
+    QCheckBox   *m_controllerCheckBox;
+    QCheckBox   *m_restCheckBox;
+    QCheckBox   *m_pitchBendCheckBox;
+    QCheckBox   *m_keyPressureCheckBox;
+    QCheckBox   *m_channelPressureCheckBox;
+    QCheckBox   *m_indicationCheckBox;
+    QCheckBox   *m_otherCheckBox;
 
     std::vector<int> m_listSelection;
     std::set<Event *> m_deletedEvents; // deleted since last refresh
 
-    QMenu          *m_menu;
+    QMenu       *m_menu;
 
 };
 

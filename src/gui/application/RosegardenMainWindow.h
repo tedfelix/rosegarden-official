@@ -510,7 +510,7 @@ public slots:
      * document is modified. (I thought we already did this ages ago, but
      * apparenty not.)
      */
-    void slotUpdateTitle();
+    void slotUpdateTitle(bool m = false);
 
     /**
      * open a URL - used for Dn'D

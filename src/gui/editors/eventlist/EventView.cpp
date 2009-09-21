@@ -236,6 +236,8 @@ EventView::EventView(RosegardenDocument *doc,
     }
 
     updateViewCaption();
+    connect(getDocument(), SIGNAL(documentModified(bool)),
+            this, SLOT(updateWindowTitle(bool)));
 
     for (unsigned int i = 0; i < m_segments.size(); ++i) {
         m_segments[i]->addObserver(this);
@@ -1792,9 +1794,21 @@ EventView::slotMenuActivated(int value)
 void
 EventView::updateViewCaption()
 {
+    // err on the side of not showing modified status here, rather than showing
+    // a false positive, since we're kind of kludging this together with the
+    // existing virtual updateViewCaption() method
+    updateWindowTitle();
+}
+
+void
+EventView::updateWindowTitle(bool m)
+{
+    QString indicator = (m ? "*" : "");
+
     if (m_isTriggerSegment) {
 
-        setWindowTitle(tr("%1 - Triggered Segment: %2")
+        setWindowTitle(tr("%1%2 - Triggered Segment: %3")
+                       .arg(indicator)
                        .arg(getDocument()->getTitle())
                        .arg(strtoqstr(m_segments[0]->getLabel())));
 
@@ -1809,13 +1823,14 @@ EventView::updateViewCaption()
         if (track)
             trackPosition = track->getPosition();
 
-        setWindowTitle(tr("%1 - Segment Track #%2 - Event List")
+        setWindowTitle(tr("%1%2 - Segment Track #%3 - Event List")
+                       .arg(indicator)
                        .arg(getDocument()->getTitle())
                        .arg(trackPosition + 1));
 
     } else {
 
-        setWindowTitle(tr("%1 - %2 Segments - Event List")
+        setWindowTitle(tr("%1%2 - %3 Segments - Event List")
                        .arg(getDocument()->getTitle())
                        .arg(m_segments.size()));
     }

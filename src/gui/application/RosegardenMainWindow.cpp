@@ -1147,6 +1147,11 @@ RosegardenMainWindow::setDocument(RosegardenDocument* newDocument)
     connect(m_doc, SIGNAL(documentModified(bool)),
             this, SLOT(slotDocumentModified(bool)));
 
+    // connecting this independently of slotDocumentModified in the hope that it
+    // will better reflect the true state of things
+    connect(m_doc, SIGNAL(documentModified(bool)),
+            this, SLOT(slotUpdateTitle(bool)));
+
     connect(m_doc, SIGNAL(loopChanged(timeT, timeT)),
             this, SLOT(slotSetLoop(timeT, timeT)));
 
@@ -1631,10 +1636,18 @@ RosegardenMainWindow::slotFileNew()
 }
 
 void
-RosegardenMainWindow::slotUpdateTitle()
+RosegardenMainWindow::slotUpdateTitle(bool m)
 {
+    //NB: I seems like using doc->isModified() would be a more accurate state
+    // test than the value of m, but in practice there is a lag factor of a few
+    // ms where we have gotten one value in m here, and isModified() is in the
+    // opposite state briefly.  I don't think there's any real concern there, so
+    // I just switched everything over to use the state of the bool passed with
+    // the signal and ignore isModified()
+    RG_DEBUG << "RosegardenMainWindow::slotUpdateTitle(" << m << ")" << endl;
+
     QString caption = qApp->applicationName();
-    QString indicator = (m_doc->isModified() ? "*" : "");
+    QString indicator = (m ? "*" : "");
     setWindowTitle(tr("%1%2 - %3").arg(indicator).arg(m_doc->getTitle()).arg(caption));
 }
 
@@ -5667,11 +5680,6 @@ RosegardenMainWindow::slotDocumentModified(bool m)
         slotStateChanged("new_file_modified", m);
     }
 
-    RG_DEBUG << "RosegardenMainWindow::slotDocumentModified: actual modified status (should be "
-             << (m ? "true" : "false") << " is " << (m_doc->isModified() ? "true" : "false")
-             << (m == m_doc->isModified() ? " [OK]" : " [BUG!!!]")
-             << endl;
-    slotUpdateTitle();
 }
 
 void
