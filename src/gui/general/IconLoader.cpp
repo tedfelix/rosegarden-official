@@ -42,6 +42,7 @@ IconLoader::loadPixmap(QString name)
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/misc", name);
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/stock", name);
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/icons", name);
+    if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps/style", name);
     if (pixmap.isNull()) pixmap = loadPixmap(":pixmaps", name);
     m_cache[name] = pixmap;
     return pixmap;

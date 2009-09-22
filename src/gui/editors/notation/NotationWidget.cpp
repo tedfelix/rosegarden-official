@@ -126,9 +126,19 @@ NotationWidget::NotationWidget() :
 
 
     // Create the headers close button
+    //
+    // NOTE: I tried to style this QToolButton to resemble the parameter area
+    // close button, but I could never get it to come out sensibly as a square
+    // button with a reasonably sized X icon in it.  I tried all kinds of wild
+    // variations.
+    //
+    // In the end, I took the way Yves had solved this problem and just replaced
+    // his white X icon with a screen capture of the button I wanted to copy.
+    // It doesn't hover correctly, but it doesn't look too bad, and seems as
+    // close as I'm going to get to what I wanted.
     QToolButton *headersCloseButton = new QToolButton;
-    headersCloseButton->setIcon(QIcon(":/pixmaps/misc/white_close.png"));
-    headersCloseButton->setIconSize(QSize(8, 8));
+    headersCloseButton->setIcon(IconLoader().loadPixmap("header-close-button"));
+    headersCloseButton->setIconSize(QSize(14, 14));
     connect(headersCloseButton, SIGNAL(clicked(bool)),
             this, SLOT(slotCloseHeaders()));
 
