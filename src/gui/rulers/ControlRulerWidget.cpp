@@ -50,6 +50,11 @@ m_scene(0),
 m_scale(0)
 {
     m_tabBar = new QTabBar;
+
+    // sizeHint() is the maximum allowed, and the widget is still useful if made
+    // smaller than this, but should never grow larger
+    m_tabBar->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
+
     m_tabBar->setDrawBase(false);
     m_tabBar->setShape(QTabBar::RoundedSouth);
 
