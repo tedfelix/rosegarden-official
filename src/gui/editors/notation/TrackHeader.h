@@ -35,6 +35,7 @@ class QLabel;
 class QPixmap;
 class QGraphicsPixmapItem;
 class QString;
+class QToolButton;
 
 
 namespace Rosegarden
@@ -221,7 +222,7 @@ private :
     typedef std::multiset<Segment *, SegmentCmp> SortedSegments;
 
     // First segment on the track.
-    Segment * m_firstSeg;
+    Segment *m_firstSeg;
     timeT m_firstSegStartTime;
 
     QGraphicsPixmapItem *m_clefItem;
@@ -237,7 +238,10 @@ private :
     QString m_toolTipText;
 
     unsigned int m_colourIndex;
-    QColor m_colour;
+
+    QToolButton *m_indeterminableClef;
+    QToolButton *m_indeterminableKey;
+
 };
 
 }

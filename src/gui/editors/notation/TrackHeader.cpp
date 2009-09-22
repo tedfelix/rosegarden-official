@@ -41,9 +41,8 @@
 #include <QApplication>
 #include <QSize>
 #include <QWidget>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QPushButton>
+#include <QToolButton>
 #include <QLabel>
 #include <QFrame>
 #include <QString>
@@ -95,7 +94,9 @@ StaffHeader::StaffHeader(HeadersGroup *group,
         m_foreGround(Qt::white),
         m_backGround(Qt::black),
         m_toolTipText(QString("")),
-        m_colourIndex(0)
+        m_colourIndex(0),
+        m_indeterminableClef(0),
+        m_indeterminableKey(0)
 
 {
     // localStyle (search key)
@@ -228,6 +229,24 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     ///   TODO : Look for the first segment(s) in
     ///          lookAtStaff() and not here.
 
+
+    // Create two warning icons
+    m_indeterminableClef = new QToolButton;
+    m_indeterminableClef->setIcon(QIcon(":/pixmaps/misc/warning.png"));
+    m_indeterminableClef->setIconSize(QSize(32, 32));
+    m_indeterminableKey = new QToolButton;
+    m_indeterminableKey->setIcon(QIcon(":/pixmaps/misc/warning.png"));
+    m_indeterminableKey->setIconSize(QSize(32, 32));
+
+    // Add a layout where to place the warning icons
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->addWidget(m_indeterminableClef);
+    hbox->addWidget(m_indeterminableKey);
+    setLayout(hbox);
+
+    // Icons are here, but they are hidden
+    m_indeterminableClef->hide();
+    m_indeterminableKey->hide();
 }
 
 StaffHeader::~StaffHeader()
@@ -660,6 +679,12 @@ StaffHeader::updateHeader(int width)
 
         // Forced width may differ from localy computed width
         m_lastWidth = width;
+
+        // Show or hide the warning icons
+        if (isClefInconsistent()) m_indeterminableClef->show();
+        else m_indeterminableClef->hide();
+        if (isKeyInconsistent()) m_indeterminableKey->show();
+        else m_indeterminableKey->hide();
     }
 
     // Highlight header if track is the current one
