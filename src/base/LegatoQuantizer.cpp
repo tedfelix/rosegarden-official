@@ -69,7 +69,7 @@ LegatoQuantizer::quantizeRange(Segment *s,
 {
     Segment::iterator tmp;
     while (from != to) {
-	quantizeSingle(s, from, tmp);
+	quantizeLegatoSingle(s, from, tmp);
 	from = tmp;
 	if (!s->isBeforeEndMarker(from) ||
 	    (s->isBeforeEndMarker(to) &&
@@ -78,8 +78,8 @@ LegatoQuantizer::quantizeRange(Segment *s,
 }
 
 void
-LegatoQuantizer::quantizeSingle(Segment *s, Segment::iterator i,
-				Segment::iterator &nexti) const
+LegatoQuantizer::quantizeLegatoSingle(Segment *s, Segment::iterator i,
+                                      Segment::iterator &nexti) const
 {
     // Stretch each note out to reach the quantized start time of the
     // next note whose quantized start time is greater than or equal

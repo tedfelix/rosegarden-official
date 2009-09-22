@@ -41,8 +41,9 @@ public:
                                Segment::iterator) const;
 
 protected:
-    virtual void quantizeSingle(Segment *, Segment::iterator,
-                                Segment::iterator &) const;
+    virtual void quantizeLegatoSingle(Segment *,
+                                      Segment::iterator,
+                                      Segment::iterator &) const;
 
     timeT quantizeTime(timeT) const;
 
