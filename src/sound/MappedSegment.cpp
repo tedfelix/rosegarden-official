@@ -48,7 +48,7 @@ MappedSegment::getBufferSize() const
 int
 MappedSegment::getBufferFill() const
 {
-    return m_size.fetchAndAddRelaxed(0);
+    return m_fill.fetchAndAddRelaxed(0);
 }
 
 void
@@ -78,6 +78,7 @@ void
 MappedSegment::setBufferFill(int newFill)
 {
     m_fill.fetchAndStoreRelaxed(newFill);
+    SEQUENCER_DEBUG << "MappedSegment::setBufferFill(" << newFill << "): Fill is now " << getBufferFill() << endl;
 }
 
 MappedSegment::iterator::iterator(MappedSegment *s) :
