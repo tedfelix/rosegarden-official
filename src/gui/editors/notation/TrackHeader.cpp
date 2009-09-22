@@ -310,15 +310,22 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     int numberOfTextLines = getNumberOfTextLines();
 
-    if (isTransposeInconsistent()) {
+//    if (isTransposeInconsistent()) {
         int upperTextY = charHeight
                          + numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
-        QColor warningBackGround = m_foreGround == Qt::white ?
-                                                       Qt::black : Qt::white;
-        paint.fillRect(0, 0, width(), upperTextY, warningBackGround);
-    }
+//        QColor warningBackGround = m_foreGround == Qt::white ?
+//                                                       Qt::black : Qt::white;
+//        paint.fillRect(0, 0, width(), upperTextY, warningBackGround);
 
-    paint.setPen(QColor(m_foreGround));
+        // an experiment: fill the upper and lower text areas with 80% opaque
+        // black regardless of other color concerns        
+        paint.fillRect(0, 0, width(), upperTextY, QColor(0, 0, 0, 200));
+//    }
+
+//    paint.setPen(QColor(m_foreGround));
+    // always use white as default foreground for text areas    
+    QColor textForeground = Qt::white;
+    paint.setPen(textForeground);
     text = getUpperText();
 
     for (int l=1; l<=numberOfTextLines; l++) {
@@ -343,7 +350,8 @@ StaffHeader::paintEvent(QPaintEvent *)
     // Write transposition text
 
     // TODO : use colours from GUIPalette
-    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
+//    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
+    colour = isTransposeInconsistent() ? QColor(Qt::red) : QColor(textForeground);
     paint.setFont(npf->getTrackHeaderBoldFont());
      // m_p->maskPainter().setFont(m_trackHeaderBoldFont);
     paint.setPen(colour);
@@ -356,15 +364,19 @@ StaffHeader::paintEvent(QPaintEvent *)
 
      // Write lower text (segment label)
 
-    if (isLabelInconsistent()) {
+//    if (isLabelInconsistent()) {
         int lowerTextY = wHeight - 4            // -4 : adjust
             - numberOfTextLines * npf->getTrackHeaderTextLineSpacing();
-        QColor warningBackGround = m_foreGround == Qt::white ? Qt::black : Qt::white;
-        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
-    }
+//        QColor warningBackGround = m_foreGround == Qt::white ? Qt::black : Qt::white;
+//        paint.fillRect(0, lowerTextY, width(), height(), warningBackGround);
+
+        // experiment        
+        paint.fillRect(0, lowerTextY, width(), height(), QColor(0, 0, 0, 200));
+//    }
 
     // TODO : use colours from GUIPalette
-    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
+//    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(m_foreGround);
+    colour = isLabelInconsistent() ? QColor(Qt::red) : QColor(textForeground);
     paint.setFont(npf->getTrackHeaderFont());
 
     paint.setPen(colour);
