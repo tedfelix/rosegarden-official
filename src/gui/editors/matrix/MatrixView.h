@@ -186,7 +186,16 @@ protected slots:
 
     void slotStepBackward();
     void slotStepForward();
- 
+
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    /// Note-on or note-off received asynchronously -- as above
+    void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
+
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
      */ 

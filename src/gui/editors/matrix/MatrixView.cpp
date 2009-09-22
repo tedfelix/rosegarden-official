@@ -56,6 +56,8 @@
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 
+#include "commands/matrix/MatrixInsertionCommand.h"
+
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
@@ -86,6 +88,7 @@
 #include <QComboBox>
 #include <QHBoxLayout>
 #include <QInputDialog>
+#include <QMessageBox>
 
 
 namespace Rosegarden
@@ -1396,11 +1399,114 @@ NewMatrixView::slotStepBackward()
                                        (time - 1, SnapGrid::SnapLeft));
 }
 
-void NewMatrixView::slotStepForward()
+void
+NewMatrixView::slotStepForward()
 {
     timeT time = getInsertionTime();
     m_document->slotSetPointerPosition(getSnapGrid()->snapTime
                                        (time + 1, SnapGrid::SnapRight));
+}
+
+void
+NewMatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn)
+{
+    // hjj:
+    // The default insertion mode is implemented equivalently in
+    // notationviewslots.cpp:
+    //  - proceed if notes do not overlap
+    //  - make the chord if notes do overlap, and do not proceed
+
+    static int numberOfNotesOn = 0;
+    static time_t lastInsertionTime = 0;
+    if (!noteOn) {
+        numberOfNotesOn--;
+        return ;
+    }
+
+    QAction *action = findAction("toggle_step_by_step");
+
+    if (!action) {
+        MATRIX_DEBUG << "WARNING: No toggle_step_by_step action" << endl;
+        return ;
+    }
+    if (!action->isChecked())
+        return ;
+
+//    if (m_inPaintEvent) {
+//        m_pendingInsertableNotes.push_back(std::pair<int, int>(pitch, velocity));
+//        return ;
+//    }
+
+    Segment *segment = getCurrentSegment();
+
+    // If the segment is transposed, we want to take that into
+    // account.  But the note has already been played back to the user
+    // at its untransposed pitch, because that's done by the MIDI THRU
+    // code in the sequencer which has no way to know whether a note
+    // was intended for step recording.  So rather than adjust the
+    // pitch for playback according to the transpose setting, we have
+    // to adjust the stored pitch in the opposite direction.
+
+    pitch -= segment->getTranspose();
+
+//    TmpStatusMsg msg(tr("Inserting note"), this);
+
+    MATRIX_DEBUG << "Inserting note at pitch " << pitch << endl;
+
+    Event modelEvent(Note::EventType, 0, 1);
+    modelEvent.set<Int>(BaseProperties::PITCH, pitch);
+    static timeT insertionTime(getInsertionTime());
+    if (insertionTime >= segment->getEndMarkerTime()) {
+        MATRIX_DEBUG << "WARNING: off end of segment" << endl;
+        return ;
+    }
+    time_t now;
+    time (&now);
+    double elapsed = difftime(now, lastInsertionTime);
+    time (&lastInsertionTime);
+
+    if (numberOfNotesOn <= 0 || elapsed > 10.0 ) {
+        numberOfNotesOn = 0;
+        insertionTime = getInsertionTime();
+    }
+    numberOfNotesOn++;
+    timeT endTime(insertionTime + getSnapGrid()->getSnapTime(insertionTime));
+
+    if (endTime <= insertionTime) {
+        static bool showingError = false;
+        if (showingError)
+            return ;
+        showingError = true;
+        /* was sorry */ QMessageBox::warning(this, "", tr("Can't insert note: No grid duration selected"));
+        showingError = false;
+        return ;
+    }
+
+    MatrixInsertionCommand* command = 
+        new MatrixInsertionCommand(*segment, insertionTime,
+                                   endTime, &modelEvent);
+
+    CommandHistory::getInstance()->addCommand(command);
+
+    m_document->slotSetPointerPosition(endTime);
+
+//    if (!isInChordMode()) {
+//        slotSetInsertCursorPosition(endTime);
+//    }
+}
+
+void
+NewMatrixView::slotInsertableNoteOnReceived(int pitch, int velocity)
+{
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOnReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, true);
+}
+
+void
+NewMatrixView::slotInsertableNoteOffReceived(int pitch, int velocity)
+{
+    MATRIX_DEBUG << "MatrixView::slotInsertableNoteOffReceived: " << pitch << endl;
+    slotInsertableNoteEventReceived(pitch, velocity, false);
 }
 
 /*
