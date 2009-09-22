@@ -151,15 +151,8 @@ void ControlRulerWidget::slotTogglePropertyRuler(const PropertyName &propertyNam
             if (propruler->getPropertyName() == propertyName)
             {
                 // We already have a ruler for this property
-                if (m_stackedWidget->currentWidget() != (*it)) {
-                    // It was not on show, so show it
-                    m_tabBar->setCurrentTab(m_stackedWidget->indexOf(*it));
-//                    m_stackedWidget->setCurrentWidget(*it);
-                }
-                else {
-                    // It was on show, so delete it
-                    removeRuler(it);
-                }
+                // Delete it
+                removeRuler(it);
                 break;
             }
         }
@@ -191,15 +184,8 @@ void ControlRulerWidget::slotToggleControlRuler(std::string controlName)
                 if (eventruler->getControlParameter()->getName() == controlName)
                 {
                     // We already have a ruler for this control
-                    if (m_stackedWidget->currentWidget() != (*jt)) {
-                        // It was not on show, so show it
-                        m_tabBar->setCurrentTab(m_stackedWidget->indexOf(*jt));
-//                        m_stackedWidget->setCurrentWidget(*jt);
-                    }
-                    else {
-                        // It was not on show, so delete it
-                        removeRuler(jt);
-                    }
+                    // Delete it
+                    removeRuler(jt);
                     break;
                 }
             }
