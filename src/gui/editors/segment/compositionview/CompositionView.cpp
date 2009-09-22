@@ -131,9 +131,6 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     
     setDragAutoScroll(true);
 
-//@@@ Not sure what becomes of these    setBackgroundMode(NoBackground);
-//@@@    viewport()->setBackgroundMode(NoBackground);
-
     viewport()->setPaletteBackgroundColor(GUIPalette::getColour(GUIPalette::SegmentCanvas));
 
     slotUpdateSize();
@@ -141,10 +138,10 @@ CompositionView::CompositionView(RosegardenDocument* doc,
     QScrollBar* hsb = horizontalScrollBar();
 
     // dynamically adjust content size when scrolling past current composition's end
-    connect(hsb, SIGNAL(nextLine()),
-            this, SLOT(scrollRight()));
-    connect(hsb, SIGNAL(prevLine()),
-            this, SLOT(scrollLeft()));
+    //   connect(hsb, SIGNAL(nextLine()),
+    //          this, SLOT(scrollRight()));
+    //   connect(hsb, SIGNAL(prevLine()),
+    //          this, SLOT(scrollLeft()));
 
     //    connect(this, SIGNAL(contentsMoving(int, int)),
     //            this, SLOT(slotAllDrawBuffersNeedRefresh()));
