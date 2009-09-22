@@ -342,7 +342,7 @@ bool RosegardenDocument::saveIfModified()
 
     RosegardenMainWindow *win = (RosegardenMainWindow *)parent();
 
-    int wantSave = QMessageBox::warning( dynamic_cast<QWidget*>(win), tr("Warning"), tr("The current file has been modified.\n"                          "Do you want to save it?"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
+    int wantSave = QMessageBox::warning( dynamic_cast<QWidget*>(win), tr("Rosegarden - Warning"), tr("<qt><p>The current file has been modified.</p><p>Do you want to save it?</p></qt>"), QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, QMessageBox::Cancel );
 
     RG_DEBUG << "wantSave = " << wantSave << endl;
 

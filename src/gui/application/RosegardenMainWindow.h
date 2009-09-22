@@ -116,6 +116,14 @@ public:
 
     virtual ~RosegardenMainWindow();
 
+    /** Qt generates a QCloseEvent when the user clicks the close button on the
+     * title bar.  We also get a close event when slotQuit() calls close().
+     *
+     * Control passes here where we call queryClose() to ask if the user wants
+     * to save a modified document.  If queryClose() returns true, we accept the
+     * close event.  Otherwise we ignore it, the closing breaks, and we keep
+     * running.
+     */
     void closeEvent(QCloseEvent *event);
 
     /*
@@ -396,24 +404,24 @@ protected:
     void initStatusBar();
 
     /**
-     * creates the centerwidget of the KTMainWindow instance and sets
+     * creates the centerwidget of the QMainWindow instance and sets
      * it as the view
      */
     void initView();
 
     /**
-     * queryClose is called by KTMainWindow on each closeEvent of a
-     * window. Against the default implementation (only returns true),
-     * this calls saveModified() on the document object to ask if the
-     * document shall be saved if Modified; on cancel the closeEvent
-     * is rejected.
-     *
-     * @see KTMainWindow#queryClose
-     * @see KTMainWindow#closeEvent
+     * queryClose is called by closeEvent() to ask whether it is OK to close.
+     * This is part of a legacy KDE mechanism, but has been left in place for
+     * convenience
      */
     virtual bool queryClose();
 
 
+ //!!! I left the following code here, but this is related to KDE session
+ // management, and I don't think we can do anything reasonable with any of this
+ // now.
+ //
+ /////////////////////////////////////////////////////////////////////
     /**
      * saves the window properties for each open window during session
      * end to the session config file, including saving the currently
@@ -431,6 +439,7 @@ protected:
      * @see KTMainWindow#readProperties
      */
     virtual void readGlobalProperties();
+///////////////////////////////////////////////////////////////////////
 
     QString getAudioFilePath();
 

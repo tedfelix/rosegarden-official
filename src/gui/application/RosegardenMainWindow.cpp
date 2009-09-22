@@ -541,20 +541,24 @@ RosegardenMainWindow::~RosegardenMainWindow()
 void
 RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
-    // Save window geometry
-    //
-    // NOTE: I would have used saveState() / restoreState() instead, to remember
-    // toolbar positions, &c., but this never worked for some unknown reason.
-    // Oh well.  I'm cutting my losses after a couple hours of chasing problems
-    // with code that worked great when I dropped in save/restoreGeometry()
-    // instead.  Fsck it.
-    RG_DEBUG << "[geometry] RosegardenMainWindow - Saving main window geometry..." << endl;
-    QSettings settings;
-    settings.beginGroup(WindowGeometryConfigGroup);
-    settings.setValue("Main_Window", this->saveGeometry());
-    settings.endGroup();
+    if (queryClose()) {
+        // Save window geometry
+        //
+        // NOTE: I would have used saveState() / restoreState() instead, to remember
+        // toolbar positions, &c., but this never worked for some unknown reason.
+        // Oh well.  I'm cutting my losses after a couple hours of chasing problems
+        // with code that worked great when I dropped in save/restoreGeometry()
+        // instead.  Fsck it.
+        RG_DEBUG << "[geometry] RosegardenMainWindow - Saving main window geometry..." << endl;
+        QSettings settings;
+        settings.beginGroup(WindowGeometryConfigGroup);
+        settings.setValue("Main_Window", this->saveGeometry());
+        settings.endGroup();
 
-    QWidget::closeEvent(event);
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
 void
