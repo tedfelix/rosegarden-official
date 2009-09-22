@@ -6305,7 +6305,7 @@ If you want to paste anyway, consider using one of the other paste types from th
         <location filename="../AutoloadStrings.cpp" line="304"/>
         <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
-        <translation type="unfinished"></translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>

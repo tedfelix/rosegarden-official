@@ -216,7 +216,9 @@ void ControlRulerWidget::removeRuler(std::list<ControlRuler*>::iterator it)
 void ControlRulerWidget::addRuler(ControlRuler *controlruler, QString name)
 {
     m_stackedWidget->addWidget(controlruler);
-    int index = m_tabBar->addTab(name.toUpper());
+    // controller names (if translatable) come from AutoLoadStrings.cpp and are
+    // in the QObject context/namespace/whatever
+    int index = m_tabBar->addTab(QObject::tr(name));
     m_tabBar->setCurrentTab(index);
     m_controlRulerList.push_back(controlruler);
     controlruler->slotSetPannedRect(m_pannedRect);
@@ -255,7 +257,13 @@ void ControlRulerWidget::slotAddPropertyRuler(const PropertyName &propertyName)
     PropertyControlRuler *controlruler = new PropertyControlRuler(propertyName, viewSegment, m_scale, this);
     controlruler->updateSelection(&m_selectedElements);
 
-    addRuler(controlruler,QString::fromStdString(propertyName.getName()));
+    // little kludge here, we only have the one property ruler, and the string
+    // "velocity" wasn't already in a context (any context) where it could be
+    // translated, and "velocity" doesn't look good with "PitchBend" or "Reverb"
+    // so we address a number of little problems thus:
+    QString name = QString::fromStdString(propertyName.getName());
+    if (name == "velocity") name = tr("Velocity");
+    addRuler(controlruler, name);
 }
 
 void ControlRulerWidget::slotSetPannedRect(QRectF pr)

@@ -6316,7 +6316,7 @@ así lo desea.</translation>
         <location filename="../AutoloadStrings.cpp" line="304"/>
         <location filename="../AutoloadStrings.cpp" line="743"/>
         <source>PitchBend</source>
-        <translation type="unfinished"></translation>
+        <translation>Inflexión de Tono</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="242"/>
@@ -10875,7 +10875,7 @@ Do you want to apply the changes before exiting the Bank Editor?</source>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="280"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Inflexión de Tono</translation>
+        <translation>Inflexión de Tono</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="285"/>
