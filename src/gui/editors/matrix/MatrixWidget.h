@@ -100,6 +100,8 @@ public:
 signals:
     void editTriggerSegment(int);
     void toolChanged(QString);
+    void segmentDeleted(Segment *);
+    void sceneDeleted();
 
 public slots:
     void slotSelectAll();

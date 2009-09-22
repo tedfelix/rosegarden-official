@@ -157,6 +157,8 @@ public slots:
     virtual void slotOpenInPercussionMatrix();
     virtual void slotOpenInNotation();
     virtual void slotOpenInEventList();
+
+    virtual void slotSegmentDeleted(Segment *);
     
     /**
      * Set the start time of the current segment

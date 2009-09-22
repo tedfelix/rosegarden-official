@@ -228,6 +228,12 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, SIGNAL(mouseDoubleClicked(const NotationMouseEvent *)),
             this, SLOT(slotDispatchMouseDoubleClick(const NotationMouseEvent *)));
 
+    connect(m_scene, SIGNAL(segmentDeleted(Segment *)),
+            this, SIGNAL(segmentDeleted(Segment *)));
+
+    connect(m_scene, SIGNAL(sceneDeleted()),
+            this, SIGNAL(sceneDeleted()));
+
     m_view->setScene(m_scene);
 
     m_toolBox->setScene(m_scene);

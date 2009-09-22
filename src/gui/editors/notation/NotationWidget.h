@@ -97,6 +97,10 @@ public:
 
     void setPointerPosition(timeT);
 
+signals:
+    void segmentDeleted(Segment *);
+    void sceneDeleted();
+
 public slots:
     void slotSetTool(QString name);
     void slotSetSelectTool();

@@ -108,6 +108,7 @@ signals:
     void eventRemoved(Event *e);
 
     void selectionChanged(EventSelection *s);
+    void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
 
 protected slots:

@@ -243,10 +243,17 @@ NewNotationView::NewNotationView(RosegardenDocument *doc,
     settings.beginGroup(WindowGeometryConfigGroup);
     this->restoreGeometry(settings.value("Notation_View").toByteArray());
     settings.endGroup();
+
+    connect(m_notationWidget, SIGNAL(segmentDeleted(Segment *)),
+            this, SLOT(slotSegmentDeleted(Segment *)));
+    connect(m_notationWidget, SIGNAL(sceneDeleted()),
+            this, SLOT(close()));
 }
 
 NewNotationView::~NewNotationView()
 {
+    NOTATION_DEBUG << "Deleting notation view" << endl;
+
     //!!! Odd that the window geometry save bit didn't work in here.  The little
     // message printed to std::cerr didn't fire, so unless I'm just really
     // obtuse and illiterate about something, I don't think this dtor ever fires
@@ -2690,6 +2697,8 @@ void
 NewNotationView::updateWindowTitle(bool m)
 {
     QString indicator = (m ? "*" : "");
+
+    if (m_segments.empty()) return;
 
     if (m_segments.size() == 1) {
 

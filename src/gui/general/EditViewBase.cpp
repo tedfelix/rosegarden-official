@@ -62,6 +62,19 @@ EditViewBase::~EditViewBase()
     slotSaveOptions();
 }
 
+void
+EditViewBase::slotSegmentDeleted(Segment *s)
+{
+    RG_DEBUG << "EditViewBase::slotSegmentDeleted" << endl;
+    for (std::vector<Segment *>::iterator i = m_segments.begin();
+         i != m_segments.end(); ++i) {
+        if (*i == s) {
+            m_segments.erase(i);
+            return;
+        }
+    }
+}
+
 void EditViewBase::slotSaveOptions()
 {
 }

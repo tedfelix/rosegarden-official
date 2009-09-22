@@ -714,6 +714,7 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
          i != m_staffs.end(); ++i) {
         if (s == &(*i)->getSegment()) {
             found = true;
+            emit segmentDeleted(s);
             delete *i;
             m_staffs.erase(i);
             break;
@@ -725,6 +726,8 @@ NotationScene::segmentRemoved(const Composition *c, Segment *s)
             NOTATION_DEBUG << "(Scene is now empty)" << endl;
             emit sceneDeleted();
         } else {
+            m_hlayout->reset();
+            m_vlayout->reset();
             positionStaffs();
             checkUpdate();
         }

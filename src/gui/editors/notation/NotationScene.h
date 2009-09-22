@@ -141,6 +141,7 @@ signals:
     void mouseReleased(const NotationMouseEvent *e);
     void mouseDoubleClicked(const NotationMouseEvent *e);
 
+    void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
 
     void eventRemoved(Event *);

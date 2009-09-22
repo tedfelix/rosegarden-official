@@ -170,6 +170,11 @@ NewMatrixView::NewMatrixView(RosegardenDocument *doc,
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View" : "Matrix_View");
     this->restoreGeometry(settings.value(modeStr).toByteArray());
     settings.endGroup();
+
+    connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
+            this, SLOT(slotSegmentDeleted(Segment *)));
+    connect(m_matrixWidget, SIGNAL(sceneDeleted()),
+            this, SLOT(close()));
 }
 
 
@@ -201,6 +206,8 @@ NewMatrixView::updateWindowTitle(bool m)
     QString view = tr("Matrix");
     //&&&if (isDrumMode())
     //    view = tr("Percussion");
+
+    if (m_segments.empty()) return;
 
     if (m_segments.size() == 1) {
 

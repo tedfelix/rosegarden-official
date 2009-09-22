@@ -546,6 +546,7 @@ MatrixScene::segmentRemoved(const Composition *c, Segment *s)
     for (std::vector<MatrixViewSegment *>::iterator i = m_viewSegments.begin();
          i != m_viewSegments.end(); ++i) {
         if (s == &(*i)->getSegment()) {
+            emit segmentDeleted(s);
             delete *i;
             m_viewSegments.erase(i);
             break;
