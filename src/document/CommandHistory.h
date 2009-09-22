@@ -158,13 +158,15 @@ protected slots:
 signals:
     /**
      * Emitted whenever a command has just been executed or
-     * unexecuted, whether by addCommand, undo, or redo.
+     * unexecuted, whether by addCommand, undo, or redo.  Note in
+     * particular that this is emitted by both undo and redo.
      */
     void commandExecuted();
 
     /**
      * Emitted whenever a command has just been executed, whether by
-     * addCommand or redo.
+     * addCommand or redo.  Note that this is not emitted by undo,
+     * which emits commandUnexecuted(Command *) instead.
      */
     void commandExecuted(Command *);
 

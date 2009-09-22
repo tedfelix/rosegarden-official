@@ -115,7 +115,7 @@ public slots:
 
     // Commands
     //
-    void slotCommandExecuted(Command *);
+    void slotCommandExecuted();
 
     /**
      * Accept a list of Segments and highlight accordingly

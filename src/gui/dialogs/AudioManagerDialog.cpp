@@ -189,8 +189,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
 
     // Connect command history for updates
     //
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
-            this, SLOT(slotCommandExecuted(Command *)));
+    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
+            this, SLOT(slotCommandExecuted()));
 
     connect(m_playTimer, SIGNAL(timeout()),
             this, SLOT(slotCancelPlayingAudio()));
@@ -1101,7 +1101,7 @@ AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)
 }
 
 void
-AudioManagerDialog::slotCommandExecuted(Command*)
+AudioManagerDialog::slotCommandExecuted()
 {
     slotPopulateFileList();
 }

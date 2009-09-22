@@ -132,7 +132,7 @@ RosegardenDocument::RosegardenDocument(QWidget *parent,
 //    m_viewList.setAutoDelete(false);
 //    m_editViewList.setAutoDelete(false);
 
-   connect(CommandHistory::getInstance(), SIGNAL(commandExecuted(Command *)),
+   connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
             this, SLOT(slotDocumentModified()));
 
     connect(CommandHistory::getInstance(), SIGNAL(documentRestored()),
