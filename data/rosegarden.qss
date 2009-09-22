@@ -798,8 +798,17 @@ state set. */
 
 QProgressBar
 {
+    border: 1px solid #AAAAAA;
+    border-radius: 3px;
+    text-align: center;
+    background: #FFFFFF;
 }
 
+QProgressBar::chunk
+{
+    background-color: #89B8E7;
+    width: 20px;
+}
 
 
 /*  QScrollBar
